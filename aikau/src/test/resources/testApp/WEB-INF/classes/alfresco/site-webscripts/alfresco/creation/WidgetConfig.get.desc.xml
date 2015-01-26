@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>WidgetConfig Test</shortname>
+  <description>This WebScript defines the WidgetConfig page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/WidgetConfig</url>
+</webscript>

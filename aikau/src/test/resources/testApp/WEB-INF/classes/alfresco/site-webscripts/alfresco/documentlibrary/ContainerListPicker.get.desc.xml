@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>ContainerListPicker Test</shortname>
+  <description>This WebScript defines the ContainerListPicker page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/ContainerListPicker</url>
+</webscript>

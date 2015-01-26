@@ -1,0 +1,19 @@
+{
+   "resultset": [
+      ["ewinlof", 74],
+      ["gjames", 48],
+      ["jiball", 37],
+      ["jcule", 27],
+      ["mbasandri", 22],
+      ["wabson", 19]
+   ],
+   "metadata": [{
+      "colIndex": 0,
+      "colType": "String",
+      "colName": "User"
+   }, {
+      "colIndex": 1,
+      "colType": "Numeric",
+      "colName": "Count"
+   }]
+}

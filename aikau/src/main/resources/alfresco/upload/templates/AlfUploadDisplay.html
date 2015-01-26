@@ -1,0 +1,43 @@
+<div class="alfresco-upload-AlfUploadDisplay">
+   <div class="title">${title}</div>
+   <div class="description">${description}</div>
+   <div class="uploads">
+
+      <!-- Show completed uploads -->
+      <div class="successful">
+         <div class="successful-title">${successfulUploadsLabel}</div>
+         <table class="successful-items" data-dojo-attach-point="successfulItemsNode">
+            
+         </table>
+      </div>
+
+      <!-- Show uploads in progress -->
+      <div class="inprogress">
+         <div class="inprogress-title">${uploadsInProgressLabel}</div>
+         <table class="inprogress-items" data-dojo-attach-point="inprogressItemsNode">
+            
+         </table>
+      </div>
+
+      <!-- Show uploads in progress -->
+      <div class="aggregate-progress">
+         <div class="aggregate-progress-title">${aggregateProgressLabel}</div>
+         <table>
+            <tr>
+               <td class="percentage" data-dojo-attach-point="aggregateProgressNode">0%</td>
+            </tr>
+         </table>
+      </div>
+
+      <!--  Show uploads that have failed -->
+      <div class="failed">
+         <div class="successful-title">${failedUploadsLabel}</div>
+         <table class="failed-items" data-dojo-attach-point="failedItemsNode">
+            
+         </table>
+      </div>
+   </div>
+   <div class="controls">
+      <!--  OK/Cancel buttons here? -->
+   </div>
+</div>

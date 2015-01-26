@@ -1,0 +1,10 @@
+.alfresco-renderers-Banner {
+   font-family: @bold-font;
+   background-color: #FFFFE0;
+   background-image: url(./images/warning-16.png);
+   background-position: 6px 4px;
+   background-repeat: no-repeat;
+   border: 1px solid #FFCA7A;
+   padding: 2px 5px 2px 28px;
+   line-height: 30px;
+}

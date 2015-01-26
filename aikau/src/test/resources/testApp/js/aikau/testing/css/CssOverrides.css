@@ -1,0 +1,8 @@
+/* Accessibility Menu */
+.hiddenAccessible,
+.accessibilityMenu p,
+.accessibilityMenu a
+{
+   position: static;
+   left: auto;
+}

@@ -1,0 +1,27 @@
+.alfresco-core-ProcessWidgets.side-margins {
+   margin: 0 20px;
+}
+
+/* These selectors are added to ensure that rendering of the header does not 
+   appear "jumpy" on hybrid pages. */
+body {
+   opacity: 0;
+}
+
+body.aikau-reveal {
+   opacity: 1;
+}
+
+.add-borders > .alfresco-core-ProcessWidgets {
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+   border: @standard-border;
+   padding: @standard-line-height @standard-column-width;
+   display: block;
+}
+
+.alfresco-core-ProcessWidgets .bottom-border {
+   border-bottom: @standard-border;
+}

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>UploadFailure Test</shortname>
+  <description>This WebScript defines the UploadFailure page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/aikau-upload-failure-unit-test</url>
+</webscript>

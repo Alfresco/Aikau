@@ -1,0 +1,21 @@
+.alfresco-search-AlternativeSearchLabel > div > .search-term-link {
+   cursor: pointer;
+   font-family: @bold-font;
+   color: @general-font-color;
+   margin-left: @standard-column-spacing;
+}
+
+.alfresco-search-AlternativeSearchLabel > div {
+   color: @de-emphasized-font-color;
+   margin: @standard-column-spacing 0;
+}
+
+.alfresco-search-AlternativeSearchLabel > div.searched-for-term {
+   font-size: @large-font-size;
+   line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
+}
+
+.alfresco-search-AlternativeSearchLabel > div.original-term {
+   font-size: @normal-font-size;
+   line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
+}

@@ -1,0 +1,21 @@
+.alfresco-renderers-Progress {
+    .alfProgressBarLabel {
+
+    }
+
+    .alfProgressBarContainer {
+
+        width: 100%;
+        overflow: hidden;
+        border: @standard-border;
+        margin-top: (@standard-line-height / 2);
+
+        .alfProgressBarProgress {
+            position:relative;
+            background-color: @primary-theme-color;
+            height: (2 * @standard-line-height);
+            width: 100%;
+            left: -100%;
+        }
+    }
+}

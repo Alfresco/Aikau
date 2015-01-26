@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>ComboBox Test</shortname>
+  <description>This WebScript defines the ComboBox page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/ComboBox</url>
+</webscript>

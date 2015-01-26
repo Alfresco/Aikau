@@ -1,0 +1,6 @@
+.alfresco-renderers-Property.version > span.inner {
+   background-color: #AAAAAA;
+   color: #FFFFFF;
+   padding: 1px 4px 1px 3px;
+   display: inline;
+}

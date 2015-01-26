@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Warning Test</shortname>
+  <description>This WebScript defines the Warning page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Warning</url>
+</webscript>

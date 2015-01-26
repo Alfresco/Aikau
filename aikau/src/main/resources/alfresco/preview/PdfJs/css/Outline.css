@@ -1,0 +1,25 @@
+.alfresco-preview-PdfJs-Outline {
+   padding: 0 0.5em;
+}
+
+.alfresco-preview-PdfJs-Outline>div,.previewer.PdfJs .sidebar .searchResults>div
+   {
+   margin-top: 0.25em;
+}
+
+.alfresco-preview-PdfJs-Outlinew>:first-child {
+   margin-top: 0.5em;
+}
+
+.alfresco-preview-PdfJs-Outline>:last-child {
+   margin-bottom: 0.5emt;
+}
+
+.alfresco-preview-PdfJs-Outline .outlineItem>.outlineItems {
+   margin-left: 20px;
+}
+
+.alfresco-preview-PdfJs-Outline .outlineItem>a {
+   text-decoration: none;
+   color: black;
+}

@@ -1,0 +1,29 @@
+.alfresco-preview-AlfDocumentPreview .previewer.Image > img {
+   max-height: 100%;
+   max-width: 100%;
+   overflow: auto;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer.WebPreviewer {
+   min-height: 400px;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer.StrobeMediaPlayback {
+   height: 480px;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .message {
+   text-align: center;
+   margin: 100px 0;
+}
+
+/* This should potentially be in a CSS file directly associated with the Image plugin */
+.alfresco-preview-AlfDocumentPreview .previewer.Image {
+   text-align: center;
+   background-color: transparent;
+}
+
+.alfresco-preview-AlfDocumentPreview .notification {
+   margin: 100px 0;
+   text-align: center;
+}

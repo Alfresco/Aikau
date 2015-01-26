@@ -1,0 +1,9 @@
+<div class="alfresco-testing-TestCoverageResults">
+   <button data-dojo-attach-event="ondijitclick:captureCoverageResults" name="button">Update Form With Coverage Data</button>
+   <form action="http://${nodeCoverageServer}/node-coverage-store" 
+         method="POST" 
+         enctype="application/x-www-form-urlencoded">
+      <input data-dojo-attach-point="coverageField" type="text" name="coverage"></input>
+      <input type="submit" value="Post Coverage Results">
+   </form>
+</div>

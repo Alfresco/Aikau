@@ -1,0 +1,38 @@
+th.alfresco-documentlibrary-views-layouts-HeaderCell {
+   background-color: @docListHeaderBgColour;
+   border-top: 1px solid @docListBorderColour;
+   border-bottom: 1px solid @docListBorderColour;
+   border-right: 1px solid @docListBorderColour;
+   padding: 10px;
+   margin: 0;
+   vertical-align: middle;
+   text-align: left;
+}
+
+th.alfresco-documentlibrary-views-layouts-HeaderCell.last,
+th.alfresco-documentlibrary-views-layouts-HeaderCell:last-of-type {
+   border-right: none;
+}
+
+.alfresco-documentlibrary-views-layouts-HeaderCell img {
+   width: 16px;
+   height: 16px;
+   float: right;
+}
+
+.alfresco-documentlibrary-views-layouts-HeaderCell img.hidden {
+   display: none;
+} 
+
+.alfresco-documentlibrary-views-layouts-HeaderCell img.ascendingSort {
+   background-image: url(./images/sort-ascending-16.png);
+}
+
+.alfresco-documentlibrary-views-layouts-HeaderCell img.descendingSort {
+   background-image: url(./images/sort-descending-16.png);
+}
+
+th.alfresco-documentlibrary-views-layouts-HeaderCell.hiddenAccessible {
+   position: absolute;
+   left: -99999px;
+}

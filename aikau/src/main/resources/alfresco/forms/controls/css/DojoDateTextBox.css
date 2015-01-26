@@ -1,0 +1,23 @@
+/*
+todo replace with less variables
+*/
+
+.claro .dijitCalendar,
+.claro .dijitCalendar:hover,
+.claro .dijitCalendarHover {
+   background-color: #fff !important;
+}
+
+.claro .dijitCalendarDateTemplate,
+.claro .dijitCalendarPreviousMonth,
+.claro .dijitCalendarNextMonth {
+   border-bottom-color: #fff !important;
+   background-color: #fff !important;
+}
+
+.claro .dijitCalendarPreviousMonth .dijitCalendarDateLabel,
+.claro .dijitCalendarNextMonth .dijitCalendarDateLabel {
+   color: #cccccc !important;
+   border-color: #fff !important;
+}
+

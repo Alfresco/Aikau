@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DocumentPicker Test</shortname>
+  <description>This WebScript defines the DocumentPicker page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/DocumentPicker</url>
+</webscript>

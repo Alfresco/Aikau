@@ -1,0 +1,10 @@
+.alfresco-preview-AlfDocumentPreview .previewer .Audio {
+   line-height: 325px;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .Audio audio
+{
+   max-height: 100%;
+   max-width: 100%;
+   overflow: auto;
+}

@@ -1,0 +1,51 @@
+.alfresco-renderers-Toggle {
+  /*margin-left: 20px; */
+}
+
+.alfresco-renderers-Toggle a
+{
+   background-repeat: no-repeat;
+   font-size: 85%;
+   padding: 1px 0 1px 20px;
+   cursor: pointer;
+   color: #333;
+}
+
+.alfresco-renderers-Toggle a.enabled
+{
+   height: 16px;
+   padding-left: 16px;
+}
+
+.alfresco-renderers-Toggle a.enabled:active,
+.alfresco-renderers-Toggle a.enabled:hover
+{
+   background-image: url(./images/delete-16.png);
+}
+
+.alfresco-renderers-Toggle span.processing
+{
+   background-image: url(./images/ajax_anim.gif);
+   background-repeat: no-repeat;
+   padding: 0 0 0 20px;
+}
+
+.alfresco-renderers-Toggle span.warning
+{
+   background-image: url(./images/warning-16.png);
+   background-repeat: no-repeat;
+   padding: 0 0 0 20px;
+}
+
+.alfresco-renderers-Toggle >*.hidden {
+   display: none;
+}
+
+.alfresco-renderers-Toggle a.on
+{
+   background-image: url(./images/enabled-indicator-on-16.png);
+}
+.alfresco-renderers-Toggle a.off
+{
+   background-image: url(./images/enabled-indicator-off-16.png);
+}

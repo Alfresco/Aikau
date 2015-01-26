@@ -1,0 +1,131 @@
+.claro .dijitMenu {
+   border-color: @standard-border-color;
+}
+
+.alfresco-forms-controls-BaseFormControl {
+   margin-bottom: @standard-line-height;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > label {
+   font-size: @normal-font-size;
+   line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
+   margin-bottom: 5px;
+   display: inline-block;
+}
+
+.alfresco-forms-controls-BaseFormControl.hiddenlabel > .title-row {
+   position: absolute;
+   left: -999em;
+   height: 0;
+}
+
+.alfresco-forms-controls-BaseFormControl > .description-row {
+   max-width: 472px;
+}
+
+.alfresco-forms-controls-BaseFormControl > .description-row > .description {
+   font-size: @small-font-size;
+   line-height: ceil(@small-font-size/@standard-line-height) * @standard-line-height;
+   margin-bottom: @standard-line-height;
+   color: @de-emphasized-font-color;
+}
+
+.alfresco-forms-controls-BaseFormControl > .control-row {
+   max-width: 472px;
+}
+
+.alfresco-forms-controls-BaseFormControl > .control-row > .control {
+   margin-right: 5px;
+   display: inline-block;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > .requirementIndicator {
+   display: none;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > .requirementIndicator.required {
+   display: inline-block;
+}
+
+.alfresco-forms-controls-BaseFormControl > .units {
+   margin-top: 5px;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > .validation {
+   display: none;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > img.validationInProgress {
+   width: 16px;
+   height: 16px;
+   margin: 0 5px;
+   vertical-align: top;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > img.validationInProgress.hidden {
+   display: none;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > .validation-error {
+   background: url("./images/error-16.png");
+   display: inline-block;
+   height: 16px;
+   width: 16px;
+   background-repeat: no-repeat;
+   margin: 0 5px;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > .validation-message {
+   display: none;
+   color: #ED2525;
+   font-weight: bold;
+   margin: 0 5px;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > .validation-message.display {
+   display: inline-block;
+}
+
+.alfresco-forms-controls-BaseFormControl > .clear-both {
+   clear: both;
+}
+
+.unmargined .alfresco-forms-controls-BaseFormControl{
+   margin-bottom: 0;
+}
+
+.unmargined .alfresco-forms-controls-BaseFormControl > .clear-both {
+   height: 0;
+}
+
+.alfresco-forms-controls-BaseFormControl.long > .control-row > div.control > div {
+   width: 472px;
+}
+
+.alfresco-forms-controls-BaseFormControl div.control div.dijitComboBox.dijitTextBoxHover,
+.alfresco-forms-controls-BaseFormControl div.control .dijitTextBoxHover,
+.alfresco-forms-controls-BaseFormControl div.control .dijitTextAreaHover,
+.alfresco-forms-controls-BaseFormControl div.control .dijitTextBoxFocused,
+.alfresco-forms-controls-BaseFormControl div.control .dijitTextAreaFocused,
+.alfresco-forms-controls-BaseFormControl div.control .dijitTextBoxActive,
+.alfresco-forms-controls-BaseFormControl div.control .dijitTextAreaActive {
+   border-color: @hover-border-color;
+   background-image: none;
+   background-color: inherit;
+}
+
+.alfresco-forms-controls-BaseFormControl div.control .dijitPlaceHolder {
+   font-style: normal;
+   color: @de-emphasized-font-color;
+}
+
+.alfresco-forms-controls-BaseFormControl div.control div.dijitComboBox {
+   border-color: @standard-border-color;
+   font-size: @large-font-size;
+}
+
+.alfresco-forms-controls-BaseFormControl div.control div.dijitComboBox.dijitTextBoxFocused,
+.alfresco-forms-controls-BaseFormControl div.control .dijitActive,
+.alfresco-forms-controls-BaseFormControl div.control .dijitFocused {
+   border-color: @focused-border-color;
+}

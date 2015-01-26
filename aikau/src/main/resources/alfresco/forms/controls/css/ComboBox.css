@@ -1,0 +1,30 @@
+.alfresco-forms-controls-BaseFormControl .control .dijitArrowButtonContainer {
+  background: none repeat scroll 0 0 transparent;
+  border: none;
+}
+
+.alfresco-forms-controls-BaseFormControl div.control div.dijitComboBox {
+   border-color: @standard-border-color;
+}
+
+.alfresco-forms-controls-BaseFormControl div.control div.dijitComboBox.dijitTextBoxHover {
+   border-color: @hover-border-color;
+   background-image: none;
+   background-color: inherit;
+}
+
+.alfresco-forms-controls-BaseFormControl div.control div.dijitComboBox.dijitTextBoxFocused {
+   border-color: @focused-border-color;
+}
+
+.claro .dijitMenu.dijitComboBoxMenu {
+   border-color: @standard-border-color;
+}
+
+.claro .dijitMenu.dijitComboBoxMenu .dijitMenuItem.dijitMenuItemSelected {
+   background-color: #f0f0f0;
+}
+
+.claro .dijitComboBoxHighlightMatch {
+   background-color: transparent;
+}

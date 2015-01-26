@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfSideBarContainer Test</shortname>
+  <description>This WebScript defines the AlfSideBarContainer page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfSideBarContainer</url>
+</webscript>

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>JustCoverage Test</shortname>
+  <description>This WebScript defines the JustCoverage page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/JustCoverage</url>
+</webscript>

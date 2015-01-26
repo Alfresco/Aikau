@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>PdfJsPreviewMissing Test</shortname>
+  <description>This WebScript defines the PdfJsPreviewMissing page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/PdfJsPreviewMissing</url>
+</webscript>

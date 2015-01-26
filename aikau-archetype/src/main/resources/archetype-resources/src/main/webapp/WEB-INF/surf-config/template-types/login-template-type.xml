@@ -1,0 +1,12 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<template-type>
+   <title>Aikau Login Page</title>
+   <description>This is the login template type for all pages</description>
+   <processor mode="view">
+      <id>webscript</id>
+      <uri>/aikau/login/template</uri>
+   </processor>
+</template-type>

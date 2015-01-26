@@ -1,0 +1,35 @@
+.alfresco-navigation-Tree .dijitTree {
+   overflow-x: hidden;
+   overflow-y: visible;
+}
+
+.alfresco-navigation-Tree .label {
+  font-size: 123.1%;
+  font-weight: normal;
+}
+
+.alfresco-navigation-Tree .dijitIconFolderOpen, .alfresco-navigation-Tree .dijitFolderOpened {
+   background-position: 0;
+   background-image: url(./images/folder-open-16.png);
+}
+
+.alfresco-navigation-Tree .dijitIconFolderClosed, .alfresco-navigation-Tree .dijitFolderClosed {
+   background-position: 0;
+   background-image: url(./images/folder-closed-16.png);
+}
+
+.alfresco-navigation-Tree .dijitTreeExpandoLoading {
+   background-image: url(./images/ajax_anim.gif);
+   background-position: 0;
+}
+
+.alfresco-navigation-Tree .dijitTreeRow {
+   border: none;
+   padding: @standard-line-height/2 0 @standard-line-height/2 0;
+}
+
+.alfresco-navigation-Tree .dijitTreeRowSelected,
+.alfresco-navigation-Tree .dijitTreeRowHover {
+   background-image: none;
+   background-color: @list-hover-color; 
+}

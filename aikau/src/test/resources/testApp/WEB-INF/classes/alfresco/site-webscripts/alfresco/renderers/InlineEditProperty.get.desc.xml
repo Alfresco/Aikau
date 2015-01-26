@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>InlineEditProperty Test</shortname>
+  <description>This WebScript defines the InlineEditProperty page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/InlineEditProperty</url>
+</webscript>

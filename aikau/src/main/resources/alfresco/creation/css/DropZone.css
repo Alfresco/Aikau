@@ -1,0 +1,16 @@
+.alfresco-creation-DropZone .previewPanel {
+   border: 1px solid #CCC;
+   /*border-radius: 5px;*/
+   min-height: 50px;
+   min-width: 100px;
+   margin: 5px;
+   padding: 10px;
+   background-color: #fff;
+   margin-top: 15px;
+   box-shadow: inset 5px 5px 10px -4px rgba(0,0,0,0.75);
+}
+
+.alfresco-creation-DropZone .previewPanel.containsItems {
+   /*border: none;*/
+   padding-right: 50px;
+}

@@ -1,0 +1,10 @@
+.alfresco-renderers-Category .icon {
+   background-image: url(./images/category-16.png);
+   width: 16px;
+   height: 16px;
+   display: inline-block;
+}
+
+.alfresco-renderers-Category .alfresco-navigation-Link {
+  margin-left: 5px;
+}

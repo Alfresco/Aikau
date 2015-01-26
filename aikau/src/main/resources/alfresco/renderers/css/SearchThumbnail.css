@@ -1,0 +1,6 @@
+.alfresco-renderers-SearchThumbnail img {
+   display: block;
+   float: right;
+   box-shadow: 0.33px 1px 3px rgba(0,0,0,0.3);
+   border: none;
+}

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>PublishPayloadMixinOnActions Test</shortname>
+  <description>This WebScript defines the PublishPayloadMixinOnActions page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/PublishPayloadMixinOnActions</url>
+</webscript>

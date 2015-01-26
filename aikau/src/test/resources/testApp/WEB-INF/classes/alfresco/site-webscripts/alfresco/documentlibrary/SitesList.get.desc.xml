@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>SitesList Test</shortname>
+  <description>This WebScript define the page for testing the alfresco/documentlibrary/AlfSitesList widget</description>
+  <family>aikau-unit-tests</family>
+  <url>/SitesList</url>
+</webscript>

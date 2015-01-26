@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AutoSet Test</shortname>
+  <description>This WebScript defines the AutoSet page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AutoSet</url>
+</webscript>

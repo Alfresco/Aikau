@@ -1,0 +1,46 @@
+.accessibilityMenu
+{
+   position: absolute;
+   left: 0;
+   top: 0;
+   height: 0;
+   width: 100%;
+   margin-left: 0;
+   text-align: center;
+}
+.accessibilityMenu p
+{
+   position: absolute;
+   left: -99999px;
+}
+.accessibilityMenu ul
+{
+   list-style: outside none;
+}
+.accessibilityMenu li
+{
+   list-style-type: none;
+}
+.accessibilityMenu a
+{
+   position: absolute;
+   left: -99999px;
+   top: 58px;
+}
+.accessibilityMenu a:focus,
+.accessibilityMenu a:active{
+   position: relative;
+   left: 0;
+   z-index: 9999;
+   width: 75%;
+   height: auto;
+   margin: 0 auto;
+   padding: 20px 25px;
+   text-align: center;
+   text-decoration: none;
+   font: bold 30px "Arial", "Freesans", sans-serif;
+   color: #333;
+   background-color: #fff;
+   opacity: 0.80;
+   border: 1px solid #333;
+}

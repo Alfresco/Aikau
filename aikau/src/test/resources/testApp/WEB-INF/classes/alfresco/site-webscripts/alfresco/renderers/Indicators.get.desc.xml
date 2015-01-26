@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Indicators Test</shortname>
+  <description>This WebScript defines the Indicators page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Indicators</url>
+</webscript>

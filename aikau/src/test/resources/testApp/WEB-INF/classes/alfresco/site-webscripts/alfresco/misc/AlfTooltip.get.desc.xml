@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfTooltip Test</shortname>
+  <description>This WebScript defines the AlfTooltip page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfTooltip</url>
+</webscript>

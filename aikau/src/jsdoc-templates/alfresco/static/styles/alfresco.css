@@ -1,0 +1,212 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url(./fonts/opensans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans Bold';
+  font-style: normal;
+  font-weight: 600;
+  src: url(./fonts/opensansbold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans Condensed';
+  font-style: normal;
+  font-weight: 300;
+  src: url(./fonts/opensanscondensed.woff) format('woff');
+}
+
+.alfresco-jsdoc {
+   font-family: Open Sans,Arial,sans-serif;
+   font-size: 13px;
+   font-color: #fff;
+}
+
+body.alfresco-jsdoc {
+   border-top: 4px solid #8cc540;
+   margin: 0;
+   padding: 10px;
+}
+
+.alfresco-jsdoc #main {
+   float: right;
+   width: 79%;
+   background: #f9f9f9;
+}
+
+.alfresco-jsdoc nav {
+   float: left;
+   width: 20%;
+   overflow-x: hidden;
+   margin-left: 0;
+   margin-top: 0;
+   border-right: 1px solid #ccc;
+   padding-right: 9px;
+   border-left: none;
+   padding-left: 0;
+}
+
+.alfresco-jsdoc nav h3 {
+  background-color: #0C5FAA;
+  width: 100%;
+  padding:5px 10px 5px 5px;
+  color: white;
+}
+
+.alfresco-jsdoc nav h3 a {
+  color: white;
+}
+
+.alfresco-jsdoc nav h4 {
+  margin-bottom:0;
+  background: #f9f9f9;
+  padding: 10px 5px 5px;
+  width: 100%
+}
+
+.alfresco-jsdoc .readme article {
+  background:white;
+  margin: 10px;
+  padding: 10px;
+}
+
+.alfresco-jsdoc #main .readme h1 {
+  color: #333;
+  padding-left: 0;
+
+}
+
+.alfresco-jsdoc h1,
+.alfresco-jsdoc h2,
+.alfresco-jsdoc h3,
+.alfresco-jsdoc h4,
+.alfresco-jsdoc h5,
+.alfresco-jsdoc th {
+   font-family: Open Sans Bold,Arial,sans-serif;
+   font-weight: normal;
+}
+
+.alfresco-jsdoc h2,
+.alfresco-jsdoc nav h2 a,
+.alfresco-jsdoc h4 {
+   color: #0C5FAA;
+}
+
+.alfresco-jsdoc h2:first-of-type {
+  border: 10px solid #f9f9f9;
+  border-left:0;
+  width: 100%;
+  padding: 5px;
+  margin-top: 0;
+}
+
+.alfresco-jsdoc .params .name, 
+.alfresco-jsdoc .props .name, 
+.alfresco-jsdoc .name code {
+   color: #0C5FAA;
+}
+
+.alfresco-jsdoc section {
+   margin-right: 0;
+   padding:0;
+   background: transparent;
+}
+
+.alfresco-jsdoc #main h1 {
+  padding: 5px 15px;
+  color: #f99829;
+}
+
+.alfresco-jsdoc section header {
+   display:none;
+}
+
+.alfresco-jsdoc article .container-overview {
+  background: white;
+  margin: 0 10px;
+  padding: 0 5px 5px;
+}
+
+.alfresco-jsdoc article .container-overview .description {
+   margin-left: 0;
+   padding: 5px;
+}
+
+.alfresco-jsdoc article .container-overview .details {
+   border: 0;
+}
+
+.alfresco-jsdoc article .container-overview h3 {
+   margin-left: 10px;
+}
+
+.alfresco-jsdoc .container-overview .prettyprint {
+   margin: 0 10px 10px;
+   width: auto;
+}
+
+.alfresco-jsdoc .prettyprint code {
+  background: #f9f9f9;
+}
+
+.alfresco-jsdoc .container-overview .code-caption {
+   margin:10px 10px 0;
+   padding: 5px 5px 0;
+   background: #ddd;
+}
+
+.alfresco-jsdoc .subsection {
+   background: white;
+   margin:20px 10px;
+   padding: 0 5px 5px;
+}
+
+.alfresco-jsdoc .subsection h5 {
+  margin: 10px 0px 5px;
+}
+
+.alfresco-jsdoc article h3.subsection-title {
+   padding:10px;
+}
+
+.alfresco-jsdoc article h4.name {
+   color: #333;
+   border-left: 3px solid #8cc540;
+   padding: 10px;
+   background: #eee;
+   margin: 20px 10px 5px 5px;
+}
+
+.alfresco-jsdoc article h4.name .signature{
+  color: #555;
+}
+
+.alfresco-jsdoc nav li {
+   margin: 5px;
+}
+
+#header {
+   margin-bottom: 10px;
+}
+
+#header > *{
+   vertical-align: middle;
+}
+
+#header img {
+   padding-right: 10px;
+   border-right: 1px #ccc solid;
+   margin-right: 10px;
+}
+
+#header span {
+   font-family: Open Sans Condensed,Arial,sans-serif;
+   color: #333333;
+   font-size: 230%;
+}
+
+.alfresco-jsdoc .details dt {
+  width: 100px;
+}
+

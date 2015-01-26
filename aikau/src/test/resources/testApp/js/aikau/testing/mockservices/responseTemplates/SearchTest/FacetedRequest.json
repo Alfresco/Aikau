@@ -1,0 +1,161 @@
+[
+   {
+      "totalRecords": 6,
+      "totalRecordsUpper": 6,
+      "startIndex": 0,
+      "numberFound": 6,
+      "facets":
+      {
+         "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.mimetype":
+            [
+               {
+                  "label": "MPEG4 Video",
+                  "value": "video\/mp4",
+                  "hits": 6
+               }
+            ],
+         "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modifier.__":
+            [
+               {
+                  "label": "Administrator",
+                  "value": "admin",
+                  "hits": 6
+               }
+            ],
+         "@{http:\/\/www.alfresco.org\/model\/content\/1.0}creator.__":
+            [
+               {
+                  "label": "Administrator",
+                  "value": "admin",
+                  "hits": 6
+               }
+            ],
+         "@{http:\/\/www.alfresco.org\/model\/content\/1.0}description.__":
+            [
+            ]
+      },
+      "items":
+         [
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/39419362-b2ad-4b2f-8926-66dbaf3e2e87",
+               "type": "document",
+               "name": "2014-03-29 01.57.56.mp4",
+               "displayName": "2014-03-29 01.57.56.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:24.141+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 7870708,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/ea6567cd-35c3-4a2b-a9af-560fee1df8c4",
+               "type": "document",
+               "name": "2014-03-29 01.59.05.mp4",
+               "displayName": "2014-03-29 01.59.05.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:25.282+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 43518131,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/ba8886c1-e428-466e-8297-bcf45afc2955",
+               "type": "document",
+               "name": "2014-03-29 02.06.37.mp4",
+               "displayName": "2014-03-29 02.06.37.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:39.257+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 22223900,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/255ef8df-ba91-4285-a073-7f270fd53096",
+               "type": "document",
+               "name": "2014-03-29 02.07.40.mp4",
+               "displayName": "2014-03-29 02.07.40.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:39.516+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 1170761,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/1dc8dc5a-42de-4a36-9aab-82bdad6a8e1e",
+               "type": "document",
+               "name": "2014-03-29 02.04.34.mp4",
+               "displayName": "2014-03-29 02.04.34.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:38.708+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 402890213,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/06cfb6c5-58e1-4ef0-9628-c5aea63f7259",
+               "type": "document",
+               "name": "2014-03-26 00.52.03.mp4",
+               "displayName": "2014-03-26 00.52.03.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:22.626+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2208300,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            }
+         ]
+   }
+]

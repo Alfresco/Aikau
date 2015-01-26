@@ -1,0 +1,17 @@
+{
+   "data":
+   [
+      {
+         "nodeRef": "workspace://SpacesStore/0e56c7a3-67d0-4a35-b2ce-4c2038897a66",
+         "name": "Node 1",
+         "title": "",
+         "description": ""
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/2a3c82c3-fe38-46c5-b210-c3d6f98e11ef",
+         "name": "Node 2",
+         "title": "",
+         "description": ""
+      }
+   ]
+}

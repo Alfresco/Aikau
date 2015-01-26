@@ -1,0 +1,144 @@
+.alfresco-share .alf-search-box {
+    margin: 2px 10px 0px 10px;
+    background-color: @primary-title-color;
+    border-radius: 12px;
+    box-shadow: @inset-box-shadow;
+    padding-left: 4px;
+    padding-bottom: 1px;
+
+    a {
+        color: @emphasized-font-color;
+        text-decoration: none;
+    }
+
+    .dijit.dijitReset.dijitInline.dijitDropDownButton {
+        float: left;
+    }
+
+    .dijitReset.dijitInline.dijitButtonNode {
+        border: medium none;
+    }
+
+    .alf-search-box-menu {
+        display: inline-block;
+    }
+
+    input.alf-search-box-text {
+        background-color: @primary-title-color;
+        border: none;
+        font-size: 100%;
+        padding: 0;
+        margin-right: 8px;
+        margin-left: -6px;
+        position: relative;
+        top: 2px;
+        margin-top: 1px;
+        font-family: @standard-font;
+    }
+
+    .alf-search-box-text:focus {
+        outline: none;
+    }
+
+    /* This defines the search icon for use in popup menu items only */
+    .alf-search-icon {
+        height: 16px;
+        width: 16px;
+        display: block;
+    }
+
+    .alf-search-box-clear {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        line-height: 12px;
+        background-image: url("../../css/images/Delete.PNG");
+        background-repeat: no-repeat;
+        margin-right: 10px;
+    }
+
+    .alf-livesearch {
+        position: absolute;
+        right: 8px;
+        min-width: 360px;
+        max-width: 500px;
+        background-color: @list-background-color;
+        border: @standard-button-border;
+        box-shadow: 0.33px 0px 8px rgba(0, 0, 0, 0.3);
+        color: @general-font-color;
+        margin-top: 3px;
+        z-index: 1000;
+        display: none;
+
+        .wait {
+            background: url("../../css/images/wait.gif") center no-repeat;
+        }
+
+        .alf-livesearch-title {
+            clear: both;
+            font-size: 115%;
+            padding: 9px 9px 5px 9px;
+        }
+
+        .alf-livesearch-more {
+            display: none;
+            margin-top: -8px;
+            margin-bottom: 4px;
+            height: 16px;
+
+            span {
+                position: absolute;
+                right: 1px;
+                height: 10px;
+                background: url("../../css/images/ArrowDown.PNG") no-repeat 100% 100%;
+                padding-right: 22px;
+            }
+        }
+
+        .alf-livesearch-list {
+            padding: 2px 0px 6px 0px;
+
+
+            & > div {
+                clear: both;
+                padding: 5px 8px 5px 8px;
+
+                &:hover {
+                    background-color: @list-hover-color;
+                }
+            }
+
+            .alf-livesearch-thumbnail {
+                float: left;
+                /*border: 1px solid #ccc;*/
+                /*box-shadow: 0px 1px 3px #ccc;*/
+                max-height: 32px;
+                overflow: hidden;
+            }
+
+            .alf-livesearch-icon {
+                float: left;
+            }
+
+            .alf-livesearch-item
+            {
+               margin-left: 40px;
+               line-height: 1.3em;
+               font-size: 93%;
+
+                span,
+                span a {
+                    color: @de-emphasized-font-color;
+                }
+            }
+        }
+    }
+}
+
+/* This overrides the header menu bar settings to ensure that the popup menu item is the right height */
+.alfresco-share .alfresco-header-Header .alf-search-box-menu .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
+    height: 16px;
+    margin-top: 0;
+    margin-left: -2px;
+    padding-right: 2px;
+}

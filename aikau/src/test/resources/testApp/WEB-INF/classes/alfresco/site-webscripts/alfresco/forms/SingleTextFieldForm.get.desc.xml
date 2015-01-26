@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>SingleTextFieldForm Test</shortname>
+  <description>This WebScript defines the SingleTextFieldForm page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/SingleTextFieldForm</url>
+</webscript>

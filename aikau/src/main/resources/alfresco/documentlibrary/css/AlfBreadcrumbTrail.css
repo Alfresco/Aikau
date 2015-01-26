@@ -1,0 +1,20 @@
+.alfresco-documentlibrary-AlfBreadcrumbTrail {
+   margin-bottom: @standard-line-height;
+   margin-top: @standard-line-height;
+   margin-left: @standard-column-width;
+   font-family: @bold-font;
+   color: @general-font-color;
+   font-size: @normal-font-size;
+}
+
+.alfresco-documentlibrary-AlfBreadcrumbTrail.hidden {
+   display: none;
+}
+
+.alfresco-share .alfresco-documentlibrary-AlfBreadcrumbTrail .alf-folder-separator {
+   background: url("./images/folder-separator.png") no-repeat scroll 0 center transparent;
+   margin-left: 10px;
+   padding: 0 10px;
+   height: 20px;
+   width: 20px;
+}

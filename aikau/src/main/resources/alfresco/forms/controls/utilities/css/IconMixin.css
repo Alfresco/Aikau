@@ -1,0 +1,13 @@
+.alfresco-forms-controls-BaseFormControl span.alf-icon.alf-search-icon {
+   background-image: url("./images/20x20-search-icon.png");
+   background-position: 3px 1px;
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 30px;
+   float: left;
+}
+
+.alfresco-forms-controls-BaseFormControl span.alf-icon + input.dijitInputInner {
+   /* PLEASE NOTE: The ~" " style prevents LESS from calculating on the server side! */
+   width: ~"calc(100% - 30px) !important";
+}

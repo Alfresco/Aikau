@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Audio Preview Test</shortname>
+  <description>This WebScript defines the Audio previewer plugin page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AudioPreview</url>
+</webscript>

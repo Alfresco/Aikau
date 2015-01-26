@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DocumentLibraryToolbar Test</shortname>
+  <description>This WebScript defines the DocumentLibraryToolbar page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/DocumentLibraryToolbar</url>
+</webscript>

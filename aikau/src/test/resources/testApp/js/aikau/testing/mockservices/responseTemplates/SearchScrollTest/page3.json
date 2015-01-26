@@ -1,0 +1,671 @@
+{
+   "totalRecords": 21,
+   "totalRecordsUpper": 71,
+   "startIndex": 50,
+   "numberFound": 71,
+   "facets":
+   {
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}created":
+      [
+         {
+         "label": "faceted-search.date.one-week.label",
+         "value": "2014-08-05\"..\"2014-08-12",
+         "hits": 27,
+         "index": 1
+         },
+         {
+         "label": "faceted-search.date.one-day.label",
+         "value": "2014-08-11\"..\"2014-08-12",
+         "hits": 27,
+         "index": 0
+         },
+         {
+         "label": "faceted-search.date.one-year.label",
+         "value": "2013-08-12\"..\"2014-08-12",
+         "hits": 71,
+         "index": 4
+         },
+         {
+         "label": "faceted-search.date.six-months.label",
+         "value": "2014-02-12\"..\"2014-08-12",
+         "hits": 71,
+         "index": 3
+         },
+         {
+         "label": "faceted-search.date.one-month.label",
+         "value": "2014-07-12\"..\"2014-08-12",
+         "hits": 28,
+         "index": 2
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modifier.__.u":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 71,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}creator.__.u":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 71,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modified":
+      [
+         {
+         "label": "faceted-search.date.one-year.label",
+         "value": "2013-08-12\"..\"2014-08-12",
+         "hits": 71,
+         "index": 4
+         },
+         {
+         "label": "faceted-search.date.one-month.label",
+         "value": "2014-07-12\"..\"2014-08-12",
+         "hits": 29,
+         "index": 2
+         },
+         {
+         "label": "faceted-search.date.one-week.label",
+         "value": "2014-08-05\"..\"2014-08-12",
+         "hits": 27,
+         "index": 1
+         },
+         {
+         "label": "faceted-search.date.six-months.label",
+         "value": "2014-02-12\"..\"2014-08-12",
+         "hits": 71,
+         "index": 3
+         },
+         {
+         "label": "faceted-search.date.one-day.label",
+         "value": "2014-08-11\"..\"2014-08-12",
+         "hits": 27,
+         "index": 0
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.mimetype":
+      [
+         {
+         "label": "JPEG Image",
+         "value": "image\/jpeg",
+         "hits": 70,
+         "index": -1
+         },
+         {
+         "label": "Adobe PDF Document",
+         "value": "application\/pdf",
+         "hits": 1,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.size":
+      [
+         {
+         "label": "faceted-search.size.1-16MB.label",
+         "value": "1048576\"..\"16777216",
+         "hits": 65,
+         "index": 3
+         },
+         {
+         "label": "faceted-search.size.100KB-1MB.label",
+         "value": "102400\"..\"1048576",
+         "hits": 6,
+         "index": 2
+         }
+      ]
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/c4819609-bc1c-4ee3-8498-7c4e2a26cac2",
+         "type": "document",
+         "name": "2013-12-26 11.50.09.jpg",
+         "displayName": "2013-12-26 11.50.09.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:59.194+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2400442,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758410511"
+          ,
+          "doclib:1407849827187"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/92605daf-966c-475f-b2a2-7b7be48e3b86",
+         "type": "document",
+         "name": "2013-12-29 09.53.13.jpg",
+         "displayName": "2013-12-29 09.53.13.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:59.345+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2825516,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758410504"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/2895582f-49d0-4056-8190-b4b1bb63edd1",
+         "type": "document",
+         "name": "2013-10-10 08.01.23.jpg",
+         "displayName": "2013-10-10 08.01.23.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:57.345+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2212228,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758410579"
+          ,
+          "doclib:1407849829264"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/85a3fb84-13bb-4ec6-b1aa-3f276ffb056c",
+         "type": "document",
+         "name": "2013-12-08 13.16.59.jpg",
+         "displayName": "2013-12-08 13.16.59.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:58.404+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 3364629,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758411712"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/4e723eb5-fd37-4e6b-b90a-a8ae604b49aa",
+         "type": "document",
+         "name": "2013-12-26 11.21.04.jpg",
+         "displayName": "2013-12-26 11.21.04.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:58.682+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 3341225,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758411982"
+          ,
+          "doclib:1407849827392"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/7a57e71f-6e64-4247-9d5e-55f1839b011d",
+         "type": "document",
+         "name": "2013-12-26 11.48.30.jpg",
+         "displayName": "2013-12-26 11.48.30.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:58.961+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2384817,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758414866"
+          ,
+          "doclib:1407849827382"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/7b417936-6c54-4c2a-b3b7-1d5190bcdcd0",
+         "type": "document",
+         "name": "2013-12-26 11.48.37.jpg",
+         "displayName": "2013-12-26 11.48.37.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:59.082+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2250577,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758414064"
+          ,
+          "doclib:1407849829264"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/5af5da23-6411-489c-a353-404fd0cfdaaa",
+         "type": "document",
+         "name": "2013-12-29 09.53.21.jpg",
+         "displayName": "2013-12-29 09.53.21.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:59.481+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2965261,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758411981"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/bbd350a9-d92a-41d2-b204-f7bd7ab4b2a3",
+         "type": "document",
+         "name": "2013-12-29 09.56.40.jpg",
+         "displayName": "2013-12-29 09.56.40.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:59.614+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 4267820,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758412505"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/264f9276-44a1-4dad-84b2-fc346771a7bb",
+         "type": "document",
+         "name": "2013-12-29 09.57.58.jpg",
+         "displayName": "2013-12-29 09.57.58.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:59.751+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2207456,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758410579"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/c3f9222b-95cb-4deb-9de7-ead9c8c9e1cf",
+         "type": "document",
+         "name": "2013-12-29 09.58.28.jpg",
+         "displayName": "2013-12-29 09.58.28.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:59.881+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2983824,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758411581"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/3f2b093b-7b73-4236-aca3-cce68318b189",
+         "type": "document",
+         "name": "2013-12-29 09.58.43.jpg",
+         "displayName": "2013-12-29 09.58.43.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T13:00:00.024+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 4327152,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758414070"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/d1ecbf67-92e0-4ac7-a5e3-625c9adf8b1b",
+         "type": "document",
+         "name": "2013-12-29 10.03.18.jpg",
+         "displayName": "2013-12-29 10.03.18.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T13:00:00.330+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 1930357,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758414866"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/bca1a8cf-416a-408c-a331-b28dd3af15a0",
+         "type": "document",
+         "name": "2013-12-29 09.59.46.jpg",
+         "displayName": "2013-12-29 09.59.46.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T13:00:00.199+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 3479494,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758414986"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/b10628d1-5caa-4547-a198-aa1e1cc80348",
+         "type": "document",
+         "name": "2013-12-29 10.03.20.jpg",
+         "displayName": "2013-12-29 10.03.20.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T13:00:00.462+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 1854400,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758414665"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/fec1164b-3235-4a0b-ad64-85eba901ccf2",
+         "type": "document",
+         "name": "2013-12-29 10.03.40.jpg",
+         "displayName": "2013-12-29 10.03.40.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T13:00:00.569+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2743117,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758415065"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/16648b5a-075a-4a99-bc0f-d0c044488916",
+         "type": "document",
+         "name": "2013-10-10 08.01.37.jpg",
+         "displayName": "2013-10-10 08.01.37.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:57.501+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 1989226,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758410104"
+          ,
+          "doclib:1407849821290"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/3a265077-deb4-456e-8a36-95a0f3f83b27",
+         "type": "document",
+         "name": "2013-10-10 08.01.11.jpg",
+         "displayName": "2013-10-10 08.01.11.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:57.196+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2288230,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758409128"
+          ,
+          "doclib:1407849821180"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/64b3eacb-b6fc-40c1-b316-fc0b24e4903d",
+         "type": "document",
+         "name": "2013-10-10 08.00.56.jpg",
+         "displayName": "2013-10-10 08.00.56.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:57.039+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2225456,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758409312"
+          ,
+          "doclib:1407849821206"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/178bce27-c14b-474d-8b3b-021859c0edb6",
+         "type": "document",
+         "name": "2013-10-12 18.22.32.jpg",
+         "displayName": "2013-10-12 18.22.32.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:57.661+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 1023955,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758409279"
+          ,
+          "doclib:1407849821240"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/b633198e-7932-4f00-bbe1-410b4626335b",
+         "type": "document",
+         "name": "2013-11-23 10.51.34.jpg",
+         "displayName": "2013-11-23 10.51.34.jpg",
+         "description": "",
+         "modifiedOn": "2014-08-11T12:59:57.829+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 2323882,
+         "mimetype": "image\/jpeg",
+         "site":
+         {
+            "shortName": "site3",
+            "title": "Site3"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1407758409424"
+          ,
+          "doclib:1407849820729"
+          
+         ],
+         "tags": []
+      }
+   ]
+}

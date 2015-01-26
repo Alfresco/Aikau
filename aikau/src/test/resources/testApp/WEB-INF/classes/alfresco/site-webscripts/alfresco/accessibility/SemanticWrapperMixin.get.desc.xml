@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>SemanticWrapperMixin Test</shortname>
+  <description>This WebScript defines the SemanticWrapperMixin page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/SemanticWrapperMixin</url>
+</webscript>

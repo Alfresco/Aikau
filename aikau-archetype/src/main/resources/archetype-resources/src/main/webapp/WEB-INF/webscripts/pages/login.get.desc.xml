@@ -1,0 +1,8 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<webscript>
+  <shortname>Login Page</shortname>
+  <family>Default Pages</family>
+  <url>/login</url>
+</webscript>

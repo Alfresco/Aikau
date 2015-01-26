@@ -1,0 +1,9 @@
+.alfresco-navigation-Tree.categories .dijitIconFolderOpen, .alfresco-navigation-Tree.categories .dijitFolderOpened {
+   background-position: 0;
+   background-image: url(./images/category-16.png);
+}
+
+.alfresco-navigation-Tree.categories .dijitIconFolderClosed, .alfresco-navigation-Tree.categories .dijitFolderClosed {
+   background-position: 0;
+   background-image: url(./images/category-16.png);
+}

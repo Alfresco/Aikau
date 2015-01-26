@@ -1,0 +1,20 @@
+{
+   "services": [
+      {
+         "name": "alfresco/testing/RequireEverything"
+      },
+      "alfresco/services/ErrorReporter"
+   ],
+   "widgets": [
+      {
+         "id": "LABEL",
+         "name": "alfresco/html/Label",
+         "config": {
+            "label": "Coverage Balanced!"
+         }
+      },
+      {
+         "name": "alfresco/testing/TestCoverageResults"
+      }
+   ]
+}

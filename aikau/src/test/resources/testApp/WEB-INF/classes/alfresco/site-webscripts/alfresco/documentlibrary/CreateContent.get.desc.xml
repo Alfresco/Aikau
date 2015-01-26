@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>CreateContent Test</shortname>
+  <description>This WebScript defines the CreateContent page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/CreateContent</url>
+</webscript>

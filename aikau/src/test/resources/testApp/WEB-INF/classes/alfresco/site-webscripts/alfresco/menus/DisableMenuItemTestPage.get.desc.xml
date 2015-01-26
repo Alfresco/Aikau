@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DisableMenuItemTestPage</shortname>
+  <description>This WebScript defines the DisableMenuItemTestPage</description>
+  <family>aikau-unit-tests</family>
+  <url>/DisableMenuItemTestPage</url>
+</webscript>

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AddFavouriteSite Test</shortname>
+  <description>This WebScript defines the AddFavouriteSite page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AddFavouriteSite</url>
+</webscript>

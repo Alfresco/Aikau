@@ -1,0 +1,9 @@
+.alfresco-menus-AlfTextForClipboard span {
+   
+}
+
+.alfresco-menus-AlfTextForClipboard input {
+   border: @standard-border;
+   font-family: @standard-font;
+   width: 300px;
+}

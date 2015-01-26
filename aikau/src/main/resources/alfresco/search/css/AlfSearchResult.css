@@ -1,0 +1,21 @@
+.alfresco-search-AlfSearchResult table {
+   border-collapse: collapse;
+   border-spacing: 0;
+}
+
+.alfresco-search-AlfSearchResult .thumbnailCell {
+   width: 100px;
+}
+
+.alfresco-search-AlfSearchResult .actionsCell {
+   width: 100px;
+}
+
+.alfresco-search-AlfSearchResult td.dateCell .alfresco-renderers-Property,
+.alfresco-search-AlfSearchResult div.dateCell .alfresco-renderers-Property {
+   color: @de-emphasized-font-color;
+}
+
+.alfresco-search-AlfSearchResult tr.spacing-row {
+   height: @standard-line-height;
+}

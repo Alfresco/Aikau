@@ -1,0 +1,15 @@
+{
+   "url": "\/alfresco\/s\/api\/sites\/site1",
+   "sitePreset": "site-dashboard",
+   "shortName": "site1",
+   "title": "Site1",
+   "description": "",
+   "node": "\/alfresco\/s\/api\/node\/workspace\/SpacesStore\/65aa61a7-882f-40c4-8f99-2ba611620ff4",
+   "tagScope": "\/alfresco\/s\/api\/tagscopes\/workspace\/SpacesStore\/65aa61a7-882f-40c4-8f99-2ba611620ff4",
+   "siteManagers":
+   [
+         "admin"
+   ],
+   "isPublic": false,
+   "visibility": "MODERATED"
+}

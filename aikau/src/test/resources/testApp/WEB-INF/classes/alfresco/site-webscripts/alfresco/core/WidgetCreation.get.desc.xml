@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>WidgetCreation Test</shortname>
+  <description>This WebScript defines the WidgetCreation page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/WidgetCreation</url>
+</webscript>

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>PropertyLink Test</shortname>
+  <description>This WebScript defines the PropertyLink page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/PropertyLink</url>
+</webscript>

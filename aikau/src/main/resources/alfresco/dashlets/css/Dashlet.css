@@ -1,0 +1,14 @@
+.alfresco-dashlets-Dashlet--toolbar,
+.alfresco-dashlets-Dashlet--titleBarActions,
+.alfresco-dashlets-Dashlet--toolbar2,
+.alfresco-dashlets-Dashlet--body {
+   display: none;
+}
+
+.alfresco-dashlets-Dashlet--widgets {
+   display: block;
+}
+
+.alfresco-dashlets-Dashlet--body {
+   overflow: hidden;
+}

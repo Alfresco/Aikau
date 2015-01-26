@@ -1,0 +1,25 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": [],
+        "exclude": [],
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "(^|\\/|\\\\)\\$"
+    },
+    "plugins": [],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "opts": {
+        "template": "src/jsdoc-templates/alfresco",
+        "encoding": "utf8",
+        "destination": "../../docs",
+        "recurse": true,
+        "query": "value",
+        "private": true,
+        "lenient": false
+    }
+}

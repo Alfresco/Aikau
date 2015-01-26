@@ -1,0 +1,23 @@
+.alfresco-layout-VerticalReveal {
+   
+}
+
+.alfresco-layout-VerticalReveal > div.toggle.hidden {
+   display: none;
+}
+
+.alfresco-layout-VerticalReveal > div.content {
+   max-height: 0;
+   overflow: hidden;
+   transition: max-height 1s ease;
+}
+
+.alfresco-layout-VerticalReveal > div.content > div {
+   border: 1px solid #ccc;
+   padding: 5px;
+   margin: 5px;
+}
+
+.alfresco-layout-VerticalReveal > div.content.reveal {
+   max-height: 1000px;
+}

@@ -1,0 +1,112 @@
+{
+   "data":
+   {
+      "parent":
+      {
+         "type": "cm:category",
+         "isContainer": false,
+         "name": "Tags",
+         "title": "",
+         "description": "",
+         "modified": "2014-07-01T13:32:21.213+01:00",
+         "modifier": "System",
+         "displayPath": "\/categories",
+         "nodeRef": "workspace://SpacesStore/tag:tag-root"
+      },
+      "items":
+      [
+         {
+            "type": "cm:category",
+            "parentType": "cm:cmobject",
+            "parentName": "Tags",
+            "isContainer": false,
+            
+            "name": "tag1",
+            "title":"",
+            "description": "",
+            "modified": "2014-08-18T10:44:10.976+01:00",
+            "modifier": "admin",
+            
+            
+            "displayPath": "\/categories\/Tags",
+               "userAccess":
+               {
+                  "create": true,
+                  "edit": true,
+                  "delete": true
+               },
+            "nodeRef": "workspace://SpacesStore/06bd4708-8998-47be-a4ea-0f418bc7bb38",
+            "selectable" : true
+         },
+         {
+            "type": "cm:category",
+            "parentType": "cm:cmobject",
+            "parentName": "Tags",
+            "isContainer": false,
+            
+            "name": "tag2",
+            "title":"",
+            "description": "",
+            "modified": "2014-08-18T10:44:14.056+01:00",
+            "modifier": "admin",
+            
+            
+            "displayPath": "\/categories\/Tags",
+               "userAccess":
+               {
+                  "create": true,
+                  "edit": true,
+                  "delete": true
+               },
+            "nodeRef": "workspace://SpacesStore/84a27335-6008-4ddc-8a27-724225bbed3d",
+            "selectable" : true
+         },
+         {
+            "type": "cm:category",
+            "parentType": "cm:cmobject",
+            "parentName": "Tags",
+            "isContainer": false,
+            
+            "name": "anotherTag",
+            "title":"",
+            "description": "",
+            "modified": "2014-08-18T10:44:20.578+01:00",
+            "modifier": "admin",
+            
+            
+            "displayPath": "\/categories\/Tags",
+               "userAccess":
+               {
+                  "create": true,
+                  "edit": true,
+                  "delete": true
+               },
+            "nodeRef": "workspace://SpacesStore/7b25e83f-d5b6-44bd-a4c2-5faba8d8314e",
+            "selectable" : true
+         },
+         {
+            "type": "cm:category",
+            "parentType": "cm:cmobject",
+            "parentName": "Tags",
+            "isContainer": false,
+            
+            "name": "tag11",
+            "title":"",
+            "description": "",
+            "modified": "2014-08-18T10:43:29.877+01:00",
+            "modifier": "admin",
+            
+            
+            "displayPath": "\/categories\/Tags",
+               "userAccess":
+               {
+                  "create": true,
+                  "edit": true,
+                  "delete": true
+               },
+            "nodeRef": "workspace://SpacesStore/d37d7dfa-8410-46be-af6a-5d5880ca478e",
+            "selectable" : true
+         }
+      ]
+   }
+}

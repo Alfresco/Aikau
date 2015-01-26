@@ -1,0 +1,16 @@
+.alfresco-renderers-Toggle a.on.like
+{
+   background-image: url(./images/liked-16.png);
+}
+.alfresco-renderers-Toggle a.off.like
+{
+   background-image: url(./images/like-16.png);
+}
+
+.alfresco-renderers-Toggle span.count
+{
+   background-color: #eee;
+   font-size: 93%;
+   margin-left: 0.5em;
+   padding:1px 2px 0;
+}

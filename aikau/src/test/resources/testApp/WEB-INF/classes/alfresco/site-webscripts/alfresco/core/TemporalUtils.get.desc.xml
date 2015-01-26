@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>TemporalUtils Test</shortname>
+  <description>This WebScript defines the TemporalUtils page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/TemporalUtils</url>
+</webscript>

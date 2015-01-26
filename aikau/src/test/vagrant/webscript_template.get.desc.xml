@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>{0} Test</shortname>
+  <description>This WebScript defines the {1} page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/{2}</url>
+</webscript>

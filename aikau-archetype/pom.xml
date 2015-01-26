@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>org.alfresco</groupId>
+      <artifactId>aikau-parent</artifactId>
+      <version>1.0.3-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
+   </parent>
+
+   <artifactId>aikau-sample-archetype</artifactId>
+   <packaging>maven-archetype</packaging>
+
+   <name>Aikau Client Archetype</name>
+   <description>A Maven archetype for quickly creating pre-configured clients for accessing a locally hosts Alfresco Repository</description>
+
+   <build>
+      <resources>
+         <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+            <includes>
+               <include>archetype-resources/pom.xml</include>
+               <include>archetype-resources/src/main/webapp/WEB-INF/surf.xml</include>
+            </includes>
+         </resource>
+         <resource>
+            <directory>src/main/resources</directory>
+            <filtering>false</filtering>
+            <excludes>
+               <exclude>archetype-resources/pom.xml</exclude>
+               <exclude>archetype-resources/src/main/webapp/WEB-INF/surf.xml</exclude>
+            </excludes>
+         </resource>
+      </resources>
+      <extensions>
+         <extension>
+            <groupId>org.apache.maven.archetype</groupId>
+            <artifactId>archetype-packaging</artifactId>
+            <version>2.2</version>
+         </extension>
+      </extensions>
+
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-resources-plugin</artifactId>
+               <version>2.5</version>
+               <configuration>
+                  <escapeString>\</escapeString>
+               </configuration>
+            </plugin>
+            <plugin>
+               <artifactId>maven-archetype-plugin</artifactId>
+               <version>2.2</version>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+   </build>
+</project>

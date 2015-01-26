@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>UserServiceFailure Test</shortname>
+  <description>This WebScript defines the UserServiceFailure page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/UserServiceFailure</url>
+</webscript>

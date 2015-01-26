@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfMenuBarSelectItems Test</shortname>
+  <description>This WebScript defines the AlfMenuBarSelectItems page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfMenuBarSelectItems</url>
+</webscript>

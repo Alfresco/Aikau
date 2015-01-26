@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>PieChart Test</shortname>
+  <description>This WebScript defines the PieChart page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/PieChart</url>
+</webscript>

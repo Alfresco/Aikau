@@ -1,0 +1,42 @@
+.alfresco-forms-controls-MultipleEntryCreator {
+   
+}
+
+.alfresco-forms-controls-MultipleEntryCreator .entries {
+   
+}
+
+.alfresco-forms-controls-MultipleEntryCreator .new-entry {
+   
+}
+
+.alfresco-forms-controls-MultipleEntryElementWrapper {
+  border: 1px solid #B5BCC7;
+  margin: 2px 0;
+  padding: 5px;
+}
+
+.alfresco-forms-controls-MultipleEntryElementWrapper .wrapped-content {
+   float: left;
+   padding: 3px;
+}
+
+.alfresco-forms-controls-MultipleEntryCreator .button {
+   background-repeat: no-repeat;
+   width: 16px;
+   height: 16px;
+   float: right;
+   margin: 5px 2px 2px;
+}
+
+.alfresco-forms-controls-MultipleEntryCreator .button.add {
+   float: none;
+} 
+
+.alfresco-forms-controls-MultipleEntryCreator .clear-both {
+   clear: both;
+}
+
+.alfresco-forms-controls-MultipleEntryCreator .clear-hide {
+   display: none;
+}

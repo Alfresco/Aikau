@@ -1,0 +1,10 @@
+{
+  "unique-headings": false,
+  "overqualified-elements": false,
+  "qualified-headings": false,
+  "known-properties": false,
+  "ids": false,
+  "adjoining-classes": false,
+  "star-property-hack": true,
+  "text-indent": false
+}

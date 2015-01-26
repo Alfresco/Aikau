@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>BasicForm Test</shortname>
+  <description>This WebScript defines the BasicForm page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/BaseForm</url>
+</webscript>

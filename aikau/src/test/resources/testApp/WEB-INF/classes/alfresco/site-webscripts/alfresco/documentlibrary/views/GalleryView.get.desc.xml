@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>GalleryView Test</shortname>
+  <description>This WebScript defines the GalleryView page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/GalleryView</url>
+</webscript>

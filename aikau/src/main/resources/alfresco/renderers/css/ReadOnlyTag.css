@@ -1,0 +1,8 @@
+.alfresco-renderers-ReadOnlyTag {
+   border-radius: 6px 6px 6px 6px;
+   font-size: 93%;
+   margin-right: 0.5em;
+   padding: 2px 8px;
+   background-color: @primary-theme-color;
+   color: @general-font-color;
+}

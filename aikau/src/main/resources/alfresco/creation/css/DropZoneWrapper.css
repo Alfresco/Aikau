@@ -1,0 +1,62 @@
+.alfresco-creation-DragZoneWrapper,
+.alfresco-creation-DragZoneWrapper.dojoDndItem,
+.alfresco-creation-DragZoneWrapper.dojoDndItemAnchor,
+.alfresco-creation-DragZoneWrapper.dojoDndItemSelected,
+.alfresco-creation-DragZoneWrapper.dojoDndItemOver {
+   background-color: #EEE;
+   background-image: none;
+   padding: 5px;
+   margin: 5px;
+   border: 1px solid #CCC;
+   position: relative;
+   min-width: 100px;
+   box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.alfresco-creation-DragZoneWrapper.dojoDndItemOver {
+   border: 1px solid #D3D3D3;
+}
+
+.alfresco-creation-DragZoneWrapper .dojoDndItemOver {
+   background-color: #EEE;
+}
+
+.alfresco-creation-DragZoneWrapper.dojoDndItemAnchor .delete {
+   background-image: url("./images/delete_icon.png");
+   background-repeat: no-repeat;
+   display: inline-block;
+   width: 13px;
+   height: 13px;
+   float: right;
+}
+
+.alfresco-creation-DragZoneWrapper .dojoDndHandle {
+   background-image: url("./images/drag_handle.png");
+   background-repeat: no-repeat;
+   display: inline-block;
+   vertical-align: middle;
+   width: 16px;
+   height: 16px;
+   margin-top: 12px;
+   /*float: right; */
+   clear: right;
+}
+
+.alfresco-creation-DragZoneWrapper .control {
+   display: inline-block;
+   vertical-align: middle;
+}
+
+.alfresco-creation-DragZoneWrapper .moduleName {
+   color: #818181;
+   position: absolute;
+   top: 5px;
+   left: 5px;
+   margin-right: 20px;
+   font-size: xx-small;
+}
+
+.alfresco-creation-DragZoneWrapper > .control > .alfresco-html-Label {
+   padding-top: 15px;
+   vertical-align: inherit;
+}

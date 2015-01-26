@@ -1,0 +1,38 @@
+.alfresco-forms-controls-BaseFormControl > .control-row > .control > table{
+   -moz-border-radius: 3px;
+   -webkit-border-radius: 3px;
+   -khtml-border-radius: 3px;
+   border-radius: 3px;
+   background-color: @standard-button-background-color;
+}
+
+.alfresco-forms-controls-BaseFormControl > .control-row > .control > table > tr{
+   background: transparent;
+}
+
+.alfresco-forms-controls-BaseFormControl > .control-row > .control > table td{
+   border: none;
+   padding: 3px 5px;
+   background: transparent;
+}
+
+.alfresco-forms-controls-BaseFormControl > .control-row > .control > table td.dijitArrowButton{
+   border: none;
+   background: transparent;
+   padding-right: 3px;
+}
+
+.alfresco-forms-controls-BaseFormControl > .control-row > .control > table td.dijitArrowButton > input{
+   border: none;
+}
+
+.dijitMenuPopup {
+   margin-top: 3px;
+}
+.claro .dijitMenuPopup .dijitMenu .dijitMenuItem td.dijitMenuItemLabel {
+   padding: 5px;
+}
+
+.claro .dijitMenu .dijitSelectSelectedOption * {
+   color: #ababab;
+}

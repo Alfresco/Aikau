@@ -1,0 +1,12 @@
+.alfresco-documentlibrary-AlfDocumentFilter {
+   overflow-x: hidden;
+   padding: 4px 0 3px 20px;
+   line-height: ceil(@small-font-size/@standard-line-height) * @standard-line-height;
+   list-style-type: none;
+}
+
+.alfresco-documentlibrary-AlfDocumentFilter > span {
+   .standard-font;
+   cursor: pointer;
+}
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<!-- Import Web Scripts Framework -->
+	<import resource="classpath*:org/springframework/extensions/webscripts/*-context.xml" />
+	
+	<!-- Import Surf Framework -->
+	<import resource="classpath*:org/springframework/extensions/surf/*-context.xml" />
+	
+   	<!-- Set up to auto-resolve to url based views -->   	
+    <bean id="handlerMappings" parent="webframeworkHandlerMappings">
+        <property name="order" value="0" />
+
+        <!-- Remove the default handler for interoperability with other handlers -->
+    	<property name="defaultHandler">
+    		<bean class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+    	</property>
+    </bean>
+
+</beans>

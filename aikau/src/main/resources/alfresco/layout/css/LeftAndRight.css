@@ -1,0 +1,13 @@
+.alfresco-layout-LeftAndRight {
+   width: 100%;
+}
+
+.alfresco-layout-LeftAndRight > div > div.left-widgets,
+.alfresco-layout-LeftAndRight > * > div > div.left-widgets {
+   float: left;
+}
+
+.alfresco-layout-LeftAndRight > div > div.right-widgets,
+.alfresco-layout-LeftAndRight > * > div > div.right-widgets {
+   float: right;
+}

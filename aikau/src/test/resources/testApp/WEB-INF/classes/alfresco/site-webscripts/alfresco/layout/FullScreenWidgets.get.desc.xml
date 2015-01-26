@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Full Screen Widgets Test</shortname>
+  <description>This WebScript defines the test page for full screen widgets</description>
+  <family>aikau-unit-tests</family>
+  <url>/FullScreenWidgets</url>
+</webscript>

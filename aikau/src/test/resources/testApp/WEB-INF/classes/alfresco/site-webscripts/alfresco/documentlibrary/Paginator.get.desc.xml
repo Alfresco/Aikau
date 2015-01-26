@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Paginator Test</shortname>
+  <description>This WebScript defines the Paginator page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Paginator</url>
+</webscript>

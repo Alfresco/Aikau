@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Label Test</shortname>
+  <description>This WebScript defines the Label page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Label</url>
+</webscript>

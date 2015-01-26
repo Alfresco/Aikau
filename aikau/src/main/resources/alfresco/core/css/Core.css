@@ -1,0 +1,50 @@
+@font-face {
+   font-family: 'Open Sans';
+   font-style: normal;
+   font-weight: 400;
+   src: url(./opensans.woff) format('woff');
+}
+@font-face {
+   font-family: 'Open Sans Bold';
+   font-style: normal;
+   font-weight: 600;
+   src: url(./opensansbold.woff) format('woff');
+}
+@font-face {
+   font-family: 'Open Sans Condensed';
+   font-style: normal;
+   font-weight: 300;
+   src: url(./opensanscondensed.woff) format('woff');
+}
+
+html {
+   overflow-y: scroll;
+}
+
+body {
+   font-family: @standard-font;
+   color: @general-font-color;
+   margin: 0;
+}
+
+.alfresco-share
+{
+   font:13px/1.231 Open Sans,arial,helvetica,clean,sans-serif;
+}
+
+.clear-both {
+   clear: both;
+}
+
+.share-hidden {
+   display: none;
+}
+
+.undo-share-margin {
+   margin: 0 -10px;
+}
+
+.hidden
+{
+   display: none !important;
+}

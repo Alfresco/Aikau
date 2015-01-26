@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>VisibilityConfig Test</shortname>
+  <description>This WebScript defines the VisibilityConfig page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/VisibilityConfig</url>
+</webscript>

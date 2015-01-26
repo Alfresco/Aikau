@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Boolean Test</shortname>
+  <description>This WebScript defines the Boolean page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Boolean</url>
+</webscript>

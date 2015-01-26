@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Advanced Visibility Config Test</shortname>
+  <description>Tests invisibility config, strict mode and currentItem data access</description>
+  <family>aikau-unit-tests</family>
+  <url>/AdvancedVisibilityConfig</url>
+</webscript>

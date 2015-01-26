@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Video Preview Test</shortname>
+  <description>This WebScript defines the video previewer plugin page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/VideoPreview</url>
+</webscript>

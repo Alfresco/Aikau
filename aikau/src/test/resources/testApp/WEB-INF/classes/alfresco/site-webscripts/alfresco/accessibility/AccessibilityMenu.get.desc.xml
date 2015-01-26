@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AccessibilityMenu Test</shortname>
+  <description>This WebScript defines the AccessibilityMenu page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AccessibilityMenu</url>
+</webscript>

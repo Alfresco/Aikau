@@ -1,0 +1,59 @@
+.alfresco-renderers-Property {
+   /*margin: 0 10px 0 0;*/
+   color: @general-font-color;
+}
+
+.alfresco-renderers-Property.alfresco-renderers-Property.block {
+   display: block;
+}
+
+.alfresco-renderers-Property.alfresco-renderers-Property.deemphasized > span {
+   color: @de-emphasized-font-color;
+}
+
+.alfresco-renderers-Property > span {
+   color: @general-font-color;
+}
+
+.alfresco-renderers-Property.faded {
+   color: @de-emphasized-font-color;
+}
+
+.alfresco-renderers-Property.small {
+   font-size: @small-font-size;
+   line-height: ceil(@small-font-size/@standard-line-height) * @standard-line-height;
+}
+
+.alfresco-renderers-Property,
+.alfresco-renderers-Property.medium {
+   font-size: @normal-font-size;
+   line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
+}
+
+.alfresco-renderers-Property.large {
+   font-size: @large-font-size;
+   font-family: @bold-font;
+   line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
+}
+
+.alfresco-renderers-Property .hidden {
+  display: none;
+}
+
+.alfresco-documentlibrary-views-layout-_MultiItemRendererMixin--item:hover .alfresco-renderers-Property.hover-only > span.inner {
+   visibility: visible;
+}
+
+.alfresco-documentlibrary-views-layout-_MultiItemRendererMixin--item .alfresco-renderers-Property.hover-only > span.inner {
+   visibility: hidden;
+}
+
+.alfresco-renderers-Property.pointer {
+   cursor: pointer;
+}
+
+.alfresco-renderers-Property span.value > a {
+    text-decoration: none;
+    color: @general-font-color;
+    cursor: pointer;
+}

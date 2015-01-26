@@ -1,0 +1,27 @@
+.alfresco-layout-AlfTabContainer {
+   height: 100%;
+   width: 100%;
+}
+
+.alfresco-layout-AlfTabContainer .dijitTabContainerTop-tabs .dijitTab {
+   padding: 0.2em 0.5em 0.4em;
+   margin: 0 0 0 0.16em;
+   border: @tab-border;
+   border-bottom-width: 0;
+   border-radius: @tab-border-radius;
+   background: @tab-background;
+   min-width: 22px;
+}
+
+.alfresco-layout-AlfTabContainer .dijitTabContainerTop-tabs .dijitTab.dijitChecked {
+   background-color: @tab-color-active;
+}
+
+.alfresco-layout-AlfTabContainer .dijitTabContainerTop-tabs .dijitTab.dijitDisabled {
+   opacity: @tab-opacity-disabled;
+}
+
+.alfresco-layout-AlfTabContainer .dijitTabPaneWrapper,
+.alfresco-layout-AlfTabContainer .dijitTabContainerTop-container {
+   border: none;
+}

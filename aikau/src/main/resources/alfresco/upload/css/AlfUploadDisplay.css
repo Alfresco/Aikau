@@ -1,0 +1,35 @@
+.alfresco-upload-AlfUploadDisplay {
+    width: 500px;
+}
+
+.alfresco-upload-AlfUploadDisplay .successful,
+.alfresco-upload-AlfUploadDisplay .inprogress,
+.alfresco-upload-AlfUploadDisplay .aggregate-progress,
+.alfresco-upload-AlfUploadDisplay .failed {
+   margin-top: 10px;
+}
+
+.alfresco-upload-AlfUploadDisplay .inprogress-title {
+   
+}
+
+.alfresco-upload-AlfUploadDisplay table {
+   border-collapse: collapse;
+   width: 100%;
+}
+
+.alfresco-upload-AlfUploadDisplay tr.file {
+   
+}
+
+.alfresco-upload-AlfUploadDisplay td {
+   border: 1px solid #CCCCCC;
+}
+
+.alfresco-upload-AlfUploadDisplay td.filename {
+
+}
+
+.alfresco-upload-AlfUploadDisplay td.percentage {
+   
+}

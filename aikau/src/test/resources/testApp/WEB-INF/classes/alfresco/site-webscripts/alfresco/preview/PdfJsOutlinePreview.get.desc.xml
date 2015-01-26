@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>PdfJsPreview Test</shortname>
+  <description>This WebScript defines the PdfJsPreview page test (using a PDF with an outline)</description>
+  <family>aikau-unit-tests</family>
+  <url>/PdfJsOutlinePreview</url>
+</webscript>

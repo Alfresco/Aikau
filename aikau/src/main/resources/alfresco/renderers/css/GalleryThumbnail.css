@@ -1,0 +1,39 @@
+.alfresco-renderers-Thumbnail.gallery {
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.alfresco-renderers-Thumbnail.gallery .displayName,
+.alfresco-renderers-Thumbnail.gallery .selectBar {
+   position: absolute;
+   width: 100%;
+   background-color: black;
+   opacity: 0.5;
+   color: #fff;
+   padding: 10px 10px;
+   text-shadow: 1px 1px #333333;
+}
+
+.alfresco-renderers-Thumbnail.gallery img {
+   width: 100%;
+}
+
+.alfresco-renderers-Thumbnail.gallery .alfresco-renderers-Selector.checked {
+   background-image: url(./images/AllSelectedWhite.png);
+}
+
+.alfresco-renderers-Thumbnail.gallery .alfresco-renderers-Selector.unchecked {
+   background-image: url(./images/NoneSelectedWhite.png);
+}
+
+.alfresco-renderers-Thumbnail.gallery .displayName {
+   bottom: 0;
+}
+
+.alfresco-renderers-Thumbnail.gallery .selectBar {
+   top: 0;
+}
+
+.alfresco-renderers-Thumbnail.gallery:hover .selectBar {
+   display: block;
+}

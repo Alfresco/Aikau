@@ -1,0 +1,14 @@
+{  
+   "url":"\/alfresco\/s\/api\/sites\/sitemyasfacetedsearch1400250449557",
+   "sitePreset":"site-dashboard",
+   "shortName":"sitemyasfacetedsearch1400250449557",
+   "title":"SitemyasFacetedSearch1400250449557",
+   "description":"",
+   "node":"\/alfresco\/s\/api\/node\/workspace\/SpacesStore\/5fca9859-3921-4010-a0d5-6d5ab2df6572",
+   "tagScope":"\/alfresco\/s\/api\/tagscopes\/workspace\/SpacesStore\/5fca9859-3921-4010-a0d5-6d5ab2df6572",
+   "siteManagers":[  
+      "userFacetedSearch1400250449557@freetht1.test"
+   ],
+   "isPublic":false,
+   "visibility":"MODERATED"
+}

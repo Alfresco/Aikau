@@ -1,0 +1,5 @@
+.alfresco-html-Spacer.top-border-beyond-gutters {
+   border-top: @standard-border;
+   margin-right: -20px;
+   margin-left: -20px;
+}

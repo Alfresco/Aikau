@@ -1,0 +1,61 @@
+[  
+   {  
+      "role":"SiteManager",
+      "isMemberOfGroup":false,
+      "authority":{  
+         "authorityType":"USER",
+         "fullName":"admin",
+         "userName":"admin",
+         "firstName":"Administrator",
+         "lastName":"",
+         "userStatus":"Toffee",
+         "userStatusTime":{  
+            "iso8601":"2014-08-07T15:26:20.974+01:00"
+         },
+         "url":"\/alfresco\/s\/api\/people\/admin"
+      },
+      "url":"\/alfresco\/s\/api\/sites\/swsdp\/memberships\/admin"
+   },
+   {  
+      "role":"SiteCollaborator",
+      "isMemberOfGroup":false,
+      "authority":{  
+         "authorityType":"USER",
+         "fullName":"abeecher",
+         "userName":"abeecher",
+         "firstName":"Alice",
+         "lastName":"Beecher",
+         "avatar":"api/node/workspace\/SpacesStore\/d77a6aa1-bac8-42e4-8df8-2faf1a085622/content/thumbnails/avatar",
+         "avatarNode":"workspace:\/\/SpacesStore\/d77a6aa1-bac8-42e4-8df8-2faf1a085622",
+         "jobtitle":"Graphic Designer",
+         "organization":"Moresby, Garland and Wedge",
+         "userStatus":"Helping to design the look and feel of the new web site",
+         "userStatusTime":{  
+            "iso8601":"2011-02-15T20:20:13.432Z"
+         },
+         "url":"\/alfresco\/s\/api\/people\/abeecher"
+      },
+      "url":"\/alfresco\/s\/api\/sites\/swsdp\/memberships\/abeecher"
+   },
+   {  
+      "role":"SiteManager",
+      "isMemberOfGroup":false,
+      "authority":{  
+         "authorityType":"USER",
+         "fullName":"mjackson",
+         "userName":"mjackson",
+         "firstName":"Mike",
+         "lastName":"Jackson",
+         "avatar":"api/node/workspace\/SpacesStore\/519ebedc-0827-4fba-a8e3-c51e39385e0c/content/thumbnails/avatar",
+         "avatarNode":"workspace:\/\/SpacesStore\/519ebedc-0827-4fba-a8e3-c51e39385e0c",
+         "jobtitle":"Web Site Manager",
+         "organization":"Green Energy",
+         "userStatus":"Working on a new web design for the corporate site",
+         "userStatusTime":{  
+            "iso8601":"2011-02-15T20:13:09.649Z"
+         },
+         "url":"\/alfresco\/s\/api\/people\/mjackson"
+      },
+      "url":"\/alfresco\/s\/api\/sites\/swsdp\/memberships\/mjackson"
+   }
+]

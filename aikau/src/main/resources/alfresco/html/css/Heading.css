@@ -1,0 +1,10 @@
+.alfresco-html-Heading {
+   display: inline;
+   padding: 0;
+   margin: 0;
+}
+
+.alfresco-html-Heading.hiddenAccessible {
+   position: absolute;
+   left: -99999px;
+}

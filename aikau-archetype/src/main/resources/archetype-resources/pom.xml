@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>\${groupId}</groupId>
+   <artifactId>\${artifactId}</artifactId>
+   <packaging>war</packaging>
+   <name>Aikau Client</name>
+   <version>\${version}</version>
+
+   <repositories>
+      <repository>
+         <id>Alfresco-Artifacts</id>
+         <name>Alfresco Artifacts SNAPSHOTS</name>
+         <url>https://artifacts.alfresco.com/nexus/content/groups/internal-snapshots/</url>
+      </repository>
+   </repositories>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.alfresco</groupId>
+         <artifactId>aikau</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.extensions.surf</groupId>
+         <artifactId>spring-surf</artifactId>
+         <version>5.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.extensions.surf</groupId>
+         <artifactId>spring-surf-api</artifactId>
+         <version>5.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+         <groupId>org.tuckey</groupId>
+         <artifactId>urlrewritefilter</artifactId>
+         <version>4.0.4</version>
+         <scope>runtime</scope>
+      </dependency>
+   </dependencies>
+   
+   <build>
+      <finalName>aikau-sample</finalName>
+      
+      <plugins>
+         <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>9.2.5.v20141112</version>
+            <configuration>
+
+               <!-- Override the system properties to set a port that *should* be unused -->
+               <systemProperties>
+                  <force>true</force>
+                  <systemProperty>
+                     <name>jetty.port</name>
+                     <value>8090</value>
+                  </systemProperty>
+               </systemProperties>
+
+               <webApp>
+                  <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
+                  <contextPath>/aikau-sample</contextPath>
+                  <resourceBases>
+                     <resourceBase>src/main/webapp</resourceBase>
+                  </resourceBases>
+                  <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames> 
+               </webApp>
+            </configuration>
+
+         </plugin>
+      </plugins>
+   </build>
+</project>

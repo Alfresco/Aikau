@@ -1,0 +1,630 @@
+{
+   "totalRecords": 24,
+   "totalRecordsUpper": 24,
+   "startIndex": 0,
+   "numberFound": 24,
+   "facets":
+   {
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}created":
+      [
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modifier.__.u":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 23,
+         "index": -1
+         },
+         {
+         "label": "userFacetedSearch1400256887327@freetht1.test LName",
+         "value": "userFacetedSearch1400256887327@freetht1.test",
+         "hits": 1,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}creator.__.u":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 23,
+         "index": -1
+         },
+         {
+         "label": "userFacetedSearch1400256887327@freetht1.test LName",
+         "value": "userFacetedSearch1400256887327@freetht1.test",
+         "hits": 1,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modified":
+      [
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.mimetype":
+      [
+         {
+         "label": "JavaScript",
+         "value": "application\/x-javascript",
+         "hits": 23,
+         "index": -1
+         },
+         {
+         "label": "Microsoft Word 2007",
+         "value": "application\/vnd.openxmlformats-officedocument.wordprocessingml.document",
+         "hits": 1,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.size":
+      [
+         {
+         "label": "faceted-search.size.10-100KB.label",
+         "value": "10240\"..\"102400",
+         "hits": 23,
+         "index": 1
+         },
+         {
+         "label": "faceted-search.size.0-10KB.label",
+         "value": "0\"..\"10240",
+         "hits": 1,
+         "index": 0
+         }
+      ]
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/90a1879a-4902-40b2-b006-e386cbb1b75c",
+         "type": "document",
+         "name": "p-fs-test.docx",
+         "displayName": "p-fs-test.docx",
+         "description": "",
+         "modifiedOn": "2014-05-16T17:16:00.215+01:00",
+         "modifiedByUser": "userFacetedSearch1400256887327@freetht1.test",
+         "modifiedBy": "userFacetedSearch1400256887327@freetht1.test LName",
+         "size": 14065,
+         "mimetype": "application\/vnd.openxmlformats-officedocument.wordprocessingml.document",
+         "site":
+         {
+            "shortName": "sitemyasfacetedsearch1400256887327",
+            "title": "SitemyasFacetedSearch1400256887327"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/9d87471b-e830-4b8e-ba83-8652763c0f7b",
+         "type": "document",
+         "name": "test_readCompositeData.js",
+         "displayName": "test_readCompositeData.js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:50.361+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 5218,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/31db7ec3-22d8-451c-848e-615f68d093a9",
+         "type": "document",
+         "name": "_ItemLinkMixin-min (1).js",
+         "displayName": "_ItemLinkMixin-min (1).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:56.045+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 19965,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/4ce28beb-a6a0-410f-a860-6633da79050a",
+         "type": "document",
+         "name": "_ItemLinkMixin-min.js",
+         "displayName": "_ItemLinkMixin-min.js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:55.967+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 19965,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/87f5632e-aa92-482b-b33f-fdd03436cf41",
+         "type": "document",
+         "name": "_ItemLinkMixin-min (2).js",
+         "displayName": "_ItemLinkMixin-min (2).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:56.117+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 19965,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/6e01e62a-7995-4f4e-93f6-84262fc59156",
+         "type": "document",
+         "name": "_ItemLinkMixin-min (3).js",
+         "displayName": "_ItemLinkMixin-min (3).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:56.189+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 19965,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/58156705-e050-41f9-a619-ead5f8182888",
+         "type": "document",
+         "name": "_AlfMenuItemMixin-min.js",
+         "displayName": "_AlfMenuItemMixin-min.js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:55.065+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 14040,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/4f82f48c-4467-4bd9-bc8e-eb2b0bbe0497",
+         "type": "document",
+         "name": "_AlfMenuItemMixin-min (1).js",
+         "displayName": "_AlfMenuItemMixin-min (1).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:55.147+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 14040,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/66143a9f-613b-4c58-bb94-3603883753c4",
+         "type": "document",
+         "name": "_AlfMenuItemMixin-min (2).js",
+         "displayName": "_AlfMenuItemMixin-min (2).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:55.222+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 14040,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/a450af24-6b8f-41e3-998e-244a5608384f",
+         "type": "document",
+         "name": "_AlfMenuItemMixin-min (3).js",
+         "displayName": "_AlfMenuItemMixin-min (3).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:55.299+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 14040,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/5ec7a7fd-1556-4194-a31b-67c6cf1e524e",
+         "type": "document",
+         "name": "_AlfCreateContentPermissionsMixin-min.js",
+         "displayName": "_AlfCreateContentPermissionsMixin-min.js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:51.510+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 11947,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/9fad811c-2cb4-4a21-acf7-6f5f5ceedfcd",
+         "type": "document",
+         "name": "_AlfCreateContentPermissionsMixin-min (2).js",
+         "displayName": "_AlfCreateContentPermissionsMixin-min (2).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:53.295+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 11947,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/712fe592-88a3-4b6d-a19b-9a27b25525b7",
+         "type": "document",
+         "name": "_AlfCreateContentPermissionsMixin-min (1).js",
+         "displayName": "_AlfCreateContentPermissionsMixin-min (1).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:53.210+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 11947,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/5f18779a-5e83-48ec-b9d3-40b01bb03f8a",
+         "type": "document",
+         "name": "_AlfCreateContentPermissionsMixin-min (3).js",
+         "displayName": "_AlfCreateContentPermissionsMixin-min (3).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:53.383+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 11947,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/e1ad08d5-cf50-4e6d-9838-960e8d912e53",
+         "type": "document",
+         "name": "_MultiItemRendererMixin-min.js",
+         "displayName": "_MultiItemRendererMixin-min.js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:56.581+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 22284,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/86e7ad3f-ed2a-4fde-aa26-9ea8c82abe0c",
+         "type": "document",
+         "name": "_MultiItemRendererMixin-min (1).js",
+         "displayName": "_MultiItemRendererMixin-min (1).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:56.661+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 22284,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/57977152-dc59-4ead-9324-d9465ce4884a",
+         "type": "document",
+         "name": "_MultiItemRendererMixin-min (2).js",
+         "displayName": "_MultiItemRendererMixin-min (2).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:56.731+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 22284,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/db206b5c-ed61-4bb6-8d73-587d5e82ba6c",
+         "type": "document",
+         "name": "_MultiItemRendererMixin-min (3).js",
+         "displayName": "_MultiItemRendererMixin-min (3).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:56.804+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 22284,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/493d425f-7792-4930-9cc9-b61501bbf9ba",
+         "type": "document",
+         "name": "upload.post.js",
+         "displayName": "upload.post.js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:41.320+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 14752,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/686406ea-cd3a-4dbd-a4c7-785131a52a3a",
+         "type": "document",
+         "name": "upload.post (1).js",
+         "displayName": "upload.post (1).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:41.400+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 14752,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/4a9543f8-55fd-404c-9830-f9ab9330bc87",
+         "type": "document",
+         "name": "_AlfDndDocumentUploadMixin-min.js",
+         "displayName": "_AlfDndDocumentUploadMixin-min.js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:53.846+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 34001,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/21fd66ce-ace3-4426-84b6-4dd51565737e",
+         "type": "document",
+         "name": "_AlfDndDocumentUploadMixin-min (2).js",
+         "displayName": "_AlfDndDocumentUploadMixin-min (2).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:53.991+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 34001,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/9b655f99-5a9f-4c91-b3dc-d2740c8dc5de",
+         "type": "document",
+         "name": "_AlfDndDocumentUploadMixin-min (1).js",
+         "displayName": "_AlfDndDocumentUploadMixin-min (1).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:53.918+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 34001,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/1ededae2-3745-4e48-85c4-42e6cfb25d16",
+         "type": "document",
+         "name": "_AlfDndDocumentUploadMixin-min (3).js",
+         "displayName": "_AlfDndDocumentUploadMixin-min (3).js",
+         "description": "",
+         "modifiedOn": "2014-04-24T09:30:54.064+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": 34001,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "test",
+            "title": "test"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      }
+   ]
+}

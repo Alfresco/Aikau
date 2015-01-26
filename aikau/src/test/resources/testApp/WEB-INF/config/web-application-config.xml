@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- This file is set as the root Spring application context file in "WEB-INF/web.xml". It effectively bootstraps Surf
+     by loading the Surf application context and then make selective bean overrides. -->	
+		
+	<!-- SURF: required infrastructure imports -->
+	<import resource="surf-config.xml"/>
+
+   <bean id="webframework.configsource" class="org.springframework.extensions.config.source.UrlConfigSource">
+      <constructor-arg>
+         <list>
+            <!-- Spring Web Scripts -->
+            <value>classpath:org/springframework/extensions/webscripts/spring-webscripts-config.xml</value>
+            <value>classpath:META-INF/spring-webscripts-config-custom.xml</value>
+            <value>jar:*!/META-INF/spring-webscripts-config-custom.xml</value>
+            
+            <!-- Spring Surf -->
+            <value>classpath:org/springframework/extensions/surf/spring-surf-config.xml</value>
+            <value>classpath:org/springframework/extensions/surf/spring-surf-config-remote.xml</value>
+            <value>classpath:META-INF/spring-surf-config-custom.xml</value>
+            <value>jar:*!/META-INF/spring-surf-config-custom.xml</value>
+            
+            <!-- Surf Autowire Support -->
+            <value>webapp:WEB-INF/surf.xml</value>
+            
+         </list>
+      </constructor-arg>
+   </bean>
+
+	<!-- Maps requests to @Controllers based on @RequestMapping("path") annotation values
+		 If no annotation-based path mapping is found, Spring MVC sends a 404 response and logs a pageNotFound warning. -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="order" value="1" />
+
+		<!-- SURF: required interceptors -->
+        <property name="interceptors">
+            <list>
+            	<ref bean="requestContextInterceptor"/>
+            	<ref bean="themeInterceptor"/>
+                <ref bean="previewContextInterceptor"/>
+            </list>
+        </property>
+	</bean>
+    
+	<!-- This overrides the default configuration for the presets persister which determines the store to use when creating
+	     Surf objects from presets. By default Surf will attempt to use a remote store (which is not configured) so instead
+		 we are defining a local file system store so that new objects are created directly in the web application file structure -->
+    <bean id="presets.persister" class="org.springframework.extensions.surf.persister.StoreObjectPersister" parent="webframework.sitedata.persister.abstract">
+	    <property name="store" ref="presets.store" />
+		<property name="pathPrefix"><value>/</value></property>
+	</bean>
+	
+	<!-- This defines the store that is referenced directly above and defines where Surf objects will be created from presets -->
+	<bean id="presets.store" class="org.springframework.extensions.webscripts.LocalFileSystemStore">
+	    
+		<!-- This defines the location of the presets folder, so all preset files must be placed in the "WEB-INF/presets" directory -->
+		<property name="root"><value>./WEB-INF</value></property>
+		
+		<!-- This defines the root location where objects that are created from presets will be stored -->
+		<property name="path"><value>/local-store</value></property>
+	</bean>
+   
+    <bean id="webframework.service.persister" class="org.springframework.extensions.surf.persister.PersisterService" init-method="init">
+       <property name="webFrameworkConfig" ref="webframework.config.element" />
+       <property name="autowireService"  ref="webframework.service.autowire"/>       
+       <property name="persisters">
+           <list>
+               <!-- The default persister added to the default persister service. This is done to 
+                    satisfy the legacy requirement of the Alresco Share which would define the
+                    same persister through the default Spring Surf object type configuration. -->
+               <ref bean="webframework.objects.persister"/>
+			   <ref bean="presets.persister" />
+           </list>
+       </property>
+    </bean>
+	
+	<!-- The Surf default WebApplicationStore is configured to just find Surf configuration objects (e.g. Pages, Template-Instances, etc)
+	     directly within WEB-INF. This statement overrides the default bean to move the store into "WEB-INF/surf-objects" in order to 
+		 make the application structure cleaner. -->
+	<bean id="webframework.store.webapp.abstract" class="org.springframework.extensions.webscripts.WebApplicationStore" abstract="true" init-method="init">
+      <property name="path"><value>/surf-config/</value></property>
+   </bean>
+   
+   <!-- This section of configuration will pull in the standard message bundles from Alfresco Share. It's worth noting that some Aikau
+        widgets still rely on these message bundles so this will need to be addressed if Aikau is ever used independently from Share. -->
+   <bean id="webscripts.resources" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+      <property name="resourceBundles">
+         <list>
+            <!--
+            <value>webscripts.messages.webscripts</value>
+            <value>alfresco.messages.common</value>
+            <value>alfresco.messages.slingshot</value> -->
+         </list>
+      </property>
+   </bean>
+</beans>

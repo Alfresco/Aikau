@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Twister Test</shortname>
+  <description>This WebScript defines the Twister page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Twister</url>
+</webscript>

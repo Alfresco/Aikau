@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+    
+   <groupId>org.alfresco</groupId>
+   <artifactId>aikau-parent</artifactId>
+   <packaging>pom</packaging>
+   <version>1.0.3-SNAPSHOT</version>
+   
+   <name>Aikau</name>
+
+   <prerequisites>
+      <maven>3.0.3</maven>
+   </prerequisites>
+
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+
+   <distributionManagement>
+      <repository>
+         <id>alfresco-internal</id>
+         <url>https://artifacts.alfresco.com/nexus/content/repositories/internal-releases</url>
+      </repository>
+      <snapshotRepository>
+         <id>alfresco-internal-snapshots</id>
+         <url>https://artifacts.alfresco.com/nexus/content/repositories/internal-snapshots</url>
+      </snapshotRepository>
+   </distributionManagement>
+
+   <scm>
+      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/modules/Internal/aikau/trunk</connection>
+   </scm>
+
+   <dependencies>
+
+      <!-- Surf is required for unit testing application -->
+      <dependency>
+         <groupId>org.springframework.extensions.surf</groupId>
+         <artifactId>spring-surf-api</artifactId>
+         <version>5.0.1-SNAPSHOT</version>
+      </dependency>
+
+      <!-- Required for unit test application -->
+      <dependency>
+         <groupId>org.tuckey</groupId>
+         <artifactId>urlrewritefilter</artifactId>
+         <version>4.0.4</version>
+         <scope>runtime</scope>
+      </dependency>
+
+      <!-- This is used for the LESS CSS processing. It allows us to include LESS code in both
+          the Theme XML files and in widget CSS files. We deliberately exclude it's preferred
+          Rhino version so as to avoid conflicts with our own dependencies. -->
+      <dependency>
+         <groupId>com.asual.lesscss</groupId>
+         <artifactId>lesscss-engine</artifactId>
+         <version>1.5.0</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.mozilla</groupId>
+               <artifactId>rhino</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+   </dependencies>
+
+   <modules>
+      <module>aikau</module>
+      <module>aikau-archetype</module>
+   </modules>
+
+</project>

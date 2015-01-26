@@ -1,0 +1,8 @@
+.alfresco-share .alfresco-navigation-Link {
+   text-decoration: none;
+   cursor: pointer;
+}
+
+.alfresco-share .alfresco-navigation-Link:hover {
+   text-decoration: underline;
+}

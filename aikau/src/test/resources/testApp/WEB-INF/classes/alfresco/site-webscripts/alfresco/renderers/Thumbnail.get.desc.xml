@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Thumbnail Test</shortname>
+  <description>This WebScript defines the Thumbnail page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Thumbnail</url>
+</webscript>

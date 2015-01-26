@@ -1,0 +1,25 @@
+{
+   "browser": true,
+   "dojo": true,
+   "esnext": true,
+   "bitwise": false,
+   "camelcase": false,
+   "curly": false,
+   "eqnull": true,
+   "immed": true,
+   "indent": 3,
+   "latedef": true,
+   "newcap": true,
+   "noarg": true,
+   "undef": true,
+   "unused": "vars",
+   "sub": true,
+   "trailing": true,
+   "globals": {
+      "define": false,
+      "Alfresco": true,
+      "module": false,
+      "require": false,
+      "console": false
+   }
+}

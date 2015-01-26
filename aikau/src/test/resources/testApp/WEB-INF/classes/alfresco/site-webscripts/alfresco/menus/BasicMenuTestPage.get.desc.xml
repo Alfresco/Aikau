@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>BasicMenuTestPage Test</shortname>
+  <description>This WebScript defines the BasicMenuTestPage page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/BasicMenuTestPage</url>
+</webscript>

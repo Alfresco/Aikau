@@ -1,0 +1,19 @@
+.alfresco-html-Label {
+   vertical-align: sub;
+}
+.alfresco-html-Label > b {
+   font-family: @bold-font;
+   font-weight: normal;
+}
+
+.alfresco-html-Label.bold {
+   font-family: @bold-font;
+}
+
+.alfresco-html-Label.large {
+   font-size: @large-font-size;
+}
+
+.alfresco-html-Label.de-emphasized {
+   color: @de-emphasized-font-color;
+}

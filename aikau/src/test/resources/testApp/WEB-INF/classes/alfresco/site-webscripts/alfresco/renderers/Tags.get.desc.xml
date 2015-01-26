@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Tags Test</shortname>
+  <description>This WebScript defines the Tags page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Tags</url>
+</webscript>

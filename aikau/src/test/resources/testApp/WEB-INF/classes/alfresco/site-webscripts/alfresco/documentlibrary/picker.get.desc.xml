@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>picker Test</shortname>
+  <description>This WebScript defines the picker page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/picker</url>
+</webscript>

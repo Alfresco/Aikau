@@ -1,0 +1,68 @@
+/* Footer Component */
+.footer
+{
+   background-color: #fafafa;
+   border-top: 1px solid #ccc;
+   text-align: center;
+   padding: 0;
+}
+
+.footer .links
+{
+   padding: 0 2em;
+}
+
+.footer .copyright
+{
+   font-size: 9px;
+}
+
+.footer-ent .copyright
+{
+   margin: 0 auto;
+   width: 450px;
+   display: block;
+}
+
+.footer-com .copyright
+{
+   display: inline-block;
+   line-height: 22px;
+   padding: 2px;
+}
+
+.footer-ent .copyright
+{
+   padding: 13px 1.5em;
+}
+
+.footer-ent .licenseHolder
+{
+}
+
+.footer-ent .copyright a
+{
+   float: left;
+   margin-top: -2px;
+}
+
+.footer-com .copyright img
+{
+   padding-right: 1em;
+   vertical-align: baseline;
+}
+
+.footer-ent .copyright img
+{
+   padding-right: 1em;
+}
+
+.footer-com .copyright span
+{
+   display: inline-block;
+}
+
+.footer-ent .copyright span
+{
+   position: relative;
+}

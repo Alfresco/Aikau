@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>BasicLayouts Test</shortname>
+  <description>This WebScript defines the BasicLayouts page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/BasicLayouts</url>
+</webscript>

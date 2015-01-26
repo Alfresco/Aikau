@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DocumentList Test</shortname>
+  <description>This WebScript defines the DocumentList page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/DocumentList</url>
+</webscript>

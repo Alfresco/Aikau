@@ -1,0 +1,8 @@
+.alfresco-share .dijitPopup.dijitMenuPopup {
+   box-shadow: none;
+}
+
+.alfresco-menus-AlfContextMenu.dijitMenu {
+  border: @standard-border;
+  padding: 5px;
+}

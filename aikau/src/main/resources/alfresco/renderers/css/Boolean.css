@@ -1,0 +1,19 @@
+.alfresco-renderers-Property.boolean-true,
+.alfresco-renderers-Property.boolean-false,
+.alfresco-renderers-Property.boolean-unknown {
+	background-repeat: no-repeat;
+}
+.alfresco-renderers-Property.boolean-true {
+	background-image: url("./images/boolean-true.png");
+}
+.alfresco-renderers-Property.boolean-false {
+	background-image: url("./images/boolean-false.png");
+}
+.alfresco-renderers-Property.boolean-unknown {
+	background-image: url("./images/boolean-unknown.png");
+}
+.alfresco-renderers-Property.boolean-true > span.inner,
+.alfresco-renderers-Property.boolean-false > span.inner,
+.alfresco-renderers-Property.boolean-unknown > span.inner {
+	visibility: hidden;
+}

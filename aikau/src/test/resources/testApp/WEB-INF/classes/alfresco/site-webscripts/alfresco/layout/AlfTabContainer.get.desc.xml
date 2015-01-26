@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfTabContainer Test</shortname>
+  <description>This WebScript defines the AlfTabContainer page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfTabContainer</url>
+</webscript>

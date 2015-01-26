@@ -1,0 +1,6 @@
+.alfresco-layout-VerticalWidgets.rounded-border {
+    width: @sidebar-component-width;
+    border: @standard-border;
+    border-radius: @standard-line-height / 2;
+    margin-bottom: @standard-line-height * 2;
+}

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>SearchList Test</shortname>
+  <description>This WebScript defines the SearchList page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/SearchList</url>
+</webscript>

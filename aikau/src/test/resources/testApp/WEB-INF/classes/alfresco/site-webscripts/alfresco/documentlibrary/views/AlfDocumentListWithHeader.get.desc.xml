@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfDocumentListWithHeader Test</shortname>
+  <description>This WebScript defines the AlfDocumentListWithHeader page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfDocumentListWithHeader</url>
+</webscript>

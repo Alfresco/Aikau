@@ -1,0 +1,48 @@
+.alfresco-renderers-Thumbnail {
+   width: 100px;
+   position: relative; /* This is required for absolutely positioned overlays */
+}
+
+.alfresco-renderers-Thumbnail span.link
+{
+   background: url(./images/link-32.png) no-repeat;
+   height: 32px;
+   width: 32px;
+   position: absolute;
+}
+
+.alfresco-renderers-Thumbnail span.link.hidden
+{
+   display: none;
+}
+
+.alfresco-renderers-Thumbnail span.droppable
+{
+   background: url(./images/drop-arrow-left-large.png) no-repeat;
+   display: none;
+   height: 25px;
+   position: absolute;
+   width: 60px;
+   z-index: 1;
+   margin-left: 40px;
+}
+
+.alfresco-renderers-Thumbnail > span.inner {
+   cursor: pointer;
+}
+
+/* Drag and Drop */
+
+.alfresco-renderers-Thumbnail.dndHighlight span.droppable
+{
+   display: block !important;
+}
+
+.alfresco-renderers-Thumbnail.dndHighlight img
+{
+   background-color: #dceaf4;
+   outline: 2px solid #4F94C9;
+   padding: 2px;
+   position: relative;
+   top: -2px;
+}

@@ -1,0 +1,22 @@
+{  
+   "entry":{  
+      "url":"\/alfresco\/s\/api\/sites\/site1",
+      "sitePreset":"site-dashboard",
+      "shortName":"site1",
+      "title":"Site One",
+      "description":"",
+      "createdDate":"2014-05-16T15:27:43.301+01:00",
+      "lastModifiedDate":"2014-05-16T15:27:44.388+01:00",
+      "visibility":"PUBLIC",
+      "userIsSiteManager":"false",
+      "siteManagers":[  
+         {  
+            "entry":{  
+               "userName":"userFacetedSearch1400250449557@freetht1.test",
+               "firstName":"userFacetedSearch1400250449557@freetht1.test",
+               "lastName":"LName"
+            }
+         }
+      ]
+   }
+}

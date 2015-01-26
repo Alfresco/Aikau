@@ -1,0 +1,30 @@
+{
+   "showAddFavourite": true, 
+   "showRemoveFavourite": false, 
+   "widgetsRecent": [
+      {
+         "id": "ALF_RECENT_SITE___site1", 
+         "config": {
+            "id": "HEADER_SITES_MENU_RECENT_site1", 
+            "siteShortName": "site1", 
+            "siteRole": "SiteManager", 
+            "label": "Site1", 
+            "iconClass": "alf-recent-site-icon", 
+            "targetUrl": "site\/site1\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      },
+      {  
+         "id": "ALF_RECENT_SITE___site2", 
+         "config": {
+            "id": "HEADER_SITES_MENU_RECENT_site2", 
+            "siteShortName": "site2", 
+            "siteRole": "SiteManager", 
+            "label": "Site2", 
+            "iconClass": "alf-recent-site-icon", 
+            "targetUrl": "site\/site2\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }
+   ]
+}

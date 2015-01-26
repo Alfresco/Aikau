@@ -1,0 +1,18 @@
+.alfresco-forms-ControlRow > div.title {
+   font-family: @bold-font;
+   font-size: @large-font-size;
+   margin-bottom: @standard-line-height/2;
+}
+
+.alfresco-forms-ControlRow > div.title.border {
+   border-bottom: @standard-border;
+   margin-bottom: @standard-line-height;
+}
+
+.alfresco-forms-ControlRow > div.description {
+   color: @de-emphasized-font-color;
+   font-family: @standard-font;
+   font-size: @normal-font-size;
+   margin-bottom: @standard-line-height;
+   border-bottom: @standard-border;
+}

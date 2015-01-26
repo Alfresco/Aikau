@@ -1,0 +1,11 @@
+<li data-dojo-attach-point="filterNode" class="alfresco-search-FacetFilter">
+   <span class="status">
+      <span class="remove hidden" data-dojo-attach-event="ondijitclick:onClearFilter" data-dojo-attach-point="removeNode">
+         <img src="${appliedFilterImageSrc}" alt="${appliedFilterAltText}"/>
+      </span>
+   </span>
+   <span class="details">
+      <span class="filterLabel" data-dojo-attach-event="ondijitclick:onToggleFilter" data-dojo-attach-point="labelNode" tabindex="0">${label}</span>
+      <span class="hits">${hits}</span>
+   </span>
+</li>

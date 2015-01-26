@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Date Test</shortname>
+  <description>This WebScript defines the Date page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Date</url>
+</webscript>

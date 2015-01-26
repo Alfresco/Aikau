@@ -1,0 +1,12 @@
+.alfresco-share.claro .dijitTooltipContainer {
+   background: #fff;
+   border: @standard-border;
+   background-image: none;
+   -webkit-box-shadow: none;
+   -moz-box-shadow: none;
+   box-shadow: none;
+}
+
+.claro .dijitTooltipConnector {
+   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAOCAYAAACbzsr/AAAB10lEQVR42t2XT2rCUBDGs+kZuu++R+kx6gF6jh6ha3ddunJnVgERRJBiF4KgKKhIEo1a89L8wAePmGjeKEScrZmZ7/vmzR8d50Y2nU4nyQVTSiW9Xs917tVms9lkMBj8NpvNF2kM/IMg2J4TYj6fx57nfVTJFY5ghfPJj4CExGKxUJ1O50uaAH+qnme+70cpgGGVIsANjLpguULop7vZbOLRaOS7rvsmSYR/XksAoNFovFYhAFzgBDazUIVCaDscDmq1WiX9ft+r1+vPNklJiL8ZLwzDv263+y0hYZs/6wsHuGQxlRJC2263U8vlMm6325826pPYFHU8Hke1Wu1J0m5pfmWTXxs+YIdDEb/SQmD7/R4xlE1lqIIGkM4G1Wq13iUV/UntmD+2yc+3YMb3HLdSQlBJSADGdpscgcQAwV8iAuKRX79MxLV9TeQmRl5bXBSCYUJP85yllTSeppKsZNqI/CYB2k0ywOFALDhlN1qhEOlaiZjuDDZJT99q0JEf4NkXyiCWxIMLMY+rMyoUAqU4dtjzVa04beQvukdYf9I7R8eGI1yJf/IBZ2/VF59xoQ7NquXdI9dcwBhc7/rUByDVOjfp1+v1lhPZeWSjSkkJy/2fcKX9A7C42B2OZ69LAAAAAElFTkSuQmCC);
+}

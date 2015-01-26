@@ -1,0 +1,334 @@
+/**
+ * Copyright (C) 2005-2014 Alfresco Software Limited.
+ *
+ * This file is part of Alfresco
+ *
+ * Alfresco is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Alfresco is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * An Alfresco styled dialog. Extends the default Dojo dialog by adding support for a row of buttons defined
+ * by the [widgetButtons]{@link module:alfresco/dialogs/AlfDialog#widgetButtons} attribute. The main body
+ * of the dialog can either be defined as simple text assigned to the
+ * [textContent]{@link module:alfresco/dialogs/AlfDialog#textContent} attribute or as a JSON model assigned to
+ * the [widgetsContent]{@link module:alfresco/dialogs/AlfDialog#widgetsContent} attribute (widgets take
+ * precedence over text - it is not possible to mix both).
+ * 
+ * @module alfresco/dialogs/AlfDialog
+ * @extends external:dijit/Dialog
+ * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @author Dave Draper
+ */
+
+/**
+ * AlfDialog is based on dijit/Dialog.
+ *
+ * @external dijit/Dialog
+ * @see http://dojotoolkit.org/reference-guide/1.9/dijit/Dialog.html
+ */
+
+define(["dojo/_base/declare",
+        "dijit/Dialog",
+        "alfresco/core/Core",
+        "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/ResizeMixin",
+        "dijit/_FocusMixin",
+        "dojo/_base/lang",
+        "dojo/sniff",
+        "dojo/_base/array",
+        "dojo/dom-construct",
+        "dojo/dom-class",
+        "dojo/dom-style",
+        "dojo/dom-geometry",
+        "dojo/html",
+        "dojo/aspect",
+        "dijit/registry"], 
+        function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin, lang, sniff, array,
+                 domConstruct, domClass, domStyle, domGeom, html, aspect, registry) {
+   
+   return declare([Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin], {
+      
+      /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/AlfDialog.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/AlfDialog.css"}],
+      
+      /**
+       * An array of the i18n files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/AlfDialog.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/AlfDialog.properties"}],
+      
+      /**
+       * Basic text content to be added to the dialog.
+       * 
+       * @instance
+       * @type {String}
+       * @default ""
+       */
+      textContent: "",
+      
+      /**
+       * Widgets to be processed into the main node
+       * 
+       * @instance
+       * @type {Object[]}
+       * @default null 
+       */
+      widgetsContent: null,
+      
+      /**
+       * Widgets to be processed into the button bar
+       * 
+       * @instance
+       * @type {Object[]}
+       * @default null 
+       */
+      widgetsButtons: null,
+
+      /**
+       * In some cases the content placed within the dialog will handle overflow itself, in that
+       * case this should be set to false. However, in most cases the dialog will want to manage
+       * overflow itself. Effectively this means that scroll bars will be added as necessary to 
+       * ensure that the user can see all of the dialog content.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      handleOverflow: true,
+
+      /**
+       * Extends the superclass implementation to set the dialog as not closeable (by clicking an "X"
+       * in the corner).
+       * 
+       * @instance
+       */
+      postMixInProperties: function alfresco_dialogs_AlfDialog__postMixInProperties() {
+         this.inherited(arguments);
+         // TODO: Had to use an existing NLS message for point of fix during dev-cycle - needs own widget NLS prop
+         this.buttonCancel = this.message("button.close");
+      },
+
+      /**
+       * If this is set to true then the dialog will retain it's opening width regardless of what happens
+       * to it's contents. This is especially useful when the dialog contains widgets that resize themselves
+       * that could result in the dialog shrinking (this can occur when using
+       * [HorizontalWidgets]{@link module:alfresco/layout/HorizontalWidgets}.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      fixedWidth: false,
+      
+      /**
+       * Extends the superclass implementation to process the widgets defined by 
+       * [widgetButtons]{@link module:alfresco/dialogs/AlfDialog#widgetButtons} into the buttons bar
+       * and either the widgets defined by [widgetsContent]{@link module:alfresco/dialogs/AlfDialog#widgetsContent}
+       * or the text string set as [textContent]{@link module:alfresco/dialogs/AlfDialog#textContent} into
+       * the main body of the dialog.
+       * 
+       * @instance
+       */
+      postCreate: function alfresco_dialogs_AlfDialog__postCreate() {
+         this.inherited(arguments);
+
+         // Listen for requests to resize the dialog...
+         this.alfSubscribe("ALF_RESIZE_DIALOG", lang.hitch(this, "onResizeRequest"));
+
+         domClass.add(this.domNode, "alfresco-dialog-AlfDialog");
+
+         // Add in any additional CSS classes...
+         if (this.additionalCssClasses != null)
+         {
+            domClass.add(this.domNode, this.additionalCssClasses);
+         }
+
+         this.bodyNode = domConstruct.create("div", {
+            "class" : "dialog-body"
+         }, this.containerNode, "last");
+
+         // Set the dimensions of the body if required...
+         domStyle.set(this.bodyNode, {
+            width: this.contentWidth ? this.contentWidth: null,
+            height: this.contentHeight ? this.contentHeight: null
+         });
+
+         // It is important to create the buttons BEFORE creating the main body. This is especially important
+         // for when the buttons will respond to initial setup events from a form placed inside the body (e.g.
+         // so that the buttons are disabled initially if required)
+         if (this.widgetsButtons != null)
+         {
+            this.creatingButtons = true;
+            this.buttonsNode = domConstruct.create("div", {
+               "class" : "footer"
+            }, this.containerNode, "last");
+            this.processWidgets(this.widgetsButtons, this.buttonsNode);
+            this.creatingButtons = false;
+         }
+
+         if (this.widgetsContent != null)
+         {
+            // Add widget content to the container node...
+            var widgetsNode = domConstruct.create("div", {}, this.bodyNode, "last");
+            this.processWidgets(this.widgetsContent, widgetsNode);
+         }
+         else if (this.textContent != null)
+         {
+            // Add basic text content into the container node. An example of this would be for
+            // setting basic text content in an confirmation dialog...
+            html.set(this.bodyNode, this.encodeHTML(this.textContent));
+         }
+      },
+      
+      /**
+       * Called when the dialog is shown.
+       * Disable the outer page scrolling ability by the user when a dialog is showing.
+       *
+       * @instance
+       */
+      onShow: function alfresco_dialogs_AlfDialog__onShow() {
+         this.inherited(arguments);
+         domStyle.set(document.documentElement, "overflow", "hidden");
+      },
+      
+      /**
+       * Called when the dialog is hidden.
+       * Enable the outer page scrolling - disabled in onShow().
+       *
+       * @instance
+       */
+      onHide: function alfresco_dialogs_AlfDialog__onHide() {
+         this.inherited(arguments);
+         domStyle.set(document.documentElement, "overflow", "");
+      },
+
+      /**
+       * This is called once the dialog gets focus and at that point it is necessary to resize 
+       * it's contents as this is the final function that is called after the dialog is displayed
+       * and therefore we know it will have dimensions to size against.
+       *
+       * @instance
+       */
+      _onFocus: function alfresco_dialogs_AlfDialog___onFocus() {
+         this.inherited(arguments);
+
+         var computedStyle = domStyle.getComputedStyle(this.containerNode);
+         var output = domGeom.getMarginBox(this.containerNode, computedStyle);
+
+         if (this.handleOverflow === true)
+         {
+            domClass.add(this.domNode, "handleOverflow");
+         }
+
+         if (this.fixedWidth === true)
+         {
+            // Fix the width of the dialog - this has been done to prevent the dialog from shrinking
+            // as its contents are resized on window resize events. The issue here is that the dialog
+            // may become too big for the initial window, but that's preferable to shrinkage...
+            domStyle.set(this.domNode, "width", output.w + "px");
+         }
+
+         this.alfPublishResizeEvent(this.domNode);
+         // TODO: We could optionally reveal the dialog after resizing to prevent any resizing jumping?
+      },
+
+      /**
+       * Calls the resize() function
+       *
+       * @instance
+       * @param {object} payload
+       */
+      onResizeRequest: function alfresco_dialogs_AlfDialog__onResizeRequest(payload) {
+         this.alfLog("log", "Resizing dialog");
+         if (this.domNode != null)
+         {
+            this.resize();
+         }
+      },
+
+      /**
+       * Iterates over any buttons that are created and calls the [attachButtonHandler]{@link module:alfresco/dialogs/AlfDialog#attachButtonHandler} 
+       * function with each of them to ensure that clicking a button always results in the dialog being hidden. It is up to the 
+       * buttons defined to publish a request to perform the appropriate action.
+       * 
+       * @instance
+       * @param {Object[]}
+       */
+      allWidgetsProcessed: function alfresco_dialogs_AlfDialog__allWidgetsProcessed(widgets) {
+         if (this.creatingButtons === true)
+         {
+            // When creating the buttons, attach the handler to each created...
+            this._buttons = [];
+            array.forEach(widgets, lang.hitch(this, "attachButtonHandler"));
+         }
+         else
+         {
+            // Once all the content is created the widget instances are added to the publish payload
+            // of all the buttons. This is done so that the dialog content is always included in publish
+            // requests. It is important NOT to override the default payload...
+            array.forEach(this._buttons, function(button, index) {
+               if (button.publishPayload == null)
+               {
+                  button.publishPayload = {};
+               }
+               button.publishPayload.dialogContent = widgets;
+               button.publishPayload.dialogRef = this; // Add a reference to the dialog itself so that it can be destroyed
+            });
+         }
+      },
+      
+      /**
+       * This field is used to keep track of the buttons that are created.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default null
+       */
+      _buttons: null,
+
+      /**
+       * Hitches each button click to the "hide" method so that whenever a button is clicked the dialog will be hidden.
+       * It's assumed that the buttons will take care of their own business.
+       * 
+       * @instance
+       * @param {Object} widget The widget update
+       * @paran {number} index The index of the widget in the widget array
+       */
+      attachButtonHandler: function alfresco_dialogs_AlfDialog__attachButtonHandler(widget, index) {
+         if (widget != null)
+         {
+            this._buttons.push(widget); // Add the button so we can add the content to them later...
+            if (sniff("ie") == 8)
+            {
+               // Need to use "after" rather than "before" for IE8...
+               aspect.after(widget, "onClick", lang.hitch(this, this.hide));
+            }
+            else
+            {
+               aspect.before(widget, "onClick", lang.hitch(this, this.hide));
+            }
+         }
+      }
+   });
+});

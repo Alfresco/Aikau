@@ -1,0 +1,19 @@
+.alfresco-documentlibrary-AlfDocumentFilters ul.filters li.showMore,
+.alfresco-documentlibrary-AlfDocumentFilters ul.filters li.showLess {
+   color: @de-emphasized-font-color;
+   display: block;
+   cursor: pointer;
+}
+
+.alfresco-documentlibrary-AlfDocumentFilters ul.filters li.showMore.hidden,
+.alfresco-documentlibrary-AlfDocumentFilters ul.filters li.showLess.hidden {
+   display: none;
+}
+
+.alfresco-documentlibrary-AlfDocumentFilters ul.filters li.moreOption {
+   display: block;
+}
+
+.alfresco-documentlibrary-AlfDocumentFilters ul.filters li.moreOption.hidden {
+   display: none;
+}

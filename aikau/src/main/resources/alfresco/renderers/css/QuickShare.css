@@ -1,0 +1,56 @@
+/*.alfresco-renderers-Toggle span.on.quick-share
+{
+   background-image: url(./images/quickshare-action-enabled-16.png);
+   background-repeat: no-repeat;
+   font-size: 93%;
+   padding: 1px 0 1px 20px;
+   cursor: pointer;
+   color: #333;
+}*/
+
+.alfresco-renderers-Toggle a.off.quick-share
+{
+   background-image: url(./images/quickshare-action-16.png);
+}
+
+/* This ensures that the menu is displayed inline rather than below the widget */
+.alfresco-renderers-Toggle .on.quick-share.enabled div.alfresco-menus-AlfMenuBar {
+  display: inline-block;
+}
+
+.alfresco-share .alf-quick-share-enabled-icon {
+   background: url("./images/quickshare-action-enabled-16.png");
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+   display: block;
+   float: left;
+}
+
+.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-social-email-icon {
+   background: url("./images/social-email-16.png");
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+}
+
+.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-social-facebook-icon {
+   background: url("./images/social-facebook-16.png");
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+}
+
+.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-social-twitter-icon {
+   background: url("./images/social-twitter-16.png");
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+}
+
+.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-social-google-plus-icon {
+   background: url("./images/social-google-16.png");
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+}

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FormButtonDialog Test</shortname>
+  <description>This WebScript defines the FormButtonDialog page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/FormButtonDialog</url>
+</webscript>

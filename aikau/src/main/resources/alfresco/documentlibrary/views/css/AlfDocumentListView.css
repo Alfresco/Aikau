@@ -1,0 +1,64 @@
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView > table {
+   width: 100%;
+   border-collapse: collapse;
+   border-spacing: 0;
+   border: none;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView tr:focus {
+   outline: none;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView.no-highlight tr:focus,
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView.no-highlight tr:hover {
+   background-color: transparent;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView > table > tbody > tr:nth-child(even) {
+   /*background-color: @docListEvenRowColour;*/
+}
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView > table > tbody > tr:nth-child(odd) {
+   /*background-color: @docListOddRowColour;*/
+}
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView > table > tbody > tr > td {
+   padding: @standard-line-height @standard-column-width @standard-line-height 0;
+   margin: 0;
+   vertical-align: top;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView.no-borders > table, 
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView.no-borders > table > tbody > tr > td {
+   border: none;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView.dndHighlight {
+   outline: 2px solid @docListDndHighlight;
+   outline-offset: -2px;
+}
+
+/* bordered table modifiers */
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView.bordered > table {
+   border-bottom: 1px solid @docListBorderColour; 
+}
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView.bordered > table > tbody > tr > td {
+   border-top: 1px dashed @docListBorderColour;
+   border-bottom: 1px dashed @docListBorderColour;
+   border-right: 1px solid @docListBorderColour;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView.bordered > table > tbody > tr > td.last,
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView.bordered > table > tbody > tr > td:last-of-type
+{
+   border-right: none;
+}
+
+/* accessibility modifiers */
+
+.alfresco-documentlibrary-views-layouts-AlfDocumentListView > table > caption.hiddenAccessible {
+   position: absolute;
+   left: -99999px;
+}

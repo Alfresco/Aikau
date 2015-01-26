@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AbsoluteCenterWidgets Test</shortname>
+  <description>This WebScript defines the AbsoluteCenterWidgets page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AbsoluteCenterWidgets</url>
+</webscript>

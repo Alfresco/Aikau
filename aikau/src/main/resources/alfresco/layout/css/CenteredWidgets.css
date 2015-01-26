@@ -1,0 +1,15 @@
+.alfresco-layout-CenteredWidgets {
+
+}
+
+.alfresco-layout-CenteredWidgets .center-container,
+.alfresco-layout-CenteredWidgets .centered-widget {
+   display: inline-block;
+}
+
+.alfresco-layout-CenteredWidgets .center-container {
+   position: absolute;
+   left: 0;
+   right: 0;
+   margin: 0 auto;
+}

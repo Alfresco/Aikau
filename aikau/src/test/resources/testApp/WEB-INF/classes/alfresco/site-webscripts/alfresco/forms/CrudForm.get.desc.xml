@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>CrudForm Test</shortname>
+  <description>This WebScript defines the CrudForm page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/CrudForm</url>
+</webscript>

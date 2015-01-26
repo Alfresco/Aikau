@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+	<display-name>Spring Surf Skeleton Application</display-name>
+    
+    <!-- Enables clean URLs with JSP views e.g. /welcome instead of /page/welcome -->
+	<filter>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <url-pattern>/proxy/*</url-pattern>
+    </filter-mapping>
+   
+    <filter-mapping>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <url-pattern>/service/*</url-pattern>
+    </filter-mapping>
+   
+    <filter-mapping>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <url-pattern>/feedservice/*</url-pattern>
+    </filter-mapping>
+   
+    <filter-mapping>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <url-pattern>/res/*</url-pattern>
+    </filter-mapping>
+   
+    <filter-mapping>
+      <filter-name>UrlRewriteFilter</filter-name>
+      <url-pattern>/system/*</url-pattern>
+    </filter-mapping>
+
+    <!-- This defines the Spring MVC servlet that is used to root requests to Surf. It identifies
+    the main Spring application context file (which effectively bootstraps Surf. Surf defines
+    a number of different ViewResolvers that process all requests made to the "/page/*"
+    URL pattern. The UrlRewriteFilter actually allows requests to be made that don't include
+    "/page/" though (as it adds them in)
+    -->
+    <servlet>
+        <servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/config/web-application-config.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+        <url-pattern>/page/*</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+    
+    <welcome-file-list>
+      <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>	
+</web-app>

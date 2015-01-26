@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfVerticalMenuBar Test</shortname>
+  <description>This WebScript defines the AlfVerticalMenuBar page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfVerticalMenuBar</url>
+</webscript>

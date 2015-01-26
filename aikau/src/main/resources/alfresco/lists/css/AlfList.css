@@ -1,0 +1,7 @@
+.alfresco-lists-AlfList > div.info {
+   margin: @standard-line-height @standard-column-width;
+}
+
+.alfresco-lists-AlfList tr:focus {
+   outline: none;
+}

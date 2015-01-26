@@ -1,0 +1,75 @@
+.alfresco-developer-mode-Enabled .alfresco-debug-Info.highlight {
+   position: relative;
+   padding: 20px;
+   box-shadow: 0 0 3px red;
+}
+
+.alfresco-debug-Info.highlight {
+   transition: padding 1s ease-in-out;
+}
+
+.alfresco-developer-mode-Enabled .alfresco-debug-Info.highlight:hover {
+   box-shadow: 0 0 3px orange;
+   background-color: rgba(255,180,0,0.2);
+}
+
+.alfresco-developer-mode-Enabled .alfresco-debug-Info > .alfresco-debug-WidgetInfo {
+   display: block;
+}
+
+.alfresco-debug-Info > .alfresco-debug-WidgetInfo {
+   position: absolute;
+   top: 3px;
+   right: 3px;
+   display: none;
+}
+
+.alfresco-debug-WidgetInfoDialog {
+   font-size: @large-font-size;
+}
+
+.alfresco-debug-WidgetInfoDialog td.label {
+   color: @de-emphasized-font-color;
+}
+
+.alfresco-debug-WidgetInfoDialog td.value {
+   color: @general-font-color;
+   font-family: @bold-font;
+}
+
+.alfresco-debug-WidgetInfoDialogPopup {
+   box-shadow: none !important;
+}
+
+.alfresco-debug-WidgetInfoDialog {
+   outline: none !important;
+}
+
+.alfresco-debug-PageInfo {
+   display: none;
+   height: 20px;
+   font-size: @large-font-size;
+   background-color: #FFC800;
+   border: 4px solid #FFB400;
+   padding: 5px;
+}
+
+.alfresco-debug-PageInfo > span.label {
+   color: @de-emphasized-font-color;
+   margin-right: 10px;
+}
+
+.alfresco-debug-PageInfo > span.value {
+   color: @general-font-color;
+   font-family: @bold-font;
+   margin-right: 10px;
+}
+
+.alfresco-debug-PageInfo > a {
+   color: @general-font-color;
+   text-decoration: none;
+}
+
+.alfresco-developer-mode-Enabled .alfresco-debug-PageInfo {
+   display: block;
+}

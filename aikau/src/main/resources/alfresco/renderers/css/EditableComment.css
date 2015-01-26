@@ -1,0 +1,11 @@
+.alfresco-renderers-EditableComment {
+
+}
+
+.alfresco-renderers-EditableComment.read > .edit {
+   display: none;
+}
+
+.alfresco-renderers-EditableComment.edit > .read {
+   display: none;
+}

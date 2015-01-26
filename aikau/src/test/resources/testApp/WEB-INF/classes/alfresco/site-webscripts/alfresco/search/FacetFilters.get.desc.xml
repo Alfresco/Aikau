@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FacetFilters Test</shortname>
+  <description>This WebScript defines the FacetFilters page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/FacetFilters</url>
+</webscript>

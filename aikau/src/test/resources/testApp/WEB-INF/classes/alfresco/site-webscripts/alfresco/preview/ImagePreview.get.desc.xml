@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>ImagePreview Test</shortname>
+  <description>This WebScript defines the ImagePreview page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/ImagePreview</url>
+</webscript>

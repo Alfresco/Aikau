@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfMenuTextForClipboard Test</shortname>
+  <description>This WebScript defines the AlfMenuTextForClipboard page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfMenuTextForClipboard</url>
+</webscript>

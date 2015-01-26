@@ -1,0 +1,8 @@
+.alfresco-renderers-Reorder > span.invisible {
+   visibility: hidden;
+}
+
+.alfresco-renderers-Reorder > span {
+   visibility: visible;
+   cursor: pointer;
+}

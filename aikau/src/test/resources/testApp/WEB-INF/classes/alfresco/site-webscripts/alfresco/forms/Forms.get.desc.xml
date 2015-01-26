@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Forms Test</shortname>
+  <description>This WebScript defines the Forms page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Forms</url>
+</webscript>

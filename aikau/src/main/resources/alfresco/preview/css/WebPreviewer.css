@@ -1,0 +1,72 @@
+/* CSS file */
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer Application
+{  
+   backgroundGradientAlphas: 1.0, 1.0;
+   backgroundGradientColors: #454545, #828282;  
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .fileNameLabel
+{
+   font-weight: bold;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .previewerChrome
+{
+   vertical-gap: 0;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .headerApplicationControlBar
+{     
+   fill-alphas: 1.0, 1.0;
+   fill-colors: #E8EAEB, #DDE0E2;
+   corner-radius: 0;    
+   horizontal-gap: 5;
+   drop-shadow-enabled: false;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .zoomOutButton,
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .zoomSlider,
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .zoomInButton,
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .previousButton,
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .nextButton
+{     
+   corner-radius: 3;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .pageTextInput
+{
+   text-align: center;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .noOfPagesLabel
+{
+   padding-left: 0;
+   text-align: left;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .of
+{
+   padding-right: 0;
+   text-align: right;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .headerSeparator
+{
+   border-color: #FFFFFF;
+   border-style:solid;
+   border-thickness: 1;
+   strokeColor: #bfc3c4;   
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .chromeSeparator
+{
+   stroke-color: #181515;
+}
+
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .zoomPercentageTextInput,
+.alfresco-preview-AlfDocumentPreview .previewer .WebPreviewer .pageTextInput
+{
+   text-align: right;
+}
+

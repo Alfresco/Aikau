@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfMenuItemWrapper Test</shortname>
+  <description>This WebScript defines the AlfMenuItemWrapper page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfMenuItemWrapper</url>
+</webscript>

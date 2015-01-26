@@ -1,0 +1,34 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//www.tuckey.org//DTD UrlRewrite 3.0//EN" "http://www.tuckey.org/res/dtds/urlrewrite3.0.dtd">
+<urlrewrite use-query-string="true">
+
+   <!-- Spring Surf -->
+   <rule>
+        <from>/favicon.ico</from>
+        <to>/favicon.ico</to>
+    </rule>
+    <rule>
+      <from>/proxy/(.*)</from>
+      <to>/page/proxy/${symbol_dollar}1</to>
+   </rule>
+   <rule>
+      <from>/res/(.*)</from>
+      <to>/page/resource/${symbol_dollar}1</to>
+   </rule>     
+   <rule>
+      <from>/service/(.*)</from>
+      <to>/page/${symbol_dollar}1</to>
+   </rule>        
+   <rule>
+      <from>/system/(.*)</from>
+      <to>/page/system/${symbol_dollar}1</to>
+    </rule>
+    <rule>
+      <from>/(.*)</from>
+      <to>/page/${symbol_dollar}1</to>
+   </rule>
+   
+</urlrewrite>

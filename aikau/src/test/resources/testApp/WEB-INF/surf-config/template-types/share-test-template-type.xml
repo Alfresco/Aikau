@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template-type>
+   <title>Share Test Page</title>
+   <description>This template-type references a test page</description>
+   <processor mode="view">
+      <id>webscript</id>
+      <uri>/share/test-page/template</uri>
+   </processor>
+</template-type>

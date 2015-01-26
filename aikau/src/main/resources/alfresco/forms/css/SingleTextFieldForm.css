@@ -1,0 +1,27 @@
+.alfresco-forms-SingleTextFieldForm > form {
+   display: inline-block;
+}
+
+.alfresco-forms-SingleTextFieldForm > div.buttons {
+   display: inline-block;
+   vertical-align: top;
+}
+
+/* Make the top of the submit button line up with the text field
+.alfresco-forms-SingleTextFieldForm div.buttons span.alfresco-buttons-AlfButton {
+   border-width: 0;
+}*/
+
+/* Hide the requirement indicator in the text field, the validation error indicator and the validation message */
+.alfresco-forms-SingleTextFieldForm .alfresco-forms-controls-BaseFormControl > .title-row {
+    display: none;
+}
+
+.alfresco-forms-SingleTextFieldForm .alfresco-forms-controls-BaseFormControl .validation-message {
+    margin: 0;
+}
+
+.alfresco-forms-SingleTextFieldForm .alfresco-forms-controls-BaseFormControl div.control div.dijitValidationTextBox {
+   border-color: #d3d3d3;
+   font-size: @large-font-size;
+}

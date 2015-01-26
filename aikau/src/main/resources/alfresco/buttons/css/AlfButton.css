@@ -1,0 +1,64 @@
+.alfresco-buttons-AlfButton {
+   background-image: none;
+   background-color: @standard-button-background-color; 
+   border: @standard-button-border;
+   margin: 0;
+   margin-right: @standard-column-width;
+   border-radius: 0;
+   font-size: @standard-button-font-size;
+}
+
+/* Set tge line-height of all spans in the button to be 2px greater than the standard font size */
+.alfresco-buttons-AlfButton span {
+   line-height: @standard-button-font-size + 2;
+}
+
+/* Convert the HEX color to RGBA so that an opacity can be set on the font color */
+.alfresco-buttons-AlfButton.dijitButtonDisabled .dijitReset.dijitInline.dijitButtonNode{
+   color: rgba(red(@standard-button-font-color), green(@standard-button-font-color), blue(@standard-button-font-color), 0.4);
+}
+
+.alfresco-buttons-AlfButton.dijitButtonFocused,
+.alfresco-buttons-AlfButton.dijitButtonHover {
+   border: @standard-button-focus-border;
+}
+
+.alfresco-buttons-AlfButton.call-to-action {
+   background-color: @call-to-action-button-background-color; 
+   border: @call-to-action-button-border;
+   /*font-size: @call-to-action-button-font-size;*/
+}
+
+.alfresco-buttons-AlfButton.call-to-action.dijitButtonFocused,
+.alfresco-buttons-AlfButton.call-to-action.dijitButtonHover {
+   border: @call-to-action-button-focus-border;
+}
+
+.alfresco-buttons-AlfButton .dijitReset.dijitInline.dijitButtonNode {
+   background: none repeat scroll 0 0;
+   border: none;
+   border-radius: 0;
+   box-shadow: none;
+   padding: 3px 10px;
+   color: @standard-button-font-color;
+}
+
+.alfresco-buttons-AlfButton.call-to-action .dijitReset.dijitInline.dijitButtonNode {
+   color: @call-to-action-button-font-color;
+}
+
+.alfresco-buttons-AlfButton.call-to-action.dijitButtonDisabled .dijitReset.dijitInline.dijitButtonNode{
+   color: rgba(red(@call-to-action-button-font-color), green(@call-to-action-button-font-color), blue(@call-to-action-button-font-color), 0.4);
+}
+
+.alfresco-buttons-AlfButton span.dijitIcon.alf-white-search-icon {
+   background-image: url("./images/20x20-search-icon-white.png");
+   background-repeat: no-repeat;
+   height: 20px;
+   text-align: center;
+   width: 24px;
+}
+
+.alfresco-buttons-AlfButton.dijitButtonDisabled span.dijitIcon.alf-white-search-icon {
+   opacity: 0.4;
+}

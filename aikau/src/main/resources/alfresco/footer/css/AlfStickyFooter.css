@@ -1,0 +1,20 @@
+html,body,
+.alfresco-core-Page,
+.alfresco-footer-AlfStickyFooter {
+   height: 100%;
+   min-height: 100%;
+   margin: 0;
+}
+
+.alfresco-footer-AlfStickyFooter .main-content {
+}
+
+.alfresco-footer-AlfStickyFooter > div.wrapper {
+   height: auto !important;
+   margin: 0 auto -50px;
+   min-height: 100%;
+}
+
+.alfresco-footer-AlfStickyFooter > div.wrapper > div.push {
+   height: 50px;
+}

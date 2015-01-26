@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfSearchResult Test</shortname>
+  <description>This WebScript defines the AlfSearchResult page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfSearchResult</url>
+</webscript>

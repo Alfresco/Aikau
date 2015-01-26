@@ -1,0 +1,30 @@
+<alfresco-config>
+
+   <config replace="true">
+      <flags>
+         <!--  Ensure that we're running in debug mode for unit testing -->
+         <client-debug>true</client-debug>
+         <client-debug-autologging>false</client-debug-autologging>
+      </flags>
+   </config>
+
+   <config evaluator="string-compare" condition="WebFramework">
+      <web-framework>
+         <autowire>
+            <mode>development</mode>
+         </autowire>
+         
+         <!-- <defaults>
+            <persister>presets.persister</persister>
+         </defaults> -->
+         
+         <!--  Add in the additional package definition for unit testing Aikau -->
+         <dojo-pages>
+            <packages>
+               <package name="aikauTesting" location="js/aikau/testing"/>
+            </packages>
+         </dojo-pages>
+      </web-framework>
+   </config>
+
+</alfresco-config>

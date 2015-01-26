@@ -1,0 +1,83 @@
+[
+   {
+      "name" : "act:actionExecutionTitle",
+      "defaultValues" : "",
+      "dataType" : "d:text",
+      "multiValued" : false,
+      "mandatory" : false,
+      "enforced" : false,
+      "protected" : false,
+      "indexed" : true,
+      "indexedAtomically" : true,
+      "constraints" :
+      [
+      ],
+      "url" : "/api/property/act_actionExecutionTitle"
+   }
+      ,
+   {
+      "name" : "act:errorDetails",
+      "defaultValues" : "",
+      "dataType" : "d:text",
+      "multiValued" : false,
+      "mandatory" : false,
+      "enforced" : false,
+      "protected" : false,
+      "indexed" : true,
+      "indexedAtomically" : true,
+      "constraints" :
+      [
+      ],
+      "url" : "/api/property/act_errorDetails"
+   }
+      ,
+   {
+      "name" : "act:errorMessage",
+      "defaultValues" : "",
+      "dataType" : "d:text",
+      "multiValued" : false,
+      "mandatory" : false,
+      "enforced" : false,
+      "protected" : false,
+      "indexed" : true,
+      "indexedAtomically" : true,
+      "constraints" :
+      [
+      ],
+      "url" : "/api/property/act_errorMessage"
+   }
+      ,
+   {
+      "name" : "act:executionStatus",
+      "defaultValues" : "",
+      "dataType" : "d:text",
+      "multiValued" : false,
+      "mandatory" : true,
+      "enforced" : false,
+      "protected" : false,
+      "indexed" : true,
+      "indexedAtomically" : true,
+      "constraints" :
+      [
+      ],
+      "url" : "/api/property/act_executionStatus"
+   }
+      ,
+   {
+      "name" : "cm:name",
+      "title" : "Name",
+      "description" : "Name",
+      "defaultValues" : "",
+      "dataType" : "d:text",
+      "multiValued" : false,
+      "mandatory" : true,
+      "enforced" : true,
+      "protected" : false,
+      "indexed" : true,
+      "indexedAtomically" : true,
+      "constraints" :
+      [],
+      "url" : "/api/property/cm_name"
+   }
+      
+]

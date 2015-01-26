@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FileType Test</shortname>
+  <description>This WebScript defines the FileType page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/FileType</url>
+</webscript>

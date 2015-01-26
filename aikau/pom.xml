@@ -1,0 +1,150 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>org.alfresco</groupId>
+      <artifactId>aikau-parent</artifactId>
+      <version>1.0.3-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
+   </parent>
+
+   <artifactId>aikau</artifactId>
+   
+   <name>Aikau</name>
+   <description>Aikau is a meta-framework for Alfresco specific UI development</description>
+
+   <dependencies>
+
+      <!-- Surf is required for unit testing application -->
+      <dependency>
+         <groupId>org.springframework.extensions.surf</groupId>
+         <artifactId>spring-surf-api</artifactId>
+         <version>5.0.1-SNAPSHOT</version>
+      </dependency>
+
+      <!-- Required for unit test application -->
+      <dependency>
+         <groupId>org.tuckey</groupId>
+         <artifactId>urlrewritefilter</artifactId>
+         <version>4.0.4</version>
+         <scope>runtime</scope>
+      </dependency>
+
+      <!-- This is used for the LESS CSS processing. It allows us to include LESS code in both
+          the Theme XML files and in widget CSS files. We deliberately exclude it's preferred
+          Rhino version so as to avoid conflicts with our own dependencies. -->
+      <dependency>
+         <groupId>com.asual.lesscss</groupId>
+         <artifactId>lesscss-engine</artifactId>
+         <version>1.5.0</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.mozilla</groupId>
+               <artifactId>rhino</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+   </dependencies>
+
+   <build>
+      <!-- Everything gets place into the META-INF folder of the JAR because Surf (the expected platform for Aikau)
+           will be able to access resources from that location via the /res/ path -->
+      <resources>
+         <!-- By default we're going to place the Aikau source files into a versioned path... -->
+         <resource>
+            <targetPath>META-INF/js/aikau/${project.version}/alfresco</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/alfresco</directory>
+         </resource>
+
+         <!-- ...but everything else goes into a standard path -->
+         <resource>
+            <targetPath>META-INF/js/lib</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/lib</directory>
+         </resource>
+         
+      </resources>
+
+      <plugins>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.9</version>
+            <executions>
+               <execution>
+                  <id>unpack-dependencies</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>unpack</goal>
+                  </goals>
+                  <configuration>
+                     <artifactItems>
+                        <artifactItem>
+                           <groupId>org.dojotoolkit</groupId>
+                           <artifactId>dojo</artifactId>
+                           <version>1.9.0</version>
+                           <type>zip</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${basedir}/target/classes/META-INF/js/lib</outputDirectory>
+                        </artifactItem>
+                     </artifactItems>
+                  </configuration>
+                </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.5.1</version>
+            <configuration>
+               <tagNameFormat>release-@{project.version}</tagNameFormat>
+               <username>${svn.username}</username>
+               <password>${svn.password}</password>
+            </configuration>
+         </plugin>
+
+         <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>9.2.5.v20141112</version>
+            <configuration>
+
+               <!-- Sets the port when using mvn jetty:run-forked -->
+               <jvmArgs>-Djetty.port=8089</jvmArgs>
+
+               <!-- Override the system properties to set a port that *should* be unused -->
+               <systemProperties>
+                  <force>true</force>
+                  <systemProperty>
+                     <name>jetty.port</name>
+                     <value>8089</value>
+                  </systemProperty>
+               </systemProperties>
+
+               <!--  The following 3 settings allow us to execute a mvn jetty:stop command to shutdown the test application -->
+               <stopPort>9966</stopPort>
+               <stopKey>foo</stopKey>
+               <stopWait>20</stopWait>
+
+                <!-- Configure the application, this will essentially be Share but overlaid with the test resources -->
+               <webApp>
+                  <descriptor>src/test/resources/testApp/WEB-INF/web.xml</descriptor>
+                  <contextPath>/aikau</contextPath>
+                  <resourceBases>
+                     <resourceBase>src/test/resources/testApp</resourceBase>
+                     <resourceBase>target/classes/META-INF</resourceBase>
+                     <!-- <resourceBase>${project.build.directory}/${project.build.finalName}</resourceBase> -->
+                  </resourceBases>
+                  <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames> 
+               </webApp>
+               <webAppSourceDirectory>src/test/resources/testApp</webAppSourceDirectory>
+               <classesDirectory>src/test/resources/testApp/WEB-INF/classes</classesDirectory>
+               <baseAppFirst>false</baseAppFirst>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+</project>

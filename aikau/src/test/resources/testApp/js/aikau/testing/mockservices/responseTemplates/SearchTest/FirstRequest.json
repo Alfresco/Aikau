@@ -1,0 +1,551 @@
+[
+   {
+      "totalRecords": 25,
+      "totalRecordsUpper": 331,
+      "startIndex": 0,
+      "numberFound": 331,
+      "facets":
+      {
+         "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.mimetype":
+            [
+               {
+                  "label": "JPEG Image",
+                  "value": "image\/jpeg",
+                  "hits": 324
+               },
+               {
+                  "label": "MPEG4 Video",
+                  "value": "video\/mp4",
+                  "hits": 6
+               },
+               {
+                  "label": "PNG Image",
+                  "value": "image\/png",
+                  "hits": 1
+               }
+            ],
+         "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modifier.__":
+            [
+               {
+                  "label": "Administrator",
+                  "value": "admin",
+                  "hits": 331
+               }
+            ],
+         "@{http:\/\/www.alfresco.org\/model\/content\/1.0}creator.__":
+            [
+               {
+                  "label": "Administrator",
+                  "value": "admin",
+                  "hits": 331
+               }
+            ],
+         "@{http:\/\/www.alfresco.org\/model\/content\/1.0}description.__":
+            [
+            ]
+      },
+      "items":
+         [
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/39419362-b2ad-4b2f-8926-66dbaf3e2e87",
+               "type": "document",
+               "name": "2014-03-29 01.57.56.mp4",
+               "displayName": "2014-03-29 01.57.56.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:24.141+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 7870708,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/ea6567cd-35c3-4a2b-a9af-560fee1df8c4",
+               "type": "document",
+               "name": "2014-03-29 01.59.05.mp4",
+               "displayName": "2014-03-29 01.59.05.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:25.282+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 43518131,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/ba8886c1-e428-466e-8297-bcf45afc2955",
+               "type": "document",
+               "name": "2014-03-29 02.06.37.mp4",
+               "displayName": "2014-03-29 02.06.37.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:39.257+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 22223900,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/255ef8df-ba91-4285-a073-7f270fd53096",
+               "type": "document",
+               "name": "2014-03-29 02.07.40.mp4",
+               "displayName": "2014-03-29 02.07.40.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:39.516+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 1170761,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/1dc8dc5a-42de-4a36-9aab-82bdad6a8e1e",
+               "type": "document",
+               "name": "2014-03-29 02.04.34.mp4",
+               "displayName": "2014-03-29 02.04.34.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:55:38.708+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 402890213,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/06cfb6c5-58e1-4ef0-9628-c5aea63f7259",
+               "type": "document",
+               "name": "2014-03-26 00.52.03.mp4",
+               "displayName": "2014-03-26 00.52.03.mp4",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:22.626+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2208300,
+               "mimetype": "video\/mp4",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/815f3944-75bd-45d8-90de-007afdb05964",
+               "type": "document",
+               "name": "2014-01-03 12.48.55.jpg",
+               "displayName": "2014-01-03 12.48.55.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:40.797+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 3271264,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/9a47f79f-d151-404a-a958-b32da68bd669",
+               "type": "document",
+               "name": "2014-01-03 12.49.09.jpg",
+               "displayName": "2014-01-03 12.49.09.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:41.010+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 3959318,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/a5e1751f-7714-44d5-91d6-ef719525a6cf",
+               "type": "document",
+               "name": "2014-01-06 21.21.38.jpg",
+               "displayName": "2014-01-06 21.21.38.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:41.366+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 1760179,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/e8ccedd8-6aa6-4b51-9566-ff6da406ba5e",
+               "type": "document",
+               "name": "2014-01-06 21.21.25.jpg",
+               "displayName": "2014-01-06 21.21.25.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:41.201+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 1787787,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/c96a87a2-9d45-46aa-84be-1af99b80d84c",
+               "type": "document",
+               "name": "2014-01-08 21.28.29.jpg",
+               "displayName": "2014-01-08 21.28.29.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:41.484+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 131380,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/fb5b550d-8c8d-40f2-9ac6-5c8a0f27e9a6",
+               "type": "document",
+               "name": "2014-01-10 22.01.54.jpg",
+               "displayName": "2014-01-10 22.01.54.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:42.644+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 1709243,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/f49338bf-ef38-4f78-a0b7-eec02b6e3650",
+               "type": "document",
+               "name": "2014-01-08 22.13.25.jpg",
+               "displayName": "2014-01-08 22.13.25.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:42.184+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 1942067,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/c5e8c80c-0897-4541-b80d-48ce35404cc2",
+               "type": "document",
+               "name": "2014-01-15 12.40.19.jpg",
+               "displayName": "2014-01-15 12.40.19.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:43.411+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 3034635,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/754363d5-95e8-43d1-8a91-20daef304c97",
+               "type": "document",
+               "name": "2014-01-21 13.52.02.jpg",
+               "displayName": "2014-01-21 13.52.02.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:45.105+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 1881257,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/18acddcb-3346-4396-ac40-94e9b3328e8d",
+               "type": "document",
+               "name": "2014-01-15 11.19.21.jpg",
+               "displayName": "2014-01-15 11.19.21.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:43.026+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2089854,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/2338765c-802b-4510-ac78-5ab1337d6bef",
+               "type": "document",
+               "name": "2014-01-15 12.40.10.jpg",
+               "displayName": "2014-01-15 12.40.10.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:43.202+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2808576,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/1fcba762-44d0-42ae-8688-192beea93949",
+               "type": "document",
+               "name": "2014-01-18 13.29.56.jpg",
+               "displayName": "2014-01-18 13.29.56.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:43.929+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2681007,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/35a47780-16a5-4642-ab71-1fe13b3895ce",
+               "type": "document",
+               "name": "2014-01-18 13.30.30.jpg",
+               "displayName": "2014-01-18 13.30.30.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:44.134+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2566663,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/cf5c7a45-de23-4178-af27-d78828cbc2c4",
+               "type": "document",
+               "name": "2014-01-21 13.52.17.jpg",
+               "displayName": "2014-01-21 13.52.17.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:45.334+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2151348,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/6e251c97-8776-4555-9651-3fa9bd38b9ec",
+               "type": "document",
+               "name": "2014-01-24 17.58.16.jpg",
+               "displayName": "2014-01-24 17.58.16.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:46.059+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 1111394,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/91a06fce-7974-4bad-8a4f-22b76a739575",
+               "type": "document",
+               "name": "2014-01-26 14.43.47.jpg",
+               "displayName": "2014-01-26 14.43.47.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:47.384+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 3249898,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/559aa733-da25-445d-b09d-a3b6b8ebbaf5",
+               "type": "document",
+               "name": "2014-01-27 20.21.52.jpg",
+               "displayName": "2014-01-27 20.21.52.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:47.750+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2473611,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/9752c4c2-8f86-4b3e-b7c8-1661c8d7024e",
+               "type": "document",
+               "name": "2014-02-06 15.18.02.jpg",
+               "displayName": "2014-02-06 15.18.02.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:35.534+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2887427,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            },
+            {
+               "nodeRef": "workspace:\/\/SpacesStore\/62d93503-c246-494b-b1d1-240cdb8f3f78",
+               "type": "document",
+               "name": "2014-02-03 13.34.22.jpg",
+               "displayName": "2014-02-03 13.34.22.jpg",
+               "description": "",
+               "modifiedOn": "2014-04-07T16:56:35.329+01:00",
+               "modifiedByUser": "admin",
+               "modifiedBy": "Administrator ",
+               "size": 2612028,
+               "mimetype": "image\/jpeg",
+               "site":
+               {
+                  "shortName": "camera-uploads",
+                  "title": "camera uploads"
+               },
+               "container": "documentLibrary",
+               "path": "",
+               "tags": []
+            }
+         ]
+   }
+]

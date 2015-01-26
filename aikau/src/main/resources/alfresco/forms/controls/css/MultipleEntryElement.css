@@ -1,0 +1,19 @@
+.alfresco-forms-controls-MultipleEntryElement {
+   
+}
+
+.alfresco-forms-controls-MultipleEntryElement .read-display {
+   display: block;
+}
+
+.alfresco-forms-controls-MultipleEntryElement .read-display.hide {
+   display: none;
+}
+
+.alfresco-forms-controls-MultipleEntryElement .edit-display {
+   display: block;
+}
+
+.alfresco-forms-controls-MultipleEntryElement .edit-display.hide {
+   display: none;
+}

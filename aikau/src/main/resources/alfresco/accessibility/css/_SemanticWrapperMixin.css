@@ -1,0 +1,17 @@
+header,
+nav,
+section,
+article,
+aside,
+figure,
+figcaption,
+footer,
+details,
+summary,
+mark,
+time
+{
+   display: block;
+   margin: 0;
+   padding: 0;
+}

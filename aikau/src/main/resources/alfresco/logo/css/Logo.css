@@ -1,0 +1,37 @@
+.alfresco-logo-Logo {
+   margin: 10px 16px 10px 8px;
+   border-right: @standard-border;
+   padding-right: 14px;
+}
+
+.alfresco-logo-Logo > div.no-background-image {
+   background: none;
+}
+
+.alfresco-logo-Logo .alfresco-logo-large {
+   background-image: url("./images/AlfrescoLogo.PNG");
+   background-repeat: no-repeat;
+   height: 48px;
+   width: 184px;
+}
+
+.alfresco-logo-Logo .alfresco-logo-only {
+   background-image: url("./images/AlfrescoLogoOnly.PNG");
+   background-repeat: no-repeat;
+   height: 48px;
+   width: 48px;
+}
+
+.alfresco-logo-Logo .surf-logo-large {
+   background-image: url("./images/SurfLogo200.jpg");
+   background-repeat: no-repeat;
+   height: 85px;
+   width: 200px;
+}
+
+.alfresco-logo-Logo .surf-logo-small {
+   background-image: url("./images/surf32.jpg");
+   background-repeat: no-repeat;
+   height: 34px;
+   width: 32px;
+}

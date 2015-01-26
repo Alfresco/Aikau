@@ -1,0 +1,73 @@
+.alfresco-layout-Twister > div.label {
+   cursor: pointer;
+   padding-left: 1em !important;
+}
+
+.alfresco-layout-Twister-actions {
+   position: absolute;
+   right: 1em;
+}
+
+.alfresco-layout-Twister-closed .alfresco-layout-Twister-actions {
+   display: none;
+}
+
+.alfresco-layout-Twister-actions a {
+   background-position: 0 center;
+   background-repeat: no-repeat;
+   padding: 0.5em;
+   text-decoration: none;
+}
+
+.alfresco-layout-Twister-open {
+   background: transparent url(./images/expanded.png) no-repeat scroll 0 50%;
+}
+
+.alfresco-layout-Twister-closed {
+   background: transparent url(./images/collapsed.png) no-repeat scroll 0 50% !important;
+}
+
+.alfresco-layout-Twister {
+    border-top: @standard-border;
+    width: @sidebar-component-width;
+    display: block;
+    padding-top: @standard-line-height;
+
+    &:first-child {
+        border: none;
+    }
+
+    &.hidden {
+        display: none;
+    }
+
+    &.no-borders {
+        border: none;
+    }
+
+    > div.alfresco-layout-Twister-open {
+        padding-left: 20px !important; /* Important is only required to override base.css use of important */
+        background-position: 0 3px !important;
+    }
+
+    > div.alfresco-layout-Twister-closed {
+        background-position: 0 3px !important;
+        padding-left: 20px !important; /* Important is only required to override base.css use of important */
+    }
+
+    .label,
+    .label h3 {
+        font-family: @bold-font;
+        color: @general-font-color;
+        font-size: @normal-font-size;
+        font-weight: normal;
+    }
+    .label {
+        margin-left: @standard-column-width;
+        padding-bottom: @standard-line-height - 2;
+    }
+
+    .content {
+        margin-left: (@standard-column-width + @standard-column-spacing) * 2;
+    }
+}

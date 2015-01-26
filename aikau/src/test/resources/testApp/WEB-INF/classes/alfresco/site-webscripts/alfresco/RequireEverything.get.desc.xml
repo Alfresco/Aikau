@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>RequireEverything Test</shortname>
+  <description>This WebScript defines the RequireEverything page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/RequireEverything</url>
+</webscript>

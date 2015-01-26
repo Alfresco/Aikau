@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Footer Test</shortname>
+  <description>This WebScript defines the Footer page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/TestFooter</url>
+</webscript>

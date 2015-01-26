@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfMenuBarToggle Test</shortname>
+  <description>This WebScript defines the AlfMenuBarToggle page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfMenuBarToggle</url>
+</webscript>

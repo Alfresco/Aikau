@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>CoreRwd Test</shortname>
+  <description>This WebScript defines the CoreRwd page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/CoreRwd</url>
+</webscript>

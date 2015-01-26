@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>BreadcrumbTrail Test</shortname>
+  <description>This WebScript defines the BreadcrumbTrail page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/BreadcrumbTrail</url>
+</webscript>

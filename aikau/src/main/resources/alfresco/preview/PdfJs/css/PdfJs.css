@@ -1,0 +1,213 @@
+/* Add selectors for module specific icons */
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon {
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-zoom-out-icon {
+   background-image: url("./images/zoom-out-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-zoom-in-icon {
+   background-image: url("./images/zoom-in-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-previous-icon {
+   background-image: url("./images/back-arrow-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-next-icon {
+   background-image: url("./images/forward-arrow-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-sidebar-on-icon {
+   background-image: url("./images/navbar-hide-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-sidebar-off-icon {
+   background-image: url("./images/navbar-show-16.png");
+}
+.alfresco-preview-PdfJs .alf-pdfjs-download-icon {
+   background-image: url("./images/download-file-16.png");
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+   display: block;
+   float: left;
+}
+/* TODO: Need toggle off version of link and search icons */;
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-link-icon {
+   background-image: url("./images/link-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-search-icon {
+   background-image: url("./images/search-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-highlight-all-on-icon {
+   background-image: url("./images/highlight-all-on-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-highlight-all-off-icon {
+   background-image: url("./images/highlight-all-off-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-case-sensitive-on-icon {
+   background-image: url("./images/case-sensitive-on-16.png");
+}
+.alfresco-preview-PdfJs .dijitIcon.dijitMenuItemIcon.alf-pdfjs-case-sensitive-off-icon {
+   background-image: url("./images/case-sensitive-off-16.png");
+}
+
+/* Add some specific styling for the link controls */
+.alfresco-preview-PdfJs .link-controls {
+   padding: 10px;
+   border-top: @standard-border;
+}
+.alfresco-preview-PdfJs .link-controls .alfresco-forms-controls-DojoValidationTextBox .dijitValidationTextBox {
+   width: 500px;
+}
+/* Add some specific styling for the search controls */
+.alfresco-preview-PdfJs .search-controls {
+   padding: 10px 10px 0 10px;
+   border-top: @standard-border;
+}
+
+
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- /
+/* vim: set shiftwidth=4 tabstop=8 autoindent cindent expandtab: */
+.alfresco-preview-PdfJs {
+   background-color: #fafafa;
+   margin: 0px;
+   padding: 0px;
+   border-bottom: @standard-border;
+}
+
+.alfresco-preview-PdfJs .viewer {
+   overflow-y: scroll;
+}
+
+.alfresco-preview-PdfJs .viewer.alfresco-debug-Info.highlight {
+   transition: initial;
+}
+
+
+/* === Toolbar === */
+.alfresco-preview-PdfJs .controls {
+   background-color: #fafafa;
+   border-top: 1px solid #ccc;
+   border-bottom: 1px solid #ccc;
+}
+
+
+/* === Sidebar === */
+.alfresco-preview-PdfJs .sidebar {
+   display: none;
+   width: 199px;
+   background-color: #fafafa;
+   border-right: @standard-border;
+   float: left;
+   text-align: left;
+   overflow-y: auto;
+   overflow-x: hidden;
+}
+
+.alfresco-preview-PdfJs .sidebar>div {
+   height: 100%;
+}
+
+.alfresco-preview-PdfJs .sidebar .thumbnailView .page.activePage,
+.alfresco-preview-PdfJs .documentView .page.activePage {
+   border-color: #aaa;
+}
+
+
+/* === Content view === */
+.alfresco-preview-PdfJs canvas {
+   margin: auto;
+   display: block;
+}
+
+.alfresco-preview-PdfJs .page {
+   width: 816px;
+   height: 1056px;
+   margin: 10px auto;
+   position: relative;
+   overflow: hidden;
+   border: 1px solid #eee;
+   background-color: #fff;
+}
+
+.alfresco-preview-PdfJs .documentView.multiPage .page {
+   margin: 10px 0 0 10px;
+   float: left;
+}
+
+.alfresco-preview-PdfJs .documentView.multiPage .page:last-child {
+   margin-bottom: 10px;
+}
+
+.alfresco-preview-PdfJs .page>a {
+   display: block;
+   position: absolute;
+}
+
+.alfresco-preview-PdfJs .page>a:hover {
+   opacity: 0.2;
+   background: #ff0;
+   box-shadow: 0px 2px 10px #ff0;
+   -moz-box-shadow: 0px 2px 10px #ff0;
+   -webkit-box-shadow: 0px 2px 10px #ff0;
+}
+
+.alfresco-preview-PdfJs .loadingIcon {
+   position: absolute;
+   display: block;
+   left: 0;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   background: url('images/loading-icon.gif') center no-repeat;
+}
+
+.alfresco-preview-PdfJs .textLayer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  color: #000;
+  font-family: sans-serif;
+}
+
+.alfresco-preview-PdfJs .textLayer > div {
+  color: transparent;
+  position: absolute;
+  line-height:1.3;
+  white-space:pre;
+}
+
+.alfresco-preview-PdfJs .textLayer .highlight {
+  margin: -1px;
+  padding: 1px;
+  background-color: rgba(180, 0, 170, 0.2);
+  border-radius: 4px;
+}
+
+.alfresco-preview-PdfJs .textLayer .highlight.begin {
+  border-radius: 4px 0px 0px 4px;
+}
+
+.alfresco-preview-PdfJs .textLayer .highlight.end {
+  border-radius: 0px 4px 4px 0px;
+}
+
+.alfresco-preview-PdfJs .textLayer .highlight.middle {
+  border-radius: 0px;
+}
+
+.alfresco-preview-PdfJs .textLayer .highlight.selected {
+  background-color: rgba(0, 100, 0, 0.2);
+}
+
+/* TODO: file FF bug to support ::-moz-selection:window-inactive
+   so we can override the opaque grey background when the window is inactive;
+   see https://bugzilla.mozilla.org/show_bug.cgi?id=706209 */
+::selection {
+   background: rgba(0, 0, 255, 0.3);
+}
+
+::-moz-selection {
+   background: rgba(0, 0, 255, 0.3);
+}

@@ -1,0 +1,13 @@
+.alfresco-search-NoSearchResults p.suggestionsTitle {
+   font-family: @bold-font;
+   font-size: @large-font-size;
+   line-height: ceil(@large-font-size/@standard-line-height) * @standard-line-height;
+   margin-bottom: @standard-line-height;
+   margin-top: @standard-line-height;
+}
+
+.alfresco-search-NoSearchResults ol li.suggestion {
+   font-size: @normal-font-size;
+   line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
+   margin-bottom: @standard-line-height;
+}

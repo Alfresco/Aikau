@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DojoSelect Test</shortname>
+  <description>This WebScript defines the DojoSelect page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/DojoSelect</url>
+</webscript>

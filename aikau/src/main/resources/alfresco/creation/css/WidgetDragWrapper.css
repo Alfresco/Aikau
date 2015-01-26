@@ -1,0 +1,43 @@
+.alfresco-creation-WidgetDragWrapper,
+.alfresco-creation-WidgetDragWrapper.dojoDndItemAnchor,
+.alfresco-creation-WidgetDragWrapper.dojoDndItemSelected,
+.alfresco-creation-WidgetDragWrapper.dojoDndItemOver {
+   background-color: inherit;
+   background-image: none;
+   padding: 5px;
+   margin: 2px;
+   border: 1px solid transparent;
+}
+
+.alfresco-creation-WidgetDragWrapper.dojoDndItemOver {
+   border: 1px solid #D3D3D3;
+}
+
+.alfresco-creation-WidgetDragWrapper .dojoDndItemOver {
+   background-color: #EEE;
+}
+
+.alfresco-creation-WidgetDragWrapper.dojoDndItemAnchor .delete {
+   background-image: url("./images/delete_icon.png");
+   background-repeat: no-repeat;
+   display: inline-block;
+   width: 13px;
+   height: 13px;
+   float: right;
+}
+
+.alfresco-creation-WidgetDragWrapper .dojoDndHandle {
+   background-image: url("./images/drag_handle.png");
+   background-repeat: no-repeat;
+   display: inline-block;
+   vertical-align: middle;
+   width: 16px;
+   height: 16px;
+   /*float: right; */
+   clear: right;
+}
+
+.alfresco-creation-WidgetDragWrapper .control {
+   display: inline-block;
+   vertical-align: middle;
+}

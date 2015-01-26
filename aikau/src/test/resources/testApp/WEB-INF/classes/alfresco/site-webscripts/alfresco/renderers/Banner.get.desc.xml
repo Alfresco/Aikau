@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Banner Test</shortname>
+  <description>This WebScript defines the Banner page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Banner</url>
+</webscript>

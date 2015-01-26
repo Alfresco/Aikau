@@ -1,0 +1,55 @@
+.alfresco-documentlibrary-AlfGalleryViewSlider {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100px;
+}
+
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider div.dijitSliderBar > div.dijitSliderMoveable > div.dijitSliderImageHandle,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider.dijitSliderHover div.dijitSliderBar.dijitSliderProgressBarH > div.dijitSliderMoveable > div.dijitSliderImageHandle.dijitSliderThumbHover,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider div.dijitSliderBar.dijitSliderProgressBarH > div.dijitSliderMoveable > div.dijitSliderImageHandle.dijitSliderFocused {
+   background-image: url("./images/thumb-n.png");
+   height: 16px;
+   width: 18px;
+   background-position: 0 0;
+}
+
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderImageHandleH,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderHover .dijitSliderImageHandleH,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderProgressBarH .dijitSliderImageHandleH,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderThumbHover.dijitSliderImageHandleH {
+  background-image: url("./images/thumb-n.png");
+  height: 16px;
+  width: 18px;
+  background-position: 0 0;
+}
+
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderDecrementIconH,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderDecrementIconV,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderIncrementIconV,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderIncrementIconH,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderActive .dijitSliderDecrementIconH,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderActive .dijitSliderDecrementIconV,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderActive .dijitSliderIncrementIconV,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderActive .dijitSliderIncrementIconH,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderHover .dijitSliderDecrementIconH,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderHover .dijitSliderDecrementIconV,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderHover .dijitSliderIncrementIconV,
+.alfresco-share .alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderHover .dijitSliderIncrementIconH {
+   background-color: transparent;
+   background-position: 0 0;
+   height: 16px;
+   width: 16px;
+   border: 0;
+}
+
+.alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderDecrementIconH,
+.alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderDecrementIconV {
+   background-image: url("./images/gallery-size-small-16.png");
+}
+
+.alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderIncrementIconV,
+.alfresco-documentlibrary-AlfGalleryViewSlider .dijitSliderIncrementIconH {
+   background-image: url("./images/gallery-size-large-16.png");
+}
+
+

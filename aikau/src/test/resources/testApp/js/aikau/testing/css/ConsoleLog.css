@@ -1,0 +1,61 @@
+.alfresco-testing-ConsoleLog table {
+   border: 1px solid #808080;
+   border-collapse: collapse;
+   width: 100%;
+   margin-bottom: 10px;
+}
+
+.alfresco-testing-ConsoleLog tr {
+   border: none;
+   border-collapse: collapse;
+}
+
+.alfresco-testing-ConsoleLog tr.cl-row:nth-child(odd),
+.alfresco-testing-ConsoleLog tr.cl-object-row:nth-child(odd) {
+   background-color: #eee;
+}
+
+.alfresco-testing-ConsoleLog tr.cl-row:nth-child(even),
+.alfresco-testing-ConsoleLog tr.cl-object-row:nth-child(even) {
+   background-color: #fff;
+}
+
+.alfresco-testing-ConsoleLog th,
+.alfresco-testing-ConsoleLog td,
+.alfresco-testing-ConsoleLog caption {
+   border: 1px solid #808080;
+   border-collapse: collapse;
+   padding: 4px;
+}
+
+.alfresco-testing-ConsoleLog caption {
+   border-bottom: none;
+   text-align: left;
+   font-weight: bold;
+   font-size: 1.1em;
+}
+
+.alfresco-testing-ConsoleLog td>table {
+   border: none;
+}
+
+.alfresco-testing-ConsoleLog pre {
+   padding: 0;
+   margin: 0;
+}
+
+.alfresco-testing-ConsoleLog pre .string {
+   color: green;
+}
+.alfresco-testing-ConsoleLog pre .number {
+   color: darkorange;
+}
+.alfresco-testing-ConsoleLog pre .boolean {
+   color: blue;
+}
+.alfresco-testing-ConsoleLog pre .null {
+   color: magenta;
+}
+.alfresco-testing-ConsoleLog pre .key {
+   color: red;
+}

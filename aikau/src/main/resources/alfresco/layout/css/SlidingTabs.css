@@ -1,0 +1,59 @@
+.alfresco-layout-SlidingTabs .navigation {
+    margin-bottom: 5px;
+    overflow: hidden;
+    height: 20px;
+}
+
+.alfresco-layout-SlidingTabs .navigation > div {
+    color: grey;
+    display: inline-block;
+    float: left;
+    width: 20px;
+    transition: width 1.0s ease;
+    overflow: hidden; 
+    margin: 0 10px 0 0;
+}
+
+.alfresco-layout-SlidingTabs .navigation > div.selected {
+    color: black;
+    width: 200px;
+}
+
+.alfresco-layout-SlidingTabs .navigation > div.next {
+    width: 200px;
+}
+
+.alfresco-layout-SlidingTabs .navigation > div > span {
+    float: left;
+}
+
+.alfresco-layout-SlidingTabs .navigation > div span.index {
+    width: 20px;
+}
+
+.alfresco-layout-SlidingTabs .navigation > div span.title {
+    width: 0px;
+    transition: width 1.0s ease;
+}
+
+.alfresco-layout-SlidingTabs .navigation > div.selected span.title,
+.alfresco-layout-SlidingTabs .navigation > div.next span.title {
+    width: 180px;
+}
+
+.alfresco-layout-SlidingTabs .content-frame {
+    position: relative;
+    border: 1px solid #eee;
+    overflow-x: hidden;
+}
+
+.alfresco-layout-SlidingTabs .content-items {
+    position: relative;
+    left: 0;
+    transition: left 1.0s ease;
+}
+
+.alfresco-layout-SlidingTabs .content-items > div {
+    float: left;
+    display: inline-block;
+}

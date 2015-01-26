@@ -1,0 +1,10 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+   <title>Home</title>
+   <description>Default landing page</description>
+   <template-instance>home-page</template-instance>
+   <authentication>user</authentication>
+</page>

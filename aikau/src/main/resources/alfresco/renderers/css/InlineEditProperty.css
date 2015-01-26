@@ -1,0 +1,39 @@
+.alfresco-renderers-Property.alfresco_renderers_InlineEditProperty {
+  /*margin-left: 20px; */
+}
+
+.alfresco-renderers-InlineEditProperty .alfresco-renderers-Property {
+  margin-left: 0;
+}
+
+.alfresco-renderers-InlineEditProperty .editIcon {
+   height: 16px;
+   width: 16px;
+   display: inline-block;
+   opacity: 0;
+}
+
+.alfresco-renderers-InlineEditProperty .action {
+   cursor: pointer;
+   font-family: @standard-font;
+   color: @general-font-color;
+   font-size: @normal-font-size;
+   display: inline-block;
+   height: 85%;
+   vertical-align: middle;
+}
+
+.alfresco-renderers-InlineEditProperty .action.disabled {
+   cursor: default;
+   color: @de-emphasized-font-color;
+}
+
+.alfresco-renderers-InlineEditProperty > .editor {
+   height: 40px;
+   display: inline-block;
+}
+
+.alfresco-renderers-InlineEditProperty > .editor > .alfresco-forms-Form {
+   display: inline-block;
+   vertical-align: bottom;
+}

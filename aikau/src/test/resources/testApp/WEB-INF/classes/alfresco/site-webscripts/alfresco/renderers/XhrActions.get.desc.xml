@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>XhrActions Test</shortname>
+  <description>This WebScript defines the XhrActions page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/XhrActions</url>
+</webscript>

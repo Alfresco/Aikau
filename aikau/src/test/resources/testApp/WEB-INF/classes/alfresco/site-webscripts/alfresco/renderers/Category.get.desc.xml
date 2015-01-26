@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Category Test</shortname>
+  <description>This WebScript defines the Category page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/Category</url>
+</webscript>

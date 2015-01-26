@@ -1,0 +1,64 @@
+.alfresco-layout-AlfSideBarContainer > .container {
+   overflow: hidden;
+}
+
+.alfresco-layout-AlfSideBarContainer > .container > .sidebar,
+.alfresco-layout-AlfSideBarContainer > .container > .main {
+   overflow: hidden;
+   float: none;
+   display: inline-block;
+   vertical-align: top;
+   background: none;
+}
+
+.alfresco-layout-AlfSideBarContainer > .container > ui-widget-content {
+   color: @general-font-color;
+   border: none;
+   border-right: @standard-border;
+}
+
+/* Convert the YUI resize handle to be transparent and slightly wider
+   to accommodate our custom image for popping the sidebar in and out */
+.alfresco-layout-AlfSideBarContainer .resize-handle {
+   background-color: #ffffff;
+   width: 9px;
+   right: -1px;
+   border-right: @standard-border;
+   border-left: @standard-border;
+}
+
+/* Overrides JQuery default behaviour to hide the handle when disabled, but this would
+   make our pop-out control hidden as well which we don't want */
+.alfresco-layout-AlfSideBarContainer .ui-resizable-disabled > .resize-handle{
+   display: inherit;
+}
+
+/* Ensure that the resize handle gets some colour when being used */ 
+.alfresco-layout-AlfSideBarContainer .resize-handle.active{
+   background-color: #dfdfdf;
+}
+
+/* Override the default drag handle image */
+.alfresco-layout-AlfSideBarContainer .resize-handle-button {
+   background-position: 0 6px;
+   background-color: transparent;
+   background-repeat: no-repeat;
+   border: @standard-border;
+   border-left: none;
+   border-right: none;
+   width: 8px;
+   height: 21px;
+   cursor: pointer;
+   position: fixed;
+   top: 50%;
+}
+
+/* This selector should be applied when the sidebar is shown */
+.alfresco-layout-AlfSideBarContainer .resize-handle-button.pop-in {
+   background-image: url("./images/PopInArrow.png");
+}
+
+/* This selector should be applied when the sidebar is hidden */
+.alfresco-layout-AlfSideBarContainer .resize-handle-button.pop-out {
+   background-image: url("./images/PopOutArrow.png");
+}

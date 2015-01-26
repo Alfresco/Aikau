@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FilmStripView Test</shortname>
+  <description>This WebScript defines the FilmStripView page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/FilmStripView</url>
+</webscript>

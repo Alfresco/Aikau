@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>SearchResultPropertyLink Test</shortname>
+  <description>This WebScript defines the SearchResultPropertyLink page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/SearchResultPropertyLink</url>
+</webscript>

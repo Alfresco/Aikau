@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DynamicForm Test</shortname>
+  <description>This WebScript defines the DynamicForm page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/DynamicForm</url>
+</webscript>

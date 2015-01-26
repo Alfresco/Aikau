@@ -1,0 +1,154 @@
+
+@docListBorderColour: #e5e5e5;
+@docListHeaderBgColour: #f5f5f5;
+@docListOddRowColour: #fff;
+@docListEvenRowColour: #f7f7f7;
+@docListDndHighlight: #0082ca;
+
+// General palette
+@primary-title-color: #fff;
+@primary-theme-color: #eee;
+
+// Layout settings...
+// This is used to control the overall layout of the page. Line-heights will be a multiple of
+// this value based on the font-size
+@standard-line-height: 10px;
+@standard-column-width: 15px;
+// This is used when the columns need some breathing space.
+@standard-column-spacing: 5px;
+// Used for e.g. the facets on the search page.
+@sidebar-component-width: 320px;
+
+// Font Colours
+@general-font-color: #333;
+@emphasized-font-color: #000;
+@de-emphasized-font-color: #999;
+@highlighted-font-color: #fff;
+
+// Backgrounds
+@list-background-color: #fff;
+@list-hover-color: #f1f1f1;
+
+// Tabs
+@tab-border: @standard-button-border;
+@tab-color: #d8d8d8;
+@tab-background: @tab-color none;
+@tab-color-active: #fff;
+@tab-border-radius: 2px 2px 0 0;
+@tab-opacity-disabled: 0.5;
+
+// Font Sizes
+@page-title-font-size: 26px;
+@title-font-size: 20px;
+@large-font-size: 16px;
+@normal-font-size: 14px;
+@small-font-size: 12px;
+@footer-font-size: 8.11px;
+
+// Font families
+@standard-font: Open Sans,Arial,Helvetica,sans-serif;
+@bold-font: Open Sans Bold, Arial, sans-serif;
+
+// Font Mixins
+
+// This is the standard font style used throughout the application for regular text
+.standard-font {
+font-family: @standard-font;
+font-weight: normal;
+color: @general-font-color;
+}
+
+// This is the bold font style - bold, but not necessarily emphasized (see below)
+.bold-font {
+font-family: @bold-font;
+font-weight: normal;
+color: @general-font-color;
+}
+
+// Emphazied fonts are used to draw the user focus so should be bolder, darker and larger than normal
+.emphasized-font {
+font-family: @bold-font;
+color: @emphasized-font-color;
+}
+
+// De-emphasized fonts are intended to be less intrusive so should be lighter in colour
+.de-emphasized-font {
+font-family: @standard-font;
+color: @de-emphasized-font-color;
+}
+
+// Borders...
+// These have been initially added for form controls...
+@standard-border-width: 1px;
+@standard-border-style: solid;
+@standard-border-color: #d3d3d3;
+@standard-border: @standard-border-width @standard-border-style @standard-border-color;
+
+@hover-border-color: #d3d3d3;
+@focused-border-color: #8DC63f;
+
+// Buttons
+// The standard button is what is normally seen...
+@standard-button-border-color: #ccc;
+@standard-button-background-color: #fff;
+@standard-button-border: 1px solid @standard-button-border-color;
+@standard-button-focus-border: 1px solid @standard-button-border-color;
+@standard-button-font-color: @general-font-color;
+@standard-button-font-size: @normal-font-size;
+
+// "Call-to-action" buttons should be darker with larger text to capture the users attention
+@call-to-action-button-background-color: #8DC63F;
+@call-to-action-button-border: 1px solid #8DC63F;
+@call-to-action-button-focus-border: 1px solid #5EAE41;
+@call-to-action-button-font-color: #ffffff;
+@call-to-action-button-font-size: @large-font-size;
+
+// Shadows
+@standard-box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.3);
+@inset-box-shadow: 1px 1px 3px @standard-button-border-color inset;
+
+// Generic colours for displaying collections of items
+@collectionColour1: #f1e695;
+@collectionColour2: #f4af72;
+@collectionColour3: #db645a;
+@collectionColour4: #8d4747;
+@collectionColour5: #ebb646;
+@collectionColour6: #90c654;
+@collectionColour7: #999999;
+@collectionColour8: #cdcccc;
+@collectionColour9: #48aa9f;
+@collectionColour10: #3860ad;
+@collectionColour11: #cc872a;
+@collectionColour12: #784423;
+@collectionColour13: #8fa9d8;
+@collectionColour14: #da533d;
+@collectionColour15: #8c624c;
+@collectionColour16: #1c8849;
+@collectionColour17: #c15f30;
+@collectionColour18: #847b47;
+@collectionColour19: #945270;
+@collectionColour20: #ada835;
+@collectionColour21: #598e75;
+
+// Charting item colours
+@chartItemColour1: @collectionColour1;
+@chartItemColour2: @collectionColour2;
+@chartItemColour3: @collectionColour3;
+@chartItemColour4: @collectionColour4;
+@chartItemColour5: @collectionColour5;
+@chartItemColour6: @collectionColour6;
+@chartItemColour7: @collectionColour7;
+@chartItemColour8: @collectionColour8;
+@chartItemColour9: @collectionColour9;
+@chartItemColour10: @collectionColour10;
+@chartItemColour11: @collectionColour11;
+@chartItemColour12: @collectionColour12;
+@chartItemColour13: @collectionColour13;
+@chartItemColour14: @collectionColour14;
+@chartItemColour15: @collectionColour15;
+@chartItemColour16: @collectionColour16;
+@chartItemColour17: @collectionColour17;
+@chartItemColour18: @collectionColour18;
+@chartItemColour19: @collectionColour19;
+@chartItemColour20: @collectionColour20;
+@chartItemColour21: @collectionColour21;

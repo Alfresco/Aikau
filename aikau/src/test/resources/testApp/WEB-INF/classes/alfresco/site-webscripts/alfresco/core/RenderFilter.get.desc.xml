@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>RenderFilter Test</shortname>
+  <description>This WebScript defines the RenderFilter page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/RenderFilter</url>
+</webscript>

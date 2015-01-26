@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfContextMenu Test</shortname>
+  <description>This WebScript defines the AlfContextMenu page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfContextMenu</url>
+</webscript>

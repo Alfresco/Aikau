@@ -1,0 +1,28 @@
+/* Make room for the indicators */
+.alfresco-renderers-PublishingDropDownMenu .alfresco-forms-controls-BaseFormControl {
+   margin-right: 20px;
+}
+
+/* Set up the common styles for indicators */
+.alfresco-renderers-PublishingDropDownMenu .indicator {
+   width: 16px;
+   height: 16px;
+   float: right;
+}
+
+/* Set the specific background images for the indicators */
+.alfresco-renderers-PublishingDropDownMenu .indicator.processing {
+   background-image: url("./images/ajax_anim.gif");
+}
+
+.alfresco-renderers-PublishingDropDownMenu .indicator.warning {
+   background-image: url("./images/warning-16.png");
+}
+
+.alfresco-renderers-PublishingDropDownMenu .indicator.success {
+   background-image: url("./images/job-success-16.png");
+}
+
+.alfresco-renderers-PublishingDropDownMenu.no-title .alfresco-forms-controls-BaseFormControl div.title-row {
+   display: none;
+}

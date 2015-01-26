@@ -1,0 +1,8 @@
+.alfresco-renderers-Toggle a.on.favourite
+{
+   background-image: url(./images/star-selected_16x16.png);
+}
+.alfresco-renderers-Toggle a.off.favourite
+{
+   background-image: url(./images/star-deselected_16x16.png);
+}

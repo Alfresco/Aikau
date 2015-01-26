@@ -1,0 +1,17 @@
+{
+   "resultset": [
+      ["image/jpeg", 74],
+      ["text/plain", 48],
+      ["image/png", 37],
+      ["text/xml", 27]
+   ],
+   "metadata": [{
+      "colIndex": 0,
+      "colType": "String",
+      "colName": "Mime type"
+   }, {
+      "colIndex": 1,
+      "colType": "Numeric",
+      "colName": "Count"
+   }]
+}

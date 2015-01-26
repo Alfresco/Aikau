@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+   <id>tp</id>
+   <template-instance>share-test-template</template-instance>
+   <authentication>none</authentication>
+</page>

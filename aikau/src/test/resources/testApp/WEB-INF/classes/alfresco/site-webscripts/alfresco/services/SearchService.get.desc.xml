@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>SearchService Test</shortname>
+  <description>This WebScript defines the SearchService page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/SearchService</url>
+</webscript>

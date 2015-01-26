@@ -1,0 +1,13 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+    <id>theme_1-theme</id>
+    <page-types>
+        <page-type>
+            <id>basic-pageType</id>
+            <page-instance-id>home</page-instance-id>
+        </page-type>
+    </page-types>
+</theme>

@@ -1,0 +1,21 @@
+.alfresco-forms-controls-DojoValidationTextBox div.dijitInputField span.alf-icon {
+   width: 30px;
+   height: 18px;
+   background-repeat: no-repeat;
+   margin-top: 1px;
+   float: left;
+}
+
+.alfresco-forms-controls-DojoValidationTextBox div.control div.dijitValidationTextBox {
+   border-color: @standard-border-color;
+}
+
+.alfresco-forms-controls-DojoValidationTextBox div.control div.dijitValidationTextBox.dijitTextBoxHover {
+   border-color: @hover-border-color;
+   background-image: none;
+   background-color: inherit;
+}
+
+.alfresco-forms-controls-DojoValidationTextBox div.control div.dijitValidationTextBox.dijitTextBoxFocused {
+   border-color: @focused-border-color;
+}

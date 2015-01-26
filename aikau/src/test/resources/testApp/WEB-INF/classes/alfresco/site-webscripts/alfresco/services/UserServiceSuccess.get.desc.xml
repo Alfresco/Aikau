@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>UserServiceSuccess Test</shortname>
+  <description>This WebScript defines the UserServiceSuccess page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/UserServiceSuccess</url>
+</webscript>

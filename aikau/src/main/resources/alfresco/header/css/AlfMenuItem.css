@@ -1,0 +1,10 @@
+.alfresco-share .alf-header-menu-bar .dijitMenu .dijitMenuItemHover td,
+.alfresco-share .alf-header-menu-bar .dijitMenu .dijitMenuItemSelected td,
+.alfresco-share .alf-header-menu-bar .dijitMenu .dijitMenuItemHover,
+.alfresco-share .alf-header-menu-bar .dijitComboBoxMenu .dijitMenuItemHover,
+.alfresco-share .alf-header-menu-bar .dijitMenuItemSelected {
+   background-color: #717171;
+   background-image: none;
+   background-repeat: no-repeat;
+   color: #fff;
+}

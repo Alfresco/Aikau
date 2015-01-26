@@ -1,0 +1,16 @@
+.alfresco-header-CurrentUserStatus .status {
+  background-color: #fff;
+  color: #333;
+  padding: 3px;
+  max-width: 180px;
+  overflow-x: hidden;
+}
+
+.alfresco-header-CurrentUserStatus .status.blank {
+   color: #666;
+}
+
+.alfresco-header-CurrentUserStatus .lastUpdate {
+   color: #ccc;
+   font-size: 83%;
+}

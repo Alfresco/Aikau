@@ -1,0 +1,8 @@
+.alfresco-documentlibrary-AlfDocumentList {
+  /*border: 1px solid #F0F0F0; Commented out because container should control border */
+  /* margin: 5px; Commented out because the container should control the margins */
+}
+
+.alfresco-documentlibrary-AlfDocumentList > div.info {
+   margin: @standard-line-height @standard-column-width;
+}

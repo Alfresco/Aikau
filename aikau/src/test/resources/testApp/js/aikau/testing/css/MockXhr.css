@@ -1,0 +1,40 @@
+.alfresco-testing-MockXhr table {
+   border: 1px solid #808080;
+   border-collapse: collapse;
+   width: 100%;
+   margin-bottom: 10px;
+}
+
+.alfresco-testing-MockXhr tr {
+   border: none;
+   border-collapse: collapse;
+}
+
+.alfresco-testing-MockXhr tr.mx-row:nth-child(odd),
+.alfresco-testing-MockXhr tr.mx-object-row:nth-child(odd) {
+   background-color: #eee;
+}
+
+.alfresco-testing-MockXhr tr.mx-row:nth-child(even),
+.alfresco-testing-MockXhr tr.mx-object-row:nth-child(even) {
+   background-color: #fff;
+}
+
+.alfresco-testing-MockXhr th,
+.alfresco-testing-MockXhr td,
+.alfresco-testing-MockXhr caption {
+   border: 1px solid #808080;
+   border-collapse: collapse;
+   padding: 4px;
+}
+
+.alfresco-testing-MockXhr caption {
+   border-bottom: none;
+   text-align: left;
+   font-weight: bold;
+   font-size: 1.1em;
+}
+
+.alfresco-testing-MockXhr td>table {
+   border: none;
+}

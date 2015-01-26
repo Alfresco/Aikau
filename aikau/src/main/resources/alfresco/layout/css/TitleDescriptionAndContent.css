@@ -1,0 +1,16 @@
+.alfresco-layout-TitleDescriptionAndContent > .title {
+  color: #333333;
+  font-family: Open Sans Condensed,Arial,sans-serif;
+  font-size: 230%;
+  padding: 5px;
+}
+
+.alfresco-layout-TitleDescriptionAndContent > .description {
+  padding: 5px;
+}
+
+.alfresco-layout-TitleDescriptionAndContent > .content {
+  border-top: 1px solid #EEEEEE;
+  margin-top: 20px;
+  padding: 5px;
+}

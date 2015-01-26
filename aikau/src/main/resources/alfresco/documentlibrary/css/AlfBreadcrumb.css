@@ -1,0 +1,41 @@
+.alfresco-documentlibrary-AlfBreadcrumb {
+   cursor: pointer;
+   position: relative;
+   display: inline-block;
+}
+
+.alfresco-documentlibrary-AlfBreadcrumb.Focused.dijitFocused {
+   background-color: #f0f0f0;
+   outline: 0;
+}
+
+.alfresco-documentlibrary-AlfBreadcrumb.dndHighlight .breadcrumb
+{
+   background-color: #dceaf4;
+   outline: 2px solid #4F94C9;
+}
+
+.alfresco-documentlibrary-AlfBreadcrumb .breadcrumb:hover
+{
+   background-color: #f0f0f0;
+}
+
+.alfresco-documentlibrary-AlfBreadcrumb span.droppable
+{
+   background: url(./images/drop-arrow-left-small.png) no-repeat;
+   display: none;
+   height: 14px;
+   position: absolute;
+   width: 33px;
+   z-index: 1;
+   margin-left: 30px;
+   top: -5px;
+   left: -10px;
+}
+
+/* Drag and Drop */
+
+.alfresco-documentlibrary-AlfBreadcrumb.dndHighlight span.droppable
+{
+   display: block !important;
+}

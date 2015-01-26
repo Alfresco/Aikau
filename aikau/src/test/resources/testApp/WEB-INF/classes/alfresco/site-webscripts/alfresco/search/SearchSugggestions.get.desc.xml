@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Search Suggestions Test</shortname>
+  <description>This WebScript defines the search suggestions page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/SearchSuggestions</url>
+</webscript>

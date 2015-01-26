@@ -1,0 +1,12 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+   <name>Aikau Sample Application</name>
+   <source-id>site</source-id>
+   <properties>
+      <theme>lightTheme</theme>
+      <root-page>home-page</root-page>
+   </properties>
+</configuration>

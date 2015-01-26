@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>RemoveFavouriteSite Test</shortname>
+  <description>This WebScript defines the RemoveFavouriteSite page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/RemoveFavouriteSite</url>
+</webscript>

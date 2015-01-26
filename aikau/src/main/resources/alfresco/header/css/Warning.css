@@ -1,0 +1,55 @@
+.alfresco-header-Warning .warnings
+{
+   margin: 0 -10px;
+   padding: 0.5em 0;
+   color: black;
+   text-align: center;
+   background-color: #F4F4F4;
+   background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      color-stop(0, rgb(242,242,242)),
+      color-stop(1, rgb(250,250,250))
+   );
+   background-image: -moz-linear-gradient(
+      center top,
+      rgb(242,242,242) 0%,
+      rgb(250,250,250) 100%
+   );
+   font-size: 108%;
+   border-top: 1px solid lightgrey;
+}
+
+.alfresco-header-Warning .info
+{
+   padding-top: 2px;
+}
+
+.alfresco-header-Warning .level0
+{
+   background: url("./images/warning-16.png") no-repeat scroll 0 0 transparent;
+   display: inline;
+   padding-left: 20px;
+}
+
+.alfresco-header-Warning .level1
+{
+   background: url("./images/warning-16.png") no-repeat scroll 0 0 transparent;
+   display: inline;
+   padding-left: 20px;
+}
+
+.alfresco-header-Warning .level2
+{
+   background: url("./images/warning-16.png") no-repeat scroll 0 0 transparent;
+   display: inline;
+   padding-left: 20px;
+}
+
+.alfresco-header-Warning .level3
+{
+   background: url("./images/error-16.png") no-repeat scroll 0 0 transparent;
+   display: inline;
+   padding-left: 20px;
+}

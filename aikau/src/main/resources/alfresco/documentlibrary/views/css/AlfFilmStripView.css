@@ -1,0 +1,46 @@
+/* The film strip view needs to have relative positioning in order for the absolute positioning of the
+ * items to work
+ */
+.alfresco-documentlibrary-views-layouts-AlfFilmStripView {
+   position: relative;
+}
+
+/* This makes the content items overlay the main preview */
+.alfresco-documentlibrary-views-layouts-AlfFilmStripView > div.items {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  z-index: 4;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfFilmStripView > div.preview .alfresco-documentlibrary-views-layouts-Carousel .alfresco-layout-LeftAndRight {
+   background-color: #000000;
+   color: #FFFFFF;
+   opacity: 0.5;
+   padding: 10px 0;
+   text-shadow: 1px 1px #333333;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfFilmStripView > div.preview .alfresco-documentlibrary-views-layouts-DocumentCarousel
+.alfresco-renderers-Thumbnail {
+   display: inline-block;
+   width: 100%;
+   text-align: center;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfFilmStripView > div.preview 
+.alfresco-documentlibrary-views-layouts-Carousel .alfresco-layout-LeftAndRight .alfresco-renderers-Property {
+   color: #FFFFFF;
+}
+
+.alfresco-documentlibrary-views-layouts-AlfFilmStripView div.preview 
+.alfresco-documentlibrary-views-layouts-Carousel .alfresco-layout-LeftAndRight 
+.alfresco-renderers-Selector.checked {
+   background-image: url(./images/AllSelectedWhite.png);
+}
+
+.alfresco-documentlibrary-views-layouts-AlfFilmStripView div.preview 
+.alfresco-documentlibrary-views-layouts-Carousel .alfresco-layout-LeftAndRight 
+.alfresco-renderers-Selector.unchecked {
+   background-image: url(./images/NoneSelectedWhite.png);
+}

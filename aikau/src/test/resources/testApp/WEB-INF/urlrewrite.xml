@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//www.tuckey.org//DTD UrlRewrite 3.0//EN" "http://www.tuckey.org/res/dtds/urlrewrite3.0.dtd">
+<urlrewrite use-query-string="true">
+
+   <!-- Spring Surf -->
+   <rule>
+      <from>/favicon.ico</from>
+      <to>/favicon.ico</to>
+   </rule>
+   <!-- DOCUMENT PREVIEW BINARY REDIRECTS -->
+   <!-- Image plugin -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/content/thumbnails/imgpreview(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/Image.jpg</to>
+   </rule>
+   <!-- Video plugin -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5/content/Video Test Binary.mp4(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/Video.mp4</to>
+   </rule>
+   <!-- Audio plugin -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52/content/Demo 3.mp3(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/Audio.mp3</to>
+   </rule>
+   <!-- PDF.js plugin -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28/content/PDF.pdf(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/PDF.pdf</to>
+    </rule>
+    <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/4ac29928-4ce3-4526-a5ca-3be256220663/content/PDF_with_outline.pdf(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/PDF_with_outline.pdf</to>
+    </rule>
+    <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/3ca89be9-b08e-4de4-aab7-5e421924472e/content/PDF_password.pdf(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/PDF_password.pdf</to>
+    </rule>
+    <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/c5d115de-d5c5-446a-b4a3-f3dae1705876/content/PDF_missing.pdf(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/PDF_missing.pdf</to>
+    </rule>
+    <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/6f4c9f59-7804-475e-b9d0-72387b40eaa6/content/PDF_faulty.pdf(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/PDF_faulty.pdf</to>
+    </rule>
+
+   <!-- Standard Surf redirects -->
+   <rule>
+      <from>/proxy/(.*)</from>
+      <to>/page/proxy/$1</to>
+   </rule>
+   <rule>
+      <from>/res/(.*)</from>
+      <to>/page/resource/$1</to>
+   </rule>
+   <rule>
+      <from>/service/(.*)</from>
+      <to>/page/$1</to>
+   </rule>
+   <rule>
+      <from>/system/(.*)</from>
+      <to>/page/system/$1</to>
+    </rule>
+    <rule>
+      <from>/(.*)</from>
+      <to>/page/$1</to>
+   </rule>
+</urlrewrite>

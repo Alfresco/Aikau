@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DojoValidationTextBox Test</shortname>
+  <description>This WebScript defines the DojoValidationTextBox page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/DojoValidationTextBox</url>
+</webscript>
