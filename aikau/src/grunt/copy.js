@@ -36,7 +36,7 @@ module.exports = function (grunt, alf) {
                   src: ['src/main/resources/alfresco/**/*'], 
                   dest: '',
                   rename: function(dest, src) {
-                     var src = src.substring(src.indexOf("src/main/resources/alfresco/") + 27);
+                     src = src.substring(src.indexOf("src/main/resources/alfresco/") + 27);
                      var newDest = './target/classes/META-INF/js/aikau/1.0/alfresco/' + src;
                      return newDest;
                   }

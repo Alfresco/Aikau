@@ -6,7 +6,7 @@
    <packaging>pom</packaging>
    <version>1.0.3-SNAPSHOT</version>
    
-   <name>Aikau</name>
+   <name>Aikau Project Aggregator</name>
 
    <prerequisites>
       <maven>3.0.3</maven>

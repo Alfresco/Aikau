@@ -27,13 +27,65 @@
 
 module.exports = function (grunt, alf) {
 
+   // Generate a task for copying the uninstrumented code back...
+   grunt.registerTask('copyOriginalCode', 'Copy Uninstrumented Code', function() {
+      var path = require("path");
+
+      var srcPath = "src/main/resources/alfresco";
+      var targetRoot = "target/classes/META-INF/js/aikau/";
+
+      // Return unique array of all file paths which match globbing pattern
+      var options1 = { cwd: srcPath, filter: 'isFile' };
+      var globPattern1 = "**/*";
+      var options2 = { cwd: targetRoot, filter: 'isDirectory' };
+      var globPattern2 = "*";
+
+      var targetVersion;
+      grunt.file.expand(options2, globPattern2).forEach(function(matches) {
+         console.log("Found target version: " + matches);
+         targetVersion = matches;
+         grunt.file.expand(options1, globPattern1).forEach(function(fileMatches) {
+            var src = path.join(srcPath, fileMatches);
+            var target = path.join(targetRoot + targetVersion + "/alfresco", fileMatches);
+            grunt.file.copy(src, target);
+        });
+      });
+   });
+
+   // Generate a task for copying the instrumented code...
+   grunt.registerTask('copyInstrumentedCode', 'Copy Instrumented Code', function() {
+      var path = require("path");
+
+      var srcPath = "src/main/resources/alfrescoInst";
+      var targetRoot = "target/classes/META-INF/js/aikau/";
+
+      // Return unique array of all file paths which match globbing pattern
+      var options1 = { cwd: srcPath, filter: 'isFile' };
+      var globPattern1 = "**/*";
+      var options2 = { cwd: targetRoot, filter: 'isDirectory' };
+      var globPattern2 = "*";
+
+      var targetVersion;
+      grunt.file.expand(options2, globPattern2).forEach(function(matches) {
+         console.log("Found target version: " + matches);
+         targetVersion = matches;
+         grunt.file.expand(options1, globPattern1).forEach(function(fileMatches) {
+            var src = path.join(srcPath, fileMatches);
+            var target = path.join(targetRoot + targetVersion + "/alfresco", fileMatches);
+            console.log("Copying '" + src + "' to '" + target);
+            grunt.file.copy(src, target);
+        });
+      });
+   });
+
+
    // Generate a coverage report using the local machine
    grunt.registerTask('coverage-report', 'A task for collecting code coverage reports', function() {
       grunt.task.run('shell:stopTestApp');
       grunt.option('force', true);
       grunt.task.run('generate-require-everything');
       grunt.task.run('instrument-code');
-      grunt.task.run('copy:instrumentedJs');
+      grunt.task.run('copyInstrumentedCode');
       grunt.task.run('hideExistingCoverageReports');
       grunt.task.run('start-node-coverage-server');
       grunt.task.run('startUnitTestApp');
@@ -42,7 +94,7 @@ module.exports = function (grunt, alf) {
       grunt.task.run('merge-reports');
       grunt.task.run('clean-reports');
       grunt.task.run('showExistingCoverageReports');
-      grunt.task.run('copy:uninstrumentedJs');
+      grunt.task.run('copyOriginalCode');
       // grunt.task.run('http:clearDependencyCaches');
       grunt.task.run('clean:instrumentedCode');
       grunt.task.run('shell:stopTestApp');
@@ -55,7 +107,7 @@ module.exports = function (grunt, alf) {
       grunt.option('force', true);
       grunt.task.run('generate-require-everything');
       grunt.task.run('instrument-code');
-      grunt.task.run('copy:instrumentedJs');
+      grunt.task.run('copyInstrumentedCode');
       grunt.task.run('hideExistingCoverageReports');
       grunt.task.run('start-node-coverage-server');
       grunt.task.run('startUnitTestApp');
@@ -64,7 +116,7 @@ module.exports = function (grunt, alf) {
       grunt.task.run('merge-reports');
       grunt.task.run('clean-reports');
       grunt.task.run('showExistingCoverageReports');
-      grunt.task.run('copy:uninstrumentedJs');
+      grunt.task.run('copyOriginalCode');
       // grunt.task.run('http:clearDependencyCaches');
       grunt.task.run('clean:instrumentedCode');
       grunt.task.run('shell:stopTestApp');

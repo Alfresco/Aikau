@@ -62,8 +62,24 @@
             <filtering>false</filtering>
             <directory>${basedir}/src/main/resources/lib</directory>
          </resource>
-         
       </resources>
+
+      <testResources>
+         <testResource>
+            <directory>src/test/resources</directory>
+            <filtering>true</filtering>
+            <includes>
+               <include>testApp/WEB-INF/surf.xml</include>
+            </includes>
+         </testResource>
+         <testResource>
+            <directory>src/test/resources</directory>
+            <filtering>false</filtering>
+            <excludes>
+               <exclude>testApp/WEB-INF/surf.xml</exclude>
+            </excludes>
+         </testResource>
+      </testResources>
 
       <plugins>
 
@@ -130,17 +146,17 @@
 
                 <!-- Configure the application, this will essentially be Share but overlaid with the test resources -->
                <webApp>
-                  <descriptor>src/test/resources/testApp/WEB-INF/web.xml</descriptor>
+                  <descriptor>target/test-classes/testApp/WEB-INF/web.xml</descriptor>
                   <contextPath>/aikau</contextPath>
                   <resourceBases>
-                     <resourceBase>src/test/resources/testApp</resourceBase>
+                     <resourceBase>target/test-classes/testApp</resourceBase>
                      <resourceBase>target/classes/META-INF</resourceBase>
                      <!-- <resourceBase>${project.build.directory}/${project.build.finalName}</resourceBase> -->
                   </resourceBases>
                   <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames> 
                </webApp>
-               <webAppSourceDirectory>src/test/resources/testApp</webAppSourceDirectory>
-               <classesDirectory>src/test/resources/testApp/WEB-INF/classes</classesDirectory>
+               <webAppSourceDirectory>target/test-classes/testApp</webAppSourceDirectory>
+               <classesDirectory>target/test-classes/testApp/WEB-INF/classes</classesDirectory>
                <baseAppFirst>false</baseAppFirst>
             </configuration>
          </plugin>
