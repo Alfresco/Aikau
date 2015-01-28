@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -20,6 +20,7 @@
 /**
  * 
  * @author Erik Winlöf
+ * @author Dave Draper
  */
 define(["intern!object",
         "intern/chai!assert",
@@ -30,12 +31,11 @@ define(["intern!object",
 
 
    registerSuite({
-      name: 'Select DojoDateTextBox Test',
-      'alfresco/forms/controls/DojoDateTextBox': function () {
+      name: 'DateTextBox Test',
+      'Basic Setup': function () {
 
          var browser = this.remote;
-         var testName = "Date TextBox Test";
-         return TestCommon.loadTestWebScript(this.remote, "/DojoDateTextBox", testName)
+         return TestCommon.loadTestWebScript(this.remote, "/DateTextBox", "DateTextBox Test")
 
             // TEST 1
             .findByCssSelector("#DOJODATETEXTBOX_CONTROL")

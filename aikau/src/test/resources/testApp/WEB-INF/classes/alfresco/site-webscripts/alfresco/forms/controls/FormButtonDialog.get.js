@@ -14,8 +14,8 @@ model.jsonModel = {
             }
          }
       },
-      "aikauTesting/mockservices/DojoSelectTestOptions",
-      "alfresco/dialogs/AlfDialogService",
+      "aikauTesting/mockservices/SelectTestOptions",
+      "alfresco/services/DialogService",
       "alfresco/services/ErrorReporter"
    ],
    widgets: [
@@ -42,7 +42,7 @@ model.jsonModel = {
                      formSubmissionTopic: "DIALOG_FORM_SUBMITTED",
                      widgets: [
                          {
-                           name: "alfresco/forms/controls/DojoCheckBox",
+                           name: "alfresco/forms/controls/CheckBox",
                            config: {
                               id: "TEST_CHECKBOX_CONTAINER",
                               fieldId: "TEST_CHECKBOX",

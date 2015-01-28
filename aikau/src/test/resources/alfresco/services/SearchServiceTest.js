@@ -44,7 +44,7 @@ define(["intern!object",
             })
             .end()
 
-         .findByCssSelector("#FCTSRCH_SEARCH_FORM div.alfresco-forms-controls-DojoValidationTextBox div.control input[name='searchTerm']")
+         .findByCssSelector("#FCTSRCH_SEARCH_FORM div.alfresco-forms-controls-TextBox div.control input[name='searchTerm']")
             .type("test")
             .end()
 

@@ -153,7 +153,7 @@ define(["dojo/_base/declare",
       
       /**
        * Overrides the [inherited function]{@link module:alfresco/renderers/InlineEditProperty#getPrimaryFormWidget}
-       * to return a [select form control]{@link module:alfresco/forms/controls/DojoSelect}.
+       * to return a [select form control]{@link module:alfresco/forms/controls/Select}.
        *
        * @instance
        * @returns {object} The widget for editing.

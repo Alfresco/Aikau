@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -20,7 +20,7 @@
 /**
  * <p>This extends the default [dialog]{@link module:alfresco/dialogs/AlfDialog} to set up a dialog that 
  * is specifically designed to contain form widgets (e.g. [text boxes]{@link module:alfresco/forms/controls/DojoValidationTextBox},
- * [checkboxes]{@link module:alfresco/forms/controls/DojoCheckBox}, etc) such that when the form is 
+ * [checkboxes]{@link module:alfresco/forms/controls/CheckBox}, etc) such that when the form is 
  * confirmed a payload containing the value retrieved from the [form]{@link module:alfresco/forms/Form}
  * is published on the [formSubmissionTopic]{@link module:alfresco/dialogs/AlfFormDialog#formSubmissionTopic}.</p>
  * <p>PLEASE NOTE: There is some overlap/duplication of code with [_AlfCreateFormDialogMixin]{@link module:alfresco/forms/_AlfCreateFormDialogMixin}</p>

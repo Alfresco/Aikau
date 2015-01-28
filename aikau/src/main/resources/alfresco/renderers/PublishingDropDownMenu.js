@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,7 +18,7 @@
  */
 
 /**
- * This renders a drop-down select menu using a wrapped [DojoSelect]{@link module:alfresco/forms/controls/DojoSelect}
+ * This renders a drop-down select menu using a wrapped [DojoSelect]{@link module:alfresco/forms/controls/Select}
  * widget that when changed will publish information about the change in value for the current rendered item.
  * 
  * @module alfresco/renderers/PublishingDropDownMenu
@@ -33,7 +33,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/PublishingDropDownMenu.html",
         "alfresco/core/Core",
         "alfresco/core/ObjectTypeUtils",
-        "alfresco/forms/controls/DojoSelect",
+        "alfresco/forms/controls/Select",
         "dojo/_base/lang",
         "dojo/dom-class"], 
         function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, ObjectTypeUtils, DojoSelect, lang, domClass) {
@@ -66,7 +66,7 @@ define(["dojo/_base/declare",
       publishTopic: null,
 
       /**
-       * This will be set to reference the [DojoSelect]{@link module:alfresco/forms/controls/DojoSelect} that is 
+       * This will be set to reference the [DojoSelect]{@link module:alfresco/forms/controls/Select} that is 
        * wrapped by this widget.
        * 
        * @instance
@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
       _dropDownWidget: null,
 
       /**
-       * This is the options config that will be passed onto the wrapped [DojoSelect]{@link module:alfresco/forms/controls/DojoSelect}
+       * This is the options config that will be passed onto the wrapped [DojoSelect]{@link module:alfresco/forms/controls/Select}
        * widget.
        * 
        * @instance

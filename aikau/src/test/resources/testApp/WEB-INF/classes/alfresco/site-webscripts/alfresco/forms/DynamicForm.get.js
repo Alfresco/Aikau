@@ -24,7 +24,7 @@ model.jsonModel = {
             widgets: [
                {
                   id: "FORM_SELECT_SELECT",
-                  name: "alfresco/forms/controls/DojoSelect",
+                  name: "alfresco/forms/controls/Select",
                   config: {
                      fieldId: "FORM_SELECT",
                      label: "Select Form",

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,107 +18,16 @@
  */
 
 /**
+ * This module has now been deprecated.
+ * 
  * @module alfresco/forms/controls/DojoValidationTextBox
- * @extends module:alfresco/forms/controls/BaseFormControl
+ * @extends module:alfresco/forms/controls/TextBox
  * @author Dave Draper
+ * @deprecated Since 1.0.3 - use [alfresco/forms/controls/TextBox]{@link module:alfresco/forms/controls/TextBox} instead.
  */
-define(["alfresco/forms/controls/BaseFormControl",
-        "alfresco/forms/controls/utilities/IconMixin",
-        "dojo/_base/declare",
-        "dijit/form/ValidationTextBox",
-        "dojo/_base/lang",
-        "dojo/dom-class"], 
-        function(BaseFormControl, IconMixin, declare, ValidationTextBox, lang, domClass) {
+define(["dojo/_base/declare",
+        "alfresco/forms/controls/TextBox"], 
+        function(declare, TextBox) {
    
-   return declare([BaseFormControl, IconMixin], {
-      
-      /**
-       * An array of the CSS files to use with this widget.
-       * 
-       * @instance
-       * @type {Array}
-       */
-      cssRequirements: [{cssFile:"./css/DojoValidationTextBox.css"}],
-
-      /**
-       *
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      placeHolder: null,
-
-      /**
-       * @instance
-       */
-      getWidgetConfig: function alfresco_forms_controls_DojoValidationTextBox__getWidgetConfig() {
-         // Return the configuration for the widget
-         var placeHolder = (this.placeHolder != null) ? this.message(this.placeHolder) : "";
-         return {
-            id : this.generateUuid(),
-            name: this.name,
-            value: this.value,
-            placeHolder: placeHolder,
-            iconClass: this.iconClass
-         };
-      },
-      
-      /**
-       * @instance
-       */
-      createFormControl: function alfresco_forms_controls_DojoValidationTextBox__createFormControl(config, domNode) {
-         var textBox = new ValidationTextBox(config);
-
-         // Handle  adding classes to control width...
-         var additionalCssClasses = "";
-         if (this.additionalCssClasses != null)
-         {
-            additionalCssClasses = this.additionalCssClasses;
-         }
-         domClass.add(this.domNode, "alfresco-forms-controls-DojoValidationTextBox " + additionalCssClasses);
-         this.addIcon(textBox);
-         return textBox;
-      },
-      
-      /**
-       * This will be set to the last known value of the text box before the current keyup event.
-       * 
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      _oldValue: null,
-      
-      /**
-       * This is used as a temporary buffer variable to keep track of changes to the old value. 
-       * 
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      __oldValue: null,
-
-      /**
-       * Overrides the default change events to use blur events on the text box. This is done so that we can validate
-       * on every single keypress. However, we need to keep track of old values as this information is not readily
-       * available from the text box itself.
-       * 
-       * @instance
-       */
-      setupChangeEvents: function alfresco_forms_controls_DojoValidationTextBox__setupChangeEvents() {
-         var _this = this;
-         
-         if (this.wrappedWidget)
-         {
-            this.wrappedWidget.on("keyup", function() {
-               _this._oldValue = _this.__oldValue; // Set the old value as the last buffer...
-               _this.__oldValue = this.getValue(); // Make the last buffer the current value being set
-               
-               _this.alfLog("log", "keyup - OLD value: " + _this._oldValue + ", NEW value: " + this.getValue());
-               _this.formControlValueChange(_this.name, _this._oldValue, this.getValue());
-               _this.validate();
-            });
-         }
-      }
-   });
+   return declare([TextBox], {});
 });

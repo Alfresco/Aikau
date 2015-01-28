@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -783,7 +783,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/forms/controls/DojoTextarea",
+                     name: "alfresco/forms/controls/TextArea",
                      config: {
                         label: "Description",
                         description: "A description of the folder",

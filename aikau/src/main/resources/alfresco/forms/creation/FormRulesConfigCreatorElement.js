@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,7 +29,7 @@ define(["alfresco/forms/controls/MultipleEntryElement",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/forms/controls/DojoValidationTextBox",
-        "alfresco/forms/controls/DojoSelect",
+        "alfresco/forms/controls/Select",
         "alfresco/forms/controls/MultipleEntryFormControl"], 
         function(MultipleEntryElement, declare, PublishForm, ObjectTypeUtils, lang, array, DojoValidationTextBox, DojoSelect, MultipleEntryFormControl) {
    
@@ -206,7 +206,7 @@ define(["alfresco/forms/controls/MultipleEntryElement",
                }
             },
             {
-               name: "alfresco/forms/controls/DojoSelect",
+               name: "alfresco/forms/controls/Select",
                config: {
                   name: "targetId",
                   label: "rule.field.label",

@@ -58,7 +58,7 @@ define(["intern!object",
             .end()
 
          // 4. Check that the validation text box is displayed...
-         .findByCssSelector(".alfresco-forms-controls-DojoValidationTextBox .dijitInputContainer input")
+         .findByCssSelector(".alfresco-forms-controls-TextBox .dijitInputContainer input")
             .getProperty('value')
             .then(function(resultText) {
                TestCommon.log(testname, "Check that widget is displayed in drop zone...");

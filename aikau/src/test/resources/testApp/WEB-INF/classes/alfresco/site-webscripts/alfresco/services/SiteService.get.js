@@ -13,7 +13,7 @@ model.jsonModel = {
          name: "alfresco/services/SiteService"
       },
       {
-         name: "alfresco/dialogs/AlfDialogService"
+         name: "alfresco/services/DialogService"
       },
       {
          name: "alfresco/services/SiteService",

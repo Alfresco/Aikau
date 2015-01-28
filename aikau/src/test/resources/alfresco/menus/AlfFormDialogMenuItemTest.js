@@ -42,7 +42,7 @@ define(["intern!object",
          .findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "subscribe", "any"))
             .then(function(elements) {
                TestCommon.log(testName,"Check that a subscription has been setup");
-               assert(elements.length === 1, "Test #1a - A subscription from the alfresco/dialogs/AlfDialogService should have been setup");
+               assert(elements.length === 1, "Test #1a - A subscription from the alfresco/services/DialogService should have been setup");
             })
          .end()
 

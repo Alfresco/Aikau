@@ -73,15 +73,15 @@ define({
       'src/test/resources/alfresco/forms/DynamicFormTest',
       'src/test/resources/alfresco/forms/FormsTest',
       'src/test/resources/alfresco/forms/SingleTextFieldFormTest',
-      'src/test/resources/alfresco/forms/controls/BaseFormTest',
       'src/test/resources/alfresco/forms/controls/AutoSetTest',
+      'src/test/resources/alfresco/forms/controls/BaseFormTest',
       'src/test/resources/alfresco/forms/controls/ComboBoxTest',
       'src/test/resources/alfresco/forms/controls/DocumentPickerTest',
-      'src/test/resources/alfresco/forms/controls/DojoSelectTest',
-      // 'src/test/resources/alfresco/forms/controls/DojoDateTextBoxTest',  // TODO: NEEDS FIXING
-      'src/test/resources/alfresco/forms/controls/DojoValidationTextBoxTest',
+      'src/test/resources/alfresco/forms/controls/DateTextBoxTest',  // TODO: NEEDS FIXING
       'src/test/resources/alfresco/forms/controls/FormButtonDialogTest',
       'src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest',
+      'src/test/resources/alfresco/forms/controls/SelectTest',
+      'src/test/resources/alfresco/forms/controls/TextBoxTest',
       'src/test/resources/alfresco/forms/controls/ValidationTest', 
 
       'src/test/resources/alfresco/header/HeaderWidgetsTest',

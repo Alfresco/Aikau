@@ -175,7 +175,7 @@ define(["alfresco/forms/controls/BaseFormControl",
       /**
        * When items are picked it is necessary to update the [AlfFormDialogButton]{@link module:alfresco/buttons/AlfFormDialogButton} 
        * that generates the [form]{@link module:alfresco/forms/Form} containing the [Picker]{@link module:alfresco/pickers/Picker} because
-       * the [AlfDialogService]{@link module:alfresco/dialogs/AlfDialogService} will destroy the dialog when it is closed. 
+       * the [DialogService]{@link module:alfresco/services/DialogService} will destroy the dialog when it is closed. 
        *
        * @instance
        * @param {object} value The items to set.

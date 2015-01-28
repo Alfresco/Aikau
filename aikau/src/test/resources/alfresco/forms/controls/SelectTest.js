@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,11 +30,11 @@ define(["intern!object",
 
    registerSuite({
       name: 'Select Menu Test',
-      'alfresco/forms/controls/DojoSelect': function () {
+      'Basic Test': function () {
 
          var browser = this.remote;
          var testName = "Select Menu Test";
-         return TestCommon.loadTestWebScript(this.remote, "/DojoSelect", testName)
+         return TestCommon.loadTestWebScript(this.remote, "/Select", testName)
 
             // Get the options labels using:
             //    #FIXED_INVALID_CHANGES_TO_CONTROL_dropdown .dijitMenuItemLabel

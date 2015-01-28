@@ -1,4 +1,4 @@
-.alfresco-forms-controls-DojoValidationTextBox div.dijitInputField span.alf-icon {
+.alfresco-forms-controls-TextBox div.dijitInputField span.alf-icon {
    width: 30px;
    height: 18px;
    background-repeat: no-repeat;
@@ -6,16 +6,16 @@
    float: left;
 }
 
-.alfresco-forms-controls-DojoValidationTextBox div.control div.dijitValidationTextBox {
+.alfresco-forms-controls-TextBox div.control div.dijitValidationTextBox {
    border-color: @standard-border-color;
 }
 
-.alfresco-forms-controls-DojoValidationTextBox div.control div.dijitValidationTextBox.dijitTextBoxHover {
+.alfresco-forms-controls-TextBox div.control div.dijitValidationTextBox.dijitTextBoxHover {
    border-color: @hover-border-color;
    background-image: none;
    background-color: inherit;
 }
 
-.alfresco-forms-controls-DojoValidationTextBox div.control div.dijitValidationTextBox.dijitTextBoxFocused {
+.alfresco-forms-controls-TextBox div.control div.dijitValidationTextBox.dijitTextBoxFocused {
    border-color: @focused-border-color;
 }

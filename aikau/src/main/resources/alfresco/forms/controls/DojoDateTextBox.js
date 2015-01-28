@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,58 +19,12 @@
 
 /**
  * @module alfresco/forms/controls/DojoDateTextBox
- * @extends module:alfresco/forms/controls/BaseFormControl
+ * @extends module:alfresco/forms/controls/DateTextBox
  * @author Dave Draper
+ * @deprecated Since 1.0.3 - use [alfresco/forms/controls/DateTextBox]{@link module:alfresco/forms/controls/DateTextBox} instead
  */
-define(["alfresco/forms/controls/BaseFormControl",
-        "dojo/_base/declare",
-        "dojo/_base/lang",
-        "dojo/date/stamp",
-        "dijit/form/DateTextBox"],
-        function(BaseFormControl, declare, lang, stamp, DateTextBox) {
-   return declare([BaseFormControl], {
-
-      /**
-       * An array of the CSS files to use with this widget.
-       * 
-       * @instance
-       * @type {object[]}
-       * @default [{cssFile:"./css/DojoSelect.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/DojoDateTextBox.css"}],
-
-      /**
-       * @instance
-       */
-      getWidgetConfig: function alfresco_forms_controls_DojoDateTextBox__getWidgetConfig() {
-         // Return the configuration for the widget
-         var value = null;
-         if (this.value instanceof Date)
-         {
-            value = this.value;
-         }
-         else if (lang.isString(this.value))
-         {
-            value = stamp.fromISOString(this.value, { selector: "date" })
-         }
-         return {
-            id : this.id + "_CONTROL",
-            name: this.name,
-            value: value,
-            options: (this.options != null) ? this.options : []
-         };
-      },
-
-      getValue: function alfresco_forms_controls_DojoDateTextBox__getValue() {
-         var value = this.inherited(arguments);
-         return stamp.toISOString(value, { selector: "date" })
-      },
-
-      /**
-       * @instance
-       */
-      createFormControl: function alfresco_forms_controls_DojoDateTextBox__createFormControl(config, domNode) {
-         return new DateTextBox(config);
-      }
-   });
+define(["dojo/_base/declare",
+        "alfresco/forms/controls/DateTextBox"],
+        function(declare, DateTextBox) {
+   return declare([DateTextBox], {});
 });

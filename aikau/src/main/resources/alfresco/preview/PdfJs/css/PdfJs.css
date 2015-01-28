@@ -55,7 +55,7 @@
    padding: 10px;
    border-top: @standard-border;
 }
-.alfresco-preview-PdfJs .link-controls .alfresco-forms-controls-DojoValidationTextBox .dijitValidationTextBox {
+.alfresco-preview-PdfJs .link-controls .alfresco-forms-controls-TextBox .dijitValidationTextBox {
    width: 500px;
 }
 /* Add some specific styling for the search controls */
