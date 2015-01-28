@@ -7,6 +7,7 @@
 }
 
 .alfresco-renderers-InlineEditProperty .editIcon {
+   cursor: pointer;
    height: 16px;
    width: 16px;
    display: inline-block;
