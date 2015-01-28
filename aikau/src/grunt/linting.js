@@ -17,15 +17,15 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
+"use strict";
 
 /**
- * Grunt tasks to for CSS and JS linting 
- * 
+ * Grunt tasks for CSS and JS linting
+ *
  * Config for csslint and jshint plugins
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function(grunt, alf) {
    // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
    return {
       // Sanity check the CSS
@@ -34,7 +34,7 @@ module.exports = function (grunt, alf) {
       csslint: {
          share: {
             options: {
-               import: false,
+               "import": false,
                csslintrc: ".csslintrc"
             },
             src: [alf.cssFiles]
@@ -42,7 +42,20 @@ module.exports = function (grunt, alf) {
       },
 
       jshint: {
-         all: ['**/.js', '**/.json']
+         options: {
+            jshintrc: true
+         },
+         src: {
+            files: {
+               src: [
+                  "src/**/*.js",
+                  "src/**/*.json",
+                  "!src/jsdoc-templates/**",
+                  "!src/main/resources/lib/**",
+                  "!src/test/**"
+               ]
+            }
+         }
       }
    };
 };

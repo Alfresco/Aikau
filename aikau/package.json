@@ -12,6 +12,7 @@
     "grunt-contrib-clean": "latest",
     "grunt-contrib-copy": "latest",
     "grunt-contrib-csslint": "latest",
+    "grunt-contrib-jshint": "^0.11.0",
     "grunt-contrib-watch": "latest",
     "grunt-folder-list": "latest",
     "grunt-http": "latest",
