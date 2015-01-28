@@ -1,5 +1,5 @@
 /* This will place the check box on the same line as the label row */
-.alfresco-forms-controls-DojoCheckBox > .title-row,
-.alfresco-forms-controls-DojoCheckBox > .control-row {
+.alfresco-forms-controls-CheckBox > .title-row,
+.alfresco-forms-controls-CheckBox > .control-row {
    display: inline-block;
 }

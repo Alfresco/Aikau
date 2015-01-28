@@ -9,7 +9,7 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/dialogs/AlfDialogService",
+      "alfresco/services/DialogService",
       "alfresco/services/ErrorReporter"
    ],
    widgets:[
@@ -97,7 +97,7 @@ model.jsonModel = {
                                                 config: {
                                                    widgets: [
                                                       {
-                                                         name: "alfresco/forms/controls/DojoSelect",
+                                                         name: "alfresco/forms/controls/Select",
                                                          config: {
                                                             fieldId: "FORM_OPTION",
                                                             name: "option",

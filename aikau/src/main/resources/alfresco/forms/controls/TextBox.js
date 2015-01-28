@@ -45,7 +45,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        * @type {Array}
        */
-      cssRequirements: [{cssFile:"./css/DojoValidationTextBox.css"}],
+      cssRequirements: [{cssFile:"./css/TextBox.css"}],
 
       /**
        *
@@ -82,7 +82,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          {
             additionalCssClasses = this.additionalCssClasses;
          }
-         domClass.add(this.domNode, "alfresco-forms-controls-DojoValidationTextBox " + additionalCssClasses);
+         domClass.add(this.domNode, "alfresco-forms-controls-TextBox " + additionalCssClasses);
          this.addIcon(textBox);
          return textBox;
       },

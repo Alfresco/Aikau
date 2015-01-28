@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -34,7 +34,7 @@ define(["intern!object",
 
          var browser = this.remote;
          var testName = "Validation TextBox Test";
-         return TestCommon.loadTestWebScript(this.remote, "/DojoValidationTextBox", testName)
+         return TestCommon.loadTestWebScript(this.remote, "/TextBox", testName)
             // Test #1 
             // Check initial rendering...
             .end()

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -20,7 +20,7 @@
 /**
  * Extends the standard [inline property editor]{@link module:alfresco/renderers/InlineEditProperty} to 
  * change the edit text box to be a select menu. The select menu is rendered by a
- * [DojoSelect widget]{@link module:alfresco/forms/controls/DojoSelect} and this module accepts the same 
+ * [DojoSelect widget]{@link module:alfresco/forms/controls/Select} and this module accepts the same 
  * [optionsConfig]{@link module:alfresco/forms/controls/BaseFormControl#optionsConfig} as it does.
  *
  * @module alfresco/renderers/InlineEditSelect
@@ -29,21 +29,21 @@
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/InlineEditProperty",
-        "alfresco/forms/controls/DojoSelect"], 
+        "alfresco/forms/controls/Select"], 
         function(declare, InlineEditProperty, DojoSelect) {
 
    return declare([InlineEditProperty], {
 
       /**
        * Overrides the [inherited function]{@link module:alfresco/renderers/InlineEditProperty#getPrimaryFormWidget}
-       * to return a [select form control]{@link module:alfresco/forms/controls/DojoSelect}.
+       * to return a [select form control]{@link module:alfresco/forms/controls/Select}.
        *
        * @instance
        * @returns {object} The widget for editing.
        */
       getPrimaryFormWidget: function alfresco_renderers_InlineEditSelect__getPrimaryFormWidget() {
          return {
-            name: "alfresco/forms/controls/DojoSelect",
+            name: "alfresco/forms/controls/Select",
             config: {
                name: this.postParam,
                optionsConfig: this.optionsConfig,

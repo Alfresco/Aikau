@@ -76,7 +76,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/forms/controls/DojoTextarea",
+         name: "alfresco/forms/controls/TextArea",
          config: {
             id: "TEXTAREA"
          }

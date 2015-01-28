@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,7 +18,7 @@
  */
 
 /**
- * @module aikauTesting/mockservices/DojoSelectTestOptions
+ * @module aikauTesting/mockservices/SelectTestOptions
  * @extends module:alfresco/core/Core
  * @author Dave Draper
  */
@@ -35,7 +35,7 @@ define(["dojo/_base/declare",
        * @instance 
        * @param {array} args The constructor arguments.
        */
-      constructor: function alfresco_testing_mockservices_DojoSelectTestOptions__constructor(args) {
+      constructor: function alfresco_testing_mockservices_SelectTestOptions__constructor(args) {
          lang.mixin(this, args);
          this.alfSubscribe("GET_OPTIONS_FOR_SELECT_2", lang.hitch(this, "getOptionsForSelect2"));
          this.alfSubscribe("GET_OPTIONS_FOR_SELECT_4", lang.hitch(this, "getOptionsForSelect4"));
@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      getOptionsForSelect2: function alfresco_testing_mockservices_DojoSelectTestOptions__getOptionsForSelect2(payload) {
+      getOptionsForSelect2: function alfresco_testing_mockservices_SelectTestOptions__getOptionsForSelect2(payload) {
          this.select2Count++;
          this.alfPublish(payload.responseTopic, {
             options: [
@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
                   "value": "Value2_" + this.select2Count
                }
             ]
-         })
+         });
       },
 
       /**
@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      getOptionsForSelect4: function alfresco_testing_mockservices_DojoSelectTestOptions__getOptionsForSelect4(payload) {
+      getOptionsForSelect4: function alfresco_testing_mockservices_SelectTestOptions__getOptionsForSelect4(payload) {
          this.select4Count++;
          this.alfPublish(payload.responseTopic, {
             options: [
@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
                   "value": "Value2_" + this.select4Count
                }
             ]
-         })
+         });
       }
    });
 });

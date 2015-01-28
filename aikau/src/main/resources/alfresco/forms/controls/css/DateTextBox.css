@@ -1,22 +1,18 @@
-/*
-todo replace with less variables
-*/
-
-.claro .dijitCalendar,
-.claro .dijitCalendar:hover,
-.claro .dijitCalendarHover {
+.alfresco-forms-controls-TextBox .dijitCalendar,
+.alfresco-forms-controls-TextBox .dijitCalendar:hover,
+.alfresco-forms-controls-TextBox .dijitCalendarHover {
    background-color: #fff !important;
 }
 
-.claro .dijitCalendarDateTemplate,
-.claro .dijitCalendarPreviousMonth,
-.claro .dijitCalendarNextMonth {
+.alfresco-forms-controls-TextBox .dijitCalendarDateTemplate,
+.alfresco-forms-controls-TextBox .dijitCalendarPreviousMonth,
+.alfresco-forms-controls-TextBox .dijitCalendarNextMonth {
    border-bottom-color: #fff !important;
    background-color: #fff !important;
 }
 
-.claro .dijitCalendarPreviousMonth .dijitCalendarDateLabel,
-.claro .dijitCalendarNextMonth .dijitCalendarDateLabel {
+.alfresco-forms-controls-TextBox .dijitCalendarPreviousMonth .dijitCalendarDateLabel,
+.alfresco-forms-controls-TextBox .dijitCalendarNextMonth .dijitCalendarDateLabel {
    color: #cccccc !important;
    border-color: #fff !important;
 }

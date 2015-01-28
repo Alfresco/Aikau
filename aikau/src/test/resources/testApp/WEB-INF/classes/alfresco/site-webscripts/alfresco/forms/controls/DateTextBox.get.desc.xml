@@ -1,6 +1,5 @@
 <webscript>
-  <shortname>DojoDateTextBox Test</shortname>
-  <description>This WebScript defines the DojoDateTextBox page test</description>
+  <shortname>DateTextBox Test</shortname>
   <family>aikau-unit-tests</family>
-  <url>/DojoDateTextBox</url>
+  <url>/DateTextBox</url>
 </webscript>

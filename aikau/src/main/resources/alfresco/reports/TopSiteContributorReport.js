@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -142,7 +142,7 @@ define(["dojo/_base/declare",
                                validFormValuesPublishOnInit: false,
                                widgets: [
                                   {
-                                      name: "alfresco/forms/controls/DojoSelect",
+                                      name: "alfresco/forms/controls/Select",
                                       config: {
                                          fieldId: "TIME_PERIOD",
                                          name: "timePeriod",
@@ -176,7 +176,7 @@ define(["dojo/_base/declare",
                                       }
                                   },
                                   {
-                                     name: "alfresco/forms/controls/DojoDateTextBox",
+                                     name: "alfresco/forms/controls/DateTextBox",
                                      config: {
                                         name: "startDate",
                                         value: startDate,
@@ -194,7 +194,7 @@ define(["dojo/_base/declare",
                                      }
                                   },
                                   {
-                                     name: "alfresco/forms/controls/DojoDateTextBox",
+                                     name: "alfresco/forms/controls/DateTextBox",
                                      config: {
                                         name: "endDate",
                                         value: endDate,

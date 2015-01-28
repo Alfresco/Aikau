@@ -78,7 +78,7 @@ define(["intern!object",
                .end()
 
             // Check that the edit widget is created...
-            .findByCssSelector(".alfresco-forms-controls-DojoValidationTextBox:first-child")
+            .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
                .then(
                   function(){ /* No action required */},
                   function(){assert(false, "Test #2b - Clicking the edit icon did not create the validation text box");}
@@ -121,7 +121,7 @@ define(["intern!object",
             .pressKeys([keys.NULL])
             
             // Check edit box has reappeared...
-            .findByCssSelector(".alfresco-forms-controls-DojoValidationTextBox:first-child")
+            .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
                .isDisplayed()
                .then(function(result) {
                   assert(result === true, "Test #4a - The edit box was not revealed on CTRL-E");

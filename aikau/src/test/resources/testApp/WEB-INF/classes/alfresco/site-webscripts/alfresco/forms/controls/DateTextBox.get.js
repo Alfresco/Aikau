@@ -24,7 +24,7 @@ model.jsonModel = {
             okButtonPublishTopic: "TEST_PUBLISH",
             widgets: [
                {
-                  name: "alfresco/forms/controls/DojoDateTextBox",
+                  name: "alfresco/forms/controls/DateTextBox",
                   config: {
                      id: "DOJODATETEXTBOX",
                      name: "someDate",

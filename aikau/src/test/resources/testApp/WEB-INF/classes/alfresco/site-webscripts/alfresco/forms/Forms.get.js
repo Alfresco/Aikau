@@ -187,7 +187,7 @@ model.jsonModel = {
                      widgets: [
                         {
                            id: "TARGET_OPTIONS",
-                           name: "alfresco/forms/controls/DojoRadioButtons",
+                           name: "alfresco/forms/controls/RadioButtons",
                            config: {
                               fieldId: "TARGET_FIELD",
                               name: "TARGET",

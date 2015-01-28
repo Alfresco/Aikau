@@ -22,7 +22,7 @@ model.jsonModel = {
             widgets: [
                {
                   id: "SOURCE",
-                  name: "alfresco/forms/controls/DojoSelect", 
+                  name: "alfresco/forms/controls/Select", 
                   config: {
                      fieldId: "SOURCE_FIELD",
                      label: "Choose from these...",

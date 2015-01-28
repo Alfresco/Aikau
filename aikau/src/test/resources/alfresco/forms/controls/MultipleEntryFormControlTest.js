@@ -42,7 +42,7 @@ define(["intern!object",
          };
          // Use this function for finding the input field when editing...
          var editFieldCssSelector = function(id, elementIndex) {
-            return "#" + id + " div.control div.entries > div:nth-child(" + elementIndex + ") div.edit-display .alfresco-forms-controls-DojoValidationTextBox .control .dijitInputContainer input";
+            return "#" + id + " div.control div.entries > div:nth-child(" + elementIndex + ") div.edit-display .alfresco-forms-controls-TextBox .control .dijitInputContainer input";
          };
          // Use this function for finding the read display field...
          var readDisplayCssSelector = function(id, elementIndex) {

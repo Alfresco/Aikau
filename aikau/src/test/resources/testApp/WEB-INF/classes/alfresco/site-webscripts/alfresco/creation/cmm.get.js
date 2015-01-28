@@ -77,7 +77,7 @@ model.jsonModel = {
                                                    }
                                                 },
                                                 {
-                                                   name: "alfresco/forms/controls/DojoTextarea",
+                                                   name: "alfresco/forms/controls/TextArea",
                                                    config: {
                                                       fieldId: "DESCRIPTION",
                                                       label: "Type Description",
@@ -187,7 +187,7 @@ model.jsonModel = {
                                                                useSimpleValues: false,
                                                                widgets: [
                                                                   {
-                                                                     name: "alfresco/forms/controls/DojoSelect",
+                                                                     name: "alfresco/forms/controls/Select",
                                                                      config: {
                                                                         fieldId: "CONSTRAINT_TYPE",
                                                                         name: "value",

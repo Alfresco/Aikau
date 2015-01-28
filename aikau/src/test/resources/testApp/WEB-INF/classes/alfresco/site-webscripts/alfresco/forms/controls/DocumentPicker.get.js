@@ -11,7 +11,7 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/dialogs/AlfDialogService",
+      "alfresco/services/DialogService",
       "aikauTesting/mockservices/DocumentPickerTestService",
       "alfresco/services/ErrorReporter"
    ],

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,55 +19,13 @@
 
 /**
  * @module alfresco/forms/controls/DojoSelect
- * @extends module:alfresco/forms/controls/BaseFormControl
+ * @extends module:alfresco/forms/controls/Select
  * @author Dave Draper
+ * @deprecated Since 1.0.3 - use [alfresco/forms/controls/Select]{@link module:alfresco/forms/controls/Select} instead.
  */
-define(["alfresco/forms/controls/BaseFormControl",
-        "dojo/_base/declare",
-        "dijit/form/Select",
-        "dijit/focus",
-        "dojo/dom-class"], 
-        function(BaseFormControl, declare, Select, focusUtil, domClass) {
+define(["dojo/_base/declare",
+        "alfresco/forms/controls/Select"], 
+        function(declare, Select) {
 
-   return declare([BaseFormControl], {
-
-      /**
-       * An array of the CSS files to use with this widget.
-       * 
-       * @instance
-       * @type {object[]}
-       * @default [{cssFile:"./css/DojoSelect.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/DojoSelect.css"}],
-
-      /**
-       * @instance
-       */
-      getWidgetConfig: function alfresco_forms_controls_DojoSelect__getWidgetConfig() {
-         // Return the configuration for the widget
-         return {
-            id : this.id + "_CONTROL",
-            name: this.name,
-            value: (this.value != null) ? this.value : null,
-            options: (this.options != null) ? this.options : []
-         };
-      },
-      
-      /**
-       * @instance
-       */
-      createFormControl: function alfresco_forms_controls_DojoSelect__createFormControl(config, domNode) {
-         var select = new Select(config);
-
-         // Handle adding classes to control...
-         var additionalCssClasses = "";
-         if (this.additionalCssClasses != null)
-         {
-            additionalCssClasses = this.additionalCssClasses;
-         }
-         domClass.add(this.domNode, "alfresco-forms-controls-DojoSelect " + additionalCssClasses);
-
-         return select;
-      }
-   });
+   return declare([Select], {});
 });

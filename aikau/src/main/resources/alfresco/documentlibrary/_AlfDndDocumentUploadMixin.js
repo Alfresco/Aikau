@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -498,7 +498,7 @@ define(["dojo/_base/declare",
        */
       widgetsForUpdate: [
          {
-            name: "alfresco/forms/controls/DojoRadioButtons",
+            name: "alfresco/forms/controls/RadioButtons",
             config: {
                label: "This version has",
                name: "targetData.majorVersion",

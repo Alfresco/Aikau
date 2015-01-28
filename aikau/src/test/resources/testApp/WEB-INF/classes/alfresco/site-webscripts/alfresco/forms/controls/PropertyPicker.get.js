@@ -11,7 +11,7 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/dialogs/AlfDialogService",
+      "alfresco/services/DialogService",
       "alfresco/services/CrudService",
       "alfresco/services/ErrorReporter"
    ],

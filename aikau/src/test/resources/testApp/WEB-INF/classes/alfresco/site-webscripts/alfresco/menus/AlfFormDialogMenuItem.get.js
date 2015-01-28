@@ -1,6 +1,6 @@
 model.jsonModel = {
    services: [
-      "alfresco/dialogs/AlfDialogService",
+      "alfresco/services/DialogService",
       "alfresco/services/ErrorReporter"
    ],
    widgets: [
