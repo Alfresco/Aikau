@@ -50,7 +50,6 @@ define(["alfresco/forms/controls/BaseFormControl",
          return {
             id : this.generateUuid(),
             name: this.name,
-            value: this.value,
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.pubSubScope,
             acceptTypes: this.acceptTypes

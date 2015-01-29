@@ -49,8 +49,10 @@ define(["dojo/_base/declare",
         "dijit/Tooltip",
         "dojo/dom-attr",
         "dojo/query",
-        "dojo/dom-construct"], 
-        function(declare, _Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, template, ObjectTypeUtils, arrayUtils, lang, array, domStyle, domClass, Tooltip, domAttr, query, domConstruct) {
+        "dojo/dom-construct",
+        "jquery"], 
+        function(declare, _Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, template, ObjectTypeUtils, 
+                 arrayUtils, lang, array, domStyle, domClass, Tooltip, domAttr, query, domConstruct, $) {
 
    return declare([_Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin], {
       
@@ -501,11 +503,11 @@ define(["dojo/_base/declare",
             var pubSub = lang.getObject("publishTopic", false, config),
                 callback = lang.getObject("callback", false, config),
                 fixed = lang.getObject("fixed", false, config);
-            if (pubSub != null)
+            if (pubSub)
             {
                this.getPubSubOptions(config);
             }
-            else if (callback != null)
+            else if (callback)
             {
                // Handle configuration requests that options be generated through a function call...
                // Note that we're not explicitly handling scope here, it's expected that a hitch call will be
@@ -526,14 +528,12 @@ define(["dojo/_base/declare",
                   this.alfLog("warn", "The supplied 'callback' attribute for '" + this.fieldId + "' was not a Function");
                }
             }
-            else if (fixed != null)
+            else if (fixed)
             {
                // Handle configuration that specifies a fixed configuration...
                if (ObjectTypeUtils.isArray(fixed))
                {
-                  this.options = fixed;
-                  array.forEach(this.options, lang.hitch(this, this.processOptionLabel));
-                  this.setOptionsValue(this.options);
+                  this.pendingOptions = fixed;
                }
                else
                {
@@ -741,6 +741,9 @@ define(["dojo/_base/declare",
          this.options = options;
          if (this.wrappedWidget)
          {
+            // TODO: Change to add options as an array...
+            // TODO: Use aspect to wait until options are added and then replace values with encoded values?
+            // TODO: Create options as numbers and then replace with values once created?
             var currentOptions = this.wrappedWidget.get("options");
             if (currentOptions && typeof this.wrappedWidget.removeOption === "function")
             {
@@ -1209,12 +1212,46 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * This function is set as a callback when the widget is not immediately added to the main document.
+       * It is used as a safety check to prevent scripts from being injected into the page (setting a value
+       * on a node before it is added into the page will cause it to execute when rendered, but setting once
+       * it has been included in the initial rendering will not cause any problems.
+       *
+       * @instance
+       * @param {object} payload This is expected to be an empty object or null.
+       */
+      onWidgetAddedToDocument: function alfresco_forms_controls_BaseFormControl__onWidgetAddedToDocument(payload) {
+         if ($.contains(document.body, this.domNode))
+         {
+            this.alfUnsubscribe(this.widgetProcessingCompleteSubscription);
+            this.setValue(this.value);
+            if (this.pendingOptions)
+            {
+               this.options = this.pendingOptions;
+               this.setOptions(this.options);
+            }
+         }
+         else
+         {
+            // No action yet. Don't unsubscribe.
+         }
+      },
+
+      /**
        * @instance
        */
       completeWidgetSetup: function alfresco_forms_controls_BaseFormControl__setupChangeEvents() {
-         
+
          // Place the widget into the DOM provided by the template...
          this.placeWidget();
+
+         // Set up subscriptions on publications likely to be published when widget processing completes...
+         // As we want to wait the most recently requested widget processing to complete (which in all likelihood
+         // should be the request that caused the creation of this widget. The callback function will set the 
+         // value of the form control making sure that the widget has been added to the document as we only set the 
+         // once it's part of the document to ensure that no unsafe value (e.g. an XSS attack) can be
+         // executed as part of the initial page rendering.
+         this.widgetProcessingCompleteSubscription = this.alfSubscribe("ALF_WIDGET_PROCESSING_COMPLETE", lang.hitch(this, this.onWidgetAddedToDocument), true);
          
          // Set up the events that indicate a change in value...
          this.setupChangeEvents();
@@ -1368,7 +1405,8 @@ define(["dojo/_base/declare",
             {
                value = value.toString();
             }
-            this.wrappedWidget.setValue(value);
+            // this.wrappedWidget.setValue(value);
+            this.wrappedWidget.set("value", value);
          }
       },
 

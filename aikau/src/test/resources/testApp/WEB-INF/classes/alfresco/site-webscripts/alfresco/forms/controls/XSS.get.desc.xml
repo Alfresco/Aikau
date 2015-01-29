@@ -1,0 +1,5 @@
+<webscript>
+   <shortname>XSS Form Value Test</shortname>
+   <family>aikau-unit-tests</family>
+   <url>/xss</url>
+</webscript>

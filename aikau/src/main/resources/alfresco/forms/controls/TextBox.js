@@ -64,7 +64,6 @@ define(["alfresco/forms/controls/BaseFormControl",
          return {
             id : this.generateUuid(),
             name: this.name,
-            value: this.value,
             placeHolder: placeHolder,
             iconClass: this.iconClass
          };

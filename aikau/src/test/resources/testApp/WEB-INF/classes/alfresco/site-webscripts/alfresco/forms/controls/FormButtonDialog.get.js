@@ -49,6 +49,15 @@ model.jsonModel = {
                               label: "Test checkbox",
                               value: "jabberwocky"
                            }
+                        },
+                        {
+                           name: "alfresco/forms/controls/TextBox", 
+                           config: {
+                              fieldId: "",
+                              id: "BASIC",
+                              label: "Basic",
+                              value: '<img src="1" onerror="window.hackedLabel=true">'
+                           }
                         }
                      ]
                   }
@@ -56,9 +65,9 @@ model.jsonModel = {
             ]
          }
       },
-      {
-         name: "alfresco/logging/SubscriptionLog"
-      },
+      // {
+      //    name: "alfresco/logging/SubscriptionLog"
+      // },
       {
          name: "aikauTesting/TestCoverageResults"
       }

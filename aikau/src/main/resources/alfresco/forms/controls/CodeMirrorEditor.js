@@ -65,8 +65,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          // Return the configuration for the widget
          return {
             id : this.generateUuid(),
-            name: this.name,
-            value: this.value
+            name: this.name
          };
       },
       
