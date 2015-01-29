@@ -1,40 +1,48 @@
-.alfresco-renderers-Property.alfresco_renderers_InlineEditProperty {
-  /*margin-left: 20px; */
-}
-
-.alfresco-renderers-InlineEditProperty .alfresco-renderers-Property {
-  margin-left: 0;
-}
-
-.alfresco-renderers-InlineEditProperty .editIcon {
-   cursor: pointer;
-   height: 16px;
-   width: 16px;
-   display: inline-block;
-   opacity: 0;
-}
-
-.alfresco-renderers-InlineEditProperty .action {
-   cursor: pointer;
-   font-family: @standard-font;
-   color: @general-font-color;
-   font-size: @normal-font-size;
-   display: inline-block;
-   height: 85%;
-   vertical-align: middle;
-}
-
-.alfresco-renderers-InlineEditProperty .action.disabled {
-   cursor: default;
-   color: @de-emphasized-font-color;
-}
-
-.alfresco-renderers-InlineEditProperty > .editor {
-   height: 40px;
-   display: inline-block;
-}
-
-.alfresco-renderers-InlineEditProperty > .editor > .alfresco-forms-Form {
-   display: inline-block;
-   vertical-align: bottom;
+.alfresco-renderers-InlineEditProperty {
+   &:hover .editIcon {
+      opacity: 1;
+   }
+   .inlineEditValue {
+      cursor: pointer;
+      line-height: 20px;
+      &.hidden ~ .editIcon {
+         display: none;
+      }
+      &:focus ~ .editIcon {
+         opacity: 1;
+      }
+   }
+   .alfresco-renderers-Property {
+      margin-left: 0;
+   }
+   .editIcon {
+      cursor: pointer;
+      display: inline-block;
+      height: 16px;
+      line-height: 20px;
+      opacity: 0;
+      transition: opacity .2s ease-out;
+      width: 16px;
+   }
+   .action {
+      color: @general-font-color;
+      cursor: pointer;
+      display: inline-block;
+      font-family: @standard-font;
+      font-size: @normal-font-size;
+      height: 85%;
+      vertical-align: middle;
+      &.disabled {
+         color: @de-emphasized-font-color;
+         cursor: default;
+      }
+   }
+   > .editor {
+      display: inline-block;
+      height: 40px;
+      > .alfresco-forms-Form {
+         display: inline-block;
+         vertical-align: bottom;
+      }
+   }
 }

@@ -47,15 +47,14 @@ define(["dojo/_base/declare",
         "dojo/dom-class",
         "dojo/html",
         "dojo/dom-attr",
-        "dojo/_base/fx",
         "dojo/keys",
         "dojo/_base/event",
         "service/constants/Default",
         "alfresco/forms/Form",
         "alfresco/forms/controls/DojoValidationTextBox",
         "alfresco/forms/controls/HiddenValue"], 
-        function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, 
-                 template, lang, array, on, domClass, html, domAttr, fx, keys, event, AlfConstants, Form, DojoValidationTextBox) {
+        function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin,
+                 template, lang, array, on, domClass, html, domAttr, keys, event) {
 
    return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin], {
       
@@ -127,6 +126,13 @@ define(["dojo/_base/declare",
        * @default "inline-edit.edit.label"
        */
       editLabel: "inline-edit.edit.label",
+
+      /**
+       * Whether the widget should be put into edit mode when rendered value is clicked.
+       *
+       * @type  {boolean}
+       */
+      editOnClickRenderedValue: true,
 
       /**
        * The topic to publish when a property edit should be persisted. For convenience it is assumed that document
@@ -357,6 +363,17 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function is called whenever the user clicks on the rendered value. It checks an overridable
+       * instance variable (editOnClickRenderedValue), to see whether it should then launch into edit mode.
+       *
+       * @instance
+       * @param {object} evt Dojo-normalised event
+       */
+      onClickRenderedValue: function alfresco_renderers_InlineEditProperty__onClickRenderedValue(evt) {
+         this.editOnClickRenderedValue && this.onEditClick(evt);
+      },
+
+      /**
        * This function is called whenever the user clicks on the edit icon. It hides the display DOM node
        * and shows the edit DOM nodes.
        * 
@@ -371,7 +388,7 @@ define(["dojo/_base/declare",
          domClass.toggle(this.renderedValueNode, "hidden");
          domClass.toggle(this.editNode, "hidden");
          formWidget.focus(); // Focus on the input node so typing can occur straight away
-         if (evt !== undefined) event.stop(evt);
+         evt && evt.stop();
       },
       
       /**
@@ -525,22 +542,6 @@ define(["dojo/_base/declare",
       suppressFocusRequest: function alfresco_renderers_InlineEditProperty__suppressFocusRequest(evt) {
          this.alfLog("log", "Suppress click event");
          event.stop(evt);
-      },
-      
-      /**
-       * TODO: Replace with CSS3
-       * @instance
-       */
-      showEditIcon: function alfresco_renderers_InlineEditProperty__showEditIcon() {
-         fx.fadeIn({ node: this.editIconNode }).play();
-      },
-      
-      /**
-       * TODO: Replace with CSS3
-       * @instance
-       */
-      hideEditIcon: function alfresco_renderers_InlineEditProperty__hideEditIcon() {
-         fx.fadeOut({ node: this.editIconNode }).play();
       }
    });
 });

@@ -38,6 +38,14 @@ define(["dojo/_base/declare",
    return declare([InlineEditProperty, _ItemLinkMixin], {
       
       /**
+       * Whether the widget should be put into edit mode when rendered value is clicked.
+       *
+       * @override
+       * @type  {boolean}
+       */
+      editOnClickRenderedValue: false,
+
+     /**
        * Extends the [inherited function]{@link module:alfresco/renderers/Property#postCreate} to add the linking
        * capability.
        * 
@@ -46,7 +54,6 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_renderers_InlineEditPropertyLink__postCreate() {
          this.inherited(arguments);
          this.own(on(this.renderedValueNode, a11yclick, lang.hitch(this, this.onLinkClick)));
-         domStyle.set(this.renderedValueNode, "cursor", "pointer");
       },
 
       /**
