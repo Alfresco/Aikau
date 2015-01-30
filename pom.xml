@@ -19,17 +19,26 @@
    <distributionManagement>
       <repository>
          <id>alfresco-internal</id>
-         <url>https://artifacts.alfresco.com/nexus/content/repositories/internal-releases</url>
+         <url>https://artifacts.alfresco.com/nexus/content/repositories/releases</url>
       </repository>
       <snapshotRepository>
          <id>alfresco-internal-snapshots</id>
-         <url>https://artifacts.alfresco.com/nexus/content/repositories/internal-snapshots</url>
+         <url>https://artifacts.alfresco.com/nexus/content/repositories/snapshots</url>
       </snapshotRepository>
    </distributionManagement>
 
    <scm>
-      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/modules/Internal/aikau/trunk</connection>
+      <connection>scm:git:https://github.com/Alfresco/Aikau.git</connection>
+      <developerConnection>scm:git:https://github.com/Alfresco/Aikau.git</developerConnection>
+      <url>https://github.com/Alfresco/Aikau</url>
    </scm>
+
+   <licenses>
+      <license>
+         <name>GNU General Public License v3.0 or later</name>
+         <url>http://www.gnu.org/licenses/lgpl-3.0-standalone.html</url>
+      </license>
+   </licenses>
 
    <dependencies>
 
