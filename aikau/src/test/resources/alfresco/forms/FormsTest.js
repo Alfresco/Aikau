@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -28,27 +28,20 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, expect, assert, require, TestCommon, keys) {
 
+   var browser;
    registerSuite({
       name: 'Forms Test',
-      'Forms': function () {
-
-         var browser = this.remote;
-         var testname = "FormsTest";
-         return TestCommon.loadTestWebScript(this.remote, "/Forms", testname)
-
-         // 1. Test setting and getting the form value from the hash fragment
-         .findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
-         .type("test1")
+      "Test setting browser hash fragment with form post": function () {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Forms", "Forms Test").findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
+            .type("test1")
          .end()
-
          .findByCssSelector("#HASH_TEXT_BOX_2 .dijitInputContainer input")
-         .type("test2")
+            .type("test2")
          .end()
-
          .findByCssSelector("#HASH_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton > span")
-         .click()
-         .end()
-
+            .click()
+         .end();
 //          Temporarily commented out as the url() function is not returning the full URL...
 //          Raised issue with Intern here: https://github.com/theintern/intern/issues/188
 //         .getCurrentUrl()
@@ -57,120 +50,109 @@ define(["intern!object",
 //            expect(page).to.contain("#field1=test1&field2=test2", "Test #1 - form submit did not update hash fragment");
 //         })
 //         .end()
-
-         // 2. Check that setting the hash will update the form...
-         .findByCssSelector("#SET_HASH")
-         .click()
+      },
+      "Test updating browser hash updates form": function() {
+         this.remote.findByCssSelector("#SET_HASH")
+            .click()
          .end()
-
          .findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
-         .getProperty('value')
-         .then(function(resultText) {
-            assert(resultText == "updatedField1", "Test #2a - field1 was not set by the hash: " + resultText);
-         })
+         .getProperty("value")
+            .then(function(resultText) {
+               assert(resultText === "updatedField1", "field1 was not set by the hash: " + resultText);
+            })
          .end()
-
          .findByCssSelector("#HASH_TEXT_BOX_2 .dijitInputContainer input")
-         .getProperty('value')
-         .then(function(resultText) {
-            assert(resultText == "updatedField2", "Test #2b - field2 was not set by the hash: " + resultText);
-         })
+            .getProperty("value")
+            .then(function(resultText) {
+               assert(resultText === "updatedField2", "field2 was not set by the hash: " + resultText);
+            })
+         .end();
+      },
+      "Test confirmation form button initially disabled": function() {
+         this.remote.findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
+            .then(function(elements) {
+               assert(elements.length === 1, "Standard form button was not initially disabled");
+            })
+         .end();
+      },
+      "Test confirmation button is enabled with valid fields": function() {
+         this.remote.findByCssSelector("#TEXT_BOX_1 .dijitInputContainer input")
+            .type("test3")
          .end()
-
-         // 2. Test hiding/displaying/configuring the standard buttons
-         .findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #3 - Standard form button was not initially disabled");
-         })
-         .end()
-
-         // 3. Update the fields and check that the submit button become enabled...
-         .findByCssSelector("#TEXT_BOX_1 .dijitInputContainer input")
-         .type("test3")
-         .end()
-
          .findByCssSelector("#TEXT_BOX_2 .dijitInputContainer input")
-         .type("9")
+            .type("9")
          .end()
-
          .findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
-         .then(function(elements) {
-            assert(elements.length === 0, "Test #4a - Standard form button was not enabled following valid data entry");
-         })
+            .then(function(elements) {
+               assert(elements.length === 0, "Standard form button was not enabled following valid data entry");
+            })
+         .end();
+      },
+      "Test form value publication": function() {
+         this.remote.findByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton > span")
+            .click()
          .end()
-
-         .findByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton > span")
-         .click()
-         .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field3", "test3"))
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #4b - standard form didn't publish correctly");
-         })
+            .then(function(elements) {
+               assert(elements.length === 1, "field3 in standard form didn't publish correctly");
+            })
+         .end().findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field4", "9"))
+            .then(function(elements) {
+               assert(elements.length === 1, "field4 in standard form didn't publish correctly");
+            })
+         .end();
+      },
+      "Test additional form buttons rendered": function() {
+         this.remote.findAllByCssSelector("#ADD_BUTTON_1")
+            .then(function(elements) {
+               assert(elements.length === 1, "The first additional button could not be found");
+            })
          .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field4", "9"))
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #4c - standard form didn't publish correctly");
-         })
-         .end()
-
-         // 3. Test creating additional buttons
-         .findAllByCssSelector("#ADD_BUTTON_1")
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #5a - The first additional button could not be found");
-         })
-         .end()
-
          .findAllByCssSelector("#ADD_BUTTON_2")
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #5b - The second additional button could not be found");
-         })
+            .then(function(elements) {
+               assert(elements.length === 1, "The second additional button could not be found");
+            })
+         .end();
+      },
+      "Test additional form buttons publish correct data": function() {
+         this.remote.findByCssSelector("#ADD_TEXT_BOX_1 .dijitInputContainer input")
+            .type("test4")
          .end()
-
-         .findByCssSelector("#ADD_TEXT_BOX_1 .dijitInputContainer input")
-         .type("test4")
-         .end()
-
          .findByCssSelector("#ADD_TEXT_BOX_2 .dijitInputContainer input")
-         .type("test5")
+            .type("test5")
          .end()
-
          .findByCssSelector("#ADD_BUTTON_1")
-         .click()
+            .click()
          .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field5", "test4"))
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #5c - the additional button didn't publish data correctly");
-         })
+            .then(function(elements) {
+               assert(elements.length === 1, "The additional button didn't publish field5 correctly");
+            })
          .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field6", "test5"))
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #5d - the additional button didn't publish data correctly");
-         })
+            .then(function(elements) {
+               assert(elements.length === 1, "The additional button didn't publish field6 correctly");
+            })
          .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "extra", "stuff"))
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #5e - the additional button didn't publish data correctly");
-         })
+            .then(function(elements) {
+               assert(elements.length === 1, "The additional button didn't publish 'extra' correctly");
+            })
+         .end();
+      },
+      "Test custom scope set correctly": function() {
+         this.remote.findAllByCssSelector(TestCommon.topicSelector("CUSTOM_SCOPE_AddButton1", "publish", "any"))
+            .then(function(elements) {
+               assert(elements.length === 1, "Custom scope not set");
+            })
+         .end();
+      },
+      "Test global scope set correctly": function() {
+         this.remote.findAllByCssSelector(TestCommon.topicSelector("SET_HASH", "publish", "any"))
+            .then(function(elements) {
+               assert(elements.length === 1, "Global scope not set");
+            })
          .end()
-
-         // 4. Test scoping
-         .findAllByCssSelector(TestCommon.topicSelector("CUSTOM_SCOPE_AddButton1", "publish", "any"))
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #6a - Custom scope not set");
-         })
-         .end()
-
-         .findAllByCssSelector(TestCommon.topicSelector("SET_HASH", "publish", "any"))
-         .then(function(elements) {
-            assert(elements.length == 1, "Test #6b - Global scope not set");
-         })
-         .end()
-
          .alfPostCoverageResults(browser);
       }
    });

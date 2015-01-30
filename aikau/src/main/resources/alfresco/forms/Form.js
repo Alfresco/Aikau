@@ -462,10 +462,11 @@ define(["dojo/_base/declare",
       createButtons: function alfresco_forms_Form__createButtons() {
          if (this.showOkButton === true)
          {
+            
             this.okButton = new AlfButton({
                pubSubScope: this.pubSubScope,
                label: this.message(this.okButtonLabel),
-               additionalCssClasses: "confirmationButton " + this.okButtonClass !== null ? this.okButtonClass : "",
+               additionalCssClasses: "confirmationButton " + (this.okButtonClass ? this.okButtonClass : ""),
                publishTopic: this.okButtonPublishTopic,
                publishPayload: this.okButtonPublishPayload,
                publishGlobal: this.okButtonPublishGlobal,

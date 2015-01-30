@@ -31,7 +31,7 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   baseFunctionalSuites2: ['src/test/resources/alfresco/menus/AlfMenuBarToggleTest'],
+   baseFunctionalSuites2: ['src/test/resources/alfresco/forms/FormsTest'],
 
    /**
     * This is the base array of functional test suites
