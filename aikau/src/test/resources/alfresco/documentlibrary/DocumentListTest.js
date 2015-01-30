@@ -37,56 +37,56 @@ define(["intern!object",
          return TestCommon.loadTestWebScript(this.remote, "/DocumentList", testname)
 
          // 1. Check that the initial request for data is correct...
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "path", "/"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "path", "/"))
             .then(function(elements) {
                TestCommon.log(testname,"Check 'path' initialised correctly");
                assert(elements.length == 1, "'path' not initialised correctly");
             })
          .end()
 
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "all"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "type", "all"))
             .then(function(elements) {
                TestCommon.log(testname,"Check initialised to show folders");
                assert(elements.length == 1, "not initialised to show folders");
             })
          .end()
 
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", "fake-site"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "site", "fake-site"))
             .then(function(elements) {
                TestCommon.log(testname,"Check 'site' initialised correctly");
                assert(elements.length == 1, "'site' not initialised correctly");
             })
          .end()
 
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "container", "documentlibrary"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "container", "documentlibrary"))
             .then(function(elements) {
                TestCommon.log(testname,"Check 'container' initialised correctly");
                assert(elements.length == 1, "'container' not initialised correctly");
             })
          .end()
 
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortAscending", "false"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "sortAscending", "false"))
             .then(function(elements) {
                TestCommon.log(testname,"Check 'sortAscending' initialised correctly");
                assert(elements.length == 1, "'sortAscending' not initialised correctly");
             })
          .end()
 
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortField", "cm:title"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "sortField", "cm:title"))
             .then(function(elements) {
                TestCommon.log(testname,"Check 'sortField' initialised correctly");
                assert(elements.length == 1, "'sortField' not initialised correctly");
             })
          .end()
 
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "page", "1"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "page", "1"))
             .then(function(elements) {
                TestCommon.log(testname,"Check 'page' initialised correctly");
                assert(elements.length == 1, "'page' not initialised correctly");
             })
          .end()
 
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "pageSize", "3"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "pageSize", "3"))
             .then(function(elements) {
                TestCommon.log(testname,"Check 'pageSize' initialised correctly");
                assert(elements.length == 1, "'pageSize' not initialised correctly");
