@@ -166,9 +166,9 @@ define(["dojo/_base/declare",
             this._processedWidgets = array.filter(this._processedWidgets, function(item) {
                return item != null;
             }, this);
-            this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
             this.allWidgetsProcessed(this._processedWidgets);
             this.widgetProcessingComplete = true;
+            this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
          }
       },
 
