@@ -388,7 +388,7 @@ define(["dojo/_base/declare",
          domClass.toggle(this.renderedValueNode, "hidden");
          domClass.toggle(this.editNode, "hidden");
          formWidget.focus(); // Focus on the input node so typing can occur straight away
-         event.stop(evt);
+         evt && event.stop(evt);
       },
       
       /**
@@ -401,7 +401,7 @@ define(["dojo/_base/declare",
          if (evt.ctrlKey === true && evt.charCode === 101)
          {
             // On ctrl-e simulate an edit click
-            event.stop(evt);
+            evt && event.stop(evt);
             this.onEditClick();
          }
       },
@@ -541,7 +541,7 @@ define(["dojo/_base/declare",
        */
       suppressFocusRequest: function alfresco_renderers_InlineEditProperty__suppressFocusRequest(evt) {
          this.alfLog("log", "Suppress click event");
-         event.stop(evt);
+         evt && event.stop(evt);
       }
    });
 });
