@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -32,8 +32,9 @@ define(["dojo/_base/declare",
         "alfresco/preview/AlfDocumentPreview",
         "alfresco/documentlibrary/views/layouts/DocumentCarousel",
         "alfresco/documentlibrary/views/layouts/Carousel",
-        "dojo/_base/lang"], 
-        function(declare, AlfDocumentListView, template, AlfDocument, AlfDocumentPreview, DocumentCarousel, Carousel, lang) {
+        "dojo/_base/lang",
+        "dojo/dom-construct"], 
+        function(declare, AlfDocumentListView, template, AlfDocument, AlfDocumentPreview, DocumentCarousel, Carousel, lang, domConstruct) {
    
    return declare([AlfDocumentListView], {
       
@@ -134,6 +135,9 @@ define(["dojo/_base/declare",
        * @returns {object} A new [DocumentListRenderer]{@link module:alfresco/documentlibrary/views/DocumentListRenderer}
        */
       createDocumentListRenderer: function alfresco_documentlibrary_views_AlfFilmStripView__createDocumentListRenderer() {
+         // NOTE: Any previous previews should have been destroyed, but empty the previewNode just to be on the safe side
+         //       TODO: Possible memory leak to investigate here, because the call to empy the node *is* required.
+         domConstruct.empty(this.previewNode);
          this.contentCarousel = new DocumentCarousel({
             widgets: lang.clone(this.widgetsForContent),
             currentData: this.currentData,
