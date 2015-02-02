@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -75,8 +75,20 @@ define(["dojo/_base/declare",
          else if (this.isContainer === false)
          {
             // This is a document so we can subscribe to the expected request to display content
+            // TODO: This contains a temporary config override whilst we wait for full adoption of the 
+            //       Aikau only PDF.js preview plugin. This override can be removed after adoption occurs.
             this.widgets = [{
-               name: "alfresco/preview/AlfDocumentPreview"
+               name: "alfresco/preview/AlfDocumentPreview",
+               config: {
+                  widgetsForPluginsOverrides: [
+                     {
+                        id: "PdfJs",
+                        replace: true,
+                        name: "alfresco/preview/PdfJs/PdfJs",
+                        config: {}
+                     }
+                  ]
+               }
             }];
             this.alfSubscribe("ALF_FILMSTRIP_DOCUMENT_REQUEST__" + this.nodeRef, lang.hitch(this, this.requestDocument, this.nodeRef));
          }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
          // Subscribe to selection topics...
          if (this.itemSelectionTopics)
          {
-            array.forEach(this.itemSelectionTopics, function(topic, index) {
+            array.forEach(this.itemSelectionTopics, function(topic) {
                this.alfSubscribe(topic, lang.hitch(this, this.selectItem));
             }, this);
          }
@@ -218,7 +218,7 @@ define(["dojo/_base/declare",
        * @param {element} rootNode The DOM element to add them into.
        */
       processWidgets: function alfresco_documentlibrary_views_layouts_Carousel__processWidgets(widgets, rootNode) {
-         var nodeToAdd = nodeToAdd = domConstruct.create("li", {}, rootNode);
+         var nodeToAdd = domConstruct.create("li", {}, rootNode);
          this.inherited(arguments, [widgets, nodeToAdd]);
       },
 
@@ -311,7 +311,7 @@ define(["dojo/_base/declare",
          domStyle.set(this.containerNode, "left", left);
 
          var itemsCount = lang.getObject("currentData.items.length", false, this);
-         domStyle.set(this.prevNode, "visibility", (this.firstDisplayedIndex == 0) ? "hidden": "visible");
+         domStyle.set(this.prevNode, "visibility", (this.firstDisplayedIndex === 0) ? "hidden": "visible");
          domStyle.set(this.nextNode, "visibility", (this.firstDisplayedIndex <= itemsCount-1 && this.lastDisplayedIndex >= itemsCount-1) ? "hidden": "visible");
 
       },
