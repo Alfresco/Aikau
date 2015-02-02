@@ -46,7 +46,8 @@ define(["intern!object",
          },
 
          teardown: function() {
-            browser.alfPostCoverageResults(browser);
+            return browser.end()
+               .alfPostCoverageResults(browser);
          },
 
          "Property is rendered correctly": function() {
