@@ -105,7 +105,7 @@ define(["dojo/_base/declare",
        * @param {number} value The number of documents per page.
        */
       setPageSize: function alfresco_lists_AlfSortablePaginatedList__setPageSize(value) {
-         if (value == null)
+         if (value === null)
          {
             value = 25;
          }
@@ -132,11 +132,11 @@ define(["dojo/_base/declare",
        */
       onSortRequest: function alfresco_lists_AlfSortablePaginatedList__onSortRequest(payload) {
          this.alfLog("log", "Sort requested: ", payload);
-         if (payload && (payload.direction != null || payload.value != null))
+         if (payload && payload.direction !== null || payload.value !== null)
          {
             if (payload.direction)
             {
-               this.sortAscending = (payload.direction == "ascending");
+               this.sortAscending = payload.direction === "ascending";
             }
             if (payload.value)
             {
@@ -147,11 +147,11 @@ define(["dojo/_base/declare",
                if (this.useHash === true)
                {
                   var currHash = ioQuery.queryToObject(hash());
-                  if (this.sortField != null)
+                  if (this.sortField !== null)
                   {
                      currHash.sortField = this.sortField;
                   }
-                  if (this.sortAscending != null)
+                  if (this.sortAscending !== null)
                   {
                      currHash.sortAscending = this.sortAscending;
                   }
@@ -174,23 +174,23 @@ define(["dojo/_base/declare",
        */
       onSortFieldSelection: function alfresco_lists_AlfSortablePaginatedList__onSortFieldSelection(payload) {
          this.alfLog("log", "Sort field selected: ", payload);
-         if (payload && payload.value != null)
+         if (payload && payload.value !== null)
          {
             this.sortField = payload.value;
             if (payload.direction)
             {
-               this.sortAscending = (payload.direction == "ascending");
+               this.sortAscending = payload.direction === "ascending";
             }
             if (this._readyToLoad === true)
             {
                if (this.useHash === true)
                {
                   var currHash = ioQuery.queryToObject(hash());
-                  if (this.sortField != null)
+                  if (this.sortField !== null)
                   {
                      currHash.sortField = this.sortField;
                   }
-                  if (this.sortAscending != null)
+                  if (this.sortAscending !== null)
                   {
                      currHash.sortAscending = this.sortAscending;
                   }
@@ -212,10 +212,13 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the new page number
        */
       onPageChange: function alfresco_lists_AlfSortablePaginatedList__onPageChange(payload) {
-         if (payload && payload.value != null && payload.value != this.currentPage)
+         if (payload && payload.value !== null && payload.value !== this.currentPage)
          {
             this.currentPage = payload.value;
-            if (this._readyToLoad) this.loadData();
+            if (this._readyToLoad) 
+            {
+               this.loadData();
+            }
          }
       },
 
@@ -224,31 +227,48 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the new page size
        */
       onItemsPerPageChange: function alfresco_lists_AlfSortablePaginatedList__onItemsPerPageChange(payload) {
-         if (payload && payload.value != null && payload.value != this.currentPageSize)
+         if (payload && payload.value !== null && payload.value !== this.currentPageSize)
          {
-            // Set the new page size...
+            // Set the new page size, and log the previous page size for some calculations we'll do in a moment...
+            var previousPageSize = this.currentPageSize;
             this.currentPageSize = payload.value;
 
             if (this._readyToLoad === true)
             {
                // Need to check that there is enough data available for the current page!!! e.g. if we're on page 3 and requesting page 3 will not return any results
                // Is the total number of records less than the requested docs per page multiplied by 1 less than the current page...
-               var totalRecords = lang.getObject("currentData.totalRecords", false, this);
-               if (totalRecords != null)
+               // var totalRecords = lang.getObject("currentData.totalRecords", false, this);
+               if (this.totalRecords !== null)
                {
-                  // If the total records available minus the requested page size is LESS than the current page size
-                  // multiplied by the requested page size then we need to display the LAST page of data, e.g:
-                  // 
-                  // Previous page size is 25 
-                  // Current page = 3
-                  // Requested page size is 50
-                  // Total records is 52
-                  // So that: (52 - 50 = 2) < (3 * 50 = 75) = TRUE
-                  if ((totalRecords - payload.value) < (this.currentPage * payload.value))
+                  // Figure out which page to show...
+                  // e.g. form 25 per page to 100 per page = 25/100 = 0.25
+                  // or   100 per page to 25 per page = 100/25 = 4
+                  var factor = previousPageSize / this.currentPageSize;
+                  if (factor < 1)
                   {
-                     // The current page should be 2 and not 3.
-                     // E.g. 52/50 = 1.04, round up to 2...
-                     this.currentPage = Math.ceil(this.currentData.totalRecords/payload.value);
+                     // If the factor is less 1 then it's relatively safe to assume that the new page will have 
+                     // the item that the user was looking at on the page when we apply the factor to
+                     // the current page (since they'll be seeing more items)...
+                     this.currentPage = Math.ceil(this.currentPage * factor);
+                  }
+                  else
+                  {
+                     // If the factor is greater than 1 then the number of items that the user is going to
+                     // see will be reduced and there is a risk that the item they were looking at will be on
+                     // a different page. We're going to work to the principle that we will go to the beginning
+                     // of the available options... e.g. reducing page size from 75 to 25 will be the equivilent
+                     // of 3 pages (at 25 items per page) compared to 1 page (of 75 items) and we will show the
+                     // first of those pages.
+                     this.currentPage = Math.ceil(this.currentPage * factor);
+                     var offset = Math.ceil(factor - 1);
+                     this.currentPage = this.currentPage - offset;
+                  }
+
+                  var firstRecordOnNewPage = ((this.currentPage - 1) * this.currentPageSize) + 1;
+                  while (firstRecordOnNewPage > this.totalRecords)
+                  {
+                     this.currentPage--;
+                     firstRecordOnNewPage = ((this.currentPage - 1) * this.currentPageSize) + 1;
                   }
                }
                else

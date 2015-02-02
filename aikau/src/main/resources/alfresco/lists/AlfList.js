@@ -890,27 +890,27 @@ define(["dojo/_base/declare",
          // Publish the details of the loaded documents. The initial use case for this was to allow
          // the selected items menu to know how many items were available for selection but it
          // clearly has many other uses...
-         var totalDocuments = this.currentData.items.length;
-         var startIndex = 0;
-         if (response != null)
+         this.totalRecords = this.currentData.items.length;
+         this.startIndex = 0;
+         if (response !== null)
          {
             var tmp = lang.getObject(this.totalResultsProperty, false, response);
-            if (tmp != null)
+            if (tmp !== null)
             {
-               totalDocuments = tmp;
+               this.totalRecords = tmp;
             }
 
             tmp = lang.getObject(this.startIndexProperty, false, response);
-            if (tmp != null)
+            if (tmp !== null)
             {
-               startIndex = tmp;
+               this.startIndex = tmp;
             }
          }
 
          this.alfPublish(this.documentsLoadedTopic, {
             documents: this.currentData.items,
-            totalDocuments: totalDocuments,
-            startIndex: startIndex
+            totalDocuments: this.totalRecords,
+            startIndex: this.startIndex
          });
       },
 
