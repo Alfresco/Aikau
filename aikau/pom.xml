@@ -12,24 +12,6 @@
    <name>Aikau</name>
    <description>Aikau is a meta-framework for Alfresco specific UI development</description>
 
-   <dependencies>
-
-      <!-- This is used for the LESS CSS processing. It allows us to include LESS code in both
-          the Theme XML files and in widget CSS files. We deliberately exclude it's preferred
-          Rhino version so as to avoid conflicts with our own dependencies. -->
-      <dependency>
-         <groupId>com.asual.lesscss</groupId>
-         <artifactId>lesscss-engine</artifactId>
-         <version>1.5.0</version>
-         <exclusions>
-            <exclusion>
-               <groupId>org.mozilla</groupId>
-               <artifactId>rhino</artifactId>
-            </exclusion>
-         </exclusions>
-      </dependency>
-   </dependencies>
-
    <build>
       <!-- Everything gets place into the META-INF folder of the JAR because Surf (the expected platform for Aikau)
            will be able to access resources from that location via the /res/ path -->
