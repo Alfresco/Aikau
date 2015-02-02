@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,207 +27,234 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
+   var pause = 500;
    registerSuite({
-      name: 'Pagination Test',
-      'Check initial state': function () {
-
-         // var browser = this.remote;
-         var testname = "Pagination Test";
-         return TestCommon.loadTestWebScript(this.remote, "/Paginator", testname)
-
-         // Make sure the page has loaded...
-         .findByCssSelector(TestCommon.topicSelector("ALF_WIDGETS_READY", "publish", "any"))
+      name: "Pagination Test",
+      "Test page selector drop-down label intialization": function () {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Paginator", "Pagination Tests").findByCssSelector(TestCommon.topicSelector("ALF_WIDGETS_READY", "publish", "any"))
             .end()
-
-         // Check that the hard-coded data renders the paginators initial state correctly...
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
-               TestCommon.log(testname, "Checking initial drop-down state");
-               assert(text === "1-3 of 3", "Test #1a - Hard coded data didn't yield correct page data: " + text);
+               assert(text === "1-25 of 243", "Page selector menu label didn't initialize correctly, expected '1-25 of 243' but saw: " + text);
             })
-            .end()
-
-         // Check that the previous and next controls are disabled...
-         .findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking previous button enablement");
-               assert(elements.length === 1, "Test #1b - The previous page button should be disabled");
-            })
-            .end()
-         .findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking next button enablement");
-               assert(elements.length === 1, "Test #1b - The next page button should be disabled");
-            })
-            .end();
+         .end();
       },
-      'Test First Page': function () {
+      "Test prevous page button is disabled on page load": function() {
+         return this.remote.findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
+            .then(function(elements) {
+               assert(elements.length === 1, "The previous page button should be disabled");
+            })
+         .end();
+      },
+      "Test next page button is enabled on page load": function() {
+         return this.remote.findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
+            .then(function(elements) {
+               assert(elements.length === 0, "The next page button should be enabled");
+            })
+         .end();
+      },
+      "Test items loaded correctly (check first row of 25 items)": function() {
+         return this.remote.findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) span.value")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "1", "First displayed row should be 1, saw: " + text);
+            })
+         .end();
+      },
+      "Test items loaded correctly (check last row of 25 items)": function() {
+         return this.remote.findByCssSelector(".alfresco-lists-AlfList tr:nth-child(25) span.value")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "25", "First displayed row should be 25, saw: " + text);
+            })
+         .end();
+      },
+      "Test 50 items per page selection update page selector drop-down label": function () {
          // Wait for the data to load and the page to draw - this is currently slow and the rendering needs to be
-
-         var browser = this.remote;
-         var testname = "Pagination Test";
-         
-         // Switch to 50 results per page (will load data via Mock XHR request)...
-         return browser.findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
+         // Switch to 50 results per page...
+         return this.remote.findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
             .click()
-            .sleep(100)
-            .end()
-
+            // .sleep(100)
+         .end()
          .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:nth-child(2) td:nth-child(3)")
             .click()
-            .end()
-
+         .end()
          // sped up - hopefully at some point in the future we can remove this sleep!         
-         .sleep(2000)
-
+         // .sleep(pause)
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
-               TestCommon.log(testname, "Checking drop-down label after first page load");
-               assert(text === "1-50 of 57", "Test #2a - First page not displayed correctly: " + text);
+               assert(text === "1-50 of 243", "Page selector label not updated correctly after switching to 50 items per page: " + text);
             })
-            .end()
-
-          // Check that the previous is still disabled but next is now enabled...
-         .findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking previous page button state (after first page load)");
-               assert(elements.length === 1, "Test #2b - The previous page button should be disabled");
-            })
-            .end()
-         .findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking next page button state (after first page load)");
-               assert(elements.length === 0, "Test #2c - The next page button should now be enabled");
-            })
-            .end();
+         .end();
       },
-      'Test Next Page Button': function () {
-         // Wait for the data to load and the page to draw - this is currently slow and the rendering needs to be
-         var browser = this.remote;
-         var testname = "Pagination Test";
-         
-         // Click the next button...
-         return browser.findByCssSelector("#PAGINATOR_PAGE_FORWARD_text")
+      "Test previous page button is still disabled (after increasing page size)": function() {
+         this.remote.findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
+            .then(function(elements) {
+               assert(elements.length === 1, "The previous page button should still be disabled");
+            })
+         .end();
+      },
+      "Test next page button is still enabled (after increasing page size)": function() {
+         this.remote.findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
+            .then(function(elements) {
+               assert(elements.length === 0, "The next page button should still be enabled");
+            })
+         .end();
+      },
+      "Test clicking next page updates page selector drop-down label": function () {
+         return this.remote.findByCssSelector("#PAGINATOR_PAGE_FORWARD_text")
             .click()
-            .sleep(1000)
-            .end()
-
+            // .sleep(pause)
+         .end()
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
-               TestCommon.log(testname, "Checking drop down label for second page");
-               assert(text === "51-57 of 57", "Test #3a - Second page not displayed correctly: " + text);
+               assert(text === "51-100 of 243", "Page selector label not correct, expected '51-100 of 243' but saw: " + text);
             })
-            .end()
-
-          // Check that the previous is still disabled but next is now enabled...
-         .findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking previous page button state for second page");
-               assert(elements.length === 0, "Test #3b - The previous page button should now be enabled");
-            })
-            .end()
-         .findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking next page button for second page");
-               assert(elements.length === 1, "Test #3c - The next page button should now be disabled");
-            })
-            .end();
+         .end();
       },
-      'Test Previous Page Button': function () {
-         // Wait for the data to load and the page to draw - this is currently slow and the rendering needs to be
-         var browser = this.remote;
-         var testname = "Pagination Test";
-         
-         // Click the previous button...
-         return browser.findByCssSelector("#PAGINATOR_PAGE_BACK_text")
+      "Test clicking next page enables previous page button": function () {
+         return this.remote.findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
+            .then(function(elements) {
+               assert(elements.length === 0, "The previous page button should now be enabled");
+            })
+         .end();
+      },
+      "Test next page button is still enabled (after using next page button)": function() {
+         return this.remote.findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
+            .then(function(elements) {
+               assert(elements.length === 0, "The next page button should still be enabled");
+            })
+         .end();
+      },
+      "Test previous page button updates page selector drop-down label": function() {
+         return this.remote.findByCssSelector("#PAGINATOR_PAGE_BACK_text")
             .click()
-            .sleep(2000)
-            .end()
-
+            // .sleep(pause)
+         .end()
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
-               TestCommon.log(testname, "Checking drop-down label after using previous page button");
-               assert(text === "1-50 of 57", "Test #4a - First page not displayed correctly: " + text);
+               assert(text === "1-50 of 243", "Page selector label not correct, expected '1-50 of 243' but saw: " + text);
             })
-            .end()
-
-          // Check that the previous is still disabled but next is now enabled...
-         .findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking previous button state after using previous page button");
-               assert(elements.length === 1, "Test #4b - The previous page button should now be enabled");
-            })
-            .end()
-         .findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking next button state after using previous page button");
-               assert(elements.length === 0, "Test #4c - The next page button should now be disabled");
-            })
-            .end();
+         .end();
       },
-      'Test Page Selection': function () {
-         // Wait for the data to load and the page to draw - this is currently slow and the rendering needs to be
-         var browser = this.remote;
-         var testname = "Pagination Test";
-         
-         // Select page 2 via the drop down...
-         return browser.findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
+      "Test previous page button is disabled (after previous page action)": function() {
+         return this.remote.findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
+            .then(function(elements) {
+               assert(elements.length === 1, "The previous page button should now be disabled");
+            })
+         .end();
+      },
+      "Test page selection updates page selector label correctly": function () {
+         // Select the 4th page, because there are 5 pages and we want to click next page to check that
+         // using the next page button will disable the next page button when the last page is reached...
+         return this.remote.findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .click()
-            .end()
-
-         .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_dropdown tr:nth-child(2) td:nth-child(3)")
+         .end()
+         .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_dropdown tr:nth-child(4) td:nth-child(3)")
             .click()
-            .end()
-
-         .findByCssSelector("#PAGINATOR_PAGE_FORWARD_text")
-            .click()
-            .sleep(1000)
-            .end()
-
+         .end()
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
-               TestCommon.log(testname, "Checking drop down label after selecting page");
-               assert(text === "51-57 of 57", "Test #5a - Second page not displayed correctly: " + text);
+               assert(text === "151-200 of 243", "Page selector label not correct, expected '151-200 of 243' but saw: " + text);
             })
-            .end()
-
-          // Check that the previous is still disabled but next is now enabled...
-         .findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking previous button state after selecting page");
-               assert(elements.length === 0, "Test #5b - The previous page button should now be enabled");
-            })
-            .end()
+         .end();
+      },
+      "Test next page button (to last page) disables next page button": function() {
+         return this.remote.findByCssSelector("#PAGINATOR_PAGE_FORWARD_text")
+            .click()
+            // .sleep(pause)
+         .end()
          .findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
             .then(function(elements) {
-               TestCommon.log(testname, "Checking next button state after selecting page");
-               assert(elements.length === 1, "Test #5c - The next page button should now be disabled");
+               assert(elements.length === 1, "The next page button should be disabled when next paging to the last page");
             })
-            .end();
+         .end();
       },
-      'Test Results Per Page Group': function () {
-         // Wait for the data to load and the page to draw - this is currently slow and the rendering needs to be
-         var browser = this.remote;
-         var testname = "Pagination Test";
-         
-         return browser.findByCssSelector("#MENU_BAR_POPUP_text")
+      "Test increasing page size adjusts current page (50 to 100 on last page)": function() {
+         // This tests that when we increase the page size on the last page, we don't attempt to load 
+         // a page of data that won't exist... instead, we should load a smaller page number to 
+         // accommodate the larger page size.
+         // Select 100 items per page and the page number should go from 5 to 3...
+         return this.remote.findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
             .click()
-            .end()
-
-         .findAllByCssSelector("#MENU_BAR_POPUP_dropdown tr:nth-child(2) td.alf-selected-icon")
-            .then(function(elements) {
-               TestCommon.log(testname, "Checking results group updated correctly");
-               assert(elements.length === 1, "Test #6a - Results per page widget updated correctly");
+            // .sleep(100)
+         .end()
+         .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:nth-child(4) td:nth-child(3)")
+            .click()
+         .end()
+         // .sleep(pause)
+         .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "201-243 of 243", "Page selector label not correct, expected '201-243 of 243' but saw: " + text);
             })
-            .end()
-
-
-         .alfPostCoverageResults(browser);
+         .end()
+         .findByCssSelector("#PAGINATOR_PAGE_MARKER > span")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "3", "Page number not correct, expected '3' but saw: " + text);
+            })
+         .end();
+      },
+      "Test items loaded correctly for incomplete page(check first row of 100 items": function() {
+         return this.remote.findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) span.value")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "201", "First displayed row should be 201, saw: " + text);
+            })
+         .end();
+      },
+      "Test items loaded correctly (check last row of 100 items": function() {
+         return this.remote.findByCssSelector(".alfresco-lists-AlfList tr:nth-child(43) span.value")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "243", "First displayed row should be 243, saw: " + text);
+            })
+         .end();
+      },
+      "Test Results Per Page Group": function () {
+         // This tests the external results per page menu, to ensure it picks up changes correctly...
+         return this.remote.findByCssSelector("#MENU_BAR_POPUP_text")
+            .click()
+         .end()
+         .findAllByCssSelector("#MENU_BAR_POPUP_dropdown tr:nth-child(4) td.alf-selected-icon")
+            .then(function(elements) {
+               assert(elements.length === 1, "Results per page widget check box not highlighted correctly");
+            })
+         .end();
+      },
+      "Test reducing page size adjusts current page (100 to 25 on last page)": function() {
+         // This tests that when we reduce the page size on the last page jump to an 
+         // appropriate page for the smaller page size. Although we're on the last page (201-243) for
+         // 100 items per page, we want to jump to the penultimate page for 25 items per page (201-225)
+         // as this is the most appropriate page for where we were.
+         return this.remote.findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
+            .click()
+            // .sleep(100)
+         .end()
+         .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:nth-child(1) td:nth-child(3)")
+            .click()
+         .end()
+         // .sleep(pause)
+         .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "201-225 of 243", "Page selector label not correct, expected '201-225 of 243' but saw: " + text);
+            })
+         .end()
+         .findByCssSelector("#PAGINATOR_PAGE_MARKER > span")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "9", "Page number not correct, expected '9' but saw: " + text);
+            })
+         .end().alfPostCoverageResults(browser);
       }
    });
 });

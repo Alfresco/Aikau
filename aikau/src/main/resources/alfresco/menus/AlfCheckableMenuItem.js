@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_menus_AlfCheckableMenuItem__postCreate() {
 
-         if (this.publishPayload == null)
+         if (!this.publishPayload)
          {
             this.publishPayload = {};
          }
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
          if (this.hashName)
          {
             var currHash = ioQuery.queryToObject(hash());
-            this.checked = (currHash[this.hashName] && currHash[this.hashName] === this.value);
+            this.checked = currHash[this.hashName] && currHash[this.hashName] === this.value;
          }
 
          this.alfLog("log", "Create checkable cell");
@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
 
          if (this.group)
          {
-            this.alfSubscribe("ALF_CHECKABLE_MENU_ITEM__" + this.group, lang.hitch(this, "onGroupSelection"));
+            this.alfSubscribe("ALF_CHECKABLE_MENU_ITEM__" + this.group, lang.hitch(this, this.onGroupSelection));
          }
 
          this.inherited(arguments);
@@ -149,7 +149,7 @@ define(["dojo/_base/declare",
          // some other widget).
          if (this.publishTopic)
          {
-            this.subscriptionHandle = this.alfSubscribe(this.publishTopic, lang.hitch(this, "onPublishTopicEvent"));
+            this.subscriptionHandle = this.alfSubscribe(this.publishTopic, lang.hitch(this, this.onPublishTopicEvent));
          }
       },
 
@@ -162,14 +162,16 @@ define(["dojo/_base/declare",
        */
       onPublishTopicEvent: function alfresco_menus_AlfCheckableMenuItem__onPublishTopicEvent(payload) {
          if (payload &&
-             payload.selected != null &&
-             payload.value == this.value)
+             payload.selected !== null &&
+             payload.value === this.value)
          {
             if (this.group)
             {
                // Clear all group settings if the payload value matches the value represented by the
                // widget. We need to ensure that only one item in the group is selected...
-               this.alfPublish("ALF_CHECKABLE_MENU_ITEM__" + this.group, {});
+               this.alfPublish("ALF_CHECKABLE_MENU_ITEM__" + this.group, {
+                  value: this.value
+               });
                this.checked = payload.selected;
             }
             else
@@ -273,8 +275,11 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onGroupSelection: function alfresco_menus_AlfCheckableMenuItem__toggleSelection(payload) {
-         this.checked = false;
-         this.render();
+         if (payload.value !== this.value)
+         {
+            this.checked = false;
+            this.render();
+         } 
       }
    });
 });

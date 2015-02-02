@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onDocumentsPerPageChange: function alfresco_documentlibrary_AlfDocumentListPaginator__onDocumentsPerPageChange(payload) {
-         if (payload && payload.value && payload.value != this.documentsPerPage)
+         if (payload && payload.value && payload.value !== this.documentsPerPage)
          {
             this.documentsPerPage = payload.value;
          }
@@ -168,7 +168,7 @@ define(["dojo/_base/declare",
        */
       onDocumentsLoaded: function alfresco_documentlibrary_AlfDocumentListPaginator__onDocumentsLoaded(payload) {
          this.alfLog("log", "New Documents Loaded", payload);
-         if (payload != null)
+         if (payload !== null)
          {
             if (this.__paginationControlsAvailable === true)
             {
@@ -189,7 +189,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The data to use to update the widgets
        */
       processLoadedDocuments: function alfresco_documentlibrary_AlfDocumentListPaginator__processLoadedDocuments(payload) {
-         if (payload.totalDocuments != null && payload.startIndex != null)
+         if (payload.totalDocuments !== null && payload.startIndex !== null)
          {
             if (payload.totalDocuments === 0)
             {
@@ -208,13 +208,13 @@ define(["dojo/_base/declare",
                // Update the page back action to disable if on the first page...
                if (this.pageBack)
                {
-                  this.pageBack.set("disabled", (this.currentPage == 1));
+                  this.pageBack.set("disabled", this.currentPage === 1);
                }
                
                // Update the page forward action to disable if on the last page...
                if (this.pageForward)
                {
-                  this.pageForward.set("disabled", (this.currentPage == this.totalPages));
+                  this.pageForward.set("disabled", this.currentPage === this.totalPages);
                }
                
                // Update the page marker to show the current page...
@@ -225,10 +225,10 @@ define(["dojo/_base/declare",
                }
                
                // Delete the previous page selector group contents...
-               if (this.pageSelectorGroup != null)
+               if (this.pageSelectorGroup !== null)
                {
                   var _this = this;
-                  array.forEach(this.pageSelectorGroup.getChildren(), function(widget, index) {
+                  array.forEach(this.pageSelectorGroup.getChildren(), function(widget) {
                      _this.pageSelectorGroup.removeChild(widget);
                      widget.destroy();
                   });
@@ -243,7 +243,7 @@ define(["dojo/_base/declare",
                   {
                      // Comments below assume 25 docs per page...
                      var pageEnd;
-                     if (i+1 != this.totalPages)
+                     if (i+1 !== this.totalPages)
                      {
                         // If we're not getting the labels for the last page...
                         pageEnd = pageStart + this.documentsPerPage - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
@@ -257,23 +257,23 @@ define(["dojo/_base/declare",
                      var label = this.message("alf-documentlist-paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalDocuments});
                      var menuItem = new AlfCheckableMenuItem({
                         label: label,
-                        value: (i+1),
+                        value: i+1,
                         group: "PAGE_SELECTION_GROUP",
-                        checked: (this.currentPage == i+1),
+                        checked: this.currentPage === i+1,
                         publishTopic: this.pubSubScope + this.pageSelectionTopic,
                         publishPayload: {
                            label: label,
-                           value: (i+1)
+                           value: i+1
                         }
                      });
 
-                     if (this.pageSelectorGroup != null)
+                     if (this.pageSelectorGroup !== null)
                      {
                         this.pageSelectorGroup.addChild(menuItem);
                      }
                      else
                      {
-                        if (this.__initialPageSelectorItems == null)
+                        if (this.__initialPageSelectorItems === null)
                         {
                            this.__initialPageSelectorItems = [];
                         }
@@ -396,7 +396,7 @@ define(["dojo/_base/declare",
                                     label: label25,
                                     value: 25,
                                     group: "DOCUMENTS_PER_PAGE_GROUP",
-                                    checked: (this.documentsPerPage == 25),
+                                    checked: this.documentsPerPage === 25,
                                     publishTopic: this.docsPerpageSelectionTopic,
                                     publishPayload: {
                                        label: label25,
@@ -410,7 +410,7 @@ define(["dojo/_base/declare",
                                     label: label50,
                                     value: 50,
                                     group: "DOCUMENTS_PER_PAGE_GROUP",
-                                    checked: (this.documentsPerPage == 50),
+                                    checked: this.documentsPerPage === 50,
                                     publishTopic: this.docsPerpageSelectionTopic,
                                     publishPayload: {
                                        label: label50,
@@ -424,7 +424,7 @@ define(["dojo/_base/declare",
                                     label: label75,
                                     value: 75,
                                     group: "DOCUMENTS_PER_PAGE_GROUP",
-                                    checked: (this.documentsPerPage == 75),
+                                    checked: this.documentsPerPage === 75,
                                     publishTopic: this.docsPerpageSelectionTopic,
                                     publishPayload: {
                                        label: label75,
@@ -438,7 +438,7 @@ define(["dojo/_base/declare",
                                     label: label100,
                                     value: 100,
                                     group: "DOCUMENTS_PER_PAGE_GROUP",
-                                    checked: (this.documentsPerPage == 100),
+                                    checked: this.documentsPerPage === 100,
                                     publishTopic: this.docsPerpageSelectionTopic,
                                     publishPayload: {
                                        label: label100,
@@ -478,7 +478,7 @@ define(["dojo/_base/declare",
 
          // Check to see if any document data was provided before widget instantiation completed and
          // if so process it with the now available widgets...
-         if (this.__deferredLoadedDocumentData != null)
+         if (this.__deferredLoadedDocumentData !== null)
          {
             this.processLoadedDocuments(this.__deferredLoadedDocumentData);
          }

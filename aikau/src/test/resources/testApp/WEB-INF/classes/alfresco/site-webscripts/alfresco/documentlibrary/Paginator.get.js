@@ -11,8 +11,12 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/DocumentService",
-      "alfresco/services/ErrorReporter"
+      {
+         name: "aikauTesting/mockservices/PaginationService",
+         config: {
+            loadDataSubscriptionTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST"
+         }
+      }
    ],
    widgets: [
       {
@@ -40,29 +44,13 @@ model.jsonModel = {
                   }
                }
             ]
-         },
+         }
       },
       {
          id: "LIST",
          name: "alfresco/lists/AlfSortablePaginatedList",
          config: {
             useHash: false,
-            currentData: {
-               items: [
-                  {
-                     id: "A",
-                     displayName: "A"
-                  },
-                  {
-                     id: "B",
-                     displayName: "B"
-                  },
-                  {
-                     id: "C",
-                     displayName: "C"
-                  }
-               ]
-            },
             widgets: [
                {
                   name: "alfresco/documentlibrary/views/AlfDocumentListView",
@@ -79,7 +67,7 @@ model.jsonModel = {
                                           {
                                              name: "alfresco/renderers/Property",
                                              config: {
-                                                propertyToRender: "displayName"
+                                                propertyToRender: "index"
                                              }
                                           }
                                        ]
@@ -93,9 +81,6 @@ model.jsonModel = {
                }
             ]
          }
-      },
-      {
-         name: "aikauTesting/mockservices/PaginationMockXhr"
       },
       {
          name: "alfresco/logging/SubscriptionLog",
