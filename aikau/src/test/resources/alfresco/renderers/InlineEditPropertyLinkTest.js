@@ -41,6 +41,10 @@ define(["intern!object",
                .end();
          },
 
+         beforeEach: function() {
+            browser.end();
+         },
+
          teardown: function() {
             browser.alfPostCoverageResults(browser);
          },
@@ -50,16 +54,14 @@ define(["intern!object",
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "Test", "Value not rendered correctly");
-               })
-               .end();
+               });
          },
 
          "Edit widget not initially created": function() {
             return browser.findAllByCssSelector("#INLINE_EDIT > .editWidgetNode > *")
                .then(function(elements) {
                   assert.lengthOf(elements, 0, "Edit widget node should be empty until needed");
-               })
-               .end();
+               });
          },
 
          "Edit icon initially invisible": function() {
@@ -67,8 +69,7 @@ define(["intern!object",
                .isDisplayed()
                .then(function(result) {
                   assert.isFalse(result, "Icon should not be displayed");
-               })
-               .end();
+               });
          },
 
          "Icon appears on focus": function() {
@@ -76,14 +77,13 @@ define(["intern!object",
                .then(function(element) {
                   element.type(""); // Focus on element
 
-                  browser.findByCssSelector("#INLINE_EDIT .editIcon")
+                  browser.end()
+                     .findByCssSelector("#INLINE_EDIT .editIcon")
                      .isDisplayed()
                      .then(function(result) {
                         assert.isTrue(result, "Edit icon was not revealed on focus");
-                     })
-                     .end();
-               })
-               .end();
+                     });
+               });
          },
 
          "Icon disappears on blur": function() {
@@ -91,14 +91,13 @@ define(["intern!object",
                .then(function(element) {
                   element.type([keys.SHIFT, keys.TAB]); // Focus away from element
 
-                  browser.findByCssSelector("#INLINE_EDIT .editIcon")
+                  browser.end()
+                     .findByCssSelector("#INLINE_EDIT .editIcon")
                      .isDisplayed()
                      .then(function(result) {
                         assert.isFalse(result, "Edit icon was not hidden on blur");
-                     })
-                     .end();
-               })
-               .end();
+                     });
+               });
          },
 
          "Icon appears on mouseover": function() {
@@ -110,22 +109,20 @@ define(["intern!object",
                .isDisplayed()
                .then(function(result) {
                   assert.isTrue(result, "Edit icon was not revealed on mouse over");
-               })
-               .end();
+               });
          },
 
          "Icon hides on mouseout": function() {
             return browser.findByCssSelector("body")
                .moveMouseTo(0, 0)
                .then(function() {
-                  browser.findByCssSelector("#INLINE_EDIT .editIcon")
+                  browser.end()
+                     .findByCssSelector("#INLINE_EDIT .editIcon")
                      .isDisplayed()
                      .then(function(result) {
                         assert.isFalse(result, "Edit icon was not hidden on mouse out");
-                     })
-                     .end();
-               })
-               .end();
+                     });
+               });
          },
 
          "Edit widgets are created on edit": function() {
@@ -136,8 +133,7 @@ define(["intern!object",
             .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
                .then(null, function() {
                   assert(false, "Clicking edit icon did not create the validation text box");
-               })
-               .end();
+               });
          },
 
          "Read property is hidden when editing": function() {
@@ -145,8 +141,7 @@ define(["intern!object",
                .isDisplayed()
                .then(function(result) {
                   assert.isFalse(result, "Read-only span was not hidden");
-               })
-               .end();
+               });
          },
 
          "Save and cancel buttons are displayed when editing": function() {
@@ -161,8 +156,7 @@ define(["intern!object",
                .isDisplayed()
                .then(function(result) {
                   assert.isTrue(result, "Cancel button not visible when editing");
-               })
-               .end();
+               });
          },
 
          "Escape key cancels editing": function() {
@@ -174,8 +168,7 @@ define(["intern!object",
                .isDisplayed()
                .then(function(result) {
                   assert.isTrue(result, "Read-only value not revealed on cancelling edit");
-               })
-               .end();
+               });
          },
 
          "Clicking on property fires topic": function() {
@@ -186,8 +179,7 @@ define(["intern!object",
             .findAllByCssSelector(TestCommon.topicSelector("TEST_PROPERTY_LINK_CLICK", "publish", "any"))
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Property link topic not published on click");
-               })
-               .end();
+               });
          },
 
          "Clicking on property does not start editing": function() {
@@ -195,15 +187,15 @@ define(["intern!object",
                .isDisplayed()
                .then(function(result) {
                   assert.isFalse(result, "Edit box revealed when clicking on property value");
-               })
-               .end();
+               });
          },
 
          "Clicking on cancel button stops editing": function() {
             return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
                .moveMouseTo()
                .then(function() {
-                  browser.findByCssSelector("#INLINE_EDIT .editIcon")
+                  return browser.end()
+                     .findByCssSelector("#INLINE_EDIT .editIcon")
                      .click()
                      .end()
 
@@ -222,10 +214,8 @@ define(["intern!object",
                      .isDisplayed()
                      .then(function(result) {
                         assert.isTrue(result, "Read-only value not revealed on cancelling edit");
-                     })
-                     .end();
-               })
-               .end();
+                     });
+               });
          },
 
          "CTRL-E starts editing": function() {
@@ -238,8 +228,7 @@ define(["intern!object",
                .isDisplayed()
                .then(function(result) {
                   assert.isTrue(result, "Edit box not revealed on CTRL-E");
-               })
-               .end();
+               });
          },
 
          "Changes published on save": function() {
@@ -274,8 +263,7 @@ define(["intern!object",
             .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "hiddenData", "hidden_update"))
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Hidden value didn't get included");
-               })
-               .end();
+               });
          },
 
          "Readonly view displayed when finished editing": function() {
@@ -288,8 +276,7 @@ define(["intern!object",
             .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "New", "Read-only value not updated correctly");
-               })
-               .end();
+               });
          }
 
       });
