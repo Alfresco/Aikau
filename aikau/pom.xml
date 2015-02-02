@@ -14,21 +14,6 @@
 
    <dependencies>
 
-      <!-- Surf is required for unit testing application -->
-      <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
-         <artifactId>spring-surf-api</artifactId>
-         <version>5.0.1-SNAPSHOT</version>
-      </dependency>
-
-      <!-- Required for unit test application -->
-      <dependency>
-         <groupId>org.tuckey</groupId>
-         <artifactId>urlrewritefilter</artifactId>
-         <version>4.0.4</version>
-         <scope>runtime</scope>
-      </dependency>
-
       <!-- This is used for the LESS CSS processing. It allows us to include LESS code in both
           the Theme XML files and in widget CSS files. We deliberately exclude it's preferred
           Rhino version so as to avoid conflicts with our own dependencies. -->
