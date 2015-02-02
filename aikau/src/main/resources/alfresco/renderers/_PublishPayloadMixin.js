@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        * @returns {object} The generated payload.
        */
       getGeneratedPayload: function alfresco_renderers__PublishPayloadMixin__generatePayload(regenerate, receivedPayload) {
-         if (this._generatedPayload == null || regenerate === true || receivedPayload != null)
+         if (this._generatedPayload === null || regenerate === true || receivedPayload !== null)
          {
             this._generatedPayload = this.generatePayload(this.publishPayload, this.currentItem, receivedPayload, this.publishPayloadType, this.publishPayloadItemMixin, this.publishPayloadModifiers);
          }
@@ -101,37 +101,48 @@ define(["dojo/_base/declare",
        */
       generatePayload: function alfresco_renderers__PublishPayloadMixin__generatePayload(configuredPayload, currentItem, receivedPayload, payloadType, mixinCurrentItem, publishPayloadModifiers) {
          var generatedPayload = null;
-         if (payloadType == null || payloadType == "CONFIGURED")
+         switch (payloadType || "CONFIGURED")
          {
-            // No payload type has been configured, or has been set to the default of "CONFIGURED" - just use the payload as is
-            generatedPayload = configuredPayload;
-         }
-         else if (payloadType == "CURRENT_ITEM")
-         {
-            // Use the current item as the payload...
-            generatedPayload = currentItem;
-         }
-         else if(payloadType == "PROCESS")
-         {
-            // Clone the configured payload so as not to "pollute" the statically defined value...
-            generatedPayload = lang.clone(configuredPayload);
-
-            // The configured payload should be process the payload using the modifier functions
-            this.processObject(publishPayloadModifiers, generatedPayload);
-         }
-         else if (payloadType == "BUILD")
-         {
-            // Clone the configured payload so as not to "pollute" the statically defined value...
-            generatedPayload = lang.clone(configuredPayload);
-
-            // Build the payload using the "alfType" and "alfProperty" keywords...
-            generatedPayload = this.buildPayload(generatedPayload, currentItem, receivedPayload);
+            case "CONFIGURED":
+            {
+               // No payload type has been configured, or has been set to the default of "CONFIGURED" - just use the payload as is
+               generatedPayload = configuredPayload;
+               
+               break;
+            }
+            case "CURRENT_ITEM":
+            {
+               // Use the current item as the payload...
+               generatedPayload = currentItem;
+               
+               break;
+            }
+            case "PROCESS":
+            {
+               // Clone the configured payload so as not to "pollute" the statically defined value...
+               generatedPayload = lang.clone(configuredPayload);
+   
+               // The configured payload should be process the payload using the modifier functions
+               this.processObject(publishPayloadModifiers, generatedPayload);
+               
+               break;
+            }
+            case "BUILD":
+            {
+               // Clone the configured payload so as not to "pollute" the statically defined value...
+               generatedPayload = lang.clone(configuredPayload);
+   
+               // Build the payload using the "alfType" and "alfProperty" keywords...
+               generatedPayload = this.buildPayload(generatedPayload, currentItem, receivedPayload);
+               
+               break;
+            }
          }
 
          // Mixin the current item into the payload if required...
-         if (mixinCurrentItem == true)
+         if (mixinCurrentItem === true)
          {
-            if (this.currentItem != null)
+            if (this.currentItem !== null)
             {
                lang.mixin(generatedPayload, currentItem);
             }
@@ -161,7 +172,7 @@ define(["dojo/_base/declare",
        * @returns {object} The payload to be published
        */
       buildPayload: function alfresco_renderers__PublishPayloadMixin__buildPayload(configuredPayload, currentItem, receivedPayload) {
-         if(configuredPayload != null)
+         if (configuredPayload !== null)
          {
             // Copy the original to grab data from...
             for (var key in configuredPayload)
@@ -192,11 +203,11 @@ define(["dojo/_base/declare",
                var type = value.alfType;
                var property = value.alfProperty;
 
-               if (type == "item" && currentItem)
+               if (type === "item" && currentItem)
                {
                   value = lang.getObject(property, null, currentItem);
                }
-               else if (type == "payload" && receivedPayload)
+               else if (type === "payload" && receivedPayload)
                {
                   value = lang.getObject(property, null, receivedPayload);
                }
@@ -208,7 +219,6 @@ define(["dojo/_base/declare",
                // Clean up the payload...
                delete value.alfType;
                delete value.alfProperty;
-
             }
             else
             {
