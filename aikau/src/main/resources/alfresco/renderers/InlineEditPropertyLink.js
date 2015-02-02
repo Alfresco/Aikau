@@ -31,9 +31,8 @@ define(["dojo/_base/declare",
         "dijit/a11yclick",
         "dojo/_base/lang",
         "dojo/on",
-        "dojo/_base/event",
-        "dojo/dom-style"], 
-        function(declare, InlineEditProperty, _ItemLinkMixin, a11yclick, lang, on, event, domStyle) {
+        "dojo/_base/event"],
+        function(declare, InlineEditProperty, _ItemLinkMixin, a11yclick, lang, on, event) {
 
    return declare([InlineEditProperty, _ItemLinkMixin], {
       
@@ -67,11 +66,11 @@ define(["dojo/_base/declare",
        */
       onLinkClick: function alfresco_renderers_InlineEditPropertyLink__onLinkClick(evt) {
          event.stop(evt);
-         if (this.linkPublishTopic != null && lang.trim(this.linkPublishTopic) !== "")
+         if (this.linkPublishTopic && lang.trim(this.linkPublishTopic))
          {
-            var publishGlobal = (this.linkPublishGlobal != null) ? this.linkPublishGlobal : false;
-            var publishToParent = (this.linkPublishToParent != null) ? this.linkPublishToParent : false;
-            var publishPayload = this.generatePayload(this.linkPublishPayload, 
+            var publishGlobal = this.linkPublishGlobal || false,
+               publishToParent = this.linkPublishToParent || false,
+               publishPayload = this.generatePayload(this.linkPublishPayload,
                                                       this.currentItem,
                                                       null, 
                                                       this.linkPublishPayloadType, 
