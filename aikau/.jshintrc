@@ -37,6 +37,8 @@
       "PDFJS": false
    },
 
+   "expr": true,
+
    "browser": true,
    "dojo": true
 }
