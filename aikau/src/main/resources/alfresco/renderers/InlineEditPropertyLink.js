@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -65,7 +65,7 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event.
        */
       onLinkClick: function alfresco_renderers_InlineEditPropertyLink__onLinkClick(evt) {
-         event.stop(evt);
+         evt && event.stop(evt);
          if (this.linkPublishTopic && lang.trim(this.linkPublishTopic))
          {
             var publishGlobal = this.linkPublishGlobal || false,
