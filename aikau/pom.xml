@@ -56,6 +56,16 @@
             <directory>${basedir}/src/main/resources/alfresco</directory>
          </resource>
 
+         <!-- Put the release notes in the root of the JAR file -->
+         <resource>
+            <targetPath>.</targetPath>
+            <filtering>true</filtering>
+            <includes>
+               <include>ReleaseNotes.txt</include>
+            </includes>
+            <directory>${basedir}/src/main/</directory>
+         </resource>
+
          <!-- ...but everything else goes into a standard path -->
          <resource>
             <targetPath>META-INF/js/lib</targetPath>
