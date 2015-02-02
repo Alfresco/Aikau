@@ -882,6 +882,7 @@ define(["dojo/_base/declare",
 
       /**
        * Publishes the details of the documents that have been loaded (primarily for multi-selection purposes)
+       * and stores any requested starting index and total records data.
        *
        * @instance
        * @param {object} response The original response.

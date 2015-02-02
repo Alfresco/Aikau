@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -223,6 +223,13 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles requests to change the number of items shown for each page of data in the list. When the page
+       * size is increased or decreased the current page will be adjusted to attempt to keep the items that the
+       * user was looking at in the requested page. This is simple when increasing the page size, but harder when
+       * decreasing the page size. When decreasing the page size the page requested will represent the beginning
+       * of the larger page size of data, e.g. when going from 50 - 25 items per page, if the user was on page 2 
+       * (51-100) then page 3 (51-75) would be requested.
+       * 
        * @instance
        * @param {object} payload The details of the new page size
        */

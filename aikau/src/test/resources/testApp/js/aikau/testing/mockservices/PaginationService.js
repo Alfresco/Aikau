@@ -29,6 +29,13 @@ define(["dojo/_base/declare",
 
    return declare([AlfCore], {
 
+      /**
+       * The topic to subscribe to to service requests for list data
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
       loadDataSubscriptionTopic: null,
 
       /**
@@ -45,6 +52,13 @@ define(["dojo/_base/declare",
          }
       },
 
+      /**
+       * This function simulates paginated results. Given a page size and a page number it will generate
+       * a set of results (up to 243 items) for that request.
+       * 
+       * @instance
+       * @param {object} payload
+       */
       onLoadDataRequest: function alfresco_testing_mockservices_PaginationService__onLoadDataRequest(payload) {
          var totalRecords = 243;
          var pageSize = payload.pageSize !== null ? payload.pageSize: 25;

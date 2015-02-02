@@ -31,7 +31,7 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   // baseFunctionalSuites: ['src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest'],
+   // baseFunctionalSuites: ['src/test/resources/alfresco/documentlibrary/PaginationTest'],
 
    /**
     * This is the base array of functional test suites

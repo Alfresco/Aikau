@@ -51,22 +51,6 @@ model.jsonModel = {
          name: "alfresco/lists/AlfSortablePaginatedList",
          config: {
             useHash: false,
-            // currentData: {
-            //    items: [
-            //       {
-            //          id: "A",
-            //          displayName: "A"
-            //       },
-            //       {
-            //          id: "B",
-            //          displayName: "B"
-            //       },
-            //       {
-            //          id: "C",
-            //          displayName: "C"
-            //       }
-            //    ]
-            // },
             widgets: [
                {
                   name: "alfresco/documentlibrary/views/AlfDocumentListView",
@@ -98,9 +82,6 @@ model.jsonModel = {
             ]
          }
       },
-      // {
-      //    name: "aikauTesting/mockservices/PaginationMockXhr"
-      // },
       {
          name: "alfresco/logging/SubscriptionLog",
          config: {

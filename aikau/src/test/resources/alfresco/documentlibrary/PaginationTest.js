@@ -28,6 +28,7 @@ define(["intern!object",
         function (registerSuite, expect, assert, require, TestCommon) {
 
    var browser;
+   var pause = 500;
    registerSuite({
       name: "Pagination Test",
       "Test page selector drop-down label intialization": function () {
@@ -82,7 +83,7 @@ define(["intern!object",
             .click()
          .end()
          // sped up - hopefully at some point in the future we can remove this sleep!         
-         .sleep(1000)
+         .sleep(pause)
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
@@ -107,7 +108,7 @@ define(["intern!object",
       "Test clicking next page updates page selector drop-down label": function () {
          return this.remote.findByCssSelector("#PAGINATOR_PAGE_FORWARD_text")
             .click()
-            .sleep(1000)
+            .sleep(pause)
          .end()
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
@@ -133,7 +134,7 @@ define(["intern!object",
       "Test previous page button updates page selector drop-down label": function() {
          return this.remote.findByCssSelector("#PAGINATOR_PAGE_BACK_text")
             .click()
-            .sleep(1000)
+            .sleep(pause)
          .end()
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
@@ -168,7 +169,7 @@ define(["intern!object",
       "Test next page button (to last page) disables next page button": function() {
          return this.remote.findByCssSelector("#PAGINATOR_PAGE_FORWARD_text")
             .click()
-            .sleep(1000)
+            .sleep(pause)
          .end()
          .findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
             .then(function(elements) {
@@ -188,7 +189,7 @@ define(["intern!object",
          .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:nth-child(4) td:nth-child(3)")
             .click()
          .end()
-         .sleep(1000)
+         .sleep(pause)
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
@@ -218,6 +219,17 @@ define(["intern!object",
             })
          .end();
       },
+      "Test Results Per Page Group": function () {
+         // This tests the external results per page menu, to ensure it picks up changes correctly...
+         return this.remote.findByCssSelector("#MENU_BAR_POPUP_text")
+            .click()
+         .end()
+         .findAllByCssSelector("#MENU_BAR_POPUP_dropdown tr:nth-child(4) td.alf-selected-icon")
+            .then(function(elements) {
+               assert(elements.length === 1, "Results per page widget check box not highlighted correctly");
+            })
+         .end();
+      },
       "Test reducing page size adjusts current page (100 to 25 on last page)": function() {
          // This tests that when we reduce the page size on the last page jump to an 
          // appropriate page for the smaller page size. Although we're on the last page (201-243) for
@@ -230,7 +242,7 @@ define(["intern!object",
          .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:nth-child(1) td:nth-child(3)")
             .click()
          .end()
-         .sleep(1000)
+         .sleep(pause)
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
@@ -242,29 +254,7 @@ define(["intern!object",
             .then(function(text) {
                assert(text === "9", "Page number not correct, expected '9' but saw: " + text);
             })
-         .end();
+         .end().alfPostCoverageResults(browser);
       }
-
-
-      // ,
-      // "Test Results Per Page Group": function () {
-      //    // Wait for the data to load and the page to draw - this is currently slow and the rendering needs to be
-      //    var browser = this.remote;
-      //    var testname = "Pagination Test";
-         
-      //    return browser.findByCssSelector("#MENU_BAR_POPUP_text")
-      //       .click()
-      //       .end()
-
-      //    .findAllByCssSelector("#MENU_BAR_POPUP_dropdown tr:nth-child(2) td.alf-selected-icon")
-      //       .then(function(elements) {
-      //          TestCommon.log(testname, "Checking results group updated correctly");
-      //          assert(elements.length === 1, "Test #6a - Results per page widget updated correctly");
-      //       })
-      //       .end()
-
-
-      //    .alfPostCoverageResults(browser);
-      // }
    });
 });
