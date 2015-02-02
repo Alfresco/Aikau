@@ -388,7 +388,7 @@ define(["dojo/_base/declare",
          domClass.toggle(this.renderedValueNode, "hidden");
          domClass.toggle(this.editNode, "hidden");
          formWidget.focus(); // Focus on the input node so typing can occur straight away
-         evt && evt.stop();
+         event.stop(evt);
       },
       
       /**
