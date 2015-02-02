@@ -77,13 +77,13 @@ define(["intern!object",
          // Switch to 50 results per page...
          return this.remote.findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
             .click()
-            .sleep(100)
+            // .sleep(100)
          .end()
          .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:nth-child(2) td:nth-child(3)")
             .click()
          .end()
          // sped up - hopefully at some point in the future we can remove this sleep!         
-         .sleep(pause)
+         // .sleep(pause)
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
@@ -108,7 +108,7 @@ define(["intern!object",
       "Test clicking next page updates page selector drop-down label": function () {
          return this.remote.findByCssSelector("#PAGINATOR_PAGE_FORWARD_text")
             .click()
-            .sleep(pause)
+            // .sleep(pause)
          .end()
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
@@ -134,7 +134,7 @@ define(["intern!object",
       "Test previous page button updates page selector drop-down label": function() {
          return this.remote.findByCssSelector("#PAGINATOR_PAGE_BACK_text")
             .click()
-            .sleep(pause)
+            // .sleep(pause)
          .end()
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
@@ -169,7 +169,7 @@ define(["intern!object",
       "Test next page button (to last page) disables next page button": function() {
          return this.remote.findByCssSelector("#PAGINATOR_PAGE_FORWARD_text")
             .click()
-            .sleep(pause)
+            // .sleep(pause)
          .end()
          .findAllByCssSelector("#PAGINATOR_PAGE_FORWARD.dijitDisabled")
             .then(function(elements) {
@@ -184,12 +184,12 @@ define(["intern!object",
          // Select 100 items per page and the page number should go from 5 to 3...
          return this.remote.findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
             .click()
-            .sleep(100)
+            // .sleep(100)
          .end()
          .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:nth-child(4) td:nth-child(3)")
             .click()
          .end()
-         .sleep(pause)
+         // .sleep(pause)
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
@@ -237,12 +237,12 @@ define(["intern!object",
          // as this is the most appropriate page for where we were.
          return this.remote.findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
             .click()
-            .sleep(100)
+            // .sleep(100)
          .end()
          .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:nth-child(1) td:nth-child(3)")
             .click()
          .end()
-         .sleep(pause)
+         // .sleep(pause)
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
