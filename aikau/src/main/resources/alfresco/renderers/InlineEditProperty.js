@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -169,24 +169,21 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          
          // If no topic has been provided then assume the default behaviour of editing document/folder properties
-         if (this.publishTopic == null)
+         if (!this.publishTopic)
          {
             this.setDefaultPublicationData();
          }
 
-         if (this.propertyToRender != null)
+         if (this.propertyToRender && !this.postParam)
          {
-            if (this.postParam == null && this.propertyToRender != null)
-            {
-               this.postParam = this.propertyToRender;
-            }
+            this.postParam = this.propertyToRender;
          }
          else
          {
             this.alfLog("warn", "Property to render attribute has not been set", this);
          }
 
-         if (this.editIconImageSrc == null || this.editIconImageSrc === "")
+         if (!this.editIconImageSrc)
          {
             this.editIconImageSrc = require.toUrl("alfresco/renderers") + "/css/images/edit-16.png";
          }
@@ -276,7 +273,7 @@ define(["dojo/_base/declare",
        */
       processHiddenDataRules: function alfresco_renderers_InlineEditProperty__processHiddenDataRules() {
          var additionalFormWidgets = [];
-         if (this.hiddenDataRules != null)
+         if (this.hiddenDataRules)
          {
             array.forEach(this.hiddenDataRules, lang.hitch(this, this.processHiddenDataRule, additionalFormWidgets));
          }
@@ -415,13 +412,13 @@ define(["dojo/_base/declare",
        * @param {object} e The key press event
        */
       onValueEntryKeyPress: function alfresco_renderers_InlineEditProperty__onValueEntryKeyPress(e) {
-         if(e.charOrCode == keys.ESCAPE)
+         if(e.charOrCode === keys.ESCAPE)
          {
             event.stop(e);
             this.onCancel();
          }
          // NOTE: This isn't currently working because Dojo form controls suppress certain keys, including ENTER...
-         else if(e.charOrCode == keys.ENTER)
+         else if(e.charOrCode === keys.ENTER)
          {
             event.stop(e);
             this.onSave();
@@ -432,6 +429,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onSave: function alfresco_renderers_InlineEditProperty__onSave(evt) {
+         /*jshint unused:false*/
          if (this.isSaveAllowed === true)
          {
             var responseTopic = this.generateUuid();
@@ -473,6 +471,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The success payload
        */
       onSaveSuccess: function alfresco_renderers_InlineEditProperty__onSaveSuccess(payload) {
+         /*jshint unused:false*/
          this.alfUnsubscribeSaveHandles([this._saveSuccessHandle, this._saveFailureHandle]);
 
          this.alfLog("log", "Property '" + this.propertyToRender + "' successfully updated for node: ", this.currentItem);
@@ -506,6 +505,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The success payload
        */
       onSaveFailure: function alfresco_renderers_InlineEditProperty__onSaveFailure(payload) {
+         /*jshint unused:false*/
          this.alfUnsubscribeSaveHandles([this._saveSuccessHandle, this._saveFailureHandle]);
          this.alfLog("warn", "Property '" + this.propertyToRender + "' was not updated for node: ", this.currentItem);
          this.onCancel();
