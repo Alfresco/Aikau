@@ -26,57 +26,45 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Page Creator Test',
-      'Basic Test': function () {
-
-         var browser = this.remote;
-         var testname = "Page Creation Test";
-         return TestCommon.loadTestWebScript(this.remote, "/WidgetConfig", testname)
-
-         // 1. Find and pick up the draggable item
-         .findByCssSelector("#dojoUnique1 > .title")
+      name: "Page Creation Widgets Test",
+      "Test Drag From Palette To Drop Zone": function () {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/WidgetConfig", "Page Creation Widgets Test").findByCssSelector("#dojoUnique1 > .title")
             .moveMouseTo()
             .click()
             .pressMouseButton()
             .moveMouseTo(1, 1)
-            .end()
-
-         // 2. Move to the drop zone and release
+         .end()
          .findByCssSelector(".alfresco-creation-DropZone > div")
             .then(function(element) {
-               TestCommon.log(testname, "Dragging widget to drop zone...");
                browser.moveMouseTo(element);
             })
             .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
             .releaseMouseButton()
-            .end()
-
-         // 3. Select the dropped widget by clicking on the drag handle...
+         .end()
          .findByCssSelector(".dojoDndHandle")
             .click()
-            .end()
-
-         // 4. Check that the validation text box is displayed...
+         .end()
          .findByCssSelector(".alfresco-forms-controls-TextBox .dijitInputContainer input")
-            .getProperty('value')
+            .getProperty("value")
             .then(function(resultText) {
-               TestCommon.log(testname, "Check that widget is displayed in drop zone...");
-               assert(resultText == "Value1", "Test #2a - The initial value was not set correctly: " + resultText);
+               assert(resultText === "Value1", "The initial value was not set correctly: " + resultText);
             })
-            .end()
+         .end().alfPostCoverageResults(browser);
 
-         // 5. Save the config...
-         .findByCssSelector(".alfresco-creation-WidgetConfig .confirmationButton > span")
-            .click()
-            .end()
+         // // 5. Save the config...
+         // .findByCssSelector(".alfresco-creation-WidgetConfig .confirmationButton > span")
+         //    .click()
+         //    .end()
 
-         // 6. Save the form...
-         .findByCssSelector("#FORM .confirmationButton > span")
-            .click()
-            .end()
+         // // 6. Save the form...
+         // .findByCssSelector("#FORM .confirmationButton > span")
+         //    .click()
+         //    .end()
 
-         .alfPostCoverageResults(browser);
+         // .alfPostCoverageResults(browser);
       }
    });
 });

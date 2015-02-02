@@ -65,7 +65,6 @@ define(["alfresco/forms/controls/BaseFormControl",
          return {
             id : this.generateUuid(),
             name: this.name,
-            value: this.value,
             smallDelta: this.delta,
             constraints: {
                min: this.min,

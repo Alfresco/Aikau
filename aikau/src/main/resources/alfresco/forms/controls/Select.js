@@ -47,9 +47,8 @@ define(["alfresco/forms/controls/BaseFormControl",
          // Return the configuration for the widget
          return {
             id : this.id + "_CONTROL",
-            name: this.name,
-            value: (this.value != null) ? this.value : null,
-            options: (this.options != null) ? this.options : []
+            name: this.name//,
+            // options: (this.options !== null) ? this.options : []
          };
       },
       
@@ -61,13 +60,28 @@ define(["alfresco/forms/controls/BaseFormControl",
 
          // Handle adding classes to control...
          var additionalCssClasses = "";
-         if (this.additionalCssClasses != null)
+         if (this.additionalCssClasses !== null)
          {
             additionalCssClasses = this.additionalCssClasses;
          }
          domClass.add(this.domNode, "alfresco-forms-controls-Select " + additionalCssClasses);
-
          return select;
+      },
+
+      /**
+       * Extends the inherited function to ensure that each option label is encoded to prevent potential
+       * XSS attacks.
+       * 
+       * @instance
+       * @param {object} option The option configuration
+       * @param {number} index The index of the option
+       */
+      processOptionLabel: function alfresco_forms_controls_BaseFormControl__processOptionLabel(option, index) {
+         this.inherited(arguments);
+         if (option.label)
+         {
+            option.label = this.encodeHTML(option.label);
+         }
       }
    });
 });

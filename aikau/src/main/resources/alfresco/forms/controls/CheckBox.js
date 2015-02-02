@@ -53,8 +53,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          return {
             id : this.generateUuid(),
             name: this.name,
-            value: this.value,
-            checked: (this.value == "true" || this.value === true)
+            checked: this.value === "true" || this.value === true
          };
       },
       
@@ -63,7 +62,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       createFormControl: function alfresco_forms_controls_CheckBox__createFormControl(config, domNode) {
          var additionalCssClasses = "";
-         if (this.additionalCssClasses != null)
+         if (this.additionalCssClasses !== null)
          {
             additionalCssClasses = this.additionalCssClasses;
          }

@@ -44,9 +44,10 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
         "dojo/_base/array",
-        "dijit/registry"], 
+        "dijit/registry",
+        "dojo/Deferred"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, _AlfHashMixin, template, 
-                 ioQuery, hash, lang, AlfButton, array, registry) {
+                 ioQuery, hash, lang, AlfButton, array, registry, Deferred) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin], {
       
@@ -193,7 +194,7 @@ define(["dojo/_base/declare",
        */
       onInvalidField: function alfresco_forms_Form__onInvalidField(payload) {
          var alreadyCaptured = array.some(this.invalidFormControls, function(item) {
-            return item == payload.fieldId;
+            return item === payload.fieldId;
          });
          if (!alreadyCaptured)
          {
@@ -214,7 +215,7 @@ define(["dojo/_base/declare",
        */
       publishFormValidity: function alfresco_forms_Form__publishFormValidity() {
          this.alfPublish("ALF_FORM_VALIDITY", {
-            valid: (this.invalidFormControls.length === 0),
+            valid: this.invalidFormControls.length === 0,
             invalidFormControls: this.invalidFormControls
          });
       },
@@ -230,7 +231,7 @@ define(["dojo/_base/declare",
        */
       onValidField: function alfresco_forms_Form__onValidField(payload) {
          this.invalidFormControls = array.filter(this.invalidFormControls, function(item) {
-            return item != payload.fieldId;
+            return item !== payload.fieldId;
          });
          if (this.okButton)
          {
@@ -241,8 +242,8 @@ define(["dojo/_base/declare",
          // Update the publishPayload of the "OK" button so that when it is clicked
          // it will provide the current form data...
          var formValue = this.getValue();
-         array.forEach(this.additionalButtons, function(button, index) {
-            if (button.publishPayload != null)
+         array.forEach(this.additionalButtons, function(button) {
+            if (button.publishPayload !== null)
             {
                lang.mixin(button.publishPayload, formValue);
             }
@@ -428,11 +429,11 @@ define(["dojo/_base/declare",
          // Make sure to remove the alfTopic from the payload (this will always be assigned on publications
          // but is not actually part of the form data)...
          delete payload.alfTopic;
-         var hash = ioQuery.objectToQuery(payload);
+         var currHash = ioQuery.objectToQuery(payload);
          
          // Publish so that the NavigationService can set the hash fragment...
          this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-            url: hash,
+            url: currHash,
             type: "HASH"
          }, true);
       },
@@ -461,10 +462,11 @@ define(["dojo/_base/declare",
       createButtons: function alfresco_forms_Form__createButtons() {
          if (this.showOkButton === true)
          {
+            
             this.okButton = new AlfButton({
                pubSubScope: this.pubSubScope,
                label: this.message(this.okButtonLabel),
-               additionalCssClasses: "confirmationButton " + ((this.okButtonClass != null) ? this.okButtonClass : ""),
+               additionalCssClasses: "confirmationButton " + (this.okButtonClass ? this.okButtonClass : ""),
                publishTopic: this.okButtonPublishTopic,
                publishPayload: this.okButtonPublishPayload,
                publishGlobal: this.okButtonPublishGlobal,
@@ -475,8 +477,8 @@ define(["dojo/_base/declare",
             // set the hash fragment with the form contents...
             if (this.setHash === true)
             {
-               if (this.okButtonPublishTopic != null &&
-                   lang.trim(this.okButtonPublishTopic) != null)
+               if (this.okButtonPublishTopic &&
+                   lang.trim(this.okButtonPublishTopic) !== "")
                {
                   this.alfSubscribe(this.okButtonPublishTopic, lang.hitch(this, "setHashFragment"), this.okButtonPublishGlobal);
                }
@@ -500,7 +502,7 @@ define(["dojo/_base/declare",
          }
          
          // If there are any other additional buttons to add, then process them here...
-         if (this.widgetsAdditionalButtons != null)
+         if (this.widgetsAdditionalButtons !== null)
          {
             this.additionalButtons = [];
             this.__creatingButtons = true;
@@ -538,10 +540,22 @@ define(["dojo/_base/declare",
                this.setValue(this.value);
             }
             
-            array.forEach(widgets, function(widget, i) {
-               if (widget.publishValue && typeof widget.publishValue == "function")
+            // Once all the controls have been added to the form we're going to ask them each to
+            // publish their initial value. However, in order to ensure that we don't publish before
+            // their value has completely initialised (e.g. if a control with options has not been set
+            // an initial value it may want to set the first option it has as the current value) which
+            // may only complete after the widget has been created but BEFORE it has been placed into
+            // the document. Value initialization occurs after being added to the document to avoid
+            // potential XSS attacks.
+            array.forEach(widgets, function(widget) {
+               if (widget.publishValue && typeof widget.publishValue === "function")
                {
-                  widget.publishValue();
+                  // Create a Deferred object and pass it to the widget, this *should* (if the function
+                  // has not been foolishly overridden!) detect the Deferred object and only resolve it
+                  // when value initialization is complete...
+                  var deferred = new Deferred();
+                  deferred.then(lang.hitch(widget, widget.publishValue));
+                  widget.publishValue(deferred);
                }
             });
          }
@@ -559,8 +573,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       updateButtonPayloads: function alfresco_forms_Form__updateButtonPayloads(values) {
-         array.forEach(this.additionalButtons, function(button, i) {
-            if (button.payload == null)
+         array.forEach(this.additionalButtons, function(button) {
+            if (!button.payload)
             {
                button.payload = {};
             }
@@ -592,7 +606,7 @@ define(["dojo/_base/declare",
          var values = {};
          if (this._form)
          {
-            array.forEach(this._form.getChildren(), function(entry, i) {
+            array.forEach(this._form.getChildren(), function(entry) {
                if (typeof entry.addFormControlValue === "function")
                {
                   entry.addFormControlValue(values);
@@ -614,12 +628,12 @@ define(["dojo/_base/declare",
          {
             if (this._form)
             {
-               array.forEach(this._form.getChildren(), function(entry, i) {
+               array.forEach(this._form.getChildren(), function(entry) {
                   if (typeof entry.updateFormControlValue === "function")
                   {
                      entry.updateFormControlValue(values);
                   }
-                  if (typeof entry.publishValue == "function")
+                  if (typeof entry.publishValue === "function")
                   {
                      entry.publishValue();
                   }
@@ -636,8 +650,7 @@ define(["dojo/_base/declare",
        */
       validate: function alfresco_forms_Form__validate() {
          this.alfLog("log", "Validating form", this._form);
-         
-         array.forEach(this._processedWidgets, function(widget, i) {
+         array.forEach(this._processedWidgets, function(widget) {
             if (typeof widget.validateFormControlValue === "function")
             {
                widget.validateFormControlValue();
@@ -652,7 +665,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       publishValidValue: function alfresco_forms_Form__publishValidValue() {
-
          // The form is valid if there are no invalid form controls...
          if (this.invalidFormControls.length === 0 && this.validFormValuesPublishTopic)
          {
@@ -664,6 +676,5 @@ define(["dojo/_base/declare",
             this.alfPublish(this.validFormValuesPublishTopic, payload, this.validFormValuesPublishGlobal);
          }
       }
-
    });
 });

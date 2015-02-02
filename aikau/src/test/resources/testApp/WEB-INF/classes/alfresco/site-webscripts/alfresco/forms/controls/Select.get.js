@@ -115,6 +115,19 @@ model.jsonModel = {
                         publishTopic: "GET_OPTIONS_FOR_SELECT_4"
                      }
                   }
+               },
+               {
+                  id:"XSS_OPTIONS",
+                  name: "alfresco/forms/controls/Select",
+                  config: {
+                     fieldId: "XSS_OPTIONS",
+                     label: "Check XSS Options",
+                     optionsConfig: {
+                        fixed: [
+                           {label:'<img src="1" onerror="window.hackedLabel=true">',value:'<img src="1" onerror="window.hackedValue=true">'}
+                        ]
+                     }
+                  }
                }
             ]
          }

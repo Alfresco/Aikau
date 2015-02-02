@@ -217,7 +217,9 @@ define(["dojo/_base/declare",
        * @param {element} domNode The element to add the string to
        */
       addStringToLog: function alfresco_testing_Subscription__addStringToLog(s, domNode) {
-         domNode.innerHTML = s;
+         domConstruct.empty(domNode);
+         domNode.appendChild(document.createTextNode(s));
+         // domNode.innerHTML = s;
          domAttr.set(domNode, "data-pubsub-object-value", s);
       },
 

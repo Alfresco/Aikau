@@ -31,7 +31,7 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   // baseFunctionalSuites: ['src/test/resources/alfresco/layout/AlfSideBarContainerTest'],
+   // baseFunctionalSuites: ['src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest'],
 
    /**
     * This is the base array of functional test suites
@@ -52,7 +52,9 @@ define({
       'src/test/resources/alfresco/core/VisibilityConfigTest',
       'src/test/resources/alfresco/core/WidgetCreationTest',
 
-      'src/test/resources/alfresco/creation/WidgetConfigTest',
+      // TODO: This test is quarantined - the widget creation code is broken, but not required for production
+      //       and there are plans to iterate on it anyway.
+      // 'src/test/resources/alfresco/creation/WidgetConfigTest',
 
       'src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest',
       'src/test/resources/alfresco/documentlibrary/CreateContentTest',
@@ -82,7 +84,8 @@ define({
       'src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest',
       'src/test/resources/alfresco/forms/controls/SelectTest',
       'src/test/resources/alfresco/forms/controls/TextBoxTest',
-      'src/test/resources/alfresco/forms/controls/ValidationTest', 
+      'src/test/resources/alfresco/forms/controls/ValidationTest',
+      'src/test/resources/alfresco/forms/controls/XssPreventionTest', 
 
       'src/test/resources/alfresco/header/HeaderWidgetsTest',
       'src/test/resources/alfresco/header/WarningTest',

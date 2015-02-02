@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/Select",
         "dojo/_base/lang",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, ObjectTypeUtils, DojoSelect, lang, domClass) {
+        function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, ObjectTypeUtils, Select, lang, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, _PublishPayloadMixin], {
       
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
              lang.exists(this.propertyToRender, this.currentItem))
          {
             // Get the value of the property to render...
-            var value = lang.getObject(this.propertyToRender, false, this.currentItem)
+            var value = lang.getObject(this.propertyToRender, false, this.currentItem);
 
             // Set up the values needed to handle the pub/sub events coming out of the wrapped dropdown...
             var uuid = this.generateUuid();
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
             var subscriptionTopic = uuid + "_valueChangeOf_" + fieldId;
 
             // Create the widget...
-            this._dropDownWidget = new DojoSelect({
+            this._dropDownWidget = new Select({
                pubSubScope: uuid,
                fieldId: fieldId,
                value: value,
@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
       onPublishChange: function alfresco_renderers_PublishingDropDownMenu__onPublishChange(payload) {
          this.alfLog("log", "Drop down property changed", payload);
 
-         if (this.publishTopic != null)
+         if (this.publishTopic !== null)
          {
             var updatePayload = this.generatePayload(this.publishPayload, this.currentItem, payload, this.publishPayloadType, this.publishPayloadItemMixin);
 
@@ -170,7 +170,7 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._updateSuccessHandle,this._updateFailureHandle]);
          domClass.add(this.processingNode, "hidden");
          domClass.remove(this.successNode, "hidden");
-         this.alfLog("log", "Update request success", payload)
+         this.alfLog("log", "Update request success", payload);
       },
 
       /**
@@ -187,7 +187,7 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._updateSuccessHandle,this._updateFailureHandle]);
          domClass.add(this.processingNode, "hidden");
          domClass.remove(this.warningNode, "hidden");
-         this.alfLog("log", "Update request success", payload)
+         this.alfLog("log", "Update request success", payload);
       }
    });
 });

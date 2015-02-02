@@ -49,8 +49,10 @@ define(["dojo/_base/declare",
         "dijit/Tooltip",
         "dojo/dom-attr",
         "dojo/query",
-        "dojo/dom-construct"], 
-        function(declare, _Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, template, ObjectTypeUtils, arrayUtils, lang, array, domStyle, domClass, Tooltip, domAttr, query, domConstruct) {
+        "dojo/dom-construct",
+        "jquery"], 
+        function(declare, _Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, template, ObjectTypeUtils, 
+                 arrayUtils, lang, array, domStyle, domClass, Tooltip, domAttr, query, domConstruct, $) {
 
    return declare([_Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin], {
       
@@ -501,11 +503,11 @@ define(["dojo/_base/declare",
             var pubSub = lang.getObject("publishTopic", false, config),
                 callback = lang.getObject("callback", false, config),
                 fixed = lang.getObject("fixed", false, config);
-            if (pubSub != null)
+            if (pubSub)
             {
                this.getPubSubOptions(config);
             }
-            else if (callback != null)
+            else if (callback)
             {
                // Handle configuration requests that options be generated through a function call...
                // Note that we're not explicitly handling scope here, it's expected that a hitch call will be
@@ -526,14 +528,12 @@ define(["dojo/_base/declare",
                   this.alfLog("warn", "The supplied 'callback' attribute for '" + this.fieldId + "' was not a Function");
                }
             }
-            else if (fixed != null)
+            else if (fixed)
             {
                // Handle configuration that specifies a fixed configuration...
                if (ObjectTypeUtils.isArray(fixed))
                {
-                  this.options = fixed;
-                  array.forEach(this.options, lang.hitch(this, this.processOptionLabel));
-                  this.setOptionsValue(this.options);
+                  this.pendingOptions = fixed;
                }
                else
                {
@@ -741,6 +741,9 @@ define(["dojo/_base/declare",
          this.options = options;
          if (this.wrappedWidget)
          {
+            // TODO: Change to add options as an array...
+            // TODO: Use aspect to wait until options are added and then replace values with encoded values?
+            // TODO: Create options as numbers and then replace with values once created?
             var currentOptions = this.wrappedWidget.get("options");
             if (currentOptions && typeof this.wrappedWidget.removeOption === "function")
             {
@@ -765,7 +768,7 @@ define(["dojo/_base/declare",
       setOptionsValue: function alfresco_forms_controls_BaseFormControl__setOptionsValue(options) {
          var currentValue = this.getValue();
          var optionsContainsValue = array.some(options, function(option, index) {
-            return option.value == currentValue;
+            return option.value === currentValue;
          });
          
          if (optionsContainsValue)
@@ -1094,6 +1097,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Reorder__postMixInProperties() {
+         // Store the initial value to ensure that when the page is added to the document is configured
+         // correctly, the value can be set with the intended value (as opposed to what the wrapped widget
+         // thinks it should be)...
+         this.initialValue = this.value;
+         
          if (this.validationInProgressImgSrc == null || this.validationInProgressImgSrc === "")
          {
             this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationInProgressImg;
@@ -1209,81 +1217,122 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * This function is set as a callback when the widget is not immediately added to the main document.
+       * It is used as a safety check to prevent scripts from being injected into the page (setting a value
+       * on a node before it is added into the page will cause it to execute when rendered, but setting once
+       * it has been included in the initial rendering will not cause any problems.
+       *
        * @instance
+       * @param {object} payload This is expected to be an empty object or null.
        */
-      completeWidgetSetup: function alfresco_forms_controls_BaseFormControl__setupChangeEvents() {
-         
-         // Place the widget into the DOM provided by the template...
-         this.placeWidget();
-         
-         // Set up the events that indicate a change in value...
-         this.setupChangeEvents();
-         
-         // Set the initial visibility, requirement and disablement...
-         this.alfVisible(this._visible);
-         this.alfRequired(this._required);
-         this.alfDisabled(this._disabled);
-         
-         // Set the label...
-         var widgetId = lang.getObject("id", false, this.wrappedWidget);
-         if (this.label != null && lang.trim(this.label) !== "")
+      onWidgetAddedToDocument: function alfresco_forms_controls_BaseFormControl__onWidgetAddedToDocument(payload) {
+         if ($.contains(document.body, this.domNode))
          {
-            this._labelNode.innerHTML = this.encodeHTML(this.message(this.label));
-            if (widgetId != null)
+            this.alfUnsubscribe(this.widgetProcessingCompleteSubscription);
+            
+            if (this.pendingOptions)
             {
-               domAttr.set(this._labelNode, "for", this.wrappedWidget.id);
+               this.options = this.pendingOptions;
+               this.setOptions(this.options);
+            }
+
+            this.setValue(this.initialValue);
+            delete this.initialValue;
+
+            // Set up the events that indicate a change in value...
+            this.setupChangeEvents();
+
+            // Set the initial visibility, requirement and disablement...
+            this.alfVisible(this._visible);
+            this.alfRequired(this._required);
+            this.alfDisabled(this._disabled);
+            
+            // Set the label...
+            var widgetId = lang.getObject("id", false, this.wrappedWidget);
+            if (this.label != null && lang.trim(this.label) !== "")
+            {
+               this._labelNode.innerHTML = this.encodeHTML(this.message(this.label));
+               if (widgetId != null)
+               {
+                  domAttr.set(this._labelNode, "for", this.wrappedWidget.id);
+               }
+            }
+            else
+            {
+               domStyle.set(this._titleRowNode, {display: "none"});
+            }
+
+            // Set the description...
+            if (this.description != null && lang.trim(this.description) !== "")
+            {
+               this._descriptionNode.innerHTML = this.encodeHTML(this.message(this.description));
+            }
+            else
+            {
+               domStyle.set(this._descriptionRowNode, {display: "none"});
+            }
+            
+            // Set the units label...
+            if (this.unitsLabel != null && this.unitsLabel !== "")
+            {
+               this._unitsNode.innerHTML = this.encodeHTML(this.message(this.unitsLabel));
+            }
+            else
+            {
+               // Hide the units node if there are no units to display...
+               domStyle.set(this._unitsNode, { display: "none"});
+            }
+            
+            // Set the error message for validation...
+            if (this.validationConfig != null && typeof this.validationConfig.errorMessage == "string")
+            {
+               // TODO: This message might not make much sense if it is just missing data for a required field...
+               this._validationMessage.innerHTML = this.encodeHTML(this.message(this.validationConfig.errorMessage));
+            }
+
+            // Fix for missing label on validation input
+            var validationInput = query("input.dijitValidationIcon.dijitValidationInner", this._controlNode);
+            if(validationInput && validationInput.length > 0 && widgetId != null)
+            {
+               var validationInputId = this.wrappedWidget.id + "_validationInput";
+
+               // Add 'id' to the input
+               domAttr.set(validationInput[0], "id", validationInputId);
+
+               // Create a label for the input
+               domConstruct.create("label", {
+                  innerHTML: this.message("validation.control.invalid"),
+                  "for": validationInputId,
+                  "class": "hiddenAccessible"
+               }, validationInput[0], "before");
+            }
+
+            // If we've promised a value publication then resolve it now...
+            // This has been added so that enclosing forms can publish the initialised value of the form control
+            if (this.deferredValuePublication)
+            {
+               this.deferredValuePublication.resolve();
             }
          }
          else
          {
-            domStyle.set(this._titleRowNode, {display: "none"});
+            // No action yet. Don't unsubscribe.
          }
+      },
 
-         // Set the description...
-         if (this.description != null && lang.trim(this.description) !== "")
-         {
-            this._descriptionNode.innerHTML = this.encodeHTML(this.message(this.description));
-         }
-         else
-         {
-            domStyle.set(this._descriptionRowNode, {display: "none"});
-         }
-         
-         // Set the units label...
-         if (this.unitsLabel != null && this.unitsLabel !== "")
-         {
-            this._unitsNode.innerHTML = this.encodeHTML(this.message(this.unitsLabel));
-         }
-         else
-         {
-            // Hide the units node if there are no units to display...
-            domStyle.set(this._unitsNode, { display: "none"});
-         }
-         
-         // Set the error message for validation...
-         if (this.validationConfig != null && typeof this.validationConfig.errorMessage == "string")
-         {
-            // TODO: This message might not make much sense if it is just missing data for a required field...
-            this._validationMessage.innerHTML = this.encodeHTML(this.message(this.validationConfig.errorMessage));
-         }
-
-         // Fix for missing label on validation input
-         var validationInput = query("input.dijitValidationIcon.dijitValidationInner", this._controlNode);
-         if(validationInput && validationInput.length > 0 && widgetId != null)
-         {
-            var validationInputId = this.wrappedWidget.id + "_validationInput";
-
-            // Add 'id' to the input
-            domAttr.set(validationInput[0], "id", validationInputId);
-
-            // Create a label for the input
-            domConstruct.create("label", {
-               innerHTML: this.message("validation.control.invalid"),
-               "for": validationInputId,
-               "class": "hiddenAccessible"
-            }, validationInput[0], "before");
-         }
-         
+      /**
+       * Adds the widget into the current DOM fragment and then sets up subscriptions on widget processing complete
+       * publications as we want to wait the most recently requested widget processing to complete (which in all likelihood
+       * should be the request that caused the creation of this widget. The callback function will set the 
+       * value of the form control making sure that the widget has been added to the document as we only set the 
+       * once it's part of the document to ensure that no unsafe value (e.g. an XSS attack) can be
+       * executed as part of the initial page rendering.
+       *
+       * @instance
+       */
+      completeWidgetSetup: function alfresco_forms_controls_BaseFormControl__setupChangeEvents() {
+         this.placeWidget();
+         this.widgetProcessingCompleteSubscription = this.alfSubscribe("ALF_WIDGET_PROCESSING_COMPLETE", lang.hitch(this, this.onWidgetAddedToDocument), true);
       },
 
       /**
@@ -1349,9 +1398,6 @@ define(["dojo/_base/declare",
                value = false;
             }
          }
-
-         // Commented out because it does make the logging quite verbose
-         // this.alfLog("log", "Returning value for field: '" + this.fieldId + "': ", value);
          return value;
       },
       
@@ -1368,7 +1414,8 @@ define(["dojo/_base/declare",
             {
                value = value.toString();
             }
-            this.wrappedWidget.setValue(value);
+            // this.wrappedWidget.setValue(value);
+            this.wrappedWidget.set("value", value);
          }
       },
 
@@ -1397,17 +1444,43 @@ define(["dojo/_base/declare",
        * all of its controls values to process all rules.
        * 
        * @instance
+       * @param {Deferred} deferred A deferred object can optionally be passed. This will only be resolved as widget value
+       * initialization completes.
        */
-      publishValue: function alfresco_forms_controls_BaseFormControl__publishValue() {
+      publishValue: function alfresco_forms_controls_BaseFormControl__publishValue(deferred) {
          this.alfLog("log", "Publishing value for field: '" + this.fieldId + "'");
-         if (this.wrappedWidget)
+         if (!deferred)
          {
-            this.alfPublish("_valueChangeOf_" + this.fieldId, {
-               fieldId: this.fieldId,
-               name: this.name,
-               oldValue: this.getValue(),
-               value: this.getValue()
-            });
+            // Make sure that the published value is correct. We can't trust that the wrapped widget
+            // won't be spuriously returning the wrong value (this will happen with select boxes that
+            // set their value as options are added) before initialization is completed. If the 
+            // "initialValue" variable still exists then this indicates that the initialization is not
+            // yet complete. It will be removed when initialization completes and from that moment on
+            // we can rely on the value returned by the "getValue" function.
+            var value;
+            if (typeof this.initialValue === "undefined")
+            {
+               value = this.getValue();
+            }
+            else
+            {
+               value = this.initialValue;
+            }
+            if (this.wrappedWidget)
+            {
+               this.alfPublish("_valueChangeOf_" + this.fieldId, {
+                  fieldId: this.fieldId,
+                  name: this.name,
+                  oldValue: value,
+                  value: value
+               });
+            }
+         }
+         else
+         {
+            // If passed a deferred object then save it for resolving once the widget is added to 
+            // the document...
+            this.deferredValuePublication = deferred;
          }
       },
       

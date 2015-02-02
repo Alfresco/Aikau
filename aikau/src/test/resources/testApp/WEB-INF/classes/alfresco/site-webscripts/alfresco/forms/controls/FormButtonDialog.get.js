@@ -47,7 +47,8 @@ model.jsonModel = {
                               id: "TEST_CHECKBOX_CONTAINER",
                               fieldId: "TEST_CHECKBOX",
                               label: "Test checkbox",
-                              value: "jabberwocky"
+                              name: "checkbox",
+                              value: false
                            }
                         }
                      ]

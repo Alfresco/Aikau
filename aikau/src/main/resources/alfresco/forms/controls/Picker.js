@@ -67,8 +67,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          // Return the configuration for the widget
          return {
             id : this.id + "_CONTROL",
-            name: this.name,
-            value: (this.value != null) ? this.value : []
+            name: this.name
          };
       },
       

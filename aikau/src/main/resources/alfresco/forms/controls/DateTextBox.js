@@ -57,8 +57,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          return {
             id : this.id + "_CONTROL",
             name: this.name,
-            value: value,
-            options: (this.options != null) ? this.options : []
+            options: (this.options !== null) ? this.options : []
          };
       },
 
