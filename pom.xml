@@ -38,6 +38,7 @@
          <groupId>org.springframework.extensions.surf</groupId>
          <artifactId>spring-surf-api</artifactId>
          <version>5.1-SNAPSHOT</version>
+         <scope>test</scope>
       </dependency>
 
       <!-- Required for unit test application -->
