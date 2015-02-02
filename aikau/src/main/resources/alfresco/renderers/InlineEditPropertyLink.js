@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -31,13 +31,20 @@ define(["dojo/_base/declare",
         "dijit/a11yclick",
         "dojo/_base/lang",
         "dojo/on",
-        "dojo/_base/event",
-        "dojo/dom-style"], 
-        function(declare, InlineEditProperty, _ItemLinkMixin, a11yclick, lang, on, event, domStyle) {
+        "dojo/_base/event"],
+        function(declare, InlineEditProperty, _ItemLinkMixin, a11yclick, lang, on, event) {
 
    return declare([InlineEditProperty, _ItemLinkMixin], {
       
       /**
+       * Whether the widget should be put into edit mode when rendered value is clicked.
+       *
+       * @override
+       * @type  {boolean}
+       */
+      editOnClickRenderedValue: false,
+
+     /**
        * Extends the [inherited function]{@link module:alfresco/renderers/Property#postCreate} to add the linking
        * capability.
        * 
@@ -46,7 +53,6 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_renderers_InlineEditPropertyLink__postCreate() {
          this.inherited(arguments);
          this.own(on(this.renderedValueNode, a11yclick, lang.hitch(this, this.onLinkClick)));
-         domStyle.set(this.renderedValueNode, "cursor", "pointer");
       },
 
       /**
@@ -59,12 +65,12 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event.
        */
       onLinkClick: function alfresco_renderers_InlineEditPropertyLink__onLinkClick(evt) {
-         event.stop(evt);
-         if (this.linkPublishTopic != null && lang.trim(this.linkPublishTopic) !== "")
+         evt && event.stop(evt);
+         if (this.linkPublishTopic && lang.trim(this.linkPublishTopic))
          {
-            var publishGlobal = (this.linkPublishGlobal != null) ? this.linkPublishGlobal : false;
-            var publishToParent = (this.linkPublishToParent != null) ? this.linkPublishToParent : false;
-            var publishPayload = this.generatePayload(this.linkPublishPayload, 
+            var publishGlobal = this.linkPublishGlobal || false,
+               publishToParent = this.linkPublishToParent || false,
+               publishPayload = this.generatePayload(this.linkPublishPayload,
                                                       this.currentItem,
                                                       null, 
                                                       this.linkPublishPayloadType, 

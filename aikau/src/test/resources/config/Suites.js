@@ -126,6 +126,7 @@ define({
       'src/test/resources/alfresco/renderers/FileTypeTest',
       'src/test/resources/alfresco/renderers/IndicatorsTest',
       'src/test/resources/alfresco/renderers/InlineEditPropertyTest',
+      'src/test/resources/alfresco/renderers/InlineEditPropertyLinkTest',
       'src/test/resources/alfresco/renderers/ProgressTest',
       'src/test/resources/alfresco/renderers/PropertyTest',
       'src/test/resources/alfresco/renderers/PropertyLinkTest',

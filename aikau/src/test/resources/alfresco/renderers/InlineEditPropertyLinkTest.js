@@ -33,11 +33,11 @@ define(["intern!object",
       var browser;
 
       registerSuite({
-         name: "InlineEditProperty",
+         name: "InlineEditPropertyLink",
 
          setup: function() {
             browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/InlineEditProperty", "InlineEditProperty")
+            return TestCommon.loadTestWebScript(this.remote, "/InlineEditPropertyLink", "InlineEditPropertyLink")
                .end();
          },
 
@@ -46,7 +46,7 @@ define(["intern!object",
          },
 
          teardown: function() {
-            browser.end()
+            return browser.end()
                .alfPostCoverageResults(browser);
          },
 
@@ -172,27 +172,50 @@ define(["intern!object",
                });
          },
 
-         "Clicking on read-only value starts editing": function() {
+         "Clicking on property fires topic": function() {
             return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
                .click()
                .end()
 
-            .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
+            .findAllByCssSelector(TestCommon.topicSelector("TEST_PROPERTY_LINK_CLICK", "publish", "any"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Property link topic not published on click");
+               });
+         },
+
+         "Clicking on property does not start editing": function() {
+            return browser.findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
                .isDisplayed()
                .then(function(result) {
-                  assert.isTrue(result, "Edit box not revealed when clicking on read-only value");
+                  assert.isFalse(result, "Edit box revealed when clicking on property value");
                });
          },
 
          "Clicking on cancel button stops editing": function() {
-            return browser.findByCssSelector("#INLINE_EDIT .action.cancel")
-               .click()
-               .end()
+            return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+               .moveMouseTo()
+               .then(function() {
+                  return browser.end()
+                     .findByCssSelector("#INLINE_EDIT .editIcon")
+                     .click()
+                     .end()
 
-            .findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isTrue(result, "Read-only value not revealed on cancelling edit");
+                  .findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+                     .isDisplayed()
+                     .then(function(result) {
+                        assert.isFalse(result, "Edit mode not entered when clicking on icon");
+                     })
+                     .end()
+
+                  .findByCssSelector("#INLINE_EDIT .action.cancel")
+                     .click()
+                     .end()
+
+                  .findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+                     .isDisplayed()
+                     .then(function(result) {
+                        assert.isTrue(result, "Read-only value not revealed on cancelling edit");
+                     });
                });
          },
 
@@ -210,7 +233,14 @@ define(["intern!object",
          },
 
          "Changes published on save": function() {
-            return browser.findByCssSelector("#INLINE_EDIT .dijitInputContainer input")
+            return browser.findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
+               .isDisplayed()
+               .then(function(result) {
+                  assert.isTrue(result, "Edit box not visible");
+               })
+               .end()
+
+            .findByCssSelector("#INLINE_EDIT .dijitInputContainer input")
                .clearValue()
                .type("New")
                .end()
@@ -247,42 +277,6 @@ define(["intern!object",
             .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "New", "Read-only value not updated correctly");
-               });
-         },
-
-         "Inline-edit select restores values on failed save": function() {
-            return browser.findByCssSelector("#INLINE_SELECT > .alfresco-renderers-Property")
-               .then(function(element) {
-                  return browser.moveMouseTo(element)
-                     .then(function() {
-                        return browser.end()
-                           .findByCssSelector("#INLINE_SELECT .editIcon")
-                           .click()
-                           .end()
-
-                        .findByCssSelector("#INLINE_SELECT .alfresco-forms-controls-BaseFormControl .dijitArrowButtonInner")
-                           .click()
-                           .end()
-
-                        .findByCssSelector(".dijitPopup table tr:nth-child(2) td.dijitMenuItemLabel")
-                           .click()
-                           .end()
-
-                        .findByCssSelector("#INLINE_SELECT .action.save")
-                           .click()
-                           .end()
-
-                        .findByCssSelector("#INLINE_SELECT > .alfresco-renderers-Property")
-                           .isDisplayed()
-                           .then(function(result) {
-                              assert.isTrue(result, "Read-only span not revealed on failed save");
-                           })
-
-                        .getVisibleText()
-                           .then(function(text) {
-                              assert.equal(text, "1", "Read-only value not restored correctly after failed save");
-                           });
-                     });
                });
          }
 
