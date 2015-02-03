@@ -25,19 +25,19 @@ model.jsonModel = {
             },
             widgetsForHeader: [
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      label: "Reorder"
                   }
                },
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      label: "Name"
                   }
                },
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      label: "Index"
                   }

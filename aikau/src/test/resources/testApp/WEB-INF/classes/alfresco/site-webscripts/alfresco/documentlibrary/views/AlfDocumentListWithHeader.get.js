@@ -26,7 +26,7 @@ model.jsonModel = {
             },
             widgetsForHeader: [
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "COLUMN1_HEADER",
                      label: "Column 1",
@@ -36,7 +36,7 @@ model.jsonModel = {
                   }
                },
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "COLUMN2_HEADER",
                      label: "Column 2",
@@ -46,7 +46,7 @@ model.jsonModel = {
                   }
                },
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "COLUMN3_HEADER",
                      label: "Column 3",

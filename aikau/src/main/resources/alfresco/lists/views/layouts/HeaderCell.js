@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,7 +19,7 @@
 
 /**
  * 
- * @module alfresco/documentlibrary/views/layouts/HeaderCell
+ * @module alfresco/lists/views/layouts/HeaderCell
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
 
       /**
        * Indicates whether or not the column headed by this cell is sorted in ascending order or not.
-       * This value is only relevant when the [usedForSort]{@link module:alfresco/documentlibrary/views/layouts/HeaderCell#usedForSort}
+       * This value is only relevant when the [usedForSort]{@link module:alfresco/lists/views/layouts/HeaderCell#usedForSort}
        * attribute is true.
        * 
        * @instance

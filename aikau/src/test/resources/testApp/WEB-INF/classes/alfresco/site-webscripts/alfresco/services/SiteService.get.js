@@ -504,7 +504,7 @@ model.jsonModel = {
                      itemKey: "shortName",
                      widgetsForHeader: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                           name: "alfresco/lists/views/layouts/HeaderCell",
                            config: {
                               label: "Site"
                            }
@@ -550,7 +550,7 @@ model.jsonModel = {
                      itemKey: "shortName",
                      widgetsForHeader: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                           name: "alfresco/lists/views/layouts/HeaderCell",
                            config: {
                               label: "Site"
                            }

@@ -54,21 +54,21 @@ define(["dojo/_base/declare",
       
       widgetsForHeader: [
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "",
                sortable: false
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "",
                sortable: false
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.name",
                sortable: true,
@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.title",
                sortable: true,
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.description",
                sortable: true,
@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.creator",
                sortable: true,
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.created",
                sortable: true,
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.modifier",
                sortable: true,
@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.modified",
                sortable: true,
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+            name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "",
                sortable: false
