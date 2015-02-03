@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        * 
        * @instance postCreate
        */
-      postCreate: function alfresco_documentlibrary_views_layouts_Cell__postCreate() {
+      postCreate: function alfresco_lists_views_layouts_Cell__postCreate() {
          if(this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);

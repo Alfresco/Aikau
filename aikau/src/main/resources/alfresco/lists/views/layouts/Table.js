@@ -20,7 +20,7 @@
 /**
  * Use this widget to render a a table of [rows]{@link module:alfresco/lists/views/layouts/Row}
  * 
- * @module alfresco/documentlibrary/views/layouts/alfresco_documentlibrary_views_layouts_Table__postCreate
+ * @module alfresco/documentlibrary/views/layouts/alfresco_lists_views_layouts_Table__postCreate
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        * 
        * @instance postCreate
        */
-      postCreate: function alfresco_documentlibrary_views_layouts_Table__postCreate() {
+      postCreate: function alfresco_lists_views_layouts_Table__postCreate() {
          if (this.widgets)
          {
             this.processWidgets(this.widgets, this.containerNode);

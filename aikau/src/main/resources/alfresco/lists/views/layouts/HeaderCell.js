@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        */
-      postMixInProperties: function alfresco_documentlibrary_views_layouts_HeaderCell__postMixInProperties() {
+      postMixInProperties: function alfresco_lists_views_layouts_HeaderCell__postMixInProperties() {
          if (this.label !== null)
          {
             this.label = this.message(this.label);
@@ -146,7 +146,7 @@ define(["dojo/_base/declare",
        * 
        * @instance postCreate
        */
-      postCreate: function alfresco_documentlibrary_views_layouts_HeaderCell__postCreate() {
+      postCreate: function alfresco_lists_views_layouts_HeaderCell__postCreate() {
 
          this.alfSubscribe("ALF_DOCLIST_SORT", lang.hitch(this, this.onExternalSortRequest));
          this.alfSubscribe("ALF_DOCLIST_SORT_FIELD_SELECTION", lang.hitch(this, this.onExternalSortRequest));
@@ -186,7 +186,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      focus: function alfresco_documentlibrary_views_layouts_HeaderCell__focus() {
+      focus: function alfresco_lists_views_layouts_HeaderCell__focus() {
          this.domNode.focus();
       },
 
@@ -197,7 +197,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onSortClick: function alfresco_documentlibrary_views_layouts_HeaderCell__onSortClick(evt) {
+      onSortClick: function alfresco_lists_views_layouts_HeaderCell__onSortClick(evt) {
          if (this.sortable === true)
          {
             this.alfLog("log", "Sort request received");
@@ -230,7 +230,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        */
-      publishSortRequest: function alfresco_documentlibrary_views_layouts_HeaderCell__publishSortRequest() {
+      publishSortRequest: function alfresco_lists_views_layouts_HeaderCell__publishSortRequest() {
          this.alfPublish("ALF_DOCLIST_SORT", {
             direction: (this.sortedAscending) ? "ascending" : "descending",
             value: this.sortValue,
@@ -245,7 +245,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onExternalSortRequest: function alfresco_documentlibrary_views_layouts_HeaderCell__onExternalSortRequest(payload) {
+      onExternalSortRequest: function alfresco_lists_views_layouts_HeaderCell__onExternalSortRequest(payload) {
          var requester = lang.getObject("requester", false, payload);
          if (requester !== this)
          {
@@ -283,7 +283,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} dir - asc, desc or nil
        */
-      sortIcon: function alfresco_documentlibrary_views_layouts_HeaderCell__sortIcon(dir) {
+      sortIcon: function alfresco_lists_views_layouts_HeaderCell__sortIcon(dir) {
          var hideClass = "hidden",
              asn = this.ascendingSortNode,
              dsn = this.descendingSortNode;
@@ -312,7 +312,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      addToolTipMsg: function alfresco_documentlibrary_views_layouts_HeaderCell__addToolTipMsg() {
+      addToolTipMsg: function alfresco_lists_views_layouts_HeaderCell__addToolTipMsg() {
          // Find the .label item within the domNode
          var labelNode = query(".label", this.domNode);
          var tip = new AlfTooltip({
@@ -327,7 +327,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      addA11yScope: function alfresco_documentlibrary_views_layouts_HeaderCell__addA11yScope(scopeStr) {
+      addA11yScope: function alfresco_lists_views_layouts_HeaderCell__addA11yScope(scopeStr) {
          if(scopeStr)
          {
             domAttr.set(this.containerNode, "scope", scopeStr);

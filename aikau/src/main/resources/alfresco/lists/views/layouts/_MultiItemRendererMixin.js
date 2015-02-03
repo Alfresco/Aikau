@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {Object} data The data to set
        */
-      setData: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__setData(data) {
+      setData: function alfresco_lists_views_layout___MultiItemRendererMixin__setData(data) {
          this.currentData = data;
       },
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @param {object} newData data to add to the existing data
        */
-      augmentData: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__augmentData(newData) {
+      augmentData: function alfresco_lists_views_layout___MultiItemRendererMixin__augmentData(newData) {
          if (!this.currentData)
          {
             // We don't need to worry about combining data if there isn't any already.
@@ -137,7 +137,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      clearData: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__clearData() {
+      clearData: function alfresco_lists_views_layout___MultiItemRendererMixin__clearData() {
          this.alfLog('info', 'Clearing currentData.');
          this.currentData = null;
       },
@@ -148,7 +148,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns {Object[]}
        */
-      getData: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__getData() {
+      getData: function alfresco_lists_views_layout___MultiItemRendererMixin__getData() {
          return this.currentData;
       },
 
@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      renderData: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__renderData() {
+      renderData: function alfresco_lists_views_layout___MultiItemRendererMixin__renderData() {
          
          // Ensure that an array is created to hold the root widget subscriptions...
          if (this.rootWidgetSubscriptions == null)
@@ -218,7 +218,7 @@ define(["dojo/_base/declare",
        * defined in the JSON model for [currentItem]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentItem}
        * @instance
        */
-      renderNextItem: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__renderNextItem() {
+      renderNextItem: function alfresco_lists_views_layout___MultiItemRendererMixin__renderNextItem() {
          // Process the widgets defined using the current item as the data to go into those widgets...
          this.alfLog("log", "Rendering item", this.currentData.items[this.currentIndex]);
          
@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {Object[]}
        */
-      allWidgetsProcessed: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets) {
          
          // Push the processed widgets for the last item into the array of rendered widgets...
          if (this._renderedItemWidgets == null)
@@ -303,7 +303,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        */
-      allItemsRendered: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__allItemsRendered() {
+      allItemsRendered: function alfresco_lists_views_layout___MultiItemRendererMixin__allItemsRendered() {
          // No action by default.
       },
       
@@ -323,7 +323,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to add the styling to
        * @param {number} index The index of the widget
        */
-      rootWidgetProcessing: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__rootWidgetProcessing(widget, index) {
+      rootWidgetProcessing: function alfresco_lists_views_layout___MultiItemRendererMixin__rootWidgetProcessing(widget, index) {
          domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin--item");
          if (this.rootWidgetSubscriptions == null)
          {
@@ -343,7 +343,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the selected item
        */
-      onItemSelection: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__onItemSelection(widget, payload) {
+      onItemSelection: function alfresco_lists_views_layout___MultiItemRendererMixin__onItemSelection(widget, payload) {
          if (this.compareItems(widget.currentItem, payload.value))
          {
             domClass.add(widget.domNode, "selected");
@@ -356,7 +356,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the selected item
        */
-      onItemDeselection: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__onItemDeselection(widget, payload) {
+      onItemDeselection: function alfresco_lists_views_layout___MultiItemRendererMixin__onItemDeselection(widget, payload) {
          if (this.compareItems(widget.currentItem, payload.value))
          {
             domClass.remove(widget.domNode, "selected");
@@ -384,7 +384,7 @@ define(["dojo/_base/declare",
        * @param {object} item2 The second item to compare
        * @returns {boolean} true if the items are the same and false otherwise.
        */
-      compareItems: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__compareItems(item1, item2) {
+      compareItems: function alfresco_lists_views_layout___MultiItemRendererMixin__compareItems(item1, item2) {
          var key1 = lang.getObject(this.itemKey, null, item1);
          var key2 = lang.getObject(this.itemKey, null, item2);
          return (key1 != null && (key1 == key2));
@@ -401,7 +401,7 @@ define(["dojo/_base/declare",
        * @param {function} callback A function to call once the widget has been instantiated
        * @param {Array} callbackArgs An array of arguments to pass to the callback function
        */
-      createWidget: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__createWidget(config, domNode, callback, callbackArgs) {
+      createWidget: function alfresco_lists_views_layout___MultiItemRendererMixin__createWidget(config, domNode, callback, callbackArgs) {
          // Only create a widget if there is data to create it with
          if (config == null || config.config == null)
          {
@@ -435,7 +435,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event that gave focus.
        */
-      onFocusClick: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__onFocusClick(evt) {
+      onFocusClick: function alfresco_lists_views_layout___MultiItemRendererMixin__onFocusClick(evt) {
          on.emit(this.domNode, "onItemFocused", {
             bubbles: true,
             cancelable: true,

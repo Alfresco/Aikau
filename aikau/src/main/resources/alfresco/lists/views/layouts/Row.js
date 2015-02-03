@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        * 
        * @instance postCreate
        */
-      postCreate: function alfresco_documentlibrary_views_layouts_Row__postCreate() {
+      postCreate: function alfresco_lists_views_layouts_Row__postCreate() {
          if (this.widgets)
          {
             if (this.widgetModelModifiers !== null)
@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      focus: function alfresco_documentlibrary_views_layouts_Row__focus() {
+      focus: function alfresco_lists_views_layouts_Row__focus() {
          this.domNode.focus();
       }
    });

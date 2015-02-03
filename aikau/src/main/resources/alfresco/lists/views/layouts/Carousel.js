@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance postCreate
        */
-      postMixInProperties: function alfresco_documentlibrary_views_layouts_Carousel__postMixInProperties() {
+      postMixInProperties: function alfresco_lists_views_layouts_Carousel__postMixInProperties() {
          this.contentNavNextArrowImgSrc = require.toUrl("alfresco/documentlibrary/views/layouts") + "/css/images/filmstrip-content-nav-next.png";
          this.contentNavPrevArrowImgSrc = require.toUrl("alfresco/documentlibrary/views/layouts") + "/css/images/filmstrip-content-nav-prev.png";
       },
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        *
        * @instance postCreate
        */
-      postCreate: function alfresco_documentlibrary_views_layouts_Carousel__postCreate() {
+      postCreate: function alfresco_lists_views_layouts_Carousel__postCreate() {
          if (this.currentItem)
          {
             if (this.widgets)
@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      resize: function alfresco_documentlibrary_views_layouts_Carousel__resize() {
+      resize: function alfresco_lists_views_layouts_Carousel__resize() {
          this.calculateSizes();
          domStyle.set(this.itemsNode, "width", this.itemsNodeWidth + "px");
          domStyle.set(this.itemsNode, "height", this.height);
@@ -152,7 +152,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      resizeContainer: function alfresco_documentlibrary_views_layouts_Carousel__resizeContainer() {
+      resizeContainer: function alfresco_lists_views_layouts_Carousel__resizeContainer() {
          var itemsCount = lang.getObject("currentData.items.length", false, this);
          if (itemsCount !== null)
          {
@@ -177,7 +177,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      calculateSizes: function alfresco_documentlibrary_views_layouts_Carousel__calculateSizes() {
+      calculateSizes: function alfresco_lists_views_layouts_Carousel__calculateSizes() {
          if (this.domNode)
          {
             // Get the available width of the items node...
@@ -217,7 +217,7 @@ define(["dojo/_base/declare",
        * @param {array} widgets The widgets to create
        * @param {element} rootNode The DOM element to add them into.
        */
-      processWidgets: function alfresco_documentlibrary_views_layouts_Carousel__processWidgets(widgets, rootNode) {
+      processWidgets: function alfresco_lists_views_layouts_Carousel__processWidgets(widgets, rootNode) {
          var nodeToAdd = nodeToAdd = domConstruct.create("li", {}, rootNode);
          this.inherited(arguments, [widgets, nodeToAdd]);
       },
@@ -258,7 +258,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onPrevClick: function alfresco_documentlibrary_views_layouts_Carousel__onPrevClick(evt) {
+      onPrevClick: function alfresco_lists_views_layouts_Carousel__onPrevClick(evt) {
          if (this.currentLeftPosition > 0)
          {
             this.currentLeftPosition -= this.itemsNodeWidth;
@@ -276,7 +276,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onNextClick: function alfresco_documentlibrary_views_layouts_Carousel__onNextClick(evt) {
+      onNextClick: function alfresco_lists_views_layouts_Carousel__onNextClick(evt) {
          this.currentLeftPosition += this.itemsNodeWidth;
 
          // Update the displayed range...
@@ -294,7 +294,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      renderDisplayedItems: function alfresco_documentlibrary_views_layouts_Carousel__renderDisplayedItems() {
+      renderDisplayedItems: function alfresco_lists_views_layouts_Carousel__renderDisplayedItems() {
          for (var i=this.firstDisplayedIndex; i<=this.lastDisplayedIndex; i++)
          {
             if (this._renderedItemWidgets)
@@ -323,7 +323,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to render
        * @param {number} index The index of the widget within the array
        */
-      renderDisplayedItem: function alfresco_documentlibrary_views_layouts_Carousel__renderDisplayedItem(widget, index) {
+      renderDisplayedItem: function alfresco_lists_views_layouts_Carousel__renderDisplayedItem(widget, index) {
          if (widget && typeof widget.render === "function")
          {
             widget.render();
@@ -336,7 +336,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      selectItem: function alfresco_documentlibrary_views_layouts_Carousel__item(payload) {
+      selectItem: function alfresco_lists_views_layouts_Carousel__item(payload) {
          if (payload.index != null && !isNaN(parseInt(payload.index)))
          {
             var targetIndex = parseInt(payload.index);

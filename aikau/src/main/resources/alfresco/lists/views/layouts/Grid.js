@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        * 
        * @instance postCreate
        */
-      postCreate: function alfresco_documentlibrary_views_layouts_Grid__postCreate() {
+      postCreate: function alfresco_lists_views_layouts_Grid__postCreate() {
          this.inherited(arguments);
          if (this.currentItem)
          {
@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      setupKeyboardNavigation: function alfresco_documentlibrary_views_layouts_Grid__setupKeyboardNavigation() {
+      setupKeyboardNavigation: function alfresco_lists_views_layouts_Grid__setupKeyboardNavigation() {
          // this.connectKeyNavHandlers([keys.LEFT_ARROW], [keys.RIGHT_ARROW]);
          this._keyNavCodes[keys.UP_ARROW] = lang.hitch(this, "focusOnCellAbove");
          this._keyNavCodes[keys.RIGHT_ARROW] = lang.hitch(this, "focusOnCellRight");
@@ -121,7 +121,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      _onChildBlur: function alfresco_documentlibrary_views_layouts_Grid___onChildBlur(focusedChild) {
+      _onChildBlur: function alfresco_lists_views_layouts_Grid___onChildBlur(focusedChild) {
          if (typeof focusedChild.blur === "function")
          {
             focusedChild.blur();
@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      focusOnCellLeft: function alfresco_documentlibrary_views_layouts_Grid__focusOnCellLeft() {
+      focusOnCellLeft: function alfresco_lists_views_layouts_Grid__focusOnCellLeft() {
          var target = null,
              focusIndex = this.getIndexOfChild(this.focusedChild),
              allChildren = this.getChildren(),
@@ -154,7 +154,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      focusOnCellRight: function alfresco_documentlibrary_views_layouts_Grid__focusOnCellLeft() {
+      focusOnCellRight: function alfresco_lists_views_layouts_Grid__focusOnCellLeft() {
          var target = null,
              focusIndex = this.getIndexOfChild(this.focusedChild),
              allChildren = this.getChildren(),
@@ -177,7 +177,7 @@ define(["dojo/_base/declare",
        *  
        * @instance
        */
-      focusOnCellAbove: function alfresco_documentlibrary_views_layouts_Grid__focusOnCellAbove() {
+      focusOnCellAbove: function alfresco_lists_views_layouts_Grid__focusOnCellAbove() {
          var target = null,
              focusIndex = this.getIndexOfChild(this.focusedChild),
              focusColumn = (focusIndex % this.columns) + 1,
@@ -211,7 +211,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      focusOnCellBelow: function alfresco_documentlibrary_views_layouts_Grid__focusOnCellBelow() {
+      focusOnCellBelow: function alfresco_lists_views_layouts_Grid__focusOnCellBelow() {
          var target = null,
              focusIndex = this.getIndexOfChild(this.focusedChild),
              focusColumn = (focusIndex % this.columns),
@@ -235,7 +235,7 @@ define(["dojo/_base/declare",
        * 
        * @instance resizeCells
        */
-      resizeCells: function alfresco_documentlibrary_views_layouts_Grid__resizeCells() {
+      resizeCells: function alfresco_lists_views_layouts_Grid__resizeCells() {
          this.alfLog("info", "Resizing");
          var node = lang.getObject("containerNode.parentNode", false, this);
          if (node)
@@ -255,7 +255,7 @@ define(["dojo/_base/declare",
        * @param {element} node The node to set width on
        * @param {number} index The current index of the element in the array
        */
-      resizeCell: function alfresco_documentlibrary_views_layouts_Grid__resizeCell(containerNodeMarginBox, widthToSet, node, index) {
+      resizeCell: function alfresco_lists_views_layouts_Grid__resizeCell(containerNodeMarginBox, widthToSet, node, index) {
          domStyle.set(node, {"width": widthToSet});
          var dimensions = {
             w: widthToSet,
@@ -272,7 +272,7 @@ define(["dojo/_base/declare",
        * @param {object} widgetNode The DOM node that possibly has a widget associated. Use registry to check
        * @param {integer} index The index of the node
        */
-      resizeWidget: function alfresco_documentlibrary_views_layouts_Grid__resizeWidget(dimensions, widgetNode, index) {
+      resizeWidget: function alfresco_lists_views_layouts_Grid__resizeWidget(dimensions, widgetNode, index) {
          var widget = registry.byNode(widgetNode);
          if (widget != null && typeof widget.resize === "function")
          {
@@ -289,7 +289,7 @@ define(["dojo/_base/declare",
        * @param {element} rootNode The DOM node to create the new DOM node as a child of
        * @param {string} rootClassName A string containing one or more space separated CSS classes to set on the DOM node
        */
-      createWidgetDomNode: function alfresco_documentlibrary_views_layouts_Grid__createWidgetDomNode(widget, rootNode, rootClassName) {
+      createWidgetDomNode: function alfresco_lists_views_layouts_Grid__createWidgetDomNode(widget, rootNode, rootClassName) {
          
          var nodeToAdd = rootNode;
          if (this.currentIndex % this.columns === 0)
@@ -316,7 +316,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      renderNextItem: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__renderNextItem() {
+      renderNextItem: function alfresco_lists_views_layout__MultiItemRendererMixin__renderNextItem() {
          if (this.nextLinkDisplay)
          {
             var cell = this.nextLinkDisplay.domNode.parentNode;
@@ -363,7 +363,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      allItemsRendered: function alfresco_documentlibrary_views_layouts_Grid__allItemsRendered() {
+      allItemsRendered: function alfresco_lists_views_layouts_Grid__allItemsRendered() {
          if(this.showNextLink && this.currentData.totalRecords < this.currentData.numberFound)
          {
             this.processWidgets([{

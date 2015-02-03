@@ -71,7 +71,7 @@ define(["dojo/_base/declare",
        * 
        * @instance postCreate
        */
-      postCreate: function alfresco_documentlibrary_views_layouts_XhrLayout__postCreate() {
+      postCreate: function alfresco_lists_views_layouts_XhrLayout__postCreate() {
 
          var nodeData = lang.getObject("currentItem.node", false, this);
          if (nodeData === null && this.widgets !== null)
@@ -88,7 +88,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      getXhrData: function alfresco_documentlibrary_views_layouts_XhrLayout__getXhrData() {
+      getXhrData: function alfresco_lists_views_layouts_XhrLayout__getXhrData() {
          var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
          if (nodeRef !== null)
          {
@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload 
        */
-      onXhrData: function alfresco_documentlibrary_views_layouts_XhrLayout__onXhrData(payload) {
+      onXhrData: function alfresco_lists_views_layouts_XhrLayout__onXhrData(payload) {
          this.alfUnsubscribeSaveHandles([this._xhrDataRequestHandle]);
          if (lang.exists("response.item", payload)) 
          {

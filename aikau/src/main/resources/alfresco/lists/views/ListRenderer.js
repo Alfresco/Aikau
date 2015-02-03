@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      postCreate: function alfresco_documentlibrary_views_DocumentListRenderer__postCreate() {
+      postCreate: function alfresco_lists_views_ListRenderer__postCreate() {
          this.inherited(arguments);
          this.setupKeyboardNavigation();
          on(this.domNode, "onSuppressKeyNavigation", lang.hitch(this, this.onSuppressKeyNavigation));
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The emitted event.
        */
-      onSuppressKeyNavigation: function alfresco_documentlibrary_views_DocumentListRenderer__onSuppressKeyNavigation(evt) {
+      onSuppressKeyNavigation: function alfresco_lists_views_ListRenderer__onSuppressKeyNavigation(evt) {
          this.suppressKeyNavigation = evt.suppress === true;
       },
       
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      setupKeyboardNavigation: function alfresco_documentlibrary_views_DocumentListRenderer__setupKeyboardNavigation() {
+      setupKeyboardNavigation: function alfresco_lists_views_ListRenderer__setupKeyboardNavigation() {
          this.connectKeyNavHandlers([keys.UP_ARROW], [keys.DOWN_ARROW]);
       },
       
@@ -120,7 +120,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      _onChildBlur: function alfresco_documentlibrary_views_DocumentListRenderer___onChildBlur(widget) {
+      _onChildBlur: function alfresco_lists_views_ListRenderer___onChildBlur(widget) {
          if (typeof widget.blur === "function")
          {
             widget.blur();
@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The keyboard event
        */
-      _onContainerKeydown: function alfresco_documentlibrary_views_DocumentListRenderer___onContainerKeydown(evt) {
+      _onContainerKeydown: function alfresco_lists_views_ListRenderer___onContainerKeydown(evt) {
          if (this.suppressKeyNavigation === false)
          {
             this.inherited(arguments);
@@ -150,7 +150,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The keyboard event
        */
-      _onContainerKeypress: function alfresco_documentlibrary_views_DocumentListRenderer___onContainerKeypress(evt) {
+      _onContainerKeypress: function alfresco_lists_views_ListRenderer___onContainerKeypress(evt) {
          if (this.suppressKeyNavigation === false)
          {
             this.inherited(arguments);
@@ -165,7 +165,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onItemFocused: function alfresco_documentlibrary_views_DocumentListRenderer__onItemFocused(evt) {
+      onItemFocused: function alfresco_lists_views_ListRenderer__onItemFocused(evt) {
          this.focusChild(evt.item);
       }
    });

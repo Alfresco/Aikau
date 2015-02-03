@@ -44,10 +44,9 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
-        "dojo/query",
-        "dijit/registry"],
+        "dojo/query"],
         function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, _AlfDndDocumentUploadMixin, DocumentListRenderer,
-                 AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query, registry) {
+                 AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query) {
 
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _AlfDndDocumentUploadMixin], {
 
@@ -123,7 +122,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      postCreate: function alfresco_documentlibrary_views_AlfDocumentListView__postCreate() {
+      postCreate: function alfresco_lists_views_AlfListView__postCreate() {
          this.inherited(arguments);
 
          // Add in any additional CSS classes...
@@ -168,7 +167,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the documents that have been provided.
        */
-      onDocumentsLoaded: function alfresco_documentlibrary_views_AlfDocumentListView__onDocumentsLoaded(payload) {
+      onDocumentsLoaded: function alfresco_lists_views_AlfListView__onDocumentsLoaded(payload) {
          var items = lang.getObject(this.itemsProperty, false, payload);
          if (items != null)
          {
@@ -194,7 +193,7 @@ define(["dojo/_base/declare",
        * @param {object} item The item to process
        * @param {number} index The index of the item
        */
-      processItem: function alfresco_documentlibrary_views_AlfDocumentListView__processItem(item, index) {
+      processItem: function alfresco_lists_views_AlfListView__processItem(item, index) {
          try
          {
             if (item.node)
@@ -216,7 +215,7 @@ define(["dojo/_base/declare",
       //  * @instance onClick
       //  * @param {object} payload
       //  */
-      // onFilterChange: function alfresco_documentlibrary_views_AlfDocumentListView__onFilterChange(payload) {
+      // onFilterChange: function alfresco_lists_views_AlfListView__onFilterChange(payload) {
       //    var path = lang.getObject("path", false, payload);
       //    if (path == null)
       //    {
@@ -249,7 +248,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns {string} "Abstract"
        */
-      getViewName: function alfresco_documentlibrary_views_AlfDocumentListView__getViewName() {
+      getViewName: function alfresco_lists_views_AlfListView__getViewName() {
          return this.viewSelectionConfig.value;
       },
 
@@ -262,7 +261,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns {Object} The configuration for selecting the view.
        */
-      getViewSelectionConfig: function alfresco_documentlibrary_views_AlfDocumentListView__getViewSelectionConfig() {
+      getViewSelectionConfig: function alfresco_lists_views_AlfListView__getViewSelectionConfig() {
          return this.viewSelectionConfig;
       },
 
@@ -275,7 +274,7 @@ define(["dojo/_base/declare",
        * @instance getAdditionalControls
        * @returns {Object[]}
        */
-      getAdditionalControls: function alfresco_documentlibrary_views_AlfDocumentListView__getAdditionalControls() {
+      getAdditionalControls: function alfresco_lists_views_AlfListView__getAdditionalControls() {
          // For the abstract view there are no additional controls.
          return [];
       },
@@ -286,7 +285,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} newData The additional data to add.
        */
-      augmentData: function alfresco_documentlibrary_views_AlfDocumentListView__augmentData(newData) {
+      augmentData: function alfresco_lists_views_AlfListView__augmentData(newData) {
          this.inherited(arguments);
          if (this.docListRenderer != null)
          {
@@ -303,7 +302,7 @@ define(["dojo/_base/declare",
        * @param {boolean} preserveCurrentData This should be set to true when you don't want to clear the old data, the
        * most common example of this is when infinite scroll is being used.
        */
-      renderView: function alfresco_documentlibrary_views_AlfDocumentListView__renderView(preserveCurrentData) {
+      renderView: function alfresco_lists_views_AlfListView__renderView(preserveCurrentData) {
          if (this.currentData && this.currentData.items && this.currentData.items.length > 0)
          {
             try
@@ -375,7 +374,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns {object} A new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        */
-      createDocumentListRenderer: function alfresco_documentlibrary_views_AlfDocumentListView__createDocumentListRenderer() {
+      createDocumentListRenderer: function alfresco_lists_views_AlfListView__createDocumentListRenderer() {
          var dlr = new DocumentListRenderer({
             id: this.id + "_ITEMS",
             widgets: this.widgets,
@@ -391,7 +390,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      clearOldView: function alfresco_documentlibrary_views_AlfDocumentListView__clearOldView() {
+      clearOldView: function alfresco_lists_views_AlfListView__clearOldView() {
          if (this.docListRenderer != null)
          {
             this.docListRenderer.destroy();
@@ -418,7 +417,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to destroy
        * @param {number} index The index of the widget
        */
-      destroyWidget: function alfresco_documentlibrary_views_AlfDocumentListView__destroyWidget(widget, index) {
+      destroyWidget: function alfresco_lists_views_AlfListView__destroyWidget(widget, index) {
          if (typeof widget.destroyRecursive === "function")
          {
             widget.destroyRecursive();
@@ -430,7 +429,7 @@ define(["dojo/_base/declare",
        * does not mean that the view has been displayed, just that it has been rendered.
        * @instance
        */
-      onViewShown: function alfresco_documentlibrary_views_AlfDocumentListView__onViewShown() {
+      onViewShown: function alfresco_lists_views_AlfListView__onViewShown() {
          // No action by default.
       },
 
@@ -449,7 +448,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      renderNoDataDisplay: function alfresco_documentlibrary_views_AlfDocumentListView__renderNoDataDisplay() {
+      renderNoDataDisplay: function alfresco_lists_views_AlfListView__renderNoDataDisplay() {
          this.clearOldView();
 
          // Only generate message node if there's a label or widgets to go in it.
@@ -477,7 +476,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      renderErrorDisplay: function alfresco_documentlibrary_views_AlfDocumentListView__renderErrorDisplay() {
+      renderErrorDisplay: function alfresco_lists_views_AlfListView__renderErrorDisplay() {
          this.clearOldView();
          this.messageNode = domConstruct.create("div", {
             innerHTML: this.message("doclistview.rendering.error.message")
@@ -489,7 +488,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      _renderOptionalElements: function alfresco_documentlibrary_views_AlfDocumentListView___renderOptionalElements() {
+      _renderOptionalElements: function alfresco_lists_views_AlfListView___renderOptionalElements() {
          this._renderHeader();
          this._renderCaption();
       },
@@ -499,7 +498,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      _renderHeader: function alfresco_documentlibrary_views_AlfDocumentListView___renderHeader() {
+      _renderHeader: function alfresco_lists_views_AlfListView___renderHeader() {
          this.currentItem = {};
          if (this.widgetsForHeader != null)
          {
@@ -514,7 +513,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      _renderCaption: function alfresco_documentlibrary_views_AlfDocumentListView___renderCaption() {
+      _renderCaption: function alfresco_lists_views_AlfListView___renderCaption() {
          if(this.a11yCaption && this.tableNode)
          {
             // Create a caption node

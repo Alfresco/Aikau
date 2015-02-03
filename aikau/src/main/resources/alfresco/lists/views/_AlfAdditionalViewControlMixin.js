@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,22 +23,21 @@
  * then it will used as a subscription topic and the [filter]{@link modulealfresco/menus/AlfDisplayFilterMixin#filter]
  * function will be called each time it is published on.
  * 
- * @module alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin
+ * @module alfresco/lists/views/_AlfAdditionalViewControlMixin
  * @extends module:alfresco/menus/AlfDisplayFilterMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/menus/_AlfDisplayFilterMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "dojo/_base/lang",
-        "dojo/dom-class"], 
-        function(declare, AlfDisplayFilterMixin, _AlfDocumentListTopicMixin, lang, domClass) {
+        "dojo/_base/lang"], 
+        function(declare, AlfDisplayFilterMixin, _AlfDocumentListTopicMixin, lang) {
    
    return declare([AlfDisplayFilterMixin, _AlfDocumentListTopicMixin], {
       
       /**
        * This should be set to the name of the [view]{@link module:alfresco/lists/views/AlfListView} that
-       * the control is associated with. This is used as a comparison in the [filter]{@link module:alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin#filter}
+       * the control is associated with. This is used as a comparison in the [filter]{@link module:alfresco/lists/views/_AlfAdditionalViewControlMixin#filter}
        * function.
        * 
        * @instance
@@ -50,12 +49,12 @@ define(["dojo/_base/declare",
       /**
        * Sets the [filterTopic]{@link module:alfresco/menus/AlfDisplayFilterMixin#filterTopic} attribute to be
        * the [viewSelectionTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#viewSelectionTopic}
-       * so that when a view is changed the [filter]{@link module:alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin#filter}
+       * so that when a view is changed the [filter]{@link module:alfresco/lists/views/_AlfAdditionalViewControlMixin#filter}
        * function is called.
        * 
        * @instance
        */
-      postMixInProperties: function alfresco_documentlibrary_views__AlfAdditionalViewControlMixin__postMixInProperties() {
+      postMixInProperties: function alfresco_lists_views__AlfAdditionalViewControlMixin__postMixInProperties() {
          this.filterTopic = this.viewSelectionTopic;
          this.inherited(arguments);
       },
@@ -67,14 +66,14 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The payload published on the filter topic 
        */
-      filter: function alfresco_documentlibrary_views__AlfAdditionalViewControlMixin__filter(payload) {
+      filter: function alfresco_lists_views__AlfAdditionalViewControlMixin__filter(payload) {
          if (this.relatedViewName == null)
          {
             this.alfLog("warn", "Unable to filter additional view control due to the 'relatedViewName' not being configured", this);
          }
          else if (lang.exists("value", payload))
          {
-            if (lang.getObject("value", false, payload) == this.relatedViewName)
+            if (lang.getObject("value", false, payload) === this.relatedViewName)
             {
                this.show();
                this.onControlDisplayed();
@@ -97,7 +96,7 @@ define(["dojo/_base/declare",
        *  
        * @instance 
        */
-      onControlDisplayed: function alfresco_documentlibrary_views__AlfAdditionalViewControlMixin__onControlDisplayed() {
+      onControlDisplayed: function alfresco_lists_views__AlfAdditionalViewControlMixin__onControlDisplayed() {
          this.inherited(arguments);
       }
    });
