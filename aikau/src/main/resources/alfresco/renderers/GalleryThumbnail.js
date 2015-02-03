@@ -158,7 +158,7 @@ define(["dojo/_base/declare",
 
       /**
        * Focuses the domNode. This has been added to support the dijit/_KeyNavContainer functions mixed into 
-       * the [document library views]{@link module:alfresco/documentlibrary/views/AlfDocumentListView} to 
+       * the [document library views]{@link module:alfresco/lists/views/AlfListView} to 
        * allow easier keyboard navigation.
        * 
        * @instance

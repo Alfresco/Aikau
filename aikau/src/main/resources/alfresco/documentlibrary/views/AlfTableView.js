@@ -20,11 +20,11 @@
 /**
  * 
  * @module alfresco/documentlibrary/views/AlfTableView
- * @extends module:alfresco/documentlibrary/views/AlfDocumentListView
+ * @extends module:alfresco/lists/views/AlfListView
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/documentlibrary/views/AlfDocumentListView",
+        "alfresco/lists/views/AlfListView",
         "service/constants/Default"], 
         function(declare, AlfDocumentListView, AlfConstants) {
    
@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
             config: {
                widgets: [
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
@@ -156,7 +156,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
@@ -167,7 +167,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
@@ -183,7 +183,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
@@ -198,7 +198,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
@@ -213,7 +213,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
@@ -237,7 +237,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
@@ -252,7 +252,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
@@ -276,7 +276,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
@@ -291,7 +291,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [

@@ -53,7 +53,7 @@ define(["intern!object",
             .end()
 
             // 2. Check that the page has been initialised with 4 items per row...
-            .findAllByCssSelector("#DOCLIST .alfresco-documentlibrary-views-layouts-Grid > tr:first-child > td")
+            .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
                .then(function(elements) {
                   assert(elements.length == 4, "Test #2a - The view initially displays an unexpected number of items per row: " + elements.length);
                })
@@ -63,7 +63,7 @@ define(["intern!object",
             .findByCssSelector("#TOOLBAR .dijitSliderIncrementIconH")
                .click()
             .end()
-            .findAllByCssSelector("#DOCLIST .alfresco-documentlibrary-views-layouts-Grid > tr:first-child > td")
+            .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
                .then(function(elements) {
                   assert(elements.length == 3, "Test #3a - The number of items per row was not decreased: " + elements.length);
                })
@@ -74,7 +74,7 @@ define(["intern!object",
                .click()
                .click()
             .end()
-            .findAllByCssSelector("#DOCLIST .alfresco-documentlibrary-views-layouts-Grid > tr:first-child > td")
+            .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
                .then(function(elements) {
                   assert(elements.length == 7, "Test #4a - The number of items per row was not increased: " + elements.length);
                })
@@ -82,7 +82,7 @@ define(["intern!object",
             .findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
                .click()
             .end()
-            .findAllByCssSelector("#DOCLIST .alfresco-documentlibrary-views-layouts-Grid > tr:first-child > td")
+            .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
                .then(function(elements) {
                   assert(elements.length == 10, "Test #4b - The number of items per row was not increased: " + elements.length);
                })

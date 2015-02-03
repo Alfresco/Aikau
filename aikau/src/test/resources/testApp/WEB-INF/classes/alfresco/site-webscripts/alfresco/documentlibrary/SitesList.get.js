@@ -28,7 +28,7 @@ model.jsonModel = {
             currentPageSize: 1,
             widgets: [
                {
-                  name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                  name: "alfresco/lists/views/AlfListView",
                   config: {
                      additionalCssClasses: "bordered",
                      noItemsMessage: "No Sites",
@@ -39,7 +39,7 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
-                                    name: "alfresco/documentlibrary/views/layouts/Cell",
+                                    name: "alfresco/lists/views/layouts/Cell",
                                     config: {
                                        additionalCssClasses: "siteName mediumpad",
                                        widgets: [

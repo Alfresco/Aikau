@@ -47,7 +47,7 @@ define(["alfresco/forms/controls/Picker",
                config: {
                   widgets: [
                      {
-                        name: "alfresco/documentlibrary/views/layouts/Cell",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
                            widgets: [
                               {
@@ -69,7 +69,7 @@ define(["alfresco/forms/controls/Picker",
                         }
                      },
                      {
-                        name: "alfresco/documentlibrary/views/layouts/Cell",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
                            width: "20px",
                            widgets: [
@@ -112,7 +112,7 @@ define(["alfresco/forms/controls/Picker",
                         config: {
                            widgets: [
                               {
-                                 name: "alfresco/documentlibrary/views/layouts/Cell",
+                                 name: "alfresco/lists/views/layouts/Cell",
                                  config: {
                                     widgets: [
                                        {
@@ -134,7 +134,7 @@ define(["alfresco/forms/controls/Picker",
                                  }
                               },
                               {
-                                 name: "alfresco/documentlibrary/views/layouts/Cell",
+                                 name: "alfresco/lists/views/layouts/Cell",
                                  config: {
                                     width: "20px",
                                     widgets: [
@@ -203,7 +203,7 @@ define(["alfresco/forms/controls/Picker",
                                        },
                                        widgets: [
                                           {
-                                             name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                                             name: "alfresco/lists/views/AlfListView",
                                              config: {
                                                 widgets: [
                                                    {
@@ -211,7 +211,7 @@ define(["alfresco/forms/controls/Picker",
                                                       config: {
                                                          widgets: [
                                                             {
-                                                               name: "alfresco/documentlibrary/views/layouts/Cell",
+                                                               name: "alfresco/lists/views/layouts/Cell",
                                                                config: {
                                                                   widgets: [
                                                                      {
@@ -275,7 +275,7 @@ define(["alfresco/forms/controls/Picker",
                                        },
                                        widgets: [
                                           {
-                                             name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                                             name: "alfresco/lists/views/AlfListView",
                                              config: {
                                                 widgets: [
                                                    {
@@ -283,7 +283,7 @@ define(["alfresco/forms/controls/Picker",
                                                       config: {
                                                          widgets: [
                                                             {
-                                                               name: "alfresco/documentlibrary/views/layouts/Cell",
+                                                               name: "alfresco/lists/views/layouts/Cell",
                                                                config: {
                                                                   widgets: [
                                                                      {

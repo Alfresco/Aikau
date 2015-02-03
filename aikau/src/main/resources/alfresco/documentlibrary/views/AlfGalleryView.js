@@ -22,14 +22,14 @@
  * that can be scaled using a slider control.
  * 
  * @module alfresco/documentlibrary/views/AlfGalleryView
- * @extends module:alfresco/documentlibrary/views/AlfDocumentListView
- * @mixes module:alfresco/documentlibrary/views/layouts/Grid
+ * @extends module:alfresco/lists/views/AlfListView
+ * @mixes module:alfresco/lists/views/layouts/Grid
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/documentlibrary/views/AlfDocumentListView",
+        "alfresco/lists/views/AlfListView",
         "dojo/text!./templates/AlfGalleryView.html",
-        "alfresco/documentlibrary/views/layouts/Grid",
+        "alfresco/lists/views/layouts/Grid",
         "alfresco/documentlibrary/AlfGalleryViewSlider",
         "dojo/_base/lang",
         "dojo/dom-construct"], 
@@ -176,13 +176,13 @@ define(["dojo/_base/declare",
       nextLinkPublishTopic: "ALF_SCROLL_NEAR_BOTTOM",
 
       /**
-       * Creates a new [DocumentListRenderer]{@link module:alfresco/documentlibrary/views/DocumentListRenderer}
+       * Creates a new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        * which is used to render the actual items in the view. This function can be overridden by extending views
        * (such as the [Film Strip View]{@link module:alfresco/documentlibrary/views/AlfFilmStripView}) to create
        * alternative widgets applicable to that view.
        * 
        * @instance
-       * @returns {object} A new [DocumentListRenderer]{@link module:alfresco/documentlibrary/views/DocumentListRenderer}
+       * @returns {object} A new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        */
       createDocumentListRenderer: function alfresco_documentlibrary_views_AlfGalleryView__createDocumentListRenderer() {
          var dlr = new Grid({
@@ -200,7 +200,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Called after the view has been shown (note that [renderView]{@link module:alfresco/documentlibrary/views/AlfDocumentListView#renderView}
+       * Called after the view has been shown (note that [renderView]{@link module:alfresco/lists/views/AlfListView#renderView}
        * does not mean that the view has been displayed, just that it has been rendered. 
        * @instance
        */

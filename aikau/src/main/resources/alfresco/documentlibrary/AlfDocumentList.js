@@ -268,7 +268,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is the topic that will be subscribed to for responding to item clicks unless [useHash]{@link module:alfresco/documentlibrary/AlfDocumentList#useHash}
-       * is set to true. [Views]{@link module:alfresco/documentlibrary/views/AlfDocumentListView} that defined
+       * is set to true. [Views]{@link module:alfresco/lists/views/AlfListView} that defined
        * renderers that provide links using the [_ItemLinkMixin]{@link module:alfresco/renderers/_ItemLinkMixin} should
        * be configured to set a matching [linkClickTopic][_ItemLinkMixin]{@link module:alfresco/renderers/_ItemLinkMixin#linkClickTopic}
        * attribute in order to have their actions processed.

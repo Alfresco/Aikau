@@ -69,7 +69,7 @@ model.jsonModel = {
                      widgets: [
                         {
                            id: "VIEW",
-                           name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                           name: "alfresco/lists/views/AlfListView",
                            config: {
                               additionalCssClasses: "bordered",
                               widgets: [
@@ -78,7 +78,7 @@ model.jsonModel = {
                                     config: {
                                        widgets: [
                                           {
-                                             name: "alfresco/documentlibrary/views/layouts/Cell",
+                                             name: "alfresco/lists/views/layouts/Cell",
                                              config: {
                                                 widgets:[
                                                    {

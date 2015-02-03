@@ -22,16 +22,16 @@
  * and allows users to quickly scan through previews of documents without needing to go to a specific page.
  *
  * @module alfresco/documentlibrary/views/AlfFilmStripView
- * @extends module:alfresco/documentlibrary/views/AlfDocumentListView
+ * @extends module:alfresco/lists/views/AlfListView
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/documentlibrary/views/AlfDocumentListView",
+        "alfresco/lists/views/AlfListView",
         "dojo/text!./templates/AlfFilmStripView.html",
         "alfresco/documentlibrary/AlfDocument",
         "alfresco/preview/AlfDocumentPreview",
         "alfresco/documentlibrary/views/layouts/DocumentCarousel",
-        "alfresco/documentlibrary/views/layouts/Carousel",
+        "alfresco/lists/views/layouts/Carousel",
         "dojo/_base/lang",
         "dojo/dom-construct"], 
         function(declare, AlfDocumentListView, template, AlfDocument, AlfDocumentPreview, DocumentCarousel, Carousel, lang, domConstruct) {
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Extends the [inherited function]{@link module:alfresco/documentlibrary/views/AlfDocumentListView#renderView}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#renderView}
        * to publish a request to get the details of the first item (if available). This request is intended to be 
        * serviced by the [DocumentService]{@link module:alfresco/services/DocumentService} and the published response
        * should be picked up the [AlfDocument]{@link module:alfresco/documentlibrary/AlfDocument} to render the
@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
       renderFilterSelectorQuery: "div.items ol li",
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/documentlibrary/views/AlfDocumentListView#onViewShown}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#onViewShown}
        * to ensure that both carousels are sized appropriately after being added into the view.
        *
        * @instance
@@ -126,13 +126,13 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Creates a new [DocumentListRenderer]{@link module:alfresco/documentlibrary/views/DocumentListRenderer}
+       * Creates a new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        * which is used to render the actual items in the view. This function can be overridden by extending views
        * (such as the [Film Strip View]{@link module:alfresco/documentlibrary/views/AlfFilmStripView}) to create
        * alternative widgets applicable to that view.
        * 
        * @instance
-       * @returns {object} A new [DocumentListRenderer]{@link module:alfresco/documentlibrary/views/DocumentListRenderer}
+       * @returns {object} A new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        */
       createDocumentListRenderer: function alfresco_documentlibrary_views_AlfFilmStripView__createDocumentListRenderer() {
          // NOTE: Any previous previews should have been destroyed, but empty the previewNode just to be on the safe side
@@ -161,7 +161,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/documentlibrary/views/AlfDocumentListView#clearOldView}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#clearOldView}
        * to destroy the content carousel.
        *
        * @instance

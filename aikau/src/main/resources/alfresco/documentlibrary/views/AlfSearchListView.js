@@ -18,16 +18,16 @@
  */
 
 /**
- * Extends the abstract [document list view]{@link module:alfresco/documentlibrary/views/AlfDocumentListView}
+ * Extends the abstract [document list view]{@link module:alfresco/lists/views/AlfListView}
  * to provide a specific set of instructions to display when no search results are available. This advice is in the
  * form of a bulleted ordered list and is configurable through the [searchAdvice attribute]{@link module:alfresco/documentlibrary/views/AlfSearchListView#searchAdvice}
  *
  * @module alfresco/documentlibrary/views/AlfSearchListView
- * @extends module:alfresco/documentlibrary/views/AlfDocumentListView
+ * @extends module:alfresco/lists/views/AlfListView
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/documentlibrary/views/AlfDocumentListView",
+        "alfresco/lists/views/AlfListView",
         "alfresco/search/AlfSearchResult"], 
         function(declare, AlfDocumentListView, AlfSearchResult) {
    

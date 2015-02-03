@@ -162,8 +162,8 @@ define(["alfresco/forms/controls/BaseFormControl",
 
       /**
        * This is the message that will be displayed if no items are available for selection. It is set as the [noItemsMessage]
-       * {@link module:alfresco/documentlibrary/views/AlfDocumentListView#noItemsMessage} value in the main [view]
-       * {@link module:alfresco/documentlibrary/views/AlfDocumentListView} of the [list]{@link module:alfresco/lists/AlfList}
+       * {@link module:alfresco/lists/views/AlfListView#noItemsMessage} value in the main [view]
+       * {@link module:alfresco/lists/views/AlfListView} of the [list]{@link module:alfresco/lists/AlfList}
        * of available items.
        *
        * @instance
@@ -251,7 +251,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       widgetsForAvailableItemsView: [
          {
-            name: "alfresco/documentlibrary/views/AlfDocumentListView",
+            name: "alfresco/lists/views/AlfListView",
             config: {
                widgets: [
                   {
@@ -281,7 +281,7 @@ define(["alfresco/forms/controls/BaseFormControl",
                         },
                         widgets: [
                            {
-                              name: "alfresco/documentlibrary/views/layouts/Cell",
+                              name: "alfresco/lists/views/layouts/Cell",
                               config: {
                                  widgets: [
                                     {
@@ -294,7 +294,7 @@ define(["alfresco/forms/controls/BaseFormControl",
                               }
                            },
                            {
-                              name: "alfresco/documentlibrary/views/layouts/Cell",
+                              name: "alfresco/lists/views/layouts/Cell",
                               config: {
                                  width: "20px",
                                  widgets: [
@@ -329,7 +329,7 @@ define(["alfresco/forms/controls/BaseFormControl",
             config: {
                widgets: [
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         widgets: [
                            {
@@ -346,7 +346,7 @@ define(["alfresco/forms/controls/BaseFormControl",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         widgets: [
                            {
@@ -359,7 +359,7 @@ define(["alfresco/forms/controls/BaseFormControl",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         width: "20px",
                         widgets: [

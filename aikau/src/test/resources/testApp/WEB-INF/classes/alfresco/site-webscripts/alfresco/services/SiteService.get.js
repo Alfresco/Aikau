@@ -499,7 +499,7 @@ model.jsonModel = {
             pubSubScope: "NORMAL_USER_",
             widgets: [
                {
-                  name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                  name: "alfresco/lists/views/AlfListView",
                   config: {
                      itemKey: "shortName",
                      widgetsForHeader: [
@@ -516,7 +516,7 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
-                                    name: "alfresco/documentlibrary/views/layouts/Cell",
+                                    name: "alfresco/lists/views/layouts/Cell",
                                     config: {
                                        widgets: [
                                           {
@@ -545,7 +545,7 @@ model.jsonModel = {
             pubSubScope: "ADMIN_USER_",
             widgets: [
                {
-                  name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                  name: "alfresco/lists/views/AlfListView",
                   config: {
                      itemKey: "shortName",
                      widgetsForHeader: [
@@ -562,7 +562,7 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
-                                    name: "alfresco/documentlibrary/views/layouts/Cell",
+                                    name: "alfresco/lists/views/layouts/Cell",
                                     config: {
                                        widgets: [
                                           {

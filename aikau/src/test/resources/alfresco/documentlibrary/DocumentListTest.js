@@ -191,14 +191,14 @@ define(["intern!object",
          .end()
 
          // 8. Check the first view is displayed...
-        .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-AlfDocumentListView .alfresco-documentlibrary-views-layouts-Cell span.alfresco-renderers-Property:nth-child(2)")
+        .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-AlfDocumentListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(2)")
             .then(function(elements) {
                TestCommon.log(testname,"Check 'VIEW1' was displayed");
                assert(elements.length == 3, "'VIEW1' was not displayed");
             })
          .end()
 
-         .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-AlfDocumentListView .alfresco-documentlibrary-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
+         .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-AlfDocumentListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
             .then(function(elements) {
                TestCommon.log(testname,"Check 'VIEW1' was not displayed");
                assert(elements.length === 0, "'VIEW2' was displayed unexpectedly");
@@ -209,7 +209,7 @@ define(["intern!object",
             .click()
          .end()
 
-         .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-AlfDocumentListView .alfresco-documentlibrary-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
+         .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-AlfDocumentListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
             .then(function(elements) {
                TestCommon.log(testname,"Check 'VIEW2' has displayed");
                assert(elements.length == 3, "'VIEW2' was not displayed");

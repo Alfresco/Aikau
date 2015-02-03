@@ -18,17 +18,17 @@
  */
 
 /**
- * This module extends the standard [Carousel]{@link module:alfresco/documentlibrary/views/layouts/Carousel} to 
+ * This module extends the standard [Carousel]{@link module:alfresco/lists/views/layouts/Carousel} to 
  * ensure that only one item is shown at a time in the carousel (regardless of available horizontal space). It 
  * was written to display [document]{@link module:module alfresco/documentlibrary/views/layouts/AlfFilmStripViewDocument}
  * modules that can render previews of individual items.
  * 
  * @module alfresco/documentlibrary/views/layouts/DocumentCarousel
- * @extends module:alfresco/documentlibrary/views/layouts/Carousel
+ * @extends module:alfresco/lists/views/layouts/Carousel
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/documentlibrary/views/layouts/Carousel",
+        "alfresco/lists/views/layouts/Carousel",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/dom-construct",
@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/documentlibrary/views/layouts/Carousel#resize}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/layouts/Carousel#resize}
        * to set the width of each item DOM node to the viewing frame.
        *
        * @instance
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/documentlibrary/views/layouts/Carousel#calculateSizes}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/layouts/Carousel#calculateSizes}
        * to ensure that only 1 item is shown at a time.
        *
        * @instance
@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/documentlibrary/views/layouts/Carousel#onPrevClick}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/layouts/Carousel#onPrevClick}
        * to publish the current item index. This is done so that when used in the 
        * [filmstrip view]{@link module:alfresco/documentlibrary/views/AlfFilmStripView} the content carousel
        * is kept up-to-date.
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/documentlibrary/views/layouts/Carousel#onNextClick}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/layouts/Carousel#onNextClick}
        * to publish the current item index. This is done so that when used in the 
        * [filmstrip view]{@link module:alfresco/documentlibrary/views/AlfFilmStripView} the content carousel
        * is kept up-to-date.

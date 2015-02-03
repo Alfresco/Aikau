@@ -31,7 +31,7 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
-                                    name: "alfresco/documentlibrary/views/layouts/Cell",
+                                    name: "alfresco/lists/views/layouts/Cell",
                                     config: {
                                        width: "16px",
                                        widgets: [

@@ -13,7 +13,7 @@ model.jsonModel = {
    ],
    widgets:[
       {
-         name: "alfresco/documentlibrary/views/AlfDocumentListView",
+         name: "alfresco/lists/views/AlfListView",
          config: {
             subscribeToDocRequests: true,
             currentData: {
@@ -49,7 +49,7 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Cell",
+                           name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {
@@ -76,7 +76,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Cell",
+                           name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {
@@ -89,7 +89,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Cell",
+                           name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {
