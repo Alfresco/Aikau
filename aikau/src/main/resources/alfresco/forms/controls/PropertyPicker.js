@@ -43,7 +43,7 @@ define(["alfresco/forms/controls/Picker",
          itemKey: "name",
          widgets: [
             {
-               name: "alfresco/documentlibrary/views/layouts/Row",
+               name: "alfresco/lists/views/layouts/Row",
                config: {
                   widgets: [
                      {
@@ -108,7 +108,7 @@ define(["alfresco/forms/controls/Picker",
                   itemKey: "name",
                   widgets: [
                      {
-                        name: "alfresco/documentlibrary/views/layouts/Row",
+                        name: "alfresco/lists/views/layouts/Row",
                         config: {
                            widgets: [
                               {
@@ -207,7 +207,7 @@ define(["alfresco/forms/controls/Picker",
                                              config: {
                                                 widgets: [
                                                    {
-                                                      name: "alfresco/documentlibrary/views/layouts/Row",
+                                                      name: "alfresco/lists/views/layouts/Row",
                                                       config: {
                                                          widgets: [
                                                             {
@@ -279,7 +279,7 @@ define(["alfresco/forms/controls/Picker",
                                              config: {
                                                 widgets: [
                                                    {
-                                                      name: "alfresco/documentlibrary/views/layouts/Row",
+                                                      name: "alfresco/lists/views/layouts/Row",
                                                       config: {
                                                          widgets: [
                                                             {

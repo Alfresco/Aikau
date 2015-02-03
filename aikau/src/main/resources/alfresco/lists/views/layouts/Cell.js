@@ -18,7 +18,7 @@
  */
 
 /**
- * Use this widget to render a single cell within a [Row]{@link module:alfresco/documentlibrary/views/layouts/Row}
+ * Use this widget to render a single cell within a [Row]{@link module:alfresco/lists/views/layouts/Row}
  * 
  * @module alfresco/lists/views/layouts/Cell
  * @extends external:dijit/_WidgetBase

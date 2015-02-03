@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,11 +23,11 @@
  * rendered but when the user clicks on the item it will asynchronously request all of the 
  * information about that that node so that complete metadata and actions, etc can be displayed.
  * 
- * @module alfresco/documentlibrary/views/layouts/XhrLayout
+ * @module alfresco/lists/views/layouts/XhrLayout
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixed dijit/_OnDijitClickMixin
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
@@ -37,16 +37,15 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dijit/_OnDijitClickMixin",
         "dojo/text!./templates/XhrLayout.html",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
+        "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dijit/registry",
-        "dojo/dom-construct",
-        "dojo/dom-class"], 
+        "dojo/dom-construct"], 
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing, 
-                 lang, array, registry, domConstruct, domClass) {
+                 lang, array, registry, domConstruct) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -75,11 +74,11 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_documentlibrary_views_layouts_XhrLayout__postCreate() {
 
          var nodeData = lang.getObject("currentItem.node", false, this);
-         if (nodeData == null && this.widgets != null)
+         if (nodeData === null && this.widgets !== null)
          {
             this.processWidgets(this.widgets, this.containerNode);
          }
-         else if (this.widgetsForXhrData != null) 
+         else if (this.widgetsForXhrData) 
          {
             this.processWidgets(this.widgetsForXhrData, this.containerNode);
          }
@@ -91,12 +90,12 @@ define(["dojo/_base/declare",
        */
       getXhrData: function alfresco_documentlibrary_views_layouts_XhrLayout__getXhrData() {
          var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
-         if (nodeRef != null)
+         if (nodeRef !== null)
          {
             // Generate a UUID for the response to the publication to ensure that only this widget
             // handles to the XHR data...
             var responseTopic = this.generateUuid();
-            this._xhrDataRequestHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onXhrData"), true);
+            this._xhrDataRequestHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onXhrData), true);
             this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", {
                alfResponseTopic: responseTopic,
                nodeRef: nodeRef
@@ -120,11 +119,11 @@ define(["dojo/_base/declare",
          if (lang.exists("response.item", payload)) 
          {
             this.currentItem = payload.response.item;
-            if (this.containerNode != null)
+            if (this.containerNode)
             {
                try
                {
-                  array.forEach(registry.findWidgets(this.containerNode), lang.hitch(this, "destroyWidget"));
+                  array.forEach(registry.findWidgets(this.containerNode), lang.hitch(this, this.destroyWidget));
                }
                catch(e)
                {

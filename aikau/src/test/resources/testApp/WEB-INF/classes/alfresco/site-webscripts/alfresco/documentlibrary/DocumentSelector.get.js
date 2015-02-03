@@ -74,7 +74,7 @@ model.jsonModel = {
                               additionalCssClasses: "bordered",
                               widgets: [
                                  {
-                                    name: "alfresco/documentlibrary/views/layouts/Row",
+                                    name: "alfresco/lists/views/layouts/Row",
                                     config: {
                                        widgets: [
                                           {

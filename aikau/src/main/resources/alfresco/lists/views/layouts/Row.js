@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -20,10 +20,10 @@
 /**
  * Use this widget to render a row of [cells]{@link module:alfresco/lists/views/layouts/Cell}
  * 
- * @module alfresco/documentlibrary/views/layouts/Row
+ * @module alfresco/lists/views/layouts/Row
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
@@ -32,11 +32,10 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Row.html",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
+        "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing",
-        "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing, domClass) {
+        "alfresco/core/CoreWidgetProcessing"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing) {
 
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -65,7 +64,7 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_documentlibrary_views_layouts_Row__postCreate() {
          if (this.widgets)
          {
-            if (this.widgetModelModifiers != null)
+            if (this.widgetModelModifiers !== null)
             {
                this.processObject(this.widgetModelModifiers, this.widgets);
             }

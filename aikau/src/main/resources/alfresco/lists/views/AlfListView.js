@@ -25,7 +25,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes external:dojo/_KeyNavContainer
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin
  * @author Dave Draper
@@ -295,8 +295,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Calls the [renderData]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#renderData}
-       * function if the [currentData]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#currentData}
+       * Calls the [renderData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#renderData}
+       * function if the [currentData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentData}
        * attribute has been set to an object with an "items" attribute that is an array of objects.
        *
        * @instance

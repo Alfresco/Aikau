@@ -29,7 +29,7 @@
  * @mixes external:dojo/_OnDijitClickMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/ResizeMixin
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -38,7 +38,7 @@ define(["dojo/_base/declare",
         "dijit/_OnDijitClickMixin",
         "alfresco/core/Core",
         "alfresco/core/ResizeMixin",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
+        "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "dojo/text!./templates/Carousel.html",
         "dojo/_base/lang",
         "dojo/_base/array",
@@ -287,7 +287,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Iterates over the [processed widgets]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#_renderedItemWidgets}
+       * Iterates over the [processed widgets]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#_renderedItemWidgets}
        * between the [first]{@link module:alfresco/lists/views/layouts/Carousel#firstDisplayedIndex} and
        * [last]{@link module:alfresco/lists/views/layouts/Carousel#lastDisplayedIndex} indices calling
        * the render function on each to ensure they display themselves correctly

@@ -255,7 +255,7 @@ define(["alfresco/forms/controls/BaseFormControl",
             config: {
                widgets: [
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Row",
+                     name: "alfresco/lists/views/layouts/Row",
                      config: {
                         visibilityConfig: {
                            rules: [
@@ -325,7 +325,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       widgetsForPickedItemsView: [
          {
-            name: "alfresco/documentlibrary/views/layouts/Row",
+            name: "alfresco/lists/views/layouts/Row",
             config: {
                widgets: [
                   {

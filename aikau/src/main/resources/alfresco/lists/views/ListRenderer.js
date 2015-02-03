@@ -27,7 +27,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes external:dojo/_KeyNavContainer
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dijit/_KeyNavContainer",
         "dojo/text!./templates/ListRenderer.html",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
+        "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
         "alfresco/core/JsNode",
         "dojo/_base/lang",
@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
       /**
        * Handles requests to focus a specific child item that has been clicked on. This is a custom
        * event issued from a module mixing in the 
-       * [_MultiItemRendererMixin]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin}.
+       * [_MultiItemRendererMixin]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin}.
        *
        * @instance
        * @param {object} evt The click event

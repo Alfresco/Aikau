@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default [{cssFile:"./css/Cell.css"}]
+       * @default [{cssFile:"./css/HeaderCell.css"}]
        */
       cssRequirements: [{cssFile:"./css/HeaderCell.css"}],
 
@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_documentlibrary_views_layouts_HeaderCell__postMixInProperties() {
-         if (this.label != null)
+         if (this.label !== null)
          {
             this.label = this.message(this.label);
          }
@@ -247,12 +247,12 @@ define(["dojo/_base/declare",
        */
       onExternalSortRequest: function alfresco_documentlibrary_views_layouts_HeaderCell__onExternalSortRequest(payload) {
          var requester = lang.getObject("requester", false, payload);
-         if (requester != this)
+         if (requester !== this)
          {
             var value = lang.getObject("value", false, payload);
-            if (value != null)
+            if (value !== null)
             {
-               if (value == this.sortValue)
+               if (value === this.sortValue)
                {
                   this.usedForSort = true;
                   this.sortIcon(this.sortedAscending === true ? "asc" : "desc");
@@ -266,9 +266,9 @@ define(["dojo/_base/declare",
             }
 
             var direction = lang.getObject("direction", false, payload);
-            if (direction != null)
+            if (direction !== null)
             {
-               this.sortedAscending = (direction == "ascending");
+               this.sortedAscending = direction === "ascending";
                if (this.usedForSort === true)
                {
                   this.sortIcon(this.sortedAscending === true ? "asc" : "desc");
@@ -333,6 +333,5 @@ define(["dojo/_base/declare",
             domAttr.set(this.containerNode, "scope", scopeStr);
          }
       }
-
    });
 });

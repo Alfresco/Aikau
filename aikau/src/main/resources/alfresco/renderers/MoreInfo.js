@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
         "alfresco/core/ObjectTypeUtils",
         "dojo/text!./templates/MoreInfo.html",
         "alfresco/core/Core",
-        "alfresco/documentlibrary/views/layouts/Popup",
+        "alfresco/lists/views/layouts/Popup",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/_base/event"],
@@ -165,7 +165,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is called when the user clicks on the "info" symbol and creates a new
-       * [popup]{@link module:alfresco/documentlibrary/views/layouts/Popup} containing the info
+       * [popup]{@link module:alfresco/lists/views/layouts/Popup} containing the info
        * to be displayed.
        *
        * @instance
@@ -273,11 +273,11 @@ define(["dojo/_base/declare",
        */
       widgets: [
          {
-            name: "alfresco/documentlibrary/views/layouts/Table",
+            name: "alfresco/lists/views/layouts/Table",
             config: {
                widgets: [
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Row",
+                     name: "alfresco/lists/views/layouts/Row",
                      config: {
                         widgets: [
                            {
@@ -311,7 +311,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Row",
+                     name: "alfresco/lists/views/layouts/Row",
                      config: {
                         widgets: [
                            {
@@ -439,7 +439,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Row",
+                     name: "alfresco/lists/views/layouts/Row",
                      config: {
                         widgets: [
                            {
@@ -467,7 +467,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Row",
+                     name: "alfresco/lists/views/layouts/Row",
                      config: {
                         widgets: [
                            {
@@ -530,7 +530,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Row",
+                     name: "alfresco/lists/views/layouts/Row",
                      config: {
                         widgets: [
                            {

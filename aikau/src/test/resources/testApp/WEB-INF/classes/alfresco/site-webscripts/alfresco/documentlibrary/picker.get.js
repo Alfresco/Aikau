@@ -44,7 +44,7 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
-                           name:  "alfresco/documentlibrary/views/layouts/XhrLayout",
+                           name:  "alfresco/lists/views/layouts/XhrLayout",
                            config: {
                               widgets: [
                                  {

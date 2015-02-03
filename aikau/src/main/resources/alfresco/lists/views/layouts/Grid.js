@@ -25,7 +25,7 @@
  * @module alfresco/lists/views/layouts/Grid
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
         "alfresco/core/ResizeMixin",
         "dijit/_KeyNavContainer",
         "dojo/text!./templates/Grid.html",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
+        "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "dojo/keys",
@@ -309,7 +309,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#renderNextItem}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#renderNextItem}
        * to ensure that any DOM elements added for allowing the user to retrieve more items is destroyed. These will
        * have been created by the [allItemsRendered function]{@link module:alfresco/lists/views/layouts/Grid#allItemsRendered}
        * when more data is available.
@@ -358,7 +358,7 @@ define(["dojo/_base/declare",
       nextLinkPublishTopic: null,
 
       /**
-       * Overrides the [inherited function]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#allItemsRendered}
+       * Overrides the [inherited function]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#allItemsRendered}
        * to create a link for retrieving more data when 
        * 
        * @instance

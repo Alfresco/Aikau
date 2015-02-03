@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,10 +24,10 @@
  * [createWidget]{@link module:alfresco/core/Core#createWidget} function to pass the details of the item
  * that is currently being rendered to all of its processed widgets. It also overrides the default 
  * [allWidgetsProcessed]{@link module:alfresco/core/Core#allWidgetsProcessed} function to make a call
- * to render the next item in the [currentData]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#currentData}
+ * to render the next item in the [currentData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentData}
  * attribute (if applicable).
  * 
- * @module alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @module alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @extends module:alfresco/core/Core
  * @author Dave Draper
  */
@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
       currentData: null,
       
       /**
-       * The index of the item in [currentData]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#currentData}
+       * The index of the item in [currentData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentData}
        * items array that is currently being rendered
        * 
        * @instance
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
       currentItem: null,
       
       /**
-       * A setter for [currentData]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#currentData}
+       * A setter for [currentData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentData}
        * @instance
        * @param {Object} data The data to set
        */
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * An advanced setter for[currentData]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#currentData}
+       * An advanced setter for[currentData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentData}
        * It intelligently merges the new data to the old data
        *
        * @param {object} newData data to add to the existing data
@@ -155,8 +155,8 @@ define(["dojo/_base/declare",
       /**
        * This function should be called to iterate over new data.
        * It sets the currentData object and resets the index back to zero. When [processWidgets]{@link module:alfresco/core/Core#processWidgets}
-       * function is called it will being set [currentItem]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#currentItem} 
-       * as the first element in the items attribute belonging to [currentData]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#currentData}
+       * function is called it will being set [currentItem]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentItem} 
+       * as the first element in the items attribute belonging to [currentData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentData}
        * 
        * @instance
        */
@@ -215,7 +215,7 @@ define(["dojo/_base/declare",
       
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets} to instantiate the widgets
-       * defined in the JSON model for [currentItem]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#currentItem}
+       * defined in the JSON model for [currentItem]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentItem}
        * @instance
        */
       renderNextItem: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__renderNextItem() {
@@ -315,7 +315,7 @@ define(["dojo/_base/declare",
       rootWidgetSubscriptions: null,
       
       /**
-       * Adds the "alfresco-documentlibrary-views-layout-_MultiItemRendererMixin--item" class to the root DOM node
+       * Adds the "alfresco-lists-views-layout-_MultiItemRendererMixin--item" class to the root DOM node
        * of the widget and additionally subscribes to item selection publications so that additional CSS classes
        * can be added when an item is selected (so that they can be visually indicate selection).
        * 
@@ -324,7 +324,7 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the widget
        */
       rootWidgetProcessing: function alfresco_documentlibrary_views_layout__MultiItemRendererMixin__rootWidgetProcessing(widget, index) {
-         domClass.add(widget.domNode, "alfresco-documentlibrary-views-layout-_MultiItemRendererMixin--item");
+         domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin--item");
          if (this.rootWidgetSubscriptions == null)
          {
             this.rootWidgetSubscriptions = [];
@@ -376,7 +376,7 @@ define(["dojo/_base/declare",
       /**
        * Compares the nodeRef attribute of both item arguments. This has been abstracted to a separate function to
        * allow simpler overriding when comparing items. This function is called by the
-       * [onItemSelection]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#onItemSelection}
+       * [onItemSelection]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#onItemSelection}
        * function to determine whether the item currently selected is the item represented by the current widget. 
        * 
        * @instance

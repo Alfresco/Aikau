@@ -161,7 +161,7 @@ define(["dojo/_base/declare",
        * attribute based on the [propertyToRender]{@link module:alfresco/renderers/InlineEditProperty#propertyToRender] if 
        * provided. It is expected that these will be different because the properties WebScript that this widget will use
        * by default to persist changes takes just the name of the property but this is expected to be nested within the
-       * [currentItem]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin#currentItem}.
+       * [currentItem]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentItem}.
        * 
        * @instance
        */
@@ -530,7 +530,7 @@ define(["dojo/_base/declare",
 
       /**
        * A common use of this widget is to be placed inside a 
-       * [_MultiItemRendererMixin]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin}
+       * [_MultiItemRendererMixin]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin}
        * that listens for click events on any of the DOM elements inside each row so that it can focus
        * on the correct item when clicked on. Therefore it is necessary to prevent focus being "stolen" whilst
        * clicking on the edit control so this function handles click events and prevents them from bubbling

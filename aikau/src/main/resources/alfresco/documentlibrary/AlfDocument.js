@@ -24,7 +24,7 @@
  * @module alfresco/documentlibrary/AlfDocument
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
@@ -32,7 +32,7 @@
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
+        "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "dojo/text!./templates/AlfDocument.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
          }
          if (this.currentItem != null && this.containerNode != null)
          {
-            // This relies on the alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin implementation of the 
+            // This relies on the alfresco/lists/views/layouts/_MultiItemRendererMixin implementation of the 
             // createWidget function in order to pass the "currentItem" attribute on to any child widgets...
             this.processWidgets(this.widgets, this.containerNode);
          }

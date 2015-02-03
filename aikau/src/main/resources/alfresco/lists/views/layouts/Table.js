@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,12 +18,12 @@
  */
 
 /**
- * Use this widget to render a a table of [rows]{@link module:alfresco/documentlibrary/views/layouts/Row}
+ * Use this widget to render a a table of [rows]{@link module:alfresco/lists/views/layouts/Row}
  * 
- * @module alfresco/documentlibrary/views/layouts/Table
+ * @module alfresco/documentlibrary/views/layouts/alfresco_documentlibrary_views_layouts_Table__postCreate
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
@@ -32,7 +32,7 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Table.html",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
+        "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing) {
