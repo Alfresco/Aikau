@@ -88,17 +88,6 @@
          </plugin>
 
          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-release-plugin</artifactId>
-            <version>2.5.1</version>
-            <configuration>
-               <tagNameFormat>release-@{project.version}</tagNameFormat>
-               <username>${svn.username}</username>
-               <password>${svn.password}</password>
-            </configuration>
-         </plugin>
-
-         <plugin>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-maven-plugin</artifactId>
             <version>9.2.5.v20141112</version>

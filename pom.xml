@@ -77,6 +77,18 @@
 
    </dependencies>
 
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.5.1</version>
+            <configuration>
+               <tagNameFormat>release-@{project.version}</tagNameFormat>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
    <modules>
       <module>aikau</module>
       <module>aikau-archetype</module>
