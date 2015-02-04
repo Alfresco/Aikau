@@ -18,7 +18,7 @@
  */
 
 /**
- * @module alfresco/documentlibrary/views/ListRenderer
+ * @module alfresco/documentlibrary/views/DocumentListRenderer
  * @extends module:alfresco/lists/views/ListRenderer
  * @author Dave Draper
  * @deprecated Since 1.0.4 - Use [alfresco/lists/views/ListRenderer]{@link module:alfresco/lists/views/ListRenderer} instead.

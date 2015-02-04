@@ -18,7 +18,7 @@
  */
 
 /**
- * @module alfresco/lists/views/_AlfAdditionalViewControlMixin
+ * @module alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin
  * @extends module:alfresco/lists/views/_AlfAdditionalViewControlMixin
  * @author Dave Draper
  * @deprecated Since 1.0.4 - Use [alfresco/lists/views/_AlfAdditionalViewControlMixin]{@link module:alfresco/lists/views/_AlfAdditionalViewControlMixin} instead.
