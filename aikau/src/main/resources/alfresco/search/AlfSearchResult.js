@@ -25,11 +25,11 @@
  * provide a completely custom rendering.
  *
  * @module alfresco/search/AlfSearchResult
- * @extends "alfresco/documentlibrary/views/layouts/Row"
+ * @extends "alfresco/lists/views/layouts/Row"
  * @author Dave Draper & David Webster
  */
 define(["dojo/_base/declare",
-        "alfresco/documentlibrary/views/layouts/Row",
+        "alfresco/lists/views/layouts/Row",
         "dojo/text!./templates/AlfSearchResult.html",
         "alfresco/renderers/SearchThumbnail",
         "alfresco/renderers/SearchResultPropertyLink",

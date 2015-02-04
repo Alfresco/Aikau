@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,219 +24,190 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
+
+   var browser;
 
    registerSuite({
-      name: 'AlfDocumentList Test',
-      'AlfSearchListTest': function () {
+      name: "DocumentList Tests",
 
-         var browser = this.remote;
-         var testname = "AlfDocumentListTest";
-         return TestCommon.loadTestWebScript(this.remote, "/DocumentList", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/DocumentList", "DocumentList").end();
+      },
 
-         // 1. Check that the initial request for data is correct...
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "path", "/"))
+      beforeEach: function() {
+         browser.end();
+      },
+
+      teardown: function() {
+         return browser.end().alfPostCoverageResults(browser);
+      },
+
+      "Test path initialised correctly": function () {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "path", "/"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'path' initialised correctly");
-               assert(elements.length == 1, "'path' not initialised correctly");
+               assert(elements.length === 1, "'path' not initialised correctly");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "type", "all"))
+         .end();
+      },
+      "Test folder display initialised correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "type", "all"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check initialised to show folders");
-               assert(elements.length == 1, "not initialised to show folders");
+               assert(elements.length === 1, "not initialised to show folders");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "site", "fake-site"))
+         .end();
+      },
+      "Test site data initialised correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "site", "fake-site"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'site' initialised correctly");
-               assert(elements.length == 1, "'site' not initialised correctly");
+               assert(elements.length === 1, "'site' not initialised correctly");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "container", "documentlibrary"))
+         .end();
+      },
+      "Test container data initialised correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "container", "documentlibrary"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'container' initialised correctly");
-               assert(elements.length == 1, "'container' not initialised correctly");
+               assert(elements.length === 1, "'container' not initialised correctly");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "sortAscending", "false"))
+         .end();
+      },
+      "Test sort direction initialised correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "sortAscending", "false"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'sortAscending' initialised correctly");
-               assert(elements.length == 1, "'sortAscending' not initialised correctly");
+               assert(elements.length === 1, "'sortAscending' not initialised correctly");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "sortField", "cm:title"))
+         .end();
+      },
+      "Test sort field initialised correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "sortField", "cm:title"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'sortField' initialised correctly");
-               assert(elements.length == 1, "'sortField' not initialised correctly");
+               assert(elements.length === 1, "'sortField' not initialised correctly");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "page", "1"))
+         .end();
+      },
+      "Test page initialised correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "page", "1"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'page' initialised correctly");
-               assert(elements.length == 1, "'page' not initialised correctly");
+               assert(elements.length === 1, "'page' not initialised correctly");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "pageSize", "3"))
+         .end();
+      },
+      "Test page size initialised correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "pageSize", "3"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'pageSize' initialised correctly");
-               assert(elements.length == 1, "'pageSize' not initialised correctly");
+               assert(elements.length === 1, "'pageSize' not initialised correctly");
             })
-         .end()
-
-         // 2. Change the sort order...
-         .findByCssSelector("#SORT_ASC_REQUEST")
+         .end();
+      },
+      "Test sort order toggles": function() {
+         return browser.findByCssSelector("#SORT_ASC_REQUEST")
             .click()
          .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortAscending", "true"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'sortAscending' updated correctly");
-               assert(elements.length == 1, "'sortAscending' not updated correctly");
+               assert(elements.length === 1, "'sortAscending' not updated correctly");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortField", "cm:name"))
+         .end();
+      },
+      "Test sort field updates with sort toggle": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortField", "cm:name"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'sortField' updated correctly");
-               assert(elements.length == 1, "'sortField' not updated correctly");
+               assert(elements.length === 1, "'sortField' not updated correctly");
             })
-         .end()
-
-         // 3. Change sort field
-         .findByCssSelector("#SORT_FIELD_SELECTION")
+         .end();
+      },
+      "Test sort field selection doesn't change sort order": function() {
+         return browser.findByCssSelector("#SORT_FIELD_SELECTION")
             .click()
          .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortAscending", "true"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'sortAscending' has not changed");
-               assert(elements.length == 1, "'sortAscending' changed unexpectedly");
+               assert(elements.length === 1, "'sortAscending' changed unexpectedly");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortField", "cm:title"))
+         .end();
+      },
+      "Test sort field selection updates": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortField", "cm:title"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'sortField' updated correctly");
-               assert(elements.length == 1, "'sortField' not updated correctly");
+               assert(elements.length === 1, "'sortField' not updated correctly");
             })
-         .end()
-
-         // 4. Change the sort order again (to descending this time)...
-         .findByCssSelector("#SORT_DESC_REQUEST")
+         .end();
+      },
+      "Test sort order toggle (to descending)": function() {
+         return browser.findByCssSelector("#SORT_DESC_REQUEST")
             .click()
          .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortAscending", "false"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'sortAscending' updated correctly");
-               assert(elements.length == 1, "'sortAscending' not updated correctly");
+               assert(elements.length === 1, "'sortAscending' not updated correctly");
             })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortField", "cm:title"))
+         .end();
+      },
+      "Test sort field doesn't change on sort order": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortField", "cm:title"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'sortField' has not changed");
-               assert(elements.length == 1, "'sortField' changed unexpectedly");
+               assert(elements.length === 1, "'sortField' changed unexpectedly");
             })
-         .end()
-
-         // 5. Hide folders...
-         .findByCssSelector("#HIDE_FOLDERS")
+         .end();
+      },
+      "Test hide folder toggle": function() {
+         return browser.findByCssSelector("#HIDE_FOLDERS")
             .click()
          .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "documents"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'type' updated correctly");
-               assert(elements.length == 1, "'type' not updated correctly");
+               assert(elements.length === 1, "'type' not updated correctly");
             })
-         .end()
-
-         // 6. Show folders...
-         .findByCssSelector("#SHOW_FOLDERS")
+         .end();
+      },
+      "Test show folder toggle": function() {
+         return browser.findByCssSelector("#SHOW_FOLDERS")
             .click()
          .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "all"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'type' updated correctly");
-               assert(elements.length == 1, "'type' not updated correctly");
+               assert(elements.length === 1, "'type' not updated correctly");
             })
-         .end()
-
-         // 7. Set page...
-         .findByCssSelector("#SET_PAGE")
+         .end();
+      },
+      "Test set page number": function() {
+         return browser.findByCssSelector("#SET_PAGE")
             .click()
          .end()
-
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "page", "2"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'page' updated correctly");
-               assert(elements.length == 1, "'page' not updated correctly");
+               assert(elements.length === 1, "'page' not updated correctly");
             })
-         .end()
-
-         .findByCssSelector("#PUBLISH_DATA")
+         .end();
+      },
+      "Test data update renders current view": function() { 
+         return browser.findByCssSelector("#PUBLISH_DATA")
             .click()
          .end()
-
-         // 8. Check the first view is displayed...
-        .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-AlfDocumentListView .alfresco-documentlibrary-views-layouts-Cell span.alfresco-renderers-Property:nth-child(2)")
+        .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(2)")
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'VIEW1' was displayed");
-               assert(elements.length == 3, "'VIEW1' was not displayed");
+               assert(elements.length === 3, "'VIEW1' was not displayed");
             })
-         .end()
-
-         .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-AlfDocumentListView .alfresco-documentlibrary-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
+         .end();
+      },
+      "Test update does not render hidden views": function() {
+         return browser.findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'VIEW1' was not displayed");
                assert(elements.length === 0, "'VIEW2' was displayed unexpectedly");
             })
-         .end()
-
-         .findByCssSelector("#CHANGE_VIEW")
+         .end();
+      },
+      "Test changing view renders current data": function() {
+         return browser.findByCssSelector("#CHANGE_VIEW")
             .click()
          .end()
-
-         .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-AlfDocumentListView .alfresco-documentlibrary-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
+         .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
             .then(function(elements) {
-               TestCommon.log(testname,"Check 'VIEW2' has displayed");
-               assert(elements.length == 3, "'VIEW2' was not displayed");
+               assert(elements.length === 3, "'VIEW2' was not displayed");
             })
-         .end()
-
-         // 9. Change the page size
-         .findByCssSelector("#SET_DOCS_PER_PAGE")
-            .click()
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "page", "1"))
-            .then(function(elements) {
-               TestCommon.log(testname,"Check 'page' was reset to 1 to account for new page size");
-   //            assert(elements.length == 1, "'page' not didn't get reset to 1 to account for new page size");
-               console.log("TODO: Failing test commented out - needs looking at");
-            })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "pageSize", "6"))
-            .then(function(elements) {
-               TestCommon.log(testname,"Check 'pageSize' updated correctly");
-               assert(elements.length == 1, "'pageSize' not updated correctly");
-            })
-         .end()
-
-         .alfPostCoverageResults(browser);
+         .end();
       }
    });
 });

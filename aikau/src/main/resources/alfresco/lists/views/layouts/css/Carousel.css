@@ -1,9 +1,9 @@
-.alfresco-documentlibrary-views-layouts-Carousel {
+.alfresco-lists-views-layouts-Carousel {
    background-image: url(./images/black-50-transparency.png);
    background-repeat: repeat;
 }
 
-.alfresco-documentlibrary-views-layouts-Carousel .items {
+.alfresco-lists-views-layouts-Carousel .items {
    overflow: hidden;
    position: relative;
    z-index: 2;
@@ -11,24 +11,24 @@
 }
 
 /* This needs to be set to relative so that the controls can be absolutely positioned over it */
-.alfresco-documentlibrary-views-layouts-Carousel {
+.alfresco-lists-views-layouts-Carousel {
    position: relative;
 }
 
-.alfresco-documentlibrary-views-layouts-Carousel div.frame {
+.alfresco-lists-views-layouts-Carousel div.frame {
 }
 
 /*
  * The width needs to be properly calculated, this is just a really big number at the moment
  * to get the frame working
  */
-.alfresco-documentlibrary-views-layouts-Carousel > div.items > div.frame > ol {
+.alfresco-lists-views-layouts-Carousel > div.items > div.frame > ol {
    padding: 0;
    position: relative;
    transition: left 1s ease 0.1s; /* NOTE THAT YUICOMPRESSOR STRIPS UNITS FROM 0 VALUES, BUT FIREFOX IGNORES TRANSITION RULES WITHOUT UNITS ON 0 VALUES!! */
 }
 
-.alfresco-documentlibrary-views-layouts-Carousel > div.items > div.frame > ol > li {
+.alfresco-lists-views-layouts-Carousel > div.items > div.frame > ol > li {
    display: inline-block;
    float: left;
    margin-top: 6px;
@@ -36,20 +36,20 @@
 
 /* Absolute position over the list of items, and ensure full width so that the floated left and right
  * controls are in the correct positions */
-.alfresco-documentlibrary-views-layouts-Carousel > div.controls {
+.alfresco-lists-views-layouts-Carousel > div.controls {
    position: absolute;
    top: 6px;
    width: 100%;
    z-index: 1;
 }
 
-.alfresco-documentlibrary-views-layouts-Carousel > div.controls .prev{
+.alfresco-lists-views-layouts-Carousel > div.controls .prev{
    float: left;
    margin-left: 10px;
    z-index: 2;
 }
 
-.alfresco-documentlibrary-views-layouts-Carousel > div.controls .next{
+.alfresco-lists-views-layouts-Carousel > div.controls .next{
    float: right;
    margin-right: 10px;
    z-index: 2;

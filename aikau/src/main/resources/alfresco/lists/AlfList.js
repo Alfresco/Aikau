@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -37,7 +37,7 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/DynamicWidgetProcessingTopics",
-        "alfresco/documentlibrary/views/AlfDocumentListView",
+        "alfresco/lists/views/AlfListView",
         "alfresco/menus/AlfCheckableMenuItem",
         "dojo/_base/array",
         "dojo/_base/lang",
@@ -378,7 +378,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed} for
-       * each widget defined. Only widgets that inherit from [AlfDocumentListView]{@link module:alfresco/documentlibrary/views/AlfDocumentListView}
+       * each widget defined. Only widgets that inherit from [AlfDocumentListView]{@link module:alfresco/lists/views/AlfListView}
        * will be successfully registered.
        *
        * @instance
@@ -535,7 +535,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Use to keeps track of the [view]{@link module:alfresco/documentlibrary/views/AlfDocumentListView} that is currently selected.
+       * Use to keeps track of the [view]{@link module:alfresco/lists/views/AlfListView} that is currently selected.
        *
        * @instance
        * @type {string}
@@ -544,7 +544,7 @@ define(["dojo/_base/declare",
       _currentlySelectedView: null,
 
       /**
-       * Used to keep track of the current data for rendering by [views]{@link module:alfresco/documentlibrary/views/AlfDocumentListView}.
+       * Used to keep track of the current data for rendering by [views]{@link module:alfresco/lists/views/AlfListView}.
        *
        * @instance
        * @type {object}
@@ -555,7 +555,7 @@ define(["dojo/_base/declare",
       /**
        * Handles requests to switch views. This is called whenever the [viewSelectionTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#viewSelectionTopic}
        * topic is published on and expects a payload containing an attribute "value" which should map to a registered
-       * [view]{@link module:alfresco/documentlibrary/views/AlfDocumentListView}. The views are mapped against the index they were configured
+       * [view]{@link module:alfresco/lists/views/AlfListView}. The views are mapped against the index they were configured
        * with so the value is expected to be an integer.
        *
        * @instance
@@ -605,7 +605,7 @@ define(["dojo/_base/declare",
 
       /**
        * Iterates over all the views and calls their 
-       * [clearOldView]{@link module:alfresco/documentlibrary/views/AlfDocumentListView#clearOldView} function.
+       * [clearOldView]{@link module:alfresco/lists/views/AlfListView#clearOldView} function.
        *
        * @instance
        */
@@ -896,13 +896,13 @@ define(["dojo/_base/declare",
          if (response !== null)
          {
             var tmp = lang.getObject(this.totalResultsProperty, false, response);
-            if (tmp !== null)
+            if (tmp)
             {
                this.totalRecords = tmp;
             }
 
             tmp = lang.getObject(this.startIndexProperty, false, response);
-            if (tmp !== null)
+            if (tmp)
             {
                this.startIndex = tmp;
             }

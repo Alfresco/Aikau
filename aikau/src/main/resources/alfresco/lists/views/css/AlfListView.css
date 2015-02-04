@@ -1,0 +1,64 @@
+.alfresco-lists-views-AlfListView > table {
+   width: 100%;
+   border-collapse: collapse;
+   border-spacing: 0;
+   border: none;
+}
+
+.alfresco-lists-views-AlfListView tr:focus {
+   outline: none;
+}
+
+.alfresco-lists-views-AlfListView.no-highlight tr:focus,
+.alfresco-lists-views-AlfListView.no-highlight tr:hover {
+   background-color: transparent;
+}
+
+.alfresco-lists-views-AlfListView > table > tbody > tr:nth-child(even) {
+   /*background-color: @docListEvenRowColour;*/
+}
+
+.alfresco-lists-views-AlfListView > table > tbody > tr:nth-child(odd) {
+   /*background-color: @docListOddRowColour;*/
+}
+
+.alfresco-lists-views-AlfListView > table > tbody > tr > td {
+   padding: @standard-line-height @standard-column-width @standard-line-height 0;
+   margin: 0;
+   vertical-align: top;
+}
+
+.alfresco-lists-views-AlfListView.no-borders > table, 
+.alfresco-lists-views-AlfListView.no-borders > table > tbody > tr > td {
+   border: none;
+}
+
+.alfresco-lists-views-AlfListView.dndHighlight {
+   outline: 2px solid @docListDndHighlight;
+   outline-offset: -2px;
+}
+
+/* bordered table modifiers */
+
+.alfresco-lists-views-AlfListView.bordered > table {
+   border-bottom: 1px solid @docListBorderColour; 
+}
+
+.alfresco-lists-views-AlfListView.bordered > table > tbody > tr > td {
+   border-top: 1px dashed @docListBorderColour;
+   border-bottom: 1px dashed @docListBorderColour;
+   border-right: 1px solid @docListBorderColour;
+}
+
+.alfresco-lists-views-AlfListView.bordered > table > tbody > tr > td.last,
+.alfresco-lists-views-AlfListView.bordered > table > tbody > tr > td:last-of-type
+{
+   border-right: none;
+}
+
+/* accessibility modifiers */
+
+.alfresco-lists-views-AlfListView > table > caption.hiddenAccessible {
+   position: absolute;
+   left: -99999px;
+}
