@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-      <version>1.0.3-SNAPSHOT</version>
+      <version>1.0.4-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -85,17 +85,6 @@
                   </configuration>
                 </execution>
             </executions>
-         </plugin>
-
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-release-plugin</artifactId>
-            <version>2.5.1</version>
-            <configuration>
-               <tagNameFormat>release-@{project.version}</tagNameFormat>
-               <username>${svn.username}</username>
-               <password>${svn.password}</password>
-            </configuration>
          </plugin>
 
          <plugin>
