@@ -896,13 +896,13 @@ define(["dojo/_base/declare",
          if (response !== null)
          {
             var tmp = lang.getObject(this.totalResultsProperty, false, response);
-            if (tmp !== null)
+            if (tmp)
             {
                this.totalRecords = tmp;
             }
 
             tmp = lang.getObject(this.startIndexProperty, false, response);
-            if (tmp !== null)
+            if (tmp)
             {
                this.startIndex = tmp;
             }
