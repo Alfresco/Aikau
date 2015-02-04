@@ -176,15 +176,15 @@ define(["dojo/_base/declare",
       nextLinkPublishTopic: "ALF_SCROLL_NEAR_BOTTOM",
 
       /**
-       * Creates a new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
+       * Creates a new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        * which is used to render the actual items in the view. This function can be overridden by extending views
        * (such as the [Film Strip View]{@link module:alfresco/documentlibrary/views/AlfFilmStripView}) to create
        * alternative widgets applicable to that view.
        * 
        * @instance
-       * @returns {object} A new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
+       * @returns {object} A new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        */
-      createDocumentListRenderer: function alfresco_documentlibrary_views_AlfGalleryView__createDocumentListRenderer() {
+      createListRenderer: function alfresco_documentlibrary_views_AlfGalleryView__createListRenderer() {
          var dlr = new Grid({
             id: this.id + "_ITEMS",
             widgets: lang.clone(this.widgets),

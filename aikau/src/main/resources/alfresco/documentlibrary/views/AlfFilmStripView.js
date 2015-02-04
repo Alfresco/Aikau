@@ -126,15 +126,15 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Creates a new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
+       * Creates a new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        * which is used to render the actual items in the view. This function can be overridden by extending views
        * (such as the [Film Strip View]{@link module:alfresco/documentlibrary/views/AlfFilmStripView}) to create
        * alternative widgets applicable to that view.
        * 
        * @instance
-       * @returns {object} A new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
+       * @returns {object} A new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        */
-      createDocumentListRenderer: function alfresco_documentlibrary_views_AlfFilmStripView__createDocumentListRenderer() {
+      createListRenderer: function alfresco_documentlibrary_views_AlfFilmStripView__createListRenderer() {
          // NOTE: Any previous previews should have been destroyed, but empty the previewNode just to be on the safe side
          //       TODO: Possible memory leak to investigate here, because the call to empy the node *is* required.
          domConstruct.empty(this.previewNode);

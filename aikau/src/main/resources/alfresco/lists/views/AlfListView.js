@@ -21,7 +21,7 @@
  * An abstract view for the Alfresco Share document list. It can be used in JSON page models if
  * configured with a widgets definition. Otherwise it can be extended to define specific views
  *
- * @module alfresco/lists/views/AlfDocumentListView
+ * @module alfresco/lists/views/AlfListView
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes external:dojo/_KeyNavContainer
@@ -33,10 +33,10 @@
 define(["dojo/_base/declare",
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
-        "dojo/text!./templates/AlfDocumentListView.html",
+        "dojo/text!./templates/AlfListView.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
-        "alfresco/lists/views/DocumentListRenderer",
+        "alfresco/lists/views/ListRenderer",
         "alfresco/core/Core",
         "alfresco/core/JsNode",
         "alfresco/core/WidgetsCreator",
@@ -45,7 +45,7 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/query"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, _AlfDndDocumentUploadMixin, DocumentListRenderer,
+        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, _AlfDndDocumentUploadMixin, ListRenderer,
                  AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query) {
 
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _AlfDndDocumentUploadMixin], {
@@ -326,7 +326,7 @@ define(["dojo/_base/declare",
                // when rendering additional infinite scroll data...
                if (this.docListRenderer == null)
                {
-                  this.docListRenderer = this.createDocumentListRenderer();
+                  this.docListRenderer = this.createListRenderer();
                   this.docListRenderer.placeAt(this.tableNode, "last");
                }
 
@@ -366,16 +366,16 @@ define(["dojo/_base/declare",
       renderFilterSelectorQuery: "tr",
 
       /**
-       * Creates a new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
+       * Creates a new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        * which is used to render the actual items in the view. This function can be overridden by extending views
        * (such as the [Film Strip View]{@link module:alfresco/documentlibrary/views/AlfFilmStripView}) to create
        * alternative widgets applicable to that view.
        *
        * @instance
-       * @returns {object} A new [DocumentListRenderer]{@link module:alfresco/lists/views/ListRenderer}
+       * @returns {object} A new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        */
-      createDocumentListRenderer: function alfresco_lists_views_AlfListView__createDocumentListRenderer() {
-         var dlr = new DocumentListRenderer({
+      createListRenderer: function alfresco_lists_views_AlfListView__createListRenderer() {
+         var dlr = new ListRenderer({
             id: this.id + "_ITEMS",
             widgets: this.widgets,
             currentData: this.currentData,
