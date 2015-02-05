@@ -60,9 +60,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      postCreate: function alfresco_renderers_SearchThumbnail__postCreate() {
+      postCreate: function alfresco_search_SearchThumbnail__postCreate() {
          this.inherited(arguments);
-         domClass.add(this.domNode, "alfresco-renderers-SearchThumbnail");
+         domClass.add(this.domNode, "alfresco-search-SearchThumbnail");
       }
    });
 });

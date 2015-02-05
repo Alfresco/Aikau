@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -26,12 +26,13 @@
  *
  * @module alfresco/search/AlfSearchResult
  * @extends "alfresco/lists/views/layouts/Row"
- * @author Dave Draper & David Webster
+ * @author Dave Draper
+ * @author David Webster
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/Row",
         "dojo/text!./templates/AlfSearchResult.html",
-        "alfresco/renderers/SearchThumbnail",
+        "alfresco/search/SearchThumbnail",
         "alfresco/renderers/SearchResultPropertyLink",
         "alfresco/renderers/PropertyLink",
         "alfresco/renderers/Property",

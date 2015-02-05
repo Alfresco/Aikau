@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -263,7 +263,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends [loadData]{@link module:alfresco/documentlibrary/AlfSearchList#loadData} to store the rootNodeRef.
+       * Extends [loadData]{@link module:alfresco/documentlibrary/AlfDocumentList#loadData} to store the rootNodeRef.
        * @instance
        */
       loadData: function alfresco_pickers_DocumentListPicker__loadData() {

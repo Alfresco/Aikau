@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,62 +18,13 @@
  */
 
 /**
- * Extends the abstract [document list view]{@link module:alfresco/lists/views/AlfListView}
- * to provide a specific set of instructions to display when no search results are available. This advice is in the
- * form of a bulleted ordered list and is configurable through the [searchAdvice attribute]{@link module:alfresco/documentlibrary/views/AlfSearchListView#searchAdvice}
- *
  * @module alfresco/documentlibrary/views/AlfSearchListView
- * @extends module:alfresco/lists/views/AlfListView
+ * @extends module:alfresco/search/AlfSearchListView
  * @author Dave Draper
+ * @deprecated Since 1.0.4 - Use [alfresco/search/AlfSearchListView]{@link module:alfresco/search/AlfSearchListView} instead.
  */
 define(["dojo/_base/declare",
-        "alfresco/lists/views/AlfListView",
-        "alfresco/search/AlfSearchResult"], 
-        function(declare, AlfDocumentListView, AlfSearchResult) {
-   
-   return declare([AlfDocumentListView], {
-      
-      /**
-       * The configuration for selecting the view (configured the menu item)
-       * @instance
-       * @type {object}
-       * @property {string|null} label The label or message key for the view (as appears in the menus)
-       * @property {string|null} iconClass The class to place next to the label
-       */
-      viewSelectionConfig: {
-         label: "doclist.view.detailed.label",
-         iconClass: "alf-detailedlist-icon"
-      },
-      
-      /**
-       * Returns the name of the view that is used when saving user view preferences.
-       * 
-       * @instance
-       * @returns {string} "detailed"
-       */
-      getViewName: function alfresco_documentlibrary_views_AlfDocumentListView__getViewName() {
-         return "detailed";
-      },
-      
-      /**
-       * An array of the CSS files to use with this widget.
-       * 
-       * @instance cssRequirements {Array}
-       * @type {object[]}
-       * @default [{cssFile:"./css/AlfSearchListView.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/AlfSearchListView.css"}],
-
-      /**
-       * The definition of how a single item is represented in the view. 
-       * 
-       * @instance
-       * @type {object[]}
-       */
-      widgets: [
-         {
-            name: "alfresco/search/AlfSearchResult"
-         }
-      ]
-   });
+        "alfresco/search/AlfSearchListView"], 
+        function(declare, AlfSearchListView) {
+   return declare([AlfSearchListView], {});
 });
