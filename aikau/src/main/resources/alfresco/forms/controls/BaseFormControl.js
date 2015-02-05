@@ -1237,17 +1237,17 @@ define(["dojo/_base/declare",
          {
             this.alfUnsubscribe(this.widgetProcessingCompleteSubscription);
             
+            // Update the flag to indicate that we're no longer deferring value assignment, this needs to be
+            // done before setting the initial value or processing all the deferred values as otherwise they'll 
+            // just get added to the end of the deferred value array!
+            this.deferValueAssigment = false;
+            
             if (this.pendingOptions)
             {
                this.options = this.pendingOptions;
                this.setOptions(this.options);
             }
 
-            // Update the flag to indicate that we're no longer deferring value assignment, this needs to be
-            // done before setting the initial value or processing all the deferred values as otherwise they'll 
-            // just get added to the end of the deferred value array!
-            this.deferValueAssigment = false;
-            
             this.setValue(this.initialValue);
             delete this.initialValue;
 
