@@ -30,7 +30,7 @@ define(["./config/Suites"],
             chromeOptions: {
                excludeSwitches: ['ignore-certificate-errors']
             }
-         // },
+         } // ,
          // { browserName: 'firefox' }
       ],
 
