@@ -1,9 +1,11 @@
 #!/bin/sh
 
-SELENIUM_VERSION="selenium-server-standalone-2.43.0.jar"
-SELENIUM_VERSION_NUMBER="2.43"
+SELENIUM_VERSION="selenium-server-standalone-2.44.0.jar"
+SELENIUM_VERSION_NUMBER="2.44"
 PHANTOMJS_VERSION="phantomjs-1.9.7-linux-x86_64" #don't include .tar.bz2 ext.
 CHROMEDRIVER_VERSION="2.10"
+CHROME_VERSION="40.0.2214.95-1"
+FIREFOX_VERSION="34.0"
 
 set -e
 
@@ -25,7 +27,7 @@ else
    apt-get update
 
    # Install Java, Chrome, Xvfb, unzip, firefox and libicu48
-   apt-get -y install openjdk-7-jre google-chrome-stable xvfb unzip firefox libicu48
+   apt-get -y install openjdk-7-jre google-chrome-stable=$CHROME_VERSION xvfb unzip libicu48
 
    cd /tmp
 
@@ -43,6 +45,10 @@ else
    wget "http://selenium-release.storage.googleapis.com/$SELENIUM_VERSION_NUMBER/$SELENIUM_VERSION"
    mv $SELENIUM_VERSION /usr/local/bin
 
+   wget "https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2"
+   tar -xjvf firefox-$FIREFOX_VERSION.tar.bz2
+   cp -r firefox /usr/local/bin/
+
    # So that running `vagrant provision` doesn't redownload everything
    touch /.installed
 fi
@@ -57,8 +63,10 @@ Xvfb :10 -screen 0 1366x768x24 -ac &
 echo "Starting Google Chrome (v`dpkg -s google-chrome-stable| grep Version|cut -d: -f2` w/ Chrome Driver v$CHROMEDRIVER_VERSION)..."
 google-chrome --remote-debugging-port=9222 &
 
-echo "Starting Firefox (v`dpkg -s firefox| grep Version|cut -d: -f2`)..."
+echo "Starting Firefox (v$FIREFOX_VERSION)..."
+cd /usr/local/bin/firefox
 firefox &
+cd - > /dev/null
 
 echo "Starting Phantomjs ($PHANTOMJS_VERSION)..."
 phantomjs --ignore-ssl-errors=true --web-security=false --webdriver=192.168.56.4:4444 &
