@@ -1,3 +1,6 @@
+Previous: [About This Tutorial](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/About.md),
+Next: [How to Create a new Widget](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial2.md)
+
 ## Tutorial 1 - Getting Started
 If you're already familiar with what Aikau is then you're probably here for an in-depth tutorial on how to use it – but for those who aren't this tutorial should serve as an example of how fast it can be to develop a new client that accesses data from an Alfresco repository.
 
@@ -83,7 +86,7 @@ At the end of the line before the comment add a comma (because we're about to ad
 }
 ```
 
-Now refresh WebScripts [LINK TO SECTION ON HOW TO REFRESH WEBSCRIPTS] and reload the page in the browser (you won't need to restart the server). You should see the following:
+Now reload the page in the browser (you won't need to restart the server). You should see the following:
 
 ![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%203.png "Document List waiting for data")
 
@@ -154,6 +157,7 @@ Now refresh the page and then try dragging and dropping a file from your compute
 
 ![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%206.png "Document List with upload support")
 
+Next: [How to Create a new Widget](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial2.md)
 
 
 
