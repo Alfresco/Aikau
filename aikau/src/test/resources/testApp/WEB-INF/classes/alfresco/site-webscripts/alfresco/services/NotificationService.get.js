@@ -25,7 +25,8 @@ model.jsonModel = {
                message: "This is a message."
             }
          }
-      }, {
+      },
+      {
          name: "alfresco/buttons/AlfButton",
          id: "NOTIFICATION_BUTTON_MEDIUM",
          config: {
@@ -35,7 +36,8 @@ model.jsonModel = {
                message: "This is my test notification message. It is of, what I consider to be, a medium length."
             }
          }
-      }, {
+      },
+      {
          name: "alfresco/buttons/AlfButton",
          id: "NOTIFICATION_BUTTON_LARGE",
          config: {
@@ -45,7 +47,8 @@ model.jsonModel = {
                message: "This is a longer message. I shall Lorem Ipsum it. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor feugiat tristique. Nulla sed egestas elit. Quisque malesuada eget felis eget auctor. Aenean mattis quam nisl, sit amet sollicitudin ex posuere eget."
             }
          }
-      }, {
+      },
+      {
          name: "alfresco/buttons/AlfButton",
          id: "DIALOG_BUTTON",
          config: {
@@ -75,9 +78,11 @@ model.jsonModel = {
                ]
             }
          }
-      }, {
+      },
+      {
          name: "alfresco/logging/SubscriptionLog"
-      }, {
+      },
+      {
          name: "aikauTesting/TestCoverageResults"
       }
    ]

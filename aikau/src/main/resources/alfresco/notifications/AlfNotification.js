@@ -23,19 +23,14 @@
  * @module alfresco/notifications/AlfNotification
  * @author Martin Doyle
  */
-define([
-      'alfresco/core/Core',
-
-      'dojo/_base/declare',
-      'dojo/_base/lang',
-      'dojo/dom-class',
-
-      'dijit/_TemplatedMixin',
-      'dijit/_WidgetBase',
-
-      'dojo/text!./templates/AlfNotification.html'
-   ],
-   function(AlfCore, declare, lang, domClass, _TemplatedMixin, _WidgetBase, template) {
+define(["alfresco/core/Core",
+        "dojo/_base/declare",
+        "dojo/_base/lang",
+        "dojo/dom-class",
+        "dijit/_TemplatedMixin",
+        "dijit/_WidgetBase",
+        "dojo/text!./templates/AlfNotification.html"],
+        function(AlfCore, declare, lang, domClass, _TemplatedMixin, _WidgetBase, template) {
 
       return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -44,10 +39,10 @@ define([
           *
           * @instance cssRequirements {Array}
           * @type {object[]}
-          * @default [{cssFile:'./css/AlfNotification.css'}]
+          * @default [{cssFile:"./css/AlfNotification.css"}]
           */
          cssRequirements: [{
-            cssFile: './css/AlfNotification.css'
+            cssFile: "./css/AlfNotification.css"
          }],
 
          /**
@@ -112,7 +107,7 @@ define([
           * @instance
           */
          hide: function alfresco_notifications_AlfNotification__hide() {
-            domClass.remove(this.domNode, 'alfresco-notifications-AlfNotification--visible');
+            domClass.remove(this.domNode, "alfresco-notifications-AlfNotification--visible");
             setTimeout(lang.hitch(this, this.destroy), this.destroyAfterHideMs);
          },
 
@@ -122,8 +117,8 @@ define([
           * @instance
           */
          show: function alfresco_notifications_AlfNotification__show() {
-            domClass.add(this.domNode, 'alfresco-notifications-AlfNotification--visible');
-            var messageText = this.messageNode.textContent || this.message.innerText || '',
+            domClass.add(this.domNode, "alfresco-notifications-AlfNotification--visible");
+            var messageText = this.messageNode.textContent || this.message.innerText || "",
                messageWords = messageText.split(/\W+/),
                autoHideSecs = Math.ceil(messageWords.length / this.wordsPerSecond) + this.notificationFocusSecs;
             setTimeout(lang.hitch(this, this.hide), autoHideSecs * 1000);

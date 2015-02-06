@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,11 +23,10 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-      "alfresco/core/Core",
-      "dojo/_base/lang",
-      "alfresco/notifications/AlfNotification"
-   ],
-   function(declare, AlfCore, lang, AlfNotification) {
+        "alfresco/core/Core",
+        "dojo/_base/lang",
+        "alfresco/notifications/AlfNotification"],
+        function(declare, AlfCore, lang, AlfNotification) {
 
       return declare([AlfCore], {
 
@@ -39,8 +38,8 @@ define(["dojo/_base/declare",
           */
          constructor: function alfresco_services_NotificationService__constructor(args) {
             lang.mixin(this, args);
-            this.alfSubscribe("ALF_DISPLAY_NOTIFICATION", lang.hitch(this, "onDisplayNotification"));
-            this.alfSubscribe("ALF_DISPLAY_PROMPT", lang.hitch(this, "onDisplayPrompt"));
+            this.alfSubscribe("ALF_DISPLAY_NOTIFICATION", lang.hitch(this.onDisplayNotification));
+            this.alfSubscribe("ALF_DISPLAY_PROMPT", lang.hitch(this.onDisplayPrompt));
          },
 
          /**
