@@ -3,12 +3,14 @@ If you're already familiar with what Aikau is then you're probably here for an i
 
 In this tutorial we're going to create a very simple application that allows a user to login and access their personal home folder in the Repository.
 
-The only thing required to complete the tutorial is an installed and operational instance of Alfresco. If you don't have Alfresco installed then you can download and install it from [LINK] here. It’s recommended that you download and install a new version of Alfresco Community because you’ll need administrator privileges to work through the entire tutorial.
+The only thing required to complete the tutorial is an installed and operational instance of Alfresco. If you don't have Alfresco installed then you can download and install it from [here](http://www.alfresco.com/products/community "Alfresco Community Download Page"). It’s recommended that you download and install a new version of Alfresco Community because you’ll need administrator privileges to work through the entire tutorial.
 
 ### Step 1. Create a new client via Maven Archetype
 From the command line of your operating system, create (or navigate to) a folder in which you wish to create your new client project and then run the following command:
 
-> mvn archetype:generate -DarchetypeCatalog=https://artifacts.alfresco.com/nexus/content/groups/public/archetype-catalog.xml -DarchetypeGroupId=org.alfresco -DarchetypeArtifactId=aikau-sample-archetype
+```
+mvn archetype:generate -DarchetypeCatalog=https://artifacts.alfresco.com/nexus/content/groups/public/archetype-catalog.xml -DarchetypeGroupId=org.alfresco -DarchetypeArtifactId=aikau-sample-archetype
+```
 
 You will be prompted to enter the following parameters for your project:
 * groupId
@@ -26,14 +28,18 @@ When the project has been generated you should see the following in the terminal
 
 A folder will have been created with the same value as you provided for the “artifactId” parameter. Change to this directory and then run:
 
-> mvn install
+```
+mvn install
+```
 
 Which will build your new Aikau project.
 
-## Step 2. Login to your new client
+### Step 2. Login to your new client
 Make sure you have an Alfresco Repository up and running, then start your new application by running:
 
-> mvn jetty:run
+```
+mvn jetty:run
+```
 
 ...from a command line. After small pause (don’t worry while this happens, it is busy!) the Jetty server will have started, when you see the line:
 
@@ -44,6 +50,112 @@ Make sure you have an Alfresco Repository up and running, then start your new ap
 > http://localhost:8090/aikau-sample/
 
 You will automatically be re-directed to the default login page at which you can enter the credentials of a valid user of your Alfresco repository and you will be taken to the default home page.
+
+**NOTE: There’s nothing particularly special about port 8090, it’s simply been selected in order to avoid conflicting with other ports that might in use (e.g. the Alfresco Repository). It can easily be changed by editing the pom.xml file of the Maven project.**
+
+At the moment it’s quite empty, containing nothing more than a header and footer with a big empty space in the middle which we’re going to fill.
+
+ADD IMAGES
+
+### Step 3. Show the user files
+Currently the home page of your client has very little displayed on it. We're going to update this page by adding in the widgets and services that will render the contents of the user’s home folder.
+
+To do this we need to add a DocumentList widget onto the page along with a view to render the contents of the list and the services required to retrieve the documents and folders to display.
+
+Open the JavaScript controller file for the home page (“<PROJECT>/src/main/webapp/WEB-INF/webscripts/pages/home.get.js”) and find the comment:
+
+```
+// Add more widgets here !!!
+```
+
+At the end of the line before the comment add a comma (because we're about to add another object to the array of widgets) and then directly underneath that line add the following code:
+
+```
+{
+  name: "alfresco/documentlibrary/AlfDocumentList",
+  config: {
+    rootNode: "alfresco://user/home",
+    rawData: true,
+    widgets: [
+      {
+        name: "alfresco/documentlibrary/views/AlfSimpleView"
+      }
+    ]
+  }
+}
+```
+
+Now refresh WebScripts [LINK TO SECTION ON HOW TO REFRESH WEBSCRIPTS] and reload the page in the browser (you won't need to restart the server). You should see the following:
+
+ADD IMAGE
+
+The AlfDocumentList widget is renders a loading message (“Loading…”) and attempts to retrieve some data from the Alfresco Repository. We have not included anything in the page to service that request so the message is never replaced with any actual data. In order to service the request for data we’ll need to include a dedicated service on the page.
+
+In the JavaScript controller find the comment:
+
+```
+// Add more services here !!!
+```
+
+At the end of the line before the comment add a comma (because we're about to add another object to the array) and then directly underneath the comment line add the following code:
+
+```
+"alfresco/services/DocumentService"
+```
+
+Reload the page and you should see a list of files for the currently logged in user. If you've logged in as “admin” then you will see the contents of “Company Home” which will look like this:
+
+ADD IMAGE
+
+We’ll explore services in more detail in later tutorials (in fact you’ll be writing your own!) but for the time being all you need to know that Aikau provides a number of services that you can easily reuse. These are all located in the “alfresco/services” package.
+
+You can now browse around the files but you won't be able to view an individual file yet (because the default document link is for an Alfresco Share specific page that does not exist in your application). Nor will you be able to do anything with the files (such as delete them) because the actions haven’t yet been configured yet. We’ll get to these in a later tutorials.
+
+### Step 4. Improve Navigation
+Although you can navigate into folders it’s not currently possible to navigate back out of them. There are lots of different ways in which we can address this (e.g. breadcrumb trails, navigation trees, etc) but as a simple solution we’ll add a button to navigate back to the parent of the current folder.
+
+Add this to the model in the JavaScript controller directly above the “alfresco/documentlibrary/AlfDocumentList” entry you added earlier.
+
+```
+{
+  name: "alfresco/buttons/AlfButton",
+  config: {
+    label: "Go to parent folder",
+    iconClass: "alf-folder-up-icon",
+    publishTopic: "ALF_DOCLIST_PARENT_NAV"
+  }
+},
+```
+
+When you refresh the page you should now see a button that can be used to navigate back to the parent folder.
+
+ADD IMAGE
+
+The key thing to note here is that the only link between the AlfDocumentList and the AlfButton is the topic that the button publishes on when clicked (defined by the “publishTopic” configuration attribute) which is subscribed to by the AlfDocumentList.
+
+Aikau uses a publication/subscription (sometimes referred to as “PubSub”) communication model (http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) to ensure that there are no fixed relationships between widgets and services in order that they can be easily reused independently of each other. The “publishTopic” that we have configured is an example of a topic that is published when an action occurs - but there will only be reaction to this publication if something else is subscribing to that topic.
+
+### Step 5. Add File Upload Support
+Now let's make an update to allow the user to upload new content.
+
+Add the following service to the page, in the same way that you added the DocumentService earlier.
+
+```
+"alfresco/services/ActionService"
+```
+
+...and after the “alfresco/documentlibrary/AlfDocumentList” entry, add the following widget:
+
+```
+{
+  name: "alfresco/upload/AlfUpload"
+}
+```
+
+Now refresh the page and then try dragging and dropping a file from your computer’s file-system onto the document list and you should see it successfully uploaded. Ensure you drop the file into the document list component area to trigger the drop-zone.
+
+ADD IMAGE
+
 
 
 
