@@ -61,8 +61,6 @@
       // Load all grunt modules
       // @see: https://github.com/sindresorhus/load-grunt-tasks
       require('load-grunt-tasks')(grunt);
-      grunt.loadNpmTasks('grunt-notify');
-      grunt.loadNpmTasks('grunt-folder-list');
 
       var _ = require('lodash'), // Add the lodash util library
          extend = _.extend,
