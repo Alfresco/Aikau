@@ -226,7 +226,7 @@ define(["dojo/_base/declare",
       onScopeSelection: function alfresco_search_AlfSearchList__onScopeSelection(payload) {
          this.alfLog("log", "Scope selection received", payload, this);
          var scope = lang.getObject("value", false, payload);
-         if (scope === null)
+         if (scope === null || scope === undefined)
          {
             this.alfLog("warn", "No 'value' attribute provided in scope selection payload", payload, this);
          }
@@ -285,7 +285,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Adding facet filter", payload, this);
          var qname = lang.getObject("qname", false, payload);
          var blockIncludeFacetRequest = lang.getObject("blockIncludeFacetRequest", false, payload);
-         if (qname === null)
+         if (qname === null || qname === undefined)
          {
             this.alfLog("warn", "No qname provided when adding facet field", payload, this);
          }
@@ -336,7 +336,7 @@ define(["dojo/_base/declare",
       onApplyFacetFilter: function alfresco_search_AlfSearchList__onApplyFacetFilter(payload) {
          this.alfLog("log", "Filtering on facet", payload, this);
          var filter = lang.getObject("filter", false, payload);
-         if (filter === null)
+         if (filter === null || filter === undefined)
          {
             this.alfLog("warn", "No filter provided when filtering by facet", payload, this);
          }
@@ -428,9 +428,9 @@ define(["dojo/_base/declare",
             // a simple string. Create a new object for the filters and then break up the filters
             // based on comma delimition and assign each element as a new key in the filters object
             var filters = lang.getObject("facetFilters", false, payload);
-            if (filters !== null)
+            if (filters !== null && filters !== undefined)
             {
-               var ff = payload["facetFilters"] = {};
+               var ff = payload.facetFilters = {};
                var fArr = filters.split(",");
                array.forEach(fArr, function(filter) {
                   ff[filter] = true;
@@ -576,7 +576,7 @@ define(["dojo/_base/declare",
          // TODO: This should probably be in the SearchService... but will leave here for now...
          var facets = lang.getObject("response.facets", false, payload);
          var filters = lang.getObject("requestConfig.query.filters", false, payload);
-         if (facets !== null)
+         if (facets !== null && facets !== undefined)
          {
             for (var key in facets)
             {
@@ -631,7 +631,7 @@ define(["dojo/_base/declare",
       handleSpellCheck: function alfresco_search_AlfSearchList__handleSpellCheck(payload) {
          // Check to see whether or not spell checking was applied...
          var spellcheck = lang.getObject("response.spellcheck", false, payload);
-         if (spellcheck !== null)
+         if (spellcheck !== null && spellcheck !== undefined)
          {
             if (spellcheck.searchedFor !== null && spellcheck.searchedFor !== undefined)
             {
