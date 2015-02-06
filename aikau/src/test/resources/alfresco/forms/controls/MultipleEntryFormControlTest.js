@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,268 +24,290 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
+   // Use this function for finding the edit, delete, cancel and save buttons...
+   var buttonCssSelector = function(id, elementIndex, button) {
+      return "#" + id + " div.control div.entries > div:nth-child(" + elementIndex + ") div.button." + button + " > img";
+   };
+   // Use this function for finding the add new entry button...
+   var addButtonCssSelector = function(id) {
+      return "#" + id + " div.control div.button.add > img";
+   };
+   // Use this function for finding the input field when editing...
+   var editFieldCssSelector = function(id, elementIndex) {
+      return "#" + id + " div.control div.entries > div:nth-child(" + elementIndex + ") div.edit-display .alfresco-forms-controls-TextBox .control .dijitInputContainer input";
+   };
+   // Use this function for finding the read display field...
+   var readDisplayCssSelector = function(id, elementIndex) {
+      return "#" + id + " .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(" + elementIndex + ") .alfresco-forms-controls-MultipleEntryElement > div:first-child";
+   };
+
+   var browser;
    registerSuite({
-      name: 'MultipleEntryFormControlTest',
-      'BasicTest': function () {
-
-         // Use this function for finding the edit, delete, cancel and save buttons...
-         var buttonCssSelector = function(id, elementIndex, button) {
-            return "#" + id + " div.control div.entries > div:nth-child(" + elementIndex + ") div.button." + button + " > img";
-         };
-         // Use this function for finding the add new entry button...
-         var addButtonCssSelector = function(id) {
-            return "#" + id + " div.control div.button.add > img";
-         };
-         // Use this function for finding the input field when editing...
-         var editFieldCssSelector = function(id, elementIndex) {
-            return "#" + id + " div.control div.entries > div:nth-child(" + elementIndex + ") div.edit-display .alfresco-forms-controls-TextBox .control .dijitInputContainer input";
-         };
-         // Use this function for finding the read display field...
-         var readDisplayCssSelector = function(id, elementIndex) {
-            return "#" + id + " .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(" + elementIndex + ") .alfresco-forms-controls-MultipleEntryElement > div:first-child";
-         };
-
-
-
-         var browser = this.remote;
-         var testname = "MultipleEntryFormControlTest";
-         return TestCommon.loadTestWebScript(this.remote, "/MultipleEntryFormControl", testname)
-
+      name: "MultipleEntryFormControlTest",
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/MultipleEntryFormControl", "MultipleEntryFormControl").end();
+      },
+      // beforeEach: function() {
+      //    browser.end();
+      // },
+      teardown: function() {
+         return browser.end().alfPostCoverageResults(browser);
+      },
+      "Test for simple value in initial form value": function () {
          // First save the form to check that the initialised results are posted correctly...
-         .findByCssSelector(".confirmationButton > span")
+         return browser.findByCssSelector(".confirmationButton > span")
             .click()
             .end()
          .findByCssSelector(TestCommon.pubDataNestedArrayValueCssSelector("FORM1SAVE_FORM_1","simpleWithValue","1","test1"))
             .then(null, function() {
-               assert(false, "Test #0a - Couldn't find simple data in initial form value publication");
+               assert(false, "Couldn't find simple data in initial form value publication");
             })
-            .end()
-         .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1SAVE_FORM_1","complexWithValue","value","test4"))
+         .end();
+      },
+      "Test for complex value in initial form value": function() {
+         return browser.findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1SAVE_FORM_1","complexWithValue","value","test4"))
             .then(null, function() {
-               assert(false, "Test #0b - Couldn't find complex data in initial form value publication");
+               assert(false, "Couldn't find complex data in initial form value publication");
             })
-            .end()
-
+         .end();
+      },
+      "Test simple preset simple value count": function() {
          // Count the preset values for the simple widget...
-         .findAllByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElement")
+         return browser.findAllByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElement")
             .then(function(elements) {
-               assert(elements.length == 3, "Test #1a - Didn't find the expected number of preset simple value elements");
+               assert(elements.length === 3, "Didn't find the expected number of preset simple value elements");
             })
-            .end()
-
+         .end();
+      },
+      "Test simple preset values rendered correctly (first)": function() {
          // Check that the preset values have been rendered correctly...
-         .findByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(1) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
+         return browser.findByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(1) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "test1", "Test #1b - First simple value not set correctly");
+               assert(resultText === "test1", "First simple value not set correctly, expected 'test1' but found: " + resultText);
             })
-            .end()
-         .findByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(2) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
+         .end();
+      },
+      "Test simple preset values rendered correctly (second)": function() {
+         // Check that the preset values have been rendered correctly...
+         return browser.findByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(2) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "test2", "Test #1c - Second simple value not set correctly");
+               assert(resultText === "test2", "Second simple value not set correctly, expected 'test2' but found: " + resultText);
             })
-            .end()
-         .findByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(3) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
+         .end();
+      },
+      "Test simple preset values rendered correctly (third)": function() {
+         // Check that the preset values have been rendered correctly...
+         return browser.findByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(3) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "test3", "Test #1d - Third simple value not set correctly");
+               assert(resultText === "test3", "Third simple value not set correctly, expected 'test3' but found: " + resultText);
             })
-            .end()
-
-         .findAllByCssSelector("#COMPLEX_WITH_VALUE .alfresco-forms-controls-MultipleEntryElement")
+         .end();
+      },
+      "Test complex preset value count": function() {
+         return browser.findAllByCssSelector("#COMPLEX_WITH_VALUE .alfresco-forms-controls-MultipleEntryElement")
             .then(function(elements) {
-               assert(elements.length == 2, "Test #1e - Didn't find the expected number of preset complex value elements");
+               assert(elements.length === 2, "Didn't find the expected number of preset complex value elements");
             })
-            .end()
-
+         .end();
+      },
+      "Test complex preset values rendered correctly (first)": function() {
          // Check that the preset values have been rendered correctly...
-         .findByCssSelector("#COMPLEX_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(1) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
+         return browser.findByCssSelector("#COMPLEX_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(1) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "test4", "Test #1f - First complex value not set correctly");
+               assert(resultText === "test4", "First complex value not set correctly, expected 'test4' but found: " + resultText);
             })
-            .end()
-         .findByCssSelector("#COMPLEX_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(2) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
+         .end();
+      },
+      "Test complex preset values rendered correctly (second)": function() {
+         // Check that the preset values have been rendered correctly...
+         return browser.findByCssSelector("#COMPLEX_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(2) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "test5", "Test #1g - Second complex value not set correctly");
+               assert(resultText === "test5", "Second complex value not set correctly, expected 'test5' but found: " + resultText);
             })
-            .end()
-
+         .end();
+      },
+      "Test deleting simple entries updates form value correctly": function() {
          // Delete some entries and check that the form value is updated correctly...
-         .findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "delete"))
+         return browser.findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "delete"))
             .click()
-            .end()
+         .end()
          .findByCssSelector(buttonCssSelector("COMPLEX_WITH_VALUE", "1", "delete"))
             .click()
-            .end()
+         .end()
          // Post the updates...
          .findByCssSelector(".confirmationButton > span")
             .click()
-            .end()
-
+         .end()
          // Check the new values...
          .findByCssSelector(TestCommon.pubDataNestedArrayValueCssSelector("FORM1SAVE_FORM_1","simpleWithValue","1","test2"))
             .then(null, function() {
-               assert(false, "Test #2a - Deletion of simple element not reflected in form post");
+               assert(false, "Deletion of simple element not reflected in form post");
             })
-            .end()
-         .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1SAVE_FORM_1","complexWithValue","value","test4"))
+         .end();
+      },
+      "Test deleting complex entries updates the form value correctly": function() {
+         // NOTE:The form post was already done in the previous test, as was the deletion!
+         return browser.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1SAVE_FORM_1","complexWithValue","value","test4"))
             .then(function (elements) {
                // NOTE: We're still expecting to find one result (e.g. from the initial form post)...
-               assert(elements.length == 1, "Test #2b - Deletion of complex element not reflected in form post");
+               assert(elements.length === 1, " Deletion of complex element not reflected in form post");
             })
-            .end()
-
-         // Edit some existing entries...
+         .end();
+      },
+      // Edit some existing entries...
+      "Test that simple entry value can be edited": function() {
          // Click the edit button of the first preset simple entry...
-         .findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "edit"))
+         return browser.findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "edit"))
             .click()
-            .end()
-
+         .end()
          // Check the edit field is present and initialised correctly...
          .findByCssSelector(editFieldCssSelector("SIMPLE_WITH_VALUE", "1"))
             .then(null, function() {
-               assert(false, "Test #3a - Couldn't find the edit field for the simple element");
+               assert(false, "Couldn't find the edit field for the simple element");
             })
-            .getProperty('value')
+            .getProperty("value")
             .then(function(resultText) {
-               assert(resultText == "test2", "Test #3b - The edit field wasn't populated as expected" + resultText);
+               assert(resultText === "test2", "The edit field wasn't populated as expected" + resultText);
             })
+         .end();
+      },
+      "Test edited simple entry is reflected in read-only display": function() {
+         return browser.findByCssSelector(editFieldCssSelector("SIMPLE_WITH_VALUE", "1"))
             .clearValue()
             .type("updated simple value")
-            .end()
-
+         .end()
          // Click the "done" button to finish editing (this should save the update)...
          .findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "doneEditing"))
             .click()
-            .end()
-
+         .end()
          // Check the read display is updated...
          .findByCssSelector(readDisplayCssSelector("SIMPLE_WITH_VALUE", "1"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "updated simple value", "Test #3b - Read display not updated correctly:", resultText);
+               assert(resultText === "updated simple value", "Read display not updated correctly:", resultText);
             })
-            .end()
-
+         .end();
+      },
+      "Test updated value reflected in form post": function() {
           // Post the update...
-         .findByCssSelector(".confirmationButton > span")
+         return browser.findByCssSelector(".confirmationButton > span")
             .click()
-            .end()
-
+         .end()
          // Check the new value...
          .findByCssSelector(TestCommon.pubDataNestedArrayValueCssSelector("FORM1SAVE_FORM_1","simpleWithValue","1","updated simple value"))
             .then(null, function() {
-               assert(false, "Test #3c - Edited value not included in form post");
+               assert(false, "Edited value not included in form post");
             })
-            .end()
-
+         .end();
+      },
+      "Test previous edit retained": function() {
          // Edit the same field, but this time with the intent to discard the changes...
-         .findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "edit"))
+         return browser.findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "edit"))
             .click()
-            .end()
-
+         .end()
          // Check the edit field is present and initialised correctly...
          .findByCssSelector(editFieldCssSelector("SIMPLE_WITH_VALUE", "1"))
-            .getProperty('value')
+            .getProperty("value")
             .then(function(resultText) {
-               assert(resultText == "updated simple value", "Test #4a - The edit field wasn't populated as expected following previous edit" + resultText);
+               assert(resultText === "updated simple value", "The edit field wasn't populated as expected following previous edit" + resultText);
             })
+         .end();
+      },
+      "Test current edit can be discarded": function() {
+         return browser.findByCssSelector(editFieldCssSelector("SIMPLE_WITH_VALUE", "1"))
             .clearValue()
             .type("to discard")
-            .end()
-
+         .end()
          // Click the "cancel" button to finish editing (this should not save the changes)...
          .findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "cancelEditing"))
             .click()
-            .end()
-
+         .end()
          // Check that the read display has NOT been changed...
          .findByCssSelector(readDisplayCssSelector("SIMPLE_WITH_VALUE", "1"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "updated simple value", "Test #4b - Discarded changes were displayed:", resultText);
+               assert(resultText === "updated simple value", "Discarded changes were displayed:", resultText);
             })
-            .end()
-
+         .end();
+      },
+      "Test that dicarded edits are not included in form post": function() {
           // Post the update...
-         .findByCssSelector(".confirmationButton > span")
+         return browser.findByCssSelector(".confirmationButton > span")
             .click()
-            .end()
-
+         .end()
          // Check that the discarded changes were NOT posted...
          .findByCssSelector(TestCommon.pubDataNestedArrayValueCssSelector("FORM1SAVE_FORM_1","simpleWithValue","1","updated simple value"))
             .then(null, function() {
-               assert(false, "Test #4c - Discarded changes were included in form post");
+               assert(false, "Discarded changes were included in form post");
             })
-            .end()
-
+         .end();
+      },
+      "Test adding and discarding an entry": function() {
          // Add some new entries...
-         .findByCssSelector(addButtonCssSelector("SIMPLE_NO_VALUE"))
+         return browser.findByCssSelector(addButtonCssSelector("SIMPLE_NO_VALUE"))
             .click()
-            .end()
-
+         .end()
          .findByCssSelector(editFieldCssSelector("SIMPLE_NO_VALUE", "1"))
             .type("new entry to discard")
-            .end()
-
+         .end()
          // Click the "cancel" button to cancel editing (this should delete the entry because it has never been saved)...
          .findByCssSelector(buttonCssSelector("SIMPLE_NO_VALUE", "1", "cancelEditing"))
             .click()
-            .end()
-
+         .end()
          // Make sure that the element wrapper has been removed...
          .findAllByCssSelector("#SIMPLE_NO_VALUE div.control div.entries > div")
             .then(function (elements) {
-               assert(elements.length === 0, "Test #5a - Cancelling creating a new entry didn't delete the element");
+               assert(elements.length === 0, "Cancelling creating a new entry didn't delete the element");
             })
-            .end()
-
+         .end();
+      },
+      "Test adding and saving an entry": function() {
          // Add the entry (with the intention of saving this time)...
-         .findByCssSelector(addButtonCssSelector("SIMPLE_NO_VALUE"))
+         return browser.findByCssSelector(addButtonCssSelector("SIMPLE_NO_VALUE"))
             .click()
-            .end()
+         .end()
          .findByCssSelector(editFieldCssSelector("SIMPLE_NO_VALUE", "1"))
             .type("new entry")
-            .end()
+         .end()
          .findByCssSelector(buttonCssSelector("SIMPLE_NO_VALUE", "1", "doneEditing"))
             .click()
-            .end()
-
+         .end()
          // Count the created entries...
          .findAllByCssSelector("#SIMPLE_NO_VALUE div.control div.entries > div")
             .then(function (elements) {
-               assert(elements.length == 1, "Test #5b - Saving a new element didn't create a single entry: " +  elements.length);
+               assert(elements.length === 1, "Saving a new element didn't create a single entry: " +  elements.length);
             })
-            .end()
-
+         .end();
+      },
+      "Test read display on additional entry": function() {
          // Check the read display...
-         .findByCssSelector(readDisplayCssSelector("SIMPLE_NO_VALUE", "1"))
+         return browser.findByCssSelector(readDisplayCssSelector("SIMPLE_NO_VALUE", "1"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "new entry", "Test #5c - Added entry was not displayed correctly:", resultText);
+               assert(resultText === "new entry", "Added entry was not displayed correctly:", resultText);
             })
-            .end()
-
+         .end();
+      },
+      "Test added entry is included in form post": function() {
          // Post the update...
-         .findByCssSelector(".confirmationButton > span")
+         return browser.findByCssSelector(".confirmationButton > span")
             .click()
-            .end()
-
+         .end()
          // Check that the discarded changes were NOT posted...
          .findByCssSelector(TestCommon.pubDataNestedArrayValueCssSelector("FORM1SAVE_FORM_1","simple","1","new entry"))
             .then(null, function() {
                assert(false, "Test #5d - Added entry was not included in form post");
             })
-            .end()
-
-         .alfPostCoverageResults(browser);
+         .end();
       }
    });
 });

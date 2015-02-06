@@ -13,7 +13,7 @@
   z-index: 4;
 }
 
-.alfresco-documentlibrary-views-layouts-AlfFilmStripView > div.preview .alfresco-documentlibrary-views-layouts-Carousel .alfresco-layout-LeftAndRight {
+.alfresco-documentlibrary-views-layouts-AlfFilmStripView > div.preview .alfresco-lists-views-layouts-Carousel .alfresco-layout-LeftAndRight {
    background-color: #000000;
    color: #FFFFFF;
    opacity: 0.5;
@@ -29,18 +29,18 @@
 }
 
 .alfresco-documentlibrary-views-layouts-AlfFilmStripView > div.preview 
-.alfresco-documentlibrary-views-layouts-Carousel .alfresco-layout-LeftAndRight .alfresco-renderers-Property {
+.alfresco-lists-views-layouts-Carousel .alfresco-layout-LeftAndRight .alfresco-renderers-Property {
    color: #FFFFFF;
 }
 
 .alfresco-documentlibrary-views-layouts-AlfFilmStripView div.preview 
-.alfresco-documentlibrary-views-layouts-Carousel .alfresco-layout-LeftAndRight 
+.alfresco-lists-views-layouts-Carousel .alfresco-layout-LeftAndRight 
 .alfresco-renderers-Selector.checked {
    background-image: url(./images/AllSelectedWhite.png);
 }
 
 .alfresco-documentlibrary-views-layouts-AlfFilmStripView div.preview 
-.alfresco-documentlibrary-views-layouts-Carousel .alfresco-layout-LeftAndRight 
+.alfresco-lists-views-layouts-Carousel .alfresco-layout-LeftAndRight 
 .alfresco-renderers-Selector.unchecked {
    background-image: url(./images/NoneSelectedWhite.png);
 }

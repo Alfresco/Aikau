@@ -50,9 +50,10 @@ define(["dojo/_base/declare",
         "dojo/dom-attr",
         "dojo/query",
         "dojo/dom-construct",
+        "dojo/Deferred",
         "jquery"], 
         function(declare, _Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, template, ObjectTypeUtils, 
-                 arrayUtils, lang, array, domStyle, domClass, Tooltip, domAttr, query, domConstruct, $) {
+                 arrayUtils, lang, array, domStyle, domClass, Tooltip, domAttr, query, domConstruct, Deferred, $) {
 
    return declare([_Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin], {
       
@@ -1101,6 +1102,12 @@ define(["dojo/_base/declare",
          // correctly, the value can be set with the intended value (as opposed to what the wrapped widget
          // thinks it should be)...
          this.initialValue = this.value;
+
+         // We want to defer value assignment until the widget has been placed into the document, so 
+         // we set this flag to indicate that value assignment will be deferred and then create an array
+         // to capture all the deferred values...
+         this.deferValueAssigment = true;
+         this.deferredValueAssignments = [];
          
          if (this.validationInProgressImgSrc == null || this.validationInProgressImgSrc === "")
          {
@@ -1230,6 +1237,11 @@ define(["dojo/_base/declare",
          {
             this.alfUnsubscribe(this.widgetProcessingCompleteSubscription);
             
+            // Update the flag to indicate that we're no longer deferring value assignment, this needs to be
+            // done before setting the initial value or processing all the deferred values as otherwise they'll 
+            // just get added to the end of the deferred value array!
+            this.deferValueAssigment = false;
+            
             if (this.pendingOptions)
             {
                this.options = this.pendingOptions;
@@ -1238,6 +1250,14 @@ define(["dojo/_base/declare",
 
             this.setValue(this.initialValue);
             delete this.initialValue;
+
+            // Iterate over all the deferred value assignments, arguably we could just process the last deferred
+            // value, however it may be necessary to ensure that the intended flow of processing is maintained
+            // (e.g. there may be rules configured to set or update other fields based on one of the values)
+            array.forEach(this.deferredValueAssignments, function(deferred) {
+               deferred.resolve();
+            });
+            delete this.deferredValueAssignments;
 
             // Set up the events that indicate a change in value...
             this.setupChangeEvents();
@@ -1407,15 +1427,26 @@ define(["dojo/_base/declare",
        * @param {object} value The value to set.
        */
       setValue: function alfresco_forms_controls_BaseFormControl__setValue(value) {
-         this.alfLog("log", "Setting field: '" + this.fieldId + "' with value: ", value);
-         if (this.wrappedWidget)
+         if (this.deferValueAssigment)
          {
-            if (this._convertStringValuesToBooleans === true && typeof value === "boolean")
+            // If we're not quite ready to start setting values, then we should defer
+            // updating the value until we are. We determine that we're ready to set
+            // a value by the existence of the deferredValueAssignments attribute..
+            var deferred = new Deferred();
+            deferred.then(lang.hitch(this, this.setValue, value));
+            this.deferredValueAssignments.push(deferred);
+         }
+         else
+         {
+            this.alfLog("log", "Setting field: '" + this.fieldId + "' with value: ", value);
+            if (this.wrappedWidget)
             {
-               value = value.toString();
+               if (this._convertStringValuesToBooleans === true && typeof value === "boolean")
+               {
+                  value = value.toString();
+               }
+               this.wrappedWidget.set("value", value);
             }
-            // this.wrappedWidget.setValue(value);
-            this.wrappedWidget.set("value", value);
          }
       },
 

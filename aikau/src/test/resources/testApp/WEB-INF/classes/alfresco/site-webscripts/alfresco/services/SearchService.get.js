@@ -73,7 +73,7 @@ model.jsonModel = {
                      a11yCaptionClass: "hiddenAccessible",
                      widgetsForHeader: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                           name: "alfresco/lists/views/layouts/HeaderCell",
                            config: {
                               label: "Thumbnail",
                               class: "hiddenAccessible",
@@ -81,7 +81,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                           name: "alfresco/lists/views/layouts/HeaderCell",
                            config: {
                               label: "Details",
                               class: "hiddenAccessible",
@@ -89,7 +89,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                           name: "alfresco/lists/views/layouts/HeaderCell",
                            config: {
                               label: "Actions",
                               class: "hiddenAccessible",

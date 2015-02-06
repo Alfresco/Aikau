@@ -36,18 +36,18 @@ model.jsonModel = {
       },
       {
          id: "SEARCHED_ON",
-         name: "alfresco/documentlibrary/views/AlfDocumentListView",
+         name: "alfresco/lists/views/AlfListView",
          config: {
             subscribeToDocRequests: true,
             documentSubscriptionTopic: "ALF_SPELL_CHECK_SEARCH_SUGGESTIONS",
             itemsProperty: "searchSuggestions",
             widgets: [
                {
-                  name: "alfresco/documentlibrary/views/layouts/Row",
+                  name: "alfresco/lists/views/layouts/Row",
                   config: {
                      widgets: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Cell",
+                           name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {
@@ -97,15 +97,15 @@ model.jsonModel = {
             widgets: [
                {
                   id: "SEARCH_RESULTS_VIEW",
-                  name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                  name: "alfresco/lists/views/AlfListView",
                   config: {
                      widgets: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Row",
+                           name: "alfresco/lists/views/layouts/Row",
                            config: {
                               widgets: [
                                  {
-                                    name: "alfresco/documentlibrary/views/layouts/Cell",
+                                    name: "alfresco/lists/views/layouts/Cell",
                                     config: {
                                        widgets: [
                                           {

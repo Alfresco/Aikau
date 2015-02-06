@@ -13,7 +13,7 @@ model.jsonModel = {
    ],
    widgets:[
       {
-         name: "alfresco/documentlibrary/views/AlfDocumentListView",
+         name: "alfresco/lists/views/AlfListView",
          config: {
             id: "LIST_WITH_HEADER",
             currentData: {
@@ -26,7 +26,7 @@ model.jsonModel = {
             },
             widgetsForHeader: [
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "COLUMN1_HEADER",
                      label: "Column 1"
@@ -35,11 +35,11 @@ model.jsonModel = {
             ],
             widgets:[
                {
-                  name: "alfresco/documentlibrary/views/layouts/Row",
+                  name: "alfresco/lists/views/layouts/Row",
                   config: {
                      widgets: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Cell",
+                           name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {

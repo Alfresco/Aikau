@@ -19,11 +19,11 @@
 
 /**
  * @module alfresco/documentlibrary/views/AlfDetailedView
- * @extends module:alfresco/documentlibrary/views/AlfDocumentListView
+ * @extends module:alfresco/lists/views/AlfListView
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/documentlibrary/views/AlfDocumentListView"], 
+        "alfresco/lists/views/AlfListView"], 
         function(declare, AlfDocumentListView, template) {
    
    return declare([AlfDocumentListView], {
@@ -67,12 +67,12 @@ define(["dojo/_base/declare",
        */
       widgets: [
          {
-            name: "alfresco/documentlibrary/views/layouts/Row",
+            name: "alfresco/lists/views/layouts/Row",
             config: {
                generatePubSubScope: true,
                widgets: [
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         width: "16px",
                         widgets: [
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         width: "16px",
                         widgets: [
@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         width: "100px",
                         widgets: [
@@ -114,15 +114,15 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         widgets: [
                            {
-                              name: "alfresco/documentlibrary/views/layouts/Column",
+                              name: "alfresco/lists/views/layouts/Column",
                               config: {
                                  widgets: [
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           widgets: [
                                              {
@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           widgets: [
                                              {
@@ -180,7 +180,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           widgets: [
                                              {
@@ -201,7 +201,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           widgets: [
                                              {
@@ -217,7 +217,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           widgets: [
                                              {
@@ -240,7 +240,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           widgets: [
                                              {
@@ -260,7 +260,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           renderFilter: [
                                              {
@@ -317,7 +317,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           widgets: [
                                              {
@@ -341,7 +341,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Cell",
+                     name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         width: "100px",
                         widgets: [

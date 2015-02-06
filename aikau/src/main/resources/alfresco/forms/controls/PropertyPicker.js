@@ -43,11 +43,11 @@ define(["alfresco/forms/controls/Picker",
          itemKey: "name",
          widgets: [
             {
-               name: "alfresco/documentlibrary/views/layouts/Row",
+               name: "alfresco/lists/views/layouts/Row",
                config: {
                   widgets: [
                      {
-                        name: "alfresco/documentlibrary/views/layouts/Cell",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
                            widgets: [
                               {
@@ -69,7 +69,7 @@ define(["alfresco/forms/controls/Picker",
                         }
                      },
                      {
-                        name: "alfresco/documentlibrary/views/layouts/Cell",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
                            width: "20px",
                            widgets: [
@@ -108,11 +108,11 @@ define(["alfresco/forms/controls/Picker",
                   itemKey: "name",
                   widgets: [
                      {
-                        name: "alfresco/documentlibrary/views/layouts/Row",
+                        name: "alfresco/lists/views/layouts/Row",
                         config: {
                            widgets: [
                               {
-                                 name: "alfresco/documentlibrary/views/layouts/Cell",
+                                 name: "alfresco/lists/views/layouts/Cell",
                                  config: {
                                     widgets: [
                                        {
@@ -134,7 +134,7 @@ define(["alfresco/forms/controls/Picker",
                                  }
                               },
                               {
-                                 name: "alfresco/documentlibrary/views/layouts/Cell",
+                                 name: "alfresco/lists/views/layouts/Cell",
                                  config: {
                                     width: "20px",
                                     widgets: [
@@ -203,15 +203,15 @@ define(["alfresco/forms/controls/Picker",
                                        },
                                        widgets: [
                                           {
-                                             name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                                             name: "alfresco/lists/views/AlfListView",
                                              config: {
                                                 widgets: [
                                                    {
-                                                      name: "alfresco/documentlibrary/views/layouts/Row",
+                                                      name: "alfresco/lists/views/layouts/Row",
                                                       config: {
                                                          widgets: [
                                                             {
-                                                               name: "alfresco/documentlibrary/views/layouts/Cell",
+                                                               name: "alfresco/lists/views/layouts/Cell",
                                                                config: {
                                                                   widgets: [
                                                                      {
@@ -275,15 +275,15 @@ define(["alfresco/forms/controls/Picker",
                                        },
                                        widgets: [
                                           {
-                                             name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                                             name: "alfresco/lists/views/AlfListView",
                                              config: {
                                                 widgets: [
                                                    {
-                                                      name: "alfresco/documentlibrary/views/layouts/Row",
+                                                      name: "alfresco/lists/views/layouts/Row",
                                                       config: {
                                                          widgets: [
                                                             {
-                                                               name: "alfresco/documentlibrary/views/layouts/Cell",
+                                                               name: "alfresco/lists/views/layouts/Cell",
                                                                config: {
                                                                   widgets: [
                                                                      {

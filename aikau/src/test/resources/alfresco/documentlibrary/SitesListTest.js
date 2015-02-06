@@ -37,7 +37,7 @@ define(["intern!object",
          var browser = this.remote;
          var testname = "AlfSitesListTest";
          return TestCommon.loadTestWebScript(this.remote, "/SitesList", testname)
-            .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-Row")
+            .findAllByCssSelector(".alfresco-lists-views-layouts-Row")
                .then(function(elements) {
                   assert(elements.length === 1, "Test #1a - Counting Result, expected: 1, found: " + elements.length);
                })
@@ -60,7 +60,7 @@ define(["intern!object",
 
          // Check that there are now 2 results (note that the MockXhr service has been fixed so that a page size of 
          // 25 returns 1 result and a page size of 100 returns 2 results)...
-         .findAllByCssSelector(".alfresco-documentlibrary-views-layouts-Row")
+         .findAllByCssSelector(".alfresco-lists-views-layouts-Row")
             .then(function(elements) {
                assert(elements.length === 2, "Test #2a - Counting Result, expected: 2, found: " + elements.length);
             })
