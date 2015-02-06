@@ -32,17 +32,6 @@ define(["dojo/_base/declare",
       return declare([AlfCore], {
 
          /**
-          * Declare the dependencies on "legacy" JS files that this is wrapping.
-          *
-          * @instance
-          * @type {String[]}
-          */
-         nonAmdDependencies: [
-            "/js/yui-common.js",
-            "/js/alfresco.js"
-         ],
-
-         /**
           * Sets up the subscriptions for the NotificationService
           *
           * @instance
