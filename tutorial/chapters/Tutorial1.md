@@ -157,7 +157,20 @@ Now refresh the page and then try dragging and dropping a file from your compute
 
 ![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%206.png "Document List with upload support")
 
-Next: [How to Create a new Widget](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial2.md)
+### So What Was Happening?
+You can jump straight to the [next tutorial](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial2.md "Link to next tutorial") if you want to continue developing your client, but if you want to understand more about what was happening on the page you created then read on...
 
+If you’ve no experience with Alfresco (and in particular, WebScript) development then most of what you have just done will seem new to you.
+
+You can find everything you need to know about WebScripts on the official [Alfresco documentation website](http://docs.alfresco.com/4.0/concepts/ws-architecture.html "Link to Alfresco Documentation") but the main thing to understand is that each page in your Aikau client is represented by a single WebScript.
+
+WebScripts uses an [MVC pattern](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller "Link to Wikipedia") and for an Aikau page it is the controller where all the development takes place. The JavaScript controller is used to create a declarative model that represents the page to be rendered. This model consists of widgets, widget configuration and services - the main difference between a widget and a service is that the former will typically render some visible content onto the page when it loads, whereas a service “sits in the background” and services requests issued by widgets. 
+
+Each widget and service is intended to serve a specific purpose. The AlfDocumentList manages the current state of a view of documents but the rendering of that view is handled by the AlfSimpleView widget (and the AlfSimpleView widget is in fact a “wrapper” around dozens of smaller widgets). The AlfDocumentList doesn’t access the Alfresco Repository for data, instead it publishes a request for data and the DocumentService handles that request by making the necessary XHR call to the Repository and publishing the data it retrieves.
+
+If you really want to learn more about the inner workings of Aikau then you can watch [this presentation](https://www.youtube.com/watch?v=qcaotLDJq9U&noredirect=1 "Link to YouTube") from Alfresco Summit 2013  and read [this blog post](http://blogs.alfresco.com/wp/developer/2013/03/05/under-the-hood-of-the-surf-updates/ "Link to Alfresco Developer Blogs").
+
+
+Next: [How to Create a new Widget](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial2.md)
 
 
