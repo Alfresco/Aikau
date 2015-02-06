@@ -18,18 +18,18 @@
  */
 
 /**
- * <p>This extends the [abstract document list view]{@link module:alfresco/documentlibrary/views/AlfDocumentListView}
+ * <p>This extends the [abstract document list view]{@link module:alfresco/lists/views/AlfListView}
  * to define a widget for rendering items that have been selected from a [picker]{@link module:alfresco/pickers/DocumentListPicker}.
  * The key difference is that this widget does not listen for "bulk" data deliveries but rather renders individual
  * items as they are published. It also provides the ability to remove items from the current selection. The ultimate
  * purpose it to be able to provide a value that is an array of selected items (e.g. for use in a form control).</p>
  *
  * @module alfresco/pickers/PickedItems
- * @extends module:alfresco/documentlibrary/views/AlfDocumentListView
+ * @extends module:alfresco/lists/views/AlfListView
  * @author Dave Draper & David Webster
  */
 define(["dojo/_base/declare",
-        "alfresco/documentlibrary/views/AlfDocumentListView",
+        "alfresco/lists/views/AlfListView",
         "dojo/_base/lang",
         "dojo/_base/array"],
    function (declare, AlfDocumentListView, lang, array) {
@@ -347,11 +347,11 @@ define(["dojo/_base/declare",
           */
          widgets: [
             {
-               name: "alfresco/documentlibrary/views/layouts/Row",
+               name: "alfresco/lists/views/layouts/Row",
                config: {
                   widgets: [
                      {
-                        name: "alfresco/documentlibrary/views/layouts/Cell",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
                            width: "20px",
                            widgets: [
@@ -366,7 +366,7 @@ define(["dojo/_base/declare",
                         }
                      },
                      {
-                        name: "alfresco/documentlibrary/views/layouts/Cell",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
                            widgets: [
                               {
@@ -380,7 +380,7 @@ define(["dojo/_base/declare",
                         }
                      },
                      {
-                        name: "alfresco/documentlibrary/views/layouts/Cell",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
                            width: "20px",
                            widgets: [

@@ -1,0 +1,31 @@
+/* Centering technique from http://www.smashingmagazine.com/2013/08/09/absolute-horizontal-vertical-centering-css */
+.alfresco-notifications-AlfNotification {
+   left: 0;
+   opacity: 0;
+   position: absolute;
+   right: 0;
+   top: 52.5%;
+   transition: opacity .2s ease-out, top .2s ease-out;
+   z-index: 9999; /* This isn't ideal, but searching all z-indexes is even worse (better solution possible?) */
+   &__container {
+      background: #666;
+      border-radius: 0 0 5px 5px;
+      box-shadow: @standard-box-shadow;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      top: -50%;
+      width: 400px;
+   }
+   &__message {
+      color: #fff;
+      font-family: @standard-font;
+      font-size: @normal-font-size;
+      line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
+   }
+   &--visible {
+      opacity: 1;
+      top: 50%;
+   }
+}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,51 +18,14 @@
  */
 
 /**
- * Renders a thumbnail specific to search results. This is different from the usual thumbnail
- * in that it renders specific images for items that are neither documents nor folders.
- * 
  * @module alfresco/renderers/SearchThumbnail
- * @extends module:alfresco/renderers/Thumbnail
+ * @extends module:alfresco/search/SearchThumbnail
  * @mixes module:alfresco/search/SearchThumbnailMixin
  * @author Dave Draper
+ * @deprecated Since 1.0.4 - Use [alfresco/search/SearchThumbnail]{@link module:alfresco/search/SearchThumbnail} instead.
  */
 define(["dojo/_base/declare",
-        "alfresco/renderers/Thumbnail",
-        "alfresco/search/SearchThumbnailMixin",
-        "dojo/dom-class"], 
-        function(declare, Thumbnail, SearchThumbnailMixin, domClass) {
-
-   return declare([Thumbnail, SearchThumbnailMixin], {
-
-      /**
-       * An array of the CSS files to use with this widget.
-       * 
-       * @instance
-       * @type {object[]}
-       * @default [{cssFile:"./css/Thumbnail.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/SearchThumbnail.css"}],
-
-      /**
-       * Overrides the inherited value to reference the property provided by the search API
-       *
-       * @instance
-       * @type {string}
-       * @default "lastThumbnailModification"
-       */
-      lastThumbnailModificationProperty: "lastThumbnailModification",
-      
-      /**
-       * Generates the publication payload by calling the mixed in 
-       * [generatePayload]{@link module:alfresco/renderers/_SearchResultLinkMixin#generatePayload}
-       * function and then wraps the property in an anchor element by calling the mixed in 
-       * [makeAnchor]{@link module:alfresco/navigation/_HtmlAnchorMixin#makeAnchor} function
-       *
-       * @instance
-       */
-      postCreate: function alfresco_renderers_SearchThumbnail__postCreate() {
-         this.inherited(arguments);
-         domClass.add(this.domNode, "alfresco-renderers-SearchThumbnail");
-      }
-   });
+        "alfresco/search/SearchThumbnail"], 
+        function(declare, SearchThumbnail) {
+   return declare([SearchThumbnail], {});
 });

@@ -1,4 +1,7 @@
-/target/
-/node_modules/
+# Ignored directories (please keep alphabetical)
 /code-coverage-reports/
 /docs/
+/node_modules/
+/src/main/resources/alfrescoInst/
+/src/test/vagrant/.vagrant/
+/target/

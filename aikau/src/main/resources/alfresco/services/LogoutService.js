@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -54,8 +54,21 @@ define(["dojo/_base/declare",
          this.serviceXhr({
             url: AlfConstants.URL_PAGECONTEXT + "dologout",
             method: "POST",
+            successCallback: this.reloadPage,
             callbackScope: this
          });
+      },
+
+      /**
+       * Refresh the current page to ensure logout occurs. This is the callback used by the
+       * [doLogout]{@link module:alfresco/services/LogoutService#doLogout} function and will
+       * be called on receiving the logout response. Attempting to reload the page will ensure
+       * that the user is shown login page having logged out.
+       *
+       * @instance
+       */
+      reloadPage: function alfresco_services_LogoutService__refresh() {
+         window.location.reload();
       }
    });
 });

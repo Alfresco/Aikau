@@ -192,16 +192,16 @@ define(["dojo/_base/declare",
        */
       widgets: [
          {
-            name: "alfresco/documentlibrary/views/AlfDocumentListView",
+            name: "alfresco/lists/views/AlfListView",
             config: {
                noItemsMessage: "propPicker.no.data.message",
                widgets: [
                   {
-                     name: "alfresco/documentlibrary/views/layouts/Row",
+                     name: "alfresco/lists/views/layouts/Row",
                      config: {
                         widgets: [
                            {
-                              name: "alfresco/documentlibrary/views/layouts/Cell",
+                              name: "alfresco/lists/views/layouts/Cell",
                               config: {
                                  widgets: [
                                     {
@@ -223,7 +223,7 @@ define(["dojo/_base/declare",
                               }
                            },
                            {
-                              name: "alfresco/documentlibrary/views/layouts/Cell",
+                              name: "alfresco/lists/views/layouts/Cell",
                               config: {
                                  width: "20px",
                                  widgets: [

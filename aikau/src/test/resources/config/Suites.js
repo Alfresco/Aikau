@@ -19,7 +19,7 @@
 
 /**
  * This provides the configuration for test suites.
- * 
+ *
  * @author Richard Smith
  */
 define({
@@ -31,7 +31,9 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   // baseFunctionalSuites: ['src/test/resources/alfresco/documentlibrary/PaginationTest'],
+   xbaseFunctionalSuites: [
+      'src/test/resources/alfresco/services/NotificationServiceTest'
+   ],
 
    /**
     * This is the base array of functional test suites
@@ -79,13 +81,13 @@ define({
       'src/test/resources/alfresco/forms/controls/BaseFormTest',
       'src/test/resources/alfresco/forms/controls/ComboBoxTest',
       'src/test/resources/alfresco/forms/controls/DocumentPickerTest',
-      'src/test/resources/alfresco/forms/controls/DateTextBoxTest',  // TODO: NEEDS FIXING
+      'src/test/resources/alfresco/forms/controls/DateTextBoxTest', // TODO: NEEDS FIXING
       'src/test/resources/alfresco/forms/controls/FormButtonDialogTest',
       'src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest',
       'src/test/resources/alfresco/forms/controls/SelectTest',
       'src/test/resources/alfresco/forms/controls/TextBoxTest',
       'src/test/resources/alfresco/forms/controls/ValidationTest',
-      'src/test/resources/alfresco/forms/controls/XssPreventionTest', 
+      'src/test/resources/alfresco/forms/controls/XssPreventionTest',
 
       'src/test/resources/alfresco/header/HeaderWidgetsTest',
       'src/test/resources/alfresco/header/WarningTest',
@@ -139,6 +141,7 @@ define({
       'src/test/resources/alfresco/renderers/ThumbnailTest',
       'src/test/resources/alfresco/renderers/XhrActionsTest',
 
+      'src/test/resources/alfresco/services/NotificationServiceTest',
       'src/test/resources/alfresco/services/SearchServiceTest',
       'src/test/resources/alfresco/services/SiteServiceTest',
       'src/test/resources/alfresco/services/UserServiceTest',
@@ -164,7 +167,7 @@ define({
     * @instance
     * @type [string]
     */
-   localFunctionalSuites: function localFunctionalSuites(){
+   localFunctionalSuites: function localFunctionalSuites() {
       return this.setupFunctionalSuites.concat(
          this.baseFunctionalSuites.concat(
             this.localOnlyFunctionalSuites.concat(
@@ -188,7 +191,7 @@ define({
     * @instance
     * @type [string]
     */
-   vmFunctionalSuites: function vmFunctionalSuites(){
+   vmFunctionalSuites: function vmFunctionalSuites() {
       return this.setupFunctionalSuites.concat(
          this.baseFunctionalSuites.concat(
             this.vmOnlyFunctionalSuites.concat(
@@ -212,7 +215,7 @@ define({
     * @instance
     * @type [string]
     */
-   slFunctionalSuites: function slFunctionalSuites(){
+   slFunctionalSuites: function slFunctionalSuites() {
       return this.setupFunctionalSuites.concat(
          this.baseFunctionalSuites.concat(
             this.slOnlyFunctionalSuites.concat(
@@ -236,7 +239,7 @@ define({
     * @instance
     * @type [string]
     */
-   gridFunctionalSuites: function gridFunctionalSuites(){
+   gridFunctionalSuites: function gridFunctionalSuites() {
       return this.setupFunctionalSuites.concat(
          this.baseFunctionalSuites.concat(
             this.gridOnlyFunctionalSuites.concat(
@@ -252,7 +255,7 @@ define({
     * @instance
     * @type [string]
     */
-   setupFunctionalSuites: [],//['src/test/resources/alfresco/DebugEnable'],
+   setupFunctionalSuites: [], //['src/test/resources/alfresco/DebugEnable'],
 
    /**
     * This is the array of functional test suites for teardown purposes
@@ -260,6 +263,6 @@ define({
     * @instance
     * @type [string]
     */
-   teardownFunctionalSuites: []//['src/test/resources/alfresco/DebugDisable']
+   teardownFunctionalSuites: [] //['src/test/resources/alfresco/DebugDisable']
 
 });

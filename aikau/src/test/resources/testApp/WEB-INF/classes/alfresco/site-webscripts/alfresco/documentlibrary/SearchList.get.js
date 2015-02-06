@@ -212,7 +212,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/documentlibrary/AlfSearchList",
+         name: "alfresco/search/AlfSearchList",
          config: {
             useHash: true,
             hashVarsForUpdate: [
@@ -224,7 +224,7 @@ model.jsonModel = {
             blockConcurrentRequests: false,
             widgets: [
                {
-                  name: "alfresco/documentlibrary/views/AlfSearchListView"
+                  name: "alfresco/search/AlfSearchListView"
                }
             ]
          }

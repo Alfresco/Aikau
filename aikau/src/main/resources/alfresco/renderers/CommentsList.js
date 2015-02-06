@@ -100,24 +100,24 @@ define(["dojo/_base/declare",
                documentsLoadedTopic: "ALF_COMMENTS_LOADED",
                widgets: [
                   {
-                     name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                     name: "alfresco/lists/views/AlfListView",
                      config: {
                         widgets: [
                            {
-                              name: "alfresco/documentlibrary/views/layouts/Row",
+                              name: "alfresco/lists/views/layouts/Row",
                               config: {
                                  generatePubSubScope: true,
                                  widgets: [
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           widgets: [
                                              {
-                                                name: "alfresco/documentlibrary/views/layouts/Column",
+                                                name: "alfresco/lists/views/layouts/Column",
                                                 config: {
                                                    widgets: [
                                                       {
-                                                         name: "alfresco/documentlibrary/views/layouts/Cell",
+                                                         name: "alfresco/lists/views/layouts/Cell",
                                                          config: {
                                                             widgets: [
                                                                {
@@ -131,7 +131,7 @@ define(["dojo/_base/declare",
                                                          }
                                                       },
                                                       {
-                                                         name: "alfresco/documentlibrary/views/layouts/Cell",
+                                                         name: "alfresco/lists/views/layouts/Cell",
                                                          config: {
                                                             widgets: [
                                                                {
@@ -150,7 +150,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
-                                       name: "alfresco/documentlibrary/views/layouts/Cell",
+                                       name: "alfresco/lists/views/layouts/Cell",
                                        config: {
                                           widgets: [
                                              {
