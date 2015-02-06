@@ -13,7 +13,7 @@ model.jsonModel = {
    ],
    widgets:[
       {
-         name: "alfresco/documentlibrary/views/AlfSearchListView",
+         name: "alfresco/search/AlfSearchListView",
          config: {
             id: "SEARCH_RESULTS",
             currentData: {

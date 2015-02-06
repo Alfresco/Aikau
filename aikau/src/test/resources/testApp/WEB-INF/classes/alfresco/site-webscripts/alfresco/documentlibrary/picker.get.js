@@ -36,7 +36,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/documentlibrary/AlfSearchList",
+         name: "alfresco/search/AlfSearchList",
          config: {
             widgets: [
                {

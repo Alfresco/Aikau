@@ -17,13 +17,13 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/documentlibrary/AlfSearchList",
+         name: "alfresco/search/AlfSearchList",
          config: {
             useHash: true,
             useInfiniteScroll: true,
             widgets: [
                {
-                  name: "alfresco/documentlibrary/views/AlfSearchListView",
+                  name: "alfresco/search/AlfSearchListView",
                   config: {
                      widgets: [
                         {

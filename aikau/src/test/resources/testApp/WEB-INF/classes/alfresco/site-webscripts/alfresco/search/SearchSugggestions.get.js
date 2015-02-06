@@ -90,7 +90,7 @@ model.jsonModel = {
       },
       {
          id: "SEARCH_RESULTS_LIST",
-         name: "alfresco/documentlibrary/AlfSearchList",
+         name: "alfresco/search/AlfSearchList",
          config: {
             waitForPageWidgets: true,
             loadDataPublishTopic: "SEARCH_RESULTS",
