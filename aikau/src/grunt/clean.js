@@ -21,10 +21,10 @@
 
 /**
  * Grunt task config for the clean plugin.
- * 
+ *
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
    return {
       // Clean tasks
       clean: {
@@ -42,7 +42,7 @@ module.exports = function (grunt, alf) {
          ],
          // Used to delete the widget listing file generated for RequireEverything re-creation
          requireEverythingWidgetsList: [
-            alf.testResourcesDir + "/" + alf.alfWidgetsList
+            alfConfig.dir.testResources + "/" + alfConfig.alfWidgetsList
          ]
       }
    };

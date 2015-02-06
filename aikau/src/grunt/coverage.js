@@ -20,12 +20,12 @@
 'use strict';
 
 /**
- * Grunt tasks to generate coverage reports 
- * 
+ * Grunt tasks to generate coverage reports
+ *
  * Defines aliases & helper functions
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
 
    // Generate a task for copying the uninstrumented code back...
    grunt.registerTask('copyOriginalCode', 'Copy Uninstrumented Code', function() {
@@ -122,7 +122,7 @@ module.exports = function (grunt, alf) {
       grunt.task.run('shell:stopTestApp');
    });
 
-   /* Register additional helper functions 
+   /* Register additional helper functions
     * These are used in the above tasks.
     */
 
@@ -137,21 +137,21 @@ module.exports = function (grunt, alf) {
    // Should always be run after a 'folder_list:alf_widgets' task
    grunt.registerTask('write-require-everything', 'A task for writing the RequireEverything widget file', function() {
 
-      var template = grunt.file.read(alf.testResourcesDir + "/" + alf.requireEverythingTemplate),
-          widgetFiles = grunt.file.readJSON(alf.testResourcesDir + "/" + alf.alfWidgetsList),
+      var template = grunt.file.read(alfConfig.dir.testResources + "/" + alfConfig.requireEverything.template),
+          widgetFiles = grunt.file.readJSON(alfConfig.dir.testResources + "/" + alfConfig.alfWidgetsList),
           fileList = [];
 
       // Iterate over widgetFiles, removing unwanted files and topping and tailing the file paths accordingly
       for (var i=0; i<widgetFiles.length; i++)
       {
-         var filePath = ((widgetFiles[i].location).replace(alf.requireEverythingWidgetsPrefix, "")).replace(alf.requireEverythingWidgetsSuffix, "");
-         if(alf.requireEverythingExclusions.indexOf(filePath) === -1)
+         var filePath = ((widgetFiles[i].location).replace(alfConfig.requireEverything.widgetsPrefix, "")).replace(alfConfig.requireEverything.widgetsSuffix, "");
+         if(alfConfig.requireEverything.exclusions.indexOf(filePath) === -1)
          {
             fileList.push("\n\t\"" + filePath + "\"");
          }
       }
 
-      grunt.file.write(alf.requireEverythingWidget, template.replace("{0}", fileList.toString()));
+      grunt.file.write(alfConfig.requireEverything.widget, template.replace("{0}", fileList.toString()));
       grunt.log.writeln("Finished writing RequireEverything widget");
    });
 
@@ -195,9 +195,9 @@ module.exports = function (grunt, alf) {
    // Delete existing instrumented code and run the coverage module instrumentation process to replace it
    grunt.registerTask('instrument-code', 'Use the node-coverage module to instrument the widgets with coverage collection data', function() {
       var done = this.async();
-      if (grunt.file.isDir(alf.jsInstFiles))
+      if (grunt.file.isDir(alfConfig.dir.jsInst))
       {
-         grunt.file.delete(alf.jsInstFiles, {
+         grunt.file.delete(alfConfig.dir.jsInst, {
             force: true
          })
       }
@@ -216,11 +216,11 @@ module.exports = function (grunt, alf) {
 
    // Start the node coverage server
    grunt.registerTask('start-node-coverage-server', 'A task to start the node-coverage server (it will stay running)', function() {
-      if (!grunt.file.isDir(alf.coverageDirectory))
+      if (!grunt.file.isDir(alfConfig.dir.coverage))
       {
-         grunt.file.mkdir(alf.coverageDirectory);
+         grunt.file.mkdir(alfConfig.dir.coverage);
       }
-      
+
       var tcpPortUsed = require('tcp-port-used');
       tcpPortUsed.check(8082, 'localhost')
       .then(function(inUse) {
@@ -232,7 +232,7 @@ module.exports = function (grunt, alf) {
                       '--port',
                       '8082',
                       '--report-dir',
-                      alf.coverageDirectory],
+                      alfConfig.dir.coverage],
                opts: {
                   detached: 'true',
                   stdio : 'inherit'

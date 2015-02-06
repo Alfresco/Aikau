@@ -23,7 +23,7 @@
  * Search tasks
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
    // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
    return {
       // @see: https://github.com/roughcoder/grunt-folder-list
@@ -35,8 +35,8 @@ module.exports = function (grunt, alf) {
             },
             files: [
                {
-                  src: [alf.jsFiles],
-                  dest: alf.testResourcesDir + '/' + alf.alfWidgetsList
+                  src: [alfConfig.files.js],
+                  dest: alfConfig.dir.testResources + '/' + alfConfig.alfWidgetsList
                }
             ]
          },
@@ -47,8 +47,8 @@ module.exports = function (grunt, alf) {
             },
             files: [
                {
-                  src: [alf.testModelFiles],
-                  dest: alf.testResourcesDir + '/' + alf.alfTestModels
+                  src: [alfConfig.files.testModel],
+                  dest: alfConfig.dir.testResources + '/' + alfConfig.alfTestModels
                }
             ]
          }

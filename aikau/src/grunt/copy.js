@@ -24,7 +24,7 @@
  * classes/META-INF/js/aikau/1.0
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
    return {
       // Copy tasks
       copy: {
@@ -32,8 +32,8 @@ module.exports = function (grunt, alf) {
          uninstrumentedJs: {
             files: [
                {
-                  expand: true, 
-                  src: ['src/main/resources/alfresco/**/*'], 
+                  expand: true,
+                  src: ['src/main/resources/alfresco/**/*'],
                   dest: '',
                   rename: function(dest, src) {
                      src = src.substring(src.indexOf("src/main/resources/alfresco/") + 27);
@@ -47,8 +47,8 @@ module.exports = function (grunt, alf) {
          instrumentedJs: {
             files: [
                {
-                  expand: true, 
-                  src: ['src/main/resources/alfrescoInst/**/*'], 
+                  expand: true,
+                  src: ['src/main/resources/alfrescoInst/**/*'],
                   dest: '',
                   rename: function(dest, src) {
                      var src = src.substring(src.indexOf("src/main/resources/alfrescoInst/") + 31);

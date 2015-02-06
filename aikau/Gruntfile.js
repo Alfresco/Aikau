@@ -1,54 +1,78 @@
+/**
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
+ *
+ * This file is part of Alfresco
+ *
+ * Alfresco is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Alfresco is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 (function() {
 
    // Keep all paths in one place
-   var alf = {
-      cssFiles: "src/main/resources/**/*.css",
-      jsdocFiles: "src/main/resources/alfresco",
+   var alfConfig = {
+      files: {
+         css: "src/main/resources/**/*.css",
+         html: "src/main/resources/alfresco/**/*.html",
+         jsdoc: "src/main/resources/alfresco",
+         js: "src/main/resources/alfresco/**/*.js",
+         test: "tests/alfresco/**",
+         testModel: "src/test/resources/alfresco/**/*.json"
+      },
+      dir: {
+         code: "./",
+         coverage: "code-coverage-reports",
+         docs: "docs",
+         jsInst: "src/main/resources/alfrescoInst",
+         nodeBin: "node_modules/.bin/",
+         root: "./",
+         testResources: "src/test/resources",
+         vagrant: "src/test/vagrant"
+      },
+      requireEverything: {
+         exclusions: [
+            "aikauTesting/mockservices/CreateContentMockXhr",
+            "aikauTesting/mockservices/DocumentLibraryMockXhr",
+            "aikauTesting/mockservices/HeaderMockXhr",
+            "aikauTesting/mockservices/PaginationMockXhr",
+            "aikauTesting/mockservices/PreviewMockXhr",
+            "aikauTesting/mockservices/SearchMockXhr",
+            "aikauTesting/mockservices/SearchScrollMockXhr",
+            "aikauTesting/mockservices/SiteMockXhr",
+            "aikauTesting/mockservices/SiteMockXhr",
+            "aikauTesting/mockservices/UploadMockXhr",
+            "aikauTesting/mockservices/UserMockXhrBad",
+            "aikauTesting/mockservices/UserMockXhrGood",
+            "alfresco/charts/ccc/BarChart",
+            "alfresco/charts/ccc/Chart",
+            "alfresco/charts/ccc/ChartsView",
+            "alfresco/charts/ccc/DonutChart",
+            "alfresco/charts/ccc/PieChart",
+            "alfresco/editors/TinyMCE",
+            "alfresco/external-doc",
+            "alfresco/forms/controls/AceEditor",
+            "alfresco/forms/controls/CodeMirrorEditor",
+            "alfresco/reports/Report",
+            "alfresco/reports/SiteContentReport",
+            "alfresco/reports/TopSiteContributorReport"
+         ],
+         template: "RequireEverything.template.js",
+         widget: "src/test/resources/testApp/js/aikau/testing/RequireEverything.js",
+         widgetsPrefix: "src/main/resources/",
+         widgetsSuffix: ".js"
+      },
       jsdocReadme: "README.md",
-      jsInstFiles: "src/main/resources/alfrescoInst",
-      jsFiles: ["src/main/resources/alfresco/**/*.js"],
-      testFiles: ["tests/alfresco/**"],
-      htmlFiles: ["src/main/resources/alfresco/**/*.html"],
-      xmlFiles: ["/**/*.xml"],
-      testResourcesDir: "src/test/resources",
-      vagrantDir: "src/test/vagrant",
-      nodeBinDir: "node_modules/.bin/",
-      coverageDirectory: "code-coverage-reports",
-      rootDir: "./",
-      codeDir: "./",
-      docsDir: "docs",
       alfWidgetsList: "alfresco_widgets.json",
-      requireEverythingTemplate: "RequireEverything.template.js",
-      requireEverythingWidget: "src/test/resources/testApp/js/aikau/testing/RequireEverything.js",
-      requireEverythingWidgetsPrefix: "src/main/resources/",
-      requireEverythingWidgetsSuffix: ".js",
-      requireEverythingExclusions: [
-         "aikauTesting/mockservices/CreateContentMockXhr",
-         "aikauTesting/mockservices/DocumentLibraryMockXhr",
-         "aikauTesting/mockservices/HeaderMockXhr",
-         "aikauTesting/mockservices/PaginationMockXhr",
-         "aikauTesting/mockservices/PreviewMockXhr",
-         "aikauTesting/mockservices/SearchMockXhr",
-         "aikauTesting/mockservices/SearchScrollMockXhr",
-         "aikauTesting/mockservices/SiteMockXhr",
-         "aikauTesting/mockservices/SiteMockXhr",
-         "aikauTesting/mockservices/UploadMockXhr",
-         "aikauTesting/mockservices/UserMockXhrBad",
-         "aikauTesting/mockservices/UserMockXhrGood",
-         "alfresco/charts/ccc/BarChart",
-         "alfresco/charts/ccc/Chart",
-         "alfresco/charts/ccc/ChartsView",
-         "alfresco/charts/ccc/DonutChart",
-         "alfresco/charts/ccc/PieChart",
-         "alfresco/editors/TinyMCE",
-         "alfresco/external-doc",
-         "alfresco/forms/controls/AceEditor",
-         "alfresco/forms/controls/CodeMirrorEditor",
-         "alfresco/reports/Report",
-         "alfresco/reports/SiteContentReport",
-         "alfresco/reports/TopSiteContributorReport"
-      ],
-      testModelFiles: ["src/test/resources/alfresco/**/*.json"],
       alfTestModels: "alfresco_model_files.json"
    };
 
@@ -64,7 +88,7 @@
          path = "./src/grunt/";
 
       /* Load the external config.
-       * External config can call grunt methods, access the alf object and
+       * External config can call grunt methods, access the alfConfig object and
        * can return an object that gets merged into the initConfig call below.
        * Note: that child objects aren't merged into each other, e.g.:
        * all http config should go into the http.js file.
@@ -75,7 +99,7 @@
             cwd: path
          })
          .forEach(function(configFile) {
-            config = extend(config, require(path + configFile)(grunt, alf));
+            config = extend(config, require(path + configFile)(grunt, alfConfig));
          });
 
       grunt.initConfig(config);

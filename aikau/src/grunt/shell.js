@@ -23,7 +23,7 @@
  * Grunt tasks that use the shell plugin to run commands in a unix shell.
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
 
    var _ = require('lodash'), // Add the lodash util library
       extend = _.extend;
@@ -232,13 +232,13 @@ module.exports = function (grunt, alf) {
 
          // Generate JSDocs
          jsdoc: {
-            command: 'jsdoc ../../' + alf.jsdocFiles + " ../../" + alf.jsdocReadme + ' -c ../../conf.json', // TODO: Make this work with defined paths.
+            command: 'jsdoc ../../' + alfConfig.files.jsdoc + " ../../" + alfConfig.jsdocReadme + ' -c ../../conf.json', // TODO: Make this work with defined paths.
             options: {
                stdout: true,
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.nodeBinDir
+                  cwd: alfConfig.dir.nodeBin
                }
             }
          },
@@ -250,7 +250,7 @@ module.exports = function (grunt, alf) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.docsDir,
+                  cwd: alfConfig.dir.docs,
                   maxBuffer: "Infinite"
                }
             }
@@ -263,7 +263,7 @@ module.exports = function (grunt, alf) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.rootDir,
+                  cwd: alfConfig.dir.root,
                   maxBuffer: "Infinite"
                }
             }
@@ -290,7 +290,7 @@ module.exports = function (grunt, alf) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.vagrantDir + "/selenium",
+                  cwd: alfConfig.dir.vagrant + "/selenium",
                   maxBuffer: "Infinite"
                }
             }
@@ -322,7 +322,7 @@ module.exports = function (grunt, alf) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.codeDir,
+                  cwd: alfConfig.dir.code,
                   maxBuffer: "Infinite"
                }
             }
@@ -341,7 +341,7 @@ module.exports = function (grunt, alf) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.vagrantDir,
+                  cwd: alfConfig.dir.vagrant,
                   maxBuffer: "Infinite"
                }
             }
@@ -354,7 +354,7 @@ module.exports = function (grunt, alf) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.vagrantDir,
+                  cwd: alfConfig.dir.vagrant,
                   maxBuffer: "Infinite"
                }
             }
@@ -367,7 +367,7 @@ module.exports = function (grunt, alf) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.vagrantDir,
+                  cwd: alfConfig.dir.vagrant,
                   maxBuffer: "Infinite"
                }
             }
@@ -381,7 +381,7 @@ module.exports = function (grunt, alf) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.vagrantDir,
+                  cwd: alfConfig.dir.vagrant,
                   maxBuffer: "Infinite"
                }
             }
@@ -395,7 +395,7 @@ module.exports = function (grunt, alf) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.vagrantDir,
+                  cwd: alfConfig.dir.vagrant,
                   maxBuffer: "Infinite"
                }
             }

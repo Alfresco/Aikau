@@ -23,7 +23,7 @@
  * Grunt aliases for the vagrant command.
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
 
    // Bring up an instance of vagrant
    grunt.registerTask('vup', [

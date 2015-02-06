@@ -23,7 +23,7 @@
  * Grunt tasks that use intern to run some tests
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
 
    // Load the Intern task - it isn't "grunt-" prefixed so isn't loaded automatically.
    // @see: https://github.com/theintern/intern/wiki/Using-Intern-with-Grunt#task-options

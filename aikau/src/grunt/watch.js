@@ -23,7 +23,7 @@
  * Grunt tasks that watch files and do stuff when they change
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
    // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
    return {
       // Watch Commands (when the specified watch is active, task is run when files change.)
@@ -33,7 +33,7 @@ module.exports = function (grunt, alf) {
          // It works best to have only one watch, otherwise multiple builds could happen simultaneously.
          // TODO: Aikau files only...
          deploy: {
-            files: [alf.jsFiles, alf.cssFiles, alf.htmlFiles], // no alf.testFiles in deploy watch as they don't get deployed.
+            files: [alfConfig.files.js, alfConfig.files.css, alfConfig.files.html], // no alfConfig.files.test in deploy watch as they don't get deployed.
             tasks: [
                's',
                'notify:shareDeployed'
@@ -43,7 +43,7 @@ module.exports = function (grunt, alf) {
             }
          },
          test: {
-            files: [alf.jsFiles, alf.cssFiles, alf.testFiles, alf.htmlFiles],
+            files: [alfConfig.files.js, alfConfig.files.css, alfConfig.files.test, alfConfig.files.html],
             tasks: [
                'newTest',
                'shell:jsdoc'

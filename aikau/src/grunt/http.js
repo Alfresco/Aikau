@@ -23,7 +23,7 @@
  * Grunt config for the http plugin.
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
    return {
       // Make HTTP Requests:
       // @see: https://github.com/johngeorgewright/grunt-http

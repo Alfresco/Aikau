@@ -23,7 +23,7 @@
  * Notification tasks
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
    // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
    return {
       // @see: https://github.com/dylang/grunt-notify

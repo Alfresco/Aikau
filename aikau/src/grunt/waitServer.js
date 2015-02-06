@@ -23,7 +23,7 @@
  * Server wait tasks
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
    // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
 
    // NOTE: It is by design that we wait for RequireEverything to be loaded. This is because

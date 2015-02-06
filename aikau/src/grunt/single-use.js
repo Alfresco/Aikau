@@ -23,7 +23,7 @@
  * Grunt tasks to perform one-off activities
  */
 
-module.exports = function (grunt, alf) {
+module.exports = function (grunt, alfConfig) {
 
    grunt.registerTask('generate-webscripts-from-models', 'Generate webscripts from the json models in the tests area', function() {
       grunt.task.run('folder_list:alf_test_models');
@@ -32,10 +32,10 @@ module.exports = function (grunt, alf) {
 
    grunt.registerTask('write-webscripts-from-models', 'A task for writing the webscripts from the json models in the tests area', function() {
 
-      var files = grunt.file.readJSON(alf.testResourcesDir + "/" + alf.alfTestModels),
-          xmlTemplate = grunt.file.read(alf.testResourcesDir + "/webscript_template.get.desc.xml"),
-          ftlTemplate = grunt.file.read(alf.testResourcesDir + "/webscript_template.get.html.ftl"),
-          jsTemplate = grunt.file.read(alf.testResourcesDir + "/webscript_template.get.js");
+      var files = grunt.file.readJSON(alfConfig.dir.testResources + "/" + alfConfig.alfTestModels),
+          xmlTemplate = grunt.file.read(alfConfig.dir.testResources + "/webscript_template.get.desc.xml"),
+          ftlTemplate = grunt.file.read(alfConfig.dir.testResources + "/webscript_template.get.html.ftl"),
+          jsTemplate = grunt.file.read(alfConfig.dir.testResources + "/webscript_template.get.js");
 
       for (var i=0; i<files.length; i++)
       {
