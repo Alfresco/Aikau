@@ -22,8 +22,6 @@ If you’re not familiar with Maven then the groupId should be related to your o
 
 When the project has been generated you should see the following in the terminal output:
 
-When the project has been generated you should see the following in the terminal output:
-
 > [INFO] BUILD SUCCESS
 
 A folder will have been created with the same value as you provided for the “artifactId” parameter. Change to this directory and then run:
@@ -45,9 +43,7 @@ mvn jetty:run
 
 > [INFO] Started Jetty Server
 
-...you’ll be able to access your new application at:
-
-> http://localhost:8090/aikau-sample/
+...you’ll be able to access your new application at: [http://localhost:8090/aikau-sample/](http://localhost:8090/aikau-sample/ "Link to client")
 
 You will automatically be re-directed to the default login page at which you can enter the credentials of a valid user of your Alfresco repository and you will be taken to the default home page.
 
@@ -64,7 +60,7 @@ Currently the home page of your client has very little displayed on it. We're go
 
 To do this we need to add a DocumentList widget onto the page along with a view to render the contents of the list and the services required to retrieve the documents and folders to display.
 
-Open the JavaScript controller file for the home page (“<PROJECT>/src/main/webapp/WEB-INF/webscripts/pages/home.get.js”) and find the comment:
+Open the JavaScript controller file for the home page (`“<PROJECT>/src/main/webapp/WEB-INF/webscripts/pages/home.get.js”`) and find the comment:
 
 ```
 // Add more widgets here !!!
@@ -116,7 +112,7 @@ You can now browse around the files but you won't be able to view an individual 
 ### Step 4. Improve Navigation
 Although you can navigate into folders it’s not currently possible to navigate back out of them. There are lots of different ways in which we can address this (e.g. breadcrumb trails, navigation trees, etc) but as a simple solution we’ll add a button to navigate back to the parent of the current folder.
 
-Add this to the model in the JavaScript controller directly above the “alfresco/documentlibrary/AlfDocumentList” entry you added earlier.
+Add this to the model in the JavaScript controller directly above the `“alfresco/documentlibrary/AlfDocumentList”` entry you added earlier.
 
 ```
 {
@@ -135,7 +131,7 @@ When you refresh the page you should now see a button that can be used to naviga
 
 The key thing to note here is that the only link between the AlfDocumentList and the AlfButton is the topic that the button publishes on when clicked (defined by the “publishTopic” configuration attribute) which is subscribed to by the AlfDocumentList.
 
-Aikau uses a publication/subscription (sometimes referred to as “PubSub”) communication model (http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) to ensure that there are no fixed relationships between widgets and services in order that they can be easily reused independently of each other. The “publishTopic” that we have configured is an example of a topic that is published when an action occurs - but there will only be reaction to this publication if something else is subscribing to that topic.
+Aikau uses a publication/subscription (sometimes referred to as “PubSub”) [communication model](http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern "Link to Wikipedia page") to ensure that there are no fixed relationships between widgets and services in order that they can be easily reused independently of each other. The “publishTopic” that we have configured is an example of a topic that is published when an action occurs - but there will only be reaction to this publication if something else is subscribing to that topic.
 
 ### Step 5. Add File Upload Support
 Now let's make an update to allow the user to upload new content.
@@ -146,7 +142,7 @@ Add the following service to the page, in the same way that you added the Docume
 "alfresco/services/ActionService"
 ```
 
-...and after the “alfresco/documentlibrary/AlfDocumentList” entry, add the following widget:
+...and after the `“alfresco/documentlibrary/AlfDocumentList”` entry, add the following widget:
 
 ```
 {
