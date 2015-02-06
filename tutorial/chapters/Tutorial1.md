@@ -156,7 +156,7 @@ Add the following service to the page, in the same way that you added the Docume
 
 Now refresh the page and then try dragging and dropping a file from your computer’s file-system onto the document list and you should see it successfully uploaded. Ensure you drop the file into the document list component area to trigger the drop-zone.
 
-![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%203.png "Document List with upload support")
+![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%206.png "Document List with upload support")
 
 
 
