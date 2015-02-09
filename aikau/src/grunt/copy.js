@@ -28,36 +28,6 @@ module.exports = function (grunt, alfConfig) {
    return {
       // Copy tasks
       copy: {
-         // Used for code coverage
-         uninstrumentedJs: {
-            files: [
-               {
-                  expand: true,
-                  src: ['src/main/resources/alfresco/**/*'],
-                  dest: '',
-                  rename: function(dest, src) {
-                     src = src.substring(src.indexOf("src/main/resources/alfresco/") + 27);
-                     var newDest = './target/classes/META-INF/js/aikau/1.0/alfresco/' + src;
-                     return newDest;
-                  }
-               }
-            ]
-         },
-         // Used for code coverage
-         instrumentedJs: {
-            files: [
-               {
-                  expand: true,
-                  src: ['src/main/resources/alfrescoInst/**/*'],
-                  dest: '',
-                  rename: function(dest, src) {
-                     var src = src.substring(src.indexOf("src/main/resources/alfrescoInst/") + 31);
-                     var newDest = './target/classes/META-INF/js/aikau/1.0/alfresco/' + src;
-                     return newDest;
-                  }
-               }
-            ]
-         },
          // Used for jsdoc
          customJsDocTemplate: {
             files: [
