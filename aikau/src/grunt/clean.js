@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -17,14 +17,11 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 /**
  * Grunt task config for the clean plugin.
- *
  */
+module.exports = function(grunt, alfConfig) {
 
-module.exports = function (grunt, alfConfig) {
    return {
       // Clean tasks
       clean: {

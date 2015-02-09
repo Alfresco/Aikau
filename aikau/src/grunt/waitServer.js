@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -17,13 +17,10 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 /**
  * Server wait tasks
  */
-
-module.exports = function (grunt, alfConfig) {
+module.exports = function() {
    // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
 
    // NOTE: It is by design that we wait for RequireEverything to be loaded. This is because

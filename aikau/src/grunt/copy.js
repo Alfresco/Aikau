@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -17,56 +17,47 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 /**
  * Grunt task config for the copy plugin.
- * classes/META-INF/js/aikau/1.0
  */
+module.exports = function() {
 
-module.exports = function (grunt, alfConfig) {
    return {
       // Copy tasks
       copy: {
          // Used for jsdoc
          customJsDocTemplate: {
-            files: [
-               {
-                  expand: true,
-                  src: ['jsdoc-templates/alfresco/**/*'],
-                  dest: [''],
-                  rename: function(dest, src) {
-                     var src = src.substring(src.indexOf("jsdoc-templates/alfresco/") + 25);
-                     var newDest = 'node_modules/jsdoc/templates/alfresco/' + src;
-                     return newDest;
-                  }
+            files: [{
+               expand: true,
+               src: ["jsdoc-templates/alfresco/**/*"],
+               dest: [""],
+               rename: function(dest, src) {
+                  src = src.substring(src.indexOf("jsdoc-templates/alfresco/") + 25);
+                  var newDest = "node_modules/jsdoc/templates/alfresco/" + src;
+                  return newDest;
                }
-            ]
+            }]
          },
          // Used for hiding existing coverage reports
          coverageReportsToTemp: {
-            files: [
-               {
-                  expand: true,
-                  flatten: true,
-                  src: ['code-coverage-reports/*'],
-                  dest: 'code-coverage-reports/temp/',
-                  filter: 'isFile'
-               }
-            ]
+            files: [{
+               expand: true,
+               flatten: true,
+               src: ["code-coverage-reports/*"],
+               dest: "code-coverage-reports/temp/",
+               filter: "isFile"
+            }]
          },
          // Used for showing existing coverage reports
          coverageReportsFromTemp: {
-            files: [
-               {
-                  expand: true,
-                  flatten: true,
-                  src: ['code-coverage-reports/temp/*'],
-                  dest: 'code-coverage-reports/',
-                  filter: 'isFile'
-               }
-            ]
+            files: [{
+               expand: true,
+               flatten: true,
+               src: ["code-coverage-reports/temp/*"],
+               dest: "code-coverage-reports/",
+               filter: "isFile"
+            }]
          }
       }
-   }
-}
+   };
+};

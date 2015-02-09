@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -17,13 +17,11 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 /**
  * Grunt config for the http plugin.
  */
+module.exports = function() {
 
-module.exports = function (grunt, alfConfig) {
    return {
       // Make HTTP Requests:
       // @see: https://github.com/johngeorgewright/grunt-http
@@ -32,9 +30,9 @@ module.exports = function (grunt, alfConfig) {
          // source files for collecting code coverage results...
          clearDependencyCaches: {
             options: {
-               uri: 'http://localhost:8081/share/page/caches/dependency/clear',
-               method: 'POST',
-               body: '',
+               uri: "http://localhost:8081/share/page/caches/dependency/clear",
+               method: "POST",
+               body: "",
                auth: {
                   user: "admin",
                   password: "admin"
@@ -44,11 +42,11 @@ module.exports = function (grunt, alfConfig) {
          // Clear all Surf caches - required for live reload.
          clearSurf: {
             options: {
-               uri: 'http://localhost:8081/share/page/console',
-               method: 'POST',
+               uri: "http://localhost:8081/share/page/console",
+               method: "POST",
                form: {
-                  reset: 'all',
-                  submit: 'Reset+All'
+                  reset: "all",
+                  submit: "Reset+All"
                },
                auth: {
                   user: "admin",
@@ -57,5 +55,5 @@ module.exports = function (grunt, alfConfig) {
             }
          }
       }
-   }
-}
+   };
+};

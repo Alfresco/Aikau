@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -17,34 +17,31 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 /**
  * Grunt aliases for the vagrant command.
  */
-
-module.exports = function (grunt, alfConfig) {
+module.exports = function(grunt) {
 
    // Bring up an instance of vagrant
-   grunt.registerTask('vup', [
-      'shell:vagrantUp',
-      'shell:vagrantProvision'
+   grunt.registerTask("vup", [
+      "shell:vagrantUp",
+      "shell:vagrantProvision"
    ]);
 
    // Provision an instance of vagrant
-   grunt.registerTask('vpro', [
-      'shell:vagrantProvision'
+   grunt.registerTask("vpro", [
+      "shell:vagrantProvision"
    ]);
 
    // Take down an instance of vagrant
-   grunt.registerTask('vdown', [
-      'shell:vagrantHalt'
+   grunt.registerTask("vdown", [
+      "shell:vagrantHalt"
    ]);
 
    // Rebuild a vagrant instance.
-   grunt.registerTask('vclean', [
-      'shell:vagrantDestroy',
-      'shell:vagrantUp',
-      'shell:vagrantProvision'
+   grunt.registerTask("vclean", [
+      "shell:vagrantDestroy",
+      "shell:vagrantUp",
+      "shell:vagrantProvision"
    ]);
-}
+};

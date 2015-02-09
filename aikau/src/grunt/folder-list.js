@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -17,13 +17,11 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 /**
  * Search tasks
  */
+module.exports = function(grunt, alfConfig) {
 
-module.exports = function (grunt, alfConfig) {
    // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
    return {
       // @see: https://github.com/roughcoder/grunt-folder-list
@@ -33,24 +31,20 @@ module.exports = function (grunt, alfConfig) {
                files: true,
                folder: true
             },
-            files: [
-               {
-                  src: [alfConfig.files.js],
-                  dest: alfConfig.dir.testResources + '/' + alfConfig.alfWidgetsList
-               }
-            ]
+            files: [{
+               src: [alfConfig.files.js],
+               dest: alfConfig.dir.testResources + "/" + alfConfig.alfWidgetsList
+            }]
          },
          alf_test_models: {
             options: {
                files: true,
                folder: true
             },
-            files: [
-               {
-                  src: [alfConfig.files.testModel],
-                  dest: alfConfig.dir.testResources + '/' + alfConfig.alfTestModels
-               }
-            ]
+            files: [{
+               src: [alfConfig.files.testModel],
+               dest: alfConfig.dir.testResources + "/" + alfConfig.alfTestModels
+            }]
          }
       }
    };

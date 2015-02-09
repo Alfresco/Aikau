@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -17,15 +17,13 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 /**
  * Grunt tasks that use the shell plugin to run commands in a unix shell.
  */
+module.exports = function(grunt, alfConfig) {
+   /*jshint maxlen:400*/
 
-module.exports = function (grunt, alfConfig) {
-
-   var _ = require('lodash'), // Add the lodash util library
+   var _ = require("lodash"), // Add the lodash util library
       extend = _.extend;
 
    // Shell Commands run by grunt
@@ -36,7 +34,7 @@ module.exports = function (grunt, alfConfig) {
    var communityConfig = {
          // Reset Share's Caches:
          resetCaches: {
-            command: 'curl -s -d "reset=on" --header "Accept-Charset:ISO-8859-1,utf-8" --header "Accept-Language:en" -u admin:admin http://localhost:8081/share/service/index ;  curl -s "http://localhost:8081/share/page/caches/dependency/clear" -H "Content-Type: application/x-www-form-urlencoded" --data "submit=Clear+Dependency+Caches" -u admin:admin',
+            command: "curl -s -d 'reset=on' --header 'Accept-Charset:ISO-8859-1,utf-8' --header 'Accept-Language:en' -u admin:admin http://localhost:8081/share/service/index ;  curl -s 'http://localhost:8081/share/page/caches/dependency/clear' -H 'Content-Type: application/x-www-form-urlencoded' --data 'submit=Clear+Dependency+Caches' -u admin:admin",
             options: {
                stdout: true,
                stderr: true,
@@ -50,7 +48,7 @@ module.exports = function (grunt, alfConfig) {
          // start share & alfresco
          // Assumes script called "start-tomcat" and "start-app-tomcat" exist.
          startRepo: {
-            command: 'mvn install -pl ../../projects/web-client,../../projects/solr -Psolr-http -DskipTests && start-tomcat',
+            command: "mvn install -pl ../../projects/web-client,../../projects/solr -Psolr-http -DskipTests && start-tomcat",
             options: {
                stdout: true,
                stderr: true,
@@ -61,7 +59,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          startRepoExistingBuild: {
-            command: 'start-tomcat',
+            command: "start-tomcat",
             options: {
                stdout: true,
                stderr: true,
@@ -72,7 +70,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          se: {
-            command: 'mvn prepare-package -pl ../../projects/slingshot -DskipTests -Dmaven.yuicompressor.skip --offline',
+            command: "mvn prepare-package -pl ../../projects/slingshot -DskipTests -Dmaven.yuicompressor.skip --offline",
             options: {
                stdout: true,
                stderr: true,
@@ -83,7 +81,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          startShare: {
-            command: 'mvn prepare-package -pl ../../projects/slingshot -DskipTests -Dmaven.yuicompressor.skip && start-app-tomcat',
+            command: "mvn prepare-package -pl ../../projects/slingshot -DskipTests -Dmaven.yuicompressor.skip && start-app-tomcat",
             options: {
                stdout: true,
                stderr: true,
@@ -94,7 +92,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          startShareInc: {
-            command: 'mvn install -pl ../../projects/slingshot -DskipTests && start-app-tomcat',
+            command: "mvn install -pl ../../projects/slingshot -DskipTests && start-app-tomcat",
             options: {
                stdout: true,
                stderr: true,
@@ -105,7 +103,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          scb: {
-            command: 'mvn clean install -pl ../../projects/slingshot -DskipTests',
+            command: "mvn clean install -pl ../../projects/slingshot -DskipTests",
             options: {
                stdout: true,
                stderr: true,
@@ -122,7 +120,7 @@ module.exports = function (grunt, alfConfig) {
       alfrescoConfig = {
          // Reset Share's Caches:
          resetCaches: {
-            command: 'ws -s; ds -s',
+            command: "ws -s; ds -s",
             options: {
                stdout: true,
                stderr: true,
@@ -135,7 +133,7 @@ module.exports = function (grunt, alfConfig) {
 
          // start share & alfresco
          startRepo: {
-            command: 'm r -ie -t',
+            command: "m r -ie -t",
             options: {
                stdout: true,
                stderr: true,
@@ -146,7 +144,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          startRepoFull: {
-            command: 'm r -be -t',
+            command: "m r -be -t",
             options: {
                stdout: true,
                stderr: true,
@@ -157,7 +155,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          startRepoExistingBuild: {
-            command: 'm r -t',
+            command: "m r -t",
             options: {
                stdout: true,
                stderr: true,
@@ -168,7 +166,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          scb: {
-            command: 'm s -be',
+            command: "m s -be",
             options: {
                stdout: true,
                stderr: true,
@@ -180,7 +178,7 @@ module.exports = function (grunt, alfConfig) {
          },
          se: {
             // Note: always do an offline build for this use-case, we want it fast.
-            command: 'm s -e -o',
+            command: "m s -e -o",
             options: {
                stdout: true,
                stderr: true,
@@ -191,7 +189,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          startShare: {
-            command: 'm s -e && m s -t',
+            command: "m s -e && m s -t",
             options: {
                stdout: true,
                stderr: true,
@@ -202,7 +200,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          startShareInc: {
-            command: 'm s -ie && m s -t',
+            command: "m s -ie && m s -t",
             options: {
                stdout: true,
                stderr: true,
@@ -217,7 +215,7 @@ module.exports = function (grunt, alfConfig) {
 
          // Starts the Aikau unit test application
          startTestApp: {
-            command: 'mvn jetty:run',
+            command: "mvn jetty:run",
             options: {
                stdout: true,
                stderr: false,
@@ -227,12 +225,12 @@ module.exports = function (grunt, alfConfig) {
 
          // Stops the Aikau unit test application
          stopTestApp: {
-            command: 'mvn jetty:stop'
+            command: "mvn jetty:stop"
          },
 
          // Generate JSDocs
          jsdoc: {
-            command: 'jsdoc ../../' + alfConfig.files.jsdoc + " ../../" + alfConfig.jsdocReadme + ' -c ../../conf.json', // TODO: Make this work with defined paths.
+            command: "jsdoc ../../" + alfConfig.files.jsdoc + " ../../" + alfConfig.jsdocReadme + " -c ../../conf.json", // TODO: Make this work with defined paths.
             options: {
                stdout: true,
                stderr: true,
@@ -244,7 +242,7 @@ module.exports = function (grunt, alfConfig) {
          },
 
          jsdocServer: {
-            command: 'python -m SimpleHTTPServer 8082',
+            command: "python -m SimpleHTTPServer 8082",
             options: {
                stdout: true,
                stderr: true,
@@ -257,7 +255,7 @@ module.exports = function (grunt, alfConfig) {
          },
 
          mvnClean: {
-            command: 'mvn clean',
+            command: "mvn clean",
             options: {
                stdout: true,
                stderr: true,
@@ -271,7 +269,7 @@ module.exports = function (grunt, alfConfig) {
 
          // Update NPM dependencies:
          npmInstall: {
-            command: 'npm install',
+            command: "npm install",
             options: {
                stdout: true,
                stderr: true,
@@ -284,7 +282,7 @@ module.exports = function (grunt, alfConfig) {
 
          // selenium
          seleniumUp: {
-            command: 'java -jar selenium*.jar',
+            command: "java -jar selenium*.jar",
             options: {
                stdout: true,
                stderr: true,
@@ -298,7 +296,7 @@ module.exports = function (grunt, alfConfig) {
 
          // Stop running servers (I don't know of a more friendly but equally effective than this).
          killRepo: {
-            command: 'kill `lsof -t -i :8080 -sTCP:LISTEN`',
+            command: "kill `lsof -t -i :8080 -sTCP:LISTEN`",
             options: {
                stdout: true,
                stderr: true,
@@ -306,7 +304,7 @@ module.exports = function (grunt, alfConfig) {
             }
          },
          killShare: {
-            command: 'kill `lsof -t -i :8081 -sTCP:LISTEN`',
+            command: "kill `lsof -t -i :8081 -sTCP:LISTEN`",
             options: {
                stdout: true,
                stderr: true,
@@ -321,7 +319,7 @@ module.exports = function (grunt, alfConfig) {
             // vbguest makes sure the virtual box guest additions on the VM are kept in sync with the Virtual Box app installed locally.
             // if the two aren't kept in sync, then there may be issues connecting to the VM which may not be obviously related.
             // If this command errors, then make sure you're running the latest vagrant version (1.6.5 or newer).
-            command: 'vagrant plugin list | grep "vbguest"> /dev/null; if [ $? -eq 1 ]; then vagrant plugin install vagrant-vbguest; fi; vagrant up',
+            command: "vagrant plugin list | grep 'vbguest'> /dev/null; if [ $? -eq 1 ]; then vagrant plugin install vagrant-vbguest; fi; vagrant up",
             options: {
                stdout: true,
                stderr: true,
@@ -334,7 +332,7 @@ module.exports = function (grunt, alfConfig) {
          },
          // Reset the vagrant VM
          vagrantDestroy: {
-            command: 'vagrant destroy -f',
+            command: "vagrant destroy -f",
             options: {
                stdout: true,
                stderr: true,
@@ -347,7 +345,7 @@ module.exports = function (grunt, alfConfig) {
          },
          // Set up an already running Vagrant VM instance
          vagrantProvision: {
-            command: 'vagrant provision',
+            command: "vagrant provision",
             options: {
                stdout: true,
                stderr: true,
@@ -361,7 +359,7 @@ module.exports = function (grunt, alfConfig) {
 
          // Shutdown a running vagrant VM istance
          vagrantHalt: {
-            command: 'vagrant halt',
+            command: "vagrant halt",
             options: {
                stdout: true,
                stderr: true,
@@ -375,7 +373,7 @@ module.exports = function (grunt, alfConfig) {
          // See also vagrant.js
          // Start the vagrant VM
          vagrantReload: {
-            command: 'vagrant reload',
+            command: "vagrant reload",
             options: {
                stdout: true,
                stderr: true,
@@ -390,13 +388,13 @@ module.exports = function (grunt, alfConfig) {
       },
 
       configToMerge = alfrescoConfig;
-      if (process.env.CURRENT_PROJECT && process.platform === "win32"){
-         // If we're not running within the Alfresco Dev Env (CURRENT_PROJECT) or
-         // we're running on Windows (which doesn't support spawning child unix shells via node)
-         // then we should run with communityConfig that doesn't assume the Dev Env helper scripts are present.
-         configToMerge = communityConfig;
-      }
-      var shellConfig = extend(sharedConfig, configToMerge);
+   if (process.env.CURRENT_PROJECT && process.platform === "win32") {
+      // If we're not running within the Alfresco Dev Env (CURRENT_PROJECT) or
+      // we"re running on Windows (which doesn"t support spawning child unix shells via node)
+      // then we should run with communityConfig that doesn't assume the Dev Env helper scripts are present.
+      configToMerge = communityConfig;
+   }
+   var shellConfig = extend(sharedConfig, configToMerge);
 
    // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
    return {
