@@ -1,4 +1,4 @@
-Next: [Getting Started](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial1.md)
+Next: [Getting Started](./Tutorial1.md)
 
 ## About This Tutorial
 This tutorial has been developed to help developers understand the Aikau framework. Although Aikau was developed to support the continuing development of the Alfresco Share client it can also be used to develop standalone clients. 
@@ -14,9 +14,9 @@ Great care has been taken to ensure that the steps and sample code provided in t
 2. Carefully check your code against the sample code (for example, make sure you’ve updated the correct section or file).
 3. Refresh WebScripts (this shouldn’t be necessary unless you’ve made seriously deviated from the described path, but 4. never hurts to be sure!)
 5. Clear Surf dependency caches.
-6. Enable logging (see [Tutorial 4](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial4.md)) and check the browser console for errors
+6. Enable logging (see [Tutorial 4](./Tutorial4.md)) and check the browser console for errors
 7. Check the Jetty server standard out log for errors
 
 If all else fails, turn it off and on again (e.g. restart the server, clear the browser caches)
 
-Next: [Getting Started](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial1.md)
+Next: [Getting Started](./Tutorial1.md)
