@@ -122,7 +122,6 @@
       // TODO: Rationalise these once we've got a workflow sorted.
       //   Grunt Work Flow:
       //
-      //      grunt d: start existing repo, start share (s -e), brings up vagrant & runs watch server.
       //      grunt cup: performs a clean update from SVN, full build & starts both servers.
       //      grunt d-cup: combines both above. (Clean & Update, Full Builds, Vagrant & Watch)
       //      grunt s: exploded redeploy and server restart
@@ -131,18 +130,12 @@
       // Dev
       grunt.registerTask("d", [
          "shell:startRepoExistingBuild", // Don't do a repo build, just start an existing one.
-         "shell:startShare",
-         "dev"
+         "shell:startShare"
       ]);
 
       // Dev - as per dev, but with a clean update first.
       grunt.registerTask("d-cup", [
-         "cup",
-         "dev"
-      ]);
-
-      grunt.registerTask("dev", [
-         "watch"
+         "cup"
       ]);
 
       // Shortcuts to incremental builds of Share/Repo
