@@ -1,5 +1,5 @@
-Previous: [About This Tutorial](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/About.md),
-Next: [How to Create a new Widget](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial2.md)
+Previous: [About This Tutorial](./About.md),
+Next: [How to Create a new Widget](./Tutorial2.md)
 
 ## Tutorial 1 - Getting Started
 If you're already familiar with what Aikau is then you're probably here for an in-depth tutorial on how to use it – but for those who aren't this tutorial should serve as an example of how fast it can be to develop a new client that accesses data from an Alfresco repository.
@@ -54,9 +54,9 @@ You will automatically be re-directed to the default login page at which you can
 
 At the moment it’s quite empty, containing nothing more than a header and footer with a big empty space in the middle which we’re going to fill.
 
-![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%201.png "Your client login page")
+![alt text](../resources/Tutorial%201%20-%20Image%201.png "Your client login page")
 
-![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%202.png "Your client home page")
+![alt text](../resources/Tutorial%201%20-%20Image%202.png "Your client home page")
 
 ### Step 3. Show the user files
 Currently the home page of your client has very little displayed on it. We're going to update this page by adding in the widgets and services that will render the contents of the user’s home folder.
@@ -88,7 +88,7 @@ At the end of the line before the comment add a comma (because we're about to ad
 
 Now reload the page in the browser (you won't need to restart the server). You should see the following:
 
-![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%203.png "Document List waiting for data")
+![alt text](../resources/Tutorial%201%20-%20Image%203.png "Document List waiting for data")
 
 The AlfDocumentList widget is renders a loading message (“Loading…”) and attempts to retrieve some data from the Alfresco Repository. We have not included anything in the page to service that request so the message is never replaced with any actual data. In order to service the request for data we’ll need to include a dedicated service on the page.
 
@@ -106,7 +106,7 @@ At the end of the line before the comment add a comma (because we're about to ad
 
 Reload the page and you should see a list of files for the currently logged in user. If you've logged in as “admin” then you will see the contents of “Company Home” which will look like this:
 
-![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%204.png "Document List populated with data from Alfresco Repository")
+![alt text](../resources/Tutorial%201%20-%20Image%204.png "Document List populated with data from Alfresco Repository")
 
 We’ll explore services in more detail in later tutorials (in fact you’ll be writing your own!) but for the time being all you need to know that Aikau provides a number of services that you can easily reuse. These are all located in the “alfresco/services” package.
 
@@ -130,7 +130,7 @@ Add this to the model in the JavaScript controller directly above the `“alfres
 
 When you refresh the page you should now see a button that can be used to navigate back to the parent folder.
 
-![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%205.png "Document List with parent folder navigation")
+![alt text](../resources/Tutorial%201%20-%20Image%205.png "Document List with parent folder navigation")
 
 The key thing to note here is that the only link between the AlfDocumentList and the AlfButton is the topic that the button publishes on when clicked (defined by the “publishTopic” configuration attribute) which is subscribed to by the AlfDocumentList.
 
@@ -155,10 +155,10 @@ Add the following service to the page, in the same way that you added the Docume
 
 Now refresh the page and then try dragging and dropping a file from your computer’s file-system onto the document list and you should see it successfully uploaded. Ensure you drop the file into the document list component area to trigger the drop-zone.
 
-![alt text](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/resources/Tutorial%201%20-%20Image%206.png "Document List with upload support")
+![alt text](../resources/Tutorial%201%20-%20Image%206.png "Document List with upload support")
 
 ### So What Was Happening?
-You can jump straight to the [next tutorial](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial2.md "Link to next tutorial") if you want to continue developing your client, but if you want to understand more about what was happening on the page you created then read on...
+You can jump straight to the [next tutorial](./Tutorial2.md "Link to next tutorial") if you want to continue developing your client, but if you want to understand more about what was happening on the page you created then read on...
 
 If you’ve no experience with Alfresco (and in particular, WebScript) development then most of what you have just done will seem new to you.
 
@@ -171,6 +171,6 @@ Each widget and service is intended to serve a specific purpose. The AlfDocument
 If you really want to learn more about the inner workings of Aikau then you can watch [this presentation](https://www.youtube.com/watch?v=qcaotLDJq9U&noredirect=1 "Link to YouTube") from Alfresco Summit 2013  and read [this blog post](http://blogs.alfresco.com/wp/developer/2013/03/05/under-the-hood-of-the-surf-updates/ "Link to Alfresco Developer Blogs").
 
 
-Next: [How to Create a new Widget](https://github.com/Alfresco/Aikau/blob/feature/AKU-63_Tutorial1/tutorial/chapters/Tutorial2.md)
+Next: [How to Create a new Widget](./Tutorial2.md)
 
 
