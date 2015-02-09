@@ -164,11 +164,6 @@
          "shell:startShare"
       ]);
 
-      // Svn up shorthand.
-      grunt.registerTask("up", [
-         "shell:svnUp"
-      ]);
-
       // Build & start after a Clean & UPdate
       grunt.registerTask("cup", [
          "shell:killRepo",

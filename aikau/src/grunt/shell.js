@@ -314,20 +314,6 @@ module.exports = function (grunt, alfConfig) {
             }
          },
 
-         svnUp: {
-            // Force Interactive to enable conflict resolution inline.
-            command: 'pwd;svn up --force-interactive',
-            options: {
-               stdout: true,
-               stderr: true,
-               failOnError: true,
-               execOptions: {
-                  cwd: alfConfig.dir.code,
-                  maxBuffer: "Infinite"
-               }
-            }
-         },
-
          // See also vagrant.js
          // Start the vagrant VM
          vagrantUp: {
