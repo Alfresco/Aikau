@@ -839,6 +839,7 @@ define(["dojo/_base/declare",
             }
             else
             {
+               this.alfLog("warn", "Failure to retrieve items with given itemsProperty: " + this.itemsProperty, this);
                this.showDataLoadFailure();
             }
          }
