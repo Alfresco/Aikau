@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
       /**
        * Gets the topic to be published on. This has been abstracted to a separate function
        * so that it can be easily overridden, an example of this is the 
-       * [SearchResultPropertyLink]{@link module:alfresco/renderers/SearchResultPropertyLink}
+       * [SearchResultPropertyLink]{@link module:alfresco/search/SearchResultPropertyLink}
        *
        * @instance
        * @returns {string} The configured publishTopic
@@ -102,7 +102,7 @@ define(["dojo/_base/declare",
       /**
        * Gets the topic to be published on. This has been abstracted to a separate function
        * so that it can be easily overridden, an example of this is the 
-       * [SearchResultPropertyLink]{@link module:alfresco/renderers/SearchResultPropertyLink}
+       * [SearchResultPropertyLink]{@link module:alfresco/search/SearchResultPropertyLink}
        *
        * @instance
        * @returns {string} The currentItem being renderered.
