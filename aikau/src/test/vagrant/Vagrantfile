@@ -2,10 +2,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-unless Vagrant.has_plugin?("vagrant-vbguest")
-  raise 'vbguest plugin is not installed, this means the VirtualBox guest additions will not be automatically kept in sync and craziness may ensue. I recommend you run: "vagrant plugin install vagrant-vbguest" from the vagrant directory'
-end
-
 Vagrant.configure("2") do |config|
 
    # VM name and location of image to start from

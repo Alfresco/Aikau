@@ -5,7 +5,7 @@ SELENIUM_VERSION_NUMBER="2.44"
 PHANTOMJS_VERSION="phantomjs-1.9.7-linux-x86_64" #don't include .tar.bz2 ext.
 CHROMEDRIVER_VERSION="2.10"
 CHROME_VERSION="40.0.2214.95-1"
-FIREFOX_VERSION="34.0"
+FIREFOX_VERSION="33.0"
 
 set -e
 
@@ -17,6 +17,9 @@ else
    echo 'INSTALLING'
    echo '----------'
 
+   # Ensure shared folders can be mounted... see https://github.com/mitchellh/vagrant/issues/3341
+   #sudo ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions
+
    # Add Google public key to apt
    wget -q -O - "https://dl-ssl.google.com/linux/linux_signing_key.pub" | sudo apt-key add -
 
@@ -27,7 +30,9 @@ else
    apt-get update
 
    # Install Java, Chrome, Xvfb, unzip, firefox and libicu48
-   apt-get -y install openjdk-7-jre google-chrome-stable=$CHROME_VERSION xvfb unzip libicu48
+   # Note that we always install latest stable Firefox but then install a specific version later
+   # this is so that we always have dependencies.
+   apt-get -y install openjdk-7-jre google-chrome-stable xvfb unzip libicu48
 
    cd /tmp
 
@@ -49,23 +54,27 @@ else
    tar -xjvf firefox-$FIREFOX_VERSION.tar.bz2
    cp -r firefox /usr/local/bin/
 
+   wget "http://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_33.1.1-0ubuntu1_amd64.deb"
+   dpkg -i firefox-mozilla-build_33.1.1-0ubuntu1_amd64.deb
+
    # So that running `vagrant provision` doesn't redownload everything
    touch /.installed
 fi
 
 # Start Xvfb, Chrome, and Selenium in the background
-export DISPLAY=:10
+export DISPLAY=localhost:10
 cd /vagrant
 
 echo "Starting Xvfb (v`dpkg -s xvfb| grep Version|cut -d: -f2`)..."
-Xvfb :10 -screen 0 1366x768x24 -ac &
+#Xvfb :10 -screen 0 1366x768x24 -ac &
+Xvfb :10 -screen 0 1366x768x24 -ac -extension RANDR &
 
 echo "Starting Google Chrome (v`dpkg -s google-chrome-stable| grep Version|cut -d: -f2` w/ Chrome Driver v$CHROMEDRIVER_VERSION)..."
 google-chrome --remote-debugging-port=9222 &
 
 echo "Starting Firefox (v$FIREFOX_VERSION)..."
 cd /usr/local/bin/firefox
-firefox &
+./firefox &
 cd - > /dev/null
 
 echo "Starting Phantomjs ($PHANTOMJS_VERSION)..."

@@ -63,6 +63,31 @@ module.exports = function(grunt) {
             }
          },
 
+         vagrantInstallGuestPlugins: {
+            command: 'vagrant plugin install vagrant-vbguest',
+            options: {
+               stdout: true,
+               stderr: true,
+               failOnError: true,
+               execOptions: {
+                  cwd: alf.rootDir,
+                  maxBuffer: "Infinite"
+               }
+            }
+         },
+         vagrantMountSharedFoldersFix: {
+            command: "vagrant up; vagrant ssh -c 'sudo ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions'; vagrant reload",
+            options: {
+               stdout: true,
+               stderr: true,
+               failOnError: true,
+               execOptions: {
+                  cwd: alf.vagrantDir,
+                  maxBuffer: "Infinite"
+               }
+            }
+         },
+        
          // Set up an already running Vagrant VM instance
          vagrantProvision: {
             command: "vagrant provision",
