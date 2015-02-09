@@ -107,6 +107,15 @@ module.exports = function (grunt, alfConfig) {
       'startUnitTestApp'
    ]);
 
+   // Display notifications on test passes and failures...
+   var notify = require("./node_modules/grunt-notify/lib/notify-lib");
+   grunt.event.on("intern.fail", function(data) {
+      notify({
+         title: "Unit Test Failed",
+         message: data
+      });
+   });
+
    // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
    return {
       // Use Intern plugin for tests.

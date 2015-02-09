@@ -199,14 +199,5 @@
          "startUnitTestApp",
          "waitServer"
       ]);
-
-      // Display notifications on test passes and failures...
-      var notify = require("./node_modules/grunt-notify/lib/notify-lib");
-      grunt.event.on("intern.fail", function(data) {
-         notify({
-            title: "Unit Test Failed",
-            message: data
-         });
-      });
    };
 })();
