@@ -7,6 +7,8 @@ module.exports = {
       alfWidgets: "src/test/resources/alfresco_widgets.json",
       coverageReports: "code-coverage-reports/*.json",
       css: "src/main/resources/**/*.css",
+      gruntFile: "Gruntfile.js",
+      gruntTasks: "src/grunt/**/*.js",
       html: "src/main/resources/alfresco/**/*.html",
       js: "src/main/resources/alfresco/**/*.js",
       jsdocConfig: "conf.json",
