@@ -28,7 +28,7 @@
             <targetPath>.</targetPath>
             <filtering>true</filtering>
             <includes>
-               <include>ReleaseNotes.txt</include>
+               <include>ReleaseNotes.md</include>
             </includes>
             <directory>${basedir}/src/main/</directory>
          </resource>
