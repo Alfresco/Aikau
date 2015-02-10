@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,28 +18,13 @@
  */
 
 /**
- * This extends [AlfDialog]{@link module:alfresco/dialogs/AlfDialog} to mixin
- * [_MultiItemRendererMixin]{@link module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin} so that
- * the individual item data can be rendered correctly. Although this widget appears to add no new
- * functions the additional capability is entirely added via the mixin module.
- * 
  * @module alfresco/documentlibrary/views/layouts/Popup
- * @extends module:alfresco/dialogs/AlfDialog
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
+ * @extends module:alfresco/lists/views/layouts/Popup
  * @author Dave Draper
+ * @deprecated Since 1.0.4 - Use [alfresco/lists/views/layouts/Popup]{@link module:alfresco/lists/views/layouts/Popup} instead.
  */
 define(["dojo/_base/declare",
-        "alfresco/dialogs/AlfDialog",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
-        "dojo/_base/lang",
-        "dojo/_base/array",
-        "dojo/dom-construct",
-        "dojo/dom-class",
-        "dojo/html",
-        "dojo/aspect"], 
-        function(declare, AlfDialog, _MultiItemRendererMixin, lang, array, domConstruct, domClass, html, aspect) {
-   
-   return declare([AlfDialog, _MultiItemRendererMixin], {
-      
-   });
+        "alfresco/lists/views/layouts/Popup"], 
+        function(declare, Popup) {
+   return declare([Popup], {});
 });

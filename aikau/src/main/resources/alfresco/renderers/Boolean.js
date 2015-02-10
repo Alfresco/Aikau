@@ -27,7 +27,7 @@
  * @example <caption>Sample configuration within table cells</caption>
  * widgets: [
  *    {
- *       name: "alfresco/documentlibrary/views/layouts/Cell",
+ *       name: "alfresco/lists/views/layouts/Cell",
  *       config: {
  *          widgets: [
  *             {
@@ -41,7 +41,7 @@
  *       }
  *    },
  *    {
- *       name: "alfresco/documentlibrary/views/layouts/Cell",
+ *       name: "alfresco/lists/views/layouts/Cell",
  *       config: {
  *          widgets: [
  *             {
@@ -55,7 +55,7 @@
  *       }
  *    },
  *    {
- *       name: "alfresco/documentlibrary/views/layouts/Cell",
+ *       name: "alfresco/lists/views/layouts/Cell",
  *       config: {
  *          widgets: [
  *             {

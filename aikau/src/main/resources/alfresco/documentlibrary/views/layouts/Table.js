@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,54 +18,13 @@
  */
 
 /**
- * Use this widget to render a a table of [rows]{@link module:alfresco/documentlibrary/views/layouts/Row}
- * 
  * @module alfresco/documentlibrary/views/layouts/Table
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
- * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @extends module:alfresco/lists/views/layouts/Table
  * @author Dave Draper
+ * @deprecated Since 1.0.4 - Use [alfresco/lists/views/layouts/Table]{@link module:alfresco/lists/views/layouts/Table} instead.
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Table.html",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
-        "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing) {
-
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing], {
-      
-      /**
-       * An array of the CSS files to use with this widget.
-       * 
-       * @instance
-       * @type {object[]}
-       * @default [{cssFile:"./css/Table.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/Table.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
-      
-      /**
-       * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
-       * 
-       * @instance postCreate
-       */
-      postCreate: function alfresco_documentlibrary_views_layouts_Table__postCreate() {
-         if (this.widgets)
-         {
-            this.processWidgets(this.widgets, this.containerNode);
-         }
-      }
-   });
+        "alfresco/lists/views/layouts/Table"], 
+        function(declare, Table) {
+   return declare([Table], {});
 });

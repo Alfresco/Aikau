@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,134 +18,13 @@
  */
 
 /**
- * This layout widget is intended to be used when rendering search results (or any data set
- * containing minimal node information). The idea is that the initially available data can be
- * rendered but when the user clicks on the item it will asynchronously request all of the 
- * information about that that node so that complete metadata and actions, etc can be displayed.
- * 
  * @module alfresco/documentlibrary/views/layouts/XhrLayout
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixed dijit/_OnDijitClickMixin
- * @mixes module:alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin
- * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @extends module:alfresco/lists/views/layouts/XhrLayout
  * @author Dave Draper
+ * @deprecated Since 1.0.4 - Use [alfresco/lists/views/layouts/XhrLayout]{@link module:alfresco/lists/views/layouts/XhrLayout} instead.
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dijit/_OnDijitClickMixin",
-        "dojo/text!./templates/XhrLayout.html",
-        "alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin",
-        "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing",
-        "dojo/_base/lang",
-        "dojo/_base/array",
-        "dijit/registry",
-        "dojo/dom-construct",
-        "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing, 
-                 lang, array, registry, domConstruct, domClass) {
-
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing], {
-      
-      /**
-       * An array of the CSS files to use with this widget.
-       * 
-       * @instance
-       * @type {object[]}
-       * @default [{cssFile:"./css/XhrLayout.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/XhrLayout.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
-      
-      /**
-       * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
-       * 
-       * @instance postCreate
-       */
-      postCreate: function alfresco_documentlibrary_views_layouts_XhrLayout__postCreate() {
-
-         var nodeData = lang.getObject("currentItem.node", false, this);
-         if (nodeData == null && this.widgets != null)
-         {
-            this.processWidgets(this.widgets, this.containerNode);
-         }
-         else if (this.widgetsForXhrData != null) 
-         {
-            this.processWidgets(this.widgetsForXhrData, this.containerNode);
-         }
-      },
-
-      /**
-       * 
-       * @instance
-       */
-      getXhrData: function alfresco_documentlibrary_views_layouts_XhrLayout__getXhrData() {
-         var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
-         if (nodeRef != null)
-         {
-            // Generate a UUID for the response to the publication to ensure that only this widget
-            // handles to the XHR data...
-            var responseTopic = this.generateUuid();
-            this._xhrDataRequestHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onXhrData"), true);
-            this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", {
-               alfResponseTopic: responseTopic,
-               nodeRef: nodeRef
-            }, true);
-         }
-         else
-         {
-            this.alfLog("warn", "No nodeRef attribute available to use to retrieve all data.", this);
-         }
-      },
-
-      /**
-       * Handles the processing of the asynchronously requested data. It will attempt to render the returned
-       * data item using the attribute "widgetsForXhrData".
-       * 
-       * @instance
-       * @param {object} payload 
-       */
-      onXhrData: function alfresco_documentlibrary_views_layouts_XhrLayout__onXhrData(payload) {
-         this.alfUnsubscribeSaveHandles([this._xhrDataRequestHandle]);
-         if (lang.exists("response.item", payload)) 
-         {
-            this.currentItem = payload.response.item;
-            if (this.containerNode != null)
-            {
-               try
-               {
-                  array.forEach(registry.findWidgets(this.containerNode), lang.hitch(this, "destroyWidget"));
-               }
-               catch(e)
-               {
-                  this.alfLog("error", "Couldn't destroy widgets", e);
-               }
-               domConstruct.empty(this.containerNode);
-            }
-            try
-            {
-               this.processWidgets(this.widgetsForXhrData, this.containerNode);
-            }
-            catch (e)
-            {
-               this.alfLog("error", "Couldn't create XHR layout",e);
-            }
-            
-         }
-         else
-         {
-            this.alfLog("warn", "Document data was provided but the 'response.item' attribute was not found", payload, this);
-         }
-      }
-   });
-});
+        "alfresco/lists/views/layouts/XhrLayout"], 
+        function(declare, XhrLayout) {
+   return declare([XhrLayout], {}
+);});

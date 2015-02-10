@@ -47,7 +47,7 @@ define(["intern!object",
                assert(elements.length === 1, "Test #1b - Unexpected number of INVISIBLE up arrows: " + elements.length);
             })
             .end()
-         .findByCssSelector(".alfresco-documentlibrary-views-layouts-Row:nth-child(1) .alfresco-renderers-Reorder .up")
+         .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(1) .alfresco-renderers-Reorder .up")
             .isDisplayed()
             .then(function(result) {
                assert(result === false, "Test #1c - The first up arrow was displayed incorrectly")
@@ -65,7 +65,7 @@ define(["intern!object",
             })
             .end()
 
-         .findByCssSelector(".alfresco-documentlibrary-views-layouts-Row:nth-child(3) .alfresco-renderers-Reorder .down")
+         .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(3) .alfresco-renderers-Reorder .down")
             .isDisplayed()
             .then(function(result) {
                assert(result === false, "Test #1f - The last down arrow was displayed incorrectly")
@@ -73,13 +73,13 @@ define(["intern!object",
             .end()
 
          // Check the alt-text is meaningful...
-         .findByCssSelector(".alfresco-documentlibrary-views-layouts-Row:nth-child(1) .alfresco-renderers-Reorder .down > img")
+         .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(1) .alfresco-renderers-Reorder .down > img")
             .getAttribute("alt")
             .then(function(result) {
                assert(result === "Click to move \"First\" down a place", "Test #2a - Alt text not set correctly on down arrow: " + result)
             })
             .end()
-         .findByCssSelector(".alfresco-documentlibrary-views-layouts-Row:nth-child(2) .alfresco-renderers-Reorder .up > img")
+         .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(2) .alfresco-renderers-Reorder .up > img")
             .getAttribute("alt")
             .then(function(result) {
                assert(result === "Click to move \"Middle\" up a place", "Test #2a - Alt text not set correctly on down arrow: " + result)
@@ -87,7 +87,7 @@ define(["intern!object",
             .end()
 
          // Check that publications are issued correctly...
-         .findByCssSelector(".alfresco-documentlibrary-views-layouts-Row:nth-child(1) .alfresco-renderers-Reorder .down > img")
+         .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(1) .alfresco-renderers-Reorder .down > img")
             .click()
             .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_MOVE_DOWN", "publish", "last"))
@@ -101,7 +101,7 @@ define(["intern!object",
             })
             .end()
 
-         .findByCssSelector(".alfresco-documentlibrary-views-layouts-Row:nth-child(2) .alfresco-renderers-Reorder .up > img")
+         .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(2) .alfresco-renderers-Reorder .up > img")
             .click()
             .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_MOVE_UP", "publish", "last"))

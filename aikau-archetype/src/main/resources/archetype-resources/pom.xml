@@ -9,13 +9,16 @@
    <name>Aikau Client</name>
    <version>\${version}</version>
 
-   <repositories>
+   <repositories> 
       <repository>
-         <id>Alfresco-Artifacts</id>
-         <name>Alfresco Artifacts SNAPSHOTS</name>
-         <url>https://artifacts.alfresco.com/nexus/content/groups/internal-snapshots/</url>
+        <id>alfresco-public</id>
+        <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
       </repository>
-   </repositories>
+      <repository>
+         <id>alfresco-public-snapshots</id>
+         <url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+       </repository>
+   </repositories> 
 
    <dependencies>
       <dependency>

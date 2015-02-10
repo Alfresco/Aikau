@@ -123,7 +123,7 @@ model.jsonModel = {
             view: "V1",
             widgets: [
                {
-                  name: "alfresco/documentlibrary/views/AlfDocumentListView",
+                  name: "alfresco/lists/views/AlfListView",
                   config: {
                      viewSelectionConfig: {
                         label: "View 1",

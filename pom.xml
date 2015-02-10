@@ -4,7 +4,7 @@
    <groupId>org.alfresco</groupId>
    <artifactId>aikau-parent</artifactId>
    <packaging>pom</packaging>
-   <version>1.0.4-SNAPSHOT</version>
+   <version>1.0.5-SNAPSHOT</version>
    
    <name>Aikau Project Aggregator</name>
 
@@ -15,6 +15,17 @@
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
    </properties>
+
+   <repositories> 
+      <repository>
+        <id>alfresco-public</id>
+        <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+      </repository>
+      <repository>
+         <id>alfresco-public-snapshots</id>
+         <url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+       </repository>
+   </repositories> 
 
    <distributionManagement>
       <repository>

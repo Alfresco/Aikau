@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-      <version>1.0.4-SNAPSHOT</version>
+   <version>1.0.5-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -28,9 +28,16 @@
             <targetPath>.</targetPath>
             <filtering>true</filtering>
             <includes>
-               <include>ReleaseNotes.txt</include>
+               <include>ReleaseNotes.md</include>
             </includes>
             <directory>${basedir}/src/main/</directory>
+         </resource>
+
+         <resource>
+            <!-- Path has to be aligned with version because Surf caches by XML path -->
+            <targetPath>./alfresco/site-data/extensions/${project.version}</targetPath>
+            <filtering>true</filtering>
+            <directory>${basedir}/src/main/resources/extension-module</directory>
          </resource>
 
          <!-- ...but everything else goes into a standard path -->

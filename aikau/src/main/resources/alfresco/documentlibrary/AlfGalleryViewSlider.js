@@ -24,14 +24,14 @@
  * @module alfresco/documentlibrary/AlfGalleryViewSlider
  * @extends external:dijit/form/HorizontalSlider
  * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin
+ * @mixes module:alfresco/lists/views/_AlfAdditionalViewControlMixin
  * @mixed module:alfresco/services/_PreferenceServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/form/HorizontalSlider",
         "alfresco/core/Core",
-        "alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin",
+        "alfresco/lists/views/_AlfAdditionalViewControlMixin",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "dojo/dom-class",
         "dojo/dom-style"], 

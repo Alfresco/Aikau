@@ -14,7 +14,7 @@ model.jsonModel = {
    ],
    widgets:[
       {
-         name: "alfresco/documentlibrary/views/AlfDocumentListView",
+         name: "alfresco/lists/views/AlfListView",
          config: {
             id: "TABLE_VIEW",
             currentData: {
@@ -25,21 +25,21 @@ model.jsonModel = {
             },
             widgetsForHeader: [
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "ID",
                      label: "Identifier"
                   }
                },
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "NAME",
                      label: "Name"
                   }
                },
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "OPTION",
                      label: "Option"
@@ -48,11 +48,11 @@ model.jsonModel = {
             ],
             widgets:[
                {
-                  name: "alfresco/documentlibrary/views/layouts/Row",
+                  name: "alfresco/lists/views/layouts/Row",
                   config: {
                      widgets: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Cell",
+                           name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {
@@ -123,7 +123,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Cell",
+                           name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {
@@ -136,7 +136,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Cell",
+                           name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {

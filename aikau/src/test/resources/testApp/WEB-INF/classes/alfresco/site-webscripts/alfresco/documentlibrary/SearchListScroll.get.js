@@ -17,21 +17,21 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/documentlibrary/AlfSearchList",
+         name: "alfresco/search/AlfSearchList",
          config: {
             useHash: true,
             useInfiniteScroll: true,
             widgets: [
                {
-                  name: "alfresco/documentlibrary/views/AlfSearchListView",
+                  name: "alfresco/search/AlfSearchListView",
                   config: {
                      widgets: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/Row",
+                           name: "alfresco/lists/views/layouts/Row",
                            config: {
                               widgets: [
                                  {
-                                    name: "alfresco/documentlibrary/views/layouts/Cell",
+                                    name: "alfresco/lists/views/layouts/Cell",
                                     config: {
                                        width: "16px",
                                        widgets: [

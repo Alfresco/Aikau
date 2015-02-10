@@ -1,4 +1,11 @@
-/target/
-/node_modules/
+# Ignored directories (please keep alphabetical)
 /code-coverage-reports/
 /docs/
+/node_modules/
+/src/main/resources/alfrescoInst/
+/src/test/vagrant/.vagrant/
+/target/
+
+# Ignored files (please keep alphabetical)
+/src/test/resources/testApp/js/aikau/testing/RequireEverything.js
+/src/test/resources/testApp/js/aikau/testing/TestCoverageResults.js

@@ -86,6 +86,7 @@ define(["alfresco/forms/controls/BaseFormControl",
                value = this.value;
             }
          }
+         value = this.convertStringValuesToBoolean(value);
          this.alfLog("log", "Returning value for field: '" + this.name + "': ", value);
          return value;
       },
@@ -97,10 +98,17 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {object} value The value to set.
        */
       setValue: function alfresco_forms_controls_CheckBox__setValue(value) {
-         this.alfLog("log", "Setting field: '" + this.name + "' with value: ", value);
-         if (this.wrappedWidget)
+         if (this.deferValueAssigment)
          {
-            this.wrappedWidget.set("checked", value);
+            this.inherited(arguments);
+         }
+         else
+         {
+            this.alfLog("log", "Setting field: '" + this.name + "' with value: ", value);
+            if (this.wrappedWidget)
+            {
+               this.wrappedWidget.set("checked", value);
+            }
          }
       },
       

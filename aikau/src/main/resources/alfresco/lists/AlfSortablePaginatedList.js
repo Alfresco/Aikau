@@ -105,7 +105,7 @@ define(["dojo/_base/declare",
        * @param {number} value The number of documents per page.
        */
       setPageSize: function alfresco_lists_AlfSortablePaginatedList__setPageSize(value) {
-         if (value === null)
+         if (value === null || value === undefined)
          {
             value = 25;
          }

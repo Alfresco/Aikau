@@ -36,7 +36,7 @@ model.jsonModel = {
       },
       {
          id: "FCTSRCH_SEARCH_RESULTS_LIST",
-         name: "alfresco/documentlibrary/AlfSearchList",
+         name: "alfresco/search/AlfSearchList",
          config: {
             viewPreferenceProperty: "org.alfresco.share.searchList.viewRendererName",
             view: "simple",
@@ -61,7 +61,7 @@ model.jsonModel = {
             widgets: [
                {
                   id: "FCTSRCH_SEARCH_ADVICE_NO_RESULTS",
-                  name: "alfresco/documentlibrary/views/AlfSearchListView",
+                  name: "alfresco/search/AlfSearchListView",
                   config: {
                      searchAdviceTitle: "faceted-search.advice.title",
                      searchAdvice: [
@@ -73,7 +73,7 @@ model.jsonModel = {
                      a11yCaptionClass: "hiddenAccessible",
                      widgetsForHeader: [
                         {
-                           name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                           name: "alfresco/lists/views/layouts/HeaderCell",
                            config: {
                               label: "Thumbnail",
                               class: "hiddenAccessible",
@@ -81,7 +81,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                           name: "alfresco/lists/views/layouts/HeaderCell",
                            config: {
                               label: "Details",
                               class: "hiddenAccessible",
@@ -89,7 +89,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                           name: "alfresco/lists/views/layouts/HeaderCell",
                            config: {
                               label: "Actions",
                               class: "hiddenAccessible",

@@ -13,7 +13,7 @@ model.jsonModel = {
    ],
    widgets:[
       {
-         name: "alfresco/documentlibrary/views/AlfSearchListView",
+         name: "alfresco/search/AlfSearchListView",
          config: {
             id: "SEARCH_RESULTS",
             currentData: {
@@ -187,21 +187,21 @@ model.jsonModel = {
             },
             widgetsForHeader: [
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "THUMBNAIL_HEADER",
                      label: "Thumbnail column"
                   }
                },
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "DETAIL_HEADER",
                      label: "Detail column"
                   }
                },
                {
-                  name: "alfresco/documentlibrary/views/layouts/HeaderCell",
+                  name: "alfresco/lists/views/layouts/HeaderCell",
                   config: {
                      id: "ACTIONS_HEADER",
                      label: "Actions column"
