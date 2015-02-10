@@ -18,7 +18,6 @@
    "maxstatements": 30,
    "newcap": true,
    "noarg": true,
-   "noempty": true,
    "nonbsp": true,
    "nonew": true,
    "notypeof": true,
