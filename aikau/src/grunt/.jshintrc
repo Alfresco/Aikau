@@ -2,7 +2,6 @@
    "bitwise": true,
    "curly": true,
    "eqeqeq": true,
-   "es3": true,
    "forin": true,
    "freeze": true,
    "funcscope": true,
@@ -18,6 +17,7 @@
    "maxstatements": 30,
    "newcap": true,
    "noarg": true,
+   "noempty": true,
    "nonbsp": true,
    "nonew": true,
    "notypeof": true,
@@ -38,6 +38,5 @@
 
    "expr": true,
 
-   "browser": true,
-   "dojo": true
+   "node": true
 }

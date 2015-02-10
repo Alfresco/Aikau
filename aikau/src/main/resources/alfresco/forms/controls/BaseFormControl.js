@@ -1406,7 +1406,33 @@ define(["dojo/_base/declare",
                this.alfLog("log", "An exception was thrown retrieving the value for field: '" + this.fieldId + "'");
             }
          }
+         value = this.convertStringValuesToBoolean(value);
+         return value;
+      },
 
+      /**
+       * Indicates whether or not string values should be converted to a boolean value if possible. This is checked
+       * during [getValue]{@link module:alfresco/forms/controls/BaseFormControl#getValue} and
+       * [setValue]{@link module:alfresco/forms/controls/BaseFormControl#setValue} to handle value conversion in and out
+       * of the widget. This attribute should be honoured if overriding those functions.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      _convertStringValuesToBooleans: false,
+
+      /**
+       * If the supplied argument is a string then this will convert that value into a boolean. Conversion will only
+       * take place if the string is either "true" or "false" otherwise the supplied value will be returned. This conversion
+       * will only take place if [_convertStringValuesToBooleans]{@link module:alfresco/forms/controls/BaseFormControl#convertStringValuesToBoolean}
+       * is set to true (which is not the default value).
+       *
+       * @instance
+       * @param {object} value
+       * @returns {object}
+       */
+      convertStringValuesToBoolean: function alfresco_forms_controls_BaseFormControl__convertStringValuesToBoolean(value) {
          if (this._convertStringValuesToBooleans === true && ObjectTypeUtils.isString(value))
          {
             if (value.toLowerCase() === "true")
@@ -1420,7 +1446,7 @@ define(["dojo/_base/declare",
          }
          return value;
       },
-      
+
       /**
        * 
        * @instance
