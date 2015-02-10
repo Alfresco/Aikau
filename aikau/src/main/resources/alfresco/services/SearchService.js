@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,7 +19,7 @@
 
 /**
  * This service is intended to be used for performing searches. It was written specifically to
- * service requests that can be rendered by the [AlfSearchList]{@link module:alfresco/documentlibrary/AlfSearchList}
+ * service requests that can be rendered by the [AlfSearchList]{@link module:alfresco/search/AlfSearchList}
  * widget.
  * 
  * @module alfresco/services/SearchService

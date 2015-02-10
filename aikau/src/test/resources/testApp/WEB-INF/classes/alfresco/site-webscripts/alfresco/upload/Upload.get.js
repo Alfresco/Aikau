@@ -9,7 +9,7 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/UploadService"
    ],
    widgets: [
       {
@@ -17,9 +17,6 @@ model.jsonModel = {
          config: {
             destinationNodeRef: "workspace://SpacesStore/671536ac-1a87-48a4-9be6-8af97906b71a"
          }
-      },
-      {
-         name: "alfresco/upload/AlfUpload"
       },
       {
          id: "BAD_FILE_DATA",

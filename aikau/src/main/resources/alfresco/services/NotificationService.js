@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,75 +24,61 @@
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
-        "dojo/_base/lang"],
-        function(declare, AlfCore, lang) {
-   
-   return declare([AlfCore], {
-      
-      /**
-       * Declare the dependencies on "legacy" JS files that this is wrapping.
-       * 
-       * @instance
-       * @type {String[]}
-       */
-      nonAmdDependencies: ["/js/yui-common.js",
-                           "/js/alfresco.js"],
+        "dojo/_base/lang",
+        "alfresco/notifications/AlfNotification"],
+        function(declare, AlfCore, lang, AlfNotification) {
 
-      /**
-       * Sets up the subscriptions for the NotificationService
-       * 
-       * @instance
-       * @param {array} args Constructor arguments
-       */
-      constructor: function alfresco_services_NotificationService__constructor(args) {
-         lang.mixin(this, args);
-         this.alfSubscribe("ALF_DISPLAY_NOTIFICATION", lang.hitch(this, "onDisplayNotification"));
-         this.alfSubscribe("ALF_DISPLAY_PROMPT", lang.hitch(this, "onDisplayPrompt"));
-      },
-      
-      /**
-       * Displays a notification to the user
-       * 
-       * @instance
-       * @param {object} payload The The details of the notification.
-       */
-      onDisplayNotification: function alfresco_services_NotificationService__onDisplayNotification(payload) {
-         var message = lang.getObject("message", false, payload);
-         if (message != null)
-         {
-            Alfresco.util.PopupManager.displayMessage({
-               text: message
-            });
-         }
-         else
-         {
-            this.alfLog("warn", "It was not possible to display the message because no 'message' attribute was provided", payload);
-         }
-      },
+      return declare([AlfCore], {
 
-      /**
-       * Displays a prompt to the user
-       *
-       * @instance
-       * @param {object} payload The The details of the notification.
-       */
-      onDisplayPrompt: function alfresco_services_NotificationService__onDisplayPrompt(payload) {
-         var message = lang.getObject("message", false, payload);
-         if (message != null)
-         {
-            var config = {
-               text: message
-            };
-            if (payload.title)
-            {
-               config.title = payload.title;
+         /**
+          * Sets up the subscriptions for the NotificationService
+          *
+          * @instance
+          * @param {array} args Constructor arguments
+          */
+         constructor: function alfresco_services_NotificationService__constructor(args) {
+            lang.mixin(this, args);
+            this.alfSubscribe("ALF_DISPLAY_NOTIFICATION", lang.hitch(this.onDisplayNotification));
+            this.alfSubscribe("ALF_DISPLAY_PROMPT", lang.hitch(this.onDisplayPrompt));
+         },
+
+         /**
+          * Displays a notification to the user
+          *
+          * @instance
+          * @param {object} payload The The details of the notification.
+          */
+         onDisplayNotification: function alfresco_services_NotificationService__onDisplayNotification(payload) {
+            var message = lang.getObject("message", false, payload);
+            if (message) {
+               var newNotification = new AlfNotification({
+                  message: payload.message
+               });
+               newNotification.startup();
+            } else {
+               this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
             }
-            Alfresco.util.PopupManager.displayMessage(config);
+         },
+
+         /**
+          * Displays a prompt to the user
+          *
+          * @instance
+          * @param {object} payload The The details of the notification.
+          */
+         onDisplayPrompt: function alfresco_services_NotificationService__onDisplayPrompt(payload) {
+            var message = lang.getObject("message", false, payload);
+            if (message) {
+               var config = {
+                  text: message
+               };
+               if (payload.title) {
+                  config.title = payload.title;
+               }
+               Alfresco.util.PopupManager.displayMessage(config);
+            } else {
+               this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
+            }
          }
-         else
-         {
-            this.alfLog("warn", "It was not possible to display the message because no 'message' attribute was provided", payload);
-         }
-      }
+      });
    });
-});

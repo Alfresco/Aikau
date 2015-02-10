@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -105,7 +105,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is the topic that will be subscribed to for receiving alternative search data. It defaults
-       * to the topic used by the [AlfSearchList]{@link alfresco/documentlibrary/AlfSearchList} widget.
+       * to the topic used by the [AlfSearchList]{@link alfresco/search/AlfSearchList} widget.
        *
        * @instance
        * @type {string}
@@ -127,7 +127,7 @@ define(["dojo/_base/declare",
       /**
        * This is the attribute key to use for retrieving the term that was actually searched for in the
        * payload provided to the [onAlternativeSearch]{@link alfresco/search/AlternativeSearchLabel#onAlternativeSearch}
-       * function. It defaults to the key provided by the [AlfSearchList]{@link alfresco/documentlibrary/AlfSearchList}.
+       * function. It defaults to the key provided by the [AlfSearchList]{@link alfresco/search/AlfSearchList}.
        *
        * @instance
        * @type {string}
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
       /**
        * This is the attribute key to use for retrieving the term that was originally requested for in the
        * payload provided to the [onAlternativeSearch]{@link alfresco/search/AlternativeSearchLabel#onAlternativeSearch}
-       * function. It defaults to the key provided by the [AlfSearchList]{@link alfresco/documentlibrary/AlfSearchList}.
+       * function. It defaults to the key provided by the [AlfSearchList]{@link alfresco/search/AlfSearchList}.
        *
        * @instance
        * @type {string}
@@ -159,12 +159,12 @@ define(["dojo/_base/declare",
       onAlternativeSearch: function alfresco_search_AlternativeSearchLabel__onAlternativeSearch(payload) {
          var searchedFor = lang.getObject(this.searchedForKey, false, payload);
          var searchRequest = lang.getObject(this.searchRequestKey, false, payload);
-         if (searchedFor != null)
+         if (searchedFor !== null)
          {
             this.searchedFor = searchedFor;
             this.searchedForNode.innerHTML = searchedFor;
          }
-         if (searchRequest != null)
+         if (searchRequest !== null)
          {
             this.searchRequest = searchRequest;
             this.searchRequestNode.innerHTML = searchRequest;

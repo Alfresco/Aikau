@@ -16,7 +16,7 @@ model.jsonModel = {
    widgets: [
       {
          id: "SITE_DOC_LINK",
-         name: "alfresco/renderers/SearchResultPropertyLink",
+         name: "alfresco/search/SearchResultPropertyLink",
          config: {
             currentItem: {
                displayName: "Site Document Link",
@@ -32,7 +32,7 @@ model.jsonModel = {
       },
       {
          id: "SITE_FOLDER_LINK",
-         name: "alfresco/renderers/SearchResultPropertyLink",
+         name: "alfresco/search/SearchResultPropertyLink",
          config: {
             currentItem: {
                displayName: "Site Folder Link",
@@ -50,7 +50,7 @@ model.jsonModel = {
       },
       {
          id: "REPO_DOC_LINK",
-         name: "alfresco/renderers/SearchResultPropertyLink",
+         name: "alfresco/search/SearchResultPropertyLink",
          config: {
             currentItem: {
                displayName: "Repo Document Link",
@@ -62,7 +62,7 @@ model.jsonModel = {
       },
       {
          id: "REPO_FOLDER_LINK",
-         name: "alfresco/renderers/SearchResultPropertyLink",
+         name: "alfresco/search/SearchResultPropertyLink",
          config: {
             currentItem: {
                displayName: "Repo Folder Link",

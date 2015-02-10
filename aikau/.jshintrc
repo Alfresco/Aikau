@@ -22,7 +22,7 @@
    "nonbsp": true,
    "nonew": true,
    "notypeof": true,
-   "quotmark": true,
+   "quotmark": "double",
    "shadow": "outer",
    "singleGroups": true,
    "undef": true,

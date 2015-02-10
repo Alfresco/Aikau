@@ -1,0 +1,15 @@
+.alfresco-lists-views-layouts-Cell {
+   
+}
+
+.alfresco-lists-views-layouts-Cell.smallpad {
+   padding: 4px;
+}
+
+.alfresco-lists-views-layouts-Cell.mediumpad {
+   padding: 10px;
+}
+
+.alfresco-lists-views-layouts-Cell.largepad {
+   padding: 16px;
+}

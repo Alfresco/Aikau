@@ -40,11 +40,11 @@
   display: none;
 }
 
-.alfresco-documentlibrary-views-layout-_MultiItemRendererMixin--item:hover .alfresco-renderers-Property.hover-only > span.inner {
+.alfresco-lists-views-layout-_MultiItemRendererMixin--item:hover .alfresco-renderers-Property.hover-only > span.inner {
    visibility: visible;
 }
 
-.alfresco-documentlibrary-views-layout-_MultiItemRendererMixin--item .alfresco-renderers-Property.hover-only > span.inner {
+.alfresco-lists-views-layout-_MultiItemRendererMixin--item .alfresco-renderers-Property.hover-only > span.inner {
    visibility: hidden;
 }
 

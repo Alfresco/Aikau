@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>NotificationService Test</shortname>
+  <description>This WebScript defines the NotificationService page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/NotificationService</url>
+</webscript>

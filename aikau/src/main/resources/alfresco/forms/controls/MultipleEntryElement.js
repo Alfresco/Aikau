@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -21,21 +21,23 @@
  * @module alfresco/forms/controls/MultipleEntryElement
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
+ * @mixes module:alfresco/core/CoreWidgetProcessing
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
-        "dojo/text!./templates/MultipleEntryElement.html",
+        "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/Core",
+        "dojo/text!./templates/MultipleEntryElement.html",
         "alfresco/core/ValueDisplayMapMixin",
         "alfresco/forms/PublishForm",
         "dojo/dom-class",
-        "alfresco/forms/controls/DojoValidationTextBox"], 
-        function(declare, _Widget, _Templated, template, AlfCore, ValueDisplayMapMixin, PublishForm, domClass, DojoValidationTextBox) {
+        "alfresco/forms/controls/TextBox"], 
+        function(declare, _Widget, _Templated, CoreWidgetProcessing, AlfCore, template, ValueDisplayMapMixin, PublishForm, domClass) {
    
-   return declare([_Widget, _Templated, AlfCore, ValueDisplayMapMixin], {
+   return declare([_Widget, _Templated, CoreWidgetProcessing, AlfCore, ValueDisplayMapMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -87,11 +89,11 @@ define(["dojo/_base/declare",
       determineKeyAndValue: function alfresco_forms_controls_MultipleEntryElement__determineKeyAndValue() {
          this.alfLog("log", "DetermineKeyAndValue", this);
          
-         if (this.elementConfig != null)
+         if (this.elementConfig !== null && this.elementConfig !== undefined)
          {
             // We're going to make sure that each element has a unique id. If the supplied configuration
             // does not include an id then we're going to create one now...
-            if (this.elementConfig.fieldId == null || this.elementConfig.fieldId == "") 
+            if (this.elementConfig.fieldId === null || this.elementConfig.fieldId === undefined || this.elementConfig.fieldId === "") 
             {
                this.elementConfig.fieldId = this.generateUuid();
             }
@@ -132,7 +134,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       createReadDisplay: function alfresco_forms_controls_MultipleEntryElement__createReadDisplay() {
-         var attribute = this.readDisplayAttribute != null ? this.readDisplayAttribute : "value";
+         var hasReadDisplay = this.readDisplayAttribute !== null && this.readDisplayAttribute !== undefined;
+         var attribute =  hasReadDisplay ? this.readDisplayAttribute : "value";
          var readDisplay = this.encodeHTML(this.elementValue[attribute]);
          readDisplay = this.mapValueToDisplayValue(readDisplay);
          this.readDisplay.innerHTML = readDisplay;
@@ -153,24 +156,22 @@ define(["dojo/_base/declare",
        * @instance
        */
       createEditDisplay: function alfresco_forms_controls_MultipleEntryElement__createEditDisplay() {
-         if (this.form == null)
+         if (this.form === null || this.form === undefined)
          {
-            // Before we create the form with the widgets, it is necessary to get the currently available
-            // fields that can be used to configure the rules.
-            // This information needs to be requested via a publication
-            // Create scope for form, but set element scope for field updates
-            var formPubSubScope = this.generateUuid();
-            this.form = new PublishForm({
-               pubSubScope: formPubSubScope,
-               dataScope: this.dataScope,
-               widgets: this.getFormWidgets()});
-            
+            // Create the form required
+            var widgets = [
+               {
+                  name: "alfresco/forms/PublishForm",
+                  assignTo: "form",
+                  config: {
+                     widgets: this.getFormWidgets()
+                  }
+               }
+            ];
+            this.processWidgets(widgets, this.editDisplay);   
             // The element is always created from the base widgets which does not actually provide any values
             // so it is important that the values are set afterwards...
             this.setFormValue(this.elementValue);
-
-            this.alfLog("log", "Created new form for MEE", this.form);
-            this.form.placeAt(this.editDisplay);
          }
          this.form.validate();
       },
@@ -191,7 +192,7 @@ define(["dojo/_base/declare",
        * @returns {object[]}
        */
       getFormWidgets: function alfresco_forms_controls_MultipleEntryElement__getFormWidgets() {
-         if (this.widgets != null)
+         if (this.widgets !== null || this.widgets !== undefined)
          {
             return this.widgets;
          }
@@ -200,7 +201,7 @@ define(["dojo/_base/declare",
             return [
                {
                   // This is the hidden id and needs to be included to ensure that the id is persisted.
-                  name: "alfresco/forms/controls/DojoValidationTextBox",
+                  name: "alfresco/forms/controls/TextBox",
                   config: {
                      name: "fieldId",
                      label: "fieldId",
@@ -211,7 +212,7 @@ define(["dojo/_base/declare",
                   }
                },
                {
-                  name: "alfresco/forms/controls/DojoValidationTextBox",
+                  name: "alfresco/forms/controls/TextBox",
                   config: {
                      name: "value",
                      label: "multi.element.value.label",
@@ -245,7 +246,6 @@ define(["dojo/_base/declare",
             // TODO: We should consider preventing exiting validation of edit mode (there are issues with this though,
             //       it's possible that the user may want to accept an entry that is invalid if it can be made valid
             //       via another entry.
-            var currentValue;
             if (saveChanges)
             {
                // If the changes should be saved then the value from the form should be retrieved.
@@ -263,7 +263,7 @@ define(["dojo/_base/declare",
        */
       getValue: function alfresco_forms_controls_MultipleEntryElement__getValue() {
          var value = {};
-         if (this.form != null) 
+         if (this.form !== null && this.form !== undefined) 
          {
             value = this.form.getValue();
          }

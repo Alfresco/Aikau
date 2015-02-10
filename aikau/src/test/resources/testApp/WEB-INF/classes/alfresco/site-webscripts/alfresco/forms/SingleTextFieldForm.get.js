@@ -30,6 +30,21 @@ model.jsonModel = {
          }
       },
       {
+         id: "STFF2",
+         name: "alfresco/forms/SingleTextFieldForm",
+         config: {
+            useHash: true,
+            okButtonLabel: "Search",
+            okButtonPublishTopic: "TEST_PUBLISH",
+            okButtonPublishGlobal: true,
+            okButtonIconClass: "alf-white-search-icon",
+            okButtonClass: "call-to-action",
+            textFieldName: "search",
+            textBoxIconClass: "alf-search-icon",
+            textBoxCssClasses: "long"
+         }
+      },
+      {
          name: "alfresco/logging/SubscriptionLog"
       },
       {
