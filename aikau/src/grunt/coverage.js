@@ -1,31 +1,11 @@
-/**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
- *
- * This file is part of Alfresco
- *
- * Alfresco is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Alfresco is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- */
+var alfConfig = require("./_config"),
+   path = require("path"),
+   tcpPortUsed = require("tcp-port-used");
 
-/**
- * Grunt tasks to generate coverage reports
- */
-module.exports = function(grunt, alfConfig) {
+module.exports = function(grunt) {
 
    // Generate a task for copying the uninstrumented code back...
    grunt.registerTask("copyOriginalCode", "Copy Uninstrumented Code", function() {
-      var path = require("path");
-
       var srcPath = "src/main/resources/alfresco";
       var targetRoot = "target/classes/META-INF/js/aikau/";
 
@@ -57,8 +37,6 @@ module.exports = function(grunt, alfConfig) {
 
    // Generate a task for copying the instrumented code...
    grunt.registerTask("copyInstrumentedCode", "Copy Instrumented Code", function() {
-      var path = require("path");
-
       var srcPath = "src/main/resources/alfrescoInst";
       var targetRoot = "target/classes/META-INF/js/aikau/";
 
@@ -89,6 +67,9 @@ module.exports = function(grunt, alfConfig) {
          });
    });
 
+   // Aliases
+   grunt.registerTask("hideExistingCoverageReports", ["copy:coverageReportsToTemp", "clean:coverageReports"]);
+   grunt.registerTask("showExistingCoverageReports", ["copy:coverageReportsFromTemp", "clean:coverageReportsTemp"]);
 
    // Generate a coverage report using the local machine
    grunt.registerTask("coverage-report", "A task for collecting code coverage reports", function() {
@@ -106,7 +87,6 @@ module.exports = function(grunt, alfConfig) {
       grunt.task.run("clean-reports");
       grunt.task.run("showExistingCoverageReports");
       grunt.task.run("copyOriginalCode");
-      // grunt.task.run("http:clearDependencyCaches");
       grunt.task.run("clean:instrumentedCode");
       grunt.task.run("shell:stopTestApp");
    });
@@ -128,7 +108,6 @@ module.exports = function(grunt, alfConfig) {
       grunt.task.run("clean-reports");
       grunt.task.run("showExistingCoverageReports");
       grunt.task.run("copyOriginalCode");
-      // grunt.task.run("http:clearDependencyCaches");
       grunt.task.run("clean:instrumentedCode");
       grunt.task.run("shell:stopTestApp");
    });
@@ -149,13 +128,13 @@ module.exports = function(grunt, alfConfig) {
    grunt.registerTask("write-require-everything", "A task for writing the RequireEverything widget file", function() {
 
       var template = grunt.file.read(alfConfig.dir.testResources + "/" + alfConfig.requireEverything.template),
-         widgetFiles = grunt.file.readJSON(alfConfig.dir.testResources + "/" + alfConfig.alfWidgetsList),
+         widgetFiles = grunt.file.readJSON(alfConfig.files.alfWidgets),
          fileList = [];
 
       // Iterate over widgetFiles, removing unwanted files and topping and tailing the file paths accordingly
       for (var i = 0; i < widgetFiles.length; i++) {
-         var filePath = ((widgetFiles[i].location)
-               .replace(alfConfig.requireEverything.widgetsPrefix, ""))
+         var filePath = widgetFiles[i].location
+            .replace(alfConfig.requireEverything.widgetsPrefix, "")
             .replace(alfConfig.requireEverything.widgetsSuffix, "");
          if (alfConfig.requireEverything.exclusions.indexOf(filePath) === -1) {
             fileList.push("\n\t\"" + filePath + "\"");
@@ -231,7 +210,6 @@ module.exports = function(grunt, alfConfig) {
          grunt.file.mkdir(alfConfig.dir.coverage);
       }
 
-      var tcpPortUsed = require("tcp-port-used");
       tcpPortUsed.check(8082, "localhost")
          .then(function(inUse) {
             /*jshint unused:false*/

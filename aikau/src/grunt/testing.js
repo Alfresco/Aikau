@@ -1,30 +1,4 @@
-/**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
- *
- * This file is part of Alfresco
- *
- * Alfresco is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Alfresco is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * Grunt tasks that use intern to run some tests
- */
 module.exports = function(grunt) {
-
-   // Load the Intern task - it isn"t "grunt-" prefixed so isn"t loaded automatically.
-   // @see: https://github.com/theintern/intern/wiki/Using-Intern-with-Grunt#task-options
-   grunt.loadNpmTasks("intern");
 
    // New Test
    grunt.registerTask("newTest", [
@@ -101,8 +75,10 @@ module.exports = function(grunt) {
       "startUnitTestApp"
    ]);
 
+   grunt.registerTask("sel", ["shell:seleniumUp"]);
+
    // Display notifications on test passes and failures...
-   var notify = require("./node_modules/grunt-notify/lib/notify-lib");
+   var notify = require("../../node_modules/grunt-notify/lib/notify-lib");
    grunt.event.on("intern.fail", function(data) {
       notify({
          title: "Unit Test Failed",
@@ -110,10 +86,8 @@ module.exports = function(grunt) {
       });
    });
 
-   // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
-   return {
-      // Use Intern plugin for tests.
-      // @see: https://github.com/theintern/intern/wiki/Using-Intern-with-Grunt
+   // Update the grunt config
+   grunt.config.merge({
       intern: {
          dev: {
             options: {
@@ -158,5 +132,6 @@ module.exports = function(grunt) {
             }
          }
       }
-   };
+   });
+
 };

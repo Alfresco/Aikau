@@ -1,27 +1,4 @@
-/**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
- *
- * This file is part of Alfresco
- *
- * Alfresco is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Alfresco is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * Server wait tasks
- */
-module.exports = function() {
-   // Return the config. This gets pushed into the grunt.init.config method in Gruntfile.
+module.exports = function(grunt) {
 
    // NOTE: It is by design that we wait for RequireEverything to be loaded. This is because
    //       by waiting for all dependencies to be processed in Surf BEFORE starting the unit tests
@@ -29,7 +6,7 @@ module.exports = function() {
    //       loaded then then unit tests will run much faster and in a more consistent fashion.
    //       The down-side is that this is the longest page to load, however for test development
    //       it is recommended to manually control the Jetty test server for expediency.
-   return {
+   grunt.config.merge({
       waitServer: {
          server: {
             options: {
@@ -39,5 +16,5 @@ module.exports = function() {
             }
          }
       }
-   };
+   });
 };
