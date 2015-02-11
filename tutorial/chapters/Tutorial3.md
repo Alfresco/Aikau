@@ -105,7 +105,7 @@ define(["dojo/_base/declare",
 This may look a little complicated at first, but it is just a structure of nested widgets, and once we have this right we can reuse it anywhere in our application without having to duplicate the code again.
 
 ### Step 3. Reference the composite widget
-We can now replace the section of model that we’ve copied with our new composite widget, e.g:
+We can now replace the section of model that we’ve copied with our new composite widget. Depending upon how you've previously edited the mode, the composite widget should replace the widget with the id "HEADER_BAR" that you should find at around line 18. After editing that section of the file should look something like this:
 
 ```JAVASCRIPT
 widgets: [
