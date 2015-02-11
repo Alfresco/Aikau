@@ -64,13 +64,13 @@ module.exports = function(grunt) {
          },
 
          vagrantInstallGuestPlugins: {
-            command: 'vagrant plugin install vagrant-vbguest',
+            command: "vagrant plugin install vagrant-vbguest",
             options: {
                stdout: true,
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.rootDir,
+                  cwd: alfConfig.dir.root,
                   maxBuffer: "Infinite"
                }
             }
@@ -82,12 +82,12 @@ module.exports = function(grunt) {
                stderr: true,
                failOnError: true,
                execOptions: {
-                  cwd: alf.vagrantDir,
+                  cwd: alfConfig.dir.vagrant,
                   maxBuffer: "Infinite"
                }
             }
          },
-        
+
          // Set up an already running Vagrant VM instance
          vagrantProvision: {
             command: "vagrant provision",
