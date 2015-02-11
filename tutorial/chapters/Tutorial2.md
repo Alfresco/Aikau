@@ -94,7 +94,7 @@ Note that this HTML file is referenced as a `dojo/text!` dependency in the JavaS
 
 In this example we are simply substituting in the value of the `greeting` instance attribute. This is done using the `${ … }` syntax.
 
-The `greeting` attribute is set in the `postMixInProperties` function and calls the `this.message( … )` function to get the locale specific value for the supplied message key.
+The `greeting` attribute is set in the `postMixInProperties` function and calls the `this.message( … )` function to get the locale specific value for the supplied message key. The `postMixInProperties` function is one of the extenion point functions provided by the `dijit/_WidgetBase` module and is called as part of the widget life-cycle, for more information on this extension point (and the other life-cycle extension points) see the [Dojo documentation](http://dojotoolkit.org/reference-guide/1.10/dijit/_WidgetBase.html ""Link to Dojo documentation").
 
 We can add in some locale specific properties by updating `i18n/HelloWorld.properties` to contain:
 
