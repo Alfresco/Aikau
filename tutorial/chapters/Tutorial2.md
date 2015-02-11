@@ -1,7 +1,7 @@
 Previous: [Getting Started](./Tutorial1.md),
 Next: [Create a Composite Widget](./Tutorial3.md)
 
-## Tutorial 1 - How to Create a new Widget
+## Tutorial 2 - How to Create a new Widget
 A typical Aikau widget comprises the following base files:
 * A JavaScript source file
 * An HTML template file
