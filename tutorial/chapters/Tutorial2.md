@@ -90,7 +90,7 @@ Add the following content to the `html/HelloWorld.html` file:
 <div class="tutorial-HelloWorld">${greeting}</div>
 ```
 
-Note that this HTML file is referenced as a `dojo/text!` dependency in the JavaScript file. This HTML file is parsed into the widget source allowing various substitutions to be made, DOM elements mapped to widget instance variables and event handlers connected. 
+Note that this HTML file is referenced as a `dojo/text!` dependency in the JavaScript file. This HTML file is parsed into the widget source allowing various substitutions to be made, DOM elements mapped to widget instance variables and event handlers connected. For more information on writing templates see the [Dojo documentation](http://dojotoolkit.org/documentation/tutorials/1.10/templated/ "Link to Dojo documentation").
 
 In this example we are simply substituting in the value of the `greeting` instance attribute. This is done using the `${ … }` syntax.
 
