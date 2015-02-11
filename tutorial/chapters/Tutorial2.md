@@ -12,7 +12,7 @@ The most important file is the JavaScript source file as this is what is referen
 
 This tutorial will cover how to create a new widget that makes use of all the files. The widget we'll create is not truly representative of a typical widget but serves purely to provide a template for you to build on.
 
-Each widget is considered a module and modules are referenced relative to the package in which they are created. The package is defined as the first element in the Module IDentifier (or MID) so for example, the “alfresco/logo/Logo” widget can be found in the “alfresco” package. 
+Each widget is considered a module and modules are referenced relative to the package in which they are created. The package is defined as the first element in the Module IDentifier (or MID) so for example, the `alfresco/logo/Logo` widget can be found in the `alfresco` package. 
 
 ### Step 1. Adding a New Package
 
