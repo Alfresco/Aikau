@@ -30,7 +30,7 @@ define(["./config/Suites"],
          //    chromeOptions: {
          //       excludeSwitches: ['ignore-certificate-errors']
          //    }
-         // } // ,
+         // }
          { browserName: 'firefox' }
       ],
 
@@ -66,7 +66,7 @@ define(["./config/Suites"],
 
       // A regular expression matching URLs to files that should not be included in code coverage analysis
       excludeInstrumentation: /^(?:tests|node_modules)\//,
-   
+
       // An array of code coverage reporters to invoke
       reporters: [
          // 'console',
