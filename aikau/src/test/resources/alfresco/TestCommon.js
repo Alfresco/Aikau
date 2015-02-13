@@ -114,6 +114,7 @@ define(["intern/dojo/node!fs",
          if(testName && browser.environmentType.browserName)
          {
             console.log(">> Starting '" + testName + "' on " + browser.environmentType.browserName);
+            console.log("   Test URL: " + this.testWebScriptURL(testWebScriptURL));
          }
          var command = browser.get(this.testWebScriptURL(testWebScriptURL))
             .then(pollUntil(
