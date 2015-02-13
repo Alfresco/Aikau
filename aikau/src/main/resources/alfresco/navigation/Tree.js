@@ -233,7 +233,7 @@ define(["dojo/_base/declare",
          this.tree = new Tree({
             model: this.treeModel,
             showRoot: this.showRoot,
-            onClick: lang.hitch(this, "onClick"),
+            onClick: lang.hitch(this, this.onClick),
             onOpen: lang.hitch(this, this.onNodeExpand),
             onClose: lang.hitch(this, this.onNodeCollapse)
          });

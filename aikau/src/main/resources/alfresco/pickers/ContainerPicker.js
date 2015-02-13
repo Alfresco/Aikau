@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -39,26 +39,7 @@ define(["dojo/_base/declare",
             name: "alfresco/pickers/PickedItems",
             assignTo: "pickedItemsWidget",
             config: {
-               singleItemMode: this.singleItemMode
-            }
-         }];
-
-         this.inherited(arguments);
-      },
-
-      /**
-       * Overrides the default picked items configuration to match the payloads provided by the 
-       * [PathTree]{@link module:alfresco/navigation/PathTree} widget.
-       *
-       * @instance
-       * @type {array}
-       */
-      widgetsForPickedItems: [
-         {
-            name: "alfresco/pickers/PickedItems",
-            assignTo: "pickedItemsWidget",
-            config: {
-               singleItemMode: "{singleItemMode}",
+               singleItemMode: this.singleItemMode,
                widgets: [
                   {
                      name: "alfresco/lists/views/layouts/Row",
@@ -76,7 +57,8 @@ define(["dojo/_base/declare",
                                           renderAsLink: false,
                                           currentItem: {
                                              node: {
-                                                type: "cm:folder"
+                                                type: "cm:folder",
+                                                nodeRef: "dummy://data/value"
                                              }
                                           }
                                        }
@@ -119,9 +101,10 @@ define(["dojo/_base/declare",
                   }
                ]
             }
-         }
-      ],
-
+         }];
+         this.inherited(arguments);
+      },
+      
       /**
        * The default widgets for the picker. This can be overridden at instantiation based on what is required to be
        * displayed in the picker.

@@ -134,9 +134,7 @@ define(["dojo/_base/declare",
          if (this.showPickedItems === true)
          {
             this._processsingPickedItems = true;
-            var clonedPickedItemsWidgets = lang.clone(this.widgetsForPickedItems);
-            this.processObject(["processInstanceTokens"], clonedPickedItemsWidgets);
-            this.processWidgets(clonedPickedItemsWidgets, this.pickedItemsNode);
+            this.processWidgets(lang.clone(this.widgetsForPickedItems), this.pickedItemsNode);
             if (this.pickedItemsLabel) {
                this.pickedItemsLabelNode.innerHTML = this.message(this.pickedItemsLabel);
             }
