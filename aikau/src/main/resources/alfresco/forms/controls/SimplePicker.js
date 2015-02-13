@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,10 +29,13 @@ define(["alfresco/forms/controls/BaseFormControl",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/ObjectProcessingMixin",
         "dojo/_base/lang",
+        "dojo/_base/array",
+        "alfresco/core/ObjectTypeUtils",
         "alfresco/pickers/Picker",
         "alfresco/pickers/PropertyPicker",
         "alfresco/pickers/PickedItems"], 
-        function(BaseFormControl, declare, CoreWidgetProcessing, ObjectProcessingMixin, lang, Picker, PropertyPicker, PickedItems) {
+        function(BaseFormControl, declare, CoreWidgetProcessing, ObjectProcessingMixin, lang, array, ObjectTypeUtils, 
+                 Picker, PropertyPicker, PickedItems) {
    
    return declare([BaseFormControl, CoreWidgetProcessing, ObjectProcessingMixin], {
       
@@ -51,14 +54,14 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       createFormControl: function alfresco_forms_controls_SimplePicker__createFormControl(config, domNode) {
-         this.lastValue = this.value != null ? this.value : [];
+         this.lastValue = ObjectTypeUtils.isArray(this.value) ? this.value : [];
 
          // Create a specific item selection scope to ensure that the picker publications don't interfere
          // with the surrounding forms...
          this.itemSelectionPubSubScope = this.generateUuid();
 
          var widgetsForControl = null;
-         if (this.widgetsForControl == null)
+         if (this.widgetsForControl === null)
          {
             // Get the widgets for displaying the available items...
             // TODO: Do we need a null check here?
@@ -91,7 +94,7 @@ define(["alfresco/forms/controls/BaseFormControl",
                               loadDataPublishTopic: this.loadDataPublishTopic,
                               loadDataPublishPayload: this.loadDataPublishPayload,
                               publishPickedItemsToParent: false,
-                              noDataMessage: this.noItemsMessage != null ? this.noItemsMessage : "alflist.no.data.message",
+                              noDataMessage: this.noItemsMessage ? this.noItemsMessage : "alflist.no.data.message",
                               widgets: widgetsForAvailableItemsView
                            }
                         }
@@ -118,6 +121,24 @@ define(["alfresco/forms/controls/BaseFormControl",
             this.processObject(["processInstanceTokens"], widgetsForControl);
          }
          return this.processWidgets(widgetsForControl, this._controlNode);
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#completeWidgetSetup}
+       * to publish the selected items. This has the effect of hiding the initialised selected items values
+       * from the available values list.
+       * 
+       * @instance
+       */
+      completeWidgetSetup: function alfresco_forms_controls_SimplePicker__setupChangeEvents() {
+         this.inherited(arguments);
+         var value = this.getValue();
+         if (ObjectTypeUtils.isArray(value))
+         {
+            array.forEach(value, function(item) {
+               this.alfPublish(this.itemSelectionPubSubScope+"ALF_ITEM_SELECTED", item);
+            }, this);
+         }
       },
 
       /**
