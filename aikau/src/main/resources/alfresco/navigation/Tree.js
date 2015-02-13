@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -21,13 +21,17 @@
  * @module alfresco/navigation/Tree
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
+ * @mixes module:alfresco/services/_NavigationServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Tree.html",
+        "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/core/Core",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
@@ -37,13 +41,11 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "alfresco/navigation/TreeStore",
         "dijit/tree/ObjectStoreModel",
-        "dijit/Tree",
-        "dojo/aspect",
-        "dojo/when"], 
-        function(declare, _Widget, _Templated, template, AlfCore, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, domConstruct, 
-                 lang, array, TreeStore, ObjectStoreModel, Tree, aspect, when) {
+        "dijit/Tree"], 
+        function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, AlfConstants, _AlfDocumentListTopicMixin, 
+                 _NavigationServiceTopicMixin, domConstruct, lang, array, TreeStore, ObjectStoreModel, Tree) {
    
-   return declare([_Widget, _Templated, AlfCore, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin], {
+   return declare([_Widget, _Templated, _PublishPayloadMixin, AlfCore, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -129,6 +131,17 @@ define(["dojo/_base/declare",
        */
       filterPrefsName: "docListTreePref",
 
+       /**
+       * This is an array of Regular Expressions that should match pathes to show. At least one of the 
+       * Regular Expressions in the array needs to pass true for the tree node to be displayed. To show
+       * all paths this should be left as null (the default value).
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      filterPaths: null,
+
       /**
        * Indicates whether or not the root node of the tree should be displayed or not.
        *
@@ -144,11 +157,11 @@ define(["dojo/_base/declare",
        */
       getTargetUrl: function alfresco_navigation_Tree__getTargetUrl() {
          var url = null;
-         if (this.siteId != null && this.containerId != null)
+         if (this.siteId !== null && this.containerId !== null)
          {
             url = AlfConstants.PROXY_URI + "slingshot/doclib/treenode/site/" + this.siteId + "/documentlibrary";
          }
-         else if (this.rootNode != null)
+         else if (this.rootNode !== null)
          {
             url = AlfConstants.PROXY_URI + "slingshot/doclib/treenode/node/alfresco/company/home";
          }
@@ -174,11 +187,11 @@ define(["dojo/_base/declare",
             children: "false",
             max: "-1"
          };
-         if (this.siteId != null && this.containerId != null)
+         if (this.siteId !== null && this.containerId !== null)
          {
             // No changes to the default query
          }
-         else if (this.rootNode != null)
+         else if (this.rootNode !== null)
          {
             query.max = "500";
             query.libraryRoot = this.rootNode;
@@ -193,13 +206,13 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_navigation_Tree__postCreate() {
 
-         // Ensure that showRoot is set (default to true)...
-         this.showRoot = this.showRoot != null ? this.showRoot : true;
+         this.showRoot = this.showRoot !== null ? this.showRoot : true;
 
          // Create a new tree store using the the siteId as part of the URL
          this.treeStore = new TreeStore({
             target: this.getTargetUrl(),
-            targetQueryObject: this.getTargetQueryObject()
+            targetQueryObject: this.getTargetQueryObject(),
+            filterPaths: this.filterPaths
          });
          
          // Create the object store...
@@ -221,8 +234,8 @@ define(["dojo/_base/declare",
             model: this.treeModel,
             showRoot: this.showRoot,
             onClick: lang.hitch(this, "onClick"),
-            onOpen: lang.hitch(this, "onNodeExpand"),
-            onClose: lang.hitch(this, "onNodeCollapse")
+            onOpen: lang.hitch(this, this.onNodeExpand),
+            onClose: lang.hitch(this, this.onNodeCollapse)
          });
          this.tree.placeAt(this.domNode);
          this.tree.startup();
@@ -237,7 +250,17 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default "ALF_DOCUMENTLIST_PATH_CHANGED"
        */
-      onClickTopic: "ALF_DOCUMENTLIST_PATH_CHANGED",
+      publishTopic: "ALF_DOCUMENTLIST_PATH_CHANGED",
+
+      /**
+       * By default the payload type will the the current item. This will automatically be set
+       * to be the tree node clicked.
+       *
+       * @instance
+       * @type {string}
+       * @default "CURRENT_ITEM"
+       */
+      publishPayloadType: "CURRENT_ITEM",
 
       /**
        * @instance
@@ -247,9 +270,12 @@ define(["dojo/_base/declare",
        */
       onClick: function alfresco_navigation_Tree__onClick(item, node, evt) {
          this.alfLog("log", "Tree Node clicked", item, node, evt);
-         this.alfPublish(this.onClickTopic, {
-            path: item.path
-         });
+
+         // Assign the clicked item as the currentItem value so that it can be used in payload generation...
+         this.currentItem = item;
+         this.publishPayload = lang.clone(this.publishPayload);
+         var generatedPayload = this.getGeneratedPayload(true);
+         this.alfPublish(this.publishTopic, generatedPayload, this.publishGlobal);
       },
       
       /**
@@ -258,10 +284,10 @@ define(["dojo/_base/declare",
        * @param {object} node The node on the tree that was opened
        */
       onNodeExpand: function alfresco_navigation_Tree__onNodeExpand(item, node) {
-         if (node != null && node._loadDeferred != null)
+         if (node !== null && node._loadDeferred !== null && node._loadDeferred !== undefined)
          {
             this.alfLog("log", "Wait for node expand before rezize", node._loadDeferred);
-            node._loadDeferred.then(lang.hitch(this, "requestSidebarResize"));
+            node._loadDeferred.then(lang.hitch(this, this.requestSidebarResize));
          }
       },
       
@@ -271,10 +297,10 @@ define(["dojo/_base/declare",
        * @param {object} node The node on the tree that was collapsed
        */
       onNodeCollapse: function alfresco_navigation_Tree__onNodeExpand(item, node) {
-         if (node != null && node._collapseDeferred != null)
+         if (node !== null && node._collapseDeferred !== null && node._collapseDeferred !== undefined)
          {
             this.alfLog("log", "Wait for node collapse before rezize", node._collapseDeferred);
-            node._loadDeferred.then(lang.hitch(this, "requestSidebarResize"));
+            node._loadDeferred.then(lang.hitch(this, this.requestSidebarResize));
          }
       },
       

@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
                                                 {
                                                    name: "alfresco/pickers/ContainerListPicker",
                                                    config: {
-                                                      siteMode: true,
+                                                      siteMode: false,
                                                       libraryRoot: "{siteNodeRef}",
                                                       nodeRef: "{siteNodeRef}",
                                                       path: "/"
@@ -117,27 +117,34 @@ define(["dojo/_base/declare",
                                     currentPickerDepth: 1,
                                     widgetsForSubPicker: [
                                        {
-                                          name: "alfresco/layout/VerticalWidgets",
+                                          name: "alfresco/navigation/PathTree",
                                           config: {
-                                             widgets: [
-                                                {
-                                                   name: "alfresco/pickers/ContainerListPicker",
-                                                   config: {
-                                                      siteMode: true,
-                                                      libraryRoot: "{siteNodeRef}",
-                                                      nodeRef: "{siteNodeRef}",
-                                                      path: "/"
-                                                   }
-                                                },
-                                                {
-                                                   name: "alfresco/documentlibrary/AlfDocumentListPaginator",
-                                                   config: {
-                                                      compactMode: true
-                                                   }
-                                                }
-                                             ]
+                                             rootNode: "{siteNodeRef}",
+                                             rootLabel: ""
                                           }
                                        }
+                                       // {
+                                       //    name: "alfresco/layout/VerticalWidgets",
+                                       //    config: {
+                                       //       widgets: [
+                                       //          {
+                                       //             name: "alfresco/pickers/ContainerListPicker",
+                                       //             config: {
+                                       //                siteMode: true,
+                                       //                libraryRoot: "{siteNodeRef}",
+                                       //                nodeRef: "{siteNodeRef}",
+                                       //                path: "/"
+                                       //             }
+                                       //          },
+                                       //          {
+                                       //             name: "alfresco/documentlibrary/AlfDocumentListPaginator",
+                                       //             config: {
+                                       //                compactMode: true
+                                       //             }
+                                       //          }
+                                       //       ]
+                                       //    }
+                                       // }
                                     ],
                                     requestItemsTopic: "ALF_GET_FAVOURITE_SITES"
                                  }
