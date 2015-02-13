@@ -21,6 +21,8 @@ model.jsonModel = {
                {
                   name: "alfresco/layout/HorizontalWidgets",
                   config: {
+                     widgetMarginLeft: 10,
+                     widgetMarginRight: 10,
                      widgets: [
                         {
                            name: "alfresco/layout/ClassicWindow",
@@ -28,10 +30,11 @@ model.jsonModel = {
                               title: "Showing Root",
                               widgets: [
                                  {
+                                    id: "TREE1",
                                     name: "alfresco/navigation/PathTree",
                                     config: {
                                        rootNode: "workspace://SpacesStore/b4cff62a-664d-4d45-9302-98723eac1319",
-                                       rootLabel: "Site"
+                                       rootLabel: "Custom Root"
                                     }
                                  }
                               ]
@@ -40,9 +43,10 @@ model.jsonModel = {
                         {
                            name: "alfresco/layout/ClassicWindow",
                            config: {
-                              title: "Hidng Root",
+                              title: "Hiding Root, filtering paths",
                               widgets: [
                                  {
+                                    id: "TREE2",
                                     name: "alfresco/navigation/PathTree",
                                     config: {
                                        showRoot: false,
