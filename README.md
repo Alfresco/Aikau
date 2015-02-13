@@ -1,7 +1,5 @@
 # Aikau
 
-### PLEASE NOTE: We're still in the process of setting up the Aikau project on GitHub. The external Aikau project has a dependency on a version of Surf that is currently publicly unavailable so the unit test framework and Maven archetype will not currently work. This notification will be removed when the required Surf libraries are publicly available on the Alfresco Nexus repository. Thank you for your patience.
-
 ### About Aikau
 #### What is Aikau?
 Aikau is a meta-framework of custom JavaScript widgets designed to work with Alfresco. It is dependant upon the Surf framework but is not dependant upon Alfresco Share application.
@@ -32,4 +30,4 @@ Once you've cloned this repository you should complete the following steps:
 We've written a tutorial that takes you through the process of building a standalone Aikau client - this will be made available soon.
 
 ## Contributing to Aikau
-We will gladly be welcoming contributions from the Alfresco Community - but please be patient with us whilst we complete the setup of the project and define the acceptance criteria for pull requests.
+We will gladly be welcoming contributions from the Alfresco Community - however, we would be grateful if you could please review and adhere to the [contribution acceptance criteria](https://github.com/Alfresco/Aikau/wiki/Contribution-Acceptance-Criteria) before generating any pull requests.
