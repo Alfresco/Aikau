@@ -61,7 +61,16 @@ module.exports = function(grunt) {
             }
          },
          vagrantMountSharedFoldersFix: {
-            command: "vagrant up; vagrant ssh -c 'sudo ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions'; vagrant reload --provision",
+            command: "vagrant ssh -c \"sudo ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions\"",
+            options: {
+               execOptions: {
+                  cwd: alfConfig.dir.vagrant,
+                  maxBuffer: "Infinite"
+               }
+            }
+         },
+         vagrantReloadAndProvision: {
+            command: "vagrant reload --provision",
             options: {
                execOptions: {
                   cwd: alfConfig.dir.vagrant,

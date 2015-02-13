@@ -6,7 +6,9 @@ module.exports = function(grunt) {
    grunt.registerTask("vcreate", [
       "shell:vagrantDestroy",
       "shell:vagrantInstallGuestPlugins",
-      "shell:vagrantMountSharedFoldersFix"
+      "shell:vagrantUp",
+      "shell:vagrantMountSharedFoldersFix",
+      "shell:vagrantReloadAndProvision"
    ]);
    grunt.registerTask("vup", ["shell:vagrantUp"]);
    grunt.registerTask("vdown", ["shell:vagrantHalt"]);
