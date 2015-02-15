@@ -136,7 +136,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          if (ObjectTypeUtils.isArray(value))
          {
             array.forEach(value, function(item) {
-               this.alfPublish(this.itemSelectionPubSubScope+"ALF_ITEM_SELECTED", item);
+               this.alfPublish(this.itemSelectionPubSubScope+"ALF_ITEM_SELECTED", item, true);
             }, this);
          }
       },
@@ -459,9 +459,12 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {object} payload
        */
       setValue: function alfresco_forms_controls_SimplePicker__setValue(value) {
-         this.alfPublish(this.itemSelectionPubSubScope+"ALF_SET_PICKED_ITEMS", {
-            pickedItems: value
-         }, true);
+         if (ObjectTypeUtils.isArray(value))
+         {
+            this.alfPublish(this.itemSelectionPubSubScope+"ALF_SET_PICKED_ITEMS", {
+               pickedItems: value
+            }, true);
+         }
       }
    });
 });

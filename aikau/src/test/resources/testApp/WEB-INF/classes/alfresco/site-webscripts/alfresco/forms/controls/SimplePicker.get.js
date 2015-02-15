@@ -12,53 +12,65 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/forms/controls/SimplePicker",
+         id: "FORM",
+         name: "alfresco/forms/Form",
          config: {
-            label: "Pick Some items",
-            description: "This is a simple picker with some hard-coded data",
-            name: "hardcoded",
-            reorderable: true,
-            currentData: {
-               items: [
-                  {
-                     name: "One"
-                  },
-                  {
-                     name: "Two"
-                  },
-                  {
-                     name: "Three"
-                  }
-               ]
-            }
-        }
-      },
-      {
-         name: "alfresco/forms/controls/SimplePicker",
-         config: {
-            label: "Pick Some items",
-            description: "This is a simple picker with some hard-coded data",
-            name: "hardcoded",
-            reorderable: true,
-            value: [
+            okButtonPublishTopic: "FORM_POST",
+            scopeFormControls: false,
+            widgets: [
                {
-                  name: "One"
+                  id: "PICKER1",
+                  name: "alfresco/forms/controls/SimplePicker",
+                  config: {
+                     label: "Picker Without Value",
+                     description: "This is a simple picker, using hard-coded data with no preset value",
+                     name: "picker1",
+                     reorderable: true,
+                     currentData: {
+                        items: [
+                           {
+                              name: "One"
+                           },
+                           {
+                              name: "Two"
+                           },
+                           {
+                              name: "Three"
+                           }
+                        ]
+                     }
+                 }
+               },
+               {
+                  id: "PICKER2",
+                  name: "alfresco/forms/controls/SimplePicker",
+                  config: {
+                     label: "Picker With Value",
+                     description: "This is a simple picker, using hard-coded data with a preset value",
+                     name: "picker2",
+                     reorderable: true,
+                     value: [
+                        {
+                           name: "One"
+                        }
+                     ],
+                     currentData: {
+                        items: [
+                           {
+                              name: "One"
+                           },
+                           {
+                              name: "Two"
+                           },
+                           {
+                              name: "Three"
+                           }
+                        ]
+                     }
+                 }
                }
-            ],
-            currentData: {
-               items: [
-                  {
-                     name: "One"
-                  },
-                  {
-                     name: "Two"
-                  },
-                  {
-                     name: "Three"
-                  }
-               ]
-            }
-        }
+            ]
+         }
       },
       {
          name: "alfresco/logging/SubscriptionLog"
