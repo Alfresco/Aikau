@@ -274,6 +274,15 @@ define(["alfresco/forms/controls/BaseFormControl",
       configForPicker: null,
 
       /**
+       * This is the widget to use as the root picker.
+       *
+       * @instance
+       * @type {string}
+       * @default "alfresco/pickers/Picker"
+       */
+      pickerWidget: "alfresco/pickers/Picker",
+
+      /**
        * 
        * @instance
        * @type {object}
@@ -303,7 +312,7 @@ define(["alfresco/forms/controls/BaseFormControl",
                            handleOverflow: false,
                            widgetsContent: [
                               {
-                                 name: "alfresco/pickers/Picker",
+                                 name: "{pickerWidget}",
                                  config: {}
                               }
                            ],
