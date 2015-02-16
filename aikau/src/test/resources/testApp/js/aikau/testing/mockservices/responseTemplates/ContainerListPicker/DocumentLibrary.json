@@ -1,0 +1,99 @@
+{
+   "totalResults": 4,
+   "resultsTrimmed": false,
+   "parent":
+   {
+      "nodeRef": "workspace://SpacesStore/8f2105b4-daaf-4874-9e8a-2152569d109b",
+      "userAccess":
+      {
+         "create": true,
+         "edit": true,
+         "delete": true
+      }
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace://SpacesStore/8bb36efb-c26d-4d2b-9199-ab6922f53c28",
+         "name": "Agency Files",
+         "description": "This folder holds the agency related files for the project",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "cm:ownable",
+            "sys:referenceable",
+            "cm:titled",
+            "cm:taggable",
+            "sys:localized"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/8ab12916-4897-47fb-94eb-1ab699822ecb",
+         "name": "Budget Files",
+         "description": "This folder holds the project budget and invoices",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "cm:ownable",
+            "sys:referenceable",
+            "cm:titled",
+            "cm:taggable",
+            "sys:localized"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/a211774d-ba6d-4a35-b97f-dacfaac7bde3",
+         "name": "Meeting Notes",
+         "description": "This folder holds notes from the project review meetings",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "cm:ownable",
+            "sys:referenceable",
+            "cm:titled",
+            "sys:localized"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/38745585-816a-403f-8005-0a55c0aec813",
+         "name": "Presentations",
+         "description": "This folder holds presentations from the project",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "cm:ownable",
+            "sys:referenceable",
+            "cm:titled",
+            "sys:localized"
+         ]
+      }
+   ]
+}

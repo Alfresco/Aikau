@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -39,13 +39,72 @@ define(["dojo/_base/declare",
             name: "alfresco/pickers/PickedItems",
             assignTo: "pickedItemsWidget",
             config: {
-               singleItemMode: this.singleItemMode
+               singleItemMode: this.singleItemMode,
+               widgets: [
+                  {
+                     name: "alfresco/lists/views/layouts/Row",
+                     config: {
+                        widgets: [
+                           {
+                              name: "alfresco/lists/views/layouts/Cell",
+                              config: {
+                                 width: "20px",
+                                 widgets: [
+                                    {
+                                       name: "alfresco/renderers/FileType",
+                                       config: {
+                                          size: "small",
+                                          renderAsLink: false,
+                                          currentItem: {
+                                             node: {
+                                                type: "cm:folder",
+                                                nodeRef: "dummy://data/value"
+                                             }
+                                          }
+                                       }
+                                    }
+                                 ]
+                              }
+                           },
+                           {
+                              name: "alfresco/lists/views/layouts/Cell",
+                              config: {
+                                 widgets: [
+                                    {
+                                       name: "alfresco/renderers/Property",
+                                       config: {
+                                          propertyToRender: "name",
+                                          renderAsLink: false
+                                       }
+                                    }
+                                 ]
+                              }
+                           },
+                           {
+                              name: "alfresco/lists/views/layouts/Cell",
+                              config: {
+                                 width: "20px",
+                                 widgets: [
+                                    {
+                                       name: "alfresco/renderers/PublishAction",
+                                       config: {
+                                          iconClass: "delete-16",
+                                          publishTopic: "ALF_ITEM_REMOVED",
+                                          publishPayloadType: "CURRENT_ITEM"
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
+                        ]
+                     }
+                  }
+               ]
             }
          }];
-
          this.inherited(arguments);
       },
-
+      
       /**
        * The default widgets for the picker. This can be overridden at instantiation based on what is required to be
        * displayed in the picker.
@@ -73,25 +132,12 @@ define(["dojo/_base/declare",
                                     currentPickerDepth: 1,
                                     widgetsForSubPicker: [
                                        {
-                                          name: "alfresco/layout/VerticalWidgets",
+                                          name: "alfresco/navigation/PathTree",
                                           config: {
-                                             widgets: [
-                                                {
-                                                   name: "alfresco/pickers/ContainerListPicker",
-                                                   config: {
-                                                      siteMode: true,
-                                                      libraryRoot: "{siteNodeRef}",
-                                                      nodeRef: "{siteNodeRef}",
-                                                      path: "/"
-                                                   }
-                                                },
-                                                {
-                                                   name: "alfresco/documentlibrary/AlfDocumentListPaginator",
-                                                   config: {
-                                                      compactMode: true
-                                                   }
-                                                }
-                                             ]
+                                             showRoot: false,
+                                             rootNode: "{siteNodeRef}",
+                                             filterPaths: ["^/documentLibrary/(.*)$"],
+                                             publishTopic: "ALF_ITEM_SELECTED"
                                           }
                                        }
                                     ],
@@ -117,25 +163,12 @@ define(["dojo/_base/declare",
                                     currentPickerDepth: 1,
                                     widgetsForSubPicker: [
                                        {
-                                          name: "alfresco/layout/VerticalWidgets",
+                                          name: "alfresco/navigation/PathTree",
                                           config: {
-                                             widgets: [
-                                                {
-                                                   name: "alfresco/pickers/ContainerListPicker",
-                                                   config: {
-                                                      siteMode: true,
-                                                      libraryRoot: "{siteNodeRef}",
-                                                      nodeRef: "{siteNodeRef}",
-                                                      path: "/"
-                                                   }
-                                                },
-                                                {
-                                                   name: "alfresco/documentlibrary/AlfDocumentListPaginator",
-                                                   config: {
-                                                      compactMode: true
-                                                   }
-                                                }
-                                             ]
+                                             showRoot: false,
+                                             rootNode: "{siteNodeRef}",
+                                             filterPaths: ["^/documentLibrary/(.*)$"],
+                                             publishTopic: "ALF_ITEM_SELECTED"
                                           }
                                        }
                                     ],
@@ -161,25 +194,12 @@ define(["dojo/_base/declare",
                                     currentPickerDepth: 1,
                                     widgetsForSubPicker: [
                                        {
-                                          name: "alfresco/layout/VerticalWidgets",
+                                          name: "alfresco/navigation/PathTree",
                                           config: {
-                                             widgets: [
-                                                {
-                                                   name: "alfresco/pickers/ContainerListPicker",
-                                                   config: {
-                                                      siteMode: true,
-                                                      libraryRoot: "{siteNodeRef}",
-                                                      nodeRef: "{siteNodeRef}",
-                                                      path: "/"
-                                                   }
-                                                },
-                                                {
-                                                   name: "alfresco/documentlibrary/AlfDocumentListPaginator",
-                                                   config: {
-                                                      compactMode: true
-                                                   }
-                                                }
-                                             ]
+                                             showRoot: false,
+                                             rootNode: "{siteNodeRef}",
+                                             filterPaths: ["^/documentLibrary/(.*)$"],
+                                             publishTopic: "ALF_ITEM_SELECTED"
                                           }
                                        }
                                     ],
@@ -200,25 +220,11 @@ define(["dojo/_base/declare",
                            pickerLabel: "Path",
                            picker: [
                               {
-                                 name: "alfresco/layout/VerticalWidgets",
+                                 name: "alfresco/navigation/PathTree",
                                  config: {
-                                    widgets: [
-                                       {
-                                          name: "alfresco/pickers/ContainerListPicker",
-                                          config: {
-                                             nodeRef: "alfresco://company/shared",
-                                             filter: {
-                                                path: "/"
-                                             }
-                                          }
-                                       },
-                                       {
-                                          name: "alfresco/documentlibrary/AlfDocumentListPaginator",
-                                          config: {
-                                             compactMode: true
-                                          }
-                                       }
-                                    ]
+                                    showRoot: false,
+                                    rootNode: "alfresco://company/shared",
+                                    publishTopic: "ALF_ITEM_SELECTED"
                                  }
                               }
                            ]
@@ -235,25 +241,11 @@ define(["dojo/_base/declare",
                            pickerLabel: "Path",
                            picker: [
                               {
-                                 name: "alfresco/layout/VerticalWidgets",
+                                 name: "alfresco/navigation/PathTree",
                                  config: {
-                                    widgets: [
-                                       {
-                                          name: "alfresco/pickers/ContainerListPicker",
-                                          config: {
-                                             nodeRef: "alfresco://company/home",
-                                             filter: {
-                                                path: "/"
-                                             }
-                                          }
-                                       },
-                                       {
-                                          name: "alfresco/documentlibrary/AlfDocumentListPaginator",
-                                          config: {
-                                             compactMode: true
-                                          }
-                                       }
-                                    ]
+                                    showRoot: false,
+                                    rootNode: "alfresco://company/home",
+                                    publishTopic: "ALF_ITEM_SELECTED"
                                  }
                               }
                            ]
@@ -270,25 +262,11 @@ define(["dojo/_base/declare",
                            pickerLabel: "Path",
                            picker: [
                               {
-                                 name: "alfresco/layout/VerticalWidgets",
+                                 name: "alfresco/navigation/PathTree",
                                  config: {
-                                    widgets: [
-                                       {
-                                          name: "alfresco/pickers/ContainerListPicker",
-                                          config: {
-                                             nodeRef: "alfresco://user/home",
-                                             filter: {
-                                                path: "/"
-                                             }
-                                          }
-                                       },
-                                       {
-                                          name: "alfresco/documentlibrary/AlfDocumentListPaginator",
-                                          config: {
-                                             compactMode: true
-                                          }
-                                       }
-                                    ]
+                                    showRoot: false,
+                                    rootNode: "alfresco://user/home",
+                                    publishTopic: "ALF_ITEM_SELECTED"
                                  }
                               }
                            ]

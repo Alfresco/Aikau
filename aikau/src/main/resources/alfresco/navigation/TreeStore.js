@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -36,6 +36,17 @@ define(["dojo/_base/declare",
    return declare([JsonRest, AlfCore, CoreXhr], {
       
       /**
+       * This is an array of Regular Expressions that should match pathes to show. At least one of the 
+       * Regular Expressions in the array needs to pass true for the tree node to be displayed. To show
+       * all paths this should be left as null (the default value).
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      filterPaths: null,
+
+      /**
        * Makes an asynchronous request to retrieve the children of the supplied parent object. It immediately returns
        * a Deferred object that is also passed as part of the request configuration. The Deferred object is resolved
        * by either the success or failure callback handler depending upon the result of the request.
@@ -71,8 +82,45 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig The configuration object passed when making the request
        */
       onChildRequestSuccess: function alfresco_navigation_TreeStore__onChildRequestSuccess(response, originalRequestConfig) {
+
+         // Update each item to set it's path...
          array.forEach(response.items, lang.hitch(this, "updateChild", originalRequestConfig.parent));
-         originalRequestConfig.deferred.resolve(response.items);
+         
+         // If required, filter the items based on their paths...
+         var filteredResponse = response.items;
+         if (this.filterPaths !== null)
+         {
+            filteredResponse = array.filter(response.items, lang.hitch(this, this.filterChildren));
+         }
+
+         // Resolve the promise...
+         originalRequestConfig.deferred.resolve(filteredResponse);
+      },
+
+      /**
+       * Filters the children based on whether or not their "path" attribute matches any of Regular Expression configured in 
+       * the [hidePaths]{@link module:alfresco/navigation/TreeStore#hidePaths} attribute.
+       *
+       * @instance
+       * @param {object} item The current item to check
+       * @param {number} index The index of the item in the original array
+       * @returns {boolean} true if the item should be kept
+       */
+      filterChildren: function alfresco_navigation_TreeStore__filterChildren(item, index) {
+         var include = array.some(this.filterPaths, function(filter) {
+            var matches = true;
+            try
+            {
+               var re = new RegExp(filter);
+               matches = re.test(item.path);
+            }
+            catch (e)
+            {
+               // Ignore failing Regular Expressions
+            }
+            return matches;
+         });
+         return include;
       },
       
       /**
@@ -90,6 +138,14 @@ define(["dojo/_base/declare",
          child.id = child.nodeRef;
          child.value = child.name;
          child.path = parent.path + child.name + "/";
+         
+         // Modify the name to be the description for site containers...
+         if (child.description && 
+             child.aspects && 
+             array.some(child.aspects, function(item) { return item === "st:siteContainer"; }))
+         {
+            child.name = child.description;
+         }
       },
       
       /**

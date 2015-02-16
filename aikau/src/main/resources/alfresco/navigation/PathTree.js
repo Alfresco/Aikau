@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,9 +30,8 @@ define(["dojo/_base/declare",
         "alfresco/navigation/Tree",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
-        "dojo/_base/array",
-        "dojo/when"], 
-        function(declare, Tree, _AlfDocumentListTopicMixin, lang, array, when) {
+        "dojo/_base/array"], 
+        function(declare, Tree, _AlfDocumentListTopicMixin, lang, array) {
    
    return declare([Tree, _AlfDocumentListTopicMixin], {
       
@@ -55,13 +54,12 @@ define(["dojo/_base/declare",
        * @param {object} payload 
        */
       onFilterChange: function alfresco_navigation_PathTree__onFilterChange(payload) {
-         if (payload != null && 
-             payload.path != null)
+         if (payload && payload.path !== null && payload.path !== undefined)
          {
             this.alfLog("log", "Filter updated", payload);
             var pathElements = payload.path.split("/");
             
-            if (this.tree != null && pathElements.length > 0)
+            if (this.tree !== null && this.tree !== undefined && pathElements.length > 0)
             {
                var rootNode = this.tree.getChildren()[0];
                pathElements.shift();
@@ -81,7 +79,7 @@ define(["dojo/_base/declare",
        */
       expandPathElement: function alfresco_navigation_PathTree__expandPathElement(node, pathElements) {
          this.alfLog("log", "Expanding path nodes: ", node, pathElements);
-         if (node != null && !node.isExpanded)
+         if (node !== null && !node.isExpanded)
          {
             // It's almost certain that the node won't be expanded when first requested, and this is likely
             // to be because the data load is deferred (e.g. awaiting the results of the XHR request to get
@@ -90,8 +88,8 @@ define(["dojo/_base/declare",
             this.alfLog("log", "Node load deferred", node._loadDeferred);
             node._loadDeferred.then(lang.hitch(this, "expandPathElement", node, pathElements));
          }
-         else if (node != null &&
-                  pathElements != null &&
+         else if (node !== null &&
+                  pathElements !== null &&
                   pathElements.length > 0)
          {
             // If the node is expanded and there are more path elements to process then we can
@@ -99,9 +97,9 @@ define(["dojo/_base/declare",
             var childNodes = node.getChildren(),
                 pathElement = pathElements.shift(),
                 filteredNodes = array.filter(childNodes, function(item) {
-               return item.item.name == pathElement;
+               return item.item.name === pathElement;
             });
-            if (filteredNodes.length == 1)
+            if (filteredNodes.length === 1)
             {
                // There should only ever be one result, but it's important to check...
                // at least an invalid path (e.g. to a deleted or moved folder) will not
