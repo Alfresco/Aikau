@@ -1,0 +1,125 @@
+
+{
+   "totalResults": 5,
+   "resultsTrimmed": false,
+   "parent":
+   {
+      "nodeRef": "workspace://SpacesStore/b4cff62a-664d-4d45-9302-98723eac1319",
+      "userAccess":
+      {
+         "create": true,
+         "edit": true,
+         "delete": true
+      }
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace://SpacesStore/64f69e69-f61e-42a3-8697-95eea1f2bda2",
+         "name": "dataLists",
+         "description": "Data Lists",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "st:siteContainer",
+            "cm:ownable",
+            "cm:tagscope",
+            "sys:referenceable",
+            "cm:titled",
+            "sys:localized"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/059c5bc7-2d38-4dc5-96b8-d09cd3c69b4c",
+         "name": "discussions",
+         "description": "",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "st:siteContainer",
+            "cm:ownable",
+            "cm:tagscope",
+            "sys:referenceable",
+            "sys:localized"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/8f2105b4-daaf-4874-9e8a-2152569d109b",
+         "name": "documentLibrary",
+         "description": "Document Library",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "st:siteContainer",
+            "cm:ownable",
+            "cm:tagscope",
+            "sys:referenceable",
+            "cm:titled",
+            "sys:localized"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/0e24b99c-41f0-43e1-a55e-fb9f50d73820",
+         "name": "links",
+         "description": "",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "st:siteContainer",
+            "cm:ownable",
+            "cm:tagscope",
+            "sys:referenceable",
+            "sys:localized"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/cdefb3a9-8f55-4771-a9e3-06fa370250f6",
+         "name": "wiki",
+         "description": "",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "st:siteContainer",
+            "cm:ownable",
+            "cm:tagscope",
+            "sys:referenceable",
+            "sys:localized"
+         ]
+      }
+   ]
+}

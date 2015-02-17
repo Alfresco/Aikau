@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.5-SNAPSHOT</version>
+   <version>1.0.6-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -67,7 +67,29 @@
 
       <plugins>
 
-         <plugin>
+        <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.8</version>
+            <executions>
+                <execution>
+                    <id>duplicate-english-messages</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <target>
+                    <copy todir="${project.build.outputDirectory}/META-INF/js/aikau/${project.version}">
+                        <fileset dir="${basedir}/src/main/resources" includes="alfresco/**/*.properties" />
+                        <mapper from="^([^_]*).properties$" to="\1_en.properties" type="regexp" />
+                    </copy>
+                </target>
+            </configuration>
+        </plugin>
+
+        <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <version>2.9</version>

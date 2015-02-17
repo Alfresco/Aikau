@@ -13,15 +13,18 @@ model.jsonModel = {
       },
       "alfresco/services/DialogService",
       "alfresco/services/DocumentService",
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/SiteService"
    ],
    widgets:[
       {
          name: "alfresco/forms/controls/ContainerPicker",
          config: {
-            id: "DOCUMENT_PICKER",
-            label: "Items"
+            id: "FOLDER_PICKER",
+            label: "Folders"
          }
+      },
+      {
+         name: "aikauTesting/mockservices/ContainerListPickerMockXhr"
       },
       {
          name: "alfresco/logging/SubscriptionLog"

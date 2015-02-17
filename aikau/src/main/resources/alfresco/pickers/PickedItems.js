@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -31,10 +31,11 @@
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView",
         "dojo/_base/lang",
-        "dojo/_base/array"],
-   function (declare, AlfDocumentListView, lang, array) {
+        "dojo/_base/array",
+        "alfresco/core/ObjectTypeUtils"],
+   function (declare, AlfListView, lang, array, ObjectTypeUtils) {
 
-      return declare([AlfDocumentListView], {
+      return declare([AlfListView], {
 
          /**
           * Set the i18n scope so that it's possible to pick up the overridden "no items" message.
@@ -109,15 +110,15 @@ define(["dojo/_base/declare",
             this.removeUploadDragAndDrop(this.domNode);
             // this.setupKeyboardNavigation();
 
-            this.alfSubscribe("ALF_ITEM_SELECTED", lang.hitch(this, "addPickedItem"));
-            this.alfSubscribe("ALF_ITEM_REMOVED", lang.hitch(this, "removePickedItem"));
+            this.alfSubscribe("ALF_ITEM_SELECTED", lang.hitch(this, this.addPickedItem));
+            this.alfSubscribe("ALF_ITEM_REMOVED", lang.hitch(this, this.removePickedItem));
             this.alfSubscribe("ALF_SET_PICKED_ITEMS", lang.hitch(this, this.onSetPickedItems));
             this.alfSubscribe("ALF_ITEM_MOVED_DOWN", lang.hitch(this, this.onReorder, 1));
             this.alfSubscribe("ALF_ITEM_MOVED_UP", lang.hitch(this, this.onReorder, -1));
 
             // Initialise the data...
             this.currentData = {
-               items: (this.value != null) ? this.value : []
+               items: ObjectTypeUtils.isArray(this.value) ? this.value : []
             };
             this.renderView();
             this.isValid();
@@ -148,20 +149,20 @@ define(["dojo/_base/declare",
           */
          addPickedItem: function alfresco_pickers_PickedItems__addPickedItem(payload) {
             var keyToAdd = lang.getObject(this.itemKey, false, payload);
-            if (keyToAdd == null)
-            {
-               this.alfLog("warn", "The supplied item does not have a key attribute as expected", payload, this);
-            }
-            else
+            if (keyToAdd)
             {
                var existingKey = this.findPickedItem(keyToAdd);
-               if (existingKey == null)
+               if (existingKey)
+               {
+                  this.alfLog("log", "Item is already picked - it will not be added a second time", payload, this);
+               }
+               else
                {
                   // Should the item to add be the only item selected?
                   if (this.singleItemMode)
                   {
                      this.alfLog("info", "Removing all other selected items", payload, this);
-                     array.forEach(this.currentData.items, function(item, index) {
+                     array.forEach(this.currentData.items, function(item) {
                         this.alfPublish("ALF_ITEM_REMOVED", item);
                      }, this);
                      this.setPickedItems([payload]);
@@ -180,11 +181,11 @@ define(["dojo/_base/declare",
                      pickedItems: this.currentData.items
                   });
                }
-               else
-               {
-                  this.alfLog("log", "Item is already picked - it will not be added a second time", payload, this);
-               }
                this.isValid();
+            }
+            else
+            {
+               this.alfLog("warn", "The supplied item does not have a key attribute as expected", payload, this);
             }
          },
 
@@ -197,16 +198,12 @@ define(["dojo/_base/declare",
           */
          removePickedItem: function alfresco_pickers_PickedItems__removePickedItem(payload) {
             var keyToRemove = lang.getObject(this.itemKey, false, payload);
-            if (keyToRemove == null)
-            {
-               this.alfLog("warn", "The supplied item does not have a key attribute as expected", payload, this);
-            }
-            else
+            if (keyToRemove)
             {
                // Filter out the target item...
-               this.currentData.items = array.filter(this.currentData.items, function(item, index) {
+               this.currentData.items = array.filter(this.currentData.items, function(item) {
                   var key = lang.getObject(this.itemKey, false, item);
-                  return key != keyToRemove;
+                  return key !== keyToRemove;
                }, this);
                array.forEach(this.currentData.items, function(item, index) {
                   item.index = index;
@@ -216,6 +213,10 @@ define(["dojo/_base/declare",
                   pickedItems: this.currentData.items
                });
                this.isValid();
+            }
+            else
+            {
+               this.alfLog("warn", "The supplied item does not have a key attribute as expected", payload, this);
             }
          },
 
@@ -231,9 +232,9 @@ define(["dojo/_base/declare",
           */
          findPickedItem: function alfresco_pickers_PickedItems__findPickedItem(targetKey) {
             var target = null;
-            var targetItems = array.filter(this.currentData.items, function(item, index) {
+            var targetItems = array.filter(this.currentData.items, function(item) {
                var key = lang.getObject(this.itemKey, false, item);
-               return key == targetKey;
+               return key === targetKey;
             }, this);
 
             if (targetItems.length > 0)
@@ -251,7 +252,7 @@ define(["dojo/_base/declare",
           */
          onSetPickedItems: function alfresco_pickers_PickedItems_setPickedItems(payload) {
             var items = lang.getObject("pickedItems", false, payload);
-            if (items != null)
+            if (ObjectTypeUtils.isArray(items))
             {
                this.setPickedItems(items);
             }
@@ -264,7 +265,7 @@ define(["dojo/_base/declare",
           * @pararm {object[]} items
           */
          setPickedItems: function alfresco_pickers_PickedItems_setPickedItems(items) {
-            if (items != null)
+            if (ObjectTypeUtils.isArray(items))
             {
                this.currentData.items = items;
                array.forEach(this.currentData.items, function(item, index) {
@@ -288,7 +289,7 @@ define(["dojo/_base/declare",
           */
          onReorder: function alfresco_pickers_PickedItems__onReorder(adjustment, item) {
             var targetKey = lang.getObject(this.itemKey, false, item);
-            if (targetKey != null)
+            if (targetKey)
             {
                var targetIndex = null;
                // Use "some" rather than "forEach" to exit loop immediately on match...

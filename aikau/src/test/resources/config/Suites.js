@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/services/NotificationServiceTest"
+      "src/test/resources/alfresco/forms/controls/ContainerPickerTest"
    ],
 
    /**
@@ -80,11 +80,13 @@ define({
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
+      "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
       "src/test/resources/alfresco/forms/controls/DocumentPickerTest",
       "src/test/resources/alfresco/forms/controls/DateTextBoxTest", // TODO: NEEDS FIXING
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
       "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",
+      "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
       "src/test/resources/alfresco/forms/controls/ValidationTest",
       "src/test/resources/alfresco/forms/controls/XssPreventionTest",
