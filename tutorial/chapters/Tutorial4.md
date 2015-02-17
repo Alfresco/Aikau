@@ -30,7 +30,7 @@ In this particular example we are defining the level of logging required but it 
 
 When you load a page containing this configuration and inspect the browser console (usually done by pressing the F12 key) you’ll see logging appear. Try it with the home page to see:
 
-SCREENSHOT
+![Image showing screenshot of browser console](../resources/Tutorial4-Image1.png "Image showing screenshot of browser console")
 
 ### Adding Logging Code
 Let’s add some logging code to the `tutorial/HelloWorld` widget, add the following into the `postMixInProperties` function. 
@@ -47,7 +47,7 @@ Because you are making a change to a widget file you will need to clear the old 
 
 Now refresh the page and amongst all the logging will be the output from the HelloWorld widget….. hard to find wasn’t it?
 
-SCREENSHOT
+![Browser console with highlighted log from HelloWorld widget](../resources/Tutorial4-Image2.png "Browser console with highlighted log from HelloWorld widget")
 
 Fortunately we can configure a filter on the LoggingService to only output messages from specific packages, modules or even functions. If you wondered why the HelloWorld widget was given a specific function name then this is why.
 
@@ -68,7 +68,7 @@ Update the `config` object of the LoggingService so that it looks like this:
 
 Refresh the page and look for the message in the browser console... bit easier to find this time wasn’t it?
 
-SCREENSHOT
+![Browser console with filtered log showing only HelloWorld widget logging](../resources/Tutorial4-Image3.png "Browser console with filtered log showing only HelloWorld widget logging")
 
 The filter attribute allows us to set a Regular Expression to match the logged message. Hopefully you’ve noticed that the console very clearly indicates which module and function has issued the log request.
 
@@ -99,10 +99,12 @@ The LoggingService can be quickly configured to only display warning and error m
 
 ...will only output warn and error messages.
 
-SCREENSHOT
+![Browser console with filtered log showing only warning logs](../resources/Tutorial4-Image4.png "Browser console with filtered log showing only warning logs")
 
 ### Dynamically Updating Logging Settings
 The LoggingService subscribes to the `ALF_UPDATE_LOGGING_PREFERENCES` topic to allow you to add widgets that let the user dynamically control the log levels and filter that is currently in action. We’ll look into making use of the publication/subscription communication model in much more detail in later tutorials - but it’s worth remembering that this is possible. An example of this can be seen in the Alfresco Share client when running in debug mode.
+
+![Screenshot of Alfresco Share with debug menu open](../resources/Tutorial4-Image5.png "Screenshot of Alfresco Share with debug menu open")
 
 ### Publication/Subscription Logging
 
