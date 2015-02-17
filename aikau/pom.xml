@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.5-SNAPSHOT</version>
+   <version>1.0.5</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -82,8 +82,8 @@
             <configuration>
                 <target>
                     <copy todir="${project.build.outputDirectory}/META-INF/js/aikau/${project.version}">
-                        <fileset dir="${basedir}/src/main/resources" includes="alfresco/**/*.properties"/>
-                        <mapper from="^([^_]*).properties$" to="\1_en.properties" type="regexp"/>
+                        <fileset dir="${basedir}/src/main/resources" includes="alfresco/**/*.properties" />
+                        <mapper from="^([^_]*).properties$" to="\1_en.properties" type="regexp" />
                     </copy>
                 </target>
             </configuration>
