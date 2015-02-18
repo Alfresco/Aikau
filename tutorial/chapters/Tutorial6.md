@@ -23,7 +23,9 @@ If you’re not familiar with [WebScripts](http://docs.alfresco.com/4.2/concepts
 
 Set the content of the files as follows:
 
-`users-and-groups.get.desc.xml`
+#### WebScript Descriptor
+
+The WebScriptor descriptor file should be found at `<PROJECT>/src/main/webapp/WEB-INF/webscripts/pages/users-and-groups.get.desc.xml`. Set it's contents to be:
 
 ```XML
 <webscript>
@@ -37,7 +39,9 @@ The only truly important line in this file (in the context of Aikau) is the <url
 
 Note that the value of the `<url>` element is the last part of the URL - how the page URLs are mapped to WebScripts will be explained in a later tutorial.
 
-`users-and-groups.get.html.ftl`
+#### WebScript Template
+
+The WebScriptor template file should be found at `<PROJECT>/src/main/webapp/WEB-INF/webscripts/pages/users-and-groups.get.html.ftl`. Set it's contents to be:
 
 ```HTML
 <@processJsonModel />
@@ -45,7 +49,9 @@ Note that the value of the `<url>` element is the last part of the URL - how the
 
 This single line is all you will ever need in your Aikau page WebScripts. It is a custom [FreeMarker directive](http://freemarker.org/docs/pgui_datamodel_directive.html "Link to FreeMarker documentation") that Surf provides to analyse the page model defined in the JavaScript controller. It ensures that all the required resource files are included on the page and creates the JavaScript to build the page from the model.
 
-`users-and-groups.get.js`
+#### WebScript Controller
+
+The WebScriptor controller file should be found at `<PROJECT>/src/main/webapp/WEB-INF/webscripts/pages/users-and-groups.get.js`. Set it's contents to be:
 
 ```JAVASCRIPT
 model.jsonModel = {
@@ -70,7 +76,9 @@ model.jsonModel = {
 
 This is the initial model that we’ll iterate on to build our page. We’ll add widgets and services over several steps explaining what each of them does as we go.
 
-`alfresco/services/CrudService`
+#### Understanding the widgets
+
+##### alfresco/services/CrudService
 
 The CrudService is a generic service designed to aid prototyping when building new pages. It is not intended to be used in a productionfinished page (and we’ll be removing it before the end of this tutorial) but is useful when you want to make rapid progress. The name refers to the fact that it supports the basic CRUD (Create, Read, Update and Delete) operations through subscriptions to the following topics:
 
@@ -82,7 +90,7 @@ The CrudService is a generic service designed to aid prototyping when building n
 
 Its benefit comes from the fact that you are able to specify the URL that you want to use in order to work with data - however, the disadvantage is that you are constrained to the URLs that you use. When you write a custom service to make XHR requests you have the opportunity to process both the request from the widget and the response back to it.
 
-`alfresco/lists/AlfList`
+##### alfresco/lists/AlfList
 
 The is the most basic list widget in Aikau (although as you’ll see it is still very feature rich) and should be considered as the widget that manages the state and views of data but it does not provide the actual rendering of that data.
 
