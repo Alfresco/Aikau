@@ -107,6 +107,23 @@ The LoggingService subscribes to the `ALF_UPDATE_LOGGING_PREFERENCES` topic to a
 ![Screenshot of Alfresco Share with debug menu open](../resources/Tutorial4-Image5.png "Screenshot of Alfresco Share with debug menu open")
 
 ### Publication/Subscription Logging
+The primary purpose for the `alfresco/logging/SubscriptionLog` widget is for use in unit testing other widgets. When running in “client-debug” mode (as your client has been initially configured to do) it will log all publications and subscription that are performed using the `alfPublish` and `alfSubscribe` functions (provided by the `alfresco/core/Core` module).
+
+However, the SubcriptionLog can also be used as debug and can be displayed in the Alfresco Share client by clicking on the the “Show Pub/Sub Log” menu item in the Debug Menu. When developing a page it can simply be added into the main `widgets` array of your WebScript controller.
+
+Add the following as the last entry into root `widgets` attribute in the `<PROJECT>/src/main/webapp/WEB-INF/webscripts/pages/home.get.js` file:
+
+```JAVASCRIPT
+{
+  name: "alfresco/logging/SubscriptionLog"
+}
+```
+
+And you should see the following (when you scroll down to the bottom of the page)
+
+![Screenshot showing SubcriptionLog output](../resources/Tutorial4-Image6.png "Screenshot showing SubcriptionLog output")
+
+Using this log is one of the best ways of seeing exactly how widgets are attempting to communicate with one another and is a useful tool to use when trying to get to resolve issues on your page.
 
 
 
