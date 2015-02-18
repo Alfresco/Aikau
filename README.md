@@ -27,7 +27,9 @@ Once you've cloned this repository you should complete the following steps:
 6. Run "grunt vup" from within the "aikau" Maven sub-module to provision your Vagrant test environment
 
 ## Learning Aikau
-We've written a tutorial that takes you through the process of building a standalone Aikau client - this will be made available soon.
+We've written a tutorial that takes you through the process of building a standalone Aikau client. We're in the process of converting it into GitHub markdown files - the chapters that have been converted so far start [here](https://github.com/Alfresco/Aikau/blob/master/tutorial/chapters/About.md "Link to Tutorial").
+
+There is also an [Alfresco Wiki page](https://wiki.alfresco.com/wiki/Aikau_framework "Link to Alfresco Wiki") that collates avaialble Aikau educational material.
 
 ## Contributing to Aikau
 We will gladly be welcoming contributions from the Alfresco Community - however, we would be grateful if you could please review and adhere to the [contribution acceptance criteria](https://github.com/Alfresco/Aikau/wiki/Contribution-Acceptance-Criteria) before generating any pull requests.
