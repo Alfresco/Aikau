@@ -152,7 +152,7 @@ Aikau provides an entire package of widgets dedicated to rendering data. The mos
 }
 ```
 
-When you load your new page you should now see the following displayed:
+You will need to [refresh WebScripts](./RefreshingWebScripts.md "Link to instructions for refreshing WebScripts") in order for your new WebScript files to be registered. You should then be able to view your at this address: [http://localhost:8090/aikau-sample/page/ap/ws/users-and-groups](http://localhost:8090/aikau-sample/page/ap/ws/users-and-groups). The page should look like this:
 
 ![Screenshot of the new page showing the list of user groups](../resources/Tutorial6-Image1.png "Screenshot of the new page")
 
