@@ -80,7 +80,7 @@ This is the initial model that we’ll iterate on to build our page. We’ll add
 
 ##### alfresco/services/CrudService
 
-The CrudService is a generic service designed to aid prototyping when building new pages. It is not intended to be used in a productionfinished page (and we’ll be removing it before the end of this tutorial) but is useful when you want to make rapid progress. The name refers to the fact that it supports the basic CRUD (Create, Read, Update and Delete) operations through subscriptions to the following topics:
+The CrudService is a generic service designed to aid prototyping when building new pages. It is not intended to be used in a production page (and we’ll be removing it before the end of this tutorial) but is useful when you want to make rapid progress. The name refers to the fact that it supports the basic CRUD (Create, Read, Update and Delete) operations through subscriptions to the following topics:
 
 * “ALF_CRUD_GET_ALL”
 * “ALF_CRUD_GET_ONE”
