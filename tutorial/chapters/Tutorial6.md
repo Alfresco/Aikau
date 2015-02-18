@@ -80,7 +80,7 @@ This is the initial model that we’ll iterate on to build our page. We’ll add
 
 ##### alfresco/services/CrudService
 
-The CrudService is a generic service designed to aid prototyping when building new pages. It is not intended to be used in a production page (and we’ll be removing it before the end of this tutorial) but is useful when you want to make rapid progress. The name refers to the fact that it supports the basic CRUD (Create, Read, Update and Delete) operations through subscriptions to the following topics:
+The CrudService is used to make [XHR requests](http://en.wikipedia.org/wiki/XMLHttpRequest "Link to Wikipedia page on XHR") to an Alfresco Repository using a URL fragment passed in published payload. It is a designed to aid prototyping when building new pages with the expectation that it's use in any given page will be replaced with a dedicated service at a later date. It is not intended to be used in a production page (and we’ll be removing it before the end of this tutorial) but is useful when you want to make rapid progress. The name refers to the fact that it supports the basic CRUD (Create, Read, Update and Delete) operations through subscriptions to the following topics:
 
 * “ALF_CRUD_GET_ALL”
 * “ALF_CRUD_GET_ONE”
@@ -96,7 +96,7 @@ The is the most basic list widget in Aikau (although as you’ll see it is still
 
 We are configuring it to publish a topic to request data (with the `loadDataPublishTopic` attribute) via the CrudService (using the “ALF_CRUD_GET_ALL” topic) with a payload object containing a `url` attribute with an Alfresco Repository WebScript URL to retrieve all the user groups that have been configured.
 
-It’s important to understand that the CrudService is designed to retrieve data from an Alfresco Repository so it cannot be passed full URL addresses. A list of the WebScript URLs on an Alfresco Repository can be browsed at this address: [http://localhost:8080/alfresco/service/index/uri/](http://localhost:8080/alfresco/service/index/uri/)
+It’s important to understand that the CrudService is designed to retrieve data from an Alfresco Repository so it cannot be passed full URL addresses. A list of the WebScript URLs that can be used can be browsed at this address: [http://localhost:8080/alfresco/service/index/uri/](http://localhost:8080/alfresco/service/index/uri/)
 
 The AlfList widget is written to cope with all manner of data structures and by default it expects to receive a data payload with an array of items in the attribute `items`. However, if you enter the groups URL into a browser (e.g. [http://localhost:8080/alfresco/service/api/groups?sortBy=displayName&zone=APP.DEFAULT](http://localhost:8080/alfresco/service/api/groups?sortBy=displayName&zone=APP.DEFAULT)) then you’ll see that the JSON response actually has the list of groups in an array called `data`. 
 
