@@ -96,6 +96,12 @@
                  false to ensure optimum performance -->
             <disable-resource-caching>false</disable-resource-caching>
 
+            <!-- This ensures that modules (including the Aikau modules) can auto-deploy -->
+            <module-deployment>
+               <mode>manual</mode>
+               <enable-auto-deploy-modules>true</enable-auto-deploy-modules>
+            </module-deployment>
+
             <!-- This is the Dojo configuration settings for Surf -->
             <dojo-pages>
                <!-- This indicates that Dojo page support is on - this means that the Dojo
