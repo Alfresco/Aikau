@@ -1,25 +1,16 @@
 module.exports = function(grunt) {
 
-   // Bring up an instance of vagrant
-   grunt.registerTask("vup", [
-      "shell:vagrantUp",
-      "shell:vagrantProvision"
-   ]);
-
-   // Provision an instance of vagrant
-   grunt.registerTask("vpro", [
-      "shell:vagrantProvision"
-   ]);
-
-   // Take down an instance of vagrant
-   grunt.registerTask("vdown", [
-      "shell:vagrantHalt"
-   ]);
-
-   // Rebuild a vagrant instance.
-   grunt.registerTask("vclean", [
+   // The only vagrant targets we "should" ever need
+   // Anything else should be run so infrequently, just
+   // run src/test/vagrant/vagrant <args>
+   grunt.registerTask("vcreate", [
       "shell:vagrantDestroy",
+      "shell:vagrantInstallGuestPlugins",
       "shell:vagrantUp",
-      "shell:vagrantProvision"
+      "shell:vagrantMountSharedFoldersFix",
+      "shell:vagrantReloadAndProvision"
    ]);
+   grunt.registerTask("vup", ["shell:vagrantUp"]);
+   grunt.registerTask("vdown", ["shell:vagrantHalt"]);
+
 };
