@@ -71,6 +71,7 @@ model.jsonModel = {
 This is the initial model that we’ll iterate on to build our page. We’ll add widgets and services over several steps explaining what each of them does as we go.
 
 `alfresco/services/CrudService`
+
 The CrudService is a generic service designed to aid prototyping when building new pages. It is not intended to be used in a productionfinished page (and we’ll be removing it before the end of this tutorial) but is useful when you want to make rapid progress. The name refers to the fact that it supports the basic CRUD (Create, Read, Update and Delete) operations through subscriptions to the following topics:
 
 * “ALF_CRUD_GET_ALL”
@@ -82,6 +83,7 @@ The CrudService is a generic service designed to aid prototyping when building n
 Its benefit comes from the fact that you are able to specify the URL that you want to use in order to work with data - however, the disadvantage is that you are constrained to the URLs that you use. When you write a custom service to make XHR requests you have the opportunity to process both the request from the widget and the response back to it.
 
 `alfresco/lists/AlfList`
+
 The is the most basic list widget in Aikau (although as you’ll see it is still very feature rich) and should be considered as the widget that manages the state and views of data but it does not provide the actual rendering of that data.
 
 We are configuring it to publish a topic to request data (with the `loadDataPublishTopic` attribute) via the CrudService (using the “ALF_CRUD_GET_ALL” topic) with a payload object containing a `url` attribute with an Alfresco Repository WebScript URL to retrieve all the user groups that have been configured.
@@ -99,11 +101,11 @@ We now need to create a view to render the list that the AlfList will load. The 
 
 In the first tutorial we added the widget `alfresco/documentlibrary/views/AlfSimpleView` which is an example of a [composite widget](./Tutorial3.md "Link to tutorial on creating composite widgets") which contains a view model. We’re now going to build a view model directly inside our AlfList configuration.
 
-All views must be instances of `alfresco/lists/views/AlfListView`. This widget should also be configured with a `“widgets` attribute which will be a model of the widgets for every item in the list.
+All views must be instances of `alfresco/lists/views/AlfListView`. This widget should also be configured with a `widgets` attribute which will be a model of the widgets for every item in the list.
 
 Aikau provides a number of “building block” modules for constructing views, but for optimum performance you should consider writing your own view template to reduce client-side processing.
 
-We’re going to construct a very basic view where each item is a row containing a single cell. Add the following into the empty “widgets” array (in the file `users-and-groups.get.js`):
+We’re going to construct a very basic view where each item is a row containing a single cell. Add the following into the empty `widgets` array (in the file `users-and-groups.get.js`):
 
 ```JAVASCRIPT
 {
