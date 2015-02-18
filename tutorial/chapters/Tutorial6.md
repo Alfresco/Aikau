@@ -154,7 +154,7 @@ Aikau provides an entire package of widgets dedicated to rendering data. The mos
 
 When you load your new page you should now see the following displayed:
 
-
+![Screenshot of the new page showing the list of user groups](../resources/Tutorial6-Image1.png "Screenshot of the new page")
 
 Previous: [Variable Substitutions in Models](./Tutorial5.md),
 Next: [Form Dialogs](./Tutorial7.md)
