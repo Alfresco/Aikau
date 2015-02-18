@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
 
 Let’s step through some of the important lines and explain what they’re doing:
 
-#### Dependencies
+##### Dependencies
 ```JAVASCRIPT
 "alfresco/core/ObjectProcessingMixin",
 "dojo/_base/lang"],
@@ -146,14 +146,14 @@ Here we’re adding dependencies on two additional modules that we’ve not prev
 
 `dojo/_base/lang` is a utility library module that provides lots of useful capabilities that are documented [here](http://dojotoolkit.org/reference-guide/1.10/dojo/_base/lang.html "Link to Dojo documentation") and we’re going to use it to clone (make a copy of) our widgets instance attribute.
 
-#### Extending and Mixing-In Modules
+##### Extending and Mixing-In Modules
 ```JAVASCRIPT
 return declare([ProcessWidgets, ObjectProcessingMixin], {
 ```
 
 This line declares our Label widget and states that it extends ProcessWidgets and mixes in ObjectProcessingMixin. This means that the widget will inherit all of functions and attributes provided by both modules but that any extending module functions will override any functions of the same name that are provided by the mixed in modules.
 
-#### Declaring Instance Variables
+##### Declaring Instance Variables
 ```JAVASCRIPT
 label: "Hello",
 
@@ -162,7 +162,7 @@ additionalCssClasses: "",
 
 Here we declare two attributes called `label` and `additionalCssClasses`. These are given default values but these can be overridden by attributes set in the “config” object when using the widget in a page.
 
-#### Defining a Model With Substitution Variables
+##### Defining a Model With Substitution Variables
 ```JAVASCRIPT
 widgets: [
   {
@@ -177,7 +177,7 @@ widgets: [
 
 This is the widgets model that we want to create. The important thing to note here is the use of the curly brackets { } that identify the variables that we want to substitute. Note that they are for `label` and `additionalCssClasses` which must match the instance attributes that were defined earlier.
 
-#### Processing the Model
+##### Processing the Model
 ```JAVASCRIPT
 postCreate: function tutorial_Label__postCreate() {
   if (this.widgets)
@@ -241,19 +241,19 @@ Update the home page JavaScript controller (`<PROJECT>/src/main/webapp/WEB-INF/w
 
 Refresh the page and you’ll see:
 
-
+![Screenshot showing the extra widgets](../resources/Tutorial5-Image1.png "Screenshot showing the extra widgets")
 
 The first instance just uses the defaults and unsurprisingly renders:
 
-
+![Close up of first widget](../resources/Tutorial5-Image2.png "Close up of first widget")
 
 The second instance configures the widget to change the label and to set an additional CSS class to make the label be rendered in a bold font: 
 
-
+![Close up of second widget](../resources/Tutorial5-Image3.png "Close up of second widget")
 
 The third instance replaces the default widget model but still leverages the substitution capabilities that the widget provides to place the label within angled brackets and to ensure that the label is bold regardless of whatever other CSS classes might be applied: 
 
-
+![Close up of third widget](../resources/Tutorial5-Image4.png "Close up of third widget")
 
 
 Previous: [Configuring Logging and Debug](./Tutorial4.md),
