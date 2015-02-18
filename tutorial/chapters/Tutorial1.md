@@ -139,18 +139,11 @@ Aikau uses a publication/subscription (sometimes referred to as “PubSub”) [c
 ### Step 5. Add File Upload Support
 Now let's make an update to allow the user to upload new content.
 
-Add the following service to the page, in the same way that you added the DocumentService earlier.
+Add the following services to the page, in the same way that you added the DocumentService earlier.
 
 ```
-"alfresco/services/ActionService"
-```
-
-...and after the `“alfresco/documentlibrary/AlfDocumentList”` entry, add the following widget:
-
-```
-{
-  name: "alfresco/upload/AlfUpload"
-}
+"alfresco/services/ActionService",
+"alfresco/services/UploadService"
 ```
 
 Now refresh the page and then try dragging and dropping a file from your computer’s file-system onto the document list and you should see it successfully uploaded. Ensure you drop the file into the document list component area to trigger the drop-zone.
