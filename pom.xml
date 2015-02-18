@@ -4,7 +4,7 @@
    <groupId>org.alfresco</groupId>
    <artifactId>aikau-parent</artifactId>
    <packaging>pom</packaging>
-   <version>1.0.5-SNAPSHOT</version>
+   <version>1.0.6-SNAPSHOT</version>
    
    <name>Aikau Project Aggregator</name>
 
@@ -103,6 +103,7 @@
    <modules>
       <module>aikau</module>
       <module>aikau-archetype</module>
+      <module>aikau-additional-languages</module>
    </modules>
 
 </project>

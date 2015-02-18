@@ -1,0 +1,37 @@
+{
+   "totalResults": 1,
+   "resultsTrimmed": false,
+   "parent":
+   {
+      "nodeRef": "workspace://SpacesStore/8ab12916-4897-47fb-94eb-1ab699822ecb",
+      "userAccess":
+      {
+         "create": true,
+         "edit": true,
+         "delete": true
+      }
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace://SpacesStore/d56afdc3-0174-4f8c-bce8-977cafd712ab",
+         "name": "Invoices",
+         "description": "This folder holds invoices for the project",
+         "hasChildren": false,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "cm:ownable",
+            "sys:referenceable",
+            "cm:titled",
+            "sys:localized"
+         ]
+      }
+   ]
+}

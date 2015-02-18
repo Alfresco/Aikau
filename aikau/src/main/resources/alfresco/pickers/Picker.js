@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -36,10 +36,11 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Picker.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/ObjectProcessingMixin",
         "dojo/_base/lang"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, lang) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ObjectProcessingMixin, lang) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ObjectProcessingMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -139,7 +140,7 @@ define(["dojo/_base/declare",
             }
          }
 
-         if (this.widgetsForRootPicker != null)
+         if (this.widgetsForRootPicker !== null)
          {
             this.processWidgets(lang.clone(this.widgetsForRootPicker), this.subPickersNode);
             if (this.subPickersLabel) {
@@ -167,7 +168,7 @@ define(["dojo/_base/declare",
             for (var i=pickerDepth; i < this.currentPickers.length; i++)
             {
                var picker = this.currentPickers[i];
-               if (picker != null && typeof picker.destroyRecursive === "function")
+               if (picker !== null && typeof picker.destroyRecursive === "function")
                {
                   picker.destroyRecursive();
                }
@@ -178,9 +179,9 @@ define(["dojo/_base/declare",
          }
 
          // Add the new picker...
-         if (payload.picker != null)
+         if (payload.picker !== null && payload.picker !== undefined)
          {
-            if (payload.picker.config == null)
+            if (payload.picker.config === null || payload.picker.config === undefined)
             {
                payload.picker.config = {};
             }
@@ -211,7 +212,7 @@ define(["dojo/_base/declare",
             this._processsingPickedItems = false;
             this.pickedItemsWidget.setPickedItems(this.value);
          }
-         else if (widgets == null || widgets.length != 1)
+         else if (widgets === null || widgets.length !== 1)
          {
             this.alfLog("warn", "A single picker widget was expected but " + widgets.length + " were created", widgets, this);
          }
@@ -244,7 +245,7 @@ define(["dojo/_base/declare",
          var value = [];
          if (this.showPickedItems === true)
          {
-            if (this.pickedItemsWidget != null)
+            if (this.pickedItemsWidget !== null)
             {
                value = this.pickedItemsWidget.currentData.items;
             }

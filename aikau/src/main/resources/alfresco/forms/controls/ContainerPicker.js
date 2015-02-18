@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -28,12 +28,22 @@
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
  */
-define(["alfresco/forms/controls/Picker",
-        "dojo/_base/declare"],
-        function(Picker, declare) {
+define(["dojo/_base/declare",
+         "alfresco/forms/controls/Picker",
+         "alfresco/pickers/ContainerPicker"],
+        function(declare, Picker) {
 
    return declare([Picker], {
 
+      /**
+       * Overrides the default picker module.
+       *
+       * @instance
+       * @type {string}
+       * @default "alfresco/pickers/ContainerPicker"
+       */
+      pickerWidget: "alfresco/pickers/ContainerPicker",
+      
       /**
        * This should be overridden to define the widget model for rendering the picker that appears within the
        * dialog.
@@ -42,137 +52,62 @@ define(["alfresco/forms/controls/Picker",
        * @type {object}
        * @default []
        */
-      configForPicker: {
-         generatePubSubScope: true,
-         widgetsForPickedItems: [
+      configForPickedItems: {
+         singleItemMode: true,
+         widgets: [
             {
-               name: "alfresco/pickers/PickedItems",
-               assignTo: "pickedItemsWidget"
-            }
-         ],
-         widgetsForRootPicker: [
-            {
-               name: "alfresco/menus/AlfVerticalMenuBar",
+               name: "alfresco/lists/views/layouts/Row",
                config: {
                   widgets: [
                      {
-                        name: "alfresco/menus/AlfMenuBarItem",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
-                           label: "picker.myFiles.label",
-                           publishTopic: "ALF_ADD_PICKER",
-                           publishOnRender: "true",
-                           publishPayload: {
-                              currentPickerDepth: 0,
-                              picker: [
-                                 {
-                                    name: "alfresco/pickers/ContainerListPicker",
-                                    config: {
-                                       nodeRef: "alfresco://user/home",
-                                       path: "/"
-                                    }
-                                 }
-                              ]
-                           }
-                        }
-                     },
-                     {
-                        name: "alfresco/menus/AlfMenuBarItem",
-                        config: {
-                           label: "picker.sharedFiles.label",
-                           publishTopic: "ALF_ADD_PICKER",
-                           publishPayload: {
-                              currentPickerDepth: 0,
-                              picker: [
-                                 {
-                                    name: "alfresco/pickers/ContainerListPicker",
-                                    config: {
-                                       nodeRef: "alfresco://company/shared",
-                                       filter: {
-                                          path: "/"
+                           width: "20px",
+                           widgets: [
+                              {
+                                 name: "alfresco/renderers/FileType",
+                                 config: {
+                                    size: "small",
+                                    renderAsLink: false,
+                                    currentItem: {
+                                       node: {
+                                          type: "cm:folder",
+                                          nodeRef: "dummy://data/value"
                                        }
                                     }
                                  }
-                              ]
-                           }
+                              }
+                           ]
                         }
                      },
                      {
-                        name: "alfresco/menus/AlfMenuBarItem",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
-                           label: "picker.repository.label",
-                           publishTopic: "ALF_ADD_PICKER",
-                           publishPayload: {
-                              currentPickerDepth: 0,
-                              picker: [
-                                 {
-                                    name: "alfresco/pickers/ContainerListPicker",
-                                    config: {
-                                       nodeRef: "alfresco://company/home",
-                                       path: "/"
-                                    }
+                           widgets: [
+                              {
+                                 name: "alfresco/renderers/Property",
+                                 config: {
+                                    propertyToRender: "name",
+                                    renderAsLink: false
                                  }
-                              ]
-                           }
+                              }
+                           ]
                         }
                      },
                      {
-                        name: "alfresco/menus/AlfMenuBarItem",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
-                           label: "picker.recentSites.label",
-                           publishTopic: "ALF_ADD_PICKER",
-                           publishPayload: {
-                              currentPickerDepth: 0,
-                              picker: [
-                                 {
-                                    name: "alfresco/pickers/SingleItemPicker",
-                                    config: {
-                                       currentPickerDepth: 1,
-                                       widgetsForSubPicker: [
-                                          {
-                                             name: "alfresco/pickers/ContainerListPicker",
-                                             config: {
-                                                siteMode: true,
-                                                libraryRoot: "{siteNodeRef}",
-                                                nodeRef: "{siteNodeRef}",
-                                                path: "/"
-                                             }
-                                          }
-                                       ],
-                                       requestItemsTopic: "ALF_GET_RECENT_SITES"
-                                    }
+                           width: "20px",
+                           widgets: [
+                              {
+                                 name: "alfresco/renderers/PublishAction",
+                                 config: {
+                                    iconClass: "delete-16",
+                                    publishTopic: "ALF_ITEM_REMOVED",
+                                    publishPayloadType: "CURRENT_ITEM"
                                  }
-                              ]
-                           }
-                        }
-                     },
-                     {
-                        name: "alfresco/menus/AlfMenuBarItem",
-                        config: {
-                           label: "picker.favouriteSites.label",
-                           publishTopic: "ALF_ADD_PICKER",
-                           publishPayload: {
-                              currentPickerDepth: 0,
-                              picker: [
-                                 {
-                                    name: "alfresco/pickers/SingleItemPicker",
-                                    config: {
-                                       currentPickerDepth: 1,
-                                       widgetsForSubPicker: [
-                                          {
-                                             name: "alfresco/pickers/ContainerListPicker",
-                                             config: {
-                                                siteMode: true,
-                                                libraryRoot: "{siteNodeRef}",
-                                                nodeRef: "{siteNodeRef}",
-                                                path: "/"
-                                             }
-                                          }
-                                       ],
-                                       requestItemsTopic: "ALF_GET_FAVOURITE_SITES"
-                                    }
-                                 }
-                              ]
-                           }
+                              }
+                           ]
                         }
                      }
                   ]

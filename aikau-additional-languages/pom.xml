@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>org.alfresco</groupId>
+      <artifactId>aikau-parent</artifactId>
+      <version>1.0.6-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
+   </parent>
+   <artifactId>aikau-additional-languages</artifactId>
+   <name>Aikau Additional Languages</name>
+   <description>This builds a JAR file containing the default properties files so that they can be translated.</description>
+   <build>
+      <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.9</version>
+            <executions>
+               <execution>
+                  <id>unpack-dependencies</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>unpack</goal>
+                  </goals>
+                  <configuration>
+                     <artifactItems>
+                        <artifactItem>
+                           <groupId>org.alfresco</groupId>
+                           <artifactId>aikau</artifactId>
+                           <version>${version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <excludes>**/*_de.properties,**/*_en.properties,**/*_es.properties,**/*_fr.properties,**/*_it.properties,**/*_ja.properties,**/*_nb.properties,**/*_nl.properties,**/*_pt_BR.properties,**/*_ru.properties,**/*_zh_CN.properties</excludes>
+                           <includes>**/*.properties</includes>
+                           <outputDirectory>${basedir}/target/classes</outputDirectory>
+                        </artifactItem>
+                     </artifactItems>
+                  </configuration>
+                </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+</project>

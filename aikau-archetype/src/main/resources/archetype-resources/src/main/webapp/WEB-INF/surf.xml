@@ -92,35 +92,26 @@
                  page loading performance -->
             <calculate-webscript-dependencies>false</calculate-webscript-dependencies>
 
-            <!-- This is the Dojo configuration settings for Surf - SUPPORT IS DISABLED BY DEFAULT -->
+            <!-- This option should ONLY be set to true during development. In production this will need to be reset to 
+                 false to ensure optimum performance -->
+            <disable-resource-caching>false</disable-resource-caching>
+
+            <!-- This ensures that modules (including the Aikau modules) can auto-deploy -->
+            <module-deployment>
+               <mode>manual</mode>
+               <enable-auto-deploy-modules>true</enable-auto-deploy-modules>
+            </module-deployment>
+
+            <!-- This is the Dojo configuration settings for Surf -->
             <dojo-pages>
                <!-- This indicates that Dojo page support is on - this means that the Dojo
                     dependency handler bean will be checked by the ResourceController and that
                     the relevant FreeMarker directives will be made available to WebScripts -->
                <enabled>true</enabled>
-               
-               <!-- This determines whether or not the loader trace is on or off -->
                <loader-trace-enabled>false</loader-trace-enabled>
-               
-               <!-- This is the file that will be loaded when Dojo is bootstrapped -->
-               <bootstrap-file>/res/js/lib/dojo-1.9.0/dojo/dojo.js</bootstrap-file>
-               
-               <!-- This is the widget that will be used to load the page -->
-               <page-widget>alfresco/core/Page</page-widget>
-               
-               <!-- The following data is used to bootstrap Dojo when it is loaded -->
-               <base-url>/res/</base-url>
-
-               <default-less-configuration>/js/aikau/${project.version}/alfresco/css/less/defaults.less</default-less-configuration>
-               
                <messages-object>Alfresco</messages-object>
                <packages>
-                   <package name="dojo"         location="js/lib/dojo-1.9.0/dojo"/>
-                   <package name="dijit"        location="js/lib/dojo-1.9.0/dijit"/>
-                   <package name="dojox"        location="js/lib/dojo-1.9.0/dojox"/>
-                   <package name="alfresco"     location="js/aikau/${project.version}/alfresco"/>
-                   <package name="surf"         location="js/surf"/>
-                   <package name="jquery"       location="js/lib/jquery-1.11.1" main="jquery-1.11.1.min"/>
+                   <!-- Add custom packages here -->
                </packages>
             </dojo-pages>
         </web-framework>
