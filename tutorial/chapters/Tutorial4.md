@@ -26,6 +26,8 @@ model.jsonModel = {
     },
 ```
 
+**NOTE: Here we are adding the LoggingService into the services array as an object rather than as a string. The majority of services don't require configuration and can just added as strings, however widgets must always be added as objects.**
+
 In this particular example we are defining the level of logging required but it is also possible to configure the widget to access the current user’s logging preferences from the Alfresco Repository - you just need to remove the `config` section completely and include the `alfresco/services/PreferenceService` on the page as well.
 
 When you load a page containing this configuration and inspect the browser console (usually done by pressing the F12 key) you’ll see logging appear. Try it with the home page to see:
@@ -43,7 +45,7 @@ Because you are making a change to a widget file you will need to clear the old 
 
 ...and click on the button marked “Clear Dependency Caches”. 
 
-**IMPORTANT: Each time you make a change to a JavaScript, CSS, HTML or properties file related to a widget or service you will need to clear the caches in order to see the change without restarting the server.**
+**IMPORTANT: Each time you make a change to a JavaScript, CSS, HTML or properties file related to a widget or service you will need to clear the caches in order to see the change without restarting the server. More information on Aikau caching can be found [here](./ClearingDependencyCaches.md)**
 
 Now refresh the page and amongst all the logging will be the output from the HelloWorld widget….. hard to find wasn’t it?
 
