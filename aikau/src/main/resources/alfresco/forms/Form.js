@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -148,6 +148,39 @@ define(["dojo/_base/declare",
       displayButtons: true,
       
       /**
+       * This should be set to a specific topic that can be published on to set the value of the form.
+       * The default value is null (e.g. setting via publication will not be possible unless a topic
+       * is explictly configured). The [setValueTopicGlobalScope]{@link module:alfresco/forms/Form#setValueTopicGlobalScope}
+       * and [setValueTopicParentScope]{@link module:alfresco/forms/Form#setValueTopicParentScope} should 
+       * also be set accordingly.
+       * 
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      setValueTopic: null,
+
+      /**
+       * This indicates whether any [setValueTopic]{@link module:alfresco/forms/Form#setValueTopic} subscription
+       * should be made globally.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      setValueTopicGlobalScope: true,
+
+      /**
+       * This indicates whether any [setValueTopic]{@link module:alfresco/forms/Form#setValueTopic} subscription
+       * should be made to the parent scope.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      setValueTopicParentScope: true,
+
+      /**
        * @instance
        */
       postCreate: function alfresco_forms_Form__postCreate() {
@@ -155,6 +188,14 @@ define(["dojo/_base/declare",
          // Setup some arrays for recording the valid and invalid widgets...
          this.invalidFormControls = [];
          
+         // If requested in the configuration, the value of a form can be set via a publication,
+         // however to avoid generating subscriptions unnecessarily the subscription is only
+         // set if explicitly requested. Global scope is intentionally used for the subscription
+         if (this.setValueTopic)
+         {
+            this.alfSubscribe(this.setValueTopic, lang.hitch(this, this.setValue), this.setValueTopicGlobalScope, this.setValueTopicParentScope);
+         }
+
          // Generate a new pubSubScope if required...
          if (this.scopeFormControls === true && this.pubSubScope === "")
          {
@@ -167,8 +208,8 @@ define(["dojo/_base/declare",
          
          // Set up the handlers for form controls reporting themselves as valid or invalid
          // following user update...
-         this.alfSubscribe("ALF_INVALID_CONTROL", lang.hitch(this, "onInvalidField"));
-         this.alfSubscribe("ALF_VALID_CONTROL", lang.hitch(this, "onValidField"));
+         this.alfSubscribe("ALF_INVALID_CONTROL", lang.hitch(this, this.onInvalidField));
+         this.alfSubscribe("ALF_VALID_CONTROL", lang.hitch(this, this.onValidField));
 
          if (this.displayButtons === true)
          {
@@ -462,11 +503,11 @@ define(["dojo/_base/declare",
       createButtons: function alfresco_forms_Form__createButtons() {
          if (this.showOkButton === true)
          {
-            
+            var onButtonClass = this.okButtonClass ? this.okButtonClass : "";
             this.okButton = new AlfButton({
                pubSubScope: this.pubSubScope,
                label: this.message(this.okButtonLabel),
-               additionalCssClasses: "confirmationButton " + (this.okButtonClass ? this.okButtonClass : ""),
+               additionalCssClasses: "confirmationButton " + onButtonClass,
                publishTopic: this.okButtonPublishTopic,
                publishPayload: this.okButtonPublishPayload,
                publishGlobal: this.okButtonPublishGlobal,
@@ -475,7 +516,7 @@ define(["dojo/_base/declare",
 
             // If useHash is set to true then set up a subcription on the publish topic for the OK button which will
             // set the hash fragment with the form contents...
-            if (this.setHash === true)
+            if (this.useHash === true)
             {
                if (this.okButtonPublishTopic &&
                    lang.trim(this.okButtonPublishTopic) !== "")
