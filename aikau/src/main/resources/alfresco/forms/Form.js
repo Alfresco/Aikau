@@ -176,9 +176,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default false
        */
-      setValueTopicParentScope: true,
+      setValueTopicParentScope: false,
 
       /**
        * @instance
