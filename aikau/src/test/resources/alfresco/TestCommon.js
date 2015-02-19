@@ -509,7 +509,7 @@ define(["intern/dojo/node!fs",
          {
             row = ":last-child";
          }
-         else if (!expectedRow)
+         else if (expectedRow !== null && expectedRow !== undefined)
          {
             var rowSelector = "nth-child";
             if (expectedRow.indexOf("-") !== -1)
