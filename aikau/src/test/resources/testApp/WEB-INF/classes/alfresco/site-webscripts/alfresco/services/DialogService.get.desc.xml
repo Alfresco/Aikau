@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>DialogService Test</shortname>
+  <family>aikau-unit-tests</family>
+  <url>/DialogService</url>
+</webscript>
