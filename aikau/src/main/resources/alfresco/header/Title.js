@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,6 +18,11 @@
  */
 
 /**
+ * This widget can be used to render a title for a page in a large font. It will also set the
+ * title of the browser window when [setBrowserTitle]{@link module:alfresco/header/Title#setBrowserTitle}
+ * is configured to be true. It subscribes to the "ALF_UPDATE_PAGE_TITLE" topic in order support the
+ * requests to dynamically re-render the title with a new value.
+ * 
  * @module alfresco/header/Title
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -58,6 +63,8 @@ define(["dojo/_base/declare",
       label: null,
       
       /**
+       * This is the URL to navigate to when the title is clicked.
+       * 
        * @instance
        * @type {string}
        */
@@ -73,6 +80,18 @@ define(["dojo/_base/declare",
       setBrowserTitle: false,
 
       /**
+       * This is the prefix to apply before the [label]{@link module:alfresco/header/Title#label} when
+       * setting the browser window title. It defaults to a standard Alfresco prefix but should be 
+       * overridden if required. The browser title will only be set when [setBrowserTitle]{@link module:alfresco/header/Title#setBrowserTitle}
+       * is set to true.
+       * 
+       * @instance
+       * @type {string}
+       * @default "Alfresco"
+       */
+      browserTitlePrefix: "Alfresco",
+
+      /**
        * It's important to perform label encoding before buildRendering occurs (e.g. before postCreate)
        * to ensure that an unencoded label isn't set and then replaced. 
        * 
@@ -81,7 +100,12 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_header_Title__postMixInProperties() {
          if (this.label)
          {
-            this.label = this.encodeHTML(this.label != null ? this.label : "");
+            var label = this.label ? this.label : "";
+            this.label = this.message(this.encodeHTML(label));
+         }
+         if (this.browserTitlePrefix)
+         {
+            this.browserTitlePrefix = this.encodeHTML(this.browserTitlePrefix);
          }
       },
       
@@ -90,10 +114,9 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_header_Title__postCreate() {
          this.textNode.innerHTML = this.label;
-
          if (this.setBrowserTitle === true)
          {
-            document.title = "Alfresco \u00bb " + this.label; // Set the browser title
+            document.title = this.browserTitlePrefix + " \u00bb " + this.label; // Set the browser title
          }
          
          if (this.targetUrl)
@@ -112,8 +135,9 @@ define(["dojo/_base/declare",
       updatePageTitle: function alfresco_header_Title__updatePageTitle(payload) {
          if (payload && payload.title)
          {
-            this.textNode.innerHTML = payload.title;
-            document.title = "Alfresco \u00bb " + payload.title; // Set the browser title
+            var title = this.message(payload.title);
+            this.textNode.innerHTML = this.message(payload.title);
+            document.title = this.browserTitlePrefix + " \u00bb " + title; // Set the browser title
          }
       }
    });
