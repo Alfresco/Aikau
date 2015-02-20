@@ -22,7 +22,8 @@ model.jsonModel = {
             label: "Display notification (short)",
             publishTopic: "ALF_DISPLAY_NOTIFICATION",
             publishPayload: {
-               message: "This is a message."
+               message: "This is a message.",
+               publishTopic: "ALF_NOTIFICATION_DESTROYED"
             }
          }
       },
