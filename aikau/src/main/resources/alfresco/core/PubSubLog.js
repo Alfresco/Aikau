@@ -19,26 +19,30 @@
 
 /**
  * Singleton providing class for publication/subscription logging. The idea is that all pub/sub data
- * is logged through a single object that can be used for rendering logging data.
- *  
+ * is logged through a single object that can be used for rendering logging data. This only happens if DEBUG mode is on.
+ *
  * @module alfresco/core/PubSubLog
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dojo/_base/lang"], 
-        function(declare, lang) {
+        "service/constants/Default"],
+        function(declare, AlfConstants) {
 
    // This is a simple singleton pattern. Technically it is still possible to instantiate a new log,
    // but as the core will always use the singleton and it is expected that all calls will go through the core
    // then this shouldn't be a problem...
    var PubSubLog = declare(null, {
-      
+
       /**
        * @instance
        */
       _log: [],
-      
+
       /**
+       *
+       * This method constructs a log entry using the supplied params and then calls [alfresco/core/PubSubLog#addEntry]
+       * It also logs the entry to the browser console to help debugging, if the console is available.
+       *
        * @instance
        * @param {string} type The type of pub/sub event (e.g. publish, subscribe, unsubscribe)
        * @param {string} topic The associated topic (if available)
@@ -54,9 +58,12 @@ define(["dojo/_base/declare",
          };
 
          // Send details to the console to enable better filter, searching and clearing.
-         // if (lang.isFunction(console.debug)) {
-         //    console.debug(entry);
-         // }
+         // This specifically avoids the logging & preference services to keep it simple & be available instantly.
+         if (console && typeof console.log === "function" && AlfConstants.DEBUG)
+         {
+            console.log(entry);
+
+         }
 
          this.addEntry(entry);
       },
@@ -70,7 +77,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       *
        * @instance
        * @param {string} topic The topic published to
        * @param {object} payload The published payload (will include the topic)
@@ -84,7 +91,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       *
        * @instance
        * @param {string} topic The topic subscribed to
        * @param {object} callback The function passed as a callback
@@ -95,7 +102,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       *
        * @instance
        * @param {object} handle The supplied subscription handle
        * @param {object} object The object that made the subscription
@@ -104,12 +111,12 @@ define(["dojo/_base/declare",
          this.updateLog("UNSUBSCRIBE", "", null, object.id);
       }
    });
-   
-   var instance; 
+
+   var instance;
    PubSubLog.getSingleton = function() {
       if (instance == null)
       {
-         instance = new PubSubLog(); 
+         instance = new PubSubLog();
       }
       return instance;
    };
