@@ -101,11 +101,11 @@ define(["dojo/_base/declare",
          if (this.label)
          {
             var label = this.label ? this.label : "";
-            this.label = this.message(this.encodeHTML(label));
+            this.label = this.encodeHTML(this.message(label));
          }
          if (this.browserTitlePrefix)
          {
-            this.browserTitlePrefix = this.encodeHTML(this.browserTitlePrefix);
+            this.browserTitlePrefix = this.encodeHTML(this.message(this.browserTitlePrefix));
          }
       },
       
@@ -136,7 +136,7 @@ define(["dojo/_base/declare",
          if (payload && payload.title)
          {
             var title = this.message(payload.title);
-            this.textNode.innerHTML = this.message(payload.title);
+            this.textNode.innerHTML = this.encodeHTML(title);
             document.title = this.browserTitlePrefix + " \u00bb " + title; // Set the browser title
          }
       }

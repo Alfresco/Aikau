@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -119,7 +119,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_html_Heading__postCreate() {
-
          if(isNaN(this.level) || this.level < 1 || this.level > 6 || !this.label)
          {
             this.alfLog("error", "A heading must have a numeric level from 1 to 6 and must have a label", this);
@@ -127,7 +126,7 @@ define(["dojo/_base/declare",
          else
          {
             var heading = domConstruct.create("h" + this.level, {
-               innerHTML: this.label
+               innerHTML: this.encodeHTML(this.message(this.label))
             }, this.headingNode);
 
             if(this.headingId)
@@ -140,11 +139,10 @@ define(["dojo/_base/declare",
          {
             domClass.add(this.domNode, this._hiddenAccessibleClass);
          }
-         else if (this.additionalCssClasses != null)
+         else if (this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);
          }
-
       }
    });
 });
