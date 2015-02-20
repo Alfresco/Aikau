@@ -31,12 +31,7 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   baseFunctionalSuites: [
-      "src/test/resources/alfresco/services/DialogServiceTest",
-      "src/test/resources/alfresco/menus/AlfFormDialogMenuItemTest",
-      "src/test/resources/alfresco/misc/TableAndFormDialogTest",
-      "src/test/resources/alfresco/forms/controls/FormButtonDialogTest"
-   ],
+   xbaseFunctionalSuites: ["src/test/resources/alfresco/services/DialogServiceTest"],
 
    /**
     * This is the base array of functional test suites
@@ -44,7 +39,7 @@ define({
     * @instance
     * @type [string]
     */
-   xbaseFunctionalSuites: [
+   baseFunctionalSuites: [
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 

@@ -17,19 +17,25 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          id: "CREATE_FORM_DIALOG_NO_ID",
          config: {
-            label: "Create Basic Form Dialog (with no ID)",
-            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            label: "Create Basic Dialog (with no ID)",
+            publishTopic: "ALF_CREATE_DIALOG_REQUEST",
             publishPayload: {
                dialogId: "FD1",
                dialogTitle: "Form Dialog 1",
-               formSubmissionTopic: "POST_DIALOG_1",
-               widgets: [
+               textContent: "Hello World",
+               publishOnShow: [
                   {
-                     id: "TB1",
-                     name: "alfresco/forms/controls/TextBox",
+                     publishTopic: "DISPLAYED_FD1",
+                     publishPayload: {}
+                  }
+               ],
+               widgetsButtons: [
+                  {
+                     name: "alfresco/buttons/AlfButton",
                      config: {
-                        name: "text",
-                        label: "Enter some text"
+                        label: "OK",
+                        additionalCssClasses: "cancellationButton",
+                        publishTopic: "ALF_ITEMS_SELECTED"
                      }
                   }
                ]
