@@ -86,7 +86,18 @@ model.jsonModel = {
                {
                   name: "alfresco/header/Title",
                   config: {
-                     label: "Test Title"
+                     label: "test.page.title"
+                  }
+               },
+               {
+                  id: "SET_TITLE_BUTTON",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: "Change Title",
+                     publishTopic: "ALF_UPDATE_PAGE_TITLE",
+                     publishPayload: {
+                        title: "test.page.updated.title"
+                     }
                   }
                }
             ]
