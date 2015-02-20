@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,35 +24,45 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
+
+   var browser;
 
    registerSuite({
-      name: 'AlfSitesList Test',
-      'Test Initial State': function () {
+      name: "Sites List Test",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SitesList", "Sites List Test").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      teardown: function() {
+         browser.end().alfPostCoverageResults(browser);
+      },
+
+      "Test Initial State": function () {
 
          // The test page is configured to start on page 2, but there will only be enough results for 1 page
          // so we need to test that actually the first and not second page of data is loaded.
-         var browser = this.remote;
-         var testname = "AlfSitesListTest";
-         return TestCommon.loadTestWebScript(this.remote, "/SitesList", testname)
-            .findAllByCssSelector(".alfresco-lists-views-layouts-Row")
-               .then(function(elements) {
-                  assert(elements.length === 1, "Test #1a - Counting Result, expected: 1, found: " + elements.length);
-               })
-            .end();
+         return browser.findAllByCssSelector(".alfresco-lists-views-layouts-Row")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Expected to load page 1");
+            })
+         .end();
       },
-      'Test Page Size Chage':  function() {
-         // MNT-12871 was raised to report that it was not possible to switch page size when on the second page
-         // of data. This test has been added to ensure the fix is not regressed.
-         var browser = this.remote;
 
-         // Click on the page size selector...
+      // MNT-12871 was raised to report that it was not possible to switch page size when on the second page
+      // of data. This test has been added to ensure the fix is not regressed.   
+      "Test Page Size Chage":  function() {
          return browser.findByCssSelector("#SITES_LIST_PAGINATION_MENU_RESULTS_PER_PAGE_SELECTOR_text")
             .click()
          .end()
-
+         
          // Select 100 results per page...
          .findByCssSelector("#SITES_LIST_PAGINATION_MENU_RESULTS_PER_PAGE_SELECTOR_dropdown .alf-dropdown-menu tr:nth-child(4)")
             .click()
@@ -62,11 +72,9 @@ define(["intern!object",
          // 25 returns 1 result and a page size of 100 returns 2 results)...
          .findAllByCssSelector(".alfresco-lists-views-layouts-Row")
             .then(function(elements) {
-               assert(elements.length === 2, "Test #2a - Counting Result, expected: 2, found: " + elements.length);
+               assert.lengthOf(elements, 2, "Expected 2 results");
             })
-         .end()
-
-         .alfPostCoverageResults(browser);
+         .end();
       }
    });
 });
