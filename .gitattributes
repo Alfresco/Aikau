@@ -9,5 +9,5 @@
 *.mp4 binary
 *.pdf binary
 *.png binary
-# *.PNG binary -- Do we need this? Uncomment if so.
+*.PNG binary
 *.woff binary
