@@ -136,7 +136,7 @@ define(["dojo/_base/declare",
          if (payload && payload.title)
          {
             var title = this.message(payload.title);
-            this.textNode.innerHTML = this.message(payload.title);
+            this.textNode.innerHTML = this.encodeHTML(title);
             document.title = this.browserTitlePrefix + " \u00bb " + title; // Set the browser title
          }
       }
