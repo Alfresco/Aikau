@@ -26,11 +26,12 @@
 define(["alfresco/core/Core",
         "dojo/_base/declare",
         "dojo/_base/lang",
+        "dojo/Deferred",
         "dojo/dom-class",
         "dijit/_TemplatedMixin",
         "dijit/_WidgetBase",
         "dojo/text!./templates/AlfNotification.html"],
-        function(AlfCore, declare, lang, domClass, _TemplatedMixin, _WidgetBase, template) {
+        function(AlfCore, declare, lang, Deferred, domClass, _TemplatedMixin, _WidgetBase, template) {
 
       return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -63,6 +64,13 @@ define(["alfresco/core/Core",
          destroyAfterHideMs: 1000,
 
          /**
+          * Variable to hold the Deferred object that will resolve once this notification is destroyed
+          *
+          * @type {object}
+          */
+         destroyDeferred: null,
+
+         /**
           * Estimate how many seconds it might take a user to focus on a notification
           *
           * @instance
@@ -82,6 +90,28 @@ define(["alfresco/core/Core",
          wordsPerSecond: 5,
 
          /**
+          * Called when widget is destroyed
+          *
+          * @instance
+          */
+         destroy: function alfresco_notifications_AlfNotification__destroy() {
+            this.destroyDeferred.resolve();
+            this.inherited(arguments);
+         },
+
+         /**
+          * Display the notification.
+          *
+          * @instance
+          * @returns  {object} A promise that will resolve once the notification is destroyed.
+          */
+         display: function alfresco_notifications_AlfNotification__display() {
+            this.destroyDeferred = new Deferred();
+            setTimeout(lang.hitch(this, this._show), 0); // Add to page before showing, else transition fails
+            return this.destroyDeferred.promise;
+         },
+
+         /**
           * Called after widget created, but not sub-widgets
           *
           * @instance
@@ -92,21 +122,12 @@ define(["alfresco/core/Core",
          },
 
          /**
-          * Called once all widgets and sub-widgets have loaded
-          *
-          * @instance
-          */
-         startup: function alfresco_notifications_AlfNotification__startup() {
-            this.inherited(arguments);
-            setTimeout(lang.hitch(this, this.show), 0); // Add to page before showing, else transition fails
-         },
-
-         /**
           * Hide the notification (and destroy it)
           *
           * @instance
+          * @private
           */
-         hide: function alfresco_notifications_AlfNotification__hide() {
+         _hide: function alfresco_notifications_AlfNotification___hide() {
             domClass.remove(this.domNode, "alfresco-notifications-AlfNotification--visible");
             setTimeout(lang.hitch(this, this.destroy), this.destroyAfterHideMs);
          },
@@ -115,13 +136,14 @@ define(["alfresco/core/Core",
           * Show the notification
           *
           * @instance
+          * @private
           */
-         show: function alfresco_notifications_AlfNotification__show() {
+         _show: function alfresco_notifications_AlfNotification___show() {
             domClass.add(this.domNode, "alfresco-notifications-AlfNotification--visible");
             var messageText = this.messageNode.textContent || this.message.innerText || "",
                messageWords = messageText.split(/\W+/),
                autoHideSecs = Math.ceil(messageWords.length / this.wordsPerSecond) + this.notificationFocusSecs;
-            setTimeout(lang.hitch(this, this.hide), autoHideSecs * 1000);
+            setTimeout(lang.hitch(this, this._hide), autoHideSecs * 1000);
          }
       });
    }

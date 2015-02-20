@@ -38,8 +38,8 @@ define(["dojo/_base/declare",
           */
          constructor: function alfresco_services_NotificationService__constructor(args) {
             lang.mixin(this, args);
-            this.alfSubscribe("ALF_DISPLAY_NOTIFICATION", lang.hitch(this.onDisplayNotification));
-            this.alfSubscribe("ALF_DISPLAY_PROMPT", lang.hitch(this.onDisplayPrompt));
+            this.alfSubscribe("ALF_DISPLAY_NOTIFICATION", lang.hitch(this, this.onDisplayNotification));
+            this.alfSubscribe("ALF_DISPLAY_PROMPT", lang.hitch(this, this.onDisplayPrompt));
          },
 
          /**
@@ -55,6 +55,11 @@ define(["dojo/_base/declare",
                   message: payload.message
                });
                newNotification.startup();
+               newNotification.display().then(lang.hitch(this, function() {
+                  if (payload.publishTopic) {
+                     this.alfPublish(payload.publishTopic, payload.publishPayload || {}, payload.publishGlobal, payload.publishToParent);
+                  }
+               }));
             } else {
                this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
             }
