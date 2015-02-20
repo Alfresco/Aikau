@@ -21,19 +21,31 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, require, TestCommon) {
 
    var browser;
+
    registerSuite({
-      name: 'Forms Test',
-      "Test setting browser hash fragment with form post": function () {
+      name: "Forms Tests",
+
+      setup: function() {
          browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/Forms", "Forms Test").findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
+         return TestCommon.loadTestWebScript(this.remote, "/Forms", "Forms Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      teardown: function() {
+         browser.end().alfPostCoverageResults(browser);
+      },
+      
+      "Test setting browser hash fragment with form post": function () {
+         return browser.findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
             .type("test1")
          .end()
          .findByCssSelector("#HASH_TEXT_BOX_2 .dijitInputContainer input")
@@ -41,18 +53,14 @@ define(["intern!object",
          .end()
          .findByCssSelector("#HASH_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton > span")
             .click()
-         .end();
-//          Temporarily commented out as the url() function is not returning the full URL...
-//          Raised issue with Intern here: https://github.com/theintern/intern/issues/188
-//         .getCurrentUrl()
-//         .then(function(page) {
-//            TestCommon.log(testname,"Check fragment hash has been updated: " + page);
-//            expect(page).to.contain("#field1=test1&field2=test2", "Test #1 - form submit did not update hash fragment");
-//         })
-//         .end()
+            .execute("return window.location.hash.toString()")
+            .then(function(hash) {
+               assert.equal(hash, "#field1=test1&field2=test2", "Form submit did not update hash fragment");
+            });
       },
+
       "Test updating browser hash updates form": function() {
-         this.remote.findByCssSelector("#SET_HASH")
+         return browser.findByCssSelector("#SET_HASH")
             .click()
          .end()
          .findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
@@ -65,18 +73,18 @@ define(["intern!object",
             .getProperty("value")
             .then(function(resultText) {
                assert(resultText === "updatedField2", "field2 was not set by the hash: " + resultText);
-            })
-         .end();
+         });
       },
+
       "Test confirmation form button initially disabled": function() {
-         this.remote.findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
+         return browser.findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
             .then(function(elements) {
                assert(elements.length === 1, "Standard form button was not initially disabled");
-            })
-         .end();
+            });
       },
+
       "Test confirmation button is enabled with valid fields": function() {
-         this.remote.findByCssSelector("#TEXT_BOX_1 .dijitInputContainer input")
+         return browser.findByCssSelector("#TEXT_BOX_1 .dijitInputContainer input")
             .type("test3")
          .end()
          .findByCssSelector("#TEXT_BOX_2 .dijitInputContainer input")
@@ -85,11 +93,11 @@ define(["intern!object",
          .findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
             .then(function(elements) {
                assert(elements.length === 0, "Standard form button was not enabled following valid data entry");
-            })
-         .end();
+            });
       },
+
       "Test form value publication": function() {
-         this.remote.findByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton > span")
+         return browser.findByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton > span")
             .click()
          .end()
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field3", "test3"))
@@ -99,11 +107,11 @@ define(["intern!object",
          .end().findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field4", "9"))
             .then(function(elements) {
                assert(elements.length === 1, "field4 in standard form didn't publish correctly");
-            })
-         .end();
+            });
       },
+
       "Test additional form buttons rendered": function() {
-         this.remote.findAllByCssSelector("#ADD_BUTTON_1")
+         return browser.findAllByCssSelector("#ADD_BUTTON_1")
             .then(function(elements) {
                assert(elements.length === 1, "The first additional button could not be found");
             })
@@ -111,11 +119,11 @@ define(["intern!object",
          .findAllByCssSelector("#ADD_BUTTON_2")
             .then(function(elements) {
                assert(elements.length === 1, "The second additional button could not be found");
-            })
-         .end();
+            });
       },
+
       "Test additional form buttons publish correct data": function() {
-         this.remote.findByCssSelector("#ADD_TEXT_BOX_1 .dijitInputContainer input")
+         return browser.findByCssSelector("#ADD_TEXT_BOX_1 .dijitInputContainer input")
             .type("test4")
          .end()
          .findByCssSelector("#ADD_TEXT_BOX_2 .dijitInputContainer input")
@@ -137,23 +145,38 @@ define(["intern!object",
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "extra", "stuff"))
             .then(function(elements) {
                assert(elements.length === 1, "The additional button didn't publish 'extra' correctly");
-            })
-         .end();
+            });
       },
+
       "Test custom scope set correctly": function() {
-         this.remote.findAllByCssSelector(TestCommon.topicSelector("CUSTOM_SCOPE_AddButton1", "publish", "any"))
+         return browser.findAllByCssSelector(TestCommon.topicSelector("CUSTOM_SCOPE_AddButton1", "publish", "any"))
             .then(function(elements) {
                assert(elements.length === 1, "Custom scope not set");
-            })
-         .end();
+            });
       },
+
       "Test global scope set correctly": function() {
-         this.remote.findAllByCssSelector(TestCommon.topicSelector("SET_HASH", "publish", "any"))
+         return browser.findAllByCssSelector(TestCommon.topicSelector("SET_HASH", "publish", "any"))
             .then(function(elements) {
                assert(elements.length === 1, "Global scope not set");
+            });
+      },
+
+      "Test setting form value by publication": function() {
+         return browser.findByCssSelector("#TEXT_BOX_3 .dijitInputContainer input")
+         .getProperty("value")
+            .then(function(resultText) {
+               assert.equal(resultText, "", "Text box to be set via publication is not empty before test");
             })
          .end()
-         .alfPostCoverageResults(browser);
+         .findByCssSelector("#SET_FORM_VALUE")
+            .click()
+         .end()
+         .findByCssSelector("#TEXT_BOX_3 .dijitInputContainer input")
+         .getProperty("value")
+            .then(function(resultText) {
+               assert.equal(resultText, "Value Set", "Text box value was not set via publication");
+            });
       }
    });
 });
