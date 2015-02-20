@@ -31,7 +31,7 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   xbaseFunctionalSuites: ["src/test/resources/alfresco/services/DialogServiceTest"],
+   xbaseFunctionalSuites: ["src/test/resources/alfresco/html/HeadingTest"],
 
    /**
     * This is the base array of functional test suites
@@ -92,6 +92,7 @@ define({
       "src/test/resources/alfresco/header/HeaderWidgetsTest",
       "src/test/resources/alfresco/header/WarningTest",
 
+      "src/test/resources/alfresco/html/HeadingTest",
       "src/test/resources/alfresco/html/LabelTest",
 
       "src/test/resources/alfresco/layout/AlfSideBarContainerTest",

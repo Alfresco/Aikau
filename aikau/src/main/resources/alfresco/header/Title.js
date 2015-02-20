@@ -101,11 +101,11 @@ define(["dojo/_base/declare",
          if (this.label)
          {
             var label = this.label ? this.label : "";
-            this.label = this.message(this.encodeHTML(label));
+            this.label = this.encodeHTML(this.message(label));
          }
          if (this.browserTitlePrefix)
          {
-            this.browserTitlePrefix = this.encodeHTML(this.browserTitlePrefix);
+            this.browserTitlePrefix = this.encodeHTML(this.message(this.browserTitlePrefix));
          }
       },
       
