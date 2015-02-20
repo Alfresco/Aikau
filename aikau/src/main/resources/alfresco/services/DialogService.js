@@ -71,6 +71,55 @@ define(["dojo/_base/declare",
          this.publishTopic = "ALF_CREATE_FORM_DIALOG_REQUEST";
          this.alfSubscribe(this.publishTopic, lang.hitch(this, "onCreateFormDialogRequest"));
          this.alfSubscribe("ALF_CREATE_DIALOG_REQUEST", lang.hitch(this, this.onCreateDialogRequest));
+
+         // Create a reference of IDs to dialogs... 
+         // The idea is that we shouldn't have multiple instances of a dialog with the same ID, but we
+         // can have multiple dialogs with different IDs...
+         this.idToDialogMap = {};
+      },
+
+      /**
+       * This deletes any previously created dialog that was requested for the same id.
+       *
+       * @instance
+       * @param {object} payload The payload for the new dialog request.
+       */
+      cleanUpAnyPreviousDialog: function alfresco_services_DialogService__cleanUpPreviousDialog(payload) {
+         if (this.idToDialogMap[payload.dialogId] &&
+             typeof this.idToDialogMap[payload.dialogId].destroyRecursive === "function")
+         {
+            // We have a reference to an existing dialog, so we'll destroy it
+            this.idToDialogMap[payload.dialogId].destroyRecursive();
+            delete this.idToDialogMap[payload.dialogId];
+         }
+         else if (this.idToDialogMap[null] &&
+                  typeof this.idToDialogMap[null].destroyRecursive === "function")
+         {
+            this.idToDialogMap[null].destroyRecursive();
+            delete this.idToDialogMap[null];
+         }
+      },
+
+      /**
+       * Maps the id requested for the dialog to the dialog created so that it can be destroyed when a
+       * request is made to create a dialog with the same id. If an id has not been requested then the
+       * dialog will be mapped to null. Only one dialog is no requested id can exist at any one time.
+       *
+       * @instance
+       * @param {object} payload The payload passed when requesting to create the dialog
+       * @param {object} dialog The dialog created
+       */
+      mapRequestedIdToDialog: function alfresco_services_DialogService__mapRequestedIdToDialog(payload, dialog) {
+         if (payload.dialogId)
+         {
+            // Map the dialog id to the dialog (so that it can be destroyed if another is requested)...
+            this.idToDialogMap[payload.dialogId] = dialog;
+         }
+         else
+         {
+            // If no id was provided for the dialog we'll store it against null...
+            this.idToDialogMap[null] = dialog;
+         }
       },
 
       /**
@@ -125,13 +174,11 @@ define(["dojo/_base/declare",
        * @param {onCreateDialogRequestPayload} payload The details of the widgets and buttons for the dialog
        */
       onCreateDialogRequest: function alfresco_services_DialogService__onCreateDialogRequest(payload) {
-         if (this.dialog != null)
-         {
-            this.dialog.destroyRecursive();
-         }
+         this.cleanUpAnyPreviousDialog(payload);
 
          // TODO: Update this and other function with scroll setting...
          var dialogConfig = {
+            id: payload.dialogId ? payload.dialogId : this.generateUuid(),
             title: this.message(payload.dialogTitle),
             textContent: payload.textContent,
             widgetsContent: payload.widgetsContent,
@@ -139,20 +186,21 @@ define(["dojo/_base/declare",
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",
             contentWidth: payload.contentWidth ? payload.contentWidth : null,
             contentHeight: payload.contentHeight ? payload.contentHeight : null,
-            handleOverflow: (payload.handleOverflow != null) ? payload.handleOverflow: true,
-            fixedWidth: (payload.fixedWidth != null) ? payload.fixedWidth: false
+            handleOverflow: payload.handleOverflow || true,
+            fixedWidth: payload.fixedWidth || false
          };
-         this.dialog = new AlfDialog(dialogConfig);
+         var dialog = new AlfDialog(dialogConfig);
 
          if (payload.publishOnShow)
          {
             array.forEach(payload.publishOnShow, lang.hitch(this, this.publishOnShow));
          }
-         this.dialog.show();
+         this.mapRequestedIdToDialog(payload, dialog);
+         dialog.show();
 
          if (payload.hideTopic)
          {
-            this.alfSubscribe(payload.hideTopic, lang.hitch(this.dialog, this.dialog.hide));
+            this.alfSubscribe(payload.hideTopic, lang.hitch(dialog, dialog.hide));
          }
       },
 
@@ -184,17 +232,12 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload published on the request topic.
        */
       onCreateFormDialogRequest: function alfresco_services_DialogService__onCreateFormDialogRequest(payload) {
-         // Destroy any previously created dialog...
-         if (this.dialog != null)
-         {
-            this.dialog.destroyRecursive();
-         }
-
-         if (payload.widgets == null)
+         this.cleanUpAnyPreviousDialog(payload);
+         if (!payload.widgets)
          {
             this.alfLog("warn", "A request was made to display a dialog but no 'widgets' attribute has been defined", payload, this);
          }
-         else if (payload.formSubmissionTopic == null)
+         else if (!payload.formSubmissionTopic)
          {
             this.alfLog("warn", "A request was made to display a dialog but no 'formSubmissionTopic' attribute has been defined", payload, this);
          }
@@ -220,11 +263,12 @@ define(["dojo/_base/declare",
                config.subcriptionTopic = subcriptionTopic; // Include the subscriptionTopic in the configuration the subscription can be cleaned up
 
                // Construct the form widgets and then construct the dialog using that configuration...
-               var formValue = (config.formValue != null) ? config.formValue: {};
+               var formValue = config.formValue ? config.formValue: {};
                var formConfig = this.createFormConfig(config.widgets, formValue);
                var dialogConfig = this.createDialogConfig(config, formConfig);
-               this.dialog = new AlfDialog(dialogConfig);
-               this.dialog.show();
+               var dialog = new AlfDialog(dialogConfig);
+               this.mapRequestedIdToDialog(payload, dialog);
+               dialog.show();
             }
             catch (e)
             {
@@ -243,10 +287,11 @@ define(["dojo/_base/declare",
        */
       createDialogConfig: function alfresco_services_DialogService__createDialogConfig(config, formConfig) {
          var dialogConfig = {
+            id: config.dialogId ? config.dialogId : this.generateUuid(),
             title: this.message(config.dialogTitle),
             pubSubScope: config.pubSubScope, // Scope the dialog content so that it doesn't pollute any other widgets,,
-            handleOverflow: (config.handleOverflow != null) ? config.handleOverflow: true,
-            fixedWidth: (config.fixedWidth != null) ? config.fixedWidth: false,
+            handleOverflow: config.handleOverflow || true,
+            fixedWidth: config.fixedWidth || false,
             parentPubSubScope: config.parentPubSubScope,
             additionalCssClasses: config.additionalCssClasses ? config.additionalCssClasses : "",
             widgetsContent: [formConfig],
@@ -256,6 +301,7 @@ define(["dojo/_base/declare",
                      config: {
                         label: config.dialogConfirmationButtonTitle,
                         disableOnInvalidControls: true,
+                        additionalCssClasses: "confirmationButton",
                         publishTopic: this._formConfirmationTopic,
                         publishPayload: {
                            formSubmissionTopic: config.formSubmissionTopic,
@@ -267,6 +313,7 @@ define(["dojo/_base/declare",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: config.dialogCancellationButtonTitle,
+                        additionalCssClasses: "cancellationButton",
                         publishTopic: "ALF_CLOSE_DIALOG"
                      }
                   }
@@ -313,9 +360,9 @@ define(["dojo/_base/declare",
        * @param {object} payload The dialog content
        */
       onFormDialogConfirmation: function alfresco_services_DialogService__onFormDialogConfirmation(payload) {
-         if (payload != null &&
-             payload.dialogContent != null &&
-             payload.dialogContent.length == 1 &&
+         if (payload &&
+             payload.dialogContent &&
+             payload.dialogContent.length &&
              typeof payload.dialogContent[0].getValue === "function")
          {
             var data = {};
@@ -327,13 +374,13 @@ define(["dojo/_base/declare",
             }
 
             // Destroy the dialog if a reference is provided...
-            if (payload.dialogReference != null)
+            if (payload.dialogReference && typeof payload.dialogReference.destroyRecursive === "function")
             {
                payload.dialogReference.destroyRecursive();
             }
 
             // Mixin in any additional payload information...
-            if (payload.formSubmissionPayloadMixin != null)
+            if (payload.formSubmissionPayloadMixin)
             {
                lang.mixin(data, payload.formSubmissionPayloadMixin);
             }
