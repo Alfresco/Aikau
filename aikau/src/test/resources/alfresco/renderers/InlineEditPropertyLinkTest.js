@@ -45,10 +45,10 @@ define(["intern!object",
             browser.end();
          },
 
-         teardown: function() {
-            return browser.end()
-               .alfPostCoverageResults(browser);
-         },
+         // teardown: function() {
+         //    return browser.end()
+         //       .alfPostCoverageResults(browser);
+         // },
 
          "Property is rendered correctly": function() {
             return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
@@ -278,6 +278,10 @@ define(["intern!object",
                .then(function(text) {
                   assert.equal(text, "New", "Read-only value not updated correctly");
                });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
          }
 
       });

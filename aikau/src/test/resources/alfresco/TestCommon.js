@@ -25,11 +25,12 @@
  * @author Dave Draper
  */
 define(["intern/dojo/node!fs",
+        "intern/dojo/node!http",
         "config/Config",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/lib/args",
         "intern/chai!assert"],
-       function(fs, Config, pollUntil, args, assert) {
+       function(fs, http, Config, pollUntil, args, assert) {
    return {
 
       /**
@@ -75,32 +76,69 @@ define(["intern/dojo/node!fs",
       },
 
       /**
-       * Loads and returns a page mode. This uses the Node provided readFileSync function which
-       * is a synchronous call to load the requested resource into a variable.
+       * This function can be called to post coverage results.
        *
-       * @instance
-       * @param {string} fileName The path to the file containing the page model to be loaded.
+       * @param {object} test The test object that allows access to the async() function
+       * @param {object} browser The browser object to work on
        */
-      loadPageModel: function(fileName) {
-         var fileContent;
-         try
+      alfPostCoverageResults: function(test, browser) {
+         if(args.doCoverage === "true")
          {
-            fileContent = fs.readFileSync(fileName, "utf-8");
+            var dfd = test.async(30000);
+            var js = "var coverageData = {" +
+               "name : name || ''," +
+               "lines : $$_l.lines," +
+               "runLines : $$_l.runLines," +
+               "code : $$_l.code," +
+               "allConditions : $$_l.allConditions," +
+               "conditions : $$_l.conditions," +
+               "allFunctions : $$_l.allFunctions," +
+               "runFunctions : $$_l.runFunctions" +
+            "};" +
+            "return JSON.stringify(coverageData);";
+            browser.execute(js)
+               .then(function(data) {
+                  console.log("Retrieved coverage data from browser...");
+                  try {
+                     var post_options = {
+                        host: "localhost",
+                        port: "8082",
+                        path: "/node-coverage-store",
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8"
+                        }
+                     };
+                     console.log("Posting coverage data...");
+                  
+                     // Set up the request
+                     var post_req = http.request(post_options, function(res) {
+                        res.setEncoding("utf8");
+                        res.on("data", function (data) {
+                            console.log("Coverage data posted successfully");
+                            dfd.resolve();
+                        });
+                     });
+                     post_req.on("error", function(e) {
+                        console.log("Coverage data post failed", e);
+                        dfd.reject(e);
+                     });
+                     post_req.write(data);
+                     post_req.end();
+                  }
+                  catch (e) {
+                     console.log("An error occurred handling coverage data", e);
+                  }
+               });
          }
-         catch (e)
+         else
          {
-            console.log("############################################");
-            console.log("#                                          #");
-            console.log("# AN ERROR OCCURRED READING THE PAGE MODEL #");
-            console.log("#                                          #");
-            console.log("############################################");
-            console.log(e);
+            return browser;
          }
-         return fileContent;
       },
 
       /**
-       *
+       * This function should be used to load the test pages.
        *
        * @instance
        * @param {object} browser The browser context to use
@@ -143,184 +181,7 @@ define(["intern/dojo/node!fs",
                   assert(false, "Test page could not be loaded");
                })
             .end();
-
-         // Add in a custom command for posting code coverage...
-         command.session.alfPostCoverageResults = function (newBrowser) {
-            if(args.doCoverage === "true")
-            {
-               return newBrowser
-                  .findByCssSelector(".alfresco-testing-TestCoverageResults button")
-                     .click()
-                     .sleep(5000)
-                  .end()
-                  .findByCssSelector(".alfresco-testing-TestCoverageResults input[type=submit]")
-                     .click()
-                  .end()
-                  .then(pollUntil(
-                     function() {
-                        var result = document && document.body && document.body.firstChild.innerHTML === "OK";
-                        return result || null;
-                     }, [], 5000))
-                  .then(
-                     function (element) {
-                        console.log(">> Converage successfully posted");
-                     },
-                     function (error) {
-                        console.log(">> Coverage post failed");
-                     }
-                  )
-               .end();
-            }
-            else
-            {
-               return newBrowser;
-            }
-         };
          return command;
-      },
-
-      /**
-       * This function should be called at the start of each unit test. It calls the bootstrap test page
-       * and enters the test data into the textarea and clicks the "Test" button which will load the
-       * test model in a new page. The unit test can then run against that page.
-       *
-       * @instance
-       * @param {object} browser This should be the the "remote" attribute from the unit test
-       * @param {string} testPageDefinitionFile This should be the path to the resource that contains
-       * the JSON definition of the page to test.
-       * @returns {promise} The promise for continuing the unit test.
-       */
-      bootstrapTest: function(browser, testPageDefinitionFile, testname) {
-
-         this._applyTimeouts(browser);
-         this._maxWindow(browser);
-         this._cancelModifierKeys(browser);
-
-         if(testname && browser.environmentType.browserName)
-         {
-            console.log(">> Starting '" + testname + "' on " + browser.environmentType.browserName);
-         }
-
-         // Load the model definition file
-         // It's necessary to remove any carriage returns and new line characters from the page model otherwise the eval statement will cause an error...
-         var pageModel;
-         try
-         {
-            pageModel = (this.loadPageModel(testPageDefinitionFile)).replace(/[\n\r]/g, "");
-         }
-         catch (e)
-         {
-            console.log("###############################################");
-            console.log("#                                             #");
-            console.log("# AN ERROR OCCURRED PROCESSING THE PAGE MODEL #");
-            console.log("#                                             #");
-            console.log("###############################################");
-            console.log(e);
-         }
-
-         return browser
-
-         .get(this.bootstrapUrl())
-            .then(pollUntil("return document.getElementsByClassName('allWidgetsProcessed');"))
-            .then(function (element) {}, function (error) {})
-            .end()
-
-         .execute("dijit.registry.byId('UNIT_TEST_MODEL_FIELD').setValue('" + pageModel + "');'set';")
-            .findByCssSelector("#UNIT_TEST_MODEL_FIELD TEXTAREA")
-            .type(" ")
-            .end()
-
-         .findById("LOAD_TEST_BUTTON")
-            .click()
-            .end()
-
-         .then(pollUntil("return document.getElementsByClassName('aikau-reveal');"))
-            .then(function (element) {}, function (error) {})
-            .end();
-      },
-
-      /**
-       * This function enables the debug module on the server to make sure debug logging is available for
-       * use in functional test.
-       *
-       * @instance
-       * @param {object} browser This should be the the "remote" attribute from the unit test
-       * @returns {promise} The promise for continuing the unit test.
-       */
-      enableDebugModule: function(browser) {
-
-         this._applyTimeouts(browser);
-         this._cancelModifierKeys(browser);
-
-         console.log(">> Enabling debug via Debug Enabler Extension");
-
-         return browser.get(this.moduleDeploymentUrl())
-            .end()
-
-         .findByCssSelector("select[name='undeployedModules'] > option[value*='Debug Enabler Extension']")
-            .click()
-            .end()
-
-         .findByCssSelector("td > input[value='Add']")
-            .click()
-            .end()
-
-         .findByCssSelector("input[value='Apply Changes']")
-            .click()
-            .end();
-
-//       this._applyTimeouts(browser);
-//       this._maxWindow(browser);
-//       console.log(">> Enabling debug via Debug Enabler Extension");
-//
-//       browser.get(this.moduleDeploymentUrl()).end();
-//
-//       var hasEnabler = true;
-//       browser.hasElementByCssSelector("select[name='undeployedModules'] > option[value*='Debug Enabler Extension']")
-//       .then(function(has){
-//          console.log(has);
-//       })
-//       .end();
-//
-//       if(hasEnabler)
-//       {
-//          browser.findByCssSelector("select[name='undeployedModules'] > option[value*='Debug Enabler Extension']").click().end();
-//          browser.findByCssSelector("td > input[value='Add']").click().end();
-//          browser.findByCssSelector("input[value='Apply Changes']").click().end();
-//       }
-//
-//       return browser;
-
-      },
-
-      /**
-       * This function disables the debug module on the server.
-       *
-       * @instance
-       * @param {object} browser This should be the the "remote" attribute from the unit test
-       * @returns {promise} The promise for continuing the unit test.
-       */
-      disableDebugModule: function(browser) {
-
-         this._applyTimeouts(browser);
-         this._cancelModifierKeys(browser);
-
-         console.log(">> Disabling debug via Debug Enabler Extension");
-
-         return browser.get(this.moduleDeploymentUrl())
-            .end()
-
-         .findByCssSelector("select[name='deployedModules'] > option[value*='Debug Enabler Extension']")
-            .click()
-            .end()
-
-         .findByCssSelector("td > input[value='Remove']")
-            .click()
-            .end()
-
-         .findByCssSelector("input[value='Apply Changes']")
-            .click()
-            .end();
       },
 
       /**
@@ -447,7 +308,6 @@ define(["intern/dojo/node!fs",
        * @returns {string} The CSS selector
        */
       pubSubDataCssSelector: function(expectedRow, key, value) {
-
          var row = "";
          if (expectedRow === "any")
          {
@@ -461,15 +321,11 @@ define(["intern/dojo/node!fs",
          {
             row = ":nth-child(" + expectedRow + ")";
          }
-
          var selector = "" +
             ".alfresco-testing-SubscriptionLog tr.sl-row" + row +
             " td[data-pubsub-object-key=" + key +
             "]+td[data-pubsub-object-value='" + value + "']";
-         // console.log("Topic selector: " + selector);
-
          return selector;
-
       },
 
       /**
@@ -497,9 +353,7 @@ define(["intern/dojo/node!fs",
        * @returns {string} The CSS selector
        */
       topicSelector: function(topic, type, expectedRow, matchType) {
-
          type = type || "subscribe";
-
          var row = "";
          if (expectedRow === "any")
          {
@@ -556,9 +410,7 @@ define(["intern/dojo/node!fs",
        * @returns {string} The CSS selector
        */
       topicDataSelector: function(topic, type, expectedRow, matchType) {
-
          return this.topicSelector(topic, type, expectedRow, matchType) + " + td.sl-data";
-
       },
 
       /**
@@ -570,60 +422,6 @@ define(["intern/dojo/node!fs",
        */
       consoleXpathSelector: function(value) {
          return "//table[@class=\"log\"]/tbody/tr[@class=\"cl-row\"]/td[contains(.,'" + value + "')]";
-      },
-
-      /**
-       * This function searches for the button to post test coverage results to the "node-coverage"
-       * server. It should be called at the end of each unit test
-       *
-       * @instance
-       * @param {object} browser This should be set to a reference to "this.remote" from the unit test
-       * @param {boolean} loadCoverageForm Choose to optionally navigate to the JustCoverage model before posting coverage data
-       */
-      postCoverageResults: function(browser, loadCoverageForm) {
-         if(args.doCoverage === "true")
-         {
-
-            if(loadCoverageForm)
-            {
-               this.bootstrapCoverageForm(browser);
-               console.log(">> Coverage form loaded");
-            }
-
-            return browser.end()
-
-            .findByCssSelector(".alfresco-testing-TestCoverageResults button")
-               .click()
-               .sleep(5000)
-            .end()
-
-            .findByCssSelector(".alfresco-testing-TestCoverageResults input[type=submit]")
-               .click()
-            .end()
-
-            .then(function() {
-               console.log(">> Waiting for coverage submission to complete...");
-            });
-         }
-         else
-         {
-            return browser.end();
-         }
-      },
-
-      /**
-       * This function loads the JustCoverage model to provide a code coverage submission form. This can be
-       * used when a test navigates away from the test framework and an already rendered coverage form is
-       * now missing.
-       *
-       * @instance
-       * @param {object} browser This should be the the "remote" attribute from the unit test
-       * @returns {promise} The promise for continuing the unit test.
-       */
-      bootstrapCoverageForm: function(browser) {
-         return this.bootstrapTest(browser, "./tests/alfresco/page_models/JustCoverage.json", "JustCoverage")
-            .sleep(1000)
-            .end();
       },
 
       /**

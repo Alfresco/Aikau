@@ -60,9 +60,9 @@ define(["intern!object",
             browser.end();
          },
 
-         teardown: function() {
-            browser.end().alfPostCoverageResults(browser);
-         },
+         // teardown: function() {
+         //    browser.end().alfPostCoverageResults(browser);
+         // },
 
          "Test that dialog with no ID can be created": function() {
             return browser.findByCssSelector("#CREATE_FORM_DIALOG_NO_ID")
@@ -167,6 +167,10 @@ define(["intern!object",
                         assert.lengthOf(elements, 1, "Inner dialog not displayed");
                      });
                });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
          }
       });
    });
