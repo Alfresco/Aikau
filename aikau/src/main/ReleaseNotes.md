@@ -1,4 +1,4 @@
-Aikau 1.0.4 Release Notes
+Aikau 1.0.6 Release Notes
 =========================
 
 Current deprecations:
