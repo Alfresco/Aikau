@@ -74,8 +74,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       createFormControl: function alfresco_forms_controls_TextBox__createFormControl(config, domNode) {
          var textBox = new ValidationTextBox(config);
-
-         // Handle  adding classes to control width...
+         // Handle adding classes
          var additionalCssClasses = "";
          if (this.additionalCssClasses != null)
          {

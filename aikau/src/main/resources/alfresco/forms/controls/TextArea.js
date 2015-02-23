@@ -30,6 +30,14 @@ define(["alfresco/forms/controls/BaseFormControl",
    return declare([BaseFormControl], {
       
       /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {Array}
+       */
+      cssRequirements: [{cssFile:"./css/TextArea.css"}],
+      
+      /**
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_TextArea__getWidgetConfig() {
@@ -64,7 +72,15 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       createFormControl: function alfresco_forms_controls_TextArea__createFormControl(config, domNode) {
-         return new Textarea(config);
+         var textArea = new Textarea(config);
+         // Handle adding classes
+         var additionalCssClasses = "";
+         if (this.additionalCssClasses != null)
+         {
+            additionalCssClasses = this.additionalCssClasses;
+         }
+         domClass.add(this.domNode, "alfresco-forms-controls-TextArea " + additionalCssClasses);
+         return textArea;
       },
       
       /**
