@@ -24,8 +24,9 @@
  */
 define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
-        "dijit/form/SimpleTextarea"], 
-        function(BaseFormControl, declare, Textarea) {
+        "dijit/form/SimpleTextarea",
+        "dojo/dom-class"], 
+        function(BaseFormControl, declare, Textarea, domClass) {
    
    return declare([BaseFormControl], {
       
