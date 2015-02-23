@@ -114,7 +114,7 @@ define(["intern!object",
          .end()
 
          // Post the form...
-         .findByCssSelector("#FD2 .confirmationButton")
+         .findByCssSelector("#FD2 .confirmationButton > span")
             .click()
          .end()
 
