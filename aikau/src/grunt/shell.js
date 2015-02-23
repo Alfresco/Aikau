@@ -33,6 +33,15 @@ module.exports = function(grunt) {
                }
             }
          },
+         vagrantProvision: {
+            command: "vagrant provision",
+            options: {
+               execOptions: {
+                  cwd: alfConfig.dir.vagrant,
+                  maxBuffer: "Infinite"
+               }
+            }
+         },
          vagrantHalt: {
             command: "vagrant halt",
             options: {

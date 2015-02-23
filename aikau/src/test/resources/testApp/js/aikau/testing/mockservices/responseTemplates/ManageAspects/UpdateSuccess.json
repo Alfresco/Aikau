@@ -1,0 +1,16 @@
+{
+   "totalResults": 1,
+   "overallSuccess": true,
+   "successCount": 1,
+   "failureCount": 0,
+   "results":
+   [
+      {
+         "id": "Project Contract.pdf",
+         "action": "manageAspects",
+         "nodeRef": "workspace:\/\/SpacesStore\/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+         "type": "document",
+         "success": true
+      }
+   ]
+}

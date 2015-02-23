@@ -267,10 +267,9 @@ define(["dojo/_base/declare",
          setPickedItems: function alfresco_pickers_PickedItems_setPickedItems(items) {
             if (ObjectTypeUtils.isArray(items))
             {
-               this.currentData.items = items;
-               array.forEach(this.currentData.items, function(item, index) {
-                  item.index = index;
-               });
+               array.forEach(this.currentData.items, function(item) {
+                  this.addPickedItem(item);
+               }, this);
             }
             else
             {

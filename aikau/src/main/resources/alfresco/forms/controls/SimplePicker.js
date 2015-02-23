@@ -130,7 +130,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        */
-      completeWidgetSetup: function alfresco_forms_controls_SimplePicker__setupChangeEvents() {
+      completeWidgetSetup: function alfresco_forms_controls_SimplePicker__completeWidgetSetup() {
          this.inherited(arguments);
          var value = this.getValue();
          if (ObjectTypeUtils.isArray(value))

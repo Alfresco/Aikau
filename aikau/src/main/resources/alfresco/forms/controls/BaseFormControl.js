@@ -1151,12 +1151,12 @@ define(["dojo/_base/declare",
          this.initialConfig = this.getWidgetConfig();
          
          // Use the _disabled property if not already set...
-         if (typeof this.initialConfig.disabled == "undefined") 
+         if (typeof this.initialConfig.disabled === "undefined") 
          {
             this.initialConfig.disabled = this._disabled;
          }
 
-         if (this.additionalCssClasses != null)
+         if (this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);
          }
@@ -1175,7 +1175,7 @@ define(["dojo/_base/declare",
             this.completeWidgetSetup();
          }
 
-         if (this.valueSubscriptionTopic != null)
+         if (this.valueSubscriptionTopic)
          {
             this.alfSubscribe(this.valueSubscriptionTopic, lang.hitch(this, "valueSubscribe"));
          }
@@ -1350,7 +1350,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      completeWidgetSetup: function alfresco_forms_controls_BaseFormControl__setupChangeEvents() {
+      completeWidgetSetup: function alfresco_forms_controls_BaseFormControl__completeWidgetSetup() {
          this.placeWidget();
          this.widgetProcessingCompleteSubscription = this.alfSubscribe("ALF_WIDGET_PROCESSING_COMPLETE", lang.hitch(this, this.onWidgetAddedToDocument), true);
       },

@@ -1397,6 +1397,14 @@ define(["dojo/_base/declare",
        */
       onMoveDocumentsFailure: function alfresco_services_ActionService__onMoveDocumentsSuccess(response, originalRequestConfig) {
          // TODO: Publish an error message.
+      },
+
+      /**
+       *
+       * @param {object} item The item to perform the action on
+       */
+      onActionManageAspects: function alfresco_services_ActionService__onActionManageAspects(item) {
+         this.alfPublish("ALF_MANAGE_ASPECTS_REQUEST", { item: item });
       }
    });
 });
