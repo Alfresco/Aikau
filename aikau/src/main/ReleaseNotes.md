@@ -34,6 +34,8 @@ Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
 1.0.6:
 * [AKU-41](https://issues.alfresco.com/jira/browse/AKU-41)   - Add Manage Aspects support
+* [AKU-41](https://issues.alfresco.com/jira/browse/AKU-72)   - Add colspan support to Cell
+* [AKU-102](https://issues.alfresco.com/jira/browse/AKU-101) - Add additionalCssClasses support to Row
 * [AKU-102](https://issues.alfresco.com/jira/browse/AKU-102) - NLS updates for alfresco/html/Heading
 * [AKU-103](https://issues.alfresco.com/jira/browse/AKU-103) - NLS updates for alfresco/header/SetTitle
 * [AKU-105](https://issues.alfresco.com/jira/browse/AKU-105) - Add notification after joining site
