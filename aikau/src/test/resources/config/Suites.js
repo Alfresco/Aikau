@@ -101,6 +101,8 @@ define({
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/TwisterTest",
 
+      "src/test/resources/alfresco/lists/views/layouts/RowTest",
+
       "src/test/resources/alfresco/menus/AlfCheckableMenuItemTest",
       "src/test/resources/alfresco/menus/AlfContextMenuTest",
       "src/test/resources/alfresco/menus/AlfFormDialogMenuItemTest",

@@ -34,8 +34,9 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Row.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing) {
+        "alfresco/core/CoreWidgetProcessing",
+        "dojo/dom-class"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -57,11 +58,21 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * Any additional CSS classes that should be applied to the rendered DOM element.
+       *
+       * @instance
+       * @type {string}
+       * @default  null
+       */
+      additionalCssClasses: null,
+
+      /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
        * @instance postCreate
        */
       postCreate: function alfresco_lists_views_layouts_Row__postCreate() {
+         domClass.add(this.domNode, this.additionalCssClasses ? this.additionalCssClasses : "");
          if (this.widgets)
          {
             if (this.widgetModelModifiers !== null)
