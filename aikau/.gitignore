@@ -1,4 +1,5 @@
 # Ignored directories (please keep alphabetical)
+/bin/
 /code-coverage-reports/
 /docs/
 /node_modules/
