@@ -64,7 +64,21 @@ define(["dojo/_base/declare",
        */
       processInstanceTokens: function alfresco_core_ObjectProcessingMixin__processInstanceTokens(v) {
          // Only replace a value if it actually exists, otherwise leave the token exactly as is.
-         var u = lang.replace(v, lang.hitch(this, this.safeReplace, this));
+         var u;
+         var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*}$/g;
+         if (re.test(v))
+         {
+            var tokenWithoutBraces = v.slice(1,-1);
+            if (typeof this[tokenWithoutBraces])
+            {
+               u = this[tokenWithoutBraces];
+            }
+         }
+         else
+         {
+            u = lang.replace(v, lang.hitch(this, this.safeReplace, this));
+         }
+         // var u = lang.replace(v, lang.hitch(this, this.safeReplace, this));
          return u;
       },
 
@@ -177,11 +191,11 @@ define(["dojo/_base/declare",
        */
       applyFunction: function alfresco_core_ObjectProcessingMixin__applyFunction(o, key, f) {
          var v = o[key];
-         if (typeof f == "function")
+         if (typeof f === "function")
          {
             v = f.apply(this, [v]);
          }
-         else if (typeof this[f] == "function")
+         else if (typeof this[f] === "function")
          {
            v = this[f].apply(this, [v]);
          }

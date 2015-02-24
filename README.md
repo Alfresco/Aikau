@@ -16,18 +16,12 @@ Surf uses the Dojo framework for AMD module loading and Aikau widgets make use o
 #### Testing
 The atomic nature of the widgets means that they are easily unit testable and Aikau makes use of the Intern JavaScript testing framework, driven by Grunt and uses Vagrant for multi-platform, cross-browser testing. It uses node-coverage to capture code coverage results of its unit tests.
 
-## Getting Started
-Once you've cloned this repository you should complete the following steps:
-
-1. Download and install Virtual Box
-2. Download and install Vagrant
-3. Download and install Node.js
-4. Run "mvn install" from the main Maven module
-5. Run "npm install" from within the "aikau" Maven sub-module to download and install the required Node.js packages
-6. Run "grunt vup" from within the "aikau" Maven sub-module to provision your Vagrant test environment
-
 ## Learning Aikau
-We've written a tutorial that takes you through the process of building a standalone Aikau client - this will be made available soon.
+We've written a tutorial that takes you through the process of building a standalone Aikau client. We're in the process of converting it into GitHub markdown files - the chapters that have been converted so far start [here](https://github.com/Alfresco/Aikau/blob/master/tutorial/chapters/About.md "Link to Tutorial").
+
+There is also an [Alfresco Wiki page](https://wiki.alfresco.com/wiki/Aikau_framework "Link to Alfresco Wiki") that collates avaialble Aikau educational material.
 
 ## Contributing to Aikau
 We will gladly be welcoming contributions from the Alfresco Community - however, we would be grateful if you could please review and adhere to the [contribution acceptance criteria](https://github.com/Alfresco/Aikau/wiki/Contribution-Acceptance-Criteria) before generating any pull requests.
+
+Setup instructions are available for [Linux](https://github.com/Alfresco/Aikau/wiki/Aikau%20Setup%20(Linux) "Link to setup instructions for Linux"), [Windows](https://github.com/Alfresco/Aikau/wiki/Aikau%20Setup%20(Windows) "Link to setup instructions for OS X") and [OS X](https://github.com/Alfresco/Aikau/wiki/Aikau%20Setup%20(OS%20X) "Link to setup instructions for OS X")

@@ -2,7 +2,7 @@ Previous: [About This Tutorial](./About.md),
 Next: [How to Create a new Widget](./Tutorial2.md)
 
 ## Tutorial 1 - Getting Started
-If you're already familiar with what Aikau is then you're probably here for an in-depth tutorial on how to use it – but for those who aren't this tutorial should serve as an example of how fast it can be to develop a new client that accesses data from an Alfresco repository.
+If you're already familiar with what Aikau is then you're probably here for an in-depth tutorial on how to use it – but for those who aren't this tutorial should serve as an example of how fast it can be to develop a new client that accesses data from an [Alfresco](http://www.alfresco.com/ "Link to Alfresco home page") repository.
 
 In this tutorial we're going to create a very simple application that allows a user to login and access their personal home folder in the Repository.
 
@@ -42,7 +42,7 @@ Make sure you have an Alfresco Repository up and running, then start your new ap
 mvn jetty:run
 ```
 
-...from a command line. After small pause (don’t worry while this happens, it is busy!) the Jetty server will have started, when you see the line:
+...from a command line. After a small pause (don’t worry while this happens, it is busy!) the Jetty server will have started, when you see the line:
 
 > [INFO] Started Jetty Server
 
@@ -139,18 +139,11 @@ Aikau uses a publication/subscription (sometimes referred to as “PubSub”) [c
 ### Step 5. Add File Upload Support
 Now let's make an update to allow the user to upload new content.
 
-Add the following service to the page, in the same way that you added the DocumentService earlier.
+Add the following services to the page, in the same way that you added the DocumentService earlier.
 
 ```
-"alfresco/services/ActionService"
-```
-
-...and after the `“alfresco/documentlibrary/AlfDocumentList”` entry, add the following widget:
-
-```
-{
-  name: "alfresco/upload/AlfUpload"
-}
+"alfresco/services/ActionService",
+"alfresco/services/UploadService"
 ```
 
 Now refresh the page and then try dragging and dropping a file from your computer’s file-system onto the document list and you should see it successfully uploaded. Ensure you drop the file into the document list component area to trigger the drop-zone.

@@ -121,9 +121,9 @@ define(["dojo/_base/declare",
        */
       getSitesSuccess: function alfresco_services_SiteService__getSitesSuccess(response, originalRequestConfig) {
 
-         if (response != null && ObjectTypeUtils.isArray(response))
+         if (ObjectTypeUtils.isArray(response))
          {
-            var topic = (originalRequestConfig.responseTopic != null) ? originalRequestConfig.responseTopic : "ALF_SITES_LOADED";
+            var topic = originalRequestConfig.responseTopic || "ALF_SITES_LOADED";
             var sitesData = {
                items: response
             };
@@ -191,7 +191,7 @@ define(["dojo/_base/declare",
       updateSite: function alfresco_services_SiteService__updateSite(payload) {
 
          var shortName = lang.getObject("shortName", false, payload);
-         if (shortName != null)
+         if (shortName)
          {
             var url = AlfConstants.PROXY_URI + "api/sites/" + shortName;
             this.serviceXhr({
@@ -217,7 +217,7 @@ define(["dojo/_base/declare",
 
          var document = payload.document;
          var shortName = lang.getObject("shortName", false, document);
-         if (shortName != null)
+         if (shortName)
          {
             var responseTopic = this.generateUuid();
             this._actionDeleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, "onActionDeleteSiteConfirmation"), false);
@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
          var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onActionDeleteSiteSuccess"), false);
          var document = payload.document;
          var shortName = lang.getObject("shortName", false, document);
-         if (shortName != null)
+         if (shortName)
          {
             var url = AlfConstants.PROXY_URI + "api/sites/" + shortName;
             this.serviceXhr({
@@ -288,7 +288,7 @@ define(["dojo/_base/declare",
        */
       onActionDeleteSiteSuccess: function alfresco_services_SiteService__onActionDeleteSiteSuccess(payload) {
          var subscriptionHandle = lang.getObject("requestConfig.subscriptionHandle", false, payload);
-         if (subscriptionHandle != null)
+         if (subscriptionHandle)
          {
             this.alfUnsubscribe(subscriptionHandle);
          }
@@ -556,8 +556,13 @@ define(["dojo/_base/declare",
        */
       siteJoined: function alfresco_services_SiteService__siteJoined(response, originalRequestConfig) {
          this.alfLog("log", "User has successfully joined a site", response, originalRequestConfig);
-         this.alfPublish("ALF_SITE_JOINED", { site: originalRequestConfig.site, user: originalRequestConfig.user});
-         this.reloadPage();
+         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            message: this.message("message.joining", {
+               "0": originalRequestConfig.user,
+               "1": originalRequestConfig.site
+            }),
+            publishTopic: "ALF_RELOAD_PAGE"
+         });
       },
 
       /**
@@ -706,6 +711,7 @@ define(["dojo/_base/declare",
        * referenced in the request. This method needs to be updated accordingly.
        */
       reloadPage: function alfresco_services_SiteService__reloadPage(response, requestConfig) {
+         /*jshint unused:false*/
          // TODO: Check user in request is current user and that site in request is current site
          this.alfPublish("ALF_RELOAD_PAGE", {});
       },
@@ -714,6 +720,7 @@ define(["dojo/_base/declare",
        * This is a method that reloads DocList data
        */
       reloadData: function alfresco_services_SiteService__reloadData(response, requestConfig) {
+         /*jshint unused:false*/
          this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {});
       },
 
@@ -748,7 +755,7 @@ define(["dojo/_base/declare",
          {
             url = url + "/site/" + this.currentSite;
          }
-         var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : "ALF_GET_RECENT_SITES";
+         var alfTopic = payload.alfResponseTopic || "ALF_GET_RECENT_SITES";
          var config = {
             alfTopic: alfTopic,
             url: url,
@@ -770,7 +777,7 @@ define(["dojo/_base/declare",
          {
             url = url + "/site/" + this.currentSite;
          }
-         var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : "ALF_GET_FAVOURITE_SITES";
+         var alfTopic = payload.alfResponseTopic || "ALF_GET_FAVOURITE_SITES";
          var config = {
             alfTopic: alfTopic,
             url: url,

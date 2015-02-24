@@ -1,3 +1,5 @@
+/*jshint unused:false,devel:true*/
+
 /**
  * Copyright (C) 2005-2014 Alfresco Software Limited.
  *
@@ -19,14 +21,14 @@
 
 /**
  * This provides the common capabilities for widget unit tests.
- * 
+ *
  * @author Dave Draper
  */
 define(["intern/dojo/node!fs",
         "config/Config",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/lib/args",
-        "intern/chai!assert"], 
+        "intern/chai!assert"],
        function(fs, Config, pollUntil, args, assert) {
    return {
 
@@ -39,7 +41,7 @@ define(["intern/dojo/node!fs",
       },
 
       /**
-       * This is the URL to use to bootstrap tests. It is composed of the paths.bootstrapPath and the 
+       * This is the URL to use to bootstrap tests. It is composed of the paths.bootstrapPath and the
        * Config.urls.bootstrapBaseUrl which is provided in the config package.
        *
        * @instance
@@ -61,7 +63,7 @@ define(["intern/dojo/node!fs",
       },
 
       /**
-       * This is the URL to use to access the module deployment screen. It is composed of the 
+       * This is the URL to use to access the module deployment screen. It is composed of the
        * paths.moduleDeploymentPath and the Config.urls.bootstrapBaseUrl which is provided in the config package.
        *
        * @instance
@@ -74,7 +76,7 @@ define(["intern/dojo/node!fs",
 
       /**
        * Loads and returns a page mode. This uses the Node provided readFileSync function which
-       * is a synchronous call to load the requested resource into a variable. 
+       * is a synchronous call to load the requested resource into a variable.
        *
        * @instance
        * @param {string} fileName The path to the file containing the page model to be loaded.
@@ -83,7 +85,7 @@ define(["intern/dojo/node!fs",
          var fileContent;
          try
          {
-            fileContent = fs.readFileSync(fileName, 'utf-8');
+            fileContent = fs.readFileSync(fileName, "utf-8");
          }
          catch (e)
          {
@@ -112,6 +114,7 @@ define(["intern/dojo/node!fs",
          if(testName && browser.environmentType.browserName)
          {
             console.log(">> Starting '" + testName + "' on " + browser.environmentType.browserName);
+            console.log("   Test URL: " + this.testWebScriptURL(testWebScriptURL));
          }
          var command = browser.get(this.testWebScriptURL(testWebScriptURL))
             .then(pollUntil(
@@ -121,7 +124,7 @@ define(["intern/dojo/node!fs",
                }, [], 10000, 1000))
             .then(
                function (element) {
-               }, 
+               },
                function (error) {
                   console.log(">> Test page for '" + testName + "'  failed to load, trying again...");
                   browser.refresh();
@@ -134,7 +137,7 @@ define(["intern/dojo/node!fs",
             .then(
                function (element) {
                   console.log(">> Test page for '" + testName + "' loaded successfully");
-               }, 
+               },
                function (error) {
                   console.log(">> Test page for '" + testName + "'  failed to load after two attempts");
                   assert(false, "Test page could not be loaded");
@@ -142,26 +145,26 @@ define(["intern/dojo/node!fs",
             .end();
 
          // Add in a custom command for posting code coverage...
-         command.session.alfPostCoverageResults = function (browser) {
+         command.session.alfPostCoverageResults = function (newBrowser) {
             if(args.doCoverage === "true")
             {
-               return browser
-                  .findByCssSelector('.alfresco-testing-TestCoverageResults button')
+               return newBrowser
+                  .findByCssSelector(".alfresco-testing-TestCoverageResults button")
                      .click()
                      .sleep(5000)
                   .end()
-                  .findByCssSelector('.alfresco-testing-TestCoverageResults input[type=submit]')
+                  .findByCssSelector(".alfresco-testing-TestCoverageResults input[type=submit]")
                      .click()
                   .end()
                   .then(pollUntil(
                      function() {
-                        var result = (document && document.body && document.body.firstChild.innerHTML === "OK");
-                        return result ? true : null;
+                        var result = document && document.body && document.body.firstChild.innerHTML === "OK";
+                        return result || null;
                      }, [], 5000))
                   .then(
                      function (element) {
                         console.log(">> Converage successfully posted");
-                     }, 
+                     },
                      function (error) {
                         console.log(">> Coverage post failed");
                      }
@@ -170,7 +173,7 @@ define(["intern/dojo/node!fs",
             }
             else
             {
-               return browser;
+               return newBrowser;
             }
          };
          return command;
@@ -178,7 +181,7 @@ define(["intern/dojo/node!fs",
 
       /**
        * This function should be called at the start of each unit test. It calls the bootstrap test page
-       * and enters the test data into the textarea and clicks the "Test" button which will load the 
+       * and enters the test data into the textarea and clicks the "Test" button which will load the
        * test model in a new page. The unit test can then run against that page.
        *
        * @instance
@@ -218,12 +221,12 @@ define(["intern/dojo/node!fs",
          return browser
 
          .get(this.bootstrapUrl())
-            .then(pollUntil('return document.getElementsByClassName("allWidgetsProcessed");'))
+            .then(pollUntil("return document.getElementsByClassName('allWidgetsProcessed');"))
             .then(function (element) {}, function (error) {})
             .end()
 
          .execute("dijit.registry.byId('UNIT_TEST_MODEL_FIELD').setValue('" + pageModel + "');'set';")
-            .findByCssSelector('#UNIT_TEST_MODEL_FIELD TEXTAREA')
+            .findByCssSelector("#UNIT_TEST_MODEL_FIELD TEXTAREA")
             .type(" ")
             .end()
 
@@ -231,7 +234,7 @@ define(["intern/dojo/node!fs",
             .click()
             .end()
 
-         .then(pollUntil('return document.getElementsByClassName("aikau-reveal");'))
+         .then(pollUntil("return document.getElementsByClassName('aikau-reveal');"))
             .then(function (element) {}, function (error) {})
             .end();
       },
@@ -265,7 +268,7 @@ define(["intern/dojo/node!fs",
          .findByCssSelector("input[value='Apply Changes']")
             .click()
             .end();
-         
+
 //       this._applyTimeouts(browser);
 //       this._maxWindow(browser);
 //       console.log(">> Enabling debug via Debug Enabler Extension");
@@ -364,7 +367,7 @@ define(["intern/dojo/node!fs",
        */
       _determineRow: function(expectedRow) {
          var row = "last-child";
-         if (expectedRow != "last")
+         if (expectedRow !== "last")
          {
             row = "nth-child(" + expectedRow + ")";
          }
@@ -385,7 +388,7 @@ define(["intern/dojo/node!fs",
          var selector = "" +
             "td[data-publish-topic='" + publishTopic + "'] + " +
             "td.sl-data tr.sl-object-row " +
-            "td[data-pubsub-object-key=" + key + 
+            "td[data-pubsub-object-key=" + key +
             "]+td[data-pubsub-object-value='" + value + "']";
          return selector;
       },
@@ -405,8 +408,8 @@ define(["intern/dojo/node!fs",
          var selector = "" +
             "td[data-publish-topic='" + publishTopic + "'] + " +
             "td.sl-data tr.sl-object-row " +
-            "td[data-pubsub-object-key=" + key + 
-            "]+ td td[data-pubsub-object-key='" + nestedKey + "'] " + 
+            "td[data-pubsub-object-key=" + key +
+            "]+ td td[data-pubsub-object-key='" + nestedKey + "'] " +
             "+ td[data-pubsub-object-value='" + nestedValue + "']";
          return selector;
       },
@@ -446,22 +449,22 @@ define(["intern/dojo/node!fs",
       pubSubDataCssSelector: function(expectedRow, key, value) {
 
          var row = "";
-         if (expectedRow == "any")
+         if (expectedRow === "any")
          {
             // Don't specify a row
          }
-         else if (expectedRow == "last")
+         else if (expectedRow === "last")
          {
             row = ":last-child";
          }
-         else if (expectedRow != "last")
+         else if (expectedRow !== "last")
          {
             row = ":nth-child(" + expectedRow + ")";
          }
 
          var selector = "" +
             ".alfresco-testing-SubscriptionLog tr.sl-row" + row +
-            " td[data-pubsub-object-key=" + key + 
+            " td[data-pubsub-object-key=" + key +
             "]+td[data-pubsub-object-value='" + value + "']";
          // console.log("Topic selector: " + selector);
 
@@ -495,21 +498,18 @@ define(["intern/dojo/node!fs",
        */
       topicSelector: function(topic, type, expectedRow, matchType) {
 
-         if (type == null)
-         {
-            type = "subscribe";
-         }
+         type = type || "subscribe";
 
          var row = "";
-         if (expectedRow == "any")
+         if (expectedRow === "any")
          {
             // Don't specify a row
          }
-         else if (expectedRow == "last")
+         else if (expectedRow === "last")
          {
             row = ":last-child";
          }
-         else if (expectedRow != null)
+         else if (expectedRow !== null && expectedRow !== undefined)
          {
             var rowSelector = "nth-child";
             if (expectedRow.indexOf("-") !== -1)
@@ -583,7 +583,7 @@ define(["intern/dojo/node!fs",
       postCoverageResults: function(browser, loadCoverageForm) {
          if(args.doCoverage === "true")
          {
-            
+
             if(loadCoverageForm)
             {
                this.bootstrapCoverageForm(browser);
@@ -592,15 +592,15 @@ define(["intern/dojo/node!fs",
 
             return browser.end()
 
-            .findByCssSelector('.alfresco-testing-TestCoverageResults button')
+            .findByCssSelector(".alfresco-testing-TestCoverageResults button")
                .click()
                .sleep(5000)
             .end()
 
-            .findByCssSelector('.alfresco-testing-TestCoverageResults input[type=submit]')
+            .findByCssSelector(".alfresco-testing-TestCoverageResults input[type=submit]")
                .click()
             .end()
-            
+
             .then(function() {
                console.log(">> Waiting for coverage submission to complete...");
             });
@@ -612,8 +612,8 @@ define(["intern/dojo/node!fs",
       },
 
       /**
-       * This function loads the JustCoverage model to provide a code coverage submission form. This can be 
-       * used when a test navigates away from the test framework and an already rendered coverage form is 
+       * This function loads the JustCoverage model to provide a code coverage submission form. This can be
+       * used when a test navigates away from the test framework and an already rendered coverage form is
        * now missing.
        *
        * @instance

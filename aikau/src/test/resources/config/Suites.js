@@ -31,9 +31,7 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/forms/controls/ContainerPickerTest"
-   ],
+   xbaseFunctionalSuites: ["src/test/resources/alfresco/html/HeadingTest"],
 
    /**
     * This is the base array of functional test suites
@@ -94,6 +92,7 @@ define({
       "src/test/resources/alfresco/header/HeaderWidgetsTest",
       "src/test/resources/alfresco/header/WarningTest",
 
+      "src/test/resources/alfresco/html/HeadingTest",
       "src/test/resources/alfresco/html/LabelTest",
 
       "src/test/resources/alfresco/layout/AlfSideBarContainerTest",
@@ -101,6 +100,8 @@ define({
       "src/test/resources/alfresco/layout/BasicLayoutTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/TwisterTest",
+
+      "src/test/resources/alfresco/lists/views/layouts/RowTest",
 
       "src/test/resources/alfresco/menus/AlfCheckableMenuItemTest",
       "src/test/resources/alfresco/menus/AlfContextMenuTest",
@@ -143,10 +144,13 @@ define({
       "src/test/resources/alfresco/renderers/ThumbnailTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
+      "src/test/resources/alfresco/services/DialogServiceTest",
       "src/test/resources/alfresco/services/NotificationServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",
       "src/test/resources/alfresco/services/SiteServiceTest",
       "src/test/resources/alfresco/services/UserServiceTest",
+
+      "src/test/resources/alfresco/services/actions/ManageAspectsTest",
 
       "src/test/resources/alfresco/search/AlfSearchResultTest",
       "src/test/resources/alfresco/search/FacetFiltersTest",

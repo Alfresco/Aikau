@@ -11,8 +11,7 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/NavigationService",
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/NavigationService"
    ],
    widgets: [
       {
@@ -24,6 +23,17 @@ model.jsonModel = {
             publishPayload: {
                url: "field1=updatedField1&field2=updatedField2",
                type: "HASH"
+            }
+         }
+      },
+      {
+         id: "SET_FORM_VALUE",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Set Form Publication",
+            publishTopic: "SET_FORM_VALUE",
+            publishPayload: {
+               pub1: "Value Set"
             }
          }
       },
@@ -220,6 +230,34 @@ model.jsonModel = {
                                     }
                                  ]
                               }
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/layout/ClassicWindow",
+         config: {
+            title: "Publish Settable Form",
+            widgets: [
+               {
+                  id: "SET_VALUE_VIA_PUBSUB_FORM",
+                  name: "alfresco/forms/Form",
+                  config: {
+                     setValueTopic: "SET_FORM_VALUE",
+                     okButtonPublishTopic: "OK",
+                     widgets: [
+                        {
+                           id: "TEXT_BOX_3",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              fieldId: "TB3",
+                              name: "pub1",
+                              label: "PubValue",
+                              value: ""
                            }
                         }
                      ]

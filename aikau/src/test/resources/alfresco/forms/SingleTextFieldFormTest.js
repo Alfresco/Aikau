@@ -76,7 +76,7 @@ define(["intern!object",
             .type("test")
             .pressKeys(keys.RETURN)
          .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "search", "test"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "search", "test"))
             .then(function(elements) {
                assert(elements.length === 1, "Enter key doesn't submit data");
             })

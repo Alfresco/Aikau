@@ -1,9 +1,9 @@
-Aikau 1.0.4 Release Notes
+Aikau 1.0.6 Release Notes
 =========================
 
 Current deprecations:
 ---------------------
-This release:
+Previous releases:
 * alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
 * alfresco/documentlibrary/views/DocumentListRenderer            (use: alfresco/lists/views/ListRenderer)
 * alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin  (use: alfresco/lists/views/_AlfAdditionalViewControlMixin)
@@ -22,18 +22,33 @@ This release:
 * alfresco/renderers/SearchResultPropertyLink                    (use: alfresco/search/SearchResultPropertyLink)
 * alfresco/renderers/SearchThumbnail                             (use: alfresco/search/SearchThumbnail)
 * alfresco/upload/AlfUpload                                      (use: alfresco/services/UploadService)
-
-Previous releases:
-* alfresco/dialogs/AlfDialogService             (use: alfresco/services/Dialog) 
-* alfresco/forms/controls/DojoValidationTextBox (use: alfresco/forms/controls/TextBox)
-* alfresco/forms/controls/DojoCheckBox          (use: alfresco/forms/controls/CheckBox)
-* alfresco/forms/controls/DojoDateTextBox       (use: alfresco/forms/controls/DateTextBox)
-* alfresco/forms/controls/DojoRadioButtons      (use: alfresco/forms/controls/RadioButtons)
-* alfresco/forms/controls/DojoSelect            (use: alfresco/forms/controls/Select)
-* alfresco/forms/controls/DojoTextarea          (use: alfresco/forms/controls/TextArea)
+* alfresco/dialogs/AlfDialogService                              (use: alfresco/services/Dialog) 
+* alfresco/forms/controls/DojoValidationTextBox                  (use: alfresco/forms/controls/TextBox)
+* alfresco/forms/controls/DojoCheckBox                           (use: alfresco/forms/controls/CheckBox)
+* alfresco/forms/controls/DojoDateTextBox                        (use: alfresco/forms/controls/DateTextBox)
+* alfresco/forms/controls/DojoRadioButtons                       (use: alfresco/forms/controls/RadioButtons)
+* alfresco/forms/controls/DojoSelect                             (use: alfresco/forms/controls/Select)
+* alfresco/forms/controls/DojoTextarea                           (use: alfresco/forms/controls/TextArea)
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.6:
+* [AKU-41](https://issues.alfresco.com/jira/browse/AKU-41)   - Add Manage Aspects support
+* [AKU-41](https://issues.alfresco.com/jira/browse/AKU-72)   - Add colspan support to Cell
+* [AKU-102](https://issues.alfresco.com/jira/browse/AKU-101) - Add additionalCssClasses support to Row
+* [AKU-102](https://issues.alfresco.com/jira/browse/AKU-102) - NLS updates for alfresco/html/Heading
+* [AKU-103](https://issues.alfresco.com/jira/browse/AKU-103) - NLS updates for alfresco/header/SetTitle
+* [AKU-105](https://issues.alfresco.com/jira/browse/AKU-105) - Add notification after joining site
+* [AKU-108](https://issues.alfresco.com/jira/browse/AKU-108) - Allow form values to be set via publication
+* [AKU-109](https://issues.alfresco.com/jira/browse/AKU-109) - Fix typo in sites menu
+* [AKU-119](https://issues.alfresco.com/jira/browse/AKU-119) - Add IDs to dialogs from alfresco/services/DialogService
+
+1.0.5:
+* [AKU-40](https://issues.alfresco.com/jira/browse/AKU-40) - Remove picked items from simple picker available list
+* [AKU-81](https://issues.alfresco.com/jira/browse/AKU-81) - Allow copy/move content into empty document libraries
+* [AKU-96](https://issues.alfresco.com/jira/browse/AKU-96) - CSS updates to copy/move action dialogs
+* [AKU-97](https://issues.alfresco.com/jira/browse/AKU-97) - Ensure en locale files are generated
+
 1.0.4:
 * [AKU-17](https://issues.alfresco.com/jira/browse/AKU-17) - Implement standalone Aikau transient notifications
 * [AKU-76](https://issues.alfresco.com/jira/browse/AKU-76) - Updated NPM to use specific tested versions
