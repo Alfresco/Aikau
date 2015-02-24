@@ -110,17 +110,23 @@ define(["dojo/_base/declare",
             this.removeUploadDragAndDrop(this.domNode);
             // this.setupKeyboardNavigation();
 
+            // Initialise the data...
+            this.currentData = {
+               items: []
+            };
+
+            if (ObjectTypeUtils.isArray(this.value))
+            {
+               this.setPickedItems(this.value);
+            }
+            
             this.alfSubscribe("ALF_ITEM_SELECTED", lang.hitch(this, this.addPickedItem));
             this.alfSubscribe("ALF_ITEM_REMOVED", lang.hitch(this, this.removePickedItem));
             this.alfSubscribe("ALF_SET_PICKED_ITEMS", lang.hitch(this, this.onSetPickedItems));
             this.alfSubscribe("ALF_ITEM_MOVED_DOWN", lang.hitch(this, this.onReorder, 1));
             this.alfSubscribe("ALF_ITEM_MOVED_UP", lang.hitch(this, this.onReorder, -1));
 
-            // Initialise the data...
-            this.currentData = {
-               items: ObjectTypeUtils.isArray(this.value) ? this.value : []
-            };
-            this.renderView();
+            this.renderView(false);
             this.isValid();
          },
 
@@ -267,16 +273,15 @@ define(["dojo/_base/declare",
          setPickedItems: function alfresco_pickers_PickedItems_setPickedItems(items) {
             if (ObjectTypeUtils.isArray(items))
             {
-               this.currentData.items = items;
-               array.forEach(this.currentData.items, function(item, index) {
-                  item.index = index;
-               });
+               array.forEach(items, function(item) {
+                  this.addPickedItem(item);
+               }, this);
             }
             else
             {
                this.alfLog("warn", "No items supplied to 'setPickedItems' function", items, this);
             }
-            this.renderView();
+            this.renderView(false);
             this.isValid();
          },
 

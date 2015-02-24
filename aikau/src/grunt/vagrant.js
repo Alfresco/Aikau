@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       "shell:vagrantMountSharedFoldersFix",
       "shell:vagrantReloadAndProvision"
    ]);
-   grunt.registerTask("vup", ["shell:vagrantUp"]);
+   grunt.registerTask("vup", ["shell:vagrantUp","shell:vagrantProvision"]);
    grunt.registerTask("vdown", ["shell:vagrantHalt"]);
 
 };

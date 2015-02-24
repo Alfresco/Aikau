@@ -57,7 +57,7 @@ define(["intern!object",
       "Test publication on dialog show": function() {
          return browser.findAllByCssSelector(TestCommon.topicSelector("DISPLAYED_FD1", "publish", "any"))
             .then(function(elements) {
-               assert.lengthOf(elements, 1, "Could not find topic published when displayed dialog")
+               assert.lengthOf(elements, 1, "Could not find topic published when displayed dialog");
             });
       },
 
@@ -73,7 +73,7 @@ define(["intern!object",
          .end()
          .findAllByCssSelector(".alfresco-dialog-AlfDialog")
             .then(function(elements) {
-               assert.lengthOf(elements, 1, "The previous dialog without an ID was not destroyed")
+               assert.lengthOf(elements, 1, "The previous dialog without an ID was not destroyed");
             });
       },
 
@@ -88,7 +88,7 @@ define(["intern!object",
          .end()
          .findAllByCssSelector(".alfresco-dialog-AlfDialog")
             .then(function(elements) {
-               assert.lengthOf(elements, 2, "The previous dialog (without an ID) was destroyed")
+               assert.lengthOf(elements, 2, "The previous dialog (without an ID) was destroyed");
             });
       },
 
@@ -102,7 +102,7 @@ define(["intern!object",
          .end()
          .findAllByCssSelector(".alfresco-dialog-AlfDialog")
             .then(function(elements) {
-               assert.lengthOf(elements, 2, "The previous dialog (without an ID) was destroyed")
+               assert.lengthOf(elements, 2, "The previous dialog (without an ID) was destroyed");
             });
       },
 
@@ -114,7 +114,7 @@ define(["intern!object",
          .end()
 
          // Post the form...
-         .findByCssSelector("#FD2 .confirmationButton")
+         .findByCssSelector("#FD2 .confirmationButton > span")
             .click()
          .end()
 

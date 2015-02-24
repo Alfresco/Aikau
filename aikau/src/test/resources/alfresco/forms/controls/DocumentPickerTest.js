@@ -40,16 +40,20 @@ define(["intern!object",
 
    registerSuite({
       name: "Document Picker Test",
+
       setup: function() {
          browser = this.remote;
          return TestCommon.loadTestWebScript(this.remote, "/DocumentPicker", "DocumentPicker").end();
       },
+
       beforeEach: function() {
          browser.end();
       },
+
       teardown: function() {
          return browser.end().alfPostCoverageResults(browser);
       },
+
       "Test picker dialog can be displayed": function () {
          return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
             .click()
@@ -63,6 +67,7 @@ define(["intern!object",
             )
          .end();
       },
+
       "Test Shared Files sub-picker is shown": function() {
          // Select "Shared Files" (the results for this are mocked)
          return browser.findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(5)")
@@ -77,6 +82,7 @@ define(["intern!object",
             )
          .end();
       },
+
       "Test Shared files result count": function() {
          // Count the mocked results...
          return browser.findAllByCssSelector(".alfresco-lists-views-AlfListView tr")
@@ -85,6 +91,7 @@ define(["intern!object",
             })
          .end();
       },
+
       "Test first item in picker can be added": function() {
          // Check the first item has an ADD publish action image...
          return browser.findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(1) .alfresco-renderers-PublishAction > img")
@@ -96,6 +103,7 @@ define(["intern!object",
             )
          .end();
       },
+
       "Test item gets picked": function() {
          // Click the ADD publish action image to add the item to the picked items...
          return browser.findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(1) .alfresco-renderers-PublishAction > img")
@@ -109,6 +117,7 @@ define(["intern!object",
             })
          .end();
       },
+
       "Test picked items are reflected when closing dialog": function() {
          // Close the dialog...
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:first-child > span")
@@ -122,6 +131,7 @@ define(["intern!object",
             })
          .end();
       },
+
       "Test picked items are retained": function() {
          return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span.alfresco-buttons-AlfButton.confirmationButton > span > span")
             .then(function(){}, function() {})
@@ -136,6 +146,7 @@ define(["intern!object",
             })
          .end();
       },
+
       "Test previously picked item can be removed": function() {
          // Check the remove item image exists...
          return browser.findByCssSelector(".picked-items tr .alfresco-renderers-PublishAction > img")
@@ -147,6 +158,7 @@ define(["intern!object",
             )
          .end();
       },
+
       "Test previously picked item gets removed": function() {
          // Remove the previously selected item...
          return browser.findByCssSelector(".picked-items tr .alfresco-renderers-PublishAction > img")
@@ -163,6 +175,7 @@ define(["intern!object",
             })
          .end();
       },
+
       "Test an item can be only picked once": function() {
          // Open the dialog again and add some more...
          return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
@@ -184,6 +197,7 @@ define(["intern!object",
             })
          .end();
       },
+
       "Test picking another item": function() {
          // Add another item...
          return browser.findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(3) .alfresco-renderers-PublishAction > img")
@@ -195,6 +209,7 @@ define(["intern!object",
             })
          .end();
       },
+      
       "Test both items are shown as picked when dialog closed": function() {
          // Close the dialog...
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:first-child > span")
