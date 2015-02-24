@@ -33,8 +33,9 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Cell.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domClass) {
+        "dojo/dom-class",
+        "dojo/dom-attr"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domClass, domAttr) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -56,11 +57,34 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * Any additional CSS classes that should be applied to the rendered DOM element.
+       *
+       * @instance
+       * @type {string}
+       * @default  null
+       */
+      additionalCssClasses: null,
+
+      /**
+       * The number of columns that this cell should span. Defaults to null (indicating that
+       * a colspan attribute will not be set on the rendered DOM element).
+       *
+       * @instance
+       * @type {number}
+       * @default null
+       */
+      colspan: null,
+
+      /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
        * @instance postCreate
        */
       postCreate: function alfresco_lists_views_layouts_Cell__postCreate() {
+         if (this.colspan)
+         {
+            domAttr.set(this.domNode, "colspan", this.colspan);
+         }
          if(this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);
