@@ -54,7 +54,7 @@ define(["./config/Suites"],
          packages: [
             { name: "alfresco", location: "./src/test/resources/alfresco" },
             { name: "config", location: "./src/test/resources/config/vm" },
-            { name: "reporters", location: "./src/test/resources/reporters"}
+            { name: "reporters", location: "./src/test/resources/reporters" }
          ]
       },
 
@@ -69,9 +69,11 @@ define(["./config/Suites"],
 
       // An array of code coverage reporters to invoke
       reporters: [
-         // "console",
-         // "runner",
-         "reporters/TestSummary"
+         // "console"
+         // "runner"
+         // "reporters/TestSummary"
+         "reporters/AikauReporter"
+         // "pretty"
       ]
 
    };
