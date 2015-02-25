@@ -1,7 +1,7 @@
 Previous: [Actions in Lists](./Tutorial9.md),
 Next: [Sorting and Pagination](./Tutorial11.md)
 
-## Tutorial 9 - Inline Editing Properties
+## Tutorial 10 - Inline Editing Properties
 
 In this tutorial we’ll introduce a renderer that allows a user to edit properties directly within a list and we’ll use this to both display and allow the editing of a group display name. Along the way we’ll improve the general rendering of our list of groups.
 
