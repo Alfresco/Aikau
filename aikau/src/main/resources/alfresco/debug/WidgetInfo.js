@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,6 +18,10 @@
  */
 
 /**
+ * This module is used exclusively in client-debug mode in order to provide information about a specific
+ * widget. It is intended to provide a developer with information about the ID of a widget and a code
+ * snippet that can be used in a Surf Extension to find the widget in the model in order to work with it.
+ * 
  * @module alfresco/debug/WidgetInfo
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -62,22 +66,32 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
-       * 
+       * Sets up the image source and it's alt text.
        * 
        * @instance
        */
       postMixInProperties: function alfresco_debug_WidgetInfo__postMixInProperties() {
          this.imgSrc = require.toUrl("alfresco/debug") + "/css/images/info-16.png";
+         if (this.displayId)
+         {
+            this.altText = this.message("widgetInfo.alt.text", {
+               0: this.displayId
+            });
+         }
+         else
+         {
+            this.altText = this.message("widgetInfo.unknown.alt.text");
+         }
       },
 
       /**
-       * 
+       * Handles clicking on the info image and displays a tooltip dialog with information about the
+       * selecte widget.
        * 
        * @instance
        */
       showInfo: function alfresco_debug_WidgetInfo__showInfo() {
-
-         if (this.ttd == null)
+         if (!this.ttd)
          {
             this.displayIdLabel = this.message("widgetInfo.displayId.label");
             this.displayTypeLabel = this.message("widgetInfo.displayType.label");
