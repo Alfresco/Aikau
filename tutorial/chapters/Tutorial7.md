@@ -41,7 +41,7 @@ model.jsonModel = {
 
 When you refresh the page you should see a button labelled “Create New Group” which when clicked will display an empty dialog.
 
-ADD SCREENSHOT
+![Screenshot showing an empty dialog](../resources/Tutorial7-Image1.png "Screenshot showing an empty dialog")
 
 Hopefully it should be obvious that the `dialogTitle` attribute has been used for the title of the dialog and the `dialogConfirmationButtonTitle` and `dialogCancellationButtonTitle` attributes have been used for the button labels!
 
@@ -71,7 +71,7 @@ Add the following into the empty `widgets` array for your form:
 
 This is the most simple configuration possible to add some text boxes. Refresh the page, click the button and you’ll see them added to the page:
 
-ADD SCREENSHOT
+![Screenshot showing a dialog with two text boxes](../resources/Tutorial7-Image2.png "Screenshot showing a dialog with two text boxes")
 
 ### Step 3. Improve Validation
 The dialog is a bit sparse at the moment and isn’t very helpful in assisting the user to complete the task of creating a new group. For example there is no information explaining what each field is used for, it is possible to click the confirmation button without data having been entered, and there is no validation of the data that can be provided. Let’s update the configuration for the first form control to address these issues:
@@ -106,7 +106,7 @@ validationConfig | This allows us to define a list of the rules that must be tru
 
 When you refresh the page and click on the button you should see the following:
 
-ADD SCREENSHOT
+![Screenshot showing a dialog with invalid form state](../resources/Tutorial7-Image3.png "Screenshot showing a dialog with invalid form state")
 
 Note that the “Create” button on the dialog is initially disabled. This is because the form does not contain valid data. Try entering invalid and valid data and you’ll see that the button automatically switches from being enabled to disabled as the validity of the form field changes.
 
@@ -249,8 +249,7 @@ createGroup: function tutorial_UserAndGroupService__createGroup(payload) {
 
 These additional attributes in the configuration argument passed to the `serviceXhr` function specify the function to call if the XHR request is successful. If the group is created then the `onSuccess` function will be called, which will in turn publish the “ALF_DOCLIST_RELOAD_DATA” topic which will make the `alfresco/lists/AlfList` reload the latest data… refresh the page and try it out !
 
-ADD SCREENSHOT
-
+![Screenshot showing newly created group](../resources/Tutorial7-Image4.png "Screenshot showing newly created group")
 
 Previous: [Creating a User and Group Management Page](./Tutorial6.md)
 Next: [Widget Dialogs](./Tutorial8.md)
