@@ -26,7 +26,7 @@ Let’s start by adding a new cell into the views for both lists. Add the follow
 
 When you refresh the page you should see that each entry in the list now has a delete icon at the end of the row, but that clicking on it has no effect - this is because we haven’t defined a publish topic or payload yet.
 
-ADD SCREENSHOT
+![Screenshot showing delete action icons](../resources/Tutorial9-Image1.png "Screenshot showing delete action icons")
 
 When deleting a group it is possible to use the CrudService because we can use the variable substitution capabilities to construct the required URL. Update the `PublishAction` widget configuration in the groups list (e.g. not the list requested to appear in the dialog) to be this:
 
@@ -67,7 +67,7 @@ By including the `requiresConfirmation` attribute in the payload we are telling 
 
 Refreshing the page and clicking on a delete action should now display a dialog similar to the one shown here:
 
-ADD SCREENSHOT
+![Screenshot showing delete confirmation dialog](../resources/Tutorial9-Image2.png "Screenshot showing delete confirmation dialog")
 
 The reason that we can’t use the CrudService for removing a user from a group is because the URL required contains both the group ID and the user short name and the attribute `shortName` is used in the response bodies for both listing groups and listing users in groups, e.g. the URL we would construct would look like this:
 
@@ -125,7 +125,6 @@ this.alfSubscribe("TUTORIAL_REMOVE_USER_FROM_GROUP", lang.hitch(this, "removeUse
 
 When you [clear the dependency caches](./ClearingDependencyCaches.md) and refresh the page you’ll see that you can remove previously added users from groups.
 
-[ADD SCREENSHOT]
 
 Previous: [Widget Dialogs](./Tutorial8.md),
 Next: [Inline Editing Properties](./Tutorial10.md)
