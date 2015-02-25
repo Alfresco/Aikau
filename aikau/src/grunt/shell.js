@@ -23,6 +23,11 @@ module.exports = function(grunt) {
             command: "mvn jetty:stop"
          },
 
+         // Maven
+         mavenInstall: {
+            command: "mvn install"
+         },
+
          // Vagrant
          vagrantUp: {
             command: "vagrant up",
