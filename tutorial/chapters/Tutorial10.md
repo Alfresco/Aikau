@@ -44,12 +44,11 @@ Now add a new cell widget into the row (between the `alfresco/renderers/Property
 
 When you refresh the page you should find that both the group identifier and display name are displayed (quite often these have the same value) and when you hover over the display name an edit icon will appear.
 
-ADD SCREENSHOT
-
+![Screenshot showing display names in additional column](../resources/Tutorial10-Image1.png "Screenshot showing display names in additional column")
 
 Clicking on this icon will switch into editing mode and allow you to update the display name (for accessibility it is also possible to enter edit mode by giving the widget focus and then pressing the CONTROL and “e” keys).
 
-ADD SCREENSHOT
+![Screenshot showing edit mode of InlineEditProperty](../resources/Tutorial10-Image2.png "Screenshot showing edit mode of InlineEditProperty")
 
 Let’s go through the configuration attributes that have been used to explain what they’re doing:
 
@@ -89,7 +88,7 @@ widgetsForHeader: [
 
 When you refresh the page you’ll see that there is now a header bar above the list that gives an indication of what each column of data represents.
 
-ADD SCREENSHOT
+![Screenshot showing table header](../resources/Tutorial10-Image3.png "Screenshot showing table header")
 
 We can do some further styling of the view and cells by setting the `additionalCssClasses` attribute on them. This is the attribute that Aikau uses to allow CSS classes to be added to the widget root DOM element that allows CSS selectors defined in the widget to apply different styling. Add the following to the `alfresco/lists/views/AlfListView` config:
 
@@ -99,7 +98,7 @@ additionalCssClasses: "bordered",
 
 This will add some dotted lines around the cells in the list as shown:
 
-ADD SCREENSHOT
+![Screenshot showing dotted borders](../resources/Tutorial10-Image4.png "Screenshot showing dotted borders")
 
 Update the configuration of each `alfresco/lists/views/layouts/Cell` to include the following:
 
@@ -109,4 +108,4 @@ additionalCssClasses: "mediumpad",
 
 This will place some padding in each cell (alternative options would be “smallpad” and “largepad”).
 
-ADD SCREENSHOT
+![Screenshot showing additional cell padding](../resources/Tutorial10-Image5.png "Screenshot showing additional cell padding")
