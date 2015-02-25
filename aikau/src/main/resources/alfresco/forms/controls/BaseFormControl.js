@@ -355,7 +355,7 @@ define(["dojo/_base/declare",
       constructor: function alfresco_forms_controls_BaseFormControl__constructor(args) {
          declare.safeMixin(this, args);
          
-         if (this.fieldId == null || this.fieldId === "")
+         if (!this.fieldId)
          {
             this.fieldId = this.generateUuid();
          }
@@ -374,7 +374,7 @@ define(["dojo/_base/declare",
          // Setup the options handling...
          this.processOptionsConfig(this.optionsConfig);
          
-         if (this.validationConfig != null && typeof this.validationConfig.regex == "string")
+         if (this.validationConfig && typeof this.validationConfig.regex === "string")
          {
             this.validationConfig.regExObj = new RegExp(this.validationConfig.regex);
          }
@@ -391,17 +391,17 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the configuration in the original array
        */
       processAutoSetConfiguration: function alfresco_forms_controls_BaseFormControl__processAutoSetConfiguration(config, index) {
-         if (config.rulePassValue == null || config.ruleFailValue == null)
-         {
-            this.alfLog("warn", "An autoset configuration element was provided without both 'rulePassValue' and 'ruleFailValue' attribute", config, this);
-         }
-         else
+         if (config.rulePassValue || config.ruleFailValue)
          {
             var instanceVar = "alfAutoSet___" + index;
             this[instanceVar] = lang.hitch(this, this.autoSetValue, config.rulePassValue, config.ruleFailValue);
 
             // Process the configuration...
             this.processConfig(instanceVar, config);
+         }
+         else
+         {
+            this.alfLog("warn", "An autoset configuration element was provided without both 'rulePassValue' and 'ruleFailValue' attribute", config, this);
          }
       },
 
@@ -462,20 +462,20 @@ define(["dojo/_base/declare",
        * @param {object} config
        */
       processOptionsConfig: function alfresco_forms_controls_BaseFormControl__processOptionsConfig(config) {
-         if (config != null)
+         if (config)
          {
             // Create update subscriptions based on the requested changes to other fields in the form...
             // We're going to do some helpful checking of the configuration to aid development rather
             // than just ignoring invalid configuration...
             var changesTo = lang.getObject("changesTo", false, config);
-            if (changesTo != null)
+            if (changesTo)
             {
                if (ObjectTypeUtils.isArray(changesTo))
                {
                   // We're using an additional topic prefix here which is the pattern used for publications
                   // within the form...
                   // TODO: Make the string an instance variable?
-                  array.forEach(config.changesTo, lang.hitch(this, "createOptionsChangesTo", config));
+                  array.forEach(config.changesTo, lang.hitch(this, this.createOptionsChangesTo, config));
                }
                else
                {
@@ -485,11 +485,11 @@ define(["dojo/_base/declare",
             // Create update subcriptions based on topics published that are external to the form. This allows
             // the options to respond to "global" events rather than just changes within the form itself.
             var updateTopics = lang.getObject("updateTopics", false, config);
-            if (updateTopics != null)
+            if (updateTopics)
             {
                if (ObjectTypeUtils.isArray(updateTopics))
                {
-                  array.forEach(config.updateTopics, lang.hitch(this, "createOptionsSubscriptions", config));
+                  array.forEach(config.updateTopics, lang.hitch(this, this.createOptionsSubscriptions, config));
                }
                else
                {
@@ -510,37 +510,56 @@ define(["dojo/_base/declare",
             }
             else if (callback)
             {
-               // Handle configuration requests that options be generated through a function call...
-               // Note that we're not explicitly handling scope here, it's expected that a hitch call will be
-               // used if a scope is required. It is also possible to set the callback as a string which will
-               // be matched against a function of the current scope....
-               if (typeof callback === "function")
-               {
-                  this.options = callback(config);
-                  array.forEach(this.options, lang.hitch(this, this.processOptionLabel));
-               }
-               else if (ObjectTypeUtils.isString(callback) && typeof this[callback] === "function")
-               {
-                  this.options = this[callback](config);
-                  array.forEach(this.options, lang.hitch(this, this.processOptionLabel));
-               }
-               else
-               {
-                  this.alfLog("warn", "The supplied 'callback' attribute for '" + this.fieldId + "' was not a Function");
-               }
+               this.processCallbackOptions(callback, config);
             }
             else if (fixed)
             {
-               // Handle configuration that specifies a fixed configuration...
-               if (ObjectTypeUtils.isArray(fixed))
-               {
-                  this.pendingOptions = fixed;
-               }
-               else
-               {
-                  this.alfLog("log", "The supplied fixed options attribute for '" + this.fieldId + "' was not an Array");
-               }
+               this.processFixedOptions(fixed);
             }
+         }
+      },
+
+      /**
+       * Handle configuration requests that options be generated through a function call...
+       * Note that we're not explicitly handling scope here, it's expected that a hitch call will be
+       * used if a scope is required. It is also possible to set the callback as a string which will
+       * be matched against a function of the current scope.
+       * 
+       * @param {Function} callback The function to call to get the options for the control
+       * @param {object} config The full options configuration
+       */
+      processCallbackOptions: function alfresco_forms_controls_BaseFormControl__processCallbackOptions(callback, config) {
+         if (typeof callback === "function")
+         {
+            this.pendingOptions = callback(config);
+            array.forEach(this.pendingOptions, lang.hitch(this, this.processOptionLabel));
+         }
+         else if (ObjectTypeUtils.isString(callback) && typeof this[callback] === "function")
+         {
+            this.pendingOptions = this[callback](config);
+            array.forEach(this.pendingOptions, lang.hitch(this, this.processOptionLabel));
+         }
+         else
+         {
+            this.alfLog("warn", "The supplied 'callback' attribute for '" + this.fieldId + "' was not a Function");
+         }
+      },
+
+      /**
+       * Processes fixed options for the form control.
+       * 
+       * @param  {array} fixed The fixe options to apply to the form control.
+       */
+      processFixedOptions: function alfresco_forms_controls_BaseFormControl__processFixedOptions(fixed) {
+         // Handle configuration that specifies a fixed configuration...
+         if (ObjectTypeUtils.isArray(fixed))
+         {
+            this.pendingOptions = fixed;
+            array.forEach(this.pendingOptions, lang.hitch(this, this.processOptionLabel));
+         }
+         else
+         {
+            this.alfLog("log", "The supplied fixed options attribute for '" + this.fieldId + "' was not an Array");
          }
       },
       
@@ -582,17 +601,18 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the topic
        */
       createOptionsChangesTo: function alfresco_forms_controls_BaseFormControl__createOptionsChangesTo(optionsConfig, subscription, index) {
-         if (subscription.targetId == null)
-         {
-            this.alfLog("warn", "No 'targetId' defined in subscription config", subscription, optionsConfig, this);
-         }
-         else
+         if (subscription.targetId)
          {
             // Create the subscription...
             var topic = "_valueChangeOf_" + subscription.targetId,
-                global = (subscription.global != null ? subscription.global : false);
-            this.alfSubscribe(topic, lang.hitch(this, "updateOptions", optionsConfig), global);
+                global = subscription.global || false;
+            this.alfSubscribe(topic, lang.hitch(this, this.updateOptions, optionsConfig), global);
          }
+         else
+         {
+            this.alfLog("warn", "No 'targetId' defined in subscription config", subscription, optionsConfig, this);
+         }
+         
       },
       
       /**
@@ -605,15 +625,15 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the topic
        */
       createOptionsSubscriptions: function alfresco_forms_controls_BaseFormControl__createOptionsSubscriptions(optionsConfig, subscription, index) {
-         if (subscription.topic == null)
+         if (subscription.topic)
          {
-            this.alfLog("warn", "No 'topic' defined in subscription config", subscription, optionsConfig, this);
+            // Create the subscription...
+            var global = subscription.global || false;
+            this.alfSubscribe(subscription.topic, lang.hitch(this, this.updateOptions, optionsConfig), global);
          }
          else
          {
-            // Create the subscription...
-            var global = (subscription.global != null ? subscription.global : false);
-            this.alfSubscribe(subscription.topic, lang.hitch(this, "updateOptions", optionsConfig), global);
+            this.alfLog("warn", "No 'topic' defined in subscription config", subscription, optionsConfig, this);
          }
       },
       
@@ -629,7 +649,7 @@ define(["dojo/_base/declare",
        */
       getOptionsFromPublication: function alfresco_forms_controls_BaseFormControl__getOptionsFromPublication(optionsConfig, payload) {
          var options = lang.getObject("options", false, payload);
-         if (options != null && ObjectTypeUtils.isArray(options))
+         if (options && ObjectTypeUtils.isArray(options))
          {
             return options;
          }
@@ -649,20 +669,20 @@ define(["dojo/_base/declare",
        */
       updateOptions: function alfresco_forms_controls_BaseFormControl__onUpdateOptions(optionsConfig, payload) {
          this.alfLog("log", "OPTIONS CONFIG: Field '" + this.fieldId + "' is handling value change of field'" + payload.name);
-         if (optionsConfig.publishTopic != null)
+         if (optionsConfig.publishTopic)
          {
             this.getPubSubOptions(optionsConfig);
          }
-         else if (optionsConfig.callback != null)
+         else if (optionsConfig.callback)
          {
             // Make the callback for setting the options. The callback can either be a function or
             // a String. If it is a String then it is assumed to be the name of a function in the 
             // widget so will be checked.
-            if (typeof optionsConfig.callback == "function")
+            if (typeof optionsConfig.callback === "function")
             {
                this.setOptions(optionsConfig.callback(optionsConfig, payload, this));
             }
-            else if (typeof optionsConfig.callback == "string" && typeof this[optionsConfig.callback] == "function")
+            else if (typeof optionsConfig.callback === "string" && typeof this[optionsConfig.callback] === "function")
             {
                this.setOptions(this[optionsConfig.callback](optionsConfig, payload, this));
             }
@@ -692,16 +712,16 @@ define(["dojo/_base/declare",
        */
       getPubSubOptions: function alfresco_forms_controls_BaseFormControl__getPubSubOptions(config) {
          // Publish a topic to get the currently available options based on the current value...
-         if (config.publishTopic != null)
+         if (config.publishTopic)
          {
             var responseTopic = this.generateUuid();
             var payload = config.publishPayload;
-            if (payload == null)
+            if (!payload)
             {
                payload = {};
             }
             payload.responseTopic = responseTopic;
-            this._pubSubOptionsHandle = this.alfSubscribe(responseTopic, lang.hitch(this, "onPubSubOptions"), true);
+            this._pubSubOptionsHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onPubSubOptions), true);
             this.alfPublish(config.publishTopic, payload, true);
          }
          else
@@ -719,7 +739,7 @@ define(["dojo/_base/declare",
        */
       onPubSubOptions: function alfresco_forms_controls_BaseFormControl__onPubSubOptions(payload) {
          this.alfUnsubscribeSaveHandles([this._pubSubOptionsHandle]);
-         if (payload.options != null)
+         if (payload.options)
          {
             this.setOptions(payload.options);
          }
@@ -736,28 +756,30 @@ define(["dojo/_base/declare",
        * @type {object}
        */
       setOptions: function alfresco_forms_controls_BaseFormControl__setOptions(options) {
-         
          this.alfLog("log", "Setting options for field '" + this.fieldId + "'", options);
-         
-         this.options = options;
-         if (this.wrappedWidget)
+         if (this.deferredValueAssignment)
          {
-            // TODO: Change to add options as an array...
-            // TODO: Use aspect to wait until options are added and then replace values with encoded values?
-            // TODO: Create options as numbers and then replace with values once created?
-            var currentOptions = this.wrappedWidget.get("options");
-            if (currentOptions && typeof this.wrappedWidget.removeOption === "function")
-            {
-               // Remove all the current options...
-               array.forEach(currentOptions, lang.hitch(this, this.removeOption));
-            }
-            if (typeof this.wrappedWidget.addOption === "function")
-            {
-               // Add all the new options...
-               array.forEach(options, lang.hitch(this, this.addOption));
-            }
+            this.pendingOptions = options;
          }
-         this.setOptionsValue(options);
+         else
+         {
+            this.options = options;
+            if (this.wrappedWidget)
+            {
+               var currentOptions = this.wrappedWidget.get("options");
+               if (currentOptions && typeof this.wrappedWidget.removeOption === "function")
+               {
+                  // Remove all the current options...
+                  array.forEach(currentOptions, lang.hitch(this, this.removeOption));
+               }
+               if (typeof this.wrappedWidget.addOption === "function")
+               {
+                  // Add all the new options...
+                  array.forEach(options, lang.hitch(this, this.addOption));
+               }
+            }
+            this.setOptionsValue(options);
+         }
       },
 
       /**
@@ -838,17 +860,17 @@ define(["dojo/_base/declare",
          if (config)
          {
             // Set the initial value...
-            if (typeof config.initialValue != "undefined")
+            if (typeof config.initialValue !== "undefined")
             {
                this[attribute](config.initialValue);
             }
             
             // Process the rule subscriptions...
-            if (typeof config.rules != "undefined")
+            if (typeof config.rules !== "undefined")
             {
                this.processRulesConfig(attribute, config.rules);
             }
-            else if (typeof config.rules != "undefined")
+            else if (typeof config.rules !== "undefined")
             {
                // Debug output when instantiation data is incorrect. Only log when some data is defined but isn't an object.
                // There's no point in logging messages for unsupplied data - just incorrectly supplied data.
@@ -856,11 +878,11 @@ define(["dojo/_base/declare",
             }
             
             // Process the callback subscriptions...
-            if (typeof config.callbacks == "object")
+            if (typeof config.callbacks === "object")
             {
                this._processCallbacksConfig(attribute, config.callbacks);
             }
-            else if (typeof config.callbacks != "undefined")
+            else if (typeof config.callbacks !== "undefined")
             {
                // Debug output when instantiation data is incorrect. Only log when some data is defined but isn't an object.
                // There's no point in logging messages for unsupplied data - just incorrectly supplied data.
@@ -893,17 +915,17 @@ define(["dojo/_base/declare",
          //       remote request.
 
          // Set up the data structure that will be required for processing the rules for the target property changes...
-         if (this._rulesEngineData == null)
+         if (!this._rulesEngineData)
          {
             // Ensure that the rulesEngineData object has been created
             this._rulesEngineData = {};
          }
-         if (typeof this._rulesEngineData[attribute] == "undefined")
+         if (typeof this._rulesEngineData[attribute] === "undefined")
          {
             // Ensure that the rulesEngineData object has specific information about the form control attribute...
             this._rulesEngineData[attribute] = {};
          }
-         array.forEach(rules, lang.hitch(this, "processRule", attribute));
+         array.forEach(rules, lang.hitch(this, this.processRule, attribute));
       },
 
       /**
@@ -916,9 +938,9 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the rule.
        */
       processRule: function alfresco_forms_controls_BaseFormControl__processRule(attribute, rule, index) {
-         if (rule.targetId != null)
+         if (rule.targetId)
          {
-            if (typeof this._rulesEngineData[attribute][rule.targetId] == "undefined")
+            if (typeof this._rulesEngineData[attribute][rule.targetId] === "undefined")
             {
                this._rulesEngineData[attribute][rule.targetId] = {};
             }
@@ -928,7 +950,7 @@ define(["dojo/_base/declare",
             this._rulesEngineData[attribute][rule.targetId].rules = rule;
             
             // Subscribe to changes in the relevant property...
-            this.alfSubscribe("_valueChangeOf_" + rule.targetId, lang.hitch(this, "evaluateRules", attribute));
+            this.alfSubscribe("_valueChangeOf_" + rule.targetId, lang.hitch(this, this.evaluateRules, attribute));
          }
          else
          {
@@ -961,6 +983,7 @@ define(["dojo/_base/declare",
          // as false by default
          var hasProps = false;
          
+         // jshint forin:false
          for (var key in this._rulesEngineData[attribute])
          {
             // Need this assignment to "prove" there are properties (this approach is used for compatibility with older
@@ -976,20 +999,20 @@ define(["dojo/_base/declare",
                
                // Assume that its NOT valid value (we'll only do the actual test if its not set to an INVALID value)...
                // UNLESS there are no valid values specified (in which case any value is valid apart form those in the invalid list)
-               var isValidValue = (typeof validValues == "undefined" || validValues.length === 0);
+               var isValidValue = typeof validValues === "undefined" || validValues.length === 0;
 
                // Initialise the invalid value to be false if no invalid values have been declared (and only check values if defined)...
-               var isInvalidValue = (typeof invalidValues != "undefined" && invalidValues.length > 0);
+               var isInvalidValue = typeof invalidValues !== "undefined" && invalidValues.length > 0;
                if (isInvalidValue)
                {
                   // Check to see if the current value is set to an invalid value (i.e. a value that negates the rule)
-                  isInvalidValue = array.some(invalidValues, lang.hitch(this, "ruleValueComparator", currentValue));
+                  isInvalidValue = array.some(invalidValues, lang.hitch(this, this.ruleValueComparator, currentValue));
                }
                
                // Check to see if the current value is set to a valid value...
-               if (!isInvalidValue && typeof validValues != "undefined" && validValues.length > 0)
+               if (!isInvalidValue && typeof validValues !== "undefined" && validValues.length > 0)
                {
-                  isValidValue = array.some(validValues, lang.hitch(this, "ruleValueComparator", currentValue));
+                  isValidValue = array.some(validValues, lang.hitch(this, this.ruleValueComparator, currentValue));
                }
                
                // The overall status is true (i.e. the rule is still passing) if the current status is true and the
@@ -1025,12 +1048,12 @@ define(["dojo/_base/declare",
          // then it doesn't really matter whether or not we get the string output for the value or not
          if (currentValue != null && targetValue.value != null)
          {
-            return currentValue.toString() == targetValue.value.toString();
+            return currentValue.toString() === targetValue.value.toString();
          }
          else
          {
             // return currentValue == targetValue.value; // Commented out because I think this is wrong (shouldn't have .value)
-            return currentValue == targetValue;
+            return currentValue === targetValue;
          }
       },
       
@@ -1048,7 +1071,7 @@ define(["dojo/_base/declare",
       _processCallbacksConfig: function alfresco_forms_controls_BaseFormControl___processCallbacksConfig(attribute, callbacks) {
          var _this = this;
          for (var key in callbacks) {
-            if (typeof callbacks[key] == "function")
+            if (typeof callbacks[key] === "function")
             {
                // Subscribe using the supplied function (this will only be possible when form controls are created
                // dynamically from widgets (rather than in configuration)...
@@ -1057,8 +1080,8 @@ define(["dojo/_base/declare",
                   _this[attribute](status);
                });
             }
-            else if (typeof callbacks[key] == "string" &&
-                     typeof _this[callbacks[key]] == "function")
+            else if (typeof callbacks[key] === "string" &&
+                     typeof _this[callbacks[key]] === "function")
             {
                // Subscribe using a String reference to a function defined in this widget...
                _this.alfSubscribe(_this.pubSubScope + "_valueChangeOf_" + key, function(payload) {
@@ -1109,7 +1132,7 @@ define(["dojo/_base/declare",
          this.deferValueAssigment = true;
          this.deferredValueAssignments = [];
          
-         if (this.validationInProgressImgSrc == null || this.validationInProgressImgSrc === "")
+         if (!this.validationInProgressImgSrc)
          {
             this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationInProgressImg;
          }
@@ -1130,24 +1153,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_forms_controls_BaseFormControl__postCreate() {
-         /*
-          * These are the types of attributes we expect a form to have...
-          * Field label (e.g. Name)
-          * Description (e.g. hover help)
-            Units (e.g. milliseconds, etc)
-            User control (e.g. text box, drop-down menu, radio buttons, etc)
-            Validation - regex expression
-            Validation - callback function reference
-            Validation - server side REST validation call (required when there is not enough client-side data for validation, e.g. has the name provided by the user already been used?)
-            Requirement indicator - whether or not the field requires input by default
-            Visibility - whether or not the field is displayed by default
-            Enablement - whether or not the field is disabled by default
-            Requirement rules - dynamic evaluation of the other controls within the form to determine if field is required
-            Visibility rules - dynamic evaluation of the other controls within the form to determine whether or not the field is displayed
-            Enablement rules - dynamic evaluation of the other controls within the form to determine whether or not the field is disabled
-            Standard errors message keys (for missing data, regex failure, etc)
-            Drag and drop call back functions?
-          */
          this.initialConfig = this.getWidgetConfig();
          
          // Use the _disabled property if not already set...
@@ -1168,7 +1173,7 @@ define(["dojo/_base/declare",
          // has been delivered...
          if (this.isPromisedWidget && typeof this.wrappedWidget.then === "function")
          {
-            this.wrappedWidget.then(lang.hitch(this, "onPromisedWidget"));
+            this.wrappedWidget.then(lang.hitch(this, this.onPromisedWidget));
          }
          else
          {
@@ -1177,7 +1182,7 @@ define(["dojo/_base/declare",
 
          if (this.valueSubscriptionTopic)
          {
-            this.alfSubscribe(this.valueSubscriptionTopic, lang.hitch(this, "valueSubscribe"));
+            this.alfSubscribe(this.valueSubscriptionTopic, lang.hitch(this, this.valueSubscribe));
          }
       },
       
@@ -1213,7 +1218,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       placeWidget: function alfresco_forms_controls_BaseFormControl__placeWrappedWidget() {
-         if (this.wrappedWidget != null && typeof this.wrappedWidget.placeAt === "function")
+         if (this.wrappedWidget && typeof this.wrappedWidget.placeAt === "function")
          {
             this.wrappedWidget.placeAt(this._controlNode);
          }
@@ -1269,10 +1274,10 @@ define(["dojo/_base/declare",
             
             // Set the label...
             var widgetId = lang.getObject("id", false, this.wrappedWidget);
-            if (this.label != null && lang.trim(this.label) !== "")
+            if (this.label && lang.trim(this.label) !== "")
             {
                this._labelNode.innerHTML = this.encodeHTML(this.message(this.label));
-               if (widgetId != null)
+               if (widgetId)
                {
                   domAttr.set(this._labelNode, "for", this.wrappedWidget.id);
                }
@@ -1283,7 +1288,7 @@ define(["dojo/_base/declare",
             }
 
             // Set the description...
-            if (this.description != null && lang.trim(this.description) !== "")
+            if (this.description && lang.trim(this.description) !== "")
             {
                this._descriptionNode.innerHTML = this.encodeHTML(this.message(this.description));
             }
@@ -1293,7 +1298,7 @@ define(["dojo/_base/declare",
             }
             
             // Set the units label...
-            if (this.unitsLabel != null && this.unitsLabel !== "")
+            if (this.unitsLabel && this.unitsLabel !== "")
             {
                this._unitsNode.innerHTML = this.encodeHTML(this.message(this.unitsLabel));
             }
@@ -1304,7 +1309,7 @@ define(["dojo/_base/declare",
             }
             
             // Set the error message for validation...
-            if (this.validationConfig != null && typeof this.validationConfig.errorMessage == "string")
+            if (this.validationConfig && typeof this.validationConfig.errorMessage === "string")
             {
                // TODO: This message might not make much sense if it is just missing data for a required field...
                this._validationMessage.innerHTML = this.encodeHTML(this.message(this.validationConfig.errorMessage));
@@ -1312,7 +1317,7 @@ define(["dojo/_base/declare",
 
             // Fix for missing label on validation input
             var validationInput = query("input.dijitValidationIcon.dijitValidationInner", this._controlNode);
-            if(validationInput && validationInput.length > 0 && widgetId != null)
+            if(validationInput && validationInput.length > 0 && widgetId)
             {
                var validationInputId = this.wrappedWidget.id + "_validationInput";
 
@@ -1367,7 +1372,7 @@ define(["dojo/_base/declare",
          if (this.wrappedWidget)
          {
             // TODO: Do we need to do anything with the watch handle when the widget is destroyed?
-            this.wrappedWidget.watch("value", lang.hitch(this, "onValueChangeEvent"));
+            this.wrappedWidget.watch("value", lang.hitch(this, this.onValueChangeEvent));
          }
       },
       
@@ -1604,7 +1609,7 @@ define(["dojo/_base/declare",
        */
       validate: function alfresco_forms_controls_BaseFormControl__validate() {
          
-         if (this.validationConfig != null && ObjectTypeUtils.isArray(this.validationConfig))
+         if (this.validationConfig && ObjectTypeUtils.isArray(this.validationConfig))
          {
             this.startValidation();
          }
@@ -1660,9 +1665,9 @@ define(["dojo/_base/declare",
             passedRequiredTest = !(this._required && (value == null || value === ""));
             
             // Check if any specified regular expression is passed...
-            if (this.validationConfig != null)
+            if (this.validationConfig)
             {
-               if (typeof this.validationConfig.regExObj != "undefined" && this.validationConfig.regExObj instanceof RegExp)
+               if (typeof this.validationConfig.regExObj !== "undefined" && this.validationConfig.regExObj instanceof RegExp)
                {
                   passedRegExpTest = this.validationConfig.regExObj.test(value);
                }
@@ -1720,9 +1725,10 @@ define(["dojo/_base/declare",
          // unless specifically requested by the configuration. This allows
          // multiple controls to represent a single field but also allows intentionally
          // hidden fields to still have data submitted
-         if (((this._visible !== undefined && this._visible === false) ||
-              (this._disabled !== undefined && this._disabled === true)) &&
-             (this.postWhenHiddenOrDisabled !== undefined && this.postWhenHiddenOrDisabled === false))
+         var hidden = this._visible !== undefined && this._visible === false;
+         var disabled = this._disabled !== undefined && this._disabled === true;
+         var noPostWhenHiddenOrDisabled = this.postWhenHiddenOrDisabled !== undefined && this.postWhenHiddenOrDisabled === false;
+         if ((hidden || disabled) && noPostWhenHiddenOrDisabled)
          {
             // Don't set the value (line below is just to allow debug point to be set)
          }
@@ -1745,9 +1751,10 @@ define(["dojo/_base/declare",
        * @param {object} values The object to set the each form control value from
        */
       updateFormControlValue: function alfresco_forms_controls_BaseFormControl__addFormControlValue(values) {
-         if (((this._visible !== undefined && this._visible === false) ||
-              (this._disabled !== undefined && this._disabled === true)) &&
-             (this.noValueUpdateWhenHiddenOrDisabled !== undefined && this.noValueUpdateWhenHiddenOrDisabled === true))
+         var hidden = this._visible !== undefined && this._visible === false;
+         var disabled = this._disabled !== undefined && this._disabled === true;
+         var noUpdateWhenHiddenOrDisabled = this.noValueUpdateWhenHiddenOrDisabled !== undefined && this.noValueUpdateWhenHiddenOrDisabled === false;
+         if ((hidden || disabled) && noUpdateWhenHiddenOrDisabled)
          {
             // Don't set the value as the field is hidden or disabled and has requested that it not be updated
             // in these circumstances. The typical reason for this is that multiple controls represent a single
@@ -1770,7 +1777,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       validateFormControlValue: function alfresco_forms_controls_BaseFormControl__validateFormControlValue() {
-         if (this.publishValue && typeof this.publishValue == "function")
+         if (this.publishValue && typeof this.publishValue === "function")
          {
             this.validate();
          }
