@@ -1,4 +1,4 @@
-Previous: [Inline Editing Properties](./Tutorial10.md),
+Previous: [Actions in Lists](./Tutorial9.md),
 Next: [Sorting and Pagination](./Tutorial11.md)
 
 ## Tutorial 9 - Inline Editing Properties
@@ -109,3 +109,6 @@ additionalCssClasses: "mediumpad",
 This will place some padding in each cell (alternative options would be “smallpad” and “largepad”).
 
 ![Screenshot showing additional cell padding](../resources/Tutorial10-Image5.png "Screenshot showing additional cell padding")
+
+Previous: [Actions in Lists](./Tutorial9.md),
+Next: [Sorting and Pagination](./Tutorial11.md)
