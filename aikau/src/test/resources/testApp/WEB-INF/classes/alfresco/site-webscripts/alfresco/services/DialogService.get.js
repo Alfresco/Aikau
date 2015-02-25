@@ -69,6 +69,39 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "LAUNCH_OUTER_DIALOG_BUTTON",
+         config: {
+            label: "Launch outer dialog",
+            publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+            publishPayload: {
+               dialogTitle: "Outer dialog",
+               dialogId: "OUTER_DIALOG",
+               widgetsContent: [
+                  {
+                     name: "alfresco/buttons/AlfButton",
+                     id: "LAUNCH_INNER_DIALOG_BUTTON",
+                     config:{
+                        label: "Launch inner dialog",
+                        publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                        publishPayload: {
+                           dialogTitle: "Inner dialog",
+                           dialogId: "INNER_DIALOG",
+                           textContent: "Inner dialog content",
+                           publishOnShow: [
+                              {
+                                 publishTopic: "DISPLAYED_INNER_DIALOG",
+                                 publishPayload: {}
+                              }
+                           ]
+                        }
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
          name: "alfresco/logging/SubscriptionLog"
       },
       {

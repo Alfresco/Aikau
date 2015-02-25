@@ -23,114 +23,150 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, require, TestCommon) {
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/helpers/pollUntil"],
+        function(registerSuite, assert, require, TestCommon, pollUntil) {
 
-   var pause = 200;
-   var browser;
-   registerSuite({
-      name: "Dialog Service Tests",
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/DialogService", "Dialog Service Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
-
-      "Test that dialog with no ID can be created": function() {
-         return browser.findByCssSelector("#CREATE_FORM_DIALOG_NO_ID")
-            .click()
-         .end()
-         .findByCssSelector(".alfresco-dialog-AlfDialog")
-            .then(null, function() {
-               assert(false, "The Dialog did not appear");
-            });
-      },
-
-      "Test publication on dialog show": function() {
-         return browser.findAllByCssSelector(TestCommon.topicSelector("DISPLAYED_FD1", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Could not find topic published when displayed dialog");
-            });
-      },
-
-      "Test recreating dialog with no ID": function() {
-         // Cancel the open dialog...
-         return browser.findByCssSelector("#FD1 .cancellationButton")
-            .click()
-         .end()
-         .sleep(pause) // TODO: Need a better way to wait for dialog to be hidden
-         // Create a new one...
-         .findByCssSelector("#CREATE_FORM_DIALOG_NO_ID")
-            .click()
-         .end()
-         .findAllByCssSelector(".alfresco-dialog-AlfDialog")
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "The previous dialog without an ID was not destroyed");
-            });
-      },
-
-      "Test creating dialog with an ID": function() {
-         // Close the open dialog...
-         return browser.findByCssSelector("#FD1 .cancellationButton")
-            .click()
-         .end()
-         .sleep(pause) // TODO: Need a better way to wait for dialog to be hidden
-         .findByCssSelector("#CREATE_FORM_DIALOG")
-            .click()
-         .end()
-         .findAllByCssSelector(".alfresco-dialog-AlfDialog")
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "The previous dialog (without an ID) was destroyed");
-            });
-      },
-
-      "Test recreating dialig with an ID": function() {
-         return browser.findByCssSelector("#FD2 .cancellationButton")
-            .click()
-         .end()
-         .sleep(pause) // TODO: Need a better way to wait for dialog to be hidden
-         .findByCssSelector("#CREATE_FORM_DIALOG")
-            .click()
-         .end()
-         .findAllByCssSelector(".alfresco-dialog-AlfDialog")
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "The previous dialog (without an ID) was destroyed");
-            });
-      },
-
-      "Test that updated value is included in post": function() {
-         // Type a value into the field...
-         return browser.findByCssSelector("#TB2 .dijitInputContainer input")
-            .clearValue()
-            .type("Some value")
-         .end()
-
-         // Post the form...
-         .findByCssSelector("#FD2 .confirmationButton > span")
-            .click()
-         .end()
-
-         // Check the values have been set
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("POST_DIALOG_2", "text", "Some value"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Textbox value was not posted");
-            });
-      },
-
-      "Test that additional data is included in post": function() {
-         // Type a value into the field...
-         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("POST_DIALOG_2", "bonusData", "test"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Additional data was not posted");
-            });
+      function closeAllDialogs() {
+         return browser.end()
+            .findAllByCssSelector(".dijitDialogCloseIcon")
+            .then(function(closeButtons) {
+               closeButtons.forEach(function(closeButton) {
+                  if (closeButton.isDisplayed()) {
+                     closeButton.click();
+                  }
+               });
+               browser.end();
+            })
+            .then(pollUntil(function() {
+               /*globals document*/
+               var underlay = document.getElementById("dijit_DialogUnderlay_0"),
+                  underlayHidden = underlay && underlay.style.display === "none";
+               return underlayHidden || null;
+            }, 5000));
       }
+
+      registerSuite({
+         name: "Dialog Service Tests",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/DialogService", "Dialog Service Tests").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         teardown: function() {
+            browser.end().alfPostCoverageResults(browser);
+         },
+
+         "Test that dialog with no ID can be created": function() {
+            return browser.findByCssSelector("#CREATE_FORM_DIALOG_NO_ID")
+               .click()
+               .end()
+
+            .findByCssSelector(".alfresco-dialog-AlfDialog")
+               .then(null, function() {
+                  assert(false, "The Dialog did not appear");
+               });
+         },
+
+         "Test publication on dialog show": function() {
+            return browser.findAllByCssSelector(TestCommon.topicSelector("DISPLAYED_FD1", "publish", "any"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Could not find topic published when displayed dialog");
+               });
+         },
+
+         "Test recreating dialog with no ID": function() {
+            return closeAllDialogs()
+               .then(function() {
+                  return browser.findById("CREATE_FORM_DIALOG_NO_ID")
+                     .click()
+                     .end()
+
+                  .findAllByCssSelector(".alfresco-dialog-AlfDialog")
+                     .then(function(elements) {
+                        assert.lengthOf(elements, 1, "The previous dialog without an ID was not destroyed");
+                     });
+               });
+         },
+
+         "Test creating dialog with an ID": function() {
+            return closeAllDialogs()
+               .then(function() {
+                  return browser.findById("CREATE_FORM_DIALOG")
+                     .click()
+                     .end()
+
+                  .findAllByCssSelector(".alfresco-dialog-AlfDialog")
+                     .then(function(elements) {
+                        assert.lengthOf(elements, 2, "The previous dialog (without an ID) was destroyed");
+                     });
+               });
+         },
+
+         "Test recreating dialog with an ID": function() {
+            return closeAllDialogs()
+               .then(function() {
+                  return browser.findById("CREATE_FORM_DIALOG")
+                     .click()
+                     .end()
+
+                  .findAllByCssSelector(".alfresco-dialog-AlfDialog")
+                     .then(function(elements) {
+                        assert.lengthOf(elements, 2, "The previous dialog (without an ID) was destroyed");
+                     });
+               });
+         },
+
+         "Test that updated value is included in post": function() {
+            // Type a value into the field...
+            return browser.findByCssSelector("#TB2 .dijitInputContainer input")
+               .clearValue()
+               .type("Some value")
+               .end()
+
+            // Post the form...
+            .findByCssSelector("#FD2 .confirmationButton > span")
+               .click()
+               .end()
+
+            // Check the values have been set
+            .findAllByCssSelector(TestCommon.pubDataCssSelector("POST_DIALOG_2", "text", "Some value"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Textbox value was not posted");
+               });
+         },
+
+         "Test that additional data is included in post": function() {
+            // Type a value into the field...
+            return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("POST_DIALOG_2", "bonusData", "test"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Additional data was not posted");
+               });
+         },
+
+         "Can launch dialog within dialog": function() {
+            return closeAllDialogs()
+               .then(function() {
+                  return browser.findById("LAUNCH_OUTER_DIALOG_BUTTON")
+                     .click()
+                     .end()
+
+                  .findById("LAUNCH_INNER_DIALOG_BUTTON")
+                     .click()
+                     .end()
+
+                  .findAllByCssSelector(TestCommon.topicSelector("DISPLAYED_INNER_DIALOG", "publish", "any"))
+                     .then(function(elements) {
+                        assert.lengthOf(elements, 1, "Inner dialog not displayed");
+                     });
+               });
+         }
+      });
    });
-});
