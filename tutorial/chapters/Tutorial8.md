@@ -40,7 +40,7 @@ This means that we can now use the curly bracket notation to reference some data
 
 Refresh the page and try clicking on a group - you should see that the dialog title reflects the display name of the group you clicked.
 
-ADD SCREENSHOT
+![Screenshot showing dialog with title matching the selected group](../resources/Tutorial8-Image1.png "Screenshot showing dialog with title matching the selected group")
 
 ### Step 2. Add the Users List
 Our dialog is still completely empty so we need to populate it with another `alfresco/lists/AlfList` widget. Add the following model to the empty `widgetsContent` array:
@@ -87,6 +87,8 @@ Our dialog is still completely empty so we need to populate it with another `alf
   }
 }
 ```
+
+![Screenshot showing dialog listing users of selected group](../resources/Tutorial8-Image2.png "Screenshot showing dialog listing users of selected group")
 
 The majority of this model should be relatively familiar to you as it is broadly similar to the model used to create the list of groups. However, there are a few key configuration attributes that should be called out:
 
@@ -200,7 +202,7 @@ One of the main differences here is that it does not assume that the options wil
 
 When you [clear the dependency caches](./ClearingDependencyCaches.md) and refresh the page and select a group you will now see a select control showing all the users in the Alfresco Repository. 
 
-ADD SCREENSHOT
+![Screenshot showing dialog containing select menu of available users](../resources/Tutorial8-Image3.png "Screenshot showing dialog containing select menu of available users")
 
 There are two disadvantages with using the OptionsService in this example:
 
@@ -245,7 +247,7 @@ optionsConfig: {
 
 The `fixed` attribute allows us to declare an array (or in this case, reference a previously constructed array) to set a fixed or static set of options.
 
-ADD SCREENSHOT
+![Screenshot showing dialog containing select menu of available users with display name](../resources/Tutorial8-Image4.png "Screenshot showing dialog containing select menu of available users with display name")
 
 ##### Custom Service
 The last alternative for retrieving form control options would be to create a custom service (or update an existing service to handle them). Requesting the data would be done in the same way in which the OptionsService is used by configuring the `publishTopic` and `publishPayload` attributes.
@@ -355,7 +357,7 @@ onSuccess: function tutorial_UserAndGroupService__onSuccess(response, originalRe
 
 Now when you [clear the dependency caches](./ClearingDependencyCaches.md) and refresh the page you should see that adding a new user to a group automatically refreshes the list of users in that group and the main groups list remains unaffected.
 
-
+![Screenshot dialog list does not affect main list](../resources/Tutorial8-Image5.png "Screenshot dialog list does not affect main list")
 
 Previous: [Form Dialogs](./Tutorial7.md),
 Next: [Actions in Lists](./Tutorial9.md)
