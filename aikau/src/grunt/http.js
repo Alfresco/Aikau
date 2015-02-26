@@ -13,6 +13,12 @@ module.exports = function(grunt) {
                useAvailablePort: true
             }
          }
+      },
+
+      // grunt-http (http abilities within grunt)
+      http: {
+         clientPatchModuleReload: {},
+         clientPatchCacheBust: {}
       }
 
    });
