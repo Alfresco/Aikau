@@ -32,11 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    baseFunctionalSuites: [
-      "src/test/resources/alfresco/debug/WidgetInfoTest",
-      "src/test/resources/alfresco/header/HeaderWidgetsTest",
-      "src/test/resources/alfresco/services/DialogServiceTest",
-      "src/test/resources/alfresco/renderers/InlineEditPropertyLinkTest",
-      "src/test/resources/alfresco/upload/UploadTest"
+      "src/test/resources/alfresco/documentlibrary/CreateContentTest"
    ],
 
    /**

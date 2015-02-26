@@ -181,6 +181,10 @@ define(["intern/dojo/node!fs",
                   assert(false, "Test page could not be loaded");
                })
             .end();
+         command.session.alfPostCoverageResults = function (newBrowser) { 
+            return newBrowser; 
+         };
+
          return command;
       },
 
