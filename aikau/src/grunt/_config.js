@@ -32,16 +32,6 @@ module.exports = {
       vagrant: "src/test/vagrant"
    },
 
-   // Client-patch config, as an array of destinations
-   // Example destination object:
-   // {
-   //    name: "My Alfresco Client",
-   //    libDir: "/Users/fbloggs/Development/projects/myAlf/code/root/projects/slingshot/target/share/WEB-INF/lib/"
-   // }
-   clientPatch: {
-      destinations: []
-   },
-
    // Require-everything settings
    requireEverything: {
       exclusions: [
