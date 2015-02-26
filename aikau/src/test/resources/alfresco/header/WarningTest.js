@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,60 +27,70 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Warning Test',
-      'alfresco/header/Warning': function () {
+      name: "Warning Tests",
 
-         var browser = this.remote;
-         var testname = "WarningTest";
-         return TestCommon.loadTestWebScript(this.remote, "/Warning", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Warning", "Warning Tests").end();
+      },
 
-         .findByCssSelector("#WARNINGS1 > div.warnings > div.info > span:last-child")
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+     "Check warning": function () {
+         return browser.findByCssSelector("#WARNINGS1 > div.warnings > div.info > span:last-child")
             .getVisibleText()
             .then(function (result1) {
-               TestCommon.log(testname,"Test 1a: Check warning");
-               expect(result1).to.equal("WARNING", "Test 1a - Warning not displayed");
-            })
-            .end()
+               expect(result1).to.equal("WARNING", "Warning not displayed");
+            });
+      },
 
-         .findByCssSelector("#WARNINGS2 > div.warnings > div.info > span:last-child")
+      "Check error": function() {
+         return browser.findByCssSelector("#WARNINGS2 > div.warnings > div.info > span:last-child")
             .getVisibleText()
             .then(function (result1) {
-               TestCommon.log(testname,"Test 1b: Check error");
-               expect(result1).to.equal("ERROR", "Test 1b - Error not displayed");
-            })
-            .end()
-         
-         .findByCssSelector("#LICENSEWARNING_READONLY > div.warnings > div.info > span:last-child")
+               expect(result1).to.equal("ERROR", "Error not displayed");
+            });
+      },
+
+      "Check readonly message": function() {
+         return browser.findByCssSelector("#LICENSEWARNING_READONLY > div.warnings > div.info > span:last-child")
             .getVisibleText()
             .then(function (result1) {
-               TestCommon.log(testname,"Test 1c: Check readonly message");
                expect(result1).to.equal("Alfresco is running in READ ONLY mode. Please consult your System Administrator to resolve this.", "Test 1c - Readonly error not displayed");
-            })
-            .end()
+            });
+      },
 
-         .findAllByCssSelector("#LICENSEWARNING_DISPLAY_TO_ADMIN > div.warnings > div.info")
+      "Test that admins see low severity warnings": function() {
+         return browser.findAllByCssSelector("#LICENSEWARNING_DISPLAY_TO_ADMIN > div.warnings > div.info")
             .then(function (adminWarnings) {
-               TestCommon.log(testname,"Test 2a - Test that admins see low severity warnings");
-               expect(adminWarnings).to.have.length(3, "Test 2a - Admins should see low severity warnings");
-            })
-            .end()
+               expect(adminWarnings).to.have.length(3, "Admins should see low severity warnings");
+            });
+      },
 
-         .findAllByCssSelector("#LICENSEWARNING_HIDE_FROM_USER > div.warnings > div.info")
+      "Test that non-admin users don't see low severity warnings": function() {
+         return browser.findAllByCssSelector("#LICENSEWARNING_HIDE_FROM_USER > div.warnings > div.info")
             .then(function (nonAdminWarnings) {
-               TestCommon.log(testname,"Test 2b - Test that non-admin users don't see low severity warnings");
-               expect(nonAdminWarnings).to.have.length(0, "Test 2b - Low severity warnings should be hidden from non-admins");
-            })
-            .end()
+               expect(nonAdminWarnings).to.have.length(0, "Low severity warnings should be hidden from non-admins");
+            });
+      },
 
-         .findAllByCssSelector("#LICENSEWARNING_DISPLAY_TO_USER > div.warnings > div.info")
+      "Test that non-admin users see high severity warnings": function() {
+         return browser.findAllByCssSelector("#LICENSEWARNING_DISPLAY_TO_USER > div.warnings > div.info")
             .then(function (nonAdminWarnings) {
-               TestCommon.log(testname,"Test 2c - Test that non-admin users see high severity warnings");
-               expect(nonAdminWarnings).to.have.length(3, "Test 2c - High severity warnings should be displayed to non-admins");
-            })
-            .end()
+               expect(nonAdminWarnings).to.have.length(3, "High severity warnings should be displayed to non-admins");
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

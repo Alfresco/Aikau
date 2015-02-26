@@ -56,6 +56,10 @@ define(["intern!object",
             .then(function(text) {
                assert.equal(text, "<img src='1' onerror='window.hacked=true>");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

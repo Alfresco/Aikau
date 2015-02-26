@@ -59,7 +59,24 @@ define({
       "src/test/resources/alfresco/forms/CrudFormTest",
       "src/test/resources/alfresco/forms/FormsTest",
       "src/test/resources/alfresco/forms/SingleTextFieldFormTest",
-      "src/test/resources/alfresco/forms/controls/AutoSetTest"
+      "src/test/resources/alfresco/forms/controls/AutoSetTest",
+      "src/test/resources/alfresco/forms/controls/BaseFormTest",
+      "src/test/resources/alfresco/forms/controls/ComboBoxTest",
+      "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
+      "src/test/resources/alfresco/forms/controls/DocumentPickerTest",
+      "src/test/resources/alfresco/forms/controls/DateTextBoxTest",
+      "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
+      "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
+      "src/test/resources/alfresco/forms/controls/SelectTest",
+      "src/test/resources/alfresco/forms/controls/SimplePickerTest",
+      "src/test/resources/alfresco/forms/controls/TextBoxTest",
+      "src/test/resources/alfresco/forms/controls/ValidationTest",
+      "src/test/resources/alfresco/forms/controls/XssPreventionTest",
+      "src/test/resources/alfresco/header/HeaderWidgetsTest",
+      "src/test/resources/alfresco/header/WarningTest",
+      "src/test/resources/alfresco/html/HeadingTest",
+      "src/test/resources/alfresco/html/LabelTest",
+      "src/test/resources/alfresco/layout/AlfSideBarContainerTest"
    ],
 
    /**

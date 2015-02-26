@@ -50,9 +50,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         return browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    return browser.end().alfPostCoverageResults(browser);
+      // },
 
       "Test picker dialog can be displayed": function () {
          return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
@@ -64,8 +64,7 @@ define(["intern!object",
                function() {
                   assert(false, "The dialog has NOT opened with the picker");
                }
-            )
-         .end();
+            );
       },
 
       "Test Shared Files sub-picker is shown": function() {
@@ -79,8 +78,7 @@ define(["intern!object",
                function() {
                   assert(false, "The Shared Files click did not yield any results");
                }
-            )
-         .end();
+            );
       },
 
       "Test Shared files result count": function() {
@@ -88,8 +86,7 @@ define(["intern!object",
          return browser.findAllByCssSelector(".alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert(elements.length === 4, "4 results expected for Shared Files, found: " + elements.length);
-            })
-         .end();
+            });
       },
 
       "Test first item in picker can be added": function() {
@@ -100,8 +97,7 @@ define(["intern!object",
                function() {
                   assert(false, "The first shared files item did not have an ADD publish action image");
                }
-            )
-         .end();
+            );
       },
 
       "Test item gets picked": function() {
@@ -114,8 +110,7 @@ define(["intern!object",
          .findAllByCssSelector(".picked-items tr")
             .then(function(elements) {
                assert(elements.length === 1, "Only one result was expected for picked items");
-            })
-         .end();
+            });
       },
 
       "Test picked items are reflected when closing dialog": function() {
@@ -128,8 +123,7 @@ define(["intern!object",
          .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert(elements.length === 1, "Only 1 results was expected for picked items after dialog close, found: " + elements.length);
-            })
-         .end();
+            });
       },
 
       "Test picked items are retained": function() {
@@ -143,8 +137,7 @@ define(["intern!object",
          .findAllByCssSelector(".picked-items tr")
             .then(function(elements) {
                assert(elements.length === 1, "The previously selected item was not preserved");
-            })
-         .end();
+            });
       },
 
       "Test previously picked item can be removed": function() {
@@ -155,8 +148,7 @@ define(["intern!object",
                function() {
                   assert(false, "The remove item image could not be found");
                }
-            )
-         .end();
+            );
       },
 
       "Test previously picked item gets removed": function() {
@@ -172,8 +164,7 @@ define(["intern!object",
          .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert(elements.length === 0, "The previously selected item should have been removed");
-            })
-         .end();
+            });
       },
 
       "Test an item can be only picked once": function() {
@@ -194,8 +185,7 @@ define(["intern!object",
          .findAllByCssSelector(".picked-items tr")
             .then(function(elements) {
                assert(elements.length === 1, "Only one result was expected for picked items, found: " + elements.length);
-            })
-         .end();
+            });
       },
 
       "Test picking another item": function() {
@@ -206,8 +196,7 @@ define(["intern!object",
          .findAllByCssSelector(".picked-items tr")
             .then(function(elements) {
                assert(elements.length === 2, "Two results were expected for picked items, found: " + elements.length);
-            })
-         .end();
+            });
       },
       
       "Test both items are shown as picked when dialog closed": function() {
@@ -219,8 +208,11 @@ define(["intern!object",
          .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert(elements.length === 2, "Two items should have been picked, found: " + elements.length);
-            })
-         .end();
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });
