@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,79 +24,96 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
+   // The IDs that should be displayed are...
+   // MBI1 - successful filter rule
+   // MBI3 - negated rule
+   // MBI4 - absent property
+   // MBI5 - successful AND condition
+   // MI1 - successful filter rule following inherited currentItem change
+
+   // The IDs that should not be displayed are...
+   // MBI2 - failed filter rule
+   // MBI6 - failed AND condition
+   // MI2 - failed filter rule following inherited currentItem change
+         
+   var browser;
    registerSuite({
-      name: 'RenderFilter Test',
-      'RenderFilter': function () {
-         var browser = this.remote;
-         var testname = "RenderFilterTest";
-         return TestCommon.loadTestWebScript(this.remote, "/RenderFilter", testname)
+      name: "RenderFilter Tests",
 
-         // The IDs that should be displayed are...
-         // MBI1 - successful filter rule
-         // MBI3 - negated rule
-         // MBI4 - absent property
-         // MBI5 - successful AND condition
-         // MI1 - successful filter rule following inherited currentItem change
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/RenderFilter", "RenderFilter Tests").end();
+      },
 
-         // The IDs that should not be displayed are...
-         // MBI2 - failed filter rule
-         // MBI6 - failed AND condition
-         // MI2 - failed filter rule following inherited currentItem change
+      beforeEach: function() {
+         browser.end();
+      },
 
-         .findById("MBI1")
+      // teardown: function() {
+      //    browser.end();
+      // },
+     
+      "Test single render filter rule": function () {
+         return browser.findById("MBI1")
             .then(function (el) {
                expect(el).to.be.an("object", "A single render filter rule failed unexpectedly");
-            })
-         .end()
+            });
+      },
 
-         .findById("MBI3")
+      "Test negated render filter rule (1)": function() {
+         return browser.findById("MBI3")
             .then(function (el) {
                expect(el).to.be.an("object", "A single negated render filter rule failed unexpectedly");
-            })
-         .end()
+            });
+      },
 
-         .findAllByCssSelector("MBI3a")
-            .then(function (els) {
-               assert(els.length === 0, "A single negated render filter rule failed unexpectedly");
-            })
-         .end()
+      "Test negated render filter rule (2)": function() {
+         return browser.findAllByCssSelector("MBI3a")
+            .then(function (elements) {
+               assert.lengthOf(elements, 0, "A single negated render filter rule failed unexpectedly");
+            });
+      },
 
-         .findById("MBI4")
+      "Test absent property render filter rule": function() {
+         return browser.findById("MBI4")
             .then(function (el) {
                expect(el).to.be.an("object", "A single absent property render filter rule failed unexpectedly");
-            })
-         .end()
+            });
+      },
 
-         .findById("MBI5")
+      "Test AND condition": function() {
+         return browser.findById("MBI5")
             .then(function (el) {
                expect(el).to.be.an("object", "An AND condition property render filter rule failed unexpectedly");
-            })
-         .end()
+            });
+      },
 
-         .findById("MBI7")
+      "Test OR condition (passing)": function() {
+         return browser.findById("MBI7")
             .then(function (el) {
-               TestCommon.log(testname,"Test OR property rule");
                expect(el).to.be.an("object", "An OR condition property render filter rule failed unexpectedly");
-            })
-         .end()
+            });
+      },
 
-         .findAllByCssSelector("#MBI8")
+      "Test OR condition (failing)": function() {
+         return browser.findAllByCssSelector("#MBI8")
             .then(function (els) {
                assert(els.length === 0, "An OR condition property render filter rule passed unexpectedly");
-            })
-         .end()
+            });
+      },
 
-         .findAllByCssSelector("#MBI2")
+      "Test inherited currentItem change (failing)": function() {
+         return browser.findAllByCssSelector("#MBI2")
             .then(function (els) {
                assert(els.length === 0, "An inherited currentItem change render filter rule passed unexpectedly");
-            })
-         .end()
+            });
+      },
 
-         .findByCssSelector("#DD1_text")
+      "Test inherited currentItem change (passing)": function() {
+         return browser.findByCssSelector("#DD1_text")
             .sleep(250)
             .click()
          .end()
@@ -106,16 +123,18 @@ define(["intern!object",
          .findById("MI1")
             .then(function (el) {
                expect(el).to.be.an("object", "An inherited currentItem change render filter rule failed unexpectedly");
-            })
-         .end()
+            });
+      },
 
-         .findAllByCssSelector("#MI2")
+      "Test inherited currentItem change (failing 2)": function() {
+         return browser.findAllByCssSelector("#MI2")
             .then(function (els) {
                assert(els.length === 0, "An inherited currentItem change render filter rule passed unexpectedly");
-            })
-         .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

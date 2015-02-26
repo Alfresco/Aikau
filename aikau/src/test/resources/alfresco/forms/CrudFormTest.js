@@ -24,148 +24,147 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'CRUD Form Test',
-      'Basic Test': function () {
-         var browser = this.remote;
-         var testname = "CRUD Form Test";
-         return TestCommon.loadTestWebScript(this.remote, "/CrudForm", testname)
+      name: "CRUD Form Tests",
 
-            // Check the info node is displayed initially...
-            .findByCssSelector("#CRUD_FORM_INFO_NODE")
-               .isDisplayed()
-               .then(function(result) {
-                  TestCommon.log(testname, "Check that the info node is initially displayed");
-                  assert(result === true, "Test #0a - The info node should be displayed");
-               })
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/CrudForm", "CRUD Form Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+      "Check that the info node is initially displayed": function () {
+         return browser.findByCssSelector("#CRUD_FORM_INFO_NODE")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === true, "The info node should be displayed");
+            });
+      },
+
+      "Check that the info node has been hidden": function() {
+         return browser.findByCssSelector("#SHOW_FORM_label")
+            .click()
             .end()
+         .findByCssSelector("#CRUD_FORM_INFO_NODE")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === false, "The info node should be hidden");
+            });
+      },
 
-            // Show the form...
-            .findByCssSelector("#SHOW_FORM_label")
-               .click()
-               .end()
-            .findByCssSelector("#CRUD_FORM_INFO_NODE")
-               .isDisplayed()
-               .then(function(result) {
-                  TestCommon.log(testname, "Check that the info node has been hidden");
-                  assert(result === false, "Test #0b - The info node should be hidden");
-               })
+      "Check that the info node has been displayed again": function() {
+         return browser.findByCssSelector("#ADDITIONAL_BUTTON_label")
+            .click()
             .end()
+         .findByCssSelector("#CRUD_FORM_INFO_NODE")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === true, "The info node should be displayed");
+            });
+      },
 
-            // Hide the form...
-            .findByCssSelector("#ADDITIONAL_BUTTON_label")
-               .click()
-               .end()
-            .findByCssSelector("#CRUD_FORM_INFO_NODE")
-               .isDisplayed()
-               .then(function(result) {
-                  TestCommon.log(testname, "Check that the info node has been displayed again");
-                  assert(result === true, "Test #0c - The info node should be displayed");
-               })
-            .end()
+      "Check that the info node has been hidden again": function() {
+         return browser.findByCssSelector("#SHOW_CREATE_label")
+            .click()
+         .end()
 
-            // Display the new item form...
-            .findByCssSelector("#SHOW_CREATE_label")
-               .click()
-            .end()
+         .findByCssSelector("#CRUD_FORM_INFO_NODE")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === false, "The info node should be hidden");
+            });
+      },
 
-            .findByCssSelector("#CRUD_FORM_INFO_NODE")
-               .isDisplayed()
-               .then(function(result) {
-                  TestCommon.log(testname, "Check that the info node has been hidden again");
-                  assert(result === false, "Test #0d - The info node should be hidden");
-               })
-            .end()
+      "Checking that new form value is correct default": function() {
+         return browser.findByCssSelector("#TEXT_FIELD .dijitInputContainer input")
+            .getProperty("value")
+            .then(function(resultText) {
+               assert(resultText === "NewData", "The new form value was not set correctly: " + resultText);
+            });
+      },
 
-            // Check default data is displayed...
-            .findByCssSelector("#TEXT_FIELD .dijitInputContainer input")
-               .getProperty('value')
-               .then(function(resultText) {
-                  TestCommon.log(testname, "Checking that new form value is correct default");
-                  assert(resultText === "NewData", "Test #1a - The new form value was not set correctly: " + resultText);
-               })
-            .end()
+      "Checking that the create button is displayed": function() {
+         return browser.findByCssSelector(".alfresco-buttons-AlfButton.createButton > span")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === true, "The create button was not displayed");
+            })
+            .click();
+      },
 
-            // Check the create button is displayed...
-            .findByCssSelector(".alfresco-buttons-AlfButton.createButton > span")
-               .isDisplayed()
-               .then(function(result) {
-                  TestCommon.log(testname, "Checking that the create button is displayed");
-                  assert(result === true, "Test #1b - The create button was not displayed");
-               })
-               .click()
-            .end()
+      "Checking that new item data is published correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("CREATE_ITEM", "prop1", "NewData"))
+            .then(function(elements) {
+               assert(elements.length === 1, "The new item button data was not published correctly, expected 1. Found: " + elements.length);
+            });
+      },
 
-            // Check that the create data is published correctly...
-            .findAllByCssSelector(TestCommon.pubDataCssSelector("CREATE_ITEM", "prop1", "NewData"))
-               .then(function(elements) {
-                  TestCommon.log(testname, "Checking that new item data is published correctly");
-                  assert(elements.length === 1, "Test #1c - The new item button data was not published correctly, expected 1. Found: " + elements.length);
-               })
-            .end()
+      "Checking that form value is shows the existing value": function() {
+         return browser.findByCssSelector("#SHOW_EXISTING_1_label")
+            .click()
+         .end()
 
-            // Display the new item form...
-            .findByCssSelector("#SHOW_EXISTING_1_label")
-               .click()
-            .end()
+         // Check existing data is displayed...
+         .findByCssSelector("#TEXT_FIELD .dijitInputContainer input")
+            .getProperty("value")
+            .then(function(resultText) {
+               assert(resultText === "Existing 1", "The form was not set with existing data: " + resultText);
+            });
+      },
 
-            // Check existing data is displayed...
-            .findByCssSelector("#TEXT_FIELD .dijitInputContainer input")
-               .getProperty('value')
-               .then(function(resultText) {
-                  TestCommon.log(testname, "Checking that form value is shows the existing value");
-                  assert(resultText === "Existing 1", "Test #2a - The form was not set with existing data: " + resultText);
-               })
-            .end()
+      "Checking that the update button is displayed": function() {
+         return browser.findByCssSelector(".alfresco-buttons-AlfButton.updateButton > span")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === true, "The update button was not displayed");
+            })
+            .click();
+      },
 
-            // Check the update button is displayed...
-            .findByCssSelector(".alfresco-buttons-AlfButton.updateButton > span")
-               .isDisplayed()
-               .then(function(result) {
-                  TestCommon.log(testname, "Checking that the update button is displayed");
-                  assert(result === true, "Test #2b - The update button was not displayed");
-               })
-               .click()
-            .end()
+      "Checking that existing item data is published correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("UPDATE_ITEM", "prop1", "Existing 1"))
+            .then(function(elements) {
+               assert(elements.length === 1, "The existing item button data was not published correctly");
+            });
+      },
 
-            // Check that the create data is published correctly...
-            .findAllByCssSelector(TestCommon.pubDataCssSelector("UPDATE_ITEM", "prop1", "Existing 1"))
-               .then(function(elements) {
-                  TestCommon.log(testname, "Checking that existing item data is published correctly");
-                  assert(elements.length === 1, "Test #2c - The existing item button data was not published correctly");
-               })
-            .end()
+      "Checking that the delete button is displayed": function() {
+         return browser.findByCssSelector(".alfresco-buttons-AlfButton.deleteButton > span")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === true, "The delete button was not displayed");
+            })
+            .click();
+      },
 
-            // Check the delete button is displayed...
-            .findByCssSelector(".alfresco-buttons-AlfButton.deleteButton > span")
-               .isDisplayed()
-               .then(function(result) {
-                  TestCommon.log(testname, "Checking that the delete button is displayed");
-                  assert(result === true, "Test #3a - The delete button was not displayed");
-               })
-               .click()
-            .end()
+      "Checking that a request was made to delete the existing item": function() {
+         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("DELETE_ITEM", "prop1", "Existing 1"))
+            .then(function(elements) {
+               assert(elements.length === 1, "A request was not made to delete the existing item");
+            });
+      },
 
-            // Check that the create data is published correctly...
-            .findAllByCssSelector(TestCommon.pubDataCssSelector("DELETE_ITEM", "prop1", "Existing 1"))
-               .then(function(elements) {
-                  TestCommon.log(testname, "Checking that a request was made to delete the existing item");
-                  assert(elements.length === 1, "Test #3b - A request was not made to delete the existing item");
-               })
-            .end()
+      "The info node should be displayed": function() {
+         return browser.findByCssSelector("#CRUD_FORM_INFO_NODE")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === true, "The info node should be displayed");
+            });
+      },
 
-            .findByCssSelector("#CRUD_FORM_INFO_NODE")
-               .isDisplayed()
-               .then(function(result) {
-                  assert(result === true, "Test #3c - The info node should be displayed");
-               })
-            .end()
-
-            .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

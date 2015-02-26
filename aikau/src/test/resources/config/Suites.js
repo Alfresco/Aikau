@@ -32,7 +32,34 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    baseFunctionalSuites: [
-      "src/test/resources/alfresco/documentlibrary/CreateContentTest"
+      "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
+      "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
+      "src/test/resources/alfresco/charts/ccc/PieChartTest",
+      "src/test/resources/alfresco/core/CoreRwdTest",
+      "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
+      "src/test/resources/alfresco/core/PublishPayloadMixinTest",
+      "src/test/resources/alfresco/core/RenderFilterTest",
+      "src/test/resources/alfresco/core/TemporalUtilsTest",
+      "src/test/resources/alfresco/core/VisibilityConfigTest",
+      "src/test/resources/alfresco/core/WidgetCreationTest",
+      "src/test/resources/alfresco/creation/WidgetConfigTest",
+      "src/test/resources/alfresco/debug/WidgetInfoTest",
+      "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
+      "src/test/resources/alfresco/documentlibrary/CreateContentTest",
+      "src/test/resources/alfresco/documentlibrary/DocumentListTest",
+      "src/test/resources/alfresco/documentlibrary/DocumentSelectorTest",
+      "src/test/resources/alfresco/documentlibrary/PaginationTest",
+      "src/test/resources/alfresco/documentlibrary/SearchListTest",
+      "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
+      "src/test/resources/alfresco/documentlibrary/SitesListTest",
+      "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
+      "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
+      "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
+      "src/test/resources/alfresco/footer/FooterTest",
+      "src/test/resources/alfresco/forms/CrudFormTest",
+      "src/test/resources/alfresco/forms/FormsTest",
+      "src/test/resources/alfresco/forms/SingleTextFieldFormTest",
+      "src/test/resources/alfresco/forms/controls/AutoSetTest"
    ],
 
    /**
@@ -47,6 +74,7 @@ define({
 
       "src/test/resources/alfresco/charts/ccc/PieChartTest",
 
+      "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
       "src/test/resources/alfresco/core/CoreRwdTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
@@ -54,9 +82,7 @@ define({
       "src/test/resources/alfresco/core/VisibilityConfigTest",
       "src/test/resources/alfresco/core/WidgetCreationTest",
 
-      // TODO: This test is quarantined - the widget creation code is broken, but not required for production
-      //       and there are plans to iterate on it anyway.
-      // "src/test/resources/alfresco/creation/WidgetConfigTest",
+      "src/test/resources/alfresco/creation/WidgetConfigTest",
 
       "src/test/resources/alfresco/debug/WidgetInfoTest",
 

@@ -40,9 +40,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    browser.end().alfPostCoverageResults(browser);
+      // },
       
       "Test setting browser hash fragment with form post": function () {
          return browser.findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
@@ -177,6 +177,10 @@ define(["intern!object",
             .then(function(resultText) {
                assert.equal(resultText, "Value Set", "Text box value was not set via publication");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

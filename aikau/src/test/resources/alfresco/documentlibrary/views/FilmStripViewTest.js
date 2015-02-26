@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -45,82 +45,112 @@ define(["intern!object",
    var previewFrameItemsSelector = previewFrameSelector + " > li";
 
    var previewImgSelectorSuffix = " > div:nth-child(2) span > img";
-   var thumbnailImgSelectorSuffix = " > div:nth-child(1) img";
+   // var thumbnailImgSelectorSuffix = " > div:nth-child(1) img";
 
    var thumbnailControlsSelector = thumbnailsCarouselSelector + " .controls";
    var prevThumbnailControlSelector = thumbnailControlsSelector + " > div.prev > img";
    var nextThumbnailControlSelector = thumbnailControlsSelector + " > div.next > img";
-   var thumbnailFrameSelector = thumbnailsCarouselSelector + " .frame > ol";
-   var thumbnailFrameItemsSelector = thumbnailFrameSelector + " > li";
+   // var thumbnailFrameSelector = thumbnailsCarouselSelector + " .frame > ol";
+   // var thumbnailFrameItemsSelector = thumbnailFrameSelector + " > li";
 
          
    registerSuite({
-      name: "FilmStrip Setup",
+      name: "FilmStrip Setup Tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/FilmStripView", "FilmStrip Setup Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+     
       "Test Previous Preview control is hidden": function () {
-         return TestCommon.loadTestWebScript(this.remote, "/FilmStripView", "Film Strip View Setup")
-         .findByCssSelector(prevPreviewControlSelector)
+         return browser.findByCssSelector(prevPreviewControlSelector)
             .isVisible()
             .then(function(result) {
                assert(result === false, "The previous preview control should not be displayed");
-            })
-         .end();
+            });
       },
+
       "Test Next Preview control is displayed": function () {
          return this.remote.findByCssSelector(nextPreviewControlSelector)
             .isVisible()
             .then(function(result) {
                assert(result === true, "The previous preview control should have been displayed");
-            })
-         .end();
+            });
       },
+
       "Test Previous Thumbnails Control is not displayed": function () {
          return this.remote.findByCssSelector(prevThumbnailControlSelector)
             .isVisible()
             .then(function(result) {
                assert(result === false, "The previous thumbnails control should not be displayed");
-            })
-         .end();
+            });
       },
+
       "Test Next Thumbnails Control is displayed": function () {
          return this.remote.findByCssSelector(nextThumbnailControlSelector)
             .isVisible()
             .then(function(result) {
                assert(result === false, "The next thumbnails control should not be displayed");
-            })
-         .end();
+            });
       },
+
       "Test Preview Item Count": function () {
          return this.remote.findAllByCssSelector(previewFrameItemsSelector)
             .then(function(elements) {
                assert(elements.length === 2, "Expected 2 preview items, found: " + elements.length);
-            })
-         .end();
+            });
       },
+
       "Test First Preview is displayed": function () {
          return this.remote.findByCssSelector(previewFrameItemsSelector + ":nth-child(1)")
             .isVisible()
             .then(function(result) {
                assert(result === true, "The first preview item should be displayed");
-            })
-         .end();
+            });
       },
+
       "Test Second Preview is hidden": function () {
          return this.remote.findByCssSelector(previewFrameItemsSelector + ":nth-child(2)")
             .isVisible()
             .then(function(result) {
                assert(result === false, "The second preview item should be hidden");
-            })
-         .end();
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 
    // NOTE: This suite relies on the previous suite having run first so that the test browser is displaying
    //       the correct page...
    registerSuite({
-      name: "FilmStrip Preview Navigation",
+      name: "FilmStrip Navigation Tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/FilmStripView", "FilmStrip Navigation Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
       "Test Next Preview Control": function () {
          // Click on the next preview item to scroll along...
-         return this.remote.findByCssSelector(nextPreviewControlSelector)
+         return browser.findByCssSelector(nextPreviewControlSelector)
             .click()
          .end()
 
@@ -140,9 +170,9 @@ define(["intern!object",
             .isVisible()
             .then(function(result) {
                assert(result === true, "The second preview item should now be displayed");
-            })
-         .end();
+            });
       },
+
       "Test Previous Preview Control displayed after Next Preview": function () {
          return this.remote.findByCssSelector(prevPreviewControlSelector)
             .isVisible()
@@ -150,17 +180,17 @@ define(["intern!object",
                assert(result === true, "The previous button is not displayed after clicking next preview control");
             })
             .click()
-            .sleep(pause) // Wait for just over a second for the animation to complete...
-         .end();
+            .sleep(pause); // Wait for just over a second for the animation to complete...
       },
+
       "Test Preview Control is hidden when used on second preview": function () {
          return this.remote.findByCssSelector(prevPreviewControlSelector)
             .isVisible()
             .then(function(result) {
                assert(result === false, "The previous button was not hidden after clicking it (to show first preview)");
-            })
-         .end();
+            });
       },
+
       "Test Preview Navigation Click": function () {
          return this.remote.findByCssSelector(previewFrameItemsSelector + ":nth-child(1)" + previewImgSelectorSuffix)
             .click()
@@ -172,20 +202,12 @@ define(["intern!object",
          .findAllByCssSelector(previewFrameItemsSelector)
             .then(function(elements) {
                assert(elements.length === 14, "Expected 14 preview items, found: " + elements.length);
-            })
-         .end();
-      }
-   });
+            });
+      },
 
-   // NOTE: This suite relies on the previous suite having run first so that the test browser is displaying
-   //       the correct page...
-   registerSuite({
-      name: "FilmStrip Thumbnail Navigation",
       "Test Thumbnail Scrolls With Preview": function () {
-          // Click the next preview selector 43 times (to check that the thumbnail frame scrolls)...
-         browser = this.remote;
-         return this.remote
-            .findByCssSelector(nextPreviewControlSelector)
+          // Click the next preview selector 4 times (to check that the thumbnail frame scrolls)...
+         return browser.findByCssSelector(nextPreviewControlSelector)
             .click()
             .sleep(pause)
             .click()
@@ -199,9 +221,14 @@ define(["intern!object",
             .isVisible()
             .then(function(visible) {
                assert(visible === true, "The previous thumbnail selection should be visible");
-            })
-         .end().alfPostCoverageResults(browser);
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
+
+      
       // TODO: Test needs completing
       // ,
       // "Test Preview Scrolls With Thumbnail Selection": function () {

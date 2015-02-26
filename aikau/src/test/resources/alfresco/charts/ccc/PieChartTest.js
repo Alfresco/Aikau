@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -20,49 +20,62 @@
 /**
  *
  * @author Erik Winlöf
+ * @author Dave Draper
  */
 define(["intern!object",
-   "intern/chai!assert",
-   "require",
-   "alfresco/TestCommon",
-   "intern/dojo/node!leadfoot/keys"],
-      function (registerSuite, assert, require, TestCommon, keys) {
+        "intern/chai!assert",
+        "require",
+        "alfresco/TestCommon"],
+      function (registerSuite, assert, require, TestCommon) {
 
-         registerSuite({
-            name: 'PieChart Test',
-            'alfresco/charts/ccc/PieChart': function () {
+   var browser;
+   registerSuite({
+      name: "PieChart Tests",
 
-               var browser = this.remote;
-               var testName = "Pie Chart Test";
-               return TestCommon.loadTestWebScript(this.remote, "/PieChart", testName)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/PieChart", "PieChart Tests").end();
+      },
 
-                  // Test #1
-                  // Check pie slices
-                  .findAllByCssSelector("#PIECHART_1 svg text")
-                     .then(function(elements) {
-                        assert(elements.length == 2, "Expected to find 2 items in the chart, but found " + elements.length);
-                     })
-                  .end()
+      beforeEach: function() {
+         browser.end();
+      },
 
-                  // Test #2
-                  // Check labels
-                  .findByCssSelector("#PIECHART_1 svg g g g g g:nth-child(2) text")
-                     .getVisibleText()
-                     .then(function(text) {
-                        assert(text == "one-hundred-100", "Expected to find label 'one-hundred-100', but found '" + text + "'");
-                     })
-                  .end()
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+     "Check pie slices": function () {
+         // Test #1
+         // Check pie slices
+         return browser.findAllByCssSelector("#PIECHART_1 svg text")
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "Expected to find 2 items in the chart, but found " + elements.length);
+            });
+      },
 
-                  // Test #3
-                  // Check labels
-                  .findByCssSelector("#PIECHART_1 svg g g g g g:nth-child(4) text")
-                     .getVisibleText()
-                     .then(function(text) {
-                        assert(text == "two-hundred-200", "Expected to find label 'two-hundred-200', but found '" + text + "'");
-                     })
-                  .end()
-                  
-                  .alfPostCoverageResults(browser);
-            }
-         });
-      });
+      "Check label 1": function() {
+         // Test #2
+         // Check labels
+         return browser.findByCssSelector("#PIECHART_1 svg g g g g g:nth-child(2) text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "one-hundred-100", "Expected to find label 'one-hundred-100', but found '" + text + "'");
+            });
+      },
+
+      "Check label 2": function() {
+         // Test #3
+         // Check labels
+         return browser.findByCssSelector("#PIECHART_1 svg g g g g g:nth-child(4) text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "two-hundred-200", "Expected to find label 'two-hundred-200', but found '" + text + "'");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+});
