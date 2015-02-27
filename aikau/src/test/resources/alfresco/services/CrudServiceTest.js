@@ -35,7 +35,7 @@ define(["intern!object",
 
          setup: function() {
             browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/NotificationService", "NotificationService")
+            return TestCommon.loadTestWebScript(this.remote, "/CrudService", "CrudService")
                .end();
          },
 
@@ -43,34 +43,53 @@ define(["intern!object",
             browser.end();
          },
 
-         teardown: function() {
-            browser.end()
-               .alfPostCoverageResults(browser);
-         },
-
-         "Notification displays on button click": function() {
-            return browser.findByCssSelector("#NOTIFICATION_BUTTON_SMALL")
+         "Valid DELETE call succeeds": function() {
+            return browser.findById("DELETE_SUCCESS_BUTTON")
                .click()
-               .sleep(1000) // Simulate delay of notification appearing and user focusing on it
                .end()
 
-            .findByCssSelector(".alfresco-notifications-AlfNotification__message")
-               .isDisplayed()
-               .then(function(notificationDisplayed) {
-                  assert.isTrue(notificationDisplayed, "Notification not displayed");
-               });
-         },
-
-         "Notification hides after displaying": function() {
-            return browser.setFindTimeout(5000)
-               .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification__message");
-         },
-
-         "Topic publishes after notification hidden": function() {
-            return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_NOTIFICATION_DESTROYED", "publish", "any"))
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_DELETED_SUCCESS", "publish", "any"))
                .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Post-notification topic not published");
+                  assert.lengthOf(elements, 1, "Delete did not succeed");
                });
+         },
+
+         "Invalid DELETE call fails": function() {
+            return browser.findById("DELETE_FAILURE_BUTTON")
+               .click()
+               .end()
+
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_DELETED_FAILURE", "publish", "any"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Invalid delete did not fail");
+               });
+         },
+
+         "Failed DELETE displays failure message": function() {
+            return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
+               .then(function(dialogBody) {
+                  return dialogBody.getVisibleText()
+                     .then(function(messageText) {
+                        var trimmed = messageText.replace(/^\s+|\s+$/g, "");
+                        assert.equal(trimmed, "Test failure message", "Failure message not displayed");
+                     });
+               });
+         },
+
+         // "Notification hides after displaying": function() {
+         //    return browser.setFindTimeout(5000)
+         //       .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification__message");
+         // },
+
+         // "Topic publishes after notification hidden": function() {
+         //    return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_NOTIFICATION_DESTROYED", "publish", "any"))
+         //       .then(function(elements) {
+         //          assert.lengthOf(elements, 1, "Post-notification topic not published");
+         //       });
+         // },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
          }
       });
    });

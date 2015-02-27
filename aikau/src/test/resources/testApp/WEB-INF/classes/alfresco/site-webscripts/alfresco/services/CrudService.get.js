@@ -12,7 +12,8 @@ model.jsonModel = {
          }
       },
       "alfresco/services/CrudService",
-      "alfresco/services/NotificationService"
+      "alfresco/services/NotificationService",
+      "alfresco/services/DialogService"
    ],
    widgets:[
       {
@@ -24,6 +25,19 @@ model.jsonModel = {
             publishPayload: {
                url: "resources/123",
                responseTopic: "ALF_CRUD_DELETED"
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "DELETE_FAILURE_BUTTON",
+         config: {
+            label: "Failed delete call",
+            publishTopic: "ALF_CRUD_DELETE",
+            publishPayload: {
+               url: "resources/234",
+               responseTopic: "ALF_CRUD_DELETED",
+               failureMessage: "Test failure message"
             }
          }
       },

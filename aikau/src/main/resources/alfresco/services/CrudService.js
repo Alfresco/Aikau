@@ -340,7 +340,7 @@ define(["dojo/_base/declare",
 
          // Get the failure message and display a notification
          var message = originalRequestConfig.failureMessage || this.message("crudservice.generic.failure.message");
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfPublish("ALF_DISPLAY_PROMPT", {
             message: message
          });
 
