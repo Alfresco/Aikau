@@ -10,7 +10,7 @@ model.jsonModel = {
          }
       },
       "aikauTesting/mockservices/SelectTestOptions",
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/DialogService"
    ],
    widgets: [
       {
@@ -154,6 +154,33 @@ model.jsonModel = {
             id: "REQUEST_SCOPED_UPDATE",
             label: "Succeed Updating Select 2 (Scoped)",
             publishTopic: "UNIT_TEST_SCOPED_UPDATE_TOPIC"
+         }
+      },
+      {
+         id: "CREATE_FORM_DIALOG",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Create dialog with select",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "DIALOG_WITH_SELECT",
+               dialogTitle: "Dialog With Select",
+               formSubmissionTopic: "DIALOG_POST",
+               widgets: [
+                  {
+                     id: "SELECT_IN_DIALOG",
+                     name: "alfresco/forms/controls/Select",
+                     config: {
+                        fieldId: "SiD",
+                        name: "selected",
+                        label: "Select",
+                        optionsConfig: {
+                           publishTopic: "GET_OPTIONS_FOR_SELECT_IN_DIALOG"
+                        }
+                     }
+                  }
+               ]
+            }
          }
       },
       {

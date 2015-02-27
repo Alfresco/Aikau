@@ -360,6 +360,12 @@ define(["dojo/_base/declare",
             this.fieldId = this.generateUuid();
          }
          
+         // We want to defer value assignment until the widget has been placed into the document, so 
+         // we set this flag to indicate that value assignment will be deferred and then create an array
+         // to capture all the deferred values...
+         this.deferValueAssigment = true;
+         this.deferredValueAssignments = [];
+
          // Setup the rules for controlling visibility, requirement and disablement...
          // NOTE: The reason for the "alf_" prefix is that we need to make sure that the functions cannot corrupt attribute
          //       accessors functionality. This is particularly relevant to the "alfDisabled". Originally a function called
@@ -757,7 +763,7 @@ define(["dojo/_base/declare",
        */
       setOptions: function alfresco_forms_controls_BaseFormControl__setOptions(options) {
          this.alfLog("log", "Setting options for field '" + this.fieldId + "'", options);
-         if (this.deferredValueAssignment)
+         if (this.deferValueAssigment)
          {
             this.pendingOptions = options;
          }
@@ -1126,12 +1132,6 @@ define(["dojo/_base/declare",
          // thinks it should be)...
          this.initialValue = this.value;
 
-         // We want to defer value assignment until the widget has been placed into the document, so 
-         // we set this flag to indicate that value assignment will be deferred and then create an array
-         // to capture all the deferred values...
-         this.deferValueAssigment = true;
-         this.deferredValueAssignments = [];
-         
          if (!this.validationInProgressImgSrc)
          {
             this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationInProgressImg;
