@@ -41,10 +41,6 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
-
       "Test that service subscription is created": function () {
          return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "subscribe", "any"))
             .then(function(elements) {
@@ -151,6 +147,10 @@ define(["intern!object",
             .then(function(text) {
                assert(text.lastIndexOf("ALF_CLOSE_DIALOG") !== -1, "A request to close the form was not published");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

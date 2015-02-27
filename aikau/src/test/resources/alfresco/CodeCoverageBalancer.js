@@ -29,27 +29,41 @@ define(["intern!object",
         "intern/lib/args"], 
         function (registerSuite, assert, require, TestCommon, args) {
 
+   var browser;
    registerSuite({
-      name: 'Code Coverage Balancer',
-      'Balance': function () {
+      name: "Code Coverage Balancer",
 
-         var browser = this.remote;
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/RequireEverything", "Coverage Balancer").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end().alfPostCoverageResults(browser);
+      // },
+
+      "Balance": function () {
          if(args.doCoverage === "true")
          {
-            return TestCommon.loadTestWebScript(this.remote, "/RequireEverything")
-
-               .findByCssSelector("#LABEL")
-                  .getVisibleText()
-                  .then(function(text) {
-                     assert(text === "Coverage Balanced!", "Code Coverage Balancer Didn't Load - coverage results will be invalid");
-                  })
-               .end()
-               .alfPostCoverageResults(browser);
+            return browser.findByCssSelector("#LABEL")
+               .getVisibleText()
+               .then(function(text) {
+                  assert(text === "Coverage Balanced!", "Code Coverage Balancer Didn't Load - coverage results will be invalid");
+               })
+            .end();
           }
           else
           {
             return browser.end();
           }
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

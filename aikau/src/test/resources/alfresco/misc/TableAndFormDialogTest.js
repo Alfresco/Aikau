@@ -40,10 +40,6 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
-      
       // To get an entry in the table to click: "#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner"
       // To get the value of an entry in the table to click: "#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner span.value"
 
@@ -139,6 +135,10 @@ define(["intern!object",
             .then(function(elements) {
                assert.lengthOf(elements, 1, "ID was not updated");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

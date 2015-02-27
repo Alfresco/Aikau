@@ -42,10 +42,6 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
-
       "Test Previewer Loads": function () {
          return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.PdfJs")
             .then(null, function() {
@@ -84,6 +80,7 @@ define(["intern!object",
                }
             );
       },
+      
       "Test Next Page Button Enables Previous Page": function() {
          // When the next page button is pressed the previous page button should be enabled
          // and the active page CSS class should move...
@@ -108,9 +105,9 @@ define(["intern!object",
          .findByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-2.activePage")
             .then(null, function() {
                assert(false, "The second page did not become the active page when the next page button was clicked");
-            })
-         .end();
+            });
       },
+ 
       "Test Jump To Last Page": function() {
          // Test using the jump to last page. This should make the last page (page 6) the active page
          // and should disabled the next page button...
@@ -137,17 +134,17 @@ define(["intern!object",
          .findByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-6.activePage")
             .then(null, function() {
                assert(false, "The 6th page did not become the active page having used the set page dialog");
-            })
-         .end();
+            });
       },
+   
       "Test Next Page Button Disabled (when last page is active)": function() {
          // NOTE: This test needs to follow immediately after selecting the last page...
          return browser.findByCssSelector("#PDF_PLUGIN_1_NEXT_PAGE.dijitDisabled")
             .then(null, function() {
                assert(false, "The previous page button was not disabled on page load");
-            })
-         .end();
+            });
       },
+  
       "Test Previous Page Button Disables (on scroll)": function() {
          // When the viewer element is scrolled back to the top, the first page should become active again...
          return browser.execute("document.getElementById('PDF_PLUGIN_1-viewer').scrollTop = 0;")
@@ -161,9 +158,9 @@ define(["intern!object",
          .findByCssSelector("#PDF_PLUGIN_1_PREVIOUS_PAGE.dijitDisabled")
              .then(null, function() {
                assert(false, "The previous page button was not disabled when scrolling back to the top of the viewer");
-            })
-         .end();
+            });
       },
+  
       "Test Zoom Out": function() {
          var initialWidth = null;
          return browser.findByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-1 > canvas")
@@ -180,9 +177,9 @@ define(["intern!object",
             .then(function(size) {
                assert(initialWidth > size.width, "The size of the canvas element did not reduce on zoom out");
                initialWidth = size.width;
-            })
-         .end();
+            });
       },
+ 
       "Test Zoom In": function() {
          var initialWidth = null;
          return browser.findByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-1 > canvas")
@@ -199,9 +196,9 @@ define(["intern!object",
             .then(function(size) {
                assert(initialWidth < size.width, "The size of the canvas element did not increase on zoom in");
                initialWidth = size.width;
-            })
-         .end();
+            });
       },
+  
       "Test Zoom Select 25%": function() {
          // This test attempts to check that the zoom to a fixed size (in this case 25%) approximately
          // sets the size as expected. First of all it gets the current zoom level and then works out
@@ -238,9 +235,9 @@ define(["intern!object",
                var bigEnough = size.width > expectedSize -5;
                var smallEnough = size.width < expectedSize + 5;
                assert(bigEnough &&  smallEnough, "Canvas hasn't shrunk to 25%, expected size: " + expectedSize + ", actual size was: " + size.width);
-            })
-         .end();
+            });
       },
+
       "Test SideBar is hidden (on page load)": function() {
          return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.PdfJs .sidebar")
             .then(null, function() {
@@ -249,9 +246,9 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === false, "The sidebar should not be displayed on page load");
-            })
-         .end();
+            });
       },
+
       "Test SideBar Reveal": function() {
          return browser.findByCssSelector("#PDF_PLUGIN_1_SHOW_SIDEBAR")
             .click()
@@ -260,9 +257,9 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === true, "The sidebar was not revealed after using toggle");
-            })
-         .end();
+            });
       },
+
       "Test SideBar Hide": function() {
          return browser.findByCssSelector("#PDF_PLUGIN_1_SHOW_SIDEBAR")
             .click()
@@ -271,9 +268,9 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === false, "The sidebar was not hidden after using toggle");
-            })
-         .end();
+            });
       },
+
       "Test Thumbnails Exist": function() {
          // Make sure to reveal the sidebar again (it will have been hidden after the last test...)
          return browser.findByCssSelector("#PDF_PLUGIN_1_SHOW_SIDEBAR")
@@ -282,10 +279,10 @@ define(["intern!object",
          .findAllByCssSelector("#PDF_PLUGIN_1-thumbnails > div.page")
             .then(function(elements) {
                assert(elements.length === 6, "Six thumbnails were not rendered");
-            })
-         .end();
+            });
       },
-       "Test Thumbnail Navigation": function() {
+
+      "Test Thumbnail Navigation": function() {
          // This test is going to check that navigation works by clicking on thumbnails, but as
          // a by-product we're going to switch to single page width viewing mode to assist with
          // active page selection...
@@ -307,18 +304,18 @@ define(["intern!object",
          .findByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-2.activePage")
             .then(null, function() {
                assert(false, "The second page was not active after clicking it's thumbnail");
-            })
-         .end();
+            });
       },
+
       "Test Page Selection Display": function() {
          // Just a quick check that the set page menu bar item is having its label updated...
          this.remote.findByCssSelector("#PDF_PLUGIN_1_SET_PAGE")
             .getVisibleText()
             .then(function(text) {
                assert(text === "2 / 6", "Set page menu item was not updated with correct page information: " + text);
-            })
-         .end();
+            });
       },
+
       "Test Link Controls are hidden (on page load)": function() {
          this.remote.findByCssSelector("#PDF_PLUGIN_1_LINK_CONTROLS")
             .then(null, function() {
@@ -327,9 +324,9 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === false, "The link controls should not be displayed on page load");
-            })
-         .end();
+            });
       },
+
       "Test Link Controls Reveal": function() {
          return browser.findByCssSelector("#PDF_PLUGIN_1_SHOW_LINK")
             .click()
@@ -338,9 +335,9 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === true, "The link controls were not revealed after using toggle");
-            })
-         .end();
+            });
       },
+
       "Test Link Controls Hide": function() {
          return browser.findByCssSelector("#PDF_PLUGIN_1_SHOW_LINK")
             .click()
@@ -349,9 +346,9 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === false, "The link controls were not hidden after using toggle");
-            })
-         .end();
+            });
       },
+
       "Test Link Value": function() {
          // Make sure to reveal the link controls again!!
          return browser.findByCssSelector("#PDF_PLUGIN_1_SHOW_LINK")
@@ -361,9 +358,9 @@ define(["intern!object",
             .getValue()
             .then(function(value) {
                assert(value.indexOf("/aikau/page/tp/ws/PdfJsPreview#page=2") !== -1, "The link was not generated correctly: " + value);
-            })
-         .end();
+            });
       },
+
       // TODO: Test quarantined as it fails intermittently - needs reviewing and improving for consistency.
       // "Test Link Update": function() {
       //    // In order to test the update link button we need to switch page whilst the link controls are
@@ -382,6 +379,7 @@ define(["intern!object",
       //       })
       //    .end();
       // },
+      
       "Test Search Controls are hidden (on page load)": function() {
          this.remote.findByCssSelector("#PDF_PLUGIN_1_SEARCH_CONTROLS")
             .then(null, function() {
@@ -390,9 +388,9 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === false, "The search controls should not be displayed on page load");
-            })
-         .end();
+            });
       },
+
       "Test Search Controls Reveal": function() {
          return browser.findByCssSelector("#PDF_PLUGIN_1_SHOW_SEARCH")
             .click()
@@ -401,9 +399,9 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === true, "The search controls were not revealed after using toggle");
-            })
-         .end();
+            });
       },
+
       "Test Search Controls Hide": function() {
          return browser.findByCssSelector("#PDF_PLUGIN_1_SHOW_SEARCH")
             .click()
@@ -412,9 +410,9 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === false, "The search controls were not hidden after using toggle");
-            })
-         .end();
+            });
       },
+
       "Test Search Highlight Count (ignore case, single highlight)": function() {
          // NOTE: Need to make sure search controls are revealed again...
          // This test is just going to count the number of highlighted elements across all the 
@@ -432,9 +430,9 @@ define(["intern!object",
          .findAllByCssSelector("#PDF_PLUGIN_1-viewer .textLayer .highlight")
             .then(function(elements) {
                assert(elements.length === 1, "Only one letter should be highlighted");
-            })
-         .end();
+            });
       },
+
       "Test Search Highlighted Value": function() {
          // Test that the highlighted value is correct... note that we have searched for "p" but should
          // have found "P" because the default behaviour is to ignore case...
@@ -442,9 +440,9 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert(text === "P", "The highlighted character was incorrect, expected 'P' found: " + text);
-            })
-         .end();
+            });
       },
+
       "Test Search All Matches Highlighted": function() {
          // Switch into highlighting all, now 6 elements should be matched to the CSS selector...
          return browser.findByCssSelector("#PDF_PLUGIN_1_HIGHLIGHT")
@@ -453,9 +451,9 @@ define(["intern!object",
          .findAllByCssSelector("#PDF_PLUGIN_1-viewer .textLayer .highlight")
             .then(function(elements) {
                assert(elements.length === 6, "Six letters should be highlighted");
-            })
-         .end();
+            });
       },
+
       "Test Exact Case Search (no matches)": function() {
          // We're not going to enable exact case matching (so that our current search criteria will fail)
          // and this should remove all existing highlighting...
@@ -465,9 +463,9 @@ define(["intern!object",
          .findAllByCssSelector("#PDF_PLUGIN_1-viewer .textLayer .highlight")
             .then(function(elements) {
                assert(elements.length === 0, "No letters should be highlighted (when case is matched");
-            })
-         .end();
+            });
       },
+
       "Test Exact Case Search (with matches)": function() {
          // Now enter the exactly matching case...
          return browser.findByCssSelector("#PDF_PLUGIN_1_SEARCH_FORM .dijitInputContainer input")
@@ -480,9 +478,9 @@ define(["intern!object",
          .findAllByCssSelector("#PDF_PLUGIN_1-viewer .textLayer .highlight")
             .then(function(elements) {
                assert(elements.length === 6, "Six letters should be highlighted");
-            })
-         .end();
+            });
       },
+
       "Test First Page is active": function() {
          return browser.findByCssSelector("#PDF_PLUGIN_1-thumbnails-canvas-1")
             .click()
@@ -492,6 +490,7 @@ define(["intern!object",
                assert(false, "The first page was not active before starting find tests");
             });
       },
+
       "Test Find Next": function() {
          // We're going to test the find next match capability, and we want to ensure that the pages
          // update as we search through the document. To ensure that the active page changes as scrolling
@@ -502,9 +501,9 @@ define(["intern!object",
          .findByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-3.activePage")
             .then(null, function() {
                assert(false, "The second page did not become the active page as we went to the next search result");
-            })
-         .end();
+            });
       },
+
       "Test Find Previous": function() {
          // We're going to test the find next match capability, and we want to ensure that the pages
          // update as we search through the document. To ensure that the active page changes as scrolling
@@ -515,9 +514,9 @@ define(["intern!object",
          .findByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-2.activePage")
             .then(null, function() {
                assert(false, "The first page did not become the active page as we went to the previous search result");
-            })
-         .end();
-      }
+            });
+      },
+
       // NOTE: Test quarantined - manual testing shows this to be working, need to revisit this test
       // ,
       // "Test hiding the search bar hides the highlights": function() {
@@ -549,7 +548,11 @@ define(["intern!object",
       //          assert(elements.length === 0, "There should now be no highlights");
       //       })
       //    .end();
-      // }
+      // },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
    });
 
    
@@ -565,10 +568,6 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
-      
       "Test Outline Loads": function () {
          return browser.findAllByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.PdfJs > div.viewer.documentView > div.page")
             .then(function(elements) {
@@ -585,24 +584,21 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert(displayed === true, "The outline view was not displayed");
-            })
-         .end();
+            });
       },
 
       "Test Outline Element Count": function() {
          return browser.findAllByCssSelector(".alfresco-preview-PdfJs-Outline .outlineItem")
             .then(function(elements) {
                assert(elements.length === 3, "There should be 3 outline elements, found: " + elements.length);
-            })
-         .end();
+            });
       },
 
       "Test Outline Structure": function() {
          return browser.findByCssSelector(".alfresco-preview-PdfJs-Outline .outlineItem > div > div > div > div > a")
             .then(null, function() {
                assert(false, "Did not find expected outline structure");
-            })
-         .end();
+            });
       },
 
       "Test Outline Navigation": function() {
@@ -614,8 +610,11 @@ define(["intern!object",
          .findByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-3.activePage")
             .then(null, function() {
                assert(false, "The last page did not become the active page having clicked on an outline element");
-            })
-         .end();
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

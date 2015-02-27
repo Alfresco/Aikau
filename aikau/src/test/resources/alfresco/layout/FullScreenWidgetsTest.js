@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -28,15 +28,22 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, expect, assert, require, TestCommon, keys) {
 
+   var browser;
    registerSuite({
-      name: 'Full Screen Widgets Test',
-      'Basic Test': function () {
+      name: "Full Screen Widgets Tests",
 
-         var browser = this.remote;
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/FullScreenWidgets", "Full Screen Widgets Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Tests": function () {
          var testname = "Full Screen Widgets Test";
-         return TestCommon.loadTestWebScript(this.remote, "/FullScreenWidgets", testname)
-
-         .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
+         return browser.findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
             .then(
                function() {
                   assert(false, "Test #1a - Full window class found unexpectedly");
@@ -146,10 +153,11 @@ define(["intern!object",
                function() { 
                   TestCommon.log(testname, "Found full window class removed correctly following escape key press");
                }
-            )
-            .end()
+            );
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

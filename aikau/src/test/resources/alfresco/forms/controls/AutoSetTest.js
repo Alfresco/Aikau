@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,103 +24,125 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Auto Set Form Rules Test',
-      'Basic Test': function () {
+      name: "Auto Set Form Rules Tests",
 
-         var browser = this.remote;
-         var testName = "Auto Set Form Rules Test";
-         return TestCommon.loadTestWebScript(this.remote, "/AutoSet", testName)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AutoSet", "Auto Set Form Rules Tests").end();
+      },
 
-            // Post the form, check the initial results...
-            .findByCssSelector(".confirmationButton > span")
-               .click()
-               .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "source", "1"))
-               .then(function(elements) {
-                  assert(elements.length == 1, "Test #1a - source field not posted correctly");
-               })
-               .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "target", ""))
-               .then(function(elements) {
-                  assert(elements.length == 1, "Test #1b - target field not posted correctly");
-               })
-               .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "hidden", ""))
-               .then(function(elements) {
-                  assert(elements.length == 1, "Test #1c - hidden field not posted correctly");
-               })
-               .end()
+      beforeEach: function() {
+         browser.end();
+      },
 
-            // Set the drop-down to 2...
-            .findByCssSelector("#SOURCE .dijitArrowButtonInner")
-               .click()
-               .end()
-            .findByCssSelector("#SOURCE_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
-               .click()
-               .end()
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+      "Check the initial post (source field)": function () {
+         return browser.findByCssSelector(".confirmationButton > span")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "source", "1"))
+            .then(function(elements) {
+               assert(elements.length === 1, "Source field not posted correctly");
+            });
+      },
 
-            // Post the form, check the hidden field is set and the visible field isn't
-            .findByCssSelector(".confirmationButton > span")
-               .click()
-               .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "source", "2"))
-               .then(function(elements) {
-                  assert(elements.length == 1, "Test #2a - source field not posted correctly");
-               })
-               .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "target", ""))
-               .then(function(elements) {
-                  assert(elements.length == 1, "Test #2b - target field not posted correctly");
-               })
-               .end()
-            .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("POST_FORM","something","quite","complex"))
-               .then(null, function() {
-                  assert(false, "Test #2c - Couldn't find complex data in initial form value publication");
-               })
-               .end()
+      "Check the initial post (target field)": function () {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "target", ""))
+            .then(function(elements) {
+               assert(elements.length === 1, "Target field not posted correctly");
+            });
+      },
 
-            // Set the drop-down to 2...
-            .findByCssSelector("#SOURCE .dijitArrowButtonInner")
-               .click()
-               .end()
-            .findByCssSelector("#SOURCE_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
-               .click()
-               .end()
+      "Check the initial post (hidden field)": function () {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "hidden", ""))
+            .then(function(elements) {
+               assert(elements.length === 1, "Hidden field not posted correctly");
+            });
+      },
 
-            // Set the drop-down to 3...
-            .findByCssSelector("#SOURCE .dijitArrowButtonInner")
-               .click()
-               .end()
-            .findByCssSelector("#SOURCE_CONTROL_dropdown table tr:nth-child(3) td.dijitMenuItemLabel")
-               .click()
-               .end()
+      "Check the updated post (source field)": function () {
+         return browser.findByCssSelector("#SOURCE .dijitArrowButtonInner")
+            .click()
+         .end()
+         .findByCssSelector("#SOURCE_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
+            .click()
+         .end()
 
-            // Post the form, check the hidden field is not set and the visible field is...
-            .findByCssSelector(".confirmationButton > span")
-               .click()
-               .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "source", "3"))
-               .then(function(elements) {
-                  assert(elements.length == 1, "Test #3a - source field not posted correctly");
-               })
-               .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "target", "Updated"))
-               .then(function(elements) {
-                  assert(elements.length == 1, "Test #3b - target field not posted correctly");
-               })
-               .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "hidden", ""))
-               .then(function(elements) {
-                  assert(elements.length == 1, "Test #3c - hidden field not posted correctly");
-               })
-               .end()
+         // Post the form, check the hidden field is set and the visible field isn't
+         .findByCssSelector(".confirmationButton > span")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "source", "2"))
+            .then(function(elements) {
+               assert(elements.length === 1, "Source field not posted correctly");
+            });
+      },
 
-            .alfPostCoverageResults(browser);
+       "Check the updated post (target field)": function () {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "target", ""))
+            .then(function(elements) {
+               assert(elements.length === 1, "Target field not posted correctly");
+            });
+      },
+
+      "Check complex data": function() {
+         return browser.findByCssSelector(TestCommon.pubDataNestedValueCssSelector("POST_FORM","something","quite","complex"))
+            .then(null, function() {
+               assert(false, "Couldn't find complex data in initial form value publication");
+            });
+      },
+
+      "Check the hidden field is not set and the visible field is": function() {
+         // Set the drop-down to 2...
+         return browser.findByCssSelector("#SOURCE .dijitArrowButtonInner")
+            .click()
+         .end()
+         .findByCssSelector("#SOURCE_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         // Set the drop-down to 3...
+         .findByCssSelector("#SOURCE .dijitArrowButtonInner")
+            .click()
+         .end()
+         .findByCssSelector("#SOURCE_CONTROL_dropdown table tr:nth-child(3) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         // Post the form, check the hidden field is not set and the visible field is...
+         .findByCssSelector(".confirmationButton > span")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "source", "3"))
+            .then(function(elements) {
+               assert(elements.length === 1, "Source field not posted correctly");
+            });
+      },
+
+      "Check target field": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "target", "Updated"))
+            .then(function(elements) {
+               assert(elements.length === 1, "Target field not posted correctly");
+            });
+      },
+
+      "Check hidden field": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "hidden", ""))
+            .then(function(elements) {
+               assert(elements.length === 1, "Hidden field not posted correctly");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

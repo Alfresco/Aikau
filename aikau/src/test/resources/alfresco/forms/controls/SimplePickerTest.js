@@ -39,9 +39,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    browser.end().alfPostCoverageResults(browser);
+      // },
 
       "Test that PICKER1 has no items selected on load": function() {
          return browser.findAllByCssSelector("#PICKER1 .picked-items table > *")
@@ -137,6 +137,10 @@ define(["intern!object",
                // NOTE: We should still find the previous post in the SubscriptionLog which is why we're checking for one...
                assert.lengthOf(elements, 1, "Removed item from PICKER1 is not reflected in form value post");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

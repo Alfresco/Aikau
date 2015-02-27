@@ -25,91 +25,96 @@
 define(["intern!object",
         "intern/chai!expect",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Base Form Control Test',
+      name: "Base Form Control Tests",
 
-      'BaseFormControl set value over pubsub': function () {
-         var testname = "BaseFormControl set value over pubsub";
-         var browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/BaseForm", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/BaseForm", "Base Form Control Tests").end();
+      },
 
-            .end()
+      beforeEach: function() {
+         browser.end();
+      },
 
-            .findByCssSelector('div#FORM_FIELD div.control input[name="control"]')
-               .getProperty("value")
-               .then(function(val){
-                  TestCommon.log(testname, "Checking the form field is empty");
-                  expect(val).to.equal("", "The form field should be empty");
-               })
-            .end()
+      // teardown: function() {
+      //    browser.end();
+      // },
 
-            .findById("SET_FORM_VALUE_1")
-               .click()
-            .end()
+      "Checking the form field is empty (1)": function () {
+         return browser.findByCssSelector("div#FORM_FIELD div.control input[name='control']")
+            .getProperty("value")
+            .then(function(val){
+               expect(val).to.equal("", "The form field should be empty");
+            });
+      },
 
-            .findByCssSelector('div#FORM_FIELD div.control input[name="control"]')
-               .getProperty("value")
-               .then(function(val){
-                  TestCommon.log(testname, "Checking the form field is empty");
-                  expect(val).to.equal("", "The form field should be empty");
-               })
-            .end()
+      "Checking the form field is empty (2)": function() {
+         return browser.findById("SET_FORM_VALUE_1")
+            .click()
+         .end()
 
-            .findById("SET_FORM_VALUE_2")
-               .click()
-            .end()
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(val){
+               expect(val).to.equal("", "The form field should be empty");
+            });
+      },
 
-            .findByCssSelector('div#FORM_FIELD div.control input[name="control"]')
-               .getProperty("value")
-               .then(function(val){
-                  TestCommon.log(testname, "Checking the form field is empty");
-                  expect(val).to.equal("", "The form field should be empty");
-               })
-            .end()
+      "Checking the form field is empty (3)": function() {
+         return browser.findById("SET_FORM_VALUE_2")
+            .click()
+         .end()
 
-            .findById("SET_FORM_VALUE_3")
-               .click()
-            .end()
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(val){
+               expect(val).to.equal("", "The form field should be empty");
+            });
+      },
 
-            .findByCssSelector('div#FORM_FIELD div.control input[name="control"]')
-               .getProperty("value")
-               .then(function(val){
-                  TestCommon.log(testname, "Checking the form field now contains 'this is the new value'");
-                  expect(val).to.equal("this is the new value", "The form field should now contain 'this is the new value'");
-               })
-            .end()
+      "Checking the form field now contains 'this is the new value'": function() {
+         return browser.findById("SET_FORM_VALUE_3")
+            .click()
+         .end()
 
-            .findById("SET_FORM_VALUE_4")
-               .click()
-            .end()
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(val){
+               expect(val).to.equal("this is the new value", "The form field should now contain 'this is the new value'");
+            });
+      },
 
-            .findByCssSelector('div#FORM_FIELD div.control input[name="control"]')
-               .getProperty("value")
-               .then(function(val){
-                  TestCommon.log(testname, "Checking the form field now contains '3.14159265'");
-                  expect(val).to.equal("3.14159265", "The form field should now contain '3.14159265'");
-               })
-            .end()
+      "Checking the form field now contains '3.14159265'": function() {
+         return browser.findById("SET_FORM_VALUE_4")
+            .click()
+         .end()
 
-            .findById("SET_FORM_VALUE_5")
-               .click()
-            .end()
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(val){
+               expect(val).to.equal("3.14159265", "The form field should now contain '3.14159265'");
+            });
+      },
 
-            .findByCssSelector('div#FORM_FIELD div.control input[name="control"]')
-               .getProperty("value")
-               .then(function(val){
-                  TestCommon.log(testname, "Checking the form field now contains 'true'");
-                  expect(val).to.equal("true", "The form field should now contain 'true'");
-               })
-            .end()
+      "Checking the form field now contains 'true'": function() {
+         return browser.findById("SET_FORM_VALUE_5")
+            .click()
+         .end()
 
-            .alfPostCoverageResults(browser)
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(val){
+               expect(val).to.equal("true", "The form field should now contain 'true'");
+            });
+      },
 
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
-      
    });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,102 +24,96 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Advanced VisibilityConfig Test',
-      'Test Initial Setup': function () {
-         // var browser = this.remote;
-         var testname = "Advanced Visibility Config";
-         return TestCommon.loadTestWebScript(this.remote, "/AdvancedVisibilityConfig", testname)
+      name: "Advanced VisibilityConfig Tests",
 
-         .findByCssSelector("#LOGO1")
-            .isDisplayed()
-            .then(function(result) {
-               TestCommon.log(testname,"Check LOGO1 is initially displayed");
-               assert(result === true, "Test #1a - LOGO1 was not initially displayed");
-            })
-         .end()
-
-         .findByCssSelector("#LOGO2")
-            .isDisplayed()
-            .then(function(result) {
-               TestCommon.log(testname,"Check LOGO2 is initially displayed");
-               assert(result === true, "Test #1b - LOGO2 was not initially displayed");
-            })
-         .end()
-
-         .findByCssSelector("#LOGO3")
-            .isDisplayed()
-            .then(function(result) {
-               TestCommon.log(testname,"Check LOGO3 is initially displayed");
-               assert(result === true, "Test #1c - LOGO3 was not initially displayed");
-            })
-         .end();
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AdvancedVisibilityConfig", "Advanced VisibilityConfig Tests").end();
       },
-      'Test Non Strict Visibility Rule': function () {
-         var browser = this.remote;
-         var testname = "Test Non-Strict Mode";
 
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+      "Check LOGO1 is initially displayed": function () {
+         return browser.findByCssSelector("#LOGO1")
+            .isDisplayed()
+            .then(function(result) {
+               assert.isTrue(result, "LOGO1 was not initially displayed");
+            });
+      },
+
+      "Check LOGO2 is initially displayed": function() {
+         return browser.findByCssSelector("#LOGO2")
+            .isDisplayed()
+            .then(function(result) {
+               assert.isTrue(result, "LOGO2 was not initially displayed");
+            });
+      },
+
+      "Check LOGO3 is initially displayed": function() {
+         return browser.findByCssSelector("#LOGO3")
+            .isDisplayed()
+            .then(function(result) {
+               assert.isTrue(result, "LOGO3 was not initially displayed");
+            });
+      },
+
+      "Check LOGO1 is still displayed (non-strict)": function () {
          return browser.findByCssSelector("#TEST_NON_STRICT_1")
             .click()
          .end()
-
          .findByCssSelector("#LOGO1")
             .isDisplayed()
             .then(function(result) {
-               TestCommon.log(testname,"Check LOGO1 is still displayed");
-               assert(result === true, "Test #2a - LOGO1 was hidden");
-            })
-         .end();
+               assert.isTrue(result, "LOGO1 was hidden");
+            });
       },
-      'Test Current Item Rule': function () {
-         var browser = this.remote;
-         var testname = "Test CurrentItem Rule";
 
+      "Check LOGO2 is still displayed (Current Item Rule)": function () {
          return browser.findByCssSelector("#HIDE_LOGO_2")
             .click()
          .end()
-
          .findByCssSelector("#LOGO2")
             .isDisplayed()
             .then(function(result) {
-               TestCommon.log(testname,"Check LOGO2 is still displayed");
-               assert(result === true, "Test #3a - LOGO2 was hidden");
-            })
-         .end();
+               assert.isTrue(result, "LOGO2 was hidden");
+            });
       },
-      'Test Invisibility Rule': function () {
-         var browser = this.remote;
-         var testname = "Test Invisibility Rule";
 
+      "Check LOGO3 is now hidden (Invisibility Rule)": function () {
          return browser.findByCssSelector("#HIDE_LOGO_3")
             .click()
          .end()
-
          .findByCssSelector("#LOGO3")
             .isDisplayed()
             .then(function(result) {
-               TestCommon.log(testname,"Check LOGO3 is now hidden");
-               assert(result === false, "Test #4a - LOGO3 was still displayed");
-            })
-         .end()
+               assert.isFalse(result, "LOGO3 was still displayed");
+            });
+      },
 
-         .findByCssSelector("#SHOW_LOGO_3")
+      "Check LOGO3 is now displayed (Invisibility Rule)": function() {
+         return browser.findByCssSelector("#SHOW_LOGO_3")
             .click()
          .end()
-
          .findByCssSelector("#LOGO3")
             .isDisplayed()
             .then(function(result) {
-               TestCommon.log(testname,"Check LOGO3 is now displayed");
-               assert(result === true, "Test #4b - LOGO3 was not displayed");
-            })
-         .end()
-         
-         .alfPostCoverageResults(browser);
+               assert.isTrue(result, "LOGO3 was not displayed");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

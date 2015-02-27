@@ -6,6 +6,7 @@
 /src/main/resources/alfrescoInst/
 /src/test/vagrant/.vagrant/
 /target/
+/clientConfig.js
 
 # Ignored files (please keep alphabetical)
 /src/test/resources/testApp/js/aikau/testing/RequireEverything.js

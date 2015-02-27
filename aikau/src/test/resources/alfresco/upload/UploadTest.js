@@ -39,16 +39,20 @@ define(["intern!object",
 
    registerSuite({
       name: "Upload Failure Tests",
+
       setup: function() {
          browser = this.remote;
          return TestCommon.loadTestWebScript(this.remote, "/aikau-upload-failure-unit-test", "Upload Failure").end();
       },
+      
       beforeEach: function() {
          browser.end();
       },
-      teardown: function() {
-         return browser.end().alfPostCoverageResults(browser);
-      },
+      
+      // teardown: function() {
+      //    return browser.end().alfPostCoverageResults(browser);
+      // },
+      
       "Upload Failure": function () {
          // Simulate providing a zero byte file and check the output...
          return browser.findByCssSelector("#SINGLE_UPLOAD_label")
@@ -64,20 +68,28 @@ define(["intern!object",
             .click()
             .sleep(dialogDelay)
          .end();
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
    registerSuite({
       name: "Upload Tests",
+      
       setup: function() {
          browser = this.remote;
          return TestCommon.loadTestWebScript(this.remote, "/aikau-upload-unit-test", "Upload").end();
       },
+      
       beforeEach: function() {
          browser.end();
       },
-      teardown: function() {
-         return browser.end().alfPostCoverageResults(browser);
-      },
+      
+      // teardown: function() {
+      //    return browser.end().alfPostCoverageResults(browser);
+      // },
+      
       "Test bad file data": function () {
          // Simulate providing a zero byte file and check the output...
          return browser.findByCssSelector("#BAD_FILE_DATA_label")
@@ -94,6 +106,7 @@ define(["intern!object",
             .sleep(dialogDelay)
          .end();
       },
+      
       "Test single file upload (no failures)": function () {
          return browser.findByCssSelector("#SINGLE_UPLOAD_label")
             .click()
@@ -105,6 +118,7 @@ define(["intern!object",
             })
          .end();
       },
+      
       "Test single file upload (one success)": function() {
          return browser.findAllByCssSelector(successfulUploadsSelector)
             .then(function(elements) {
@@ -112,6 +126,7 @@ define(["intern!object",
             })
          .end();
       },
+      
       "Test single file upload (progress)": function() {
          return browser.findByCssSelector(aggProgStatusSelector)
             .getVisibleText()
@@ -124,6 +139,7 @@ define(["intern!object",
             .sleep(dialogDelay)
          .end();
       },
+      
       "Test zero file upload (failed)": function () {
          return browser.findByCssSelector("#NO_FILES_UPLOAD_label")
             .click()
@@ -135,6 +151,7 @@ define(["intern!object",
             })
          .end();
       },
+      
       "Test zero file upload (successful)": function() {
          return browser.findAllByCssSelector(successfulUploadsSelector)
             .then(function(elements) {
@@ -146,6 +163,7 @@ define(["intern!object",
             .sleep(dialogDelay)
          .end();
       },
+      
       "Test Multi-File Upload (failed)": function () {
          return browser.findByCssSelector("#MULTI_UPLOAD_label")
             .click()
@@ -157,6 +175,7 @@ define(["intern!object",
             })
          .end();
       },
+      
       "Test Multi-File Upload (successful)": function () {
          return browser.findAllByCssSelector(successfulUploadsSelector)
             .then(function(elements) {
@@ -173,6 +192,10 @@ define(["intern!object",
             .click()
             .sleep(dialogDelay)
          .end();
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,18 +27,23 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Site Service Test',
-      'SiteServiceTest - Site details': function () {
+      name: "Site Service Tests (Site details)",
 
-         var browser = this.remote;
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SiteService", "Site Service Tests (Site details)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "SiteServiceTest - Site details": function () {
          var testname = "SiteServiceTest - Site details";
-         return TestCommon.loadTestWebScript(this.remote, "/SiteService", testname)
-
-         .end()
-
          // Site details
-         .findById("GET_SITE_DETAILS")
+         return browser.findById("GET_SITE_DETAILS")
             .click()
             .then(function () {
                TestCommon.log(testname,"Test ALF_GET_SITE_DETAILS");
@@ -63,22 +68,29 @@ define(["intern!object",
             .click()
             .then(function () {
                TestCommon.log(testname,"Test ALF_GET_SITE_DETAILS with a faulty payload 3");
-            })
-            .end()
-
-         .alfPostCoverageResults(browser);
+            });
       },
 
-      'SiteServiceTest - Favourite and recent sites': function () {
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 
-         var browser = this.remote;
+   registerSuite({
+      name: "Site Service Tests (Favourite and recent sites)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SiteService", "Site Service Tests (Favourite and recent sites)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "SiteServiceTest - Favourite and recent sites": function () {
          var testname = "SiteServiceTest - Favourite and recent sites";
-         return TestCommon.loadTestWebScript(this.remote, "/SiteService", testname)
-
-         .end()
-
-         // Recent sites
-         .findById("GET_RECENT_SITES")
+         return browser.findById("GET_RECENT_SITES")
             .click()
             .then(function () {
                TestCommon.log(testname,"Test ALF_GET_RECENT_SITES");
@@ -149,22 +161,31 @@ define(["intern!object",
             .then(function () {
                TestCommon.log(testname,"Test ALF_REMOVE_FAVOURITE_SITE with a faulty payload 2");
             })
-            .end()
-
-         .alfPostCoverageResults(browser);
+            .end();
       },
 
-      'SiteServiceTest - Site memberships': function () {
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 
+   registerSuite({
+      name: "Site Service Tests (Site memberships)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SiteService", "Site Service Tests (Site memberships)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "SiteServiceTest - Site memberships": function () {
          var dialogDelay = 250;
-         var browser = this.remote;
          var testname = "SiteServiceTest - Site memberships";
-         return TestCommon.loadTestWebScript(this.remote, "/SiteService", testname)
-
-         .end()
-
          // Get site memberships
-         .findById("GET_SITE_MEMBERSHIPS")
+         return browser.findById("GET_SITE_MEMBERSHIPS")
             .click()
             .then(function () {
                TestCommon.log(testname,"Test ALF_GET_SITE_MEMBERSHIPS");
@@ -354,22 +375,30 @@ define(["intern!object",
 
          .findByCssSelector("div.alfresco-dialog-AlfDialog:last-of-type div.footer span.dijitReset.dijitInline.dijitButtonNode:last-of-type")
             .click()
-            .sleep(dialogDelay)
-            .end()
-
-         .alfPostCoverageResults(browser);
+            .sleep(dialogDelay);
       },
 
-      'SiteServiceTest - Update and delete site': function () {
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 
-         var browser = this.remote;
+   registerSuite({
+      name: "Site Service Tests (Update and delete site)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SiteService", "Site Service Tests (Update and delete site)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "SiteServiceTest - Update and delete site": function () {
          var testname = "SiteServiceTest - Update and delete site";
-         return TestCommon.loadTestWebScript(this.remote, "/SiteService", testname)
-
-         .end()
-
          // Update site
-         .findById("UPDATE_SITE_DETAILS")
+         return browser.findById("UPDATE_SITE_DETAILS")
             .click()
             .then(function () {
                TestCommon.log(testname,"Test ALF_UPDATE_SITE_DETAILS");
@@ -393,9 +422,11 @@ define(["intern!object",
 
          .findByCssSelector("div.alfresco-dialog-AlfDialog div.footer span.dijitReset.dijitInline.dijitButtonNode:first-of-type")
             .click()
-            .end()
+            .end();
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

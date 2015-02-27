@@ -24,118 +24,130 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        'intern/dojo/node!fs',
-        "intern/dojo/node!leadfoot/helpers/pollUntil",
-        "intern/dojo/node!leadfoot/Command"], 
-        function (registerSuite, expect, assert, require, TestCommon, fs, pollUntil, Command) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
-   var startSize;
-
+   // var startSize;
+   var browser;
    registerSuite({
-      name: 'AlfSideBarContainer Tests',
-      'Test preferences requested': function () {
-         return TestCommon.loadTestWebScript(this.remote, "/AlfSideBarContainer", "AlfSideBarContainer Tests")
-         .findByCssSelector(TestCommon.pubDataCssSelector("ALF_PREFERENCE_GET", "preference", "org.alfresco.share.sideBarWidth"))
+      name: "AlfSideBarContainer Tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfSideBarContainer", "AlfSideBarContainer Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+     "Test preferences requested": function () {
+         return browser.findByCssSelector(TestCommon.pubDataCssSelector("ALF_PREFERENCE_GET", "preference", "org.alfresco.share.sideBarWidth"))
             .then(
-               function(element) {
+               function() {
                   // No action - preferences request found
                },
-               function(err) {
+               function() {
                   assert(false, "User preferences were not requested");
-               })
-         .end();
+               });
       },
-      'Test Resized Handle Exists': function () {
-         return this.remote.findByCssSelector(".resize-handle")
+
+      "Test Resized Handle Exists": function () {
+         return browser.findByCssSelector(".resize-handle")
             .then(
-               function(element) {
+               function() {
                   // No action required - resize handler found
                },
-               function(err) {
+               function() {
                   assert(false, "Couldn't find resize handle");
-               })
-         .end();
+               });
       },
-      'Test Sidebar Placement': function () {
-         return this.remote.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar #SIDEBAR_LOGO")
+
+      "Test Sidebar Placement": function () {
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar #SIDEBAR_LOGO")
             .then(
-               function(element) {
+               function() {
                   // No action required - found logo in sidebar
                },
-               function(err) {
+               function() {
                   assert(false, "Logo wasn't placed correctly into the sidebar");
-               })
-         .end();
+               });
       },
-      'Test Main Panel Placement': function () {
-         return this.remote.findByCssSelector(".alfresco-layout-AlfSideBarContainer .main #MAIN_LOGO")
+
+      "Test Main Panel Placement": function () {
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .main #MAIN_LOGO")
             .then(
-               function(element) {
+               function() {
                   // No action required - found logo in main panel
                },
                function() {
                   assert(false, "Main logo wasn't placed correctly into main panel");
-               })
-         .end();
+               });
       },
-      'Test Initial Widths': function () {
-         return this.remote.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+
+      "Test Initial Widths": function () {
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
             .getComputedStyle("width")
             .then(function(width) {
-               assert(width == "150px", "The sidebar width wasn't initialised correctly");
-            })
-         .end();
+               assert(width === "150px", "The sidebar width wasn't initialised correctly");
+            });
       },
-      'Test Hide Sidebar': function () {
-         return this.remote.findByCssSelector(".resize-handle-button")
+
+      "Test Hide Sidebar": function () {
+         return browser.findByCssSelector(".resize-handle-button")
             .click()
          .end()
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
             .getComputedStyle("width")
             .then(function(width) {
-               assert(width == "9px", "The sidebar wasn't hidden via the bar control");
-            })
-         .end();
+               assert(width === "9px", "The sidebar wasn't hidden via the bar control");
+            });
       },
-      'Test Show Sidebar': function() {
-         return this.remote.findByCssSelector(".resize-handle-button")
+
+      "Test Show Sidebar": function() {
+         return browser.findByCssSelector(".resize-handle-button")
             .click()
          .end()
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
             .getComputedStyle("width")
             .then(function(width) {
-               assert(width == "150px", "The sidebar wasn't shown via the bar control");
-            })
-         .end();
+               assert(width === "150px", "The sidebar wasn't shown via the bar control");
+            });
       },
-      'Test Hide Sidebar via PubSub': function() {
+
+      "Test Hide Sidebar via PubSub": function() {
          return this.remote.findByCssSelector("#HIDE_BUTTON")
             .click()
          .end()
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
             .getComputedStyle("width")
             .then(function(width) {
-               assert(width == "9px", "The sidebar wasn't hidden via publication");
-            })
-         .end();
+               assert(width === "9px", "The sidebar wasn't hidden via publication");
+            });
       },
-      'Test Show Sidebar via PubSub': function() {
-         var browser = this.remote;
-         return this.remote.findByCssSelector("#SHOW_BUTTON")
+
+      "Test Show Sidebar via PubSub": function() {
+         return browser.findByCssSelector("#SHOW_BUTTON")
             .click()
          .end()
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
             .getComputedStyle("width")
             .then(function(width) {
-               assert(width == "150px", "The sidebar wasn't shown via publication");
+               assert(width === "150px", "The sidebar wasn't shown via publication");
             })
-         .end()
-         .alfPostCoverageResults(browser);
+         .end();
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
       // TODO: Re-instate when figured out how to resize with Leadfoot!
       // ,
-      // 'Test Resize': function () {
+      // "Test Resize": function () {
       //    var browser = this.remote;
       //    return this.remote.findByCssSelector(".sidebar")
       //       .getSize()

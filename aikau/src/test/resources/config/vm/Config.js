@@ -34,8 +34,7 @@ define({
    urls: {
       bootstrapBaseUrl: "http://192.168.56.1:8081",
       moduleDeploymentBaseUrl: "http://admin:admin@192.168.56.1:8081",
-      unitTestAppBaseUrl: "http://192.168.56.1:8089",
-      coverageServerUrl: "http://192.168.56.1:8282"
+      unitTestAppBaseUrl: "http://192.168.56.1:8089"
    },
 
    /**

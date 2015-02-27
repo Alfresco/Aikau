@@ -54,9 +54,10 @@ define(["intern!object",
       // beforeEach: function() {
       //    browser.end();
       // },
-      teardown: function() {
-         return browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    return browser.end().alfPostCoverageResults(browser);
+      // },
+      
       "Test for simple value in initial form value": function () {
          // First save the form to check that the initialised results are posted correctly...
          return browser.findByCssSelector(".confirmationButton > span")
@@ -68,6 +69,7 @@ define(["intern!object",
             })
          .end();
       },
+      
       "Test for complex value in initial form value": function() {
          return browser.findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1SAVE_FORM_1","complexWithValue","value","test4"))
             .then(null, function() {
@@ -75,6 +77,7 @@ define(["intern!object",
             })
          .end();
       },
+      
       "Test simple preset simple value count": function() {
          // Count the preset values for the simple widget...
          return browser.findAllByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElement")
@@ -83,6 +86,7 @@ define(["intern!object",
             })
          .end();
       },
+      
       "Test simple preset values rendered correctly (first)": function() {
          // Check that the preset values have been rendered correctly...
          return browser.findByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(1) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
@@ -92,6 +96,7 @@ define(["intern!object",
             })
          .end();
       },
+      
       "Test simple preset values rendered correctly (second)": function() {
          // Check that the preset values have been rendered correctly...
          return browser.findByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(2) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
@@ -101,6 +106,7 @@ define(["intern!object",
             })
          .end();
       },
+     
       "Test simple preset values rendered correctly (third)": function() {
          // Check that the preset values have been rendered correctly...
          return browser.findByCssSelector("#SIMPLE_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(3) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
@@ -110,6 +116,7 @@ define(["intern!object",
             })
          .end();
       },
+  
       "Test complex preset value count": function() {
          return browser.findAllByCssSelector("#COMPLEX_WITH_VALUE .alfresco-forms-controls-MultipleEntryElement")
             .then(function(elements) {
@@ -117,6 +124,7 @@ define(["intern!object",
             })
          .end();
       },
+  
       "Test complex preset values rendered correctly (first)": function() {
          // Check that the preset values have been rendered correctly...
          return browser.findByCssSelector("#COMPLEX_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(1) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
@@ -126,6 +134,7 @@ define(["intern!object",
             })
          .end();
       },
+  
       "Test complex preset values rendered correctly (second)": function() {
          // Check that the preset values have been rendered correctly...
          return browser.findByCssSelector("#COMPLEX_WITH_VALUE .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(2) .alfresco-forms-controls-MultipleEntryElement > div:first-child")
@@ -135,6 +144,7 @@ define(["intern!object",
             })
          .end();
       },
+ 
       "Test deleting simple entries updates form value correctly": function() {
          // Delete some entries and check that the form value is updated correctly...
          return browser.findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "delete"))
@@ -154,6 +164,7 @@ define(["intern!object",
             })
          .end();
       },
+  
       "Test deleting complex entries updates the form value correctly": function() {
          // NOTE:The form post was already done in the previous test, as was the deletion!
          return browser.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1SAVE_FORM_1","complexWithValue","value","test4"))
@@ -163,6 +174,7 @@ define(["intern!object",
             })
          .end();
       },
+
       // Edit some existing entries...
       "Test that simple entry value can be edited": function() {
          // Click the edit button of the first preset simple entry...
@@ -180,6 +192,7 @@ define(["intern!object",
             })
          .end();
       },
+   
       "Test edited simple entry is reflected in read-only display": function() {
          return browser.findByCssSelector(editFieldCssSelector("SIMPLE_WITH_VALUE", "1"))
             .clearValue()
@@ -197,6 +210,7 @@ define(["intern!object",
             })
          .end();
       },
+ 
       "Test updated value reflected in form post": function() {
           // Post the update...
          return browser.findByCssSelector(".confirmationButton > span")
@@ -209,6 +223,7 @@ define(["intern!object",
             })
          .end();
       },
+ 
       "Test previous edit retained": function() {
          // Edit the same field, but this time with the intent to discard the changes...
          return browser.findByCssSelector(buttonCssSelector("SIMPLE_WITH_VALUE", "1", "edit"))
@@ -222,6 +237,7 @@ define(["intern!object",
             })
          .end();
       },
+ 
       "Test current edit can be discarded": function() {
          return browser.findByCssSelector(editFieldCssSelector("SIMPLE_WITH_VALUE", "1"))
             .clearValue()
@@ -239,6 +255,7 @@ define(["intern!object",
             })
          .end();
       },
+  
       "Test that dicarded edits are not included in form post": function() {
           // Post the update...
          return browser.findByCssSelector(".confirmationButton > span")
@@ -251,6 +268,7 @@ define(["intern!object",
             })
          .end();
       },
+  
       "Test adding and discarding an entry": function() {
          // Add some new entries...
          return browser.findByCssSelector(addButtonCssSelector("SIMPLE_NO_VALUE"))
@@ -270,6 +288,7 @@ define(["intern!object",
             })
          .end();
       },
+ 
       "Test adding and saving an entry": function() {
          // Add the entry (with the intention of saving this time)...
          return browser.findByCssSelector(addButtonCssSelector("SIMPLE_NO_VALUE"))
@@ -288,6 +307,7 @@ define(["intern!object",
             })
          .end();
       },
+   
       "Test read display on additional entry": function() {
          // Check the read display...
          return browser.findByCssSelector(readDisplayCssSelector("SIMPLE_NO_VALUE", "1"))
@@ -297,6 +317,7 @@ define(["intern!object",
             })
          .end();
       },
+   
       "Test added entry is included in form post": function() {
          // Post the update...
          return browser.findByCssSelector(".confirmationButton > span")
@@ -308,6 +329,10 @@ define(["intern!object",
                assert(false, "Test #5d - Added entry was not included in form post");
             })
          .end();
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

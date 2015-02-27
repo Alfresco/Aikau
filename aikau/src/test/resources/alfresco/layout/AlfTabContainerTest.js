@@ -30,20 +30,29 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, expect, assert, require, TestCommon, keys) {
 
+   var browser;
    registerSuite({
-      name: 'Tab Container Tests',
-      
+      name: "Tab Container Tests",
 
-      'AlfTabContainer initial rendering': function () {
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfTabContainer", "Tab Container Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "AlfTabContainer initial rendering": function () {
          var testname = "AlfTabContainer initial rendering";
          return TestCommon.loadTestWebScript(this.remote, "/AlfTabContainer", testname)
 
             .findByCssSelector("div.alfresco-layout-AlfTabContainer > div.dijitTabContainer")
                .then(
-                  function (obj) {
+                  function () {
                      TestCommon.log(testname,"Check the tab container is present");
                   },
-                  function (err) {
+                  function () {
                      assert(false, "Tab container not rendered");
                   })
             .end()
@@ -68,10 +77,10 @@ define(["intern!object",
 
             .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper.dijitVisible")
                .then(
-                  function (obj) {
+                  function () {
                      TestCommon.log(testname,"Check one visible panel is present");
                   },
-                  function (err) {
+                  function () {
                      assert(false, "Visible panel not rendered");
                   })
             .end()
@@ -82,19 +91,14 @@ define(["intern!object",
                      TestCommon.log(testname,"Check the correct number of panels is present");
                      expect(panels.length).to.equal(8, "There are not 8 panels");
                   }
-               )
-            .end()
+               );
       },
 
-
-      'AlfTabContainer mouse tests': function () {
-         var browser = this.remote;
+      "AlfTabContainer mouse tests": function () {
          var testname = "AlfTabContainer mouse tests";
-         return browser
-        
-            // Test current panel states
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-               .getAttribute('class')
+         // Test current panel states
+         return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking 3rd panel is visible");
@@ -104,7 +108,7 @@ define(["intern!object",
             .end()
 
             .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:last-of-type")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking last panel is hidden");
@@ -120,7 +124,7 @@ define(["intern!object",
 
             // Test current panel states
             .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking 3rd panel is hidden");
@@ -130,7 +134,7 @@ define(["intern!object",
             .end()
 
             .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:last-of-type")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking last panel is visible");
@@ -146,7 +150,7 @@ define(["intern!object",
 
             // Test current panel states
             .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking 3rd panel is visible");
@@ -156,393 +160,408 @@ define(["intern!object",
             .end()
 
             .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:last-of-type")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking last panel is hidden");
                      expect(currClasses).to.contain("dijitHidden", "The last panel should be hidden");
                      expect(currClasses).to.not.contain("dijitVisible", "The last panel should not be visible");
-                  })
-            .end()
-
-            .alfPostCoverageResults(browser)
-
+                  });
       },
 
-
-      // This test reloads the page to clear any previous focus and make keyboard actions more predictable
-      'AlfTabContainer keyboard tests': function () {
-         var browser = this.remote;
-         var testname = "AlfTabContainer keyboard tests";
-         return TestCommon.loadTestWebScript(this.remote, "/AlfTabContainer", testname)
-        
-            // Test current panel states
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 3rd panel is visible");
-                     expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
-                  })
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 4th is hidden");
-                     expect(currClasses).to.contain("dijitHidden", "The 4th panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 4th panel should not be visible");
-                  })
-            .end()
-
-            // Tab to tab controls and select right tab
-            .pressKeys(keys.TAB)
-            .pressKeys(keys.ARROW_RIGHT)
-
-            // Test current panel states
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 3rd panel is hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 3rd panel should not be visible");
-                     expect(currClasses).to.contain("dijitHidden", "The 3rd panel should be hidden");
-                  })
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 4th panel is visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 4th panel should not be hidden");
-                     expect(currClasses).to.contain("dijitVisible", "The 4th panel should be visible");
-                  })
-            .end()
-
-            // Select left tab
-            .pressKeys(keys.ARROW_LEFT)
-
-            // Test current panel states
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 3rd panel is visible");
-                     expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
-                  })
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 4th panel is hidden");
-                     expect(currClasses).to.contain("dijitHidden", "The 4th panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 4th panel should not be visible");
-                  })
-            .end()
-
-            .alfPostCoverageResults(browser)
-
-      },
-
-
-      // This test reloads the page
-      'AlfTabContainer function tests': function () {
-         var browser = this.remote;
-         var testname = "AlfTabContainer function tests";
-         return TestCommon.loadTestWebScript(this.remote, "/AlfTabContainer", testname)
-        
-            .end()
-
-            // Test current panel states
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 3rd panel is visible");
-                     expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
-                  })
-            .end()
-
-            .findById("SELECT_TAB_1")
-               .click()
-               .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st panel is visible after external selection by index");
-                     expect(currClasses).to.contain("dijitVisible", "The 1st panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 1st panel should not be hidden");
-                  })
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 3rd panel is hidden after external selection by index");
-                     expect(currClasses).to.contain("dijitHidden", "The 3rd panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 3rd panel should not be visible");
-                  })
-            .end()
-
-            .findById("SELECT_TAB_2")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(2)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 2nd panel is visible after external selection by index");
-                     expect(currClasses).to.contain("dijitVisible", "The 2nd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 2nd panel should not be hidden");
-                  })
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st panel is hidden after external selection by index");
-                     expect(currClasses).to.contain("dijitHidden", "The 1st panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 1st panel should not be visible");
-                  })
-            .end()
-
-            .findById("SELECT_TAB_3")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st panel is visible after external selection by title");
-                     expect(currClasses).to.contain("dijitVisible", "The 1st panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 1st panel should not be hidden");
-                  })
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 2nd panel is hidden after external selection by title");
-                     expect(currClasses).to.contain("dijitHidden", "The 2nd panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 2nd panel should not be visible");
-                  })
-            .end()
-
-            .findById("SELECT_TAB_4")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(2)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 2nd panel is visible after external selection by title");
-                     expect(currClasses).to.contain("dijitVisible", "The 2nd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 2nd panel should not be hidden");
-                  })
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st panel is hidden after external selection by title");
-                     expect(currClasses).to.contain("dijitHidden", "The 1st panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 1st panel should not be visible");
-                  })
-            .end()
-
-            .findById("SELECT_TAB_5")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st panel is visible after external selection by id");
-                     expect(currClasses).to.contain("dijitVisible", "The 1st panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 1st panel should not be hidden");
-                  })
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 2nd panel is hidden after external selection by id");
-                     expect(currClasses).to.contain("dijitHidden", "The 2nd panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 2nd panel should not be visible");
-                  })
-            .end()
-
-            .findById("SELECT_TAB_6")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(2)")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 2nd panel is visible after external selection by id");
-                     expect(currClasses).to.contain("dijitVisible", "The 2nd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 2nd panel should not be hidden");
-                  })
-            .end()
-
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st panel is hidden after external selection by id");
-                     expect(currClasses).to.contain("dijitHidden", "The 1st panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 1st panel should not be visible");
-                  })
-            .end()
-
-            .findById("DISABLE_TAB_1")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st tab is disabled after external selection by index");
-                     expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
-                  })
-            .end()
-
-            .findById("DISABLE_TAB_2")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st tab is enabled after external selection by index");
-                     expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
-                  })
-            .end()
-
-            .findById("DISABLE_TAB_3")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st tab is disabled after external selection by title");
-                     expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
-                  })
-            .end()
-
-            .findById("DISABLE_TAB_4")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st tab is enabled after external selection by title");
-                     expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
-                  })
-            .end()
-
-            .findById("DISABLE_TAB_5")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st tab is disabled after external selection by id");
-                     expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
-                  })
-            .end()
-
-            .findById("DISABLE_TAB_6")
-               .click()
-            .end()
-
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking 1st tab is enabled after external selection by id");
-                     expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
-                  })
-            .end()
-
-            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-               .then(
-                  function (tabs) {
-                     TestCommon.log(testname,"Check the correct number of tabs is present");
-                     expect(tabs.length).to.equal(9, "There are not 9 tabs");
-                  }
-               )
-            .end()
-
-            .findById("DELETE_TAB_1")
-               .click()
-            .end()
-
-            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-               .then(
-                  function (tabs) {
-                     TestCommon.log(testname,"Check the correct number of tabs is present after deleting tab 7");
-                     expect(tabs.length).to.equal(8, "There are not 8 tabs");
-                  }
-               )
-            .end()
-
-            .findById("DELETE_TAB_2")
-               .click()
-            .end()
-
-            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-               .then(
-                  function (tabs) {
-                     TestCommon.log(testname,"Check the correct number of tabs is present after deleting tab titled 'Logo 8'");
-                     expect(tabs.length).to.equal(7, "There are not 7 tabs");
-                  }
-               )
-            .end()
-
-            .findById("DELETE_TAB_3")
-               .click()
-            .end()
-
-            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-               .then(
-                  function (tabs) {
-                     TestCommon.log(testname,"Check the correct number of tabs is present after deleting tab with id 'dijit_layout_ContentPane_8");
-                     expect(tabs.length).to.equal(6, "There are not 6 tabs");
-                  }
-               )
-            .end()
-
-            .alfPostCoverageResults(browser)
-
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
-      
+   });
+
+
+   // This test reloads the page to clear any previous focus and make keyboard actions more predictable
+   registerSuite({
+      name: "Tab Container Tests (keyboard)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfTabContainer", "Tab Container Tests (keyboard)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "AlfTabContainer keyboard tests": function () {
+         var testname = "AlfTabContainer keyboard tests";
+         return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 3rd panel is visible");
+                  expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
+               })
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 4th is hidden");
+                  expect(currClasses).to.contain("dijitHidden", "The 4th panel should be hidden");
+                  expect(currClasses).to.not.contain("dijitVisible", "The 4th panel should not be visible");
+               })
+         .end()
+
+         // Tab to tab controls and select right tab
+         .pressKeys(keys.TAB)
+         .pressKeys(keys.ARROW_RIGHT)
+
+         // Test current panel states
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 3rd panel is hidden");
+                  expect(currClasses).to.not.contain("dijitVisible", "The 3rd panel should not be visible");
+                  expect(currClasses).to.contain("dijitHidden", "The 3rd panel should be hidden");
+               })
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 4th panel is visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 4th panel should not be hidden");
+                  expect(currClasses).to.contain("dijitVisible", "The 4th panel should be visible");
+               })
+         .end()
+
+         // Select left tab
+         .pressKeys(keys.ARROW_LEFT)
+
+         // Test current panel states
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 3rd panel is visible");
+                  expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
+               })
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 4th panel is hidden");
+                  expect(currClasses).to.contain("dijitHidden", "The 4th panel should be hidden");
+                  expect(currClasses).to.not.contain("dijitVisible", "The 4th panel should not be visible");
+               });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+
+   // This test reloads the page to clear any previous focus and make keyboard actions more predictable
+   registerSuite({
+      name: "Tab Container Tests (function)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfTabContainer", "Tab Container Tests (function)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "AlfTabContainer function tests": function () {
+         var testname = "AlfTabContainer function tests";
+         return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 3rd panel is visible");
+                  expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
+               })
+         .end()
+
+         .findById("SELECT_TAB_1")
+            .click()
+            .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st panel is visible after external selection by index");
+                  expect(currClasses).to.contain("dijitVisible", "The 1st panel should be visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 1st panel should not be hidden");
+               })
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 3rd panel is hidden after external selection by index");
+                  expect(currClasses).to.contain("dijitHidden", "The 3rd panel should be hidden");
+                  expect(currClasses).to.not.contain("dijitVisible", "The 3rd panel should not be visible");
+               })
+         .end()
+
+         .findById("SELECT_TAB_2")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(2)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 2nd panel is visible after external selection by index");
+                  expect(currClasses).to.contain("dijitVisible", "The 2nd panel should be visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 2nd panel should not be hidden");
+               })
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st panel is hidden after external selection by index");
+                  expect(currClasses).to.contain("dijitHidden", "The 1st panel should be hidden");
+                  expect(currClasses).to.not.contain("dijitVisible", "The 1st panel should not be visible");
+               })
+         .end()
+
+         .findById("SELECT_TAB_3")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st panel is visible after external selection by title");
+                  expect(currClasses).to.contain("dijitVisible", "The 1st panel should be visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 1st panel should not be hidden");
+               })
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 2nd panel is hidden after external selection by title");
+                  expect(currClasses).to.contain("dijitHidden", "The 2nd panel should be hidden");
+                  expect(currClasses).to.not.contain("dijitVisible", "The 2nd panel should not be visible");
+               })
+         .end()
+
+         .findById("SELECT_TAB_4")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(2)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 2nd panel is visible after external selection by title");
+                  expect(currClasses).to.contain("dijitVisible", "The 2nd panel should be visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 2nd panel should not be hidden");
+               })
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st panel is hidden after external selection by title");
+                  expect(currClasses).to.contain("dijitHidden", "The 1st panel should be hidden");
+                  expect(currClasses).to.not.contain("dijitVisible", "The 1st panel should not be visible");
+               })
+         .end()
+
+         .findById("SELECT_TAB_5")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st panel is visible after external selection by id");
+                  expect(currClasses).to.contain("dijitVisible", "The 1st panel should be visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 1st panel should not be hidden");
+               })
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 2nd panel is hidden after external selection by id");
+                  expect(currClasses).to.contain("dijitHidden", "The 2nd panel should be hidden");
+                  expect(currClasses).to.not.contain("dijitVisible", "The 2nd panel should not be visible");
+               })
+         .end()
+
+         .findById("SELECT_TAB_6")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(2)")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 2nd panel is visible after external selection by id");
+                  expect(currClasses).to.contain("dijitVisible", "The 2nd panel should be visible");
+                  expect(currClasses).to.not.contain("dijitHidden", "The 2nd panel should not be hidden");
+               })
+         .end()
+
+         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st panel is hidden after external selection by id");
+                  expect(currClasses).to.contain("dijitHidden", "The 1st panel should be hidden");
+                  expect(currClasses).to.not.contain("dijitVisible", "The 1st panel should not be visible");
+               })
+         .end()
+
+         .findById("DISABLE_TAB_1")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st tab is disabled after external selection by index");
+                  expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
+               })
+         .end()
+
+         .findById("DISABLE_TAB_2")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st tab is enabled after external selection by index");
+                  expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
+               })
+         .end()
+
+         .findById("DISABLE_TAB_3")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st tab is disabled after external selection by title");
+                  expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
+               })
+         .end()
+
+         .findById("DISABLE_TAB_4")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st tab is enabled after external selection by title");
+                  expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
+               })
+         .end()
+
+         .findById("DISABLE_TAB_5")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st tab is disabled after external selection by id");
+                  expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
+               })
+         .end()
+
+         .findById("DISABLE_TAB_6")
+            .click()
+         .end()
+
+         .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking 1st tab is enabled after external selection by id");
+                  expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
+               })
+         .end()
+
+         .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            .then(
+               function (tabs) {
+                  TestCommon.log(testname,"Check the correct number of tabs is present");
+                  expect(tabs.length).to.equal(9, "There are not 9 tabs");
+               }
+            )
+         .end()
+
+         .findById("DELETE_TAB_1")
+            .click()
+         .end()
+
+         .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            .then(
+               function (tabs) {
+                  TestCommon.log(testname,"Check the correct number of tabs is present after deleting tab 7");
+                  expect(tabs.length).to.equal(8, "There are not 8 tabs");
+               }
+            )
+         .end()
+
+         .findById("DELETE_TAB_2")
+            .click()
+         .end()
+
+         .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            .then(
+               function (tabs) {
+                  TestCommon.log(testname,"Check the correct number of tabs is present after deleting tab titled 'Logo 8'");
+                  expect(tabs.length).to.equal(7, "There are not 7 tabs");
+               }
+            )
+         .end()
+
+         .findById("DELETE_TAB_3")
+            .click()
+         .end()
+
+         .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            .then(
+               function (tabs) {
+                  TestCommon.log(testname,"Check the correct number of tabs is present after deleting tab with id 'dijit_layout_ContentPane_8");
+                  expect(tabs.length).to.equal(6, "There are not 6 tabs");
+               }
+            );
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
    });
 });

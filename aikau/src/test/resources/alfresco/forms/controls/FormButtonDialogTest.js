@@ -41,9 +41,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    browser.end().alfPostCoverageResults(browser);
+      // },
       
       "Test Form Exists": function () {
          return browser.findByCssSelector("DIV#TEST_FORM > FORM")
@@ -162,6 +162,10 @@ define(["intern!object",
             .then(null, function() {
                assert(false, "Form submission did not proceed as expected and the expected publish on 'TEST_FORM_SUBMITTED' was missing");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

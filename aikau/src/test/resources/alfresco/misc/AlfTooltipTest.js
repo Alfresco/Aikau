@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -26,16 +26,23 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'AlfTooltip Test',
-      'alfresco/misc/AlfTooltip': function () {
+      name: "AlfTooltip Tests",
 
-         var browser = this.remote;
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfTooltip", "AlfTooltip Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Tests": function () {
+
          var testname = "AlfTooltipTest";
-         return TestCommon.loadTestWebScript(this.remote, "/AlfTooltip", testname)
-
-         // Does the test button exist?
-         .findById("TEST_BUTTON")
+         return browser.findById("TEST_BUTTON")
          .then(function(el1) {
             TestCommon.log(testname,"Does the test button exist?");
             expect(el1).to.be.an("object", "The Test Button could not be found");
@@ -86,10 +93,11 @@ define(["intern!object",
             if(browser.environmentType.browserName.indexOf("chrome") === -1) {
                expect(result4).to.equal(false, "The Tooltip should be hidden");
             }
-         })
-         .end()
+         });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });
