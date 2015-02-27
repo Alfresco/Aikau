@@ -31,7 +31,7 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   baseFunctionalSuites: [
+   xbaseFunctionalSuites: [
       // Chrome Failures
       "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
       "src/test/resources/alfresco/layout/BasicLayoutTest",
@@ -54,7 +54,7 @@ define({
     * @instance
     * @type [string]
     */
-   xbaseFunctionalSuites: [
+   baseFunctionalSuites: [
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 

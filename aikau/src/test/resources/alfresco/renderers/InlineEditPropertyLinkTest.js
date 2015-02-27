@@ -37,18 +37,12 @@ define(["intern!object",
 
          setup: function() {
             browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/InlineEditPropertyLink", "InlineEditPropertyLink")
-               .end();
+            return TestCommon.loadTestWebScript(this.remote, "/InlineEditPropertyLink", "InlineEditPropertyLink").end();
          },
 
          beforeEach: function() {
             browser.end();
          },
-
-         // teardown: function() {
-         //    return browser.end()
-         //       .alfPostCoverageResults(browser);
-         // },
 
          "Property is rendered correctly": function() {
             return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
@@ -283,6 +277,5 @@ define(["intern!object",
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
-
       });
    });
