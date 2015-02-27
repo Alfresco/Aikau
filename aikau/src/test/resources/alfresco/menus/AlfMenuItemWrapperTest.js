@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,18 +29,24 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, require, TestCommon, keys) {
 
+   var browser;
    registerSuite({
-      name: 'AlfMenuItemWrapper Test',
-      'alfresco/menus/AlfMenuItemWrapper': function () {
+      name: "AlfMenuItemWrapper Tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfMenuItemWrapper", "AlfMenuItemWrapper Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Tests": function () {
 
          var testname = "AlfMenuItemWrapper Test";
          var alfPause = 500;
-         var browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfMenuItemWrapper")
-
-            // Test #1
-            // Check that keyboard navigation works
-            .pressKeys(keys.TAB)
+         return browser.pressKeys(keys.TAB)
             .sleep(alfPause)
             .pressKeys(keys.ARROW_DOWN) // Opens the drop-down
             .sleep(alfPause)
@@ -101,11 +107,11 @@ define(["intern!object",
                   function(err) {
                      assert(false, "Test #1d - The empty wrapped menu item was not skipped on keyboard navigation", err);
                   }
-               )
-            .end()
+               );
+      },
 
-            
-            .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

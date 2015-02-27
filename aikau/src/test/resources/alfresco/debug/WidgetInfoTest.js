@@ -39,9 +39,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    browser.end();
+      // },
 
       "Test that developer mode isn't initally enabled": function() {
          return browser.findAllByCssSelector(".alfresco-developer-mode-Enabled")
@@ -99,6 +99,10 @@ define(["intern!object",
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Info tooltip was not generated");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

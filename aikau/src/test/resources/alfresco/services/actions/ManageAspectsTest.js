@@ -41,10 +41,6 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
-
       "Test aspects dialog opens (when requesting aspects)": function() {
          // Check that dialog opens when the button simulating the action request is clicked...
          return browser.findByCssSelector("#MANAGE_ASPECTS1_label")
@@ -190,6 +186,10 @@ define(["intern!object",
             .then(null, function() {
                assert(false, "The error prompt was not requested when failure occurred saving data");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

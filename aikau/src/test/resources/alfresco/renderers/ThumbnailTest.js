@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,22 +30,28 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Thumbnail Test',
-      'alfresco/renderers/Thumbnail': function () {
+      name: "Thumbnail Tests",
 
-         var browser = this.remote;
-         var testname = "ThumbnailTest";
-         return TestCommon.loadTestWebScript(this.remote, "/Thumbnail", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Thumbnail", "Thumbnail Tests").end();
+      },
 
-         .findAllByCssSelector("span.alfresco-renderers-Thumbnail")
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Check there are the expected number of thumbnails successfully rendered": function () {
+         return browser.findAllByCssSelector("span.alfresco-renderers-Thumbnail")
             .then(function (thumbnails){
-               TestCommon.log(testname,"Check there are the expected number of thumbnails successfully rendered");
                expect(thumbnails).to.have.length(12, "There should be 12 thumbnails successfully rendered");
-            })
-            .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,67 +25,76 @@
  * @author Dave Draper
  */
 define(["intern!object",
+        "intern/chai!assert",
         "intern/chai!expect",
         "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        function (registerSuite, assert, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Label Test',
-      'alfresco/html/Label': function () {
+      name: "Label Tests",
 
-         var browser = this.remote;
-         var testname = "LabelTest";
-         return TestCommon.loadTestWebScript(this.remote, "/Label", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Label", "Label Tests").end();
+      },
 
-         // Has label with correct phrase
-         .findById("TEST_LABEL")
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+     "Check the label is shown with the correct text to begin with": function () {
+         return browser.findById("TEST_LABEL")
             .getVisibleText()
             .then(function (label) {
-               TestCommon.log(testname,"Check the label is shown with the correct text to begin with");
                expect(label).to.equal("This is a test label", "The label should contain 'This is a test label'");
-            })
-            .end()
+            });
+      },
 
-         // Label has appropriate css class
-         .findByCssSelector("#TEST_LABEL.bold")
+      "Check the label has the class 'bold' when rendered": function() {
+         return browser.findByCssSelector("#TEST_LABEL.bold")
             .then(
-               function(){TestCommon.log(testname,"Check the label has the class 'bold' when rendered");},
+               function(){},
                function(){assert(false, "The label should have css class 'bold'");}
-            )
-            .end()
+            );
+      },
 
-         // Has subscribed to appropriate topic
-         .findByCssSelector(TestCommon.topicSelector("NOT_A_REAL_TOPIC", "subscribe", "any"))
+      "Check the label has subscribed to topic 'NOT_A_REAL_TOPIC'": function() {
+         return browser.findByCssSelector(TestCommon.topicSelector("NOT_A_REAL_TOPIC", "subscribe", "any"))
             .then(
-               function(){TestCommon.log(testname,"Check the label has subscribed to topic 'NOT_A_REAL_TOPIC'");},
+               function(){},
                function(){assert(false, "The label should have subscribed to topic 'NOT_A_REAL_TOPIC'");}
-            )
-            .end()
-         
-         // Click button to publish topic
-         .findById("TEST_BUTTON")
+            );
+      },
+
+      "Check the button has published to topic 'NOT_A_REAL_TOPIC'": function() {
+         return browser.findById("TEST_BUTTON")
             .click()
-            .end()
+         .end()
 
          // Has published to appropriate topic
          .findByCssSelector(TestCommon.topicSelector("NOT_A_REAL_TOPIC", "publish", "any"))
             .then(
-               function(){TestCommon.log(testname,"Check the button has published to topic 'NOT_A_REAL_TOPIC'");},
+               function(){},
                function(){assert(false, "The button should have published to topic 'NOT_A_REAL_TOPIC'");}
-            )
-            .end()
+            );
+      },
 
-         // Label copy has changed appropriately
-         .findById("TEST_LABEL")
+      "Check the label is now shown with the text from the topic publish payload": function() {
+         return browser.findById("TEST_LABEL")
             .getVisibleText()
             .then(function (label) {
-               TestCommon.log(testname,"Check the label is now shown with the text from the topic publish payload");
                expect(label).to.equal("Label is updated", "The label should contain 'Label is updated'");
-            })
-            .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

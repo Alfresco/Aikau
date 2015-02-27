@@ -41,9 +41,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    browser.end().alfPostCoverageResults(browser);
+      // },
       
       "Test that header CSS is applied": function () {
          // Check that the header CSS is applied...         
@@ -223,6 +223,10 @@ define(["intern!object",
             .then(function(resultText) {
                assert.equal(resultText, "Updated Title", "The title was not updated");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 
@@ -238,9 +242,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    browser.end().alfPostCoverageResults(browser);
+      // },
       
       "Test add favourite request published": function() {
          return browser.findByCssSelector("#SITES_MENU_text")
@@ -263,6 +267,10 @@ define(["intern!object",
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Favourite not added correctly");
                });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 
@@ -278,9 +286,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    browser.end().alfPostCoverageResults(browser);
+      // },
       
       "Test remove favourite request published": function() {
          return browser.findByCssSelector("#SITES_MENU_text")
@@ -303,6 +311,10 @@ define(["intern!object",
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Favourite not removed correctly");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 
@@ -318,9 +330,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    browser.end().alfPostCoverageResults(browser);
+      // },
       
       "Test title gets set": function() {
          return browser.findByCssSelector(".alfresco-header-Title > .text")
@@ -335,6 +347,10 @@ define(["intern!object",
             .then(function(title) {
                assert(title.indexOf("Unit Tests" === 0), "The document title was not updated");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

@@ -21,46 +21,48 @@
  * @author David Webster
  */
 define(["intern!object",
-   "intern/chai!expect",
-   "intern/chai!assert",
-   "require",
-   "alfresco/TestCommon"],
-   function (registerSuite, expect, assert, require, TestCommon) {
+        "intern/chai!expect",
+        "intern/chai!assert",
+        "require",
+        "alfresco/TestCommon"],
+       function (registerSuite, expect, assert, require, TestCommon) {
 
-      registerSuite({
-         name: 'XHR Actions Renderer Test',
-         'alfresco/renderers/XhrActions': function () {
+   var browser;
+   registerSuite({
+      name: "XHR Actions Renderer Tests",
 
-            var browser = this.remote;
-            var testname = "XhrActionsTest";
-            return TestCommon.loadTestWebScript(this.remote, "/XhrActions", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/XhrActions", "XHR Actions Renderer Tests").end();
+      },
 
-               // Test spec:
-               // 1: Check dropdown element exists
+      beforeEach: function() {
+         browser.end();
+      },
 
-               .findByCssSelector(".alfresco-menus-AlfMenuBar span:first-child")
-                  .getVisibleText()
-                  .then(function(resultText) {
-                     TestCommon.log(testname,"Check Actions menu was rendered");
-                     assert(resultText == "Actions", "Test #1- Actions should be rendered as a menu: " + resultText);
-                  })
+     "Check Actions menu was rendered": function () {
+         // Test spec:
+         // 1: Check dropdown element exists
+         return browser.findByCssSelector(".alfresco-menus-AlfMenuBar span:first-child")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert(resultText === "Actions", "Actions should be rendered as a menu: " + resultText);
+            });
+      },
 
-               // 2: Click on it. Check event triggered: ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST
+      "Check that document request event was triggered": function() {
+         // 2: Click on it. Check event triggered: ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST
+         return browser.findByCssSelector(".alfresco-menus-AlfMenuBar span:first-child")
+            .click()
+            .end()
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", "publish", "any"))
+            .then(function(elements) {
+               assert(elements.length === 1, "Retrieve single doc request not triggered");
+            });
+      },
 
-                  .click()
-                  .end()
-               .findAllByCssSelector(TestCommon.topicSelector("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", "publish", "any"))
-                  .then(function(elements) {
-                     TestCommon.log(testname,"Check that document request event was triggered");
-                     assert(elements.length == 1, "Test #2 - Retrieve single doc request not triggered");
-                  })
-                  .end()
-
-               // TODO: 3: Trigger response event with data
-               // TODO: 4: See if response is rendered
-
-               
-               .alfPostCoverageResults(browser);
-         }
-      });
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
    });
+});

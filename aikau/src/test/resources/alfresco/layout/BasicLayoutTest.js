@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,27 +23,34 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Basic Layout Test',
-      'BasicLayout': function () {
+      name: "Basic Layout Tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/BasicLayouts", "Basic Layout Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Tests": function () {
 
          var testableDimensions = {};
 
-         var browser = this.remote;
          var testname = "BasicLayoutTest";
-         return TestCommon.loadTestWebScript(this.remote, "/BasicLayouts", testname)
-
-            // Test #1
-            // Check margins in vertical widgets...
-            .findByCssSelector("#SURF_LOGO1")
+         // Test #1
+         // Check margins in vertical widgets...
+         return browser.findByCssSelector("#SURF_LOGO1")
                .getAttribute("style")
                .then(function(style) {
                   TestCommon.log(testname,"Test top margin is set correctly on a vertical widget");
-                  assert(style == "margin-top: 10px;", "Test #1a - The style was not set correctly on a vertical widget with top margin: " + style);
+                  assert(style === "margin-top: 10px;", "Test #1a - The style was not set correctly on a vertical widget with top margin: " + style);
                })
                .end()
 
@@ -51,7 +58,7 @@ define(["intern!object",
                .getAttribute("style")
                .then(function(style) {
                   TestCommon.log(testname,"Test bottom margin is set correctly on a vertical widget");
-                  assert(style == "margin-bottom: 20px;", "Test #1b - The style was not set correctly on a vertical widget with bottom margin: " + style);
+                  assert(style === "margin-bottom: 20px;", "Test #1b - The style was not set correctly on a vertical widget with bottom margin: " + style);
                })
                .end()
 
@@ -59,7 +66,7 @@ define(["intern!object",
                .getAttribute("style")
                .then(function(style) {
                   TestCommon.log(testname,"Test both top and bottom margins are set correctly on a vertical widget");
-                  assert(style == "margin-top: 30px; margin-bottom: 40px;", "Test #1c - The style was not set correctly on a vertical widget with top and bottom margins: " + style);
+                  assert(style === "margin-top: 30px; margin-bottom: 40px;", "Test #1c - The style was not set correctly on a vertical widget with top and bottom margins: " + style);
                })
                .end()
 
@@ -98,7 +105,7 @@ define(["intern!object",
                .end()
 
             .findByCssSelector(".right-widgets #ALFRESCO_LOGO1")
-               .then(null, function(result) {
+               .then(null, function() {
                   assert(false, "Test #3b - logo was not right aligned");
                })
                .end()
@@ -116,12 +123,12 @@ define(["intern!object",
                .getComputedStyle("margin-left")
                .then(function(x) {
                   TestCommon.log(testname,"Test left margin of horizontal widget");
-                  assert(x == "10px", "Test #4a - The left margin was not set correctly on a horizontal widget: " + x);
+                  assert(x === "10px", "Test #4a - The left margin was not set correctly on a horizontal widget: " + x);
                })
                .getComputedStyle("margin-right")
                .then(function(x) {
                   TestCommon.log(testname,"Test right margin of horizontal widget");
-                  assert(x == "20px", "Test #4b - The right margin was not set correctly on a horizontal widget: " + x);
+                  assert(x === "20px", "Test #4b - The right margin was not set correctly on a horizontal widget: " + x);
                })
                .getComputedStyle("width")
                .then(function(width) {
@@ -130,7 +137,7 @@ define(["intern!object",
                   var x = width.substring(0, width.lastIndexOf("px"));
                   var shouldBe = (testableDimensions.horiz2 - 90 - 300 - 3 - 30) * 0.75;
                   TestCommon.log(testname,"Test width of horizontal element by remaining percentage");
-                  assert(shouldBe == x, "Test #4c - The width was not set correctly by remaining percentage: " + x + " (should be: " + shouldBe + ")");
+                  assert(shouldBe === x, "Test #4c - The width was not set correctly by remaining percentage: " + x + " (should be: " + shouldBe + ")");
                })
                .end()
 
@@ -138,7 +145,7 @@ define(["intern!object",
                .getComputedStyle("width")
                .then(function(width) {
                   TestCommon.log(testname,"Test width is set correctly");
-                  assert(width == "300px", "Test #4d - The width was not set correctly by pixels: " + width);
+                  assert(width === "300px", "Test #4d - The width was not set correctly by pixels: " + width);
                })
                .end()
 
@@ -155,7 +162,7 @@ define(["intern!object",
                   var x = width.substring(0, width.lastIndexOf("px"));
                   var shouldBe = (testableDimensions.horiz3 - 2 - 30) * 0.5;
                   TestCommon.log(testname,"Test space is evenly divided");
-                  assert(shouldBe == x, "Test #4e - The width was not set correctly by evenly dividing space, was: " + x + ", should be: " + shouldBe);
+                  assert(shouldBe === x, "Test #4e - The width was not set correctly by evenly dividing space, was: " + x + ", should be: " + shouldBe);
                })
                .end()
 
@@ -165,7 +172,7 @@ define(["intern!object",
                   var x = width.substring(0, width.lastIndexOf("px"));
                   var shouldBe = (testableDimensions.horiz3 - 2 - 30) * 0.5;
                   TestCommon.log(testname,"Test space is evenly divided");
-                  assert(shouldBe == x, "Test #4f - The width was not set correctly by evenly dividing space");
+                  assert(shouldBe === x, "Test #4f - The width was not set correctly by evenly dividing space");
                })
                .end()
 
@@ -190,7 +197,7 @@ define(["intern!object",
             // Test #5
             // Test center alignment of centered widgets...
             .findByCssSelector(".center-container")
-               .then(null, function(result) {
+               .then(null, function() {
                   assert(false, "Test #5a - center-container not found");
                })
                .end()
@@ -206,11 +213,12 @@ define(["intern!object",
                .then(function(width) {
                   var x = width.substring(0, width.lastIndexOf("px"));
                   var shouldBe = 368;
-                  assert(shouldBe == x, "Test #5c - The width was not set correctly");
-               })
-               .end()
+                  assert(shouldBe === x, "Test #5c - The width was not set correctly");
+               });
+      },
 
-            .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

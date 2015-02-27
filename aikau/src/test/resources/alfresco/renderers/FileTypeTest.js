@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,22 +30,28 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'FileType Test',
-      'alfresco/renderers/FileType': function () {
+      name: "FileType Tests",
 
-         var browser = this.remote;
-         var testname = "FileTypeTest";
-         return TestCommon.loadTestWebScript(this.remote, "/FileType", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/FileType", "FileType Tests").end();
+      },
 
-         .findAllByCssSelector("div.alfresco-renderers-FileType")
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Check there are the expected number of filetypes": function () {
+         return browser.findAllByCssSelector("div.alfresco-renderers-FileType")
             .then(function (filetypes){
-               TestCommon.log(testname,"Check there are the expected number of filetypes");
                expect(filetypes).to.have.length(6, "There should be 6 filetypes rendered");
-            })
-            .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

@@ -29,17 +29,23 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, require, TestCommon, keys) {
 
+   var browser;
    registerSuite({
-      name: 'AlfMenuBarSelect Test',
-      'alfresco/menus/AlfMenuBarSelect': function () {
+      name: "AlfMenuBarSelect Tests",
 
-         var browser = this.remote;
-         var testName = "Menu Bar Select Test";
-         return TestCommon.loadTestWebScript(this.remote, "/AlfMenuBarSelect", testName)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfMenuBarSelect", "AlfMenuBarSelect Tests").end();
+      },
 
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Tests": function () {
          // Test #1
          // Check that the subscriptions are set-up correctly
-         .findByCssSelector(TestCommon.topicSelector("MENU_BAR_SELECT"))
+         return browser.findByCssSelector(TestCommon.topicSelector("MENU_BAR_SELECT"))
          .then(
             null,
             function(){assert(false, "Test #1 - A subscription for the basic widget could not be found");}
@@ -65,21 +71,21 @@ define(["intern!object",
          .findByCssSelector("#MENU_BAR_SELECT_text")
          .getVisibleText()
          .then(function(resultText) {
-            assert(resultText == "Select (label)...", "Test #2 - The inital label of the basic widget was not correct: " + resultText);
+            assert(resultText === "Select (label)...", "Test #2 - The inital label of the basic widget was not correct: " + resultText);
          })
          .end()
 
          .findByCssSelector("#MENU_BAR_SELECT_VALUE_text")
          .getVisibleText()
          .then(function(resultText) {
-            assert(resultText == "Select (value)...", "Test #2 - The inital label of the basic widget was not correct: " + resultText);
+            assert(resultText === "Select (value)...", "Test #2 - The inital label of the basic widget was not correct: " + resultText);
          })
          .end()
 
          .findByCssSelector("#MENU_BAR_SELECT_WITH_ICON_text")
          .getVisibleText()
          .then(function(resultText) {
-            assert(resultText == "Select (show icon)...", "Test #2 - The inital label of the basic widget was not correct: " + resultText);
+            assert(resultText === "Select (show icon)...", "Test #2 - The inital label of the basic widget was not correct: " + resultText);
          })
          .end()
 
@@ -106,7 +112,7 @@ define(["intern!object",
          .findByCssSelector("#MENU_BAR_SELECT_text")
          .getVisibleText()
          .then(function(resultText) {
-            assert(resultText == "Option 1 Selected", "Test #3 - The label was not updated correctly: " + resultText);
+            assert(resultText === "Option 1 Selected", "Test #3 - The label was not updated correctly: " + resultText);
          })
          .end()
 
@@ -132,7 +138,7 @@ define(["intern!object",
          .findByCssSelector("#MENU_BAR_SELECT_VALUE_text")
          .getVisibleText()
          .then(function(resultText) {
-            assert(resultText == "Alpha", "Test #4 - The label was not updated correctly (to use a value): " + resultText);
+            assert(resultText === "Alpha", "Test #4 - The label was not updated correctly (to use a value): " + resultText);
          })
          .end()
 
@@ -167,7 +173,7 @@ define(["intern!object",
          .findByCssSelector("#MENU_BAR_SELECT_text")
          .getVisibleText()
          .then(function(resultText) {
-            assert(resultText == "Option 2 Selected", "Test #6 - The label was not updated correctly: " + resultText);
+            assert(resultText === "Option 2 Selected", "Test #6 - The label was not updated correctly: " + resultText);
          })
          .end()
 
@@ -198,7 +204,7 @@ define(["intern!object",
          .findByCssSelector("#MENU_BAR_SELECT_VALUE_text")
          .getVisibleText()
          .then(function(resultText) {
-            assert(resultText == "Beta", "Test #6 - The label was not updated correctly: " + resultText);
+            assert(resultText === "Beta", "Test #6 - The label was not updated correctly: " + resultText);
          })
          .end()
 
@@ -216,7 +222,7 @@ define(["intern!object",
          .findByCssSelector("#MENU_BAR_SELECT_text")
          .getVisibleText()
          .then(function(resultText) {
-            assert(resultText == "Alternative Label", "Test #8 - The label was not updated correctly by an external publication: " + resultText);
+            assert(resultText === "Alternative Label", "Test #8 - The label was not updated correctly by an external publication: " + resultText);
          })
          .end()
 
@@ -229,11 +235,12 @@ define(["intern!object",
          .findByCssSelector("#MENU_BAR_SELECT_VALUE_text")
          .getVisibleText()
          .then(function(resultText) {
-            assert(resultText == "Alternative Value", "Test #9 - The label was not updated correctly by an external publication: " + resultText);
-         })
-         .end()
+            assert(resultText === "Alternative Value", "Test #9 - The label was not updated correctly by an external publication: " + resultText);
+         });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

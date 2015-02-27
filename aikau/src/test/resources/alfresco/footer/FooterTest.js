@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,37 +24,48 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Footer Test',
-      'FooterTest': function () {
-         var browser = this.remote;
-         var testname = "FooterTest";
-         return TestCommon.loadTestWebScript(this.remote, "/TestFooter", testname)
+      name: "Footer Tests",
 
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/TestFooter", "Footer Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+     
+      "Check copyright text": function () {
          // This isn't the most comprehenive set of tests...
          // 1) It's not obvious how to test that the footer is stuck to the bottom without visually checking
          // 2) Some of the config could be further tested
          // It's good enough as a starting point though.
-         .findByCssSelector(".alfresco-footer-AlfShareFooter span.copyright span:last-child")
+         return browser.findByCssSelector(".alfresco-footer-AlfShareFooter span.copyright span:last-child")
             .getVisibleText()
             .then(function (text) {
-               TestCommon.log(testname,"Check copyright text");
                expect(text).to.equal("SOME COPYRIGHT LABEL", "The copyright has not been set correctly");
-            })
-         .end()
+            });
+      },
 
-         .findByCssSelector(".alfresco-footer-AlfShareFooter .licenseHolder")
+      "Check license text": function() {
+         return browser.findByCssSelector(".alfresco-footer-AlfShareFooter .licenseHolder")
             .getVisibleText()
             .then(function (text) {
-               TestCommon.log(testname,"Check license text");
                expect(text).to.equal("Licensed To: SOME LICENSE LABEL", "The license label was not set correctly");
-            })
-         .end()
-         .alfPostCoverageResults(browser);
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

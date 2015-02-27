@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,22 +30,28 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Indicators Test',
-      'alfresco/renderers/Indicators': function () {
+      name: "Indicators Tests",
 
-         var browser = this.remote;
-         var testname = "IndicatorsTest";
-         return TestCommon.loadTestWebScript(this.remote, "/Indicators", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Indicators", "Indicators Tests").end();
+      },
 
-         .findAllByCssSelector("a.indicator-action")
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Check there are the expected number of actions (across several indicators)": function () {
+         return browser.findAllByCssSelector("a.indicator-action")
             .then(function (actions){
-               TestCommon.log(testname,"Check there are the expected number of actions (across several indicators)");
                expect(actions).to.have.length(14, "There should be 14 actions rendered (across several indicators)");
-            })
-            .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

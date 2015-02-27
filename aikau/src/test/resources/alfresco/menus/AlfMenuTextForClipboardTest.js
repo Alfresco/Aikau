@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -33,11 +33,20 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, require, TestCommon, keys) {
 
+   var browser;
    registerSuite({
-      name: 'AlfMenuTextForClipboard Test',
-      'alfresco/menus/AlfMenuTextForClipboard': function () {
+      name: "AlfMenuTextForClipboard Tests",
 
-         var browser = this.remote;
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfMenuTextForClipboard", "AlfMenuTextForClipboard Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Tests": function () {
          var testName = "Menu Text For Clipboard Test";
          return TestCommon.loadTestWebScript(this.remote, "/AlfMenuTextForClipboard", testName)
 
@@ -74,7 +83,7 @@ define(["intern!object",
 
 
             .pressKeys(keys.TAB)
-            .pressKeys(keys.TAB)
+            .pressKeys(keys.TAB);
             // .pressKeys(keys.TAB)
             // .findByCssSelector("#TEXTAREA textarea")
             //    .click()
@@ -91,8 +100,10 @@ define(["intern!object",
             //    .then(function(resultText) {
             //       assert(resultText == "Copy me!", "Test #1c - The inital label of TEXT3 has been set incorrectly: " + resultText);
             //    })
-            
-            .alfPostCoverageResults(browser);
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });
