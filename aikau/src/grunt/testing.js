@@ -19,6 +19,9 @@ module.exports = function(grunt) {
    // Restart the test server
    grunt.registerTask("restartTestApp", ["shell:stopTestApp", "startUnitTestApp"]);
 
+   // Build and then clear cached stuff
+   grunt.registerTask("updateTest", ["shell:mavenProcessTestResources", "http:testAppReloadWebScripts", "http:testAppClearCaches"]);
+
    // Start jetty server if not already running. Use waitServer to check startup finished
    grunt.registerTask("startUnitTestApp", "Spawn a Maven process to start the Jetty server running the unit test application", function() {
       grunt.log.writeln("Check Jetty unit test application state...");
