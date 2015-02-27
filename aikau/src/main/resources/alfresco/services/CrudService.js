@@ -32,7 +32,7 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/json"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang, array, dojoJson) {
+        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang) {
    
    return declare([AlfCore, CoreXhr], {
       
@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
        */
       refreshRequest: function alfresco_services_CrudService__refreshRequest(response, originalRequestConfig) {
          var responseTopic = lang.getObject("alfTopic", false, originalRequestConfig);
-         if (responseTopic != null)
+         if (responseTopic)
          {
             this.alfPublish(responseTopic + "_SUCCESS", response);
          }
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
          }
 
          var message = lang.getObject("successMessage", false, originalRequestConfig);
-         if (message == null)
+         if (!message)
          {
             message = this.message("crudservice.generic.success.message");
          }
@@ -91,18 +91,14 @@ define(["dojo/_base/declare",
          });
 
          var noRefresh = lang.getObject("data.noRefresh", false, originalRequestConfig);
-         if (noRefresh != null && noRefresh === true)
+         if (noRefresh === true)
          {
             // Don't make a refresh request...
          }
          else
          {
             // When refreshing, check to see if a pubSubScope was provided...
-            var pubSubScope = lang.getObject("data.pubSubScope", false, originalRequestConfig);
-            if (pubSubScope == null)
-            {
-               pubSubScope = "";
-            }
+            var pubSubScope = lang.getObject("data.pubSubScope", false, originalRequestConfig) || "";
             this.alfPublish(pubSubScope + "ALF_DOCLIST_RELOAD_DATA");
          }
       },
@@ -126,7 +122,7 @@ define(["dojo/_base/declare",
          else
          {
             var urlType = payload.urlType;
-            if (urlType == null || urlType === "PROXY")
+            if (!urlType || urlType === "PROXY")
             {
                url = AlfConstants.PROXY_URI + url;
             }
@@ -171,7 +167,7 @@ define(["dojo/_base/declare",
          {
             this.serviceXhr({url: url,
                              data: this.clonePayload(payload),
-                             alfTopic: (payload.alfResponseTopic ? payload.alfResponseTopic : null),
+                             alfTopic: payload.alfResponseTopic || null,
                              method: "GET"});
          }
       },
@@ -185,7 +181,7 @@ define(["dojo/_base/declare",
       onGetOne: function alfresco_services_CrudService__onGetOne(payload) {
          // TODO: Need to append the identifier to specify the object to retrieve
          var url = this.getUrlFromPayload(payload);
-         if (url !== null)
+         if (url)
          {
             this.serviceXhr({url: url,
                              data: this.clonePayload(payload),
