@@ -215,6 +215,25 @@ define(["intern!object",
          });
       },
 
+      "Test pub/sub options in dialog": function() {
+         // See https://issues.alfresco.com/jira/browse/AKU-131
+         // Create the form dialog...
+         return browser.findByCssSelector("#CREATE_FORM_DIALOG_label")
+            .click()
+         .end()
+
+         // Open the opens...
+         .findByCssSelector("#SELECT_IN_DIALOG .dijitArrowButtonInner")
+            .click()
+         .end()
+
+         // Count that there are some...
+         .findAllByCssSelector("#SELECT_IN_DIALOG_CONTROL_dropdown .dijitMenuItemLabel")
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "No pub sub options provided for select in a dialog");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

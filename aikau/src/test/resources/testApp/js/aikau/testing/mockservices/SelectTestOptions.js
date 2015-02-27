@@ -37,8 +37,9 @@ define(["dojo/_base/declare",
        */
       constructor: function alfresco_testing_mockservices_SelectTestOptions__constructor(args) {
          lang.mixin(this, args);
-         this.alfSubscribe("GET_OPTIONS_FOR_SELECT_2", lang.hitch(this, "getOptionsForSelect2"));
-         this.alfSubscribe("GET_OPTIONS_FOR_SELECT_4", lang.hitch(this, "getOptionsForSelect4"));
+         this.alfSubscribe("GET_OPTIONS_FOR_SELECT_2", lang.hitch(this, this.getOptionsForSelect2));
+         this.alfSubscribe("GET_OPTIONS_FOR_SELECT_4", lang.hitch(this, this.getOptionsForSelect4));
+         this.alfSubscribe("GET_OPTIONS_FOR_SELECT_IN_DIALOG", lang.hitch(this, this.getOptionsForSelectInDialog));
 
          this.select2Count = 0;
          this.select4Count = 0;
@@ -81,6 +82,21 @@ define(["dojo/_base/declare",
                {
                   "label": "Update2_" + this.select4Count,
                   "value": "Value2_" + this.select4Count
+               }
+            ]
+         });
+      },
+
+      getOptionsForSelectInDialog: function alfresco_testing_mockservices_SelectTestOptions__getOptionsForSelectInDialog(payload) {
+         this.alfPublish(payload.responseTopic, {
+            options: [
+               {
+                  label: "Dialog Option 1",
+                  value: "DO1"
+               },
+               {
+                  label: "Dialog Option 2",
+                  value: "DO2"
                }
             ]
          });
