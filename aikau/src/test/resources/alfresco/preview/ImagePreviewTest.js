@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,21 +27,21 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Previewer Tests',
-      'Image Preview': function () {
+      name: "Image Preview Tests",
 
-         var browser = this.remote;
-         var testname = "Image Preview Test";
-         return TestCommon.loadTestWebScript(this.remote, "/ImagePreview", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/ImagePreview", "Image Preview Tests").end();
+      },
 
-         // A long sleep is required to wait for the binary data to be loaded.
-         // However, it's worth noting that the binary data is *not* actually used because
-         // the image preview creates an <img> element rather than making an XHR request.
-         // However, the code has been left for education purposes for now. This test is therefore
-         // not actually expected to render an image (due to a lack of authentication and a non-existant nodeRef)
-         // .sleep(20000)
-         .findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer")
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Tests": function () {
+         return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer")
             .then(null, function() {
                assert(false, "Test #1a - Couldn't find preview node");
             })
@@ -56,13 +56,13 @@ define(["intern!object",
          .findByCssSelector(".alfresco-testing-MockXhr table tbody tr:first-child td.mx-url")
             .getVisibleText()
             .then(function(text) {
-               var result = (text.indexOf("/aikau/service/components/documentlibrary/data/node/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4?view=browse&noCache") !== -1);
+               var result = text.indexOf("/aikau/service/components/documentlibrary/data/node/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4?view=browse&noCache") !== -1;
                assert(result, "Test #2b - AlfDocument didn't request node details: " + text);
-            })
-            .end()
+            });
+      },
 
-         
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

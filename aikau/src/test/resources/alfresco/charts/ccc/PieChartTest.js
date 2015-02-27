@@ -41,10 +41,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
      "Check pie slices": function () {
          // Test #1
          // Check pie slices

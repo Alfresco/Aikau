@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,22 +27,29 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Property Test',
-      'alfresco/renderers/Property': function () {
+      name: "Property Tests",
 
-         var browser = this.remote;
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Property", "Property Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Tests": function () {
          var testname = "PropertyTest";
-         return TestCommon.loadTestWebScript(this.remote, "/Property", testname)
-
-         .moveMouseTo(null, 0, 0)
+         return browser.moveMouseTo(null, 0, 0)
             .end()
 
          .findByCssSelector("#BASIC .value")
             .getVisibleText()
             .then(function(resultText) {
                TestCommon.log(testname,"Check standard property is rendered correctly");
-               assert(resultText == "Test", "Standard property not rendered correctly: " + resultText);
+               assert(resultText === "Test", "Standard property not rendered correctly: " + resultText);
             })
             .end()
 
@@ -50,7 +57,7 @@ define(["intern!object",
             .getVisibleText()
             .then(function(resultText) {
                TestCommon.log(testname,"Check prefixed/suffixed property is rendered correctly");
-               assert(resultText == "(Test)", "Prefix and suffix not rendered correctly: " + resultText);
+               assert(resultText === "(Test)", "Prefix and suffix not rendered correctly: " + resultText);
             })
             .end()
 
@@ -58,7 +65,7 @@ define(["intern!object",
             .getComputedStyle("display")
             .then(function(result) {
                TestCommon.log(testname,"Check new line property is rendered correctly");
-               assert(result == "block", "New line not applied");
+               assert(result === "block", "New line not applied");
             })
             .end()
 
@@ -66,7 +73,7 @@ define(["intern!object",
             .getVisibleText()
             .then(function(resultText) {
                TestCommon.log(testname,"Check standard warning is rendered correctly");
-               assert(resultText == "No property for: \"missing\"", "Standard warning not rendered correctly: " + resultText);
+               assert(resultText === "No property for: \"missing\"", "Standard warning not rendered correctly: " + resultText);
             })
             .end()
 
@@ -74,7 +81,7 @@ define(["intern!object",
             .getVisibleText()
             .then(function(resultText) {
                TestCommon.log(testname,"Check explicit warning is rendered correctly");
-               assert(resultText == "No description", "Explicit warning not rendered correctly: " + resultText);
+               assert(resultText === "No description", "Explicit warning not rendered correctly: " + resultText);
             })
             .end()
 
@@ -111,11 +118,12 @@ define(["intern!object",
             .getVisibleText()
             .then(function(resultText) {
                TestCommon.log(testname,"Check label is rendered correctly");
-               assert(resultText == "Label:", "Label not rendered correctly: " + resultText);
-            })
-            .end()
+               assert(resultText === "Label:", "Label not rendered correctly: " + resultText);
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

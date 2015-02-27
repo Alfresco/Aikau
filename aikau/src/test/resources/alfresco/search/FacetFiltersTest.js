@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -32,16 +32,23 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, expect, assert, require, TestCommon, keys) {
 
+   var browser;
    registerSuite({
-      name: 'FacetFilters Test',
-      'Mouse tests': function () {
+      name: "FacetFilters Tests (Mouse)",
 
-         var browser = this.remote;
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", "FacetFilters Tests (Mouse)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Mouse tests": function () {
          var testname = "FacetFiltersTest - Mouse tests";
-         return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", testname)
-
          // Check no facets are shown to begin with
-         .findById("FACET1")
+         return browser.findById("FACET1")
             .getVisibleText()
             .then(function (initialValue) {
                TestCommon.log(testname,"Check no facets are shown to begin with");
@@ -232,20 +239,30 @@ define(["intern!object",
             .then(
                function(){TestCommon.log(testname,"Clicking a facet to deselect should publish");},
                function(){assert(false, "The facet deselection did not publish on 'ALF_REMOVE_FACET_FILTER'");}
-            )
-            .end()
-
-         .alfPostCoverageResults(browser);
+            );
       },
 
-      'Keyboard tests': function () {
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 
-         var browser = this.remote;
+   registerSuite({
+      name: "FacetFilters Tests (Keyboard)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", "FacetFilters Tests (Keyboard)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Keyboard tests": function () {
          var testname = "FacetFiltersTest - Keyboard tests";
-         return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", testname)
-
          // Check no facets are shown to begin with
-         .findById("FACET1")
+         return browser.findById("FACET1")
             .getVisibleText()
             .then(function (initialValue) {
                TestCommon.log(testname,"Check no facets are shown to begin with");
@@ -335,20 +352,30 @@ define(["intern!object",
             .then(
                function(){TestCommon.log(testname,"Clicking a facet using the keyboard to deselect should publish");},
                function(){assert(false, "The facet deselection using the keyboard did not publish on 'ALF_REMOVE_FACET_FILTER'");}
-            )
-            .end()
-
-         .alfPostCoverageResults(browser);
+            );
       },
 
-      'Url hash tests': function () {
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 
-         var browser = this.remote;
+   registerSuite({
+      name: "FacetFilters Tests (URL Hash Tests)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", "FacetFilters Tests (URL Hash Tests)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Url hash tests": function () {
          var testname = "FacetFiltersTest - Url hash tests";
-         return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", testname)
-
          // Click button 4 - 3 rows of facet data should appear
-         .findById("DO_FACET_BUTTON_4")
+         return browser.findById("DO_FACET_BUTTON_4")
             .click()
             .end()
 
@@ -409,10 +436,11 @@ define(["intern!object",
                TestCommon.log(testname,"Click the second item in the facet menu again");
                expect(url).to.not.contain("FACET2QNAME", "The url hash should not now contain 'FACET2QNAME'")
                   .and.to.not.contain("facFil2", "The facet click did not remove the value 'facFil2' from the url hash as expected");
-            })
-            .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -28,55 +28,50 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
+   var activeElementId;
+      
    registerSuite({
-      name: 'AlfSearchResult Test',
-      'alfresco/search/AlfSearchResult': function () {
+      name: "AlfSearchResult Tests",
 
-         var browser = this.remote;
-         var testname = "AlfSearchResult Test";
-         var activeElementId;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfSearchResult", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfSearchResult", "AlfSearchResult Tests").end();
+      },
 
-         // Are there 11 results?
-         .findAllByCssSelector('#SEARCH_RESULTS table tbody tr')
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Check the correct number of rows is shown": function () {
+         return browser.findAllByCssSelector("#SEARCH_RESULTS table tbody tr")
             .then(function (rows){
-               TestCommon.log(testname,"Check the correct number of rows is shown");
-               expect(rows).to.have.length(11, "Test #1 - There should be 11 search result rows shown");
-            })
-            .end()
+               expect(rows).to.have.length(11, "There should be 11 search result rows shown");
+            });
+      },
 
-         // Click the last result row
-         .findByCssSelector('#SEARCH_RESULTS table tbody tr:last-of-type')
+      "Check that a clicked search result at the bottom of the screen becomes focused": function() {
+         return browser.findByCssSelector("#SEARCH_RESULTS table tbody tr:last-of-type")
             .click()
-            .end()
+         .end()
 
          // Store the id of the currently focused (active) element
          .getActiveElement()
             .then(function (element){
                activeElementId = element._elementId;
             })
-            .end()
+         .end()
 
          // Are the clicked row of the results and the currently focused item the same?
-         .findByCssSelector('#SEARCH_RESULTS table tbody tr:last-of-type')
+         .findByCssSelector("#SEARCH_RESULTS table tbody tr:last-of-type")
             .then(function (clickedElement){
-               TestCommon.log(testname,"Check that a clicked search result at the bottom of the screen becomes focused");
                var clickedElementId = clickedElement._elementId;
-               expect(clickedElementId).to.equal(activeElementId, "Test #2 - The clicked element has not become focused");
-            })
-            .end()
+               expect(clickedElementId).to.equal(activeElementId, "The clicked element has not become focused");
+            });
+      },
 
-         // Old version of last test which was a bit brittle
-         // .findByCssSelector('#SEARCH_RESULTS table tbody tr:last-of-type')
-         //    .click()
-         //    .getComputedStyle('background-color')
-         //    .then(function (colour){
-         //       TestCommon.log(testname,"Check that a clicked search result at the bottom of the screen becomes selected");
-         //       expect(colour).to.equal("rgba(245, 245, 245, 1)", "Test #2 - The colour of the click selection was not as expected");
-         //    })
-         //    .end()
-
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

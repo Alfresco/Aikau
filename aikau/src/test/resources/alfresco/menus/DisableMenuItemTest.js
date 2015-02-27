@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -28,24 +28,29 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Disable MenuItem Test',
-      'alfresco/menus/_AlfMenuItemMixin': function () {
-         var browser = this.remote;
-         var testname = "DisableMenuItemTests";
-         return TestCommon.loadTestWebScript(this.remote, "/DisableMenuItemTestPage", testname)
-            
-            .end()
+      name: "Disable MenuItem Tests",
 
-            // Check menu item is enabled
-            .findById("MENU_BAR_ITEM_1")
-               .getAttribute('class')
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking menu item is not yet disabled");
-                     expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled yet");
-                  })
-               .end()
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/DisableMenuItemTestPage", "Disable MenuItem Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Tests": function () {
+         var testname = "DisableMenuItemTests";
+         return browser.findById("MENU_BAR_ITEM_1")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking menu item is not yet disabled");
+                  expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled yet");
+               })
+            .end()
 
             // Disable menu item
             .findById("DROP_DOWN_MENU_1")
@@ -57,7 +62,7 @@ define(["intern!object",
 
             // Check menu item is now disabled
             .findById("MENU_BAR_ITEM_1")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking menu item is disabled");
@@ -75,7 +80,7 @@ define(["intern!object",
 
             // Check menu item is enabled
             .findById("MENU_BAR_ITEM_1")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking menu item is enabled again");
@@ -93,7 +98,7 @@ define(["intern!object",
 
             // Check menu item is enabled
             .findById("MENU_BAR_ITEM_1")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking menu item is still enabled");
@@ -111,7 +116,7 @@ define(["intern!object",
 
             // Check menu item is enabled
             .findById("MENU_BAR_ITEM_1")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking menu item is still enabled");
@@ -129,7 +134,7 @@ define(["intern!object",
 
             // Check menu item is enabled
             .findById("MENU_BAR_ITEM_1")
-               .getAttribute('class')
+               .getAttribute("class")
                .then(
                   function(currClasses) {
                      TestCommon.log(testname, "Checking menu item is still enabled");
@@ -195,10 +200,11 @@ define(["intern!object",
                   function(txt) {
                      TestCommon.log(testname, "Checking menu item has not changed label");
                      expect(txt).to.equal("Wot-ya-ma-call-it", "The menu item has the wrong label");
-                  })
-               .end()
+                  });
+      },
 
-            .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

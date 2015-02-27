@@ -42,10 +42,6 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
-
       // Count the number of subscriptions to for the grouped checkable items, there should be 
       // 3 subscriptions - one for each item in the group...
       "Test registered subscription count": function () {
@@ -268,6 +264,10 @@ define(["intern!object",
                .then(function(result) {
                   assert.isTrue(result, "The third GROUPED menu item should have been CHECKED following mouse navigation");
                });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

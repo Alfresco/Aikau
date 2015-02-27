@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,78 +30,84 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Banner and Locked Banner Test',
-      'alfresco/renderers/Banner & alfresco/renderers/LockedBanner': function () {
+      name: "Banner and Locked Banner Tests",
 
-         var browser = this.remote;
-         var testname = "BannerTest";
-         return TestCommon.loadTestWebScript(this.remote, "/Banner", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Banner", "Banner and Locked Banner Tests").end();
+      },
 
-         .findAllByCssSelector("span.alfresco-renderers-Banner")
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check there are the expected number of banners successfully rendered": function () {
+         return browser.findAllByCssSelector("span.alfresco-renderers-Banner")
             .then(function (banners){
-               TestCommon.log(testname,"Check there are the expected number of banners successfully rendered");
                expect(banners).to.have.length(7, "There should be 7 banners successfully rendered");
-            })
-            .end()
+            });
+      },
 
-         .findById("BANNER")
+      "Check 'BANNER' is displayed": function() {
+         return browser.findById("BANNER")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check 'BANNER' is displayed");
                expect(displayed).to.equal(true, "'BANNER' should be displayed");
-            })
-            .end()
+            });
+      },
 
-         .findById("BANNER_EMPTY_MESSAGE")
+      "Check 'BANNER_EMPTY_MESSAGE' is not displayed": function() {
+         return browser.findById("BANNER_EMPTY_MESSAGE")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check 'BANNER_EMPTY_MESSAGE' is not displayed");
                expect(displayed).to.equal(false, "'BANNER_EMPTY_MESSAGE' should not be displayed");
-            })
-            .end()
+            });
+      },
 
-         .findById("BANNER_NULL_MESSAGE")
+      "Check 'BANNER_NULL_MESSAGE' is not displayed": function() {
+         return browser.findById("BANNER_NULL_MESSAGE")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check 'BANNER_NULL_MESSAGE' is not displayed");
                expect(displayed).to.equal(false, "'BANNER_NULL_MESSAGE' should not be displayed");
-            })
-            .end()
+            });
+      },
 
-         .findById("BANNER_NO_MESSAGE")
+      "Check 'BANNER_NO_MESSAGE' is not displayed": function() {
+         return browser.findById("BANNER_NO_MESSAGE")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check 'BANNER_NO_MESSAGE' is not displayed");
                expect(displayed).to.equal(false, "'BANNER_NO_MESSAGE' should not be displayed");
-            })
-            .end()
+            });
+      },
 
-         .findById("LOCKED_BANNER_LOCK_OWNER")
+      "Check 'LOCKED_BANNER_LOCK_OWNER' is displayed": function() {
+         return browser.findById("LOCKED_BANNER_LOCK_OWNER")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check 'LOCKED_BANNER_LOCK_OWNER' is displayed");
                expect(displayed).to.equal(true, "'LOCKED_BANNER_LOCK_OWNER' should be displayed");
-            })
-            .end()
+            });
+      },
 
-         .findById("LOCKED_BANNER_WORKING_COPY_OWNER")
+      "Check 'LOCKED_BANNER_WORKING_COPY_OWNER' is displayed": function() {
+         return browser.findById("LOCKED_BANNER_WORKING_COPY_OWNER")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check 'LOCKED_BANNER_WORKING_COPY_OWNER' is displayed");
                expect(displayed).to.equal(true, "'LOCKED_BANNER_WORKING_COPY_OWNER' should be displayed");
-            })
-            .end()
+            });
+      },
 
-         .findById("LOCKED_BANNER_NO_MESSAGE")
+      "Check 'LOCKED_BANNER_NO_MESSAGE' is not displayed": function() {
+         return browser.findById("LOCKED_BANNER_NO_MESSAGE")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check 'LOCKED_BANNER_NO_MESSAGE' is not displayed");
                expect(displayed).to.equal(false, "'LOCKED_BANNER_NO_MESSAGE' should not be displayed");
-            })
-            .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

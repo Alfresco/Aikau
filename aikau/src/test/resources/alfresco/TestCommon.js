@@ -84,7 +84,7 @@ define(["intern/dojo/node!fs",
       alfPostCoverageResults: function(test, browser) {
          if(args.doCoverage === "true")
          {
-            var dfd = test.async(30000);
+            var dfd = test.async(90000);
             var js = "var coverageData = {" +
                "name : name || ''," +
                "lines : $$_l.lines," +

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,40 +30,46 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'PropertyLink Test',
-      'alfresco/renderers/PropertyLink': function () {
+      name: "PropertyLink Tests",
 
-         var browser = this.remote;
-         var testname = "PropertyLinkTest";
-         return TestCommon.loadTestWebScript(this.remote, "/PropertyLink", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/PropertyLink", "PropertyLink Tests").end();
+      },
 
-         .findByCssSelector("#LIST_WITH_HEADER_ITEMS tr:first-child td span.inner")
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check that currentItem is published": function () {
+         return browser.findByCssSelector("#LIST_WITH_HEADER_ITEMS tr:first-child td span.inner")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "name", "Site1"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check that currentItem is published");
-               assert(elements.length == 1, "'name' not included in currentItem data");
-            })
-            .end()
+               assert(elements.length === 1, "'name' not included in currentItem data");
+            });
+      },
 
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "urlname", "site1"))
+      "Check that currentItem data is published": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "urlname", "site1"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check that currentItem is published");
-               assert(elements.length == 1, "'urlname' not included in currentItem data");
-            })
-            .end()
+               assert(elements.length === 1, "'urlname' not included in currentItem data");
+            });
+      },
 
-         .findAllByCssSelector(TestCommon.topicSelector("publishTopic", "publish", "last"))
+      "Check that topic is published": function() {
+         return browser.findAllByCssSelector(TestCommon.topicSelector("publishTopic", "publish", "last"))
             .then(function(elements) {
-               TestCommon.log(testname,"Check that topic is published");
-               assert(elements.length == 1, "topic not published correctly");
-            })
-            .end()
+               assert(elements.length === 1, "topic not published correctly");
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });
