@@ -169,8 +169,8 @@ define(["dojo/_base/declare",
             // Construct headers HTML
             var headersHtmlBuffer = [];
             for (var headerName in xhrRequest.responseHeaders) {
-               if (xhrRequest.hasOwnPropertyName(headerName)) {
-                  headersHtmlBuffer.push(headerName + ": " + xhrRequest.responseHeaders[headerName]);
+               if (xhrRequest.responseHeaders.hasOwnProperty(headerName)) {
+                  headersHtmlBuffer.push("<span class='nowrap'>" + headerName + ": " + xhrRequest.responseHeaders[headerName] + "</span>");
                }
             }
             var headersHtml = (headersHtmlBuffer.length && headersHtmlBuffer.join("<br />")) || "N/A",
@@ -180,9 +180,9 @@ define(["dojo/_base/declare",
             var responseHtml = xhrRequest.status + " (" + xhrRequest.statusText + ")<br />";
             responseHtml += "<em>Hover for more info ...</em>";
             responseHtml += "<dl class='mx-response__info'>";
-            responseHtml += "<dt>Headers:</dt>";
+            responseHtml += "<dt>Headers</dt>";
             responseHtml += "<dd>" + headersHtml + "</dd>";
-            responseHtml += "<dt>Reponse body:</dt>";
+            responseHtml += "<dt>Reponse body</dt>";
             responseHtml += "<dd>" + responseText + "</dd>";
             responseHtml += "</dl>";
 
