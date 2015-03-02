@@ -40,6 +40,7 @@ define(["dojo/_base/declare",
         "dijit/_OnDijitClickMixin",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/renderers/_PublishPayloadMixin",
+        "alfresco/lists/KeyboardNavigationSuppressionMixin",
         "dojo/text!./templates/InlineEditProperty.html",
         "dojo/_base/lang",
         "dojo/_base/array",
@@ -53,10 +54,10 @@ define(["dojo/_base/declare",
         "alfresco/forms/Form",
         "alfresco/forms/controls/DojoValidationTextBox",
         "alfresco/forms/controls/HiddenValue"], 
-        function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin,
+        function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin,
                  template, lang, array, on, domClass, html, domAttr, keys, event) {
 
-   return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin], {
+   return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin], {
       
       /**
        * The array of file(s) containing internationalised strings.
@@ -193,23 +194,6 @@ define(["dojo/_base/declare",
          this.cancelLabel = this.message(this.cancelLabel);
          this.editAltText = this.message(this.editAltText, {
             0: this.renderedValue
-         });
-      },
-
-      /**
-       * Emits a custom event to notify any containers that use keyboard navigation that handling
-       * keyboard events needs to be suppressed whilst editing is taking place. If the argument
-       * is passed as false then it emits a custom event that indicates to containers that keyboard
-       * navigation can resume.
-       *
-       * @instance
-       * @param {boolean} suppress Whether or not to suppress keyboard navigation
-       */
-      suppressContainerKeyboardNavigation: function alfresco_renderers_InlineEditProperty__suppressContainerKeyboardNavigation(suppress) {
-         on.emit(this.domNode, "onSuppressKeyNavigation", {
-            bubbles: true,
-            cancelable: true,
-            suppress: suppress
          });
       },
 
@@ -389,43 +373,6 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Checks for the CTRL-e combination and when detected moves into edit mode.
-       * 
-       * @instance
-       * @param {object} evt The keypress event
-       */
-      onKeyPress: function alfresco_renderers_InlineEditProperty__onKeyPress(evt) {
-         if (evt.ctrlKey === true && evt.charCode === 101)
-         {
-            // On ctrl-e simulate an edit click
-            evt && event.stop(evt);
-            this.onEditClick();
-         }
-      },
-      
-      /**
-       * This function is connected via the widget template. It occurs whenever a key is pressed whilst
-       * focus is on the input field for updating the property value. All keypress events other than the
-       * enter and escape key are ignored. Enter will save the data, escape will cancel editing
-       * 
-       * @instance
-       * @param {object} e The key press event
-       */
-      onValueEntryKeyPress: function alfresco_renderers_InlineEditProperty__onValueEntryKeyPress(e) {
-         if(e.charOrCode === keys.ESCAPE)
-         {
-            event.stop(e);
-            this.onCancel();
-         }
-         // NOTE: This isn't currently working because Dojo form controls suppress certain keys, including ENTER...
-         else if(e.charOrCode === keys.ENTER)
-         {
-            event.stop(e);
-            this.onSave();
-         }
-      },
-
-      /**
        * @instance
        */
       onSave: function alfresco_renderers_InlineEditProperty__onSave(evt) {
@@ -526,22 +473,6 @@ define(["dojo/_base/declare",
          // Reset the input field...
          this.getFormWidget().setValue(this.renderedValue);
          this.renderedValueNode.focus();
-      },
-
-      /**
-       * A common use of this widget is to be placed inside a 
-       * [_MultiItemRendererMixin]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin}
-       * that listens for click events on any of the DOM elements inside each row so that it can focus
-       * on the correct item when clicked on. Therefore it is necessary to prevent focus being "stolen" whilst
-       * clicking on the edit control so this function handles click events and prevents them from bubbling
-       * any further out through the DOM.
-       *
-       * @instance
-       * @param {object} evt The click event
-       */
-      suppressFocusRequest: function alfresco_renderers_InlineEditProperty__suppressFocusRequest(evt) {
-         this.alfLog("log", "Suppress click event");
-         evt && event.stop(evt);
       }
    });
 });

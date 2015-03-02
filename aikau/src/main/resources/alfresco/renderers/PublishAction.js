@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -34,9 +34,8 @@ define(["dojo/_base/declare",
         "alfresco/renderers/_JsNodeMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "dojo/text!./templates/PublishAction.html",
-        "alfresco/core/Core",
-        "service/constants/Default"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, template, AlfCore, AlfConstants) {
+        "alfresco/core/Core"], 
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, template, AlfCore) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, AlfCore], {
       
@@ -92,23 +91,24 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_PublishAction__postMixInProperties() {
-         if (this.iconClass == null || this.iconClass === "")
-         {
-            this.imageSrc = require.toUrl("alfresco/renderers") + "/css/images/add-icon-16.png";
-         }
-         else
+         if (this.iconClass)
          {
             this.imageSrc = require.toUrl("alfresco/renderers") + "/css/images/" + this.iconClass + ".png";
          }
+         else
+         {
+            this.imageSrc = require.toUrl("alfresco/renderers") + "/css/images/add-icon-16.png";
+         }
 
          // Localize the alt text...
+         var altTextId = this.currentItem ? this.currentItem[this.propertyToRender] : "";
          this.altText = this.message(this.altText, {
-            0: (this.currentItem != null ? this.currentItem[this.propertyToRender] : "")
+            0: altTextId
          });
 
          this.publishPayload = this.getGeneratedPayload();
-         this.publishGlobal = (this.publishGlobal != null) ? this.publishGlobal : false;
-         this.publishToParent = (this.publishToParent != null) ? this.publishToParent : false;
+         this.publishGlobal = this.publishGlobal || false;
+         this.publishToParent = this.publishToParent || false;
       },
 
       /**
