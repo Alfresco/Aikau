@@ -38,10 +38,12 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Heading.html",
         "alfresco/core/Core",
+        "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/dom-construct",
-        "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, domClass, domConstruct, domAttr) {
+        "dojo/dom-attr",
+        "dojo/query"],
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domClass, domConstruct, domAttr, domQuery) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -119,7 +121,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_html_Heading__postCreate() {
-         if(isNaN(this.level) || this.level < 1 || this.level > 6 || !this.label)
+         if (isNaN(this.level) || this.level < 1 || this.level > 6 || !this.label)
          {
             this.alfLog("error", "A heading must have a numeric level from 1 to 6 and must have a label", this);
          }
@@ -129,19 +131,46 @@ define(["dojo/_base/declare",
                innerHTML: this.encodeHTML(this.message(this.label))
             }, this.headingNode);
 
-            if(this.headingId)
+            if (this.headingId)
             {
                domAttr.set(heading, "id", this.headingId);
             }
          }
 
-         if(this.isHidden)
+         if (this.isHidden)
          {
             domClass.add(this.domNode, this._hiddenAccessibleClass);
          }
          else if (this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);
+         }
+      },
+      
+      /**
+       * @instance
+       */
+      postMixInProperties: function alfresco_html_Label__postMixInProperties() {
+         if (this.subscriptionTopic != null && lang.trim(this.subscriptionTopic) !== "")
+         {
+            this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, "onHeadingUpdate"));
+         }
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {object} payload The details of the label update
+       */
+      onHeadingUpdate: function alfresco_html_Heading__onHeadingUpdate(payload) {
+         var update = lang.getObject("label", false, payload);
+         if (update != null)
+         {
+            var headingNodes = domQuery("h"+this.level, this.headingNode);
+            if (headingNodes && headingNodes.length === 1)
+            {
+               headingNodes[0].textContent = update;
+            }
          }
       }
    });
