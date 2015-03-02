@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -33,9 +33,8 @@ define(["dojo/_base/declare",
         "alfresco/menus/AlfFilteringMenuItem",
         "alfresco/documentlibrary/_AlfCreateContentPermissionsMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "dojo/_base/lang",
-        "dojo/dom-class"], 
-        function(declare, AlfFilteringMenuItem, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, lang, domClass) {
+        "dojo/_base/lang"], 
+        function(declare, AlfFilteringMenuItem, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, lang) {
    
    return declare([AlfFilteringMenuItem, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin], {
 

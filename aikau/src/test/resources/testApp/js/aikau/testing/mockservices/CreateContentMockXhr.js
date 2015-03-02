@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -26,7 +26,7 @@ define(["dojo/_base/declare",
         "aikauTesting/MockXhr",
         "dojo/text!./responseTemplates/CreateContentTest/node_templates.json",
         "dojo/text!./responseTemplates/CreateContentTest/space_templates.json"], 
-        function(declare, MockXhr, nodeTemplates, spaceTemlates) {
+        function(declare, MockXhr, nodeTemplates, spaceTemplates) {
    
    return declare([MockXhr], {
 
@@ -47,7 +47,17 @@ define(["dojo/_base/declare",
                                     /\/aikau\/proxy\/alfresco\/slingshot\/doclib\/folder-templates/,
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
-                                     nodeTemplates]);
+                                     spaceTemplates]);
+            this.server.respondWith("POST",
+                                    /\/aikau\/proxy\/alfresco\/slingshot\/doclib\/node-templates/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     "{'name':'FAKE_NODE_NAME','success':true}"]);
+            this.server.respondWith("POST",
+                                    /\/aikau\/proxy\/alfresco\/slingshot\/doclib\/folder-templates/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     "{'name':'FAKE_FOLDER_NAME','success':true}"]);
          }
          catch(e)
          {
