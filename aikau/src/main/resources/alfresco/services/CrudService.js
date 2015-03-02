@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,7 +19,7 @@
 
 /**
  * This is a generic service for handling CRUD requests between widgets and the repository.
- * 
+ *
  * @module alfresco/services/CrudService
  * @extends module:alfresco/core/Core
  * @author Dave Draper
@@ -32,20 +32,21 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/json"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang, array, dojoJson) {
-   
+        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang) {
+
    return declare([AlfCore, CoreXhr], {
-      
+
       /**
        * An array of the i18n files to use with this service.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/CrudService.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/CrudService.properties"}],
-      
+
       /**
+       * Constructor
        * 
        * @instance
        * @param {array} args Constructor arguments
@@ -58,30 +59,26 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_CRUD_UPDATE", lang.hitch(this, this.onUpdate));
          this.alfSubscribe("ALF_CRUD_DELETE", lang.hitch(this, this.onDelete));
       },
-      
+
       /**
        * This is called whenever a create, update or delete operation is performed to ensure that
        * any associated list views are refreshed. It does this by publishing on the "ALF_DOCLIST_RELOAD_DATA"
        * topic (for historical reasons - a more generic topic should be used in the future).
-       * 
+       *
        * @instance
        * @param {object} response The response from the original XHR request.
        * @param {object} originalRequestConfig The configuration passed to the original XHR request.
        */
       refreshRequest: function alfresco_services_CrudService__refreshRequest(response, originalRequestConfig) {
          var responseTopic = lang.getObject("alfTopic", false, originalRequestConfig);
-         if (responseTopic != null)
-         {
+         if (responseTopic) {
             this.alfPublish(responseTopic + "_SUCCESS", response);
-         }
-         else
-         {
+         } else {
             this.alfLog("warn", "It was not possible to publish requested CRUD data because the 'responseTopic' attribute was not set on the original request", response, originalRequestConfig);
          }
 
          var message = lang.getObject("successMessage", false, originalRequestConfig);
-         if (message == null)
-         {
+         if (!message) {
             message = this.message("crudservice.generic.success.message");
          }
 
@@ -91,18 +88,11 @@ define(["dojo/_base/declare",
          });
 
          var noRefresh = lang.getObject("data.noRefresh", false, originalRequestConfig);
-         if (noRefresh != null && noRefresh === true)
-         {
+         if (noRefresh === true) {
             // Don't make a refresh request...
-         }
-         else
-         {
+         } else {
             // When refreshing, check to see if a pubSubScope was provided...
-            var pubSubScope = lang.getObject("data.pubSubScope", false, originalRequestConfig);
-            if (pubSubScope == null)
-            {
-               pubSubScope = "";
-            }
+            var pubSubScope = lang.getObject("data.pubSubScope", false, originalRequestConfig) || "";
             this.alfPublish(pubSubScope + "ALF_DOCLIST_RELOAD_DATA");
          }
       },
@@ -112,30 +102,22 @@ define(["dojo/_base/declare",
        * is not found. This is called from all the CRUD handling functions. The payload is expected to contain
        * a 'url' attribute that maps to a Repository WebScript. This function will automatically prefix it
        * with the appropriate proxy stem.
-       * 
+       *
        * @instance
        * @param {object} payload
        * @returns {string} The URL to use to make the CRUD request or null if no 'url' attribute was provided.
        */
       getUrlFromPayload: function alfresco_services_CrudService__getUrlFromPayload(payload) {
          var url = lang.getObject("url", false, payload);
-         if (url === null)
-         {
+         if (!url) {
             this.alfLog("warn", "A request was made to service a CRUD request but no 'url' attribute was provided on the payload", payload, this);
-         }
-         else
-         {
+         } else {
             var urlType = payload.urlType;
-            if (urlType == null || urlType === "PROXY")
-            {
+            if (!urlType || urlType === "PROXY") {
                url = AlfConstants.PROXY_URI + url;
-            }
-            else if (urlType === "SHARE")
-            {
+            } else if (urlType === "SHARE") {
                url = AlfConstants.URL_SERVICECONTEXT + url;
-            }
-            else
-            {
+            } else {
                this.alfLog("warn", "An unknown URL type was requested, using provided URL", payload, this);
             }
          }
@@ -143,8 +125,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This is a utility function for cloning a payload and removing attributes that should
-       * not be passed onto the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
+       * This is a utility function for cloning a payload and removing attributes that should not be
+       * passed onto the [serviceXhr] {@link module:alfresco/core/CoreXhr#serviceXhr} function
        *
        * @param {object} payload The payload to clone
        * @returns {object} The cloned payload
@@ -159,20 +141,21 @@ define(["dojo/_base/declare",
 
       /**
        * Makes a GET request to the Repository using the 'url' attribute provided in the payload passed
-       * in the publication on the topic that this function subscribes to. The 'url' is expected to be a 
-       * Repository WebScript URL and should not include the Repository proxy stem. 
-       * 
+       * in the publication on the topic that this function subscribes to. The 'url' is expected to be a
+       * Repository WebScript URL and should not include the Repository proxy stem.
+       *
        * @instance
-       * @param {object} payload 
+       * @param {object} payload
        */
       onGetAll: function alfresco_services_CrudService__onGetAll(payload) {
          var url = this.getUrlFromPayload(payload);
-         if (url !== null)
-         {
-            this.serviceXhr({url: url,
-                             data: this.clonePayload(payload),
-                             alfTopic: (payload.alfResponseTopic ? payload.alfResponseTopic : null),
-                             method: "GET"});
+         if (url) {
+            this.serviceXhr({
+               url: url,
+               data: this.clonePayload(payload),
+               alfTopic: payload.alfResponseTopic || null,
+               method: "GET"
+            });
          }
       },
 
@@ -180,16 +163,17 @@ define(["dojo/_base/declare",
        * TODO: This needs to be completed.
        *
        * @instance
-       * @param {object} payload 
+       * @param {object} payload
        */
       onGetOne: function alfresco_services_CrudService__onGetOne(payload) {
          // TODO: Need to append the identifier to specify the object to retrieve
          var url = this.getUrlFromPayload(payload);
-         if (url !== null)
-         {
-            this.serviceXhr({url: url,
-                             data: this.clonePayload(payload),
-                             method: "GET"});
+         if (url) {
+            this.serviceXhr({
+               url: url,
+               data: this.clonePayload(payload),
+               method: "GET"
+            });
          }
       },
 
@@ -197,35 +181,43 @@ define(["dojo/_base/declare",
        * Creates a new item via the supplied URL. The payload needs to contain both a 'url' attribute
        * (that indicates the REST API to call) and a 'data' attribute (that defines the object to be
        * created).
-       * 
+       *
        * @instance
-       * @param {object} payload 
+       * @param {object} payload
        */
       onCreate: function alfresco_services_CrudService__onCreate(payload) {
          var url = this.getUrlFromPayload(payload);
-         this.serviceXhr({url: url,
-                          data: this.clonePayload(payload),
-                          method: "POST",
-                          successMessage: payload.successMessage,
-                          alfTopic: payload.alfResponseTopic,
-                          successCallback: this.refreshRequest,
-                          callbackScope: this});
+         this.serviceXhr({
+            url: url,
+            data: this.clonePayload(payload),
+            method: "POST",
+            alfTopic: payload.alfResponseTopic,
+            successMessage: payload.successMessage,
+            successCallback: this.refreshRequest,
+            failureMessage: payload.failureMessage,
+            failureCallback: this.failureCallback,
+            callbackScope: this
+         });
       },
 
       /**
        *
        * @instance
-       * @param {object} payload 
+       * @param {object} payload
        */
       onUpdate: function alfresco_services_CrudService__onUpdate(payload) {
          var url = this.getUrlFromPayload(payload);
-         this.serviceXhr({url: url,
-                          data: this.clonePayload(payload),
-                          method: "PUT",
-                          successMessage: payload.successMessage,
-                          alfTopic: payload.alfResponseTopic,
-                          successCallback: this.refreshRequest,
-                          callbackScope: this});
+         this.serviceXhr({
+            url: url,
+            data: this.clonePayload(payload),
+            method: "PUT",
+            alfTopic: payload.alfResponseTopic,
+            successMessage: payload.successMessage,
+            successCallback: this.refreshRequest,
+            failureMessage: payload.failureMessage,
+            failureCallback: this.failureCallback,
+            callbackScope: this
+         });
       },
 
       /**
@@ -233,22 +225,18 @@ define(["dojo/_base/declare",
        * that is set to true, then a dialog will be displayed prompting the user to confirm the delete
        * action. The payload can optionally contain localized messages for the dialog title, prompt
        * and button labels.
-       * 
+       *
        * @instance
-       * @param {object} payload 
+       * @param {object} payload
        */
       onDelete: function alfresco_services_CrudService__onDelete(payload) {
          // TODO: Need to determine whether or not the ID should be provided in the payload or
          //       as part of the URL.
          var url = this.getUrlFromPayload(payload);
-         if (url !== null)
-         {
-            if (payload.requiresConfirmation === true)
-            {
+         if (url !== null) {
+            if (payload.requiresConfirmation === true) {
                this.requestDeleteConfirmation(url, payload);
-            }
-            else
-            {
+            } else {
                this.performDelete(url, payload);
             }
          }
@@ -257,7 +245,7 @@ define(["dojo/_base/declare",
       /**
        * Called from [onDelete]{@link module:alfresco/services/CrudService#onDelete} when user confirmation
        * for the delete action is required. Displays a dialog prompting the user to confirm the action.
-       * The dialog title, prompt and button labels can all be configured via the attributes on the 
+       * The dialog title, prompt and button labels can all be configured via the attributes on the
        * supplied payload.
        *
        * @instance
@@ -269,10 +257,10 @@ define(["dojo/_base/declare",
          var responseTopic = this.generateUuid();
          this._deleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onDeleteConfirmation), true);
 
-         var title = (payload.confirmationTitle) ? payload.confirmationTitle : this.message("crudservice.generic.delete.title");
-         var prompt = (payload.confirmationPrompt) ? payload.confirmationPrompt : this.message("crudservice.generic.delete.prompt");
-         var confirmButtonLabel = (payload.confirmationButtonLabel) ? payload.confirmationButtonLabel : this.message("crudservice.generic.delete.confirmationButtonLabel");
-         var cancelButtonLabel = (payload.cancellationButtonLabel) ? payload.cancellationButtonLabel : this.message("crudservice.generic.delete.cancellationButtonLabel");
+         var title = payload.confirmationTitle || this.message("crudservice.generic.delete.title");
+         var prompt = payload.confirmationPrompt || this.message("crudservice.generic.delete.prompt");
+         var confirmButtonLabel = payload.confirmationButtonLabel || this.message("crudservice.generic.delete.confirmationButtonLabel");
+         var cancelButtonLabel = payload.cancellationButtonLabel || this.message("crudservice.generic.delete.cancellationButtonLabel");
 
          var dialog = new AlfDialog({
             generatePubSubScope: false,
@@ -288,7 +276,8 @@ define(["dojo/_base/declare",
                         url: url,
                         pubSubScope: payload.pubSubScope,
                         responseTopic: payload.responseTopic,
-                        successMessage: payload.successMessage
+                        successMessage: payload.successMessage,
+                        failureMessage: payload.failureMessage
                      }
                   }
                },
@@ -315,24 +304,53 @@ define(["dojo/_base/declare",
        * @param {object} payload The original payload
        */
       performDelete: function alfresco_services_CrudService__performDelete(url, payload) {
-         this.serviceXhr({url: url,
-                          method: "DELETE",
-                          data: this.clonePayload(payload),
-                          alfTopic: payload.responseTopic,
-                          successMessage: payload.successMessage,
-                          successCallback: this.refreshRequest,
-                          callbackScope: this});
+         this.serviceXhr({
+            url: url,
+            method: "DELETE",
+            data: this.clonePayload(payload),
+            alfTopic: payload.responseTopic,
+            successMessage: payload.successMessage,
+            successCallback: this.refreshRequest,
+            failureMessage: payload.failureMessage,
+            failureCallback: this.failureCallback,
+            callbackScope: this
+         });
       },
 
       /**
        * This function is called when the user confirms that they wish to peform the delete action.
-       * 
+       *
        * @instance
        * @param {object} payload An object containing the the deletion details.
        */
       onDeleteConfirmation: function alfresco_services_CrudService__onDeleteConfirmation(payload) {
          this.alfUnsubscribeSaveHandles([this._deleteHandle]);
          this.performDelete(payload.url, payload);
+      },
+
+      /**
+       * This is called whenever a create, update or delete operation fails. It will generate a notification
+       * with a message (optionally supplied as failureMessage in the payload).
+       *
+       * @instance
+       * @param {object} response The response from the original XHR request.
+       * @param {object} originalRequestConfig The configuration passed to the original XHR request.
+       */
+      failureCallback: function alfresco_services_CrudService__failureCallback(response, originalRequestConfig) {
+
+         // Publish failure topic as necessary
+         if (originalRequestConfig.alfTopic) {
+            this.alfPublish(originalRequestConfig.alfTopic + "_FAILURE", {
+               requestConfig: originalRequestConfig,
+               response: response
+            });
+         }
+
+         // Get the failure message and display a notification
+         var message = originalRequestConfig.failureMessage || this.message("crudservice.generic.failure.message");
+         this.alfPublish("ALF_DISPLAY_PROMPT", {
+            message: message
+         });
       }
    });
 });

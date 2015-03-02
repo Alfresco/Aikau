@@ -18,7 +18,22 @@ module.exports = function(grunt) {
       // grunt-http (http abilities within grunt)
       http: {
          clientPatchModuleReload: {},
-         clientPatchCacheBust: {}
+         clientPatchCacheBust: {},
+         testAppReloadWebScripts: {
+            options: {
+               url: "http://localhost:8089/aikau/page/index",
+               method: "POST",
+               form: {
+                  reset: "on"
+               }
+            }
+         },
+         testAppClearCaches: {
+            options: {
+               url: "http://localhost:8089/aikau/page/caches/dependency/clear",
+               method: "POST"
+            }
+         }
       }
 
    });

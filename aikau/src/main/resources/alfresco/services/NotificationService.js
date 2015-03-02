@@ -31,6 +31,14 @@ define(["dojo/_base/declare",
       return declare([AlfCore], {
 
          /**
+          * An array of the i18n files to use with this widget.
+          *
+          * @instance
+          * @type {Array}
+          */
+         i18nRequirements: [{i18nFile: "./i18n/NotificationService.properties"}],
+
+         /**
           * Sets up the subscriptions for the NotificationService
           *
           * @instance
@@ -74,13 +82,19 @@ define(["dojo/_base/declare",
          onDisplayPrompt: function alfresco_services_NotificationService__onDisplayPrompt(payload) {
             var message = lang.getObject("message", false, payload);
             if (message) {
-               var config = {
-                  text: message
-               };
-               if (payload.title) {
-                  config.title = payload.title;
-               }
-               Alfresco.util.PopupManager.displayMessage(config);
+               this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+                  dialogId: "NOTIFICATION_PROMPT",
+                  dialogTitle: this.message("notification.prompt.title"),
+                  textContent: message,
+                  widgetsButtons: [
+                     {
+                        name: "alfresco/buttons/AlfButton",
+                        config: {
+                           label: "notification.ok.label"
+                        }
+                     }
+                  ]
+               });
             } else {
                this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
             }

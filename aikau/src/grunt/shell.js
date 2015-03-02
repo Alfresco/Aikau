@@ -27,6 +27,9 @@ module.exports = function(grunt) {
          mavenInstall: {
             command: "mvn install"
          },
+         mavenProcessTestResources: {
+            command: "mvn -q process-test-resources"
+         },
 
          // Vagrant
          vagrantUp: {
