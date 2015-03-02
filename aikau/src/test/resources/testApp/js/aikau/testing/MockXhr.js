@@ -17,31 +17,33 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*globals sinon*/
 /**
  *
  * @module aikauTesting/MockXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/MockXhr.html",
         "alfresco/core/Core",
         "dojo/_base/lang",
         "dojo/dom-construct",
-        "dojo/aspect"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domConstruct, aspect) {
-   
-   return declare([ _WidgetBase, _TemplatedMixin, AlfCore], {
+        "dojo/aspect",
+        "dojo/Deferred"],
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domConstruct, aspect, Deferred) {
+
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/MockXhr.css"}]
        */
-      cssRequirements: [{cssFile:"./css/MockXhr.css"}],
+   cssRequirements: [{cssFile:"./css/MockXhr.css"}],
 
       /**
        * The HTML template to use for the widget.
@@ -52,7 +54,7 @@ define(["dojo/_base/declare",
 
       /**
        * Sets up the Sinon fake server.
-       * 
+       *
        * @instance
        */
       constructor: function alfresco_testing_MockXhr__constructor(args) {
@@ -91,22 +93,20 @@ define(["dojo/_base/declare",
        */
       waitForServer: function alfresco_testing_mockservices_MockXhr__waitForServer() {
          var _this = this;
-         setTimeout(function () {
-            if (_this.server == null) {
+         setTimeout(function() {
+            if (!_this.server) {
                _this.alfLog("log", "Waiting for fake server...");
                _this.waitForServer();
-            }
-            else
-            {
+            } else {
                _this.setupServerWithBinaryData();
             }
          }, 3000);
       },
-   
+
       /**
        * This is an extension point function intended to be overridden by extending mock xhr services. It
        * is called from [waitForServer]{@link module:aikauTesting/MockXhr#waitForServer} and indicates that
-       * both the binary data and the fake Sinon server are ready to use. 
+       * both the binary data and the fake Sinon server are ready to use.
        *
        * @instance
        */
@@ -125,13 +125,24 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Adds the details of each XHR request to the log so that it can be queried by a unit test to 
+       * Adds the details of each XHR request to the log so that it can be queried by a unit test to
        * check that services are making appropriate requests for data.
-       * 
+       *
        * @instance
        * @param {object} xhrRequest The XHR request that was made
        */
       updateLog: function alfresco_testing_MockXhr__updateLog(xhrRequest) {
+
+         // We need to know when the response has been completed
+         var deferred = new Deferred(),
+            stateComplete = 4;
+         xhrRequest.addEventListener("readystatechange", function() {
+            if (xhrRequest.readyState === stateComplete) {
+               deferred.resolve();
+            }
+         });
+
+         // Add a new row to the log
          var rowNode = domConstruct.create("tr", {
             className: "mx-row"
          }, this.logNode);
@@ -145,8 +156,39 @@ define(["dojo/_base/declare",
          }, rowNode);
          domConstruct.create("td", {
             className: "mx-payload",
-            innerHTML: (xhrRequest.requestBody != null) ? xhrRequest.requestBody : ""
+            innerHTML: xhrRequest.requestBody || ""
          }, rowNode);
+         var responseNode = domConstruct.create("td", {
+            className: "mx-response",
+            innerHTML: "Waiting..."
+         }, rowNode);
+
+         // Once we've had a response, add it to the log
+         deferred.promise.then(function() {
+
+            // Construct headers HTML
+            var headersHtmlBuffer = [];
+            for (var headerName in xhrRequest.responseHeaders) {
+               if (xhrRequest.hasOwnPropertyName(headerName)) {
+                  headersHtmlBuffer.push(headerName + ": " + xhrRequest.responseHeaders[headerName]);
+               }
+            }
+            var headersHtml = (headersHtmlBuffer.length && headersHtmlBuffer.join("<br />")) || "N/A",
+               responseText = (xhrRequest.responseText && lang.trim(xhrRequest.responseText)) || "N/A";
+
+            // Build response info
+            var responseHtml = xhrRequest.status + " (" + xhrRequest.statusText + ")<br />";
+            responseHtml += "<em>Hover for more info ...</em>";
+            responseHtml += "<dl class='mx-response__info'>";
+            responseHtml += "<dt>Headers:</dt>";
+            responseHtml += "<dd>" + headersHtml + "</dd>";
+            responseHtml += "<dt>Reponse body:</dt>";
+            responseHtml += "<dd>" + responseText + "</dd>";
+            responseHtml += "</dl>";
+
+            // Add a new row to the log
+            responseNode.innerHTML = responseHtml;
+         });
       }
    });
 });
