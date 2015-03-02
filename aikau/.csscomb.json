@@ -10,7 +10,7 @@
    "space-after-colon": " ",
    "space-after-combinator": " ",
    "space-after-opening-brace": "\n",
-   "space-after-selector-delimiter": "\n",
+   "space-after-selector-delimiter": " ",
    "space-before-closing-brace": "\n",
    "space-before-colon": "",
    "space-before-combinator": " ",
