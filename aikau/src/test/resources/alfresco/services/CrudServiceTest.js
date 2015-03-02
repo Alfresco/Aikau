@@ -21,14 +21,32 @@
  * @author Martin Doyle
  */
 define(["intern!object",
-      "intern/chai!expect",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon"
-   ],
-   function(registerSuite, expect, assert, require, TestCommon) {
+        "intern/chai!assert",
+        "require",
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/helpers/pollUntil"], 
+        function(registerSuite, assert, require, TestCommon, pollUntil) {
 
       var browser;
+
+      function closeAllDialogs() {
+         return browser.end()
+            .findAllByCssSelector(".dijitDialogCloseIcon")
+            .then(function(closeButtons) {
+               closeButtons.forEach(function(closeButton) {
+                  if (closeButton.isDisplayed()) {
+                     closeButton.click();
+                  }
+               });
+               browser.end();
+            })
+            .then(pollUntil(function() {
+               /*globals document*/
+               var underlay = document.getElementById("dijit_DialogUnderlay_0"),
+                  underlayHidden = underlay && underlay.style.display === "none";
+               return underlayHidden || null;
+            }, 5000));
+      }
 
       registerSuite({
          name: "CrudService",
@@ -71,22 +89,82 @@ define(["intern!object",
                   return dialogBody.getVisibleText()
                      .then(function(messageText) {
                         var trimmed = messageText.replace(/^\s+|\s+$/g, "");
-                        assert.equal(trimmed, "Test failure message", "Failure message not displayed");
+                        assert.equal(trimmed, "Test delete-failure message", "Delete failure message not displayed");
                      });
                });
          },
 
-         // "Notification hides after displaying": function() {
-         //    return browser.setFindTimeout(5000)
-         //       .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification__message");
-         // },
+         "Valid UPDATE call succeeds": function() {
+            return closeAllDialogs()
+               .then(function() {
+                  return browser.findById("UPDATE_SUCCESS_BUTTON")
+                     .click()
+                     .end()
 
-         // "Topic publishes after notification hidden": function() {
-         //    return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_NOTIFICATION_DESTROYED", "publish", "any"))
-         //       .then(function(elements) {
-         //          assert.lengthOf(elements, 1, "Post-notification topic not published");
-         //       });
-         // },
+                  .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATED_SUCCESS", "publish", "any"))
+                     .then(function(elements) {
+                        assert.lengthOf(elements, 1, "Update did not succeed");
+                     });
+               });
+         },
+
+         "Invalid UPDATE call fails": function() {
+            return browser.findById("UPDATE_FAILURE_BUTTON")
+               .click()
+               .end()
+
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATED_FAILURE", "publish", "any"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Invalid update did not fail");
+               });
+         },
+
+         "Failed UPDATE displays failure message": function() {
+            return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
+               .then(function(dialogBody) {
+                  return dialogBody.getVisibleText()
+                     .then(function(messageText) {
+                        var trimmed = messageText.replace(/^\s+|\s+$/g, "");
+                        assert.equal(trimmed, "Test update-failure message", "Update failure message not displayed");
+                     });
+               });
+         },
+
+         "Valid CREATE call succeeds": function() {
+            return closeAllDialogs()
+               .then(function() {
+                  return browser.findById("CREATE_SUCCESS_BUTTON")
+                     .click()
+                     .end()
+
+                  .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_SUCCESS", "publish", "any"))
+                     .then(function(elements) {
+                        assert.lengthOf(elements, 1, "Create did not succeed");
+                     });
+               });
+         },
+
+         "Invalid CREATE call fails": function() {
+            return browser.findById("CREATE_FAILURE_BUTTON")
+               .click()
+               .end()
+
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_FAILURE", "publish", "any"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Invalid create did not fail");
+               });
+         },
+
+         "Failed CREATE displays failure message": function() {
+            return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
+               .then(function(dialogBody) {
+                  return dialogBody.getVisibleText()
+                     .then(function(messageText) {
+                        var trimmed = messageText.replace(/^\s+|\s+$/g, "");
+                        assert.equal(trimmed, "Test create-failure message", "Create failure message not displayed");
+                     });
+               });
+         },
 
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);

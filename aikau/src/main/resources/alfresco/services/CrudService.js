@@ -338,12 +338,6 @@ define(["dojo/_base/declare",
        */
       failureCallback: function alfresco_services_CrudService__failureCallback(response, originalRequestConfig) {
 
-         // Get the failure message and display a notification
-         var message = originalRequestConfig.failureMessage || this.message("crudservice.generic.failure.message");
-         this.alfPublish("ALF_DISPLAY_PROMPT", {
-            message: message
-         });
-
          // Publish failure topic as necessary
          if (originalRequestConfig.alfTopic) {
             this.alfPublish(originalRequestConfig.alfTopic + "_FAILURE", {
@@ -351,6 +345,12 @@ define(["dojo/_base/declare",
                response: response
             });
          }
+
+         // Get the failure message and display a notification
+         var message = originalRequestConfig.failureMessage || this.message("crudservice.generic.failure.message");
+         this.alfPublish("ALF_DISPLAY_PROMPT", {
+            message: message
+         });
       }
    });
 });

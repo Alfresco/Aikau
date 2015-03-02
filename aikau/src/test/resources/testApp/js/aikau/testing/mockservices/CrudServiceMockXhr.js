@@ -22,12 +22,8 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-      "aikauTesting/MockXhr",
-      "dojo/text!./responseTemplates/ContainerListPicker/RecentSites.json",
-      "dojo/text!./responseTemplates/ContainerListPicker/Site.json",
-      "dojo/text!./responseTemplates/ContainerListPicker/DocumentLibrary.json"
-   ],
-   function(declare, MockXhr, RecentSites, Site, DocumentLibrary) {
+        "aikauTesting/MockXhr"],
+        function(declare, MockXhr) {
 
       return declare([MockXhr], {
 
@@ -39,8 +35,9 @@ define(["dojo/_base/declare",
          setupServer: function alfresco_testing_mockservices_ContainerListPickerMockXhr__setupServer() {
             try {
                this.server.respondWith("DELETE", "/aikau/proxy/alfresco/resources/123", [200, {}, ""]);
+               this.server.respondWith("POST", "/aikau/proxy/alfresco/resources/123", [200, {}, ""]);
+               this.server.respondWith("PUT", "/aikau/proxy/alfresco/resources/123", [200, {}, ""]);
                this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
-
             } catch (e) {
                this.alfLog("error", "The following error occurred setting up the mock server", e);
             }

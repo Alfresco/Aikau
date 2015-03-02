@@ -37,7 +37,57 @@ model.jsonModel = {
             publishPayload: {
                url: "resources/234",
                responseTopic: "ALF_CRUD_DELETED",
-               failureMessage: "Test failure message"
+               failureMessage: "Test delete-failure message"
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "UPDATE_SUCCESS_BUTTON",
+         config: {
+            label: "Successful update call",
+            publishTopic: "ALF_CRUD_UPDATE",
+            publishPayload: {
+               url: "resources/123",
+               alfResponseTopic: "ALF_CRUD_UPDATED"
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "UPDATE_FAILURE_BUTTON",
+         config: {
+            label: "Failed update call",
+            publishTopic: "ALF_CRUD_UPDATE",
+            publishPayload: {
+               url: "resources/234",
+               alfResponseTopic: "ALF_CRUD_UPDATED",
+               failureMessage: "Test update-failure message"
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_SUCCESS_BUTTON",
+         config: {
+            label: "Successful create call",
+            publishTopic: "ALF_CRUD_CREATE",
+            publishPayload: {
+               url: "resources/123",
+               alfResponseTopic: "ALF_CRUD_CREATED"
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_FAILURE_BUTTON",
+         config: {
+            label: "Failed create call",
+            publishTopic: "ALF_CRUD_CREATE",
+            publishPayload: {
+               url: "resources/234",
+               alfResponseTopic: "ALF_CRUD_CREATED",
+               failureMessage: "Test create-failure message"
             }
          }
       },
