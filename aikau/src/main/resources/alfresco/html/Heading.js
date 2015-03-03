@@ -153,7 +153,7 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_html_Label__postMixInProperties() {
          if (this.subscriptionTopic != null && lang.trim(this.subscriptionTopic) !== "")
          {
-            this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, "onHeadingUpdate"));
+            this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.onHeadingUpdate));
          }
       },
 
