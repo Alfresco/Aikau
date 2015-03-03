@@ -40,10 +40,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-
       "Checking for create content item in create content menu": function () {
          // Check everything is initialised correctly...
          return browser.findByCssSelector("#CREATE_CONTENT_MENU_text")
@@ -109,10 +105,6 @@ define(["intern!object",
       beforeEach: function() {
          browser.end();
       },
-
-      // teardown: function() {
-      //    browser.end();
-      // },
 
       "Checking create content menu is now disabled": function () {
          return browser.findByCssSelector("#DENY_CREATE_PERMISSION_label")
@@ -209,10 +201,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-
       "Check content menu has been disabled again": function () {
          return browser.findByCssSelector("#SET_OTHER_FILTER_label")
             .click()
@@ -308,10 +296,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-
       "Check create template node has rendered correctly": function () {
          return browser.findByCssSelector("#POPUP_MENU_text")
             .click()
@@ -330,9 +314,71 @@ define(["intern!object",
       },
 
       "Check that create template topic was published correctly": function() {
-         return browser.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("ALF_CREATE_CONTENT", "params", "nodeRef", "workspace://SpacesStore/0e56c7a3-67d0-4a35-b2ce-4c2038897a66"))
+         return browser.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("ALF_CREATE_CONTENT", "params", "sourceNodeRef", "workspace://SpacesStore/0e56c7a3-67d0-4a35-b2ce-4c2038897a66"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Create template topic not published correctly");
+            });
+      },
+
+      "Check folder template creation label": function() {
+         return browser.findByCssSelector("#POPUP_MENU_text")
+            .click()
+         .end()
+         .findByCssSelector("#CREATE_FOLDER_TEMPLATES_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Create content from folder template", "Menu item label was not correct");
+            });
+      },
+
+      "Check folder templates loaded": function() {
+         return browser.findByCssSelector("#CREATE_FOLDER_TEMPLATES_text")
+            .click()
+         .end()
+         .findAllByCssSelector("#CREATE_FOLDER_TEMPLATES_dropdown .alf-menu-group-items tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Unexpected number of folder templates found");
+            });
+      },
+
+      "Check folder override dialog is displayed when template selected": function() {
+         return browser.findByCssSelector("#CREATE_FOLDER_TEMPLATES_text")
+            .click()
+         .end()
+         .findAllByCssSelector("#CREATE_FOLDER_TEMPLATES_dropdown tr:first-child td:nth-child(2)")
+            .click()
+         .end()
+         .findAllByCssSelector("#ALF_CREATE_FOLDER_TEMPLATE_NODE")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Folder template overrides dialog was not displayed");
+            });
+      },
+
+      "Override folder template settings": function() {
+         return browser.findByCssSelector("#FOLDER_TEMPLATE_NAME  .dijitInputContainer input")
+            .clearValue()
+            .type("Name")
+         .end()
+         .findByCssSelector("#FOLDER_TEMPLATE_TITLE  .dijitInputContainer input")
+            .clearValue()
+            .type("Title")
+         .end()
+         .findByCssSelector("#FOLDER_TEMPLATE_DESCRIPTION textarea")
+            .clearValue()
+            .type("Description")
+         .end()
+         .findByCssSelector("#ALF_CREATE_FOLDER_TEMPLATE_NODE .confirmationButton")
+            .click()
+         .end()
+         .findByCssSelector(".mx-row:nth-child(3) .mx-payload")
+            .getVisibleText()
+            .then(function(payload) {
+               // NOTE: Checking payload elements individually because order is not guaranteed...
+               assert(payload.indexOf("\"parentNodeRef\":\"some://dummy/node\"") !== -1, "Parent NodeRef incorrect");
+               assert(payload.indexOf("\"sourceNodeRef\":\"workspace://SpacesStore/c90aa137-2c57-4a36-8681-b0b207cbee91\"") !== -1, "Source NodeRef incorrect");
+               assert(payload.indexOf("\"prop_cm_name\":\"Name\"") !== -1, "Name incorrect");
+               assert(payload.indexOf("\"prop_cm_title\":\"Title\"") !== -1, "Title incorrect");
+               assert(payload.indexOf("\"prop_cm_description\":\"Description\"") !== -1, "Description incorrect");
             });
       },
 

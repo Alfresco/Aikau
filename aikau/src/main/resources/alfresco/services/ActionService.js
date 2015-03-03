@@ -449,10 +449,10 @@ define(["dojo/_base/declare",
        * @param {object} action An object containing the details of the action to perform
        * @param {object} document The document to perform the action on (only applicable to actions of type "javascript")
        */
-      processActionObject: function alfresco_services_ContentService__processActionObject(action, document) {
+      processActionObject: function alfresco_services_ActionService__processActionObject(action, document) {
          if (action && action.type)
          {
-            if (action.type == "pagelink")
+            if (action.type === "pagelink")
             {
                if (action.params.page)
                {
@@ -463,7 +463,7 @@ define(["dojo/_base/declare",
                   this.alfLog("error", "A request was made to perform an action. The 'pagelink' type was requested, but no 'page' attribute was provided: ", action);
                }
             }
-            else if (action.type == "link")
+            else if (action.type === "link")
             {
                if (action.params.href)
                {
@@ -474,7 +474,7 @@ define(["dojo/_base/declare",
                   this.alfLog("error", "A request was made to perform an action. The 'link' type was requested, but no 'href' attribute was provided: ", action);
                }
             }
-            else if (action.type == "javascript")
+            else if (action.type === "javascript")
             {
                if (action.params["function"])
                {
@@ -485,11 +485,20 @@ define(["dojo/_base/declare",
                   this.alfLog("error", "A request was made to perform an action. The 'javascript' type was requested, but no 'function' attribute was provided: ", action);
                }
             }
-            else if (action.type == "template")
+            else if (action.type === "template")
             {
-               if (action.params.nodeRef)
+               if (action.params.sourceNodeRef)
                {
-                  this.createTemplateContent(action, document);
+                  // this.createTemplateContent(action, document);
+                  var targetNodeRef = action.params.targetNodeRef || lang.getObject("_currentNode.parent.nodeRef", false, this);
+                  this.alfPublish("ALF_CREATE_TEMPLATE_CONTENT", {
+                     sourceNodeRef: action.params.sourceNodeRef,
+                     targetNodeRef: targetNodeRef,
+                     templateType: action.params.templateType || "node",
+                     name: action.params.name || "",
+                     title: action.params.title || "",
+                     description: action.params.description || ""
+                  });
                }
                else
                {
@@ -1244,60 +1253,6 @@ define(["dojo/_base/declare",
             ],
             handleOverflow: true
          }, true);
-      },
-
-      /**
-       * Creates new content based on the nodeRef supplied.
-       *
-       * @instance
-       * @param {object} payload
-       */
-      createTemplateContent: function alfresco_services_ActionService__createTemplateContent(payload) {
-
-         // Create content based on a template
-         var node = payload.params.nodeRef,
-             destination = this._currentNode.parent.nodeRef;
-
-         // If node is undefined the loading or empty menu items were clicked
-         if (node)
-         {
-            // Set up the favourites information...
-            var url = AlfConstants.PROXY_URI + "slingshot/doclib/node-templates",
-                dataObj = {
-                   parentNodeRef: destination,
-                   sourceNodeRef: node
-                };
-            this.serviceXhr({url : url,
-                             node: node,
-                             data: dataObj,
-                             method: "POST",
-                             successCallback: this.templateContentCreateSuccess,
-                             failureCallback: this.templateContentCreateFailure,
-                             callbackScope: this});
-         }
-      },
-
-      /**
-       * @instance
-       * @param {object} response The response from the request
-       * @param {object} originalRequestConfig The configuration passed on the original request
-       */
-      templateContentCreateSuccess: function alfresco_services_ActionService__templateContentCreateSuccess(response, originalRequestConfig) {
-         this.displayMessage(this.message("message.create-content-by-template-node.success", response.name));
-         this.alfPublish("ALF_NODE_CREATED", {
-            name: response.name,
-            parentNodeRef: originalRequestConfig.data.parentNodeRef,
-            highlightFile: response.name
-         });
-      },
-
-      /**
-       * @instance
-       * @param {object} response The response from the request
-       * @param {object} originalRequestConfig The configuration passed on the original request
-       */
-      templateContentCreateFailure: function alfresco_services_ActionService__templateContentCreateSuccess(response, originalRequestConfig) {
-         this.displayMessage(this.message("message.create-content-by-template-node.failure", response.name));
       },
 
       /**
