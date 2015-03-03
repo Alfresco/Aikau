@@ -57,6 +57,25 @@ define(["intern!object",
                assert.equal(text, "<img src='1' onerror='window.hacked=true>");
             });
       },
+      
+      "Test update heading label": function() {
+         return browser.findAllByCssSelector("#HEADING3 > h1")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "BEFORE PUBLISH LABEL", "Heading was not correct before update");
+            })
+            .end()
+            
+            .findById("TEST_BUTTON")
+            .click()
+            .end()
+            
+            .findAllByCssSelector("#HEADING3 > h1")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "AFTER PUBLISH LABEL", "Heading was not correct after update");
+            });
+      },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
