@@ -47,9 +47,10 @@ define(["intern!object",
       },
 
       "Test label of basic toggle": function () {
-         return browser.getVisibleText()
+         return browser.findById("BASIC_MENU_BAR_TOGGLE_text")
+            .getVisibleText()
             .then(function (initialValue) {
-               expect(initialValue).to.equal("Off", "The inital label of the basic toggle was not correct: " + initialValue);
+               expect(initialValue).to.equal("Off", "The inital label of the basic toggle was not correct");
             });
       },
 

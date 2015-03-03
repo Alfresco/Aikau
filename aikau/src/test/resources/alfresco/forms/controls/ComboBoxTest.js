@@ -41,11 +41,7 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-     "Checking the number of tag options...": function () {
+      "Checking the number of tag options...": function () {
          return browser.findByCssSelector("#TAGS .dijitArrowButtonInner")
             .click()
          .end()
@@ -131,24 +127,20 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-     "Down arrow test": function () {
+      "Down arrow test": function () {
          // Slightly convoluted way to leave a result stem in the #TAGS_CONTROL
          return browser.pressKeys(keys.TAB)
             .pressKeys("ta")
             .sleep(500)
-            //.pressKeys(keys.BACKSPACE) // Because the combobox gives a longer suggestion
-            //.pressKeys(keys.BACKSPACE) // Because the combobox gives a longer suggestion
-            //.sleep(500)
             .pressKeys(keys.TAB)
             .sleep(500)
             .pressKeys([keys.SHIFT, keys.TAB])
             .pressKeys(keys.ARROW_DOWN)
             .sleep(500)
          .end()
+
+         // Release SHIFT and TAB before assertion...
+         .pressKeys([keys.SHIFT, keys.TAB])
 
          // Test that clicking the down arrow gives results based on the stem left above
          .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
