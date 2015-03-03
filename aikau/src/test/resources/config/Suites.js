@@ -32,20 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      // Chrome Failures
-      "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
-      "src/test/resources/alfresco/layout/BasicLayoutTest",
-      "src/test/resources/alfresco/menus/AlfMenuBarToggleTest",
-      // Firefox Failures
-      "src/test/resources/alfresco/header/HeaderWidgetsTest",
-      "src/test/resources/alfresco/layout/AlfTabContainerTest",
-      "src/test/resources/alfresco/layout/TwisterTest",
-      "src/test/resources/alfresco/menus/AlfMenuBarSelectTest",
-      "src/test/resources/alfresco/menus/AlfMenuItemWrapperTest",
-      "src/test/resources/alfresco/menus/MenuTests",
-      "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest",
-      "src/test/resources/alfresco/renderers/InlineEditPropertyTest",
-      "src/test/resources/alfresco/renderers/InlineEditPropertyLinkTest"
+      "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest"
    ],
 
    /**
