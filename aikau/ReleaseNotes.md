@@ -32,6 +32,15 @@ Previous releases:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.7:
+* [AKU-13](https://issues.alfresco.com/jira/browse/AKU-13)   - Added support for stacked dialogs
+* [AKU-27](https://issues.alfresco.com/jira/browse/AKU-27)   - Add support for create folder templated content
+* [AKU-94](https://issues.alfresco.com/jira/browse/AKU-94)   - Added Grunt task for patching clients
+* [AKU-124](https://issues.alfresco.com/jira/browse/AKU-124) - Added alfresco/lists/views/layouts/EditableRow
+* [AKU-127](https://issues.alfresco.com/jira/browse/AKU-127) - Add alt text to developer mode widgets
+* [AKU-131](https://issues.alfresco.com/jira/browse/AKU-131) - Ensure pub/sub options for form controls work in dialogs
+* [AKU-139](https://issues.alfresco.com/jira/browse/AKU-139) - Updated tests for more reliable code coverage
+
 1.0.6:
 * [AKU-41](https://issues.alfresco.com/jira/browse/AKU-41)   - Add Manage Aspects support
 * [AKU-41](https://issues.alfresco.com/jira/browse/AKU-72)   - Add colspan support to Cell

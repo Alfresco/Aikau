@@ -9,7 +9,9 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/ActionService",
+      "alfresco/services/actions/CreateTemplateContentService",
+      "alfresco/services/DialogService"
    ],
    widgets: [
       {
@@ -38,7 +40,7 @@ model.jsonModel = {
                                        publishPayload: {
                                           action: "",
                                           type: null,
-                                          params: {},
+                                          params: {}
                                        }
                                     }
                                  }
@@ -71,13 +73,26 @@ model.jsonModel = {
                                        publishPayload: {
                                           action: "",
                                           type: null,
-                                          params: {},
+                                          params: {}
                                        }
                                     }
                                  },
                                  {
                                     id: "CREATE_TEMPLATES",
-                                    name: "alfresco/documentlibrary/AlfCreateTemplateContentMenu"
+                                    name: "alfresco/documentlibrary/AlfCreateTemplateContentMenu",
+                                    config: {
+                                       label: "Create content from node template"
+                                    }
+                                 },
+                                 {
+                                    id: "CREATE_FOLDER_TEMPLATES",
+                                    name: "alfresco/documentlibrary/AlfCreateTemplateContentMenu",
+                                    config: {
+                                       label: "Create content from folder template",
+                                       _templatesUrl: "slingshot/doclib/folder-templates",
+                                       templateType: "folder",
+                                       targetNodeRef: "some://dummy/node"
+                                    }
                                  }
                               ]
                            }

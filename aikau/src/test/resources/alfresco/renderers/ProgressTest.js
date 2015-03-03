@@ -27,18 +27,29 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
    var width;
    registerSuite({
-      name: 'Progress Renderer Test',
-      'Test Setup': function () {
+      name: "Progress Renderer Test",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/PieChart", "PieChart Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Test Setup": function () {
          return TestCommon.loadTestWebScript(this.remote, "/Progress", "Test Progress Renderer").findByCssSelector("#PROGRESS1 .alfProgressBarLabel")
             .getVisibleText()
             .then(function(text) {
-               assert(text == "Creating archive to download", "Unexpected default initialization message: " + text);
+               assert(text === "Creating archive to download", "Unexpected default initialization message: " + text);
             })
          .end();
       },
-      'Test Initial Progress': function () {
+      "Test Initial Progress": function () {
          return this.remote.findByCssSelector("#PROGRESS1 .alfProgressBarProgress")
             .getSize()
             .then(function(size) {
@@ -51,7 +62,7 @@ define(["intern!object",
             })
          .end();
       },
-      'Test 50% Progress Update': function() {
+      "Test 50% Progress Update": function() {
          return this.remote.findByCssSelector("#SEMI-COMPLETE_label")
             .click()
          .end()
@@ -63,15 +74,15 @@ define(["intern!object",
             })
          .end();
       },
-      'Test 50% Progress Label': function() {
+      "Test 50% Progress Label": function() {
          return this.remote.findByCssSelector("#PROGRESS1 .alfProgressBarLabel")
             .getVisibleText()
             .then(function(text) {
-               assert(text == "Creating zip file (3 out of 7 files added)", "Unexpected default completion message: " + text);
+               assert(text === "Creating zip file (3 out of 7 files added)", "Unexpected default completion message: " + text);
             })
          .end();
       },
-      'Test 75% Progress Update': function() {
+      "Test 75% Progress Update": function() {
          return this.remote.findByCssSelector("#THREE-QUARTERS-COMPLETE_label")
             .click()
          .end()
@@ -83,7 +94,7 @@ define(["intern!object",
             })
          .end();
       },
-      'Test Completed Update': function() {
+      "Test Completed Update": function() {
          return this.remote.findByCssSelector("#FULLY-COMPLETE_label")
             .click()
          .end()
@@ -95,41 +106,42 @@ define(["intern!object",
             })
          .end();
       },
-      'Test Completed Label': function() {
+      "Test Completed Label": function() {
          return this.remote.findByCssSelector("#PROGRESS1 .alfProgressBarLabel")
             .getVisibleText()
             .then(function(text) {
-               assert(text == "Zip creation complete. Downloading zip file.", "Unexpected default completion message: " + text);
+               assert(text === "Zip creation complete. Downloading zip file.", "Unexpected default completion message: " + text);
             })
          .end();
       },
-      'Test Error Update': function() {
+      "Test Error Update": function() {
          return this.remote.findByCssSelector("#ERROR_label")
             .click()
          .end()
          .findByCssSelector("#PROGRESS1 .alfProgressBarLabel")
             .getVisibleText()
             .then(function(text) {
-               assert(text == "There was an error getting progress status.", "Unexpected default error message: " + text);
+               assert(text === "There was an error getting progress status.", "Unexpected default error message: " + text);
             })
          .end();
       },
-      'Test Cancel Update': function() {
-         var browser = this.remote;
-         return this.remote.findByCssSelector("#CANCELLED_label")
+      "Test Cancel Update": function() {
+         return browser.findByCssSelector("#CANCELLED_label")
             .click()
          .end()
          .findAllByCssSelector(TestCommon.topicSelector("PROGRESS1_ALF_PROGRESS_CANCELLED", "publish", "any"))
             .then(function(elements) {
-               assert(elements.length == 1, "Cancellation topic not published");
+               assert(elements.length === 1, "Cancellation topic not published");
             })
          .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_CLOSE_DIALOG", "publish", "last"))
             .then(function(elements) {
-               assert(elements.length == 1, "Request to close dialog not published");
-            })
-         .end()
-         .alfPostCoverageResults(browser);
+               assert(elements.length === 1, "Request to close dialog not published");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,25 +24,28 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
+   var toggleSelector = function(id, status) {
+      return "#" + id + " ." + status;
+   };
+
+   var browser;
    registerSuite({
-      name: 'Social Renderers Test',
-      'Like Test': function () {
-         var browser = this.remote;
-         var testname = "Social Renderers Test";
+      name: "Social Renderers Test (Likes)",
 
-         // type (like, favourite), status (processing, on, off, count, warning)
-         var toggleSelector = function(id, status) {
-            return "#" + id + " ." + status;
-         };
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SocialRenderers", "Social Renderers Test (Likes)").end();
+      },
 
-         return TestCommon.loadTestWebScript(this.remote, "/SocialRenderers", testname)
+      beforeEach: function() {
+         browser.end();
+      },
 
-         // Check the initial state of the LIKE widget...
-         .findByCssSelector(toggleSelector("LIKES", "processing"))
+     "Like Test": function () {
+         return browser.findByCssSelector(toggleSelector("LIKES", "processing"))
             .isDisplayed()
             .then(function(result) {
                assert(result === false, "Test #1a - like PROCESSING image displayed incorrectly");
@@ -69,7 +72,7 @@ define(["intern!object",
          .findByCssSelector(toggleSelector("LIKES", "count"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "4", "Test #1e - like COUNT is incorrect: " + resultText);
+               assert(resultText === "4", "Test #1e - like COUNT is incorrect: " + resultText);
             })
             .end()
 
@@ -97,7 +100,7 @@ define(["intern!object",
          .findByCssSelector(toggleSelector("LIKES", "count"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "5", "Test #2d - like COUNT is incorrect following liking: " + resultText);
+               assert(resultText === "5", "Test #2d - like COUNT is incorrect following liking: " + resultText);
             })
             .end()
 
@@ -125,7 +128,7 @@ define(["intern!object",
          .findByCssSelector(toggleSelector("LIKES", "count"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "4", "Test #3d - like COUNT is incorrect following liking: " + resultText);
+               assert(resultText === "4", "Test #3d - like COUNT is incorrect following liking: " + resultText);
             })
             .end()
 
@@ -142,26 +145,28 @@ define(["intern!object",
             .isDisplayed()
             .then(function(result) {
                assert(result === true, "Test #4b - like WARNING image not displayed following simulated failure");
-            })
-            .end()
-
-         .alfPostCoverageResults(browser);
+            });
       },
-      'Favourite Test': function () {
-         var browser = this.remote;
-         var testname = "Social Renderers Test";
 
-         // type (like, favourite), status (processing, on, off, count, warning)
-         var toggleSelector = function(id, status) {
-            return "#" + id + " ." + status;
-         };
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 
-         return TestCommon.loadTestWebScript(this.remote, "/SocialRenderers", testname)
+   registerSuite({
+      name: "Social Renderers Test (Favourites)",
 
-         .end()
-         
-         // Check the initial state of the FAVOURITE widget...
-         .findByCssSelector(toggleSelector("FAVOURITES", "processing"))
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SocialRenderers", "Social Renderers Test (Favourites)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Favourite Test": function () {
+         return browser.findByCssSelector(toggleSelector("FAVOURITES", "processing"))
             .isDisplayed()
             .then(function(result) {
                assert(result === false, "Test #1a - favourite PROCESSING image displayed incorrectly");
@@ -243,32 +248,37 @@ define(["intern!object",
             .isDisplayed()
             .then(function(result) {
                assert(result === true, "Test #4b - favourite WARNING image not displayed following simulated failure");
-            })
-            .end()
-         
-         .alfPostCoverageResults(browser);
+            });
       },
-      'Comments Test': function () {
-         var browser = this.remote;
-         var testname = "Social Renderers Test";
 
-         // type (like, favourite), status (processing, on, off, count, warning)
-         var toggleSelector = function(id, status) {
-            return "#" + id + " ." + status;
-         };
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 
-         return TestCommon.loadTestWebScript(this.remote, "/SocialRenderers", testname)
 
-         .end()
-         
-         .findByCssSelector(toggleSelector("COMMENTS", "count"))
+   registerSuite({
+      name: "Social Renderers Test (Comments)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SocialRenderers", "Social Renderers Test (Comments)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Comments Test": function () {
+        return browser.findByCssSelector(toggleSelector("COMMENTS", "count"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText == "6", "Test #1a - comments COUNT is incorrect: " + resultText);
-            })
-            .end()
-         
-         .alfPostCoverageResults(browser);
+               assert(resultText === "6", "Test #1a - comments COUNT is incorrect: " + resultText);
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

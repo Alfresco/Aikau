@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,22 +29,29 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, require, TestCommon, keys) {
 
+   var alfPause = 250;
+   var browser;
    registerSuite({
-      name: 'Basic Menus Test',
-      'Menus Test': function () {
-        
-      // TODO: It would be nice to get rid of the sleeps in this test...
-      //       Should this test start failing then the first thing to do would be to increase
-      //       the sleep times. However, there should be a better way of determining whether or 
-      //       not it's safe to proceed before the next action without needing the sleep
-      var alfPause = 250;
-      var browser = this.remote;
-      var testName = "Menus Test";
-         return TestCommon.loadTestWebScript(this.remote, "/BasicMenuTestPage", testName)
-            
-            // Test #1 
-            // Open the drop-down menu and select the FIRST menut item using the space bar...
-            .pressKeys(keys.TAB)
+      name: "Menus Tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/BasicMenuTestPage", "Menus Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Tests": function () {
+         // TODO: It would be nice to get rid of the sleeps in this test...
+         //       Should this test start failing then the first thing to do would be to increase
+         //       the sleep times. However, there should be a better way of determining whether or 
+         //       not it's safe to proceed before the next action without needing the sleep
+         var testName = "Menus Test";
+         // Test #1 
+         // Open the drop-down menu and select the FIRST menut item using the space bar...
+         return browser.pressKeys(keys.TAB)
             .pressKeys(keys.ARROW_DOWN)
             .sleep(alfPause)
             .pressKeys(keys.SPACE)
@@ -70,7 +77,7 @@ define(["intern!object",
                   function() {
                      TestCommon.log(testName, "2) Clicking MENU_ITEM_2 (down, down, return)...");
                   }, 
-                  function(result) {
+                  function() {
                      assert(false, "Could not find MENU_ITEM_2 in Test #2");
                   }
                )
@@ -366,10 +373,11 @@ define(["intern!object",
                   function() {
                      assert(false, "Could not find MENU_ITEM_13 in Test #18");
                   }
-               )
-               .end()
+               );
+      },
 
-            .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

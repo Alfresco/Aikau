@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,20 +24,25 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'PublishPayloadMixinOnActions Test',
-      'alfresco/renderers/_PublishPayloadMixin': function () {
+      name: "PublishPayloadMixinOnActions Tests",
 
-         var browser = this.remote;
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/PublishPayloadMixinOnActions", "PublishPayloadMixinOnActions Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+     "Tests": function () {
          var testname = "PublishPayloadMixinOnActionsTest";
-         return TestCommon.loadTestWebScript(this.remote, "/PublishPayloadMixinOnActions", testname)
-
-         // Check there are 3 action menus as described in the model
-         .findAllByCssSelector("div.alfresco-menus-AlfMenuBar")
+         return browser.findAllByCssSelector("div.alfresco-menus-AlfMenuBar")
             .then(function (actionmenus) {
                TestCommon.log(testname,"Check there are 3 action menus as described in the model");
                expect(actionmenus).to.have.length(3, "There should be 3 action menus rendered");
@@ -51,7 +56,7 @@ define(["intern!object",
          .findByCssSelector(".dijitPopup")
             .then(
                null,
-               function() { assert(false,"The action menu did not appear on mouse clicks")}
+               function() { assert(false,"The action menu did not appear on mouse clicks");}
             )
             .end()
 
@@ -71,19 +76,19 @@ define(["intern!object",
          .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "alfTopic", "DELETE_ACTION_TOPIC"))
             .then(
                function() {},
-               function() { assert(false,"The action menu did not publish on 'DELETE_ACTION_TOPIC' after mouse clicks")}
+               function() { assert(false,"The action menu did not publish on 'DELETE_ACTION_TOPIC' after mouse clicks");}
             )
             .end()
          .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "variable1", "red"))
             .then(
                function() {},
-               function() { assert(false,"The action menu did not publish the payload with 'variable1' as 'red' after mouse clicks") }
+               function() { assert(false,"The action menu did not publish the payload with 'variable1' as 'red' after mouse clicks"); }
             )
             .end()
          .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "variable2", "orange"))
             .then(
                function() {},
-               function() { assert(false,"The action menu did not publish the payload with 'variable2' as 'orange' after mouse clicks") }
+               function() { assert(false,"The action menu did not publish the payload with 'variable2' as 'orange' after mouse clicks");}
             )
             .end()
 
@@ -117,10 +122,11 @@ define(["intern!object",
          .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "payloadVariable2", "red"))
             .then(null, function() {
                assert(false,"The action menu did not publish the payload with 'payloadVariable2' as 'orange' after mouse clicks");
-            })
-            .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

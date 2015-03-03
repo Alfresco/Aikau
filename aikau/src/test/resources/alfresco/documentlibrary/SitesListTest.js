@@ -41,9 +41,9 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
+      // teardown: function() {
+      //    browser.end().alfPostCoverageResults(browser);
+      // },
 
       "Test Initial State": function () {
 
@@ -52,8 +52,7 @@ define(["intern!object",
          return browser.findAllByCssSelector(".alfresco-lists-views-layouts-Row")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Expected to load page 1");
-            })
-         .end();
+            });
       },
 
       // MNT-12871 was raised to report that it was not possible to switch page size when on the second page
@@ -73,8 +72,11 @@ define(["intern!object",
          .findAllByCssSelector(".alfresco-lists-views-layouts-Row")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Expected 2 results");
-            })
-         .end();
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

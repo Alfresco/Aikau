@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,16 +30,22 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Boolean Test',
-      'alfresco/renderers/Boolean': function () {
+      name: "Boolean Tests",
 
-         var browser = this.remote;
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Boolean", "Boolean Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Tests": function () {
          var testname = "BooleanTest";
-         return TestCommon.loadTestWebScript(this.remote, "/Boolean", testname)
-
-         // Check there are 10 rows x 6 columns = 60 cells
-         .findAllByCssSelector("span.alfresco-renderers-Property")
+         return browser.findAllByCssSelector("span.alfresco-renderers-Property")
             .then(function (booleans) {
                TestCommon.log(testname,"Check there are 60 cells as described in the model");
                expect(booleans).to.have.length(60, "There should be 60 cells rendered");
@@ -213,10 +219,11 @@ define(["intern!object",
             .then(function (result20) {
                TestCommon.log(testname,"Check the value of a boolean");
                expect(result20).to.equal("Unknown", "Row ten, column two should say 'Unknown'");
-            })
-            .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

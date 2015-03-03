@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -134,11 +134,11 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log", "Loading templates");
             var url = this._templatesUrl;
-            if (url == null)
+            if (!url)
             {
-               url = AlfConstants.PROXY_URI + "slingshot/doclib/node-templates";
+               url = "slingshot/doclib/node-templates";
             }
-            this.serviceXhr({url : url,
+            this.serviceXhr({url : AlfConstants.PROXY_URI + url,
                              method: "GET",
                              successCallback: this._templatesLoaded,
                              failureCallback: this._templatesLoadFailed,
@@ -158,11 +158,11 @@ define(["dojo/_base/declare",
          this._templatesAlreadyLoaded = true;
          
          // Check for keyboard access by seeing if the first child is focused...
-         var focusFirstChild = (this.popup && this.popup.getChildren().length > 0 && this.popup.getChildren()[0].focused);
+         var focusFirstChild = this.popup && this.popup.getChildren().length > 0 && this.popup.getChildren()[0].focused;
          
          // Remove the loading templates item...
          var _this = this;
-         array.forEach(this.popup.getChildren(), function(widget, index) {
+         array.forEach(this.popup.getChildren(), function(widget) {
             _this.popup.removeChild(widget);
          });
          
@@ -203,7 +203,7 @@ define(["dojo/_base/declare",
          
          // Remove the loading templates item...
          var _this = this;
-         array.forEach(this.popup.getChildren(), function(widget, index) {
+         array.forEach(this.popup.getChildren(), function(widget) {
             _this.popup.removeChild(widget);
          });
          this.addTemplatesFailMessageItem();
@@ -254,7 +254,25 @@ define(["dojo/_base/declare",
        * @default "alf-textdoc-icon"
        */
       templateIconClass: "alf-textdoc-icon",
-         
+      
+      /**
+       * The type of template to be created. Either "node" or "folder".
+       *
+       * @instance
+       * @type {string}
+       * @default "node"
+       */
+      templateType: "node",
+
+      /**
+       * An optional NodeRef in which to create the template.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      targetNodeRef: null,
+
       /**
        * Adds an individual menu item.
        * 
@@ -272,7 +290,12 @@ define(["dojo/_base/declare",
             publishPayload: {
                type: "template",
                params: {
-                  nodeRef: widget.nodeRef
+                  sourceNodeRef: widget.nodeRef,
+                  targetNodeRef: this.targetNodeRef,
+                  templateType: this.templateType,
+                  name: widget.name,
+                  title: widget.title,
+                  description: widget.description
                }
             }
          });

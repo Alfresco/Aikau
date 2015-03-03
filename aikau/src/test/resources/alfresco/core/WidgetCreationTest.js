@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,43 +24,54 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'Widget Creation Test',
-      'WidgetCreation': function () {
-         var browser = this.remote;
-         var testname = "WidgetCreationTest";
-         return TestCommon.loadTestWebScript(this.remote, "/WidgetCreation", testname)
+      name: "Widget Creation Tests",
 
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/WidgetCreation", "Widget Creation Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+     "Count the number of Logo widgets": function () {
          // This isn't the optimal way of testing this - ideally we want to get each widget and then
          // check the IDs - however, it's not easily understood how to do this with mulitple selection and 
          // chaining of promises - this test should be sufficient but it would be nice to update at some
          // point in the future!
 
-         .findAllByCssSelector(".alfresco-logo-Logo")
+         return browser.findAllByCssSelector(".alfresco-logo-Logo")
             .then(function (els) {
-               TestCommon.log(testname,"Count the number of Logo widgets");
-               assert(els.length == 3, "An unexpected number of logo widgets found", els.length);
-            })
-         .end()
+               assert.lengthOf(els, 3, "An unexpected number of logo widgets found");
+            });
+      },
 
-         .findAllByCssSelector("#SPECIFIC_DOM_ID")
+      "Check for the Logo with the specific ID": function() {
+         return browser.findAllByCssSelector("#SPECIFIC_DOM_ID")
             .then(function (els) {
-               TestCommon.log(testname,"Check for the Logo with the specific ID");
-               assert(els.length == 1, "Couldn't find Logo with specific DOM id", els.length);
-            })
-         .end()
-         .findAllByCssSelector("#SPECIFIC_DOM_ID")
-            .then(function (els) {
-               TestCommon.log(testname,"Check for the Logo with the overridden ID");
-               assert(els.length == 1, "Couldn't find Logo with overridden DOM id", els.length);
-            })
-         .end()
+               assert.lengthOf(els, 1, "Couldn't find Logo with specific DOM id");
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Check for the Logo with the overridden ID": function() {
+         return browser.findAllByCssSelector("#SPECIFIC_DOM_ID")
+            .then(function (els) {
+               assert.lengthOf(els, 1, "Couldn't find Logo with overridden DOM id");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

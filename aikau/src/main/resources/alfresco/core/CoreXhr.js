@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        */
       cleanupJSONResponse: function alfresco_core_CoreXhr__cleanupJSONResponse(input) {
          var r = input;
-         if (typeof input == "string")
+         if (typeof input === "string")
          {
             r = input.replace(/,}/g, "}");
          }
@@ -98,18 +98,19 @@ define(["dojo/_base/declare",
        * @param {serviceXhrConfig} config The configuration for the request
        */
       serviceXhr: function alfresco_core_CoreXhr__serviceXhr(config) {
+         /*jshint maxcomplexity:12*/
 
          var _this = this;
 
          if (config)
          {
-            if (typeof config.url == "undefined")
+            if (!config.url)
             {
                this.alfLog("error", "An XHR request was made but no URL was provided", config);
             }
             else
             {
-               var headers = (config.headers) ? config.headers : { 'Content-Type': 'application/json' };
+               var headers = (config.headers) ? config.headers : { "Content-Type": "application/json" };
                if (this.isCsrfFilterEnabled())
                {
                   headers[this.getCsrfHeader()] = this.getCsrfToken();
@@ -117,11 +118,11 @@ define(["dojo/_base/declare",
 
                // Attempt to parse the data, but reset to null if not possible...
                var data;
-               if (headers['Content-Type'] == 'application/json')
+               if (headers["Content-Type"] === "application/json")
                {
                   try
                   {
-                     data = (config.data != null) ? JSON.stringify(config.data) : null;
+                     data = (config.data && JSON.stringify(config.data)) || null;
                   }
                   catch (e)
                   {
@@ -142,13 +143,13 @@ define(["dojo/_base/declare",
                }).then(function(response) {
 
                   var id = lang.getObject("requestId", false, config);
-                  if (id != null)
+                  if (id)
                   {
                      delete _this.serviceRequests[id];
                   }
 
                   // HANDLE SUCCESS...
-                  if (typeof response == "string" && lang.trim(response) !== "")
+                  if (typeof response === "string" && lang.trim(response))
                   {
                      try
                      {
@@ -160,9 +161,9 @@ define(["dojo/_base/declare",
                      }
 
                   }
-                  if (typeof config.successCallback == "function")
+                  if (typeof config.successCallback === "function")
                   {
-                     var callbackScope = (config.successCallbackScope ? config.successCallbackScope : (config.callbackScope ? config.callbackScope : _this));
+                     var callbackScope = config.successCallbackScope || config.callbackScope || _this;
                      config.successCallback.call(callbackScope, response, config);
                   }
                   else
@@ -178,7 +179,7 @@ define(["dojo/_base/declare",
                      var redirect = response.response.getHeader("Location");
                      if (redirect)
                      {
-                        if (redirect.indexOf("http://") == 0 || redirect.indexOf("https://") == 0 ) {
+                        if (redirect.indexOf("http://") === 0 || redirect.indexOf("https://") === 0 ) {
                            window.location.href = redirect;
                         }
                         else {
@@ -195,11 +196,11 @@ define(["dojo/_base/declare",
 
                   // HANDLE FAILURE...
                   var id = lang.getObject("requestId", false, config);
-                  if (id != null)
+                  if (id)
                   {
                      delete _this.serviceRequests[id];
                   }
-                  if (typeof response == "string" && lang.trim(response) !== "")
+                  if (typeof response === "string" && lang.trim(response))
                   {
                      try
                      {
@@ -210,9 +211,9 @@ define(["dojo/_base/declare",
                         _this.alfLog("error", "An error occurred parsing an XHR JSON failure response", response, this);
                      }
                   }
-                  if (typeof config.failureCallback == "function")
+                  if (typeof config.failureCallback === "function")
                   {
-                     var callbackScope = (config.failureCallbackScope ? config.failureCallbackScope : (config.callbackScope ? config.callbackScope : _this));
+                     var callbackScope = config.failureCallbackScope || config.callbackScope || _this;
                      config.failureCallback.call(callbackScope, response, config);
                   }
                   else
@@ -223,7 +224,7 @@ define(["dojo/_base/declare",
                }, function(response) {
 
                   // HANDLE PROGRESS...
-                  if (typeof response == "string" && lang.trim(response) !== "")
+                  if (typeof response === "string" && lang.trim(response))
                   {
                      try
                      {
@@ -234,9 +235,9 @@ define(["dojo/_base/declare",
                         _this.alfLog("error", "An error occurred parsing an XHR JSON progress response", response, this);
                      }
                   }
-                  if (typeof config.progressCallback == "function")
+                  if (typeof config.progressCallback === "function")
                   {
-                     var callbackScope = (config.progressCallbackScope ? config.progressCallbackScope : (config.callbackScope ? config.callbackScope : _this));
+                     var callbackScope = config.progressCallbackScope || config.callbackScope || _this;
                      config.progressCallback.call(callbackScope, response, config);
                   }
                   else
@@ -349,7 +350,7 @@ define(["dojo/_base/declare",
        */
       onStopRequest: function alfresco_core_CoreXhr__onStopRequest(payload) {
          var id = lang.getObject("requestId", false, payload);
-         if (id != null && this.serviceRequests[id])
+         if (id && this.serviceRequests[id])
          {
             this.alfLog("info", "Stopping XHR request: " + id);
             this.serviceRequests[id].cancel();
@@ -421,7 +422,7 @@ define(["dojo/_base/declare",
             if (token)
             {
                // remove quotes to support Jetty app-server - bug where it quotes a valid cookie value see ALF-18823
-               token = token.replace(/"/g, '');
+               token = token.replace(/"/g, "");
             }
          }
          return token;

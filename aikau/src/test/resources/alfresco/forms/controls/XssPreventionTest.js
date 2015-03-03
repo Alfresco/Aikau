@@ -27,64 +27,74 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
       name: "Form Control XSS Prevention Test",
-      "Test TextBox Value": function () {
-         var browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/xss", "XSS Form Control Prevention Test").then(function(){
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/xss", "Form Control XSS Prevention Test").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+     "Test TextBox Value": function () {
+        return browser.then(function(){
             var notHacked = browser.execute("!window.hackedTextBoxValue");
             assert(notHacked, "XSS attack in TextBox value succeeeded");
-         })
-         .end();
+         });
       },
+      
       "Test RadioButtons Option Label": function () {
-         var browser = this.remote;
-         return this.remote.then(function(){
+         return browser.then(function(){
             var notHacked = browser.execute("!window.hackedRBOptionLabel");
             assert(notHacked, "XSS attack in RadioButtons option label succeeeded");
-         })
-         .end();
+         });
       },
+
       "Test RadioButtons Option Value": function () {
-         var browser = this.remote;
-         return this.remote.then(function(){
+         return browser.then(function(){
             var notHacked = browser.execute("!window.hackedRBOptionValue");
             assert(notHacked, "XSS attack in RadioButtons option value succeeeded");
-         })
-         .end();
+         });
       },
+
       "Test Select Option Label": function () {
-         var browser = this.remote;
-         return this.remote.then(function(){
+         return browser.then(function(){
             var notHacked = browser.execute("!window.hackedSelectOptionLabel");
             assert(notHacked, "XSS attack in Select option label succeeeded");
-         })
-         .end();
+         });
       },
+
       "Test Select Option Value": function () {
-         var browser = this.remote;
-         return this.remote.then(function(){
+         return browser.then(function(){
             var notHacked = browser.execute("!window.hackedSelectOptionValue");
             assert(notHacked, "XSS attack in Select option value succeeeded");
-         })
-         .end();
+         });
       },
+
       "Test ComboBox Option Label": function () {
-         var browser = this.remote;
-         return this.remote.then(function(){
+         return browser.then(function(){
             var notHacked = browser.execute("!window.hackedSelectOptionLabel");
             assert(notHacked, "XSS attack in ComboBox option label succeeeded");
-         })
-         .end();
+         });
       },
+
       "Test ComboBox Option Value": function () {
-         var browser = this.remote;
-         return this.remote.then(function(){
+         return browser.then(function(){
             var notHacked = browser.execute("!window.hackedComboBoxOptionValue");
             assert(notHacked, "XSS attack in ComboBox option value succeeeded");
-         })
-         .end()
-         .alfPostCoverageResults(browser);
+         });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

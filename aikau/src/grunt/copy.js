@@ -19,6 +19,13 @@ module.exports = function(grunt) {
                dest: "code-coverage-reports/",
                filter: "isFile"
             }]
+         },
+         clientPatch: {
+            expand: true,
+            flatten: true,
+            cwd: "target",
+            src: "aikau-*.jar",
+            dest: ""
          }
       }
 

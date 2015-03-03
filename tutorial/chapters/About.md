@@ -12,10 +12,10 @@ Great care has been taken to ensure that the steps and sample code provided in t
 
 1. If something goes wrong then it is recommended to follow these simple steps:
 2. Carefully check your code against the sample code (for example, make sure you’ve updated the correct section or file).
-3. Refresh WebScripts (this shouldn’t be necessary unless you’ve made seriously deviated from the described path, but 4. never hurts to be sure!)
-5. Clear Surf dependency caches.
-6. Enable logging (see [Tutorial 4](./Tutorial4.md)) and check the browser console for errors
-7. Check the Jetty server standard out log for errors
+3. [Refresh WebScripts](./RefreshingWebScripts.md) - this shouldn’t be necessary unless you’ve made seriously deviated from the described path, but it never hurts to be sure!
+4. [Clear Surf dependency caches](./ClearingDependencyCaches.md)
+5. Enable logging (see [Tutorial 4](./Tutorial4.md)) and check the browser console for errors
+6. Check the Jetty server standard out log for errors
 
 If all else fails, turn it off and on again (e.g. restart the server, clear the browser caches)
 

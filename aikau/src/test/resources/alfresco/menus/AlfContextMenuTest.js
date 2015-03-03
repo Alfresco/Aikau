@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,46 +25,51 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'AlfContextMenu Test',
-      'alfresco/menus/AlfContextMenu': function () {
+      name: "AlfContextMenu Tests",
 
-         var browser = this.remote;
-         var testName = "Context Menu Test";
-         return TestCommon.loadTestWebScript(this.remote, "/AlfContextMenu", testName)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfContextMenu", "AlfContextMenu Tests").end();
+      },
 
-            // TESTS COMMENTED OUT PENDING ANSWER POSTED HERE: https://github.com/theintern/intern/issues/191
-            // .findByCssSelector("#LOGO")
-            //    .click("2")
-            //    .end()
-            // .findByCssSelector("#MI3")
-            //    .click()
-            //    .end()
-            // .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "key3", "value3"))
-            //    .then(function(elements) {
-            //       TestCommon.log(testname,"Check targeted node context menu works");
-            //       assert(elements.length == 1, "Test #1 - Targeted node context menu failure");
-            //    })
-            //    .end()
+      beforeEach: function() {
+         browser.end();
+      },
 
-            // .findByCssSelector("#CLASSIC_WINDOW div.content")
-            //    .click("2")
-            //    .end()
-            // .findByCssSelector("#MI1")
-            //    .click()
-            //    .end()
-            // .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "key1", "value1"))
-            //    .then(function(elements) {
-            //       TestCommon.log(testname,"Check inherited node context menu works");
-            //       assert(elements.length == 1, "Test #2 - Inherited node context menu failure");
-            //    })
-            //    .end()
+      // TESTS COMMENTED OUT PENDING ANSWER POSTED HERE: https://github.com/theintern/intern/issues/191
+      // .findByCssSelector("#LOGO")
+      //    .click("2")
+      //    .end()
+      // .findByCssSelector("#MI3")
+      //    .click()
+      //    .end()
+      // .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "key3", "value3"))
+      //    .then(function(elements) {
+      //       TestCommon.log(testname,"Check targeted node context menu works");
+      //       assert(elements.length == 1, "Test #1 - Targeted node context menu failure");
+      //    })
+      //    .end()
 
-            .alfPostCoverageResults(browser);
+      // .findByCssSelector("#CLASSIC_WINDOW div.content")
+      //    .click("2")
+      //    .end()
+      // .findByCssSelector("#MI1")
+      //    .click()
+      //    .end()
+      // .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "key1", "value1"))
+      //    .then(function(elements) {
+      //       TestCommon.log(testname,"Check inherited node context menu works");
+      //       assert(elements.length == 1, "Test #2 - Inherited node context menu failure");
+      //    })
+      //    .end()
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

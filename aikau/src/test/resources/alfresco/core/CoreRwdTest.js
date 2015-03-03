@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -21,6 +21,7 @@
  * This test assesses the CoreRwd mixin as applied to AlfMenuBarPopup
  * 
  * @author Richard Smith
+ * @author Dave Draper
  */
 define(["intern!object",
         "intern/chai!expect",
@@ -28,59 +29,75 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'CoreRwd Test',
-      'alfresco/core/CoreRwd': function () {
+      name: "CoreRwd Tests",
 
-         var browser = this.remote;
-         var testname = "CoreRwdTest";
-         return TestCommon.loadTestWebScript(this.remote, "/CoreRwd", testname)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/CoreRwd", "CoreRwd Tests").end();
+      },
 
-         .end()
+      beforeEach: function() {
+         browser.end();
+      },
 
-         .findById("DROP_DOWN_MENU_1")
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+      "Check the dropdown is not hidden": function () {
+         return browser.findById("DROP_DOWN_MENU_1")
             .getAttribute("class")
             .then(function (classes1){
-               TestCommon.log(testname,"Check the dropdown is not 'hidden'");
-               expect(classes1).to.not.contain("hidden", "Test #1a - The dropdown should not have class 'hidden'");
-            })
+               expect(classes1).to.not.contain("hidden", "The dropdown should not have class 'hidden'");
+            });
+      },
 
+      "Check the dropdown is visible": function() {   
+         return browser.findById("DROP_DOWN_MENU_1")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check the dropdown is visible");
-               expect(displayed).to.equal(true, "Test #1b - The dropdown should be visible");
-            })
+               expect(displayed).to.equal(true, "The dropdown should be visible");
+            });
+      },
 
-            .setWindowSize(null, 700, 400)
-
+      "Check the dropdown is hidden": function() { 
+         return browser.setWindowSize(null, 700, 400)
+            .findById("DROP_DOWN_MENU_1")
             .getAttribute("class")
             .then(function (classes2){
-               TestCommon.log(testname,"Check the dropdown is 'hidden'");
-               expect(classes2).to.contain("hidden", "Test #1c - The dropdown should have class 'hidden'");
-            })
+               expect(classes2).to.contain("hidden", "The dropdown should have class 'hidden'");
+            });
+      },
 
+      "Check the dropdown is not visible": function() {  
+         return browser.findById("DROP_DOWN_MENU_1")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check the dropdown is not visible");
-               expect(displayed).to.equal(false, "Test #1d - The dropdown should not be visible");
-            })
+               expect(displayed).to.equal(false, "The dropdown should not be visible");
+            });
+      },
 
-            .setWindowSize(null, 1024, 768)
-
+      "Check the dropdown is not hidden again": function() {
+         return browser.setWindowSize(null, 1024, 768)
+            .findById("DROP_DOWN_MENU_1")
             .getAttribute("class")
             .then(function (classes3){
-               TestCommon.log(testname,"Check the dropdown is not 'hidden' again");
-               expect(classes3).to.not.contain("hidden", "Test #1e - The dropdown should not have class 'hidden'");
-            })
+               expect(classes3).to.not.contain("hidden", "The dropdown should not have class 'hidden'");
+            });
+      },
 
+      "Check the dropdown is visible again": function() {
+         return browser.findById("DROP_DOWN_MENU_1")
             .isDisplayed()
             .then(function (displayed){
-               TestCommon.log(testname,"Check the dropdown is visible again");
                expect(displayed).to.equal(true, "Test #1f - The dropdown should be visible again");
-            })
-            .end()
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

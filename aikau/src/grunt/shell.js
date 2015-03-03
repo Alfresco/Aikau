@@ -23,9 +23,26 @@ module.exports = function(grunt) {
             command: "mvn jetty:stop"
          },
 
+         // Maven
+         mavenInstall: {
+            command: "mvn install"
+         },
+         mavenProcessTestResources: {
+            command: "mvn -q process-test-resources"
+         },
+
          // Vagrant
          vagrantUp: {
             command: "vagrant up",
+            options: {
+               execOptions: {
+                  cwd: alfConfig.dir.vagrant,
+                  maxBuffer: "Infinite"
+               }
+            }
+         },
+         vagrantUpAndProvision: {
+            command: "vagrant up --provision",
             options: {
                execOptions: {
                   cwd: alfConfig.dir.vagrant,

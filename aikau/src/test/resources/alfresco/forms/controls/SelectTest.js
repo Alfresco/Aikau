@@ -39,24 +39,39 @@ define(["intern!object",
    // Get specific menu option:
    //    #FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel
 
+   var browser;
    registerSuite({
-      name: "Select Menu Test",
-      "Test Label Rendering": function () {
+      name: "Select Menu Tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Select", "Select Menu Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // teardown: function() {
+      //    browser.end();
+      // },
+      
+     "Test Label Rendering": function () {
          return TestCommon.loadTestWebScript(this.remote, "/Select", "Select Form Control Tests").findByCssSelector("#FIXED_INVALID_CHANGES_TO .label")
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "Fixed 1", "The label was not rendered correctly: " + resultText);
-            })
-         .end();
+            });
       },
+      
       "Test initial value of fixed config": function() {
          return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO span[role=option]")
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "Two", "The initial value was not represented correctly: " + resultText);
-            })
-         .end();
+            });
       },
+      
       "Test fixed options count": function() {
          return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
             .click()
@@ -64,25 +79,25 @@ define(["intern!object",
          .findAllByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown .dijitMenuItemLabel")
             .then(function(elements) {
                assert(elements.length === 3, "Three fixed options were expected, found: " + elements.length);
-            })
-         .end();
+            });
       },
+  
       "Test fixed option label rendering": function() {
          return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "One", "Fixed label not set correctly: " + resultText);
-            })
-         .end();
+            });
       },
+  
       "Test fixed option label set from value": function() {
          return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(3) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "NO LABEL", "Fixed label not set correctly from value: " + resultText);
-            })
-         .end();
+            });
       },
+   
       "Test pub/sub options generated": function() {
          return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
             .click()
@@ -93,17 +108,17 @@ define(["intern!object",
          .findAllByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown .dijitMenuItemLabel")
             .then(function(elements) {
                assert(elements.length === 2, "Two options were expected, found: " + elements.length);
-            })
-         .end();
+            });
       },
+  
       "Test updated label set by pub/sub": function() {
          return this.remote.findByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "Update1_1", "Updated label not set correctly by pub/sub: " + resultText);
-            })
-         .end();
+            });
       },
+    
       "Test pub/sub options generated from field change": function() {
          // Check that pub/sub options generated from field changes are correct (should be on 3rd request based on values being set)...
          return this.remote.findByCssSelector("#HAS_UPDATE_TOPICS .dijitArrowButtonInner")
@@ -115,18 +130,18 @@ define(["intern!object",
          .findAllByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown .dijitMenuItemLabel")
             .then(function(elements) {
                assert(elements.length === 2, "Two options were expected, found: " + elements.length);
-            })
-         .end();
+            });
       },
+    
       "Test options provided once": function() {
          // The options should have been provided once (the mock service increments the options)...
          return this.remote.findByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "Update1_3", "Updated label not set correctly by pub/sub: " + resultText);
-            })
-         .end();
+            });
       },
+  
       "Test update topics processed": function() {
          return this.remote.findByCssSelector("#HAS_CHANGES_TO .dijitArrowButtonInner")
             .click()
@@ -141,9 +156,9 @@ define(["intern!object",
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "Update1_2", "Updated label not set correctly by external update: " + resultText);
-            })
-         .end();
+            });
       },
+ 
       "Test update topic scoping": function() {
          // Clicking the 2nd button should have no effect (as it's the scoped topic published globally)...
          return this.remote.findByCssSelector("#REQUEST_SCOPED_UPDATE_GLOBALLY_label")
@@ -156,9 +171,9 @@ define(["intern!object",
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "Update1_2", "Updated label not unexpectedly updated: " + resultText);
-            })
-         .end();
+            });
       },
+   
       "Test label updated  from external publication": function() {
          // Clicking the 3rd button should perform an update...
          return this.remote.findByCssSelector("#REQUEST_SCOPED_UPDATE_label")
@@ -171,9 +186,9 @@ define(["intern!object",
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "Update1_3", "Updated label not set correctly by external update: " + resultText);
-            })
-         .end();
+            });
       },
+   
       "Test changing field triggers update": function() {
          // Change a field to check an update is made...
          return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
@@ -189,17 +204,38 @@ define(["intern!object",
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "Update1_4", "Updated label not set correctly by pub/sub: " + resultText);
-            })
-         .end();
+            });
       },
+   
       "Test XSS attack fails": function() {
          // Change a field to check an update is made...
-         var browser = this.remote;
-         return this.remote.then(function(){
+         return browser.then(function(){
             var notHacked = browser.execute("!window.hackedLabel && !window.hackedValue");
             assert(notHacked, "XSS prevention failed - script executed in label or value of option");
-         })
-         .alfPostCoverageResults(browser);
+         });
+      },
+
+      "Test pub/sub options in dialog": function() {
+         // See https://issues.alfresco.com/jira/browse/AKU-131
+         // Create the form dialog...
+         return browser.findByCssSelector("#CREATE_FORM_DIALOG_label")
+            .click()
+         .end()
+
+         // Open the opens...
+         .findByCssSelector("#SELECT_IN_DIALOG .dijitArrowButtonInner")
+            .click()
+         .end()
+
+         // Count that there are some...
+         .findAllByCssSelector("#SELECT_IN_DIALOG_CONTROL_dropdown .dijitMenuItemLabel")
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "No pub sub options provided for select in a dialog");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

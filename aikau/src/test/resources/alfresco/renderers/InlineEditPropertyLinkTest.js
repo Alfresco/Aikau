@@ -37,17 +37,11 @@ define(["intern!object",
 
          setup: function() {
             browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/InlineEditPropertyLink", "InlineEditPropertyLink")
-               .end();
+            return TestCommon.loadTestWebScript(this.remote, "/InlineEditPropertyLink", "InlineEditPropertyLink").end();
          },
 
          beforeEach: function() {
             browser.end();
-         },
-
-         teardown: function() {
-            return browser.end()
-               .alfPostCoverageResults(browser);
          },
 
          "Property is rendered correctly": function() {
@@ -278,7 +272,10 @@ define(["intern!object",
                .then(function(text) {
                   assert.equal(text, "New", "Read-only value not updated correctly");
                });
-         }
+         },
 
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
       });
    });

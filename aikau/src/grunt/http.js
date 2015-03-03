@@ -13,6 +13,27 @@ module.exports = function(grunt) {
                useAvailablePort: true
             }
          }
+      },
+
+      // grunt-http (http abilities within grunt)
+      http: {
+         clientPatchModuleReload: {},
+         clientPatchCacheBust: {},
+         testAppReloadWebScripts: {
+            options: {
+               url: "http://localhost:8089/aikau/page/index",
+               method: "POST",
+               form: {
+                  reset: "on"
+               }
+            }
+         },
+         testAppClearCaches: {
+            options: {
+               url: "http://localhost:8089/aikau/page/caches/dependency/clear",
+               method: "POST"
+            }
+         }
       }
 
    });

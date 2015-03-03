@@ -30,17 +30,21 @@ define(["intern!object",
 
    var browser;
    registerSuite({
-      name: "SingleTextFieldForm Test",
+      name: "SingleTextFieldForm Tests",
+      
       setup: function() {
          browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SingleTextFieldForm#search=bob", "SingleTextFieldForm").end();
+         return TestCommon.loadTestWebScript(this.remote, "/SingleTextFieldForm#search=bob", "SingleTextFieldForm Tests").end();
       },
+      
       beforeEach: function() {
          browser.end();
       },
-      teardown: function() {
-         return browser.end().alfPostCoverageResults(browser);
-      },
+      
+      // teardown: function() {
+      //    return browser.end().alfPostCoverageResults(browser);
+      // },
+      
       "Test hash doesn't set value in first form": function () {
          // The first form is configured to not update values from the browser hash fragment, so the
          // initial URL shouldn't set a value...
@@ -48,9 +52,9 @@ define(["intern!object",
             .getValue()
             .then(function(value) {
                assert(value === "", "The value of the first form was set with: " + value);
-            })
-         .end();
+            });
       },
+      
       "Test hash sets value in second form": function () {
          // The second form is configured to update values from the browser hash fragment, so the
          // initial URL should be set to "bob" (the value of "search" in the hash fragment)...
@@ -58,9 +62,9 @@ define(["intern!object",
             .getValue()
             .then(function(value) {
                assert(value === "bob", "The value of the first form was set with: " + value);
-            })
-         .end();
+            });
       },
+      
       "Test form can't be submitted without field value": function() {
          return browser.findByCssSelector("#STFF1 .dijitInputContainer input")
             .pressKeys(keys.RETURN)
@@ -68,9 +72,9 @@ define(["intern!object",
          .findAllByCssSelector(TestCommon.topicSelector("TEST_PUBLISH", "publish", "any"))
             .then(function(elements) {
                assert(elements.length === 0, "Enter key submitted data on empty field");
-            })
-         .end();
+            });
       },
+      
       "Test form can be submitted with field value": function() {
          return browser.findByCssSelector("#STFF1 .dijitInputContainer input")
             .type("test")
@@ -79,8 +83,11 @@ define(["intern!object",
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "search", "test"))
             .then(function(elements) {
                assert(elements.length === 1, "Enter key doesn't submit data");
-            })
-         .end();
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

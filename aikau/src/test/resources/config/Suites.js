@@ -31,7 +31,22 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   xbaseFunctionalSuites: ["src/test/resources/alfresco/html/HeadingTest"],
+   xbaseFunctionalSuites: [
+      // Chrome Failures
+      "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
+      "src/test/resources/alfresco/layout/BasicLayoutTest",
+      "src/test/resources/alfresco/menus/AlfMenuBarToggleTest",
+      // Firefox Failures
+      "src/test/resources/alfresco/header/HeaderWidgetsTest",
+      "src/test/resources/alfresco/layout/AlfTabContainerTest",
+      "src/test/resources/alfresco/layout/TwisterTest",
+      "src/test/resources/alfresco/menus/AlfMenuBarSelectTest",
+      "src/test/resources/alfresco/menus/AlfMenuItemWrapperTest",
+      "src/test/resources/alfresco/menus/MenuTests",
+      "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest",
+      "src/test/resources/alfresco/renderers/InlineEditPropertyTest",
+      "src/test/resources/alfresco/renderers/InlineEditPropertyLinkTest"
+   ],
 
    /**
     * This is the base array of functional test suites
@@ -45,6 +60,7 @@ define({
 
       "src/test/resources/alfresco/charts/ccc/PieChartTest",
 
+      "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
       "src/test/resources/alfresco/core/CoreRwdTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
@@ -52,9 +68,9 @@ define({
       "src/test/resources/alfresco/core/VisibilityConfigTest",
       "src/test/resources/alfresco/core/WidgetCreationTest",
 
-      // TODO: This test is quarantined - the widget creation code is broken, but not required for production
-      //       and there are plans to iterate on it anyway.
-      // "src/test/resources/alfresco/creation/WidgetConfigTest",
+      "src/test/resources/alfresco/creation/WidgetConfigTest",
+
+      "src/test/resources/alfresco/debug/WidgetInfoTest",
 
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
@@ -102,6 +118,7 @@ define({
       "src/test/resources/alfresco/layout/TwisterTest",
 
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
+      "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
 
       "src/test/resources/alfresco/menus/AlfCheckableMenuItemTest",
       "src/test/resources/alfresco/menus/AlfContextMenuTest",
@@ -174,13 +191,7 @@ define({
     * @type [string]
     */
    localFunctionalSuites: function localFunctionalSuites() {
-      return this.setupFunctionalSuites.concat(
-         this.baseFunctionalSuites.concat(
-            this.localOnlyFunctionalSuites.concat(
-               this.teardownFunctionalSuites
-            )
-         )
-      );
+      return this.baseFunctionalSuites.concat(this.localOnlyFunctionalSuites);
    },
 
    /**
@@ -198,13 +209,7 @@ define({
     * @type [string]
     */
    vmFunctionalSuites: function vmFunctionalSuites() {
-      return this.setupFunctionalSuites.concat(
-         this.baseFunctionalSuites.concat(
-            this.vmOnlyFunctionalSuites.concat(
-               this.teardownFunctionalSuites
-            )
-         )
-      );
+      return this.baseFunctionalSuites.concat(this.vmOnlyFunctionalSuites);
    },
 
    /**
@@ -222,13 +227,7 @@ define({
     * @type [string]
     */
    slFunctionalSuites: function slFunctionalSuites() {
-      return this.setupFunctionalSuites.concat(
-         this.baseFunctionalSuites.concat(
-            this.slOnlyFunctionalSuites.concat(
-               this.teardownFunctionalSuites
-            )
-         )
-      );
+      return this.baseFunctionalSuites.concat(this.slOnlyFunctionalSuites);
    },
 
    /**
@@ -246,29 +245,6 @@ define({
     * @type [string]
     */
    gridFunctionalSuites: function gridFunctionalSuites() {
-      return this.setupFunctionalSuites.concat(
-         this.baseFunctionalSuites.concat(
-            this.gridOnlyFunctionalSuites.concat(
-               this.teardownFunctionalSuites
-            )
-         )
-      );
-   },
-
-   /**
-    * This is the array of functional test suites for setup purposes
-    *
-    * @instance
-    * @type [string]
-    */
-   setupFunctionalSuites: [], //["src/test/resources/alfresco/DebugEnable"],
-
-   /**
-    * This is the array of functional test suites for teardown purposes
-    *
-    * @instance
-    * @type [string]
-    */
-   teardownFunctionalSuites: [] //["src/test/resources/alfresco/DebugDisable"]
-
+      return this.baseFunctionalSuites.concat(this.gridOnlyFunctionalSuites);
+   }
 });

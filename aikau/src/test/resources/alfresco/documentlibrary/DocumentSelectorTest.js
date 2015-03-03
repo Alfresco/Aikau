@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,78 +24,87 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
+   // Use this function for getting an individual selector...
+   var selectorSelector = function(row) {
+      return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector";
+   };
+   // Use this function for getting all checked selectors...
+   var checkedSelectorSelector = function() {
+      return "#VIEW tr .alfresco-renderers-Selector.checked";
+   };
+   // Use this function for getting all unchecked selectors...
+   var uncheckedSelectorSelector = function() {
+      return "#VIEW tr .alfresco-renderers-Selector.unchecked";
+   };
+   // Use this function to check if a specific entry is checked...
+   var specificCheckedSelectorSelector = function(row) {
+      return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector.checked";
+   };
+   // Use this function for getting all unchecked selectors...
+   var specificUncheckedSelectorSelector = function(row) {
+      return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector.unchecked";
+   };
+
+   var browser;
    registerSuite({
-      name: 'AlfDocumentList Test',
-      'AlfSearchListTest': function () {
+      name: "Document Selector Tests",
 
-         // Use this function for getting an individual selector...
-         var selectorSelector = function(row) {
-            return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector";
-         };
-         // Use this function for getting all checked selectors...
-         var checkedSelectorSelector = function() {
-            return "#VIEW tr .alfresco-renderers-Selector.checked";
-         };
-         // Use this function for getting all unchecked selectors...
-         var uncheckedSelectorSelector = function() {
-            return "#VIEW tr .alfresco-renderers-Selector.unchecked";
-         };
-         // Use this function to check if a specific entry is checked...
-         var specificCheckedSelectorSelector = function(row) {
-            return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector.checked";
-         };
-         // Use this function for getting all unchecked selectors...
-         var specificUncheckedSelectorSelector = function(row) {
-            return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector.unchecked";
-         };
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/DocumentSelector", "Document Selector Tests").end();
+      },
 
-         var browser = this.remote;
-         var testname = "AlfDocumentListTest";
-         return TestCommon.loadTestWebScript(this.remote, "/DocumentSelector", testname)
+      beforeEach: function() {
+         browser.end();
+      },
 
-         // First lets count the rows...
-         .findAllByCssSelector("#VIEW tr")
+      // teardown: function() {
+      //    browser.end();
+      // },
+     
+      "Count the rows": function () {
+         return browser.findAllByCssSelector("#VIEW tr")
             .then(function(elements) {
-               assert(elements.length == 3, "Test #1a - An unexpected number of rows were detected: " + elements.length);
-            })
-         .end()
+               assert(elements.length === 3, "An unexpected number of rows were detected: " + elements.length);
+            });
+      },
 
-         // Count the unchecked selectors...
-         .findAllByCssSelector(uncheckedSelectorSelector())
+      "Count the unchecked selectors": function() {
+         return browser.findAllByCssSelector(uncheckedSelectorSelector())
             .then(function(elements) {
-               assert(elements.length == 3, "Test #1b - An unexpected number of UNCHECKED selectors were found: " + elements.length);
-            })
-         .end()
-          // Count the checked selectors...
-         .findAllByCssSelector(checkedSelectorSelector())
-            .then(function(elements) {
-               assert(elements.length === 0, "Test #1c - An unexpected number of CHECKED selectors were found: " + elements.length);
-            })
-         .end()
+               assert(elements.length === 3, "An unexpected number of UNCHECKED selectors were found: " + elements.length);
+            });
+      },
 
-         // Check that the overall selector indicates that none have been selected...
-         .findByCssSelector("#SELECTED_ITEMS .alf-noneselected-icon")
+      "Count the checked selectors": function() {
+          return browser.findAllByCssSelector(checkedSelectorSelector())
+            .then(function(elements) {
+               assert(elements.length === 0, "An unexpected number of CHECKED selectors were found: " + elements.length);
+            });
+      },
+
+      "Check that the overall selector indicates that none have been selected": function() {
+         return browser.findByCssSelector("#SELECTED_ITEMS .alf-noneselected-icon")
             .then(null, function() {
-               assert(false, "Test #1d - The selected items widget doesn't indicate that NO items are selected");
-            })
-         .end()
+               assert(false, "The selected items widget doesn't indicate that NO items are selected");
+            });
+      },
 
-         // Check the first selector...
-         .findByCssSelector(selectorSelector(1))
+      "Check the first selector": function() {
+         return browser.findByCssSelector(selectorSelector(1))
             .click()
-            .end()
+         .end()
          .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
             .then(null, function() {
-               assert(false, "Test #2a - The selected items widget doesn't indicate that SOME items are selected");
-            })
-         .end()
+               assert(false, "The selected items widget doesn't indicate that SOME items are selected");
+            });
+      },
 
-         // Check the other two selectors...
-         .findByCssSelector(selectorSelector(2))
+      "Check the other two selectors": function() {
+         return browser.findByCssSelector(selectorSelector(2))
             .click()
          .end()
          .findByCssSelector(selectorSelector(3))
@@ -103,43 +112,43 @@ define(["intern!object",
          .end()
          .findByCssSelector("#SELECTED_ITEMS .alf-allselected-icon")
             .then(null, function() {
-               assert(false, "Test #2b - The selected items widget doesn't indicate that ALL items are selected");
-            })
-         .end()
+               assert(false, "The selected items widget doesn't indicate that ALL items are selected");
+            });
+      },
 
-         // Uncheck the middle selector...
-         .findByCssSelector(selectorSelector(2))
+      "Uncheck the middle selector": function() {
+         return browser.findByCssSelector(selectorSelector(2))
             .click()
          .end()
          .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
             .then(null, function() {
-               assert(false, "Test #2c - The selected items widget doesn't indicate that SOME items are selected");
-            })
-         .end()
+               assert(false, "The selected items widget doesn't indicate that SOME items are selected");
+            });
+      },
 
-         // Open the menu and select documents...
-         .findByCssSelector(".alf-menu-arrow")
+      "Open the menu and select documents": function() {
+         return browser.findByCssSelector(".alf-menu-arrow")
             .click()
          .end()
          .sleep(150)
-
          .findByCssSelector(".dijitMenuItem:nth-child(4) > td.dijitMenuItemLabel")
             .click()
          .end()
-
          .findByCssSelector(specificCheckedSelectorSelector(1))
             .then(null, function() {
-               assert(false, "Test #3a - First item was not checked when 'Documents' selected");
-            })
-         .end()
-         .findByCssSelector(specificUncheckedSelectorSelector(2))
-            .then(null, function() {
-               assert(false, "Test #3b - Second item was unexpectedly checked when 'Documents' selected");
-            })
-         .end()
+               assert(false, "First item was not checked when 'Documents' selected");
+            });
+      },
 
-         // Open the menu and select folders...
-         .findByCssSelector(".alf-menu-arrow")
+      "Check that second item is not checked": function() {
+         return browser.findByCssSelector(specificUncheckedSelectorSelector(2))
+            .then(null, function() {
+               assert(false, "Second item was unexpectedly checked when 'Documents' selected");
+            });
+      },
+
+      "Open the menu and select folders": function() {
+         return browser.findByCssSelector(".alf-menu-arrow")
             .click()
          .end()
          .sleep(150)
@@ -150,16 +159,19 @@ define(["intern!object",
 
          .findByCssSelector(specificCheckedSelectorSelector(2))
             .then(null, function() {
-               assert(false, "Test #3a - First item was unexpectedly checked when 'Folders' selected");
-            })
-         .end()
-         .findByCssSelector(specificUncheckedSelectorSelector(1))
-            .then(null, function() {
-               assert(false, "Test #3b - Second item was not checked when 'Folders' selected");
-            })
-         .end()
+               assert(false, "First item was unexpectedly checked when 'Folders' selected");
+            });
+      },
 
-         .alfPostCoverageResults(browser);
+      "Check that second item is checked": function() {
+         return browser.findByCssSelector(specificUncheckedSelectorSelector(1))
+            .then(null, function() {
+               assert(false, "Second item was not checked when 'Folders' selected");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

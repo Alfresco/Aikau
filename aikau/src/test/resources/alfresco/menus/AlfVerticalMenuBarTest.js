@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,22 +25,26 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'AlfVerticalMenuBar Test',
-      'alfresco/menus/AlfVerticalMenuBar': function () {
+      name: "AlfVerticalMenuBar Tests",
 
-         var browser = this.remote;
-         var testName = "Vertical Menu Bar Test";
-         return TestCommon.loadTestWebScript(this.remote, "/AlfVerticalMenuBar", testName)
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfVerticalMenuBar", "AlfVerticalMenuBar Tests").end();
+      },
 
-            // TODO: This test has not yet been written because the vertical menu bar is still in beta and needs to be completed
+      beforeEach: function() {
+         browser.end();
+      },
 
-            
-            .alfPostCoverageResults(browser);
+      // TODO: This test has not yet been written because the vertical menu bar is still in beta and needs to be completed
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

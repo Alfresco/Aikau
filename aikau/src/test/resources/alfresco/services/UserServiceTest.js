@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -21,6 +21,7 @@
  * This test uses a MockXhr service to test the user service responds as required.
  * 
  * @author Richard Smith
+ * @author Dave Draper
  */
 define(["intern!object",
         "intern/chai!expect",
@@ -28,77 +29,38 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+   var browser;
    registerSuite({
-      name: 'User Service Test',
-      'UserService - success': function () {
+      name: "User Service Test (successful)",
 
-         var browser = this.remote;
-         var testname = "UserServiceTest - Success";
-         return TestCommon.loadTestWebScript(this.remote, "/UserServiceSuccess", testname)
-
-         .findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
-            .getVisibleText()
-            .then(function (text){
-               TestCommon.log(testname,"Check the starting 'last updated' copy");
-               expect(text).to.equal("Last updated: over 3 years ago", "The 'last updated' should read 'Last updated: over 3 years ago' to begin with");
-            })
-         .end()
-
-         .findByCssSelector("#HEADER_USER_STATUS > div.status")
-            .getVisibleText()
-            .then(function (text){
-               TestCommon.log(testname,"Check the starting status copy");
-               expect(text).to.equal("I'm so very happy", "The status should read 'I'm so very happy' to begin with");
-            })
-            .click()
-         .end()
-
-         .findById("HEADER_USER_STATUS_STATUS_TEXTAREA")
-            .click()
-            .type("testing")
-         .end()
-
-         .findByCssSelector("div.alfresco-dialog-AlfDialog div.footer span.alfresco-buttons-AlfButton:first-of-type span.dijitButtonNode")
-            .click()
-         .end()
-
-         .findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
-            .getVisibleText()
-            .then(function (text){
-               TestCommon.log(testname,"Check the finishing 'last updated' copy");
-               expect(text).to.equal("Last updated: just now", "The 'last updated' should read 'Last updated: just now' to finish");
-            })
-         .end()
-
-         .alfPostCoverageResults(browser);
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/UserServiceSuccess", "User Service Test (successful)").end();
       },
 
-      'UserService - failure': function () {
+      beforeEach: function() {
+         browser.end();
+      },
 
-         var browser = this.remote;
-         var testname = "UserServiceTest - Failure";
-         return TestCommon.loadTestWebScript(this.remote, "/UserServiceFailure", testname)
-
-         .end()
-
-         .findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
+      "Check the starting 'last updated' copy": function () {
+         return browser.findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
             .getVisibleText()
             .then(function (text){
-               TestCommon.log(testname,"Check the starting 'last updated' copy");
                expect(text).to.equal("Last updated: over 3 years ago", "The 'last updated' should read 'Last updated: over 3 years ago' to begin with");
-            })
-         .end()
+            });
+      },
 
-         .findByCssSelector("#HEADER_USER_STATUS > div.status")
+      "Check the starting status copy": function() {
+         return browser.findByCssSelector("#HEADER_USER_STATUS > div.status")
             .getVisibleText()
             .then(function (text){
-               TestCommon.log(testname,"Check the starting status copy");
-               expect(text).to.equal("I'm not so very happy", "The status should read 'I'm not so very happy' to begin with");
+               expect(text).to.equal("I'm so very happy", "The status should read 'I'm so very happy' to begin with");
             })
-            .click()
-         .end()
+            .click();
+      },
 
-         .findById("HEADER_USER_STATUS_STATUS_TEXTAREA")
+      "Check the finishing 'last updated' copy": function() {
+         return browser.findById("HEADER_USER_STATUS_STATUS_TEXTAREA")
             .click()
             .type("testing")
          .end()
@@ -110,12 +72,66 @@ define(["intern!object",
          .findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
             .getVisibleText()
             .then(function (text){
-               TestCommon.log(testname,"Check the finishing 'last updated' copy");
-               expect(text).to.equal("Last updated: over 3 years ago", "The 'last updated' should read 'Last updated: over 3 years ago' to finish");
+               expect(text).to.equal("Last updated: just now", "The 'last updated' should read 'Last updated: just now' to finish");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   registerSuite({
+      name: "User Service Test (failure)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/UserServiceFailure", "User Service Test (failure)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "UserService - failure": function () {
+         var testname = "UserServiceTest - Failure";
+         return browser.findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
+            .getVisibleText()
+            .then(function (text){
+               TestCommon.log(testname,"Check the starting 'last updated' copy");
+               expect(text).to.equal("Last updated: over 3 years ago", "The 'last updated' should read 'Last updated: over 3 years ago' to begin with");
+            });
+      },
+
+      "Check the starting status copy": function() {
+         return browser.findByCssSelector("#HEADER_USER_STATUS > div.status")
+            .getVisibleText()
+            .then(function (text){
+               expect(text).to.equal("I'm not so very happy", "The status should read 'I'm not so very happy' to begin with");
             })
+            .click();
+      },
+
+      "Check the finishing 'last updated' copy": function() {
+         return browser.findById("HEADER_USER_STATUS_STATUS_TEXTAREA")
+            .click()
+            .type("testing")
          .end()
 
-         .alfPostCoverageResults(browser);
+         .findByCssSelector("div.alfresco-dialog-AlfDialog div.footer span.alfresco-buttons-AlfButton:first-of-type span.dijitButtonNode")
+            .click()
+         .end()
+
+         .findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
+            .getVisibleText()
+            .then(function (text){
+               expect(text).to.equal("Last updated: over 3 years ago", "The 'last updated' should read 'Last updated: over 3 years ago' to finish");
+            })
+         .end();
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

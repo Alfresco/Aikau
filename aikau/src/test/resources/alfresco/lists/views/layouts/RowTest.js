@@ -39,10 +39,6 @@ define(["intern!object",
          browser.end();
       },
 
-      teardown: function() {
-         browser.end().alfPostCoverageResults(browser);
-      },
-
       "Test that row has additional CSS classes": function() {
          return browser.findAllByCssSelector("tr.extra")
             .then(function(elements) {
@@ -56,6 +52,10 @@ define(["intern!object",
             .then(function(colspan) {
                assert.equal(colspan, 2, "Colspan attribute not set on cell");
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

@@ -1,40 +1,71 @@
-.alfresco-testing-MockXhr table {
-   border: 1px solid #808080;
-   border-collapse: collapse;
-   width: 100%;
-   margin-bottom: 10px;
-}
-
-.alfresco-testing-MockXhr tr {
-   border: none;
-   border-collapse: collapse;
-}
-
-.alfresco-testing-MockXhr tr.mx-row:nth-child(odd),
-.alfresco-testing-MockXhr tr.mx-object-row:nth-child(odd) {
-   background-color: #eee;
-}
-
-.alfresco-testing-MockXhr tr.mx-row:nth-child(even),
-.alfresco-testing-MockXhr tr.mx-object-row:nth-child(even) {
-   background-color: #fff;
-}
-
-.alfresco-testing-MockXhr th,
-.alfresco-testing-MockXhr td,
-.alfresco-testing-MockXhr caption {
-   border: 1px solid #808080;
-   border-collapse: collapse;
-   padding: 4px;
-}
-
-.alfresco-testing-MockXhr caption {
-   border-bottom: none;
-   text-align: left;
-   font-weight: bold;
-   font-size: 1.1em;
-}
-
-.alfresco-testing-MockXhr td>table {
-   border: none;
+.alfresco-testing-MockXhr {
+   table, tr, th, td, caption {
+      border-collapse: collapse;
+   }
+   table {
+      border: 1px solid #808080;
+      margin-bottom: 10px;
+      width: 100%;
+   }
+   tr {
+      border: none;
+      .mx-row:nth-child(odd), .mx-object-row:nth-child(odd) {
+         background-color: #eee;
+      }
+      .mx-row:nth-child(even), .mx-object-row:nth-child(even) {
+         background-color: #fff;
+      }
+   }
+   th, td, caption {
+      border: 1px solid #808080;
+      padding: 4px;
+   }
+   td > table {
+      border: none;
+   }
+   caption {
+      border-bottom: none;
+      font-size: 1.1em;
+      font-weight: 700;
+      text-align: left;
+   }
+   .mx-response {
+      position: relative;
+      &__info {
+         background: white;
+         border: 1px solid #aaa;
+         box-shadow: 1px 1px 5px rgba(0,0,0,.8);
+         display: none;
+         margin: 0;
+         padding: 10px;
+         position: absolute;
+         right: 105%;
+         text-align: right;
+         top: 8px;
+         z-index: 1;
+         dt, dd {
+            display: block;
+            margin: 0;
+         }
+         dt {
+            border-bottom: 1px solid #000;
+            font-size: 16px;
+            margin: 15px 0 2px;
+            padding-bottom: 2px;
+            &:first-child {
+               margin-top: 0;
+            }
+         }
+         dd {
+            .nowrap {
+               white-space: nowrap;
+            }
+         }
+      }
+      &:hover {
+         .mx-response__info {
+            display: block;
+         }
+      }
+   }
 }
