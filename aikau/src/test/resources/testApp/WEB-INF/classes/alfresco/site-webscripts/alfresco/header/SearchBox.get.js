@@ -15,6 +15,7 @@ model.jsonModel = {
          id: "SB1",
          name: "alfresco/header/SearchBox",
          config: {
+            site: page.url.templateArgs.site,
             alignRight: false
          }
       },
