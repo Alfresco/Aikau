@@ -25,7 +25,7 @@ Update the HeaderCell for the group display name column to look like this:
 
 When you refresh the page you will be able to click on the display name header cell and you will see a sort icon displayed. Clicking again will change the icon to indicate that the sort direction has changed.
 
-ADD SCREENSHOT
+![Screenshot showing sort order indicator](../resources/Tutorial11-Image1.png "Screenshot showing sort order indicator")
 
 You should also note however that the list doesn’t change - the list reloads but the order remains the same. This is another limitation of using the CrudService to retrieve our data because the sort information is defined directly within the URL that has been configured.
 
@@ -78,7 +78,7 @@ There’s a couple of things to do before testing everything out. The first is t
 
 When you [clear the dependency caches](./ClearingDependencyCaches.md) and refresh the page you’ll now be able to click on the “Display Name”  header cell to change the order of the listed groups.
 
-ADD SCREENSHOT
+![Screenshot showing sorted list](../resources/Tutorial11-Image2.png "Screenshot showing sorted list")
 
 You can also update the “Group Identifier” header cell to allow sorting to be done against the identifier as well:
 
@@ -150,6 +150,9 @@ getGroups: function tutorial_UserAndGroupService__getGroups(payload) {
 ```
 
 When you [clear the dependency caches](./ClearingDependencyCaches.md) and refresh the page you will now find that you can page through all your groups (assuming that you have more than 5 of course!)
+
+![Screenshot showing pagination controls](../resources/Tutorial11-Image3.png "Screenshot showing pagination controls")
+![Screenshot showing second page of data](../resources/Tutorial11-Image4.png "Screenshot showing second page of data")
 
 Previous: [Inline Editing Properties](./Tutorial10.md),
 Next: [Introducing Menus](./Tutorial12.md)
