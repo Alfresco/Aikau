@@ -17,12 +17,15 @@ model.jsonModel = {
          id: "FORM1",
          name: "alfresco/forms/Form",
          config: {
+            okButtonPublishTopic: "FORM_POST",
+            scopeFormControls: false,
             widgets: [
                {
                   id: "TINY_MCE_1",
                   name: "alfresco/forms/controls/TinyMCE",
                   config: {
-                     label: "Content"
+                     label: "Content",
+                     name: "RichText"
                   }
                }
             ]
