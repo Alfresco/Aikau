@@ -36,7 +36,7 @@ Add the following as the first entry in the “widgets” array attribute of you
 
 When you refresh the page you’ll see two “windows” stacked on top of each other (and of course the groups list immediately below it).
 
-ADD SCREENSHOT
+![Screenshot showing vertically aligned windows](../resources/Tutorial13-Image1.png "Screenshot showing vertically aligned windows")
 
 You can space out the widgets by setting the `widgetMarginTop` and `widgetMarginBottom` attributes. Try updating the configuration to look like this:
 
@@ -51,14 +51,14 @@ You can space out the widgets by setting the `widgetMarginTop` and `widgetMargin
 
 When you refresh the page you’ll see that there now more space between the windows.
 
-ADD SCRENSHOT
+![Screenshot showing vertically aligned windows with gaps](../resources/Tutorial13-Image2.png "Screenshot showing vertically aligned windows with gaps")
 
 ### Step 2 - Horizontal Widgets
 Now change the `alfresco/layout/VerticalWidgets` widget to be a `alfresco/layout/HorizontalWidgets` widget (you can remove the `widgetMarginTop` and `widgetMarginBottom` attributes if you’d like, but it’s not essential - Aikau is quite forgiving of irrelevant configuration).
 
 When you refresh the page you’ll see that the windows are now laid out side by side. 
 
-ADD SCREENSHOT
+![Screenshot showing horizontally aligned windows](../resources/Tutorial13-Image3.png "Screenshot showing horizontally aligned windows")
 
 Unlike the vertical layout there is no space automatically allocated between each child widget. This can be addressed with the `widgetMarginLeft` and `widgetMarginRight` attributes. Update the model so set these now:
 
@@ -73,7 +73,7 @@ Unlike the vertical layout there is no space automatically allocated between eac
 
 This should result in the following layout:
 
-ADD SCREENSHOT
+![Screenshot showing horizontally aligned windows with gaps](../resources/Tutorial13-Image4.png "Screenshot showing horizontally aligned windows with gaps")
 
 ### Step 3 - Percentage Width
 Each window is given an equal share of the available horizontal space by default. We can configure each widget to have a different share of the space. Update the model to set `widthPc` on the `ClassicWindow` widgets like this:
@@ -108,7 +108,7 @@ Note that the `widthPc` attribute is outside the `config` object of the `Classic
 
 The “widthPc” attribute indicates the percentage of remaining space that the widget should take up after all other deductions (such as the margins) have been consumed. 
 
-ADD SCREENSHOT
+![Screenshot showing percentage widths](../resources/Tutorial13-Image5.png "Screenshot showing percentage widths")
 
 ### Step 4 - Fixed Width
 It is also possible to set a fixed width in pixels. This is done using the `widthPx` attribute and it is possible to mix both width types. Update the configuration to set a fixed width on the “Users” window like this:
@@ -134,7 +134,7 @@ widgets: [
 
 When you refresh the page you should see that the `ClassicWindow` widgets have different widths… but what is really cool is that when you resize your browser window that only the Groups `ClassicWindow` changes in size. The width automatically updates to be 75% of the available space after the fixed width consumed by the other window has been deducted.
 
-ADD SCREENSHOT
+![Screenshot showing fixed and percentage widths](../resources/Tutorial13-Image6.png "Screenshot showing fixed and percentage widths")
 
 Try adding in more `ClassicWindow` widgets - if they aren’t given either `widthPc` or `widthPx` attributes then they will just be given an equal share of whatever space is left.
 
@@ -161,13 +161,13 @@ widgets: [
 
 When you refresh the page you should see the following layout.
 
-ADD SCREENSHOT
+![Screenshot showing TitleDescriptionAndContent widgets](../resources/Tutorial13-Image7.png "Screenshot showing TitleDescriptionAndContent widgets")
 
 Now move the widgets model that we’ve previously been working on (e.g. the `alfresco/menus/AlfMenuBar`, `alfresco/lists/AlfSortablePaginatedList` and `alfresco/documentlibrary/AlfDocumentListPaginator` widgets) into the empty `widgets` array.
 
 Refreshing the page should result in the following:
 
-ADD SCREENSHOT
+![Screenshot showing relocated group widgets](../resources/Tutorial13-Image8.png "Screenshot showing relocated group widgets")
 
 We now have a nice space in which we can add our user management widgets (which we’ll do in the next tutorial).
 
@@ -206,7 +206,7 @@ What we’re doing is splitting our menu bar into two separate menus… to compl
 
 Finally remove the now empty `AlfMenuBar` widget (from which you’ve just moved the widgets) and when you refresh the page you should see the change reflected as shown here:
 
-ADD SCREENSHOT
+![Screenshot showing left and right aligned menus](../resources/Tutorial13-Image9.png "Screenshot showing left and right aligned menus")
 
 Previous: [Introducing Menus](./Tutorial12.md),
 Next: [Recap for User Management](./Tutorial14.md)
