@@ -27,6 +27,7 @@ Copy the content of `config` object from the `alfresco/buttons/AlfButton` and pa
 
 When you refresh the page and click the “Create New Group” menu item you’ll find that (unsurprisingly) it allows you to create a group as you could by clicking on the button. You can remove the original AlfButton now if you like.
 
+![Screenshot showing menu bar item](../resources/Tutorial12-Image1.png "Screenshot showing menu bar item")
 
 ### Step 2 - Sort field menu
 We can now do something similar to provide an alternative approach to setting the sort field. This time we’re going to create a popup menu bar item that allows us to choose the field to sort the group data on. Add the following after the `alfresco/menus/AlfMenuBarItem` that you just added:
@@ -96,7 +97,7 @@ Finally and most importantly you should notice that changing the sort field by t
 
 Also, in case you were wondering - the difference between the `label` and `title` attributes is that the `title` attribute is for accessibility configuration. This is the value that will be used for the alternative text that is picked up by screen readers.
 
-
+![Screenshot showing sort field selection menu](../resources/Tutorial12-Image2.png "Screenshot showing sort field selection menu")
 
 ### Step 3 - Sort Direction Toggle
 We can also add a menu item to handle changing the sorted direction. There are only two states of direction (ascending and descending) so this is a good candidate for the `alfresco/menus/AlfMenuBarToggle` widget.
@@ -134,7 +135,7 @@ This widget allows the configuration of “on” and “off” states. They are 
 
 Refresh the page and try it out. Once again you should see that toggling the sort direction will also update the header cell icon for the currently sorted column.
 
-
+![Screenshot showing sort order toggle menu item](../resources/Tutorial12-Image3.png "Screenshot showing sort order toggle menu item")
 
 ### Step 4 - Multiple Item Selection
 If you want to perform an action on more than one item (at the moment our page only supports delete, but other pages might support all kinds of other actions) then you will want to allow items in the list to be selected and then perform an action on all those items. 
@@ -211,11 +212,11 @@ It is to this latter topic that the `alfresco/menus/AlfSelectedItemsMenuItem` wi
 
 Refresh the page and try it out… although clicking the delete menu won’t currently do anything (because we still need to update our service to handle it!) you should notice that the popup menu itself is automatically disabled when no items are selected.
 
-
+![Screenshot showing selectors and disabled selected items menu](../resources/Tutorial12-Image4.png "Screenshot showing selectors and disabled selected items menu")
 
 When you use the menu item you should also notice that all group selections are cleared. This is achieved by setting `clearSelectedItemsOnClick` to `true` as this instructs the menu item to publish a request to clear selections. This is not the default behaviour but makes sense in this instance because deleting the groups will want to remove them from the list of selected items.
 
-
+![Screenshot showing selected selectors and opened selected items menu](../resources/Tutorial12-Image5.png "Screenshot showing selected selectors and opened selected items menu")
 
 ### Step 5 - Select All, Select None
 To save our user the trouble of individually clicking on each of the checkboxes when they want to delete everything (although we should remember that it’s not advisable to delete all the groups - especially the “ALFRESCO_ADMINISTRATORS” group!) we can add another widget to assist them.
@@ -232,8 +233,9 @@ When you refresh the page you’ll see a new widget that also subscribes to the 
 
 You can also click on the down arrow to display a popup menu that allows you to perform the same action as well as inverting the current selection.
 
-
-
+![Screenshot showing no selected items](../resources/Tutorial12-Image6.png "Screenshot showing no selected items")
+![Screenshot showing some selected items](../resources/Tutorial12-Image7.png "Screenshot showing some selected items")
+![Screenshot showing all selected items](../resources/Tutorial12-Image8.png "Screenshot showing all selected items")
 
 ### Step 6 - Handling Bulk Actions
 Now that we can select multiple groups we need to update our service to be able to handle requests to delete multiple items in a single action. Update the `UserAndGroupService.js` to add the following functions:
@@ -272,7 +274,7 @@ define(["dojo/_base/declare",
         function(declare, Core, lang, CoreXhr, AlfConstants, array) {
 ```
 
-**NOTE - This utility function is a polyfill for the “forEach” function that was included in the ES5 specification [ADD LINK] so isn’t supported in IE8. If you don’t need to support IE8 then you should use the native browser function (if you don’t understand much of this paragraph, then don’t worry - just use the code as provided!).**
+**NOTE - This utility function is a polyfill for the [“forEach”](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach "Link to Mozilla Documentation") function that was included in the ES5 specification so isn’t supported in IE8. If you don’t need to support IE8 then you should use the native browser function (if you don’t understand much of this paragraph, then don’t worry - just use the code as provided!).**
 
 Finally we need to bind the `deleteGroups` function in a subscription to the “TUTORIAL_DELETE_GROUPS” topic. Add the following line into the `constructor` function:
 
@@ -375,7 +377,7 @@ The `alfUnsubscribe` function is again provided by the `alfresco/core/Core` modu
 
 When you [clear the dependency caches](./ClearingDependencyCaches.md) and refresh the page you should now get a confirmation dialog when you attempt to delete multiple groups.
 
-
+![Screenshot showing confirmation dialog](../resources/Tutorial12-Image9.png "Screenshot showing confirmation dialog")
 
 ### Step 8 - Menu Icons
 Let’s tweak the appearance of our menu by adding some icons. Most menu widgets can be assigned an icon by setting their `iconClass`. Try updating the `alfresco/menus/AlfSelectedItemsMenuItem` widget to include the following configuration:
@@ -394,7 +396,7 @@ Let’s tweak the appearance of our menu by adding some icons. Most menu widgets
 
 When you [clear the dependency caches](./ClearingDependencyCaches.md) and refresh the page you will see that it now has a delete icon. You can also set the `iconClass` attribute of the create group AlfMenuBarItem to be “alf-create-icon” - there are lots of default icons to choose from.
 
-
+![Screenshot showing menu item with icon](../resources/Tutorial12-Image10.png "Screenshot showing menu item with icon")
 
 For custom icon images you can set the `iconImage` attribute to be the URL of the image you want to use for the icon. Menu icon images are expected to be both 16 pixels in height and widgth, but you can also override those defaults by updating the `iconImageWidth` and `iconImageHeight` attributes.
 
