@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>SearchBox Test Page</shortname>
+  <family>aikau-unit-tests</family>
+  <url>/SearchBox</url>
+</webscript>
