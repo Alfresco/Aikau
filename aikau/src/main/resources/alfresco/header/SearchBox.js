@@ -527,6 +527,28 @@ define(["dojo/_base/declare",
       linkToFacetedSearch: true,
 
       /**
+       * The search results page to use. If this is left as the default of null then it is assumed that
+       * the widget is being used within Alfresco Share and the standard search page or faceted search
+       * page will be used (depending upon the configuration of 
+       * [linkToFacetedSearch]{@link module:alfresco/header/SearchBox#linkToFacetedSearch}). Alternatively
+       * this can be configured to be a custom page.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      searchResultsPage: null,
+
+      /**
+       * The default scope to use when requesting a search.
+       *
+       * @instance
+       * @type {string}
+       * @default "repo"
+       */
+      defaultSearchScope: "repo",
+
+      /**
        * This function is called from the [onSearchBoxKeyUp function]{@link module:alfresco/header/SearchBox#onSearchBoxKeyUp}
        * when the enter key is pressed and will generate a link to either the faceted search page or the old search page
        * based on the value of [linkToFacetedSearch]{@link module:alfresco/header/SearchBox#linkToFacetedSearch}. This function
@@ -538,23 +560,25 @@ define(["dojo/_base/declare",
        */
       generateSearchPageLink: function alfresco_header_SearchBox__generateSearchPageLink(terms) {
          var url;
-         if (this.linkToFacetedSearch === true)
+         var scope = this.site || this.defaultSearchScope;
+         if (this.searchResultsPage)
+         {
+            // Generate custom search page link...
+            url = this.searchResultsPage + "#searchTerm=" + encodeURIComponent(terms) + "&scope=" + scope + "&sortField=Relevance";
+         }
+         else if (this.linkToFacetedSearch === true)
          {
             // Generate faceted search page link...
-            url = "dp/ws/faceted-search#searchTerm=" + encodeURIComponent(terms) + "&scope=repo&sortField=Relevance";
-            if (this.site)
-            {
-               url = "site/" + this.site + "/" + url;
-            }
+            url = "dp/ws/faceted-search#searchTerm=" + encodeURIComponent(terms) + "&scope=" + scope + "&sortField=Relevance";
          }
          else
          {
             // Generate old search page link...
             url = "search?t=" + encodeURIComponent(terms) + (this.allsites ? "&a=true&r=false" : "&a=false&r=true");
-            if (this.site)
-            {
-               url = "site/" + this.site + "/" + url;
-            }
+         }
+         if (this.site)
+         {
+            url = "site/" + this.site + "/" + url;
          }
          this.alfLog("log", "Generated search page link", url, this);
          return url;
