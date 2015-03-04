@@ -367,7 +367,7 @@ define(["intern!object",
             .clearValue()
             .type("Description")
          .end()
-         .findByCssSelector("#ALF_CREATE_FOLDER_TEMPLATE_NODE .confirmationButton")
+         .findByCssSelector("#ALF_CREATE_FOLDER_TEMPLATE_NODE .confirmationButton > span")
             .click()
          .end()
          .findByCssSelector(".mx-row:nth-child(3) .mx-payload")
