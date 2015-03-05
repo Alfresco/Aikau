@@ -63,7 +63,6 @@ define(["dojo/_base/declare",
       i18nScope: "org.alfresco.SearchBox",
       
       /**
-       *
        * @instance
        * @type {object}
        * @default  null
@@ -134,7 +133,6 @@ define(["dojo/_base/declare",
    var LiveSearchItem = declare([_Widget, _Templated, AlfCore], {
 
       /**
-       *
        * @instance
        * @type {object}
        */
@@ -238,7 +236,7 @@ define(["dojo/_base/declare",
        * @type {integer}
        * @default 180
        */
-      _width: "180",
+      width: "180",
 
       /**
        * @instance
@@ -276,7 +274,6 @@ define(["dojo/_base/declare",
       lastSearchText: null,
       
       /**
-       *
        * @instance
        * @type {number}
        * @default 250
@@ -284,7 +281,6 @@ define(["dojo/_base/declare",
       _keyRepeatWait: 250,
       
       /**
-       *
        * @instance
        * @type {number}
        * @default 2
@@ -292,7 +288,6 @@ define(["dojo/_base/declare",
       _minimumSearchLength: 2,
       
       /**
-       *
        * @instance
        * @type {number}
        * @default 5
@@ -300,7 +295,6 @@ define(["dojo/_base/declare",
       _resultPageSize: 5,
       
       /**
-       *
        * @instance
        * @type {object}
        * @default null
@@ -308,7 +302,6 @@ define(["dojo/_base/declare",
       _LiveSearch: null,
       
        /**
-       *
        * @instance
        * @type {object}
        * @default null
@@ -316,7 +309,6 @@ define(["dojo/_base/declare",
       _requests: null,
       
        /**
-       *
        * @instance
        * @type {number}
        * @default 0
@@ -337,9 +329,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default "right"
        */
-      alignRight: true,
+      alignment: "right",
 
       /**
        * This is the page to navigate to for document container links. It defaults
@@ -421,10 +413,10 @@ define(["dojo/_base/declare",
 
          // Make sure that the inner width is a valid number...
          // Set the outer width (based on the requested inner width of the input field)...
-         var w = parseInt(this._width, 10);
+         var w = parseInt(this.width, 10);
          if (isNaN(w))
          {
-            this._width = "180";
+            this.width = "180";
             this._outerWidth = "250";
          }
          else
@@ -492,9 +484,9 @@ define(["dojo/_base/declare",
                searchBox: this
             });
 
-            if (this.alignRight)
+            if (this.alignment)
             {
-               domClass.add(this._LiveSearch.domNode, "right");
+               domClass.add(this._LiveSearch.domNode, this.alignment);
             }
 
             this._LiveSearch.placeAt(this._searchLiveNode);
@@ -1020,7 +1012,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       *
        * @instance
        * @param {object} evt The click event
        */

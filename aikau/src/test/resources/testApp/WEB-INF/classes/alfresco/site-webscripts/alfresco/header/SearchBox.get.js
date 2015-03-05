@@ -10,8 +10,8 @@ if (page.url.templateArgs.site)
       name: "alfresco/header/SearchBox",
       config: {
          site: page.url.templateArgs.site,
-         alignRight: true,
-         _width: "500",
+         alignment: "right",
+         width: "500",
          documentLibraryPage: "custom-document-container",
          documentPage: "custom-document-details"
       }
@@ -24,7 +24,7 @@ else
       name: "alfresco/header/SearchBox",
       config: {
          site: page.url.templateArgs.site,
-         alignRight: false
+         alignment: "left"
       }
    };
 }
