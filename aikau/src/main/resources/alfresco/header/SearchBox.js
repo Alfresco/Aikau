@@ -94,7 +94,6 @@ define(["dojo/_base/declare",
       containerNodePeople: null,
       
       /**
-       * 
        * @instance
        * @type {string}
        * @default  null
@@ -591,7 +590,6 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * 
        * @instance
        */
       onSaveLastUserSearch: function alfresco_header_SearchBox__onSaveLastUserSearch() {
@@ -617,6 +615,7 @@ define(["dojo/_base/declare",
       /**
        * Handles keydown events that occur on the <input> element. Used to page through last user searches
        * and ensure no other components handle the cursor key events.
+       * 
        * @instance
        * @param {object} evt The keydown event
        */
@@ -748,8 +747,9 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * 
        * @instance
+       * @param {string} terms
+       * @param {number} startIndex
        */
       liveSearchDocuments: function alfresco_header_SearchBox__liveSearchDocuments(terms, startIndex) {
          this._requests.push(
@@ -832,7 +832,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
        * @instance
        * @param {string} terms The search terms
        * @param {number} startIndex
@@ -872,7 +871,6 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * 
        * @instance
        * @param {string} terms The search terms
        * @param {number} startIndex
@@ -914,7 +912,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
        * @instance
        */
       updateResults: function alfresco_header_SearchBox__showResults() {
@@ -971,7 +968,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
        * @instance
        */
       clearResults: function alfresco_header_SearchBox__clearResults() {
