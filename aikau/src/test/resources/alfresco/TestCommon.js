@@ -280,6 +280,15 @@ define(["intern/dojo/node!fs",
          return selector;
       },
 
+      pubDataRowsCssSelector: function(publishTopic, key) {
+         var selector = "" +
+            "tr.sl-row:last-child td[data-publish-topic='" + publishTopic + "'] + " +
+            "td.sl-data tr.sl-object-row " +
+            "td[data-pubsub-object-key=" + key + 
+            "]+td > table > tr";
+         return selector;
+      },
+
       /**
        * This generates a CSS selector that attempts to select a publication payload entry from the SubscriptionLOg
        * widget where the payload contains a nested key/value pair that is the value of a key

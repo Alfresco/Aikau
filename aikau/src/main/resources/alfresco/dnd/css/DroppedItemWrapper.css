@@ -1,0 +1,82 @@
+.alfresco-dnd-DroppedItemWrapper,
+.alfresco-dnd-DroppedItemWrapper.dojoDndItem,
+.alfresco-dnd-DroppedItemWrapper.dojoDndItemAnchor,
+.alfresco-dnd-DroppedItemWrapper.dojoDndItemSelected,
+.alfresco-dnd-DroppedItemWrapper.dojoDndItemOver {
+   background-color: #EEE;
+   background-image: none;
+   padding: 5px;
+   margin: 5px;
+   border: 1px solid #CCC;
+   position: relative;
+   min-width: 100px;
+   box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.3);
+   transition: margin-top .2s .2s ease-out, margin-bottom .2s .2s ease-out;
+}
+
+.alfresco-dnd-DroppedItemWrapper.dojoDndItemOver {
+   border: 1px solid #D3D3D3;
+}
+
+.alfresco-dnd-DroppedItemWrapper .dojoDndItemOver {
+   background-color: #EEE;
+}
+
+.alfresco-dnd-DroppedItemWrapper > .action {
+   background-repeat: no-repeat;
+   display: inline-block;
+   width: 16px;
+   height: 16px;
+   float: right;
+}
+
+.alfresco-dnd-DroppedItemWrapper > .action.delete {
+   background-image: url("./images/trashcan-16.png");
+}
+
+.alfresco-dnd-DroppedItemWrapper > .action.edit {
+   background-image: url("./images/edit-16.png");
+}
+
+.alfresco-dnd-DroppedItemWrapper > .dojoDndHandle {
+   background-image: url("./images/drag_handle.png");
+   background-repeat: no-repeat;
+   display: inline-block;
+   vertical-align: middle;
+   width: 16px;
+   height: 16px;
+   margin-top: 20px;
+   margin-bottom: 16px;
+   clear: right;
+}
+
+.alfresco-dnd-DroppedItemWrapper.dojoDndItem.dojoDndItemOver.dojoDndItemBefore {
+   margin-top: 20px;
+   transition: margin-top .2s ease-out;
+}
+
+.alfresco-dnd-DroppedItemWrapper.dojoDndItem.dojoDndItemOver.dojoDndItemAfter {
+   margin-bottom: 20px;
+   transition: margin-bottom .2s ease-out;
+}
+
+.alfresco-dnd-DroppedItemWrapper > .control {
+   display: inline-block;
+   vertical-align: middle;
+   margin-top: 20px;
+   margin-bottom: 16px;
+}
+
+.alfresco-dnd-DroppedItemWrapper > .label {
+   color: #818181;
+   position: absolute;
+   top: 5px;
+   left: 5px;
+   margin-right: 20px;
+   font-size: xx-small;
+}
+
+.alfresco-dnd-DroppedItemWrapper > .control > .alfresco-html-Label {
+   padding-top: 15px;
+   vertical-align: inherit;
+}
