@@ -95,6 +95,7 @@ define({
       "src/test/resources/alfresco/forms/controls/XssPreventionTest",
 
       "src/test/resources/alfresco/header/HeaderWidgetsTest",
+      "src/test/resources/alfresco/header/SearchBoxTest",
       "src/test/resources/alfresco/header/WarningTest",
 
       "src/test/resources/alfresco/html/HeadingTest",

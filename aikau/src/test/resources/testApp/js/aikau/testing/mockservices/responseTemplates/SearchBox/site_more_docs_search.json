@@ -1,0 +1,89 @@
+{
+   "totalRecords": 5,
+   "startIndex": 5,
+   "hasMoreRecords": false,
+   "items":
+   [
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/5515d3e1-bb2a-42ed-833c-52802a367033",
+         "name": "Project Objectives.ppt",
+         "title": "Project Objectives.ppt",
+         "description": "",
+         "modifiedOn": "2011-03-03T10:31:31.651Z",
+         "modifiedBy": "mjackson",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "size": 2117632,
+         "mimetype": "application\/vnd.ms-powerpoint"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/1373739a-2849-4647-9e97-7a4e05cc5841",
+         "name": "Meetings",
+         "title": "Meetings",
+         "description": "",
+         "modifiedOn": "2011-06-14T11:28:57.304+01:00",
+         "modifiedBy": "admin",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "wiki",
+         "lastThumbnailModification": "doclib:1425545295743",
+         "size": 1771,
+         "mimetype": "text\/html"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/99cb2789-f67e-41ff-bea9-505c138a6b23",
+         "name": "Project Overview.ppt",
+         "title": "Project Overview.ppt",
+         "description": "",
+         "modifiedOn": "2011-03-03T10:31:31.651Z",
+         "modifiedBy": "mjackson",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "size": 2898432,
+         "mimetype": "application\/vnd.ms-powerpoint"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+         "name": "Project Contract.pdf",
+         "title": "Project Contract for Green Enery",
+         "description": "Conract for the Green Energy project",
+         "modifiedOn": "2011-06-14T11:28:54.714+01:00",
+         "modifiedBy": "admin",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "size": 381778,
+         "mimetype": "application\/pdf"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/150398b3-7f82-4cf6-af63-c450ef6c5eb8",
+         "name": "Meeting Notes 2011-02-03.doc",
+         "title": "Meeting Notes 2011-02-03.doc",
+         "description": "",
+         "modifiedOn": "2011-02-24T16:16:37.300Z",
+         "modifiedBy": "mjackson",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "size": 73728,
+         "mimetype": "application\/msword"
+      }
+   ]
+}
