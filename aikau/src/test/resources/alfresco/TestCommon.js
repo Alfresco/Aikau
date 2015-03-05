@@ -157,6 +157,7 @@ define(["intern/dojo/node!fs",
          var command = browser.get(this.testWebScriptURL(testWebScriptURL))
             .then(pollUntil(
                function() {
+                  /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
                }, [], 10000, 1000))
@@ -169,6 +170,7 @@ define(["intern/dojo/node!fs",
                })
             .then(pollUntil(
                function() {
+                  /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
                }, [], 10000, 1000))
@@ -184,7 +186,24 @@ define(["intern/dojo/node!fs",
          command.session.alfPostCoverageResults = function (newBrowser) { 
             return newBrowser; 
          };
-
+         command.session.screenieIndex = 0;
+         command.session.screenie = function() {
+            var safeBrowserName = browser.environmentType.browserName.replace(/\W+/g, "_")
+               .split("_")
+               .map(function(namePart) {
+                  return namePart.length > 1 ? namePart.substr(0, 1)
+                     .toUpperCase() + namePart.substr(1)
+                     .toLowerCase() : namePart.toUpperCase();
+               })
+               .join("_");
+            var screenshotName = safeBrowserName + "-" + testName + "-" + command.session.screenieIndex++ +".png",
+               screenshotPath = "src/test/screenshots/" + screenshotName;
+            return browser.takeScreenshot()
+               .then(function(screenshot) {
+                  fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary");
+               });
+         };
+         
          return command;
       },
 

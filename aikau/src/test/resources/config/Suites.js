@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest"
+      "src/test/resources/alfresco/editors/TinyMCETest"
    ],
 
    /**
@@ -71,6 +71,8 @@ define({
       "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
       "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
+
+      "src/test/resources/alfresco/editors/TinyMCETest",
 
       "src/test/resources/alfresco/footer/FooterTest",
 
@@ -148,6 +150,7 @@ define({
       "src/test/resources/alfresco/renderers/ThumbnailTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
+      "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
       "src/test/resources/alfresco/services/NotificationServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",

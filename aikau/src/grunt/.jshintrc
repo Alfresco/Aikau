@@ -23,7 +23,6 @@
    "notypeof": true,
    "quotmark": "double",
    "shadow": "outer",
-   "singleGroups": true,
    "undef": true,
    "unused": true,
 
