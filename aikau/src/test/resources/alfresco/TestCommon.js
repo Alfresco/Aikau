@@ -157,6 +157,7 @@ define(["intern/dojo/node!fs",
          var command = browser.get(this.testWebScriptURL(testWebScriptURL))
             .then(pollUntil(
                function() {
+                  /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
                }, [], 10000, 1000))
@@ -169,6 +170,7 @@ define(["intern/dojo/node!fs",
                })
             .then(pollUntil(
                function() {
+                  /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
                }, [], 10000, 1000))
