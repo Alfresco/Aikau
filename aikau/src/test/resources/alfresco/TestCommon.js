@@ -58,9 +58,11 @@ define(["intern/dojo/node!fs",
        *
        * @instance
        * @param {string} webScriptURL The WebScript URL
+       * @param {string} webScriptPrefix Optional prefix to the test page.
        */
-      testWebScriptURL: function (webScriptURL) {
-         return Config.urls.unitTestAppBaseUrl + "/aikau/page/tp/ws" + webScriptURL;
+      testWebScriptURL: function (webScriptURL, webScriptPrefix) {
+         var prefix = webScriptPrefix || "/tp/ws";
+         return Config.urls.unitTestAppBaseUrl + "/aikau/page" + prefix + webScriptURL;
       },
 
       /**
@@ -144,17 +146,18 @@ define(["intern/dojo/node!fs",
        * @param {object} browser The browser context to use
        * @param {string} testWebScriptURL The URL of the test WebScript
        * @param {string} testName The name of the test to run
+       * @param {string} testWebScriptPrefix Optional prefix to use before the WebScript URL
        */
-      loadTestWebScript: function (browser, testWebScriptURL, testName) {
+      loadTestWebScript: function (browser, testWebScriptURL, testName, testWebScriptPrefix) {
          this._applyTimeouts(browser);
          this._maxWindow(browser);
          this._cancelModifierKeys(browser);
          if(testName && browser.environmentType.browserName)
          {
             console.log(">> Starting '" + testName + "' on " + browser.environmentType.browserName);
-            console.log("   Test URL: " + this.testWebScriptURL(testWebScriptURL));
+            console.log("   Test URL: " + this.testWebScriptURL(testWebScriptURL, testWebScriptPrefix));
          }
-         var command = browser.get(this.testWebScriptURL(testWebScriptURL))
+         var command = browser.get(this.testWebScriptURL(testWebScriptURL, testWebScriptPrefix))
             .then(pollUntil(
                function() {
                   var elements = document.getElementsByClassName("aikau-reveal");
@@ -329,6 +332,35 @@ define(["intern/dojo/node!fs",
             ".alfresco-testing-SubscriptionLog tr.sl-row" + row +
             " td[data-pubsub-object-key=" + key +
             "]+td[data-pubsub-object-value='" + value + "']";
+         return selector;
+      },
+
+      /**
+       * Selects the data value element for a specific key in a specific row.
+       * 
+       * @instance
+       * @param {number} expectedRow The row that the data is expected to be found in (can be set to "last")
+       * @param {string} key The key for the data
+       * @returns {string} The CSS selector
+       */
+      pubSubDataValueCssSelector: function(expectedRow, key) {
+         var row = "";
+         if (expectedRow === "any")
+         {
+            // Don't specify a row
+         }
+         else if (expectedRow === "last")
+         {
+            row = ":last-child";
+         }
+         else if (expectedRow !== "last")
+         {
+            row = ":nth-child(" + expectedRow + ")";
+         }
+         var selector = "" +
+            ".alfresco-testing-SubscriptionLog tr.sl-row" + row +
+            " td[data-pubsub-object-key=" + key +
+            "]+td";
          return selector;
       },
 

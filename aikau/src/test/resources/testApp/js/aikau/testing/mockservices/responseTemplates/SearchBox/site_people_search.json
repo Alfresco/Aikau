@@ -1,0 +1,16 @@
+{
+   "totalRecords": 1,
+   "startIndex": 0,
+   "items":
+   [
+      {
+   "url": "\/alfresco\/s\/api\/people\/bob",
+   "userName": "bob",
+   "firstName": "Bob",
+   "lastName": "Site",
+   "jobtitle": "",
+   "location": ""
+}
+
+   ]
+}

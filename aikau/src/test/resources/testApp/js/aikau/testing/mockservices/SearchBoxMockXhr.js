@@ -26,8 +26,13 @@ define(["dojo/_base/declare",
         "aikauTesting/MockXhr",
         "dojo/text!./responseTemplates/SearchBox/pdf_docs_search.json",
         "dojo/text!./responseTemplates/SearchBox/pdf_sites_search.json",
-        "dojo/text!./responseTemplates/SearchBox/pdf_people_search.json"], 
-        function(declare, MockXhr, pdf_docs_search, pdf_sites_search, pdf_people_search) {
+        "dojo/text!./responseTemplates/SearchBox/pdf_people_search.json",
+        "dojo/text!./responseTemplates/SearchBox/site_docs_search.json",
+        "dojo/text!./responseTemplates/SearchBox/site_sites_search.json",
+        "dojo/text!./responseTemplates/SearchBox/site_people_search.json",
+        "dojo/text!./responseTemplates/SearchBox/site_more_docs_search.json"], 
+        function(declare, MockXhr, pdf_docs_search, pdf_sites_search, pdf_people_search,
+                 site_docs_search, site_sites_search, site_people_search, site_more_docs_search) {
    
    return declare([MockXhr], {
 
@@ -54,6 +59,26 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      pdf_people_search]);
+            this.server.respondWith("GET",
+                                    "/aikau/proxy/alfresco/slingshot/live-search-docs?t=site&maxResults=5&startIndex=0",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     site_docs_search]);
+            this.server.respondWith("GET",
+                                    "/aikau/proxy/alfresco/slingshot/live-search-sites?t=site&maxResults=5",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     site_sites_search]);
+            this.server.respondWith("GET",
+                                    "/aikau/proxy/alfresco/slingshot/live-search-people?t=site&maxResults=5",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     site_people_search]);
+            this.server.respondWith("GET",
+                                    "/aikau/proxy/alfresco/slingshot/live-search-docs?t=site&maxResults=5&startIndex=5",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     site_more_docs_search]);
          }
          catch(e)
          {

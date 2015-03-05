@@ -779,7 +779,7 @@ define(["dojo/_base/declare",
                      {
                         info += "<a href='" + AlfConstants.URL_PAGECONTEXT + site + this.documentLibraryPage + "'>" + this.encodeHTML(item.site.title) + "</a> | ";
                      }
-                     info += "<a href='" + AlfConstants.URL_PAGECONTEXT + "user/" + this.encodeHTML(item.modifiedBy) + "/profile'>" + this.encodeHTML(item.modifiedBy) + "</a> | ";
+                     info += "<a href='" + AlfConstants.URL_PAGECONTEXT + "user/" + this.encodeHTML(item.modifiedBy) + "/" + this.peoplePage + "'>" + this.encodeHTML(item.modifiedBy) + "</a> | ";
                      info += this.getRelativeTime(item.modifiedOn) + " | ";
                      info += this.formatFileSize(item.size);
 

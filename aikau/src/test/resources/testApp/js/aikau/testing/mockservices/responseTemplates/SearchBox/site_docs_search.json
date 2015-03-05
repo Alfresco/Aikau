@@ -1,0 +1,90 @@
+{
+   "totalRecords": 5,
+   "startIndex": 0,
+   "hasMoreRecords": true,
+   "items":
+   [
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/05dedd34-9d9d-48d9-9af6-c81b555541c9",
+         "name": "WebSiteReview.mp4",
+         "title": "WebSiteReview.mp4",
+         "description": "This is a video of the mock up to show the planned structure for the new web site.",
+         "modifiedOn": "2011-03-08T10:37:43.961Z",
+         "modifiedBy": "abeecher",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "size": 3737049,
+         "mimetype": "video\/mp4"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/5fa74ad3-9b5b-461b-9df5-de407f1f4fe7",
+         "name": "budget.xls",
+         "title": "Web Site Design - Budget",
+         "description": "Budget file for the web site redesign",
+         "modifiedOn": "2011-02-15T21:35:26.467Z",
+         "modifiedBy": "mjackson",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "size": 26112,
+         "mimetype": "application\/vnd.ms-excel"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/4b9ebe73-7b19-4aaf-b596-5e545544e2a6",
+         "name": "e6fc15e9-5caf-4f17-857e-7b0cfbc655a9",
+         "title": "Support access",
+         "description": "Support need to be able to access and update content of the corporate web site. Need to find a solution.",
+         "modifiedOn": "2011-02-15T22:15:49.142Z",
+         "modifiedBy": "abeecher",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "dataLists",
+         "size": 0,
+         "mimetype": "application\/octet-stream"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/d6f3a279-ce86-4a12-8985-93b71afbb71d",
+         "name": "Main_Page",
+         "title": "Main Page",
+         "description": "",
+         "modifiedOn": "2011-06-14T11:28:57.221+01:00",
+         "modifiedBy": "admin",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "wiki",
+         "lastThumbnailModification": "doclib:1425545276001",
+         "size": 1175,
+         "mimetype": "text\/html"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/3c73aace-9f54-420d-a1c0-c54b6a116dcf",
+         "name": "Milestones",
+         "title": "Milestones",
+         "description": "",
+         "modifiedOn": "2011-06-14T11:28:57.370+01:00",
+         "modifiedBy": "admin",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "wiki",
+         "lastThumbnailModification": "doclib:1425545276201",
+         "size": 3430,
+         "mimetype": "text\/html"
+      }
+   ]
+}

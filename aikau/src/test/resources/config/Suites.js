@@ -31,8 +31,8 @@ define({
     * @type [string]
     */
    // Uncomment and add specific tests as necessary during development!
-   xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest"
+   baseFunctionalSuites: [
+      "src/test/resources/alfresco/header/SearchBoxTest"
    ],
 
    /**
@@ -41,7 +41,7 @@ define({
     * @instance
     * @type [string]
     */
-   baseFunctionalSuites: [
+   xbaseFunctionalSuites: [
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 
@@ -93,6 +93,7 @@ define({
       "src/test/resources/alfresco/forms/controls/XssPreventionTest",
 
       "src/test/resources/alfresco/header/HeaderWidgetsTest",
+      "src/test/resources/alfresco/header/SearchBoxTest",
       "src/test/resources/alfresco/header/WarningTest",
 
       "src/test/resources/alfresco/html/HeadingTest",
