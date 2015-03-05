@@ -29,15 +29,16 @@
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
+        "alfresco/renderers/_PublishPayloadMixin",
         "dojo/text!./templates/Indicators.html",
         "alfresco/core/Core",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
-        "service/constants/Default"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, array, lang, domConstruct, AlfConstants) {
+        "dojo/on"], 
+        function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, array, lang, domConstruct, on) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
+   return declare([_WidgetBase, _TemplatedMixin, _PublishPayloadMixin, AlfCore], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -48,6 +49,15 @@ define(["dojo/_base/declare",
        */
       i18nRequirements: [{i18nFile: "./i18n/Indicators.properties"}],
       
+      /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/Indicators.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/Indicators.css"}],
+
       /**
        * The HTML template to use for the widget.
        * @instance
@@ -99,18 +109,6 @@ define(["dojo/_base/declare",
        */
       addIndicator: function alfresco_renderers_Indicators__addIndicator(indicator, index) {
 
-         var outer = domConstruct.create("div", {
-            "class": "status"
-         }, this.containerNode);
-         
-         if (indicator.action)
-         {
-            domConstruct.create("a", {
-               "class": "indicator-action",
-               "data-action": indicator.action
-            }, outer);
-         }
-
          /* Make an attempt to convert any label parameters that are provided with the
           * indicator for use with the supplied label. This is a meeting of the old and
           * new document library implementations which is why it is necessary to remove
@@ -118,7 +116,7 @@ define(["dojo/_base/declare",
           * current item.
           */
          var messageArgs = {};
-         if (indicator.labelParams != null)
+         if (indicator.labelParams)
          {
             for (var i=0; i<indicator.labelParams.length; i++)
             {
@@ -132,11 +130,59 @@ define(["dojo/_base/declare",
          }
          var label = this.message(indicator.label, messageArgs);
          
-         domConstruct.create("img", {
-            "src": AlfConstants.URL_RESCONTEXT + 'components/documentlibrary/indicators/' + indicator.icon,
+         var img = domConstruct.create("img", {
+            "src": require.toUrl("alfresco/renderers") + "/css/images/indicators/" + indicator.icon,
             "title": label,
-            "alt": indicator.id
-         }, outer);
+            "alt": indicator.id,
+            "class": (indicator.action && "has-action") || ""
+         }, this.containerNode);
+
+         on(img, "click", lang.hitch(this, this.onActionClick, indicator));
+      },
+
+      /**
+       *
+       * @instance
+       * @param {object} indicator The indicator to generate the action for
+       */
+      onActionClick: function alfresco_renderers_Indicators__onActionClick(indicator) {
+         var publishTopic = indicator.publishTopic || "ALF_SINGLE_DOCUMENT_ACTION_REQUEST";
+         var publishPayload;
+         var publishGlobal = true;
+         var parentScope = false;
+         
+         if (indicator.publishTopic)
+         {
+            // If a custom indicator is being provided (indicated by the definition of a custom
+            // publishTopic attribute then the assumption is that the payload and scope should
+            // also be provided by the indicator configuration)
+            publishPayload = this.generatePayload(indicator.publishPayload, 
+                                                  this.currentItem, 
+                                                  null, 
+                                                  indicator.publishPayloadType, 
+                                                  indicator.publishPayloadItemMixin, 
+                                                  indicator.publishPayloadModifiers);
+
+            if (indicator.publishGlobal === false)
+            {
+               publishGlobal = false;
+            }
+            if (indicator.parentScope === true)
+            {
+               parentScope = true;
+            }
+         }
+         else
+         {
+            // If a publishTopic isn't defined on the indicator then the assumption is that
+            // this is a standard legacy action defined in the Alfresco Share configuration 
+            // and is expected to be handled by the ActionService (or alternative service)
+            publishPayload = {
+               action: indicator.action,
+               document: this.currentItem
+            };
+         }
+         this.alfPublish(publishTopic, publishPayload, publishGlobal, parentScope);
       }
    });
 });
