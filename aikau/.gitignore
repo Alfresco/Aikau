@@ -9,4 +9,5 @@
 /clientConfig.js
 
 # Ignored files (please keep alphabetical)
+/.sublime-grunt.cache
 /src/test/resources/testApp/js/aikau/testing/RequireEverything.js
