@@ -1,0 +1,10 @@
+.alfresco-renderers-Indicators {
+
+   img {
+      display: block;
+   }
+
+   .has-action {
+      cursor: pointer;
+   }
+}
