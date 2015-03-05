@@ -8,7 +8,8 @@ module.exports = function(grunt) {
          coverageReportsTemp: alfConfig.dir.coverageTemp,
          instrumentedCode: alfConfig.dir.jsInst,
          jsdoc: alfConfig.dir.docs,
-         requireEverythingWidgetsList: alfConfig.files.alfWidgets
+         requireEverythingWidgetsList: alfConfig.files.alfWidgets,
+         testScreenshots: alfConfig.files.testScreenshots
       }
 
    });
