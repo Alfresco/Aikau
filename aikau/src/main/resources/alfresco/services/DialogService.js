@@ -186,8 +186,8 @@ define(["dojo/_base/declare",
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",
             contentWidth: payload.contentWidth ? payload.contentWidth : null,
             contentHeight: payload.contentHeight ? payload.contentHeight : null,
-            handleOverflow: payload.handleOverflow || true,
-            fixedWidth: payload.fixedWidth || false
+            handleOverflow: (payload.handleOverflow === false || !payload.handleOverflow) ? false : true,
+            fixedWidth: (payload.fixedWidth === true || !payload.handleOverflow) ? true : false
          };
          var dialog = new AlfDialog(dialogConfig);
 
