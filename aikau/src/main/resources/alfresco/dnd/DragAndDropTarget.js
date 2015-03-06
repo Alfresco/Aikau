@@ -151,6 +151,17 @@ define(["dojo/_base/declare",
          // Capture widgets being dropped...
          aspect.after(this.previewTarget, "onDrop", lang.hitch(this, this.onItemsUpdated), true);
          
+         // We need to make sure that when a previously dropped item is dragged to a new location
+         // that the target it has been dragged out of is updated after a successful relocation
+         aspect.after(this.previewTarget, "onDndDrop", function(source, nodes, copy, target) {
+            var widget = registry.getEnclosingWidget(target.node);
+            widget = registry.getEnclosingWidget(source.node);
+            if (typeof widget.onItemsUpdated === "function")
+            {
+               widget.onItemsUpdated();
+            }
+         }, true);
+         
          // Listen for widgets requesting to be deleted...
          on(this.previewNode, Constants.deleteItemEvent, lang.hitch(this, this.deleteItem));
 
