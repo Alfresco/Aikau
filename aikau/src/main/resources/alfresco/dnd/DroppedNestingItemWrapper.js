@@ -19,8 +19,8 @@
 
 /**
  * This is an extension of the basic [DroppedItemWrapper]{@link module:alfresco/dnd/DroppedItemWrapper}
- * and should be used when the item dropped can contain one or more nested [DragAndDropTargets]
- * {@link module:alfresco/dnd/DragAndDropTarget}.
+ * and should be used when the item dropped can contain one or more nested 
+ * [DragAndDropTargets]{@link module:alfresco/dnd/DragAndDropTarget}.
  * 
  * @module alfresco/dnd/DroppedNestingItemWrapper
  * @extends module:alfresco/dnd/DroppedItemWrapper

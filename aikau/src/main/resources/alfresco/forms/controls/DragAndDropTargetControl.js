@@ -19,15 +19,13 @@
 
 /**
  * <p>This form control can be used for constructing form data through a drag and drop interface. Include
- * this widget in a [form]{@link module:alfresco/forms/Form} and it will render a [DragAndDropTarget]
- * {@link module:alfresco/dnd/DragAndDropTarget} that can be used to drop items dragged from a
+ * this widget in a [form]{@link module:alfresco/forms/Form} and it will render a 
+ * [DragAndDropTarget]{@link module:alfresco/dnd/DragAndDropTarget} that can be used to drop items dragged from a
  * [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems} widget.</p>
- * <p>When configured the control you can choose whether or not to [use a modelling service]
- * {@link module:alfresco/form/controls/DragAndDropTargetControl#useModellingService} (recommended for finer control) as well
- * as overriding the [widget model for wrapping dropped items]
- * {@link module:alfresco/form/controls/DragAndDropTargetControl#widgetsForWrappingDroppedItems}
- * and the [widget model for rendering each dropped item]
- * {@link module:alfresco/form/controls/DragAndDropTargetControl#widgetsForDroppedItems}} (although the latter
+ * <p>When configured the control you can choose whether or not to [use a modelling service]{@link module:alfresco/form/controls/DragAndDropTargetControl#useModellingService}
+ * (recommended for finer control) as well as overriding the 
+ * [widget model for wrapping dropped items]{@link module:alfresco/form/controls/DragAndDropTargetControl#widgetsForWrappingDroppedItems}
+ * and the [widget model for rendering each dropped item]{@link module:alfresco/form/controls/DragAndDropTargetControl#widgetsForDroppedItems}} (although the latter
  * configuration might get overriden by your modelling service configuration).</p>
  * 
  * @module alfresco/form/controls/DragAndDropTargetControl

@@ -19,8 +19,7 @@
 
 /**
  * This widget allows an array of [items]{@link module:alfresco/dnd/DragAndDropItems#items} to 
- * be rendered which can be dragged and dropped (e.g. onto a [DragAndDropTargetControl]
- * {@link module:alfresco/form/controls/DragAndDropTargetControl}).
+ * be rendered which can be dragged and dropped (e.g. onto a [DragAndDropTargetControl]{@link module:alfresco/form/controls/DragAndDropTargetControl}).
  * 
  * @module alfresco/dnd/DragAndDropItems
  * @extends external:dijit/_WidgetBase

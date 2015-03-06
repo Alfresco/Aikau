@@ -18,15 +18,11 @@
  */
 
 /**
- * <p>This widget represents a drop target for items dragged from a [DragAndDropItems]
- * {@link module:alfresco/dnd/DragAndDropItems} widget. When an item is dropped onto this
- * widget it will render that item using the configured [widgetsForWrappingDroppedItems]
- * {@link module:alfresco/dnd/DragAndDropTarget#widgetsForWrappingDroppedItems} and
+ * <p>This widget represents a drop target for items dragged from a [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems} widget. When an item is dropped onto this
+ * widget it will render that item using the configured [widgetsForWrappingDroppedItems]{@link module:alfresco/dnd/DragAndDropTarget#widgetsForWrappingDroppedItems} and
  * [widgetsForDroppedItems]{@link module:alfresco/dnd/DragAndDropTarget#widgetsForDroppedItems} 
- * unless it has been configured to [use a modelling service]
- * [widgetsForDroppedItems]{@link module:alfresco/dnd/DragAndDropTarget#useModellingService}
- * (in which case the [service]{@link module:alfresco/services/DragAndDropModellingService} will
- * provide the widget models).</p>
+ * unless it has been configured to [use a modelling service]{@link module:alfresco/dnd/DragAndDropTarget#useModellingService}
+ * (in which case the [service]{@link module:alfresco/services/DragAndDropModellingService} will provide the widget models).</p>
  * 
  * @module alfresco/dnd/DragAndDropTarget
  * @extends external:dijit/_WidgetBase
