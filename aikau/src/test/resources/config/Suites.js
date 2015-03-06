@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/editors/TinyMCETest"
+      "src/test/resources/alfresco/dnd/DndTest"
    ],
 
    /**
@@ -58,6 +58,8 @@ define({
       "src/test/resources/alfresco/creation/WidgetConfigTest",
 
       "src/test/resources/alfresco/debug/WidgetInfoTest",
+
+      "src/test/resources/alfresco/dnd/DndTest",
 
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
