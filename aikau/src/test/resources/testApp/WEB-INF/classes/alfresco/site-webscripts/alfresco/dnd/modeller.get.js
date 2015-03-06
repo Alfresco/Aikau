@@ -20,29 +20,32 @@ model.jsonModel = {
                   targetValues: ["alfresco/forms/controls/(.*)"],
                   widgetsForConfig: [
                      {
+                        id: "ALF_EDIT_FORM_CONTROL_LABEL",
                         name: "alfresco/forms/controls/TextBox",
                         config: {
                            fieldId: "LABEL",
                            label: "Label",
-                           description: "Label to set on the TextBox",
+                           description: "The label for the form field value",
                            name: "config.label"
                         }
                      },
                      {
+                        id: "ALF_EDIT_FORM_CONTROL_DESCRIPTION",
                         name: "alfresco/forms/controls/TextArea",
                         config: {
                            fieldId: "DESCRIPTION",
                            label: "Description",
-                           description: "The description of the TextBox value",
+                           description: "The description of the form field value",
                            name: "config.description"
                         }
                      },
                      {
+                        id: "ALF_EDIT_FORM_CONTROL_VALUE",
                         name: "alfresco/forms/controls/TextBox",
                         config: {
                            fieldId: "VALUE",
                            label: "Value",
-                           description: "The initial value to assign the text box",
+                           description: "The initial value to assign the form field",
                            name: "config.value"
                         }
                      }
@@ -51,6 +54,7 @@ model.jsonModel = {
                      {
                         name: "alfresco/dnd/DroppedItemWrapper",
                         config: {
+                           label: "{label}",
                            value: "{value}",
                            widgets: [
                               {
@@ -69,7 +73,7 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/layout/HorizontalWidgets",
+         name: "alfresco/layout/VerticalWidgets",
          config: {
             widgets: [
                {
@@ -79,23 +83,25 @@ model.jsonModel = {
                      items: [
                         {
                            type: [ "widget" ],
-                           label: "Select Box",
+                           label: "Text Area",
                            value: {
-                              name: "alfresco/forms/controls/Select",
+                              name: "alfresco/forms/controls/TextArea",
                               config: {
-                                 label: "Select",
-                                 value: "select"
+                                 label: "No Label",
+                                 description: "No description",
+                                 value: ""
                               }
                            }
                         },
                         {
                            type: [ "widget" ],
-                           label: "TextBox",
+                           label: "Text Box",
                            value: {
                               name: "alfresco/forms/controls/TextBox",
                               config: {
-                                 name: "Textbox",
-                                 label: "Moo"
+                                 label: "No Label",
+                                 description: "No description",
+                                 value: ""
                               }
                            }
                         }
@@ -103,24 +109,64 @@ model.jsonModel = {
                   }
                },
                {
-                  id: "FORM1",
-                  name: "alfresco/forms/Form",
+                  name: "alfresco/layout/HorizontalWidgets",
                   config: {
-                     scopeFormControls: false,
-                     okButtonLabel: "Save",
-                     okButtonPublishTopic: "FORM1_POST",
-                     okButtonPublishGlobal: true,
-                     showCancelButton: false,
                      widgets: [
                         {
-                           id: "ROOT_DROPPED_ITEMS1",
-                           name: "alfresco/forms/controls/DragAndDropTargetControl",
+                           id: "FORM1",
+                           name: "alfresco/forms/Form",
                            config: {
-                              label: "Data",
-                              name: "data",
-                              value: null,
-                              acceptTypes: ["widget"],
-                              useModellingService: true
+                              scopeFormControls: false,
+                              okButtonLabel: "Save",
+                              okButtonPublishTopic: "FORM1_POST",
+                              okButtonPublishGlobal: true,
+                              showCancelButton: false,
+                              widgets: [
+                                 {
+                                    id: "ROOT_DROPPED_ITEMS1",
+                                    name: "alfresco/forms/controls/DragAndDropTargetControl",
+                                    config: {
+                                       label: "Widgets",
+                                       name: "widgets",
+                                       value: null,
+                                       acceptTypes: ["widget"],
+                                       useModellingService: true
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           id: "FORM2",
+                           name: "alfresco/forms/Form",
+                           config: {
+                              scopeFormControls: false,
+                              okButtonLabel: "Save",
+                              okButtonPublishTopic: "FORM2_POST",
+                              okButtonPublishGlobal: true,
+                              showCancelButton: false,
+                              widgets: [
+                                 {
+                                    id: "ROOT_DROPPED_ITEMS2",
+                                    name: "alfresco/forms/controls/DragAndDropTargetControl",
+                                    config: {
+                                       label: "Widgets",
+                                       name: "widgets",
+                                       value: [
+                                          {
+                                             name: "alfresco/forms/controls/TextArea",
+                                             config: {
+                                                label: "Preset label",
+                                                description: "Preset Description",
+                                                value: "Preset value"
+                                             }
+                                          }
+                                       ],
+                                       acceptTypes: ["widget"],
+                                       useModellingService: true
+                                    }
+                                 }
+                              ]
                            }
                         }
                      ]

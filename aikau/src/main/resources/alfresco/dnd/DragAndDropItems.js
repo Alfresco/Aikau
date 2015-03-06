@@ -18,7 +18,9 @@
  */
 
 /**
- * 
+ * This widget allows an array of [items]{@link module:alfresco/dnd/DragAndDropItems#items} to 
+ * be rendered which can be dragged and dropped (e.g. onto a [DragAndDropTargetControl]
+ * {@link module:alfresco/form/controls/DragAndDropTargetControl}).
  * 
  * @module alfresco/dnd/DragAndDropItems
  * @extends external:dijit/_WidgetBase
@@ -63,6 +65,8 @@ define(["dojo/_base/declare",
       dragWithHandles: false,
       
       /**
+       * Creates a palette of items that can be dragged (and dropped).
+       * 
        * @instance
        */
       postCreate: function alfresco_dnd_DragAndDropItems__postCreate() {
@@ -76,15 +80,17 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Handles the creation of drag'n'drop avatars. This could check the supplied hint parameter
+       * Handles the creation of drag and drop avatars. This could check the supplied hint parameter
        * to see if an avatar is required, but since the source doesn't allow self-copying and is not
        * a target in itself then this is not necessary.
        * 
        * @instance
+       * @param {object} item The configuration for the dragged item.
        */
       creator: function alfresco_dnd_DragAndDropItems__creator(item, hint) {
          this.alfLog("log", "Creating", item, hint);
          var clonedItem = lang.clone(item);
+
          var node = domConstruct.toDom(stringUtil.substitute(PaletteItemTemplate, {
             title: clonedItem.label ? clonedItem.label : "",
             iconClass: clonedItem.iconClass ? clonedItem.iconClass : ""
@@ -93,8 +99,13 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * The array of items to render as draggable entities. Each item should have a type array (indicating
+       * what targets it can be dropped onto), a label (to indicate its purpose) and a value (which can
+       * be any complex object).
+       * 
        * @instance
-       * @returns {object[]}
+       * @type {array}
+       * @default null
        */
       items: null
    });

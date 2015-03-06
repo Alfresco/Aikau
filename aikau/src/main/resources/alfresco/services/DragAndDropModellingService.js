@@ -18,6 +18,51 @@
  */
 
 /**
+ * <p>This service should be used in conjunction with the 
+ * [DragAndDropTargetControl]{@link module:alfresco/form/controls/DragAndDropTargetControl}
+ * and the widgets in the "alfresco/dnd" package. It should be configured with models for how
+ * dropped items should be both rendered and edited. Each model should be placed into the
+ * [models]{@link module:alfresco/services/DragAndDropModellingService#models} array. An example
+ * model might look like this:</p>
+ * <p><pre>{
+ *    property: "name",
+ *    targetValues: ["alfresco/forms/controls/(.*)"],
+ *    widgetsForConfig: [
+ *       {
+ *          id: "ALF_EDIT_FORM_CONTROL_LABEL",
+ *          name: "alfresco/forms/controls/TextBox",
+ *          config: {
+ *             fieldId: "LABEL",
+ *             label: "Label",
+ *             description: "The label for the form field value",
+ *             name: "config.label"
+ *          }
+ *       }
+ *    ],
+ *    widgetsForDisplay: [
+ *       {
+ *          name: "alfresco/dnd/DroppedItemWrapper",
+ *          config: {
+ *             label: "{label}",
+ *             value: "{value}",
+ *             widgets: [
+ *                {
+ *                   name: "alfresco/dnd/DroppedItemWidgets"
+ *                }
+ *             ]
+ *          }
+ *       }
+ *    ]
+ * }</pre></p>
+ * <p>In this example we are mapping the configuration of a [dropped item]{@link module:alfresco/dnd/DragAndDropItems#items}
+ * that has a property "name" that matches any of the Regular Expressions defined in the "targetValues" array 
+ * (in this case we are targeting any data objects that have a "name" property that maps to that of a form 
+ * control wigdget (e.g. "alfresco/forms/controls/TextBox")). If the criteria for this model is met then the 
+ * "widgetsForConfig" or "widgetsForDisplay" arrays will be returned depending upon which has been asked for.</p>
+ * <p>The "widgetsForDisplay" array is a model of widgets that will be rendered for the 
+ * [dropped item]{@link module:alfresco/dnd/DragAndDropItems#items} and the "widgetsForConfig" array is a model 
+ * of widgets that can be used to edit the value of that item.</p>
+ * 
  * @module alfresco/services/DragAndDropModellingService
  * @extends module:alfresco/core/Core
  * @author Dave Draper
@@ -27,14 +72,13 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/dnd/Constants",
-        "alfresco/core/ObjectTypeUtils",
-        "alfresco/dnd/DroppedItemWidgets"],
+        "alfresco/core/ObjectTypeUtils"],
         function(declare, AlfCore, lang, array, Constants, ObjectTypeUtils) {
    
    return declare([AlfCore], {
       
       /**
-       * Sets up the subscriptions for the LogoutService
+       * Sets up the subscriptions for the service
        * 
        * @instance
        * @param {array} args Constructor arguments
@@ -44,6 +88,16 @@ define(["dojo/_base/declare",
          this.alfSubscribe(Constants.requestWidgetsForDisplayTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForDisplay"));
          this.alfSubscribe(Constants.requestWidgetsForConfigTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForConfig"));
       },
+
+      /**
+       * This should be configured as an array of models to inspect when data is requested. See the 
+       * main service description above for details.
+       * 
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      models: null,
 
       /**
        * Handles requests to find a model that matches the value provided in the published payload. If a matching model
@@ -87,7 +141,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       * Inspects the supplied model with data provided to see whether or not the model matches the data.
        * 
        * @instance
        * @param {string} configAttribute The configuration attribute to return from the model

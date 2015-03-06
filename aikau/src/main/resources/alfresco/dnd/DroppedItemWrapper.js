@@ -18,6 +18,11 @@
  */
 
 /**
+ * This widget is used to wrap dropped items in a [DragAndDropTarget]{@link module:alfresco/dnd/DragAndDropTarget}.
+ * It provides a drag handle (for re-ordering or dragging to other targets) as well as edit and
+ * delete buttons. It is also reponsible for managing the state of the item that it represents as well
+ * as rendering the a representation of that item.
+ * 
  * @module alfresco/dnd/DroppedItemWrapper
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -71,6 +76,10 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_dnd_DroppedItemWrapper__postCreate() {
+         if (this.label)
+         {
+            this.labelNode.innerHTML = this.encodeHTML(this.message(this.label));
+         }
          if (this.widgets !== null && this.widgets !== undefined)
          {
             this.processWidgets(this.widgets, this.controlNode);
@@ -122,7 +131,7 @@ define(["dojo/_base/declare",
          on.emit(this.domNode, Constants.deleteItemEvent, {
             bubbles: true,
             cancelable: true,
-            widgetToDelete: this
+            targetWidget: this
          });
       },
 

@@ -18,6 +18,10 @@
  */
 
 /**
+ * This is a more complex representation of an item dragged from a [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+ * widget and dropped onto a [DragAndDropTargetControl]{@link module:alfresco/form/controls/DragAndDropTargetControl} it
+ * renders the widgets defined by the value of the item.
+ * 
  * @module alfresco/dnd/DroppedItemWidgets
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin

@@ -18,6 +18,16 @@
  */
 
 /**
+ * <p>This widget represents a drop target for items dragged from a [DragAndDropItems]
+ * {@link module:alfresco/dnd/DragAndDropItems} widget. When an item is dropped onto this
+ * widget it will render that item using the configured [widgetsForWrappingDroppedItems]
+ * {@link module:alfresco/dnd/DragAndDropTarget#widgetsForWrappingDroppedItems} and
+ * [widgetsForDroppedItems]{@link module:alfresco/dnd/DragAndDropTarget#widgetsForDroppedItems} 
+ * unless it has been configured to [use a modelling service]
+ * [widgetsForDroppedItems]{@link module:alfresco/dnd/DragAndDropTarget#useModellingService}
+ * (in which case the [service]{@link module:alfresco/services/DragAndDropModellingService} will
+ * provide the widget models).</p>
+ * 
  * @module alfresco/dnd/DragAndDropTarget
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -97,12 +107,36 @@ define(["dojo/_base/declare",
        */
       acceptTypes: null,
 
+      /**
+       * Indicates whether or not dragging should be done with handles.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
       withHandles: true,
+
+      /**
+       * An optional label to provide for the target.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      label: null,
 
       /**
        * @instance
        */
       postCreate: function alfresco_dnd_DragAndDropTarget__postCreate() {
+         if (this.label)
+         {
+            domConstruct.create("div", {
+               "class": "label",
+               innerHTML: this.encodeHTML(this.message(this.label))
+            }, this.domNode, "first");
+         }
+
          if (this.acceptTypes === null)
          {
             this.acceptTypes = ["widget"];
@@ -128,7 +162,6 @@ define(["dojo/_base/declare",
          this.watch("value", function(name, oldValue, newValue) {
             _this.setValue(newValue);
          });
-         // this.setValue(this.value);
       },
       
       /**
@@ -141,6 +174,7 @@ define(["dojo/_base/declare",
          {
             name: "alfresco/dnd/DroppedItemWrapper",
             config: {
+               label: "{label}",
                value: "{value}",
                widgets: "{widgets}"
             }
@@ -190,25 +224,24 @@ define(["dojo/_base/declare",
       },
 
       /**
-       *
+       * This function is the callback for the promise published by the [createViaService]
+       * {@link module:alfresco/dnd/DragAndDropTarget#createViaService} function. It will
+       * render the model provided to wrap and represent the dropped item.
        *
        * @instance
+       * @param {object} item The dropped item configuration
+       * @param {element} node The dropped element
+       * @param {object} resolvedPromise A resolved promise containing the widget models to render
        */
       createDroppedItemsWidgets: function alfresco_dnd_DragAndDropTarget__createDroppedItemsWidgets(item, node, resolvedPromise) {
          if (resolvedPromise.widgets)
          {
             var widgetModel = lang.clone(resolvedPromise.widgets);
-            // Not sure this is the ideal solution, maybe currentItem shouldn't be abused like this?
-            if (this.currentItem === null || this.currentItem === undefined)
-            {
-               this.currentItem = {};
-            }
 
             // Set the value to be processed...
+            this.currentItem = {};
+            this.currentItem.label = item.label;
             this.currentItem.value = item.value;
-
-            // TODO: processInstanceTokens needs an update to substitute entire objects for strings
-            //       e.g. the value should be an object and not a string
             this.processObject(["processCurrentItemTokens"], widgetModel);
             
             // Create the widgets...
@@ -226,10 +259,10 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      creator: function alfresco_dnd_DragAndDropTarget__creator(item, hint) {
+      creator: function alfresco_dnd_DragAndDropTarget__creator(item, /*jshint unused:false*/ hint) {
          var node = domConstruct.create("div");
          var clonedItem = lang.clone(item);
-         if (item.value !== null && item.value !== undefined)
+         if (clonedItem.value !== null && clonedItem.value !== undefined)
          {
             if (this.useModellingService === true)
             {
@@ -240,20 +273,18 @@ define(["dojo/_base/declare",
                var widgetModel = lang.clone(this.widgetsForWrappingDroppedItems);
             
                // Not sure this is the ideal solution, maybe currentItem shouldn't be abused like this?
-               if (this.currentItem === null || this.currentItem === undefined)
-               {
-                  this.currentItem = {};
-               }
+               this.currentItem = {};
 
                // Set the value to be processed...
-               this.currentItem.value = item.value;
+               this.currentItem.value = clonedItem.value;
+               this.currentItem.label = clonedItem.label;
 
                // Check to see if a specific widget model has been requested for rendering the dropped item...
                // TODO Not sure that we actually care about this yet? If at all... shouldn't everything be part of the value?
                //      This might give flexibility though...
-               if (item.widgets !== null && item.widgets !== undefined)
+               if (clonedItem.widgets !== null && clonedItem.widgets !== undefined)
                {
-                  this.currentItem.widgets = item.widgets;
+                  this.currentItem.widgets = clonedItem.widgets;
                }
                else
                {
@@ -275,6 +306,16 @@ define(["dojo/_base/declare",
          return {node: node.firstChild, data: clonedItem, type: ["widget"]};
       },
       
+      /**
+       * An optional property that the target represents. This is expected to be used when a target is 
+       * nested within the display of another dropped item.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      targetProperty: null,
+
       /**
        * Iterates over all the dropped nodes, finds the widget associated with each node and then calls
        * that widgets getValue function (if it has one). The resulting values are all pushed into an
@@ -298,7 +339,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       *
+       * This will render new items for each value in the element array provided.
        * 
        * @instance
        * @param {object} value The value to set.
@@ -318,6 +359,8 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * Handles requests to delete a previously dropped item.
+       * 
        * @instance
        * @param {object} evt The event.
        */
@@ -326,9 +369,9 @@ define(["dojo/_base/declare",
          if (evt.target && 
              evt.target.id &&
              this.previewTarget.getItem(evt.target.id) &&
-             evt.widgetToDelete) 
+             evt.targetWidget) 
          {
-            evt.widgetToDelete.destroyRecursive(false);
+            evt.targetWidget.destroyRecursive(false);
             // TODO: This is destroying the wrong widget - the wrapper, not the DroppedItem
             this.previewTarget.delItem(evt.target.id);
             
@@ -349,15 +392,12 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The selection event
        */
-      onWidgetSelected: function alfresco_dnd_DragAndDropTarget__onWidgetSelected(evt) {
+      onWidgetSelected: function alfresco_dnd_DragAndDropTarget__onWidgetSelected(/*jshint unused:false*/evt) {
          var selectedNodes = this.previewTarget.getSelectedNodes();
          if (selectedNodes.length > 0 && selectedNodes[0] !== null)
          {
             var selectedItem = this.previewTarget.getItem(selectedNodes[0].id);
             this.alfLog("log", "Widget selected", selectedItem);
-            // this.onItemsUpdated();
-            // TODO: We probably don't need to do anything when a widget is selected.
-            // TODO: We probably want a pencil icon for editing, hooked into a similar function.
          }
       },
 
@@ -370,7 +410,7 @@ define(["dojo/_base/declare",
          on.emit(this.domNode, Constants.updateItemsEvent, {
             bubbles: true,
             cancelable: true,
-            widgetToDelete: this
+            targetWidget: this
          });
 
          // NOTE: This is needed to ensure that form controls are rendered correctly

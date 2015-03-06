@@ -18,6 +18,8 @@
  */
 
 /**
+ * Some constants used by multiple modules in the "alfresco/dnd" package.
+ * 
  * @module alfresco/dnd/Constants
  * @author Dave Draper
  */

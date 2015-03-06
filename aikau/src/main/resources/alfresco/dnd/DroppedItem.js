@@ -18,6 +18,10 @@
  */
 
 /**
+ * The most basic representation of an item dragged from a [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+ * widget and dropped onto a [DragAndDropTargetControl]{@link module:alfresco/form/controls/DragAndDropTargetControl} it
+ * simply renders the "name" attribute of the value of the dropped item.
+ * 
  * @module alfresco/dnd/DroppedItem
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin

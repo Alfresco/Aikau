@@ -18,6 +18,18 @@
  */
 
 /**
+ * <p>This form control can be used for constructing form data through a drag and drop interface. Include
+ * this widget in a [form]{@link module:alfresco/forms/Form} and it will render a [DragAndDropTarget]
+ * {@link module:alfresco/dnd/DragAndDropTarget} that can be used to drop items dragged from a
+ * [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems} widget.</p>
+ * <p>When configured the control you can choose whether or not to [use a modelling service]
+ * {@link module:alfresco/form/controls/DragAndDropTargetControl#useModellingService} (recommended for finer control) as well
+ * as overriding the [widget model for wrapping dropped items]
+ * {@link module:alfresco/form/controls/DragAndDropTargetControl#widgetsForWrappingDroppedItems}
+ * and the [widget model for rendering each dropped item]
+ * {@link module:alfresco/form/controls/DragAndDropTargetControl#widgetsForDroppedItems}} (although the latter
+ * configuration might get overriden by your modelling service configuration).</p>
+ * 
  * @module alfresco/form/controls/DragAndDropTargetControl
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @author Dave Draper
@@ -44,11 +56,31 @@ define(["dojo/_base/declare",
       useModellingService: false,
 
       /**
+       * An optional model to override the default widgets used for rendering the wrapper around
+       * a dropped item.
+       * 
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      widgetsForWrappingDroppedItems: null,
+
+      /**
+       * An optional model to override the default widgets used for rendering a dropped item.
+       * 
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      widgetsForDroppedItems: null,
+      
+      /**
+       * Return the configuration for the widget
+       * 
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_DragAndDropTargetControl__getWidgetConfig() {
-         // Return the configuration for the widget
-         return {
+         var config = {
             id : this.generateUuid(),
             name: this.name,
             pubSubScope: this.pubSubScope,
@@ -56,16 +88,31 @@ define(["dojo/_base/declare",
             acceptTypes: this.acceptTypes,
             useModellingService: this.useModellingService
          };
+         if (this.widgetsForWrappingDroppedItems)
+         {
+            config.widgetsForWrappingDroppedItems = this.widgetsForWrappingDroppedItems;
+         }
+         if (this.widgetsForDroppedItems)
+         {
+            config.widgetsForDroppedItems = this.widgetsForDroppedItems;
+         }
+         return config;
       },
       
       /**
+       * Instantiates a new [DragAndDropTarget]{@link module:alfresco/dnd/DragAndDropTarget} widget.
+       * 
        * @instance
+       * @param {config} config The configuration to instantiate the control with.
        */
       createFormControl: function alfresco_forms_controls_DragAndDropTargetControl__createFormControl(config, /*jshint unused:false*/ domNode) {
          return new DragAndDropTarget(config);
       },
       
       /**
+       * Overrides the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#setupChangeEvents}
+       * to listen to update events generated when items are added or removed from the control.
+       * 
        * @instance
        */
       setupChangeEvents: function alfresco_forms_controls_DragAndDropTargetControl__setupChangeEvents() {
