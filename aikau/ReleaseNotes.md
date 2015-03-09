@@ -1,4 +1,4 @@
-Aikau 1.0.6 Release Notes
+Aikau 1.0.8 Release Notes
 =========================
 
 Current deprecations:
@@ -32,7 +32,18 @@ Previous releases:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
-1.0.7:
+1.0.8:
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)   -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)   - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)   - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)   - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)   - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)   - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)   - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)   - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)   - 
+
+* 1.0.7:
 * [AKU-13](https://issues.alfresco.com/jira/browse/AKU-13)   - Added support for stacked dialogs
 * [AKU-27](https://issues.alfresco.com/jira/browse/AKU-27)   - Add support for create folder templated content
 * [AKU-94](https://issues.alfresco.com/jira/browse/AKU-94)   - Added Grunt task for patching clients
