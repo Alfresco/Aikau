@@ -40,53 +40,52 @@ define(["intern!object",
          browser.end();
       },
 
-     "Tests": function () {
-         var testname = "PropertyTest";
-         return browser.moveMouseTo(null, 0, 0)
-            .end()
+     "Check standard property is rendered correctly": function () {
+         return browser
+         // .moveMouseTo(null, 0, 0)
+         //    .end()
 
          .findByCssSelector("#BASIC .value")
             .getVisibleText()
             .then(function(resultText) {
-               TestCommon.log(testname,"Check standard property is rendered correctly");
                assert(resultText === "Test", "Standard property not rendered correctly: " + resultText);
-            })
-            .end()
+            });
+      },
 
-         .findByCssSelector("#PREFIX_SUFFIX .value")
+      "Check prefixed/suffixed property is rendered correctly" : function() {
+         return browser.findByCssSelector("#PREFIX_SUFFIX .value")
             .getVisibleText()
             .then(function(resultText) {
-               TestCommon.log(testname,"Check prefixed/suffixed property is rendered correctly");
                assert(resultText === "(Test)", "Prefix and suffix not rendered correctly: " + resultText);
-            })
-            .end()
+            });
+      },
 
-         .findByCssSelector("#NEW_LINE")
+      "Check new line property is rendered correctly" : function() {
+         return browser.findByCssSelector("#NEW_LINE")
             .getComputedStyle("display")
             .then(function(result) {
-               TestCommon.log(testname,"Check new line property is rendered correctly");
                assert(result === "block", "New line not applied");
-            })
-            .end()
+            });
+      },
 
-         .findByCssSelector("#WARN1 .value")
+      "Check standard warning is rendered correctly" : function() {
+         return browser.findByCssSelector("#WARN1 .value")
             .getVisibleText()
             .then(function(resultText) {
-               TestCommon.log(testname,"Check standard warning is rendered correctly");
-               assert(resultText === "No property for: \"missing\"", "Standard warning not rendered correctly: " + resultText);
-            })
-            .end()
+               assert.equal(resultText, "No property for: \"missing\"", "Standard warning not rendered correctly");
+            });
+      },
 
-         .findByCssSelector("#WARN2 .value")
+      "Check explicit warning is rendered correctly" : function() {
+         return browser.findByCssSelector("#WARN2 .value")
             .getVisibleText()
             .then(function(resultText) {
-               TestCommon.log(testname,"Check explicit warning is rendered correctly");
                assert(resultText === "No description", "Explicit warning not rendered correctly: " + resultText);
-            })
-            .end()
+            });
+      },
 
-         // Position the mouse over the SubscriptionLog to make sure the hover only property isn't displayed...
-         .findByCssSelector(".alfresco-testing-SubscriptionLog")
+      "Check hover property is hidden" : function() {
+         return browser.findByCssSelector(".alfresco-testing-SubscriptionLog")
             .then(function(element) {
                browser.moveMouseTo(element);
             })
@@ -95,12 +94,12 @@ define(["intern!object",
          .findByCssSelector("#HOVER .inner")
            .isDisplayed()
             .then(function(result) {
-               TestCommon.log(testname,"Check hover property is hidden");
                assert(result === false, "Hover displayed unexpectedly");
-            })
-            .end()
+            });
+      },
 
-         .findByCssSelector("#LIST table tbody tr td")
+      "Check hover property is displayed" : function() {
+         return browser.findByCssSelector("#LIST table tbody tr td")
             .then(function(element) {
                browser.moveMouseTo(element);
             })
@@ -109,15 +108,14 @@ define(["intern!object",
         .findByCssSelector("#HOVER .value")
            .isDisplayed()
            .then(function(result) {
-               TestCommon.log(testname,"Check hover property is displayed");
                assert(result === true, "Hover displayed unexpectedly");
-            })
-           .end()
+            });
+      },
 
-         .findByCssSelector("#LABEL .label")
+      "Check label is rendered correctly" : function() {
+         return browser.findByCssSelector("#LABEL .label")
             .getVisibleText()
             .then(function(resultText) {
-               TestCommon.log(testname,"Check label is rendered correctly");
                assert(resultText === "Label:", "Label not rendered correctly: " + resultText);
             });
       },
