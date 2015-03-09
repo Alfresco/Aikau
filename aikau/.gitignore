@@ -10,4 +10,5 @@
 
 # Ignored files (please keep alphabetical)
 /.sublime-grunt.cache
+/phantomjsdriver.log
 /src/test/resources/testApp/js/aikau/testing/RequireEverything.js
