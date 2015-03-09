@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,6 +24,7 @@
  * @module alfresco/core/Page
  * @extends module:alfresco/core/ProcessWidgets
  * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["alfresco/core/ProcessWidgets",
         "service/constants/Default",
