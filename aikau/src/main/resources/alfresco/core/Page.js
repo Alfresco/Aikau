@@ -193,7 +193,7 @@ define(["alfresco/core/ProcessWidgets",
             {
                // If there is a callback then call it with any provided scope (but default to the
                // "this" as the scope if one isn't provided).
-               callback.call((callbackScope || this), service, index);
+               callback.call((callbackScope || _this), service, index);
             }
          });
       },
@@ -228,7 +228,7 @@ define(["alfresco/core/ProcessWidgets",
        */
       _registerProcessedService: function alfresco_core_Core___registerProcessedService(service, index) {
          this._processedServiceCountdown--;
-         if (!index || isNaN(index))
+         if (index !== 0 && (!index || isNaN(index)))
          {
             this._processedServices.push(service);
          }
