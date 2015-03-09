@@ -69,7 +69,7 @@ define(["intern!object",
       },
       
       "Test Form Value Updated After Drop": function() {
-         return browser.findByCssSelector("#FORM1 .confirmationButton")
+         return browser.findByCssSelector("#FORM1 .confirmationButton > span")
             .click()
          .end()
          .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1_POST","data","name","bob"))
@@ -86,7 +86,7 @@ define(["intern!object",
       },
       
       "Test Preset Form Control Post Value": function() {
-         return browser.findByCssSelector("#FORM2 .confirmationButton")
+         return browser.findByCssSelector("#FORM2 .confirmationButton > span")
             .click()
          .end()
          .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM2_POST","data","preset","value1"))
