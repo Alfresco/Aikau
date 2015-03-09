@@ -2,11 +2,14 @@
 /bin/
 /code-coverage-reports/
 /docs/
+/logs/
 /node_modules/
 /src/main/resources/alfrescoInst/
-/src/test/vagrant/.vagrant/
 /target/
-/clientConfig.js
 
 # Ignored files (please keep alphabetical)
+/.sublime-grunt.cache
+/clientConfig.js
+/phantomjsdriver.log
 /src/test/resources/testApp/js/aikau/testing/RequireEverything.js
+/src/test/vagrant/.vagrant/
