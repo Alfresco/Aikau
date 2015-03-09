@@ -176,6 +176,17 @@ define(["dojo/_base/declare",
       onCreateDialogRequest: function alfresco_services_DialogService__onCreateDialogRequest(payload) {
          this.cleanUpAnyPreviousDialog(payload);
 
+         var handleOverflow = true;
+         if (payload.handleOverflow === false)
+         {
+            handleOverflow = false;
+         }
+         var fixedWidth = false;
+         if (payload.fixedWidth === true)
+         {
+            fixedWidth = true;
+         }
+
          // TODO: Update this and other function with scroll setting...
          var dialogConfig = {
             id: payload.dialogId ? payload.dialogId : this.generateUuid(),
@@ -186,8 +197,8 @@ define(["dojo/_base/declare",
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",
             contentWidth: payload.contentWidth ? payload.contentWidth : null,
             contentHeight: payload.contentHeight ? payload.contentHeight : null,
-            handleOverflow: (payload.handleOverflow === false || !payload.handleOverflow) ? false : true,
-            fixedWidth: (payload.fixedWidth === true || !payload.handleOverflow) ? true : false
+            handleOverflow: handleOverflow,
+            fixedWidth: fixedWidth
          };
          var dialog = new AlfDialog(dialogConfig);
 
@@ -286,12 +297,23 @@ define(["dojo/_base/declare",
        * @returns {object} The dialog configuration.
        */
       createDialogConfig: function alfresco_services_DialogService__createDialogConfig(config, formConfig) {
+         var handleOverflow = true;
+         if (config.handleOverflow === false)
+         {
+            handleOverflow = false;
+         }
+         var fixedWidth = false;
+         if (config.fixedWidth === true)
+         {
+            fixedWidth = true;
+         }
+         
          var dialogConfig = {
             id: config.dialogId ? config.dialogId : this.generateUuid(),
             title: this.message(config.dialogTitle),
             pubSubScope: config.pubSubScope, // Scope the dialog content so that it doesn't pollute any other widgets,,
-            handleOverflow: config.handleOverflow || true,
-            fixedWidth: config.fixedWidth || false,
+            handleOverflow: handleOverflow,
+            fixedWidth: fixedWidth,
             parentPubSubScope: config.parentPubSubScope,
             additionalCssClasses: config.additionalCssClasses ? config.additionalCssClasses : "",
             widgetsContent: [formConfig],

@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
          var u;
 
          // Only replace a value if it actually exists, otherwise leave the token exactly as is.
-         var re = /{[a-zA-Z_$][0-9a-zA-Z_$]*}/g ;
+         var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*}$/g ;
          if (re.test(v))
          {
             var tokenWithoutBraces = v.slice(1,-1);
