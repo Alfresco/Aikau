@@ -1,4 +1,4 @@
-Aikau 1.0.6 Release Notes
+Aikau 1.0.8 Release Notes
 =========================
 
 Current deprecations:
@@ -32,7 +32,19 @@ Previous releases:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
-1.0.7:
+1.0.8:
+* [AKU-5](https://issues.alfresco.com/jira/browse/AKU-5)       - Remove YUI2 and Share dependencies from TinyMCE modules
+* [AKU-30](https://issues.alfresco.com/jira/browse/AKU-30)     - Updates to Indicators renderer
+* [AKU-112](https://issues.alfresco.com/jira/browse/AKU-112)   - Drag and drop items and post form value
+* [AKU-113](https://issues.alfresco.com/jira/browse/AKU-113)   - Re-order items and post updated value 
+* [AKU-114](https://issues.alfresco.com/jira/browse/AKU-114)   - Delete dropped items and post updated value
+* [AKU-117](https://issues.alfresco.com/jira/browse/AKU-117)   - Render widgets as dropped items
+* [AKU-118](https://issues.alfresco.com/jira/browse/AKU-118)   - Implement drag and drop modelling service
+* [AKU-140](https://issues.alfresco.com/jira/browse/AKU-140)   - Search scope issues resolved
+* [AKU-142](https://issues.alfresco.com/jira/browse/AKU-142)   - Add hash fragment support to AlfDynamicPayloadButton
+* [AKU-151](https://issues.alfresco.com/jira/browse/AKU-151)   - Fixed DialogService config issue
+
+* 1.0.7:
 * [AKU-13](https://issues.alfresco.com/jira/browse/AKU-13)   - Added support for stacked dialogs
 * [AKU-27](https://issues.alfresco.com/jira/browse/AKU-27)   - Add support for create folder templated content
 * [AKU-94](https://issues.alfresco.com/jira/browse/AKU-94)   - Added Grunt task for patching clients
