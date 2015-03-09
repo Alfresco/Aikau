@@ -33,7 +33,8 @@ Previous releases:
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
 1.0.8:
-* [AKU-5](https://issues.alfresco.com/jira/browse/AKU-5)   - Remove YUI2 and Share dependencies from TinyMCE modules
+* [AKU-5](https://issues.alfresco.com/jira/browse/AKU-5)       - Remove YUI2 and Share dependencies from TinyMCE modules
+* [AKU-30](https://issues.alfresco.com/jira/browse/AKU-30)     - Updates to Indicators renderer
 * [AKU-112](https://issues.alfresco.com/jira/browse/AKU-112)   - Drag and drop items and post form value
 * [AKU-113](https://issues.alfresco.com/jira/browse/AKU-113)   - Re-order items and post updated value 
 * [AKU-114](https://issues.alfresco.com/jira/browse/AKU-114)   - Delete dropped items and post updated value
