@@ -30,7 +30,7 @@ define(["intern/dojo/node!fs",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/lib/args",
         "intern/chai!assert"],
-       function(fs, http, Config, pollUntil, args, assert) {
+        function(fs, http, Config, pollUntil, args, assert) {
    return {
 
       /**
@@ -273,10 +273,10 @@ define(["intern/dojo/node!fs",
        */
       pubDataCssSelector: function(publishTopic, key, value) {
          var selector = "" +
-            "td[data-publish-topic='" + publishTopic + "'] + " +
-            "td.sl-data tr.sl-object-row " +
-            "td[data-pubsub-object-key=" + key +
-            "]+td[data-pubsub-object-value='" + value + "']";
+         "td[data-publish-topic='" + publishTopic + "'] + " +
+         "td.sl-data > table > tr.sl-object-row > " +
+         "td[data-pubsub-object-key=" + key + "] + " +
+         "td[data-pubsub-object-value='" + value + "']";
          return selector;
       },
 

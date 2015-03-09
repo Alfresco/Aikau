@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,6 +24,7 @@
  * @module alfresco/core/Page
  * @extends module:alfresco/core/ProcessWidgets
  * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["alfresco/core/ProcessWidgets",
         "service/constants/Default",
@@ -35,9 +36,10 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/dom-class",
         "dojo/_base/window",
         "alfresco/core/PubQueue",
-        "jquery"], // NOTE: Need to include JQuery at root page to prevent XHR require request for first module that uses it
+        "jquery", // NOTE: Need to include JQuery at root page to prevent XHR require request for first module that uses it
+        "alfresco/core/shims"],
         function(ProcessWidgets, AlfConstants, string, declare, domConstruct, array, 
-                 lang, domClass, win, PubQueue, jquery) {
+                 lang, domClass, win, PubQueue, jquery, shims) {
    
    return declare([ProcessWidgets], {
       
@@ -57,31 +59,33 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       postCreate: function alfresco_core_Page__postCreate() {
+         /*jshint devel:true*/
+         shims.apply();
          try
          {
             // If we're in debug mode, then we should add some DOM elements for the Developer View. This will
             // allow developers to see which WebScript has generated the page and to click a link to generate
             // a sample JAR to customize the page.
-            if (AlfConstants.DEBUG && this.domNode != null && this.webScriptId != null)
+            if (AlfConstants.DEBUG && this.domNode && this.webScriptId)
             {
                this.webScriptLabel = "WebScript ID:";
                this.extensionDownloadUrl = AlfConstants.URL_PAGECONTEXT + "generator/extension?webscriptId=" + this.webScriptId;
                this.extensionDownloadLabel = "(Click to generate extension JAR)";
-               var pageInfoTemplate = '<div class="alfresco-debug-PageInfo">' +
-                  '<span class="label">${webScriptLabel}</span>' + 
-                  '<span class="value">${webScriptId}</span>' + 
-                  '<a href="${extensionDownloadUrl}">${extensionDownloadLabel}</a>' + 
-               '</div>';
+               var pageInfoTemplate = "<div class=\"alfresco-debug-PageInfo\">" +
+                  "<span class=\"label\">${webScriptLabel}</span>" + 
+                  "<span class=\"value\">${webScriptId}</span>" + 
+                  "<a href=\"${extensionDownloadUrl}\">${extensionDownloadLabel}</a>" + 
+               "</div>";
                var pageInfo = string.substitute(pageInfoTemplate, this);
                var pageInfoDom = domConstruct.toDom(pageInfo);
                domConstruct.place(pageInfoDom, this.domNode, "first");
             }
 
-            if (this.services != null && this.services.length !== 0)
+            if (this.services && this.services.length)
             {
                this.processServices(this.services);
             }
-            else if (this.widgets != null && this.widgets.length !== 0)
+            else if (this.widgets && this.widgets.length)
             {
                // Make sure to process widgets if there are no services...
                // Otherwise they will be processed once all the services are instantiated...
@@ -100,9 +104,7 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       onReadyPublish: function alfresco_core_Page__onReadyPublish(publicationDetails) {
-         if (publicationDetails != null && 
-             publicationDetails.publishTopic != null &&
-             publicationDetails.publishTopic !== "")
+         if (publicationDetails && publicationDetails.publishTopic)
          {
             this.alfLog("log", "Onload publication", publicationDetails);
             this.alfPublish(publicationDetails.publishTopic, publicationDetails.publishPayload);
@@ -125,7 +127,7 @@ define(["alfresco/core/ProcessWidgets",
       processServices: function alfresco_core_Page__processServices(services, callback, callbackScope, index) {
          if (services)
          {
-            if (this.servicesToDestroy == null)
+            if (!this.servicesToDestroy)
             {
                this.servicesToDestroy = [];
             }
@@ -138,7 +140,7 @@ define(["alfresco/core/ProcessWidgets",
             this._processedServices = [];
 
             // Iterate over all the services in the configuration object and add them...
-            array.forEach(services, function(serviceConfig, i) {
+            array.forEach(services, function(serviceConfig) {
                this.createService(serviceConfig, this._registerProcessedService, this, index);
             }, this);
          }
@@ -168,7 +170,7 @@ define(["alfresco/core/ProcessWidgets",
          {
             dep = config;
          }
-         else if (typeof config === "object" && config.name != null)
+         else if (typeof config === "object" && config.name)
          {
             dep = config.name;
             if (typeof config.config === "object")
@@ -192,7 +194,7 @@ define(["alfresco/core/ProcessWidgets",
             {
                // If there is a callback then call it with any provided scope (but default to the
                // "this" as the scope if one isn't provided).
-               callback.call((callbackScope != null ? callbackScope : _this), service, index);
+               callback.call((callbackScope || _this), service, index);
             }
          });
       },
@@ -227,7 +229,7 @@ define(["alfresco/core/ProcessWidgets",
        */
       _registerProcessedService: function alfresco_core_Core___registerProcessedService(service, index) {
          this._processedServiceCountdown--;
-         if (index == null || isNaN(index))
+         if (index !== 0 && (!index || isNaN(index)))
          {
             this._processedServices.push(service);
          }
@@ -262,6 +264,7 @@ define(["alfresco/core/ProcessWidgets",
        * @param {Array} services An array of all the services that have been processed
        */
       allServicesProcessed: function alfresco_core_Core__allServicesProcessed(services) {
+         /*jshint unused:false*/
          this.alfLog("log", "All services processed");
          if (this.widgets)
          {
@@ -275,11 +278,12 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       allWidgetsProcessed: function alfresco_core_Page__allWidgetsProcessed(widgets) {
+         /*jshint unused:false*/
          this.alfLog("log", "All page widgets processed");
          // TODO: Need to be able to notify widgets that they can start publications in the knowledge that other widgets are available
          // to respond...
          
-         if (this.publishOnReady != null)
+         if (this.publishOnReady)
          {
             array.forEach(this.publishOnReady, lang.hitch(this, "onReadyPublish"));
          }
