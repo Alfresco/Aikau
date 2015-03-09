@@ -119,6 +119,7 @@ define(["dojo/_base/declare",
        * @returns  {object[]} The indicators.
        */
       normaliseIndicators: function alfresco_renderers_Indicators__normaliseIndicators(currentItem) {
+         /*jshint loopfunc:true*/
 
          // Setup variables
          var indicators = (currentItem && currentItem.indicators) || [];
@@ -131,15 +132,15 @@ define(["dojo/_base/declare",
             normalised = []; // The output
 
          // Populate the source and canBeOverridden maps
-         indicators.forEach(function(item) {
+         array.forEach(indicators, function(item) {
             source[item.id] = item;
-            (item.overrides || []).forEach(function(overriddenItemId) {
+            array.forEach((item.overrides || []), function(overriddenItemId) {
                canBeOverridden[overriddenItemId] = item.id;
             });
          });
 
          // Find the edges
-         Object.keys(source).forEach(function(id) {
+         array.forEach(Object.keys(source), function(id) {
             if (!canBeOverridden.hasOwnProperty(id)) {
                topologicallySorted.push(source[id]);
                delete source[id];
@@ -148,9 +149,8 @@ define(["dojo/_base/declare",
 
          // Run through the sorted array, finding overridden children
          while (Object.keys(source).length) {
-            topologicallySorted.forEach(function(sortedItem) {
-               var overrides = sortedItem.overrides || [];
-               overrides.forEach(function(overriddenId) {
+            array.forEach(topologicallySorted, function(sortedItem) {
+               array.forEach((sortedItem.overrides || []), function(overriddenId) {
                   if (source[overriddenId]) {
                      topologicallySorted.push(source[overriddenId]);
                      delete source[overriddenId];
@@ -160,9 +160,9 @@ define(["dojo/_base/declare",
          }
 
          // Now we have the toposort, override in order
-         topologicallySorted.forEach(function(nextSortedItem) {
+         array.forEach(topologicallySorted, function(nextSortedItem) {
             if (!actuallyOverridden.hasOwnProperty(nextSortedItem.id)) {
-               (nextSortedItem.overrides || []).forEach(function(overriddenId) {
+               array.forEach((nextSortedItem.overrides || []), function(overriddenId) {
                   actuallyOverridden[overriddenId] = true;
                });
                normalised.push(nextSortedItem);
