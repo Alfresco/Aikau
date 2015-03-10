@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,10 +24,10 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView"], 
-        function(declare, AlfDocumentListView, template) {
-   
+        function(declare, AlfDocumentListView) {
+
    return declare([AlfDocumentListView], {
-      
+
       /**
        * By default the detailed view should have no borders
        *
@@ -48,317 +48,27 @@ define(["dojo/_base/declare",
          label: "doclist.view.detailed.label",
          iconClass: "alf-detailedlist-icon"
       },
-      
+
       /**
        * Returns the name of the view that is used when saving user view preferences.
-       * 
+       *
        * @instance
        * @returns {string} "detailed"
        */
       getViewName: function alfresco_documentlibrary_views_AlfDocumentListView__getViewName() {
          return "detailed";
       },
-      
+
       /**
-       * The definition of how a single item is represented in the view. 
-       * 
+       * The definition of how a single item is represented in the view.
+       *
        * @instance
        * @type {object[]}
        */
       widgets: [
          {
-            name: "alfresco/lists/views/layouts/Row",
-            config: {
-               generatePubSubScope: true,
-               widgets: [
-                  {
-                     name: "alfresco/lists/views/layouts/Cell",
-                     config: {
-                        width: "16px",
-                        widgets: [
-                           {
-                              name: "alfresco/renderers/Selector",
-                              config: {
-                                 publishGlobal: false,
-                                 publishToParent: true
-                              }
-                           }
-                        ]
-                     }
-                  },
-                  {
-                     name: "alfresco/lists/views/layouts/Cell",
-                     config: {
-                        width: "16px",
-                        widgets: [
-                           {
-                              name: "alfresco/renderers/Indicators"
-                           }
-                        ]
-                     }
-                  },
-                  {
-                     name: "alfresco/lists/views/layouts/Cell",
-                     config: {
-                        width: "100px",
-                        widgets: [
-                           {
-                              name: "alfresco/renderers/Thumbnail",
-                              config: {
-                                 showDocumentPreview: true,
-                                 publishGlobal: false,
-                                 publishToParent: true
-                              }
-                           }
-                        ]
-                     }
-                  },
-                  {
-                     name: "alfresco/lists/views/layouts/Cell",
-                     config: {
-                        widgets: [
-                           {
-                              name: "alfresco/lists/views/layouts/Column",
-                              config: {
-                                 widgets: [
-                                    {
-                                       name: "alfresco/lists/views/layouts/Cell",
-                                       config: {
-                                          widgets: [
-                                             {
-                                                name: "alfresco/renderers/LockedBanner"
-                                             }
-                                          ]
-                                       }
-                                    },
-                                    {
-                                       name: "alfresco/lists/views/layouts/Cell",
-                                       config: {
-                                          widgets: [
-                                             {
-                                                name: "alfresco/renderers/InlineEditPropertyLink",
-                                                config: {
-                                                   propertyToRender: "node.properties.cm:name",
-                                                   postParam: "prop_cm_name",
-                                                   renderSize: "large"
-                                                }
-                                             },
-                                             {
-                                                name: "alfresco/renderers/InlineEditProperty",
-                                                config: {
-                                                   propertyToRender: "node.properties.cm:title",
-                                                   postParam: "prop_cm_title",
-                                                   renderedValuePrefix: "(",
-                                                   renderedValueSuffix: ")",
-                                                   renderFilter: [
-                                                      {
-                                                         property: "node.properties.cm:title",
-                                                         values: [""],
-                                                         negate: true
-                                                      }
-                                                   ]
-                                                }
-                                             },
-                                             {
-                                                name: "alfresco/renderers/Version",
-                                                config: {
-                                                   onlyShowOnHover: true,
-                                                   renderFilter: [
-                                                      {
-                                                         property: "node.isContainer",
-                                                         values: [false]
-                                                      },
-                                                      {
-                                                         property: "workingCopy.isWorkingCopy",
-                                                         values: [false],
-                                                         renderOnAbsentProperty: true
-                                                      }
-                                                   ]
-                                                }
-                                             }
-                                          ]
-                                       }
-                                    },
-                                    {
-                                       name: "alfresco/lists/views/layouts/Cell",
-                                       config: {
-                                          widgets: [
-                                             {
-                                                name: "alfresco/renderers/Date"
-                                             },
-                                             {
-                                                name: "alfresco/renderers/Size",
-                                                config: {
-                                                   renderFilter: [
-                                                      {
-                                                         property: "node.isContainer",
-                                                         values: [false]
-                                                      }
-                                                   ]
-                                                }
-                                             }
-                                          ]
-                                       }
-                                    },
-                                    {
-                                       name: "alfresco/lists/views/layouts/Cell",
-                                       config: {
-                                          widgets: [
-                                             {
-                                                name: "alfresco/renderers/InlineEditProperty",
-                                                config: {
-                                                   propertyToRender: "node.properties.cm:description",
-                                                   postParam: "prop_cm_description",
-                                                   warnIfNotAvailable: true,
-                                                   warnIfNoteAvailableMessage: "no.description.message"
-                                                }
-                                             }
-                                          ]
-                                       }
-                                    },
-                                    {
-                                       name: "alfresco/lists/views/layouts/Cell",
-                                       config: {
-                                          widgets: [
-                                             {
-                                                name: "alfresco/renderers/Tags",
-                                                config: {
-                                                   propertyToRender: "node.properties.cm:taggable",
-                                                   postParam: "prop_cm_taggable",
-                                                   warnIfNotAvailable: true,
-                                                   warnIfNoteAvailableMessage: "no.tags.message",
-                                                   renderFilter: [
-                                                      {
-                                                         property: "workingCopy.isWorkingCopy",
-                                                         values: [false],
-                                                         renderOnAbsentProperty: true
-                                                      }
-                                                   ]
-                                                }
-                                             }
-                                          ]
-                                       }
-                                    },
-                                    {
-                                       name: "alfresco/lists/views/layouts/Cell",
-                                       config: {
-                                          widgets: [
-                                             {
-                                                name: "alfresco/renderers/Category",
-                                                config: {
-                                                   renderFilter: [
-                                                      {
-                                                         property: "node.properties.cm:categories",
-                                                         renderOnAbsentProperty: true,
-                                                         values: [],
-                                                         negate: true
-                                                      }
-                                                   ]
-                                                }
-                                             }
-                                          ]
-                                       }
-                                    },
-                                    {
-                                       name: "alfresco/lists/views/layouts/Cell",
-                                       config: {
-                                          renderFilter: [
-                                             {
-                                                property: "workingCopy.isWorkingCopy",
-                                                values: [false],
-                                                renderOnAbsentProperty: true
-                                             }
-                                          ],
-                                          widgets: [
-                                             {
-                                                name: "alfresco/renderers/Favourite"
-                                             },
-                                             {
-                                                name: "alfresco/renderers/Separator"
-                                             },
-                                             {
-                                                name: "alfresco/renderers/Like"
-                                             },
-                                             {
-                                                name: "alfresco/renderers/Separator"
-                                             },
-                                             {
-                                                name: "alfresco/renderers/Comments",
-                                                config: {
-                                                   subscriptionTopic: "ALF_COMMENTS_LOADED",
-                                                   publishTopic: "ALF_REVEAL_COMMENTS",
-                                                   publishPayload: {
-                                                   }
-                                                }
-                                             },
-                                             {
-                                                name: "alfresco/renderers/Separator",
-                                                config: {
-                                                   renderFilter: [
-                                                      {
-                                                         property: "node.isContainer",
-                                                         values: [false]
-                                                      }
-                                                   ]
-                                                }
-                                             },
-                                             {
-                                                name: "alfresco/renderers/QuickShare",
-                                                config: {
-                                                   renderFilter: [
-                                                      {
-                                                         property: "node.isContainer",
-                                                         values: [false]
-                                                      }
-                                                   ]
-                                                }
-                                             }
-                                          ]
-                                       }
-                                    },
-                                    {
-                                       name: "alfresco/lists/views/layouts/Cell",
-                                       config: {
-                                          widgets: [
-                                             {
-                                                name: "alfresco/layout/VerticalReveal",
-                                                config: {
-                                                   subscriptionTopic: "ALF_REVEAL_COMMENTS",
-                                                   widgets: [
-                                                      {
-                                                         name: "alfresco/renderers/CommentsList"
-                                                      }
-                                                   ]
-                                                }
-                                             }
-                                          ]
-                                       }
-                                    }
-                                 ]
-                              }
-                           }
-                        ]
-                     }
-                  },
-                  {
-                     name: "alfresco/lists/views/layouts/Cell",
-                     config: {
-                        width: "100px",
-                        widgets: [
-                           {
-                              name: "alfresco/renderers/Actions",
-                              config: {
-                                 publishGlobal: false,
-                                 publishToParent: true
-                              }
-                           }
-                        ]
-                     }
-                  }
-               ]
-            }
+            name: "alfresco/documentlibrary/views/AlfDetailedViewItem"
          }
       ]
-      
    });
 });
