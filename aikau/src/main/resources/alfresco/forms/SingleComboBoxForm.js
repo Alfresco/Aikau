@@ -31,7 +31,7 @@
 define(["dojo/_base/declare",
         "alfresco/forms/SingleTextFieldForm",
         "alfresco/forms/controls/ComboBox"], 
-        function(declare, SingleTextFieldForm, ComboBox) {
+        function(declare, SingleTextFieldForm) {
    
    return declare([SingleTextFieldForm], {
       
@@ -80,13 +80,13 @@ define(["dojo/_base/declare",
                name: "alfresco/forms/controls/ComboBox",
                assignTo: "entryField",
                config: {
-                  label: (this.textBoxLabel != null) ? this.message(this.textBoxLabel) : "",
+                  label: (this.textBoxLabel) ? this.message(this.textBoxLabel) : "",
                   name: this.textFieldName,
                   requirementConfig: {
                      initialValue: true
                   },
-                  iconClass: (this.textBoxIconClass != null) ? this.textBoxIconClass : "",
-                  additionalCssClasses: (this.textBoxCssClasses != null) ? this.textBoxCssClasses : "",
+                  iconClass: (this.textBoxIconClass) ? this.textBoxIconClass : "",
+                  additionalCssClasses: (this.textBoxCssClasses) ? this.textBoxCssClasses : "",
                   optionsConfig: {
                      queryAttribute: this.queryAttribute,
                      publishTopic: this.optionsPublishTopic,
