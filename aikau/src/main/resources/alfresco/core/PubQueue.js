@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
        * @param {string} payload The payload to be delivered
        */
       publish: function alfresco_core_PubQueue__publish(scopedTopic, payload, caller) {
-         if (this._released == false)
+         if (this._released === false)
          {
             this._queue.push({
                topic: scopedTopic,
@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            if (AlfConstants.DEBUG == true)
+            if (AlfConstants.DEBUG === true)
             {
                PubSubLog.getSingleton().pub(scopedTopic, payload, caller);
             }
@@ -88,7 +88,7 @@ define(["dojo/_base/declare",
       release: function alfresco_core_PubQueue__release() {
          this._released = true;
          array.forEach(this._queue, function(publication) {
-            if (AlfConstants.DEBUG == true)
+            if (AlfConstants.DEBUG === true)
             {
                PubSubLog.getSingleton().pub(publication.topic, 
                                             publication.payload, 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
    
    var instance; 
    PubQueue.getSingleton = function() {
-      if (instance == null)
+      if (!instance)
       {
          instance = new PubQueue(); 
       }

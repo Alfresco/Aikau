@@ -103,10 +103,10 @@ define(["alfresco/forms/controls/BaseFormControl",
       postCreate: function alfresco_forms_controls_RadioButtons_RadioButtons__postCreate() {
          // Create an object to map each option value to the RadioButton that represents it...
          this.optionToWidget = {};
-         if (this.options != null && this.options instanceof Array)
+         if (this.options && this.options instanceof Array)
          {
-            array.forEach(this.options, function(option, index) {
-               if (typeof option.label == "string" && typeof option.value == "string")
+            array.forEach(this.options, function(option) {
+               if (typeof option.label === "string" && typeof option.value === "string")
                {
                   this.addOption(option);
                }
@@ -154,7 +154,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       removeOption: function alfresco_forms_controls_RadioButtons_RadioButtons__removeOption(option) {
-         if (typeof option.value == "string")
+         if (typeof option.value === "string")
          {
             // Destroy the widget...
             var rb = this.optionToWidget[option.value];
@@ -170,9 +170,9 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {object} value The value to set.
        */
       setValue: function alfresco_forms_controls_RadioButtons_RadioButtons__setValue(value) {
-         if (this.optionToWidget != null && this.optionToWidget[value] != null)
+         if (this.optionToWidget && (this.optionToWidget[value] === false || this.optionToWidget[value]))
          {
-            this.optionToWidget[value]._radioButton.set('checked', true);
+            this.optionToWidget[value]._radioButton.set("checked", true);
          }
       },
 
@@ -181,10 +181,13 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       getValue: function alfresco_forms_controls_RadioButtons_RadioButtons__getValue() {
          for (var key in this.optionToWidget) {
-            var selected =  this.optionToWidget[key]._radioButton.get("checked");
-            if (selected)
+            if (this.optionToWidget.hasOwnProperty(key))
             {
-               return this.optionToWidget[key]._radioButton.getValue();
+               var selected =  this.optionToWidget[key]._radioButton.get("checked");
+               if (selected)
+               {
+                  return this.optionToWidget[key]._radioButton.getValue();
+               }
             }
          }
       }
@@ -209,7 +212,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          return {
             id : this.id + "_CONTROL",
             name: this.name,
-            options: (this.options != null) ? this.options : [],
+            options: this.options || [],
             control: this
          };
       },
@@ -222,6 +225,26 @@ define(["alfresco/forms/controls/BaseFormControl",
          // provides the standard widget API that the BaseFormControl is expecting...
          domClass.add(this.domNode, "alfresco-forms-controls-RadioButtons");
          return new RadioButtons(config);
+      },
+
+      /**
+       * Sets the checked value of the RadioButtons.
+       * 
+       * @instance
+       * @param {object} value The value to set.
+       */
+      setValue: function alfresco_forms_controls_RadioButtons__setValue(value) {
+         if (this.deferValueAssigment)
+         {
+            this.inherited(arguments);
+         }
+         else
+         {
+            if (this.wrappedWidget)
+            {
+               this.wrappedWidget.setValue(value);
+            }
+         }
       }
    });
 });

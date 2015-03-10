@@ -62,7 +62,6 @@ define(["dojo/_base/declare",
          if (console && typeof console.log === "function" && AlfConstants.DEBUG)
          {
             console.log(entry);
-
          }
 
          this.addEntry(entry);
