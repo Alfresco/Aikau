@@ -30,7 +30,7 @@ define(["intern/dojo/node!fs",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/lib/args",
         "intern/chai!assert"],
-       function(fs, http, Config, pollUntil, args, assert) {
+        function(fs, http, Config, pollUntil, args, assert) {
    return {
 
       /**
@@ -58,9 +58,11 @@ define(["intern/dojo/node!fs",
        *
        * @instance
        * @param {string} webScriptURL The WebScript URL
+       * @param {string} webScriptPrefix Optional prefix to the test page.
        */
-      testWebScriptURL: function (webScriptURL) {
-         return Config.urls.unitTestAppBaseUrl + "/aikau/page/tp/ws" + webScriptURL;
+      testWebScriptURL: function (webScriptURL, webScriptPrefix) {
+         var prefix = webScriptPrefix || "/tp/ws";
+         return Config.urls.unitTestAppBaseUrl + "/aikau/page" + prefix + webScriptURL;
       },
 
       /**
@@ -144,19 +146,21 @@ define(["intern/dojo/node!fs",
        * @param {object} browser The browser context to use
        * @param {string} testWebScriptURL The URL of the test WebScript
        * @param {string} testName The name of the test to run
+       * @param {string} testWebScriptPrefix Optional prefix to use before the WebScript URL
        */
-      loadTestWebScript: function (browser, testWebScriptURL, testName) {
+      loadTestWebScript: function (browser, testWebScriptURL, testName, testWebScriptPrefix) {
          this._applyTimeouts(browser);
          this._maxWindow(browser);
          this._cancelModifierKeys(browser);
          if(testName && browser.environmentType.browserName)
          {
             console.log(">> Starting '" + testName + "' on " + browser.environmentType.browserName);
-            console.log("   Test URL: " + this.testWebScriptURL(testWebScriptURL));
+            console.log("   Test URL: " + this.testWebScriptURL(testWebScriptURL, testWebScriptPrefix));
          }
-         var command = browser.get(this.testWebScriptURL(testWebScriptURL))
+         var command = browser.get(this.testWebScriptURL(testWebScriptURL, testWebScriptPrefix))
             .then(pollUntil(
                function() {
+                  /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
                }, [], 10000, 1000))
@@ -169,6 +173,7 @@ define(["intern/dojo/node!fs",
                })
             .then(pollUntil(
                function() {
+                  /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
                }, [], 10000, 1000))
@@ -184,7 +189,24 @@ define(["intern/dojo/node!fs",
          command.session.alfPostCoverageResults = function (newBrowser) { 
             return newBrowser; 
          };
-
+         command.session.screenieIndex = 0;
+         command.session.screenie = function() {
+            var safeBrowserName = browser.environmentType.browserName.replace(/\W+/g, "_")
+               .split("_")
+               .map(function(namePart) {
+                  return namePart.length > 1 ? namePart.substr(0, 1)
+                     .toUpperCase() + namePart.substr(1)
+                     .toLowerCase() : namePart.toUpperCase();
+               })
+               .join("_");
+            var screenshotName = safeBrowserName + "-" + testName + "-" + command.session.screenieIndex++ +".png",
+               screenshotPath = "src/test/screenshots/" + screenshotName;
+            return browser.takeScreenshot()
+               .then(function(screenshot) {
+                  fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary");
+               });
+         };
+         
          return command;
       },
 
@@ -251,10 +273,19 @@ define(["intern/dojo/node!fs",
        */
       pubDataCssSelector: function(publishTopic, key, value) {
          var selector = "" +
-            "td[data-publish-topic='" + publishTopic + "'] + " +
+         "td[data-publish-topic='" + publishTopic + "'] + " +
+         "td.sl-data > table > tr.sl-object-row > " +
+         "td[data-pubsub-object-key=" + key + "] + " +
+         "td[data-pubsub-object-value='" + value + "']";
+         return selector;
+      },
+
+      pubDataRowsCssSelector: function(publishTopic, key) {
+         var selector = "" +
+            "tr.sl-row:last-child td[data-publish-topic='" + publishTopic + "'] + " +
             "td.sl-data tr.sl-object-row " +
-            "td[data-pubsub-object-key=" + key +
-            "]+td[data-pubsub-object-value='" + value + "']";
+            "td[data-pubsub-object-key=" + key + 
+            "]+td > table > tr";
          return selector;
       },
 
@@ -329,6 +360,35 @@ define(["intern/dojo/node!fs",
             ".alfresco-testing-SubscriptionLog tr.sl-row" + row +
             " td[data-pubsub-object-key=" + key +
             "]+td[data-pubsub-object-value='" + value + "']";
+         return selector;
+      },
+
+      /**
+       * Selects the data value element for a specific key in a specific row.
+       * 
+       * @instance
+       * @param {number} expectedRow The row that the data is expected to be found in (can be set to "last")
+       * @param {string} key The key for the data
+       * @returns {string} The CSS selector
+       */
+      pubSubDataValueCssSelector: function(expectedRow, key) {
+         var row = "";
+         if (expectedRow === "any")
+         {
+            // Don't specify a row
+         }
+         else if (expectedRow === "last")
+         {
+            row = ":last-child";
+         }
+         else if (expectedRow !== "last")
+         {
+            row = ":nth-child(" + expectedRow + ")";
+         }
+         var selector = "" +
+            ".alfresco-testing-SubscriptionLog tr.sl-row" + row +
+            " td[data-pubsub-object-key=" + key +
+            "]+td";
          return selector;
       },
 

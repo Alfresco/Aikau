@@ -40,49 +40,45 @@ define(["intern!object",
          browser.end();
       },
 
-      "Test PdfJs with a missing PDF hides the interface and shows a notification": function () {
-         // A delay because the viewer does actually take a moment to reconfigure when the PDF is missing
-         var testname = "PdfJs missing PDF test";
+      "Checking controls are hidden": function () {
          return browser.sleep(500)
-
             .findByCssSelector(".previewer > .controls")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking controls are hidden");
-                  expect(displayed).to.equal(false, "Controls should be hidden");
-               })
-            .end()
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(false, "Controls should be hidden");
+            });
+      },
 
-            .findByCssSelector(".previewer > .sidebar")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking sidebar is hidden");
-                  expect(displayed).to.equal(false, "Sidebar should be hidden");
-               })
-            .end()
+      "Checking sidebar is hidden": function() {
+         return browser.findByCssSelector(".previewer > .sidebar")
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(false, "Sidebar should be hidden");
+            });
+      },
 
-            .findByCssSelector(".previewer > .viewer")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking viewer is hidden");
-                  expect(displayed).to.equal(false, "Viewer should be hidden");
-               })
-            .end()
+      "Checking viewer is hidden": function() {
+         return browser.findByCssSelector(".previewer > .viewer")
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(false, "Viewer should be hidden");
+            });
+      },
 
-            .findByCssSelector(".notification")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking notification is shown");
-                  expect(displayed).to.equal(true, "Notification should be shown");
-               })
-            .end()
+      "Checking notification is shown": function() {
+         return browser.findByCssSelector(".notification")
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(true, "Notification should be shown");
+            });
+      },
 
-            .findByCssSelector(".notification")
-               .getVisibleText()
-               .then(function(text) {
-                  TestCommon.log(testname,"Checking notification has text in it");
-                  expect(text).to.have.length.above(0, "There should be a notification message");
-               });
+      "Checking notification has text in it": function() {
+         return browser.findByCssSelector(".notification")
+            .getVisibleText()
+            .then(function(text) {
+               expect(text).to.have.length.above(0, "There should be a notification message");
+            });
       },
 
       "Post Coverage Results": function() {
@@ -102,48 +98,45 @@ define(["intern!object",
          browser.end();
       },
 
-      "Test PdfJs with a faulty PDF hides the interface and shows a notification": function () {
-         var testname = "PdfJs faulty PDF test";
-         // A delay because the viewer does actually take a moment to reconfigure when the PDF is faulty
+      "Checking controls are hidden": function () {
          return browser.sleep(500)
             .findByCssSelector(".previewer > .controls")
                .isDisplayed()
                .then(function(displayed) {
-                  TestCommon.log(testname,"Checking controls are hidden");
                   expect(displayed).to.equal(false, "Controls should be hidden");
-               })
-            .end()
-
-            .findByCssSelector(".previewer > .sidebar")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking sidebar is hidden");
-                  expect(displayed).to.equal(false, "Sidebar should be hidden");
-               })
-            .end()
-
-            .findByCssSelector(".previewer > .viewer")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking viewer is hidden");
-                  expect(displayed).to.equal(false, "Viewer should be hidden");
-               })
-            .end()
-
-            .findByCssSelector(".notification")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking notification is shown");
-                  expect(displayed).to.equal(true, "Notification should be shown");
-               })
-            .end()
-
-            .findByCssSelector(".notification")
-               .getVisibleText()
-               .then(function(text) {
-                  TestCommon.log(testname,"Checking notification has text in it");
-                  expect(text).to.have.length.above(0, "There should be a notification message");
                });
+      },
+
+      "Checking sidebar is hidden": function() {
+         return browser.findByCssSelector(".previewer > .sidebar")
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(false, "Sidebar should be hidden");
+            });
+      },
+
+      "Checking viewer is hidden": function() {
+         return browser.findByCssSelector(".previewer > .viewer")
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(false, "Viewer should be hidden");
+            });
+      },
+
+      "Checking notification is shown": function() {
+         return browser.findByCssSelector(".notification")
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(true, "Notification should be shown");
+            });
+      },
+
+      "Checking notification has text in it": function() {
+         return browser.findByCssSelector(".notification")
+            .getVisibleText()
+            .then(function(text) {
+               expect(text).to.have.length.above(0, "There should be a notification message");
+            });
       },
 
       "Post Coverage Results": function() {
@@ -163,49 +156,45 @@ define(["intern!object",
          browser.end();
       },
 
-      "Test PdfJs with a password protected PDF hides the interface and shows a notification": function () {
-         var testname = "PdfJs password protected PDF test";
-         // A delay because the viewer does actually take a moment to reconfigure when the PDF is password protected
+      "Checking controls are hidden": function () {
          return browser.sleep(500)
-
             .findByCssSelector(".previewer > .controls")
                .isDisplayed()
                .then(function(displayed) {
-                  TestCommon.log(testname,"Checking controls are hidden");
                   expect(displayed).to.equal(false, "Controls should be hidden");
-               })
-            .end()
-
-            .findByCssSelector(".previewer > .sidebar")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking sidebar is hidden");
-                  expect(displayed).to.equal(false, "Sidebar should be hidden");
-               })
-            .end()
-
-            .findByCssSelector(".previewer > .viewer")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking viewer is hidden");
-                  expect(displayed).to.equal(false, "Viewer should be hidden");
-               })
-            .end()
-
-            .findByCssSelector(".notification")
-               .isDisplayed()
-               .then(function(displayed) {
-                  TestCommon.log(testname,"Checking notification is shown");
-                  expect(displayed).to.equal(true, "Notification should be shown");
-               })
-            .end()
-
-            .findByCssSelector(".notification")
-               .getVisibleText()
-               .then(function(text) {
-                  TestCommon.log(testname,"Checking notification has text in it");
-                  expect(text).to.have.length.above(0, "There should be a notification message");
                });
+      },
+
+      "Checking sidebar is hidden": function() {
+         return browser.findByCssSelector(".previewer > .sidebar")
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(false, "Sidebar should be hidden");
+            });
+      },
+
+      "Checking viewer is hidden": function() {
+         return browser.findByCssSelector(".previewer > .viewer")
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(false, "Viewer should be hidden");
+            });
+      },
+
+      "Checking notification is shown": function() {
+         return browser.findByCssSelector(".notification")
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(true, "Notification should be shown");
+            });
+      },
+
+      "Checking notification has text in it": function() {
+         return browser.findByCssSelector(".notification")
+            .getVisibleText()
+            .then(function(text) {
+               expect(text).to.have.length.above(0, "There should be a notification message");
+            });
       },
 
       "Test PdfJs with a password protected PDF displays a password request": function () {
@@ -219,7 +208,6 @@ define(["intern!object",
       },
 
       "Test PdfJs with a password protected PDF displays a new password challenge with a password error": function () {
-         var testname = "PdfJs password protected PDF bad password test";
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
             .then(null, function() {
                assert(false, "No password field found");
@@ -239,13 +227,11 @@ define(["intern!object",
          .findByCssSelector(".alfresco-dialog-AlfDialog")
             .isDisplayed()
             .then(function(displayed) {
-               TestCommon.log(testname,"Checking dialog is displayed");
                expect(displayed).to.equal(true, "Dialog should be displayed");
             });
       },
 
       "Test PdfJs with a password protected PDF displays a new password challenge with another password error": function () {
-         var testname = "PdfJs password protected PDF bad password test again";
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
             .then(null, function() {
                assert(false, "No password field found");
@@ -265,14 +251,11 @@ define(["intern!object",
          .findByCssSelector(".alfresco-dialog-AlfDialog")
             .isDisplayed()
             .then(function(displayed) {
-               TestCommon.log(testname,"Checking dialog is displayed");
                expect(displayed).to.equal(true, "Dialog should be displayed");
             });
-
       },
 
       "Test PdfJs with a password protected PDF displays the PDF with a correct password": function () {
-         var testname = "PdfJs password protected PDF correct password test";
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
             .then(null, function() {
                assert(false, "No password field found");
@@ -292,31 +275,30 @@ define(["intern!object",
          .findByCssSelector(".previewer > .controls")
             .isDisplayed()
             .then(function(displayed) {
-               TestCommon.log(testname,"Checking controls are visible");
                expect(displayed).to.equal(true, "Controls should be visible");
-            })
-         .end()
+            });
+      },
 
-         .findByCssSelector(".previewer > .sidebar")
+      "Checking sidebar is visible": function() {
+         return browser.findByCssSelector(".previewer > .sidebar")
             .isDisplayed()
             .then(function(displayed) {
-               TestCommon.log(testname,"Checking sidebar is visible");
                expect(displayed).to.equal(true, "Sidebar should be visible");
-            })
-         .end()
+            });
+      },
 
-         .findByCssSelector(".previewer > .viewer")
+      "Checking viewer is visible": function() {
+         return browser.findByCssSelector(".previewer > .viewer")
             .isDisplayed()
             .then(function(displayed) {
-               TestCommon.log(testname,"Checking viewer is visible");
                expect(displayed).to.equal(true, "Viewer should be visible");
-            })
-         .end()
+            });
+      },
 
-         .findByCssSelector(".notification")
+      "Checking notification is not shown": function() {
+         return browser.findByCssSelector(".notification")
             .isDisplayed()
             .then(function(displayed) {
-               TestCommon.log(testname,"Checking notification is not shown");
                expect(displayed).to.equal(false, "Notification should not be shown");
             });
       },

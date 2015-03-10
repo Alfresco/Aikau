@@ -1338,6 +1338,8 @@ define(["dojo/_base/declare",
             {
                this.deferredValuePublication.resolve();
             }
+
+            this.validate();
          }
          else
          {
@@ -1608,8 +1610,11 @@ define(["dojo/_base/declare",
        * @returns {boolean} A value indicating whether or not validation passed successfully or not.
        */
       validate: function alfresco_forms_controls_BaseFormControl__validate() {
-         
-         if (this.validationConfig && ObjectTypeUtils.isArray(this.validationConfig))
+         if (this.deferValueAssigment)
+         {
+            // Do nothing until final value has been assigned
+         }
+         else if (this.validationConfig && ObjectTypeUtils.isArray(this.validationConfig))
          {
             this.startValidation();
          }

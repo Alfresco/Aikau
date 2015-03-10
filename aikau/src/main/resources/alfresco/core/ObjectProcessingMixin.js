@@ -53,6 +53,7 @@ define(["dojo/_base/declare",
          } 
       },
 
+
       /**
        * This utility function will perform token substitution on the supplied string value using the
        * values from the calling object. If the token cannot be found in the calling object then it will be left 
@@ -92,8 +93,22 @@ define(["dojo/_base/declare",
        * @returns The processed value
        */
       processCurrentItemTokens: function alfresco_core_ObjectProcessingMixin__processCurrentItemTokens(v) {
+         var u;
+
          // Only replace a value if it actually exists, otherwise leave the token exactly as is.
-         var u = lang.replace(v, lang.hitch(this, this.safeReplace, this.currentItem));
+         var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*}$/g ;
+         if (re.test(v))
+         {
+            var tokenWithoutBraces = v.slice(1,-1);
+            if (typeof this.currentItem[tokenWithoutBraces] !== "undefined")
+            {
+               u = this.currentItem[tokenWithoutBraces];
+            }
+         }
+         else
+         {
+            u = lang.replace(v, lang.hitch(this, this.safeReplace, this.currentItem));
+         }
          return u;
       },
 

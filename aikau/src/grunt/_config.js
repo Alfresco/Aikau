@@ -14,7 +14,8 @@ module.exports = {
       jsdocConfig: "conf.json",
       jsdocReadme: "src/jsdoc-templates/alfresco/README.md",
       test: "tests/alfresco/**",
-      testModel: "src/test/resources/alfresco/**/*.json"
+      testModel: "src/test/resources/alfresco/**/*.json",
+      testScreenshots: "src/test/screenshots/*.png"
    },
 
    // Directories

@@ -1,0 +1,13 @@
+.alfresco-renderers-Indicators {
+   .indicator {
+      display: block;
+   }
+   .has-action {
+      cursor: pointer;
+      transition: transform .1s ease-out;
+      &:active {
+         transform: scale(.9);
+         transition: transform 0;
+      }
+   }
+}

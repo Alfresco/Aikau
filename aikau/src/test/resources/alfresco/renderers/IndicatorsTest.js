@@ -19,16 +19,17 @@
 
 /**
  * This test renders examples of Indicators.
- * 
+ *
  * The test is simple and much of its validity is in the use of slightly damaged or incomplete models to inspect edge cases.
- * 
+ *
  * @author Richard Smith
+ * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!expect",
-        "require",
+define(["intern!object", 
+        "intern/chai!assert", 
+        "require", 
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        function(registerSuite, assert, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -43,10 +44,64 @@ define(["intern!object",
          browser.end();
       },
 
-     "Check there are the expected number of actions (across several indicators)": function () {
-         return browser.findAllByCssSelector("a.indicator-action")
-            .then(function (actions){
-               expect(actions).to.have.length(14, "There should be 14 actions rendered (across several indicators)");
+      "Indicators without actions do not respond to clicks": function() {
+         var currentLogRows;
+         return browser.findAllByCssSelector(".log > tbody > tr")
+            .then(function(elements) {
+               currentLogRows = elements.length;
+            })
+            .end()
+
+         .findByCssSelector(".indicator[alt=geographic]")
+            .click()
+            .end()
+
+         .findAllByCssSelector(".log > tbody > tr")
+            .then(function(elements) {
+               assert.equal(currentLogRows, elements.length, "New action occurred when clicking indicator without action");
+            });
+      },
+
+      "Indicators with actions publish to the ALF_SINGLE_DOCUMENT_ACTION_REQUEST topic": function() {
+         return browser.findByCssSelector(".indicator[alt=cloud-indirect-sync]")
+            .click()
+            .end()
+
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_SINGLE_DOCUMENT_ACTION_REQUEST", "action", "onCloudIndirectSyncIndicatorAction"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Action indicator did not publish topic");
+            });
+      },
+
+      "Indicators with custom actions publish to their custom topic": function() {
+         return browser.findByCssSelector(".indicator[alt=bob]")
+            .click()
+            .end()
+
+         .findAllByCssSelector(TestCommon.topicSelector("CUSTOM_ACTION", "publish", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Custom action did not publish custom topic");
+            });
+      },
+
+      "Indicator titles are correct": function() {
+         return browser.findByCssSelector(".indicator[alt=geographic]")
+            .getAttribute("title")
+            .then(function(titleValue) {
+               assert.equal("Geolocation metadata available", titleValue, "Title attribute of indicator incorrect");
+            });
+      },
+
+      "Indicators handle overrides and sorting appropriately": function() {
+         return browser.findAllByCssSelector(".indicator")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Incorrect number of display indicators (overrides not working)");
+            })
+            .end()
+
+         .findAllByCssSelector(".indicator[alt=bob] + .indicator[alt=geographic] + .indicator[alt=cloud-indirect-sync]")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Indicators not sorted correctly, or overrides incorrect");
             });
       },
 

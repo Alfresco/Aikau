@@ -32,8 +32,8 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/on",
-        "alfresco/forms/controls/DojoValidationTextBox"], 
-        function(declare, Form, lang, domClass, on, DojoValidationTextBox) {
+        "alfresco/forms/controls/TextBox"], 
+        function(declare, Form, lang, domClass, on) {
    
    return declare([Form], {
       
@@ -100,16 +100,16 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_forms_SingleTextFieldForm__postMixInProperties() {
          this.widgets = [
             {
-               name: "alfresco/forms/controls/DojoValidationTextBox",
+               name: "alfresco/forms/controls/TextBox",
                assignTo: "entryField",
                config: {
-                  label: (this.textBoxLabel != null) ? this.message(this.textBoxLabel) : "",
+                  label: (this.textBoxLabel) ? this.message(this.textBoxLabel) : "",
                   name: this.textFieldName,
                   requirementConfig: {
                      initialValue: true
                   },
-                  iconClass: (this.textBoxIconClass != null) ? this.textBoxIconClass : "",
-                  additionalCssClasses: (this.textBoxCssClasses != null) ? this.textBoxCssClasses : ""
+                  iconClass: (this.textBoxIconClass) ? this.textBoxIconClass : "",
+                  additionalCssClasses: (this.textBoxCssClasses) ? this.textBoxCssClasses : ""
                }
             }
          ];
@@ -133,9 +133,10 @@ define(["dojo/_base/declare",
        * @param {array} widgets The widgets instantiated
        */
       allWidgetsProcessed: function alfresco_forms_SingleTextFieldForm__allWidgetsProcessed(widgets) {
+         // jshint unused:false
          this.inherited(arguments);
          on(this.entryField, "keyup", lang.hitch(this, function(evt) {
-            if (evt.keyCode == 13)
+            if (evt.keyCode === 13)
             {
                if (this.okButton && this.okButton.get("disabled") === false)
                {

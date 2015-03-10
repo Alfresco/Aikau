@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -17,37 +17,36 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*globals tinymce*/
 /**
- * This is a prototype widget that handles requirements and instantiation of a TinyMCE editor. It is 
+ * This is a prototype widget that handles requirements and instantiation of a TinyMCE editor. It is
  * not ready for production use yet as there as still outstanding issues.
- * 
+ *
  * @module alfresco/editors/TinyMCE
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
-define(["dojo/_base/declare",
+define(["dojo/_base/declare", 
         "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/TinyMCE.html",
-        "alfresco/core/Core",
-        "service/constants/Default",
+        "dijit/_TemplatedMixin", 
+        "dojo/text!./templates/TinyMCE.html", 
+        "alfresco/core/Core", 
+        "service/constants/Default", 
         "dojo/_base/lang"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, AlfConstants, lang) {
-   
+
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
       /**
        * Make sure TinyMCE is included on the page.
-       * 
+       *
        * @instance
-       * @type {String[]} 
+       * @type {String[]}
        */
-      nonAmdDependencies: ["/js/yui-common.js",
-                           "/js/alfresco.js",
-                           "/modules/editors/tiny_mce.js"],
+      nonAmdDependencies: ["/js/lib/tinymce/tinymce.js"],
 
       /**
        * The HTML template to use for the widget.
@@ -56,7 +55,7 @@ define(["dojo/_base/declare",
        */
       templateString: template,
 
-      
+
       /**
        * The list of support locales for the editor. Can be overridden by only if there are the message
        * bundles available to support the additional locales.
@@ -72,7 +71,7 @@ define(["dojo/_base/declare",
        * to all instances of the editor). However specific overrides can be achieved by setting the value of
        * [editorConfig]{@link module:alfresco/editors/TinyMCE#editorConfig} which will be mixed into these default
        * values.
-       * 
+       *
        * @instance
        * @type {object}
        */
@@ -88,7 +87,7 @@ define(["dojo/_base/declare",
 
       /**
        * Should be used to override the [defaultEditorConfig]{@link module:alfresco/editors/TinyMCE#defaultEditorConfig}
-       * 
+       *
        * @instance
        * @type {object}
        * @default null
@@ -116,26 +115,22 @@ define(["dojo/_base/declare",
       immediateInit: true,
 
       /**
-       * 
+       *
        * @instance
        */
       postCreate: function alfresco_editors_TinyMCE__postCreate() {
          // Mix the custom editor config overrides into the default editor config...
          var config = lang.clone(this.defaultEditorConfig);
-         if (this.editorConfig != null)
-         {
+         if (this.editorConfig) {
             lang.mixin(config, this.editorConfig);
          }
 
          // Check that the language requested is supported...
-         if (config.language)
-         {
+         if (config.language) {
             var locales = this.supportedLocales.split(",");
             var locale = "en";
-            for (var i = 0, j = locales.length; i < j; i++)
-            {
-               if (locales[i] == config.language)
-               {
+            for (var i = 0, j = locales.length; i < j; i++) {
+               if (locales[i] === config.language) {
                   locale = config.language;
                   break;
                }
@@ -143,42 +138,53 @@ define(["dojo/_base/declare",
             config.language = locale;
          }
 
-         if (this.immediateInit === true)
-         {
+         tinymce.baseURL = AlfConstants.URL_RESCONTEXT + "js/lib/tinymce";
+
+         if (this.immediateInit === true) {
             this.init(config);
-         }
-         else
-         {
+         } else {
             this._delayedInitConfig = config;
          }
       },
 
       /**
-       * 
+       *
        * @instance
        * @param {object} config The configuration to initialise the editor with
        */
       init: function alfresco_editors_TinyMCE__init(config) {
-         if (config == null)
-         {
-            config = this._delayedInitConfig;
-         }
-
+         config = config || this._delayedInitConfig;
          config.theme = "modern";
-         if (!config.toolbar)
-         {
+         if (!config.toolbar) {
             config.toolbar = "styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview fullscreen";
          }
-         if (!config.menu)
-         {
+         if (!config.menu) {
             config.menu = {
                // TODO: I18N
-               file   : {title : 'File'  , items : 'newdocument | print'},
-               edit   : {title : 'Edit'  , items : 'undo redo | cut copy paste pastetext | selectall | searchreplace'},
-               insert : {title : 'Insert', items : 'link image | charmap hr anchor pagebreak inserttime nonbreaking'},
-               view   : {title : 'View'  , items : 'fullscreen preview visualblocks code'},
-               format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
-               table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'},
+               file: {
+                  title: "File",
+                  items: "newdocument | print"
+               },
+               edit: {
+                  title: "Edit",
+                  items: "undo redo | cut copy paste pastetext | selectall | searchreplace"
+               },
+               insert: {
+                  title: "Insert",
+                  items: "link image | charmap hr anchor pagebreak inserttime nonbreaking"
+               },
+               view: {
+                  title: "View",
+                  items: "fullscreen preview visualblocks code"
+               },
+               format: {
+                  title: "Format",
+                  items: "bold italic underline strikethrough superscript subscript | formats | removeformat"
+               },
+               table: {
+                  title: "Table",
+                  items: "inserttable tableprops deletetable | cell row column"
+               }
             };
          }
          config.plugins = [
@@ -186,16 +192,14 @@ define(["dojo/_base/declare",
             "searchreplace code fullscreen insertdatetime nonbreaking",
             "table contextmenu paste textcolor visualblocks"
          ];
-         config.relative_urls = true;
-         config.convert_urls = false;
          config.init_instance_callback = lang.hitch(this, this.editorInitialized);
-    
+
          this.editor = new tinymce.Editor(this.editorNode, config, tinymce.EditorManager);
-         
-         // Allow back the 'embed' tag as TinyMCE now removes it - this is allowed by our this.editors
-         // if the HTML stripping is disabled via the 'allowUnfilteredHTML' config attribute
+
+         // Allow back the "embed" tag as TinyMCE now removes it - this is allowed by our this.editors
+         // if the HTML stripping is disabled via the "allowUnfilteredHTML" config attribute
          var extValidElements = config.extended_valid_elements;
-         extValidElements = (extValidElements && extValidElements !== "") ? (extValidElements = extValidElements + ",") : "";
+         extValidElements = (extValidElements && extValidElements + ",") || "";
          config.extended_valid_elements = extValidElements + "embed[src|type|width|height|flashvars|wmode]";
          this.editor.render();
          this.editor.save();
@@ -241,25 +245,12 @@ define(["dojo/_base/declare",
        */
       editorInitialized: function alfresco_editors_TinyMCE__editorInitialized(editor) {
          this.alfLog("log", "TinyMCE Editor intialized!", editor);
-         if (this.contentChangeScope && this.contentChangeHandler)
-         {
+         if (this.contentChangeScope && this.contentChangeHandler) {
             editor.on("change", lang.hitch(this.contentChangeScope, this.contentChangeHandler));
          }
          editor.setContent(this.initialContent);
          this._editorInitialized = true;
          this.setDisabled(this.initiallyDisabled);
-      },
-
-      /**
-       *
-       *
-       * @instance
-       * @param {boolean} preserveDom Indicates whether or not the DOM should be left after destroying.
-       */
-      destroy: function alfresco_editors_TinyMCE__destroy(preserveDom) {
-         // tinymce.remove('textarea');
-         // this.editor.destroy(true);
-         this.inherited(arguments);
       },
 
       /**
@@ -280,12 +271,10 @@ define(["dojo/_base/declare",
        * @param {boolean} isDisabled Indicates whether or not to move the editor into disabled mode
        */
       setDisabled: function alfresco_editors_TinyMCE__disable(isDisabled) {
-         if (this._editorInitialized)
-         {
-            this.editor.getBody().setAttribute('contenteditable', !isDisabled);
-         }
-         else
-         {
+         if (this._editorInitialized) {
+            this.editor.getBody()
+               .setAttribute("contenteditable", !isDisabled);
+         } else {
             this.initiallyDisabled = isDisabled;
          }
       },
@@ -297,16 +286,13 @@ define(["dojo/_base/declare",
        * @instance
        * @param {boolean} isDisabled Indicates whether or not to move the editor into disabled mode
        */
-      getValue: function alfresco_editors_TinyMCE__getValue() { 
-         if (this._editorInitialized)
-         {
+      getValue: function alfresco_editors_TinyMCE__getValue() {
+         if (this._editorInitialized) {
             return this.editor.getContent();
-         }
-         else
-         {
+         } else {
             return "";
          }
-      }, 
+      },
 
       /**
        * This function has been added to support the use of this widget within the [TinyMCE form control]
@@ -315,13 +301,10 @@ define(["dojo/_base/declare",
        * @instance
        * @param {boolean} isDisabled Indicates whether or not to move the editor into disabled mode
        */
-      setValue: function alfresco_editors_TinyMCE__setContent(html) { 
-         if (this._editorInitialized)
-         {
+      setValue: function alfresco_editors_TinyMCE__setContent(html) {
+         if (this._editorInitialized) {
             this.editor.setContent(html);
-         }
-         else
-         {
+         } else {
             this.initialContent = html;
          }
       }
