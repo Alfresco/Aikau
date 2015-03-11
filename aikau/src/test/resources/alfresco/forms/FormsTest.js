@@ -179,25 +179,28 @@ define(["intern!object",
             });
       },
 
-      "Test noUpdateWhenHiddenOrDisabled (disabled)": function() {
+      "Test noValueUpdateWhenHiddenOrDisabled (disabled)": function() {
          return browser.findByCssSelector("#SET_VALUE_VIA_PUBSUB_FORM .confirmationButton > span")
             .click()
          .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "pub2"))
+         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "pub3"))
             .getVisibleText()
             .then(function(text){
                assert.equal(text, "default", "The default data was updated despite being disabled by the updated value");
             });
       },
 
-      "Test noUpdateWhenHiddenOrDisabled (enabled)": function() {
-         return browser.findByCssSelector("#SET_FORM_VALUE_2")
+      "Test noValueUpdateWhenHiddenOrDisabled (enabled)": function() {
+         return browser.findByCssSelector("#TEXT_BOX_4 .dijitInputContainer input")
+            .clearValue()
+         .end()
+         .findByCssSelector("#SET_FORM_VALUE_2")
             .click()
          .end()
          .findByCssSelector("#SET_VALUE_VIA_PUBSUB_FORM .confirmationButton > span")
             .click()
          .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "pub2"))
+         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "pub3"))
             .getVisibleText()
             .then(function(text){
                assert.equal(text, "Update Success", "The default data was not updated despite being enabled");
@@ -205,7 +208,7 @@ define(["intern!object",
       },
 
       "Test postWhenHiddenOrDisabled (displayed) and noPostWhenValueIs (hidden)": function() {
-         return browser.findByCssSelector("#TARGET_OPTIONS .radio-button:nth-child(3) .radio-button-widget")
+         return browser.findByCssSelector("#TARGET_OPTIONS .radio-button:nth-child(3) .radio-button-widget input")
             .click()
          .end()
          .findByCssSelector("#CUSTOM_TARGET .dijitInputContainer input")
@@ -223,7 +226,7 @@ define(["intern!object",
       },
 
       "Test postWhenHiddenOrDisabled (hidden) and noPostWhenValueIs (displayed)": function() {
-         return browser.findByCssSelector("#TARGET_OPTIONS .radio-button:nth-child(1) .radio-button-widget")
+         return browser.findByCssSelector("#TARGET_OPTIONS .radio-button:nth-child(1) .radio-button-widget input")
             .click()
          .end()
          .findByCssSelector("#CUSTOM_FIELDS_FORM .confirmationButton > span")

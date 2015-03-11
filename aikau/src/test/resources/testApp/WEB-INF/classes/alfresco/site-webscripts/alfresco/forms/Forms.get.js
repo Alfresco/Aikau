@@ -34,7 +34,7 @@ model.jsonModel = {
             publishTopic: "SET_FORM_VALUE",
             publishPayload: {
                pub1: "Value Set",
-               pub2: "Update Fail"
+               pub3: "Update Fail"
             }
          }
       },
@@ -46,7 +46,7 @@ model.jsonModel = {
             publishTopic: "SET_FORM_VALUE",
             publishPayload: {
                pub1: "Value Reset",
-               pub2: "Update Success"
+               pub3: "Update Success"
             }
          }
       },
@@ -279,15 +279,25 @@ model.jsonModel = {
                            config: {
                               fieldId: "TB4",
                               name: "pub2",
+                              label: "PubValue",
+                              value: "disabled"
+                           }
+                        },
+                        {
+                           id: "TEXT_BOX_5",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              fieldId: "TB5",
+                              name: "pub3",
                               label: "Hidden",
                               value: "default",
-                              noUpdateWhenHiddenOrDisabled: true,
+                              noValueUpdateWhenHiddenOrDisabled: true,
                               disablementConfig: {
                                  initialValue: false,
                                  rules: [
                                     {
-                                       targetId: "TB3",
-                                       is: ["Value Set"]
+                                       targetId: "TB4",
+                                       is: ["disabled"]
                                     }
                                  ]
                               }
