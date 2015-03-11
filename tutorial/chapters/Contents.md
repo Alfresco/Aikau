@@ -13,7 +13,7 @@
 11. [Sorting and Pagination](./Tutorial11.md)
 12. [Introducing Menus](./Tutorial12.md)
 13. [Introducing Layout](./Tutorial13.md)
-14. Recap for User Management
+14. [Recap for User Management](./Tutorial14.md)
 15. Introducing Rendering Filters
 16. More Form Controls
 17. Document Previews
