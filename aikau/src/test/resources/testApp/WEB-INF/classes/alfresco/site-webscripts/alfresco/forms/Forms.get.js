@@ -33,7 +33,20 @@ model.jsonModel = {
             label: "Set Form Publication",
             publishTopic: "SET_FORM_VALUE",
             publishPayload: {
-               pub1: "Value Set"
+               pub1: "Value Set",
+               pub2: "Update Fail"
+            }
+         }
+      },
+      {
+         id: "SET_FORM_VALUE_2",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Set Form Publication 2",
+            publishTopic: "SET_FORM_VALUE",
+            publishPayload: {
+               pub1: "Value Reset",
+               pub2: "Update Success"
             }
          }
       },
@@ -190,7 +203,7 @@ model.jsonModel = {
             title: "Conditional parameters form",
             widgets: [
                {
-                  id: "ADD_BUTTONS_FORM",
+                  id: "CUSTOM_FIELDS_FORM",
                   name: "alfresco/forms/Form",
                   config: {
                      okButtonPublishTopic: "PUBLISH_CONDITIONAL_FORM_DATA",
@@ -258,6 +271,26 @@ model.jsonModel = {
                               name: "pub1",
                               label: "PubValue",
                               value: ""
+                           }
+                        },
+                        {
+                           id: "TEXT_BOX_4",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              fieldId: "TB4",
+                              name: "pub2",
+                              label: "Hidden",
+                              value: "default",
+                              noUpdateWhenHiddenOrDisabled: true,
+                              disablementConfig: {
+                                 initialValue: false,
+                                 rules: [
+                                    {
+                                       targetId: "TB3",
+                                       is: ["Value Set"]
+                                    }
+                                 ]
+                              }
                            }
                         }
                      ]

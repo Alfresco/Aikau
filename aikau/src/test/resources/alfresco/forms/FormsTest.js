@@ -164,7 +164,7 @@ define(["intern!object",
 
       "Test setting form value by publication": function() {
          return browser.findByCssSelector("#TEXT_BOX_3 .dijitInputContainer input")
-         .getProperty("value")
+            .getProperty("value")
             .then(function(resultText) {
                assert.equal(resultText, "", "Text box to be set via publication is not empty before test");
             })
@@ -176,6 +176,63 @@ define(["intern!object",
          .getProperty("value")
             .then(function(resultText) {
                assert.equal(resultText, "Value Set", "Text box value was not set via publication");
+            });
+      },
+
+      "Test noUpdateWhenHiddenOrDisabled (disabled)": function() {
+         return browser.findByCssSelector("#SET_VALUE_VIA_PUBSUB_FORM .confirmationButton > span")
+            .click()
+         .end()
+         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "pub2"))
+            .getVisibleText()
+            .then(function(text){
+               assert.equal(text, "default", "The default data was updated despite being disabled by the updated value");
+            });
+      },
+
+      "Test noUpdateWhenHiddenOrDisabled (enabled)": function() {
+         return browser.findByCssSelector("#SET_FORM_VALUE_2")
+            .click()
+         .end()
+         .findByCssSelector("#SET_VALUE_VIA_PUBSUB_FORM .confirmationButton > span")
+            .click()
+         .end()
+         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "pub2"))
+            .getVisibleText()
+            .then(function(text){
+               assert.equal(text, "Update Success", "The default data was not updated despite being enabled");
+            });
+      },
+
+      "Test postWhenHiddenOrDisabled (displayed) and noPostWhenValueIs (hidden)": function() {
+         return browser.findByCssSelector("#TARGET_OPTIONS .radio-button:nth-child(3) .radio-button-widget")
+            .click()
+         .end()
+         .findByCssSelector("#CUSTOM_TARGET .dijitInputContainer input")
+            .clearValue()
+            .type("bob")
+         .end()
+         .findByCssSelector("#CUSTOM_FIELDS_FORM .confirmationButton > span")
+            .click()
+         .end()
+         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "TARGET"))
+            .getVisibleText()
+            .then(function(text){
+               assert.equal(text, "bob", "The custom target data was not posted");
+            });
+      },
+
+      "Test postWhenHiddenOrDisabled (hidden) and noPostWhenValueIs (displayed)": function() {
+         return browser.findByCssSelector("#TARGET_OPTIONS .radio-button:nth-child(1) .radio-button-widget")
+            .click()
+         .end()
+         .findByCssSelector("#CUSTOM_FIELDS_FORM .confirmationButton > span")
+            .click()
+         .end()
+         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "TARGET"))
+            .getVisibleText()
+            .then(function(text){
+               assert.equal(text, "KNOWN1", "The custom target data was not posted");
             });
       },
 
