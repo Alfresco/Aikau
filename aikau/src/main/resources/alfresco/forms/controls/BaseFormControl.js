@@ -1755,10 +1755,10 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} values The object to set the each form control value from
        */
-      updateFormControlValue: function alfresco_forms_controls_BaseFormControl__addFormControlValue(values) {
+      updateFormControlValue: function alfresco_forms_controls_BaseFormControl__updateFormControlValue(values) {
          var hidden = this._visible !== undefined && this._visible === false;
          var disabled = this._disabled !== undefined && this._disabled === true;
-         var noUpdateWhenHiddenOrDisabled = this.noValueUpdateWhenHiddenOrDisabled !== undefined && this.noValueUpdateWhenHiddenOrDisabled === false;
+         var noUpdateWhenHiddenOrDisabled = this.noValueUpdateWhenHiddenOrDisabled !== undefined && this.noValueUpdateWhenHiddenOrDisabled === true;
          if ((hidden || disabled) && noUpdateWhenHiddenOrDisabled)
          {
             // Don't set the value as the field is hidden or disabled and has requested that it not be updated
