@@ -21,6 +21,7 @@
  * @module alfresco/documentlibrary/views/AlfDetailedView
  * @extends module:alfresco/lists/views/AlfListView
  * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView"], 
@@ -65,10 +66,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object[]}
        */
-      widgets: [
-         {
-            name: "alfresco/documentlibrary/views/AlfDetailedViewItem"
-         }
-      ]
+      widgets: [{
+         name: "alfresco/documentlibrary/views/AlfDetailedViewItem"
+      }]
    });
 });
