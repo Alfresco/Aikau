@@ -61,6 +61,7 @@ Use the “ALF_CRUD_UPDATE” topic
 
 Once you’ve finished you should end up with something that looks like this:
 
+![Screenshot showing example solution for user management](../resources/Tutorial14-Image1.png "Screenshot showing example solution for user management")
 
 Previous: [Introducing Layout](./Tutorial13.md),
 Next: [Introducing Rendering Filters](./Tutorial15.md)
