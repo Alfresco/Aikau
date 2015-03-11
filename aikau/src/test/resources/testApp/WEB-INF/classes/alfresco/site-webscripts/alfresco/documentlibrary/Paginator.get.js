@@ -26,7 +26,7 @@ model.jsonModel = {
             widgets: [
                {
                   id: "PAGINATOR",
-                  name: "alfresco/documentlibrary/AlfDocumentListPaginator",
+                  name: "alfresco/lists/Paginator",
                   config: {
                      hidePageSizeOnWidth: 100
                   }
@@ -38,7 +38,7 @@ model.jsonModel = {
                      label: "Popup",
                      widgets: [
                         {
-                           name: "alfresco/documentlibrary/AlfResultsPerPageGroup"
+                           name: "alfresco/lists/ResultsPerPageGroup"
                         }
                      ]
                   }
