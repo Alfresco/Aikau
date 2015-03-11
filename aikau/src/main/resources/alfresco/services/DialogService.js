@@ -280,11 +280,29 @@ define(["dojo/_base/declare",
                var dialog = new AlfDialog(dialogConfig);
                this.mapRequestedIdToDialog(payload, dialog);
                dialog.show();
+
+               if (config.dialogCloseTopic)
+               {
+                  this.alfSubscribe(config.dialogCloseTopic, lang.hitch(this, this.onCloseDialog, dialog));
+               }
             }
             catch (e)
             {
                this.alfLog("error", "The following error occurred creating a dialog for defined configuration", e, this.dialogConfig, this);
             }
+         }
+      },
+
+      /**
+       * Closes the supplied dialog.
+       *
+       * @instance
+       * @param {object} dialog The dialog to close.
+       */
+      onCloseDialog: function alfresco_services_DialogService__onCloseDialog(dialog) {
+         if (typeof dialog.hide === "function")
+         {
+            dialog.hide();
          }
       },
 
@@ -307,6 +325,10 @@ define(["dojo/_base/declare",
          {
             fixedWidth = true;
          }
+
+         // If a specific dialogCloseTopic has been requeste then add the "confirmationButton" CSS class as
+         // a value that will suppress dialog closure.
+         var suppressCloseClasses = config.dialogCloseTopic ? ["confirmationButton"]: null;
          
          var dialogConfig = {
             id: config.dialogId ? config.dialogId : this.generateUuid(),
@@ -316,6 +338,7 @@ define(["dojo/_base/declare",
             fixedWidth: fixedWidth,
             parentPubSubScope: config.parentPubSubScope,
             additionalCssClasses: config.additionalCssClasses ? config.additionalCssClasses : "",
+            suppressCloseClasses: suppressCloseClasses,
             widgetsContent: [formConfig],
             widgetsButtons: [
                   {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -53,10 +53,9 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom-geometry",
         "dojo/html",
-        "dojo/aspect",
-        "dijit/registry"], 
+        "dojo/aspect"], 
         function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin, lang, sniff, array,
-                 domConstruct, domClass, domStyle, domGeom, html, aspect, registry) {
+                 domConstruct, domClass, domStyle, domGeom, html, aspect) {
    
    return declare([Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin], {
       
@@ -159,7 +158,7 @@ define(["dojo/_base/declare",
          domClass.add(this.domNode, "alfresco-dialog-AlfDialog");
 
          // Add in any additional CSS classes...
-         if (this.additionalCssClasses != null)
+         if (this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);
          }
@@ -177,7 +176,7 @@ define(["dojo/_base/declare",
          // It is important to create the buttons BEFORE creating the main body. This is especially important
          // for when the buttons will respond to initial setup events from a form placed inside the body (e.g.
          // so that the buttons are disabled initially if required)
-         if (this.widgetsButtons != null)
+         if (this.widgetsButtons)
          {
             this.creatingButtons = true;
             this.buttonsNode = domConstruct.create("div", {
@@ -187,13 +186,13 @@ define(["dojo/_base/declare",
             this.creatingButtons = false;
          }
 
-         if (this.widgetsContent != null)
+         if (this.widgetsContent)
          {
             // Add widget content to the container node...
             var widgetsNode = domConstruct.create("div", {}, this.bodyNode, "last");
             this.processWidgets(this.widgetsContent, widgetsNode);
          }
-         else if (this.textContent != null)
+         else if (this.textContent)
          {
             // Add basic text content into the container node. An example of this would be for
             // setting basic text content in an confirmation dialog...
@@ -260,8 +259,8 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onResizeRequest: function alfresco_dialogs_AlfDialog__onResizeRequest(payload) {
-         this.alfLog("log", "Resizing dialog");
-         if (this.domNode != null)
+         // jshint unused:false
+         if (this.domNode)
          {
             this.resize();
          }
@@ -280,15 +279,15 @@ define(["dojo/_base/declare",
          {
             // When creating the buttons, attach the handler to each created...
             this._buttons = [];
-            array.forEach(widgets, lang.hitch(this, "attachButtonHandler"));
+            array.forEach(widgets, lang.hitch(this, this.attachButtonHandler));
          }
          else
          {
             // Once all the content is created the widget instances are added to the publish payload
             // of all the buttons. This is done so that the dialog content is always included in publish
             // requests. It is important NOT to override the default payload...
-            array.forEach(this._buttons, function(button, index) {
-               if (button.publishPayload == null)
+            array.forEach(this._buttons, function(button) {
+               if (!button.publishPayload)
                {
                   button.publishPayload = {};
                }
@@ -308,6 +307,19 @@ define(["dojo/_base/declare",
       _buttons: null,
 
       /**
+       * An optional array of CSS classes to check buttons for that will suppress dialog closure when
+       * the button is clicked. This has been added to allow button actions to be carried out to a 
+       * successful conclusion before the dialog is closed. This means that button action failures
+       * will leave the dialog visible. In particular this addresses the use case of form dialogs
+       * not being closed if the form submission fails.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      suppressCloseClasses: null,
+
+      /**
        * Hitches each button click to the "hide" method so that whenever a button is clicked the dialog will be hidden.
        * It's assumed that the buttons will take care of their own business.
        * 
@@ -316,17 +328,30 @@ define(["dojo/_base/declare",
        * @paran {number} index The index of the widget in the widget array
        */
       attachButtonHandler: function alfresco_dialogs_AlfDialog__attachButtonHandler(widget, index) {
-         if (widget != null)
+         // jshint unused:false
+         
+         var disableClose = false;
+         if (this.suppressCloseClasses)
+         {
+            disableClose = array.some(this.suppressCloseClasses, function(className) {
+               return domClass.contains(widget.domNode, className);
+            }, this);
+         }
+
+         if (widget)
          {
             this._buttons.push(widget); // Add the button so we can add the content to them later...
-            if (sniff("ie") == 8)
+            if (!disableClose)
             {
-               // Need to use "after" rather than "before" for IE8...
-               aspect.after(widget, "onClick", lang.hitch(this, this.hide));
-            }
-            else
-            {
-               aspect.before(widget, "onClick", lang.hitch(this, this.hide));
+               if (sniff("ie") === 8)
+               {
+                  // Need to use "after" rather than "before" for IE8...
+                  aspect.after(widget, "onClick", lang.hitch(this, this.hide));
+               }
+               else
+               {
+                  aspect.before(widget, "onClick", lang.hitch(this, this.hide));
+               }
             }
          }
       }

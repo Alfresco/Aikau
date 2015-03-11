@@ -197,6 +197,7 @@ define(["dojo/_base/declare",
             delete payload.subscriptionHandle;
          }
          delete payload.alfTopic;
+         delete payload.alfPublishScope;
 
          // We should consider whether we actually want to mixin in the updated value
          // or just override it completely. It depends on whether or not we want to be

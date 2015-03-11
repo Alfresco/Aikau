@@ -514,6 +514,7 @@ define(["dojo/_base/declare",
                if (this.query)
                {
                   delete this.query.alfTopic;
+                  delete this.query.alfPublishScope;
 
                   if(typeof this.query === "string")
                   {

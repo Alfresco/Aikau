@@ -136,6 +136,7 @@ define(["dojo/_base/declare",
          delete data.url;
          delete data.alfResponseTopic;
          delete data.alfTopic;
+         delete data.alfPublishScope;
          return data;
       },
 

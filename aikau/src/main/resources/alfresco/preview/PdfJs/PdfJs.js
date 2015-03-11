@@ -343,9 +343,9 @@ define(["dojo/_base/declare",
             skipBrowserTest = this.attributes.skipbrowsertest === "true",
             srcMaxSize = this.attributes.srcMaxSize;
 
-         if (srcMaxSize.match(/^\d+$/) && this.previewManager.size > parseInt(srcMaxSize))
+         if (srcMaxSize.match(/^\d+$/) && this.previewManager.size > parseInt(srcMaxSize, 10))
          {
-            return this.previewManager.message("PdfJs.tooLargeFile", Alfresco.util.formatFileSize(this.previewManager.size), parseInt(srcMaxSize));
+            return this.previewManager.message("PdfJs.tooLargeFile", Alfresco.util.formatFileSize(this.previewManager.size), parseInt(srcMaxSize, 10));
          }
 
          if (!skipBrowserTest)
@@ -395,8 +395,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       _isCanvasSupported: function alfresco_preview_PdfJs_PdfJs___isCanvasSupported() {
-         var elem = document.createElement('canvas');
-         return !!(elem.getContext && elem.getContext('2d'));
+         var elem = document.createElement("canvas");
+         return !!(elem.getContext && elem.getContext("2d"));
       },
 
       /**
@@ -414,7 +414,7 @@ define(["dojo/_base/declare",
          // Remove the annoying 'Setting up Previewer' message
          this.previewManager.getPreviewerElement().innerHTML = "";
 
-         this.workerSrc = AlfConstants.URL_CONTEXT + 'res/js/lib/pdfjs/pdf.worker.js';
+         this.workerSrc = AlfConstants.URL_CONTEXT + "res/js/lib/pdfjs/pdf.worker.js";
          this._loadDocumentConfig();
 
          // Setup display options, page linking only works for specific pages
@@ -425,7 +425,7 @@ define(["dojo/_base/declare",
          // Set page number
          if (this.disabledPageLinking)
          {
-            this.pageNum = this.documentConfig.pageNum ? parseInt(this.documentConfig.pageNum) : this.pageNum;
+            this.pageNum = this.documentConfig.pageNum ? parseInt(this.documentConfig.pageNum, 10) : this.pageNum;
          }
          else
          {
@@ -433,9 +433,9 @@ define(["dojo/_base/declare",
             var query = uri.substring(uri.indexOf("?") + 1, uri.length);
             var urlParams = ioQuery.queryToObject(query);
             // var urlParams = Alfresco.util.getQueryStringParameters(window.location.hash.replace("#", ""));
-            this.pageNum = urlParams.page || (this.documentConfig.pageNum ? parseInt(this.documentConfig.pageNum) : this.pageNum);
+            this.pageNum = urlParams.page || (this.documentConfig.pageNum ? parseInt(this.documentConfig.pageNum, 10) : this.pageNum);
          }
-         this.pageNum = parseInt(this.pageNum); // If value from urlParams.page is used it's a string
+         this.pageNum = parseInt(this.pageNum, 10); // If value from urlParams.page is used it's a string
          this.onViewerLoaded();
 
          // Window resize behaviour
@@ -454,13 +454,14 @@ define(["dojo/_base/declare",
        * @instance
        */
       onViewerLoaded: function alfresco_preview_PdfJs_PdfJs__onViewerLoaded(p_obj) {
+         // jshint unused:false
          // This is the construction of a previewer elements...
          this.controls = domConstruct.create("div", {"class": "controls"}, this.previewManager.getPreviewerElement());
          this.sidebar = domConstruct.create("div", {"class": "sidebar"}, this.previewManager.getPreviewerElement());
          this.viewer = domConstruct.create("div", {"class": "viewer documentView"}, this.previewManager.getPreviewerElement());
 
          // Set up viewer
-         if (this.attributes.pageLayout == "multi")
+         if (this.attributes.pageLayout === "multi")
          {
             domClass.add(this.viewer, "multiPage");
          }
@@ -597,7 +598,7 @@ define(["dojo/_base/declare",
          {
             if (!this.maximized)
             {
-               var dialogPane;
+               // var dialogPane;
                var previewHeight;
                // TODO: Re-instate...
                // if (dialogPane = Dom.getAncestorByClassName(this.previewManager.getPreviewerElement(), "dijitDialogPaneContent"))
@@ -657,9 +658,9 @@ define(["dojo/_base/declare",
          var fileurl = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl();
          
          // Add the full protocol + host as pdf.js require this
-         if (fileurl.substr(0, 4).toLowerCase() !== 'http')
+         if (fileurl.substr(0, 4).toLowerCase() !== "http")
          {
-            fileurl = window.location.protocol + '//' + window.location.host + fileurl;
+            fileurl = window.location.protocol + "//" + window.location.host + fileurl;
          }
 
          params = params || {};
@@ -676,15 +677,15 @@ define(["dojo/_base/declare",
                radius: 10, // The radius of the inner circle
                corners: 1, // Corner roundness (0..1)
                rotate: 0, // The rotation offset
-               color: '#666', // #rgb or #rrggbb
+               color: "#666", // #rgb or #rrggbb
                speed: 1, // Rounds per second
                trail: 60, // Afterglow percentage
                shadow: false, // Whether to render a shadow
                hwaccel: false, // Whether to use hardware acceleration
-               className: 'spinner', // The CSS class to assign to the spinner
+               className: "spinner", // The CSS class to assign to the spinner
                zIndex: 2e9, // The z-index (defaults to 2000000000)
-               top: 'auto', // Top position relative to parent in px
-               left: 'auto' // Left position relative to parent in px
+               top: "auto", // Top position relative to parent in px
+               left: "auto" // Left position relative to parent in px
             }).spin(this.viewer);
             this.waitForPdfHandle = this.alfSubscribe(PdfJsConstants.PDF_LOADED_TOPIC, lang.hitch(this, this.removeSpinner));
          }
@@ -696,12 +697,12 @@ define(["dojo/_base/declare",
          // Set the worker source
          PDFJS.workerSrc = this.workerSrc;
          // Set the char map source dir
-         PDFJS.cMapUrl = './cmaps/';
+         PDFJS.cMapUrl = "/cmaps/";
          PDFJS.cMapPacked = true;
 
          // PDFJS range request for progessive loading
          // We also test if it may already be set to true by compatibility.js tests, some browsers do not support it.
-         if (this.attributes.progressiveLoading == "true" && PDFJS.disableRange !== true)
+         if (this.attributes.progressiveLoading === "true" && PDFJS.disableRange !== true)
          {
              PDFJS.disableRange = false;
              // disable autofetch - retrieve just the ranges needed to display
@@ -756,7 +757,7 @@ define(["dojo/_base/declare",
             this.alfLog("warn","Could not load PDF due to error " + exception.name + " (code " + exception.code + ")");
 
             // We have a password exception
-            if (exception.name === 'PasswordException') {
+            if (exception.name === "PasswordException") {
 
                // Hide the interface
                this.alfPublish(PdfJsConstants.SHOW_INTERFACE_TOPIC);
@@ -796,7 +797,7 @@ define(["dojo/_base/declare",
             {
 
                var loadingErrorMessage = this.message("pdfjs.error.pdfload");
-               if (exception.name === 'InvalidPDFException') {
+               if (exception.name === "InvalidPDFException") {
                   loadingErrorMessage = this.message("pdfjs.error.invalidpdf");
                }
 
@@ -812,7 +813,6 @@ define(["dojo/_base/declare",
                this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
                   message: loadingErrorMessage
                });
-
             }
          }
       },
@@ -845,7 +845,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onInterfaceToggle: function alfresco_preview_PdfJs_PdfJs__onInterfaceToggle() {
-         var display = (domStyle.get(this.controls, "display") == "block") ? "none" : "block";
+         var display = (domStyle.get(this.controls, "display") === "block") ? "none" : "block";
          domStyle.set(this.controls, "display", display);
          domStyle.set(this.sidebar, "display", display);
          domStyle.set(this.viewer, "display", display);
@@ -867,7 +867,7 @@ define(["dojo/_base/declare",
          {
             html.set(this.notification, message);
          }
-         var display = (domStyle.get(this.notification, "display") == "block") ? "none" : "block";
+         var display = (domStyle.get(this.notification, "display") === "block") ? "none" : "block";
          domStyle.set(this.notification, "display", display);
       },
 
@@ -915,7 +915,7 @@ define(["dojo/_base/declare",
                pageLayout: this.attributes.pageLayout,
                currentScale: PdfJsConstants.K_UNKNOWN_SCALE,
                defaultScale: this.documentConfig.scale ? this.documentConfig.scale : this.attributes.defaultScale,
-               disableTextLayer: this.attributes.disableTextLayer == "true" || has("ios") || has("android"),
+               disableTextLayer: this.attributes.disableTextLayer === "true" || has("ios") || has("android"),
                autoMinScale : parseFloat($(window).width() > 1024 ? this.attributes.autoMinScale : this.attributes.autoMinScaleMobile),
                autoMaxScale: parseFloat(this.attributes.autoMaxScale),
                pdfJsPlugin: this,
@@ -932,7 +932,7 @@ define(["dojo/_base/declare",
          for (var i = 0; i < promisedPages.length; i++)
          {
             var page = promisedPages[i], pageRef = page.ref;
-            pagesRefMap[pageRef.num + ' ' + pageRef.gen + ' R'] = i;
+            pagesRefMap[pageRef.num + " " + pageRef.gen + " R"] = i;
          }
 
          this.documentView.render();
@@ -974,8 +974,9 @@ define(["dojo/_base/declare",
        * @param {object} payload This is expected to be an empty object.
        */
       onViewerScroll: function alfresco_preview_PdfJs_PdfJs__onViewerScroll(payload) {
+         // jshint unused:false
          var newPn = this.documentView.getScrolledPageNumber();
-         if (this.pageNum != newPn)
+         if (this.pageNum !== newPn)
          {
             this.pageNum = newPn;
             this._updatePageControls();
@@ -1052,7 +1053,7 @@ define(["dojo/_base/declare",
          }
 
          // Re-add the documentView onScroll event
-         if (this.scrollToPageTimeout != null)
+         if (this.scrollToPageTimeout)
          {
             clearTimeout(this.scrollToPageTimeout);
          }
@@ -1066,7 +1067,7 @@ define(["dojo/_base/declare",
        * @param {object} dest outline object item, from the document outline
        */
       _navigateTo: function alfresco_preview_PdfJs_PdfJs___navigateTo(dest) {
-         if (typeof dest === 'string')
+         if (typeof dest === "string")
          {
             dest = this.destinations[dest];
          }
@@ -1075,7 +1076,7 @@ define(["dojo/_base/declare",
             // dest array looks like that: <page-ref> </XYZ|FitXXX> <args..>
             var destRef = dest[0];
             var pageNumber = destRef instanceof Object ?
-            this.pagesRefMap[destRef.num + ' ' + destRef.gen + ' R'] : (destRef + 1);
+            this.pagesRefMap[destRef.num + " " + destRef.gen + " R"] : (destRef + 1);
             if (pageNumber > this.documentView.pages.length - 1)
             {
                pageNumber = this.documentView.pages.length - 1;
@@ -1093,7 +1094,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       _loadDocumentConfig: function alfresco_preview_PdfJs_PdfJs___loadDocumentConfig() {
-         if (this.attributes.useLocalStorage != "true" || !this._browserSupportsHtml5Storage())
+         if (this.attributes.useLocalStorage !== "true" || !this._browserSupportsHtml5Storage())
          {
             this.documentConfig = {};
          }
@@ -1104,7 +1105,7 @@ define(["dojo/_base/declare",
                pageNum : window.localStorage[base + "pageNum"],
                scale : window.localStorage[base + "scale"]
             };
-            if (this.documentConfig.scale == "null")
+            if (this.documentConfig.scale === "null")
             {
                this.documentConfig.scale = null;
             }
@@ -1120,7 +1121,7 @@ define(["dojo/_base/declare",
       _browserSupportsHtml5Storage: function alfresco_preview_PdfJs_PdfJs___browserSupportsHtml5Storage() {
          try
          {
-            return 'localStorage' in window && window['localStorage'] !== null;
+            return "localStorage" in window && window.localStorage !== null;
          }
          catch (e)
          {
@@ -1134,7 +1135,8 @@ define(["dojo/_base/declare",
        * @method onSidebarToggle
        */
       onSidebarToggle: function alfresco_preview_PdfJs_PdfJs__onSidebarToggle(payload) {
-         var sbshown = domStyle.get(this.sidebar, "display") == "block";
+         // jshint unused:false
+         var sbshown = domStyle.get(this.sidebar, "display") === "block";
          domStyle.set(this.sidebar, "display", sbshown ? "none" : "block");
          if (sbshown)
          {
@@ -1239,6 +1241,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the menu item click.
        */
       onSetPageRequest: function alfresco_preview_PdfJs_PdfJs__onSetPageRequest(payload) {
+         // jshint unused:false
          this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
             dialogTitle: "pdfjs.page.set.dialog.title",
             dialogConfirmationButtonTitle: "pdfjs.page.set.dialog.confirmation",
@@ -1270,11 +1273,11 @@ define(["dojo/_base/declare",
        */
       onSetPageConfirmation: function alfresco_preview_PdfJs_PdfJs__onSetPageConfirmation(payload) {
          var pn = lang.getObject("pageNumber", false, payload);
-         if (pn == null || pn < 1 || pn > this.numPages)
+         if (!pn || pn < 1 || pn > this.numPages)
          {
             // This will require that the alfresco/service/NotificationService is on the page
             this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
-               message: this.previewManager.message('error.badpage')
+               message: this.previewManager.message("error.badpage")
             }, true);
          }
          else
@@ -1290,8 +1293,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       onPagePrevious: function alfresco_preview_PdfJs_PdfJs__onPagePrevious(e_obj) {
+         // jshint unused:false
          if (this.pageNum <= 1)
+         {
             return;
+         }
          this.pageNum--;
          this._scrollToPage(this.pageNum);
       },
@@ -1302,6 +1308,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onPageNext : function alfresco_preview_PdfJs_PdfJs__onPageNext(e_obj) {
+         // jshint unused:false
          if (this.pageNum < this.pdfDocument.numPages)
          {
             this.pageNum++;
@@ -1401,6 +1408,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onFindNext: function alfresco_preview_PdfJs_PdfJs__onFindNext(payload) {
+         // jshint unused:false
          this._findPrevious = false;
          this.onFindChange("findagain");
       },
@@ -1412,6 +1420,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onFindPrevious: function alfresco_preview_PdfJs_PdfJs__onFindPrevious(payload) {
+         // jshint unused:false
          this._findPrevious = true;
          this.onFindChange("findagain");
       },
@@ -1462,9 +1471,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       onFindChange: function alfresco_preview_PdfJs_PdfJs__onFindChange(eventid) {
-         if (this._query != null)
+         if (this._query)
          {
-            var event = document.createEvent('CustomEvent');
+            var event = document.createEvent("CustomEvent");
             event.initCustomEvent(eventid, true, true, {
                query: this._query,
                caseSensitive: this._matchCase,
@@ -1483,6 +1492,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the zoom out menu item
        */
       onZoomOut: function alfresco_preview_PdfJs_PdfJs__onZoomOut(payload) {
+         // jshint unused:false
          var newScale = Math.max(PdfJsConstants.K_MIN_SCALE, this.documentView.currentScale / this.attributes.scaleDelta);
          this.documentView.setScale(this.documentView.parseScale(newScale));
          this._scrollToPage(this.pageNum);
@@ -1497,6 +1507,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the zoom in menu item
        */
       onZoomIn : function alfresco_preview_PdfJs_PdfJs__onZoomIn(payload) {
+         // jshint unused:false
          var newScale = Math.min(PdfJsConstants.K_MAX_SCALE, this.documentView.currentScale * this.attributes.scaleDelta);
          this.documentView.setScale(this.documentView.parseScale(newScale));
          this._scrollToPage(this.pageNum);
@@ -1525,6 +1536,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onDownloadClick : function alfresco_preview_PdfJs_PdfJs__onDownloadClick(p_obj) {
+         // jshint unused:false
          this.alfPublish("ALF_NAVIGATE_TO_PAGE", { url: this.previewManager.getContentUrl(true).replace("api/node","slingshot/node"),
                                                    type: "FULL_PATH",
                                                    target: "CURRENT"}, true);
@@ -1536,6 +1548,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onDownloadPDFClick : function alfresco_preview_PdfJs_PdfJs__onDownloadPDFClick(p_obj) {
+         // jshint unused:false
          this.alfPublish("ALF_NAVIGATE_TO_PAGE", { url: this.previewManager.getThumbnailUrl(this.attributes.src) + "&a=true",
                                                    type: "FULL_PATH",
                                                    target: "CURRENT"}, true);
@@ -1576,6 +1589,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the show/hide link controls toggle.
        */
       onLinkClick : function alfresco_preview_PdfJs_PdfJs__onLinkClick(payload) {
+         // jshint unused:false
          this.onRecalculatePreviewLayout();
          this.onLinkUpdateRequest();
       },
@@ -1587,6 +1601,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onLinkUpdateRequest: function alfresco_preview_PdfJs_PdfJs__onLinkUpdateRequest(payload) {
+         // jshint unused:false
          var link = window.location.href.replace(window.location.hash, "") + "#page=" + this.pageNum;
          this.alfPublish(PdfJsConstants.SET_LINK_URL_TOPIC, {
             value: link
@@ -1624,26 +1639,30 @@ define(["dojo/_base/declare",
        * @instance
        */
       onWindowHashChange: function alfresco_preview_PdfJs_PdfJs__onWindowHashChange(p_obj) {
-          if(this.disabledPageLinking)    // Ignore page hash change
-            return;
-
-         // Set page number
-         var urlParams = Alfresco.util.getQueryStringParameters(window.location.hash.replace("#", ""));
-         pn = urlParams.page;
-
-         if (pn)
+         // jshint unused:false
+         if(this.disabledPageLinking)
          {
-            if (pn > this.pdfDocument.numPages)
+            // Ignore page hash change
+         }
+         else
+         {    
+            // Set page number
+            var urlParams = Alfresco.util.getQueryStringParameters(window.location.hash.replace("#", ""));
+            var pn = urlParams.page;
+            if (pn)
             {
-                pn = this.pdfDocument.numPages;
-            }
-            else if(pn < 1)
-            {
-                pn = 1;
-            }
+               if (pn > this.pdfDocument.numPages)
+               {
+                   pn = this.pdfDocument.numPages;
+               }
+               else if(pn < 1)
+               {
+                   pn = 1;
+               }
 
-            this.pageNum = parseInt(pn);
-            this._scrollToPage(this.pageNum);
+               this.pageNum = parseInt(pn, 10);
+               this._scrollToPage(this.pageNum);
+            }
          }
       },
 
@@ -1653,7 +1672,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onWindowUnload: function alfresco_preview_PdfJs_PdfJs__onWindowUnload() {
-         if (this.attributes.useLocalStorage == "true" && this._browserSupportsHtml5Storage() && this.documentView)
+         if (this.attributes.useLocalStorage === "true" && this._browserSupportsHtml5Storage() && this.documentView)
          {
             var base = "org.alfresco.pdfjs.document." + this.previewManager.nodeRef.replace(":/", "").replace("/", ".") + ".";
             if (this.pageNum)
