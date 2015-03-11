@@ -49,8 +49,8 @@ The `property` attribute identifies the property within that target object to te
 
 When you log into the client as a member of the “ALFRESCO_ADMINISTRATORS” group (e.g. “admin”) then you will see the menu item, but if you log in as a user that is not a member of that group then you will not see the menu item.
 
-
-
+![Screenshot showing extra header menu item for admin](../resources/Tutorial15-Image1.png "Screenshot showing extra header menu item for admin")
+![Screenshot showing regular header menu items for non-admin](../resources/Tutorial15-Image2.png "Screenshot showing regular header menu items for non-admin")
 
 ### Step 3. Message Banners
 Let’s imagine a scenario where a user know the URL of the user and groups management page and can access it directly by entering it into the browser address bar. Although they won’t have permission to manage users and groups we still don’t want them to think that they should have that ability.
@@ -102,7 +102,7 @@ This is the inverse of the previous rule and stops the widget (and therefore all
 
 Login with such a user and you’ll see the warning displayed and no group or user information.
 
-ADD SCRREENSHOT
+![Screenshot showing warning message](../resources/Tutorial15-Image3.png "Screenshot showing warning message")
 
 ### Step 4. CurrentItem Based Render Filters
 We can also add some fine grained control into our groups list. Remember the warnings about not deleting the “ALFRESCO_ADMINISTRATORS” group? Well, let’s just remove the ability to delete those groups from the client.
@@ -124,7 +124,7 @@ Note that we’ve omitted the `target` attribute so that the target defaults to 
 
 When you refresh the page you’ll see that the widgets are not present for the “ALFRESCO_ADMINISTRATORS” group so that the user cannot delete them (at least not from our client!).
 
-ADD SCREENSHOT
+![Screenshot showing users and groups page](../resources/Tutorial15-Image4.png "Screenshot showing users and groups page")
 
 Previous: [Recap for User Management](./Tutorial14.md)
 Next: [More Form Controls](./Tutorial16.md)
