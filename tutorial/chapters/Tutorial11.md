@@ -98,13 +98,13 @@ When you refresh the page you’ll be able to sort on either the group identifie
 ### Step 4 - Pagination
 As you’d expect from its name, the `alfresco/lists/AlfSortablePaginatedList` module also provides support for paged data. The main requirement is actually to update the model to include a widget that allows the user to control pagination.
 
-The `alfresco/documentlibrary/AlfDocumentListPaginator` is one such widget (although it’s important to realise that as all communication is done over a publication/subscription you’re not constrained in any way to using this widget - the AlfSortablePaginatedList only cares about the topic, not its origin!)
+The `alfresco/lists/Paginator` is one such widget (although it’s important to realise that as all communication is done over a publication/subscription you’re not constrained in any way to using this widget - the AlfSortablePaginatedList only cares about the topic, not its origin!)
 
 Update the page model so that after the group AlfSortablePaginatedList the following widget definition is added:
 
 ```JAVASCRIPT
 {
-  name: "alfresco/documentlibrary/AlfDocumentListPaginator",
+  name: "alfresco/lists/Paginator",
   config: {
     documentsPerPage: 5
   }
@@ -122,7 +122,7 @@ startIndexProperty: "paging.skipCount",
 totalResultsProperty: "paging.totalItems",
 ```
 
-Here we’re also setting the current page size to show 5 results per page and we’re also identifying the properties in the XHR response that identify the requested starting index of data and the total number of results. This information is published whenever data is loaded and widgets like the AlfDocumentListPaginator are able to process this data to update their rendering.
+Here we’re also setting the current page size to show 5 results per page and we’re also identifying the properties in the XHR response that identify the requested starting index of data and the total number of results. This information is published whenever data is loaded and widgets like the Paginator are able to process this data to update their rendering.
 
 The last update we need to make is to the `getGroups` function in our service so that it will include the page and page size data in the request URL:
 

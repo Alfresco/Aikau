@@ -63,7 +63,7 @@ model.jsonModel = {
       },
       {
          id: "SITES_LIST_PAGINATION_MENU",
-         name: "alfresco/documentlibrary/AlfDocumentListPaginator",
+         name: "alfresco/lists/Paginator",
          config: {
             hidePageSizeOnWidth: 50
          }

@@ -88,7 +88,7 @@ model.jsonModel = {
                },
                {
                   id: "PAGINATOR",
-                  name: "alfresco/documentlibrary/AlfDocumentListPaginator",
+                  name: "alfresco/lists/Paginator",
                   align: "right"
                },
                {
