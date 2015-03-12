@@ -97,6 +97,10 @@ model.jsonModel = {
                         itemData: {
                            alfType: "item",
                            alfProperty: "mixinData5"
+                        },
+                        missingData: {
+                           alfType: "item",
+                           alfProperty: "not_there"
                         }
                      }
                   }

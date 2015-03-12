@@ -177,7 +177,10 @@ define(["dojo/_base/declare",
             // Copy the original to grab data from...
             for (var key in configuredPayload)
             {
-               configuredPayload[key] = this.processValue(configuredPayload[key], configuredPayload, currentItem, receivedPayload);
+               if (configuredPayload.hasOwnProperty(key))
+               {
+                  configuredPayload[key] = this.processValue(configuredPayload[key], configuredPayload, currentItem, receivedPayload);
+               }
             }
             return configuredPayload;
          }
@@ -193,8 +196,7 @@ define(["dojo/_base/declare",
        * @param {object} receivedPayload The payload that triggered the request to generate a new payload
        * @returns {object} The processed value.
        */
-      processValue: function alfresco_renderers__PublishPayloadMixin__processValue(value, configuredPayload, currentItem, receivedPayload)
-      {
+      processValue: function alfresco_renderers__PublishPayloadMixin__processValue(value, configuredPayload, currentItem, receivedPayload) {
          // Catch null values (typeof null === "object")
          if (value !== null && ObjectTypeUtils.isObject(value))
          {
@@ -205,27 +207,26 @@ define(["dojo/_base/declare",
 
                if (type === "item" && currentItem)
                {
-                  value = lang.getObject(property, null, currentItem);
+                  value = lang.getObject(property, false, currentItem);
                }
                else if (type === "payload" && receivedPayload)
                {
-                  value = lang.getObject(property, null, receivedPayload);
+                  value = lang.getObject(property, false, receivedPayload);
                }
                else
                {
                   this.alfLog("warn", "A payload was defined with 'alfType' and 'alfProperty' attributes but the 'alfType' attribute was neither 'item' nor 'payload' (which are the only supported types), or the target object was null", this);
                }
-
-               // Clean up the payload...
-               delete value.alfType;
-               delete value.alfProperty;
             }
             else
             {
                // If it isn't a property we can build, does it contain one we can?
                for (var nestedKey in value)
                {
-                  value[nestedKey] = this.processValue(value[nestedKey], configuredPayload, currentItem, receivedPayload);
+                  if (value.hasOwnProperty(nestedKey))
+                  {
+                     value[nestedKey] = this.processValue(value[nestedKey], configuredPayload, currentItem, receivedPayload);
+                  }
                }
             }
          }
