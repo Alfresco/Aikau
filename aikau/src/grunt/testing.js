@@ -16,6 +16,9 @@ module.exports = function(grunt) {
    grunt.registerTask("test_sl", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:sl"]);
    grunt.registerTask("test_grid", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:grid"]);
 
+   // Watch for changes and retest
+   grunt.registerTask("watchTest", ["watch:test"]);
+
    // Restart the test server
    grunt.registerTask("restartTestApp", ["shell:stopTestApp", "startUnitTestApp"]);
 

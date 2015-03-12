@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
                                      [200,
                                       {"Content-Type":"application/json;charset=UTF-8"},
                                       nodeTemplate]);
-
+            this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
          }
 
          catch(e)
