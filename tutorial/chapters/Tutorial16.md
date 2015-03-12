@@ -51,7 +51,7 @@ You can use this validator with any form widgets - it is not tied to the `alfres
 
 When you refresh the page you should see that the password fields are masked and that it is not possible to create a user until a password has been provided and confirmed.
 
-ADD SCREENSHOT
+![Screenshot showing password and confirmation fields](../resources/Tutorial16-Image1.png "Screenshot showing password and confirmation fields")
 
 ### Step 2. Minimum Character Length
 When creating passwords we often want to make sure that a sensible number of characters have been provided. This can be achieved using the `minLength` validator. Update the password field to include this validation configuration:
@@ -80,7 +80,7 @@ When creating passwords we often want to make sure that a sensible number of cha
 
 When you refresh the page you’ll find that you have to enter a password that is at least 8 characters long in order to create a user.
 
-ADD SCREENSHOT
+![Screenshot showing minimum length validation error](../resources/Tutorial16-Image2.png "Screenshot showing minimum length validation error")
 
 Maximum Character Length
 Unsurprisingly there is also a `maxLength` validator that can be used in exactly the same way. It’s also possible to “chain” multiple validators together so that you can validate a single form field in multiple ways. Update the `validationConfig` attribute so that it becomes:
@@ -102,7 +102,7 @@ validationConfig: [
 
 Now you have to enter a password that is between 8 and 20 characters long.
 
-ADD SCREENSHOT
+![Screenshot showing maximum length validation error](../resources/Tutorial16-Image3.png "Screenshot showing maximum length validation error")
 
 ### Step 3. Regular Expression Validation
 Although we briefly covered Regular Expression validation in an [earlier tutorial](./Tutorial7.md "Link to Form Dialogs tutorial") it is worth mentioning again, if only to demonstrate that multiple validation error messages can be displayed at the same time.
@@ -132,7 +132,7 @@ validationConfig: [
 
 When you refresh the page and try to provide a password containing an illegal character (such as “:”) then you’ll see the error message. If the password is less than 8 characters you’ll see both error messages displayed.
 
-ADD SCREENSHOT
+![Screenshot showing regular expression valiation error](../resources/Tutorial16-Image4.png "Screenshot showing regular expression valiation error")
 
 ### Step 4. Asynchronous Validation
 It’s also possible to perform asynchronous validation where an XHR request is required to retrieve the data needed to validate against. An example of this is to validate the uniqueness of a field value such as the username by checking the value provided against all the existing users.
@@ -171,7 +171,7 @@ Notice that we don’t need to identify the attribute within each existing user 
 
 When you refresh the page and start entering a value for the user name you should see a new icon appear indicating that validation is in progress. If you provide a value that matches an existing username then an error message will be displayed and you will not be able to submit the form.
 
-ADD SCREENSHOT
+![Screenshot showing asynchronous valiation error](../resources/Tutorial16-Image5.png "Screenshot showing asynchronous valiation error")
 
 ### Step 5. Progressive Disclosure
 One pattern that you often see in forms is that of “progressive disclosure” to reduce clutter in the form and present only the minimum required information. 
@@ -230,7 +230,8 @@ isNot: [false]
 
 When you refresh the page you’ll find that you are able to dynamically reveal and hide the new “jobtitle” field by checking and unchecking the box.
 
-ADD SCREENSHOT
+![Screenshot showing dynamically hidden field](../resources/Tutorial16-Image6.png "Screenshot showing dynamically hidden field")
+![Screenshot showing dynamically revealed field](../resources/Tutorial16-Image7.png "Screenshot showing dynamically revealed field")
 
 ### Step 6. Dynamic Requirement and Disablement
 It’s also possible to modify the rule construction to make rules change their requirement and disabled state through the use of the `requirementConfig` and `disablementConfig` attributes. 
@@ -256,7 +257,7 @@ You can make a form a bit more organised by “wrapping” form control widgets 
 
 Try adding `alfresco/forms/ControlRow` widgets around the current widgets to organise the form so that it looks more like this:
 
-ADD SCREENSHOT
+![Screenshot showing control rows](../resources/Tutorial16-Image8.png "Screenshot showing control rows")
 
 ### Step 8. Multiple Entry Form Fields
 One other useful Aikau module to be aware of (both in terms of use within page models and by extension for custom widgets) is the `alfresco/forms/controls/MultipleEntryFormControl`. This module (and its related modules) make it possible to create nested forms that allow the user to construct complex objects to submit.
@@ -297,15 +298,15 @@ We’ll use this module to make it possible to assign a new user to one or more 
 
 This will render a form field containing a “plus” icon:
 
-ADD SCREENSHOT
+![Screenshot showing empty MultipleEntryFormControl](../resources/Tutorial16-Image9.png "Screenshot showing empty MultipleEntryFormControl")
 
 Click on the icon and you’ll be presented with a nested form (ours contains a single select field that allows us to pick a group).
 
-ADD SCREENSHOT
+![Screenshot showing new entry in MultipleEntryFormControl](../resources/Tutorial16-Image10.png "Screenshot showing new entry in MultipleEntryFormControl")
 
 Once you’ve selected a group you can click the “tick” icon and the value of the nested form will be added as an element in the array that is the value of the field in the main form.
 
-ADD SCREENSHOT
+![Screenshot showing selected entry in MultipleEntryFormControl](../resources/Tutorial16-Image11.png "Screenshot showing selected entry in MultipleEntryFormControl")
 
 You can continue to add more groups and delete or edit previously created groups. Remember that this is a very simplistic example of using this form control and that you can add as many form controls into the `widgets` configuration array as you’d like. 
 
