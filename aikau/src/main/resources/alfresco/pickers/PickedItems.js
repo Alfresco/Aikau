@@ -171,7 +171,7 @@ define(["dojo/_base/declare",
                      array.forEach(this.currentData.items, function(item) {
                         this.alfPublish("ALF_ITEM_REMOVED", item);
                      }, this);
-                     this.setPickedItems([payload]);
+                     this.currentData.items = [payload];
                      this.renderView(false);
                   }
                   else {
