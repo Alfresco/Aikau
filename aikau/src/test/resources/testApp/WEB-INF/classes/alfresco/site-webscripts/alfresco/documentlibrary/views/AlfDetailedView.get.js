@@ -27,7 +27,7 @@ model.jsonModel = {
          }]
       }
    }, {
-      name: "aikauTesting/mockservices/DocumentLibraryMockXhr"
+      name: "aikauTesting/mockservices/DocumentLibraryDetailedViewMockXhr"
    }, {
       name: "alfresco/logging/SubscriptionLog"
    }, {
