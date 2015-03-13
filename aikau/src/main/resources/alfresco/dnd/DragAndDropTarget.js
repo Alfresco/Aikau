@@ -459,6 +459,7 @@ define(["dojo/_base/declare",
          {
             var createdItem = this.creator(resolvedPromise.item);
             this.previewTarget.insertNodes(true, [createdItem.data]);
+            this.onItemsUpdated();
          }
       }
    });

@@ -23,8 +23,9 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"], 
+        function (registerSuite, assert, require, TestCommon, keys) {
 
    var browser;
    registerSuite({
@@ -49,7 +50,7 @@ define(["intern!object",
       },
 
       "Test Drag From Palette To DropItems": function () {
-         return browser.findByCssSelector("#dojoUnique1 > .title")
+         return browser.findByCssSelector("#dojoUnique1 .title")
             .moveMouseTo()
             .click()
             .pressMouseButton()
@@ -117,6 +118,166 @@ define(["intern!object",
       }
    });
 
+   var pause = 150;
+   registerSuite({
+
+      name: "Accessibility DND tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/basic-dnd", "Accessibility DND Testing")
+            .end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Select item using keyboard": function() {
+         return browser.pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+            .findAllByCssSelector(".alfresco-dnd-DragAndDropItem.selected")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "The wrong number of items were selected");
+               });
+      },
+
+      "Add item to target": function() {
+         // 3 more tabs should highlight the first drop target...
+         return browser.pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+
+            // Hitting return should add the selected item...
+            .pressKeys(keys.ENTER)
+            .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
+               .then(function(elements) {
+                     assert.lengthOf(elements, 1, "The item was not added");
+               });
+      },
+
+      "Submit the form to check the right item was added": function() {
+         // Six more tabs should highlight the confirmation button
+         return browser.pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+            .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1_POST","data","name","bob"))
+            .then(null, function() {
+               assert(false, "Form didn't contain the value added by keyboard");
+            });
+      },
+
+      "Select another item": function() {
+         // Shift tab 7 times should get back to the last item
+         return browser.pressKeys([keys.SHIFT])
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys([keys.SHIFT]) // Remember to release the shift key!
+            .pressKeys(keys.ENTER)
+            .findAllByCssSelector(".alfresco-dnd-DragAndDropItem.selected")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Only one item should be selected, the other should be deselected");
+               });
+
+      },
+
+      "Add the next item": function() {
+         // Just one more tab should get to the target again...
+         return browser.pressKeys(keys.TAB)
+            .sleep(pause)
+
+            // Hitting return should add the selected item...
+            .pressKeys(keys.ENTER)
+            .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
+               .then(function(elements) {
+                     assert.lengthOf(elements, 2, "The second item was not added");
+               });
+      },
+
+      "Check the initial order": function() {
+         return browser.findByCssSelector("#FORM1 .previewPanel .alfresco-dnd-DroppedItemWrapper:nth-child(1) > .label")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Value 1", "The items are not in the correct order");
+            });
+      },
+
+      "Move item down a place": function() {
+         // 3 tabs should get to the move down action...
+         return browser.pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+            .findByCssSelector("#FORM1 .previewPanel .alfresco-dnd-DroppedItemWrapper:nth-child(1) > .label")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "TextBox", "The item was not moved down a place");
+               });
+      },
+
+      "Move item back up a place": function() {
+         // We should still be focused on the same node, so a single shift-tab will get to the move up action...
+         return browser.pressKeys([keys.SHIFT])
+            .pressKeys(keys.TAB)
+            .pressKeys([keys.SHIFT]) // Release the SHIFT key!
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+            .findByCssSelector("#FORM1 .previewPanel .alfresco-dnd-DroppedItemWrapper:nth-child(1) > .label")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Value 1", "The item was not moved back up");
+            });
+      },
+
+      // TODO: This test is passing on Chrome but failing on Firefox
+      // "Delete an item": function() {
+      //    // 2 tabs should get to the delete item action
+      //    return browser.pressKeys(keys.TAB)
+      //       .sleep(pause)
+      //       .pressKeys(keys.TAB)
+      //       .sleep(pause)
+      //       .pressKeys(keys.ENTER)
+            
+      //       .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
+      //          .then(function(elements) {
+      //                assert.lengthOf(elements, 1, "The item was not deleted");
+      //          });
+      // },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
    registerSuite({
 
       name: "DND Nesting Tests",
@@ -132,7 +293,7 @@ define(["intern!object",
       },
 
       "Drag and drop nestable item": function () {
-         return browser.findByCssSelector("#dojoUnique1 > .title")
+         return browser.findByCssSelector("#dojoUnique1 .title")
             .moveMouseTo()
             .click()
             .pressMouseButton()
@@ -159,7 +320,7 @@ define(["intern!object",
       },
 
       "Drop an item into the first nested target": function() {
-         return browser.findByCssSelector("#dojoUnique1 > .title")
+         return browser.findByCssSelector("#dojoUnique1 .title")
             .moveMouseTo()
             .click()
             .pressMouseButton()
@@ -213,7 +374,7 @@ define(["intern!object",
       },
 
       "Drag and drop and item": function () {
-         return browser.findByCssSelector("#dojoUnique1 > .title")
+         return browser.findByCssSelector("#dojoUnique1 .title")
             .moveMouseTo()
             .click()
             .pressMouseButton()
