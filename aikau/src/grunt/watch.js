@@ -5,10 +5,7 @@ module.exports = function(grunt) {
       watch: {
          test: {
             files: [alfConfig.files.testScripts],
-            tasks: ["intern:dev"],
-            options: {
-               interrupt: true
-            }
+            tasks: ["intern:dev"]
          }
       }
    });
