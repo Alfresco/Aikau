@@ -47,6 +47,15 @@ define([],function() {
       updateItemsEvent: "onAlfItemsUpdated",
 
       /**
+       * Emitted when a draggable item is selected.
+       *
+       * @instance
+       * @type {String}
+       * @default "onAlfItemSelected"
+       */
+      itemSelectedEvent: "onAlfItemSelected",
+
+      /**
        * This topic is published when using a modelling service to render the dropped items.
        * It is published to request the widgets to display for a given value.
        *
@@ -55,7 +64,6 @@ define([],function() {
        * @default "ALF_DND_REQUEST_WIDGETS_FOR_DISPLAY"
        */
       requestWidgetsForDisplayTopic: "ALF_DND_REQUEST_WIDGETS_FOR_DISPLAY",
-
 
       /**
        * This topic is published when using a modelling service render the widgets that allow

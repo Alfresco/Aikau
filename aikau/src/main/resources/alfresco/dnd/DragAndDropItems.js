@@ -24,23 +24,29 @@
  * @module alfresco/dnd/DragAndDropItems
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
+        "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/ObjectProcessingMixin",
         "dojo/text!./templates/DragAndDropItems.html",
-        "dojo/text!./templates/DragAndDropItem.html",
         "alfresco/core/Core",
         "alfresco/dnd/Constants",
         "dojo/dnd/Source",
         "dojo/_base/lang",
+        "dojo/_base/array",
+        "dojo/on",
         "dojo/string",
-        "dojo/dom-construct"], 
-        function(declare, _Widget, _Templated, template, PaletteItemTemplate, AlfCore, Constants, Source, lang, stringUtil, domConstruct) {
+        "dojo/dom-construct",
+        "dojo/dom-class"], 
+        function(declare, _Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, template, AlfCore, Constants, 
+                 Source, lang, array, on, stringUtil, domConstruct, domClass) {
    
-   return declare([_Widget, _Templated, AlfCore], {
+   return declare([_Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -70,15 +76,41 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_dnd_DragAndDropItems__postCreate() {
-         var palette = new Source(this.paletteNode, {
+         // Listen for items that are selected through key presses so that the currently selected item
+         // can be inserted into a drop target when the drop target is actioned by the keyboard
+         on(this.paletteNode, Constants.itemSelectedEvent, lang.hitch(this, this.onItemSelected));
+
+         this.sourceTarget = new Source(this.paletteNode, {
             copyOnly: true,
             selfCopy: false,
             creator: lang.hitch(this, this.creator),
             withHandles: this.dragWithHandles
          });
-         palette.insertNodes(false, this.items);
+         this.sourceTarget.insertNodes(false, this.items);
 
          this.alfSubscribe(Constants.requestItemToAddTopic, lang.hitch(this, this.onItemToAddRequest));
+      },
+
+      /**
+       * Handles the selection of an item. When an item is selected it will returned as the item to
+       * insert into a drag target when requested.
+       *
+       * @instance
+       * @param {object} evt The selection event
+       */
+      onItemSelected: function alfresco_dnd_DragAndDropItems__onItemToAddRequest(evt) {
+         if (evt && evt.target && evt.target.parentNode)
+         {
+            var item = this.sourceTarget.getItem(evt.target.parentNode.id);
+            if (item)
+            {
+               this._selectedItem = item;
+               array.forEach(this.sourceTarget.getAllNodes(), function(node) {
+                  domClass.remove(node.firstChild, "selected");
+               });
+               domClass.add(evt.target, "selected");
+            }
+         }
       },
 
       /**
@@ -89,16 +121,31 @@ define(["dojo/_base/declare",
       onItemToAddRequest: function alfresco_dnd_DragAndDropItems__onItemToAddRequest(payload) {
          if (payload.promise && typeof payload.promise.resolve === "function")
          {
-            // TODO: Get selected item...
-            if (this.items && this.items.length > 0)
+            if (this._selectedItem)
             {
                payload.promise.resolve({
-                  item: lang.clone(this.items[0])
+                  item: lang.clone(this._selectedItem.data)
                });
             }
          }
       },
       
+      /**
+       * The widgets model to render as a drag-and-drop item.
+       *
+       * @instance
+       * @type {array}
+       */
+      widgets: [
+         {
+            name: "alfresco/dnd/DragAndDropItem",
+            config: {
+               iconClass: "{iconClass}",
+               title: "{title}"
+            }
+         }
+      ],
+
       /**
        * Handles the creation of drag and drop avatars. This could check the supplied hint parameter
        * to see if an avatar is required, but since the source doesn't allow self-copying and is not
@@ -108,13 +155,15 @@ define(["dojo/_base/declare",
        * @param {object} item The configuration for the dragged item.
        */
       creator: function alfresco_dnd_DragAndDropItems__creator(item, hint) {
-         this.alfLog("log", "Creating", item, hint);
+         // jshint unused: false
+         var node = domConstruct.create("div");         
          var clonedItem = lang.clone(item);
-
-         var node = domConstruct.toDom(stringUtil.substitute(PaletteItemTemplate, {
-            title: clonedItem.label ? clonedItem.label : "",
-            iconClass: clonedItem.iconClass ? clonedItem.iconClass : ""
-         }));
+         this.currentItem = {};
+         this.currentItem.title = clonedItem.label || "";
+         this.currentItem.iconClass = clonedItem.iconClass || "";
+         var widgetModel = lang.clone(this.widgets);
+         this.processObject(["processCurrentItemTokens"], widgetModel);
+         this.processWidgets(widgetModel, node);
          return {node: node, data: clonedItem, type: clonedItem.type};
       },
       
