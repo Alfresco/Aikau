@@ -319,6 +319,42 @@ define(["intern!object",
    });
 
    registerSuite({
+      name: "Title Tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Title", "Title Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+      
+      "Test title gets set": function() {
+         return browser.findByCssSelector(".alfresco-header-Title:nth-child(2)")
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "This is a title", "The title was not set");
+            });
+      },
+
+      "Long title is truncated": function() {
+         return browser.findByCssSelector(".alfresco-header-Title:nth-child(3) .text")
+         .then(function(elem){
+            return elem.getSize();
+         })
+         .then(function(size){
+            assert.equal(size.width, 300, "Long title width incorrect");
+         })
+         .screenie(); // For visual verification of ellipsis if required
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   registerSuite({
       name: "Set Title Tests",
 
       setup: function() {
