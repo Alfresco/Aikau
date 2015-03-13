@@ -35,8 +35,10 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Title.html",
         "dojo/_base/lang",
         "alfresco/core/Core",
-        "service/constants/Default"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, lang, AlfCore, AlfConstants) {
+        "service/constants/Default",
+        "dojo/dom-class",
+        "dojo/dom-style"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, lang, AlfCore, AlfConstants, domClass, domStyle) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
       
@@ -118,7 +120,13 @@ define(["dojo/_base/declare",
          {
             document.title = this.browserTitlePrefix + " \u00bb " + this.label; // Set the browser title
          }
-         
+         if (this.maxWidth) {
+            this.textNode.title = this.label;
+            domClass.add(this.textNode, "has-max-width");
+            domStyle.set(this.textNode, {
+               maxWidth: this.maxWidth
+            });
+         }
          if (this.targetUrl)
          {
             this.textNode.href = AlfConstants.URL_PAGECONTEXT + this.targetUrl;
