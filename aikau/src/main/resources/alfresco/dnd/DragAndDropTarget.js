@@ -47,9 +47,11 @@ define(["dojo/_base/declare",
         "dojo/aspect",
         "dojo/on",
         "alfresco/dnd/Constants",
-        "dojo/Deferred"], 
+        "dojo/Deferred",
+        "dojo/_base/event",
+        "dojo/keys"], 
         function(declare, _Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, template, AlfCore, 
-                 lang, array, registry, Source, Target, domConstruct, domClass, aspect, on, Constants, Deferred) {
+                 lang, array, registry, Source, Target, domConstruct, domClass, aspect, on, Constants, Deferred, Event, keys) {
    
    return declare([_Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore], {
       
@@ -423,6 +425,41 @@ define(["dojo/_base/declare",
          // NOTE: This is needed to ensure that form controls are rendered correctly
          //       after being dropped onto the page...
          this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
+      },
+
+      /**
+       * Handles key presses when the drop target has focus. If the key pressed is the ENTER key
+       * then a request will be published to request an item to insert. This is expected to be
+       * the currently selected item in a [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * widget.
+       * 
+       * @instance
+       * @param {object} evt The keypress event
+       */
+      onKeyPress: function alfresco_dnd_DragAndDropTarget__onKeyPress(evt) {
+         if (evt.charOrCode === keys.ENTER)
+         {
+            evt && Event.stop(evt);
+            var promise = new Deferred();
+            promise.then(lang.hitch(this, this.addItem));
+            this.alfPublish(Constants.requestItemToAddTopic, {
+               promise: promise
+            });
+         }
+      },
+
+      /**
+       * Inserts a new item provided by a resolved promise.
+       *
+       * @instance
+       * @param {promise} resolvedPromise A resolved promise that is expected to contain an item to insert
+       */
+      addItem: function alfresco_dnd_DragAndDropTarget__addItem(resolvedPromise) {
+         if (resolvedPromise.item)
+         {
+            var createdItem = this.creator(resolvedPromise.item);
+            this.previewTarget.insertNodes(true, [createdItem.data]);
+         }
       }
    });
 });

@@ -49,6 +49,15 @@ define(["dojo/_base/declare",
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
       /**
+       * The array of file(s) containing internationalised strings.
+       *
+       * @instance
+       * @type {object}
+       * @default [{i18nFile: "./i18n/DroppedItemWrapper.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/DroppedItemWrapper.properties"}],
+
+      /**
        * An array of the CSS files to use with this widget.
        * 
        * @instance
@@ -71,6 +80,102 @@ define(["dojo/_base/declare",
        * @default null
        */
       value: null,
+
+      /**
+       * The name of the file to use for the move up image. This is expected to be in the css/images relative path
+       * of the widget.
+       *
+       * @instance
+       * @type {string}
+       * @default "move-up.png"
+       */
+      upImg: "move-up.png",
+      
+      /**
+       * The name of the file to use for the move down image. This is expected to be in the css/images relative path
+       * of the widget.
+       *
+       * @instance
+       * @type {string}
+       * @default "move-down.png"
+       */
+      downImg: "move-down.png",
+      
+      /**
+       * The name of the file to use for the edit image. This is expected to be in the css/images relative path
+       * of the widget.
+       *
+       * @instance
+       * @type {string}
+       * @default "edit-16.png"
+       */
+      editImg: "edit-16.png",
+      
+      /**
+       * The name of the file to use for the delete image. This is expected to be in the css/images relative path
+       * of the widget.
+       *
+       * @instance
+       * @type {string}
+       * @default "trashcan-16.png"
+       */
+      deleteImg: "trashcan-16.png",
+
+      /**
+       * The message to display as alt text for the move up image. This will also be displayed as a title on the
+       * image.
+       *
+       * @instance
+       * @type {string}
+       * @default "droppedItemWrapper.up.alt.text"
+       */
+      upAltText: "droppedItemWrapper.up.alt.text",
+      
+      /**
+       * The message to display as alt text for the move down image. This will also be displayed as a title on the
+       * image.
+       *
+       * @instance
+       * @type {string}
+       * @default "droppedItemWrapper.down.alt.text"
+       */
+      downAltText: "droppedItemWrapper.down.alt.text",
+      
+      /**
+       * The message to display as alt text for the delete image. This will also be displayed as a title on the
+       * image.
+       *
+       * @instance
+       * @type {string}
+       * @default "droppedItemWrapper.delete.alt.text"
+       */
+      deleteAltText: "droppedItemWrapper.delete.alt.text",
+      
+      /**
+       * The message to display as alt text for the edit image. This will also be displayed as a title on the
+       * image.
+       *
+       * @instance
+       * @type {string}
+       * @default "droppedItemWrapper.edit.alt.text"
+       */
+      editAltText: "droppedItemWrapper.edit.alt.text",
+
+      /**
+       * Sets up images and translations for alt text and titles.
+       * 
+       * @instance
+       */
+      postMixInProperties: function alfresco_dnd_DroppedItemWrapper__postMixInProperties() {
+         this.upAltText = this.encodeHTML(this.message(this.upAltText));
+         this.downAltText = this.encodeHTML(this.message(this.downAltText));
+         this.deleteAltText = this.encodeHTML(this.message(this.deleteAltText));
+         this.editAltText = this.encodeHTML(this.message(this.editAltText));
+         this.upImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.upImg;
+         this.downImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.downImg;
+         this.editImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.editImg;
+         this.deleteImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.deleteImg;
+      },
 
       /**
        * @instance
@@ -121,13 +226,13 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Emits a custom a "onWidgetDelete" event to indicate that the widget should be deleted.
+       * Emits a custom a event to indicate that the widget should be deleted.
        * TODO: Should this prompt the user with a confirmation dialog?
        * 
        * @instance
        * @param {object} evt The click event that triggers the delete.
        */
-      onWidgetDelete: function alfresco_dnd_DroppedItemWrapper__onWidgetDelete(/* jshint unused:false */ evt) {
+      onItemDelete: function alfresco_dnd_DroppedItemWrapper__onItemDelete(/* jshint unused:false */ evt) {
          on.emit(this.domNode, Constants.deleteItemEvent, {
             bubbles: true,
             cancelable: true,
@@ -142,7 +247,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event that triggers the delete.
        */
-      onWidgetEdit: function alfresco_dnd_DroppedItemWrapper__onWidgetEdit(/* jshint unused:false */ evt) {
+      onItemEdit: function alfresco_dnd_DroppedItemWrapper__onItemEdit(/* jshint unused:false */ evt) {
          var promise = new Deferred();
          promise.then(lang.hitch(this, this.onEditConfig, this.value));
          this.alfPublish(Constants.requestWidgetsForConfigTopic, {
@@ -214,6 +319,52 @@ define(["dojo/_base/declare",
             });
             domConstruct.empty(this.controlNode);
             this.postCreate();
+         }
+      },
+
+      /**
+       * Moves the item up one place.
+       * 
+       * @instance
+       */
+      onItemUp: function alfresco_dnd_DroppedItemWrapper__onItemUp() {
+         var currentIndex = $(this.domNode).index();
+         if (currentIndex !== 0)
+         {
+            var previousItem = $(this.domNode.parentNode).children().eq(currentIndex -1);
+            $(this.domNode).after($(previousItem));
+
+            on.emit(this.domNode, Constants.updateItemsEvent, {
+               bubbles: true,
+               cancelable: true,
+               targetWidget: this
+            });
+         }
+      },
+
+      /**
+       * Moves the item down one place.
+       * 
+       * @instance
+       */
+      onItemDown: function alfresco_dnd_DroppedItemWrapper__onItemonItemDown() {
+         var currentIndex = $(this.domNode).index();
+         var itemCount = $(this.domNode.parentNode).children().length;
+         if (currentIndex !== itemCount - 1)
+         {
+            var nextItem = $(this.domNode.parentNode).children().eq(currentIndex + 1);
+            $(this.domNode).before($(nextItem));
+
+            // NOTE: Potential alternative animation, not sure about it though...
+            // $(this.domNode).slideUp(300, function () {
+            //    $(this).insertAfter(nextItem).slideDown(300);
+            // });
+
+            on.emit(this.domNode, Constants.updateItemsEvent, {
+               bubbles: true,
+               cancelable: true,
+               targetWidget: this
+            });
          }
       }
    });

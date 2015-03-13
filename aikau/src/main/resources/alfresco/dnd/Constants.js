@@ -65,6 +65,16 @@ define([],function() {
        * @type {string}
        * @default "ALF_DND_REQUEST_WIDGETS_FOR_CONFIG"
        */
-      requestWidgetsForConfigTopic: "ALF_DND_REQUEST_WIDGETS_FOR_CONFIG"
+      requestWidgetsForConfigTopic: "ALF_DND_REQUEST_WIDGETS_FOR_CONFIG",
+
+      /**
+       * This topic is published when using the keyboard to insert a node. It requests the node
+       * to be inserted.
+       *
+       * @instance
+       * @type {string}
+       * @default "ALF_DND_REQUEST_ITEM_TO_ADD"
+       */
+      requestItemToAddTopic: "ALF_DND_REQUEST_ITEM_TO_ADD"
    };
 });

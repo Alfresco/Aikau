@@ -33,11 +33,12 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/DragAndDropItems.html",
         "dojo/text!./templates/DragAndDropItem.html",
         "alfresco/core/Core",
+        "alfresco/dnd/Constants",
         "dojo/dnd/Source",
         "dojo/_base/lang",
         "dojo/string",
         "dojo/dom-construct"], 
-        function(declare, _Widget, _Templated, template, PaletteItemTemplate, AlfCore, Source, lang, stringUtil, domConstruct) {
+        function(declare, _Widget, _Templated, template, PaletteItemTemplate, AlfCore, Constants, Source, lang, stringUtil, domConstruct) {
    
    return declare([_Widget, _Templated, AlfCore], {
       
@@ -76,6 +77,26 @@ define(["dojo/_base/declare",
             withHandles: this.dragWithHandles
          });
          palette.insertNodes(false, this.items);
+
+         this.alfSubscribe(Constants.requestItemToAddTopic, lang.hitch(this, this.onItemToAddRequest));
+      },
+
+      /**
+       * Handles requests to provide an item to insert into a [DragAndDropTarget]{@link module:alfresco/dnd/DragAndDropTarget}
+       * 
+       * @instance
+       */
+      onItemToAddRequest: function alfresco_dnd_DragAndDropItems__onItemToAddRequest(payload) {
+         if (payload.promise && typeof payload.promise.resolve === "function")
+         {
+            // TODO: Get selected item...
+            if (this.items && this.items.length > 0)
+            {
+               payload.promise.resolve({
+                  item: lang.clone(this.items[0])
+               });
+            }
+         }
       },
       
       /**

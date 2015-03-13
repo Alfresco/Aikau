@@ -1,6 +1,18 @@
-<div class="alfresco-dnd-DroppedItemWrapper">
-   <div class="action delete" data-dojo-attach-point="deleteNode" data-dojo-attach-event="onclick:onWidgetDelete"></div>
-   <div class="action edit" data-dojo-attach-point="editNode" data-dojo-attach-event="onclick:onWidgetEdit"></div>
+<div class="alfresco-dnd-DroppedItemWrapper" tabindex="0">
+   <div class="actions">
+      <span data-dojo-attach-point="reorderUpNode" class="action up" data-dojo-attach-event="ondijitclick:onItemUp" tabindex="0">
+         <img class="image" src="${upImageSrc}" alt="${upAltText}" title="${upAltText}"/>
+      </span>
+      <span data-dojo-attach-point="reorderDownNode" class="action down" data-dojo-attach-event="ondijitclick:onItemDown" tabindex="0">
+         <img class="image" src="${downImageSrc}" alt="${downAltText}" title="${downAltText}"/>
+      </span>
+      <span data-dojo-attach-point="deleteNode" class="action delete" data-dojo-attach-event="ondijitclick:onItemDelete" tabindex="0">
+         <img class="image" src="${deleteImageSrc}" alt="${deleteAltText}" title="${deleteAltText}"/>
+      </span>
+      <span data-dojo-attach-point="editNode" class="action edit" data-dojo-attach-event="ondijitclick:onItemEdit" tabindex="0">
+         <img class="image" src="${editImageSrc}" alt="${editAltText}" title="${editAltText}"/>
+      </span>
+   </div>
    <span class="dojoDndHandle"></span>
    <span class="label" data-dojo-attach-point="labelNode"></span>
    <span class="control" data-dojo-attach-point="controlNode"></span>
