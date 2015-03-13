@@ -143,7 +143,7 @@
 }
 
 /* This overrides the header menu bar settings to ensure that the popup menu item is the right height */
-.alfresco-share .alfresco-header-SearchBox-menu .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
+.alfresco-share .alfresco-header-SearchBox-menu .alfresco-menus-AlfMenuBar .dijitMenuBar .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     height: 16px;
     margin-top: 0;
     margin-left: -2px;
