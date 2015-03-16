@@ -69,9 +69,9 @@ define(["dojo/_base/declare",
        * @param {object} evt The keypress event
        */
       onKeyPress: function alfresco_dnd_DragAndDropTarget__onKeyPress(evt) {
-         if (evt.charOrCode === keys.ENTER)
+         if (evt && evt.charOrCode === keys.ENTER)
          {
-            evt && Event.stop(evt);
+            Event.stop(evt);
             on.emit(this.domNode, Constants.itemSelectedEvent, {
                bubbles: true,
                cancelable: true,
