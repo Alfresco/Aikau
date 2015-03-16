@@ -182,7 +182,7 @@ define(["dojo/_base/declare",
             this.creatingButtons = true;
             this.buttonsNode = domConstruct.create("div", {
                "class" : "footer"
-            }, this.containerNode, "last");
+            }, this.containerNode.parentNode, "last");
             this.processWidgets(this.widgetsButtons, this.buttonsNode);
             this.creatingButtons = false;
          }
