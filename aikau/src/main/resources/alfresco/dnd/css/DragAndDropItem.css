@@ -1,0 +1,43 @@
+.alfresco-dnd-DragAndDropItem.dragTemplate {
+   border: 1px solid #CCC;
+   margin: 5px;
+   padding: 5px;
+   width: 150px;
+   display: inline-block;
+   box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.3);
+   background-color: #fff;
+   background-image: none;
+}
+
+.alfresco-dnd-DragAndDropItem.dragTemplate:focus {
+   border: 4px solid orange;
+}
+
+.alfresco-dnd-DragAndDropItem.dragTemplate.selected {
+   border: 4px solid green;
+}
+
+.alfresco-dnd-DragAndDropItem.dragTemplate.dojoDndItemAnchor {
+   background-color: #fff;
+   background-image: none;
+}
+
+.alfresco-dnd-DragAndDropItem.dragTemplate.dojoDndItemOver {
+   background-color: #eee;
+   background-image: none;
+}
+
+.alfresco-dnd-DragAndDropItem.dragTemplate span {
+   vertical-align: middle;
+   display: inline-block;
+}
+
+.alfresco-dnd-DragAndDropItem.dragTemplate .icon {
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+}
+
+.alfresco-dnd-DragAndDropItem.dragTemplate .title {
+   width: 90px;
+}

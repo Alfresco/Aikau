@@ -22,20 +22,13 @@
    background-color: #EEE;
 }
 
-.alfresco-dnd-DroppedItemWrapper > .action {
-   background-repeat: no-repeat;
-   display: inline-block;
-   width: 16px;
-   height: 16px;
+.alfresco-dnd-DroppedItemWrapper > .actions {
    float: right;
 }
 
-.alfresco-dnd-DroppedItemWrapper > .action.delete {
-   background-image: url("./images/trashcan-16.png");
-}
-
-.alfresco-dnd-DroppedItemWrapper > .action.edit {
-   background-image: url("./images/edit-16.png");
+.alfresco-dnd-DroppedItemWrapper > .action {
+   width: 16px;
+   height: 16px;
 }
 
 .alfresco-dnd-DroppedItemWrapper > .dojoDndHandle {
