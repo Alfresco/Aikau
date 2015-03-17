@@ -147,6 +147,55 @@ define(["intern!object",
             });
       },
 
+      "Dialog is closed when dialogCloseTopic is set": function() {
+         return closeAllDialogs()
+            .then(function() {
+               return browser.findById("LAUNCH_FAILURE_DIALOG")
+                  .click()
+               .end()
+
+               .findByCssSelector("#TB3 .dijitInputContainer input")
+                  .clearValue()
+                  .type("Succeed")
+               .end()
+
+               .findByCssSelector("#FD3 .confirmationButton > span")
+                  .click()
+               .end()
+               .sleep(250) // Give the dialog a chance to be hidden
+               .findByCssSelector("#FD3")
+                  .isDisplayed()
+                  .then(function(displayed) {
+                     assert.isFalse(displayed, "The dialog was not hidden");
+                  });
+            });
+      },
+
+      "Dialog remains open when dialogCloseTopic is set": function() {
+         return closeAllDialogs()
+            .then(function() {
+               return browser.findById("LAUNCH_FAILURE_DIALOG")
+                  .click()
+               .end()
+
+               .findByCssSelector("#TB3 .dijitInputContainer input")
+                  .clearValue()
+                  .type("fail")
+               .end()
+
+               .findByCssSelector("#FD3 .confirmationButton > span")
+                  .click()
+               .end()
+               .sleep(250) // Give the dialog a chance to be hidden
+               .findByCssSelector("#FD3")
+                  .isDisplayed()
+                  .then(function(displayed) {
+                     assert.isTrue(displayed, "The dialog was not hidden");
+                  });
+            });
+      },
+
+
       "Can launch dialog within dialog": function() {
          return closeAllDialogs()
             .then(function() {

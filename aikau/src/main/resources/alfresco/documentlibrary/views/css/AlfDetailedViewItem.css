@@ -1,0 +1,34 @@
+.alfresco-documentlibrary-views-AlfDetailedViewItem {
+   .selector-column, .indicators-column {
+      width: 16px;
+   }
+   .thumbnail-column, .actions-column {
+      width: 100px;
+   }
+   .item-details {
+      border-spacing: 0;
+      > tr > td {
+         padding: 0;
+      }
+      &--separated {
+         > * {
+            border-left: 1px solid #d9d9d9;
+            display: inline-block;
+            margin-left: 10px;
+            padding-left: 10px;
+            &:first-child {
+               border: 0;
+               margin: 0;
+               padding: 0;
+            }
+         }
+      }
+   }
+   &--working-copy {
+      .item-details {
+         &--non-working-copy {
+            display: none;
+         }
+      }
+   }
+}

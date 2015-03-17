@@ -4,7 +4,7 @@
    <groupId>org.alfresco</groupId>
    <artifactId>aikau-parent</artifactId>
    <packaging>pom</packaging>
-   <version>1.0.9-SNAPSHOT</version>
+   <version>1.0.10-SNAPSHOT</version>
    
    <name>Aikau Project Aggregator</name>
 

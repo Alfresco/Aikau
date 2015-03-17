@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/renderers/IndicatorsTest"
+      "src/test/resources/alfresco/documentlibrary/views/AlfDetailedViewTest"
    ],
 
    /**
@@ -72,6 +72,7 @@ define({
       "src/test/resources/alfresco/documentlibrary/SearchListTest",
       "src/test/resources/alfresco/documentlibrary/SelectedItemsMenuTest",
       "src/test/resources/alfresco/documentlibrary/SitesListTest",
+      "src/test/resources/alfresco/documentlibrary/views/AlfDetailedViewTest",
       "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
       "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
@@ -84,13 +85,14 @@ define({
       "src/test/resources/alfresco/forms/DynamicFormTest",
       "src/test/resources/alfresco/forms/FormsTest",
       "src/test/resources/alfresco/forms/SingleTextFieldFormTest",
-      
+
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
       "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
       "src/test/resources/alfresco/forms/controls/DateTextBoxTest", // TODO: NEEDS FIXING
       "src/test/resources/alfresco/forms/controls/DocumentPickerTest",
+      "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest",
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
       "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",

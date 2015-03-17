@@ -10,6 +10,10 @@
    box-shadow: inset 5px 5px 10px -4px rgba(0,0,0,0.75);
 }
 
+.alfresco-dnd-DragAndDropTarget .previewPanel:focus {
+  border: 4px solid orange;
+}
+
 .alfresco-dnd-DragAndDropTarget .previewPanel.containsItems {
    /*border: none;*/
    padding-right: 50px;

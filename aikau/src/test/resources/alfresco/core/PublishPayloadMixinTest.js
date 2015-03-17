@@ -39,11 +39,7 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-
-     "Check that no search request is used when 'useHash' is enabled": function () {
+      "Check that no search request is used when 'useHash' is enabled": function () {
          // Check that with minimal configuration we still get a payload published
          return browser.findByCssSelector("#PA_NO_TYPE")
             .click()

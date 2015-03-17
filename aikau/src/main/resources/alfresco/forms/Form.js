@@ -470,6 +470,7 @@ define(["dojo/_base/declare",
          // Make sure to remove the alfTopic from the payload (this will always be assigned on publications
          // but is not actually part of the form data)...
          delete payload.alfTopic;
+         delete payload.alfPublishScope;
          var currHash = ioQuery.objectToQuery(payload);
          
          // Publish so that the NavigationService can set the hash fragment...

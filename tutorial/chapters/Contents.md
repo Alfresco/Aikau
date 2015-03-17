@@ -10,11 +10,11 @@
 8. [Widget Dialogs](./Tutorial8.md)
 9. [Actions in Lists](./Tutorial9.md)
 10. [Inline Editing Properties](./Tutorial10.md)
-11. Sorting and Pagination
-12. Introducing Menus
-13. Introducing Layout
-14. Recap for User Management
-15. Introducing Rendering Filters
-16. More Form Controls
+11. [Sorting and Pagination](./Tutorial11.md)
+12. [Introducing Menus](./Tutorial12.md)
+13. [Introducing Layout](./Tutorial13.md)
+14. [Recap for User Management](./Tutorial14.md)
+15. [Introducing Rendering Filters](./Tutorial15.md)
+16. [More Form Controls](./Tutorial16.md)
 17. Document Previews
 18. Document Details Page

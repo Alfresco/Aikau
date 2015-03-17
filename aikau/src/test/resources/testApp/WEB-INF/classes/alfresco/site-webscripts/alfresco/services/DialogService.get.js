@@ -10,7 +10,8 @@ model.jsonModel = {
                }
             }
       },
-      "alfresco/services/DialogService"
+      "alfresco/services/DialogService",
+      "aikauTesting/mockservices/FormDialogMockService"
    ],
    widgets: [
       {
@@ -95,6 +96,31 @@ model.jsonModel = {
                               }
                            ]
                         }
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "LAUNCH_FAILURE_DIALOG",
+         config: {
+            label: "Launch Failing Form Dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogTitle: "Failure Test Dialog",
+               dialogId: "FD3",
+               formSubmissionTopic: "POST_FORM_DIALOG",
+               dialogCloseTopic: "FORM_POST_SUCCESS",
+               widgets: [
+                  {
+                     id: "TB3",
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        description: "The service will fail when value is 'fail'"
                      }
                   }
                ]

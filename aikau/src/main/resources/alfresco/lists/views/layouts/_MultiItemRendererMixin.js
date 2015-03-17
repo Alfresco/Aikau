@@ -423,7 +423,7 @@ define(["dojo/_base/declare",
             {
                config.config.currentMetadata = this.currentData.metadata;
             }
-            this.inherited(arguments);
+            return this.inherited(arguments);
          }
       },
 

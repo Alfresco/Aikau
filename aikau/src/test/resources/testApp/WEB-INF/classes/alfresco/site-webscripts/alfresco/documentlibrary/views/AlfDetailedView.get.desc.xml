@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfDetailedView Test</shortname>
+  <description>This WebScript defines the AlfDetailedView page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfDetailedView</url>
+</webscript>

@@ -396,22 +396,25 @@ define(["dojo/_base/declare",
          }
 
          array.forEach(topics, function(topic) {
+            if (!payload)
+            {
+               payload = {};
+            }
             var scopedTopic = topic;
-            if (global != null && global === true)
+            if (global !== false && global === true)
             {
                // No action required - use global scope
+               payload.alfPublishScope = "";
             }
-            else if (parentScope != null && parentScope === true)
+            else if (parentScope === true)
             {
                scopedTopic = this.parentPubSubScope + topic;
+               payload.alfPublishScope = this.parentPubSubScope;
             }
             else
             {
                scopedTopic = this.pubSubScope + topic;
-            }
-            if (payload == null)
-            {
-               payload = {};
+               payload.alfPublishScope = this.pubSubScope;
             }
             payload.alfTopic = scopedTopic;
 

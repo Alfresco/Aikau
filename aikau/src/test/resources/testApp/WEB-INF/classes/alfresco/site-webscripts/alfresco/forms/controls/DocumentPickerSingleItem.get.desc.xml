@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DocumentPicker Test</shortname>
+  <description>This WebScript defines test page for the DocumentPicker in single item mode</description>
+  <family>aikau-unit-tests</family>
+  <url>/DocumentPickerSingleItem</url>
+</webscript>

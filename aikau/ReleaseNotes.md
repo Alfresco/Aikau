@@ -1,8 +1,12 @@
-Aikau 1.0.8 Release Notes
+Aikau 1.0.9 Release Notes
 =========================
 
 Current deprecations:
 ---------------------
+This release:
+* alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
+* alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
+
 Previous releases:
 * alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
 * alfresco/documentlibrary/views/DocumentListRenderer            (use: alfresco/lists/views/ListRenderer)
@@ -32,6 +36,19 @@ Previous releases:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.9:
+* [AKU-33](https://issues.alfresco.com/jira/browse/AKU-33)     - Add dedicated Detailed View result widget for performance
+* [AKU-115](https://issues.alfresco.com/jira/browse/AKU-115)   - Use keyboard to add DND items
+* [AKU-116](https://issues.alfresco.com/jira/browse/AKU-116)   - Re-order DND items using keyboard navigation
+* [AKU-148](https://issues.alfresco.com/jira/browse/AKU-148)   - Alias AlfDocumentListPaginator
+* [AKU-149](https://issues.alfresco.com/jira/browse/AKU-149)   - When a publishPayloadType 'BUILD' updates
+* [AKU-150](https://issues.alfresco.com/jira/browse/AKU-150)   - Title overflow handling
+* [AKU-155](https://issues.alfresco.com/jira/browse/AKU-155)   - Improved form dialog submission failures
+* [AKU-160](https://issues.alfresco.com/jira/browse/AKU-160)   - Duplicate BaseFormControlfunctions
+* [AKU-161](https://issues.alfresco.com/jira/browse/AKU-161)   - Fix noValueUpdateWhenHiddenOrDisabled
+* [AKU-164](https://issues.alfresco.com/jira/browse/AKU-164)   - SearchBox styling
+* [AKU-168](https://issues.alfresco.com/jira/browse/AKU-168)   - PickedItem fails in singleItemMode
+
 1.0.8:
 * [AKU-5](https://issues.alfresco.com/jira/browse/AKU-5)       - Remove YUI2 and Share dependencies from TinyMCE modules
 * [AKU-30](https://issues.alfresco.com/jira/browse/AKU-30)     - Updates to Indicators renderer
