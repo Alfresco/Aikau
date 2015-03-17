@@ -9,7 +9,7 @@
 .alfresco-forms-controls-BaseFormControl > .title-row > label {
    font-size: @normal-font-size;
    line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
-   margin-bottom: 5px;
+   margin-bottom: 3px;
    display: inline-block;
 }
 
