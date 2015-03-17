@@ -2,7 +2,7 @@
 
 ### About Aikau
 #### What is Aikau?
-Aikau is a meta-framework of custom JavaScript widgets designed to work with Alfresco. It is dependant upon the Surf framework but is not dependant upon Alfresco Share application.
+Aikau is a meta-framework of custom JavaScript widgets designed to work with Alfresco. It is dependant upon the Surf framework but is not dependent upon Alfresco Share application.
 
 The framework provides a suite of widgets that can be referenced in JSON models to build complete pages. These page models can be defined in WebScripts or remotely stored and rendered from an Alfresco Repository. This means that it possible to dynamically create and render new pages from within an application without needing to restart the server.
  
