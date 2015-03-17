@@ -24,14 +24,14 @@
  * capabilities of form controls so that additional data can be set as other fields are updated.
  *
  * @module alfresco/forms/controls/HiddenValue
- * @extends module:alfresco/forms/controls/DojoValidationTextBox
+ * @extends module:alfresco/forms/controls/TextBox
  * @author Dave Draper
  */
-define(["alfresco/forms/controls/DojoValidationTextBox",
+define(["alfresco/forms/controls/TextBox",
         "dojo/_base/declare"], 
-        function(DojoValidationTextBox, declare) {
+        function(TextBox, declare) {
    
-   return declare([DojoValidationTextBox], {
+   return declare([TextBox], {
       
       /**
        * Overrides the [inherited attribute]{@link module:alfresco/forms/controls/BaseFormControl#visibilityConfig} 
@@ -48,11 +48,9 @@ define(["alfresco/forms/controls/DojoValidationTextBox",
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_HiddenValue__getWidgetConfig() {
-         this.setValue(this.value);
          return {
             id : this.generateUuid(),
-            name: this.name,
-            value: ""
+            name: this.name
          };
       },
 
@@ -85,7 +83,15 @@ define(["alfresco/forms/controls/DojoValidationTextBox",
        * @param {object} value The value to set.
        */
       setValue: function alfresco_forms_controls_HiddenValue__setValue(value) {
-         this.___hiddenValue = value;
-      },
+         // this.___hiddenValue = value;
+         if (this.deferValueAssigment)
+         {
+            this.inherited(arguments);
+         }
+         else
+         {
+            this.___hiddenValue = value;
+         }
+      }
    });
 });

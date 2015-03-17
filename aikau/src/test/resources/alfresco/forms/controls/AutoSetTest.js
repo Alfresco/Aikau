@@ -40,10 +40,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
       "Check the initial post (source field)": function () {
          return browser.findByCssSelector(".confirmationButton > span")
             .click()
@@ -65,6 +61,13 @@ define(["intern!object",
          return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "hidden", ""))
             .then(function(elements) {
                assert(elements.length === 1, "Hidden field not posted correctly");
+            });
+      },
+
+      "Check the initial post (hidden field without auto set config)": function () {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "hidden2", "initial value"))
+            .then(function(elements) {
+               assert(elements.length === 1, "Second hidden field not posted correctly");
             });
       },
 
@@ -138,6 +141,19 @@ define(["intern!object",
          return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "hidden", ""))
             .then(function(elements) {
                assert(elements.length === 1, "Hidden field not posted correctly");
+            });
+      },
+
+      "Check that hidden field value can be set by form value update": function() {
+         return browser.findByCssSelector("#SET_FORM_VALUE")
+            .click()
+         .end()
+         .findByCssSelector(".confirmationButton > span")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "hidden2", "Value Set"))
+            .then(function(elements) {
+               assert(elements.length === 1, "Second hidden field not posted correctly");
             });
       },
 

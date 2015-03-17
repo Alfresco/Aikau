@@ -15,10 +15,25 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         id: "SET_FORM_VALUE",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Set Form Publication",
+            publishTopic: "SET_FORM_VALUE",
+            publishPayload: {
+               hidden2: "Value Set"
+            }
+         }
+      },
+      {
          name: "alfresco/forms/Form",
          config: {
             okButtonPublishTopic: "POST_FORM",
+            setValueTopic: "SET_FORM_VALUE",
             scopeFormControls: false,
+            value: {
+               hidden2: "initial value"
+            },
             widgets: [
                {
                   id: "SOURCE",
@@ -79,15 +94,19 @@ model.jsonModel = {
                         }
                      ]
                   }
+               },
+               {
+                  id: "HIDDEN2",
+                  name: "alfresco/forms/controls/HiddenValue",
+                  config: {
+                     name: "hidden2"
+                  }
                }
             ]
          }
       },
       {
          name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };
