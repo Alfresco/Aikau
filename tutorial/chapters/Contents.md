@@ -16,5 +16,5 @@
 14. [Recap for User Management](./Tutorial14.md)
 15. [Introducing Rendering Filters](./Tutorial15.md)
 16. [More Form Controls](./Tutorial16.md)
-17. Document Previews
+17. [Document Previews](./Tutorial17.md)
 18. Document Details Page
