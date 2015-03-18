@@ -223,4 +223,117 @@ define(["intern!object",
          TestCommon.alfPostCoverageResults(this, browser);
       }
    });
+
+   registerSuite({
+      name: "Search Box Tests (Configuration options)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SearchBox", "Search Box Tests", "/site/site1/tp/ws").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check alternative placeholder text": function() {
+         return browser.findByCssSelector("#SB2 .alfresco-header-SearchBox-text")
+            .getAttribute("placeholder")
+            .then(function(placeholder) {
+               assert.equal(placeholder, "Whatcha lookin' for?", "Placeholder text override not shown");
+            });
+      },
+
+      "Check search results redirect can be suppressed": function() {
+         return browser.findByCssSelector("#SB2 input.alfresco-header-SearchBox-text")
+            .type("site")
+            .pressKeys(keys.RETURN)
+         .end()
+         .sleep(500)
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_WIDGET_PROCESSING_COMPLETE", "publish", "last"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "The search request was not suppressed");
+            });
+      },
+
+      "Check that document titles can be overridden": function() {
+         return browser.findByCssSelector("#SB2 .alf-live-search-documents-title")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Stuff", "Documents title was not overridden");
+            });
+      },
+
+      "Check that people titles can be overridden": function() {
+         return browser.findByCssSelector("#SB2 .alf-live-search-people-title")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Even more stuff", "People title was not overridden");
+            });
+      },
+
+      "Check that live search site results can be hidden": function() {
+         return browser.findByCssSelector("#SB2 .alf-live-search-sites-list")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The live search sites results weren't hidden");
+            });
+      },
+
+      "Check that live search document results can be hidden": function() {
+         return browser.findByCssSelector("#SB2 .alfresco-header-SearchBox-clear div")
+               .click()
+            .end()
+            .findByCssSelector("#SB3 input.alfresco-header-SearchBox-text")
+               .type("site")
+            .end()
+            .sleep(500)
+            .findByCssSelector("#SB3 .alf-live-search-documents-list")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed, "The live search sites results weren't hidden");
+               });
+      },
+
+      "Check that sites titles can be overridden": function() {
+         return browser.findByCssSelector("#SB3 .alf-live-search-sites-title")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Other stuff", "Sites title was not overridden");
+            });
+      },
+
+      "Check that live search people results can be hidden": function() {
+         return browser.findByCssSelector("#SB3 .alfresco-header-SearchBox-clear div")
+               .click()
+            .end()
+            .findByCssSelector("#SB4 input.alfresco-header-SearchBox-text")
+               .type("site")
+            .end()
+            .sleep(500)
+            .findByCssSelector("#SB4 .alf-live-search-people-list")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed, "The live search sites results weren't hidden");
+               });
+      },
+
+      "Check that hidden search terms are included": function() {
+         return browser.findByCssSelector("#SB4 .alfresco-header-SearchBox-clear div")
+               .click()
+            .end()
+            .findByCssSelector("#SB5 input.alfresco-header-SearchBox-text")
+               .type("data")
+               .pressKeys(keys.RETURN)
+            .end()
+            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_NAVIGATE_TO_PAGE", "url", "dp/ws/faceted-search#searchTerm=data%20secret%20squirrels&scope=repo&sortField=Relevance"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Did not find expected navigation publication request (check the search scope contains site!)");
+               });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 });
