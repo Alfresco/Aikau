@@ -18,6 +18,20 @@
  */
 
 /**
+ * <p>This widget provides multiple ways in which search requests can be made. As well as supporting the basic ability
+ * to allow the user to enter a search term and hit the return key to go to a 
+ * [configurable search results page]{@link module:alfresco/header/SearchBox#searchResultsPage} it also supports the ability
+ * to immediately show search results for documents, sites and users as characters are entered. These "live search" results
+ * can be [completely disabled]{@link module:alfresco/header/SearchBox#liveSearch} or individually disabled for any combination
+ * of [documents]{@link module:alfresco/header/SearchBox#showDocumentResults}, [sites]{@link module:alfresco/header/SearchBox#showSiteResults}
+ * and [users]{@link module:alfresco/header/SearchBox#showPeopleResults}.</p>
+ * <p>It's possible to override [placeholder]{@link module:alfresco/header/SearchBox#placeholder} text as well as the 
+ * live search result titles for [documents]{@link module:alfresco/header/SearchBox#documentsTitle}, 
+ * [sites]{@link module:alfresco/header/SearchBox#sitesTitle} and [users]{@link module:alfresco/header/SearchBox#peopleTitle}. Links 
+ * for individual results can also be configured and it is also possible to include
+ * [hidden search terms]{@link module:alfresco/header/SearchBox#hiddenSearchTerms} in the search queries to tailor the
+ * results.</p>
+ * 
  * @module alfresco/header/SearchBox
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -112,9 +126,10 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_header_LiveSearch__postMixInProperties() {
          // construct our I18N labels ready for template
          this.label = {};
-         array.forEach(["documents", "sites", "people", "more"], lang.hitch(this, function(msg) {
-            this.label[msg] = this.message("search." + msg);
-         }));
+         this.label.documents = this.message(this.searchBox.documentsTitle);
+         this.label.sites = this.message(this.searchBox.sitesTitle);
+         this.label.people = this.message(this.searchBox.peopleTitle);
+         this.label.more = this.message(this.searchBox.moreTitle);
       },
       
       /**
@@ -401,6 +416,54 @@ define(["dojo/_base/declare",
       peoplePage: "profile",
 
       /**
+       * If this is overridden to be true then hitting the enter key will not trigger a redirect
+       * to a search results page.
+       *
+       * @instance
+       * @type {boolean}
+       * @default  false
+       */
+      suppressRedirect: false,
+
+      /**
+       * Indicates whether or not document results should be displayed in the live search pane.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      showDocumentResults: true,
+
+      /**
+       * Indicates whether or not site results should be displayed in the live search pane.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      showSiteResults: true,
+
+      /**
+       * Indicates whether or not people results should be displayed in the live search pane.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      showPeopleResults: true,
+
+      /**
+       * Some additional search terms to include in search requests that will not be displayed to the
+       * user. Setting this can tailor the results that are shown in both the search results page and
+       * the live search results.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      hiddenSearchTerms: "",
+
+      /**
        * @instance
        */
       postMixInProperties: function alfresco_header_SearchBox__postMixInProperties() {
@@ -425,6 +488,60 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * The placeholder text to set in the main input field.
+       *
+       * @instance
+       * @type {string}
+       * @default "search.instruction"
+       */
+      placeholder: "search.instruction",
+
+      /**
+       * The text to use for the accessibility instruction on the input field.
+       *
+       * @instance
+       * @type {string}
+       * @default "search.label"
+       */
+      accessibilityInstruction: "search.label",
+
+      /**
+       * The title to use as above document results in the live search results panel.
+       * 
+       * @instance
+       * @type {string}
+       * @default "search.documents"
+       */
+      documentsTitle: "search.documents",
+
+      /**
+       * The title to use as above site results in the live search results panel.
+       * 
+       * @instance
+       * @type {string}
+       * @default "search.sites"
+       */
+      sitesTitle: "search.sites",
+
+      /**
+       * The title to use as above people results in the live search results panel.
+       * 
+       * @instance
+       * @type {string}
+       * @default "search.people"
+       */
+      peopleTitle: "search.people",
+
+      /**
+       * The title to use on the button for retrieving more document results.
+       * 
+       * @instance
+       * @type {string}
+       * @default "search.more"
+       */
+      moreTitle: "search.more",
+
+      /**
        * @instance
        */
       postCreate: function alfresco_header_SearchBox__postCreate() {
@@ -433,7 +550,7 @@ define(["dojo/_base/declare",
          this.resultsCounts = {};
          
          domAttr.set(this._searchTextNode, "id", "HEADER_SEARCHBOX_FORM_FIELD");
-         domAttr.set(this._searchTextNode, "placeholder", this.message("search.instruction"));
+         domAttr.set(this._searchTextNode, "placeholder", this.message(this.placeholder));
          
          on(this._searchTextNode, "keyup", lang.hitch(this, function(evt) {
             this.onSearchBoxKeyUp(evt);
@@ -555,17 +672,17 @@ define(["dojo/_base/declare",
          if (this.searchResultsPage)
          {
             // Generate custom search page link...
-            url = this.searchResultsPage + "#searchTerm=" + encodeURIComponent(terms) + "&scope=" + scope + "&sortField=Relevance";
+            url = this.searchResultsPage + "#searchTerm=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&scope=" + scope + "&sortField=Relevance";
          }
          else if (this.linkToFacetedSearch === true)
          {
             // Generate faceted search page link...
-            url = "dp/ws/faceted-search#searchTerm=" + encodeURIComponent(terms) + "&scope=" + scope + "&sortField=Relevance";
+            url = "dp/ws/faceted-search#searchTerm=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&scope=" + scope + "&sortField=Relevance";
          }
          else
          {
             // Generate old search page link...
-            url = "search?t=" + encodeURIComponent(terms) + (this.allsites ? "&a=true&r=false" : "&a=false&r=true");
+            url = "search?t=" + encodeURIComponent(terms + this.hiddenSearchTerms) + (this.allsites ? "&a=true&r=false" : "&a=false&r=true");
          }
          if (this.site)
          {
@@ -693,7 +810,7 @@ define(["dojo/_base/declare",
             // Enter key press
             case 13:
             {
-               if (terms.length !== 0)
+               if (terms.length !== 0 && this.suppressRedirect !== true)
                {
                   this.onSaveLastUserSearch();
                   // ACE-1798 - always close the live search drop-down on enter keypress..
@@ -732,9 +849,18 @@ define(["dojo/_base/declare",
                      }
                      var _this = this;
                      this._timeoutHandle = setTimeout(function() {
-                        _this.liveSearchDocuments(terms, 0);
-                        _this.liveSearchSites(terms, 0);
-                        _this.liveSearchPeople(terms, 0);
+                        if (_this.showDocumentResults)
+                        {
+                           _this.liveSearchDocuments(terms, 0);
+                        }
+                        if (_this.showSiteResults)
+                        {
+                           _this.liveSearchSites(terms, 0);
+                        }
+                        if (_this.showPeopleResults)
+                        {
+                           _this.liveSearchPeople(terms, 0);
+                        }
                      }, this._keyRepeatWait);
                   }
                }
@@ -754,7 +880,7 @@ define(["dojo/_base/declare",
       liveSearchDocuments: function alfresco_header_SearchBox__liveSearchDocuments(terms, startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-docs?t=" + encodeURIComponent(terms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
+               url: AlfConstants.PROXY_URI + "slingshot/live-search-docs?t=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
                method: "GET",
                successCallback: function(response) {
                   if (startIndex === 0)
@@ -839,7 +965,7 @@ define(["dojo/_base/declare",
       liveSearchSites: function alfresco_header_SearchBox__liveSearchSites(terms, /*jshint unused:false*/ startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-sites?t=" + encodeURIComponent(terms) + "&maxResults=" + this._resultPageSize,
+               url: AlfConstants.PROXY_URI + "slingshot/live-search-sites?t=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&maxResults=" + this._resultPageSize,
                method: "GET",
                successCallback: function(response) {
                   this._LiveSearch.containerNodeSites.innerHTML = "";
@@ -878,7 +1004,7 @@ define(["dojo/_base/declare",
       liveSearchPeople: function alfresco_header_SearchBox__liveSearchPeople(terms, /*jshint unused:false*/ startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-people?t=" + encodeURIComponent(terms) + "&maxResults=" + this._resultPageSize,
+               url: AlfConstants.PROXY_URI + "slingshot/live-search-people?t=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&maxResults=" + this._resultPageSize,
                method: "GET",
                successCallback: function(response) {
                   this._LiveSearch.containerNodePeople.innerHTML = "";
@@ -1002,7 +1128,7 @@ define(["dojo/_base/declare",
       addAccessibilityLabel: function alfresco_header_SearchBox__addAccessibilityLabel() {
          domConstruct.create("label", {
             "for": "HEADER_SEARCHBOX_FORM_FIELD",
-            innerHTML: this.message("search.label"),
+            innerHTML: this.message(this.accessibilityInstruction),
             "class": "hidden"
          }, this._searchTextNode, "before");
       },
