@@ -339,6 +339,8 @@ define(["dojo/_base/declare",
             parentPubSubScope: config.parentPubSubScope,
             additionalCssClasses: config.additionalCssClasses ? config.additionalCssClasses : "",
             suppressCloseClasses: suppressCloseClasses,
+            contentWidth: config.contentWidth ? config.contentWidth : null,
+            contentHeight: config.contentHeight ? config.contentHeight : null,
             widgetsContent: [formConfig],
             widgetsButtons: [
                   {
