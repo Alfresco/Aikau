@@ -47,71 +47,87 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
-                           id: "DRAG_PALETTE",
-                           name: "alfresco/dnd/DragAndDropItems",
-                           widthPx: 200,
+                           name: "alfresco/layout/ClassicWindow",
+                           widthPx: 300,
                            config: {
-                              items: [
+                              title: "Widget Palette",
+                              widgets: [
                                  {
-                                    type: [ "widget" ],
-                                    label: "Form Control",
-                                    value: {
-                                       name: "alfresco/forms/controls/TextBox",
-                                       config: {
-                                          label: "No Label",
-                                          description: "No description",
-                                          value: ""
-                                       }
-                                    }
-                                 },
-                                 {
-                                    type: [ "widget" ],
-                                    label: "Form",
-                                    value: {
-                                       name: "alfresco/forms/Form",
-                                       config: {
-                                       }
+                                    id: "DRAG_PALETTE",
+                                    name: "alfresco/dnd/DragAndDropItems",
+                                    config: {
+                                       items: [
+                                          {
+                                             type: [ "widget" ],
+                                             label: "Form Control",
+                                             value: {
+                                                name: "alfresco/forms/controls/TextBox",
+                                                config: {
+                                                   label: "No Label",
+                                                   description: "No description",
+                                                   value: ""
+                                                }
+                                             }
+                                          },
+                                          {
+                                             type: [ "widget" ],
+                                             label: "Form",
+                                             value: {
+                                                name: "alfresco/forms/Form",
+                                                config: {
+                                                }
+                                             }
+                                          }
+                                       ]
                                     }
                                  }
                               ]
                            }
                         },
                         {
-                           id: "FORM1",
-                           name: "alfresco/forms/Form",
+                           name: "alfresco/layout/ClassicWindow",
                            config: {
-                              scopeFormControls: false,
-                              okButtonLabel: "Save",
-                              okButtonPublishTopic: "FORM1_POST",
-                              okButtonPublishGlobal: true,
-                              showCancelButton: false,
+                              title: "Widget Layout",
                               widgets: [
                                  {
-                                    id: "ROOT_DROPPED_ITEMS1",
-                                    name: "alfresco/forms/controls/DragAndDropTargetControl",
+                                    id: "FORM1",
+                                    name: "alfresco/forms/Form",
                                     config: {
-                                       label: "Widgets",
-                                       name: "widgets",
-                                       value: null,
-                                       acceptTypes: ["widget"],
-                                       useModellingService: true
-                                    }
-                                 }
-                              ],
-                              widgetsAdditionalButtons: [
-                                 {
-                                    name: "alfresco/buttons/AlfButton",
-                                    config: {
-                                       label: "Preview",
-                                       publishTopic: "ALF_GENERATE_PAGE_PREVIEW"
-                                    }
-                                 },
-                                 {
-                                    name: "alfresco/buttons/AlfButton",
-                                    config: {
-                                       label: "WebScript Controller Export",
-                                       publishTopic: "ALF_EXPORT_PAGE_DEFINITION",
-                                       publishGlobal: true
+                                       scopeFormControls: false,
+                                       okButtonLabel: "Save",
+                                       okButtonPublishTopic: "FORM1_POST",
+                                       okButtonPublishGlobal: true,
+                                       showCancelButton: false,
+                                       widgets: [
+                                          {
+                                             id: "ROOT_DROPPED_ITEMS1",
+                                             name: "alfresco/forms/controls/DragAndDropTargetControl",
+                                             config: {
+                                                label: "Widgets",
+                                                name: "widgets",
+                                                value: null,
+                                                acceptTypes: ["widget"],
+                                                useModellingService: true
+                                             }
+                                          }
+                                       ],
+                                       widgetsAdditionalButtons: [
+                                          {
+                                             name: "alfresco/buttons/AlfButton",
+                                             config: {
+                                                label: "Preview",
+                                                publishTopic: "ALF_GENERATE_PAGE_PREVIEW"
+                                             }
+                                          },
+                                          {
+                                             name: "alfresco/buttons/AlfButton",
+                                             config: {
+                                                label: "WebScript Controller Export",
+                                                publishTopic: "ALF_EXPORT_PAGE_DEFINITION",
+                                                publishGlobal: true
+                                             }
+                                          }
+                                       ]
                                     }
                                  }
                               ]

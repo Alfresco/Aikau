@@ -45,9 +45,10 @@ define(["dojo/_base/declare",
         "alfresco/buttons/AlfButton",
         "dojo/_base/array",
         "dijit/registry",
-        "dojo/Deferred"], 
+        "dojo/Deferred",
+        "dojo/dom-construct"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, _AlfHashMixin, template, 
-                 ioQuery, hash, lang, AlfButton, array, registry, Deferred) {
+                 ioQuery, hash, lang, AlfButton, array, registry, Deferred, domConstruct) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin], {
       
@@ -530,6 +531,11 @@ define(["dojo/_base/declare",
                }
             }
          }
+         else
+         {
+            domConstruct.destroy(this.okButtonNode);
+         }
+         
          if (this.showCancelButton === true)
          {
             this.cancelButton = new AlfButton({
@@ -541,6 +547,10 @@ define(["dojo/_base/declare",
                publishGlobal: this.cancelButtonPublishGlobal,
                iconClass: this.cancelButtonIconClass
             }, this.cancelButtonNode);
+         }
+         else
+         {
+            domConstruct.destroy(this.cancelButtonNode);
          }
          
          // If there are any other additional buttons to add, then process them here...
