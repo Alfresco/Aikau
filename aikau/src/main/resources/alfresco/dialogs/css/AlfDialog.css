@@ -38,7 +38,8 @@
 
 .alfresco-dialog-AlfDialog .dialog-body {
    padding: 12px;
-   overflow: hidden;
+   overflow: auto;
+   height: ~"calc(100% - 50px)";
 }
 
 .alfresco-dialog-AlfDialog.no-padding .dialog-body {
@@ -84,6 +85,8 @@
    text-align: center;
    padding: 8px 0;
    width: 100%;
+   position: absolute;
+   bottom: 0px;
 }
 
 .alfresco-dialog-AlfDialog.no-padding .footer {
