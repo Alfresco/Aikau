@@ -538,24 +538,26 @@ function getFormConfigWidgets() {
       {
          name: "alfresco/forms/controls/CheckBox",
          config: {
-            fieldId: "showFormButtons",
+            fieldId: "SHOW_BUTTONS",
             name: "config.displayButtons",
-            label: "Display Buttons?",
-            description: "Controls whether or not any buttons are displayed in the form.",
+            label: "dnd.model.forms.show-buttons.label",
+            description: "dnd.model.forms.show-buttons.description",
             value: true
          }
       },
       {
          name: "alfresco/forms/ControlRow",
          config: {
+            title: "dnd.model.forms.confirmation-button.fieldSet.title",
+            description: "dnd.model.forms.confirmation-button.fieldSet.description",
             widgets: [
                {
                   name: "alfresco/forms/controls/CheckBox",
                   config: {
-                     fieldId: "showOkButton",
+                     fieldId: "SHOW_CONFIRMATION_BUTTON",
                      name: "config.showOkButton",
-                     label: "Display Confirmation Button?",
-                     description: "Controls whether or not the 'confirmation' button is displayed for the form or not",
+                     label: "dnd.model.forms.show-confirmation-button.label",
+                     description: "dnd.model.forms.show-confirmation-button.description",
                      value: false,
                      postWhenHiddenOrDisabled: false,
                      noValueUpdateWhenHiddenOrDisabled: true,
@@ -563,7 +565,7 @@ function getFormConfigWidgets() {
                         initialValue: true,
                         rules: [
                            {
-                              targetId: "showFormButtons",
+                              targetId: "SHOW_BUTTONS",
                               is: [true]
                            }
                         ]
@@ -573,9 +575,10 @@ function getFormConfigWidgets() {
                {
                   name: "alfresco/forms/controls/TextBox",
                   config: {
+                     fieldId: "CONFIRMATION_BUTTON_LABEL",
                      name: "config.okButtonLabel",
-                     label: "Confirmation Button Label",
-                     description: "The label to show on the 'confirmation' button",
+                     label: "dnd.model.forms.confirmation-button-label.label",
+                     description: "dnd.model.forms.confirmation-button-label.description",
                      value: "OK",
                      postWhenHiddenOrDisabled: false,
                      noValueUpdateWhenHiddenOrDisabled: true,
@@ -583,11 +586,11 @@ function getFormConfigWidgets() {
                         initialValue: true,
                         rules: [
                            {
-                              targetId: "showFormButtons",
+                              targetId: "SHOW_BUTTONS",
                               is: [true]
                            },
                            {
-                              targetId: "showOkButton",
+                              targetId: "SHOW_CONFIRMATION_BUTTON",
                               is: [true]
                            }
                         ]
@@ -596,14 +599,24 @@ function getFormConfigWidgets() {
                         initialValue: true,
                         rules: [
                            {
-                              targetId: "showFormButtons",
+                              targetId: "SHOW_CONFIRMATION_BUTTON",
                               is: [true]
                            }
                         ]
                      }
                   }
                }
-            ]
+            ],
+            visibilityConfig: {
+               initialValue: false,
+               rules: [
+                  {
+                     topic: "_valueChangeOf_SHOW_BUTTONS",
+                     attribute: "value",
+                     is: [true]
+                  }
+               ]
+            }
          }
       },
       {
@@ -611,12 +624,86 @@ function getFormConfigWidgets() {
          config: {
             widgets: [
                {
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     name: "config.okButtonPublishTopic",
+                     label: "Confirmation Button Topic",
+                     description: "This is the topic to publish when the 'confirmation' button is pressed. The value of the form will be published as the payload",
+                     value: "",
+                     postWhenHiddenOrDisabled: false,
+                     noValueUpdateWhenHiddenOrDisabled: true,
+                     visibilityConfig: {
+                        initialValue: true,
+                        rules: [
+                           {
+                              targetId: "SHOW_BUTTONS",
+                              is: [true]
+                           },
+                           {
+                              targetId: "SHOW_CONFIRMATION_BUTTON",
+                              is: [true]
+                           }
+                        ]
+                     },
+                     requirementConfig: {
+                        initialValue: true,
+                        rules: [
+                           {
+                              targetId: "SHOW_CONFIRMATION_BUTTON",
+                              is: [true]
+                           }
+                        ]
+                     }
+                  }
+               },
+               {
                   name: "alfresco/forms/controls/CheckBox",
                   config: {
-                     fieldId: "showCancelButton",
+                     name: "config.okButtonPublishGlobal",
+                     label: "Global Publish",
+                     description: "Controls whether the topic is published globally or not. Most services subscribe to globally published topics",
+                     value: true,
+                     visibilityConfig: {
+                        initialValue: true,
+                        rules: [
+                           {
+                              targetId: "SHOW_BUTTONS",
+                              is: [true]
+                           },
+                           {
+                              targetId: "SHOW_CONFIRMATION_BUTTON",
+                              is: [true]
+                           }
+                        ]
+                     }
+                  }
+               }
+            ],
+            visibilityConfig: {
+               initialValue: false,
+               rules: [
+                  {
+                     topic: "_valueChangeOf_SHOW_BUTTONS",
+                     attribute: "value",
+                     is: [true]
+                  }
+               ]
+            }
+         }
+      },
+      {
+         name: "alfresco/forms/ControlRow",
+         config: {
+            title: "dnd.model.forms.cancellation-button.fieldSet.title",
+            description: "dnd.model.forms.cancellation-button.fieldSet.description",
+            widgets: [
+               {
+                  name: "alfresco/forms/controls/CheckBox",
+                  config: {
+                     fieldId: "SHOW_CANCELLATION_BUTTON",
                      name: "config.showCancelButton",
-                     label: "Display Cancel Button",
-                     description: "Controls whether or not the 'cancellation' button is displayed for the form or not",
+                     label: "dnd.model.forms.show-cancellation-button.label",
+                     description: "dnd.model.forms.show-cancellation-button.description",
                      value: false,
                      postWhenHiddenOrDisabled: false,
                      noValueUpdateWhenHiddenOrDisabled: true,
@@ -624,7 +711,7 @@ function getFormConfigWidgets() {
                         initialValue: true,
                         rules: [
                            {
-                              targetId: "showFormButtons",
+                              targetId: "SHOW_BUTTONS",
                               is: [true]
                            }
                         ]
@@ -634,9 +721,10 @@ function getFormConfigWidgets() {
                {
                   name: "alfresco/forms/controls/TextBox",
                   config: {
+                     fieldId: "CANCELLATION_BUTTON_LABEL",
                      name: "config.cancelButtonLabel",
-                     label: "Cancellation Button Label",
-                     description: "The label to show on the 'cancellation' button",
+                     label: "dnd.model.forms.cancellation-button-label.label",
+                     description: "dnd.model.forms.cancellation-button-label.description",
                      value: "Cancel",
                      postWhenHiddenOrDisabled: false,
                      noValueUpdateWhenHiddenOrDisabled: true,
@@ -644,11 +732,11 @@ function getFormConfigWidgets() {
                         initialValue: true,
                         rules: [
                            {
-                              targetId: "showFormButtons",
+                              targetId: "SHOW_BUTTONS",
                               is: [true]
                            },
                            {
-                              targetId: "showCancelButton",
+                              targetId: "SHOW_CANCELLATION_BUTTON",
                               is: [true]
                            }
                         ]
@@ -657,68 +745,20 @@ function getFormConfigWidgets() {
                         initialValue: true,
                         rules: [
                            {
-                              targetId: "showFormButtons",
+                              targetId: "SHOW_BUTTONS",
                               is: [true]
                            }
                         ]
                      }
                   }
                }
-            ]
-         }
-      },
-      {
-         name: "alfresco/forms/controls/DojoSelect",
-         config: {
-            name: "config.okButtonPublishTopic",
-            label: "Confirmation Button Topic",
-            description: "This is the topic to publish when the 'confirmation' button is pressed. The value of the form will be published as the payload",
-            value: "",
-            postWhenHiddenOrDisabled: false,
-            noValueUpdateWhenHiddenOrDisabled: true,
+            ],
             visibilityConfig: {
-               initialValue: true,
+               initialValue: false,
                rules: [
                   {
-                     targetId: "showFormButtons",
-                     is: [true]
-                  },
-                  {
-                     targetId: "showOkButton",
-                     is: [true]
-                  }
-               ]
-            },
-            requirementConfig: {
-               initialValue: true,
-               rules: [
-                  {
-                     targetId: "showFormButtons",
-                     is: [true]
-                  }
-               ]
-            },
-            optionsConfig: {
-               // TODO
-            }
-         }
-      },
-      {
-         name: "alfresco/forms/controls/CheckBox",
-         config: {
-            name: "config.okButtonPublishGlobal",
-            label: "Global Publish",
-            description: "Controls whether the topic is published globally or not. Most services subscribe to globally published topics",
-            value: true,
-            visibilityConfig: {
-               initialValue: true,
-               rules: [
-                  {
-                     targetId: "showFormButtons",
-                     is: [true]
-                  },
-                  {
-                     targetId: "showOkButton",
+                     topic: "_valueChangeOf_SHOW_BUTTONS",
+                     attribute: "value",
                      is: [true]
                   }
                ]
