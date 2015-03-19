@@ -27,11 +27,8 @@ define(["alfresco/forms/controls/MultipleEntryElement",
         "alfresco/forms/PublishForm",
         "alfresco/core/ObjectTypeUtils",
         "dojo/_base/lang",
-        "dojo/_base/array",
-        "alfresco/forms/controls/DojoValidationTextBox",
-        "alfresco/forms/controls/Select",
-        "alfresco/forms/controls/MultipleEntryFormControl"], 
-        function(MultipleEntryElement, declare, PublishForm, ObjectTypeUtils, lang, array, DojoValidationTextBox, DojoSelect, MultipleEntryFormControl) {
+        "dojo/_base/array"], 
+        function(MultipleEntryElement, declare, PublishForm, ObjectTypeUtils, lang, array) {
    
    return declare([MultipleEntryElement], {
       
@@ -63,56 +60,24 @@ define(["alfresco/forms/controls/MultipleEntryElement",
       },
       
       /**
-       * Extends the inherited function to create a subscription for updates to the available form fields to select
-       * from when creating a new rule and then explicitly publishes a request to get the latest field information.
-       * 
-       * @instance
-       */
-      postCreate: function alfresco_forms_controls_FormRulesConfigCreatorElement__postCreate() {
-         this.alfSubscribe("ALF_FORM_FIELDS_UPDATE", lang.hitch(this, "updateAvailableFields"));
-         this.alfPublish("ALF_REQUEST_AVAILABLE_FORM_FIELDS", {});
-         this.inherited(arguments);
-      },
-      
-      /**
-       * This function is the callback handler for requesting the currently available fields. It is very similar to 
-       * the "getOptionsFromPublication" function in BaseFormControl except that it sets an instance variable. It is
-       * necessary to get the latest fields in order to be able to render the read display correctly.
-       * 
-       * @instance
-       * @param {payload} payload The payload containing the details of the available fields
-       */
-      updateAvailableFields: function alfresco_forms_controls_FormRulesConfigCreatorElement__setAvailableFields(payload) {
-         var options = lang.getObject("options", false, payload);
-         if (options != null && ObjectTypeUtils.isArray(options))
-         {
-            this.availableFields = options;
-         }
-         else
-         {
-            this.availableFields = []
-         }
-      },
-      
-      /**
        * Attempts to create a human readable description of the current rule definition.
        * 
        * @instance
        */
       createReadDisplay: function alfresco_forms_creation_FormRulesConfigCreatorElement__createReadDisplay() {
          var value = this.getValue();
-         if (value.is != null && value.isNot != null)
+         if (value.is && value.isNot && value.targetId)
          {
             var msgType = "";
-            if (value.is.length == 0 && value.isNot.length == 0)
+            if (value.is.length === 0 && value.isNot.length === 0)
             {
                msgType = "rule.display.any";
             }
-            else if (value.is.length > 0 && value.isNot.length == 0)
+            else if (value.is.length > 0 && value.isNot.length === 0)
             {
                msgType = "rule.display.mustBe";
             }
-            else if (value.isNot.length > 0 && value.is.length == 0)
+            else if (value.isNot.length > 0 && value.is.length === 0)
             {
                msgType = "rule.display.mustNotBe";
             }
@@ -121,53 +86,14 @@ define(["alfresco/forms/controls/MultipleEntryElement",
                msgType = "rule.display.mustAndmustNotBe";
             }
 
-            // Get the selected field name...
-            var fieldName = this.findAvailableField(value);
-            if (fieldName != null)
-            {
-               this.readDisplay.innerHTML = this.message(msgType, {"field": fieldName, 
-                  "mustBe" : this.generateReadValues(value.is),
-                  "mustNotBe" : this.generateReadValues(value.isNot)});
-            }
-            else
-            {
-               this.readDisplay.innerHTML = this.message("rule.fieldDeleted.label");
-            }
+            this.readDisplay.innerHTML = this.message(msgType, {"field": value.targetId, 
+               "mustBe" : this.generateReadValues(value.is),
+               "mustNotBe" : this.generateReadValues(value.isNot)});
          }
          else
          {
             this.readDisplay.innerHTML = "";
          }
-      },
-      
-      createEditDisplay: function alfresco_forms_creation_FormRulesConfigCreatorElement__createEditDisplay() {
-         this.inherited(arguments);
-         this.alfPublish("ALF_REQUEST_AVAILABLE_FORM_FIELDS", {});
-      },
-      /**
-       * Searches through the availableFields to find a field with the same id as the targetId attribute of the
-       * current value. Returns the label associated with the field for display purposes.
-       * 
-       * TODO: Emit a validation event if the field cannot be found (as this would indicate that it has been deleted)
-       * 
-       * @instance
-       * @param {object} value The current value to find the field for
-       * @returns {string} fieldName
-       */
-      findAvailableField: function alfresco_forms_creation_FormRulesConfigCreatorElement__findAvailableField(value) {
-         var fieldName = null;
-         if (this.availableFields != null)
-         {
-            for (var i=0; i<this.availableFields.length; i++)
-            {
-               if (this.availableFields[i].value == value.targetId)
-               {
-                  fieldName = this.availableFields[i].label;
-                  break;
-               }
-            }
-         }
-         return fieldName;
       },
       
       /**
@@ -183,69 +109,6 @@ define(["alfresco/forms/controls/MultipleEntryElement",
             values = values + "'" + value.value + "'" + ((index < valueArray.length-1) ? ", " : "");
          });
          return values;
-      },
-      
-      /**
-       * Returns the widgets to be used in the form created for edit mode.
-       * 
-       * @instance
-       * @returns {object[]}
-       */
-      getFormWidgets: function alfresco_forms_creation_FormRulesConfigCreatorElement__getFormWidgets() {
-         return [
-            {
-               // This is the hidden id and needs to be included to ensure that the id is persisted.
-               name: "alfresco/forms/controls/DojoValidationTextBox",
-               config: {
-                  name: "fieldId",
-                  label: "fieldId",
-                  value: this.elementValue.fieldId,
-                  visibilityConfig: {
-                     initialValue: false
-                  }
-               }
-            },
-            {
-               name: "alfresco/forms/controls/Select",
-               config: {
-                  name: "targetId",
-                  label: "rule.field.label",
-                  description: "rule.field.description",
-                  value: this.elementValue.targetId,
-                  optionsConfig: {
-                     updateTopics: [{
-                        // Make the subscription global but prefix it with the pubSubScope for the element.
-                        // This is necessary because the form being creating has it's own scope (to prevent
-                        // pollution of field events) but the field updates must come from the wider scope
-                        topic: this.pubSubScope + "ALF_FORM_FIELDS_UPDATE",
-                        global: true
-                     }],
-                     callback: "getOptionsFromPublication"
-                  },
-                  requirementConfig: {
-                     initialValue: true
-                  }
-               }
-            },
-            {
-               name: "alfresco/forms/controls/MultipleEntryFormControl",
-               config: {
-                  name: "is",
-                  label: "rule.is.label",
-                  description: "rule.is.description",
-                  value: this.elementValue.is
-               }
-            },
-            {
-               name: "alfresco/forms/controls/MultipleEntryFormControl",
-               config: {
-                  name: "isNot",
-                  label: "rule.isNot.label",
-                  description: "rule.isNot.description",
-                  value: this.elementValue.isNot
-               }
-            }
-         ];
       }
    });
 });

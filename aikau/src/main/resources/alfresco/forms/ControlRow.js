@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -76,6 +76,20 @@ define(["alfresco/layout/HorizontalWidgets",
       title: null,
 
       /**
+       * Extends the [inherited function]{@link module:alfresco/layout/HorizontalWidgets#postMixInProperties} to
+       * ensure that the title is translated.
+       * 
+       * @instance
+       */
+      postMixInProperties: function alfresco_forms_ControlRow__postMixInProperties() {
+         this.inherited(arguments);
+         if (this.title && lang.trim(this.title) !== "")
+         {
+            this.title = this.message(this.title);
+         }
+      },
+
+      /**
        * Extends the [inherited function]{@link module:alfresco/layout/HorizontalWidgets#postCreate} to add
        * in a field set label if configured.
        * 
@@ -85,7 +99,7 @@ define(["alfresco/layout/HorizontalWidgets",
          this.inherited(arguments);
          domClass.add(this.domNode, "alfresco-forms-ControlRow");
          var hasDescription = false;
-         if (this.description != null && lang.trim(this.description) !== "")
+         if (this.description && lang.trim(this.description) !== "")
          {
             hasDescription = true;
             this.description = this.message(this.description);
@@ -94,9 +108,8 @@ define(["alfresco/layout/HorizontalWidgets",
                className: "description border"
             }, this.domNode, "first");
          }
-         if (this.title != null && lang.trim(this.title) !== "")
+         if (this.title && lang.trim(this.title) !== "")
          {
-            this.title = this.message(this.title);
             domConstruct.create("div", {
                innerHTML: this.title,
                className: "title" + (hasDescription ? "" : " border")

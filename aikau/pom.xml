@@ -40,6 +40,13 @@
             <directory>${basedir}/src/main/resources/extension-module</directory>
          </resource>
 
+         <resource>
+            <!-- WebScript library files go straight into a package -->
+            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/webscript/libs</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/webscript-libs</directory>
+         </resource>
+
          <!-- ...but everything else goes into a standard path -->
          <resource>
             <targetPath>META-INF/js/lib</targetPath>
@@ -151,7 +158,8 @@
                   <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames> 
                </webApp>
                <webAppSourceDirectory>target/test-classes/testApp</webAppSourceDirectory>
-               <classesDirectory>target/test-classes/testApp/WEB-INF/classes</classesDirectory>
+               <classesDirectory>target/classes</classesDirectory>
+               <testClassesDirectory>target/test-classes/testApp/WEB-INF/classes</testClassesDirectory>
                <baseAppFirst>false</baseAppFirst>
             </configuration>
          </plugin>

@@ -406,7 +406,6 @@ define(["dojo/_base/declare",
          if (selectedNodes.length > 0 && selectedNodes[0] !== null)
          {
             var selectedItem = this.previewTarget.getItem(selectedNodes[0].id);
-            this.alfLog("log", "Widget selected", selectedItem);
          }
       },
 

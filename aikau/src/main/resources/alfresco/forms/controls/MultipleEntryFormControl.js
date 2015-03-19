@@ -55,7 +55,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       getWidgetConfig: function alfresco_forms_controls_MultipleEntryFormControl__getWidgetConfig() {
          var elementWidget = null;
-         if (this.elementWidget != null)
+         if (this.elementWidget)
          {
             elementWidget = this.elementWidget;
          }
@@ -71,7 +71,7 @@ define(["alfresco/forms/controls/BaseFormControl",
             id : this.generateUuid(),
             name: this.name,
             value: this.value,
-            elementWrapper: (this.elementWrapper != null) ? this.elementWrapper : "alfresco/forms/controls/MultipleEntryElementWrapper",
+            elementWrapper: this.elementWrapper || "alfresco/forms/controls/MultipleEntryElementWrapper",
             elementWidget: elementWidget,
             widgets: this.widgets,
             valueDisplayMap: this.valueDisplayMap,
@@ -96,7 +96,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       processValidationRules: function alfresco_forms_controls_MultipleEntryFormControl__processValidationRules() {
          var valid = true;
-         if (this.wrappedWidget && typeof this.wrappedWidget.validate == "function")
+         if (this.wrappedWidget && typeof this.wrappedWidget.validate === "function")
          {
             valid = this.wrappedWidget.validate();
          }
