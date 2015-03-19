@@ -93,7 +93,7 @@ model.jsonModel = {
 
 Once again we’re just re-using widgets that we’ve previously introduced in earlier tutorials. In this case its the `alfresco/header/Warning` widget that we’ve previously used to indicate when a user doesn’t have permission to view the users and groups page. Here we’re using it to let the user know that their URL is missing key information… try it using the URL: http://localhost:8090/aikau-sample/page/ap/ws/document and you should see the following:
 
-
+![Screenshot showing warning message](../resources/Tutorial18-Image1.png "Screenshot showing warning message")
 
 ### Step 4 - Add the Document and Preview Widgets
 Now let’s add in the same document and preview widgets that we used for the side-by-side layout. Add the following into the `if` block:
@@ -180,6 +180,8 @@ The last minor but significant change is the inclusion of the additional `conver
 Finally we need to update the list of services on the page to include the `alfresco/services/NavigationService` that will subscribe to the “ALF_NAVIGATE_TO_PAGE” topic and navigate the user to the appropriate page.
 
 When you refresh the page you should be able to click on a document link and will be taken to the new page.
+
+![Screenshot showing details page with preview](../resources/Tutorial18-Image2.png "Screenshot showing details page with preview")
 
 Previous: [Document Previews](./Tutorial17.md),
 Next: [Accessibility](./Tutorial19.md)
