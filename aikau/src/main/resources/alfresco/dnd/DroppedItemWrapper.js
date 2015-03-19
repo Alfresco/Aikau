@@ -277,7 +277,8 @@ define(["dojo/_base/declare",
                formSubmissionPayloadMixin: {
                   subscriptionHandle: subscriptionHandle
                },
-               contentWidth: "70%",
+               dialogWidth: "80%",
+               fixedWidth: true,
                formValue: item,
                widgets: resolvedPromise.widgets
             }, true);

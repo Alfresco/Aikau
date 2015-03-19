@@ -163,6 +163,14 @@ define(["dojo/_base/declare",
             domClass.add(this.domNode, this.additionalCssClasses);
          }
 
+         // Set a width for the dialog
+         if (this.dialogWidth)
+         {
+            domStyle.set(this.domNode, {
+               width: this.dialogWidth
+            });
+         }
+
          this.bodyNode = domConstruct.create("div", {
             "class" : "dialog-body"
          }, this.containerNode, "last");
