@@ -158,7 +158,7 @@ When we click on a document in the `alfresco/documentlibrary/AlfDocumentList` a 
 
 Refresh the page, upload a variety of documents into a folder (e.g. a video file, an image, a PDF, a word documents, etc) and then select each item in the list to see a preview displayed.
 
-
+![Screenshot showing custom list view and preview](../resources/Tutorial17-Image1.png "Screenshot showing custom list view and preview")
 
 ### Step 5 - Taking a Shortcut
 For this particular example we can actually shortcut the route via the `alfresco/services/DocumentService`. The data loaded for each item in the `alfresco/documentlibrary/AlfDocumentList` is actually sufficient for generating a preview. This means that instead of publishing on the “ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST” topic we publish on the “ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST_SUCCESS” document using the current item.
