@@ -42,6 +42,12 @@
    height: ~"calc(100% - 50px)";
 }
 
+.alfresco-dialog-AlfDialog.iefooter .dialog-body {
+   padding: 12px;
+   overflow: hidden;
+   height: auto;
+}
+
 .alfresco-dialog-AlfDialog.no-padding .dialog-body {
    padding: 0px;
 }
@@ -86,7 +92,12 @@
    padding: 8px 0;
    width: 100%;
    position: absolute;
-   bottom: 0px;
+   bottom: 0;
+}
+
+.alfresco-dialog-AlfDialog.iefooter .footer {
+   position: inherit;
+   bottom: inherit;
 }
 
 .alfresco-dialog-AlfDialog.no-padding .footer {

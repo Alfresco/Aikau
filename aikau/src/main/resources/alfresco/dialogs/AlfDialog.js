@@ -173,6 +173,13 @@ define(["dojo/_base/declare",
             height: this.contentHeight ? this.contentHeight: null
          });
 
+         if (sniff("ie") === 8 || sniff("ie") === 9)
+         {
+            // Add specific classes for IE8 and 9 to undo the CSS calculations and selectors
+            // that make the footer always visible (because they don't support CSS calc)...
+            domClass.add(this.domNode, "iefooter");
+         }
+
          // It is important to create the buttons BEFORE creating the main body. This is especially important
          // for when the buttons will respond to initial setup events from a form placed inside the body (e.g.
          // so that the buttons are disabled initially if required)
