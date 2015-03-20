@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -32,20 +32,8 @@ define(["alfresco/forms/controls/MultipleEntryFormControl",
       /**
        * @instance
        */
-      getWidgetConfig: function alfresco_forms_creation_FormRulesConfigControl__getWidgetConfig() {
-         // NOTE: It's important to pass on the pubSubScope to ensure topics get scoped.
-         return {
-            id : this.generateUuid(),
-            name: this.name,
-            value: this.value,
-            pubSubScope: this.pubSubScope
-         };
-      },
-      
-      /**
-       * @instance
-       */
       createFormControl: function alfresco_forms_creation_FormRulesConfigControl__createFormControl(config, domNode) {
+         // jshint unused:false
          return new FormRulesConfigCreator(config);
       }
    });

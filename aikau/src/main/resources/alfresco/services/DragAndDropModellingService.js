@@ -87,6 +87,7 @@ define(["dojo/_base/declare",
          lang.mixin(this, args);
          this.alfSubscribe(Constants.requestWidgetsForDisplayTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForDisplay"));
          this.alfSubscribe(Constants.requestWidgetsForConfigTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForConfig"));
+         this.alfSubscribe(Constants.requestWidgetsForNestedConfigTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForNestedConfig"));
       },
 
       /**
@@ -173,7 +174,7 @@ define(["dojo/_base/declare",
                   // Check that the attriibute we're looking for is actually provided for this model
                   if (model[configAttribute])
                   {
-                     response.widgets = model[configAttribute];
+                     response.widgets = lang.clone(model[configAttribute]);
                      modelMatchFound = true;
                   }
                   else

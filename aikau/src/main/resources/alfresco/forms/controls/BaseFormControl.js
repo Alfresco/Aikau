@@ -1472,13 +1472,13 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("log", "Setting field: '" + this.fieldId + "' with value: ", value);
-            if (this.wrappedWidget)
+            if (this.wrappedWidget && typeof this.wrappedWidget.setValue === "function")
             {
                if (this._convertStringValuesToBooleans === true && typeof value === "boolean")
                {
                   value = value.toString();
                }
-               this.wrappedWidget.set("value", value);
+               this.wrappedWidget.setValue(value);
             }
          }
       },

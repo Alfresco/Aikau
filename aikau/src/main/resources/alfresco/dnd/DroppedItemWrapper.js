@@ -277,6 +277,8 @@ define(["dojo/_base/declare",
                formSubmissionPayloadMixin: {
                   subscriptionHandle: subscriptionHandle
                },
+               dialogWidth: "80%",
+               fixedWidth: true,
                formValue: item,
                widgets: resolvedPromise.widgets
             }, true);
@@ -308,6 +310,12 @@ define(["dojo/_base/declare",
          // or just override it completely. It depends on whether or not we want to be
          // able to remove data.
          $.extend(true, this.value, payload);
+         // this.value = lang.clone(payload);
+         on.emit(this.domNode, Constants.itemSavedEvent, {
+            bubbles: true,
+            cancelable: true,
+            targetWidget: this
+         });
 
          if (this._renderedWidgets)
          {

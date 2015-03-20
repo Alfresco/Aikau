@@ -192,7 +192,7 @@ define(["dojo/_base/declare",
        * @returns {object[]}
        */
       getFormWidgets: function alfresco_forms_controls_MultipleEntryElement__getFormWidgets() {
-         if (this.widgets !== null || this.widgets !== undefined)
+         if (this.widgets)
          {
             return this.widgets;
          }

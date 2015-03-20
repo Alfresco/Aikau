@@ -292,52 +292,11 @@ define(["intern!object",
          browser.end();
       },
 
-      "Drag and drop nestable item": function () {
-         return browser.findByCssSelector("#dojoUnique1 .title")
-            .moveMouseTo()
-            .click()
-            .pressMouseButton()
-            .moveMouseTo(1, 1)
-         .end()
-         .findByCssSelector(".alfresco-dnd-DragAndDropTarget > div")
-            .then(function(element) {
-               browser.moveMouseTo(element);
-            })
-            .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-            .releaseMouseButton()
-         .end()
-         .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
+      "Check that preset nested items are rendered": function() {
+         return browser.findAllByCssSelector("#FORM2 .alfresco-dnd-DroppedItem")
             .then(function(elements) {
-                  assert.lengthOf(elements, 1, "The dropped item was found");
+               assert.lengthOf(elements, 1, "Could not find nested preset item");
             });
-      },
-
-      "Check that two additional drop targets have been rendered": function() {
-         return browser.findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DroppedItemWrapper .alfresco-dnd-DragAndDropTarget")
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "The nested drop targets weren't rendered");
-            });
-      },
-
-      "Drop an item into the first nested target": function() {
-         return browser.findByCssSelector("#dojoUnique1 .title")
-            .moveMouseTo()
-            .click()
-            .pressMouseButton()
-            .moveMouseTo(1, 1)
-         .end()
-         .findByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DroppedItemWrapper .alfresco-dnd-DragAndDropTarget:nth-child(2)")
-            .then(function(element) {
-               browser.moveMouseTo(element);
-            })
-            .sleep(2000) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-            .releaseMouseButton()
-         .end();
-         // TODO: Cannot get this working, dropped items get created in main drop target, manual tests work fine
-         // .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DroppedItemWrapper .alfresco-dnd-DragAndDropTarget:nth-child(2) .alfresco-dnd-DroppedItemWrapper")
-         //    .then(function(elements) {
-         //          assert.lengthOf(elements, 1, "The nested dropped item was not found");
-         //    }).sleep(2000);
       },
 
       "Post Coverage Results": function() {
@@ -434,6 +393,92 @@ define(["intern!object",
       },
 
      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   registerSuite({
+
+      name: "Inherited DND Configuration Tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/additional-config-dnd", "Inherited DND Configuration Tests")
+            .end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check outer widget doesn't inherit configuration": function() {
+         // Select the available widget...
+         return browser.pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+
+            // Tab to the target and add the widget...
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+            .sleep(pause)
+
+            // Edit the item...
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+            .sleep(pause)
+
+            // Now check that there are 2 form controls (should have inherited one additional configuration field)
+            .findAllByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .alfresco-forms-controls-BaseFormControl")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 2, "Found an unexpected number of form controls");
+               });
+      },
+
+      "Check nested item inherits configuration": function() {
+         // Close the previous edit dialog...
+         return browser.findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .cancellationButton > span")
+            .click()
+         .end()
+
+         .sleep(1000) // Make sure dialog disappears...
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.ENTER)
+         .sleep(pause)
+         
+         // Tab to the edit button and edit the nested widget...
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.ENTER)
+         .sleep(pause)
+
+         // Now check that there are 3 form controls (should have inherited one additional configuration field)
+         .findAllByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .alfresco-forms-controls-BaseFormControl")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Found an unexpected number of form controls");
+            });
+
+      },
+
+      "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
    });
