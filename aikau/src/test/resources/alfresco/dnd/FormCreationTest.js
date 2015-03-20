@@ -146,7 +146,7 @@ define(["intern!object",
 
          .sleep(1000)
 
-         .findByCssSelector("#FORM1 .buttons > span:nth-child(3) > span")
+         .findByCssSelector("#FORM1 .buttons > span:nth-child(2) > span")
             .click()
          .end()
 

@@ -81,14 +81,9 @@ define(["dojo/_base/declare",
                {
                   this.alfLog("log", "Value and label properties are not set on form control yet so cannot be added as an option", this, value);
                }
+               
+               widget.formControlOptions = allFields;
             }
-         }, this);
-
-         // Update all the other dropped widgets so that they have a reference to them...
-         array.forEach(nodes, function(node) {
-            // Get the widgets for the node...
-            var widget = registry.byNode(node);
-            widget.formControlOptions = allFields;
          }, this);
       }
    });
