@@ -38,10 +38,9 @@
 
 .alfresco-dialog-AlfDialog .dialog-body {
    padding: 12px;
-   overflow: scroll;
+   overflow: auto;
    height: ~"calc(100% - 50px)";
-   margin-bottom: 25px;
-   padding-bottom: 0;
+   margin-bottom: 37px;
 }
 
 .alfresco-dialog-AlfDialog.iefooter .dialog-body {
@@ -61,7 +60,7 @@
    overflow: hidden !important; /* Wouldn't normally use !important but has to override direct element setting! */
 }
 
-.alfresco-dialog-AlfDialog.handleOverflow .dijitDialogPaneContent {
+.alfresco-dialog-AlfDialog.iefooter.handleOverflow .dijitDialogPaneContent {
    overflow: auto !important; /* Wouldn't normally use !important but has to override direct element setting! */
 }
 
