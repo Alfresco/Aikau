@@ -106,6 +106,28 @@ model.jsonModel = {
                   }
                },
                {
+                  id: "PA_BUILD_FAIL",
+                  name: "alfresco/renderers/PublishAction",
+                  config: {
+                     currentItem: {
+                        mixinData5: "mixinValue7"
+                     },
+                     publishTopic: "TOPIC7",
+                     publishPayloadType: "BUILD",
+                     publishPayload: {
+                        itemData: {
+                           alfType: "item",
+                           alfProperty: "mixinData5"
+                        },
+                        missingData: {
+                           alfType: "item",
+                           alfProperty: "not_there",
+                           alfStrict: true
+                        }
+                     }
+                  }
+               },
+               {
                   id: "PROPERTYLINK",
                   name: "alfresco/renderers/PropertyLink",
                   config: {

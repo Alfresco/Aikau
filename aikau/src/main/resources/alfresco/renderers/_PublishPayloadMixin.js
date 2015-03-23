@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -204,6 +204,7 @@ define(["dojo/_base/declare",
             {
                var type = value.alfType;
                var property = value.alfProperty;
+               var strict = value.alfStrict;
 
                if (type === "item" && currentItem)
                {
@@ -216,6 +217,20 @@ define(["dojo/_base/declare",
                else
                {
                   this.alfLog("warn", "A payload was defined with 'alfType' and 'alfProperty' attributes but the 'alfType' attribute was neither 'item' nor 'payload' (which are the only supported types), or the target object was null", this);
+               }
+
+               // If the target value can't be found then issue a warning or throw an error depending on the alfStrict setting
+               if (value === undefined)
+               {
+                  var msg = "A BUILD payload was defined referencing an attribute that doens't exist. Tried to use property '" + property + "' in type'" + type;
+                  if (strict === true)
+                  {
+                     throw new Error(msg);
+                  }
+                  else
+                  {
+                     this.alfLog("warn", msg, this);
+                  }
                }
             }
             else

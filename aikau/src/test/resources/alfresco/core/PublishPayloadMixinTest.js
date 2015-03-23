@@ -226,6 +226,13 @@ define(["intern!object",
             });
       },
 
+      "Check that BUILD type with strict rules and failing data doens't render": function() {
+         return browser.findAllByCssSelector("#PA_BUILD_FAIL")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The strict BUILD type with invalid data should not have been rendered");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
