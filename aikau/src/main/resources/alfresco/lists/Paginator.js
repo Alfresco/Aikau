@@ -183,7 +183,7 @@ define(["dojo/_base/declare",
        */
       processLoadedDocuments: function alfresco_lists_Paginator__processLoadedDocuments(payload) {
          // jshint maxcomplexity:false,unused:false,maxstatements:false
-         if (payload.totalDocuments !== null && payload.startIndex !== null)
+         if (payload && payload.totalDocuments !== null && payload.startIndex !== null)
          {
             if (payload.totalDocuments === 0)
             {
@@ -472,7 +472,7 @@ define(["dojo/_base/declare",
 
          // Check to see if any document data was provided before widget instantiation completed and
          // if so process it with the now available widgets...
-         if (this.__deferredLoadedDocumentData !== null)
+         if (this.__deferredLoadedDocumentData)
          {
             this.processLoadedDocuments(this.__deferredLoadedDocumentData);
          }
