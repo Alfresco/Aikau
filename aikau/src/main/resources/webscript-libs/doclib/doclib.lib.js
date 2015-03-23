@@ -904,6 +904,12 @@ function getDocLibConfigMenu() {
                      }
                   ]
                }
+            },
+            {
+               name: "alfresco/documentlibrary/ViewPreferencesGroup",
+               config: {
+                  userIsSiteManager: true // TODO: Remove before commit
+               }
             }
          ]
       }
