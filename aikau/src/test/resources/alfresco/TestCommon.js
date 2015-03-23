@@ -152,11 +152,11 @@ define(["intern/dojo/node!fs",
          this._applyTimeouts(browser);
          this._maxWindow(browser);
          this._cancelModifierKeys(browser);
-         if(testName && browser.environmentType.browserName)
-         {
-            console.log(">> Starting '" + testName + "' on " + browser.environmentType.browserName);
-            console.log("   Test URL: " + this.testWebScriptURL(testWebScriptURL, testWebScriptPrefix));
-         }
+         // if(testName && browser.environmentType.browserName)
+         // {
+         //    console.log(">> Starting '" + testName + "' on " + browser.environmentType.browserName);
+         //    console.log("   Test URL: " + this.testWebScriptURL(testWebScriptURL, testWebScriptPrefix));
+         // }
          var command = browser.get(this.testWebScriptURL(testWebScriptURL, testWebScriptPrefix))
             .then(pollUntil(
                function() {
@@ -168,7 +168,7 @@ define(["intern/dojo/node!fs",
                function (element) {
                },
                function (error) {
-                  console.log(">> Test page for '" + testName + "'  failed to load, trying again...");
+                  // console.log(">> Test page for '" + testName + "'  failed to load, trying again...");
                   browser.refresh();
                })
             .then(pollUntil(
@@ -179,11 +179,11 @@ define(["intern/dojo/node!fs",
                }, [], 10000, 1000))
             .then(
                function (element) {
-                  console.log(">> Test page for '" + testName + "' loaded successfully");
+                  // console.log(">> Test page for '" + testName + "' loaded successfully");
                },
                function (error) {
-                  console.log(">> Test page for '" + testName + "'  failed to load after two attempts");
-                  assert(false, "Test page could not be loaded");
+                  // console.log(">> Test page for '" + testName + "'  failed to load after two attempts");
+                  assert.fail(null, null, "Test page could not be loaded");
                })
             .end();
          command.session.alfPostCoverageResults = function (newBrowser) { 
