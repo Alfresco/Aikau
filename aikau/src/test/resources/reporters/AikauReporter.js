@@ -241,7 +241,6 @@ define([], function() {
 // /coverage
 // /runner/end
 // /runner/start
-// /suite/end
 // /suite/new
 // /test/end
 // /tunnel/download/progress
