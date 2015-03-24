@@ -14,6 +14,10 @@ define([], function() {
       state = {},
       testCounter = 1,
       environments = {},
+      timers = {
+         beforeTest: 0,
+         beforeSuite: 0
+      },
       lastSuite;
 
    /* Constants */
@@ -123,7 +127,7 @@ define([], function() {
 
             // Output title
             var title = collectionName.substr(0, 1).toUpperCase() + collectionName.substr(1).toLowerCase();
-            console.log("\n" + ANSI_COLORS.Underline + title + ANSI_COLORS.Reset + "\n");
+            console.log("\n" + ANSI_COLORS.Underline + title + ANSI_COLORS.Reset);
 
             // Run through collection
             var lastEnv,
@@ -133,7 +137,8 @@ define([], function() {
                // Output environment information if changed
                if (item.state.env !== lastEnv) {
                   lastEnv = item.state.env;
-                  console.log(ANSI_COLORS.Bold + lastEnv + ANSI_COLORS.Reset);
+                  lastSuite = null;
+                  console.log("\n" + ANSI_COLORS.Bold + lastEnv + ANSI_COLORS.Reset);
                }
 
                // Output suite if changed
@@ -168,39 +173,55 @@ define([], function() {
       "/error": function(error) {
          addToCollection("errors", error.message);
       },
+      "/suite/end": function(suite) {
+         if (suite.name === "main") {
+            return;
+         }
+         var timeTaken = Date.now() - timers.beforeSuite;
+         console.log("Suite took " + timeTaken + "ms to complete");
+      },
       "/suite/error": function(suite) {
+         if (suite.name === "main") {
+            return;
+         }
          state.test = null;
          addToCollection("errors", suite.error.stack);
          console.log(ANSI_COLORS.FgRed + "   [ERROR]" + ANSI_COLORS.Reset);
       },
       "/suite/start": function(suite) {
-         augmentSuite(suite);
-         state.suite = suite.name;
-         if (suite.name !== "main") {
-            console.log("\n" + ANSI_COLORS.Bold + suite.name + ANSI_COLORS.Reset);
+         if (suite.name === "main") {
+            return;
          }
+         augmentSuite(suite);
+         timers.beforeSuite = Date.now();
+         state.suite = suite.name;
+         console.log("\n" + ANSI_COLORS.Bold + suite.name + ANSI_COLORS.Reset);
       },
       "/test/fail": function(test) {
          var errorMessage = test.error.message,
-            lineBreakIndex = errorMessage.indexOf("\n");
+            lineBreakIndex = errorMessage.indexOf("\n"),
+            timeTaken = Date.now() - timers.beforeTest;
          if (lineBreakIndex !== -1) {
             errorMessage = errorMessage.substr(0, lineBreakIndex);
          }
          addToCollection("failures", errorMessage);
-         logTest(test.name + " [FAILED]", ANSI_COLORS.FgRed);
+         logTest(test.name + " (" + timeTaken + "ms) [FAILED]", ANSI_COLORS.FgRed);
       },
       "/test/new": function() {
          counts.total++;
       },
       "/test/pass": function(test) {
+         var timeTaken = Date.now() - timers.beforeTest;
          counts.passed++;
-         logTest(test.name + " [PASSED]");
+         logTest(test.name + " (" + timeTaken + "ms) [PASSED]");
       },
       "/test/skip": function(test) {
+         var timeTaken = Date.now() - timers.beforeTest;
          counts.skipped++;
-         logTest(test.name + " [SKIPPED]", ANSI_COLORS.FgYellow);
+         logTest(test.name + " (" + timeTaken + "ms) [SKIPPED]", ANSI_COLORS.FgYellow);
       },
       "/test/start": function(test) {
+         timers.beforeTest = Date.now();
          state.env = test.parent.env;
          state.test = test.name;
          if (state.suite && lastSuite !== state.suite) {
