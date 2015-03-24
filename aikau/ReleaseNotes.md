@@ -1,13 +1,10 @@
-Aikau 1.0.9 Release Notes
-=========================
+Aikau 1.0.10 Release Notes
+==========================
 
 Current deprecations:
 ---------------------
-This release:
 * alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
 * alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
-
-Previous releases:
 * alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
 * alfresco/documentlibrary/views/DocumentListRenderer            (use: alfresco/lists/views/ListRenderer)
 * alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin  (use: alfresco/lists/views/_AlfAdditionalViewControlMixin)
@@ -36,6 +33,13 @@ Previous releases:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.10:
+* [AKU-133](https://issues.alfresco.com/jira/browse/AKU-133)     - FileType configurable images
+* [AKU-157](https://issues.alfresco.com/jira/browse/AKU-157)     - Ensure HiddenValue form control can be set
+* [AKU-170](https://issues.alfresco.com/jira/browse/AKU-170)     - Improvements to test reporter
+* [AKU-172](https://issues.alfresco.com/jira/browse/AKU-172)     - SearchBox configurability updates
+* [AKU-176](https://issues.alfresco.com/jira/browse/AKU-176)     - Form dialog width setting updates
+
 1.0.9:
 * [AKU-33](https://issues.alfresco.com/jira/browse/AKU-33)     - Add dedicated Detailed View result widget for performance
 * [AKU-115](https://issues.alfresco.com/jira/browse/AKU-115)   - Use keyboard to add DND items
