@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,7 +18,7 @@
  */
 
 /**
- * @module alfresco/services/QuickShareService
+ * @module alfresco/services/PageService
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/services/_PageServiceTopicMixin
@@ -69,12 +69,7 @@ define(["dojo/_base/declare",
        * @param {object} payload Details of the page to export
        */
       exportPageModel: function alfresco_services_PageService__exportPageModel(payload) {
-
          var pageDef = this.getPageDefinitionFromPayload(payload);
-
-         delete pageDef.publishOnReadyEditorConfig;
-         delete pageDef.servicesEditorConfig;
-         delete pageDef.widgetsEditorConfig;
 
          // Stringify the model in a nice format...
          var exportString = "model.jsonModel = " + JSON.stringify(pageDef, null, "   ");
@@ -95,7 +90,7 @@ define(["dojo/_base/declare",
          this.generateWsDownload(payload.pageName + ".get.desc.xml", descXmlString);
 
          // Generate the HTML template...
-         var htmlString = "<@processJsonModel group=\"share\"/>";
+         var htmlString = "<@processJsonModel/>";
          this.generateWsDownload(payload.pageName + ".get.html.ftl", htmlString);
       },
 
@@ -107,23 +102,10 @@ define(["dojo/_base/declare",
        */
       generateWsDownload: function alfresco_services_PageService__generateWsDownload(fileName, content) {
          var downloadLink = domConstruct.create("a", {
-            href: 'data:text/plain;charset=utf-8,' + encodeURIComponent(content),
+            href: "data:text/plain;charset=utf-8," + encodeURIComponent(content),
             download: fileName
          });
          downloadLink.click();
-      },
-
-      /**
-       * Deletes an attribute from the  "widgetsForDisplay" attributes from the current object
-       * @instance
-       * @param {string} key The current key in the current object
-       * @param {object} obj The current object
-       */
-      _cleanUpModelObject: function alfresco_services_PageService___cleanUpModelObject(key, obj) {
-         if (key == "widgetsForDisplay")
-         {
-            delete obj[key];
-         }
       },
 
       /**
@@ -135,7 +117,6 @@ define(["dojo/_base/declare",
        * publish the options back on.
        */
       loadPages: function alfresco_services_PageService__loadPages(payload) {
-
          this.serviceXhr({
             url: AlfConstants.PROXY_URI + "/remote-share/pages",
             method: "GET",
@@ -158,9 +139,9 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig
        */
       loadPagesSuccess: function alfresco_services_PageService__loadPagesSuccess(response, originalRequestConfig) {
-         if (response != null && response.items != null && ObjectTypeUtils.isArray(response.items))
+         if (response && response.items && ObjectTypeUtils.isArray(response.items))
          {
-            var topic = (originalRequestConfig.responseTopic != null) ? originalRequestConfig.responseTopic : this.availablePagesLoadSuccess;
+            var topic = originalRequestConfig.responseTopic || this.availablePagesLoadSuccess;
             var pageDefs = [];
             array.forEach(response.items, lang.hitch(this, "processAvailablePageDefResults", pageDefs));
 
@@ -194,17 +175,18 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the page def in the original results set
        */
       processAvailablePageDefResults: function alfresco_services_PageService__processAvailablePageDefResults(pageDefs, def, index) {
-         if (def.name == null || def.nodeRef == null)
-         {
-            this.alfLog("error", "Missing attributes from page definition", def, this);
-         }
-         else
+         // jshint unused:false
+         if (def.name && def.nodeRef)
          {
             var processedDef = {
                label: def.name,
                value: def.nodeRef
-            }
+            };
             pageDefs.push(processedDef);
+         }
+         else
+         {
+            this.alfLog("error", "Missing attributes from page definition", def, this);
          }
       },
       
@@ -230,25 +212,13 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from which to retrieve the page definition.
        */
       getPageDefinitionFromPayload: function alfresco_services_PageService__getPageDefinitionFromPayload(payload) {
-         var pageDefinition = {};
-         if (payload.pageDefinition == null)
-         {
-            pageDefinition = {
-               publishOnReady: payload.publishOnReady.widgetsConfig,
-               publishOnReadyEditorConfig: payload.publishOnReady.editorConfig,
-               services: payload.services.widgetsConfig,
-               servicesEditorConfig: payload.services.editorConfig,
-               widgets: payload.widgets.widgetsConfig,
-               widgetsEditorConfig: payload.widgets.editorConfig
-            };
-         }
-         else
-         {
-            pageDefinition = payload.pageDefinition;
-         }
+         var pageDefinition = {
+            publishOnReady: payload.publishOnReady,
+            services: payload.services,
+            widgets: payload.widgets
+         };
          return pageDefinition;
       },
-
 
       /**
        * 
@@ -256,8 +226,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the page to create
        */
       createPage: function alfresco_services_PageService__createPage(payload) {
-         if (payload != null && 
-             payload.pageName != null)
+         if (payload && payload.pageName)
          {
             var data = {
                name: payload.pageName,
@@ -312,8 +281,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the page to update
        */
       updatePage: function alfresco_services_PageService__updatePage(payload) {
-         if (payload != null && 
-             payload.pageName != null)
+         if (payload && payload.pageName)
          {
             var data = {
                name: payload.pageName,

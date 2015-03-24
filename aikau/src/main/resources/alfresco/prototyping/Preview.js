@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -83,23 +83,12 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from which to retrieve the page definition.
        */
       getPageDefinitionFromPayload: function alfresco_prototyping_Preview__getPageDefinitionFromPayload(payload) {
-         var pageDefinition = {};
-         if (payload.pageDefinition == null)
-         {
-            pageDefinition = {
-               publishOnReady: payload.publishOnReady.widgetsConfig,
-               publishOnReadyEditorConfig: payload.publishOnReady.editorConfig,
-               services: payload.services.widgetsConfig,
-               servicesEditorConfig: payload.services.editorConfig,
-               widgets: payload.widgets.widgetsConfig,
-               widgetsEditorConfig: payload.widgets.editorConfig
-            };
-            pageDefinition = dojoJson.stringify(pageDefinition);
-         }
-         else
-         {
-            pageDefinition = payload.pageDefinition;
-         }
+         var pageDefinition = {
+            publishOnReady: payload.publishOnReady,
+            services: payload.services,
+            widgets: payload.widgets
+         };
+         pageDefinition = dojoJson.stringify(pageDefinition);
          return pageDefinition;
       },
 
@@ -108,10 +97,9 @@ define(["dojo/_base/declare",
        * @param {object} payload An object containing the details of the page definition to preview.
        */
       generatePreview: function alfresco_prototyping_Preview__generatePreview(payload) {
-
-         if (payload != null)
+         if (payload)
          {
-            if (this.rootPreviewWidget != null)
+            if (this.rootPreviewWidget)
             {
                this.rootPreviewWidget.destroyRecursive(false);
             }
@@ -155,16 +143,18 @@ define(["dojo/_base/declare",
          // widgets CSS dependencies are loaded... 
          for (var media in response.cssMap)
          {
-            // TODO: query for the node outside of the loop
-            // TODO: keep a reference to each node appended and then remove it when the preview is regenerated
-            query("head").append('<link rel="stylesheet" type="text/css" href="' + appContext + response.cssMap[media] + '" media="' + media + '">');
+            if (response.cssMap.hasOwnProperty(media))
+            {
+               // TODO: query for the node outside of the loop
+               // TODO: keep a reference to each node appended and then remove it when the preview is regenerated
+               query("head").append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + appContext + response.cssMap[media] + "\" media=\"" + media + "\">");
+            }
          }
-
          
          // Build in the i18n properties into the global object...
          for (var scope in response.i18nMap)
          {
-            if (typeof window[response.i18nGlobalObject].messages.scope[scope] == "undefined")
+            if (typeof window[response.i18nGlobalObject].messages.scope[scope] === "undefined")
             {
                // If the scope hasn't already been used then we can just assign it directly...
                window[response.i18nGlobalObject].messages.scope[scope] = response.i18nMap[scope];
@@ -178,12 +168,11 @@ define(["dojo/_base/declare",
          
          // The data response will contain a MD5 referencing JavaScript resource that we should request that Dojo loads...
          var requires = [];
-         array.forEach(response.nonAmdDeps, function(dep, i) {
-            requires.push(AlfConstants.URL_RESCONTEXT + dep)
+         array.forEach(response.nonAmdDeps, function(dep) {
+            requires.push(AlfConstants.URL_RESCONTEXT + dep);
          });
          requires.push(AlfConstants.URL_RESCONTEXT + response.javaScript);
          require(requires, lang.hitch(this, "buildPreview", originalRequestConfig.data.jsonContent, this.previewNode));
-         
       },
 
       /**

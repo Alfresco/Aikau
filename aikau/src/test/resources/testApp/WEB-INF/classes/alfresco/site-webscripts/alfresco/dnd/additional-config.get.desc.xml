@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>Drag-and-drop with modelling service test that provides additional config</shortname>
+  <family>aikau-unit-tests</family>
+  <url>/additional-config-dnd</url>
+</webscript>

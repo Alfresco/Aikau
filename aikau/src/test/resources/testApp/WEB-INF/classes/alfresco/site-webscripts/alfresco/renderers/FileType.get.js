@@ -108,6 +108,37 @@ model.jsonModel = {
          }
       },
       {
+         id: "ITEM7",
+         name: "alfresco/renderers/FileType",
+         alight: "left",
+         config: {
+            altText:"logo",
+            imageUrl: "alfresco/logo/css/images/AlfrescoLogoOnly.PNG",
+            currentItem: {
+               fileName: "item7.ppt",
+               node:{
+                  nodeRef: "7777777",
+                  type: "cm:thumbnail"
+               }
+            }
+         }
+      },
+      {
+         id: "ITEM8",
+         name: "alfresco/renderers/FileType",
+         alight: "left",
+         config: {
+            altText:"notLogo",
+            currentItem: {
+               fileName: "item8.ppt",
+               node:{
+                  nodeRef: "88888888",
+                  type: "cm:thumbnail"
+               }
+            }
+         }
+      },
+      {
          name: "alfresco/logging/SubscriptionLog"
       },
       {

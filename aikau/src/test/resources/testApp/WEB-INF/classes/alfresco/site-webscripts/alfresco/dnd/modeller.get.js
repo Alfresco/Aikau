@@ -20,6 +20,17 @@ model.jsonModel = {
                   targetValues: ["alfresco/forms/controls/(.*)"],
                   widgetsForConfig: [
                      {
+                        id: "ALF_EDIT_FORM_CONTROL_NAME",
+                        name: "alfresco/forms/controls/TextBox",
+                        config: {
+                           fieldId: "NAME",
+                           name: "name",
+                           visibilityConfig: {
+                              initialValue: false
+                           }
+                        }
+                     },
+                     {
                         id: "ALF_EDIT_FORM_CONTROL_LABEL",
                         name: "alfresco/forms/controls/TextBox",
                         config: {

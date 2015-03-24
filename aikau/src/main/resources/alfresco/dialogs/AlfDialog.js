@@ -163,6 +163,14 @@ define(["dojo/_base/declare",
             domClass.add(this.domNode, this.additionalCssClasses);
          }
 
+         // Set a width for the dialog
+         if (this.dialogWidth)
+         {
+            domStyle.set(this.domNode, {
+               width: this.dialogWidth
+            });
+         }
+
          this.bodyNode = domConstruct.create("div", {
             "class" : "dialog-body"
          }, this.containerNode, "last");
@@ -172,6 +180,13 @@ define(["dojo/_base/declare",
             width: this.contentWidth ? this.contentWidth: null,
             height: this.contentHeight ? this.contentHeight: null
          });
+
+         if (sniff("ie") === 8 || sniff("ie") === 9)
+         {
+            // Add specific classes for IE8 and 9 to undo the CSS calculations and selectors
+            // that make the footer always visible (because they don't support CSS calc)...
+            domClass.add(this.domNode, "iefooter");
+         }
 
          // It is important to create the buttons BEFORE creating the main body. This is especially important
          // for when the buttons will respond to initial setup events from a form placed inside the body (e.g.

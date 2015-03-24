@@ -279,6 +279,10 @@ define(["dojo/_base/declare",
                response: response
             });
          }
+         else
+         {
+            this.alfLog("warn", "[DEFAULT CALLBACK] Default success callback has been called but no requestConfig.alfTopic has been set.");
+         }
       },
 
       /**

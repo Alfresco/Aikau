@@ -44,8 +44,8 @@ model.jsonModel = {
                         changesTo: "INVALID_DATA",
                         updateTopics: "INVALID_DATA",
                         fixed: [
-                           {label:"One",value:"1"},
-                           {label:"Two",value:"2"},
+                           {label:"select.test.fixed.option.one",value:"1"},
+                           {label:"select.test.fixed.option.two",value:"2"},
                            {value:"NO LABEL"},
                            {INVALID:"DATA"}
                         ]
@@ -176,6 +176,21 @@ model.jsonModel = {
                         label: "Select",
                         optionsConfig: {
                            publishTopic: "GET_OPTIONS_FOR_SELECT_IN_DIALOG"
+                        }
+                     }
+                  },
+                  {
+                     id: "SELECT2_IN_DIALOG",
+                     name: "alfresco/forms/controls/RadioButtons",
+                     config: {
+                        fieldId: "SiD2",
+                        name: "selected2",
+                        label: "Select Fixed",
+                        value: "2",
+                        optionsConfig: {
+                           fixed: [
+                              { label: "One", value: "1"}, { label: "Two", value: "2"}
+                           ]
                         }
                      }
                   }

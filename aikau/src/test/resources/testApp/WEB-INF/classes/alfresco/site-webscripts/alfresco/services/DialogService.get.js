@@ -56,6 +56,8 @@ model.jsonModel = {
                formSubmissionPayloadMixin: {
                   bonusData: "test"
                },
+               contentWidth: "700px",
+               contentHeight: "300px",
                widgets: [
                   {
                      id: "TB2",
@@ -78,6 +80,8 @@ model.jsonModel = {
             publishPayload: {
                dialogTitle: "Outer dialog",
                dialogId: "OUTER_DIALOG",
+               contentWidth: "600px",
+               contentHeight: "400px",
                widgetsContent: [
                   {
                      name: "alfresco/buttons/AlfButton",

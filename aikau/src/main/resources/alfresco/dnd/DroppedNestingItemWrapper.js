@@ -30,8 +30,10 @@ define(["dojo/_base/declare",
         "alfresco/dnd/DroppedItemWrapper",
         "alfresco/dnd/Constants",
         "dojo/_base/lang",
-        "dojo/on"], 
-        function(declare, DroppedItemWrapper, Constants, lang, on) {
+        "dojo/_base/array",
+        "dojo/on",
+        "dojo/Deferred"], 
+        function(declare, DroppedItemWrapper, Constants, lang, array, on, Deferred) {
    
    return declare([DroppedItemWrapper], {
       
@@ -42,8 +44,41 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_dnd_DroppedNestingItemWrapper__postCreate() {
+         // Provide any additional configuration that the nested item might use...
+         var promise = new Deferred();
+         promise.then(lang.hitch(this, this.onNestedConfig));
+         this.alfPublish(Constants.requestWidgetsForNestedConfigTopic, {
+            value: this.value,
+            promise: promise
+         });
+
          this.inherited(arguments);
          on(this.domNode, Constants.updateItemsEvent, lang.hitch(this, this.onNestedTargetUpdated));
+      },
+
+      /**
+       * Updates the display items with the nested widget configuration model. The widgets processed are expected
+       * to be [DragAndDropNestedTarget]{@link module:alfresco/dnd/DragAndDropNestedTarget} widgets that will be
+       * able to pass this additional configuration onto the items that are dropped into them.
+       *
+       * @instance
+       * @param {array} widgets The widgets processed.
+       */
+      allWidgetsProcessed: function alfresco_dnd_DroppedNestingItemWrapper__allWidgetsProcessed(widgets) {
+         this.inherited(arguments);
+         array.forEach(widgets, function(widget) {
+            widget.widgetsForNestedConfig = this._widgetsForNestedConfig;
+
+            // Ensure that nested items are rendered if values are available for them...
+            if (widget.targetProperty)
+            {
+               var value = lang.getObject(widget.targetProperty, false, this.value);
+               if (value && typeof widget.setValue === "function")
+               {
+                  widget.setValue(value);
+               }
+            }
+         }, this);
       },
 
       /**
@@ -78,6 +113,39 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "The update event contains no 'targetWidget' attribute", evt, this);
          }
+      },
+
+      /**
+       * Retrieves additional configuration data from a [DndModellingService]{@link module:alfresco/services/DragAndDropModellingService}
+       * that can then be passed onto the child widget.
+       * 
+       * @instance
+       * @param {object} targetWidget The target widget to update with the additional configuration
+       * @param {promise} resolvedPromise A resolved promise that is expected to contain a widgets array
+       */
+      onNestedConfig: function alfresco_dnd_DroppedNestingItemWrapper__onNestedConfig(resolvedPromise) {
+         if (resolvedPromise.widgets)
+         {
+            this._widgetsForNestedConfig = resolvedPromise.widgets;
+         }
+         else
+         {
+            this.alfLog("warn", "Wigets were not provided in the resolved promise", resolvedPromise, this);
+         }
+      },
+
+      /**
+       * Extends the inherited function to add in any nested configuration widgets.
+       * 
+       * @param {object} item The current item being edited.
+       * @param {promise} resolvedPromise A resolved promise that is expected to contain a widgets array
+       */
+      onEditConfig: function alfresco_dnd_DroppedNestingItemWrapper__onEditConfig(item, resolvedPromise) {
+         if (resolvedPromise.widgets && this.widgetsForNestedConfig)
+         {
+            resolvedPromise.widgets = this.widgetsForNestedConfig.concat(resolvedPromise.widgets);
+         }
+         this.inherited(arguments);
       }
    });
 });

@@ -18,8 +18,8 @@
  */
 
 /**
- * This renders an image that represents the type of file that the assigned node represents. 
- * 
+ * This renders an image that represents the type of file that the assigned node represents.
+ *
  * @module alfresco/renderers/FileType
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -27,27 +27,27 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "alfresco/renderers/_JsNodeMixin",
         "dojo/text!./templates/FileType.html",
         "alfresco/core/Core",
-        "dojo/_base/lang"], 
+        "dojo/_base/lang"],
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, template, AlfCore, lang) {
 
    return declare([_WidgetBase, _TemplatedMixin, _JsNodeMixin, AlfCore], {
-      
+
       /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
        */
       templateString: template,
-      
+
       /**
        * The size of the image. By default this will be "large" but can be set to "small" or "medium". The default widget has 3 image
        * sizes: 16px, 32px and 48px and changing the size will change the size of image that is used.
-       * 
+       *
        * @instance
        * @type {string}
        * @default "large"
@@ -64,8 +64,18 @@ define(["dojo/_base/declare",
       altText: "",
 
       /**
+       * The URL to the image.
+       * Available parameters to replace are {prefix} {type} and {size}
+       *
+       * @instance
+       * @type {string}
+       * @default require.toUrl("alfresco/renderers/css/images/filetypes/{prefix}-{type}-{size}.png")
+       */
+      imageUrl: "alfresco/renderers/css/images/filetypes/{prefix}-{type}-{size}.png",
+
+      /**
        * Set up the attributes to be used when rendering the template.
-       * 
+       *
        * @instance
        */
       postMixInProperties: function alfresco_renderers_FileType__postMixInProperties() {
@@ -73,21 +83,25 @@ define(["dojo/_base/declare",
          var typeMappings = this.defaultTypeMappings;
          if (this.customTypeMappings != null)
          {
-            lang.mixin(typeMappings, this.customTypeMappings); 
+            lang.mixin(typeMappings, this.customTypeMappings);
          }
 
          // Mix the custom extension mappings into the default extension mappings...
          var extnMappings = this.defaultExtnMappings;
          if (this.customExtnMappings != null)
          {
-            lang.mixin(extnMappings, this.customExtnMappings); 
+            lang.mixin(extnMappings, this.customExtnMappings);
          }
 
-         var type = this.getImageType(typeMappings);
-         this.img = require.toUrl("alfresco/renderers/css/images/filetypes/" + this.getImagePrefix(extnMappings) + "-" + type + "-" + this.getImageSize() + ".png");
+         var imageUrl = lang.replace(this.imageUrl, {
+            prefix: this.getImagePrefix(extnMappings),
+            type: this.getImageType(typeMappings),
+            size: this.getImageSize()
+         });
+         this.img = require.toUrl(imageUrl);
          this.alfText = this.message("fileType." + this.getExtension() + ".altText");
       },
-      
+
       /**
        * This returns a String that represents the type of file that an image should be generated for.
        *
@@ -105,14 +119,14 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Gets the extension for the current item. It does this by looking for the last "." in the fileName. 
+       * Gets the extension for the current item. It does this by looking for the last "." in the fileName.
        *
        * @instance
        * @returns {string} The extension for the current item
        */
       getExtension: function alfresco_renderers_FileType__getExtensions() {
          var extn = "";
-         if (this.currentItem != null && 
+         if (this.currentItem != null &&
              this.currentItem.fileName != null &&
              this.currentItem.fileName.lastIndexOf(".") != -1)
          {
@@ -167,11 +181,11 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       *
        * @instance
        */
       postCreate: function alfresco_renderers_FileType__postCreate() {
-         
+
       },
 
       /**

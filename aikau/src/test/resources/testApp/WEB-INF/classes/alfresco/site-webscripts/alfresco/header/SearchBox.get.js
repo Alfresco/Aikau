@@ -44,6 +44,48 @@ model.jsonModel = {
    widgets:[
       searchBox,
       {
+         id: "SB2",
+         name: "alfresco/header/SearchBox",
+         config: {
+            alignment: "left",
+            placeholder: "Whatcha lookin' for?",
+            documentsTitle: "Stuff",
+            peopleTitle: "Even more stuff",
+            moreTitle: "You want more?",
+            suppressRedirect: true,
+            showSiteResults: false
+         }
+      },
+      {
+         id: "SB3",
+         name: "alfresco/header/SearchBox",
+         config: {
+            alignment: "left",
+            placeholder: "Won't show documents",
+            sitesTitle: "Other stuff",
+            showDocumentResults: false
+         }
+      },
+      {
+         id: "SB4",
+         name: "alfresco/header/SearchBox",
+         config: {
+            alignment: "left",
+            placeholder: "Won't show people",
+            showPeopleResults: false
+         }
+      },
+      {
+         id: "SB5",
+         name: "alfresco/header/SearchBox",
+         config: {
+            alignment: "left",
+            placeholder: "Has hidden search terms",
+            showPeopleResults: false,
+            hiddenSearchTerms: " secret squirrels"
+         }
+      },
+      {
          name: "aikauTesting/mockservices/SearchBoxMockXhr"
       },
       {
