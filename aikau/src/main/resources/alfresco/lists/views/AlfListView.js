@@ -125,6 +125,11 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_lists_views_AlfListView__postCreate() {
          this.inherited(arguments);
 
+         // Set up a subscription to handle requests for the view name.
+         // This supports other widgets displaying the name (rather than value) of views and
+         // also acts as a "role call" of views to check that an expected view is available
+         this.alfSubscribe("ALF_VIEW_NAME_REQUEST", lang.hitch(this, this.onViewNameRequest));
+
          // Add in any additional CSS classes...
          domClass.add(this.domNode, (this.additionalCssClasses != null ? this.additionalCssClasses : ""));
 
@@ -152,6 +157,26 @@ define(["dojo/_base/declare",
             this.renderView(false);
          }
          this._renderOptionalElements();
+      },
+
+      /**
+       * If the supplied payload contains a view value that matches this view then this will resolve
+       * the promise that should be included.
+       *
+       * @instance
+       * @param {object} payload A payload containing a view value and a promise to resolve.
+       */
+      onViewNameRequest: function alfresco_lists_views_AlfListView__onViewNameRequest(payload) {
+         if (payload && 
+             payload.value === this.getViewName() && 
+             payload.promise && 
+             typeof payload.promise.resolve === "function")
+         {
+            payload.promise.resolve({
+               value: this.getViewName(),
+               label: this.viewSelectionConfig.label 
+            });
+         }
       },
 
       /**

@@ -29,8 +29,9 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "service/constants/Default",
         "dojo/_base/lang",
-        "dojo/dom-style"], 
-        function(declare, AlfMenuGroup, _AlfDocumentListTopicMixin, AlfConstants, lang, domStyle) {
+        "dojo/dom-style",
+        "dojo/Deferred"], 
+        function(declare, AlfMenuGroup, _AlfDocumentListTopicMixin, AlfConstants, lang, domStyle, Deferred) {
    
    return declare([AlfMenuGroup, _AlfDocumentListTopicMixin], {
 
@@ -93,66 +94,107 @@ define(["dojo/_base/declare",
          if (payload && payload.node)
          {
             this._currentNode = payload.node;
+            this.updateViews();
+            this.updateMenus();
+         }
+      },
 
-            var folderView = lang.getObject("node.parent.properties.app:defaultViewId", false, payload);
+      /**
+       * Publishes payload to update the currently selected view based on the default view of the 
+       * current node and the preferred view of the user.
+       *
+       * @instance
+       */
+      updateViews: function alfresco_documentlibrary_ViewPreferencesGroup__updateViews() {
+         var promise = new Deferred();
+         var folderView = lang.getObject("parent.properties.app:defaultViewId", false, this._currentNode);
+         if (folderView)
+         {
+            // Check to see if the folder view exists...
+            promise.then(lang.hitch(this, this.onViewName, true));
+            this.alfPublish("ALF_VIEW_NAME_REQUEST", {
+               value: folderView,
+               promise: promise
+            });
+         }
+         else if (this.userPreferredView)
+         {
+            // Check to see if the user preferred view exists...
+            promise.then(lang.hitch(this, this.onViewName, false));
+            this.alfPublish("ALF_VIEW_NAME_REQUEST", {
+               value: this.userPreferredView,
+               promise: promise
+            });
+         }
+      },
+
+      /**
+       * This function is called when a preferred view confirms it's existence by resolving a 
+       * promimse provided. This then allows that view to be set.
+       *
+       * @instance
+       * @param {boolean} updateMenuItem Indicates whether or not the menu item for removing the view should be updated
+       * @param {object} view The view configuration
+       */
+      onViewName: function alfresco_documentlibrary_ViewPreferencesGroup__onViewName(updateMenuItem, view) {
+         this.alfPublish(this.viewSelectionTopic, view);
+         if (updateMenuItem)
+         {
+            // Set the name of the default view...
+            this._removeDefaultMenuItem.set("label", this.message("documentlibrary.view.preference.remove", {
+               0: view.label
+            }));
+         }
+      },
+
+      /**
+       * Updates the menu items for setting and removing default views
+       *
+       * @instance
+       */
+      updateMenus: function alfresco_documentlibrary_ViewPreferencesGroup__updateMenus() {
+         var folderView = lang.getObject("parent.properties.app:defaultViewId", false, this._currentNode);
+         var folderCreator = lang.getObject("parent.properties.cm:creator", false, this._currentNode);
+         if (this.userIsSiteManager || folderCreator === AlfConstants.USERNAME)
+         {
+            domStyle.set(this.domNode, "display", "block");
+
+            // Update the option labels for current view...
+            this._setDefaultMenuItem.set("label", this.message("documentlibrary.view.preference.add", {
+               0: this.currentViewName
+            }));
+               
+            // If the user is either the site manager or the creator of the container...
             if (folderView)
             {
-               // Set folder preferred view
-               this.alfPublish(this.viewSelectionTopic, {
-                  value: folderView
-               });
-            }
-            else if (this.userPreferredView)
-            {
-               // Set user preferred view
-               this.alfPublish(this.viewSelectionTopic, {
-                  value: this.userPreferredView
-               });
-            }
-
-            var folderCreator = lang.getObject("node.parent.properties.cm:creator", false, payload);
-            if (this.userIsSiteManager || folderCreator === AlfConstants.USERNAME)
-            {
-               // If the user is either the site manager or the creator of the container...
-               if (folderView)
+               // A default view has been set so the option to remove it is valid...
+               if (folderView === this.currentView)
                {
-                  // Update the option labels for setting default views...
-                  // E.g. change them to contain the view name...
-                  this._setDefaultMenuItem.set("label", this.message("documentlibrary.view.preference.add", {
-                     0: this.currentViewName
-                  }));
-                  this._removeDefaultMenuItem.set("label", this.message("documentlibrary.view.preference.remove", {
-                     0: this.currentViewName
-                  }));
-
-                  // A default view has been set so the option to remove it is valid...
-                  if (folderView === this.currentView)
-                  {
-                     // The current view is the default view so there is no need to show the set default view option...
-                     domStyle.set(this._setDefaultMenuItem.domNode, "display", "none");
-                  }
-                  else
-                  {
-                     // The current view is NOT the default view so we need to offer it as an option...
-                     domStyle.set(this.domNode, "display", "block");
-                     domStyle.set(this._setDefaultMenuItem.domNode, "display", "table-row");
-                  }
+                  // The current view is the default view so there is no need to show the set default view option...
+                  domStyle.set(this._setDefaultMenuItem.domNode, "display", "none");
                }
                else
                {
-                  // No default view has been set yet, so the set view as default option can be shown...
-                  domStyle.set(this.domNode, "display", "block");
+                  // The current view is NOT the default view so we need to offer it as an option...
                   domStyle.set(this._setDefaultMenuItem.domNode, "display", "table-row");
-
-                  // ...but the remove option can't be...
-                  domStyle.set(this._removeDefaultMenuItem.domNode, "display", "none");
                }
+
+               // Allow the default view to be removed...
+               domStyle.set(this._removeDefaultMenuItem.domNode, "display", "table-row");
             }
             else
             {
-               // If the user does not have write permissions then we want to hide both options...
-               domStyle.set(this.domNode, "display", "none");
+               // No default view has been set yet, so the set view as default option can be shown...
+               domStyle.set(this._setDefaultMenuItem.domNode, "display", "table-row");
+
+               // ...but the remove option can't be...
+               domStyle.set(this._removeDefaultMenuItem.domNode, "display", "none");
             }
+         }
+         else
+         {
+            // If the user does not have write permissions then we want to hide both options...
+            domStyle.set(this.domNode, "display", "none");
          }
       },
 
@@ -167,6 +209,7 @@ define(["dojo/_base/declare",
          {
             this.currentView = payload.value;
             this.currentViewName = payload.label || payload.value;
+            this.updateMenus();
          }
       },
 
