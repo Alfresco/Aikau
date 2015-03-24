@@ -22,6 +22,7 @@ model.jsonModel = {
             publishPayload: {
                node: {
                   parent: {
+                     nodeRef: "some://node/one",
                      properties: {
                         "app:defaultViewId": "VIEW1",
                         "cm:creator": "guest"
@@ -40,6 +41,7 @@ model.jsonModel = {
             publishPayload: {
                node: {
                   parent: {
+                     nodeRef: "some://node/two",
                      properties: {
                         "app:defaultViewId": "VIEW2",
                         "cm:creator": "guest"
@@ -58,6 +60,7 @@ model.jsonModel = {
             publishPayload: {
                node: {
                   parent: {
+                     nodeRef: "some://node/three",
                      properties: {
                         "app:defaultViewId": "VIEW1",
                         "cm:creator": "someoneelse"
@@ -75,12 +78,24 @@ model.jsonModel = {
             publishTopic: "ALF_CURRENT_NODEREF_CHANGED",
             publishPayload: {
                node: {
+                  nodeRef: "some://node/four",
                   parent: {
                      properties: {
                         "cm:creator": "someoneelse"
                      }
                   }
                }
+            }
+         }
+      },
+      {
+         id: "SET_METADATA_5",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Set no node",
+            publishTopic: "ALF_CURRENT_NODEREF_CHANGED",
+            publishPayload: {
+               node: {}
             }
          }
       },
@@ -123,7 +138,7 @@ model.jsonModel = {
                            id: "VPG1",
                            name: "alfresco/documentlibrary/ViewPreferencesGroup",
                            config: {
-                              isSiteManager: true
+                              userPreferredView: "VIEW3"
                            }
                         }
                      ]
@@ -147,6 +162,15 @@ model.jsonModel = {
             viewSelectionConfig: {
                label: "View 2",
                value: "VIEW2"
+            }
+         }
+      },
+      {
+         name: "alfresco/lists/views/AlfListView",
+         config: {
+            viewSelectionConfig: {
+               label: "View 3",
+               value: "VIEW3"
             }
          }
       },

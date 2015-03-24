@@ -91,11 +91,17 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the node that is now current.
        */
       handleCurrentNodeChange: function alfresco_documentlibrary_ViewPreferencesGroup__handleCurrentNodeRefChange(payload) {
-         if (payload && payload.node)
+         if (payload && payload.node && payload.node.parent)
          {
             this._currentNode = payload.node;
             this.updateViews();
             this.updateMenus();
+         }
+         else
+         {
+            // Hide the group if there is not parent node in the metadata.
+            // This will typically occur when a filter has been used in the Document Library
+            domStyle.set(this.domNode, "display", "none");
          }
       },
 
@@ -155,6 +161,7 @@ define(["dojo/_base/declare",
       updateMenus: function alfresco_documentlibrary_ViewPreferencesGroup__updateMenus() {
          var folderView = lang.getObject("parent.properties.app:defaultViewId", false, this._currentNode);
          var folderCreator = lang.getObject("parent.properties.cm:creator", false, this._currentNode);
+         var nodeRef = lang.getObject("parent.nodeRef", false, this._currentNode);
          if (this.userIsSiteManager || folderCreator === AlfConstants.USERNAME)
          {
             domStyle.set(this.domNode, "display", "block");
@@ -163,6 +170,13 @@ define(["dojo/_base/declare",
             this._setDefaultMenuItem.set("label", this.message("documentlibrary.view.preference.add", {
                0: this.currentViewName
             }));
+
+            // Update the payload of the set menu item so that it publishes the correct information when 
+            // clicked...
+            this._setDefaultMenuItem.publishPayload = {
+               prop_app_defaultViewId: this.currentView,
+               nodeRef: nodeRef
+            }
                
             // If the user is either the site manager or the creator of the container...
             if (folderView)
@@ -181,6 +195,13 @@ define(["dojo/_base/declare",
 
                // Allow the default view to be removed...
                domStyle.set(this._removeDefaultMenuItem.domNode, "display", "table-row");
+
+               // Update the payload of the set menu item so that it publishes the correct information when 
+               // clicked...
+               this._removeDefaultMenuItem.publishPayload = {
+                  prop_app_defaultViewId: "",
+                  nodeRef: nodeRef
+               }
             }
             else
             {
@@ -224,7 +245,9 @@ define(["dojo/_base/declare",
             name: "alfresco/menus/AlfMenuItem",
             assignTo: "_setDefaultMenuItem",
             config: {
-               label: "documentlibrary.view.preference.add"
+               label: "documentlibrary.view.preference.add",
+               iconClass: "alf-enabled-on-icon",
+               publishTopic: "ALF_UPDATE_CONTENT_REQUEST"
             }
          },
          {
@@ -232,7 +255,9 @@ define(["dojo/_base/declare",
             name: "alfresco/menus/AlfMenuItem",
             assignTo: "_removeDefaultMenuItem",
             config: {
-               label: "documentlibrary.view.preference.remove"
+               label: "documentlibrary.view.preference.remove",
+               iconClass: "alf-enabled-off-icon",
+               publishTopic: "ALF_UPDATE_CONTENT_REQUEST"
             }
          }
       ]

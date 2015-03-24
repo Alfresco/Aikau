@@ -73,6 +73,27 @@ define(["intern!object",
             });
       },
 
+      "Remove the default view": function() {
+         return browser.findByCssSelector("#REMOVE_DEFAULT_DOCUMENT_LIST_VIEW_text")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_UPDATE_CONTENT_REQUEST", "publish", "last"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Request to remove default view not found");
+            })
+         .end()
+         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "nodeRef"))
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "some://node/one", "Wrong nodeRef");
+            });
+         // .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "prop_app_defaultViewId"))
+         //    .getVisibleText()
+         //    .then(function(text) {
+         //       assert.equal(text, "", "Unexpected default view");
+         //    });
+      },
+
       "Change the view": function() {
          // Remove should still be shown
          // Add should also be shown (because the current view is not the default view)
@@ -94,6 +115,22 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The remove menu item was not displayed");
+            });
+      },
+
+      "Set default view": function() {
+         return browser.findByCssSelector("#SET_DEFAULT_DOCUMENT_LIST_VIEW_text")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_UPDATE_CONTENT_REQUEST", "publish", "last"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Request to remove default view not found");
+            })
+         .end()
+         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "nodeRef"))
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "some://node/one", "Wrong nodeRef");
             });
       },
 
@@ -147,9 +184,42 @@ define(["intern!object",
             });
       },
 
+      "Check that group is hidden for folders not owned by user": function() {
+         return browser.findByCssSelector("#VPG1")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The group should not be displayed");
+            });
+      },
+
       "Change to unowned node without default view": function() {
          // The menu items should still be hidden
          // The user preferred view should be requested
+         return browser.findByCssSelector("#SET_METADATA_4_label")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_SELECT_VIEW", "publish", "last"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "View selection publication for user preferred view not found");
+            })
+         .end()
+         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "VIEW3", "The user preferred view was not requested");
+            });
+      },
+
+      "Simulate filter": function() {
+         // When a filter is requested there will be no node to set default views on...
+         return browser.findByCssSelector("#SET_METADATA_5_label")
+            .click()
+         .end()
+         .findByCssSelector("#VPG1")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The group should not be displayed");
+            });
       },
 
       "Post Coverage Results": function() {
