@@ -15,6 +15,7 @@ define([], function() {
       testCounter = 1,
       environments = {},
       timers = {
+         beforeAll: 0,
          beforeTest: 0,
          beforeSuite: 0
       },
@@ -74,16 +75,31 @@ define([], function() {
       }
    }
 
-   function logTest(message, color) {
+   function logTest(name, duration, result, color) {
       var totalLength = ("" + counts.total).length,
-         padString = (new Array(totalLength)).join("0"),
-         testCount = testCounter++,
-         paddedCount = (padString + testCount).slice(0 - totalLength),
-         logMessage = paddedCount + "/" + counts.total + ": " + message;
+         count = pad("" + testCounter++, totalLength, "0") + "/" + counts.total,
+         message = count + ": " + name + " (" + duration + "ms)",
+         formattedResult = " [" + result + "]",
+         output = ANSI_COLORS.Dim + message + ANSI_COLORS.Reset + formattedResult;
       if (color) {
-         logMessage = color + logMessage + ANSI_COLORS.Reset;
+         output = color + ANSI_COLORS.Dim + message + ANSI_COLORS.Reset + color + formattedResult + ANSI_COLORS.Reset;
       }
-      console.log(logMessage);
+      console.log(output);
+   }
+
+   function logTitle(title) {
+      var underOverLine = new Array(title.length + 1).join("="),
+         output = ["", underOverLine, title, underOverLine].join("\n");
+      console.log(ANSI_COLORS.Bold + output + ANSI_COLORS.Reset);
+   }
+
+   function pad(str, paddedLength, padChar, padRight) {
+      str = str || "";
+      paddedLength = paddedLength || str.length;
+      padChar = padChar || " ";
+      var padding = new Array(paddedLength).join(padChar),
+         preTrim = padRight ? str + padding : padding + str;
+      return padRight ? preTrim.slice(0, paddedLength) : preTrim.slice(0 - paddedLength);
    }
 
    /* Create and return the intern object */
@@ -91,18 +107,42 @@ define([], function() {
 
       /* CORE FUNCTIONS */
       start: function() {
-         console.log("");
-         console.log("Running tests ...");
+
+         // Record start time
+         timers.beforeAll = Date.now();
+
+         // Output starting message
+         logTitle("STARTING TESTS");
+
       },
       stop: function() {
 
-         // Output completed message
-         console.log("");
-         console.log(ANSI_COLORS.Underline + "Test run complete" + ANSI_COLORS.Reset);
+         // Calculate and log time taken
+         var timeTakenMs = Date.now() - timers.beforeAll,
+            timeTakenMins = Math.floor(timeTakenMs / 1000 / 60),
+            timeTakenSecs,
+            minText,
+            secText,
+            timeTaken;
+         if (timeTakenMins) {
+            timeTakenSecs = Math.round(timeTakenMs / 1000) % (timeTakenMins * 60);
+            minText = timeTakenMins === 1 ? "minute" : "minutes";
+            secText = timeTakenSecs === 1 ? "second" : "seconds";
+            timeTaken = timeTakenMins + " " + minText + " " + timeTakenSecs + " " + secText;
+         } else {
+            timeTakenSecs = Math.round(timeTakenMs / 100) / 10;
+            secText = timeTakenSecs === 1 ? "second" : "seconds";
+            timeTaken = timeTakenSecs + " " + secText;
+         }
 
-         // Give initial stats for the test-run
-         var info = {
-               Total: counts.total,
+         // Output completed message
+         logTitle("TESTING COMPLETE");
+         console.log("");
+         console.log("Took " + timeTaken + " to run " + counts.total + " tests");
+
+         // Calculate stats for the test-run
+         var stats = {
+               Success: Math.round((counts.passed + counts.skipped) / counts.total) * 100 + "%",
                Passed: counts.passed,
                Skipped: counts.skipped,
                Failed: collections.failures.length,
@@ -110,11 +150,34 @@ define([], function() {
                Deprecated: collections.deprecations.length,
                Environments: Object.keys(environments).length
             },
-            infoMessage = Object.keys(info).map(function(infoKey) {
-               return infoKey + ": " + info[infoKey];
-            }).join(", ");
+            maxStatLabelLength,
+            maxStatValueLength;
+
+         // Check longest name and value in stats
+         Object.keys(stats).forEach(function(statLabel) {
+            var statValue = stats[statLabel] + "",
+               statLabelLength = statLabel.length,
+               statValueLength = statValue.length;
+            if (!maxStatLabelLength || statLabelLength > maxStatLabelLength) {
+               maxStatLabelLength = statLabelLength;
+            }
+            if (!maxStatValueLength || statValueLength > maxStatValueLength) {
+               maxStatValueLength = statValueLength;
+            }
+         });
+
+         var statMessages = Object.keys(stats).map(function(statLabel) {
+            var statValue = stats[statLabel],
+               paddedLabel = pad(statLabel, maxStatLabelLength + 5, ".", true),
+               paddedValue = pad(statValue + "", maxStatValueLength, "."),
+               message = paddedLabel + paddedValue;
+            return statValue ? message : ANSI_COLORS.Dim + message + ANSI_COLORS.Reset;
+         }).join("\n");
+
+         // Log test-run stats
+         logTitle("RESULTS");
          console.log("");
-         console.log(infoMessage);
+         console.log(statMessages);
 
          // Run through the collections
          Object.keys(collections).forEach(function(collectionName) {
@@ -126,8 +189,7 @@ define([], function() {
             }
 
             // Output title
-            var title = collectionName.substr(0, 1).toUpperCase() + collectionName.substr(1).toLowerCase();
-            console.log("\n" + ANSI_COLORS.Underline + title + ANSI_COLORS.Reset);
+            logTitle(collectionName.toUpperCase());
 
             // Run through collection
             var lastEnv,
@@ -178,7 +240,7 @@ define([], function() {
             return;
          }
          var timeTaken = Date.now() - timers.beforeSuite;
-         console.log("Suite took " + timeTaken + "ms to complete");
+         console.log(ANSI_COLORS.Dim + "Suite took " + timeTaken + "ms to complete" + ANSI_COLORS.Reset);
       },
       "/suite/error": function(suite) {
          if (suite.name === "main") {
@@ -205,7 +267,7 @@ define([], function() {
             errorMessage = errorMessage.substr(0, lineBreakIndex);
          }
          addToCollection("failures", errorMessage);
-         logTest(test.name + " (" + timeTaken + "ms) [FAILED]", ANSI_COLORS.FgRed);
+         logTest(test.name, timeTaken, "FAILED", ANSI_COLORS.FgRed);
       },
       "/test/new": function() {
          counts.total++;
@@ -213,12 +275,12 @@ define([], function() {
       "/test/pass": function(test) {
          var timeTaken = Date.now() - timers.beforeTest;
          counts.passed++;
-         logTest(test.name + " (" + timeTaken + "ms) [PASSED]");
+         logTest(test.name, timeTaken, "PASSED");
       },
       "/test/skip": function(test) {
          var timeTaken = Date.now() - timers.beforeTest;
          counts.skipped++;
-         logTest(test.name + " (" + timeTaken + "ms) [SKIPPED]", ANSI_COLORS.FgYellow);
+         logTest(test.name, timeTaken, "SKIPPED", ANSI_COLORS.FgYellow);
       },
       "/test/start": function(test) {
          timers.beforeTest = Date.now();
@@ -226,7 +288,9 @@ define([], function() {
          state.test = test.name;
          if (state.suite && lastSuite !== state.suite) {
             lastSuite = state.suite;
-            console.log(state.env);
+            if (state.env) {
+               console.log(state.env);
+            }
          }
       }
    };
