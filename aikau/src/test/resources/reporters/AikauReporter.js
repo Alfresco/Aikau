@@ -64,7 +64,11 @@ define([], function() {
             if (env && env.browserName) {
                var safeBrowserString = env.browserName.replace(/[^a-zA-Z0-9]/g, /_/),
                   safeBrowserName = safeBrowserString.substr(0, 1).toUpperCase() + safeBrowserString.substr(1).toLowerCase(),
-                  envString = env.platform + " - " + safeBrowserName + " v" + env.version;
+                  platformName = env.platform.split(" ").map(function(platformName) {
+                     var capitalised = platformName && platformName.substr(0, 1).toUpperCase() + platformName.substr(1).toLowerCase();
+                     return capitalised || "";
+                  }).join(" "),
+                  envString = safeBrowserName + " v" + env.version + " (" + platformName + ")";
                suite.env = envString;
                environments[envString] = true;
             }
@@ -80,10 +84,8 @@ define([], function() {
          count = pad("" + testCounter++, totalLength, "0") + "/" + counts.total,
          message = count + ": " + name + " (" + duration + "ms)",
          formattedResult = " [" + result + "]",
-         output = ANSI_COLORS.Dim + message + ANSI_COLORS.Reset + formattedResult;
-      if (color) {
-         output = color + ANSI_COLORS.Dim + message + ANSI_COLORS.Reset + color + formattedResult + ANSI_COLORS.Reset;
-      }
+         controlCode = color || ANSI_COLORS.Dim,
+         output = controlCode + message + formattedResult + ANSI_COLORS.Reset;
       console.log(output);
    }
 
@@ -135,20 +137,20 @@ define([], function() {
             timeTaken = timeTakenSecs + " " + secText;
          }
 
-         // Output completed message
+         // Output completed message and test run information
+         var environmentNames = Object.keys(environments);
          logTitle("TESTING COMPLETE");
          console.log("");
-         console.log("Took " + timeTaken + " to run " + counts.total + " tests");
+         console.log("Took " + timeTaken + " to run " + counts.total + " tests in " + environmentNames.length + " environments: \"" + environmentNames.join("\", \"") + "\"");
 
          // Calculate stats for the test-run
          var stats = {
-               Success: Math.round((counts.passed + counts.skipped) / counts.total) * 100 + "%",
-               Passed: counts.passed,
-               Skipped: counts.skipped,
-               Failed: collections.failures.length,
-               Errors: collections.errors.length,
-               Deprecated: collections.deprecations.length,
-               Environments: Object.keys(environments).length
+               "Success rate": Math.round((counts.passed + counts.skipped) / counts.total) * 100 + "%",
+               "Total passed": counts.passed,
+               "Total skipped": counts.skipped,
+               "Total failed": collections.failures.length,
+               "Unexpected errors": collections.errors.length,
+               "Deprecated code calls": collections.deprecations.length
             },
             maxStatLabelLength,
             maxStatValueLength;
@@ -212,7 +214,7 @@ define([], function() {
                // Show test and message
                if (item.state.test) {
                   console.log("- " + item.state.test);
-                  console.log("  " + item.message);
+                  console.log("  " + ANSI_COLORS.FgRed + "\"" + item.message + "\"" + ANSI_COLORS.Reset);
                } else {
                   // This should be a stacktrace
                   console.log("- " + item.message);
