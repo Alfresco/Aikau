@@ -1,3 +1,4 @@
+/*jshint maxlen:1000*/
 model.jsonModel = {
    services: [
       {
@@ -87,7 +88,45 @@ model.jsonModel = {
                                        label: "Label",
                                        propertyToRender: "name"
                                     }
-                                 },
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+            
+         }
+      },
+      {
+         name: "alfresco/lists/views/AlfListView",
+         config: {
+            id: "LIST",
+            currentData: {
+               items: [
+                  {
+                     name: "Lorem ipsum Magna Ut incididunt minim do sunt ut cupidatat adipisicing velit Duis ex aute laborum exercitation aute consectetur veniam nisi dolor aliquip sit non ut ut in occaecat amet occaecat quis sunt exercitation ex in minim incididunt minim non."
+                  }
+               ]
+            },
+            widgets:[
+               {
+                  name: "alfresco/lists/views/layouts/Row",
+                  config: {
+                     widgets: [
+                        {
+                           name: "alfresco/lists/views/layouts/Cell",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "MAX_LENGTH",
+                                    name: "alfresco/renderers/Property",
+                                    config: {
+                                       maxWidth: "300px",
+                                       propertyToRender: "name"
+                                    }
+                                 }
                               ]
                            }
                         }
