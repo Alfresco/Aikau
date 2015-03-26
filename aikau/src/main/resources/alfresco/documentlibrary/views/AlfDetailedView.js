@@ -67,7 +67,10 @@ define(["dojo/_base/declare",
        * @type {object[]}
        */
       widgets: [{
-         name: "alfresco/documentlibrary/views/AlfDetailedViewItem"
+         name: "alfresco/documentlibrary/views/AlfDetailedViewItem",
+         config: {
+            generatePubSubScope: true
+         }
       }]
    });
 });

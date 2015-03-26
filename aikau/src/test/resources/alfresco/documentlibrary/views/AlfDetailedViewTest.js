@@ -62,8 +62,8 @@ define(["intern!object",
       "Version only appears on hover": function() {
          return browser.findByCssSelector(".detail-item__version .value")
             .isDisplayed()
-            .then(function(versionDisplayed) {
-               assert.isFalse(versionDisplayed, "Version information visible without hovering");
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Version information visible without hovering");
             })
             .end()
 
@@ -73,8 +73,8 @@ define(["intern!object",
 
          .findByCssSelector(".detail-item__version .value")
             .isDisplayed()
-            .then(function(versionDisplayed) {
-               assert.isTrue(versionDisplayed, "Version information not visible when hovering");
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Version information not visible when hovering");
             })
             .end()
 
@@ -84,8 +84,8 @@ define(["intern!object",
 
          .findByCssSelector(".detail-item__version .value")
             .isDisplayed()
-            .then(function(versionDisplayed) {
-               assert.isFalse(versionDisplayed, "Version information visible when no longer hovering");
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Version information visible when no longer hovering");
             });
       },
 
@@ -183,6 +183,25 @@ define(["intern!object",
          .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(3) .detail-item__size, .alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(4) .detail-item__size")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Size widgets not created for correct items");
+            });
+      },
+
+      "Clicking the comments link only opens the comments for that item": function() {
+         return browser.findByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .comment-link")
+            .click()
+            .end()
+
+         .findByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .detail-item__commentsReveal > .content")
+            .getSize()
+            .then(function(size) {
+               assert.notEqual(size.height, 0, "Comments not expanded for chosen item");
+            })
+            .end()
+
+         .findByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(2) .detail-item__commentsReveal > .content")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.height, 0, "Comments expanded for incorrect item");
             });
       },
 

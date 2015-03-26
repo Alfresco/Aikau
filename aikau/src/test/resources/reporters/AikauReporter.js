@@ -219,8 +219,22 @@ define([], function() {
                   console.log("- " + item.state.test);
                   console.log("  \"" + item.message + "\"");
                } else {
-                  // This should be a stacktrace
-                  console.log("- " + item.message);
+                  // This should be a stacktrace ... if it is, format specially
+                  var alfrescoTestPath = "test/resources/alfresco",
+                     resultMessage = item.message,
+                     isStacktrace = resultMessage.indexOf(alfrescoTestPath) !== -1,
+                     stacktraceLines;
+                  if (isStacktrace) {
+                     stacktraceLines = resultMessage.split("\n");
+                     resultMessage = stacktraceLines.map(function(line, lineIndex) {
+                        if (lineIndex && line.indexOf(alfrescoTestPath) === -1) {
+                           return ANSI_COLORS.Dim + line + ANSI_COLORS.Reset;
+                        } else {
+                           return line;
+                        }
+                     }).join("\n");
+                  }
+                  console.log("- " + resultMessage);
                }
             });
          });
