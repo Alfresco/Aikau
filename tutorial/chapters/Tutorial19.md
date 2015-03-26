@@ -47,7 +47,7 @@ In [tutorial 3](./Tutorial3.md "Link to tutorial 3") we learned about composite 
 
 If you reload the page you’ll not see anything new at all, which is intentional, but try tabbing through the document and you should see the accessibility menu item appear - "Skip to content". Your screen should look something like this:
 
-ADD SCREENSHOT
+![Screenshot showing accessibility menu](../resources/Tutorial19-Image1.png "Screenshot showing accessibility menu")
 
 Let’s go through this configuration and see what’s going on.
 
@@ -141,11 +141,11 @@ If you’ve started using the WAVE toolbar for Firefox which was described previ
 
 After clicking the Text-only button you will see the following and you should observe the components of the AccessibilityMenu, the "Menu" heading and the "Group List" heading:
 
-ADD SCREENSHOT
+![Screenshot showing headings](../resources/Tutorial19-Image2.png "Screenshot showing headings")
 
 When you have clicked the Outline button you will see the following:
 
-ADD SCREENSHOT
+![Screenshot showing outline](../resources/Tutorial19-Image3.png "Screenshot showing outline")
 
 This view gives an indication of the structural elements that might be seen by a screen reader and you should observe the two headings you have added here too.
 
