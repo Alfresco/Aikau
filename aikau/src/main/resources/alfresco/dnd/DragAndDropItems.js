@@ -159,7 +159,11 @@ define(["dojo/_base/declare",
          var node = domConstruct.create("div");         
          var clonedItem = lang.clone(item);
          this.currentItem = {};
-         this.currentItem.title = clonedItem.label || "";
+         this.currentItem.title = "";
+         if (clonedItem.label)
+         {
+            this.currentItem.title = this.encodeHTML(this.message(clonedItem.label));
+         }
          this.currentItem.iconClass = clonedItem.iconClass || "";
          var widgetModel = lang.clone(this.widgets);
          this.processObject(["processCurrentItemTokens"], widgetModel);

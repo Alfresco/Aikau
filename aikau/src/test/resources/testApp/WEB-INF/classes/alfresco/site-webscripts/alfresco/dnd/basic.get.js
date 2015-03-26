@@ -24,7 +24,7 @@ model.jsonModel = {
                      items: [
                         {
                            type: [ "widget" ],
-                           label: "Value 1",
+                           label: "dnd.item.label",
                            value: {
                               name: "bob",
                               ted: "geoff"
