@@ -25,9 +25,10 @@
  */
 define(["intern!object",
         "intern/chai!expect",
+        "intern/chai!assert",
         "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        function (registerSuite, expect, assert, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -72,6 +73,14 @@ define(["intern!object",
          .findAllByCssSelector("#FCTSRCH_SEARCH_RESULTS_LIST tr.alfresco-search-AlfSearchResult")
             .then(function (results){
                expect(results).to.have.length(24, "There should still be 24 mocked results");
+            });
+      },
+
+      "Check there are no unexpected queries": function() {
+         return browser.findByCssSelector("td.mx-url")
+            .getVisibleText()
+            .then(function(text) {
+               assert(decodeURIComponent(text).indexOf("&query={") === -1, "unexpected query found")
             });
       },
 
