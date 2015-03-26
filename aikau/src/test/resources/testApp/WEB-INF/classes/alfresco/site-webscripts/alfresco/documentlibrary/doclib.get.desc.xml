@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>doclib Test</shortname>
-  <description>This WebScript defines the doclib page test</description>
-  <family>aikau-unit-tests</family>
-  <url>/doclib</url>
-</webscript>
