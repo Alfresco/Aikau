@@ -21,12 +21,12 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon",
+        "intern/chai!expect", 
+        "intern/chai!assert", 
+        "require", 
+        "alfresco/TestCommon", 
         "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        function(registerSuite, expect, assert, require, TestCommon, keys) {
 
    var browser;
    registerSuite({
@@ -44,11 +44,11 @@ define(["intern!object",
       // teardown: function() {
       //    browser.end().alfPostCoverageResults(browser);
       // },
-      
-      "Test that header CSS is applied": function () {
+
+      "Test that header CSS is applied": function() {
          // Check that the header CSS is applied...         
          return browser.findByCssSelector(".alfresco-layout-LeftAndRight.alfresco-header-Header")
-            .then(function(){}, function() {
+            .then(function() {}, function() {
                assert(false, "The header CSS was not applied correctly");
             });
       },
@@ -64,13 +64,13 @@ define(["intern!object",
       "Test initial user status": function() {
          return browser.findByCssSelector("#HEADER_POPUP_text")
             .click()
-         .end()
+            .end()
 
          // Check the preset user status...
          .findByCssSelector("#PRESET_STATUS > div.status")
             .getVisibleText()
             .then(function(resultText) {
-               assert.equal(resultText,"Test Status", "Preset status not set correctly");
+               assert.equal(resultText, "Test Status", "Preset status not set correctly");
             });
       },
 
@@ -78,7 +78,7 @@ define(["intern!object",
          return browser.findByCssSelector("#PRESET_STATUS > div.lastUpdate > span")
             .getVisibleText()
             .then(function(resultText) {
-               assert.equal(resultText,"over 15 years ago", "Preset status time not displayed as expected");
+               assert.equal(resultText, "over 15 years ago", "Preset status time not displayed as expected");
             });
       },
 
@@ -102,10 +102,10 @@ define(["intern!object",
          return browser.findByCssSelector("#NO_STATUS > div.status")
             .click()
             .sleep(500)
-         .end()
+            .end()
 
          .findByCssSelector(".alfresco-dialog-AlfDialog")
-            .then(function(){}, function() {
+            .then(function() {}, function() {
                assert(false, "The update dialog was not displayed");
             });
       },
@@ -125,7 +125,7 @@ define(["intern!object",
             .pressKeys([keys.TAB])
             .pressKeys([keys.RETURN])
             .sleep(250)
-         .end()
+            .end()
 
          // Check that the status update was posted correctly...
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "status", "Status Update"))
@@ -139,21 +139,21 @@ define(["intern!object",
          // (with the bonus of checking the header versions of the menu items work)...
          return browser.findByCssSelector("#HEADER_POPUP_text")
             .click()
-         .end()
-         .sleep(150)
-         .findByCssSelector("#CASCADE_1_text")
+            .end()
+            .sleep(150)
+            .findByCssSelector("#CASCADE_1_text")
             .click()
-         .end()
-         .sleep(150)
-         .findByCssSelector("#MENU_ITEM_1_text")
+            .end()
+            .sleep(150)
+            .findByCssSelector("#MENU_ITEM_1_text")
             .click()
-         .end()
-         .sleep(150)
+            .end()
+            .sleep(150)
 
          // Open the popup again...
          .findByCssSelector("#HEADER_POPUP_text")
             .click()
-         .end()
+            .end()
 
          // Check the preset user status (which should be updated)...
          .findByCssSelector("#NO_STATUS > div.status")
@@ -169,15 +169,15 @@ define(["intern!object",
             .then(function(resultText) {
                assert.equal(resultText, "over 15 years ago", "Status time not updated");
             })
-         .end();
+            .end();
 
       },
 
       "Test recent sites displayed (first site)": function() {
          // Click on the sites menus...
-         return browser.findByCssSelector("#SITES_MENU_text") 
+         return browser.findByCssSelector("#SITES_MENU_text")
             .click()
-         .end()
+            .end()
 
          .findByCssSelector("#HEADER_SITES_MENU_RECENT_site1 a")
             .getVisibleText()
@@ -197,7 +197,7 @@ define(["intern!object",
       "Test favourite sites displayed (first site)": function() {
          return browser.findByCssSelector("#SITES_MENU_FAVOURITES_text")
             .click()
-         .end()
+            .end()
 
          .findByCssSelector("#HEADER_SITES_MENU_FAVOURITE_site1 a")
             .getVisibleText()
@@ -217,8 +217,8 @@ define(["intern!object",
       "Test updating title": function() {
          return browser.findByCssSelector("#SET_TITLE_BUTTON")
             .click()
-         .end()
-         .findByCssSelector(".alfresco-header-Title > .text")
+            .end()
+            .findByCssSelector(".alfresco-header-Title > .text")
             .getVisibleText()
             .then(function(resultText) {
                assert.equal(resultText, "Updated Title", "The title was not updated");
@@ -245,16 +245,16 @@ define(["intern!object",
       // teardown: function() {
       //    browser.end().alfPostCoverageResults(browser);
       // },
-      
+
       "Test add favourite request published": function() {
          return browser.findByCssSelector("#SITES_MENU_text")
             .click()
             .sleep(500)
-         .end()
+            .end()
 
          .findByCssSelector("#SITES_MENU_ADD_FAVOURITE_text")
             .click()
-         .end()
+            .end()
 
          .findAllByCssSelector(TestCommon.topicSelector("ALF_ADD_FAVOURITE_SITE", "publish", "last"))
             .then(function(elements) {
@@ -264,9 +264,9 @@ define(["intern!object",
 
       "Test favourite request published correctly": function() {
          return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", "site1"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Favourite not added correctly");
-               });
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Favourite not added correctly");
+            });
       },
 
       "Post Coverage Results": function() {
@@ -289,16 +289,16 @@ define(["intern!object",
       // teardown: function() {
       //    browser.end().alfPostCoverageResults(browser);
       // },
-      
+
       "Test remove favourite request published": function() {
          return browser.findByCssSelector("#SITES_MENU_text")
             .click()
             .sleep(500)
-         .end()
+            .end()
 
          .findByCssSelector("#SITES_MENU_REMOVE_FAVOURITE_text")
             .click()
-         .end()
+            .end()
 
          .findAllByCssSelector(TestCommon.topicSelector("ALF_REMOVE_FAVOURITE_SITE", "publish", "last"))
             .then(function(elements) {
@@ -329,7 +329,7 @@ define(["intern!object",
       beforeEach: function() {
          browser.end();
       },
-      
+
       "Test title gets set": function() {
          return browser.findByCssSelector(".alfresco-header-Title:nth-child(2)")
             .getVisibleText()
@@ -339,13 +339,24 @@ define(["intern!object",
       },
 
       "Long title is truncated": function() {
-         return browser.findByCssSelector(".alfresco-header-Title:nth-child(3) .text")
-         .then(function(elem){
-            return elem.getSize();
-         })
-         .then(function(size){
-            assert.equal(size.width, 300, "Long title width incorrect");
-         })
+         return browser.execute(function() {
+               var title = document.querySelector(".alfresco-header-Title:nth-child(3) .text");
+               return title.clientWidth < title.scrollWidth;
+            })
+            .then(function(truncated) {
+               assert.isTrue(truncated, "Long title not truncated");
+            })
+            .end()
+
+         .findByCssSelector(".alfresco-header-Title:nth-child(3) .text")
+            .then(function(elem) {
+               return elem.getSize();
+            })
+            .then(function(size) {
+               assert.equal(size.width, 300, "Long title width incorrect");
+            })
+            .end()
+
          .screenie(); // For visual verification of ellipsis if required
       },
 
@@ -369,7 +380,7 @@ define(["intern!object",
       // teardown: function() {
       //    browser.end().alfPostCoverageResults(browser);
       // },
-      
+
       "Test title gets set": function() {
          return browser.findByCssSelector(".alfresco-header-Title > .text")
             .getVisibleText()

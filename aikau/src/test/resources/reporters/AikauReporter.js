@@ -15,6 +15,7 @@ define([], function() {
       testCounter = 1,
       environments = {},
       timers = {
+         beforeAll: 0,
          beforeTest: 0,
          beforeSuite: 0
       },
@@ -63,7 +64,11 @@ define([], function() {
             if (env && env.browserName) {
                var safeBrowserString = env.browserName.replace(/[^a-zA-Z0-9]/g, /_/),
                   safeBrowserName = safeBrowserString.substr(0, 1).toUpperCase() + safeBrowserString.substr(1).toLowerCase(),
-                  envString = env.platform + " - " + safeBrowserName + " v" + env.version;
+                  platformName = env.platform.split(" ").map(function(platformName) {
+                     var capitalised = platformName && platformName.substr(0, 1).toUpperCase() + platformName.substr(1).toLowerCase();
+                     return capitalised || "";
+                  }).join(" "),
+                  envString = safeBrowserName + " v" + env.version + " (" + platformName + ")";
                suite.env = envString;
                environments[envString] = true;
             }
@@ -74,16 +79,29 @@ define([], function() {
       }
    }
 
-   function logTest(message, color) {
+   function logTest(name, duration, result, color) {
       var totalLength = ("" + counts.total).length,
-         padString = (new Array(totalLength)).join("0"),
-         testCount = testCounter++,
-         paddedCount = (padString + testCount).slice(0 - totalLength),
-         logMessage = paddedCount + "/" + counts.total + ": " + message;
-      if (color) {
-         logMessage = color + logMessage + ANSI_COLORS.Reset;
-      }
-      console.log(logMessage);
+         count = pad("" + testCounter++, totalLength, "0") + "/" + counts.total,
+         message = count + ": " + name + " (" + duration + "ms)",
+         formattedResult = ANSI_COLORS.Bold + " [" + result + "]",
+         controlCode = color || ANSI_COLORS.Dim,
+         output = controlCode + message + formattedResult + ANSI_COLORS.Reset;
+      console.log(output);
+   }
+
+   function logTitle(title) {
+      var underOverLine = new Array(title.length + 1).join("="),
+         output = ["", underOverLine, title, underOverLine].join("\n");
+      console.log(ANSI_COLORS.Bold + output + ANSI_COLORS.Reset);
+   }
+
+   function pad(str, paddedLength, padChar, padRight) {
+      str = str || "";
+      paddedLength = paddedLength || str.length;
+      padChar = padChar || " ";
+      var padding = new Array(paddedLength).join(padChar),
+         preTrim = padRight ? str + padding : padding + str;
+      return padRight ? preTrim.slice(0, paddedLength) : preTrim.slice(0 - paddedLength);
    }
 
    /* Create and return the intern object */
@@ -91,30 +109,77 @@ define([], function() {
 
       /* CORE FUNCTIONS */
       start: function() {
-         console.log("");
-         console.log("Running tests ...");
+
+         // Record start time
+         timers.beforeAll = Date.now();
+
+         // Output starting message
+         logTitle("Starting tests");
+
       },
       stop: function() {
 
-         // Output completed message
-         console.log("");
-         console.log(ANSI_COLORS.Underline + "Test run complete" + ANSI_COLORS.Reset);
+         // Calculate and log time taken
+         var timeTakenMs = Date.now() - timers.beforeAll,
+            timeTakenMins = Math.floor(timeTakenMs / 1000 / 60),
+            timeTakenSecs,
+            minText,
+            secText,
+            timeTaken;
+         if (timeTakenMins) {
+            timeTakenSecs = Math.round(timeTakenMs / 1000) % (timeTakenMins * 60);
+            minText = timeTakenMins === 1 ? "minute" : "minutes";
+            secText = timeTakenSecs === 1 ? "second" : "seconds";
+            timeTaken = timeTakenMins + " " + minText + " " + timeTakenSecs + " " + secText;
+         } else {
+            timeTakenSecs = Math.round(timeTakenMs / 100) / 10;
+            secText = timeTakenSecs === 1 ? "second" : "seconds";
+            timeTaken = timeTakenSecs + " " + secText;
+         }
 
-         // Give initial stats for the test-run
-         var info = {
-               Total: counts.total,
-               Passed: counts.passed,
-               Skipped: counts.skipped,
-               Failed: collections.failures.length,
-               Errors: collections.errors.length,
-               Deprecated: collections.deprecations.length,
-               Environments: Object.keys(environments).length
-            },
-            infoMessage = Object.keys(info).map(function(infoKey) {
-               return infoKey + ": " + info[infoKey];
-            }).join(", ");
+         // Output completed message and test run information
+         var environmentNames = Object.keys(environments);
+         logTitle("Testing complete");
          console.log("");
-         console.log(infoMessage);
+         console.log("Took " + timeTaken + " to run " + counts.total + " tests in " + environmentNames.length + " environments: \"" + environmentNames.join("\", \"") + "\"");
+
+         // Calculate stats for the test-run
+         var stats = {
+               "Success rate": Math.round((counts.passed + counts.skipped) / counts.total * 1000) / 10 + "%",
+               "Total passed": counts.passed,
+               "Total skipped": counts.skipped,
+               "Total failed": collections.failures.length,
+               "Unexpected errors": collections.errors.length,
+               "Deprecated code calls": collections.deprecations.length
+            },
+            maxStatLabelLength,
+            maxStatValueLength;
+
+         // Check longest name and value in stats
+         Object.keys(stats).forEach(function(statLabel) {
+            var statValue = stats[statLabel] + "",
+               statLabelLength = statLabel.length,
+               statValueLength = statValue.length;
+            if (!maxStatLabelLength || statLabelLength > maxStatLabelLength) {
+               maxStatLabelLength = statLabelLength;
+            }
+            if (!maxStatValueLength || statValueLength > maxStatValueLength) {
+               maxStatValueLength = statValueLength;
+            }
+         });
+
+         var statMessages = Object.keys(stats).map(function(statLabel) {
+            var statValue = stats[statLabel],
+               paddedLabel = pad(statLabel, maxStatLabelLength + 5, ".", true),
+               paddedValue = pad(statValue + "", maxStatValueLength, "."),
+               message = paddedLabel + paddedValue;
+            return statValue ? message : ANSI_COLORS.Dim + message + ANSI_COLORS.Reset;
+         }).join("\n");
+
+         // Log test-run stats
+         logTitle("Results");
+         console.log("");
+         console.log(statMessages);
 
          // Run through the collections
          Object.keys(collections).forEach(function(collectionName) {
@@ -126,8 +191,8 @@ define([], function() {
             }
 
             // Output title
-            var title = collectionName.substr(0, 1).toUpperCase() + collectionName.substr(1).toLowerCase();
-            console.log("\n" + ANSI_COLORS.Underline + title + ANSI_COLORS.Reset);
+            var collectionTitle = collectionName.substr(0, 1).toUpperCase() + collectionName.substr(1).toLowerCase();
+            logTitle(collectionTitle);
 
             // Run through collection
             var lastEnv,
@@ -138,19 +203,21 @@ define([], function() {
                if (item.state.env !== lastEnv) {
                   lastEnv = item.state.env;
                   lastSuite = null;
-                  console.log("\n" + ANSI_COLORS.Bold + lastEnv + ANSI_COLORS.Reset);
+                  console.log("");
+                  console.log("\"" + lastEnv + "\"");
+                  console.log("");
                }
 
                // Output suite if changed
                if (item.state.suite !== lastSuite) {
                   lastSuite = item.state.suite;
-                  console.log(lastSuite);
+                  console.log(ANSI_COLORS.Bold + lastSuite + ANSI_COLORS.Reset);
                }
 
                // Show test and message
                if (item.state.test) {
                   console.log("- " + item.state.test);
-                  console.log("  " + item.message);
+                  console.log("  \"" + item.message + "\"");
                } else {
                   // This should be a stacktrace
                   console.log("- " + item.message);
@@ -178,7 +245,7 @@ define([], function() {
             return;
          }
          var timeTaken = Date.now() - timers.beforeSuite;
-         console.log("Suite took " + timeTaken + "ms to complete");
+         console.log(ANSI_COLORS.Dim + "Suite took " + timeTaken + "ms to complete" + ANSI_COLORS.Reset);
       },
       "/suite/error": function(suite) {
          if (suite.name === "main") {
@@ -205,7 +272,7 @@ define([], function() {
             errorMessage = errorMessage.substr(0, lineBreakIndex);
          }
          addToCollection("failures", errorMessage);
-         logTest(test.name + " (" + timeTaken + "ms) [FAILED]", ANSI_COLORS.FgRed);
+         logTest(test.name, timeTaken, "Failed", ANSI_COLORS.FgRed);
       },
       "/test/new": function() {
          counts.total++;
@@ -213,12 +280,12 @@ define([], function() {
       "/test/pass": function(test) {
          var timeTaken = Date.now() - timers.beforeTest;
          counts.passed++;
-         logTest(test.name + " (" + timeTaken + "ms) [PASSED]");
+         logTest(test.name, timeTaken, "Passed");
       },
       "/test/skip": function(test) {
          var timeTaken = Date.now() - timers.beforeTest;
          counts.skipped++;
-         logTest(test.name + " (" + timeTaken + "ms) [SKIPPED]", ANSI_COLORS.FgYellow);
+         logTest(test.name, timeTaken, "Skipped", ANSI_COLORS.FgYellow);
       },
       "/test/start": function(test) {
          timers.beforeTest = Date.now();
@@ -226,7 +293,9 @@ define([], function() {
          state.test = test.name;
          if (state.suite && lastSuite !== state.suite) {
             lastSuite = state.suite;
-            console.log(state.env);
+            if (state.env) {
+               console.log(state.env);
+            }
          }
       }
    };
