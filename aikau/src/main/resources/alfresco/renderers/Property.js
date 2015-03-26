@@ -248,7 +248,7 @@ define(["dojo/_base/declare",
          }
 
          // If the renderedValue is not set then display a warning message if requested...
-         if (!this.renderedValue) {
+         if (this.renderedValue === null || this.renderedValue === "" || typeof this.renderedValue === "undefined") {
             if (this.warnIfNotAvailable) {
                // Get appropriate message
                // Check message based on propertyToRender otherwise default to sensible alternative
@@ -332,7 +332,7 @@ define(["dojo/_base/declare",
       getRenderedProperty: function alfresco_renderers_Property__getRenderedProperty(property) {
          /*jshint maxcomplexity:15*/
          var value = "";
-         if (!property) {
+         if (property === null || typeof property === "undefined") {
             // No action required if a property isn't supplied
          } else if (ObjectTypeUtils.isString(property)) {
             value = this.encodeHTML(property);

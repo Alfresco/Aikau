@@ -145,7 +145,7 @@ define([], function() {
 
          // Calculate stats for the test-run
          var stats = {
-               "Success rate": Math.round((counts.passed + counts.skipped) / counts.total) * 100 + "%",
+               "Success rate": Math.round((counts.passed + counts.skipped) / counts.total * 1000) / 10 + "%",
                "Total passed": counts.passed,
                "Total skipped": counts.skipped,
                "Total failed": collections.failures.length,
@@ -203,13 +203,15 @@ define([], function() {
                if (item.state.env !== lastEnv) {
                   lastEnv = item.state.env;
                   lastSuite = null;
-                  console.log("\n" + ANSI_COLORS.Bold + lastEnv + ANSI_COLORS.Reset);
+                  console.log("");
+                  console.log("\"" + lastEnv + "\"");
+                  console.log("");
                }
 
                // Output suite if changed
                if (item.state.suite !== lastSuite) {
                   lastSuite = item.state.suite;
-                  console.log(lastSuite);
+                  console.log(ANSI_COLORS.Bold + lastSuite + ANSI_COLORS.Reset);
                }
 
                // Show test and message
