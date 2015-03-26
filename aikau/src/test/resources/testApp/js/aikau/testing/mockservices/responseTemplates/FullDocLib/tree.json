@@ -1,0 +1,79 @@
+{
+   "totalResults": 3,
+   "resultsTrimmed": false,
+   "parent":
+   {
+      "nodeRef": "workspace://SpacesStore/2f2ea581-74af-479d-a733-1ee28512b80f",
+      "userAccess":
+      {
+         "create": true,
+         "edit": true,
+         "delete": true
+      }
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace://SpacesStore/4307d3f5-7d49-461a-bf86-b9510956ee2f",
+         "name": "DetailedView",
+         "description": "",
+         "hasChildren": false,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "sys:referenceable",
+            "cm:titled",
+            "cm:taggable",
+            "sys:localized"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/f1ad751a-b1f5-41c2-bd3e-d5878c9f4267",
+         "name": "GalleryView",
+         "description": "",
+         "hasChildren": false,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "sys:referenceable",
+            "cm:titled",
+            "cm:taggable",
+            "sys:localized",
+            "cm:generalclassifiable"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/79186cae-80c8-4f9f-b859-1539a0fe7367",
+         "name": "SimpleView",
+         "description": "",
+         "hasChildren": false,
+         "userAccess":
+         {
+            "create": true,
+            "edit": true,
+            "delete": true
+         },
+         "aspects": 
+         [
+            "cm:auditable",
+            "sys:referenceable",
+            "cm:titled",
+            "sys:localized",
+            "fm:discussable",
+            "fm:commentsRollup"
+         ]
+      }
+   ]
+}

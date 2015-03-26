@@ -88,7 +88,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_menus_AlfMenuGroup__postCreate() {
          
-         if (this.label == "")
+         if (this.label === "")
          {
             // If there is no label for the title then hide the title node entirely...
             domStyle.set(this._groupTitleNode, "display", "none");
@@ -139,7 +139,7 @@ define(["dojo/_base/declare",
             if (menuBarAncestor)
             {
                this.alfLog("log", "Go to next item in menu bar");
-               menuBarAncestor.focusNext()
+               menuBarAncestor.focusNext();
             }
          }
       },

@@ -177,7 +177,7 @@ define(["dojo/_base/declare",
       
       /**
        * This handles publications on the [hashChangeTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#hashChangeTopic}
-       * topic and updates the [currentPath]P{@link module:alfresco/documentlibrary/AlfBreadcrumbTrail#currentPath} attribute and calls the
+       * topic and updates the [currentPath]{@link module:alfresco/documentlibrary/AlfBreadcrumbTrail#currentPath} attribute and calls the
        * [renderBreadcrumbTrail]{@link module:alfresco/documentlibrary/AlfBreadcrumbTrail#renderBreadcrumbTrail} function to re-render the
        * breadcrumb trail.
        *  
