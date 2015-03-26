@@ -83,7 +83,7 @@ define([], function() {
       var totalLength = ("" + counts.total).length,
          count = pad("" + testCounter++, totalLength, "0") + "/" + counts.total,
          message = count + ": " + name + " (" + duration + "ms)",
-         formattedResult = " [" + result + "]",
+         formattedResult = ANSI_COLORS.Bold + " [" + result + "]",
          controlCode = color || ANSI_COLORS.Dim,
          output = controlCode + message + formattedResult + ANSI_COLORS.Reset;
       console.log(output);
@@ -114,7 +114,7 @@ define([], function() {
          timers.beforeAll = Date.now();
 
          // Output starting message
-         logTitle("STARTING TESTS");
+         logTitle("Starting tests");
 
       },
       stop: function() {
@@ -139,7 +139,7 @@ define([], function() {
 
          // Output completed message and test run information
          var environmentNames = Object.keys(environments);
-         logTitle("TESTING COMPLETE");
+         logTitle("Testing complete");
          console.log("");
          console.log("Took " + timeTaken + " to run " + counts.total + " tests in " + environmentNames.length + " environments: \"" + environmentNames.join("\", \"") + "\"");
 
@@ -177,7 +177,7 @@ define([], function() {
          }).join("\n");
 
          // Log test-run stats
-         logTitle("RESULTS");
+         logTitle("Results");
          console.log("");
          console.log(statMessages);
 
@@ -191,7 +191,8 @@ define([], function() {
             }
 
             // Output title
-            logTitle(collectionName.toUpperCase());
+            var collectionTitle = collectionName.substr(0, 1).toUpperCase() + collectionName.substr(1).toLowerCase();
+            logTitle(collectionTitle);
 
             // Run through collection
             var lastEnv,
@@ -214,7 +215,7 @@ define([], function() {
                // Show test and message
                if (item.state.test) {
                   console.log("- " + item.state.test);
-                  console.log("  " + ANSI_COLORS.FgRed + "\"" + item.message + "\"" + ANSI_COLORS.Reset);
+                  console.log("  \"" + item.message + "\"");
                } else {
                   // This should be a stacktrace
                   console.log("- " + item.message);
@@ -269,7 +270,7 @@ define([], function() {
             errorMessage = errorMessage.substr(0, lineBreakIndex);
          }
          addToCollection("failures", errorMessage);
-         logTest(test.name, timeTaken, "FAILED", ANSI_COLORS.FgRed);
+         logTest(test.name, timeTaken, "Failed", ANSI_COLORS.FgRed);
       },
       "/test/new": function() {
          counts.total++;
@@ -277,12 +278,12 @@ define([], function() {
       "/test/pass": function(test) {
          var timeTaken = Date.now() - timers.beforeTest;
          counts.passed++;
-         logTest(test.name, timeTaken, "PASSED");
+         logTest(test.name, timeTaken, "Passed");
       },
       "/test/skip": function(test) {
          var timeTaken = Date.now() - timers.beforeTest;
          counts.skipped++;
-         logTest(test.name, timeTaken, "SKIPPED", ANSI_COLORS.FgYellow);
+         logTest(test.name, timeTaken, "Skipped", ANSI_COLORS.FgYellow);
       },
       "/test/start": function(test) {
          timers.beforeTest = Date.now();
