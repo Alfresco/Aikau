@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/renderers/PropertyTest"
+      "src/test/resources/alfresco/logo/LogoTest"
    ],
 
    /**
@@ -118,6 +118,8 @@ define({
 
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
+
+      "src/test/resources/alfresco/logo/LogoTest",
 
       "src/test/resources/alfresco/menus/AlfCheckableMenuItemTest",
       "src/test/resources/alfresco/menus/AlfContextMenuTest",

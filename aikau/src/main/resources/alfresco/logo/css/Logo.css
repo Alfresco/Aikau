@@ -4,8 +4,8 @@
    padding-right: 14px;
 }
 
-.alfresco-logo-Logo > div.no-background-image {
-   background: none;
+.alfresco-logo-Logo img {
+   height: 48px;
 }
 
 .alfresco-logo-Logo .alfresco-logo-large {
