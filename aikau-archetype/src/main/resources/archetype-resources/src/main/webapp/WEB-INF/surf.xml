@@ -132,4 +132,31 @@
            <uri-template id="page">/{pageid}/ws/{webscript}</uri-template>
         </uri-templates>
    </config>
+
+   <!-- If the Alfresco Repository that you want this client to connect to is not located on the same
+        machine then you will need to uncomment this section of configuration and update the
+        domain and port for both endpoints to match the location of the target Alfresco Repository.
+
+   <config evaluator="string-compare" condition="Remote">
+     <remote>
+        <endpoint>
+           <id>alfresco-noauth</id>
+           <name>Alfresco - unauthenticated access</name>
+           <description>Access to Alfresco Repository WebScripts that do not require authentication</description>
+           <connector-id>alfresco</connector-id>
+           <endpoint-url>http://<domain>:<port>/alfresco/s</endpoint-url>
+           <identity>none</identity>
+        </endpoint>
+
+        <endpoint>
+           <id>alfresco</id>
+           <name>Alfresco - user access</name>
+           <description>Access to Alfresco Repository WebScripts that require user authentication</description>
+           <connector-id>alfresco</connector-id>
+           <endpoint-url>http://<domain>:<port>0/alfresco/s</endpoint-url>
+           <identity>user</identity>
+        </endpoint>
+      </remote>
+    </config>
+    -->
 </alfresco-config>
