@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Unit Test Index Page</shortname>
+  <description>The provides links to all the other unit test pages</description>
+  <family>aikau-unit-tests</family>
+  <url>/Index</url>
+</webscript>
