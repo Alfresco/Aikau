@@ -102,4 +102,7 @@
          </list>
       </property>
    </bean>
+
+   <bean id="webscript.alfresco.UnitTestList.get" class="org.alfresco.aikau.UnitTestList" parent="webscript" scope="prototype" />
+   
 </beans>

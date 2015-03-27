@@ -13,6 +13,7 @@
    <description>Aikau is a meta-framework for Alfresco specific UI development</description>
 
    <build>
+
       <!-- Everything gets place into the META-INF folder of the JAR because Surf (the expected platform for Aikau)
            will be able to access resources from that location via the /res/ path -->
       <resources>
@@ -74,26 +75,40 @@
 
       <plugins>
 
-        <plugin>
+         <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
             <version>1.8</version>
             <executions>
-                <execution>
-                    <id>duplicate-english-messages</id>
-                    <phase>generate-resources</phase>
-                    <goals>
-                        <goal>run</goal>
-                    </goals>
+               <execution>
+                  <id>duplicate-english-messages</id>
+                  <phase>generate-resources</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <target>
+                        <copy todir="${project.build.outputDirectory}/META-INF/js/aikau/${project.version}">
+                           <fileset dir="${basedir}/src/main/resources" includes="alfresco/**/*.properties" />
+                           <mapper from="^([^_]*).properties$" to="\1_en.properties" type="regexp" />
+                        </copy>
+                     </target>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>copy-webscript-beans</id>
+                  <phase>process-test-classes</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <target>
+                        <copy todir="${project.build.testOutputDirectory}/testApp/WEB-INF/classes">
+                           <fileset dir="${project.build.testOutputDirectory}" includes="**/*.class" />
+                        </copy>
+                      </target>
+                  </configuration>
                 </execution>
             </executions>
-            <configuration>
-                <target>
-                    <copy todir="${project.build.outputDirectory}/META-INF/js/aikau/${project.version}">
-                        <fileset dir="${basedir}/src/main/resources" includes="alfresco/**/*.properties" />
-                        <mapper from="^([^_]*).properties$" to="\1_en.properties" type="regexp" />
-                    </copy>
-                </target>
-            </configuration>
         </plugin>
 
         <plugin>
