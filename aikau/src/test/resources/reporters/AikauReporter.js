@@ -1,5 +1,46 @@
 define([], function() {
 
+   /* Constants */
+   var CONFIG = {
+         ShowUnused: false
+      },
+      UNUSED_TOPICS = [
+         "/client/end",
+         "/coverage",
+         "/runner/end",
+         "/runner/start",
+         "/suite/new",
+         "/tunnel/download/progress",
+         "/tunnel/start",
+         "/tunnel/status",
+         "/tunnel/stop"
+      ],
+      ANSI_COLORS = {
+         Reset: "\x1b[0m",
+         Bold: "\x1b[1m",
+         Dim: "\x1b[2m",
+         Underline: "\x1b[4m",
+         Blink: "\x1b[5m",
+         Reverse: "\x1b[7m",
+         Hidden: "\x1b[8m",
+         FgBlack: "\x1b[30m",
+         FgRed: "\x1b[31m",
+         FgGreen: "\x1b[32m",
+         FgYellow: "\x1b[33m",
+         FgBlue: "\x1b[34m",
+         FgMagenta: "\x1b[35m",
+         FgCyan: "\x1b[36m",
+         FgWhite: "\x1b[37m",
+         BgBlack: "\x1b[40m",
+         BgRed: "\x1b[41m",
+         BgGreen: "\x1b[42m",
+         BgYellow: "\x1b[43m",
+         BgBlue: "\x1b[44m",
+         BgMagenta: "\x1b[45m",
+         BgCyan: "\x1b[46m",
+         BgWhite: "\x1b[47m"
+      }; // From https://coderwall.com/p/yphywg/printing-colorful-text-in-terminal-when-run-node-js-script
+
    /* Setup state variables */
    var counts = {
          total: 0,
@@ -19,34 +60,9 @@ define([], function() {
          beforeTest: 0,
          beforeSuite: 0
       },
-      lastSuite;
-
-   /* Constants */
-   var ANSI_COLORS = {
-      Reset: "\x1b[0m",
-      Bold: "\x1b[1m",
-      Dim: "\x1b[2m",
-      Underline: "\x1b[4m",
-      Blink: "\x1b[5m",
-      Reverse: "\x1b[7m",
-      Hidden: "\x1b[8m",
-      FgBlack: "\x1b[30m",
-      FgRed: "\x1b[31m",
-      FgGreen: "\x1b[32m",
-      FgYellow: "\x1b[33m",
-      FgBlue: "\x1b[34m",
-      FgMagenta: "\x1b[35m",
-      FgCyan: "\x1b[36m",
-      FgWhite: "\x1b[37m",
-      BgBlack: "\x1b[40m",
-      BgRed: "\x1b[41m",
-      BgGreen: "\x1b[42m",
-      BgYellow: "\x1b[43m",
-      BgBlue: "\x1b[44m",
-      BgMagenta: "\x1b[45m",
-      BgCyan: "\x1b[46m",
-      BgWhite: "\x1b[47m"
-   }; // From https://coderwall.com/p/yphywg/printing-colorful-text-in-terminal-when-run-node-js-script
+      unusedTopicsCounter = {},
+      lastSuite,
+      lastEnv;
 
    /* Helper functions */
    function addToCollection(collection, message) {
@@ -60,23 +76,35 @@ define([], function() {
       var setupFunc = suite.setup;
       if (setupFunc) {
          suite.setup = function() {
-            var env = this.remote && this.remote.environmentType;
-            if (env && env.browserName) {
-               var safeBrowserString = env.browserName.replace(/[^a-zA-Z0-9]/g, /_/),
-                  safeBrowserName = safeBrowserString.substr(0, 1).toUpperCase() + safeBrowserString.substr(1).toLowerCase(),
-                  platformName = env.platform.split(" ").map(function(platformName) {
-                     var capitalised = platformName && platformName.substr(0, 1).toUpperCase() + platformName.substr(1).toLowerCase();
-                     return capitalised || "";
-                  }).join(" "),
-                  envString = safeBrowserName + " v" + env.version + " (" + platformName + ")";
-               suite.env = envString;
-               environments[envString] = true;
+            if (suite.name !== "main") {
+               var env = this.remote && this.remote.environmentType;
+               if (env && env.browserName) {
+                  var browserName = env.browserName.split(" ").map(function(namePart) {
+                        return capitalise(namePart);
+                     }).join(" "),
+                     platformName = env.platform.split(" ").map(function(nextPlatform) {
+                        var capitalised = nextPlatform && capitalise(nextPlatform);
+                        return capitalised || "";
+                     }).join(" "),
+                     envString = browserName + " v" + env.version + " (" + platformName + ")";
+                  suite.env = envString;
+                  environments[envString] = true;
+               } else {
+                  console.log(ANSI_COLORS.FgYellow + "\n[INFO] Suite '" + suite.name + "' does not have browserName in its environment: ", env, ANSI_COLORS.Reset);
+               }
             }
             return setupFunc.apply(this, arguments);
          };
       } else {
          console.log(ANSI_COLORS.FgYellow + "\n[INFO] Suite '" + suite.name + "' does not have setup() method" + ANSI_COLORS.Reset);
       }
+   }
+
+   function capitalise(input) {
+      if (!input) {
+         return input;
+      }
+      return input.substr(0, 1).toUpperCase() + input.substr(1).toLowerCase();
    }
 
    function logTest(name, duration, result, color) {
@@ -105,7 +133,7 @@ define([], function() {
    }
 
    /* Create and return the intern object */
-   return {
+   var reporter = {
 
       /* CORE FUNCTIONS */
       start: function() {
@@ -167,7 +195,6 @@ define([], function() {
                maxStatValueLength = statValueLength;
             }
          });
-
          var statMessages = Object.keys(stats).map(function(statLabel) {
             var statValue = stats[statLabel],
                paddedLabel = pad(statLabel, maxStatLabelLength + 5, ".", true),
@@ -180,6 +207,23 @@ define([], function() {
          logTitle("Results");
          console.log("");
          console.log(statMessages);
+
+         // Any unused topics?
+         var unusedTopicNames = Object.keys(unusedTopicsCounter);
+         if (unusedTopicNames.length && CONFIG.ShowUnused) {
+
+            // Construct an info string
+            var unusedTopicsMessage = unusedTopicNames.filter(function(nextTopicName) {
+               return !!unusedTopicsCounter[nextTopicName];
+            }).map(function(nextTopicName) {
+               return "\"" + nextTopicName + "\": " + unusedTopicsCounter[nextTopicName];
+            }).join(", ");
+
+            // Output a title
+            logTitle("Calls to unhandled topics");
+            console.log("");
+            console.log(unusedTopicsMessage);
+         }
 
          // Run through the collections
          Object.keys(collections).forEach(function(collectionName) {
@@ -200,7 +244,11 @@ define([], function() {
             collectionItems.forEach(function(item) {
 
                // Output environment information if changed
-               if (item.state.env !== lastEnv) {
+               if (!item.state.env) {
+                  lastEnv = null;
+                  lastSuite = null;
+                  console.log("");
+               } else if (item.state.env !== lastEnv) {
                   lastEnv = item.state.env;
                   lastSuite = null;
                   console.log("");
@@ -209,7 +257,7 @@ define([], function() {
                }
 
                // Output suite if changed
-               if (item.state.suite !== lastSuite) {
+               if (item.state.suite && item.state.suite !== lastSuite) {
                   lastSuite = item.state.suite;
                   console.log(ANSI_COLORS.Bold + lastSuite + ANSI_COLORS.Reset);
                }
@@ -253,12 +301,16 @@ define([], function() {
       },
       "/error": function(error) {
          addToCollection("errors", error.message);
+         console.log("");
+         console.log(ANSI_COLORS.FgRed + "[UNEXPECTED ERROR]" + ANSI_COLORS.Reset);
       },
       "/suite/end": function(suite) {
          if (suite.name === "main") {
             return;
          }
          var timeTaken = Date.now() - timers.beforeSuite;
+         state.suite = null;
+         state.env = null;
          console.log(ANSI_COLORS.Dim + "Suite took " + timeTaken + "ms to complete" + ANSI_COLORS.Reset);
       },
       "/suite/error": function(suite) {
@@ -277,6 +329,9 @@ define([], function() {
          timers.beforeSuite = Date.now();
          state.suite = suite.name;
          console.log("\n" + ANSI_COLORS.Bold + suite.name + ANSI_COLORS.Reset);
+      },
+      "/test/end": function(test) {
+         state.test = null;
       },
       "/test/fail": function(test) {
          var errorMessage = test.error.message,
@@ -302,31 +357,32 @@ define([], function() {
          logTest(test.name, timeTaken, "Skipped", ANSI_COLORS.FgYellow);
       },
       "/test/start": function(test) {
+         var parentSuite = test.parent;
+         if (parentSuite.name === "main") {
+            return;
+         }
          timers.beforeTest = Date.now();
-         state.env = test.parent.env;
+         state.env = parentSuite.env;
          state.test = test.name;
-         if (state.suite && lastSuite !== state.suite) {
+         if ((state.suite && lastSuite !== state.suite) || (state.env && lastEnv !== state.env)) {
             lastSuite = state.suite;
+            lastEnv = state.env;
             if (state.env) {
                console.log(state.env);
             }
          }
       }
    };
+
+   // Decorate the reporter with "unused" topics, to make sure we're
+   // told if they're called unexpectedly
+   UNUSED_TOPICS.forEach(function(topicName) {
+      reporter[topicName] = function() {
+         var count = unusedTopicsCounter[topicName] || 0;
+         unusedTopicsCounter[topicName] = count + 1;
+      };
+   });
+
+   // Pass back the reporter object
+   return reporter;
 });
-
-
-// ================
-// Unhandled topics
-// ================
-// 
-// /client/end
-// /coverage
-// /runner/end
-// /runner/start
-// /suite/new
-// /test/end
-// /tunnel/download/progress
-// /tunnel/start
-// /tunnel/status
-// /tunnel/stop
