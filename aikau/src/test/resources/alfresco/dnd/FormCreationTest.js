@@ -123,14 +123,42 @@ define(["intern!object",
          .sleep(1000)
 
          // Reveal the dynamic visibility controls...
-         .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #DYNAMIC_BEHAVIOUR_TOGGLE input")
-            .click()
-         .end()
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.SPACE)
+         .sleep(pause)
+
+         // Reveal the dynamic visibility controls...
+         // .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #DYNAMIC_BEHAVIOUR_TOGGLE input")
+         //    .click()
+         // .end()
 
          // Add a new visibility rule...
-         .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #DYNAMIC_VISIBILITY_RULES .button.add")
-            .click()
-         .end()
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.SPACE)
+         .sleep(pause)
+
+         .sleep(1000)
+
+         // Add a new visibility rule...
+         // .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #DYNAMIC_VISIBILITY_RULES .button.add")
+         //    .click()
+         // .end()
 
          // Count the numnber of fields that can be referenced...
          .findAllByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #DYNAMIC_VISIBILITY_RULES .alfresco-forms-controls-Select tr")
