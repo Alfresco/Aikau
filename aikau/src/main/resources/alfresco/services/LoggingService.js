@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,13 +29,11 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/_base/window",
-        "dojo/sniff",
         "dijit/registry",
-        "alfresco/dialogs/AlfDialog",
-        "alfresco/buttons/AlfButton",
-        "alfresco/logging/SubscriptionLog",
-        "alfresco/debug/CoreDataDebugger"],
-        function(declare, AlfCore, _PreferenceServiceTopicMixin, lang, domClass, win, sniff, registry, AlfDialog, AlfButton, SubscriptionLog, CoreDataDebugger) {
+        "alfresco/dialogs/AlfDialog"],
+        function(declare, AlfCore, _PreferenceServiceTopicMixin, lang, domClass, win, registry, AlfDialog) {
+        /*jshint devel:true*/
+
 
    return declare([AlfCore, _PreferenceServiceTopicMixin], {
 
@@ -86,7 +84,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_SHOW_DATA_MODEL", lang.hitch(this, this.showDataModel));
          this.alfSubscribe("ALF_TOGGLE_DEVELOPER_MODE", lang.hitch(this, this.toggleDeveloperMode));
 
-         if (this.loggingPreferences != null)
+         if (this.loggingPreferences !== null && typeof this.loggingPreferences !== "undefined")
          {
             // Set up subscriptions if the LoggingService has been instantiated with default
             // preferences...
@@ -110,7 +108,8 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       showPubSubLog: function alfresco_services_LoggingService__showPubSubLog(payload) {
-         if (this.pubSubLog == null)
+         /*jshint unused:false*/
+         if (!this.pubSubLog)
          {
             this.pubSubLog = new AlfDialog({
                title: this.message("logging.pubSubLog.title"),
@@ -134,6 +133,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The request payload
        */
       showDataModel: function alfresco_services_LoggingService__showDataModel(payload) {
+         /*jshint unused:false*/
          var dialog = new AlfDialog({
             pubSubScope: this.pubSubScope,
             title: this.message("logging.dataModel.title"),
@@ -171,11 +171,7 @@ define(["dojo/_base/declare",
        * @param {boolean} value Indicates whether or not to enable or disable logging.
        */
       setLoggingStatus: function alfresco_services_LoggingService__setLoggingStatus(value) {
-         if (value == null)
-         {
-            value = {};
-         }
-         this.loggingPreferences = value;
+         this.loggingPreferences = value || {};
          this.handleSubscription();
       },
 
@@ -187,11 +183,11 @@ define(["dojo/_base/declare",
        * @listens alfLoggingTopic
        */
       handleSubscription: function alfresco_services_LoggingService__handleSubscription() {
-         if (this.loggingPreferences.enabled && this.logSubscriptionHandle == null)
+         if (this.loggingPreferences.enabled && !this.logSubscriptionHandle)
          {
             this.logSubscriptionHandle = this.alfSubscribe(this.alfLoggingTopic, lang.hitch(this, this.onLogRequest));
          }
-         else if (!this.loggingPreferences.enabled && this.logSubscriptionHandle != null)
+         else if (!this.loggingPreferences.enabled && this.logSubscriptionHandle)
          {
             this.alfUnsubscribe(this.logSubscriptionHandle);
             this.logSubscriptionHandle = null;
@@ -236,7 +232,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onDetailsDialog: function alfresco_services_LoggingService__onDetailsDialog(payload) {
-         if (this.detailsDialog == null)
+         if (!this.detailsDialog)
          {
             this.alfSubscribe(this.saveLoggingPrefsUpdateTopic, lang.hitch(this, "onPrefsUpdateSave"));
             this.alfSubscribe(this.cancelLoggingPrefsUpdateTopic, lang.hitch(this, "onPrefsUpdateCancel"));
@@ -250,7 +246,7 @@ define(["dojo/_base/declare",
                         name: "filter",
                         label: this.message("filter.label"),
                         description: this.message("filter.description"),
-                        value: (this.loggingPreferences.filter != null) ? this.loggingPreferences.filter : ""
+                        value: this.loggingPreferences.filter || ""
                      }
                   }
                ],
@@ -282,8 +278,9 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onPrefsUpdateSave: function alfresco_services_LoggingService__onPrefsUpdateSave(payload) {
+         /*jshint unused:false*/
          var filterWidget = registry.byId(this.id + "_LOGGING_FILTER");
-         if (filterWidget != null)
+         if (filterWidget)
          {
             var filterValue = filterWidget.getValue();
             this.alfPublish(this.setPreferenceTopic, {
@@ -299,10 +296,11 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onPrefsUpdateCancel: function alfresco_services_LoggingService__onPrefsUpdateCancel(payload) {
+         /*jshint unused:false*/
          var filterWidget = registry.byId(this.id + "_LOGGING_FILTER");
-         if (filterWidget != null)
+         if (filterWidget)
          {
-            filterWidget.setValue((this.loggingPreferences.filter != null) ? this.loggingPreferences.filter : "");
+            filterWidget.setValue(this.loggingPreferences.filter || "");
          }
       },
 
@@ -335,68 +333,43 @@ define(["dojo/_base/declare",
              (this.loggingPreferences.all === true ||
               this.loggingPreferences[payload.severity] === true))
          {
-            if (typeof console[payload.severity] != "function" && (sniff("ie") <= 9))
+            // Call the console method passing all the additional arguments)...
+            var callerName = payload.callerName;
+            if (callerName && callerName !== "")
             {
-               // Catch developer errors !!
-               console.error("The supplied severity is not a function of console", payload.severity);
-            }
-            else
-            {
-               // Call the console method passing all the additional arguments)...
-               var callerName = payload.callerName;
-               if (callerName && callerName !== "")
+               var fIndex = callerName.lastIndexOf("__"),
+                   re1 = /([^_])_/g;
+               if (fIndex !== -1)
                {
-                  var fIndex = callerName.lastIndexOf("__"),
-                      re1 = /([^_])(_){1}/g;
-                  if (fIndex != -1)
-                  {
-                     var mName = callerName.substring(0, fIndex);
-                     var fName = callerName.substring(fIndex + 2);
-                     callerName = mName.replace(re1, "$1/") + "[" + fName + "] >> ";
-                  }
-                  else
-                  {
-                     callerName = callerName + " >> ";
-                  }
+                  var mName = callerName.substring(0, fIndex);
+                  var fName = callerName.substring(fIndex + 2);
+                  callerName = mName.replace(re1, "$1/") + "[" + fName + "] >> ";
                }
                else
                {
-                  callerName = "";
+                  callerName = callerName + " >> ";
                }
+            }
+            else
+            {
+               callerName = "";
+            }
 
-               // Check to see whether or not there is a log filter and if so, whether or
-               // not the current caller passes the filter...
-               var matchesFilter = true;
-               if (this.loggingPreferences.filter != null)
-               {
-                  var test = new RegExp(this.loggingPreferences.filter);
-                  matchesFilter = test.test(callerName);
-               }
+            // Check to see whether or not there is a log filter and if so, whether or
+            // not the current caller passes the filter...
+            var matchesFilter = true;
+            if (this.loggingPreferences.filter)
+            {
+               var test = new RegExp(this.loggingPreferences.filter);
+               matchesFilter = test.test(callerName);
+            }
 
-               // If the filter is mapped (or if there is no filter) output the log...
-               if (matchesFilter || sniff("ie"))
-               {
-                  payload.messageArgs[0] = callerName + payload.messageArgs[0];
-                  if (sniff("ie") <= 8)
-                  {
-                     console.log(payload.messageArgs);
-                  }
-                  else if (sniff("ie") <= 10)
-                  {
-                     if (payload.severity == "error")
-                     {
-                        console.error.apply(this, payload.messageArgs);
-                     }
-                     else
-                     {
-                        console.log.apply(this, payload.messageArgs);
-                     }
-                  }
-                  else
-                  {
-                     console[payload.severity].apply(console, payload.messageArgs);
-                  }
-               }
+            // If the filter is mapped (or if there is no filter) output the log...
+            if (matchesFilter)
+            {
+               payload.messageArgs[0] = callerName + payload.messageArgs[0];
+               var logFunc = (typeof console[payload.severity] === "function" && payload.severity) || "log";
+               console[logFunc](payload.messageArgs);
             }
          }
       }
