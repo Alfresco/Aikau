@@ -8,7 +8,9 @@ model.jsonModel = {
                all: true
             }
          }
-      }
+      },
+      "alfresco/services/DialogService",
+      "alfresco/services/ErrorReporter"
    ],
    widgets: [
       {
@@ -20,7 +22,10 @@ model.jsonModel = {
             widgets: [
                {
                   id: "CODE_MIRROR_1",
-                  name: "alfresco/forms/controls/CodeMirrorEditor"
+                  name: "alfresco/forms/controls/CodeMirrorEditor",
+                  config: {
+                     name: "codeMirrorValue"
+                  }
                }
             ]
          }
@@ -30,13 +35,18 @@ model.jsonModel = {
          id: "DIALOG_BUTTON",
          config: {
             label: "Display editor in dialog",
-            publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
             publishPayload: {
                dialogTitle: "CodeMirror Editor Dialog",
-               widgetsContent: [
+               formSubmissionTopic: "POST_FORM_DIALOG",
+               contentWidth: "600px",
+               widgets: [
                   {
                      id: "CODE_MIRROR_2",
-                     name: "alfresco/forms/controls/CodeMirrorEditor"
+                     name: "alfresco/forms/controls/CodeMirrorEditor",
+                     config: {
+                        name: "codeMirrorValue2"
+                     }
                   }
                ]
             }
