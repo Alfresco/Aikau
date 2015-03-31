@@ -19,25 +19,25 @@
 
 /**
  * This mixin module is primarily provided for allowing publication payloads to be be processed
- * using a set of utility functions. It was written to be used by the 
+ * using a set of utility functions. It was written to be used by the
  * [_PublishPayloadMixin]{@link module:alfresco/renderers/_PublishPayloadMixin} but can be mixed into
  * any module that needs to take advantage of the object processing capabilities that it provides.
- * 
+ *
  * @module alfresco/core/ObjectProcessingMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
-        "alfresco/core/ObjectTypeUtils"], 
+        "alfresco/core/ObjectTypeUtils"],
         function(declare, lang, array, ObjectTypeUtils) {
-   
+
    return declare(null, {
-      
+
       /**
        * This utility function will convert the value "___AlfCurrentItem" into the actual
        * currentItem object. It will return the supplied value if it is anything else.
-       * 
+       *
        * @instance
        * @param {string} v The value to process.
        * @returns The processed value
@@ -50,13 +50,13 @@ define(["dojo/_base/declare",
          else
          {
             return v;
-         } 
+         }
       },
 
 
       /**
        * This utility function will perform token substitution on the supplied string value using the
-       * values from the calling object. If the token cannot be found in the calling object then it will be left 
+       * values from the calling object. If the token cannot be found in the calling object then it will be left
        * as is (including the curly braces).
        *
        * @instance
@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
          if (re.test(v))
          {
             var tokenWithoutBraces = v.slice(1,-1);
-            if (typeof this[tokenWithoutBraces])
+            if (typeof this[tokenWithoutBraces] !== "undefined")
             {
                u = this[tokenWithoutBraces];
             }
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
 
       /**
        * This utility function will perform token substitution on the supplied string value using the
-       * values from currentItem. If the token cannot be found in the currnentItem then it will be left 
+       * values from currentItem. If the token cannot be found in the currnentItem then it will be left
        * as is (including the curly braces).
        *
        * @instance
@@ -141,12 +141,12 @@ define(["dojo/_base/declare",
          else
          {
             return existingValue;
-         }  
+         }
       },
 
       /**
        * This utility function will replaced all colons in a string with underscores. This has been provided
-       * for assisting with processing qnames into values that can be included in a URL. 
+       * for assisting with processing qnames into values that can be included in a URL.
        *
        * @instance
        * @param {string} v The value to process.
@@ -159,8 +159,8 @@ define(["dojo/_base/declare",
 
       /**
        * This utility function can be used to work through the supplied object and process string
-       * values with all the supplied functions. 
-       * 
+       * values with all the supplied functions.
+       *
        * @intance
        * @param {array} functions An array of functions to apply to values
        * @param {object} o The object to process
@@ -198,7 +198,7 @@ define(["dojo/_base/declare",
 
       /**
        * Apply the supplied function to the value of the supplied key in the supplied object
-       * 
+       *
        * @instance
        * @param {object} o The object to get the value from
        * @param {string} key The key of the object to use
