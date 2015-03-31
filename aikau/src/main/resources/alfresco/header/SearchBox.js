@@ -668,7 +668,7 @@ define(["dojo/_base/declare",
        */
       generateSearchPageLink: function alfresco_header_SearchBox__generateSearchPageLink(terms) {
          var url;
-         var scope = this.site || this.defaultSearchScope;
+         var scope = this.defaultSearchScope;
          if (this.searchResultsPage)
          {
             // Generate custom search page link...

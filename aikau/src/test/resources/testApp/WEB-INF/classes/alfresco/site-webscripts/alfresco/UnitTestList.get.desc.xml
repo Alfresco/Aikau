@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>List Unit Tests</shortname>
+  <url>/unitTestList</url>
+  <format default="json">argument</format>
+</webscript>

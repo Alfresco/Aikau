@@ -131,7 +131,13 @@ define(["alfresco/core/ProcessWidgets",
             this.processWidgets(this.widgets, this.containerNode);
             this._processedWidgetsToReveal = true;
          }
-         domClass.toggle(this.contentNode, "reveal");
+         var maxHeight = domStyle.get(this.contentNode, "maxHeight"),
+            isExpanded = !isNaN(maxHeight) && maxHeight > 0;
+         if (isExpanded) {
+            domStyle.set(this.contentNode, "maxHeight", 0);
+         } else {
+            domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
+         }
       }
    });
 });

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>VerticalReveal Test</shortname>
+  <description>This WebScript defines the VerticalReveal test page</description>
+  <family>aikau-unit-tests</family>
+  <url>/VerticalReveal</url>
+</webscript>

@@ -42,6 +42,14 @@ define(["intern!object",
          browser.end();
       },
 
+      "Test that labels are localized": function() {
+         return browser.findByCssSelector("#dojoUnique1 .title")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Value 1", "Item label was not localized");
+            })
+      },
+
       "Test there are no dropped items on page load": function() {
          return browser.findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > *")
             .then(function(elements) {
@@ -67,6 +75,14 @@ define(["intern!object",
             .then(function(elements) {
                   assert.lengthOf(elements, 1, "The dropped item was found");
             });
+      },
+
+      "Test that dropped items labels are localized": function() {
+         return browser.findByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper > .label")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Value 1", "Dropped item label was not localized");
+            })
       },
       
       "Test Form Value Updated After Drop": function() {
