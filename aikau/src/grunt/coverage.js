@@ -71,26 +71,6 @@ module.exports = function(grunt) {
    grunt.registerTask("hideExistingCoverageReports", ["copy:coverageReportsToTemp", "clean:coverageReports"]);
    grunt.registerTask("showExistingCoverageReports", ["copy:coverageReportsFromTemp", "clean:coverageReportsTemp"]);
 
-   // Generate a coverage report using the local machine
-   grunt.registerTask("coverage-report", "A task for collecting code coverage reports", function() {
-      grunt.task.run("shell:stopTestApp");
-      grunt.option("force", true);
-      grunt.task.run("generate-require-everything");
-      grunt.task.run("instrument-code");
-      grunt.task.run("copyInstrumentedCode");
-      grunt.task.run("hideExistingCoverageReports");
-      grunt.task.run("start-node-coverage-server");
-      grunt.task.run("startUnitTestApp");
-      grunt.task.run("waitServer");
-      grunt.task.run("intern:local_coverage");
-      grunt.task.run("merge-reports");
-      grunt.task.run("clean-reports");
-      grunt.task.run("showExistingCoverageReports");
-      grunt.task.run("copyOriginalCode");
-      grunt.task.run("clean:instrumentedCode");
-      grunt.task.run("shell:stopTestApp");
-   });
-
    // Generate a coverage report using a vagrant initialised VM
    // The VM is run up by the task
    grunt.registerTask("vm-coverage-report", "A task for collecting code coverage reports using a vagrant VM", function() {

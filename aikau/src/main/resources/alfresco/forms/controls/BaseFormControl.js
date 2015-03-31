@@ -1373,8 +1373,15 @@ define(["dojo/_base/declare",
       setupChangeEvents: function alfresco_forms_controls_BaseFormControl__setupChangeEvents() {
          if (this.wrappedWidget)
          {
-            // TODO: Do we need to do anything with the watch handle when the widget is destroyed?
-            this.wrappedWidget.watch("value", lang.hitch(this, this.onValueChangeEvent));
+            if (this.wrappedWidget.watch)
+            {
+               // TODO: Do we need to do anything with the watch handle when the widget is destroyed?
+               this.wrappedWidget.watch("value", lang.hitch(this, this.onValueChangeEvent));
+            } 
+            else
+            {
+               this.alfLog("warn", "No watch method found on wrapped widget", this);
+            }
          }
       },
       
