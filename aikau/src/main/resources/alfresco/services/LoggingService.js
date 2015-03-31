@@ -369,7 +369,7 @@ define(["dojo/_base/declare",
             {
                payload.messageArgs[0] = callerName + payload.messageArgs[0];
                var logFunc = (typeof console[payload.severity] === "function" && payload.severity) || "log";
-               console[logFunc](payload.messageArgs);
+               console[logFunc].apply(console, payload.messageArgs);
             }
          }
       }
