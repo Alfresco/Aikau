@@ -498,4 +498,46 @@ define(["intern!object",
          TestCommon.alfPostCoverageResults(this, browser);
       }
    });
+
+   registerSuite({
+
+      name: "Multi-source DND tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/multi-source-dnd", "Multi-source DND tests")
+            .end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Select item in source one, then select item in source two to deselect item in source one": function() {
+         // Select the item in the first source...
+         return browser.pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+
+            // Tab to the second source and select its item...
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+            .sleep(pause)
+
+            // Check that just one item is selected...
+            .findAllByCssSelector(".alfresco-dnd-DragAndDropItem.selected")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "The wrong number of items were selected");
+               });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 });

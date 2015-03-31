@@ -89,6 +89,7 @@ define(["dojo/_base/declare",
          this.sourceTarget.insertNodes(false, this.items);
 
          this.alfSubscribe(Constants.requestItemToAddTopic, lang.hitch(this, this.onItemToAddRequest));
+         this.alfSubscribe(Constants.itemSelectedTopic, lang.hitch(this, this.onExternalItemSelected));
       },
 
       /**
@@ -109,7 +110,31 @@ define(["dojo/_base/declare",
                   domClass.remove(node.firstChild, "selected");
                });
                domClass.add(evt.target, "selected");
+
+               // Publish the selected item so that other DragAndDropItems widgets can de-select
+               // any selected items...
+               this.alfPublish(Constants.itemSelectedTopic, {
+                  widget: this
+               });
             }
+         }
+      },
+
+      /**
+       * Handles publications indicating that another [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * widget publishing at the same scope has had an item selected. It checks that the publication didn't
+       * originate from the current instance and if not deselects all the items.
+       * 
+       * @instance
+       * @param {object} payload The payload containing the details of the widget that has had an item selected.
+       */
+      onExternalItemSelected: function alfresco_dnd_DragAndDropItems__onExternalItemSelected(payload) {
+         if (payload && payload.widget !== this)
+         {
+            array.forEach(this.sourceTarget.getAllNodes(), function(node) {
+               domClass.remove(node.firstChild, "selected");
+            });
+            this._selectedItem = null;
          }
       },
 
