@@ -538,12 +538,10 @@ define(["dojo/_base/declare",
          if (typeof callback === "function")
          {
             this.pendingOptions = callback(config);
-            array.forEach(this.pendingOptions, lang.hitch(this, this.processOptionLabel));
          }
          else if (ObjectTypeUtils.isString(callback) && typeof this[callback] === "function")
          {
             this.pendingOptions = this[callback](config);
-            array.forEach(this.pendingOptions, lang.hitch(this, this.processOptionLabel));
          }
          else
          {
@@ -561,7 +559,6 @@ define(["dojo/_base/declare",
          if (ObjectTypeUtils.isArray(fixed))
          {
             this.pendingOptions = fixed;
-            array.forEach(this.pendingOptions, lang.hitch(this, this.processOptionLabel));
          }
          else
          {
