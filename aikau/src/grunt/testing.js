@@ -77,13 +77,6 @@ module.exports = function(grunt) {
                doCoverage: false
             }
          },
-         local_coverage: {
-            options: {
-               runType: "runner",
-               config: "src/test/resources/intern_local",
-               doCoverage: true
-            }
-         },
          sl: {
             options: {
                runType: "runner",
