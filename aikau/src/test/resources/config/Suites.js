@@ -79,8 +79,6 @@ define({
       "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
 
-      "src/test/resources/alfresco/editors/TinyMCETest",
-
       "src/test/resources/alfresco/footer/FooterTest",
 
       "src/test/resources/alfresco/forms/CrudFormTest",
@@ -100,6 +98,7 @@ define({
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
+      "src/test/resources/alfresco/forms/controls/TinyMCETest",
       "src/test/resources/alfresco/forms/controls/ValidationTest",
       "src/test/resources/alfresco/forms/controls/XssPreventionTest",
 
