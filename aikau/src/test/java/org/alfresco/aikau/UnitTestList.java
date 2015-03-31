@@ -20,6 +20,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
  */
 public class UnitTestList extends DeclarativeWebScript
 {
+   @Override
    protected Map<String, Object> executeImpl(WebScriptRequest req, Status status)
    {
       Path path = getContainer().getRegistry().getFamily("/aikau-unit-tests");
@@ -30,7 +31,7 @@ public class UnitTestList extends DeclarativeWebScript
       {
          try
          {
-             ps = Integer.parseInt(pageSize);
+             ps = Integer.parseInt(pageSize, 10);
          }
          catch (NumberFormatException e)
          {
@@ -43,7 +44,7 @@ public class UnitTestList extends DeclarativeWebScript
       {
          try
          {
-             int p = Integer.parseInt(page);
+             int p = Integer.parseInt(page, 10);
              si = (p - 1) * ps;
          }
          catch (NumberFormatException e)
@@ -54,11 +55,11 @@ public class UnitTestList extends DeclarativeWebScript
         
       List<WebScript> webscripts = Arrays.asList(path.getScripts());
       Collections.sort(webscripts, new UnitTestList.WebScriptComparator());
-      WebScript[] websscriptsArr = new WebScript[webscripts.size()];
-      webscripts.toArray(websscriptsArr);
-      websscriptsArr = Arrays.copyOfRange(websscriptsArr, si, ps + si);
+      WebScript[] webscriptsArr = new WebScript[webscripts.size()];
+      webscripts.toArray(webscriptsArr);
+      webscriptsArr = Arrays.copyOfRange(webscriptsArr, si, ps + si);
       Map<String, Object> model = new HashMap<String, Object>(7, 1.0f);
-      model.put("scripts", websscriptsArr);
+      model.put("scripts", webscriptsArr);
       model.put("totalRecords", webscripts.size());
       model.put("startIndex", si);
       return model;

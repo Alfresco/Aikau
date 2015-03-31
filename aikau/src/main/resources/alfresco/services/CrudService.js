@@ -141,7 +141,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function can be used to append the supplied querty parameter name and value onto the 
+       * This function can be used to append the supplied query parameter name and value onto the 
        * supplied URL string which is then returned.
        * 
        * @param {string} url The url to update
