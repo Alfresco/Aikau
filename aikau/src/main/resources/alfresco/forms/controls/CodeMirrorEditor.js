@@ -188,6 +188,15 @@ define(["alfresco/forms/controls/BaseFormControl",
          this.onValueChangeEvent(this.name, this.lastValue, value);
          this.lastValue = value;
       },
+
+      /**
+       * Overrides to prevent any action from occurring.
+       * 
+       * @instance
+       */
+      setupChangeEvents: function alfresco_forms_controls_TinyMCE__setupChangeEvents() {
+         // No action.
+      },
       
       /**
        * Extends the [default function]{@link module:alfresco/forms/controls/BaseFormControl#processValidationRules} to 
