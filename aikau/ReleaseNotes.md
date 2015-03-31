@@ -1,4 +1,4 @@
-Aikau 1.0.10 Release Notes
+Aikau 1.0.11 Release Notes
 ==========================
 
 Current deprecations:
@@ -33,6 +33,17 @@ Current deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.11:
+* [AKU-3](https://issues.alfresco.com/jira/browse/AKU-3)     - Updated tests to work against Selenium Grid
+* [AKU-37](https://issues.alfresco.com/jira/browse/AKU-37)   - Added folder view preference handling
+* [AKU-159](https://issues.alfresco.com/jira/browse/AKU-159) - Support for truncated property rendering
+* [AKU-175](https://issues.alfresco.com/jira/browse/AKU-175) - Improved image source logo width handling
+* [AKU-177](https://issues.alfresco.com/jira/browse/AKU-177) - Fixed scoping on AlfDetailedViewItem
+* [AKU-180](https://issues.alfresco.com/jira/browse/AKU-180) - PDF.js preview faults test fix
+* [AKU-182](https://issues.alfresco.com/jira/browse/AKU-182) - Update archetype to include repo connection config
+* [AKU-183](https://issues.alfresco.com/jira/browse/AKU-183) - Index page for unit test application
+* [AKU-184](https://issues.alfresco.com/jira/browse/AKU-184) - DND item label localization
+
 1.0.10:
 * [AKU-133](https://issues.alfresco.com/jira/browse/AKU-133)     - FileType configurable images
 * [AKU-157](https://issues.alfresco.com/jira/browse/AKU-157)     - Ensure HiddenValue form control can be set
