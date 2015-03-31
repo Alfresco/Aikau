@@ -141,6 +141,27 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function can be used to append the supplied query parameter name and value onto the 
+       * supplied URL string which is then returned.
+       * 
+       * @param {string} url The url to update
+       * @param {string} param The name of the query parameter
+       * @param {string} value The value of the query parameter
+       * @returns {string} The updated URL
+       */
+      addQueryParameter: function alfresco_services_CrudService__addQueryParameter(url, param, value) {
+         if (url.indexOf("?") === -1)
+         {
+            url += "?";
+         }
+         else
+         {
+            url += "&";
+         }
+         return url += param + "=" + value;
+      },
+
+      /**
        * Makes a GET request to the Repository using the 'url' attribute provided in the payload passed
        * in the publication on the topic that this function subscribes to. The 'url' is expected to be a
        * Repository WebScript URL and should not include the Repository proxy stem.
@@ -150,6 +171,16 @@ define(["dojo/_base/declare",
        */
       onGetAll: function alfresco_services_CrudService__onGetAll(payload) {
          var url = this.getUrlFromPayload(payload);
+
+         if (payload.pageSize)
+         {
+            url = this.addQueryParameter(url, "pageSize", payload.pageSize);
+         }
+         if (payload.page)
+         {
+            url = this.addQueryParameter(url, "page", payload.page);
+         }
+         
          if (url) {
             this.serviceXhr({
                url: url,

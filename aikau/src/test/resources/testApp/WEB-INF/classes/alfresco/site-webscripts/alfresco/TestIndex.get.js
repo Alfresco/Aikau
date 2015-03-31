@@ -23,7 +23,13 @@ model.jsonModel = {
             description: "This page provides links to all the Aikau unit test pages.",
             widgets: [
                {
-                  name: "alfresco/lists/AlfList",
+                 name: "alfresco/lists/Paginator",
+                 config: {
+                   documentsPerPage: 25
+                 }
+               },
+               {
+                  name: "alfresco/lists/AlfSortablePaginatedList",
                   config: {
                      loadDataPublishTopic: "ALF_CRUD_GET_ALL",
                      loadDataPublishPayload: {
