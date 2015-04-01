@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>Basic drag-and-drop test</shortname>
+  <shortname>Drag-and-drop (basic)</shortname>
+  <description>Shows the most basic implementation of the Drag-and-drop widgets. These widgets do not use an 'alfresco/services/DragAndDropModellingService' and instead rely on the basic capabilities of the 'alfresco/dnd/DragAndDropTarget' widget to render the dropped items.</description>
   <family>aikau-unit-tests</family>
   <url>/basic-dnd</url>
 </webscript>
