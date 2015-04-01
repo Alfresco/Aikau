@@ -86,7 +86,7 @@ define(["intern!object",
          return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "One", "Fixed label not set correctly: " + resultText);
+               assert(resultText === "Priv\u00e9", "Fixed label not set correctly: " + resultText);
             });
       },
   
