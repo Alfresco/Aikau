@@ -71,6 +71,28 @@ define(["dojo/_base/declare",
       dragWithHandles: false,
       
       /**
+       * If this is configured to be true then once an item has been used it will be removed 
+       * so that it cannot be used again. If the item is deleted it will be reinstated.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      useItemsOnce: false,
+
+      /**
+       * When [items can only be used once]{@link module:alfresco/dnd/DragAndDropItems#useItemsOnce}
+       * this is the dot-notation property to compare deleted items against the configured
+       * [items]{@link module:alfresco/dnd/DragAndDropItems#items} to see if a deleted item should
+       * be re-instated.
+       *
+       * @instance
+       * @type {string}
+       * @default "name"
+       */
+      useItemsOnceComparisonKey: "name",
+
+      /**
        * Creates a palette of items that can be dragged (and dropped).
        * 
        * @instance
@@ -81,7 +103,7 @@ define(["dojo/_base/declare",
          on(this.paletteNode, Constants.itemSelectedEvent, lang.hitch(this, this.onItemSelected));
 
          this.sourceTarget = new Source(this.paletteNode, {
-            copyOnly: true,
+            copyOnly: !this.useItemsOnce,
             selfCopy: false,
             creator: lang.hitch(this, this.creator),
             withHandles: this.dragWithHandles
@@ -90,6 +112,38 @@ define(["dojo/_base/declare",
 
          this.alfSubscribe(Constants.requestItemToAddTopic, lang.hitch(this, this.onItemToAddRequest));
          this.alfSubscribe(Constants.itemSelectedTopic, lang.hitch(this, this.onExternalItemSelected));
+
+         if (this.useItemsOnce === true)
+         {
+            this.alfSubscribe(Constants.itemDeletedTopic, lang.hitch(this, this.onItemDeleted));
+         }
+      },
+
+      /**
+       * Handles items being deleted. If the item deleted is a deleted item from this widget then it will
+       * be re-instated.
+       *
+       * @instance
+       * @param  {object} payload A payload containing a deleted item
+       */
+      onItemDeleted: function alfresco_dnd_DragAndDropItems__onItemDeleted(payload) {
+         if (payload && payload.item && this.useItemsOnceComparisonKey)
+         {
+            var a = lang.getObject(this.useItemsOnceComparisonKey, false, payload.item);
+            if (a)
+            {
+               // NOTE: Using some to exit as soon as match is found
+               array.some(this.items, function(item) {
+                  var b = lang.getObject(this.useItemsOnceComparisonKey, false, item.value);
+                  if (a === b)
+                  {
+                     this.sourceTarget.insertNodes(false, [item]);
+                     return true;
+                  }
+                  return false;
+               }, this);
+            }
+         }
       },
 
       /**
