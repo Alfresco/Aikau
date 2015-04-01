@@ -536,6 +536,40 @@ define(["intern!object",
                });
       },
 
+      "Drag and drop a single use item": function () {
+         return browser.findByCssSelector("#DRAG_PALETTE2 .dojoDndItem .title")
+            .moveMouseTo()
+            .click()
+            .pressMouseButton()
+            .moveMouseTo(1, 1)
+         .end()
+         .findByCssSelector(".alfresco-dnd-DragAndDropTarget > div")
+            .then(function(element) {
+               browser.moveMouseTo(element);
+            })
+            .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
+            .releaseMouseButton()
+         .end()
+         .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
+            .then(function(elements) {
+                  assert.lengthOf(elements, 1, "The dropped item was not found");
+            })
+         .findAllByCssSelector("#DRAG_PALETTE2 .dojoDndItem")
+            .then(function(elements) {
+                  assert.lengthOf(elements, 0, "The dragged single use item was not removed from the items list");
+            });
+      },
+
+      "Delete the dropped single use item to reinstate": function() {
+         return browser.findByCssSelector(".alfresco-dnd-DroppedItemWrapper .action.delete img")
+            .click()
+         .end()
+         .findAllByCssSelector("#DRAG_PALETTE2 .dojoDndItem")
+            .then(function(elements) {
+                  assert.lengthOf(elements, 1, "The deleted single use item was not reinstated");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

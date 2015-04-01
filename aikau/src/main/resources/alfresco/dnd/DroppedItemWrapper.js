@@ -238,6 +238,9 @@ define(["dojo/_base/declare",
             cancelable: true,
             targetWidget: this
          });
+         this.alfPublish(Constants.itemDeletedTopic, {
+            item: this.getValue()
+         });
       },
 
       /**

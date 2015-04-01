@@ -59,6 +59,7 @@ model.jsonModel = {
                   id: "DRAG_PALETTE2",
                   name: "alfresco/dnd/DragAndDropItems",
                   config: {
+                     useItemsOnce: true,
                      items: [
                         {
                            type: [ "widget" ],

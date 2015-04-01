@@ -123,6 +123,17 @@ define([],function() {
        * @type {String}
        * @default "ALF_DND_SOURCE_ITEM_SELECTED"
        */
-      itemSelectedTopic: "ALF_DND_SOURCE_ITEM_SELECTED"
+      itemSelectedTopic: "ALF_DND_SOURCE_ITEM_SELECTED",
+
+      /**
+       * This topic is published by a [DroppedItemWrapper]{@link module:alfresco/dnd/DroppedItemWrapper} whenever a 
+       * dropped item is deleted. This topic is subscribed to by [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * that are configured to only allow an item to be used so that the deleted item can be reinstated.
+       *
+       * @instance
+       * @type {String}
+       * @default "ALF_DND_DROPPED_ITEM_DELETED"
+       */
+      itemDeletedTopic: "ALF_DND_DROPPED_ITEM_DELETED",
    };
 });
