@@ -188,8 +188,6 @@ define(["intern!object",
             .sleep(pause)
             .pressKeys(keys.TAB)
             .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
             .pressKeys(keys.ENTER)
             .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1_POST","data","name","bob"))
             .then(null, function() {
@@ -200,8 +198,6 @@ define(["intern!object",
       "Select another item": function() {
          // Shift tab 7 times should get back to the last item
          return browser.pressKeys([keys.SHIFT])
-            .pressKeys(keys.TAB)
-            .sleep(pause)
             .pressKeys(keys.TAB)
             .sleep(pause)
             .pressKeys(keys.TAB)

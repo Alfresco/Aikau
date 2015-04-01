@@ -778,6 +778,7 @@ function getDefaultFormModel() {
          {
             name: "alfresco/dnd/DroppedNestingItemWrapper",
             config: {
+               showEditButton: true,
                label: "{label}",
                value: "{value}",
                widgets: [
@@ -806,6 +807,7 @@ function getDefaultFormControlModel() {
          {
             name: "alfresco/dnd/DroppedFormControlWrapper",
             config: {
+               showEditButton: true,
                label: "{label}",
                value: "{value}",
                widgets: [

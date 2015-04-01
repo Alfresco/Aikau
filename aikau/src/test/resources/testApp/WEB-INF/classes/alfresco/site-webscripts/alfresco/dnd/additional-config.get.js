@@ -55,12 +55,14 @@ model.jsonModel = {
                      {
                         name: "alfresco/dnd/DroppedNestingItemWrapper",
                         config: {
+                           showEditButton: true,
                            label: "{label}",
                            value: "{value}",
                            widgets: [
                               {
                                  name: "alfresco/dnd/DragAndDropNestedTarget",
                                  config: {
+                                    useModellingService: true,
                                     label: "Widgets", // TODO: NLS
                                     targetProperty: "config.widgets"
                                  }
