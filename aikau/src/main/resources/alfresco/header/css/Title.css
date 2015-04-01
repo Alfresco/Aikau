@@ -19,7 +19,10 @@
       border-bottom: 1px solid #ccc;
       > div {
          background-color: #fafafa;
-         height: 67px;
+
+         .right-widgets {
+            height: 67px;
+         }
       }
    }
 }
