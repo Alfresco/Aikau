@@ -39,7 +39,7 @@
    Pulls in main template body.
 -->
 <#macro templateBody>
-<body id="Share" class="claro alfresco-share">
+<body id="Share" class="claro alfresco-share" style="padding: 10px;">
 <#nested>
 </#macro>
 
