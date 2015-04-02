@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>MultiSelectInput Test</shortname>
+  <description>This is a test page for the MultiSelectInput form control</description>
+  <family>aikau-unit-tests</family>
+  <url>/MultiSelectInput</url>
+</webscript>
