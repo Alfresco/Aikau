@@ -53,63 +53,62 @@ define(["dojo/_base/declare",
          }
       },
 
-
       /**
        * This utility function will perform token substitution on the supplied string value using the
        * values from the calling object. If the token cannot be found in the calling object then it will be left
        * as is (including the curly braces).
        *
-       * @instance
-       * @param {string} v The value to process.
-       * @returns The processed value
+       * @param value {String} - the token to replace
+       * @param object {Object} - the object containing the token
+       * @return {*}
        */
-      processInstanceTokens: function alfresco_core_ObjectProcessingMixin__processInstanceTokens(v) {
-         // Only replace a value if it actually exists, otherwise leave the token exactly as is.
-         var u;
+      processTokens: function alfresco_core_ObjectProcessingMixin__processInstanceTokens(value, object) {
+         // Default to returning the input value if it doesn't match.
+         var processedValue = value;
+
+         // Regular expression to match token in curly braces
          var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*}$/g;
-         if (re.test(v))
-         {
-            var tokenWithoutBraces = v.slice(1,-1);
-            if (typeof this[tokenWithoutBraces] !== "undefined")
-            {
-               u = this[tokenWithoutBraces];
+
+         // If the whole string is the token, replace it if it matches
+         if (re.test(value)) {
+            // Strip off curly braces
+            var tokenWithoutBraces = value.slice(1, -1);
+
+            // If taken exists in object, replace it.
+            if (typeof object[tokenWithoutBraces] !== "undefined") {
+               processedValue = object[tokenWithoutBraces];
             }
          }
-         else
-         {
-            u = lang.replace(v, lang.hitch(this, this.safeReplace, this));
+         else {
+            // Deal with multiple tokens in the string.
+            processedValue = lang.replace(value, lang.hitch(this, this.safeReplace, object));
          }
-         // var u = lang.replace(v, lang.hitch(this, this.safeReplace, this));
-         return u;
+
+         return processedValue
       },
 
       /**
-       * This utility function will perform token substitution on the supplied string value using the
-       * values from currentItem. If the token cannot be found in the currnentItem then it will be left
-       * as is (including the curly braces).
+       * Wrapper for processTokens, searching within this
        *
        * @instance
        * @param {string} v The value to process.
-       * @returns The processed value
+       * @returns {*} The processed value
+       */
+      processInstanceTokens: function alfresco_core_ObjectProcessingMixin__processInstanceTokens(v) {
+         // Search for tokens in the current scope
+         return this.processTokens(v, this);
+      },
+
+      /**
+       * Wrapper for processTokens, searching within currentItem
+       *
+       * @instance
+       * @param {string} v The value to process.
+       * @returns {*} The processed value
        */
       processCurrentItemTokens: function alfresco_core_ObjectProcessingMixin__processCurrentItemTokens(v) {
-         var u;
-
-         // Only replace a value if it actually exists, otherwise leave the token exactly as is.
-         var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*}$/g ;
-         if (re.test(v))
-         {
-            var tokenWithoutBraces = v.slice(1,-1);
-            if (typeof this.currentItem[tokenWithoutBraces] !== "undefined")
-            {
-               u = this.currentItem[tokenWithoutBraces];
-            }
-         }
-         else
-         {
-            u = lang.replace(v, lang.hitch(this, this.safeReplace, this.currentItem));
-         }
-         return u;
+         // Search for tokens in the current item
+         return this.processTokens(v, this.currentItem);
       },
 
       /**
