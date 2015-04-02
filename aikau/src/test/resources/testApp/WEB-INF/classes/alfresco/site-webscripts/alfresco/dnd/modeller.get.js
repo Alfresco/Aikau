@@ -65,6 +65,7 @@ model.jsonModel = {
                      {
                         name: "alfresco/dnd/DroppedItemWrapper",
                         config: {
+                           showEditButton: true,
                            label: "{label}",
                            value: "{value}",
                            widgets: [
