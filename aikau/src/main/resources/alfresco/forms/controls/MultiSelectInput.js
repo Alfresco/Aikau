@@ -44,7 +44,8 @@ define([
             return {
                id: this.id + "_CONTROL",
                name: this.name,
-               placeholder: (this.placeholder && this.message(this.placeholder)) || ""
+               width: this.width,
+               value: this.value
             };
          },
 
@@ -59,23 +60,12 @@ define([
           * @returns  {object} The new control
           */
          createFormControl: function alfresco_forms_controls_MultiSelectInput__createFormControl(config) {
-            /*jshint unused:false*/
-            var serviceStore = this.createServiceStore();
-            var multiSelect = new MultiSelect({
-               id: this.id + "_CONTROL",
-               name: this.name,
-               value: this.value,
-               store: serviceStore,
-               searchAttr: serviceStore.queryAttribute,
-               labelAttribute: serviceStore.labelAttribute,
-               valueAttribute: serviceStore.valueAttribute,
-               queryExpr: "${0}"
-            });
-            this.addIcon(multiSelect);
-            this.showOptionsBasedOnValue(multiSelect);
-
-            // It's necessary to override the standard Dojo validation message handling here.
-            multiSelect.displayMessage = lang.hitch(this, this.onFilteringValidation);
+            var serviceStore = this.createServiceStore(),
+               widgetConfig = lang.mixin({
+                  store: serviceStore,
+                  queryExpr: "${0}"
+               }, config),
+               multiSelect = new MultiSelect(widgetConfig);
             return multiSelect;
          },
 

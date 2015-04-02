@@ -25,8 +25,8 @@ model.jsonModel = {
             config: {
                label: "Tags",
                name: "tags",
+               width: "400px",
                optionsConfig: {
-                  placeholder: "Select your tags",
                   queryAttribute: "name",
                   valueAttribute: "nodeRef",
                   publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",

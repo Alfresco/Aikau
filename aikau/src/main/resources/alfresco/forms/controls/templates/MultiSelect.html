@@ -1,3 +1,24 @@
-<div class="alfresco-forms-controls-MultiSelect">
-   <div contentEditable="true">${placeholder}</div>
+<div class="${rootClass}">
+   <div class="${rootClass}__off-screen-search" data-dojo-attach-point="offScreenSearch"></div>
+   <div class="${rootClass}__container">
+      <div class="${rootClass}__choice">
+         <span class="${rootClass}__choice__label">Sloth Bear</span>
+         <a class="${rootClass}__choice__close-button">&times;</a>
+      </div>
+      <div class="${rootClass}__choice">
+         <span class="${rootClass}__choice__label">American Black Bear</span>
+         <a class="${rootClass}__choice__close-button">&times;</a>
+      </div>
+      <input class="${rootClass}__search-box" data-dojo-attach-point="searchBox" data-dojo-attach-event="keyup:_onSearchKeyUp" type="text" tabindex="0" value="search string" />
+   </div>
+   <ul class="${rootClass}__results">
+      <li class="${rootClass}__result ${rootClass}__result--chosen" data-aikau-value="american_black_bear">American Black Bear</li>
+      <li class="${rootClass}__result" data-aikau-value="asiatic_black_bear">Asiatic Black Bear</li>
+      <li class="${rootClass}__result" data-aikau-value="brown_bear">Brown Bear</li>
+      <li class="${rootClass}__result" data-aikau-value="giant_panda">Giant Panda</li>
+      <li class="${rootClass}__result ${rootClass}__result--chosen" data-aikau-value="sloth_bear">Sloth Bear</li>
+      <li class="${rootClass}__result" data-aikau-value="sun_bear">Sun Bear</li>
+      <li class="${rootClass}__result ${rootClass}__result--focused" data-aikau-value="polar_bear">Polar Bear</li>
+      <li class="${rootClass}__result" data-aikau-value="spectacled_bear">Spectacled Bear</li>
+   </ul>
 </div>

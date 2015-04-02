@@ -27,10 +27,14 @@ define([
       "dijit/_TemplatedMixin",
       "dijit/_WidgetBase",
       "dojo/_base/declare",
+      "dojo/_base/lang",
       "dojo/dom-construct",
+      "dojo/dom-style",
+      "dojo/dom-class",
+      "dojo/on",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(_TemplatedMixin, _WidgetBase, declare, domConstruct, template) {
+   function(_TemplatedMixin, _WidgetBase, declare, lang, domConstruct, domStyle, domClass, on, template) {
 
       return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -55,11 +59,13 @@ define([
          templateString: template,
 
          /**
-          * Placeholder text to use if no items are selected and no search string is present
+          * The root class of this widget
           *
+          * @protected
+          * @instance
           * @type {string}
           */
-         placeholder: null,
+         rootClass: "alfresco-forms-controls-MultiSelect",
 
          /**
           * Constructor
@@ -72,15 +78,66 @@ define([
          },
 
          /**
+          * Widget template has been turned into a DOM
+          *
+          * @override
+          * @instance
+          */
+         buildRendering: function() {
+            this.inherited(arguments);
+            this.width && domStyle.set(this.domNode, "width", this.width);
+         },
+
+         /**
+          * Widget has been created, but possibly not sub-widgets
+          *
+          * @override
+          * @instance
+          */
+         postCreate: function() {
+            this.inherited(arguments);
+            this.own(on(this.searchBox, "focus", lang.hitch(this, this._onSearchFocus)));
+            this.own(on(this.searchBox, "blur", lang.hitch(this, this._onSearchBlur)));
+         },
+
+         /**
+          * Widget and sub-widgets have been created
+          *
+          * @override
+          * @instance
+          */
+         startup: function() {
+            this.inherited(arguments);
+         },
+
+         /**
           * Set the value of the control
           *
           * @instance
-          * @param    {string} newValue The new value
+          * @param    {string[]} newValues The new values
           */
          setValue: function(newValue) {
+            /*jshint unused:false*/
             // NOOP
-         }
+         },
 
+         _onSearchBlur: function() {
+            domClass.remove(this.domNode, this.rootClass + "--focused");
+         },
+
+         _onSearchChange: function() {
+            this.offScreenSearch.innerHTML = this.searchBox.value;
+            var contentWidth = this.offScreenSearch.offsetWidth;
+            domStyle.set(this.searchBox, "width", (contentWidth + 10) + "px");
+         },
+
+         _onSearchFocus: function() {
+            domClass.add(this.domNode, this.rootClass + "--focused");
+         },
+
+         _onSearchKeyUp: function() {
+            this._onSearchChange();
+         }
       });
    }
 );
