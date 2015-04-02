@@ -1,4 +1,5 @@
 .alfresco-testing-MockXhr {
+   margin-top: 25px;
    table, tr, th, td, caption {
       border-collapse: collapse;
    }
@@ -9,10 +10,10 @@
    }
    tr {
       border: none;
-      .mx-row:nth-child(odd), .mx-object-row:nth-child(odd) {
+      &.mx-row:nth-child(odd), &.mx-object-row:nth-child(odd) {
          background-color: #eee;
       }
-      .mx-row:nth-child(even), .mx-object-row:nth-child(even) {
+      &.mx-row:nth-child(even), &.mx-object-row:nth-child(even) {
          background-color: #fff;
       }
    }
@@ -28,6 +29,7 @@
       font-size: 1.1em;
       font-weight: 700;
       text-align: left;
+      background: #ccc;
    }
    .mx-response {
       position: relative;

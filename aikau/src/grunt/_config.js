@@ -5,6 +5,7 @@ module.exports = {
    files: {
       alfTestModels: "src/test/resources/alfresco_model_files.json",
       alfWidgets: "src/test/resources/alfresco_widgets.json",
+      app: "src/main/resources/alfresco/**",
       coverageReports: "code-coverage-reports/*.json",
       css: "src/main/resources/**/*.css",
       gruntFile: "Gruntfile.js",
@@ -14,6 +15,7 @@ module.exports = {
       jsdocConfig: "conf.json",
       jsdocReadme: "src/jsdoc-templates/alfresco/README.md",
       test: "tests/alfresco/**",
+      testApp: "src/test/resources/testApp/WEB-INF/classes/alfresco/site-webscripts/**",
       testModel: "src/test/resources/alfresco/**/*.json",
       testScreenshots: "src/test/screenshots/*.png",
       testScripts: "src/test/resources/alfresco/**/*.js"
