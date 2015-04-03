@@ -41,10 +41,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
-
       "Test Initial State": function () {
 
          // The test page is configured to start on page 2, but there will only be enough results for 1 page

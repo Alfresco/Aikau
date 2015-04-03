@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -88,7 +88,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onPageWidgetsReady: function alfresco_lists_AlfHashList__onPageWidgetsReady(payload) {
+      onPageWidgetsReady: function alfresco_lists_AlfHashList__onPageWidgetsReady(/*jshint unused:false*/payload) {
          // Remove the subscription to ensure it's only processed once...
          this.alfUnsubscribe(this.pageWidgetsReadySubcription);
 
@@ -102,7 +102,7 @@ define(["dojo/_base/declare",
             var hashString = hash();
             if (hashString === "" && 
                 this.useLocalStorageHashFallback === true && 
-                ("localStorage" in window && window["localStorage"] !== null))
+                ("localStorage" in window && window.localStorage !== null))
             {
                // No hash has been provided, check local storage for last hash...
                var locallyStoredHash = localStorage.getItem(this.useLocalStorageHashFallbackKey);
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
             }
             else if (hashString !== "" && 
                      this.useLocalStorageHashFallback === true && 
-                     ("localStorage" in window && window["localStorage"] !== null))
+                     ("localStorage" in window && window.localStorage !== null))
             {
                // Store the initial hash...
                localStorage.setItem(this.useLocalStorageHashFallbackKey, hash());
@@ -120,10 +120,17 @@ define(["dojo/_base/declare",
             var currHash = ioQuery.queryToObject(hashString);
             if(!this._payloadContainsUpdateableVar(currHash))
             {
-               this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-                  url: ioQuery.objectToQuery(this.currentFilter),
-                  type: "HASH"
-               }, true);
+               if (this.currentFilter)
+               {
+                  this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+                     url: ioQuery.objectToQuery(this.currentFilter),
+                     type: "HASH"
+                  }, true);
+               }
+               else
+               {
+                  this.loadData();
+               }
             }
             else
             {
@@ -140,7 +147,7 @@ define(["dojo/_base/declare",
             // changed. Each view renderer that registers a link will need to set a "linkClickTopic" and this
             // should be matched by the "linkClickTopic" of this instance)
             this.alfSubscribe(this.linkClickTopic, lang.hitch(this, this.onItemLinkClick));
-            if (this.currentData != null)
+            if (this.currentData)
             {
                this.processLoadedData(this.currentData);
                this.renderView();
@@ -160,12 +167,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload object
+       * @param {boolean} updateInstanceValues Indicates whether or not the list instance should be updated with the payload values
        * @return {boolean}
        */
-      _payloadContainsUpdateableVar: function alfresco_lists_AlfHashList___payloadContainsUpdateableVar(payload) {
-         
+      _payloadContainsUpdateableVar: function alfresco_lists_AlfHashList___payloadContainsUpdateableVar(payload, updateInstanceValues) {
+         var containsUpdateableVar = false;
+
          // No hashVarsForUpdate - return true
-         if(this.hashVarsForUpdate == null || this.hashVarsForUpdate.length === 0)
+         if(!this.hashVarsForUpdate || this.hashVarsForUpdate.length === 0)
          {
             return true;
          }
@@ -175,10 +184,14 @@ define(["dojo/_base/declare",
          {
             if(this.hashVarsForUpdate[i] in payload)
             {
-               return true;
+               if (updateInstanceValues === true)
+               {
+                  this[this.hashVarsForUpdate[i]] = payload[this.hashVarsForUpdate[i]];
+               }
+               containsUpdateableVar = true;
             }
          }
-         return false;
+         return containsUpdateableVar;
       },
 
       /**
@@ -187,10 +200,10 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      updateLocallyStoredHash: function alfresco_lists_AlfHashList__onHashChanged(payload) {
+      updateLocallyStoredHash: function alfresco_lists_AlfHashList__onHashChanged(/*jshint unused:false*/payload) {
          // Save the hash to local storage if required...
          if(this.useLocalStorageHashFallback === true && 
-            ("localStorage" in window && window["localStorage"] !== null))
+            ("localStorage" in window && window.localStorage !== null))
          {
             localStorage.setItem(this.useLocalStorageHashFallbackKey, hash());
          }
@@ -207,7 +220,10 @@ define(["dojo/_base/declare",
          if(this._payloadContainsUpdateableVar(payload))
          {
             //this.currentFilter = payload;
-            if (this._readyToLoad) this.loadData();
+            if (this._readyToLoad)
+            {
+               this.loadData();
+            }
          }
       }
    });

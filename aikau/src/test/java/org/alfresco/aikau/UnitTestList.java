@@ -1,5 +1,6 @@
 package org.alfresco.aikau;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,7 +12,6 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Path;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScript;
-import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 
 /**
@@ -52,15 +52,35 @@ public class UnitTestList extends DeclarativeWebScript
              // No action required
          }
       }
+      
+      
         
       List<WebScript> webscripts = Arrays.asList(path.getScripts());
       Collections.sort(webscripts, new UnitTestList.WebScriptComparator());
-      WebScript[] webscriptsArr = new WebScript[webscripts.size()];
-      webscripts.toArray(webscriptsArr);
+      
+      List<WebScript> filteredWebscripts = new ArrayList<WebScript>();
+      String filter = req.getParameter("filter");
+      if (filter != null)
+      {
+          for (WebScript ws: webscripts)
+          {
+              if (ws.getDescription().getShortName().toLowerCase().indexOf(filter.toLowerCase()) != -1)
+              {
+                  filteredWebscripts.add(ws);
+              }
+          }
+      }
+      else
+      {
+          filteredWebscripts.addAll(webscripts);
+      }
+      
+      WebScript[] webscriptsArr = new WebScript[filteredWebscripts.size()];
+      filteredWebscripts.toArray(webscriptsArr);
       webscriptsArr = Arrays.copyOfRange(webscriptsArr, si, ps + si);
       Map<String, Object> model = new HashMap<String, Object>(7, 1.0f);
       model.put("scripts", webscriptsArr);
-      model.put("totalRecords", webscripts.size());
+      model.put("totalRecords", filteredWebscripts.size());
       model.put("startIndex", si);
       return model;
    }
