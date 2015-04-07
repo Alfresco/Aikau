@@ -9,16 +9,17 @@
          <span class="${rootClass}__choice__label">American Black Bear</span>
          <a class="${rootClass}__choice__close-button">&times;</a>
       </div>
-      <input class="${rootClass}__search-box" data-dojo-attach-point="searchBox" data-dojo-attach-event="keyup:_onSearchKeyUp" type="text" tabindex="0" value="search string" />
+      <input class="${rootClass}__search-box" data-dojo-attach-point="searchBox" data-dojo-attach-event="keypress:_onSearchKeypress,keyup:_onSearchKeyup" type="text" tabindex="0" />
    </div>
    <ul class="${rootClass}__results">
-      <li class="${rootClass}__result ${rootClass}__result--chosen" data-aikau-value="american_black_bear">American Black Bear</li>
-      <li class="${rootClass}__result" data-aikau-value="asiatic_black_bear">Asiatic Black Bear</li>
+      <li class="${rootClass}__results-loading">Loading ...</li>
+      <li class="${rootClass}__results-error" data-dojo-attach-point="errorItem"></li>
+<!--       <li class="${rootClass}__result" data-aikau-value="asiatic_black_bear">Asiatic Black Bear</li>
       <li class="${rootClass}__result" data-aikau-value="brown_bear">Brown Bear</li>
       <li class="${rootClass}__result" data-aikau-value="giant_panda">Giant Panda</li>
       <li class="${rootClass}__result ${rootClass}__result--chosen" data-aikau-value="sloth_bear">Sloth Bear</li>
       <li class="${rootClass}__result" data-aikau-value="sun_bear">Sun Bear</li>
       <li class="${rootClass}__result ${rootClass}__result--focused" data-aikau-value="polar_bear">Polar Bear</li>
       <li class="${rootClass}__result" data-aikau-value="spectacled_bear">Spectacled Bear</li>
-   </ul>
+ -->   </ul>
 </div>

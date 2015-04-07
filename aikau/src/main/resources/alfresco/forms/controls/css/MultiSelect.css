@@ -1,5 +1,6 @@
 .alfresco-forms-controls-MultiSelect {
    border: 1px solid #666;
+   box-shadow: inset 0 0 2px rgba(0,0,0,.3);
    box-sizing: border-box;
    padding: 5px 5px 0;
    position: relative;
@@ -14,16 +15,20 @@
       border-radius: 3px;
       cursor: default;
       display: inline-block;
+      line-height: 22px;
       margin: 0 5px 5px 0;
-      padding: 2px 5px;
+      padding: 0 0 0 5px;
       position: relative;
-      &__label, &__close-button {
+      &__label {
          color: #333;
       }
       &__close-button {
+         color: #666;
          cursor: pointer;
+         display: inline-block;
+         font-family: @bold-font;
          font-weight: 700;
-         margin-left: 5px;
+         padding: 0 10px 0 5px;
       }
    }
    &__off-screen-search {
@@ -43,29 +48,46 @@
       margin: 0 0 5px 0;
       max-width: 100%;
       padding: 0;
-      width: 20px;
+      width: 50px;
       &:focus {
          outline: 0;
       }
    }
    &__results {
       background: #fff;
-      border: 1px solid #666;
       box-shadow: 2px 2px 3px rgba(0, 0, 0, .1);
+      display: none;
       left: -1px;
       list-style: none;
       margin: 0;
+      overflow: hidden;
       padding: 0;
       position: absolute;
       right: -1px;
       top: 100%;
    }
-   &__result {
+   &__results-loading, &__results-error {
+      display: none;
+   }
+   &__results-error {
+      color: #c00;
+      font-family: @bold-font;
+      font-weight: 700;
+   }
+   &__results-loading, &__results-error, &__result {
+      border: solid #666;
+      border-width: 0 1px;
       font-size: 14px;
       margin: 0;
       overflow: hidden;
-      padding: 3px 0 3px 5px;
+      padding: 5px 0 5px 5px;
       text-overflow: ellipsis;
+      &:first-child {
+         border-top-width: 1px;
+      }
+      &:last-child {
+         border-bottom-width: 1px;
+      }
       &--chosen {
          color: #ccc;
       }
@@ -77,5 +99,29 @@
    &--focused {
       border-color: #09c;
       outline: 1px solid #0cf;
+   }
+   &--show-results {
+      .alfresco-forms-controls-MultiSelect {
+         &__results {
+            display: block;
+         }
+      }
+   }
+   &--show-error {
+      border-color: #c00;
+      outline: 1px solid #faa;
+      .alfresco-forms-controls-MultiSelect {
+         &__results-error {
+            border-color: #c00;
+            display: block;
+         }
+      }
+   }
+   &--show-loading {
+      .alfresco-forms-controls-MultiSelect {
+         &__results-loading {
+            display: block;
+         }
+      }
    }
 }
