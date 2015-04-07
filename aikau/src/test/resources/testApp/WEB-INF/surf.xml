@@ -116,6 +116,7 @@
                    <package name="dojox"        location="js/lib/dojo-1.9.0/dojox"/>
                    <package name="alfresco"     location="js/aikau/${project.version}/alfresco"/>
                    <package name="aikauTesting" location="js/aikau/testing"/>
+                   <package name="cm"           location="js/lib/code-mirror"/>
                    <package name="surf"         location="js/surf"/>
                    <package name="jquery"       location="js/lib/jquery-1.11.1" main="jquery-1.11.1.min"/>
                    <package name="jqueryui"     location="js/lib/jquery-ui-1.11.1" main="jquery-ui.min"/>

@@ -17,13 +17,14 @@ module.exports = function(grunt) {
    grunt.registerTask("test_grid", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:grid"]);
 
    // Watch for changes and retest
+   grunt.registerTask("watchDev", ["watch:dev"]);
    grunt.registerTask("watchTest", ["watch:test"]);
 
    // Restart the test server
    grunt.registerTask("restartTestApp", ["shell:stopTestApp", "startUnitTestApp"]);
 
    // Build and then clear cached stuff
-   grunt.registerTask("updateTest", ["shell:mavenProcessTestResources", "http:testAppReloadWebScripts", "http:testAppClearCaches"]);
+   grunt.registerTask("updateTest", ["notifyTestUpdating", "shell:mavenProcessTestResources", "http:testAppReloadWebScripts", "http:testAppClearCaches", "notifyTestUpdated"]);
 
    // Start jetty server if not already running. Use waitServer to check startup finished
    grunt.registerTask("startUnitTestApp", "Spawn a Maven process to start the Jetty server running the unit test application", function() {
@@ -45,7 +46,19 @@ module.exports = function(grunt) {
          });
    });
 
-   // Display notifications on test passes and failures...
+   // Notifications
+   grunt.registerTask("notifyTestUpdating", "Notify that the 'updatedTest' task has started", function() {
+      notify({
+         title: "Test app updating",
+         message: "The test app is updating..."
+      });
+   });
+   grunt.registerTask("notifyTestUpdated", "Notify that the 'updatedTest' task has completed", function() {
+      notify({
+         title: "Test app updated",
+         message: "The test app has been updated and the caches cleared"
+      });
+   });
    grunt.event.on("intern.fail", function(data) {
       notify({
          title: "Unit Test Failed",
@@ -75,13 +88,6 @@ module.exports = function(grunt) {
                runType: "runner",
                config: "src/test/resources/intern_local",
                doCoverage: false
-            }
-         },
-         local_coverage: {
-            options: {
-               runType: "runner",
-               config: "src/test/resources/intern_local",
-               doCoverage: true
             }
          },
          sl: {

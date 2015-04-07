@@ -32,7 +32,7 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/json"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang) {
+        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang, array) {
 
    return declare([AlfCore, CoreXhr], {
 
@@ -179,6 +179,13 @@ define(["dojo/_base/declare",
          if (payload.page)
          {
             url = this.addQueryParameter(url, "page", payload.page);
+         }
+         if (payload.dataFilters)
+         {
+            // TODO: iterate over filters and add each as a request parameter...
+            array.forEach(payload.dataFilters, function(filter) {
+               url = this.addQueryParameter(url, filter.name, filter.value);
+            }, this);
          }
          
          if (url) {

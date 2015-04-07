@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfList (that can be filtered on text input)</shortname>
+  <description>Shows an AlfList and a text box where the data entered into the text box will filter the results displayed in the list</description>
+  <family>aikau-unit-tests</family>
+  <url>/FilteredList</url>
+</webscript>

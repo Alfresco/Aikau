@@ -131,10 +131,10 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_VIEW_NAME_REQUEST", lang.hitch(this, this.onViewNameRequest));
 
          // Add in any additional CSS classes...
-         domClass.add(this.domNode, (this.additionalCssClasses != null ? this.additionalCssClasses : ""));
+         domClass.add(this.domNode, (this.additionalCssClasses ? this.additionalCssClasses : ""));
 
          // Allow custom messages to be displayed when no items are available for display...
-         if (this.noItemsMessage == null)
+         if (!this.noItemsMessage)
          {
             this.noItemsMessage = this.message("doclistview.no.data.message");
          }
@@ -151,7 +151,7 @@ define(["dojo/_base/declare",
          {
             this.alfSubscribe(this.documentSubscriptionTopic, lang.hitch(this, this.onDocumentsLoaded));
          }
-         if (this.currentData != null)
+         if (this.currentData)
          {
             // Render the initial data - make sure any previous data is cleared (not that there should be any!)
             this.renderView(false);
@@ -194,7 +194,7 @@ define(["dojo/_base/declare",
        */
       onDocumentsLoaded: function alfresco_lists_views_AlfListView__onDocumentsLoaded(payload) {
          var items = lang.getObject(this.itemsProperty, false, payload);
-         if (items != null)
+         if (items)
          {
             array.forEach(items, lang.hitch(this, this.processItem));
             this.setData({
@@ -218,7 +218,7 @@ define(["dojo/_base/declare",
        * @param {object} item The item to process
        * @param {number} index The index of the item
        */
-      processItem: function alfresco_lists_views_AlfListView__processItem(item, index) {
+      processItem: function alfresco_lists_views_AlfListView__processItem(item, /*jshint unused:false*/ index) {
          try
          {
             if (item.node)
@@ -231,26 +231,6 @@ define(["dojo/_base/declare",
             this.alfLog("warn", "Could not process item as Alfresco node", item, e);
          }
       },
-
-      // /**
-      //  * Handles changes to the current filter and removes drag-and-drop capabilities for all bar the
-      //  * "path" filter types (this is because only the path defines an actual location for uploading
-      //  * files to).
-      //  *
-      //  * @instance onClick
-      //  * @param {object} payload
-      //  */
-      // onFilterChange: function alfresco_lists_views_AlfListView__onFilterChange(payload) {
-      //    var path = lang.getObject("path", false, payload);
-      //    if (path == null)
-      //    {
-      //       this.removeUploadDragAndDrop(this.dragAndDropNode);
-      //    }
-      //    else
-      //    {
-      //       this.addUploadDragAndDrop(this.dragAndDropNode);
-      //    }
-      // },
 
       /**
        * The configuration for view selection menu items. This needs to be either configured or defined in an
@@ -310,9 +290,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} newData The additional data to add.
        */
-      augmentData: function alfresco_lists_views_AlfListView__augmentData(newData) {
+      augmentData: function alfresco_lists_views_AlfListView__augmentData(/*jshint unused:false*/ newData) {
          this.inherited(arguments);
-         if (this.docListRenderer != null)
+         if (this.docListRenderer)
          {
             this.docListRenderer.currentData = this.currentData;
          }
@@ -332,14 +312,14 @@ define(["dojo/_base/declare",
          {
             try
             {
-               if (this.messageNode != null)
+               if (this.messageNode)
                {
                   domConstruct.destroy(this.messageNode);
                }
 
                // If we don't want to preserve the current data (e.g. if infinite scroll isn't being used)
                // then we should destroy the previous renderer...
-               if (preserveCurrentData === false && this.docListRenderer != null)
+               if ((preserveCurrentData === false || preserveCurrentData === undefined) && this.docListRenderer)
                {
                   this.docListRenderer.destroy();
 
@@ -349,7 +329,7 @@ define(["dojo/_base/declare",
 
                // If the renderer is null we need to create one (this typically wouldn't be expected to happen)
                // when rendering additional infinite scroll data...
-               if (this.docListRenderer == null)
+               if (!this.docListRenderer)
                {
                   this.docListRenderer = this.createListRenderer();
                   this.docListRenderer.placeAt(this.tableNode, "last");
@@ -416,14 +396,14 @@ define(["dojo/_base/declare",
        * @instance
        */
       clearOldView: function alfresco_lists_views_AlfListView__clearOldView() {
-         if (this.docListRenderer != null)
+         if (this.docListRenderer)
          {
             this.docListRenderer.destroy();
 
             // TODO: Concerned about this - it needs further investigation as to why anything is being left behind!
             this.docListRenderer = null;
          }
-         if (this.messageNode != null)
+         if (this.messageNode)
          {
             domConstruct.destroy(this.messageNode);
          }
@@ -442,7 +422,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to destroy
        * @param {number} index The index of the widget
        */
-      destroyWidget: function alfresco_lists_views_AlfListView__destroyWidget(widget, index) {
+      destroyWidget: function alfresco_lists_views_AlfListView__destroyWidget(widget) {
          if (typeof widget.destroyRecursive === "function")
          {
             widget.destroyRecursive();
@@ -486,7 +466,7 @@ define(["dojo/_base/declare",
 
          // If specific widgets have been defined to display when there are no results then replace
          // the default message with them...
-         if (this.widgetsForNoDataDisplay != null)
+         if (this.widgetsForNoDataDisplay)
          {
             var wc = new WidgetsCreator({
                widgets: this.widgetsForNoDataDisplay
@@ -525,7 +505,7 @@ define(["dojo/_base/declare",
        */
       _renderHeader: function alfresco_lists_views_AlfListView___renderHeader() {
          this.currentItem = {};
-         if (this.widgetsForHeader != null)
+         if (this.widgetsForHeader)
          {
             var thead = domConstruct.create("thead", null, this.tableNode, "first");
             this.processWidgets(this.widgetsForHeader, thead);

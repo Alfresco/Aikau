@@ -538,12 +538,10 @@ define(["dojo/_base/declare",
          if (typeof callback === "function")
          {
             this.pendingOptions = callback(config);
-            array.forEach(this.pendingOptions, lang.hitch(this, this.processOptionLabel));
          }
          else if (ObjectTypeUtils.isString(callback) && typeof this[callback] === "function")
          {
             this.pendingOptions = this[callback](config);
-            array.forEach(this.pendingOptions, lang.hitch(this, this.processOptionLabel));
          }
          else
          {
@@ -561,7 +559,6 @@ define(["dojo/_base/declare",
          if (ObjectTypeUtils.isArray(fixed))
          {
             this.pendingOptions = fixed;
-            array.forEach(this.pendingOptions, lang.hitch(this, this.processOptionLabel));
          }
          else
          {
@@ -1373,8 +1370,15 @@ define(["dojo/_base/declare",
       setupChangeEvents: function alfresco_forms_controls_BaseFormControl__setupChangeEvents() {
          if (this.wrappedWidget)
          {
-            // TODO: Do we need to do anything with the watch handle when the widget is destroyed?
-            this.wrappedWidget.watch("value", lang.hitch(this, this.onValueChangeEvent));
+            if (this.wrappedWidget.watch)
+            {
+               // TODO: Do we need to do anything with the watch handle when the widget is destroyed?
+               this.wrappedWidget.watch("value", lang.hitch(this, this.onValueChangeEvent));
+            } 
+            else
+            {
+               this.alfLog("warn", "No watch method found on wrapped widget", this);
+            }
          }
       },
       

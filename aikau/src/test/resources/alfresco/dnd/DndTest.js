@@ -188,8 +188,6 @@ define(["intern!object",
             .sleep(pause)
             .pressKeys(keys.TAB)
             .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
             .pressKeys(keys.ENTER)
             .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1_POST","data","name","bob"))
             .then(null, function() {
@@ -200,8 +198,6 @@ define(["intern!object",
       "Select another item": function() {
          // Shift tab 7 times should get back to the last item
          return browser.pressKeys([keys.SHIFT])
-            .pressKeys(keys.TAB)
-            .sleep(pause)
             .pressKeys(keys.TAB)
             .sleep(pause)
             .pressKeys(keys.TAB)
@@ -492,6 +488,82 @@ define(["intern!object",
                assert.lengthOf(elements, 3, "Found an unexpected number of form controls");
             });
 
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   registerSuite({
+
+      name: "Multi-source DND tests",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/multi-source-dnd", "Multi-source DND tests")
+            .end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Select item in source one, then select item in source two to deselect item in source one": function() {
+         // Select the item in the first source...
+         return browser.pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+
+            // Tab to the second source and select its item...
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+            .sleep(pause)
+
+            // Check that just one item is selected...
+            .findAllByCssSelector(".alfresco-dnd-DragAndDropItem.selected")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "The wrong number of items were selected");
+               });
+      },
+
+      "Drag and drop a single use item": function () {
+         return browser.findByCssSelector("#DRAG_PALETTE2 .dojoDndItem .title")
+            .moveMouseTo()
+            .click()
+            .pressMouseButton()
+            .moveMouseTo(1, 1)
+         .end()
+         .findByCssSelector(".alfresco-dnd-DragAndDropTarget > div")
+            .then(function(element) {
+               browser.moveMouseTo(element);
+            })
+            .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
+            .releaseMouseButton()
+         .end()
+         .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
+            .then(function(elements) {
+                  assert.lengthOf(elements, 1, "The dropped item was not found");
+            })
+         .findAllByCssSelector("#DRAG_PALETTE2 .dojoDndItem")
+            .then(function(elements) {
+                  assert.lengthOf(elements, 0, "The dragged single use item was not removed from the items list");
+            });
+      },
+
+      "Delete the dropped single use item to reinstate": function() {
+         return browser.findByCssSelector(".alfresco-dnd-DroppedItemWrapper .action.delete img")
+            .click()
+         .end()
+         .findAllByCssSelector("#DRAG_PALETTE2 .dojoDndItem")
+            .then(function(elements) {
+                  assert.lengthOf(elements, 1, "The deleted single use item was not reinstated");
+            });
       },
 
       "Post Coverage Results": function() {

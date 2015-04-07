@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -57,7 +57,7 @@ define(["dojo/_base/declare",
        * @param {string} hashString An optional string to use as the hash. If not provided the current hash will be
        */
       initialiseFilter: function(hashString) {
-         if (hashString == null)
+         if (!hashString)
          {
             this.onHashChange(hash());
          }

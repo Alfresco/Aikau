@@ -84,6 +84,40 @@ model.jsonModel = {
                      }
                   }
                },
+
+               // Process Current Instance Not found
+               {
+                  id: "PA_PROCESS_CI_NOT_FOUND",
+                  name: "alfresco/renderers/PublishAction",
+                  config: {
+                     currentItem: {
+                        mixinData4: "mixinValue4"
+                     },
+                     publishTopic: "TOPIC_CI_NOT_FOUND",
+                     publishPayloadType: "PROCESS",
+                     publishPayloadModifiers: ["processCurrentItemTokens"],
+                     publishPayload: {
+                        data: "{NOTFOUND}"
+                     }
+                  }
+               },
+
+               // Process Instance Not found
+               {
+                  id: "PA_PROCESS_INSTANCE_NOT_FOUND",
+                  name: "alfresco/renderers/PublishAction",
+                  config: {
+                     mixinData4: "mixinValue4",
+                     publishTopic: "TOPIC_INSTANCE_NOT_FOUND",
+                     publishPayloadType: "PROCESS",
+                     publishPayloadModifiers: ["processInstanceTokens"],
+                     publishPayload: {
+                        data: "{DOESNOTEXIST}",
+                        dataReplaced: "{mixinData4}"
+                     }
+                  }
+               },
+
                {
                   id: "PA_BUILD",
                   name: "alfresco/renderers/PublishAction",

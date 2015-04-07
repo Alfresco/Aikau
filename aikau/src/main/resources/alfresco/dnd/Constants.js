@@ -112,6 +112,28 @@ define([],function() {
        * @type {string}
        * @default "ALF_DND_REQUEST_ITEM_TO_ADD"
        */
-      requestItemToAddTopic: "ALF_DND_REQUEST_ITEM_TO_ADD"
+      requestItemToAddTopic: "ALF_DND_REQUEST_ITEM_TO_ADD",
+
+      /**
+       * This topic is published whenever an item in a [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * widget is selected. This is intended to cover the scenario where multiple 
+       * [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems} widgets are included on the same page.
+       *
+       * @instance
+       * @type {String}
+       * @default "ALF_DND_SOURCE_ITEM_SELECTED"
+       */
+      itemSelectedTopic: "ALF_DND_SOURCE_ITEM_SELECTED",
+
+      /**
+       * This topic is published by a [DroppedItemWrapper]{@link module:alfresco/dnd/DroppedItemWrapper} whenever a 
+       * dropped item is deleted. This topic is subscribed to by [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * that are configured to only allow an item to be used so that the deleted item can be reinstated.
+       *
+       * @instance
+       * @type {String}
+       * @default "ALF_DND_DROPPED_ITEM_DELETED"
+       */
+      itemDeletedTopic: "ALF_DND_DROPPED_ITEM_DELETED",
    };
 });

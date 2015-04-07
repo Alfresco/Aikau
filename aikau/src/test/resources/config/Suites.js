@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/documentlibrary/views/AlfDetailedViewTest"
+      "src/test/resources/alfresco/forms/controls/CodeMirrorTest"
    ],
 
    /**
@@ -79,8 +79,6 @@ define({
       "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
 
-      "src/test/resources/alfresco/editors/TinyMCETest",
-
       "src/test/resources/alfresco/footer/FooterTest",
 
       "src/test/resources/alfresco/forms/CrudFormTest",
@@ -90,6 +88,7 @@ define({
 
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",
+      "src/test/resources/alfresco/forms/controls/CodeMirrorTest",
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
       "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
       "src/test/resources/alfresco/forms/controls/DateTextBoxTest", // TODO: NEEDS FIXING
@@ -100,6 +99,7 @@ define({
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
+      "src/test/resources/alfresco/forms/controls/TinyMCETest",
       "src/test/resources/alfresco/forms/controls/ValidationTest",
       "src/test/resources/alfresco/forms/controls/XssPreventionTest",
 
@@ -117,6 +117,7 @@ define({
       "src/test/resources/alfresco/layout/TwisterTest",
 
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
+      "src/test/resources/alfresco/lists/FilteredListTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
 
       "src/test/resources/alfresco/logo/LogoTest",
@@ -184,7 +185,7 @@ define({
     * @instance
     * @type [string]
     */
-   localOnlyFunctionalSuites: ["src/test/resources/alfresco/CodeCoverageBalancer"],
+   localOnlyFunctionalSuites: [],
 
    /**
     * This is the full array of functional test suites for local tests

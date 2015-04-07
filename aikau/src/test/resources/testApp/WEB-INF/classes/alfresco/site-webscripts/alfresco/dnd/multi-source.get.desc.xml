@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop (multiple source widgets)</shortname>
+  <description>Shows a single 'alfresco/forms/controls/DragAndDropTargetControl' with two 'alfresco/dnd/DragAndDropItems'. The purpose of this test page is to verify that when an item is selected in one of the DragAndDropItems widgets any selected item in the other DragAndDropItems widget is deselected.</description>
+  <family>aikau-unit-tests</family>
+  <url>/multi-source-dnd</url>
+</webscript>

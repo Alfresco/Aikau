@@ -1,4 +1,4 @@
-Aikau 1.0.11 Release Notes
+Aikau 1.0.12 Release Notes
 ==========================
 
 Current deprecations:
@@ -33,6 +33,16 @@ Current deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.12:
+* [AKU-14](https://issues.alfresco.com/jira/browse/AKU-14)       - Code Mirror form control updates
+* [AKU-150](https://issues.alfresco.com/jira/browse/AKU-150)     - CSS updates to support Share title bar
+* [AKU-188](https://issues.alfresco.com/jira/browse/AKU-188)     - Hide edit button on DND items by default
+* [AKU-189](https://issues.alfresco.com/jira/browse/AKU-189)     - Use-once DND items
+* [AKU-190](https://issues.alfresco.com/jira/browse/AKU-190)     - Multiple DND source keyboard control fix
+* [AKU-192](https://issues.alfresco.com/jira/browse/AKU-192)     - Added alfresco/lists/AlfFilteredList widget
+* [AKU-193](https://issues.alfresco.com/jira/browse/AKU-193)     - Form control options localization fix
+* [AKU-217](https://issues.alfresco.com/jira/browse/AKU-217)     - CSS correction for Logo
+
 1.0.11:
 * [AKU-3](https://issues.alfresco.com/jira/browse/AKU-3)     - Updated tests to work against Selenium Grid
 * [AKU-37](https://issues.alfresco.com/jira/browse/AKU-37)   - Added folder view preference handling
