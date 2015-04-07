@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
        * @param object {Object} - the object containing the token
        * @return {*}
        */
-      processTokens: function alfresco_core_ObjectProcessingMixin__processInstanceTokens(value, object) {
+      processTokens: function alfresco_core_ObjectProcessingMixin__processTokens(value, object) {
          // Default to returning the input value if it doesn't match.
          var processedValue = value;
 
