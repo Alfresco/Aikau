@@ -127,6 +127,23 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#onFilterRequest} to ensure
+       * that when a new filter is set the page is reset to the first page.
+       *
+       * @instance
+       * @param {object} payload The filter payload
+       */
+      onFilterRequest: function alfresco_lists_AlfSortablePaginatedList__onFilterRequest(/*jshint unused:false*/ payload) {
+         if (payload && payload.name)
+         {
+            this.onPageChange({
+               value: 1
+            });
+         }
+         this.inherited(arguments);
+      },
+
+      /**
        * @instance
        * @param {object} payload The details of the request
        */
@@ -215,9 +232,24 @@ define(["dojo/_base/declare",
          if (payload && payload.value !== null && payload.value !== this.currentPage)
          {
             this.currentPage = payload.value;
-            if (this._readyToLoad) 
+            if (this._readyToLoad === true) 
             {
-               this.loadData();
+               if (this.useHash === true)
+               {
+                  var currHash = ioQuery.queryToObject(hash());
+                  if (this.currentPage)
+                  {
+                     currHash.currentPage = this.currentPage;
+                  }
+                  this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+                     url: ioQuery.objectToQuery(currHash),
+                     type: "HASH"
+                  }, true);
+               }
+               else
+               {
+                  this.loadData();
+               }
             }
          }
       },
@@ -282,6 +314,20 @@ define(["dojo/_base/declare",
                {
                   // No need to worry. The current page is fine for the new page size so it can be set safely...
                }
+               if (this.useHash === true)
+               {
+                  var currHash = ioQuery.queryToObject(hash());
+                  currHash.currentPage = this.currentPage;
+                  currHash.currentPageSize = this.currentPageSize;
+                  this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+                     url: ioQuery.objectToQuery(currHash),
+                     type: "HASH"
+                  }, true);
+               }
+               else
+               {
+                  this.loadData();
+               }
                this.loadData();
             }
          }
@@ -294,7 +340,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param payload
        */
-      onScrollNearBottom: function alfresco_lists_AlfSortablePaginatedList__onScrollNearBottom(payload) {
+      onScrollNearBottom: function alfresco_lists_AlfSortablePaginatedList__onScrollNearBottom(/*jshint unused:false*/payload) {
          // Process Infinite Scroll, if enabled & if we've not hit the end of the results
          if(this.useInfiniteScroll && this.currentData.totalRecords < this.currentData.numberFound)
          {
@@ -328,8 +374,7 @@ define(["dojo/_base/declare",
        * This method is useful, e.g., when navigation between different list views.
        *
        */
-      resetPaginationData: function alfresco_lists_AlfSortablePaginatedList__resetPaginationData()
-      {
+      resetPaginationData: function alfresco_lists_AlfSortablePaginatedList__resetPaginationData() {
          // This intentionally doesn't trigger an onPageChange event (we don't want to cause a data reload event).
          this.alfLog("info", "Resetting currentPage to 1");
          this.currentPage = 1;

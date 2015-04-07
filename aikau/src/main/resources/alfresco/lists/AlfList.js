@@ -910,70 +910,72 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig The configuration that was passed to the the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
        */
       onDataLoadSuccess: function alfresco_lists_AlfList__onDataLoadSuccess(payload) {
-         this.alfLog("log", "Data Loaded", payload, this);
-
-         var foundItems = false;
-         if (!this.itemsProperty)
-         {
-            this.currentData = {};
-            this.currentData.items = payload.response;
-            foundItems = true;
-         }
-         else
-         {
-            var items = lang.getObject(this.itemsProperty, false, payload.response);
-            if (!items)
-            {
-               // As a fallback we're going to check the actual payload object...
-               // It would be reasonable to ask why we don't just look in payload initially and
-               // expect the "itemsProperty" to include "response", however that is not the most common
-               // scenario and this approach catches the edge cases...
-               items = lang.getObject(this.itemsProperty, false, payload);
-            }
-
-            if (items)
-            {
-               this.currentData = {};
-               this.currentData.items = items;
-               foundItems = true;
-
-               // We lose metaData unless we store that as well.
-               var metadata = lang.getObject(this.metadataProperty, false, payload.response);
-               if (metadata)
-               {
-                  this.currentData.metadata = metadata;
-               }
-            }
-            else
-            {
-               this.alfLog("warn", "Failure to retrieve items with given itemsProperty: " + this.itemsProperty, this);
-               this.showDataLoadFailure();
-            }
-         }
-
-         if (foundItems)
-         {
-            if (payload.response) 
-            {
-               this.processLoadedData(payload.response);
-            }
-            else
-            {
-               this.processLoadedData(this.currentData);
-            }
-            this.renderView();
-         }
-
-         // This request has finished, allow another one to be triggered.
-         this.alfPublish(this.requestFinishedTopic, {});
-
          // There is a pending load request, this will typically be the case when a new filter has been
          // applied before the last request has returned. By requesting another data load the latest 
          // filters will be requested...
          if (this.pendingLoadRequest === true)
          {
+            this.alfLog("log", "Found pending request, loading data...");
             this.pendingLoadRequest = false;
             this.loadData();
+         }
+         else
+         {
+            this.alfLog("log", "Data Loaded", payload, this);
+            var foundItems = false;
+            if (!this.itemsProperty)
+            {
+               this.currentData = {};
+               this.currentData.items = payload.response;
+               foundItems = true;
+            }
+            else
+            {
+               var items = lang.getObject(this.itemsProperty, false, payload.response);
+               if (!items)
+               {
+                  // As a fallback we're going to check the actual payload object...
+                  // It would be reasonable to ask why we don't just look in payload initially and
+                  // expect the "itemsProperty" to include "response", however that is not the most common
+                  // scenario and this approach catches the edge cases...
+                  items = lang.getObject(this.itemsProperty, false, payload);
+               }
+
+               if (items)
+               {
+                  this.currentData = {};
+                  this.currentData.items = items;
+                  foundItems = true;
+
+                  // We lose metaData unless we store that as well.
+                  var metadata = lang.getObject(this.metadataProperty, false, payload.response);
+                  if (metadata)
+                  {
+                     this.currentData.metadata = metadata;
+                  }
+               }
+               else
+               {
+                  this.alfLog("warn", "Failure to retrieve items with given itemsProperty: " + this.itemsProperty, this);
+                  this.showDataLoadFailure();
+               }
+            }
+
+            if (foundItems)
+            {
+               if (payload.response) 
+               {
+                  this.processLoadedData(payload.response);
+               }
+               else
+               {
+                  this.processLoadedData(this.currentData);
+               }
+               this.renderView();
+            }
+
+            // This request has finished, allow another one to be triggered.
+            this.alfPublish(this.requestFinishedTopic, {});
          }
       },
 

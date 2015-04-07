@@ -23,6 +23,17 @@ model.jsonModel = {
             description: "This page provides links to all the Aikau unit test pages.",
             widgets: [
                {
+                  id: "TEXTBOX",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     fieldId: "FILTER",
+                     name: "filter",
+                     placeHolder: "Filter by name",
+                     label: "Filter results",
+                     description: "Enter a value that the name must contain"
+                  }
+               },
+               {
                  name: "alfresco/lists/Paginator",
                  config: {
                    documentsPerPage: 25
@@ -31,6 +42,12 @@ model.jsonModel = {
                {
                   name: "alfresco/lists/AlfSortablePaginatedList",
                   config: {
+                     useHash: true,
+                     hashVarsForUpdate: [
+                        "currentPage",
+                        "currentPageSize"
+                     ],
+                     filteringTopics: ["_valueChangeOf_FILTER"],
                      loadDataPublishTopic: "ALF_CRUD_GET_ALL",
                      loadDataPublishPayload: {
                        url: "unitTestList",
