@@ -1,4 +1,6 @@
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/forms.lib.js">
+<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/droppedItemWidgets.lib.js">
+<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/LayoutModel.lib.js">
 
 model.jsonModel = {
    services: [
@@ -17,7 +19,10 @@ model.jsonModel = {
          name: "alfresco/services/DragAndDropModellingService",
          config: {
             models: [
-               getDefaultFormControlModel()
+               getDefaultFormControlModel(),
+               getDefaultDroppedItemWidgetsModel(),
+               getDefaultDroppedNestingItemWrapperModel(),
+               getDefaultLayoutModelModel()
             ]
          }
       },
@@ -91,6 +96,39 @@ model.jsonModel = {
                                                    label: "No Label",
                                                    description: "No description",
                                                    value: ""
+                                                }
+                                             }
+                                          },
+                                          {
+                                             type: [ "widget" ],
+                                             label: "Nested item wrapper",
+                                             value: {
+                                                name: "alfresco/dnd/DroppedNestingItemWrapper",
+                                                config: {
+                                                   label: "{label}",
+                                                   value: "{value}",
+                                                   widgets: "{widgets}"
+                                                }
+                                             }
+                                          },
+                                          {
+                                             type: [ "widget" ],
+                                             label: "Drop Target",
+                                             value: {
+                                                name: "alfresco/dnd/DragAndDropTarget",
+                                                config: {
+                                                   useModellingService: true,
+                                                   label: "Widgets",
+                                                   targetProperty: "config.widgets"
+                                                }
+                                             }
+                                          },
+                                          {
+                                             type: [ "widget" ],
+                                             label: "Layout",
+                                             value: {
+                                                name: "alfresco/layout/HorizontalWidgets",
+                                                config: {
                                                 }
                                              }
                                           }
@@ -232,7 +270,7 @@ model.jsonModel = {
                                              id: "WIDGETS_FOR_DISPLAY",
                                              name: "alfresco/forms/controls/DragAndDropTargetControl",
                                              config: {
-                                                label: "Display",
+                                                label: "Configuration to display dropped items",
                                                 description: "The widgets that will represent the item when it is dropped onto the page.",
                                                 name: "widgetsForDisplay",
                                                 value: null,

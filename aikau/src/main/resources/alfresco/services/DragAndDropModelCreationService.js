@@ -155,8 +155,9 @@ define(["dojo/_base/declare",
 
          // Make sure that name is first...
          // NOTE: This is probably going to be quite brittle
-         var re2 = /(config: {(.|\n)*?}),\n(.*)(\s)(name:\s"([^"]*)")/g;
-         content = content.replace(re2, "$5,\n$3 $1"); 
+         // CURRENTLY COMMENTED OUT BECAUSE NOT WORKING FOR NESTED ITEMS
+         // var re2 = /(config: {(.|\n)*?}),\n(.*)(\s)(name:\s"([^"]*)")/g;
+         // content = content.replace(re2, "$5,\n$3 $1"); 
          return content;
       },
 
