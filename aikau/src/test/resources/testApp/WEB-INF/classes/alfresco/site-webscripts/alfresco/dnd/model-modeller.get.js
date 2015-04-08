@@ -1,6 +1,5 @@
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/forms.lib.js">
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/droppedItemWidgets.lib.js">
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/LayoutModel.lib.js">
 
 model.jsonModel = {
    services: [
@@ -21,8 +20,7 @@ model.jsonModel = {
             models: [
                getDefaultFormControlModel(),
                getDefaultDroppedItemWidgetsModel(),
-               getDefaultDroppedNestingItemWrapperModel(),
-               getDefaultLayoutModelModel()
+               getDefaultDroppedNestingItemWrapperModel()
             ]
          }
       },
@@ -120,15 +118,6 @@ model.jsonModel = {
                                                    useModellingService: true,
                                                    label: "Widgets",
                                                    targetProperty: "config.widgets"
-                                                }
-                                             }
-                                          },
-                                          {
-                                             type: [ "widget" ],
-                                             label: "Layout",
-                                             value: {
-                                                name: "alfresco/layout/HorizontalWidgets",
-                                                config: {
                                                 }
                                              }
                                           }
