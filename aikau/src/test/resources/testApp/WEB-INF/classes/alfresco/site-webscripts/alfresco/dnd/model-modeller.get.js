@@ -113,7 +113,7 @@ model.jsonModel = {
                                              type: [ "widget" ],
                                              label: "Drop Target",
                                              value: {
-                                                name: "alfresco/dnd/DragAndDropTarget",
+                                                name: "alfresco/dnd/DragAndDropNestedTarget",
                                                 config: {
                                                    useModellingService: true,
                                                    label: "Widgets",

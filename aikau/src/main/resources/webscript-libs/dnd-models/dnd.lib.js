@@ -227,7 +227,7 @@ function getDragAndDropTargetDisplay() {
             value: "{value}",
             widgets: [
                {
-                  name: "alfresco/dnd/DragAndDropTarget",
+                  name: "alfresco/dnd/DragAndDropNestedTarget",
                   config: {
                      useModellingService: true,
                      label: "Targets",
@@ -243,7 +243,7 @@ function getDragAndDropTargetDisplay() {
 function getDefaultDragAndDropTargetModel() {
    return {
       property: "name",
-      targetValues: ["alfresco/dnd/DragAndDropTarget"],
+      targetValues: ["alfresco/dnd/DragAndDropNestedTarget"],
       widgetsForConfig: getDragAndDropTargetConfig(),
       widgetsForNestedConfig: getDragAndDropTargetNestedConfig(),
       widgetsForDisplay: getDragAndDropTargetDisplay()
