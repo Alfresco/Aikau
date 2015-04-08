@@ -29,6 +29,7 @@ model.jsonModel = {
                optionsConfig: {
                   queryAttribute: "name",
                   valueAttribute: "nodeRef",
+                  labelAttribute: "name",
                   publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",
                   publishPayload: {
                      resultsProperty: "response.data.items"

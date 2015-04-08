@@ -11,7 +11,7 @@
    }
    &__choice {
       background: #eee linear-gradient(to bottom, #fff, #eee);
-      border: 1px solid #333;
+      border: 1px solid #666;
       border-radius: 3px;
       cursor: default;
       display: inline-block;
@@ -19,16 +19,35 @@
       margin: 0 5px 5px 0;
       padding: 0 0 0 5px;
       position: relative;
-      &__label {
+      &__content {
          color: #333;
       }
       &__close-button {
-         color: #666;
+         color: #aaa;
          cursor: pointer;
          display: inline-block;
          font-family: @bold-font;
          font-weight: 700;
-         padding: 0 10px 0 5px;
+         margin: 0 0 0 3px;
+         padding: 0 6px 0 3px;
+         &:hover {
+            color: #666;
+         }
+      }
+      &--selected {
+         background: #06a linear-gradient(to bottom, #08c, #06a);
+         border-color: #039;
+         .alfresco-forms-controls-MultiSelect__choice {
+            &__content {
+               color: #fff;
+            }
+            &__close-button {
+               color: #cef;
+               &:hover {
+                  color: #fff;
+               }
+            }
+         }
       }
    }
    &__off-screen-search {
@@ -45,6 +64,7 @@
       color: #000;
       display: inline-block;
       font-size: 14px;
+      line-height: 22px;
       margin: 0 0 5px 0;
       max-width: 100%;
       padding: 0;
@@ -65,35 +85,52 @@
       position: absolute;
       right: -1px;
       top: 100%;
+      > * {
+         border: solid #666;
+         border-width: 1px 1px 0;
+         font-size: 14px;
+         margin: 0;
+         overflow: hidden;
+         padding: 5px 0 5px 5px;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+      }
    }
-   &__results-loading, &__results-error {
+   &__result-loading, &__result-error, &__result-empty {
+      border-width: 1px;
       display: none;
    }
-   &__results-error {
+   &__result-empty {
+      color: #999;
+   }
+   &__result-error {
       color: #c00;
       font-family: @bold-font;
       font-weight: 700;
+      white-space: normal;
    }
-   &__results-loading, &__results-error, &__result {
-      border: solid #666;
-      border-width: 0 1px;
-      font-size: 14px;
-      margin: 0;
-      overflow: hidden;
-      padding: 5px 0 5px 5px;
-      text-overflow: ellipsis;
+   &__result {
+      border-top-color: #ccc;
+      cursor: pointer;
+      &__highlighted-label {
+         font-family: @bold-font;
+         font-weight: 700;
+         text-decoration: underline;
+      }
       &:first-child {
-         border-top-width: 1px;
+         border-top-color: #666;
       }
       &:last-child {
          border-bottom-width: 1px;
       }
-      &--chosen {
-         color: #ccc;
-      }
       &--focused {
          background: #06a;
          color: #fff;
+      }
+      &--already-chosen {
+         background: #fff;
+         color: #ccc;
+         cursor: default;
       }
    }
    &--focused {
@@ -111,7 +148,7 @@
       border-color: #c00;
       outline: 1px solid #faa;
       .alfresco-forms-controls-MultiSelect {
-         &__results-error {
+         &__result-error {
             border-color: #c00;
             display: block;
          }
@@ -119,7 +156,14 @@
    }
    &--show-loading {
       .alfresco-forms-controls-MultiSelect {
-         &__results-loading {
+         &__result-loading {
+            display: block;
+         }
+      }
+   }
+   &--show-empty {
+      .alfresco-forms-controls-MultiSelect {
+         &__result-empty {
             display: block;
          }
       }

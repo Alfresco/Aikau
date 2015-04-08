@@ -26,6 +26,7 @@
 define([
       "dijit/_TemplatedMixin",
       "dijit/_WidgetBase",
+      "dojo/_base/array",
       "dojo/_base/declare",
       "dojo/_base/lang",
       "dojo/Deferred",
@@ -34,9 +35,11 @@ define([
       "dojo/dom-class",
       "dojo/keys",
       "dojo/on",
+      "dojo/query",
+      "dojo/when",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(_TemplatedMixin, _WidgetBase, declare, lang, Deferred, domConstruct, domStyle, domClass, keys, on, template) {
+   function(_TemplatedMixin, _WidgetBase, array, declare, lang, Deferred, domConstruct, domStyle, domClass, keys, on, query, when, template) {
 
       return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -77,6 +80,13 @@ define([
          _currentSearchValue: "",
 
          /**
+          * Listener handles by choice (for removing)
+          *
+          * @type {object}
+          */
+         _choiceListeners: null,
+
+         /**
           * The index of the latest search request
           *
           * @type {number}
@@ -84,18 +94,33 @@ define([
          _latestSearchRequestIndex: 0,
 
          /**
+          * How long a query can run (ms) before a loading message is displayed
+          *
+          * @type {number}
+          */
+         _loadingMessageTimeoutMs: 250,
+
+         /**
           * Timeout used to debounce new search requests
           *
           * @type {number}
           */
-         _newSearchTimeout: 0,
+         _newSearchTimeoutPointer: 0,
 
          /**
           * A cache of the last search value
           *
           * @type {string}
           */
-         _prevSearchValue: null,
+         _prevSearchValue: "",
+
+         /**
+          * Collection of listeners for the results dropdown to help track and
+          * remove them when no longer needed
+          *
+          * @type {object[]}
+          */
+         _resultListeners: null,
 
          /**
           * The number of milliseconds to debounce search requests, i.e. the pause
@@ -103,28 +128,22 @@ define([
           *
           * @type {number}
           */
-         _searchDebounceMs: 250,
+         _searchDebounceMs: 100,
 
          /**
-          * TEMPORARY - Override of proper functionality for development purposes
+          * A timeout to ensure the loading message does not display if the results
+          * come back super-quick
           *
-          * @override
-          * @instance
-          * @returns  {object} A dojo/promise/Promise object
+          * @type {number}
           */
-         alfPublishToPromise: function() {
-            console.log("alfPublishToPromise...");
-            var deferred = new Deferred();
-            setTimeout(function() {
-               // deferred.resolve({
-               //    aloha: "Hi there"
-               // });
-               deferred.reject({
-                  message: "An expected error occurred - \"Wibble!\""
-               });
-            }, 1000);
-            return deferred.promise;
-         },
+         _showLoadingTimeoutPointer: 0,
+
+         /**
+          * The attribute name against which to store the value of an item in the HTML
+          *
+          * @type {string}
+          */
+         _valueAttribute: "data-aikau-value",
 
          /**
           * Widget template has been turned into a DOM
@@ -144,6 +163,8 @@ define([
           * @instance
           */
          constructor: function alfresco_forms_controls_MultiSelect__constructor() {
+            this._choiceListeners = {};
+            this._resultListeners = [];
             window.alfMs = this;
          },
 
@@ -171,14 +192,131 @@ define([
          },
 
          /**
+          * Get the value of the control
+          *
+          * @instance
+          * @returns {string[]} The value(s) of the control
+          */
+         getValue: function alfresco_forms_controls_MultiSelect__setValue() {
+            /*jshint unused:false,devel:true*/
+            console.error("Attempt to call MultiSelect.getValue() but not yet implemented");
+         },
+
+         /**
           * Set the value of the control
           *
           * @instance
           * @param    {string[]} newValues The new values
           */
          setValue: function alfresco_forms_controls_MultiSelect__setValue(newValue) {
-            /*jshint unused:false*/
-            // NOOP
+            /*jshint unused:false,devel:true*/
+            console.error("Attempt to call MultiSelect.setValue() but not yet implemented");
+         },
+
+         /**
+          * Add the specified result item to the choices
+          *
+          * @instance
+          * @protected
+          * @param    {object} chosenResultItem The result item to add
+          */
+         _addChoice: function(chosenResultItem) {
+            var label = chosenResultItem.textContent || chosenResultItem.innerText,
+               value = chosenResultItem.getAttribute(this._valueAttribute),
+               choiceClass = this.rootClass + "__choice",
+               choiceNode = domConstruct.create("div", {
+                  className: choiceClass
+               }, this.searchBox, "before"),
+               contentNode = domConstruct.create("span", {
+                  className: choiceClass + "__content"
+               }, choiceNode),
+               closeButton = domConstruct.create("a", {
+                  className: choiceClass + "__close-button",
+                  innerHTML: "x"
+               }, choiceNode),
+               selectListener = on(choiceNode, "click", lang.hitch(this, function(evt) {
+                  this._selectChoice(choiceNode);
+                  evt.preventDefault();
+                  evt.stopPropagation();
+               })),
+               closeListener = on(closeButton, "click", function(evt) {
+                  domConstruct.destroy(choiceNode);
+                  selectListener.remove();
+                  closeListener.remove();
+                  evt.stopPropagation();
+               });
+            contentNode.setAttribute(this._valueAttribute, value);
+            contentNode.appendChild(document.createTextNode(label));
+            this.own(selectListener, closeListener);
+         },
+
+         /**
+          * Helper function, with an API consistent with being called by array.forEach(), which
+          * will add result items to the results dropdown and create associated listeners
+          *
+          * @instance
+          * @protected
+          * @param    {object} nextResult The next item from the search results
+          * @param    {number} itemIndex The index of this item in the results collection
+          */
+         _addResultItem: function alfresco_forms_controls_MultiSelect___addResultItem(nextResult) {
+            var label = nextResult[this.store.labelAttribute],
+               value = nextResult[this.store.valueAttribute],
+               resultListItem = domConstruct.create("li", {
+                  "className": this.rootClass + "__result"
+               }, this.resultsDropdown),
+               labelParts = label.split(this._currentSearchValue),
+               clickListener,
+               mouseoverListener;
+            resultListItem.setAttribute(this._valueAttribute, value);
+            array.forEach(labelParts, function(labelPart, partIndex) {
+               var highlightSpan;
+               if (partIndex) {
+                  highlightSpan = domConstruct.create("span", {
+                     className: this.rootClass + "__result__highlighted-label"
+                  }, resultListItem);
+                  highlightSpan.appendChild(document.createTextNode(this._currentSearchValue));
+               }
+               resultListItem.appendChild(document.createTextNode(labelPart));
+            }, this);
+            clickListener = on(resultListItem, "mousedown", lang.hitch(this, this._chooseItem));
+            mouseoverListener = on(resultListItem, "mouseover", lang.hitch(this, function() {
+               array.forEach(this._getResultItemNodes(), function(nextItemNode) {
+                  domClass[nextItemNode === resultListItem ? "add" : "remove"](nextItemNode, this.rootClass + "__result--focused");
+               }, this);
+            }));
+            this._resultListeners.push(clickListener, mouseoverListener);
+            this.own(clickListener, mouseoverListener);
+         },
+
+         /**
+          * Choose the specified item node
+          *
+          * @instance
+          * @protected
+          */
+         _chooseItem: function() {
+
+            // Get the chosen item
+            var focusedClass = this.rootClass + "__result--focused",
+               alreadyChosenClass = this.rootClass + "__result--already-chosen",
+               chosenResultItem;
+            array.some(this._getResultItemNodes(), function(nextItem) {
+               if (domClass.contains(nextItem, focusedClass) && !domClass.contains(nextItem, alreadyChosenClass)) {
+                  chosenResultItem = nextItem;
+               }
+               return !!chosenResultItem;
+            });
+
+            // If there is no chosen item, do nothing
+            if (!chosenResultItem) {
+               return;
+            }
+
+            // Choose the item and update the control
+            this._addChoice(chosenResultItem);
+            this._updateChoicesInResultsList();
+            this._gotoNextResult();
          },
 
          /**
@@ -190,10 +328,158 @@ define([
           * @param    {string} searchString The search string to use
           */
          _debounceNewSearch: function alfresco_forms_controls_MultiSelect___debounceNewSeach(searchString) {
-            clearTimeout(this._newSearchTimeout);
-            this._newSearchTimeout = setTimeout(lang.hitch(this, function() {
+            clearTimeout(this._newSearchTimeoutPointer);
+            this._newSearchTimeoutPointer = setTimeout(lang.hitch(this, function() {
                this._startSearch(searchString);
             }), this._searchDebounceMs);
+         },
+
+         /**
+          * Deselect all choices
+          *
+          * @instance
+          * @protected
+          */
+         _deselectAllChoices: function() {
+            query("." + this.rootClass + "__choice").forEach(function(nextChoice) {
+               domClass.remove(nextChoice, this.rootClass + "__choice--selected");
+            }, this);
+         },
+
+         /**
+          * Empty the results dropdown
+          *
+          * @instance
+          * @protected
+          */
+         _emptyResults: function alfresco_forms_controls_MultiSelect___emptyResults() {
+            var resultListener;
+            while ((resultListener = this._resultListeners.pop())) {
+               resultListener.remove();
+            }
+            while (this.errorItem.nextSibling) { // "empty message" item and all preceding will remain
+               this.resultsDropdown.removeChild(this.resultsDropdown.lastChild);
+            }
+         },
+
+         /**
+          * Get the choices, as an array of objects with "node", "label" and "value" properties
+          *
+          * @instance
+          * @protected
+          * @returns  {object[]} The choices
+          */
+         _getChoices: function alfresco_forms_controls_MultiSelect___getChoices() {
+            var choices = [];
+            query(".alfresco-forms-controls-MultiSelect__choice__content").forEach(function(choiceContentNode) {
+               choices.push({
+                  node: choiceContentNode.parentNode,
+                  label: choiceContentNode.textContent || choiceContentNode.innerText,
+                  value: choiceContentNode.getAttribute(this._valueAttribute)
+               });
+            }, this);
+            return choices;
+         },
+
+         /**
+          * Get the cursor position within the search box
+          * NOTE: Uses code derived from http://javascript.nwbox.com/cursor_position
+          *
+          * @instance
+          * @protected
+          * @returns  {number} The cursor position (zero-indexed)
+          */
+         _getCursorPosition: function alfresco_forms_controls_MultiSelect___getCursorPosition() {
+            var cursorPos = 0,
+               range;
+            if (this.searchBox.createTextRange) {
+               range = document.selection.createRange().duplicate();
+               range.moveEnd("character", this.searchBox.value.length);
+               if (!range.text) {
+                  cursorPos = this.searchBox.value.length;
+               } else {
+                  cursorPos = this.searchBox.value.lastIndexOf(range.text);
+               }
+            } else {
+               cursorPos = this.searchBox.selectionStart;
+            }
+            return cursorPos;
+         },
+
+         /**
+          * Get the currently selected choice (or null if one isn't selected).
+          *
+          * @instance
+          * @protected
+          * @returns  {object} The currently selected choice (node)
+          */
+         _getSelectedChoice: function alfresco_forms_controls_MultiSelect___getSelectedChoice() {
+            var selectedChoice = null;
+            query("." + this.rootClass + "__choice").some(function(nextChoice) {
+               if (domClass.contains(nextChoice, this.rootClass + "__choice--selected")) {
+                  selectedChoice = nextChoice;
+               }
+               return !!selectedChoice;
+            }, this);
+            return selectedChoice;
+         },
+
+         /**
+          * Get the result-item nodes as an array (only if the dropdown is open)
+          *
+          * @instance
+          * @protected
+          * @returns  {[object]} Item nodes
+          */
+         _getResultItemNodes: function alfresco_forms_controls_MultiSelect___getResultItemNodes() {
+            var itemNodes = [];
+            query("." + this.rootClass + "__result", this.domNode).forEach(function(nextItem) {
+               itemNodes.push(nextItem);
+            });
+            return itemNodes;
+         },
+
+         /**
+          * Go to the next result in the dropdown, or the first one if none selected (ignores already-chosen items)
+          *
+          * @instance
+          * @protected
+          * @param {boolean} reverseCommand If true then go to previous item instead
+          */
+         _gotoNextResult: function alfresco_forms_controls_MultiSelect___gotoNextResult(reverseCommand) {
+            var resultItems = this._getResultItemNodes(),
+               focusedClass = this.rootClass + "__result--focused",
+               alreadyChosenClass = this.rootClass + "__result--already-chosen",
+               focusNextItem = false,
+               focusedItem,
+               itemToGainFocus;
+            if (reverseCommand) {
+               resultItems.reverse();
+            }
+            array.some(resultItems, function(nextItem) {
+               if (domClass.contains(nextItem, focusedClass) && !domClass.contains(nextItem, alreadyChosenClass)) {
+                  focusedItem = nextItem;
+               }
+               return !!focusedItem;
+            });
+            resultItems.forEach(function(nextItem) {
+               if (!itemToGainFocus) {
+                  var itemIsChosen = domClass.contains(nextItem, alreadyChosenClass),
+                     itemIsFocused = domClass.contains(nextItem, focusedClass),
+                     itemIsValid = !itemIsChosen && (!focusedItem || focusNextItem);
+                  if (itemIsValid) {
+                     itemToGainFocus = nextItem;
+                  } else if (itemIsFocused) {
+                     focusNextItem = true;
+                  }
+               }
+               domClass.remove(nextItem, focusedClass);
+            });
+            if (itemToGainFocus) {
+               domClass.add(itemToGainFocus, focusedClass);
+            } else if (focusedItem) {
+               domClass.add(focusedItem, focusedClass);
+            }
          },
 
          /**
@@ -204,8 +490,15 @@ define([
           * @param    {object} err The error object
           */
          _handleSearchFailure: function alfresco_forms_controls_MultiSelect___handleSearchFailure(err) {
-            this._hideLoading();
-            this._showError(err.message);
+
+            // Remove old results
+            this._emptyResults();
+
+            // Hide loading and show error
+            this._hideLoadingMessage();
+            this._showErrorMessage(err.message);
+
+            // Log full error details
             this.alfLog("error", "Error occurred during search: ", err);
          },
 
@@ -214,32 +507,50 @@ define([
           *
           * @instance
           * @protected
-          * @param    {object} response The response
+          * @param    {object} responseItems The response items
           */
-         _handleSearchSuccess: function alfresco_forms_controls_MultiSelect___handleSearchSuccess(response) {
-            this._hideLoading();
-            console.warn("Response received from search service: ", response);
+         _handleSearchSuccess: function alfresco_forms_controls_MultiSelect___handleSearchSuccess(responseItems) {
+            this._hideLoadingMessage();
+            this._emptyResults();
+            if (!responseItems.length) {
+               this._showEmptyMessage();
+            } else {
+               array.forEach(responseItems, this._addResultItem, this);
+               this._updateChoicesInResultsList();
+               this._gotoNextResult();
+            }
+            this._showResultsDropdown();
          },
 
          /**
-          * Hide the error dropdown
+          * Hide the empty message in the dropdown
           *
           * @instance
           * @protected
           */
-         _hideError: function alfresco_forms_controls_MultiSelect___hideError() {
+         _hideEmptyMessage: function alfresco_forms_controls_MultiSelect___hideEmptyMessage() {
+            domClass.remove(this.domNode, this.rootClass + "--show-empty");
+         },
+
+         /**
+          * Hide the error message in the dropdown
+          *
+          * @instance
+          * @protected
+          */
+         _hideErrorMessage: function alfresco_forms_controls_MultiSelect___hideError() {
             domClass.remove(this.domNode, this.rootClass + "--show-error");
          },
 
          /**
-          * Hide the loading dropdown
+          * Hide the loading message in the dropdown
           *
           * @instance
           * @protected
           */
-         _hideLoading: function alfresco_forms_controls_MultiSelect___hideLoading() {
+         _hideLoadingMessage: function alfresco_forms_controls_MultiSelect___hideLoading() {
             domClass.remove(this.domNode, this.rootClass + "--show-loading");
-
+            clearTimeout(this._showLoadingTimeoutPointer);
          },
 
          /**
@@ -250,8 +561,8 @@ define([
           */
          _hideResultsDropdown: function alfresco_forms_controls_MultiSelect___hideResults() {
             domClass.remove(this.domNode, this.rootClass + "--show-results");
-            this._hideLoading();
-            this._hideError();
+            this._hideLoadingMessage();
+            this._hideErrorMessage();
          },
 
          /**
@@ -263,6 +574,7 @@ define([
           */
          _onControlClick: function alfresco_forms_controls_MultiSelect___onControlClick(evt) {
             var controlIsFocused = domClass.contains(this.domNode, this.rootClass + "--focused");
+            this._deselectAllChoices();
             if (evt.target !== this.searchBox && !controlIsFocused) {
                this.searchBox.focus();
             }
@@ -294,7 +606,7 @@ define([
             this._prevSearchValue = this._currentSearchValue;
             this._currentSearchValue = newValue;
 
-            // Update searchbox size
+            // Update searchBox size
             this.offScreenSearch.innerHTML = newValue;
             var contentWidth = this.offScreenSearch.offsetWidth;
             domStyle.set(this.searchBox, "width", (contentWidth + 20) + "px");
@@ -313,7 +625,13 @@ define([
          _onSearchFocus: function alfresco_forms_controls_MultiSelect___onSearchFocus(evt) {
             /*jshint unused:false*/
             domClass.add(this.domNode, this.rootClass + "--focused");
-            this._showResults();
+            var existingResults = query("." + this.rootClass + "__result", this.domNode);
+            if (existingResults.length) {
+               this._showResultsDropdown();
+               this._gotoNextResult();
+            } else {
+               this._startSearch(this.searchBox.value);
+            }
          },
 
          /**
@@ -324,13 +642,39 @@ define([
           * @param {object} evt Dojo-normalised event object
           */
          _onSearchKeypress: function alfresco_forms_controls_MultiSelect___onSearchKeypress(evt) {
+            var cursorPosBeforeKeypress = this._getCursorPosition();
             switch (evt.charOrCode) {
                case keys.ESCAPE:
                   this._resetSearchBox();
                   this._hideResultsDropdown();
+                  evt.preventDefault();
+                  evt.stopPropagation();
+                  break;
+               case keys.ENTER:
+                  if (this._resultsDropdownIsVisible()) {
+                     this._chooseItem();
+                     evt.preventDefault();
+                     evt.stopPropagation();
+                  }
                   break;
                case keys.DOWN_ARROW:
-                  this._showResults();
+                  if (this._resultsDropdownIsVisible()) {
+                     this._gotoNextResult();
+                  } else {
+                     this._showResultsDropdown();
+                  }
+                  evt.preventDefault();
+                  break;
+               case keys.UP_ARROW:
+                  if (this._resultsDropdownIsVisible()) {
+                     this._gotoNextResult(true);
+                  }
+                  evt.preventDefault();
+                  break;
+               case keys.LEFT_ARROW:
+                  if (!cursorPosBeforeKeypress) {
+                     this._selectChoice(-1);
+                  }
                   break;
                default:
                   // Allow to continue
@@ -374,15 +718,59 @@ define([
          },
 
          /**
-          * Show the error dropdown
+          * Test whether the results dropdown is currently visible
+          *
+          * @instance
+          * @returns  {boolean} The results dropdown's visibility
+          */
+         _resultsDropdownIsVisible: function alfresco_forms_controls_MultiSelect___resultsDropdownIsVisible() {
+            return domClass.contains(this.domNode, this.rootClass + "--show-results");
+         },
+
+         /**
+          * Select the specified choice
+          *
+          * @instance
+          * @protected
+          * @param    {object|number} choice The choice to select or the adjustment offset
+          */
+         _selectChoice: function(choice) {
+            var currentlySelectedChoice = this._getSelectedChoice();
+            this._deselectAllChoices();
+            if (isNaN(choice)) {
+               domClass.add(choice, this.rootClass + "__choice--selected");
+            } else {
+               // Wibble
+            }
+         },
+
+         /**
+          * Show the empty message in the dropdown
+          *
+          * @instance
+          * @protected
+          */
+         _showEmptyMessage: function alfresco_forms_controls_MultiSelect___showEmptyMessage() {
+            while (this.noResultSearchTerm.hasChildNodes()) {
+               this.noResultSearchTerm.removeChild(this.noResultSearchTerm.firstChild);
+            }
+            this.noResultSearchTerm.appendChild(document.createTextNode(this._currentSearchValue));
+            domClass.add(this.domNode, this.rootClass + "--show-empty");
+            this._hideErrorMessage();
+            this._hideLoadingMessage();
+            this._showResultsDropdown();
+         },
+
+         /**
+          * Show the error message in the dropdown
           *
           * @instance
           * @protected
           * @param {string} message The error message to be shown
           */
-         _showError: function alfresco_forms_controls_MultiSelect___showError(message) {
+         _showErrorMessage: function alfresco_forms_controls_MultiSelect___showError(message) {
 
-            // Remove old message and insert new one (safely!)
+            // Remove old message and insert new one
             while (this.errorItem.hasChildNodes()) {
                this.errorItem.removeChild(this.errorItem.firstChild);
             }
@@ -390,20 +778,22 @@ define([
 
             // Show the error (and hide any loading indicator)
             domClass.add(this.domNode, this.rootClass + "--show-error");
-            this._hideLoading();
-            this._showResults();
+            this._hideEmptyMessage();
+            this._hideLoadingMessage();
+            this._showResultsDropdown();
          },
 
          /**
-          * Show the loading dropdown
+          * Show the loading message in the dropdown
           *
           * @instance
           * @protected
           */
-         _showLoading: function alfresco_forms_controls_MultiSelect___showLoading() {
+         _showLoadingMessage: function alfresco_forms_controls_MultiSelect___showLoading() {
             domClass.add(this.domNode, this.rootClass + "--show-loading");
-            this._hideError();
-            this._showResults();
+            this._hideEmptyMessage();
+            this._hideErrorMessage();
+            this._showResultsDropdown();
          },
 
          /**
@@ -412,7 +802,7 @@ define([
           * @instance
           * @protected
           */
-         _showResults: function alfresco_forms_controls_MultiSelect___showResults() {
+         _showResultsDropdown: function alfresco_forms_controls_MultiSelect___showResults() {
             domClass.add(this.domNode, this.rootClass + "--show-results");
          },
 
@@ -424,7 +814,14 @@ define([
           * @param    {string} searchString The string to search on
           */
          _startSearch: function alfresco_forms_controls_MultiSelect___startSearch(searchString) {
-            /*jshint unused:false*/
+
+            // Hide existing result items
+            this._hideLoadingMessage();
+            this._hideErrorMessage();
+            this._hideEmptyMessage();
+            this._emptyResults();
+
+            // Setup handlers and update request "counter"
             var thisRequestIndex = this._latestSearchRequestIndex = this._latestSearchRequestIndex + 1,
                successHandler = lang.hitch(this, function(response) {
                   if (thisRequestIndex === this._latestSearchRequestIndex) {
@@ -435,13 +832,32 @@ define([
                   if (thisRequestIndex === this._latestSearchRequestIndex) {
                      this._handleSearchFailure(err);
                   }
-               });
-            if (searchString) {
-               this._showLoading();
-               this.alfPublishToPromise().then(successHandler, failureHandler);
-            } else {
-               this._hideResultsDropdown();
-            }
+               }),
+               queryObj = {};
+
+            // Make the query
+            queryObj[this.store.queryAttribute] = searchString;
+            this._showLoadingTimeoutPointer = setTimeout(lang.hitch(this, this._showLoadingMessage), this._loadingMessageTimeoutMs);
+            when(this.store.query(queryObj), successHandler, failureHandler);
+         },
+
+         /**
+          * Update the results list, specifically to update the choices within it
+          *
+          * @instance
+          * @protected
+          */
+         _updateChoicesInResultsList: function alfresco_forms_controls_MultiSelect___updateChoicesInResultsList() {
+            var resultItemNodes = this._getResultItemNodes(),
+               choices = this._getChoices();
+            array.forEach(resultItemNodes, function(nextResultItem) {
+               var resultLabel = nextResultItem.textContent || nextResultItem.innerText,
+                  resultValue = nextResultItem.getAttribute(this._valueAttribute),
+                  itemIsChosen = array.some(choices, function(nextChoice) {
+                     return (resultLabel === nextChoice.label && resultValue === nextChoice.value);
+                  });
+               domClass[itemIsChosen ? "add" : "remove"](nextResultItem, this.rootClass + "__result--already-chosen");
+            }, this);
          }
       });
    }
