@@ -1,5 +1,5 @@
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/forms.lib.js">
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/droppedItemWidgets.lib.js">
+<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/dnd.lib.js">
 
 model.jsonModel = {
    services: [
@@ -19,7 +19,7 @@ model.jsonModel = {
          config: {
             models: [
                getDefaultFormControlModel(),
-               getDefaultDroppedItemWidgetsModel(),
+               getDefaultDragAndDropTargetModel(),
                getDefaultDroppedNestingItemWrapperModel()
             ]
          }

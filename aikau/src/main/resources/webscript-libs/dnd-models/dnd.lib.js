@@ -124,7 +124,7 @@ function getDefaultDroppedNestingItemWrapperModel() {
    };
 }
 
-function getDroppedItemWidgetsConfig() {
+function getDragAndDropTargetConfig() {
    return [
       {
          config: {
@@ -213,11 +213,11 @@ function getDroppedItemWidgetsConfig() {
    ];
 }
 
-function getDroppedItemWidgetsNestedConfig() {
+function getDragAndDropTargetNestedConfig() {
    return [];
 }
 
-function getDroppedItemWidgetsDisplay() {
+function getDragAndDropTargetDisplay() {
    return [
       {
          name: "alfresco/dnd/DroppedNestingItemWrapper",
@@ -240,12 +240,12 @@ function getDroppedItemWidgetsDisplay() {
    ];
 }
 
-function getDefaultDroppedItemWidgetsModel() {
+function getDefaultDragAndDropTargetModel() {
    return {
       property: "name",
-      targetValues: ["alfresco/dnd/DroppedItemWidgets"],
-      widgetsForConfig: getDroppedItemWidgetsConfig(),
-      widgetsForNestedConfig: getDroppedItemWidgetsNestedConfig(),
-      widgetsForDisplay: getDroppedItemWidgetsDisplay()
+      targetValues: ["alfresco/dnd/DragAndDropTarget"],
+      widgetsForConfig: getDragAndDropTargetConfig(),
+      widgetsForNestedConfig: getDragAndDropTargetNestedConfig(),
+      widgetsForDisplay: getDragAndDropTargetDisplay()
    };
 }
