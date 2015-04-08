@@ -22,7 +22,7 @@ model.jsonModel = {
          }
       },
       "alfresco/services/DialogService",
-      "alfresco/services/FormCreationService",
+      "alfresco/services/DragAndDropModelCreationService",
       "alfresco/services/OptionsService"
    ],
    widgets: [
@@ -42,7 +42,10 @@ model.jsonModel = {
                               title: "Main Configuration Preview",
                               widgets: [
                                  {
-                                    name: "alfresco/prototyping/Preview"
+                                    name: "alfresco/prototyping/Preview",
+                                    config: {
+                                       pubSubScope: "MAIN_"
+                                    }
                                  }
                               ]
                            }
@@ -50,10 +53,13 @@ model.jsonModel = {
                         {
                            name: "alfresco/layout/ClassicWindow",
                            config: {
-                              title: "Additional Configuration Preview",
+                              title: "Nested Configuration Preview",
                               widgets: [
                                  {
-                                    name: "alfresco/prototyping/Preview"
+                                    name: "alfresco/prototyping/Preview",
+                                    config: {
+                                       pubSubScope: "NESTED_"
+                                    }
                                  }
                               ]
                            }
@@ -116,11 +122,34 @@ model.jsonModel = {
                                              config: {
                                                 fieldId: "MODEL_NAME",
                                                 label: "Model name",
-                                                description: "The name of the model that is being built.",
+                                                description: "The name of the model that is being built. This will be used to a the names of the exported files, e.g. <model name>.lib.js and <model name>.lib.properties.",
                                                 name: "modelName",
+                                                placeHolder: "Name of model...",
                                                 requirementConfig: {
                                                    initialValue: true
                                                 }
+                                             }
+                                          },
+                                          {
+                                             id: "NLS_PREFIX",
+                                             name: "alfresco/forms/controls/TextBox",
+                                             config: {
+                                                fieldId: "NLS_PREFIX",
+                                                label: "NLS Key Prefix",
+                                                description: "This is the prefix to apply to all the generated NLS keys.",
+                                                name: "nlsPrefix",
+                                                placeHolder: "Prefix...",
+                                                requirementConfig: {
+                                                   initialValue: true
+                                                },
+                                                validationConfig: [
+                                                   {
+                                                      validation: "regex",
+                                                      regex: "^[a-z]+(.[a-z]+)+$",
+                                                      errorMessage: "Please use lower-case dot-notation pattern"
+                                                   }
+                                                ]
+                                                
                                              }
                                           },
                                           {
@@ -131,6 +160,7 @@ model.jsonModel = {
                                                 label: "Property to compare",
                                                 description: "This is the (dot-notataion) property within the dropped item that should be compared against the list of matching target patterns.",
                                                 name: "property",
+                                                placeHolder: "Target property...",
                                                 requirementConfig: {
                                                    initialValue: true
                                                 }
@@ -173,11 +203,16 @@ model.jsonModel = {
                                                 name: "widgetsForConfig",
                                                 value: null,
                                                 acceptTypes: ["widget"],
-                                                useModellingService: true
+                                                useModellingService: true,
+                                                widgetsForControl: [
+                                                   {
+                                                      name: "alfresco/dnd/DragAndDropFormControlTarget"
+                                                   }
+                                                ]
                                              }
                                           },
                                           {
-                                             id: "WIDGETS_FOR_DISPLAY",
+                                             id: "WIDGETS_FOR_NESTED_CONFIG",
                                              name: "alfresco/forms/controls/DragAndDropTargetControl",
                                              config: {
                                                 label: "Configuration for nested items",
@@ -185,7 +220,12 @@ model.jsonModel = {
                                                 name: "widgetsForNestedConfig",
                                                 value: null,
                                                 acceptTypes: ["widget"],
-                                                useModellingService: true
+                                                useModellingService: true,
+                                                widgetsForControl: [
+                                                   {
+                                                      name: "alfresco/dnd/DragAndDropFormControlTarget"
+                                                   }
+                                                ]
                                              }
                                           },
                                           {
@@ -194,7 +234,7 @@ model.jsonModel = {
                                              config: {
                                                 label: "Display",
                                                 description: "The widgets that will represent the item when it is dropped onto the page.",
-                                                name: "widgetForDisplay",
+                                                name: "widgetsForDisplay",
                                                 value: null,
                                                 acceptTypes: ["widget"],
                                                 useModellingService: true
@@ -205,14 +245,14 @@ model.jsonModel = {
                                           {
                                              name: "alfresco/buttons/AlfButton",
                                              config: {
-                                                label: "Preview",
-                                                publishTopic: "ALF_GENERATE_PAGE_PREVIEW"
+                                                label: "Preview forms",
+                                                publishTopic: "ALF_PREVIEW_FORM_MODELS"
                                              }
                                           },
                                           {
                                              name: "alfresco/buttons/AlfButton",
                                              config: {
-                                                label: "WebScript Controller Export",
+                                                label: "Export library files",
                                                 publishTopic: "ALF_EXPORT_PAGE_DEFINITION",
                                                 publishGlobal: true
                                              }

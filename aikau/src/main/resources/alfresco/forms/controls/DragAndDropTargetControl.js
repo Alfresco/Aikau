@@ -30,17 +30,19 @@
  * 
  * @module alfresco/form/controls/DragAndDropTargetControl
  * @extends module:alfresco/forms/controls/BaseFormControl
+ * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/forms/controls/BaseFormControl",
+        "alfresco/core/CoreWidgetProcessing",
         "alfresco/dnd/DragAndDropTarget",
         "dojo/_base/lang",
         "dojo/on",
         "alfresco/dnd/Constants"], 
-        function(declare, BaseFormControl, DragAndDropTarget, lang, on, Constants) {
+        function(declare, BaseFormControl, CoreWidgetProcessing, DragAndDropTarget, lang, on, Constants) {
    
-   return declare([BaseFormControl], {
+   return declare([BaseFormControl, CoreWidgetProcessing], {
       
       /**
        * Indicates whether or not to use a modelling service to render the dropped items.
@@ -104,8 +106,29 @@ define(["dojo/_base/declare",
        * @param {config} config The configuration to instantiate the control with.
        */
       createFormControl: function alfresco_forms_controls_DragAndDropTargetControl__createFormControl(config, /*jshint unused:false*/ domNode) {
-         return new DragAndDropTarget(config);
+         if (this.widgetsForControl && this.widgetsForControl.length && this.widgetsForControl[0].name)
+         {
+            return this.createWidget({
+               name: this.widgetsForControl[0].name,
+               config: config
+            });
+         }
+         else
+         {
+            return new DragAndDropTarget(config);
+         }
       },
+
+      /**
+       * This can be set to be an array containing a single widget definition. The array structure is used in order
+       * for Surf dynamic-dependency analysis to include the required widget resources on the page. Only the "name"
+       * attribute of the first widget in the page will be used, other configuration will be ignored.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      widgetsForControl: null,
       
       /**
        * Overrides the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#setupChangeEvents}
