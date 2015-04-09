@@ -47,7 +47,7 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Value 1", "Item label was not localized");
-            })
+            });
       },
 
       "Test there are no dropped items on page load": function() {
@@ -82,7 +82,7 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Value 1", "Dropped item label was not localized");
-            })
+            });
       },
       
       "Test Form Value Updated After Drop": function() {

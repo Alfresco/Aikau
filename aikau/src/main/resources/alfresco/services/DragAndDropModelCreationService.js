@@ -44,8 +44,8 @@ define(["dojo/_base/declare",
        */
       constructor: function alfresco_services_DragAndDropModelCreationService__constructor(args) {
          lang.mixin(this, args);
-         this.alfSubscribe("ALF_EXPORT_PAGE_DEFINITION", lang.hitch(this, this.onFormExport));
-         this.alfSubscribe("ALF_PREVIEW_FORM_MODELS", lang.hitch(this, this.onFormPreview));
+         this.alfSubscribe("ALF_DND_EXPORT_MODEL_LIBRARY_FILES", lang.hitch(this, this.onFormExport));
+         this.alfSubscribe("ALF_DND_PREVIEW_FORM_MODELS", lang.hitch(this, this.onFormPreview));
       },
 
       /**
@@ -121,6 +121,12 @@ define(["dojo/_base/declare",
                                                 displaySuffix);
 
          this.generateDownload(payload.modelName + ".lib.js", libContent);
+
+         // NOTE: This publication is largely included for test purposes...
+         this.alfPublish("ALF_DND_MODEL_LIBRARIES", {
+            nls: nlsContent,
+            js: libContent
+         });
       },
 
       /**

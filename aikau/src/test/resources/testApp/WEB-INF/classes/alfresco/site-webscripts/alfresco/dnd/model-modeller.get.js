@@ -273,14 +273,14 @@ model.jsonModel = {
                                              name: "alfresco/buttons/AlfButton",
                                              config: {
                                                 label: "Preview forms",
-                                                publishTopic: "ALF_PREVIEW_FORM_MODELS"
+                                                publishTopic: "ALF_DND_PREVIEW_FORM_MODELS"
                                              }
                                           },
                                           {
                                              name: "alfresco/buttons/AlfButton",
                                              config: {
                                                 label: "Export library files",
-                                                publishTopic: "ALF_EXPORT_PAGE_DEFINITION",
+                                                publishTopic: "ALF_DND_EXPORT_MODEL_LIBRARY_FILES",
                                                 publishGlobal: true
                                              }
                                           }
