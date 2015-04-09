@@ -25,16 +25,17 @@
  * @author Martin Doyle
  */
 define([
+      "alfresco/core/CoreWidgetProcessing",
       "alfresco/forms/controls/BaseFormControl",
-      "alfresco/forms/controls/MultiSelect",
       "alfresco/forms/controls/utilities/IconMixin",
       "alfresco/forms/controls/utilities/UseServiceStoreMixin",
       "dojo/_base/declare",
-      "dojo/_base/lang"
+      "dojo/_base/lang",
+      "alfresco/forms/controls/MultiSelect"
    ],
-   function(BaseFormControl, MultiSelect, IconMixin, UseServiceStoreMixin, declare, lang) {
+   function(CoreWidgetProcessing, BaseFormControl, IconMixin, UseServiceStoreMixin, declare, lang) {
 
-      return declare([BaseFormControl, UseServiceStoreMixin, IconMixin], {
+      return declare([BaseFormControl, CoreWidgetProcessing, UseServiceStoreMixin, IconMixin], {
 
          /**
           * @override
@@ -62,11 +63,12 @@ define([
          createFormControl: function alfresco_forms_controls_MultiSelectInput__createFormControl(config) {
             var serviceStore = this.createServiceStore(),
                widgetConfig = lang.mixin({
-                  store: serviceStore,
-                  queryExpr: "${0}"
-               }, config),
-               multiSelect = new MultiSelect(widgetConfig);
-            return multiSelect;
+                  store: serviceStore
+               }, config);
+            return this.createWidget({
+               name: "alfresco/forms/controls/MultiSelect",
+               config: widgetConfig
+            });
          },
 
          /**

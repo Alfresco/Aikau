@@ -108,6 +108,13 @@ define([
          _newSearchTimeoutPointer: 0,
 
          /**
+          * A map of retrieved items, by value
+          *
+          * @type {object}
+          */
+         _resultItems: null,
+
+         /**
           * Collection of listeners for the results dropdown to help track and
           * remove them when no longer needed
           *
@@ -157,8 +164,8 @@ define([
           */
          constructor: function alfresco_forms_controls_MultiSelect__constructor() {
             this._choiceListeners = {};
+            this._resultItems = {};
             this._resultListeners = [];
-            window.alfMs = this;
          },
 
          /**
@@ -175,24 +182,18 @@ define([
          },
 
          /**
-          * Widget and sub-widgets have been created
-          *
-          * @override
-          * @instance
-          */
-         startup: function alfresco_forms_controls_MultiSelect__startup() {
-            this.inherited(arguments);
-         },
-
-         /**
           * Get the value of the control
           *
           * @instance
           * @returns {string[]} The value(s) of the control
           */
          getValue: function alfresco_forms_controls_MultiSelect__setValue() {
-            /*jshint unused:false,devel:true*/
-            console.error("Attempt to call MultiSelect.getValue() but not yet implemented");
+            var currentChoices = this._getChoices(),
+               values = array.map(currentChoices, function(nextChoice) {
+                  return this._resultItems[nextChoice.value];
+               }, this);
+            console.debug("getValue returning ", values);
+            return values;
          },
 
          /**
@@ -246,18 +247,19 @@ define([
           *
           * @instance
           * @protected
-          * @param    {object} nextResult The next item from the search results
+          * @param    {object} nextResultItem The next item from the search results
           * @param    {number} itemIndex The index of this item in the results collection
           */
-         _addResultItem: function alfresco_forms_controls_MultiSelect___addResultItem(nextResult) {
-            var label = nextResult[this.store.labelAttribute],
-               value = nextResult[this.store.valueAttribute],
+         _addResultItem: function alfresco_forms_controls_MultiSelect___addResultItem(nextResultItem) {
+            var label = nextResultItem[this.store.labelAttribute],
+               value = nextResultItem[this.store.valueAttribute],
                resultListItem = domConstruct.create("li", {
                   "className": this.rootClass + "__result"
                }, this.resultsDropdown),
                labelParts = label.split(this._currentSearchValue),
                clickListener,
                mouseoverListener;
+            this._resultItems[value] = nextResultItem;
             resultListItem.setAttribute(this._valueAttribute, value);
             array.forEach(labelParts, function(labelPart, partIndex) {
                var highlightSpan;
@@ -322,6 +324,21 @@ define([
             this._newSearchTimeoutPointer = setTimeout(lang.hitch(this, function() {
                this._startSearch(searchString);
             }), this._searchDebounceMs);
+         },
+
+         /**
+          * Delete the currently selected choice
+          *
+          * @instance
+          * @protected
+          */
+         _deleteSelectedChoice: function alfresco_forms_controls_MultiSelect___deleteSelectedChoice() {
+            var selectedChoice = this._getSelectedChoiceNode(),
+               choiceCloseLink = query("." + this.rootClass + "__choice__close-button", selectedChoice)[0];
+            on.emit(choiceCloseLink, "click", {
+               bubbles: true,
+               cancelable: true
+            });
          },
 
          /**
@@ -730,6 +747,13 @@ define([
                case keys.RIGHT_ARROW:
                   if (this._getSelectedChoiceNode()) {
                      this._selectChoice(1);
+                     evt.preventDefault();
+                  }
+                  break;
+               case keys.DELETE:
+               case keys.BACKSPACE:
+                  if (this._getSelectedChoiceNode()) {
+                     this._deleteSelectedChoice();
                      evt.preventDefault();
                   }
                   break;
