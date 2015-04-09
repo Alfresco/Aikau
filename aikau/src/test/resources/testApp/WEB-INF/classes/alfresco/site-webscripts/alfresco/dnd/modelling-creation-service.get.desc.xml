@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop (modelling creation service testing)</shortname>
+  <description>A page purely for testing the model creation service capabilities. This is used for testing and isn't useful for demonstrating widgets.</description>
+  <family>aikau-unit-tests</family>
+  <url>/modelling-creation-service-testing</url>
+</webscript>
