@@ -17,6 +17,11 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// TODO: Use dijit/_FocusMixin
+//       Add ARIA
+//       Remove use of query where possible
+//       Handle setValue
+
 /**
  * @module alfresco/forms/controls/MultiSelect
  * @extends external:dijit/_TemplatedMixin
@@ -24,6 +29,7 @@
  * @author Martin Doyle
  */
 define([
+      "alfresco/core/ObjectTypeUtils",
       "dijit/_TemplatedMixin",
       "dijit/_WidgetBase",
       "dojo/_base/array",
@@ -39,7 +45,8 @@ define([
       "dojo/when",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(_TemplatedMixin, _WidgetBase, array, declare, lang, Deferred, domConstruct, domStyle, domClass, keys, on, query, when, template) {
+   function(ObjectTypeUtils, _TemplatedMixin, _WidgetBase, array, declare, lang, Deferred, domConstruct, domStyle, domClass, keys, on, query, when, template) {
+      /*jshint devel:true*/
 
       return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -55,6 +62,15 @@ define([
          }],
 
          /**
+          * The root class of this widget
+          *
+          * @protected
+          * @instance
+          * @type {string}
+          */
+         rootClass: "alfresco-forms-controls-MultiSelect",
+
+         /**
           * The HTML template to use for the widget.
           *
           * @override
@@ -64,13 +80,12 @@ define([
          templateString: template,
 
          /**
-          * The root class of this widget
+          * The current value of the control
           *
-          * @protected
           * @instance
-          * @type {string}
+          * @type {object[]}
           */
-         rootClass: "alfresco-forms-controls-MultiSelect",
+         value: null,
 
          /**
           * A cache of the current search value
@@ -143,7 +158,7 @@ define([
           *
           * @type {string}
           */
-         _valueAttribute: "data-aikau-value",
+         _valueHtmlAttribute: "data-aikau-value",
 
          /**
           * Widget template has been turned into a DOM
@@ -166,6 +181,7 @@ define([
             this._choiceListeners = {};
             this._resultItems = {};
             this._resultListeners = [];
+            window.alfMs = this;
          },
 
          /**
@@ -179,6 +195,7 @@ define([
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
             this.own(on(this.searchBox, "focus", lang.hitch(this, this._onSearchFocus)));
             this.own(on(this.searchBox, "blur", lang.hitch(this, this._onSearchBlur)));
+            this.value = [];
          },
 
          /**
@@ -187,24 +204,34 @@ define([
           * @instance
           * @returns {string[]} The value(s) of the control
           */
-         getValue: function alfresco_forms_controls_MultiSelect__setValue() {
-            var currentChoices = this._getChoices(),
-               values = array.map(currentChoices, function(nextChoice) {
-                  return this._resultItems[nextChoice.value];
-               }, this);
-            console.debug("getValue returning ", values);
-            return values;
+         getValue: function alfresco_forms_controls_MultiSelect__getValue() {
+            return this.value;
          },
 
          /**
           * Set the value of the control
           *
           * @instance
-          * @param    {string[]} newValues The new values
+          * @param    {string|string[]|object|object[]} newValue The new value(s)
           */
          setValue: function alfresco_forms_controls_MultiSelect__setValue(newValue) {
-            /*jshint unused:false,devel:true*/
-            console.error("Attempt to call MultiSelect.setValue() but not yet implemented");
+
+            console.debug("setValue(", newValue, ")");
+
+            // Setup helper vars
+            var labelAttr = this.store.labelAttribute,
+               valueAttr = this.store.valueAttribute;
+            if (!ObjectTypeUtils.isArray(newValue)) {
+               newValue = [newValue];
+            }
+
+            // Create the updated-value variable
+            var updatedValue = array.map(newValue, function(nextValue) {
+               return nextValue;
+            });
+
+            // Set the new value
+            this.value = updatedValue;
          },
 
          /**
@@ -215,10 +242,17 @@ define([
           * @param    {object} chosenResultItem The result item to add
           */
          _addChoice: function alfresco_forms_controls_MultiSelect___addChoice(chosenResultItem) {
+
+            // Setup helper vars
             var label = chosenResultItem.textContent || chosenResultItem.innerText,
-               value = chosenResultItem.getAttribute(this._valueAttribute),
-               choiceClass = this.rootClass + "__choice",
-               choiceNode = domConstruct.create("div", {
+               value = chosenResultItem.getAttribute(this._valueHtmlAttribute),
+               choiceClass = this.rootClass + "__choice";
+
+            // Add to the control's value property
+            this._changeAttrValue("value", this.value.concat(this._resultItems[value]));
+
+            // Construct and attach the DOM nodes
+            var choiceNode = domConstruct.create("div", {
                   className: choiceClass
                }, this.searchBox, "before"),
                contentNode = domConstruct.create("span", {
@@ -227,18 +261,24 @@ define([
                closeButton = domConstruct.create("a", {
                   className: choiceClass + "__close-button",
                   innerHTML: "x"
-               }, choiceNode),
-               choiceObject = {},
+               }, choiceNode);
+
+            // Setup the listeners
+            var choiceObject = {},
                selectListener = on(choiceNode, "click", lang.hitch(this, this._onChoiceClick, choiceObject)),
                closeListener = on(closeButton, "click", lang.hitch(this, this._onChoiceCloseClick, choiceObject));
+            this.own(selectListener, closeListener);
             lang.mixin(choiceObject, {
                node: choiceNode,
                selectListener: selectListener,
-               closeListener: closeListener
+               closeListener: closeListener,
+               label: label,
+               value: value
             });
-            contentNode.setAttribute(this._valueAttribute, value);
+
+            // Add the label and value
+            contentNode.setAttribute(this._valueHtmlAttribute, value);
             contentNode.appendChild(document.createTextNode(label));
-            this.own(selectListener, closeListener);
          },
 
          /**
@@ -260,7 +300,7 @@ define([
                clickListener,
                mouseoverListener;
             this._resultItems[value] = nextResultItem;
-            resultListItem.setAttribute(this._valueAttribute, value);
+            resultListItem.setAttribute(this._valueHtmlAttribute, value);
             array.forEach(labelParts, function(labelPart, partIndex) {
                var highlightSpan;
                if (partIndex) {
@@ -382,7 +422,7 @@ define([
                choices.push({
                   node: choiceContentNode.parentNode,
                   label: choiceContentNode.textContent || choiceContentNode.innerText,
-                  value: choiceContentNode.getAttribute(this._valueAttribute)
+                  value: choiceContentNode.getAttribute(this._valueHtmlAttribute)
                });
             }, this);
             return choices;
@@ -595,13 +635,26 @@ define([
           * @param    {object} evt Dojo-normalised event object
           */
          _onChoiceCloseClick: function alfresco_forms_controls_MultiSelect___onChoiceCloseClick(choiceObject, evt) {
+
+            // Remove the item from the control's value
+            var choiceValue = choiceObject.value,
+               storeValueAttr = this.store.valueAttribute,
+               newValue = array.filter(this.value, function(nextValue) {
+                  return nextValue[storeValueAttr] !== choiceValue;
+               }, this);
+            this._changeAttrValue("value", newValue);
+
+            // Remove the node and its listeners
             domConstruct.destroy(choiceObject.node);
             choiceObject.selectListener.remove();
             choiceObject.closeListener.remove();
+
+            // Stop the click doing anything else
             evt.preventDefault();
             evt.stopPropagation();
+
+            // Update the control state
             this._updateChoicesInResultsList();
-            this.searchBox.focus();
          },
 
          /**
@@ -706,7 +759,7 @@ define([
           * @param {object} evt Dojo-normalised event object
           */
          _onSearchKeypress: function alfresco_forms_controls_MultiSelect___onSearchKeypress(evt) {
-            /*jshint maxcomplexity:11*/
+            /*jshint maxcomplexity:16*/
             var cursorPosBeforeKeypress = this._getCursorPosition();
             switch (evt.charOrCode) {
                case keys.ESCAPE:
@@ -961,7 +1014,7 @@ define([
                choices = this._getChoices();
             array.forEach(resultItemNodes, function(nextResultItem) {
                var resultLabel = nextResultItem.textContent || nextResultItem.innerText,
-                  resultValue = nextResultItem.getAttribute(this._valueAttribute),
+                  resultValue = nextResultItem.getAttribute(this._valueHtmlAttribute),
                   itemIsChosen = array.some(choices, function(nextChoice) {
                      return (resultLabel === nextChoice.label && resultValue === nextChoice.value);
                   });
