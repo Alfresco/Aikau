@@ -20,7 +20,6 @@
 // TODO: Use dijit/_FocusMixin
 //       Add ARIA
 //       Remove use of query where possible
-//       Handle setValue
 
 /**
  * @module alfresco/forms/controls/MultiSelect
@@ -102,6 +101,15 @@ define([
          _choiceListeners: null,
 
          /**
+          * Collection of items which have temporary labels
+          * NOTE: It is assumed these items are in the _resultItems property,
+          *       so their properties can just be updated in-situ
+          *
+          * @type {object[]}
+          */
+         _itemsWithTemporaryLabels: null,
+
+         /**
           * The index of the latest search request
           *
           * @type {number}
@@ -179,6 +187,7 @@ define([
           */
          constructor: function alfresco_forms_controls_MultiSelect__constructor() {
             this._choiceListeners = {};
+            this._itemsWithTemporaryLabels = [];
             this._resultItems = {};
             this._resultListeners = [];
             window.alfMs = this;
@@ -214,24 +223,64 @@ define([
           * @instance
           * @param    {string|string[]|object|object[]} newValue The new value(s)
           */
-         setValue: function alfresco_forms_controls_MultiSelect__setValue(newValue) {
+         setValue: function alfresco_forms_controls_MultiSelect__setValue(newValueParam) {
 
-            console.debug("setValue(", newValue, ")");
+            console.debug("setValue(" + JSON.stringify(newValueParam) + ")");
 
             // Setup helper vars
-            var labelAttr = this.store.labelAttribute,
-               valueAttr = this.store.valueAttribute;
-            if (!ObjectTypeUtils.isArray(newValue)) {
-               newValue = [newValue];
+            var labelAttrName = this.store.labelAttribute,
+               valueAttrName = this.store.valueAttribute,
+               newValuesArray = newValueParam;
+            if (!ObjectTypeUtils.isArray(newValuesArray)) {
+               newValuesArray = (newValueParam && [newValueParam]) || [];
             }
 
-            // Create the updated-value variable
-            var updatedValue = array.map(newValue, function(nextValue) {
-               return nextValue;
-            });
+            // Create an items array
+            var chosenItems = array.map(newValuesArray, function(nextNewValue) {
+
+               // Try and get the value from the existing result items
+               var newValueIsString = typeof nextNewValue === "string",
+                  realValue = (newValueIsString && nextNewValue) || nextNewValue[valueAttrName],
+                  nextItem = this._resultItems[realValue];
+
+               // If we already have the item, return immediately
+               if (nextItem) {
+                  return nextItem;
+               }
+
+               // Use value if object, otherwise add as value property to new object
+               if (newValueIsString) {
+                  nextItem = {};
+                  nextItem[valueAttrName] = realValue;
+               } else {
+                  nextItem = nextNewValue;
+               }
+
+               // Add a temporary label if not present
+               if (!nextItem.hasOwnProperty(labelAttrName)) {
+                  nextItem[labelAttrName] = nextItem[valueAttrName];
+                  this._itemsWithTemporaryLabels.push(nextItem);
+               }
+
+               // Put the new item into the items map
+               this._resultItems[realValue] = nextItem;
+
+               // Pass back the final item
+               return nextItem;
+
+            }, this);
+
+            // Add the choices to the control and kick off the label retrieval if necessary
+            array.forEach(chosenItems, function(nextItem) {
+               var label = nextItem[labelAttrName],
+                  value = nextItem[valueAttrName];
+               this._addChoice(label, value);
+            }, this);
+            this._updateTemporaryLabels();
+            this._updateChoicesInResultsList();
 
             // Set the new value
-            this.value = updatedValue;
+            this.value = chosenItems;
          },
 
          /**
@@ -239,20 +288,17 @@ define([
           *
           * @instance
           * @protected
-          * @param    {object} chosenResultItem The result item to add
+          * @param    {string} label The label of the chosen item
+          * @param    {string} value The value of the chosen item
           */
-         _addChoice: function alfresco_forms_controls_MultiSelect___addChoice(chosenResultItem) {
-
-            // Setup helper vars
-            var label = chosenResultItem.textContent || chosenResultItem.innerText,
-               value = chosenResultItem.getAttribute(this._valueHtmlAttribute),
-               choiceClass = this.rootClass + "__choice";
+         _addChoice: function alfresco_forms_controls_MultiSelect___addChoice(label, value) {
 
             // Add to the control's value property
             this._changeAttrValue("value", this.value.concat(this._resultItems[value]));
 
             // Construct and attach the DOM nodes
-            var choiceNode = domConstruct.create("div", {
+            var choiceClass = this.rootClass + "__choice",
+               choiceNode = domConstruct.create("div", {
                   className: choiceClass
                }, this.searchBox, "before"),
                contentNode = domConstruct.create("span", {
@@ -260,7 +306,7 @@ define([
                }, choiceNode),
                closeButton = domConstruct.create("a", {
                   className: choiceClass + "__close-button",
-                  innerHTML: "x"
+                  innerHTML: "&times;"
                }, choiceNode);
 
             // Setup the listeners
@@ -270,6 +316,7 @@ define([
             this.own(selectListener, closeListener);
             lang.mixin(choiceObject, {
                node: choiceNode,
+               contentNode: contentNode,
                selectListener: selectListener,
                closeListener: closeListener,
                label: label,
@@ -342,8 +389,12 @@ define([
                return false;
             }
 
-            // Choose the item and update the control
-            this._addChoice(focusedResultItem);
+            // Add the choice
+            var label = focusedResultItem.textContent || focusedResultItem.innerText,
+               value = focusedResultItem.getAttribute(this._valueHtmlAttribute);
+            this._addChoice(label, value);
+
+            // Update the control
             this._updateChoicesInResultsList();
             this._gotoNextResult();
 
@@ -421,6 +472,7 @@ define([
             query(".alfresco-forms-controls-MultiSelect__choice__content").forEach(function(choiceContentNode) {
                choices.push({
                   node: choiceContentNode.parentNode,
+                  contentNode: choiceContentNode,
                   label: choiceContentNode.textContent || choiceContentNode.innerText,
                   value: choiceContentNode.getAttribute(this._valueHtmlAttribute)
                });
@@ -985,9 +1037,9 @@ define([
 
             // Setup handlers and update request "counter"
             var thisRequestIndex = this._latestSearchRequestIndex = this._latestSearchRequestIndex + 1,
-               successHandler = lang.hitch(this, function(response) {
+               successHandler = lang.hitch(this, function(responseItems) {
                   if (thisRequestIndex === this._latestSearchRequestIndex) {
-                     this._handleSearchSuccess(response);
+                     this._handleSearchSuccess(responseItems);
                   }
                }),
                failureHandler = lang.hitch(this, function(err) {
@@ -1013,13 +1065,62 @@ define([
             var resultItemNodes = this._getResultItemNodes(),
                choices = this._getChoices();
             array.forEach(resultItemNodes, function(nextResultItem) {
-               var resultLabel = nextResultItem.textContent || nextResultItem.innerText,
-                  resultValue = nextResultItem.getAttribute(this._valueHtmlAttribute),
+               var resultValue = nextResultItem.getAttribute(this._valueHtmlAttribute),
                   itemIsChosen = array.some(choices, function(nextChoice) {
-                     return (resultLabel === nextChoice.label && resultValue === nextChoice.value);
+                     return resultValue === nextChoice.value;
                   });
                domClass[itemIsChosen ? "add" : "remove"](nextResultItem, this.rootClass + "__result--already-chosen");
             }, this);
+         },
+
+         /**
+          * Update all of the items with temporary labels
+          *
+          * @instance
+          * @protected
+          */
+         _updateTemporaryLabels: function() {
+
+            // Make sure we have some that need updating
+            if (!this._itemsWithTemporaryLabels.length) {
+               return;
+            }
+
+            // Setup handlers
+            var successHandler = lang.hitch(this, function(responseItems) {
+
+                  // debugger;
+
+                  // Update the result items map
+                  array.forEach(responseItems, function(nextItem) {
+                     var value = nextItem[this.store.valueAttribute];
+                     if (this._resultItems[value]) {
+                        lang.mixin(this._resultItems[value], nextItem);
+                     } else {
+                        this._resultItems[value] = nextItem;
+                     }
+                  }, this);
+
+                  // Run through the choices, updating their labels
+                  array.forEach(this._getChoices(), function(nextChoice) {
+                     var contentNode = nextChoice.contentNode,
+                        nextValue = nextChoice.value,
+                        realLabel = this._resultItems[nextValue][this.store.labelAttribute];
+                     while (contentNode.hasChildNodes()) {
+                        contentNode.removeChild(contentNode.firstChild);
+                     }
+                     contentNode.appendChild(document.createTextNode(realLabel));
+                  }, this);
+
+               }),
+               failureHandler = lang.hitch(this, function(err) {
+                  this.alfLog("error", "Error updating labels from store", err);
+               });
+
+            // Make the query
+            var queryObj = {};
+            queryObj[this.store.queryAttribute] = "";
+            when(this.store.query(queryObj), successHandler, failureHandler);
          }
       });
    }

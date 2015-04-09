@@ -15,21 +15,24 @@
       border-radius: 3px;
       cursor: default;
       display: inline-block;
-      line-height: 22px;
       margin: 0 5px 5px 0;
-      padding: 0 0 0 5px;
+      padding: 0 20px 0 3px;
       position: relative;
       &__content {
          color: #333;
+         line-height: 22px;
       }
       &__close-button {
          color: #aaa;
          cursor: pointer;
-         display: inline-block;
+         display: block;
          font-family: @bold-font;
+         font-size: 16px;
          font-weight: 700;
-         margin: 0 0 0 3px;
-         padding: 0 6px 0 3px;
+         padding: 3px 5px;
+         position: absolute;
+         right: 0;
+         top: 0;
          &:hover {
             color: #666;
          }

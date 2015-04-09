@@ -21,7 +21,7 @@ model.jsonModel = {
             okButtonPublishTopic: "FORM_POST",
             scopeFormControls: false,
             value: {
-               tags: ["tag1", "tag11"]
+               tags: ["workspace://SpacesStore/06bd4708-8998-47be-a4ea-0f418bc7bb38", "workspace://SpacesStore/d37d7dfa-8410-46be-af6a-5d5880ca478e"]
             },
             widgets: [
                {

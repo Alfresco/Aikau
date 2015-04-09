@@ -69,33 +69,36 @@ define([
                name: "alfresco/forms/controls/MultiSelect",
                config: widgetConfig
             });
-         },
-
-         /**
-          * This function is hitched to the MultiSelect widget's displayMessage function
-          * and is used to control the overall validation for the widget so that it works with
-          * other Aikau form controls.
-          *
-          * @override
-          * @instance
-          * @param {string} message The error message to display (this will be null if value is valid)
-          */
-         onFilteringValidation: function alfresco_forms_controls_MultiSelectInput__onFilteringValidation(message) {
-            if (!message) {
-               this._validationMessage.innerHTML = "";
-               this.alfPublish("ALF_VALID_CONTROL", {
-                  name: this.name,
-                  fieldId: this.fieldId
-               });
-               this.hideValidationFailure();
-            } else {
-               this._validationMessage.innerHTML = message;
-               this.alfPublish("ALF_INVALID_CONTROL", {
-                  name: this.name,
-                  fieldId: this.fieldId
-               });
-               this.showValidationFailure();
-            }
          }
+
+         // NOTE: Commented out as not sure what it does, so need to understand and presumably re-implement
+         // 
+         // /**
+         //  * This function is hitched to the MultiSelect widget's displayMessage function
+         //  * and is used to control the overall validation for the widget so that it works with
+         //  * other Aikau form controls.
+         //  *
+         //  * @override
+         //  * @instance
+         //  * @param {string} message The error message to display (this will be null if value is valid)
+         //  */
+         // onFilteringValidation: function alfresco_forms_controls_MultiSelectInput__onFilteringValidation(message) {
+         //    console.debug("onFilteringValidation");
+         //    if (!message) {
+         //       this._validationMessage.innerHTML = "";
+         //       this.alfPublish("ALF_VALID_CONTROL", {
+         //          name: this.name,
+         //          fieldId: this.fieldId
+         //       });
+         //       this.hideValidationFailure();
+         //    } else {
+         //       this._validationMessage.innerHTML = message;
+         //       this.alfPublish("ALF_INVALID_CONTROL", {
+         //          name: this.name,
+         //          fieldId: this.fieldId
+         //       });
+         //       this.showValidationFailure();
+         //    }
+         // }
       });
    });
