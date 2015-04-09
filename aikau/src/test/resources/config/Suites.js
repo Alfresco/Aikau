@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/dnd/ModelCreationServiceTest"
+      "src/test/resources/alfresco/services/actions/CopyMoveTest"
    ],
 
    /**
@@ -175,6 +175,7 @@ define({
       "src/test/resources/alfresco/services/SiteServiceTest",
       "src/test/resources/alfresco/services/UserServiceTest",
 
+      "src/test/resources/alfresco/services/actions/CopyMoveTest",
       "src/test/resources/alfresco/services/actions/ManageAspectsTest",
 
       "src/test/resources/alfresco/upload/UploadTest"

@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      postCreate: function alfresco_pickers_DocumentListPicker__postCreate(payload) {
+      postCreate: function alfresco_pickers_DocumentListPicker__postCreate() {
          var config = [{
             name: "alfresco/lists/views/AlfListView",
             config: {
@@ -236,13 +236,12 @@ define(["dojo/_base/declare",
        */
       onFolderClick: function alfresco_pickers_DocumentListPicker__onFolderClick(payload) {
          var targetNode = lang.getObject("item.nodeRef", false, payload) || lang.getObject("node.nodeRef", false, payload) || payload.nodeRef;
-         if (targetNode != null)
+         if (targetNode)
          {
             this.nodeRef = targetNode;
 
             // Make sure we go back to page one when the new list is requested.
             this.resetPaginationData();
-
             this.loadData();
          }
          else
@@ -259,6 +258,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onDocumentClick: function alfresco_pickers_DocumentListPicker__onDocumentClick(payload) {
+         // jshint unused:false
          // No action.
       },
 
@@ -280,14 +280,14 @@ define(["dojo/_base/declare",
          {
             this.alfPublish("ALF_VALID_CONTROL", {});
          }
-
          this.inherited(arguments);
       },
 
       /**
        * Overrides [onDataLoadSuccess]{@link module:alfresco/documentlibrary/AlfList#onDataLoadSuccess} to skip children.
        *
-       * @param payload
+       * @instance
+       * @param {object} payload
        */
       onDataLoadSuccess: function alfresco_pickers_DocumentListPicker__onDataLoadSuccess(payload) {
          var parentType = lang.getObject("response.metadata.parent.type", false, payload);
@@ -336,10 +336,8 @@ define(["dojo/_base/declare",
        * displayed in the picker.
        *
        * @instance
-       * @type {object}
+       * @type {array}
        */
-      widgets: [
-
-      ]
+      widgets: []
    });
 });
