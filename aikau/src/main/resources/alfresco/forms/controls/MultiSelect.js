@@ -108,13 +108,6 @@ define([
          _newSearchTimeoutPointer: 0,
 
          /**
-          * A cache of the last search value
-          *
-          * @type {string}
-          */
-         _prevSearchValue: "",
-
-         /**
           * Collection of listeners for the results dropdown to help track and
           * remove them when no longer needed
           *
@@ -220,7 +213,7 @@ define([
           * @protected
           * @param    {object} chosenResultItem The result item to add
           */
-         _addChoice: function(chosenResultItem) {
+         _addChoice: function alfresco_forms_controls_MultiSelect___addChoice(chosenResultItem) {
             var label = chosenResultItem.textContent || chosenResultItem.innerText,
                value = chosenResultItem.getAttribute(this._valueAttribute),
                choiceClass = this.rootClass + "__choice",
@@ -234,17 +227,8 @@ define([
                   className: choiceClass + "__close-button",
                   innerHTML: "x"
                }, choiceNode),
-               selectListener = on(choiceNode, "click", lang.hitch(this, function(evt) {
-                  this._selectChoice(choiceNode);
-                  evt.preventDefault();
-                  evt.stopPropagation();
-               })),
-               closeListener = on(closeButton, "click", function(evt) {
-                  domConstruct.destroy(choiceNode);
-                  selectListener.remove();
-                  closeListener.remove();
-                  evt.stopPropagation();
-               });
+               selectListener = on(choiceNode, "click", lang.hitch(this, this._onChoiceClick, choiceNode)),
+               closeListener = on(closeButton, "click", lang.hitch(this, this._onChoiceCloseClick, choiceNode, selectListener, closeListener));
             contentNode.setAttribute(this._valueAttribute, value);
             contentNode.appendChild(document.createTextNode(label));
             this.own(selectListener, closeListener);
@@ -279,12 +263,8 @@ define([
                }
                resultListItem.appendChild(document.createTextNode(labelPart));
             }, this);
-            clickListener = on(resultListItem, "mousedown", lang.hitch(this, this._chooseItem));
-            mouseoverListener = on(resultListItem, "mouseover", lang.hitch(this, function() {
-               array.forEach(this._getResultItemNodes(), function(nextItemNode) {
-                  domClass[nextItemNode === resultListItem ? "add" : "remove"](nextItemNode, this.rootClass + "__result--focused");
-               }, this);
-            }));
+            clickListener = on(resultListItem, "mousedown", lang.hitch(this, this._onResultMousedown));
+            mouseoverListener = on(resultListItem, "mouseover", lang.hitch(this, this._onResultMouseover, resultListItem));
             this._resultListeners.push(clickListener, mouseoverListener);
             this.own(clickListener, mouseoverListener);
          },
@@ -295,26 +275,26 @@ define([
           * @instance
           * @protected
           */
-         _chooseItem: function() {
+         _chooseItem: function alfresco_forms_controls_MultiSelect___chooseItem() {
 
             // Get the chosen item
             var focusedClass = this.rootClass + "__result--focused",
                alreadyChosenClass = this.rootClass + "__result--already-chosen",
-               chosenResultItem;
+               focusedResultItem;
             array.some(this._getResultItemNodes(), function(nextItem) {
                if (domClass.contains(nextItem, focusedClass) && !domClass.contains(nextItem, alreadyChosenClass)) {
-                  chosenResultItem = nextItem;
+                  focusedResultItem = nextItem;
                }
-               return !!chosenResultItem;
+               return !!focusedResultItem;
             });
 
             // If there is no chosen item, do nothing
-            if (!chosenResultItem) {
+            if (!focusedResultItem) {
                return;
             }
 
             // Choose the item and update the control
-            this._addChoice(chosenResultItem);
+            this._addChoice(focusedResultItem);
             this._updateChoicesInResultsList();
             this._gotoNextResult();
          },
@@ -340,7 +320,7 @@ define([
           * @instance
           * @protected
           */
-         _deselectAllChoices: function() {
+         _deselectAllChoices: function alfresco_forms_controls_MultiSelect___deselectAllChoices() {
             query("." + this.rootClass + "__choice").forEach(function(nextChoice) {
                domClass.remove(nextChoice, this.rootClass + "__choice--selected");
             }, this);
@@ -566,6 +546,37 @@ define([
          },
 
          /**
+          * Handle clicks on a choice
+          *
+          * @instance
+          * @protected
+          * @param    {object} choiceNode The choice (node) being clicked on
+          * @param    {object} evt Dojo-normalised event object
+          */
+         _onChoiceClick: function alfresco_forms_controls_MultiSelect___onChoiceClick(choiceNode, evt) {
+            this._selectChoice(choiceNode);
+            evt.preventDefault();
+            evt.stopPropagation();
+         },
+
+         /**
+          * Handle clicks on a choice's close icon
+          *
+          * @instance
+          * @protected
+          * @param    {object} choiceNode The choice (node) being clicked on
+          * @param    {object} selectListener The selection listener (for cleanup purposes)
+          * @param    {object} closeListener The close listener (for cleanup purposes)
+          * @param    {object} evt Dojo-normalised event object
+          */
+         _onChoiceCloseClick: function alfresco_forms_controls_MultiSelect___onChoiceCloseClick(choiceNode, selectListener, closeListener, evt) {
+            domConstruct.destroy(choiceNode);
+            selectListener.remove();
+            closeListener.remove();
+            evt.stopPropagation();
+         },
+
+         /**
           * Handle clicks on the control
           *
           * @instance
@@ -578,6 +589,32 @@ define([
             if (evt.target !== this.searchBox && !controlIsFocused) {
                this.searchBox.focus();
             }
+         },
+
+         /**
+          * Handle mousedowns on the result items
+          * NOTE: We're using mousedown rather than click to evade problems with the searchbox blur event
+          *
+          * @instance
+          * @protected
+          */
+         _onResultMousedown: function alfresco_forms_controls_MultiSelect___onResultMousedown() {
+            this._chooseItem();
+         },
+
+         /**
+          * Handle mouseovers on the result items
+          * NOTE: This will blindly add the focused class to the item, as the already-chosen class
+          *       will override it if necessary
+          *
+          * @instance
+          * @protected
+          * @param    {object} resultListItem The node in the result list that's being moused-over
+          */
+         _onResultMouseover: function alfresco_forms_controls_MultiSelect___onResultMouseover(resultListItem) {
+            array.forEach(this._getResultItemNodes(), function(nextItemNode) {
+               domClass[nextItemNode === resultListItem ? "add" : "remove"](nextItemNode, this.rootClass + "__result--focused");
+            }, this);
          },
 
          /**
@@ -602,8 +639,7 @@ define([
           */
          _onSearchChange: function alfresco_forms_controls_MultiSelect___onSearchChange(newValue) {
 
-            // Get new value and update stored value
-            this._prevSearchValue = this._currentSearchValue;
+            // Get new value
             this._currentSearchValue = newValue;
 
             // Update searchBox size
@@ -653,9 +689,11 @@ define([
                case keys.ENTER:
                   if (this._resultsDropdownIsVisible()) {
                      this._chooseItem();
-                     evt.preventDefault();
-                     evt.stopPropagation();
+                     this._resetSearchBox();
+                     this._hideResultsDropdown();
                   }
+                  evt.preventDefault();
+                  evt.stopPropagation();
                   break;
                case keys.DOWN_ARROW:
                   if (this._resultsDropdownIsVisible()) {
@@ -714,6 +752,7 @@ define([
           * @protected
           */
          _resetSearchBox: function alfresco_forms_controls_MultiSelect___resetSearchBox() {
+            this._currentSearchValue = "";
             this.searchBox.value = "";
          },
 
@@ -732,15 +771,18 @@ define([
           *
           * @instance
           * @protected
-          * @param    {object|number} choice The choice to select or the adjustment offset
+          * @param    {object|number} choiceNodeOrOffset The choice node to select or the adjustment offset from
+          *                                              the currently selected one. If none is selected, then
+          *                                              the start position is to the right of the current choices.
           */
-         _selectChoice: function(choice) {
-            var currentlySelectedChoice = this._getSelectedChoice();
+         _selectChoice: function alfresco_forms_controls_MultiSelect___selectChoice(choiceNodeOrOffset) {
+            var currentlySelectedChoice;
             this._deselectAllChoices();
-            if (isNaN(choice)) {
-               domClass.add(choice, this.rootClass + "__choice--selected");
+            if (isNaN(choiceNodeOrOffset)) {
+               domClass.add(choiceNodeOrOffset, this.rootClass + "__choice--selected");
             } else {
-               // Wibble
+               currentlySelectedChoice = this._getSelectedChoice();
+               // TODO
             }
          },
 
