@@ -93,6 +93,17 @@ define(["dojo/_base/declare",
       useItemsOnceComparisonKey: "name",
 
       /**
+       * Indicates that the items should be rendered immediately. This is a configurable option because
+       * the [DragAndDropItemsListView]{@link module:alfresco/dnd/DragAndDropItemsListView} needs to be able
+       * to prevent immediately rendering the item data.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      immediateRender: true,
+
+      /**
        * Creates a palette of items that can be dragged (and dropped).
        * 
        * @instance
@@ -102,13 +113,10 @@ define(["dojo/_base/declare",
          // can be inserted into a drop target when the drop target is actioned by the keyboard
          on(this.paletteNode, Constants.itemSelectedEvent, lang.hitch(this, this.onItemSelected));
 
-         this.sourceTarget = new Source(this.paletteNode, {
-            copyOnly: !this.useItemsOnce,
-            selfCopy: false,
-            creator: lang.hitch(this, this.creator),
-            withHandles: this.dragWithHandles
-         });
-         this.sourceTarget.insertNodes(false, this.items);
+         if (this.immediateRender)
+         {
+            this.renderData();
+         }
 
          this.alfSubscribe(Constants.requestItemToAddTopic, lang.hitch(this, this.onItemToAddRequest));
          this.alfSubscribe(Constants.itemSelectedTopic, lang.hitch(this, this.onExternalItemSelected));
@@ -117,6 +125,26 @@ define(["dojo/_base/declare",
          {
             this.alfSubscribe(Constants.itemDeletedTopic, lang.hitch(this, this.onItemDeleted));
          }
+      },
+
+      /**
+       * This function can be called to render the drag-and-drop items. It has this specific name so that
+       * it can be used as the renderer in the [DragAndDropItemsListView]{@link module:alfresco/dnd/DragAndDropItemsListView}
+       *
+       * @instance
+       */
+      renderData: function alfresco_dnd_DragAndDropItems__renderData() {
+         if (this.sourceTarget)
+         {
+            this.sourceTarget.destroy();
+         }
+         this.sourceTarget = new Source(this.paletteNode, {
+            copyOnly: !this.useItemsOnce,
+            selfCopy: false,
+            creator: lang.hitch(this, this.creator),
+            withHandles: this.dragWithHandles
+         });
+         this.sourceTarget.insertNodes(false, this.items);
       },
 
       /**
