@@ -401,8 +401,9 @@ define([
             this._addChoice(focusedResult.label, focusedResult.value);
 
             // Update the control
+            this._resetSearchBox();
             this._updateResultsDropdown();
-            this._gotoNextResult();
+            this._hideResultsDropdown();
 
             // Return true to indicate item was chosen
             return true;
@@ -486,6 +487,7 @@ define([
             while (this.resultsDropdown.childNodes.length > 3) {
                this.resultsDropdown.removeChild(this.resultsDropdown.lastChild);
             }
+            this._focusedResult = null;
          },
 
          /**
@@ -541,11 +543,16 @@ define([
                   }
                }
                domClass.remove(nextResult.domNode, focusedClass);
-            });
+            }, this);
             if (!resultToFocus && this._focusedResult) {
                resultToFocus = this._focusedResult;
             }
-            resultToFocus && domClass.add(resultToFocus.domNode, focusedClass);
+            if (resultToFocus) {
+               this._focusedResult = resultToFocus;
+               domClass.add(resultToFocus.domNode, focusedClass);
+            } else {
+               this._focusedResult = null;
+            }
          },
 
          /**
@@ -662,6 +669,7 @@ define([
           */
          _onChoiceClick: function alfresco_forms_controls_MultiSelect___onChoiceClick(choiceObject, evt) {
             this._selectChoice(choiceObject.domNode);
+            this._unfocusResults();
             evt.preventDefault();
             evt.stopPropagation();
          },
@@ -701,6 +709,7 @@ define([
 
             // Update the results (i.e. adjust the items' chosen states)
             this._updateResultsDropdown();
+            this._hideResultsDropdown();
          },
 
          /**
@@ -714,6 +723,12 @@ define([
             this._deselectAllChoices();
             if (evt.target !== this.searchBox) {
                this.searchBox.focus();
+            }
+            if (this._results.length && !this._resultsDropdownIsVisible()) {
+               this._showResultsDropdown();
+               this._gotoNextResult();
+            } else {
+               this._startSearch(this.searchBox.value);
             }
          },
 
@@ -951,6 +966,7 @@ define([
                domClass.add(choiceToSelect.domNode, this.rootClass + "__choice--selected");
             }
             this._selectedChoice = choiceToSelect;
+            this.searchBox.focus();
          },
 
          /**
@@ -1057,10 +1073,11 @@ define([
           */
          _updateResultsDropdown: function alfresco_forms_controls_MultiSelect___updateResultsDropdown() {
 
-            // Remove all existing listeners
+            // Remove all existing listeners and reset the focused result
             array.forEach(this._resultListeners, function(nextListener) {
                nextListener.remove();
             });
+            this._focusedResult = null;
 
             // If we have too many current results displaying, remove the excess nodes
             while (this.resultsDropdown.childNodes.length > this._results.length + 3) {
@@ -1108,8 +1125,9 @@ define([
                // Update the domNode in the result item
                nextResult.domNode = itemNode;
 
-               // Mark item as chosen, if appropriate
+               // Mark item as chosen, if appropriate and remove focused indicator
                domClass[resultIsChosen ? "add" : "remove"](itemNode, this.rootClass + "__result--already-chosen");
+               domClass.remove(itemNode, this.rootClass + "__result--focused");
 
             }, this);
          },
@@ -1159,6 +1177,19 @@ define([
             var queryObj = {};
             queryObj[this.store.queryAttribute] = "";
             when(this.store.query(queryObj), successHandler, failureHandler);
+         },
+
+         /**
+          * Un-focus all results
+          *
+          * @instance
+          * @protected
+          */
+         _unfocusResults: function alfresco_forms_controls_MultiSelect___unfocusResults() {
+            this._focusedResult = null;
+            array.forEach(this._results, function(nextResult) {
+               domClass.remove(nextResult.domNode, this.rootClass + "__result--focused");
+            }, this);
          }
       });
    }

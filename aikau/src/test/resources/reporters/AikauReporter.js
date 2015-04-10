@@ -318,10 +318,12 @@ define([], function() {
             estimatedTimeLeft = (1 / percentCompleteDecimal) * totalTimeTaken,
             timeLeftString = msToMinsAndSecs(estimatedTimeLeft),
             progressString = percentComplete + "% complete";
-         if (percentComplete > 10) {
-            progressString += ", approx " + timeLeftString + " remaining";
-         } else {
-            progressString += ", calculating remaining time...";
+         if (totalTimeTaken > 1000 * 30) {
+            if (percentComplete > 10) {
+               progressString += ", approx " + timeLeftString + " remaining";
+            } else {
+               progressString += ", calculating remaining time...";
+            }
          }
          state.suite = null;
          state.env = null;

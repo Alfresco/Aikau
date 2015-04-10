@@ -24,9 +24,10 @@ define([
       "intern!object",
       "intern/chai!assert",
       "require",
-      "alfresco/TestCommon"
+      "alfresco/TestCommon",
+      "intern/dojo/node!leadfoot/helpers/pollUntil"
    ],
-   function(registerSuite, assert, require, TestCommon) {
+   function(registerSuite, assert, require, TestCommon, pollUntil) {
 
       var browser;
       registerSuite({
@@ -41,8 +42,101 @@ define([
             browser.end();
          },
 
-         "Test rendered preset values": function() {
-            assert.fail(null, null, "Not yet implemented");
+         "Preset values are rendered by control": function() {
+            return browser.findAllByCssSelector(".alfresco-forms-controls-MultiSelect__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 2, "Did not render two preset values for control");
+               })
+               .end()
+
+            .findByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "tag1", "Did not display first tag label correctly");
+               })
+               .end()
+
+            .findByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "tag11", "Did not display second tag label correctly");
+               });
+         },
+
+         "Focusing on control brings up initial results": function() {
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__search-box")
+               .screenie()
+               .click()
+               .screenie()
+               .end()
+
+            .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
+               .screenie()
+               .then(function(elements) {
+                  assert.lengthOf(elements, 4, "Did not bring up initial results");
+               });
+         },
+
+         "Selecting item in dropdown chooses that item": function() {
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(2)")
+               .click()
+               .end()
+
+            .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 3, "Did not add new choice to control");
+               })
+               .end()
+
+            .findByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(3) .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "tag2", "Did not add selected tag at end of choices");
+               })
+         },
+
+         "Typing into search box filters results": function() {
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__search-box")
+               .type("tag2")
+               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(5)")
+               .end()
+
+            .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Did not filter results");
+               });
+         },
+
+         "Clicking cross on a chosen item removes it": function() {
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__close-button")
+               .click()
+               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(3)")
+               .end()
+
+            .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 2, "Did not remove choice");
+               });
+         },
+
+         "Submitting form submits correct values from control": function() {
+            return browser.findByCssSelector("#FORM1 .confirmationButton .dijitButtonNode")
+               .click()
+               .end()
+
+            .then(pollUntil(function() {
+                  /*jshint browser:true*/
+                  var topicData = document.querySelectorAll(".sl-topic[data-publish-topic=FORM_POST] + td.sl-data"),
+                     lastTopic = topicData && topicData[topicData.length - 1],
+                     dataContent = lastTopic && (lastTopic.textContent || lastTopic.innerText);
+                  return dataContent || null;
+               }, 5000))
+               .then(function(dataContent) {
+                  assert.include(dataContent, "labeltag1valueworkspace", "Failed to submit control value of tag1");
+                  assert.include(dataContent, "labeltag2valueworkspace", "Failed to submit control value of tag2");
+               }, function(err) {
+                  assert.fail(null, null, "Failed to submit control values [" + err.name + "]: " + err);
+               });
          },
 
          "Post Coverage Results": function() {
