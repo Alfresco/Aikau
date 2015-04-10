@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,7 +23,8 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
- * @author Dave Draper & David Webster
+ * @author Dave Draper
+ * @author David Webster
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase",
@@ -58,11 +59,10 @@ define(["dojo/_base/declare",
 
       /**
        *
-       *
        * @instance
        */
       postCreate: function alfresco_pickers_SingleItemPicker__postCreate() {
-         if (this.requestItemsTopic != null)
+         if (this.requestItemsTopic)
          {
             var pubSubScope = this.generateUuid();
             var requestTopic = pubSubScope + "ALF_SINGLE_PICKER_ITEMS_REQUEST";
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
       onItemsLoadSuccess: function alfresco_pickers_SingleItemPicker__onItemsLoadSuccess(payload) {
          this.alfLog("log", "Items loaded", payload);
 
-         if (payload == null || payload.response == null)
+         if (!payload || !payload.response)
          {
             this.alfLog("warn", "The response for a request for SingleItemPicker items did not contain a 'response' attribute", payload, this);
          }
@@ -126,9 +126,8 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the item to add
        * @todo Hard coded to site data. See comment in method description about generalising code.
        */
-      addItemWidgetConfig: function alfresco_pickers_SingleItemPicker__addItemWidgetConfig(widgets, item, index) {
+      addItemWidgetConfig: function alfresco_pickers_SingleItemPicker__addItemWidgetConfig(widgets, item, /*jshint unused:false*/ index) {
          var siteNodeRef = NodeUtils.processNodeRef(item.node.substring(item.node.indexOf("workspace"))).nodeRef;
-
 
          // Generate the widget model for the sub-picker...
          // We're going to clone the defined "widgetsForSubPicker" configuration to prevent
@@ -139,7 +138,6 @@ define(["dojo/_base/declare",
             siteNodeRef: siteNodeRef
          };
          this.processObject(["processCurrentItemTokens"], widgetsForSubPicker);
-
 
          var config = {
             name: "alfresco/menus/AlfMenuBarItem",
@@ -158,7 +156,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       *
        *
        * @instance
        */
@@ -193,7 +190,6 @@ define(["dojo/_base/declare",
          // TODO: Implement item selected function. This is only relevant for hardcoded options
          //       HOWEVER, maybe the menu item should publish a topic that this subscribes to so that this can
          //       be a more useful override??
-
       }
    });
 });

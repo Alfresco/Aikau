@@ -273,6 +273,11 @@ define(["dojo/_base/declare",
 
          // Assign the clicked item as the currentItem value so that it can be used in payload generation...
          this.currentItem = item;
+         if (!this.currentItem.nodeRef)
+         {
+            this.currentItem.nodeRef = this.rootNode;
+         }
+
          this.publishPayload = lang.clone(this.publishPayload);
          var generatedPayload = this.getGeneratedPayload(true);
          this.alfPublish(this.publishTopic, generatedPayload, this.publishGlobal);

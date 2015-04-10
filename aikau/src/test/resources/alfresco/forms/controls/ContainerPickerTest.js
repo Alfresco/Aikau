@@ -40,10 +40,6 @@ define(["intern!object",
          browser.end();
       },
       
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
-      
       "Test picker dialog can be displayed": function () {
          return browser.findByCssSelector("#FOLDER_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
             .click()

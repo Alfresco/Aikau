@@ -520,7 +520,7 @@ define(["dojo/_base/declare",
        */
       alfUnsubscribeSaveHandles: function alfresco_core_Core__alfUnsubscribeSaveHandles(handles) {
          array.forEach(handles, function(handle) {
-            if (handle != null)
+            if (handle)
             {
                this.alfUnsubscribe(handle);
             }
