@@ -17,9 +17,7 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// TODO: Use dijit/_FocusMixin
-//       Add ARIA
-//       Remove use of query where possible
+// TODO: Add ARIA
 
 /**
  * @module alfresco/forms/controls/MultiSelect
@@ -29,6 +27,7 @@
  */
 define([
       "alfresco/core/ObjectTypeUtils",
+      "dijit/_FocusMixin",
       "dijit/_TemplatedMixin",
       "dijit/_WidgetBase",
       "dojo/_base/array",
@@ -40,14 +39,38 @@ define([
       "dojo/dom-class",
       "dojo/keys",
       "dojo/on",
-      "dojo/query",
       "dojo/when",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(ObjectTypeUtils, _TemplatedMixin, _WidgetBase, array, declare, lang, Deferred, domConstruct, domStyle, domClass, keys, on, query, when, template) {
-      /*jshint devel:true*/
+   function(ObjectTypeUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, Deferred, domConstruct, domStyle, domClass, keys, on, when, template) {
 
-      return declare([_WidgetBase, _TemplatedMixin], {
+      return declare([_WidgetBase, _TemplatedMixin, _FocusMixin], {
+
+         /**
+          * The Choice object (referenced in other JSDoc comments)
+          *
+          * @instance
+          * @typedef {object} Choice
+          * @property {object} domNode The main domNode for the choice
+          * @property {object} contentNode The content domNode inside the choice
+          * @property {object} closeButton The domNode of the close button
+          * @property {object} selectListener A remove handle for the choice selection listener
+          * @property {object} closeListener A remove handle for the close-button listener
+          * @property {object} item The store item
+          * @property {string} label The label for this choice
+          * @property {string} value The value of this choice
+          */
+
+         /**
+          * The Result object (referenced in other JSDoc comments)
+          *
+          * @instance
+          * @typedef {object} Result
+          * @property {object} domNode The main domNode for the result
+          * @property {object} item The store item
+          * @property {string} label The label for this choice
+          * @property {string} value The value of this choice
+          */
 
          /**
           * An array of the CSS files to use with this widget.
@@ -101,13 +124,27 @@ define([
          _choiceListeners: null,
 
          /**
-          * Collection of items which have temporary labels
-          * NOTE: It is assumed these items are in the _resultItems property,
+          * Collection of choice objects
+          *
+          * @type {Choice[]}
+          */
+         _choices: null,
+
+         /**
+          * The currently focused result item
+          *
+          * @type {Result}
+          */
+         _focusedResult: null,
+
+         /**
+          * Collection of items which are "temporary" and need updating from the store
+          * NOTE: It is assumed these items are also in the _storeItems collection,
           *       so their properties can just be updated in-situ
           *
           * @type {object[]}
           */
-         _itemsWithTemporaryLabels: null,
+         _itemsToUpdateFromStore: null,
 
          /**
           * The index of the latest search request
@@ -131,19 +168,19 @@ define([
          _newSearchTimeoutPointer: 0,
 
          /**
-          * A map of retrieved items, by value
-          *
-          * @type {object}
-          */
-         _resultItems: null,
-
-         /**
           * Collection of listeners for the results dropdown to help track and
           * remove them when no longer needed
           *
           * @type {object[]}
           */
          _resultListeners: null,
+
+         /**
+          * The results
+          *
+          * @type {Result[]}
+          */
+         _results: null,
 
          /**
           * The number of milliseconds to debounce search requests, i.e. the pause
@@ -154,12 +191,26 @@ define([
          _searchDebounceMs: 100,
 
          /**
+          * The currently selected choice object
+          *
+          * @type {Choice}
+          */
+         _selectedChoice: null,
+
+         /**
           * A timeout to ensure the loading message does not display if the results
           * come back super-quick
           *
           * @type {number}
           */
          _showLoadingTimeoutPointer: 0,
+
+         /**
+          * A map of retrieved items, by value
+          *
+          * @type {object}
+          */
+         _storeItems: null,
 
          /**
           * The attribute name against which to store the value of an item in the HTML
@@ -186,11 +237,12 @@ define([
           * @instance
           */
          constructor: function alfresco_forms_controls_MultiSelect__constructor() {
+            this._choices = [];
             this._choiceListeners = {};
-            this._itemsWithTemporaryLabels = [];
-            this._resultItems = {};
+            this._itemsToUpdateFromStore = [];
+            this._results = [];
             this._resultListeners = [];
-            window.alfMs = this;
+            this._storeItems = {};
          },
 
          /**
@@ -202,8 +254,6 @@ define([
          postCreate: function alfresco_forms_controls_MultiSelect__postCreate() {
             this.inherited(arguments);
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
-            this.own(on(this.searchBox, "focus", lang.hitch(this, this._onSearchFocus)));
-            this.own(on(this.searchBox, "blur", lang.hitch(this, this._onSearchBlur)));
             this.value = [];
          },
 
@@ -225,8 +275,6 @@ define([
           */
          setValue: function alfresco_forms_controls_MultiSelect__setValue(newValueParam) {
 
-            console.debug("setValue(" + JSON.stringify(newValueParam) + ")");
-
             // Setup helper vars
             var labelAttrName = this.store.labelAttribute,
                valueAttrName = this.store.valueAttribute,
@@ -241,7 +289,7 @@ define([
                // Try and get the value from the existing result items
                var newValueIsString = typeof nextNewValue === "string",
                   realValue = (newValueIsString && nextNewValue) || nextNewValue[valueAttrName],
-                  nextItem = this._resultItems[realValue];
+                  nextItem = this._storeItems[realValue];
 
                // If we already have the item, return immediately
                if (nextItem) {
@@ -259,11 +307,13 @@ define([
                // Add a temporary label if not present
                if (!nextItem.hasOwnProperty(labelAttrName)) {
                   nextItem[labelAttrName] = nextItem[valueAttrName];
-                  this._itemsWithTemporaryLabels.push(nextItem);
                }
 
                // Put the new item into the items map
-               this._resultItems[realValue] = nextItem;
+               this._storeItems[realValue] = nextItem;
+
+               // Mark this item as needing updating from the store
+               this._itemsToUpdateFromStore.push(nextItem);
 
                // Pass back the final item
                return nextItem;
@@ -276,11 +326,11 @@ define([
                   value = nextItem[valueAttrName];
                this._addChoice(label, value);
             }, this);
-            this._updateTemporaryLabels();
-            this._updateChoicesInResultsList();
+            this._updateItemsFromStore();
+            this._updateResultsDropdown();
 
             // Set the new value
-            this.value = chosenItems;
+            this._changeAttrValue("value", chosenItems);
          },
 
          /**
@@ -294,7 +344,8 @@ define([
          _addChoice: function alfresco_forms_controls_MultiSelect___addChoice(label, value) {
 
             // Add to the control's value property
-            this._changeAttrValue("value", this.value.concat(this._resultItems[value]));
+            var storeItem = this._storeItems[value];
+            this._changeAttrValue("value", this.value.concat(storeItem));
 
             // Construct and attach the DOM nodes
             var choiceClass = this.rootClass + "__choice",
@@ -315,53 +366,20 @@ define([
                closeListener = on(closeButton, "click", lang.hitch(this, this._onChoiceCloseClick, choiceObject));
             this.own(selectListener, closeListener);
             lang.mixin(choiceObject, {
-               node: choiceNode,
+               domNode: choiceNode,
                contentNode: contentNode,
+               closeButton: closeButton,
                selectListener: selectListener,
                closeListener: closeListener,
+               item: storeItem,
                label: label,
                value: value
             });
+            this._choices.push(choiceObject);
 
             // Add the label and value
             contentNode.setAttribute(this._valueHtmlAttribute, value);
             contentNode.appendChild(document.createTextNode(label));
-         },
-
-         /**
-          * Helper function, with an API consistent with being called by array.forEach(), which
-          * will add result items to the results dropdown and create associated listeners
-          *
-          * @instance
-          * @protected
-          * @param    {object} nextResultItem The next item from the search results
-          * @param    {number} itemIndex The index of this item in the results collection
-          */
-         _addResultItem: function alfresco_forms_controls_MultiSelect___addResultItem(nextResultItem) {
-            var label = nextResultItem[this.store.labelAttribute],
-               value = nextResultItem[this.store.valueAttribute],
-               resultListItem = domConstruct.create("li", {
-                  "className": this.rootClass + "__result"
-               }, this.resultsDropdown),
-               labelParts = label.split(this._currentSearchValue),
-               clickListener,
-               mouseoverListener;
-            this._resultItems[value] = nextResultItem;
-            resultListItem.setAttribute(this._valueHtmlAttribute, value);
-            array.forEach(labelParts, function(labelPart, partIndex) {
-               var highlightSpan;
-               if (partIndex) {
-                  highlightSpan = domConstruct.create("span", {
-                     className: this.rootClass + "__result__highlighted-label"
-                  }, resultListItem);
-                  highlightSpan.appendChild(document.createTextNode(this._currentSearchValue));
-               }
-               resultListItem.appendChild(document.createTextNode(labelPart));
-            }, this);
-            clickListener = on(resultListItem, "mousedown", lang.hitch(this, this._onResultMousedown));
-            mouseoverListener = on(resultListItem, "mouseover", lang.hitch(this, this._onResultMouseover, resultListItem));
-            this._resultListeners.push(clickListener, mouseoverListener);
-            this.own(clickListener, mouseoverListener);
          },
 
          /**
@@ -371,35 +389,47 @@ define([
           * @protected
           * @returns {boolean} Returns true if item is chosen
           */
-         _chooseItem: function alfresco_forms_controls_MultiSelect___chooseItem() {
-
-            // Get the chosen item
-            var focusedClass = this.rootClass + "__result--focused",
-               alreadyChosenClass = this.rootClass + "__result--already-chosen",
-               focusedResultItem;
-            array.some(this._getResultItemNodes(), function(nextItem) {
-               if (domClass.contains(nextItem, focusedClass) && !domClass.contains(nextItem, alreadyChosenClass)) {
-                  focusedResultItem = nextItem;
-               }
-               return !!focusedResultItem;
-            });
+         _chooseFocusedItem: function alfresco_forms_controls_MultiSelect___chooseFocusedItem() {
 
             // If there is no chosen item, do nothing
-            if (!focusedResultItem) {
+            var focusedResult = this._focusedResult;
+            if (!focusedResult) {
                return false;
             }
 
             // Add the choice
-            var label = focusedResultItem.textContent || focusedResultItem.innerText,
-               value = focusedResultItem.getAttribute(this._valueHtmlAttribute);
-            this._addChoice(label, value);
+            this._addChoice(focusedResult.label, focusedResult.value);
 
             // Update the control
-            this._updateChoicesInResultsList();
+            this._updateResultsDropdown();
             this._gotoNextResult();
 
             // Return true to indicate item was chosen
             return true;
+         },
+
+         /**
+          * Create a document fragment of a label, highlighted with the current search term
+          *
+          * @instance
+          * @protected
+          * @param    {string} label The label
+          * @returns  {object} A document fragment of the highlighted label
+          */
+         _createHighlightedLabel: function alfresco_forms_controls_MultiSelect___createHighlightedLabel(label) {
+            var labelParts = label.split(this._currentSearchValue),
+               labelFrag = document.createDocumentFragment();
+            array.forEach(labelParts, function(labelPart, partIndex) {
+               var highlightSpan;
+               if (partIndex) {
+                  highlightSpan = domConstruct.create("span", {
+                     className: this.rootClass + "__result__highlighted-label"
+                  }, labelFrag);
+                  highlightSpan.appendChild(document.createTextNode(this._currentSearchValue));
+               }
+               labelFrag.appendChild(document.createTextNode(labelPart));
+            }, this);
+            return labelFrag;
          },
 
          /**
@@ -424,9 +454,7 @@ define([
           * @protected
           */
          _deleteSelectedChoice: function alfresco_forms_controls_MultiSelect___deleteSelectedChoice() {
-            var selectedChoice = this._getSelectedChoiceNode(),
-               choiceCloseLink = query("." + this.rootClass + "__choice__close-button", selectedChoice)[0];
-            on.emit(choiceCloseLink, "click", {
+            on.emit(this._selectedChoice.closeButton, "click", {
                bubbles: true,
                cancelable: true
             });
@@ -439,8 +467,8 @@ define([
           * @protected
           */
          _deselectAllChoices: function alfresco_forms_controls_MultiSelect___deselectAllChoices() {
-            query("." + this.rootClass + "__choice").forEach(function(nextChoice) {
-               domClass.remove(nextChoice, this.rootClass + "__choice--selected");
+            array.forEach(this._choices, function(nextChoice) {
+               domClass.remove(nextChoice.domNode, this.rootClass + "__choice--selected");
             }, this);
          },
 
@@ -455,29 +483,9 @@ define([
             while ((resultListener = this._resultListeners.pop())) {
                resultListener.remove();
             }
-            while (this.errorItem.nextSibling) { // "empty message" item and all preceding will remain
+            while (this.resultsDropdown.childNodes.length > 3) {
                this.resultsDropdown.removeChild(this.resultsDropdown.lastChild);
             }
-         },
-
-         /**
-          * Get the choices, as an array of objects with "node", "label" and "value" properties
-          *
-          * @instance
-          * @protected
-          * @returns  {object[]} The choices
-          */
-         _getChoices: function alfresco_forms_controls_MultiSelect___getChoices() {
-            var choices = [];
-            query(".alfresco-forms-controls-MultiSelect__choice__content").forEach(function(choiceContentNode) {
-               choices.push({
-                  node: choiceContentNode.parentNode,
-                  contentNode: choiceContentNode,
-                  label: choiceContentNode.textContent || choiceContentNode.innerText,
-                  value: choiceContentNode.getAttribute(this._valueHtmlAttribute)
-               });
-            }, this);
-            return choices;
          },
 
          /**
@@ -488,7 +496,7 @@ define([
           * @protected
           * @returns  {number} The cursor position (zero-indexed)
           */
-         _getCursorPosition: function alfresco_forms_controls_MultiSelect___getCursorPosition() {
+         _getCursorPositionWithinTextbox: function alfresco_forms_controls_MultiSelect___getCursorPositionWithinTextbox() {
             var cursorPos = 0,
                range;
             if (this.searchBox.createTextRange) {
@@ -506,39 +514,6 @@ define([
          },
 
          /**
-          * Get the currently selected choice (or null if one isn't selected).
-          *
-          * @instance
-          * @protected
-          * @returns  {object} The currently selected choice (node)
-          */
-         _getSelectedChoiceNode: function alfresco_forms_controls_MultiSelect___getSelectedChoice() {
-            var selectedChoice = null;
-            query("." + this.rootClass + "__choice").some(function(nextChoice) {
-               if (domClass.contains(nextChoice, this.rootClass + "__choice--selected")) {
-                  selectedChoice = nextChoice;
-               }
-               return !!selectedChoice;
-            }, this);
-            return selectedChoice;
-         },
-
-         /**
-          * Get the result-item nodes as an array (only if the dropdown is open)
-          *
-          * @instance
-          * @protected
-          * @returns  {[object]} Item nodes
-          */
-         _getResultItemNodes: function alfresco_forms_controls_MultiSelect___getResultItemNodes() {
-            var itemNodes = [];
-            query("." + this.rootClass + "__result", this.domNode).forEach(function(nextItem) {
-               itemNodes.push(nextItem);
-            });
-            return itemNodes;
-         },
-
-         /**
           * Go to the next result in the dropdown, or the first one if none selected (ignores already-chosen items)
           *
           * @instance
@@ -546,39 +521,31 @@ define([
           * @param {boolean} reverseCommand If true then go to previous item instead
           */
          _gotoNextResult: function alfresco_forms_controls_MultiSelect___gotoNextResult(reverseCommand) {
-            var resultItems = this._getResultItemNodes(),
+            var results = this._results.slice(0), // Clone the array, so we can reverse if necessary
                focusedClass = this.rootClass + "__result--focused",
                alreadyChosenClass = this.rootClass + "__result--already-chosen",
-               focusNextItem = false,
-               focusedItem,
-               itemToGainFocus;
+               focusNextResult = false,
+               resultToFocus;
             if (reverseCommand) {
-               resultItems.reverse();
+               results.reverse();
             }
-            array.some(resultItems, function(nextItem) {
-               if (domClass.contains(nextItem, focusedClass) && !domClass.contains(nextItem, alreadyChosenClass)) {
-                  focusedItem = nextItem;
-               }
-               return !!focusedItem;
-            });
-            resultItems.forEach(function(nextItem) {
-               if (!itemToGainFocus) {
-                  var itemIsChosen = domClass.contains(nextItem, alreadyChosenClass),
-                     itemIsFocused = domClass.contains(nextItem, focusedClass),
-                     itemIsValid = !itemIsChosen && (!focusedItem || focusNextItem);
-                  if (itemIsValid) {
-                     itemToGainFocus = nextItem;
-                  } else if (itemIsFocused) {
-                     focusNextItem = true;
+            array.forEach(results, function(nextResult) {
+               if (!resultToFocus) {
+                  var resultIsChosen = domClass.contains(nextResult.domNode, alreadyChosenClass),
+                     resultIsFocused = this._focusedResult === nextResult,
+                     resultIsValid = !resultIsChosen && (!this._focusedResult || focusNextResult);
+                  if (resultIsValid) {
+                     resultToFocus = nextResult;
+                  } else if (resultIsFocused) {
+                     focusNextResult = true;
                   }
                }
-               domClass.remove(nextItem, focusedClass);
+               domClass.remove(nextResult.domNode, focusedClass);
             });
-            if (itemToGainFocus) {
-               domClass.add(itemToGainFocus, focusedClass);
-            } else if (focusedItem) {
-               domClass.add(focusedItem, focusedClass);
+            if (!resultToFocus && this._focusedResult) {
+               resultToFocus = this._focusedResult;
             }
+            resultToFocus && domClass.add(resultToFocus.domNode, focusedClass);
          },
 
          /**
@@ -610,12 +577,21 @@ define([
           */
          _handleSearchSuccess: function alfresco_forms_controls_MultiSelect___handleSearchSuccess(responseItems) {
             this._hideLoadingMessage();
-            this._emptyResults();
+            this._results = array.map(responseItems, function(nextItem) {
+               var label = nextItem[this.store.labelAttribute],
+                  value = nextItem[this.store.valueAttribute];
+               this._storeItems[value] = nextItem;
+               return {
+                  domNode: null,
+                  item: nextItem,
+                  label: label,
+                  value: value
+               };
+            }, this);
+            this._updateResultsDropdown();
             if (!responseItems.length) {
                this._showEmptyMessage();
             } else {
-               array.forEach(responseItems, this._addResultItem, this);
-               this._updateChoicesInResultsList();
                this._gotoNextResult();
             }
             this._showResultsDropdown();
@@ -665,6 +641,18 @@ define([
          },
 
          /**
+          * Handle blur events on the search box
+          *
+          * @instance
+          * @protected
+          */
+         _onBlur: function alfresco_forms_controls_MultiSelect___onSearchBlur() {
+            domClass.remove(this.domNode, this.rootClass + "--focused");
+            this._deselectAllChoices();
+            this._hideResultsDropdown();
+         },
+
+         /**
           * Handle clicks on a choice
           *
           * @instance
@@ -673,7 +661,7 @@ define([
           * @param    {object} evt Dojo-normalised event object
           */
          _onChoiceClick: function alfresco_forms_controls_MultiSelect___onChoiceClick(choiceObject, evt) {
-            this._selectChoice(choiceObject.node);
+            this._selectChoice(choiceObject.domNode);
             evt.preventDefault();
             evt.stopPropagation();
          },
@@ -683,30 +671,36 @@ define([
           *
           * @instance
           * @protected
-          * @param    {object} choiceObject Object containing information about the choice ("node", "selectListener" and "closeListener")
+          * @param    {object} choiceToRemove The choice object to remove
           * @param    {object} evt Dojo-normalised event object
           */
-         _onChoiceCloseClick: function alfresco_forms_controls_MultiSelect___onChoiceCloseClick(choiceObject, evt) {
+         _onChoiceCloseClick: function alfresco_forms_controls_MultiSelect___onChoiceCloseClick(choiceToRemove, evt) {
 
-            // Remove the item from the control's value
-            var choiceValue = choiceObject.value,
-               storeValueAttr = this.store.valueAttribute,
-               newValue = array.filter(this.value, function(nextValue) {
-                  return nextValue[storeValueAttr] !== choiceValue;
-               }, this);
-            this._changeAttrValue("value", newValue);
+            // Update the choices collection
+            this._choices = array.filter(this._choices, function(nextChoice) {
+               return nextChoice.value !== choiceToRemove.value;
+            });
+            if (this._selectedChoice === choiceToRemove) {
+               this._selectedChoice = null;
+            }
+
+            // Synchronise the control's value with the choices collection
+            var updatedValue = array.map(this._choices, function(nextChoice) {
+               return nextChoice.item;
+            }, this);
+            this._changeAttrValue("value", updatedValue);
 
             // Remove the node and its listeners
-            domConstruct.destroy(choiceObject.node);
-            choiceObject.selectListener.remove();
-            choiceObject.closeListener.remove();
+            domConstruct.destroy(choiceToRemove.domNode);
+            choiceToRemove.selectListener.remove();
+            choiceToRemove.closeListener.remove();
 
             // Stop the click doing anything else
             evt.preventDefault();
             evt.stopPropagation();
 
-            // Update the control state
-            this._updateChoicesInResultsList();
+            // Update the results (i.e. adjust the items' chosen states)
+            this._updateResultsDropdown();
          },
 
          /**
@@ -717,10 +711,25 @@ define([
           * @param    {object} evt Dojo-normalised event object
           */
          _onControlClick: function alfresco_forms_controls_MultiSelect___onControlClick(evt) {
-            var controlIsFocused = domClass.contains(this.domNode, this.rootClass + "--focused");
             this._deselectAllChoices();
-            if (evt.target !== this.searchBox && !controlIsFocused) {
+            if (evt.target !== this.searchBox) {
                this.searchBox.focus();
+            }
+         },
+
+         /**
+          * Handle focus events on this control
+          *
+          * @instance
+          * @protected
+          */
+         _onFocus: function alfresco_forms_controls_MultiSelect___onSearchFocus() {
+            domClass.add(this.domNode, this.rootClass + "--focused");
+            if (this._results.length) {
+               this._showResultsDropdown();
+               this._gotoNextResult();
+            } else {
+               this._startSearch(this.searchBox.value);
             }
          },
 
@@ -732,35 +741,32 @@ define([
           * @protected
           */
          _onResultMousedown: function alfresco_forms_controls_MultiSelect___onResultMousedown() {
-            this._chooseItem();
+            this._chooseFocusedItem();
          },
 
          /**
           * Handle mouseovers on the result items
-          * NOTE: This will blindly add the focused class to the item, as the already-chosen class
-          *       will override it if necessary
           *
           * @instance
           * @protected
-          * @param    {object} resultListItem The node in the result list that's being moused-over
+          * @param    {object} evt Dojo-normalised event object
           */
-         _onResultMouseover: function alfresco_forms_controls_MultiSelect___onResultMouseover(resultListItem) {
-            array.forEach(this._getResultItemNodes(), function(nextItemNode) {
-               domClass[nextItemNode === resultListItem ? "add" : "remove"](nextItemNode, this.rootClass + "__result--focused");
+         _onResultMouseover: function alfresco_forms_controls_MultiSelect___onResultMouseover(evt) {
+            var focusedClass = this.rootClass + "__result--focused",
+               alreadyChosenClass = this.rootClass + "__result--already-chosen",
+               hoveredResultNode = evt.currentTarget,
+               hoveredResultAlreadyChosen = domClass.contains(hoveredResultNode, alreadyChosenClass);
+            this._focusedResult = null;
+            array.forEach(this._results, function(nextResult) {
+               var nextResultIsHovered = nextResult.domNode === hoveredResultNode,
+                  doFocus = nextResultIsHovered && !hoveredResultAlreadyChosen;
+               if (doFocus) {
+                  this._focusedResult = nextResult;
+                  domClass.add(nextResult.domNode, focusedClass);
+               } else {
+                  domClass.remove(nextResult.domNode, focusedClass);
+               }
             }, this);
-         },
-
-         /**
-          * Handle blur events on the search box
-          *
-          * @instance
-          * @protected
-          * @param {object} evt Dojo-normalised event object
-          */
-         _onSearchBlur: function alfresco_forms_controls_MultiSelect___onSearchBlur(evt) {
-            /*jshint unused:false*/
-            domClass.remove(this.domNode, this.rootClass + "--focused");
-            this._hideResultsDropdown();
          },
 
          /**
@@ -785,25 +791,6 @@ define([
          },
 
          /**
-          * Handle focus events on this control
-          *
-          * @instance
-          * @protected
-          * @param {object} evt Dojo-normalised event object
-          */
-         _onSearchFocus: function alfresco_forms_controls_MultiSelect___onSearchFocus(evt) {
-            /*jshint unused:false*/
-            domClass.add(this.domNode, this.rootClass + "--focused");
-            var existingResults = query("." + this.rootClass + "__result", this.domNode);
-            if (existingResults.length) {
-               this._showResultsDropdown();
-               this._gotoNextResult();
-            } else {
-               this._startSearch(this.searchBox.value);
-            }
-         },
-
-         /**
           * Handle keypress events on the search box
           *
           * @instance
@@ -811,8 +798,8 @@ define([
           * @param {object} evt Dojo-normalised event object
           */
          _onSearchKeypress: function alfresco_forms_controls_MultiSelect___onSearchKeypress(evt) {
-            /*jshint maxcomplexity:16*/
-            var cursorPosBeforeKeypress = this._getCursorPosition();
+            /*jshint maxcomplexity:17*/
+            var cursorPosBeforeKeypress = this._getCursorPositionWithinTextbox();
             switch (evt.charOrCode) {
                case keys.ESCAPE:
                   this._resetSearchBox();
@@ -822,7 +809,7 @@ define([
                   break;
                case keys.ENTER:
                   if (this._resultsDropdownIsVisible()) {
-                     if (this._chooseItem()) {
+                     if (this._chooseFocusedItem()) {
                         this._resetSearchBox();
                         this._hideResultsDropdown();
                      }
@@ -850,16 +837,19 @@ define([
                   }
                   break;
                case keys.RIGHT_ARROW:
-                  if (this._getSelectedChoiceNode()) {
+                  if (this._selectedChoice) {
                      this._selectChoice(1);
                      evt.preventDefault();
                   }
                   break;
                case keys.DELETE:
                case keys.BACKSPACE:
-                  if (this._getSelectedChoiceNode()) {
+                  if (this._selectedChoice) {
                      this._deleteSelectedChoice();
                      evt.preventDefault();
+                  } else if (!cursorPosBeforeKeypress && this._choices.length) {
+                     this._selectChoice(-1);
+                     this._deleteSelectedChoice();
                   }
                   break;
                default:
@@ -925,24 +915,27 @@ define([
           *                                              right of the current choices.
           */
          _selectChoice: function alfresco_forms_controls_MultiSelect___selectChoice(choiceNodeOrOffset) {
-            var selectedClass = this.rootClass + "__choice--selected",
-               currentlySelectedChoiceNode = this._getSelectedChoiceNode(),
+            var currentlySelectedChoice = this._selectedChoice,
                selectNextChoice = false,
                choiceToSelect = null,
-               choices;
+               choices = this._choices.slice(0); // Clone the array, so we can reverse if necessary
             this._deselectAllChoices();
-            if (typeof choiceNodeOrOffset === "object") { // Node
-               domClass.add(choiceNodeOrOffset, selectedClass);
-            } else { // Offset
-               choices = this._getChoices();
-               if (!currentlySelectedChoiceNode) {
-                  domClass.add(choices[choices.length - 1].node, selectedClass);
+            if (typeof choiceNodeOrOffset === "object") {
+               array.some(choices, function(nextChoice) {
+                  if (nextChoice.domNode === choiceNodeOrOffset) {
+                     choiceToSelect = nextChoice;
+                  }
+                  return !!choiceToSelect;
+               });
+            } else {
+               if (!currentlySelectedChoice) {
+                  choiceToSelect = choices[choices.length - 1];
                } else {
                   if (choiceNodeOrOffset < 0) {
                      choices.reverse();
                   }
                   array.some(choices, function(nextChoice) {
-                     if (currentlySelectedChoiceNode === nextChoice.node) {
+                     if (currentlySelectedChoice === nextChoice) {
                         selectNextChoice = true;
                      } else if (selectNextChoice) {
                         choiceToSelect = nextChoice;
@@ -950,12 +943,14 @@ define([
                      return !!choiceToSelect;
                   });
                   if (!choiceToSelect && choiceNodeOrOffset < 0) {
-                     domClass.add(currentlySelectedChoiceNode, selectedClass);
-                  } else if (choiceToSelect) {
-                     domClass.add(choiceToSelect.node, selectedClass);
+                     choiceToSelect = currentlySelectedChoice;
                   }
                }
             }
+            if (choiceToSelect) {
+               domClass.add(choiceToSelect.domNode, this.rootClass + "__choice--selected");
+            }
+            this._selectedChoice = choiceToSelect;
          },
 
          /**
@@ -1033,7 +1028,6 @@ define([
             this._hideLoadingMessage();
             this._hideErrorMessage();
             this._hideEmptyMessage();
-            this._emptyResults();
 
             // Setup handlers and update request "counter"
             var thisRequestIndex = this._latestSearchRequestIndex = this._latestSearchRequestIndex + 1,
@@ -1056,56 +1050,100 @@ define([
          },
 
          /**
-          * Update the results list, specifically to update the choices within it
+          * Update the results list
           *
           * @instance
           * @protected
           */
-         _updateChoicesInResultsList: function alfresco_forms_controls_MultiSelect___updateChoicesInResultsList() {
-            var resultItemNodes = this._getResultItemNodes(),
-               choices = this._getChoices();
-            array.forEach(resultItemNodes, function(nextResultItem) {
-               var resultValue = nextResultItem.getAttribute(this._valueHtmlAttribute),
-                  itemIsChosen = array.some(choices, function(nextChoice) {
-                     return resultValue === nextChoice.value;
-                  });
-               domClass[itemIsChosen ? "add" : "remove"](nextResultItem, this.rootClass + "__result--already-chosen");
+         _updateResultsDropdown: function alfresco_forms_controls_MultiSelect___updateResultsDropdown() {
+
+            // Remove all existing listeners
+            array.forEach(this._resultListeners, function(nextListener) {
+               nextListener.remove();
+            });
+
+            // If we have too many current results displaying, remove the excess nodes
+            while (this.resultsDropdown.childNodes.length > this._results.length + 3) {
+               this.resultsDropdown.removeChild(this.resultsDropdown.lastChild);
+            }
+
+            // Update or add as necessary
+            array.forEach(this._results, function(nextResult, index) {
+
+               // Setup variables
+               var resultIsChosen = array.some(this._choices, function(nextChoice) {
+                     return nextChoice.value === nextResult.value;
+                  }),
+                  itemNode = this.resultsDropdown.childNodes[index + 3],
+                  clickListener,
+                  mouseoverListener;
+
+               // Construct the item if not already present
+               if (!itemNode) {
+                  itemNode = domConstruct.create("li", {
+                     "className": this.rootClass + "__result"
+                  }, this.resultsDropdown);
+               }
+
+               // Update the value if necessary
+               if (itemNode.getAttribute(this._valueHtmlAttribute) !== nextResult.value) {
+                  itemNode.setAttribute(this._valueHtmlAttribute, nextResult.value);
+               }
+
+               // Recreate the label
+               var newLabel = this._createHighlightedLabel(nextResult.label);
+               if (itemNode.innerHTML !== newLabel.outerHTML) {
+                  while (itemNode.hasChildNodes()) {
+                     itemNode.removeChild(itemNode.firstChild);
+                  }
+                  itemNode.appendChild(newLabel);
+               }
+
+               // Setup event listeners
+               clickListener = on(itemNode, "mousedown", lang.hitch(this, this._onResultMousedown));
+               mouseoverListener = on(itemNode, "mouseover", lang.hitch(this, this._onResultMouseover));
+               this._resultListeners.push(clickListener, mouseoverListener);
+               this.own(clickListener, mouseoverListener);
+
+               // Update the domNode in the result item
+               nextResult.domNode = itemNode;
+
+               // Mark item as chosen, if appropriate
+               domClass[resultIsChosen ? "add" : "remove"](itemNode, this.rootClass + "__result--already-chosen");
+
             }, this);
          },
 
          /**
-          * Update all of the items with temporary labels
+          * Update all of the items with latest info from the store
           *
           * @instance
           * @protected
           */
-         _updateTemporaryLabels: function() {
+         _updateItemsFromStore: function alfresco_forms_controls_MultiSelect___updateItemsFromStore() {
 
             // Make sure we have some that need updating
-            if (!this._itemsWithTemporaryLabels.length) {
+            if (!this._itemsToUpdateFromStore.length) {
                return;
             }
 
             // Setup handlers
             var successHandler = lang.hitch(this, function(responseItems) {
 
-                  // debugger;
-
                   // Update the result items map
                   array.forEach(responseItems, function(nextItem) {
                      var value = nextItem[this.store.valueAttribute];
-                     if (this._resultItems[value]) {
-                        lang.mixin(this._resultItems[value], nextItem);
+                     if (this._storeItems[value]) {
+                        lang.mixin(this._storeItems[value], nextItem);
                      } else {
-                        this._resultItems[value] = nextItem;
+                        this._storeItems[value] = nextItem;
                      }
                   }, this);
 
                   // Run through the choices, updating their labels
-                  array.forEach(this._getChoices(), function(nextChoice) {
+                  array.forEach(this._choices, function(nextChoice) {
                      var contentNode = nextChoice.contentNode,
-                        nextValue = nextChoice.value,
-                        realLabel = this._resultItems[nextValue][this.store.labelAttribute];
+                        realLabel = nextChoice.item[this.store.labelAttribute];
                      while (contentNode.hasChildNodes()) {
                         contentNode.removeChild(contentNode.firstChild);
                      }
