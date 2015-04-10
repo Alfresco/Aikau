@@ -403,7 +403,13 @@ define(["dojo/_base/declare",
        */
       createWidget: function alfresco_lists_views_layout___MultiItemRendererMixin__createWidget(config, domNode, callback, callbackArgs) {
          // Only create a widget if there is data to create it with
-         if (!config || !config.config)
+         if (!config)
+         {
+            config = {
+               config: {}
+            };
+         }
+         else if (!config.config)
          {
             config.config = {};
          }
