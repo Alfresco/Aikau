@@ -105,7 +105,7 @@ define(["dojo/_base/declare",
          if (!this.currentData)
          {
             // We don't need to worry about combining data if there isn't any already.
-            this.alfLog('debug', 'AlfDocumentListView_augmentData called but this.currentData empty, so using setData instead.');
+            this.alfLog("debug", "augmentData called but this.currentData empty, so using setData instead.");
             this.setData(newData);
          }
          else
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       clearData: function alfresco_lists_views_layout___MultiItemRendererMixin__clearData() {
-         this.alfLog('info', 'Clearing currentData.');
+         this.alfLog("info", "Clearing currentData.");
          this.currentData = null;
       },
 
@@ -163,7 +163,7 @@ define(["dojo/_base/declare",
       renderData: function alfresco_lists_views_layout___MultiItemRendererMixin__renderData() {
          
          // Ensure that an array is created to hold the root widget subscriptions...
-         if (this.rootWidgetSubscriptions == null)
+         if (!this.rootWidgetSubscriptions)
          {
             this.rootWidgetSubscriptions = [];
          }
@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
          // the only subscriptions that will be present are those for selecting items, but extending
          // classes could have added additional subscriptions. If the subscriptions aren't cleaned 
          // up properly then destroyed widgets will try to be actioned.
-         array.forEach(this.rootWidgetSubscriptions, function(handle, i) {
+         array.forEach(this.rootWidgetSubscriptions, function(handle) {
             if (typeof handle.remove === "function")
             {
                handle.remove();
@@ -227,12 +227,12 @@ define(["dojo/_base/declare",
          this.currentData.items[this.currentIndex].isLastItem = (this.currentItem.index === this.currentData.items.length -1);
 
          // Set a width if provided...
-         if (this.width != null)
+         if (this.width)
          {
             domStyle.set(this.domNode, "width", this.width);
          }
          
-         if (this.containerNode != null)
+         if (this.containerNode)
          {
             // It is necessary to clone the widget definition to prevent them being modified for future iterations...
             // var clonedWidgets = lang.clone(this.widgets);
@@ -267,7 +267,7 @@ define(["dojo/_base/declare",
       allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets) {
          
          // Push the processed widgets for the last item into the array of rendered widgets...
-         if (this._renderedItemWidgets == null)
+         if (!this._renderedItemWidgets)
          {
             this._renderedItemWidgets = [];
          }
@@ -325,7 +325,7 @@ define(["dojo/_base/declare",
        */
       rootWidgetProcessing: function alfresco_lists_views_layout___MultiItemRendererMixin__rootWidgetProcessing(widget, index) {
          domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin--item");
-         if (this.rootWidgetSubscriptions == null)
+         if (!this.rootWidgetSubscriptions)
          {
             this.rootWidgetSubscriptions = [];
          }
@@ -387,7 +387,7 @@ define(["dojo/_base/declare",
       compareItems: function alfresco_lists_views_layout___MultiItemRendererMixin__compareItems(item1, item2) {
          var key1 = lang.getObject(this.itemKey, null, item1);
          var key2 = lang.getObject(this.itemKey, null, item2);
-         return (key1 != null && (key1 == key2));
+         return (key1 && (key1 === key2));
       },
       
       /**
@@ -403,16 +403,16 @@ define(["dojo/_base/declare",
        */
       createWidget: function alfresco_lists_views_layout___MultiItemRendererMixin__createWidget(config, domNode, callback, callbackArgs) {
          // Only create a widget if there is data to create it with
-         if (config == null || config.config == null)
+         if (!config || !config.config)
          {
             config.config = {};
          }
-         if (this.currentItem != null)
+         if (this.currentItem)
          {
             // This checks if the "jsNode" attribute has been created, and if not will make an attempt
             // to create it. This is in place purely for handling node based items, but shouldn't
             // break anything else...
-            if (typeof this.currentItem.jsNode === "undefined" && this.currentItem.node != null)
+            if (typeof this.currentItem.jsNode === "undefined" && this.currentItem.node)
             {
                this.currentItem.jsNode = new JsNode(this.currentItem.node);
             }

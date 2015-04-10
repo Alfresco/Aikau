@@ -134,6 +134,32 @@ define(["intern!object",
       }
    });
 
+   registerSuite({
+
+      name: "DND items provided by list",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/list-of-dnd-items", "DND items provided by list")
+            .end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check items can be loaded from a list": function() {
+         return browser.findAllByCssSelector(".alfresco-dnd-DragAndDropItemsListView .alfresco-dnd-DragAndDropItem")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "The DND items were not populated");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
    var pause = 150;
    registerSuite({
 

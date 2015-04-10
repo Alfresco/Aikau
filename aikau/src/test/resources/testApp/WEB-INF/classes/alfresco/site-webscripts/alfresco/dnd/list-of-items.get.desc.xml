@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop (list of items)</shortname>
+  <description>Uses an AlfList with the DragAndDropItemsListView to request and render the items that can be dragged and dropped.</description>
+  <family>aikau-unit-tests</family>
+  <url>/list-of-dnd-items</url>
+</webscript>
