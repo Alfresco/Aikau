@@ -60,7 +60,11 @@ define(["intern!object",
       },
 
       "Edit icon initially invisible": function() {
-         return browser.findByCssSelector("#INLINE_EDIT .editIcon")
+         return browser.findByCssSelector(".alfresco-testing-SubscriptionLog")
+            .moveMouseTo()
+         .end()
+         .sleep(250) // Make sure the mouse isn't over the row!
+         .findByCssSelector("#INLINE_EDIT .editIcon")
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Icon should not be displayed");

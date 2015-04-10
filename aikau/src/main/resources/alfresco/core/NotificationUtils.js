@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -22,50 +22,34 @@
  *
  * @module alfresco/core/NotificationUtils
  * @author Dave Draper
+ * @deprecated Since 1.0.17 - use the [NotificationService]{@link module:alfresco/services/NotificationService} instead.
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
-        "alfresco/dialogs/AlfDialog",
-        "dojo/dom-construct"],
-        function(declare, AlfCore, AlfDialog, domConstruct) {
+        "alfresco/core/Core"],
+        function(declare, AlfCore) {
 
    return declare([AlfCore], {
 
       /**
-       * This function handles displaying popup messages. It currently uses the legacy YUI functions that are defined
-       * in alfresco.js and are expected to be available in the JavaScript global namespace until Share is merged
-       * completely to the new UI framework. At some point in time this function should be updated to use alternative
-       * means of displaying a message.
+       * This function handles displaying popup messages. 
        *
        * @instance
        * @param msg {String} The message to be displayed.
        */
       displayMessage: function alfresco_core_Core__displayMessage(msg) {
-         if (Alfresco && Alfresco.util && Alfresco.util.PopupManager)
-         {
-            Alfresco.util.PopupManager.displayMessage({
-               text: msg
-            });
-         }
-         else
-         {
-            this.alfLog("error", "Alfresco.util.PopupManager not available for handling displayMessage requests.");
-         }
+         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            message: msg
+         });
       },
 
       /**
        * This function handles displaying popup messages that require some acknowledgement.
-       * It currently uses the legacy YUI functions that are defined
-       * in alfresco.js and are expected to be available in the JavaScript global namespace until Share is merged
-       * completely to the new UI framework. At some point in time this function should be updated to use alternative
-       * means of displaying a message.
        *
        * @instance
        * @param msg {String} The message to be displayed.
        */
       displayPrompt: function alfresco_core_Core__displayPrompt(config) {
-         var dialog = new AlfDialog(config);
-         dialog.show();
+         this.alfPublish("ALF_DISPLAY_PROMPT", config);
       }
    });
 });

@@ -50,12 +50,13 @@ define(["dojo/_base/declare",
         "dojo/dom-attr",
         "dojo/keys",
         "dojo/_base/event",
+        "dojo/query",
         "service/constants/Default",
         "alfresco/forms/Form",
         "alfresco/forms/controls/DojoValidationTextBox",
         "alfresco/forms/controls/HiddenValue"], 
         function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin,
-                 template, lang, array, on, domClass, html, domAttr, keys, event) {
+                 template, lang, array, on, domClass, html, domAttr, keys, event, query) {
 
    return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin], {
       
@@ -317,6 +318,10 @@ define(["dojo/_base/declare",
                   widgets: [primaryFormWidget].concat(autoSetFields)
                }
             }, this.formWidgetNode);
+            // NOTE: This line is specifically required to support Firefox, for some reason the standard
+            //       key handling is being suppressed, this was uncovered on the move from Dojo 1.9.0 to
+            //       both 1.9.6 and then 1.10.4
+            query(".alfresco-forms-controls-BaseFormControl .control input").on("keypress", lang.hitch(this, this.onValueEntryKeyPress));
          }
          return this.formWidget;
       },

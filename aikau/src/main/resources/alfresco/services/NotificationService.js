@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
             if (message) {
                this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
                   dialogId: "NOTIFICATION_PROMPT",
-                  dialogTitle: this.message("notification.prompt.title"),
+                  dialogTitle: payload.title || this.message("notification.prompt.title"),
                   textContent: message,
                   widgetsButtons: [
                      {

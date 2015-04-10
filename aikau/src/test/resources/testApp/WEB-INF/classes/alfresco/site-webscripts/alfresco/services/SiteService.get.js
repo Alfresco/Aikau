@@ -27,6 +27,7 @@ model.jsonModel = {
             pubSubScope: "ADMIN_USER_"
          }
       },
+      "alfresco/services/NotificationService",
       "alfresco/services/ErrorReporter"
    ],
    widgets:[

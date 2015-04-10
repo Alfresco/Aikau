@@ -21,7 +21,7 @@
  * An Alfresco styled dialog. Extends the default Dojo dialog by adding support for a row of buttons defined
  * by the [widgetButtons]{@link module:alfresco/dialogs/AlfDialog#widgetButtons} attribute. The main body
  * of the dialog can either be defined as simple text assigned to the
- * [textContent]{@link module:alfresco/dialogs/AlfDialog#textContent} attribute or as a JSON model assigned to
+ * [content]{@link module:alfresco/dialogs/AlfDialog#content} attribute or as a JSON model assigned to
  * the [widgetsContent]{@link module:alfresco/dialogs/AlfDialog#widgetsContent} attribute (widgets take
  * precedence over text - it is not possible to mix both).
  * 
@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        * @type {String}
        * @default ""
        */
-      textContent: "",
+      content: "",
       
       /**
        * Widgets to be processed into the main node
@@ -146,7 +146,7 @@ define(["dojo/_base/declare",
        * Extends the superclass implementation to process the widgets defined by 
        * [widgetButtons]{@link module:alfresco/dialogs/AlfDialog#widgetButtons} into the buttons bar
        * and either the widgets defined by [widgetsContent]{@link module:alfresco/dialogs/AlfDialog#widgetsContent}
-       * or the text string set as [textContent]{@link module:alfresco/dialogs/AlfDialog#textContent} into
+       * or the text string set as [content]{@link module:alfresco/dialogs/AlfDialog#content} into
        * the main body of the dialog.
        * 
        * @instance
@@ -173,6 +173,7 @@ define(["dojo/_base/declare",
             });
          }
 
+         domConstruct.empty(this.containerNode);
          this.bodyNode = domConstruct.create("div", {
             "class" : "dialog-body"
          }, this.containerNode, "last");
@@ -224,11 +225,11 @@ define(["dojo/_base/declare",
             }];
             this.processWidgets(bodyModel, widgetsNode);
          }
-         else if (this.textContent)
+         else if (this.content)
          {
             // Add basic text content into the container node. An example of this would be for
             // setting basic text content in an confirmation dialog...
-            html.set(this.bodyNode, this.encodeHTML(this.textContent));
+            html.set(this.bodyNode, this.encodeHTML(this.content));
          }
       },
       
