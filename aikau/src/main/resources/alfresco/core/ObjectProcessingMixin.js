@@ -83,8 +83,7 @@ define(["dojo/_base/declare",
             // Deal with multiple tokens in the string.
             processedValue = lang.replace(value, lang.hitch(this, this.safeReplace, object));
          }
-
-         return processedValue
+         return processedValue;
       },
 
       /**

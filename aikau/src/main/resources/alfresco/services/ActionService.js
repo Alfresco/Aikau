@@ -1140,82 +1140,40 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Performs a document move. Note, this doesn't display a dialog for move options - it simply performs the move. The payload
-       * published on this topic must contain a "sourceNodeRefs" attribute which should be an array of strings where each element
-       * is a NodeRef to be moved. It can accept either a "targetNodeRefUri" or a "targetPath". The "targetNodeRefUri" should be
-       * a URI fragment of a NodeRef (e.g. with the "://" converted to "/"). When a "targetPath" is specified then either the
-       * "rootNode" attribute or a combination of "siteId" and "containerId" will be used to construct the POST URL.
-       *
-       * @instance
-       * @param {object} payload
-       */
-      onMoveDocuments: function alfresco_services_ActionService__onMoveDocuments(payload) {
-         if (payload && payload.sourceNodeRefs)
-         {
-            var url = null;
-            if (payload.targetNodeRefUri)
-            {
-               url = AlfConstants.PROXY_URI + "slingshot/doclib/action/move-to/node/" + payload.targetNodeRefUri;
-            }
-            else if (payload.targetPath)
-            {
-               if (this.rootNode)
-               {
-                  var currentLocation = new JsNode(this.rootNode).nodeRef.uri;
-                  url = AlfConstants.PROXY_URI + "slingshot/doclib/action/move-to/node/" + currentLocation + payload.targetPath;
-               }
-               else
-               {
-                  url = AlfConstants.PROXY_URI + "slingshot/doclib/action/move-to/site/" + this.siteId + "/" + this.containerId  + "/" + payload.targetPath;
-               }
-            }
-            if (url)
-            {
-               var dataObj = {
-                  nodeRefs: payload.sourceNodeRefs,
-                  parentId: this._currentNode.parent.nodeRef
-               };
-               this.serviceXhr({url : url,
-                                data: dataObj,
-                                method: "POST",
-                                successCallback: this.onMoveDocumentsSuccess,
-                                failureCallback: this.onMoveDocumentsFailure,
-                                callbackScope: this});
-            }
-            else
-            {
-               this.alfLog("warn", "Could not process a request to move documents due to missing attributes, either 'targetNodeRefUri' or 'targetPath' is required", payload);
-            }
-         }
-      },
-
-      /**
-       * @instance
-       * @param {object} response
-       * @param {object} originalRequestConfig
-       */
-      onMoveDocumentsSuccess: function alfresco_services_ActionService__onMoveDocumentsSuccess(response, originalRequestConfig) {
-         // jshint unused:false
-         // TODO: Display a success message.
-         this.alfPublish(this.reloadDataTopic, {});
-      },
-
-      /**
-       * @instance
-       * @param {object} response
-       * @param {object} originalRequestConfig
-       */
-      onMoveDocumentsFailure: function alfresco_services_ActionService__onMoveDocumentsSuccess(response, originalRequestConfig) {
-         // jshint unused:false
-         // TODO: Publish an error message.
-      },
-
-      /**
        *
        * @param {object} item The item to perform the action on
        */
       onActionManageAspects: function alfresco_services_ActionService__onActionManageAspects(item) {
          this.alfPublish("ALF_MANAGE_ASPECTS_REQUEST", { item: item });
+      },
+
+      /**
+       * Handles the "onActionSimpleRepoAction" that is used by multiple configured actions within Alfresco Share.
+       * The publication that mapped to the "action" attribute is called. Currently this is only supporting the
+       * "document-approve" and "document-reject" actions which are delegated to the 
+       * [SimpleWorkflowService]{@link module:alfresco/services/actions/SimpleWorkflowService}.
+       * 
+       * @instance
+       * @param {object} payload This will contain the details of the configured action
+       * @param {object} nodes The nodes to perform the actions on. 
+       */
+      onActionSimpleRepoAction: function alfresco_services_ActionService__onActionSimpleRepoAction(payload, nodes) {
+         switch (payload.id) {
+            case "document-approve":
+               this.alfPublish("ALF_APPROVE_SIMPLE_WORKFLOW", {
+                  items: nodes,
+                  action: payload.action
+               });
+               break;
+            case "document-reject":
+               this.alfPublish("ALF_REJECT_SIMPLE_WORKFLOW", {
+                  items: nodes,
+                  action: payload.action
+               });
+               break;
+            default:
+               this.alfLog("warn", "A simple repo action request was made but the action is unsupported", payload, this);
+         }
       }
    });
 });

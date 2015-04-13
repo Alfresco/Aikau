@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -105,7 +105,7 @@ define(["dojo/_base/declare",
        */
       getXhrData: function alfresco_renderers_XhrActions__getXhrData() {
          var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
-         if (nodeRef != null)
+         if (nodeRef)
          {
             // Generate a UUID for the response to the publication to ensure that only this widget
             // handles to the XHR data...
@@ -163,7 +163,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       clearLoadingItem: function alfresco_renderers_XhrActions__clearLoadingItem() {
-         array.forEach(this.actionsMenu.popup.getChildren(), function(widget, index) {
+         array.forEach(this.actionsMenu.popup.getChildren(), function(widget) {
             this.actionsMenu.popup.removeChild(widget);
          }, this);
       },
@@ -176,7 +176,7 @@ define(["dojo/_base/declare",
       addXhrItems: function alfresco_renderers_XhrActions__addXhrItems() {
          this.actionsGroup = new AlfMenuGroup({});
          this.actionsMenu.popup.addChild(this.actionsGroup);
-         array.forEach(this.currentItem.actions, lang.hitch(this, "addAction"));
+         array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
       }
    });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -33,14 +33,17 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/renderers/_PublishPayloadMixin",
+        "alfresco/core/ObjectProcessingMixin",
         "alfresco/menus/AlfMenuItem",
         "dojo/_base/array",
         "dojo/_base/lang",
         "service/constants/Default",
-        "alfresco/core/ArrayUtils"],
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, _PublishPayloadMixin, AlfMenuItem, array, lang, AlfConstants, AlfArray) {
+        "alfresco/core/ArrayUtils",
+        "alfresco/core/JsNode"],
+        function(declare, AlfCore, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin, 
+                 AlfMenuItem, array, lang, AlfConstants, AlfArray, JsNode) {
 
-   return declare([AlfCore, _AlfDocumentListTopicMixin, _PublishPayloadMixin], {
+   return declare([AlfCore, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin], {
 
       /**
        * Indicates whether or not actions should be filtered according to the
@@ -83,7 +86,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers__ActionsMixin__postCreate() {
          this.inherited(arguments);
-         if (this.allowedActionsString != null)
+         if (this.allowedActionsString)
          {
             try
             {
@@ -105,7 +108,7 @@ define(["dojo/_base/declare",
        */
       addActions: function alfresco_renderers__ActionsMixin__addActions() {
          // Iterate over the actions to create a menu item for each of them...
-         if (this.customActions != null && this.customActions.length > 0)
+         if (this.customActions && this.customActions.length > 0)
          {
             array.forEach(this.customActions, lang.hitch(this, "addAction"));
          }
@@ -121,19 +124,33 @@ define(["dojo/_base/declare",
        * @param {object} action The configuration for the action to add
        * @param (integer} index The index of the action
        */
-      addAction: function alfresco_renderers__ActionsMixin__addAction(action, index) {
+      addAction: function alfresco_renderers__ActionsMixin__addAction(action, /*jshint unused:false*/index) {
          if (this.filterActions === false || AlfArray.arrayContains(this.allowedActions, action.id))
          {
             this.alfLog("log", "Adding action", action);
 
-            var payload = (action.publishPayload != null) ? action.publishPayload : {document: this.currentItem, action: action};
+            // If there is a node object then create the corresponding jsNode object - this is required for 
+            // label processing below
+            if (!this.currentItem.jsNode && this.currentItem.node)
+            {
+               this.currentItem.jsNode = new JsNode(this.currentItem.node);
+            }
+
+            // Some Share actions have variable labels, most notably the simple workflow actions, and these should
+            // be processed to ensure that they are rendered correctly.
+            if (action.label)
+            {
+               action.label = this.processTokens(action.label, this.currentItem);
+            }
+
+            var payload = (action.publishPayload) ? action.publishPayload : {document: this.currentItem, action: action};
             var menuItem = new AlfMenuItem({
                label: action.label,
                iconImage: AlfConstants.URL_RESCONTEXT + "components/documentlibrary/actions/" + action.icon + "-16.png",
                type: action.type,
                pubSubScope: this.pubSubScope,
                parentPubSubScope: this.parentPubSubScope,
-               publishTopic: (action.publishTopic != null) ? action.publishTopic : this.singleDocumentActionTopic,
+               publishTopic: action.publishTopic || this.singleDocumentActionTopic,
                publishPayload: this.generatePayload(payload, this.currentItem, null, action.publishPayloadType, action.publishPayloadItemMixin, action.publishPayloadModifiers),
                publishGlobal: this.publishGlobal,
                publishToParent: this.publishToParent
