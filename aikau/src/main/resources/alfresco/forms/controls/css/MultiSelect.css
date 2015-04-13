@@ -99,11 +99,11 @@
          white-space: nowrap;
       }
    }
-   &__result-loading, &__result-error, &__result-empty {
+   &__result-loading, &__result-error, &__result-no-results {
       border-width: 1px;
       display: none;
    }
-   &__result-empty {
+   &__result-no-results {
       color: #999;
    }
    &__result-error {
@@ -166,7 +166,7 @@
    }
    &--show-empty {
       .alfresco-forms-controls-MultiSelect {
-         &__result-empty {
+         &__result-no-results {
             display: block;
          }
       }

@@ -4,7 +4,7 @@
       <input class="${rootClass}__search-box" data-dojo-attach-point="searchBox" data-dojo-attach-event="keypress:_onSearchKeypress,keyup:_onSearchKeyup" type="text" />
    </div>
    <ul class="${rootClass}__results" data-dojo-attach-point="resultsDropdown"><li
-      class="${rootClass}__result-loading">Loading ...</li><li
-      class="${rootClass}__result-empty">No results found for search string &quot;<span data-dojo-attach-point="noResultSearchTerm"></span>&quot;</li><li
-      class="${rootClass}__result-error" data-dojo-attach-point="errorItem"></li></ul>
+      class="${rootClass}__result-loading" data-dojo-attach-point="loadingMessage">${loadingMessage}</li><li
+      class="${rootClass}__result-no-results" data-dojo-attach-point="noResultsMessage"></li><li
+      class="${rootClass}__result-error" data-dojo-attach-point="errorMessage"></li></ul>
 </div>

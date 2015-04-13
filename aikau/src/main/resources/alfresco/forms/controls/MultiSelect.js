@@ -26,6 +26,7 @@
  * @author Martin Doyle
  */
 define([
+      "alfresco/core/Core",
       "alfresco/core/ObjectTypeUtils",
       "dijit/_FocusMixin",
       "dijit/_TemplatedMixin",
@@ -42,9 +43,9 @@ define([
       "dojo/when",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(ObjectTypeUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, Deferred, domConstruct, domStyle, domClass, keys, on, when, template) {
+   function(Core, ObjectTypeUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, Deferred, domConstruct, domStyle, domClass, keys, on, when, template) {
 
-      return declare([_WidgetBase, _TemplatedMixin, _FocusMixin], {
+      return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core], {
 
          /**
           * The Choice object (referenced in other JSDoc comments)
@@ -82,6 +83,24 @@ define([
          cssRequirements: [{
             cssFile: "./css/MultiSelect.css"
          }],
+
+         /**
+          * An array of the i18n files to use with this widget.
+          *
+          * @instance
+          * @type {object[]}
+          * @default [{i18nFile: "./i18n/MultiSelect.properties"}]
+          */
+         i18nRequirements: [{
+            i18nFile: "./i18n/MultiSelect.properties"
+         }],
+
+         /**
+          * The localised loading message used by the template
+          *
+          * @type {string}
+          */
+         loadingMessage: null,
 
          /**
           * The root class of this widget
@@ -255,6 +274,17 @@ define([
             this.inherited(arguments);
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
             this.value = [];
+         },
+
+         /**
+          * Widget instantiated and properties mixed, but not been started
+          *
+          * @instance
+          * @override
+          */
+         postMixInProperties: function() {
+            this.inherited(arguments);
+            this.loadingMessage = this.message("multiselect.loading");
          },
 
          /**
@@ -813,62 +843,65 @@ define([
           * @param {object} evt Dojo-normalised event object
           */
          _onSearchKeypress: function alfresco_forms_controls_MultiSelect___onSearchKeypress(evt) {
-            /*jshint maxcomplexity:17*/
-            var cursorPosBeforeKeypress = this._getCursorPositionWithinTextbox();
-            switch (evt.charOrCode) {
-               case keys.ESCAPE:
-                  this._resetSearchBox();
-                  this._hideResultsDropdown();
-                  evt.preventDefault();
-                  evt.stopPropagation();
-                  break;
-               case keys.ENTER:
-                  if (this._resultsDropdownIsVisible()) {
-                     if (this._chooseFocusedItem()) {
-                        this._resetSearchBox();
-                        this._hideResultsDropdown();
+            /*jshint maxcomplexity:21*/
+            var cursorPosBeforeKeypress = this._getCursorPositionWithinTextbox(),
+               modifiersPressed = evt.ctrlKey || evt.altKey || evt.shiftKey || evt.metaKey;
+            if (!modifiersPressed) {
+               switch (evt.charOrCode) {
+                  case keys.ESCAPE:
+                     this._resetSearchBox();
+                     this._hideResultsDropdown();
+                     evt.preventDefault();
+                     evt.stopPropagation();
+                     break;
+                  case keys.ENTER:
+                     if (this._resultsDropdownIsVisible()) {
+                        if (this._chooseFocusedItem()) {
+                           this._resetSearchBox();
+                           this._hideResultsDropdown();
+                        }
                      }
-                  }
-                  evt.preventDefault();
-                  evt.stopPropagation();
-                  break;
-               case keys.DOWN_ARROW:
-                  if (this._resultsDropdownIsVisible()) {
-                     this._gotoNextResult();
-                  } else {
-                     this._showResultsDropdown();
-                  }
-                  evt.preventDefault();
-                  break;
-               case keys.UP_ARROW:
-                  if (this._resultsDropdownIsVisible()) {
-                     this._gotoNextResult(true);
-                  }
-                  evt.preventDefault();
-                  break;
-               case keys.LEFT_ARROW:
-                  if (!cursorPosBeforeKeypress) {
-                     this._selectChoice(-1);
-                  }
-                  break;
-               case keys.RIGHT_ARROW:
-                  if (this._selectedChoice) {
-                     this._selectChoice(1);
                      evt.preventDefault();
-                  }
-                  break;
-               case keys.DELETE:
-               case keys.BACKSPACE:
-                  if (this._selectedChoice) {
-                     this._deleteSelectedChoice();
+                     evt.stopPropagation();
+                     break;
+                  case keys.DOWN_ARROW:
+                     if (this._resultsDropdownIsVisible()) {
+                        this._gotoNextResult();
+                     } else {
+                        this._showResultsDropdown();
+                     }
                      evt.preventDefault();
-                  } else if (!cursorPosBeforeKeypress && this._choices.length) {
-                     this._selectChoice(-1);
-                     this._deleteSelectedChoice();
-                  }
-                  break;
-               default:
-                  // Allow to continue
+                     break;
+                  case keys.UP_ARROW:
+                     if (this._resultsDropdownIsVisible()) {
+                        this._gotoNextResult(true);
+                     }
+                     evt.preventDefault();
+                     break;
+                  case keys.LEFT_ARROW:
+                     if (!cursorPosBeforeKeypress) {
+                        this._selectChoice(-1);
+                     }
+                     break;
+                  case keys.RIGHT_ARROW:
+                     if (this._selectedChoice) {
+                        this._selectChoice(1);
+                        evt.preventDefault();
+                     }
+                     break;
+                  case keys.DELETE:
+                  case keys.BACKSPACE:
+                     if (this._selectedChoice) {
+                        this._deleteSelectedChoice();
+                        evt.preventDefault();
+                     } else if (!cursorPosBeforeKeypress && this._choices.length) {
+                        this._selectChoice(-1);
+                        this._deleteSelectedChoice();
+                     }
+                     break;
+                  default:
+                     // Allow to continue
+               }
             }
          },
 
@@ -976,10 +1009,11 @@ define([
           * @protected
           */
          _showEmptyMessage: function alfresco_forms_controls_MultiSelect___showEmptyMessage() {
-            while (this.noResultSearchTerm.hasChildNodes()) {
-               this.noResultSearchTerm.removeChild(this.noResultSearchTerm.firstChild);
+            while (this.noResultsMessage.hasChildNodes()) {
+               this.noResultsMessage.removeChild(this.noResultsMessage.firstChild);
             }
-            this.noResultSearchTerm.appendChild(document.createTextNode(this._currentSearchValue));
+            var emptyMessage = this.message("multiselect.noresults", this._currentSearchValue);
+            this.noResultsMessage.appendChild(document.createTextNode(emptyMessage));
             domClass.add(this.domNode, this.rootClass + "--show-empty");
             this._hideErrorMessage();
             this._hideLoadingMessage();
@@ -996,10 +1030,10 @@ define([
          _showErrorMessage: function alfresco_forms_controls_MultiSelect___showError(message) {
 
             // Remove old message and insert new one
-            while (this.errorItem.hasChildNodes()) {
-               this.errorItem.removeChild(this.errorItem.firstChild);
+            while (this.errorMessage.hasChildNodes()) {
+               this.errorMessage.removeChild(this.errorMessage.firstChild);
             }
-            this.errorItem.appendChild(document.createTextNode(message));
+            this.errorMessage.appendChild(document.createTextNode(message));
 
             // Show the error (and hide any loading indicator)
             domClass.add(this.domNode, this.rootClass + "--show-error");
