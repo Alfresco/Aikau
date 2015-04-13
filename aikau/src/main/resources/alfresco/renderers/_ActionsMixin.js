@@ -150,7 +150,7 @@ define(["dojo/_base/declare",
                type: action.type,
                pubSubScope: this.pubSubScope,
                parentPubSubScope: this.parentPubSubScope,
-               publishTopic: (action.publishTopic) ? action.publishTopic : this.singleDocumentActionTopic,
+               publishTopic: action.publishTopic || this.singleDocumentActionTopic,
                publishPayload: this.generatePayload(payload, this.currentItem, null, action.publishPayloadType, action.publishPayloadItemMixin, action.publishPayloadModifiers),
                publishGlobal: this.publishGlobal,
                publishToParent: this.publishToParent
