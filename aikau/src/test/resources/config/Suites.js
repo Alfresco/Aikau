@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/services/actions/CopyMoveTest"
+      "src/test/resources/alfresco/lists/AlfHashListTest"
    ],
 
    /**
@@ -117,8 +117,9 @@ define({
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/TwisterTest",
 
-      "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
+      "src/test/resources/alfresco/lists/AlfHashListTest",
       "src/test/resources/alfresco/lists/FilteredListTest",
+      "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
 
       "src/test/resources/alfresco/logo/LogoTest",

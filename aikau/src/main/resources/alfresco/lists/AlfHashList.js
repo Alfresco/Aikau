@@ -57,6 +57,17 @@ define(["dojo/_base/declare",
       hashVarsForUpdate: [],
 
       /**
+       * Indicates whether or not the [hashVarsForUpdate]{@link module:alfresco/lists/AlfHashList#hashVarsForUpdate}
+       * that are present in the current hash should be mapped directly into the 
+       * [loadDataPublishPayload]{@link module:alfresco/lists/AlfList#loadDataPublishPayload}.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      mapHashVarsToPayload: false,
+
+      /**
        * Determines whether or not a locally stored hash value should be maintained and re-used in the event of 
        * a hash not being found in the URL. This was added to support the scenario where a user might leave and 
        * then return to a page having lost the hash (e.g. actions on search).
@@ -155,6 +166,32 @@ define(["dojo/_base/declare",
             else
             {
                this.loadData();
+            }
+         }
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#updateLoadDataPayload} to map
+       * the [hashVarsForUpdate]{@link module:alfresco/lists/AlfHashList#hashVarsForUpdate} values into the
+       * [loadDataPublishPayload]{@link module:alfresco/lists/AlfList#loadDataPublishPayload} if 
+       * [mapHashVarsToPayload]{@link module:alfresco/lists/AlfHashList#mapHashVarsToPayload}
+       * is set to true.
+       *
+       * @instance
+       * @param {object} payload The payload to update
+       */
+      updateLoadDataPayload: function alfresco_lists_AlfHashList__updateLoadDataPayload(payload) {
+         this.inherited(arguments);
+         if (this.mapHashVarsToPayload)
+         {
+            var hashString = hash();
+            var currHash = ioQuery.queryToObject(hashString);
+            for(var i=0; i < this.hashVarsForUpdate.length; i++)
+            {
+               if(this.hashVarsForUpdate[i] in currHash)
+               {
+                  payload[this.hashVarsForUpdate[i]] = currHash[this.hashVarsForUpdate[i]];
+               }
             }
          }
       },
