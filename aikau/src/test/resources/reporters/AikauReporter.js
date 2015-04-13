@@ -134,7 +134,11 @@ define([], function() {
          roundedSecs = Math.round(ms / 1000) % (wholeMins * 60);
          minText = wholeMins === 1 ? "minute" : "minutes";
          secText = roundedSecs === 1 ? "second" : "seconds";
-         timeInMinsAndSecs = wholeMins + " " + minText + " " + roundedSecs + " " + secText;
+         if(roundedSecs) {
+            timeInMinsAndSecs = wholeMins + " " + minText + " " + roundedSecs + " " + secText;
+         } else {
+            timeInMinsAndSecs = wholeMins + " " + minText;
+         }
       } else {
          roundedSecs = Math.round(ms / 100) / 10;
          secText = roundedSecs === 1 ? "second" : "seconds";
@@ -315,7 +319,7 @@ define([], function() {
             totalTimeTaken = Date.now() - timers.beforeAll,
             percentCompleteDecimal = (counts.run / counts.total),
             percentComplete = Math.round(percentCompleteDecimal * 1000) / 10,
-            estimatedTimeLeft = (1 / percentCompleteDecimal) * totalTimeTaken,
+            estimatedTimeLeft = (totalTimeTaken / percentCompleteDecimal) - totalTimeTaken,
             timeLeftString = msToMinsAndSecs(estimatedTimeLeft),
             progressString = percentComplete + "% complete";
          if (totalTimeTaken > 1000 * 30) {
