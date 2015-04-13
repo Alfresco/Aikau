@@ -28,7 +28,7 @@
  * and the [widget model for rendering each dropped item]{@link module:alfresco/form/controls/DragAndDropTargetControl#widgetsForDroppedItems}} (although the latter
  * configuration might get overriden by your modelling service configuration).</p>
  * 
- * @module alfresco/form/controls/DragAndDropTargetControl
+ * @module alfresco/forms/controls/DragAndDropTargetControl
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
