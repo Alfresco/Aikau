@@ -25,9 +25,10 @@ define([
       "intern/chai!assert",
       "require",
       "alfresco/TestCommon",
+      "intern/dojo/node!leadfoot/keys",
       "intern/dojo/node!leadfoot/helpers/pollUntil"
    ],
-   function(registerSuite, assert, require, TestCommon, pollUntil) {
+   function(registerSuite, assert, require, TestCommon, keys, pollUntil) {
 
       var browser;
       registerSuite({
@@ -64,21 +65,19 @@ define([
          },
 
          "Focusing on control brings up initial results": function() {
-            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__search-box")
-               .screenie()
+            return browser.findById("FOCUS_HELPER_BUTTON")
                .click()
-               .screenie()
+               .pressKeys(keys.TAB)
                .end()
 
             .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
-               .screenie()
                .then(function(elements) {
                   assert.lengthOf(elements, 4, "Did not bring up initial results");
                });
          },
 
          "Selecting item in dropdown chooses that item": function() {
-            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(2)")
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(5)")
                .click()
                .end()
 

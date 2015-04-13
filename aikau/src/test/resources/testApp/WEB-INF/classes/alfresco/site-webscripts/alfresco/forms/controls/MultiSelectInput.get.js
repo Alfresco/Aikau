@@ -15,6 +15,13 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "FOCUS_HELPER_BUTTON",
+         config: {
+            label: "Focus helper"
+         }
+      },
+      {
          id: "FORM1",
          name: "alfresco/forms/Form",
          config: {
