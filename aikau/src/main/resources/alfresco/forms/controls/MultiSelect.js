@@ -20,7 +20,7 @@
 // TODO: Add ARIA
 
 /**
- * An input control that allows multiple-selection of defined items from a service
+ * An input control that allows multiple-selection of defined items
  *
  * @example <caption>Sample configuration:</caption>
  * {
@@ -1170,7 +1170,7 @@ define([
          },
 
          /**
-          * Update all of the items in this._itemsToUpdateFromStore with info from the store
+          * Update all of the items in [_itemsToUpdateFromStore]{@link module:alfresco/forms/controls/MultiSelect#_itemsToUpdateFromStore} with info from the store
           *
           * @instance
           */

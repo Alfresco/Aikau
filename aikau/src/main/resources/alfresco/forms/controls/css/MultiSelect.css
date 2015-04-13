@@ -1,5 +1,5 @@
 .alfresco-forms-controls-MultiSelect {
-   border: 1px solid @standard-border-color;
+   border: @standard-border;
    box-shadow: @inset-box-shadow;
    box-sizing: border-box;
    padding: 5px 5px 0;
@@ -11,7 +11,7 @@
    }
    &__choice {
       background: #eee linear-gradient(to bottom, #fff, #eee);
-      border: 1px solid @standard-border-color;
+      border: @standard-border;
       border-radius: 3px;
       cursor: default;
       display: inline-block;
