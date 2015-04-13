@@ -112,9 +112,9 @@ define(["dojo/_base/declare",
       updateLog: function alfresco_testing_Subscription__updateLog(logData) {
 
          var includeTopic = true;
-         if (this.topicsToIgnore != null)
+         if (this.topicsToIgnore)
          {
-            includeTopic = !array.some(this.topicsToIgnore, function(topic, index) {
+            includeTopic = !array.some(this.topicsToIgnore, function(topic) {
                return topic === logData.topic;
             });
          }
@@ -130,12 +130,12 @@ define(["dojo/_base/declare",
             }, rowNode);
             var topicNode = domConstruct.create("td", {
                className: "sl-topic",
-               innerHTML: logData.topic,
+               innerHTML: logData.topic
             }, rowNode);
             // Set some additional data in the DOM to aid with CSS selectors in unit tests...
             domAttr.set(topicNode, "data-" + logData.type + "-topic", logData.topic);
             var dataCellNode = domConstruct.create("td", {
-               className: "sl-data",
+               className: "sl-data"
             }, rowNode);
             this.addValueToLog(logData.data, dataCellNode, 0);
             var objectNode = domConstruct.create("td", {
@@ -157,11 +157,16 @@ define(["dojo/_base/declare",
        * @param {element} domNode The DOM node to add the value to
        */
       addValueToLog: function alfresco_testing_Subscription__addValueToLog(value, cellNode, depth) {
+         /*jshint maxcomplexity:12*/
          if (depth < 6)
          {
-            if (value == null)
+            if (value === null)
             {
                this.addStringToLog("null", cellNode);
+            }
+            else if (typeof value === "undefined")
+            {
+               this.addStringToLog("undefined", cellNode);
             }
             else if (typeof value === "number")
             {
@@ -230,7 +235,7 @@ define(["dojo/_base/declare",
        */
       addArrayToLog: function alfresco_testing_Subscription__addArrayToLog(a, domNode, depth) {
          var tableNode = domConstruct.create("table", {}, domNode);
-         array.forEach(a, function(object, index) {
+         array.forEach(a, function(object) {
             var rowNode = domConstruct.create("tr", {}, tableNode);
             var valueCellNode = domConstruct.create("td", {}, rowNode);
             this.addValueToLog(object, valueCellNode, depth);
@@ -248,17 +253,20 @@ define(["dojo/_base/declare",
          var tableNode = domConstruct.create("table", {}, domNode);
          for (var key in o)
          {
-            var rowNode = domConstruct.create("tr", {
-               className: "sl-object-row"
-            }, tableNode);
-            var keyCellNode = domConstruct.create("td", {
-               innerHTML: key
-            }, rowNode);
-            domAttr.set(keyCellNode, "data-pubsub-object-key", key);
+            if(o.hasOwnProperty(key))
+            {
+               var rowNode = domConstruct.create("tr", {
+                  className: "sl-object-row"
+               }, tableNode);
+               var keyCellNode = domConstruct.create("td", {
+                  innerHTML: key
+               }, rowNode);
+               domAttr.set(keyCellNode, "data-pubsub-object-key", key);
 
-            var valueCellNode = domConstruct.create("td", {}, rowNode);
-            var value = o[key];
-            this.addValueToLog(value, valueCellNode, depth);
+               var valueCellNode = domConstruct.create("td", {}, rowNode);
+               var value = o[key];
+               this.addValueToLog(value, valueCellNode, depth);
+            }
          }
       }
    });
