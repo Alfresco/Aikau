@@ -1,0 +1,174 @@
+.alfresco-forms-controls-MultiSelect {
+   border: @standard-border;
+   box-shadow: @inset-box-shadow;
+   box-sizing: border-box;
+   padding: 5px 5px 0;
+   position: relative;
+   * {
+      box-sizing: inherit;
+   }
+   &__container {
+   }
+   &__choice {
+      background: #eee linear-gradient(to bottom, #fff, #eee);
+      border: @standard-border;
+      border-radius: 3px;
+      cursor: default;
+      display: inline-block;
+      margin: 0 5px 5px 0;
+      padding: 0 20px 0 3px;
+      position: relative;
+      &__content {
+         color: #333;
+         line-height: 22px;
+      }
+      &__close-button {
+         color: #aaa;
+         cursor: pointer;
+         display: block;
+         font-family: @bold-font;
+         font-size: @large-font-size;
+         font-weight: 700;
+         padding: 3px 5px;
+         position: absolute;
+         right: 0;
+         top: 0;
+         &:hover {
+            color: #666;
+         }
+      }
+      &--selected {
+         background: #06a linear-gradient(to bottom, #08c, #06a);
+         border-color: #039;
+         .alfresco-forms-controls-MultiSelect__choice {
+            &__content {
+               color: @highlighted-font-color;
+            }
+            &__close-button {
+               color: #cef;
+               &:hover {
+                  color: @highlighted-font-color;
+               }
+            }
+         }
+      }
+   }
+   &__off-screen-search {
+      font-size: @normal-font-size;
+      left: -9999px;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      top: -9999px;
+   }
+   &__search-box {
+      background: transparent;
+      border: 0;
+      color: @general-font-color;
+      display: inline-block;
+      font-size: @normal-font-size;
+      line-height: 22px;
+      margin: 0 0 5px 0;
+      max-width: 100%;
+      padding: 0;
+      width: 50px;
+      &:focus {
+         outline: 0;
+      }
+   }
+   &__results {
+      background: @list-background-color;
+      box-shadow: @standard-box-shadow;
+      display: none;
+      left: -1px;
+      list-style: none;
+      margin: 0;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      right: -1px;
+      top: 100%;
+      > * {
+         border: solid @standard-border-color;
+         border-width: 1px 1px 0;
+         font-size: @normal-font-size;
+         margin: 0;
+         overflow: hidden;
+         padding: 5px 0 5px 5px;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+      }
+   }
+   &__result-loading, &__result-error, &__result-no-results {
+      border-width: 1px;
+      display: none;
+   }
+   &__result-no-results {
+      color: @de-emphasized-font-color;
+   }
+   &__result-error {
+      color: #c00;
+      font-family: @bold-font;
+      font-weight: 700;
+      white-space: normal;
+   }
+   &__result {
+      border-top-color: #ccc;
+      cursor: pointer;
+      &__highlighted-label {
+         font-family: @bold-font;
+         font-weight: 700;
+         text-decoration: underline;
+      }
+      &:first-child {
+         border-top-color: @standard-border-color;
+      }
+      &:last-child {
+         border-bottom-width: 1px;
+      }
+      &--focused {
+         background: #06a;
+         color: @highlighted-font-color;
+      }
+      &--already-chosen {
+         background: @list-background-color;
+         color: @de-emphasized-font-color;
+         cursor: default;
+      }
+   }
+   &--focused {
+      border-color: #09c;
+      outline: 1px solid #0cf;
+   }
+   &--show-results {
+      .alfresco-forms-controls-MultiSelect {
+         &__results {
+            display: block;
+         }
+      }
+   }
+   &--show-error {
+      border-color: #c00;
+      outline: 1px solid #faa;
+      .alfresco-forms-controls-MultiSelect {
+         &__result-error {
+            border-color: #c00;
+            display: block;
+         }
+      }
+   }
+   &--show-loading {
+      .alfresco-forms-controls-MultiSelect {
+         &__result-loading {
+            display: block;
+         }
+      }
+   }
+   &--show-empty {
+      .alfresco-forms-controls-MultiSelect {
+         &__result-no-results {
+            display: block;
+         }
+      }
+   }
+}

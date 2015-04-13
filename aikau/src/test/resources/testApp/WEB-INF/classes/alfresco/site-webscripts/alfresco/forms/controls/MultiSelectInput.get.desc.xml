@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>MultiSelectInputFormControl</shortname>
+  <description>Shows an example of the alfresco/forms/controls/MultiSelectInput form control using mocked tag data</description>
+  <family>aikau-unit-tests</family>
+  <url>/MultiSelectInput</url>
+</webscript>

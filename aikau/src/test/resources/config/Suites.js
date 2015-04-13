@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/lists/AlfHashListTest"
+      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest"
    ],
 
    /**
@@ -97,6 +97,7 @@ define({
       "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest",
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
       "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
+      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
