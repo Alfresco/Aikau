@@ -178,6 +178,7 @@ define({
 
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
       "src/test/resources/alfresco/services/actions/ManageAspectsTest",
+      "src/test/resources/alfresco/services/actions/SimpleWorkflowTest",
 
       "src/test/resources/alfresco/upload/UploadTest"
    ],

@@ -191,7 +191,8 @@ define(["dojo/_base/declare",
 
       /**
        * Makes an XHR call to move or copy the selected documents to the location provided.
-       * 
+       *
+       * @instance
        * @param {array} nodeRefs An array of the nodes to move or copy
        * @param {string} urlPrefix The prefix to use in the action URL
        * @param {boolean} copy A boolean indicating if this is a copy action or not
@@ -221,7 +222,7 @@ define(["dojo/_base/declare",
        * if a partial success was reported then a prompt is displayed listing the nodes that could not be copied or moved.
        *
        * @instance
-       * @param payload
+       * @param {object} payload
        */
       onActionSuccess: function alfresco_services_ActionService__onActionSuccess(payload) {
          // jshint unused:false
@@ -264,7 +265,7 @@ define(["dojo/_base/declare",
        * Handles failed actions by displaying a notification indicating that the action was not successful.
        *
        * @instance
-       * @param payload
+       * @param {object} payload
        */
       onActionFailure: function alfresco_services_ActionService__onActionFailure(payload) {
          // jshint unused:false

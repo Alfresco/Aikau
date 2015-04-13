@@ -82,6 +82,7 @@ define(["dojo/_base/declare",
        * @instance postCreate
        */
       postCreate: function alfresco_search_AlfSearchResult__postCreate() {
+         // jshint nonew:false, maxstatements:false, maxcomplexity:false
 
          // Define the filter for document and folder actions, this filter is initially
          // based on what actions are currently supported by the Aikau action service
@@ -108,7 +109,9 @@ define(["dojo/_base/declare",
             "document-move-to",
             "document-locate",
             "document-assign-workflow",
-            "document-cancel-editing"
+            "document-cancel-editing",
+            "document-approve",
+            "document-reject"
 
 //            TODO: Needs to use forms runtime or equiv.
 //            "document-edit-properties",
@@ -116,8 +119,7 @@ define(["dojo/_base/declare",
 //            TODO: Not implemented yet.
 //            "document-upload-new-version",
 //            "folder-view-details"
-//            "document-approve"
-//            "document-reject"
+//            
 //            "document-manage-aspects"
 //            "document-cloud-sync"
 //            "document-cloud-unsync"
@@ -151,7 +153,7 @@ define(["dojo/_base/declare",
             renderSize: "large"
          }, this.nameNode);
 
-         if (this.currentItem.title == null || this.currentItem.title === "")
+         if (!this.currentItem.title)
          {
             domClass.add(this.titleNode, "hidden");
          }
@@ -220,7 +222,7 @@ define(["dojo/_base/declare",
          var site = lang.getObject("site.title", false, this.currentItem),
              repo = true;
 
-         if (site == null || site === "")
+         if (!site)
          {
             domClass.add(this.siteRow, "hidden");
          }
@@ -245,7 +247,7 @@ define(["dojo/_base/declare",
             }, this.siteNode);
          }
 
-         if (this.currentItem.path == null || this.currentItem.path === "")
+         if (!this.currentItem.path)
          {
             domClass.add(this.pathRow, "hidden");
          }
@@ -253,8 +255,8 @@ define(["dojo/_base/declare",
          {
             // Create processed path as pathLink on this.currentItem
             this.currentItem.pathLink = repo ?
-               encodeURIComponent('/' + this.currentItem.path.split('/').slice(2).join('/')) :
-               encodeURIComponent('/' + this.currentItem.path);
+               encodeURIComponent("/" + this.currentItem.path.split("/").slice(2).join("/")) :
+               encodeURIComponent("/" + this.currentItem.path);
 
             new PropertyLink({
                renderedValueClass: "alfresco-renderers-Property pointer",
@@ -275,7 +277,7 @@ define(["dojo/_base/declare",
          }
 
          // We only show the size if it's not empty and at least one byte
-         if (this.currentItem.size == null || this.currentItem.size === "" || this.currentItem.size < 1)
+         if (!this.currentItem.size)
          {
             domClass.add(this.sizeRow, "hidden");
          }
