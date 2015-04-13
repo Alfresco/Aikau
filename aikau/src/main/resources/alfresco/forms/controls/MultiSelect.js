@@ -20,6 +20,28 @@
 // TODO: Add ARIA
 
 /**
+ * An input control that allows multiple-selection of defined items from a service
+ *
+ * @example <caption>Sample configuration:</caption>
+ * {
+ *    id: "MyMultiSelect",
+ *    name: "alfresco/forms/controls/MultiSelectInput",
+ *    config: {
+ *       label: "My multi-select input",
+ *       name: "form_field_name",
+ *       width: "400px",
+ *       optionsConfig: {
+ *          labelAttribute: "name",  // Defaults to label
+ *          queryAttribute: "name",  // Defaults to name
+ *          valueAttribute: "value", // Defaults to value
+ *          publishTopic: "ALF_RETRIEVE_MULTISELECT_INFO",
+ *          publishPayload: {
+ *             resultsProperty: "response.data.items"
+ *          }
+ *       }
+ *    }
+ * }
+ *
  * @module alfresco/forms/controls/MultiSelect
  * @extends external:dijit/_TemplatedMixin
  * @extends external:dijit/_WidgetBase
@@ -98,6 +120,7 @@ define([
          /**
           * The localised loading message used by the template
           *
+          * @instance
           * @type {string}
           */
          loadingMessage: null,
@@ -105,7 +128,6 @@ define([
          /**
           * The root class of this widget
           *
-          * @protected
           * @instance
           * @type {string}
           */
@@ -131,6 +153,7 @@ define([
          /**
           * A cache of the current search value
           *
+          * @instance
           * @type {string}
           */
          _currentSearchValue: "",
@@ -138,6 +161,7 @@ define([
          /**
           * Listener handles by choice (for removing)
           *
+          * @instance
           * @type {object}
           */
          _choiceListeners: null,
@@ -145,6 +169,7 @@ define([
          /**
           * Collection of choice objects
           *
+          * @instance
           * @type {Choice[]}
           */
          _choices: null,
@@ -152,6 +177,7 @@ define([
          /**
           * The currently focused result item
           *
+          * @instance
           * @type {Result}
           */
          _focusedResult: null,
@@ -161,6 +187,7 @@ define([
           * NOTE: It is assumed these items are also in the _storeItems collection,
           *       so their properties can just be updated in-situ
           *
+          * @instance
           * @type {object[]}
           */
          _itemsToUpdateFromStore: null,
@@ -168,6 +195,7 @@ define([
          /**
           * The index of the latest search request
           *
+          * @instance
           * @type {number}
           */
          _latestSearchRequestIndex: 0,
@@ -175,6 +203,7 @@ define([
          /**
           * How long a query can run (ms) before a loading message is displayed
           *
+          * @instance
           * @type {number}
           */
          _loadingMessageTimeoutMs: 250,
@@ -182,6 +211,7 @@ define([
          /**
           * Timeout used to debounce new search requests
           *
+          * @instance
           * @type {number}
           */
          _newSearchTimeoutPointer: 0,
@@ -190,6 +220,7 @@ define([
           * Collection of listeners for the results dropdown to help track and
           * remove them when no longer needed
           *
+          * @instance
           * @type {object[]}
           */
          _resultListeners: null,
@@ -197,6 +228,7 @@ define([
          /**
           * The results
           *
+          * @instance
           * @type {Result[]}
           */
          _results: null,
@@ -205,6 +237,7 @@ define([
           * The number of milliseconds to debounce search requests, i.e. the pause
           * needed during typing for a search request to actually kick off
           *
+          * @instance
           * @type {number}
           */
          _searchDebounceMs: 100,
@@ -212,6 +245,7 @@ define([
          /**
           * The currently selected choice object
           *
+          * @instance
           * @type {Choice}
           */
          _selectedChoice: null,
@@ -220,6 +254,7 @@ define([
           * A timeout to ensure the loading message does not display if the results
           * come back super-quick
           *
+          * @instance
           * @type {number}
           */
          _showLoadingTimeoutPointer: 0,
@@ -227,6 +262,7 @@ define([
          /**
           * A map of retrieved items, by value
           *
+          * @instance
           * @type {object}
           */
          _storeItems: null,
@@ -234,6 +270,7 @@ define([
          /**
           * The attribute name against which to store the value of an item in the HTML
           *
+          * @instance
           * @type {string}
           */
          _valueHtmlAttribute: "data-aikau-value",
@@ -367,7 +404,6 @@ define([
           * Add the specified result item to the choices
           *
           * @instance
-          * @protected
           * @param    {string} label The label of the chosen item
           * @param    {string} value The value of the chosen item
           */
@@ -416,7 +452,6 @@ define([
           * Choose the focused item in the results dropdown
           *
           * @instance
-          * @protected
           * @returns {boolean} Returns true if item is chosen
           */
          _chooseFocusedItem: function alfresco_forms_controls_MultiSelect___chooseFocusedItem() {
@@ -443,7 +478,6 @@ define([
           * Create a document fragment of a label, highlighted with the current search term
           *
           * @instance
-          * @protected
           * @param    {string} label The label
           * @returns  {object} A document fragment of the highlighted label
           */
@@ -468,7 +502,6 @@ define([
           * i.e. wait until the user has paused typing to actually do the search.
           *
           * @instance
-          * @protected
           * @param    {string} searchString The search string to use
           */
          _debounceNewSearch: function alfresco_forms_controls_MultiSelect___debounceNewSeach(searchString) {
@@ -482,7 +515,6 @@ define([
           * Delete the currently selected choice
           *
           * @instance
-          * @protected
           */
          _deleteSelectedChoice: function alfresco_forms_controls_MultiSelect___deleteSelectedChoice() {
             on.emit(this._selectedChoice.closeButton, "click", {
@@ -495,7 +527,6 @@ define([
           * Deselect all choices
           *
           * @instance
-          * @protected
           */
          _deselectAllChoices: function alfresco_forms_controls_MultiSelect___deselectAllChoices() {
             array.forEach(this._choices, function(nextChoice) {
@@ -507,7 +538,6 @@ define([
           * Empty the results dropdown
           *
           * @instance
-          * @protected
           */
          _emptyResults: function alfresco_forms_controls_MultiSelect___emptyResults() {
             var resultListener;
@@ -525,7 +555,6 @@ define([
           * NOTE: Uses code derived from http://javascript.nwbox.com/cursor_position
           *
           * @instance
-          * @protected
           * @returns  {number} The cursor position (zero-indexed)
           */
          _getCursorPositionWithinTextbox: function alfresco_forms_controls_MultiSelect___getCursorPositionWithinTextbox() {
@@ -549,7 +578,6 @@ define([
           * Go to the next result in the dropdown, or the first one if none selected (ignores already-chosen items)
           *
           * @instance
-          * @protected
           * @param {boolean} reverseCommand If true then go to previous item instead
           */
          _gotoNextResult: function alfresco_forms_controls_MultiSelect___gotoNextResult(reverseCommand) {
@@ -589,7 +617,6 @@ define([
           * Handle failures that occur when calling the search service
           *
           * @instance
-          * @protected
           * @param    {object} err The error object
           */
          _handleSearchFailure: function alfresco_forms_controls_MultiSelect___handleSearchFailure(err) {
@@ -609,7 +636,6 @@ define([
           * Handle the (successful) response from the search service
           *
           * @instance
-          * @protected
           * @param    {object} responseItems The response items
           */
          _handleSearchSuccess: function alfresco_forms_controls_MultiSelect___handleSearchSuccess(responseItems) {
@@ -638,7 +664,6 @@ define([
           * Hide the empty message in the dropdown
           *
           * @instance
-          * @protected
           */
          _hideEmptyMessage: function alfresco_forms_controls_MultiSelect___hideEmptyMessage() {
             domClass.remove(this.domNode, this.rootClass + "--show-empty");
@@ -648,7 +673,6 @@ define([
           * Hide the error message in the dropdown
           *
           * @instance
-          * @protected
           */
          _hideErrorMessage: function alfresco_forms_controls_MultiSelect___hideError() {
             domClass.remove(this.domNode, this.rootClass + "--show-error");
@@ -658,7 +682,6 @@ define([
           * Hide the loading message in the dropdown
           *
           * @instance
-          * @protected
           */
          _hideLoadingMessage: function alfresco_forms_controls_MultiSelect___hideLoading() {
             domClass.remove(this.domNode, this.rootClass + "--show-loading");
@@ -669,7 +692,6 @@ define([
           * Hide the results dropdown
           *
           * @instance
-          * @protected
           */
          _hideResultsDropdown: function alfresco_forms_controls_MultiSelect___hideResults() {
             domClass.remove(this.domNode, this.rootClass + "--show-results");
@@ -681,7 +703,6 @@ define([
           * Handle blur events on the search box
           *
           * @instance
-          * @protected
           */
          _onBlur: function alfresco_forms_controls_MultiSelect___onSearchBlur() {
             domClass.remove(this.domNode, this.rootClass + "--focused");
@@ -693,7 +714,6 @@ define([
           * Handle clicks on a choice
           *
           * @instance
-          * @protected
           * @param    {object} choiceObject The choice (node) being clicked on
           * @param    {object} evt Dojo-normalised event object
           */
@@ -708,7 +728,6 @@ define([
           * Handle clicks on a choice's close icon
           *
           * @instance
-          * @protected
           * @param    {object} choiceToRemove The choice object to remove
           * @param    {object} evt Dojo-normalised event object
           */
@@ -746,7 +765,6 @@ define([
           * Handle clicks on the control
           *
           * @instance
-          * @protected
           * @param    {object} evt Dojo-normalised event object
           */
          _onControlClick: function alfresco_forms_controls_MultiSelect___onControlClick(evt) {
@@ -766,7 +784,6 @@ define([
           * Handle focus events on this control
           *
           * @instance
-          * @protected
           */
          _onFocus: function alfresco_forms_controls_MultiSelect___onSearchFocus() {
             domClass.add(this.domNode, this.rootClass + "--focused");
@@ -783,7 +800,6 @@ define([
           * NOTE: We're using mousedown rather than click to evade problems with the searchBox blur event
           *
           * @instance
-          * @protected
           */
          _onResultMousedown: function alfresco_forms_controls_MultiSelect___onResultMousedown() {
             this._chooseFocusedItem();
@@ -793,7 +809,6 @@ define([
           * Handle mouseovers on the result items
           *
           * @instance
-          * @protected
           * @param    {object} evt Dojo-normalised event object
           */
          _onResultMouseover: function alfresco_forms_controls_MultiSelect___onResultMouseover(evt) {
@@ -818,7 +833,6 @@ define([
           * Handle changes to the search box value
           *
           * @instance
-          * @protected
           * @param {string} newValue The new search value
           */
          _onSearchChange: function alfresco_forms_controls_MultiSelect___onSearchChange(newValue) {
@@ -839,7 +853,6 @@ define([
           * Handle keypress events on the search box
           *
           * @instance
-          * @protected
           * @param {object} evt Dojo-normalised event object
           */
          _onSearchKeypress: function alfresco_forms_controls_MultiSelect___onSearchKeypress(evt) {
@@ -909,7 +922,6 @@ define([
           * Handle keyup events on the search box
           *
           * @instance
-          * @protected
           * @param {object} evt Dojo-normalised event object
           */
          _onSearchKeyup: function alfresco_forms_controls_MultiSelect___onSearchKeyup(evt) {
@@ -922,7 +934,6 @@ define([
           * the search value having changed
           *
           * @instance
-          * @protected
           */
          _onSearchUpdate: function alfresco_forms_controls_MultiSelect___onSearchUpdate() {
             var trimmedValue = this.searchBox.value.replace(/^\s+|\s+$/g, "");
@@ -935,7 +946,6 @@ define([
           * Reset the search box (i.e. empty it)
           *
           * @instance
-          * @protected
           */
          _resetSearchBox: function alfresco_forms_controls_MultiSelect___resetSearchBox() {
             this._currentSearchValue = "";
@@ -956,7 +966,6 @@ define([
           * Select the specified choice
           *
           * @instance
-          * @protected
           * @param    {object|number} choiceNodeOrOffset The choice node to select or the adjustment offset from
           *                                              the currently selected one, which must be either 1 or -1.
           *                                              If none is selected, then the start position is to the
@@ -1006,7 +1015,6 @@ define([
           * Show the empty message in the dropdown
           *
           * @instance
-          * @protected
           */
          _showEmptyMessage: function alfresco_forms_controls_MultiSelect___showEmptyMessage() {
             while (this.noResultsMessage.hasChildNodes()) {
@@ -1024,7 +1032,6 @@ define([
           * Show the error message in the dropdown
           *
           * @instance
-          * @protected
           * @param {string} message The error message to be shown
           */
          _showErrorMessage: function alfresco_forms_controls_MultiSelect___showError(message) {
@@ -1046,7 +1053,6 @@ define([
           * Show the loading message in the dropdown
           *
           * @instance
-          * @protected
           */
          _showLoadingMessage: function alfresco_forms_controls_MultiSelect___showLoading() {
             domClass.add(this.domNode, this.rootClass + "--show-loading");
@@ -1059,7 +1065,6 @@ define([
           * Show the results dropdown
           *
           * @instance
-          * @protected
           */
          _showResultsDropdown: function alfresco_forms_controls_MultiSelect___showResults() {
             domClass.add(this.domNode, this.rootClass + "--show-results");
@@ -1069,7 +1074,6 @@ define([
           * Start a new search
           *
           * @instance
-          * @protected
           * @param    {string} searchString The string to search on
           */
          _startSearch: function alfresco_forms_controls_MultiSelect___startSearch(searchString) {
@@ -1103,7 +1107,6 @@ define([
           * Update the results list
           *
           * @instance
-          * @protected
           */
          _updateResultsDropdown: function alfresco_forms_controls_MultiSelect___updateResultsDropdown() {
 
@@ -1167,10 +1170,9 @@ define([
          },
 
          /**
-          * Update all of the items with latest info from the store
+          * Update all of the items in this._itemsToUpdateFromStore with info from the store
           *
           * @instance
-          * @protected
           */
          _updateItemsFromStore: function alfresco_forms_controls_MultiSelect___updateItemsFromStore() {
 
@@ -1217,7 +1219,6 @@ define([
           * Un-focus all results
           *
           * @instance
-          * @protected
           */
          _unfocusResults: function alfresco_forms_controls_MultiSelect___unfocusResults() {
             this._focusedResult = null;

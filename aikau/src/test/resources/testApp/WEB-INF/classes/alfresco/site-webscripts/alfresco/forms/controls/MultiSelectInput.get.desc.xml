@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>MultiSelectInput Test</shortname>
-  <description>This is a test page for the MultiSelectInput form control</description>
+  <shortname>MultiSelectInputFormControl</shortname>
+  <description>Shows an example of the alfresco/forms/controls/MultiSelectInput form control using mocked tag data</description>
   <family>aikau-unit-tests</family>
   <url>/MultiSelectInput</url>
 </webscript>

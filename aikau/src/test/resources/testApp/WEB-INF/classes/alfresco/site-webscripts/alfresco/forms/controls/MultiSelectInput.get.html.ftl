@@ -1,1 +1,1 @@
-<@processJsonModel group="share"/>
+<@processJsonModel />
