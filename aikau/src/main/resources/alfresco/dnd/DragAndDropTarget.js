@@ -458,8 +458,13 @@ define(["dojo/_base/declare",
          {
             var createdItem = this.creator(resolvedPromise.item);
             this.previewTarget.insertNodes(true, [createdItem.data]);
+            if (typeof resolvedPromise.addCallback === "function")
+            {
+               resolvedPromise.addCallback.call(resolvedPromise.addCallbackScope || this, resolvedPromise.item);
+            }
             this.onItemsUpdated();
          }
+
       }
    });
 });
