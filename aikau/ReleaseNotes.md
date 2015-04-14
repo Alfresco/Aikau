@@ -1,4 +1,4 @@
-Aikau 1.0.12 Release Notes
+Aikau 1.0.13 Release Notes
 ==========================
 
 Current deprecations:
@@ -33,6 +33,15 @@ Current deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.13:
+* [AKU-163](https://issues.alfresco.com/jira/browse/AKU-163)       - alfresco/lists/AlfHashList can update load payload from hash parameters
+* [AKU-178](https://issues.alfresco.com/jira/browse/AKU-178)       - New alfresco/forms/controls/MultiSelectInput widget
+* [AKU-191](https://issues.alfresco.com/jira/browse/AKU-191)       - New alfresco/dnd/DragAndDropItemsListView widget
+* [AKU-196](https://issues.alfresco.com/jira/browse/AKU-196)       - Added support for "document-approve" action
+* [AKU-197](https://issues.alfresco.com/jira/browse/AKU-197)       - Added support for "document-reject" action
+* [AKU-216](https://issues.alfresco.com/jira/browse/AKU-216)       - Updated ContainerPicker to support configurable repository root node.
+* [AKU-218](https://issues.alfresco.com/jira/browse/AKU-218)       - Added modelling service config creator
+
 1.0.12:
 * [AKU-14](https://issues.alfresco.com/jira/browse/AKU-14)       - Code Mirror form control updates
 * [AKU-150](https://issues.alfresco.com/jira/browse/AKU-150)     - CSS updates to support Share title bar
