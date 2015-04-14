@@ -90,17 +90,17 @@ define(["dojo/_base/declare",
          this.imgAltText = "";
          this.imgTitle = "";
 
-         if (this.currentItem != null && this.currentItem.jsNode)
+         if (this.currentItem && this.currentItem.jsNode)
          {
             var jsNode = this.currentItem.jsNode;
             this.thumbnailUrl = this.generateThumbnailUrl();
-            if (this.currentItem.displayName == null)
+            if (!this.currentItem.displayName)
             {
                this.currentItem.displayName = jsNode.properties["cm:name"];
             }
             this.setImageTitle();
          }
-         else if (this.currentItem != null && this.currentItem.nodeRef != null)
+         else if (this.currentItem && this.currentItem.nodeRef)
          {
             this.imageIdProperty = "nodeRef";
             this.setImageTitle();
@@ -112,7 +112,7 @@ define(["dojo/_base/declare",
             {
                this.thumbnailUrl = require.toUrl("alfresco/renderers") + "/css/images/" + this.folderImage;
             }
-            else if (this.currentItem.type === "document" && nodeRef.uri != null)
+            else if (this.currentItem.type === "document" && nodeRef.uri)
             {
                this.thumbnailUrl = this.generateRenditionSpecificThumbnailUrl(nodeRef.uri);
                if (this.thumbnailUrl === null)
@@ -155,7 +155,7 @@ define(["dojo/_base/declare",
          if (title)
          {
             this.imgTitle = this.encodeHTML(title);
-            this.imgAltText = (title != null) ? title.substring(title.lastIndexOf(".")) : "";
+            this.imgAltText = title ? title.substring(title.lastIndexOf(".")) : "";
          }
          var id = this.currentItem[this.imageIdProperty];
          if (id)
@@ -219,11 +219,11 @@ define(["dojo/_base/declare",
        */
       generateThumbnailUrl: function alfresco_renderers_Thumbnail__generateThumbnailUrl() {
          var url = null;
-         if (this.renditionName == null)
+         if (!this.renditionName)
          {
             this.renditionName = "doclib";
          }
-         if (this.currentItem != null && this.currentItem.jsNode)
+         if (this.currentItem && this.currentItem.jsNode)
          {
             var jsNode = this.currentItem.jsNode;
             if (jsNode.isContainer || (jsNode.isLink && jsNode.linkedNode.isContainer))
@@ -236,7 +236,7 @@ define(["dojo/_base/declare",
                url = this.generateRenditionSpecificThumbnailUrl(nodeRef.uri);
             }
          }
-         if (url == null)
+         if (!url)
          {
             url = AlfConstants.PROXY_URI + "api/node/" + nodeRef.uri + "/content/thumbnails/" + this.renditionName + "?c=queue&ph=true";
          }
@@ -259,7 +259,7 @@ define(["dojo/_base/declare",
          {
             for (var i = 0; i < thumbnailModData.length; i++)
             {
-               if (thumbnailModData[i].indexOf(this.renditionName) != -1)
+               if (thumbnailModData[i].indexOf(this.renditionName) !== -1)
                {
                   url = AlfConstants.PROXY_URI + "api/node/" + nodeRefUri + "/content/thumbnails/" + this.renditionName + "?c=queue&ph=true&lastModified=" + thumbnailModData[i];
                   break;
@@ -295,11 +295,23 @@ define(["dojo/_base/declare",
                // get last modified for image preview if present in the metadata
                var lastModified = lang.getObject(this.lastThumbnailModificationProperty, false, this.currentItem) || 1;
                this.publishTopic = "ALF_DISPLAY_LIGHTBOX";
-               this.publishPayload = {
-                  src: AlfConstants.PROXY_URI + "api/node/" + lang.getObject("nodeRef", false, this.currentItem).replace(":/", "") +
-                       "/content/thumbnails/imgpreview?c=force&lastModified=" + encodeURIComponent(lastModified),
-                  title: lang.getObject("displayName", false, this.currentItem)
-               };
+               var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
+               if (!nodeRef)
+               {
+                  nodeRef = lang.getObject("node.nodeRef", false, this.currentItem);
+               }
+               if (nodeRef)
+               {
+                  this.publishPayload = {
+                     src: AlfConstants.PROXY_URI + "api/node/" + nodeRef.replace(":/", "") +
+                          "/content/thumbnails/imgpreview?c=force&lastModified=" + encodeURIComponent(lastModified),
+                     title: lang.getObject("displayName", false, this.currentItem)
+                  };
+               }
+               else
+               {
+                  this.alfLog("warn", "Could not find a nodeRef to process", this.currentItem, this);
+               }
             }
             else
             {
@@ -345,7 +357,7 @@ define(["dojo/_base/declare",
                };
             }
          }
-         else if (this.publishTopic == null)
+         else if (!this.publishTopic)
          {
             // If no topic has been provided then set up a default one (presumed to be for use
             // in a document library)...
@@ -353,7 +365,7 @@ define(["dojo/_base/declare",
             this.publishTopic = this.generateFileFolderLink(this.publishPayload);
             this.publishGlobal = true;
          }
-         else if (this.publishPayload != null)
+         else if (this.publishPayload)
          {
             // If a payload has been provided then use it...
             this.publishPayload = this.getGeneratedPayload(false, null);
@@ -371,7 +383,7 @@ define(["dojo/_base/declare",
       onLinkClick: function alfresco_renderers_Thumbnail__onLinkClick(evt) {
          event.stop(evt);
          // var publishTopic = this.getPublishTopic();
-         if (this.publishTopic == null || lang.trim(this.publishTopic) === "")
+         if (!this.publishTopic || lang.trim(this.publishTopic) === "")
          {
             this.alfLog("warn", "No publishTopic provided for PropertyLink", this);
          }

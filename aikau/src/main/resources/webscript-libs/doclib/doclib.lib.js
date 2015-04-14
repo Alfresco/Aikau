@@ -921,11 +921,12 @@ function getDocLibConfigMenu() {
  * DOCUMENT LIST CONSTRUCTION                                                      *
  *                                                                                 *
  ***********************************************************************************/
-function getDocLibList(siteId, containerId, rootNode) {
+function getDocLibList(siteId, containerId, rootNode, rawData) {
    return {
       id: "DOCLIB_DOCUMENT_LIST",
       name: "alfresco/documentlibrary/AlfDocumentList",
       config: {
+         rawData: rawData || false,
          useHash: true,
          hashVarsForUpdate: [
             "path",
@@ -1065,7 +1066,7 @@ function getDocLibToolbar() {
  * @param {string} rootNode The node that is the root of the DocumentLibrary to render
  * @returns {object} An object containing the JSON model for a DocumentLibrary
  */
-function getDocLib(siteId, containerId, rootNode, rootLabel) {
+function getDocLib(siteId, containerId, rootNode, rootLabel, rawData) {
    var docLibModel = {
       id: "DOCLIB_SIDEBAR",
       name: "alfresco/layout/AlfSideBarContainer",
@@ -1101,7 +1102,7 @@ function getDocLib(siteId, containerId, rootNode, rootLabel) {
                            rootLabel: rootLabel
                         }
                      },
-                     getDocLibList(siteId, containerId, rootNode)
+                     getDocLibList(siteId, containerId, rootNode, rawData)
                   ]
                }
             }

@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
                   dialogCancellationButtonTitle: "Cancel",
                   formSubmissionTopic: "ALF_CRUD_CREATE",
                   formSubmissionPayloadMixin: {
-                     url: "api/node/{nodeRef}/comments",
+                     url: "api/node/{node.nodeRef}/comments",
                      pubSubScope: "{pubSubScope}"
                   },
                   additionalCssClasses: "no-padding",
@@ -94,8 +94,8 @@ define(["dojo/_base/declare",
                waitForPageWidgets: false,
                loadDataPublishTopic: "ALF_CRUD_GET_ALL",
                loadDataPublishPayload: {
-                  url: "components/node/{nodeRef}/comments?reverse=true&startIndex=0&pageSize=10",
-                  urlType: "SHARE"
+                  url: "api/node/{node.nodeRef}/comments?reverse=true&startIndex=0&pageSize=10",
+                  urlType: "PROXY"
                },
                documentsLoadedTopic: "ALF_COMMENTS_LOADED",
                widgets: [
