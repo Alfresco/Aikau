@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/forms/controls/CodeMirrorTest"
+      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest"
    ],
 
    /**
@@ -63,6 +63,7 @@ define({
 
       "src/test/resources/alfresco/dnd/DndTest",
       "src/test/resources/alfresco/dnd/FormCreationTest",
+      "src/test/resources/alfresco/dnd/ModelCreationServiceTest",
 
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
@@ -96,6 +97,7 @@ define({
       "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest",
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
       "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
+      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
@@ -116,8 +118,9 @@ define({
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/TwisterTest",
 
-      "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
+      "src/test/resources/alfresco/lists/AlfHashListTest",
       "src/test/resources/alfresco/lists/FilteredListTest",
+      "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
 
       "src/test/resources/alfresco/logo/LogoTest",
@@ -174,7 +177,9 @@ define({
       "src/test/resources/alfresco/services/SiteServiceTest",
       "src/test/resources/alfresco/services/UserServiceTest",
 
+      "src/test/resources/alfresco/services/actions/CopyMoveTest",
       "src/test/resources/alfresco/services/actions/ManageAspectsTest",
+      "src/test/resources/alfresco/services/actions/SimpleWorkflowTest",
 
       "src/test/resources/alfresco/upload/UploadTest"
    ],

@@ -32,9 +32,10 @@ define(["dojo/_base/declare",
         "alfresco/core/PubQueue",
         "dojo/_base/array",
         "dojo/_base/lang",
-        "dojox/uuid/generateRandomUuid",
-        "dojox/html/entities"],
-        function(declare, CoreData, PubSubLog, AlfConstants, pubSub, PubQueue, array, lang, uuid, htmlEntities) {
+        "dojox/uuid/generateRandomUuid", 
+        "dojox/html/entities", 
+        "dojo/Deferred"], 
+        function(declare, CoreData, PubSubLog, AlfConstants, pubSub, PubQueue, array, lang, uuid, htmlEntities, Deferred) {
 
    return declare(null, {
 
@@ -79,9 +80,10 @@ define(["dojo/_base/declare",
        * @returns {string} A localized form of the supplied message
        */
       message: function alfresco_core_Core__message(p_messageId) {
+         /*jshint maxcomplexity:13*/
 
          var scopeMsg;
-         if (typeof p_messageId != "string")
+         if (typeof p_messageId !== "string")
          {
             throw new Error("Missing or invalid argument: messageId");
          }
@@ -93,7 +95,7 @@ define(["dojo/_base/declare",
          if (typeof Alfresco.messages.global === "object")
          {
             var globalMsg = Alfresco.messages.global[p_messageId];
-            if (typeof globalMsg == "string")
+            if (typeof globalMsg === "string")
             {
                msg = globalMsg;
             }
@@ -103,7 +105,7 @@ define(["dojo/_base/declare",
          if (typeof Alfresco.messages.pageScope === "object")
          {
             var pageScopeMsg = Alfresco.messages.pageScope[p_messageId];
-            if (typeof pageScopeMsg == "string")
+            if (typeof pageScopeMsg === "string")
             {
                msg = pageScopeMsg;
             }
@@ -113,7 +115,7 @@ define(["dojo/_base/declare",
          if (typeof Alfresco.messages.scope[Alfresco.messages.defaultScope] === "object")
          {
             scopeMsg = Alfresco.messages.scope[Alfresco.messages.defaultScope][p_messageId];
-            if (typeof scopeMsg == "string")
+            if (typeof scopeMsg === "string")
             {
                msg = scopeMsg;
             }
@@ -131,10 +133,10 @@ define(["dojo/_base/declare",
                //              to investigate.
                if (entry._meta && entry._meta.hidden && entry._meta.hidden.i18nScope && Alfresco.messages.scope[entry._meta.hidden.i18nScope])
                {
-                  var scopeMsg = Alfresco.messages.scope[entry._meta.hidden.i18nScope][p_messageId];
-                  if (typeof scopeMsg == "string")
+                  var i18nScopeMsg = Alfresco.messages.scope[entry._meta.hidden.i18nScope][p_messageId];
+                  if (typeof i18nScopeMsg === "string")
                   {
-                     msg = scopeMsg;
+                     msg = i18nScopeMsg;
                   }
                }
             });
@@ -142,10 +144,10 @@ define(["dojo/_base/declare",
 
          // Set the main scope for the calling class...
          // This will either be the i18nScope or the default message scope if i18nScope is not defined
-         if (typeof this.i18nScope != "undefined" && typeof Alfresco.messages.scope[this.i18nScope] === "object")
+         if (typeof this.i18nScope !== "undefined" && typeof Alfresco.messages.scope[this.i18nScope] === "object")
          {
             scopeMsg = Alfresco.messages.scope[this.i18nScope][p_messageId];
-            if (typeof scopeMsg == "string")
+            if (typeof scopeMsg === "string")
             {
                msg = scopeMsg;
             }
@@ -153,7 +155,7 @@ define(["dojo/_base/declare",
 
          // Search/replace tokens
          var tokens = [];
-         if ((arguments.length == 2) && (typeof arguments[1] == "object"))
+         if ((arguments.length === 2) && (typeof arguments[1] === "object"))
          {
             tokens = arguments[1];
          }
@@ -224,11 +226,11 @@ define(["dojo/_base/declare",
       alfSetData: function alfresco_core_Core__alfSetData(dotNotation, value, scope) {
          this.alfLog("log", "Setting data", dotNotation, value, scope, this);
          var dataOwnerBinding = {};
-         if (this.dataScope == null)
+         if (!this.dataScope)
          {
             this.dataScope = CoreData.getSingleton().root;
          }
-         if (scope == null)
+         if (!scope)
          {
             scope = this.dataScope;
          }
@@ -238,7 +240,7 @@ define(["dojo/_base/declare",
          dotNotation = this.alfProcessDataDotNotation(dotNotation);
 
          var data = lang.getObject(dotNotation, false, scope);
-         if (data == null)
+         if (!data)
          {
             // The data item doesn't exist yet, create it now and register the caller
             // as the owner. Not sure if this is necessary, we can't tell if the widget is destroyed
@@ -249,7 +251,7 @@ define(["dojo/_base/declare",
          var oldValue = data._alfValue;
          lang.setObject(dotNotation + "._alfValue", value, scope);
 
-         if (data._alfCallbacks != null)
+         if (data._alfCallbacks)
          {
             // Move all the pending callbacks into the callback property
             for (var callbackId in data._alfCallbacks)
@@ -274,11 +276,11 @@ define(["dojo/_base/declare",
        */
       alfGetData: function alfresco_core_Core__alfGetData(dotNotation, scope) {
          // If a data scope has not been set then get the root data model
-         if (this.dataScope == null)
+         if (!this.dataScope)
          {
             this.dataScope = CoreData.getSingleton().root;
          }
-         if (scope == null)
+         if (!scope)
          {
             scope = this.dataScope;
          }
@@ -304,11 +306,11 @@ define(["dojo/_base/declare",
          if (dotNotation)
          {
             this.alfLog("log", "Binding data listener", dotNotation, scope, callback, this);
-            if (this.dataScope == null)
+            if (!this.dataScope)
             {
                this.dataScope = CoreData.getSingleton().root;
             }
-            if (scope == null)
+            if (!scope)
             {
                scope = this.dataScope;
             }
@@ -326,7 +328,7 @@ define(["dojo/_base/declare",
                dotNotation: dotNotation,
                callbackId: callbackId
             };
-            if (this.dataBindingCallbacks == null)
+            if (!this.dataBindingCallbacks)
             {
                this.dataBindingCallbacks = [];
             }
@@ -345,7 +347,7 @@ define(["dojo/_base/declare",
          try
          {
             var data = lang.getObject(binding.dotNotation, false, binding.scope);
-            if (data != null)
+            if (!data)
             {
                delete data._alfCallbacks[binding.callbackId];
             }
@@ -455,11 +457,11 @@ define(["dojo/_base/declare",
        */
       alfSubscribe: function alfresco_core_Core__alfSubscribe(topic, callback, global, parentScope) {
          var scopedTopic = topic;
-         if (global != null && global === true)
+         if (global === true)
          {
             // No action required - use global scope
          }
-         else if (parentScope != null && parentScope === true)
+         else if (parentScope === true)
          {
             scopedTopic = this.parentPubSubScope + topic;
          }
@@ -474,7 +476,7 @@ define(["dojo/_base/declare",
          }
 
          var handle = pubSub.subscribe(scopedTopic, callback);
-         if (this.alfSubscriptions == null)
+         if (!this.alfSubscriptions)
          {
             this.alfSubscriptions = [];
          }
@@ -520,7 +522,7 @@ define(["dojo/_base/declare",
        */
       alfUnsubscribeSaveHandles: function alfresco_core_Core__alfUnsubscribeSaveHandles(handles) {
          array.forEach(handles, function(handle) {
-            if (handle != null)
+            if (handle)
             {
                this.alfUnsubscribe(handle);
             }
@@ -542,7 +544,8 @@ define(["dojo/_base/declare",
        * @param {boolean} preserveDom
        */
       destroy: function alfresco_core_Core__destroy(preserveDom) {
-         if (this.alfSubscriptions != null)
+         /*jshint unused:false*/
+         if (this.alfSubscriptions)
          {
             array.forEach(this.alfSubscriptions, function(handle) {
                if (typeof handle.remove === "function")
@@ -551,27 +554,27 @@ define(["dojo/_base/declare",
                }
             });
          }
-         if (this.dataBindingCallbacks != null)
+         if (this.dataBindingCallbacks)
          {
             array.forEach(this.dataBindingCallbacks, function(binding) {
                this.alfRemoveDataListener(binding);
             }, this);
          }
 
-         if (this.servicesToDestroy != null)
+         if (this.servicesToDestroy)
          {
             array.forEach(this.servicesToDestroy, function(service) {
-               if (service != null && typeof service.destroy === "function")
+               if (service && typeof service.destroy === "function")
                {
                   service.destroy();
                }
             }, this);
          }
 
-         if (this.widgetsToDestroy != null)
+         if (this.widgetsToDestroy)
          {
             array.forEach(this.widgetsToDestroy, function(widget) {
-               if (widget != null && typeof widget.destroy === "function")
+               if (widget && typeof widget.destroy === "function")
                {
                   widget.destroy();
                }
@@ -622,13 +625,56 @@ define(["dojo/_base/declare",
        */
       alfLog: function alfresco_core_Core__alfLog(severity, message) {
          // arguments.callee is deprecated, but there's no alternative to it, so ignore errors.
-         /* jshint -W059 */
+         /*jshint unused:false, noarg:false*/
          this.alfPublish(this.alfLoggingTopic, {
             callerName: arguments.callee.caller.name,
             severity: severity,
             messageArgs: Array.prototype.slice.call(arguments, 1)
          }, true);
-         /* jshint +W059 */
+      },
+
+      /**
+       * Submit a pub-sub request (i.e. do a publish) and return a promise that will resolve to the
+       * returned subscription. This is specifically for occasions when doing a publish with a UUID,
+       * where the response (i.e. subsequent subscription) is only relevant for this one instance. The
+       * response topic is generated automatically, and does not need to be supplied in the payload.
+       *
+       * @instance
+       * @param {String} topic The topic on which to publish
+       * @param {object} payload The payload to publish on the supplied topic
+       * @param {boolean} [global] Indicates that the pub/sub scope should not be applied
+       * @param {boolean} [parentScope] Indicates that the pub/sub scope inherited from the parent should be applied
+       * @returns {object} A dojo/promise/Promise
+       */
+      alfPublishToPromise: function alfresco_core_Core__alfPubSubToPromise(topic, payload, global, parentScope) {
+
+         // Setup the publish variables and handlers
+         var deferred = new Deferred(),
+            responseTopic = uuid(),
+            subscriptionHandles = [],
+            publishPayload = lang.mixin({
+               alfResponseTopic: responseTopic
+            }, payload || {}),
+            resultsProperty = payload.resultsProperty || "response";
+
+         // Define the subscription handlers
+         var successHandler = lang.hitch(this, function(response) {
+               this.alfUnsubscribeSaveHandles(subscriptionHandles);
+               deferred.resolve(response[resultsProperty]);
+            }),
+            failureHandler = lang.hitch(this, function(response) {
+               this.alfUnsubscribeSaveHandles(subscriptionHandles);
+               deferred.reject(response);
+            });
+
+         // Do subscriptions and publish
+         subscriptionHandles.push(this.alfSubscribe(responseTopic, successHandler));
+         subscriptionHandles.push(this.alfSubscribe(responseTopic + "_SUCCESS", successHandler));
+         subscriptionHandles.push(this.alfSubscribe(responseTopic + "_FAILURE", failureHandler));
+         this.alfPublish(topic, publishPayload, global, parentScope);
+
+         // Pass back the promise
+         return deferred.promise;
       }
    });
 });

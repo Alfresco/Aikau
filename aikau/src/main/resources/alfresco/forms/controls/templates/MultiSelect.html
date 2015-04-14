@@ -1,0 +1,10 @@
+<div class="${rootClass}">
+   <div class="${rootClass}__off-screen-search" data-dojo-attach-point="offScreenSearch"></div>
+   <div class="${rootClass}__container" data-dojo-attach-point="labelsContainer">
+      <input class="${rootClass}__search-box" data-dojo-attach-point="searchBox" data-dojo-attach-event="keypress:_onSearchKeypress,keyup:_onSearchKeyup" type="text" />
+   </div>
+   <ul class="${rootClass}__results" data-dojo-attach-point="resultsDropdown"><li
+      class="${rootClass}__result-loading" data-dojo-attach-point="loadingMessage">${loadingMessage}</li><li
+      class="${rootClass}__result-no-results" data-dojo-attach-point="noResultsMessage"></li><li
+      class="${rootClass}__result-error" data-dojo-attach-point="errorMessage"></li></ul>
+</div>

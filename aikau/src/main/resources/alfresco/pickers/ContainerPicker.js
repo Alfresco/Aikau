@@ -222,7 +222,8 @@ define(["dojo/_base/declare",
                               {
                                  name: "alfresco/navigation/PathTree",
                                  config: {
-                                    showRoot: false,
+                                    showRoot: true,
+                                    rootLabel: "picker.sharedFiles.label",
                                     rootNode: "alfresco://company/shared",
                                     publishTopic: "ALF_ITEM_SELECTED"
                                  }
@@ -243,8 +244,9 @@ define(["dojo/_base/declare",
                               {
                                  name: "alfresco/navigation/PathTree",
                                  config: {
-                                    showRoot: false,
-                                    rootNode: "alfresco://company/home",
+                                    showRoot: true,
+                                    rootLabel: "picker.repository.label",
+                                    rootNode: "{repoNodeRef}",
                                     publishTopic: "ALF_ITEM_SELECTED"
                                  }
                               }
@@ -264,7 +266,8 @@ define(["dojo/_base/declare",
                               {
                                  name: "alfresco/navigation/PathTree",
                                  config: {
-                                    showRoot: false,
+                                    showRoot: true,
+                                    rootLabel: "picker.myFiles.label",
                                     rootNode: "alfresco://user/home",
                                     publishTopic: "ALF_ITEM_SELECTED"
                                  }
@@ -284,10 +287,8 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default
+       * @default []
        */
-      widgetsForPickedItems: [
-
-      ]
+      widgetsForPickedItems: []
    });
 });

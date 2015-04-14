@@ -121,6 +121,17 @@ define(["dojo/_base/declare",
       generatePubSubScope: true,
 
       /**
+       * This should be set to the NodeRef to be used to represent the root of the Repository. By default
+       * this is "alfresco://company/home" but can be configured to be any other value. This value is used
+       * as the root location for the Repository root picker.
+       *
+       * @instance
+       * @type {string}
+       * @default "alfresco://company/home"
+       */
+      repoNodeRef: "alfresco://company/home",
+
+      /**
        *
        *
        * @instance
@@ -142,7 +153,9 @@ define(["dojo/_base/declare",
 
          if (this.widgetsForRootPicker !== null)
          {
-            this.processWidgets(lang.clone(this.widgetsForRootPicker), this.subPickersNode);
+            var clonedWidgetsForRootPicker = lang.clone(this.widgetsForRootPicker);
+            this.processObject(["processInstanceTokens"], clonedWidgetsForRootPicker);
+            this.processWidgets(clonedWidgetsForRootPicker, this.subPickersNode);
             if (this.subPickersLabel) {
                this.subPickersLabelNode.innerHTML = this.message(this.subPickersLabel);
             }
@@ -333,7 +346,7 @@ define(["dojo/_base/declare",
                               {
                                  name: "alfresco/pickers/DocumentListPicker",
                                  config: {
-                                    nodeRef: "alfresco://company/home",
+                                    nodeRef: "{repoNodeRef}",
                                     path: "/"
                                  }
                               }

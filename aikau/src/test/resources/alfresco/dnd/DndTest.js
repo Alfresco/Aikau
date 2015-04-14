@@ -47,7 +47,7 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Value 1", "Item label was not localized");
-            })
+            });
       },
 
       "Test there are no dropped items on page load": function() {
@@ -82,7 +82,7 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Value 1", "Dropped item label was not localized");
-            })
+            });
       },
       
       "Test Form Value Updated After Drop": function() {
@@ -126,6 +126,32 @@ define(["intern!object",
          return browser.findAllByCssSelector(TestCommon.pubDataRowsCssSelector("FORM2_POST","data"))
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Preset dropped item was not deleted");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   registerSuite({
+
+      name: "DND items provided by list",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/list-of-dnd-items", "DND items provided by list")
+            .end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check items can be loaded from a list": function() {
+         return browser.findAllByCssSelector(".alfresco-dnd-DragAndDropItemsListView .alfresco-dnd-DragAndDropItem")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "The DND items were not populated");
             });
       },
 

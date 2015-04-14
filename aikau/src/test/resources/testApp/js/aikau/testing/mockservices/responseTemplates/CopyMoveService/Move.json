@@ -1,0 +1,30 @@
+{
+   "totalResults": 3,
+   "overallSuccess": false,
+   "successCount": 1,
+   "failureCount": 2,
+   "results":
+   [
+      {
+         "id": "File1",
+         "action": "moveFile",
+         "nodeRef": "workspace:\/\/SpacesStore\/3f3ecd27-87fd-4bf9-bddf-a79d6cb999e4",
+         "type": "document",
+         "success": true
+      },
+      {
+         "id": "File2",
+         "action": "moveFile",
+         "nodeRef": "workspace:\/\/SpacesStore\/3f3ecd27-87fd-4bf9-bddf-a79d6cb999e4",
+         "type": "document",
+         "success": false
+      },
+      {
+         "id": "File3",
+         "action": "moveFile",
+         "nodeRef": "workspace:\/\/SpacesStore\/3f3ecd27-87fd-4bf9-bddf-a79d6cb999e4",
+         "type": "document",
+         "success": false
+      }
+   ]
+}

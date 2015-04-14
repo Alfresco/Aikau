@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Copy/Move Service</shortname>
+  <description>Displays buttons that call the CopyMoveService to launch copy/move dialogs</description>
+  <family>aikau-unit-tests</family>
+  <url>/CopyMoveService</url>
+</webscript>

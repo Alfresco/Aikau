@@ -45,7 +45,8 @@ define([], function() {
    var counts = {
          total: 0,
          passed: 0,
-         skipped: 0
+         skipped: 0,
+         run: 0
       },
       collections = {
          failures: [],
@@ -123,6 +124,29 @@ define([], function() {
       console.log(ANSI_COLORS.Bold + output + ANSI_COLORS.Reset);
    }
 
+   function msToMinsAndSecs(ms) {
+      var wholeMins = Math.floor(ms / 1000 / 60),
+         roundedSecs,
+         minText,
+         secText,
+         timeInMinsAndSecs;
+      if (wholeMins) {
+         roundedSecs = Math.round(ms / 1000) % (wholeMins * 60);
+         minText = wholeMins === 1 ? "minute" : "minutes";
+         secText = roundedSecs === 1 ? "second" : "seconds";
+         if(roundedSecs) {
+            timeInMinsAndSecs = wholeMins + " " + minText + " " + roundedSecs + " " + secText;
+         } else {
+            timeInMinsAndSecs = wholeMins + " " + minText;
+         }
+      } else {
+         roundedSecs = Math.round(ms / 100) / 10;
+         secText = roundedSecs === 1 ? "second" : "seconds";
+         timeInMinsAndSecs = roundedSecs + " " + secText;
+      }
+      return timeInMinsAndSecs;
+   }
+
    function pad(str, paddedLength, padChar, padRight) {
       str = str || "";
       paddedLength = paddedLength || str.length;
@@ -147,26 +171,9 @@ define([], function() {
       },
       stop: function() {
 
-         // Calculate and log time taken
-         var timeTakenMs = Date.now() - timers.beforeAll,
-            timeTakenMins = Math.floor(timeTakenMs / 1000 / 60),
-            timeTakenSecs,
-            minText,
-            secText,
-            timeTaken;
-         if (timeTakenMins) {
-            timeTakenSecs = Math.round(timeTakenMs / 1000) % (timeTakenMins * 60);
-            minText = timeTakenMins === 1 ? "minute" : "minutes";
-            secText = timeTakenSecs === 1 ? "second" : "seconds";
-            timeTaken = timeTakenMins + " " + minText + " " + timeTakenSecs + " " + secText;
-         } else {
-            timeTakenSecs = Math.round(timeTakenMs / 100) / 10;
-            secText = timeTakenSecs === 1 ? "second" : "seconds";
-            timeTaken = timeTakenSecs + " " + secText;
-         }
-
          // Output completed message and test run information
-         var environmentNames = Object.keys(environments);
+         var timeTaken = msToMinsAndSecs(Date.now() - timers.beforeAll),
+            environmentNames = Object.keys(environments);
          logTitle("Testing complete");
          console.log("");
          console.log("Took " + timeTaken + " to run " + counts.total + " tests in " + environmentNames.length + " environments: \"" + environmentNames.join("\", \"") + "\"");
@@ -308,10 +315,23 @@ define([], function() {
          if (suite.name === "main") {
             return;
          }
-         var timeTaken = Date.now() - timers.beforeSuite;
+         var timeTaken = Date.now() - timers.beforeSuite,
+            totalTimeTaken = Date.now() - timers.beforeAll,
+            percentCompleteDecimal = (counts.run / counts.total),
+            percentComplete = Math.round(percentCompleteDecimal * 1000) / 10,
+            estimatedTimeLeft = (totalTimeTaken / percentCompleteDecimal) - totalTimeTaken,
+            timeLeftString = msToMinsAndSecs(estimatedTimeLeft),
+            progressString = percentComplete + "% complete";
+         if (totalTimeTaken > 1000 * 30) {
+            if (percentComplete > 10) {
+               progressString += ", approx " + timeLeftString + " remaining";
+            } else {
+               progressString += ", calculating remaining time...";
+            }
+         }
          state.suite = null;
          state.env = null;
-         console.log(ANSI_COLORS.Dim + "Suite took " + timeTaken + "ms to complete" + ANSI_COLORS.Reset);
+         console.log(ANSI_COLORS.Dim + "Suite took " + timeTaken + "ms to complete (" + progressString + ")" + ANSI_COLORS.Reset);
       },
       "/suite/error": function(suite) {
          if (suite.name === "main") {
@@ -330,8 +350,9 @@ define([], function() {
          state.suite = suite.name;
          console.log("\n" + ANSI_COLORS.Bold + suite.name + ANSI_COLORS.Reset);
       },
-      "/test/end": function(test) {
+      "/test/end": function() {
          state.test = null;
+         counts.run++;
       },
       "/test/fail": function(test) {
          var errorMessage = test.error.message,

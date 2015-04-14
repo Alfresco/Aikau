@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
        * @param object {Object} - the object containing the token
        * @return {*}
        */
-      processTokens: function alfresco_core_ObjectProcessingMixin__processInstanceTokens(value, object) {
+      processTokens: function alfresco_core_ObjectProcessingMixin__processTokens(value, object) {
          // Default to returning the input value if it doesn't match.
          var processedValue = value;
 
@@ -83,8 +83,7 @@ define(["dojo/_base/declare",
             // Deal with multiple tokens in the string.
             processedValue = lang.replace(value, lang.hitch(this, this.safeReplace, object));
          }
-
-         return processedValue
+         return processedValue;
       },
 
       /**

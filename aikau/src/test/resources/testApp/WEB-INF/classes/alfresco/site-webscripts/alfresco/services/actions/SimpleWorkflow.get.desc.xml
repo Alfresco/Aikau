@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Simple Workflow Actions</shortname>
+  <description>Displays buttons that use the SimpleWorkflowService control approval and rejection of workflows.</description>
+  <family>aikau-unit-tests</family>
+  <url>/SimpleWorkflowActions</url>
+</webscript>

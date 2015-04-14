@@ -1,0 +1,16 @@
+{
+   "totalResults": 1,
+   "overallSuccess": true,
+   "successCount": 1,
+   "failureCount": 0,
+   "results":
+   [
+      {
+         "id": "Meeting Notes 2011-01-27.doc",
+         "action": "copyFile",
+         "nodeRef": "workspace:\/\/SpacesStore\/3f3ecd27-87fd-4bf9-bddf-a79d6cb999e4",
+         "type": "document",
+         "success": true
+      }
+   ]
+}
