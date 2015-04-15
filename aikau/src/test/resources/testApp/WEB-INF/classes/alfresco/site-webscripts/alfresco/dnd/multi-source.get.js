@@ -10,7 +10,65 @@ model.jsonModel = {
                error: true
             }
          }
-      }
+      },
+      {
+         name: "alfresco/services/DragAndDropModellingService",
+         config: {
+            models: [
+               {
+                  property: "name",
+                  targetValues: ["bob"],
+                  widgetsForConfig: [
+                     // No config
+                  ],
+                  widgetsForDisplay: [
+                     {
+                        name: "alfresco/dnd/DroppedNestingItemWrapper",
+                        config: {
+                           showEditButton: false,
+                           label: "{label}",
+                           value: "{value}",
+                           widgets: [
+                              {
+                                 name: "alfresco/dnd/DragAndDropNestedTarget",
+                                 config: {
+                                    useModellingService: true,
+                                    label: "Widgets",
+                                    targetProperty: "config.widgets"
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  ]
+               },
+               {
+                  property: "name",
+                  targetValues: ["ted"],
+                  widgetsForConfig: [
+                     // No config
+                  ],
+                  widgetsForDisplay: [
+                     {
+                        name: "alfresco/dnd/DroppedNestingItemWrapper",
+                        config: {
+                           showEditButton: false,
+                           label: "{label}",
+                           value: "{value}",
+                           widgets: [
+                              {
+                                 name: "alfresco/dnd/DroppedItem"
+                              }
+                           ]
+                        }
+                     }
+                  ]
+               }
+
+            ]
+         }
+      },
+      "alfresco/services/DialogService"
    ],
    widgets: [
       {
@@ -49,7 +107,8 @@ model.jsonModel = {
                               label: "Data",
                               name: "data",
                               value: null,
-                              acceptTypes: ["widget"]
+                              acceptTypes: ["widget"],
+                              useModellingService: true
                            }
                         }
                      ]

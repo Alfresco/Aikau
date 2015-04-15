@@ -558,8 +558,8 @@ define(["intern!object",
                });
       },
 
-      "Drag and drop a single use item": function () {
-         return browser.findByCssSelector("#DRAG_PALETTE2 .dojoDndItem .title")
+      "Drag and drop a single use item into a nested target": function () {
+         return browser.findByCssSelector("#dojoUnique1 .title")
             .moveMouseTo()
             .click()
             .pressMouseButton()
@@ -574,8 +574,18 @@ define(["intern!object",
          .end()
          .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
-                  assert.lengthOf(elements, 1, "The dropped item was not found");
+                  assert.lengthOf(elements, 1, "The dropped item was found");
             })
+         .end()
+         .findByCssSelector(".alfresco-dnd-DroppedItemWrapper .alfresco-dnd-DragAndDropTarget .dojoDndTarget")
+            .click()
+         .end()
+         .pressKeys(keys.ENTER)
+         .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
+            .then(function(elements) {
+                  assert.lengthOf(elements, 2, "The dropped item was not found");
+            })
+         .end()
          .findAllByCssSelector("#DRAG_PALETTE2 .dojoDndItem")
             .then(function(elements) {
                   assert.lengthOf(elements, 0, "The dragged single use item was not removed from the items list");

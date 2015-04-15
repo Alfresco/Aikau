@@ -32,8 +32,9 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/on",
-        "dojo/Deferred"], 
-        function(declare, DroppedItemWrapper, Constants, lang, array, on, Deferred) {
+        "dojo/Deferred",
+        "dijit/registry"], 
+        function(declare, DroppedItemWrapper, Constants, lang, array, on, Deferred, registry) {
    
    return declare([DroppedItemWrapper], {
       
@@ -79,6 +80,31 @@ define(["dojo/_base/declare",
                }
             }
          }, this);
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/dnd/DroppedItemWrapper#onItemDelete} to to iterate
+       * over all the nested items an individually delete them to ensure that any items that are configured for
+       * single use only are ultimately returned to the [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * widget from which they were originally sourced.
+       *
+       * @instance
+       * @param {object} evt The deletion event
+       */
+      onItemDelete: function alfresco_dnd_DroppedNestingItemWrapper__onItemDelete(/* jshint unused:false */ evt) {
+         array.forEach(this._renderedWidgets, function(widget) {
+            if (widget.previewTarget && typeof widget.previewTarget.getAllNodes === "function")
+            {
+               var nodes = widget.previewTarget.getAllNodes.call(widget.previewTarget);
+               array.forEach(nodes, function(node) {
+                  var w = registry.byNode(node);
+                  if (w && typeof w.onItemDelete === "function") {
+                     w.onItemDelete.call(w);
+                  }
+               });
+            }
+         });
+         this.inherited(arguments);
       },
 
       /**
