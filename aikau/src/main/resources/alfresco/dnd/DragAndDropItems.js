@@ -104,6 +104,26 @@ define(["dojo/_base/declare",
       immediateRender: true,
 
       /**
+       * Indicates whether or not items displayed can be re-arranged. Defaults to false.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      selfAccept: false,
+
+      /**
+       * The array of types that this can be dropped if this is to be used as a target. Note that this has been added
+       * purely to support configurablility and extensions. If this is left as the default of null then it means
+       * that this cannot be used as a drag-and-drop target.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      acceptTypes: null,
+
+      /**
        * Creates a palette of items that can be dragged (and dropped).
        * 
        * @instance
@@ -141,6 +161,8 @@ define(["dojo/_base/declare",
          this.sourceTarget = new Source(this.paletteNode, {
             copyOnly: !this.useItemsOnce,
             selfCopy: false,
+            accept: this.acceptTypes || [],
+            selfAccept: this.selfAccept,
             creator: lang.hitch(this, this.creator),
             withHandles: this.dragWithHandles
          });
