@@ -98,10 +98,9 @@ define(["intern!object",
          return browser.findByCssSelector(".confirmationButton > span")
             .click()
          .end()
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "updated1", "Value2_1"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Value2_1", "The initial value was not selected in the initially generated options");
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("UNIT_TEST_FORM_POST", "updated1", "Value2_1"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "The value was not re-selected in the second set of options");
             });
       },
    
@@ -126,20 +125,12 @@ define(["intern!object",
             });
       },
 
-      "Test value of pub sub option after options update": function() {
-         return browser.findByCssSelector(".confirmationButton > span")
-            .click()
-         .end()
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "updated1", "Value2_1"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Value2_1", "The value was not re-selected in the second set of options");
-            });
-      },
-    
       "Test options provided once": function() {
          // The options should have been provided once (the mock service increments the options)...
-         return this.remote.findByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
+         return browser.findByCssSelector("#HAS_CHANGES_TO_CONTROL")
+            .click()
+         .end()
+         .findByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "Update1_3", "Updated label not set correctly by pub/sub: " + resultText);
@@ -160,6 +151,16 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Update1_2", "Updated label not set correctly by external update");
+            });
+      },
+
+      "Test value of pub sub option after options update": function() {
+         return browser.findByCssSelector(".confirmationButton > span")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("UNIT_TEST_FORM_POST", "updated1", "Value2_1"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "The value was not re-selected in the second set of options");
             });
       },
 

@@ -63,7 +63,7 @@ define(["dojo/_base/declare",
                   "value": "Value2_" + this.select2Count
                },
                {
-                  "label": "Update3_" + this.select2Count,
+                  "label": "Update2_" + (this.select2Count - 1),
                   "value": "Value2_" + (this.select2Count - 1)
                }
             ]
