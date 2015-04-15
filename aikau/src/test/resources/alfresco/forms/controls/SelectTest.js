@@ -52,15 +52,11 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-     "Test Label Rendering": function () {
+      "Test Label Rendering": function () {
          return TestCommon.loadTestWebScript(this.remote, "/Select", "Select Form Control Tests").findByCssSelector("#FIXED_INVALID_CHANGES_TO .label")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "Fixed 1", "The label was not rendered correctly: " + resultText);
+               assert.equal(resultText, "Fixed Options", "The label was not rendered correctly: " + resultText);
             });
       },
       
@@ -97,6 +93,17 @@ define(["intern!object",
                assert(resultText === "NO LABEL", "Fixed label not set correctly from value: " + resultText);
             });
       },
+
+      "Test initial value of pub sub option": function() {
+         return browser.findByCssSelector(".confirmationButton > span")
+            .click()
+         .end()
+         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "updated1", "Value2_1"))
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Value2_1", "The initial value was not selected in the initially generated options");
+            });
+      },
    
       "Test pub/sub options generated": function() {
          return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
@@ -107,29 +114,26 @@ define(["intern!object",
          .end()
          .findAllByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown .dijitMenuItemLabel")
             .then(function(elements) {
-               assert(elements.length === 2, "Two options were expected, found: " + elements.length);
+               assert.lengthOf(elements, 3, "The wrong number of options were generated");
             });
       },
   
       "Test updated label set by pub/sub": function() {
          return this.remote.findByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
-            .then(function(resultText) {
-               assert(resultText === "Update1_1", "Updated label not set correctly by pub/sub: " + resultText);
+            .then(function(text) {
+               assert.equal(text, "Update1_1", "Updated label not set correctly by pub/sub");
             });
       },
-    
-      "Test pub/sub options generated from field change": function() {
-         // Check that pub/sub options generated from field changes are correct (should be on 3rd request based on values being set)...
-         return this.remote.findByCssSelector("#HAS_UPDATE_TOPICS .dijitArrowButtonInner")
+
+      "Test value of pub sub option after options update": function() {
+         return browser.findByCssSelector(".confirmationButton > span")
             .click()
          .end()
-         .findByCssSelector("#HAS_CHANGES_TO .dijitArrowButtonInner")
-            .click()
-         .end()
-         .findAllByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown .dijitMenuItemLabel")
-            .then(function(elements) {
-               assert(elements.length === 2, "Two options were expected, found: " + elements.length);
+         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "updated1", "Value2_1"))
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Value2_1", "The value was not re-selected in the second set of options");
             });
       },
     
@@ -154,8 +158,22 @@ define(["intern!object",
          .end()
          .findByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
-            .then(function(resultText) {
-               assert(resultText === "Update1_2", "Updated label not set correctly by external update: " + resultText);
+            .then(function(text) {
+               assert.equal(text, "Update1_2", "Updated label not set correctly by external update");
+            });
+      },
+
+      "Test pub/sub options generated from field change": function() {
+         // Check that pub/sub options generated from field changes are correct (should be on 3rd request based on values being set)...
+         return this.remote.findByCssSelector("#HAS_UPDATE_TOPICS .dijitArrowButtonInner")
+            .click()
+         .end()
+         .findByCssSelector("#HAS_CHANGES_TO .dijitArrowButtonInner")
+            .click()
+         .end()
+         .findAllByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown .dijitMenuItemLabel")
+            .then(function(elements) {
+               assert(elements.length === 2, "Two options were expected, found: " + elements.length);
             });
       },
  
