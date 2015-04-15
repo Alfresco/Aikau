@@ -18,6 +18,7 @@ model.jsonModel = {
          config: {
             id: "FORM",
             pubSubScope: "UNIT_TEST_",
+            okButtonPublishTopic: "FORM_POST",
             widgets: [
                {
                   id: "NO_CONFIG",
@@ -28,6 +29,8 @@ model.jsonModel = {
                   id: "INVALID_CONFIG",
                   name: "alfresco/forms/controls/Select",
                   config: {
+                     label: "Invalid options config",
+                     description: "This select field has incorrectly configured options configuration. No options are expected to be displayed",
                      optionsConfig: {
                         fixed: 1
                      }
@@ -38,7 +41,9 @@ model.jsonModel = {
                   config: {
                      id: "FIXED_INVALID_CHANGES_TO",
                      fieldId: "Select1",
-                     label: "Fixed 1",
+                     name: "fixed1",
+                     label: "Fixed Options",
+                     description: "This select field is configured with a mixture of valid and invalid static options. Only the valid options will be displayed",
                      value: "2",
                      optionsConfig: {
                         changesTo: "INVALID_DATA",
@@ -57,7 +62,10 @@ model.jsonModel = {
                   config: {
                      id: "HAS_UPDATE_TOPICS",
                      fieldId: "Select2",
+                     name: "updated1",
                      label: "Update Topics",
+                     description: "This field is configured with a topic to publish requesting options, along with a number of topics that will trigger the options to be refreshed. The update topics can be triggered by clicking the button at below the form.",
+                     value: "Value2_1", 
                      optionsConfig: {
                         updateTopics: [
                            {
@@ -84,7 +92,9 @@ model.jsonModel = {
                   config: {
                      id:"BASIC_FIXED_OPTIONS",
                      fieldId: "Select3",
-                     label: "Fixed 2",
+                     name: "fixed2",
+                     label: "Fixed Options Trigger",
+                     description: "This is another example of a select field with fixed options. This particular field can be used to trigger the refreshing of options in the 'ChangesTo' field.",
                      optionsConfig: {
                         fixed: [
                            {label:"Three",value:"3"},
@@ -98,7 +108,9 @@ model.jsonModel = {
                   config: {
                      id: "HAS_CHANGES_TO",
                      fieldId: "Select4",
-                     label: "ChangesTo_PubSub",
+                     name: "updated2",
+                     label: "ChangesTo",
+                     description: "This select field is configured to dynamically request options each time the value of 'Fixed Options Trigger' is changed",
                      optionsConfig: {
                         changesTo: [
                            {
@@ -121,7 +133,9 @@ model.jsonModel = {
                   name: "alfresco/forms/controls/Select",
                   config: {
                      fieldId: "XSS_OPTIONS",
+                     name: "xss",
                      label: "Check XSS Options",
+                     description: "This field is configured with a single option that attempts to inject JavaScript into the page, it is included to validate that this is not possible",
                      optionsConfig: {
                         fixed: [
                            {label:'<img src="1" onerror="window.hackedLabel=true">',value:'<img src="1" onerror="window.hackedValue=true">'}
@@ -136,7 +150,7 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          config: {
             id: "REQUEST_GLOBAL_UPDATE",
-            label: "Update Select 2 (Global)",
+            label: "Refresh 'Update Topics'",
             publishTopic: "GLOBAL_UPDATE_TOPIC"
          }
       },
@@ -144,7 +158,7 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          config: {
             id: "REQUEST_SCOPED_UPDATE_GLOBALLY",
-            label: "Fail To Update Select 2 (Scoped Topic/Global Publish)",
+            label: "Fail To refresh 'Update Topics' (Scoped Topic/Global Publish)",
             publishTopic: "SCOPED_UPDATE_TOPIC"
          }
       },
@@ -152,7 +166,7 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          config: {
             id: "REQUEST_SCOPED_UPDATE",
-            label: "Succeed Updating Select 2 (Scoped)",
+            label: "Succeed Updating 'Update Topics' (Scoped)",
             publishTopic: "UNIT_TEST_SCOPED_UPDATE_TOPIC"
          }
       },
@@ -200,9 +214,6 @@ model.jsonModel = {
       },
       {
          name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

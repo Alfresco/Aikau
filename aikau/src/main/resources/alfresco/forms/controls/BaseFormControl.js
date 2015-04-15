@@ -766,6 +766,7 @@ define(["dojo/_base/declare",
          }
          else
          {
+            var value = this.getValue();
             this.options = options;
             if (this.wrappedWidget)
             {
@@ -781,7 +782,7 @@ define(["dojo/_base/declare",
                   array.forEach(options, lang.hitch(this, this.addOption));
                }
             }
-            this.setOptionsValue(options);
+            this.setOptionsValue(value, options);
          }
       },
 
@@ -789,19 +790,19 @@ define(["dojo/_base/declare",
        * Sets the value if there are options to select from
        *
        * @instance
+       * @param {object} value The value to attempt to set from the available options
        * @param {array} options The options to choose from
        */
-      setOptionsValue: function alfresco_forms_controls_BaseFormControl__setOptionsValue(options) {
-         var currentValue = this.getValue();
-         var optionsContainsValue = array.some(options, function(option, index) {
-            return option.value === currentValue;
+      setOptionsValue: function alfresco_forms_controls_BaseFormControl__setOptionsValue(value, options) {
+         var optionsContainsValue = array.some(options, function(option) {
+            return option.value === value;
          });
          
          if (optionsContainsValue)
          {
             // Reset the option...
-            this.setValue(currentValue);
-            this.value = currentValue;
+            this.setValue(value);
+            this.value = value;
          }
          else if (options.length > 0)
          {
@@ -818,6 +819,7 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the option to remove
        */
       removeOption: function alfresco_forms_controls_BaseFormControl__removeOption(option, index) {
+         // jshint unused:false
          this.wrappedWidget.removeOption(option);
       },
       
