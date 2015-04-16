@@ -67,6 +67,22 @@ define(["intern!object",
             });
       },
 
+      "Render on new line configuration doesn't effect icon": function() {
+         var valueX;
+         return browser.findByCssSelector("#INLINE_EDIT .inlineEditValue")
+            .getPosition()
+            .then(function(p) {
+               valueX = p.x;
+            })
+         .end()
+         .findByCssSelector("#INLINE_EDIT .editIcon")
+            .getPosition()
+            .then(function(p) {
+               assert.notEqual(valueX, p.x, "The value and icon should NOT be starting at the same X co-ordinate");
+            })
+         .end();
+      },
+
       "Icon appears on focus": function() {
          return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
             .then(function(element) {

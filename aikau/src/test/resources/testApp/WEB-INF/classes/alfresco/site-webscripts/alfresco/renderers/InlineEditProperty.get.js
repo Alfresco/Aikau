@@ -53,16 +53,10 @@ model.jsonModel = {
                                              ruleFailValue: "",
                                              is: ["New"]
                                           }
-                                       ]
+                                       ],
+                                       renderOnNewLine: true
                                     }
-                                 }
-                              ]
-                           }
-                        },
-                        {
-                           name: "alfresco/lists/views/layouts/Cell",
-                           config: {
-                              widgets: [
+                                 },
                                  {
                                     id: "INLINE_SELECT",
                                     name: "alfresco/renderers/InlineEditSelect",
