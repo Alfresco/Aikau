@@ -74,6 +74,15 @@ define([],function() {
       requestAdditionalConfigEvent: "onAdditionalConfigRequest",
 
       /**
+       * Emitted when a item is dragged out of a [DragAndDropNestedTarget]{@link module:alfresco/dnd/DragAndDropNestedTarget}.
+       * 
+       * @instance
+       * @type {string}
+       * @default "onNestedDragOutEvent"
+       */
+      nestedDragOutEvent: "onNestedDragOutEvent",
+
+      /**
        * This topic is published when using a modelling service to render the dropped items.
        * It is published to request the widgets to display for a given value.
        *
@@ -134,6 +143,6 @@ define([],function() {
        * @type {String}
        * @default "ALF_DND_DROPPED_ITEM_DELETED"
        */
-      itemDeletedTopic: "ALF_DND_DROPPED_ITEM_DELETED",
+      itemDeletedTopic: "ALF_DND_DROPPED_ITEM_DELETED"
    };
 });
