@@ -9,6 +9,7 @@
    &__entry {
       align-items: stretch;
       border-top: 1px solid #ccc;
+      cursor: pointer;
       display: flex;
       justify-content: space-between;
       margin: 0;
@@ -43,7 +44,6 @@
          }
       }
       &__data {
-         cursor: pointer;
          flex: 0 1 50%;
          font-family: @bold-font;
          margin-left: 20px;
@@ -54,7 +54,7 @@
             max-width: 100%;
          }
          &__collapsed {
-            color: #99f;
+            color: #aaf;
             display: none;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -75,14 +75,6 @@
                }
             }
          }
-         &:hover {
-            .alfresco_logging_DebugLog__entry__data {
-               &__collapsed, &__full {
-                  background: #eef;
-                  color: #00c;
-               }
-            }
-         }
       }
       &--publish {
          .alfresco_logging_DebugLog__entry__info {
@@ -92,6 +84,14 @@
       &--subscribe {
          .alfresco_logging_DebugLog__entry__info {
             background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAB+klEQVR42rXVTUhVQRjG8dGFCzMprKyNq2qRoisXSn5gmAmKGGqggi6EQBRX6kLBhSCIiqG58hPb2SJRyIWUYlrRok2U4BcEgqCIKJSbQv8v8y5Ocq53zr008ONyz8yd55wzM++NMf+5xTiOi0MZ8nEHJ1jDDI6jDSjABHYwh11cx2MNbNf+iAKK8Ap1WPDpT9enmEZP0IAEbKAGS3otE/Xa9wGTSMYX1GI5SIDcdQVK9fsjvEYT3iINhehCNZ4jL0jAC/zEoI77gQGMecZk4whbOMB97LsGZODQ2EXNwjxu48+FcRLyESvo1E+nAG8bxj088elLNHbbyiYYMhc2g0tAC/oxi8pLxn1CK1aDBMjCLuo42TW5IcbF6uuUNTgIEnAF3WjEX9zEb59xORgx9lz801zXoA29eIo3Pv1yTRZ3MJKAeJ1A9nyfsaXB28p04lScBg1Iwmfc1e8v0ezpl8P2Xp9s1W+CcAElxhY4GXdm7I4a1r4UnbTD2HplIgm4ge+4hU1ja5GUZ9n7si2lFvVfNoHLGshreoCv+KXXpow90Q3hfhwqIF/vesanTxbznbF7/iTSgGfGlt9Snz65eymCXQ5PHzLgGrbxEOue68UY16c4iiZAWoPepRwwKcFSJqpQbuz/sVMLt8gF+qqu4htGsec6uUtA1O0cO01iGSVhFtgAAAAASUVORK5CYII=");
+         }
+      }
+      &:hover {
+         background: #f0f0f0;
+         .alfresco_logging_DebugLog__entry__data {
+            &__collapsed {
+               color: #00c;
+            }
          }
       }
    }

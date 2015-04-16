@@ -132,7 +132,8 @@ define(["alfresco/logging/SubscriptionLog",
          updateLog: function alfresco_logging_DebugLog__updateLog(logData) {
 
             // Create data variables
-            var safeData = this._createSafeData(logData.data),
+            var hasData = !!logData.data,
+               safeData = this._createSafeData(logData.data),
                simpleData = JSON.stringify(safeData),
                formattedData = JSON.stringify(safeData, null, 2);
 
@@ -181,7 +182,7 @@ define(["alfresco/logging/SubscriptionLog",
             }
 
             // Add the data if we have it
-            if (safeData) {
+            if (hasData) {
                dataNode = domConstruct.create("span", {
                   className: this.rootClass + "__entry__data " + this.rootClass + "__entry__data--collapsed",
                   innerHTML: "Payload"
@@ -194,7 +195,9 @@ define(["alfresco/logging/SubscriptionLog",
                   className: this.rootClass + "__entry__data__full",
                   innerHTML: formattedData
                }, dataNode);
-               on(dataNode, "click", lang.hitch(this, this._toggleCollapsed));
+               on(entryNode, "click", lang.hitch(this, function() {
+                  this._toggleCollapsed(dataNode);
+               }));
             }
          },
 
@@ -306,10 +309,10 @@ define(["alfresco/logging/SubscriptionLog",
           * Toggle the collapsed state of a data item
           *
           * @instance
-          * @param    {object} evt Dojo-normalised event object
+          * @param    {object} dataNode The node to toggle
           */
-         _toggleCollapsed: function alfresco_logging_DebugLog___toggleCollapsed(evt) {
-            domClass.toggle(evt.currentTarget, this.rootClass + "__entry__data--collapsed");
+         _toggleCollapsed: function alfresco_logging_DebugLog___toggleCollapsed(dataNode) {
+            domClass.toggle(dataNode, this.rootClass + "__entry__data--collapsed");
          }
       });
    });

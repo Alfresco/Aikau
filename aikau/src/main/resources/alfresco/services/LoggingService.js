@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
                handleOverflow: true,
                widgetsContent: [
                   {
-                     name: "alfresco/logging/SubscriptionLog"
+                     name: "alfresco/logging/DebugLog"
                   }
                ]
             });
