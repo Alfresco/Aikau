@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -237,15 +237,7 @@ define(["dojo/_base/declare",
             this.alfLog("log", "Property does not exist:", this);
          }
 
-         this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
-
-         if (this.renderOnNewLine === true) {
-            this.renderedValueClass = this.renderedValueClass + " block";
-         }
-
-         if (this.deemphasized === true) {
-            this.renderedValueClass = this.renderedValueClass + " deemphasized";
-         }
+         this.updateRenderedValueClass();
 
          // If the renderedValue is not set then display a warning message if requested...
          if (this.renderedValue === null || this.renderedValue === "" || typeof this.renderedValue === "undefined") {
@@ -274,6 +266,23 @@ define(["dojo/_base/declare",
                this.renderedValuePrefix = "";
                this.renderedValueSuffix = "";
             }
+         }
+      },
+
+      /**
+       * Updates the [renderedValueClass]{@link module:alfresco/renderers/Property#renderedValueClass}
+       * attribute based on the current configuration. This is abstracted to a function so that it can
+       * be easily called by extending renderers.
+       *
+       * @instance
+       */
+      updateRenderedValueClass: function alfresco_renderers_Property__updateRenderedValueClass() {
+         this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
+         if (this.renderOnNewLine === true) {
+            this.renderedValueClass = this.renderedValueClass + " block";
+         }
+         if (this.deemphasized === true) {
+            this.renderedValueClass = this.renderedValueClass + " deemphasized";
          }
       },
 

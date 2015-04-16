@@ -59,6 +59,14 @@ define(["intern!object",
             });
       },
 
+      "Check simple date rendering": function() {
+         return browser.findByCssSelector("#SIMPLE_MODE .value")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Tue 11 Apr 2000 12:42:02", "Simple date not rendered correctly");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
