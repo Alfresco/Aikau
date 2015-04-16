@@ -1,33 +1,33 @@
 .alfresco-testing-SubscriptionLog {
    margin-top: 25px;
-   table {
+   .log {
       border: 1px solid #808080;
       border-collapse: collapse;
       width: 100%;
-   }
-   tr {
-      border: none;
-      border-collapse: collapse;
-      &.sl-row:nth-child(odd), &.sl-object-row:nth-child(odd) {
-         background-color: #eee;
+      tr {
+         border: none;
+         border-collapse: collapse;
+         &.sl-row:nth-child(odd), &.sl-object-row:nth-child(odd) {
+            background-color: #eee;
+         }
+         &.sl-row:nth-child(even), &.sl-object-row:nth-child(even) {
+            background-color: #fff;
+         }
       }
-      &.sl-row:nth-child(even), &.sl-object-row:nth-child(even) {
-         background-color: #fff;
+      th, td, caption {
+         border: 1px solid #808080;
+         border-collapse: collapse;
+         padding: 4px;
       }
-   }
-   th, td, caption {
-      border: 1px solid #808080;
-      border-collapse: collapse;
-      padding: 4px;
-   }
-   caption {
-      border-bottom: none;
-      font-size: 1.1em;
-      font-weight: 700;
-      text-align: left;
-      background: #ccc;
-   }
-   td > table {
-      border: none;
+      caption {
+         background: #ccc;
+         border-bottom: none;
+         font-size: 1.1em;
+         font-weight: 700;
+         text-align: left;
+      }
+      td > table {
+         border: none;
+      }
    }
 }

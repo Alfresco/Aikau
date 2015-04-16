@@ -1,0 +1,98 @@
+.alfresco_logging_DebugLog {
+   margin: 25px 0;
+   &__log {
+      list-style: none;
+      margin: 0;
+      max-width: 100%;
+      padding: 0;
+   }
+   &__entry {
+      align-items: stretch;
+      border-top: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      margin: 0;
+      padding: 5px 0;
+      &:first-child {
+         border-top: 0;
+      }
+      &__info, &__data {
+         min-width: 200px;
+      }
+      &__info {
+         background-position: 0 2px;
+         background-repeat: no-repeat;
+         flex: 0 1 auto;
+         font-size: 12px;
+         padding-left: 30px;
+         word-wrap: break-word;
+         &__topic, &__timestamp, &__object {
+            display: block;
+         }
+         &__topic {
+            font-family: @bold-font;
+            font-size: 14px;
+            margin-bottom: 3px;
+         }
+         &__timestamp, &__object {
+            font-family: monospace;
+            font-size: 11px;
+         }
+         &__object {
+            color: #999;
+         }
+      }
+      &__data {
+         cursor: pointer;
+         flex: 0 1 50%;
+         font-family: @bold-font;
+         margin-left: 20px;
+         &__collapsed, &__full {
+            font-family: monospace;
+            font-size: 11px;
+            margin-top: 3px;
+            max-width: 100%;
+         }
+         &__collapsed {
+            color: #99f;
+            display: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+         }
+         &__full {
+            color: #00c;
+            display: block;
+            white-space: pre-wrap;
+         }
+         &--collapsed {
+            .alfresco_logging_DebugLog__entry__data {
+               &__collapsed {
+                  display: block;
+               }
+               &__full {
+                  display: none;
+               }
+            }
+         }
+         &:hover {
+            .alfresco_logging_DebugLog__entry__data {
+               &__collapsed, &__full {
+                  background: #eef;
+                  color: #00c;
+               }
+            }
+         }
+      }
+      &--publish {
+         .alfresco_logging_DebugLog__entry__info {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEs0lEQVR42rWUa0ybZRTHn3IphV6pjJay0kBxIOOyChmQSTDossUhIh9oBwNRLjJw0blN53AFxsC4jDmiYc1go8pEOkQu44NoRBcYF+eAchuXsUI7yiVd6R0oLfW8i34xA7olni/vyfM85/zO5Z8Xh/5nw211Sc4pYemvnlVu9YZytJSlu1Kw6ZtNAcSMAj55V2j9iuJBtPZKQe/T3lDzyqJc2f49+gmpwCguldgNoBwtc8TTXniIc3T0cTRoyAuXTxooWUIBKTigCDk6OBml989rq8+JmcfLyVYSTWezWOTmZZWfTlRgtQtAziyMpe4O/8N0v/+iuqroFPfUV0QDhSFz5+3bgWw2pB29i0jqOY+pCx89JqZ/dtF9T/QJ7ei9V/XXim/bBSBlCrOogbwqnGyk6FHl2WLfD7/w0ePJs3gq/cm9WadBlDXdSw8rTo/7fFBaaOUEFenHB7J1185V2zeiTOHbrl6cn2wLMyVL1SVC7Iz53pn6FZwzH/NdbOu3lq6XJWA+I1tYghicz9cX5UnqquImuwA780upBpuDxrJikr4RwuXd/DjD1tzc3PtAtxZp3bChABqhLzExMer1kkqHXtl8vxPBLcwTj6NNXj6ttVtF7PcLz+isuNLgHaSIgz506lv7In6bm5szb4Cx2WxCy52/9v88q9aOqAx/0pxQwayoqMxuFWF27Osa3C/j8txYLuvGAQ692cvLK06v189DfjOVSuXMz893tM+qE29PK48cCuKILuVn2J4J8K+JxLVRr0TweqRSqcTT0/M1AKyqVKo7YWFh/O5+aXROemrvVvHbAiQSya3Q0ND4ewOD+70Yns0YYEn1WPDynrBfh4aG2vh8/pvPDaj9vi4yZHdQr1KpfLS6ZubQ3Wlmq9W6ptXryQQ8fpbFYu0cGhmNSj+S2vdcgLq6uvqYmBg+VGqEsVz39fU9BoCNpaWlChKJlAOdETs7OyUpKSmCZwY0NDS86OfnN7m6uoogocLf35+t0WgQjAh5eHigyclJBeyETSAQ0PT09K7k5OSpZwLU1tZ+GxcXl97V1dVOJBIPqdXqfC6XWwEdIJlMlken068ajcY26PBgR0fHd2lpae/YDWhra/OBKmchMRoYGMh1cHBwo9FoWZA0COtAq9WOLS8vV4Nv4vF4IgAhGCEnPj5ebhcAlFMVHR2dNTExgSCxmcFg4Kempixubm5OGMBsNq9DN86Li4tmGBs+ICAAdXd3VwsEguxtAa2trV7u7u5KJpOJhoeHEQ6HWzAYDOWQeCgwMLAdA8D8Y+F8L5lMPmGz2ZghISFoYWEBQVeshISE+S0BoJwvofpP5HI5cnV1RTAWBL8IJSzy9+Dg4FQMMDY2VgMdHPD29mbBbpDJZEIcDgf19PRcAEV9uimgpaWFBpXJISlZoVD0gZ8HKsqFRMkUCoUKu3iiIuwLo9EC+CaoSAShlfAmEjrQw70P/Ag1TwU0NTURoZofnJ2d98L3ZEZGxo1/wG4QfB5kexwDzMzMlMNuhJDIhN3X1NQchv1cslgsd6Hrw0lJScZtZfpfE4vF34SHh+dj/uDgoBhk+a49cXYDGhsbQ0A9SZjv4uLyI1Q5ak/c33NBNTe8AryTAAAAAElFTkSuQmCC");
+         }
+      }
+      &--subscribe {
+         .alfresco_logging_DebugLog__entry__info {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAB+klEQVR42rXVTUhVQRjG8dGFCzMprKyNq2qRoisXSn5gmAmKGGqggi6EQBRX6kLBhSCIiqG58hPb2SJRyIWUYlrRok2U4BcEgqCIKJSbQv8v8y5Ocq53zr008ONyz8yd55wzM++NMf+5xTiOi0MZ8nEHJ1jDDI6jDSjABHYwh11cx2MNbNf+iAKK8Ap1WPDpT9enmEZP0IAEbKAGS3otE/Xa9wGTSMYX1GI5SIDcdQVK9fsjvEYT3iINhehCNZ4jL0jAC/zEoI77gQGMecZk4whbOMB97LsGZODQ2EXNwjxu48+FcRLyESvo1E+nAG8bxj088elLNHbbyiYYMhc2g0tAC/oxi8pLxn1CK1aDBMjCLuo42TW5IcbF6uuUNTgIEnAF3WjEX9zEb59xORgx9lz801zXoA29eIo3Pv1yTRZ3MJKAeJ1A9nyfsaXB28p04lScBg1Iwmfc1e8v0ezpl8P2Xp9s1W+CcAElxhY4GXdm7I4a1r4UnbTD2HplIgm4ge+4hU1ja5GUZ9n7si2lFvVfNoHLGshreoCv+KXXpow90Q3hfhwqIF/vesanTxbznbF7/iTSgGfGlt9Snz65eymCXQ5PHzLgGrbxEOue68UY16c4iiZAWoPepRwwKcFSJqpQbuz/sVMLt8gF+qqu4htGsec6uUtA1O0cO01iGSVhFtgAAAAASUVORK5CYII=");
+         }
+      }
+   }
+}
