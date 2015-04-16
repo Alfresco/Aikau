@@ -123,6 +123,8 @@ define({
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
 
+      "src/test/resources/alfresco/logging/DebugLogTest",
+
       "src/test/resources/alfresco/logo/LogoTest",
 
       "src/test/resources/alfresco/menus/AlfCheckableMenuItemTest",
