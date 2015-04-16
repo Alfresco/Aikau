@@ -116,6 +116,13 @@ model.jsonModel = {
                                  value: ""
                               }
                            }
+                        },
+                        {
+                           type: [ "widget" ],
+                           label: "No model",
+                           value: {
+                              name: "nomatch"
+                           }
                         }
                      ]
                   }
