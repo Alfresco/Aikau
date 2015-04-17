@@ -132,11 +132,19 @@ define(["alfresco/core/ProcessWidgets",
             this._processedWidgetsToReveal = true;
          }
          var maxHeight = domStyle.get(this.contentNode, "maxHeight"),
-            isExpanded = !isNaN(maxHeight) && maxHeight > 0;
+            isExpanded = maxHeight === "none" || (typeof maxHeight === "number" && maxHeight > 0);
          if (isExpanded) {
-            domStyle.set(this.contentNode, "maxHeight", 0);
+            domClass.remove(this.contentNode, "content--has-transition");
+            domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
+            domClass.add(this.contentNode, "content--has-transition");
+            setTimeout(lang.hitch(this, function(){
+               domStyle.set(this.contentNode, "maxHeight", 0);
+            }), 0);
          } else {
             domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
+            setTimeout(lang.hitch(this, function(){
+               domStyle.set(this.contentNode, "maxHeight", "none");
+            }), 1000 * 60);
          }
       }
    });
