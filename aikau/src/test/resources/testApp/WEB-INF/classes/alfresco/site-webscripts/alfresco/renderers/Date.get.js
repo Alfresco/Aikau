@@ -21,7 +21,8 @@ model.jsonModel = {
                modifiedBy: "Brian Griffin"
             },
             modifiedDateProperty: "modifiedOn",
-            modifiedByProperty: "modifiedBy"
+            modifiedByProperty: "modifiedBy",
+            renderOnNewLine: true
          }
       },
       {
@@ -39,14 +40,24 @@ model.jsonModel = {
                      }
                   }
                }
-            }
+            },
+            renderOnNewLine: true
+         }
+      },
+      {
+         id: "SIMPLE_MODE",
+         name: "alfresco/renderers/Date",
+         config: {
+            currentItem: {
+               date: "2000-04-11T12:42:02+00:00"
+            },
+            simple: true,
+            propertyToRender: "date",
+            renderOnNewLine: true
          }
       },
       {
          name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };
