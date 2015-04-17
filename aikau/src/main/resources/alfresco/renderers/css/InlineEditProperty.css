@@ -15,6 +15,9 @@
    .alfresco-renderers-Property {
       margin-left: 0;
    }
+   .alfresco-renderers-Property.block {
+      display: inline-block;
+   }
    .editIcon {
       cursor: pointer;
       display: inline-block;
