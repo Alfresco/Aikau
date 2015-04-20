@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,7 +18,7 @@
  */
 
 /**
- * This is a BETA quality widget and not guaranteed for production use. 
+ * This widget displays the comments for an item in a list.
  *
  * @module alfresco/renderers/CommentsList
  * @extends module:alfresco/core/ProcessWidgets

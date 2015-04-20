@@ -18,7 +18,18 @@
  */
 
 /**
- * This is a BETA quality widget and not guaranteed for production use.
+ * This layout widget allows for the dynamic revealing and hiding of content.
+ *
+ * @example <caption>Sample configuration</caption>
+ * {
+ *   name: "alfresco/layout/VerticalReveal",
+ *   config: {
+ *     subscriptionTopic: "ALF_REVEAL_LOGO",
+ *     widgets: [{
+ *       name: "alfresco/logo/Logo"
+ *     }]
+ *   }
+ * }
  *
  * @module alfresco/layout/VerticalReveal
  * @extends module:alfresco/core/ProcessWidgets
@@ -27,14 +38,14 @@
  * @author Martin Doyle
  */
 define(["alfresco/core/ProcessWidgets",
-        "dijit/_OnDijitClickMixin", 
-        "dojo/text!./templates/VerticalReveal.html", 
-        "dojo/_base/declare", 
-        "dojo/_base/lang", 
-        "dojo/Deferred", 
-        "dojo/dom-construct", 
-        "dojo/dom-class", 
-        "dojo/dom-style"], 
+        "dijit/_OnDijitClickMixin",
+        "dojo/text!./templates/VerticalReveal.html",
+        "dojo/_base/declare",
+        "dojo/_base/lang",
+        "dojo/Deferred",
+        "dojo/dom-construct",
+        "dojo/dom-class",
+        "dojo/dom-style"],
         function(ProcessWidgets, _OnDijitClickMixin, template, declare, lang, Deferred, domConstruct, domClass, domStyle) {
 
    return declare([ProcessWidgets, _OnDijitClickMixin], {
@@ -140,28 +151,35 @@ define(["alfresco/core/ProcessWidgets",
       },
 
       /**
+       * Toggle the content node.
+       *
+       * @instance
+       */
+      _doToggle: function alfresco_layout_VerticalReveal___doToggle() {
+         var maxHeight = this.contentNode.style.maxHeight, // domStyle.get returns 0 instead of "none"
+            isExpanded = maxHeight === "none" || (typeof maxHeight === "number" && maxHeight > 0);
+         if (isExpanded) {
+            domClass.remove(this.contentNode, "content--has-transition");
+            domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
+            domClass.add(this.contentNode, "content--has-transition");
+            setTimeout(lang.hitch(this, function() {
+               domStyle.set(this.contentNode, "maxHeight", 0);
+            }), 0);
+         } else {
+            domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
+            setTimeout(lang.hitch(this, function() {
+               domStyle.set(this.contentNode, "maxHeight", "none");
+            }), 1000);
+         }
+      },
+
+      /**
        * Handle requests to toggle the contents visibility
        *
        * @instance
        */
       _onDisplayToggle: function alfresco_layout_VerticalReveal___onDisplayToggle() {
-         this._processWidgets().then(lang.hitch(this, function() {
-            var maxHeight = this.contentNode.style.maxHeight, // domStyle.get returns 0 instead of "none"
-               isExpanded = maxHeight === "none" || (typeof maxHeight === "number" && maxHeight > 0);
-            if (isExpanded) {
-               domClass.remove(this.contentNode, "content--has-transition");
-               domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
-               domClass.add(this.contentNode, "content--has-transition");
-               setTimeout(lang.hitch(this, function() {
-                  domStyle.set(this.contentNode, "maxHeight", 0);
-               }), 0);
-            } else {
-               domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
-               setTimeout(lang.hitch(this, function() {
-                  domStyle.set(this.contentNode, "maxHeight", "none");
-               }), 1000);
-            }
-         }));
+         this._processWidgets().then(lang.hitch(this, this._doToggle));
       },
 
       /**
