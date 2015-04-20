@@ -106,6 +106,30 @@ define([
                });
          },
 
+         "Typing into search box filters results for strings in middle of tag name": function () {
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__search-box")
+               .type("tag12")
+               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(5)")
+               .end()
+
+               .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
+               .then(function (elements) {
+                  assert.lengthOf(elements, 1, "Did not filter results for string in middle of tag name");
+               });
+         },
+
+         "Search box correctly filters on special reg exp chars": function () {
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__search-box")
+               .type("(a")
+               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(5)")
+               .end()
+
+               .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
+               .then(function (elements) {
+                  assert.lengthOf(elements, 1, "Did not filter results using special reg exp character");
+               });
+         },
+
          "Clicking cross on a chosen item removes it": function() {
             return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__close-button")
                .click()
