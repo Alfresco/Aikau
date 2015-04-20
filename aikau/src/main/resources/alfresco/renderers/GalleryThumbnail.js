@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        * @param {object} dimensions
        */
       resize: function alfresco_renderers_GalleryThumbnail__resize(dimensions) {
-         if (this.imgNode != null && dimensions && dimensions.w)
+         if (this.imgNode && dimensions && dimensions.w)
          {
             // Set the container height AND the image height and widths...
             // Heights are set to ensure a nice square thumbnail...
@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
          {
             domStyle.set(this.titleNode, "display", "none");
          }
-         if (this.dimensions != null)
+         if (this.dimensions)
          {
             this.resize(this.dimensions);
          }

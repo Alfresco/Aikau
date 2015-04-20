@@ -18,17 +18,14 @@
  */
 
 /**
- * This test renders examples of Thumbnails.
- * 
- * The test is simple and much of its validity is in the use of slightly damaged or incomplete models to inspect edge cases.
- * 
- * @author Richard Smith
+ * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
+        "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"], 
+        function (registerSuite, assert, require, TestCommon, keys) {
 
    var browser;
    registerSuite({
@@ -43,10 +40,68 @@ define(["intern!object",
          browser.end();
       },
 
-     "Check there are the expected number of thumbnails successfully rendered": function () {
+      "Check there are the expected number of thumbnails successfully rendered": function () {
          return browser.findAllByCssSelector("span.alfresco-renderers-Thumbnail")
-            .then(function (thumbnails){
-               expect(thumbnails).to.have.length(12, "There should be 12 thumbnails successfully rendered");
+            .then(function (elements){
+               assert.lengthOf(elements, 9, "There should be 9 thumbnails successfully rendered");
+            });
+      },
+
+      "Standard document link": function() {
+         return browser.findByCssSelector("#DOCLIB_RENDITIONS tr:nth-child(2) .alfresco-renderers-Thumbnail .inner img")
+            .click()
+         .end();
+         // TODO: Link is currently not created properly outside of Share, raised https://issues.alfresco.com/jira/browse/AKU-240
+      },
+
+      "Standard container link": function() {
+         return browser.findByCssSelector("#DOCLIB_RENDITIONS tr:nth-child(1) .alfresco-renderers-Thumbnail .inner img")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCUMENTLIST_PATH_CHANGED", "path", "/Budget Files/Invoices/Folder"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find standard container link publication");
+            });
+      },
+
+      "Custom thumbnail link": function() {
+         return browser.findByCssSelector("#IMGPREVIEW_RENDITIONS tr:nth-child(2) .alfresco-renderers-Thumbnail .inner img")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("CUSTOM_CLICK_TOPIC", "nodeRef", "workspace://SpacesStore/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find custom link click publication");
+            });
+      },
+
+      "Lightbox preview": function() {
+         return browser.findAllByCssSelector("#TASKS1 .alfresco-renderers-Thumbnail img")
+            .click()
+         .end()
+         .sleep(1000) // Give the lightbox a chance to populate
+         .findByCssSelector("#aikauLightbox")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The lightbox preview was not displayed");
+            });
+      },
+
+      "Escape closes lightbox preview": function() {
+         return browser.pressKeys([keys.ESCAPE])
+            .findByCssSelector("#aikauLightbox")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed, "The lightbox preview was not hidden on ESC");
+               });
+      },
+
+      "PDFjs Preview": function() {
+         return browser.findByCssSelector("#HARDCODED .alfresco-renderers-Thumbnail .inner img")
+            .click()
+         .end()
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog .alfresco-preview-PdfJs")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "PDFjs preview not displayed");
             });
       },
 
