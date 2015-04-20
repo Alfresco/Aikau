@@ -1,6 +1,11 @@
 .alfresco-layout-VerticalReveal {
-   > .toggle.hidden {
+   &__toggle-node {
       display: none;
+   }
+   &--has-toggle {
+      .alfresco-layout-VerticalReveal__toggle-node {
+         display: block;
+      }
    }
    > .content {
       max-height: 0;

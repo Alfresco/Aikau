@@ -117,6 +117,7 @@ define({
       "src/test/resources/alfresco/layout/BasicLayoutTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/TwisterTest",
+      "src/test/resources/alfresco/layout/VerticalRevealTest",
 
       "src/test/resources/alfresco/lists/AlfHashListTest",
       "src/test/resources/alfresco/lists/FilteredListTest",
