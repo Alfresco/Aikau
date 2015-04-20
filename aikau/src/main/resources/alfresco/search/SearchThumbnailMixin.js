@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,7 +18,11 @@
  */
 
 /**
- * This module was created to support both the specific thumbnail and gallery thumbnail modules for search results.
+ * This module was created to support both the [thumbnail]{@link module:alfresco/search/SearchThumbnail} and 
+ * [gallery thumbnail]{@link module:alfresco/search/SearchGalleryThumbnail} modules that are used to
+ * render thumbnails in search results. Because search results can contain any node types (e.g. blogs, wikis,
+ * links, etc) rather than just documents and folders it provides the extra code for rendering the correct
+ * thumbnail image for the additional types that can be displayed.
  * 
  * @module alfresco/search/SearchThumbnailMixin
  * @extends module:alfresco/renderers/_SearchResultLinkMixin
@@ -27,11 +31,8 @@
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/_SearchResultLinkMixin",
-        "alfresco/navigation/_HtmlAnchorMixin",
-        "service/constants/Default",
-        "dojo/_base/lang",
-        "dojo/window"], 
-        function(declare, _SearchResultLinkMixin, _HtmlAnchorMixin, AlfConstants, lang, win) {
+        "alfresco/navigation/_HtmlAnchorMixin"], 
+        function(declare, _SearchResultLinkMixin, _HtmlAnchorMixin) {
 
    return declare([_SearchResultLinkMixin, _HtmlAnchorMixin], {
 
@@ -45,16 +46,6 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/SearchThumbnailMixin.properties"}],
 
       /**
-       * Indicates whether documents thumbnail clicks should launch a previewer in a dialog
-       * rather than linking directly to the document itself. Default to false.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      showDocumentPreview: false,
-
-      /**
        * Generates the publication payload by calling the mixed in 
        * [generatePayload]{@link module:alfresco/renderers/_SearchResultLinkMixin#generatePayload}
        * function and then wraps the property in an anchor element by calling the mixed in 
@@ -64,85 +55,12 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_SearchThumbnailMixin__postCreate() {
          this.inherited(arguments);
-         if (this.publishPayload == null)
+         if (!this.publishPayload)
          {
             this.publishPayload = {};
          }
          this.publishPayload = this.generateSearchLinkPayload(this.publishPayload, this.currentItem, null, this.publishPayloadType, this.publishPayloadItemMixin, this.publishPayloadModifiers);
          this.makeAnchor(this.publishPayload.url, this.publishPayload.type);
-      },
-
-      /**
-       * Extends the function inherited from the [_SearchResultLinkMixin module]{@link module:alfresco/renderers/_SearchResultLinkMixin#generatePayload}
-       * to the topic and payload for documents to show a dialog containing the previewer for that document
-       *
-       * @instance
-       * @returns {object} The payload to publish when clicked.
-       */
-      generateSearchLinkPayload: function alfresco_renderers_SearchThumbnailMixin__generateSearchLinkPayload() {
-         var type = lang.getObject("type", false, this.currentItem),
-             mimetype = lang.getObject("mimetype", false, this.currentItem);
-         if (this.showDocumentPreview && type === "document")
-         {
-            if (mimetype && mimetype.indexOf("image/") === 0)
-            {
-               // get last modified for image preview if present in the metadata
-               var lastModified = lang.getObject("lastThumbnailModification", false, this.currentItem) || 1;
-               this.publishTopic = "ALF_DISPLAY_LIGHTBOX";
-               return {
-                  src: AlfConstants.PROXY_URI + "api/node/" + lang.getObject("nodeRef", false, this.currentItem).replace(":/", "") +
-                       "/content/thumbnails/imgpreview?c=force&lastModified=" + encodeURIComponent(lastModified),
-                  title: lang.getObject("displayName", false, this.currentItem)
-               };
-            }
-            else
-            {
-               // Because the content of the previewer will load asynchronously it's important that 
-               // we set some dimensions for the dialog body, otherwise it will appear off-center
-               var vs = win.getBox();
-               this.publishTopic = "ALF_CREATE_DIALOG_REQUEST";
-               return {
-                  contentWidth: (vs.w*0.7) + "px",
-                  contentHeight: (vs.h-64) + "px",
-                  handleOverflow: false,
-                  dialogTitle: this.currentItem.name,
-                  additionalCssClasses: "no-padding",
-                  widgetsContent: [
-                     {
-                        name: "alfresco/documentlibrary/AlfDocument",
-                        config: {
-                           widgets: [
-                              {
-                                 name: "alfresco/preview/AlfDocumentPreview"
-                              }
-                           ]
-                        }
-                     }
-                  ],
-                  widgetsButtons: [
-                     {
-                        name: "alfresco/buttons/AlfButton",
-                        config: {
-                           label: this.message("searchThumbnail.preview.dialog.close"),
-                           publishTopic: "NO_OP"
-                        }
-                     }
-                  ],
-                  publishOnShow: [
-                     {
-                        publishTopic: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
-                        publishPayload: {
-                           nodeRef: this.currentItem.nodeRef
-                        }
-                     }
-                  ]
-               };
-            }
-         }
-         else
-         {
-            return this.inherited(arguments);
-         }
       },
 
       /**

@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>Thumbnail Test</shortname>
-  <description>This WebScript defines the Thumbnail page test</description>
+  <shortname>Thumbnail Renderers</shortname>
+  <description>Shows all the different ways in which a thumbnails can be rendered.</description>
   <family>aikau-unit-tests</family>
   <url>/Thumbnail</url>
 </webscript>

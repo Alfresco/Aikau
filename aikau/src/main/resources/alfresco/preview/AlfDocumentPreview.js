@@ -211,7 +211,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_DOCUMENT_PREVIEW_UPDATE", lang.hitch(this, "onPreviewChanged"));
          this.alfSubscribe("ALF_METADATA_REFRESH", lang.hitch(this, "doRefresh"));
 
-         if (this.currentItem != null)
+         if (this.currentItem)
          {
             this.nodeRef = this.currentItem.node.nodeRef;
             this.name = this.currentItem.node.properties["cm:name"] || this.currentItem.node.properties["cm:title"];
@@ -222,45 +222,35 @@ define(["dojo/_base/declare",
          }
 
          // Initialise empty arrays as required...
-         if (this.thumbnails == null)
+         if (!this.thumbnails)
          {
             this.thumbnails = [];
          }
-         if (this.thumbnailModification == null)
+         if (!this.thumbnailModification)
          {
             this.thumbnailModification = [];
          }
          this.plugins = {};
 
-         // Convert the JSON string conditions back into an object...
-         // if (this.pluginConditions != null)
-         // {
-         //    this.pluginConditions = eval(this.pluginConditions);
-         // }
-         // else
-         // {
-         //    this.alfLog("warn", "No 'pluginConditions' attribute provided for document preview", this);
-         // }
-         
          // SWFObject patch to help flash plugins, will ensure all flashvars are URI encoded
          // TODO: Do we really need this still for Aikau???
-         if (window.YAHOO != null && window.YAHOO.deconcept != null)
-         {
-            window.YAHOO.deconcept.SWFObject.prototype.getVariablePairs = function()
-            {
-               var variablePairs = [],
-                  key,
-                  variables = this.getVariables();
-               for (key in variables)
-               {
-                  if (variables.hasOwnProperty(key))
-                  {
-                     variablePairs[variablePairs.length] = key + "=" + encodeURIComponent(variables[key]);
-                  }
-               }
-               return variablePairs;
-            };
-         }
+         // if (window.YAHOO != null && window.YAHOO.deconcept != null)
+         // {
+         //    window.YAHOO.deconcept.SWFObject.prototype.getVariablePairs = function()
+         //    {
+         //       var variablePairs = [],
+         //          key,
+         //          variables = this.getVariables();
+         //       for (key in variables)
+         //       {
+         //          if (variables.hasOwnProperty(key))
+         //          {
+         //             variablePairs[variablePairs.length] = key + "=" + encodeURIComponent(variables[key]);
+         //          }
+         //       }
+         //       return variablePairs;
+         //    };
+         // }
 
          this.setupPlugins();
 
@@ -280,7 +270,7 @@ define(["dojo/_base/declare",
       widgetsForPlugins: [
          {
             id: "PdfJs",
-            name: "alfresco/preview/PdfJs"
+            name: "alfresco/preview/PdfJs/PdfJs"
          },
          {
             id: "WebPreviewer",
@@ -351,11 +341,11 @@ define(["dojo/_base/declare",
             else 
             {
                // Update the name (if provided)...
-               if (pluginConfig.name != null)
+               if (pluginConfig.name)
                {
                   existingPlugin.name = pluginConfig.name;
                }
-               if (pluginConfig.replace === true || existingPlugin.config == null)
+               if (pluginConfig.replace === true || !existingPlugin.config)
                {
                   // Completely replace the plugin configuration...
                   existingPlugin.config = pluginConfig.config;
@@ -382,13 +372,13 @@ define(["dojo/_base/declare",
       setupPlugins: function alfresco_preview_AlfDocumentPreview__setupPlugins() {
          this.plugins = {};
 
-         if (this.widgetsForPluginsOverrides != null)
+         if (this.widgetsForPluginsOverrides)
          {
             array.forEach(this.widgetsForPluginsOverrides, lang.hitch(this, this.updatePluginConfiguration));
          }
 
-         array.forEach(this.widgetsForPlugins, function(plugin, index) {
-            if (plugin.id != null && plugin.name != null)
+         array.forEach(this.widgetsForPlugins, function(plugin) {
+            if (plugin.id && plugin.name)
             {
                this.alfLog("log", "Creating plugin: ", plugin.id);
                try
@@ -418,7 +408,7 @@ define(["dojo/_base/declare",
          // automated testing purposes but it is important to ensure it's available...
          var i = 0;
          var tmpName = pluginName;
-         while (registry.byId(tmpName) != null)
+         while (registry.byId(tmpName))
          {
             i++;
             tmpName = pluginName + "_" + i;
@@ -478,10 +468,10 @@ define(["dojo/_base/declare",
             throw new Error("A nodeRef must be provided");
          }
 
-         if (this.size == "0")
+         if (this.size === "0")
          {
             // Shrink the web previewers real estate and tell user that node has no content
-            this.previewerNode.innerHTML = '<div class="message">' + this.message("label.noContent") + '</div>';
+            this.previewerNode.innerHTML = "<div class=\"message\">" + this.message("label.noContent") + "</div>";
          }
          else
          {
@@ -504,7 +494,7 @@ define(["dojo/_base/declare",
 
                   // Check the plugin constructor actually exists, in case client-side dependencies
                   // have not been loaded (ALF-12798)
-                  if (this.plugins[pluginDescriptor.name] != null)
+                  if (this.plugins[pluginDescriptor.name])
                   {
                      // Get plugin
                      plugin = this.plugins[pluginDescriptor.name];
@@ -550,7 +540,7 @@ define(["dojo/_base/declare",
                         catch(e)
                         {
                            // Oops a plugin failure, log it and try the next one instead...
-                           this.alfLog("error",'Error:' + pluginDescriptor.name + ' failed to display: ' + e);
+                           this.alfLog("error","Error:" + pluginDescriptor.name + " failed to display: " + e);
                            messages.push(this.message("label.error", pluginDescriptor.name, e.message));
                         }
                      }
@@ -558,7 +548,7 @@ define(["dojo/_base/declare",
                   else
                   {
                      // Plugin could not be instantiated, log it and try the next one instead...
-                     this.alfLog("error",'Error, Alfresco.WebPreview.Plugins.' + pluginDescriptor.name + ' does not exist');
+                     this.alfLog("error","Error, Alfresco.WebPreview.Plugins." + pluginDescriptor.name + " does not exist");
                      messages.push(this.message("label.errorMissing", pluginDescriptor.name));
                   }
                }
@@ -573,9 +563,9 @@ define(["dojo/_base/declare",
             var message = this.message(noPreviewLabel, this.getContentUrl(true));
             for (i = 0, il = messages.length; i < il; i++)
             {
-               message += '<br/>' + messages[i];
+               message += "<br/>" + messages[i];
             }
-            this.previewerNode.innerHTML = '<div class="message">' + message + '</div>';
+            this.previewerNode.innerHTML = "<div class=\"message\">" + message + "</div>";
          }
       },
 
@@ -585,7 +575,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onPreviewChanged: function alfresco_preview_AlfDocumentPreview__onPreviewChanged(payload) {
+      onPreviewChanged: function alfresco_preview_AlfDocumentPreview__onPreviewChanged(/*jshint unused:false*/ payload) {
          this.avoidCachedThumbnail = true;
 
          // No event to stop, so commented out pending deletion...
@@ -601,7 +591,7 @@ define(["dojo/_base/declare",
        * @return {boolean} true if conditions are fulfilled for plugins to be used.
        */
       conditionsMatch: function alfresco_preview_AlfDocumentPreview__conditionsMatch(condition) {
-         if (condition.attributes.mimeType && condition.attributes.mimeType != this.mimeType)
+         if (condition.attributes.mimeType && condition.attributes.mimeType !== this.mimeType)
          {
             return false;
          }
@@ -646,7 +636,7 @@ define(["dojo/_base/declare",
          // Check to see if last modification data is available for the thumbnail...
          for (var i = 0; i < this.thumbnailModification.length; i++)
          {
-            if (this.thumbnailModification[i].indexOf(thumbnail) != -1)
+            if (this.thumbnailModification[i].indexOf(thumbnail) !== -1)
             {
                var timestampPostfix = noCache;
 
@@ -703,11 +693,12 @@ define(["dojo/_base/declare",
        * @return {boolean} Returns true if a flash player of the required version is installed
        */
       hasRequiredFlashPlayer: function alfresco_preview_AlfDocumentPreview__hasRequiredFlashPlayer(reqMajorVer, reqMinorVer, reqRevision) {
-         if (typeof DetectFlashVer == "function")
+         // jshint unused:false, ignore:start
+         if (typeof DetectFlashVer === "function")
          {
-            // NOTE: JSHint warning can be ignored...
             return DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision);
          }
+         // jshint ignore:end
          return false;
       },
 
@@ -736,7 +727,7 @@ define(["dojo/_base/declare",
          {
             attributes:
             {
-               thumbnail: "pdf",
+               thumbnail: "pdf"
             },
             plugins: [
                {
