@@ -166,8 +166,6 @@ define(["alfresco/core/ProcessWidgets",
             setTimeout(lang.hitch(this, function() {
                domClass.add(this.contentNode, "content--has-transition");
                domStyle.set(this.contentNode, "maxHeight", 0);
-               // setTimeout(lang.hitch(this, function() {
-               // }), 0);
             }, 0));
          } else {
             domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
