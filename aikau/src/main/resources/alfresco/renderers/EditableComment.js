@@ -127,6 +127,10 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.onEditRequest));
          this.alfSubscribe("ALF_CANCEL_EDIT_COMMENT", lang.hitch(this, this.onCancelEdit));
          this.alfSubscribe("ALF_EDIT_COMMENT_SAVE", lang.hitch(this, this.onEditSave));
+
+         // Safely add the rendered value to the document
+         var safeDocFrag = this._makeSafe(this.renderedValue);
+         this.readNode.appendChild(safeDocFrag);
       },
 
       /**
@@ -248,6 +252,25 @@ define(["dojo/_base/declare",
        * @default "Save"
        */
       okButtonLabel: "Save",
+
+      /**
+       * Convert the supplied, potentially-unsafe HTML into a safe document fragment
+       *
+       * @instance
+       * @param    {string} unsafeHtml The "unsafe" HTML
+       * @returns  {object} The now-safe HTML as a document fragment
+       */
+      _makeSafe: function alfresco_renderers_EditableComment___makeSafe(unsafeHtml) {
+         var safeDocFrag = document.createDocumentFragment(),
+            containerDiv = safeDocFrag.appendChild(document.createElement("DIV"));
+         containerDiv.innerHTML = unsafeHtml;
+         while(containerDiv.hasChildNodes()) {
+            safeDocFrag.appendChild(containerDiv.firstChild);
+         }
+         safeDocFrag.removeChild(containerDiv);
+         // TODO Make this safe!
+         return safeDocFrag;
+      },
 
       /**
        *
