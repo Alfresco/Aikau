@@ -106,20 +106,22 @@ define([
                });
          },
 
-         "Typing into search box filters results for strings in middle of tag name": function () {
+         "Typing into search box filters results for strings in middle of name": function () {
             return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__search-box")
-               .type("tag12")
-               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(5)")
+               .clearValue()
+               .type("12")
+               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(2)")
                .end()
 
                .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
                .then(function (elements) {
-                  assert.lengthOf(elements, 1, "Did not filter results for string in middle of tag name");
+                  assert.lengthOf(elements, 1, "Did not filter results for string in middle of name" + elements);
                });
          },
 
          "Search box correctly filters on special reg exp chars": function () {
             return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__search-box")
+               .clearValue()
                .type("(a")
                .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(5)")
                .end()
