@@ -24,6 +24,7 @@
  * {
  *   name: "alfresco/layout/VerticalReveal",
  *   config: {
+ *     initiallyRevealed: true, // Optionally reveal immediately
  *     subscriptionTopic: "ALF_REVEAL_LOGO",
  *     widgets: [{
  *       name: "alfresco/logo/Logo"
@@ -103,12 +104,12 @@ define(["alfresco/core/ProcessWidgets",
       initiallyRevealed: false,
 
       /**
-       * Will be resolved once the widgets have been processed
+       * Will be set to true once the widgets have been processed
        *
        * @instance
-       * @type {object}
+       * @type {boolean}
        */
-      _widgetProcessingDeferred: null,
+      _widgetsProcessed: false,
 
       /**
        * Called when the child widgets have been processed
@@ -118,7 +119,8 @@ define(["alfresco/core/ProcessWidgets",
        * @param {Array} widgets An array of all the widgets that have been processed
        */
       allWidgetsProcessed: function alfresco_layout_VerticalReveal__allWidgetsProcessed( /*jshint unused:false*/ widgets) {
-         this._widgetProcessingDeferred.resolve();
+         this._widgetsProcessed = true;
+         this._doToggle();
       },
 
       /**
@@ -131,9 +133,9 @@ define(["alfresco/core/ProcessWidgets",
          if (this.toggleLabel) {
             domClass.add(this.domNode, this.rootClass + "--has-toggle");
          }
-         this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this._onDisplayToggle));
+         this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this._onToggleDisplay));
          if (this.initiallyRevealed === true) {
-            this._processWidgets();
+            this._onToggleDisplay();
          }
       },
 
@@ -161,15 +163,17 @@ define(["alfresco/core/ProcessWidgets",
          if (isExpanded) {
             domClass.remove(this.contentNode, "content--has-transition");
             domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
-            domClass.add(this.contentNode, "content--has-transition");
             setTimeout(lang.hitch(this, function() {
+               domClass.add(this.contentNode, "content--has-transition");
                domStyle.set(this.contentNode, "maxHeight", 0);
-            }), 0);
+               // setTimeout(lang.hitch(this, function() {
+               // }), 0);
+            }, 0));
          } else {
             domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
             setTimeout(lang.hitch(this, function() {
                domStyle.set(this.contentNode, "maxHeight", "none");
-            }), 1000);
+            }), 700);
          }
       },
 
@@ -178,26 +182,12 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        */
-      _onDisplayToggle: function alfresco_layout_VerticalReveal___onDisplayToggle() {
-         this._processWidgets().then(lang.hitch(this, this._doToggle));
-      },
-
-      /**
-       * Process the widgets to be displayed
-       *
-       * @instance
-       * @returns {object} A promise, that will be resolved when the widgets have been processed
-       */
-      _processWidgets: function alfresco_layout_VerticalReveal___processWidgets() {
-         if (!this._widgetProcessingDeferred) {
-            this._widgetProcessingDeferred = new Deferred();
-            if (this.widgets) {
-               this.processWidgets(this.widgets, this.containerNode);
-            } else {
-               this._widgetProcessingDeferred.resolve();
-            }
+      _onToggleDisplay: function alfresco_layout_VerticalReveal___onToggleDisplay() {
+         if (!this._widgetsProcessed) {
+            this.processWidgets(this.widgets, this.containerNode);
+         } else {
+            this._doToggle();
          }
-         return this._widgetProcessingDeferred.promise;
       }
    });
 });
