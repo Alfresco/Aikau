@@ -72,7 +72,7 @@ define([
 
             .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
                .then(function(elements) {
-                  assert.lengthOf(elements, 4, "Did not bring up initial results");
+                  assert.lengthOf(elements, 7, "Did not bring up initial results");
                });
          },
 
