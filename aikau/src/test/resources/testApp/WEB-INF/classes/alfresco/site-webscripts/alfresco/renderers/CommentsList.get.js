@@ -9,22 +9,30 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/ErrorReporter",
+      "alfresco/services/DialogService",
+      "aikauTesting/mockservices/CommentsListMockService"
    ],
    widgets: [{
       name: "alfresco/renderers/CommentsList",
+      id: "COMMENT_LIST",
       config: {
+         pubSubScope: "COMMENTS1_",
          currentItem: {
             node: {
-               nodeRef: "workspace:\/\/SpacesStore\/4307d3f5-7d49-461a-bf86-b9510956ee2f"
+               nodeRef: "workspace://SpacesStore/4fd42b12-361a-4e02-a1da-9131e6fa074d"
+            },
+            parent: {
+               permissions: {
+                  user: {
+                     CreateChildren: true
+                  }
+               }
             }
          }
       }
    }, {
-      name: "aikauTesting/mockservices/CommentsListMockXhr"
-   }, {
       name: "alfresco/logging/DebugLog"
-         // name: "alfresco/logging/SubscriptionLog"
    }, {
       name: "aikauTesting/TestCoverageResults"
    }]

@@ -42,8 +42,36 @@ define(["intern!object",
             browser.end();
          },
 
-         "Ensure wibble is woobly": function() {
-            assert.fail(null, null, "Not yet implemented");
+         "No comments loaded initially": function() {
+            return browser.findByCssSelector("#COMMENT_LIST .alfresco-lists-AlfList")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "No comments", "Did not display no-comments message at startup");
+               });
+         },
+
+         "Can add comment": function() {
+            return browser.findByCssSelector("#COMMENT_LIST .dijitButtonNode")
+               .click()
+               .end()
+
+            .findAllByCssSelector(".alfresco-editors-TinyMCE iframe") // Wait for control
+               .end()
+
+            .findAllByCssSelector(".alfresco-editors-TinyMCE iframe")
+               .execute("tinymce.get(0).setContent('<p><strong>Hello tester!</strong></p>');")
+               .execute("tinymce.get(0).save();")
+               .end()
+
+            .findByCssSelector(".alfresco-dialog-AlfDialog .dijitButtonNode")
+               .click()
+               .end()
+
+            .findByCssSelector("#COMMENT_LIST .alfresco-lists-AlfList")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.include(text, "Hello tester!", "Did not add new comment");
+               });
          },
 
          "Post Coverage Results": function() {
