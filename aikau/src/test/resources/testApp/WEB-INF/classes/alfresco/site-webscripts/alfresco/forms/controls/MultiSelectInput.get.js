@@ -45,7 +45,8 @@ model.jsonModel = {
                         publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",
                         publishPayload: {
                            resultsProperty: "response.data.items"
-                        }
+                        },
+                        searchStartsWith: false
                      }
                   }
                }
