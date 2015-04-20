@@ -26,9 +26,9 @@
  *    name: "alfresco/logging/DebugLog",
  *    config: {
  *       payloadConfig: {
- *          maxDepth: 3,  // Defaults to 6
- *          maxChildren: 10,  // Defaults to 50
- *          excludedKeys: ["foo", "bar"] // Defaults to ["dojo", "dijit", "dojox", "$", "LiveReload", "Alfresco", "sinon", "dojoConfig"]
+ *          maxDepth: 3,
+ *          maxChildren: 10,
+ *          excludedKeys: ["foo", "bar"]
  *       }
  *    }
  * }
@@ -100,7 +100,7 @@ define(["alfresco/logging/SubscriptionLog",
          defaultPayloadConfig: {
             maxChildren: 50,
             maxDepth: 6,
-            excludedKeys: ["dojo", "dijit", "dojox", "$", "LiveReload", "Alfresco", "sinon", "dojoConfig"]
+            excludedKeys: ["dojo", "dijit", "dojox", "$", "LiveReload", "Alfresco", "sinon", "dojoConfig", "tinyMCE", "tinymce", "cScope"]
          },
 
          /**
