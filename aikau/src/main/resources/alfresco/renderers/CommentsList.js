@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,7 +18,7 @@
  */
 
 /**
- * This is a BETA quality widget and not guaranteed for production use. 
+ * This widget displays the comments for an item in a list.
  *
  * @module alfresco/renderers/CommentsList
  * @extends module:alfresco/core/ProcessWidgets
@@ -31,9 +31,18 @@ define(["dojo/_base/declare",
         function(declare, ProcessWidgets, ObjectProcessingMixin, lang) {
 
    return declare([ProcessWidgets, ObjectProcessingMixin], {
+
+      /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/CommentsList.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/CommentsList.properties"}],
       
       /**
-       * 
+       * Widget has been started, but not necessarily any sub-widgets.
        * 
        * @instance
        */
@@ -44,24 +53,23 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       * The widgets that comprise this CommentsList.
        * 
        * @instance
-       *
        * @fires ALF_CREATE_FORM_DIALOG_REQUEST
        */
       widgets: [
          {
             name: "alfresco/buttons/AlfButton",
             config: {
-               label: "Add Comment",
+               label: "comment.add",
                publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
                publishPayloadType: "PROCESS",
                publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
                publishPayload: {
-                  dialogTitle: "Add Comment",
-                  dialogConfirmationButtonTitle: "Add",
-                  dialogCancellationButtonTitle: "Cancel",
+                  dialogTitle: "comment.add",
+                  dialogConfirmationButtonTitle: "comment.add.confirm",
+                  dialogCancellationButtonTitle: "comment.add.cancel",
                   formSubmissionTopic: "ALF_CRUD_CREATE",
                   formSubmissionPayloadMixin: {
                      url: "api/node/{node.nodeRef}/comments",
@@ -69,6 +77,7 @@ define(["dojo/_base/declare",
                   },
                   additionalCssClasses: "no-padding",
                   fixedWidth: true,
+                  dialogWidth: "545px",
                   widgets: [
                      {
                         name: "alfresco/forms/controls/TinyMCE",
@@ -91,6 +100,7 @@ define(["dojo/_base/declare",
          {
             name: "alfresco/lists/AlfList",
             config: {
+               noDataMessage: "comments.none",
                waitForPageWidgets: false,
                loadDataPublishTopic: "ALF_CRUD_GET_ALL",
                loadDataPublishPayload: {
@@ -156,6 +166,7 @@ define(["dojo/_base/declare",
                                              {
                                                 name: "alfresco/renderers/PublishAction",
                                                 config: {
+                                                   altText: "comment.edit",
                                                    iconClass: "edit-16",
                                                    publishTopic: "ALF_EDIT_COMMENT",
                                                    renderFilter: [
@@ -169,14 +180,15 @@ define(["dojo/_base/declare",
                                              {
                                                 name: "alfresco/renderers/PublishAction",
                                                 config: {
+                                                   altText: "comment.delete",
                                                    iconClass: "delete-16",
                                                    publishTopic: "ALF_CRUD_DELETE",
                                                    publishPayloadType: "PROCESS",
                                                    publishPayload: {
                                                       url: "{url}",
-                                                      confirmationTitle: "Delete Comment",
-                                                      confirmationPrompt: "Are you sure you want to delete the comment'?",
-                                                      successMessage: "Successfully deleted",
+                                                      confirmationTitle: "comment.delete",
+                                                      confirmationPrompt: "comment.delete.prompt",
+                                                      successMessage: "comment.delete.success",
                                                       requiresConfirmation: true,
                                                       pubSubScope: "{pubSubScope}"
                                                    },

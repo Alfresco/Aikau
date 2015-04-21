@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>CommentsList Test</shortname>
+  <description>Shows an example of the alfresco/renderers/CommentsList widget using mocked data</description>
+  <description></description>
+  <family>aikau-unit-tests</family>
+  <url>/CommentsList</url>
+</webscript>

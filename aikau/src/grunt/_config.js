@@ -16,6 +16,7 @@ module.exports = {
       jsdocReadme: "src/jsdoc-templates/alfresco/README.md",
       test: "tests/alfresco/**",
       testApp: "src/test/resources/testApp/WEB-INF/classes/alfresco/site-webscripts/**",
+      testFramework: "src/test/resources/testApp/js/aikau/testing/**",
       testModel: "src/test/resources/alfresco/**/*.json",
       testScreenshots: "src/test/screenshots/*.png",
       testScripts: "src/test/resources/alfresco/**/*.js"
