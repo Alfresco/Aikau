@@ -166,7 +166,6 @@ define(["dojo/_base/declare",
             }
             else if (nodeRef && this.assumeRendition)
             {
-               // 
                this.thumbnailUrl = AlfConstants.PROXY_URI + "api/node/" + nodeRef.uri + "/content/thumbnails/" + this.renditionName + "/?c=queue&ph=true";
             }
             else
