@@ -1,0 +1,52 @@
+
+{
+   "metadata":
+   {
+      "repositoryId": "87677116-4e54-4bd2-902f-b96693499aff",
+      
+      "custom": {"vtiServer":null,"aos":{"baseUrl":"http://dave-Latitude-E6530:8080/alfresco/aos"}},
+      "onlineEditing": false,
+      "workingCopyLabel": " (Working Copy)",
+      "shareURL": "http:\/\/localhost:8081\/share",
+      "serverURL": "http:\/\/localhost:8080"
+   },
+   
+   "item":
+   {
+   "thumbnailDefinitions": ["avatar32","doclib","avatar","medium","imgpreview"],
+      "node": {"isLink":false,"aspects":["cm:auditable","cm:thumbnailModification","cm:ownable","sys:referenceable","exif:exif","cm:titled","rn:renditioned","cm:author","sys:localized"],"properties":{"exif:pixelYDimension":"970","cm:modified":{"value":"Thu Mar 03 10:33:35 GMT 2011","iso8601":"2011-03-03T10:33:35.301Z"},"cm:content":null,"sys:node-uuid":null,"exif:pixelXDimension":"751","cm:name":"inv I200-189.png","cm:lastThumbnailModification":["imgpreview:1429517979717"],"sys:store-protocol":null,"sys:locale":null,"cm:owner":{"lastName":"","userName":"admin","displayName":"Administrator","firstName":"Administrator"},"sys:node-dbid":null,"cm:creator":{"lastName":"Jackson","userName":"mjackson","displayName":"Mike Jackson","firstName":"Mike"},"cm:created":{"value":"Thu Mar 03 10:33:35 GMT 2011","iso8601":"2011-03-03T10:33:35.301Z"},"cm:title":"inv I200-189.png","cm:modifier":{"lastName":"Jackson","userName":"mjackson","displayName":"Mike Jackson","firstName":"Mike"},"sys:store-identifier":null},"type":"cm:content","isLocked":false,"size":777461,"mimetypeDisplayName":"PNG Image","mimetype":"image\/png","encoding":"UTF-8","permissions":{"roles":["ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED","ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED","ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED","ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED","ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED","ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED"],"inherited":true,"user":{"ChangePermissions":true,"CancelCheckOut":false,"CreateChildren":true,"Write":true,"Delete":true,"Unlock":false}},"nodeRef":"workspace:\/\/SpacesStore\/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8","isContainer":false,"contentURL":"\/slingshot\/node\/content\/workspace\/SpacesStore\/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8\/inv%20I200-189.png"},
+      "parent": {"isLink":false,"aspects":["cm:auditable","cm:ownable","sys:referenceable","cm:titled","sys:localized"],"permissions":{"roles":["ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED","ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED","ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED","ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED","ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED","ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED"],"inherited":true,"user":{"ChangePermissions":true,"CancelCheckOut":false,"CreateChildren":true,"Write":true,"Delete":true,"Unlock":false}},"nodeRef":"workspace:\/\/SpacesStore\/d56afdc3-0174-4f8c-bce8-977cafd712ab","properties":{"cm:modified":{"value":"Mon Apr 20 11:05:39 BST 2015","iso8601":"2015-04-20T10:05:39.875Z"},"sys:node-dbid":null,"cm:description":"This folder holds invoices for the project","cm:creator":{"lastName":"Jackson","userName":"mjackson","displayName":"Mike Jackson","firstName":"Mike"},"sys:node-uuid":null,"cm:created":{"value":"Tue Feb 15 21:12:14 GMT 2011","iso8601":"2011-02-15T21:12:14.908Z"},"cm:name":"Invoices","cm:title":"Project invoices","sys:store-protocol":null,"cm:owner":{"lastName":"","userName":"admin","displayName":"Administrator","firstName":"Administrator"},"sys:locale":null,"cm:modifier":{"lastName":"","userName":"admin","displayName":"Administrator","firstName":"Administrator"},"sys:store-identifier":null},"type":"cm:folder","isContainer":true,"isLocked":false},
+   "version": "1.0",
+   "webdavUrl": "\/webdav\/Sites\/swsdp\/documentLibrary\/Budget%20Files\/Invoices\/inv%20I200-189.png",
+   "activeWorkflows": 1,
+   "isFavourite": false,
+   
+   "likes":
+   {
+      "isLiked": false,
+      "totalLikes": 0
+   },
+   "location":
+   {
+      "repositoryId": "87677116-4e54-4bd2-902f-b96693499aff",
+      "site":
+      {
+         "name": "swsdp",
+         "title": "Sample: Web Site Design Project",
+         "preset": "site-dashboard"
+      },
+      "container":
+      {
+         "name": "documentLibrary",
+         "type": "cm:folder",
+         "nodeRef": ""
+      },
+      "path": "\/Budget Files\/Invoices",
+      "repoPath": "\/Sites\/swsdp\/documentLibrary\/Budget Files\/Invoices",
+      "file": "inv I200-189.png",
+      "parent":
+      {
+      }
+   }
+   }
+}

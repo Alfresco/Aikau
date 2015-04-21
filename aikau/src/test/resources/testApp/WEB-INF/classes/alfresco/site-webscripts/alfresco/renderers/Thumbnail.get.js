@@ -9,181 +9,275 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/DocumentService",
+      "alfresco/services/DialogService",
+      "alfresco/services/CrudService",
+      "alfresco/services/LightboxService"
    ],
    widgets:[
       {
-         id: "ITEM_JS_NODE",
-         name: "alfresco/renderers/Thumbnail",
+         id: "DOCLIB_RENDITIONS",
+         name: "alfresco/layout/ClassicWindow",
          config: {
-            currentItem: {
-               jsNode: {
-                  nodeRef: "dummy://nodeRef/1",
-                  isContainer: true
-               },
-               type: "folder",
-               displayName: "ITEM_JS_NODE",
-               renditionName: "doclib"
-            }
-         }
-      },
-      {
-         id: "ITEM_JS_NODE_NO_DISPLAYNAME",
-         name: "alfresco/renderers/Thumbnail",
-         config: {
-            currentItem: {
-               jsNode: {
-                  nodeRef: "dummy://nodeRef/1",
-                  properties: {
-                     "cm:name": "ITEM_JS_NODE_NO_DISPLAYNAME"
+            title: "Document Library Example (doclib rendition)",
+            widgets: [
+               {
+                  name: "alfresco/documentlibrary/AlfDocumentList",
+                  config: {
+                     pubSubScope: "DOCLIB",
+                     siteId: "swsdp",
+                     containerId: "documentlibrary",
+                     rootNode: null,
+                     widgets: [
+                        {
+                           name: "alfresco/lists/views/AlfListView",
+                           config: {
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/layouts/Row",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/renderers/Thumbnail"
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
                   }
-               },
-               type: "folder"
-            }
+               }
+            ]
          }
       },
       {
-         id: "ITEM_NODE_REF_FOLDER",
-         name: "alfresco/renderers/Thumbnail",
+         id: "IMGPREVIEW_RENDITIONS",
+         name: "alfresco/layout/ClassicWindow",
          config: {
-            currentItem: {
-               nodeRef: "dummy://nodeRef/1",
-               displayName: "ITEM_NODE_REF_FOLDER",
-               type: "folder"
-            }
-         }
-      },
-      {
-         id: "ITEM_NODE_REF_DOCUMENT",
-         name: "alfresco/renderers/Thumbnail",
-         config: {
-            currentItem: {
-               nodeRef: "dummy://nodeRef/1",
-               displayName: "ITEM_NODE_REF_DOCUMENT",
-               type: "document"
-            }
-         }
-      },
-      {
-         id: "ITEM_NODE_REF_OTHER",
-         name: "alfresco/renderers/Thumbnail",
-         config: {
-            currentItem: {
-               nodeRef: "dummy://nodeRef/1",
-               displayName: "ITEM_NODE_REF_OTHER",
-               type: "blog"
-            }
-         }
-      },
-      {
-         id: "ITEM_NO_NODE",
-         name: "alfresco/renderers/Thumbnail",
-         config: {
-            currentItem: {}
-         }
-      },
-      {
-         id: "ITEM_NO_CURRENT_ITEM",
-         name: "alfresco/renderers/Thumbnail",
-         config: {}
-      },
-      {
-         id: "SMALL_ITEM_JS_NODE_1",
-         name: "alfresco/renderers/SmallThumbnail",
-         config: {
-            currentItem: {
-               jsNode: {
-                  nodeRef: "dummy://nodeRef/1",
-                  isContainer: false
-               },
-               node: {
-                  properties: {
-                     "cm:name": "SMALL_ITEM_JS_NODE_1"
+            title: "Document Library Example (imgpreview rendition, width fixed to 200px)",
+            widgets: [
+               {
+                  name: "alfresco/documentlibrary/AlfDocumentList",
+                  config: {
+                     pubSubScope: "IMGPREVIEW",
+                     siteId: "swsdp",
+                     containerId: "documentlibrary",
+                     rootNode: null,
+                     widgets: [
+                        {
+                           name: "alfresco/lists/views/AlfListView",
+                           config: {
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/layouts/Row",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/renderers/Thumbnail",
+                                                      config: {
+                                                         renditionName: "imgpreview",
+                                                         width: "200px",
+                                                         publishTopic: "CUSTOM_CLICK_TOPIC",
+                                                         publishPayloadType: "CURRENT_ITEM",
+                                                         publishPayload: {},
+                                                         publishGlobal: true
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
                   }
-               },
-               type: "folder",
-               displayName: "SMALL_ITEM_JS_NODE_1",
-               renditionName: "doclib"
-            }
+               }
+            ]
          }
       },
       {
-         id: "SMALL_ITEM_JS_NODE_2",
-         name: "alfresco/renderers/SmallThumbnail",
+         id: "SEARCH_RESULTS",
+         name: "alfresco/layout/ClassicWindow",
          config: {
-            currentItem: {
-               jsNode: {
-                  nodeRef: "dummy://nodeRef/1",
-                  isContainer: true
-               },
-               type: "folder",
-               displayName: "SMALL_ITEM_JS_NODE_2",
-               renditionName: "doclib"
-            }
-         }
-      },
-      {
-         id: "SMALL_ITEM_JS_NODE_3",
-         name: "alfresco/renderers/SmallThumbnail",
-         config: {
-            currentItem: {
-               jsNode: {
-                  nodeRef: "dummy://nodeRef/1",
-                  isContainer: false,
-                  isLink: true,
-                  linkedNode: {
-                     isContainer: true
+            title: "Search Results Example (doclib rendition)",
+            widgets: [
+               {
+                  name: "alfresco/lists/AlfList",
+                  config: {
+                     pubSubScope: "SEARCH",
+                     loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+                     loadDataPublishPayload: {
+                       url: "slingshot/search"
+                     },
+                     itemsProperty: "items",
+                     widgets: [
+                        {
+                           name: "alfresco/lists/views/AlfListView",
+                           config: {
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/layouts/Row",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/renderers/Thumbnail"
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
                   }
-               },
-               type: "folder",
-               displayName: "SMALL_ITEM_JS_NODE_3",
-               renditionName: "doclib"
-            }
+               }
+            ]
          }
       },
       {
-         id: "SMALL_ITEM_JS_NODE_4",
-         name: "alfresco/renderers/SmallThumbnail",
+         id: "TASKS1",
+         name: "alfresco/layout/ClassicWindow",
          config: {
-            currentItem: {
-               jsNode: {
-                  nodeRef: "dummy://nodeRef/1",
-                  isContainer: false,
-                  isLink: false,
-                  linkedNode: {
-                     isContainer: false
+            title: "Tasks Results Example (assume rendition available, with preview)",
+            widgets: [
+               {
+                  name: "alfresco/lists/AlfList",
+                  config: {
+                     pubSubScope: "TASKS1",
+                     loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+                     loadDataPublishPayload: {
+                       url: "slingshot/tasks"
+                     },
+                     itemsProperty: "task.resources",
+                     widgets: [
+                        {
+                           name: "alfresco/lists/views/AlfListView",
+                           config: {
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/layouts/Row",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/renderers/Thumbnail",
+                                                      config: {
+                                                         assumeRendition: true,
+                                                         showDocumentPreview: true
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
                   }
-               },
-               node: {
-                  properties: {
-                     "cm:name": "SMALL_ITEM_JS_NODE_4"
-                  }
-               },
-               type: "folder",
-               displayName: "SMALL_ITEM_JS_NODE_4",
-               renditionName: "doclib"
-            }
+               }
+            ]
          }
       },
       {
-         id: "SMALL_ITEM_NODE_REF_DOCUMENT",
-         name: "alfresco/renderers/SmallThumbnail",
+         id: "TASKS2",
+         name: "alfresco/layout/ClassicWindow",
          config: {
-            currentItem: {
-               nodeRef: "dummy://nodeRef/1",
-               displayName: "SMALL_ITEM_NODE_REF_DOCUMENT",
-               type: "document"
-            }
+            title: "Tasks Results Example (no rendition assumption)",
+            widgets: [
+               {
+                  name: "alfresco/lists/AlfList",
+                  config: {
+                     pubSubScope: "TASKS2",
+                     loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+                     loadDataPublishPayload: {
+                       url: "slingshot/tasks"
+                     },
+                     itemsProperty: "task.resources",
+                     widgets: [
+                        {
+                           name: "alfresco/lists/views/AlfListView",
+                           config: {
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/layouts/Row",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/renderers/Thumbnail",
+                                                      config: {}
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
          }
       },
       {
-         name: "aikauTesting/ConsoleLog"
+         id: "HARDCODED",
+         name: "alfresco/layout/ClassicWindow",
+         config: {
+            title: "Hard-coded data, for PDF preview",
+            widgets: [
+               {
+                  name: "alfresco/renderers/Thumbnail",
+                  config: {
+                     currentItem: {
+                        nodeRef: "workspace://SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28",
+                        displayName: "Test PDF"
+                     },
+                     showDocumentPreview: true
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "aikauTesting/mockservices/ThumbnailsMockXhr"
       },
       {
          name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

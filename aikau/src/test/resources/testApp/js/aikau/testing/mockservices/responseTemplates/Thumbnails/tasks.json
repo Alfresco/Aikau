@@ -1,0 +1,27 @@
+{
+   "task": {
+      "id": "activiti$674",
+      "description": "Please review",
+      "dueDate": "9999-04-20 11:07:33 GMT+0100 (BST)",
+      "status": "Not Yet Started",
+      "priority": "2",
+      "startDate": "2015-04-20 11:07:20 GMT+0100 (BST)",
+      "type": "Review",
+      "completeness": "0",
+      "resources": [{
+         "nodeRef": "workspace://SpacesStore/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8",
+         "fileName": "inv I200-189.png",
+         "displayName": "inv I200-189.png",
+         "location": {
+            "site": "swsdp",
+            "container": "documentLibrary",
+            "path": "/Budget Files/Invoices"
+         },
+         "icon": "/images/filetypes/png.gif"
+      }],
+      "transitions": [{
+         "id": "Next",
+         "label": "Task Done"
+      }]
+   }
+}
