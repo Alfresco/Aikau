@@ -82,7 +82,6 @@ define(["dojo/_base/declare",
             message = "crudservice.generic.success.message";
          }
 
-         // TODO: Need a context sensitive, localized message...
          this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
             message: this.message(message)
          });
