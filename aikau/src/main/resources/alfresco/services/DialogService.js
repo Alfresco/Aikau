@@ -190,7 +190,7 @@ define(["dojo/_base/declare",
          // TODO: Update this and other function with scroll setting...
          var dialogConfig = {
             id: payload.dialogId ? payload.dialogId : this.generateUuid(),
-            title: this.message(payload.dialogTitle),
+            title: this.message(payload.dialogTitle || ""),
             textContent: payload.textContent,
             widgetsContent: payload.widgetsContent,
             widgetsButtons: payload.widgetsButtons,
@@ -333,7 +333,7 @@ define(["dojo/_base/declare",
          
          var dialogConfig = {
             id: config.dialogId ? config.dialogId : this.generateUuid(),
-            title: this.message(config.dialogTitle),
+            title: this.message(config.dialogTitle || ""),
             pubSubScope: config.pubSubScope, // Scope the dialog content so that it doesn't pollute any other widgets,,
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth,

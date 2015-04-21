@@ -72,7 +72,7 @@ define([
 
             .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
                .then(function(elements) {
-                  assert.lengthOf(elements, 4, "Did not bring up initial results");
+                  assert.lengthOf(elements, 7, "Did not bring up initial results");
                });
          },
 
@@ -103,6 +103,32 @@ define([
             .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Did not filter results");
+               });
+         },
+
+         "Typing into search box filters results for strings in middle of name": function () {
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__search-box")
+               .clearValue()
+               .type("12")
+               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(2)")
+               .end()
+
+               .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
+               .then(function (elements) {
+                  assert.lengthOf(elements, 1, "Did not filter results for string in middle of name" + elements);
+               });
+         },
+
+         "Search box correctly filters on special reg exp chars": function () {
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__search-box")
+               .clearValue()
+               .type("(a")
+               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__result:nth-child(5)")
+               .end()
+
+               .findAllByCssSelector(".alfresco-forms-controls-MultiSelect__result")
+               .then(function (elements) {
+                  assert.lengthOf(elements, 1, "Did not filter results using special reg exp character");
                });
          },
 

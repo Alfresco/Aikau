@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,6 +18,17 @@
  */
 
 /**
+ * Renders a property as a size so that it will be rendered as an easily readable
+ * number with the most appropriate units measurement (e.g. MB, KB, etc). 
+ *
+ * @example <caption>Sample configuration:</caption>
+ * {
+ *    name: "alfresco/renderers/Size",
+ *    config: {
+ *       propertyToRender: "size"
+ *    }
+ * }
+ * 
  * @module alfresco/renderers/Size
  * @extends module:alfresco/renderers/Property
  * @mixes module:alfresco/core/FileSizeMixin
@@ -56,20 +67,16 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Size__postMixInProperties() {
-         if (this.currentItem != null)
+         if (this.currentItem)
          {
-            if (this.sizeProperty == null)
+            if (!this.sizeProperty)
             {
-               this.sizeProperty = "jsNode.size";
+               this.sizeProperty = this.propertyToRender || "jsNode.size";
             }
             var size = lang.getObject(this.sizeProperty, false, this.currentItem);
             this.renderedValue = this.formatFileSize(size);
          }
-         this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
-         if (this.deemphasized === true)
-         {
-            this.renderedValueClass = this.renderedValueClass + " deemphasized";
-         }
+         this.updateRenderedValueClass();
       }
    });
 });

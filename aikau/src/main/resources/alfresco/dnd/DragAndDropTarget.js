@@ -49,9 +49,10 @@ define(["dojo/_base/declare",
         "alfresco/dnd/Constants",
         "dojo/Deferred",
         "dojo/_base/event",
-        "dojo/keys"], 
+        "dojo/keys",
+        "dojo/dnd/Manager"], 
         function(declare, _Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, template, AlfCore, 
-                 lang, array, registry, Source, Target, domConstruct, domClass, aspect, on, Constants, Deferred, Event, keys) {
+                 lang, array, registry, Source, Target, domConstruct, domClass, aspect, on, Constants, Deferred, Event, keys, DndManager) {
    
    return declare([_Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore], {
       
@@ -166,6 +167,7 @@ define(["dojo/_base/declare",
          
          // Listen for widgets requesting to be deleted...
          on(this.previewNode, Constants.deleteItemEvent, lang.hitch(this, this.deleteItem));
+         on(this.previewNode, Constants.nestedDragOutEvent, lang.hitch(this, this.onNestedDragOut));
 
          var _this = this;
          this.watch("value", function(name, oldValue, newValue) {
@@ -458,8 +460,27 @@ define(["dojo/_base/declare",
          {
             var createdItem = this.creator(resolvedPromise.item);
             this.previewTarget.insertNodes(true, [createdItem.data]);
+            if (typeof resolvedPromise.addCallback === "function")
+            {
+               resolvedPromise.addCallback.call(resolvedPromise.addCallbackScope || this, resolvedPromise.item);
+            }
             this.onItemsUpdated();
          }
+      },
+
+      /**
+       * This function is called when a [DragAndDropNestedTarget]{@link module:alfresco/dnd/DragAndDropNestedTarget}
+       * has an item dragged out of it. This function will then call the Dojo dojo.dnd.Manager singleton to let it know
+       * that the item is currently over the current target. This is required because the Dojo drag and drop framework
+       * that is used does not support nested targets.
+       *
+       * @instance 
+       * @param {object} evt The drag out event
+       */
+      onNestedDragOut: function alfresco_dnd_DragAndDropTarget__onNestedDragOut(evt) {
+         evt && Event.stop(evt);
+         var m = DndManager.manager();
+         m.overSource(this.previewTarget);
       }
    });
 });

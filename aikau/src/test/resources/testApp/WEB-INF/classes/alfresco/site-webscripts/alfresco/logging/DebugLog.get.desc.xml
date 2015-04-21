@@ -1,0 +1,6 @@
+<webscript>
+   <shortname>DebugLog Test</shortname>
+   <description>Tests related to the alfresco/logging/DebugLog widget</description>
+   <family>aikau-unit-tests</family>
+   <url>/DebugLog</url>
+</webscript>

@@ -38,10 +38,9 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
-        "dojo/dom-class",
-        "service/constants/Default"], 
+        "dojo/dom-class"], 
         function(declare, _WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _PublishPayloadMixin, template, 
-                 array, lang, domConstruct, domClass, AlfConstants) {
+                 array, lang, domConstruct, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _PublishPayloadMixin], {
       
@@ -53,6 +52,15 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/EditableComment.css"}]
        */
       cssRequirements: [{cssFile:"./css/EditableComment.css"}],
+      
+      /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/EditableComment.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/EditableComment.properties"}],
       
       /**
        * The HTML template to use for the widget.
@@ -107,7 +115,7 @@ define(["dojo/_base/declare",
 
          // Get the comment value...
          this.renderedValue = lang.getObject(this.propertyToRender, false, this.currentItem);
-         if (this.renderedValue == null)
+         if (this.renderedValue === null || typeof this.renderedValue === "undefined")
          {
             this.renderedValue = "";
          }
@@ -127,6 +135,10 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.onEditRequest));
          this.alfSubscribe("ALF_CANCEL_EDIT_COMMENT", lang.hitch(this, this.onCancelEdit));
          this.alfSubscribe("ALF_EDIT_COMMENT_SAVE", lang.hitch(this, this.onEditSave));
+
+         // Safely add the rendered value to the document
+         var safeDocFrag = this._makeSafe(this.renderedValue);
+         this.readNode.appendChild(safeDocFrag);
       },
 
       /**
@@ -136,7 +148,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onEditRequest: function alfresco_renderers_EditableComment__onEditRequest(payload) {
+      onEditRequest: function alfresco_renderers_EditableComment__onEditRequest(/*jshint unused:false*/ payload) {
          if (this._formCreated === false)
          {
             var widgetsConfig = lang.clone(this.widgetsForForm);
@@ -157,7 +169,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The payload published on the cancellation topic
        */
-      onCancelEdit: function alfresco_renderers_EditableComment__onCancelEdit(payload) {
+      onCancelEdit: function alfresco_renderers_EditableComment__onCancelEdit(/*jshint unused:false*/ payload) {
          domClass.remove(this.domNode, "edit");
          domClass.add(this.domNode, "read");
          this._mode = "read";
@@ -247,7 +259,26 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default "Save"
        */
-      okButtonLabel: "Save",
+      okButtonLabel: "comment.save",
+
+      /**
+       * Convert the supplied, potentially-unsafe HTML into a safe document fragment
+       *
+       * @instance
+       * @param    {string} unsafeHtml The "unsafe" HTML
+       * @returns  {object} The now-safe HTML as a document fragment
+       */
+      _makeSafe: function alfresco_renderers_EditableComment___makeSafe(unsafeHtml) {
+         var safeDocFrag = document.createDocumentFragment(),
+            containerDiv = safeDocFrag.appendChild(document.createElement("DIV"));
+         containerDiv.innerHTML = unsafeHtml;
+         while(containerDiv.hasChildNodes()) {
+            safeDocFrag.appendChild(containerDiv.firstChild);
+         }
+         safeDocFrag.removeChild(containerDiv);
+         // TODO Make this safe!
+         return safeDocFrag;
+      },
 
       /**
        *

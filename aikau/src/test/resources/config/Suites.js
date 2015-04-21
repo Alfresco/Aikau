@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest"
+      "src/test/resources/alfresco/renderers/CommentsListTest"
    ],
 
    /**
@@ -117,11 +117,14 @@ define({
       "src/test/resources/alfresco/layout/BasicLayoutTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/TwisterTest",
+      "src/test/resources/alfresco/layout/VerticalRevealTest",
 
       "src/test/resources/alfresco/lists/AlfHashListTest",
       "src/test/resources/alfresco/lists/FilteredListTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
+
+      "src/test/resources/alfresco/logging/DebugLogTest",
 
       "src/test/resources/alfresco/logo/LogoTest",
 
@@ -148,6 +151,7 @@ define({
       "src/test/resources/alfresco/renderers/BannerTest",
       "src/test/resources/alfresco/renderers/BooleanTest",
       "src/test/resources/alfresco/renderers/CategoryTest",
+      "src/test/resources/alfresco/renderers/CommentsListTest",
       "src/test/resources/alfresco/renderers/DateLinkTest",
       "src/test/resources/alfresco/renderers/DateTest",
       "src/test/resources/alfresco/renderers/FileTypeTest",

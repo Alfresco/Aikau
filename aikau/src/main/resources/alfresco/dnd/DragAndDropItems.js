@@ -104,6 +104,26 @@ define(["dojo/_base/declare",
       immediateRender: true,
 
       /**
+       * Indicates whether or not items displayed can be re-arranged. Defaults to false.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      selfAccept: false,
+
+      /**
+       * The array of types that this can be dropped if this is to be used as a target. Note that this has been added
+       * purely to support configurablility and extensions. If this is left as the default of null then it means
+       * that this cannot be used as a drag-and-drop target.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      acceptTypes: null,
+
+      /**
        * Creates a palette of items that can be dragged (and dropped).
        * 
        * @instance
@@ -141,6 +161,8 @@ define(["dojo/_base/declare",
          this.sourceTarget = new Source(this.paletteNode, {
             copyOnly: !this.useItemsOnce,
             selfCopy: false,
+            accept: this.acceptTypes || [],
+            selfAccept: this.selfAccept,
             creator: lang.hitch(this, this.creator),
             withHandles: this.dragWithHandles
          });
@@ -188,6 +210,7 @@ define(["dojo/_base/declare",
             if (item)
             {
                this._selectedItem = item;
+               this._selectedNode = evt.target.parentNode;
                array.forEach(this.sourceTarget.getAllNodes(), function(node) {
                   domClass.remove(node.firstChild, "selected");
                });
@@ -224,6 +247,7 @@ define(["dojo/_base/declare",
        * Handles requests to provide an item to insert into a [DragAndDropTarget]{@link module:alfresco/dnd/DragAndDropTarget}
        * 
        * @instance
+       * @param {object} payload The payload of the request to add an item.
        */
       onItemToAddRequest: function alfresco_dnd_DragAndDropItems__onItemToAddRequest(payload) {
          if (payload.promise && typeof payload.promise.resolve === "function")
@@ -231,12 +255,31 @@ define(["dojo/_base/declare",
             if (this._selectedItem)
             {
                payload.promise.resolve({
-                  item: lang.clone(this._selectedItem.data)
+                  item: lang.clone(this._selectedItem.data),
+                  addCallback: this.onItemAddedByKeyboard,
+                  addCallbackScope: this
                });
             }
          }
       },
-      
+
+      /**
+       * Handles items being added via the keyboard. This checks to see whether
+       * [items can only be used once]{@link module:alfresco/dnd/DragAndDropItems#useItemsOnce}
+       * and if this is the case it will remove the selected item.
+       *
+       * @instance
+       * @param  {object} item The item selected
+       */
+      onItemAddedByKeyboard: function alfresco_dnd_DragAndDropItems__onItemAddedByKeyboard(/*jshint unused:false*/ item) {
+         if (this.useItemsOnce === true && this._selectedNode)
+         {
+            this.sourceTarget.delItem(this._selectedNode.id);
+            domConstruct.destroy(this._selectedNode);
+            this._selectedNode = null;
+         }
+      },
+
       /**
        * The widgets model to render as a drag-and-drop item.
        *
@@ -263,7 +306,7 @@ define(["dojo/_base/declare",
        */
       creator: function alfresco_dnd_DragAndDropItems__creator(item, hint) {
          // jshint unused: false
-         var node = domConstruct.create("div");         
+         var node = domConstruct.create("div");
          var clonedItem = lang.clone(item);
          this.currentItem = {};
          this.currentItem.title = "";

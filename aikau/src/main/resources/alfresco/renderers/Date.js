@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,6 +18,29 @@
  */
 
 /**
+ * Renders an iso8601 format date indicating when a node created or last modified. However,
+ * when [simple]{@link module:alfresco/renderers/Date#simple} is configured to be true
+ * this will just render the date using the [propertyToRender]{@link module:alfresco/renderers/Property#propertyToRender}
+ * configuration attribute.
+ * 
+ * @example <caption>Sample configuration to override modified by properties:</caption>
+ * {
+ *    name: "alfresco/renderers/Date",
+ *    config: {
+ *       modifiedDateProperty: "modifiedOn",
+ *       modifiedByProperty: "modifiedBy"
+ *    }
+ * }
+ * 
+ * @example <caption>Sample configuration of simple mode:</caption>
+ * {
+ *    name: "alfresco/renderers/Date",
+ *    config: {
+ *       simple: true,
+ *       propertyToRender: "date"
+ *    }
+ * }
+ * 
  * @module alfresco/renderers/Date
  * @extends module:alfresco/renderers/Property
  * @mixes module:alfresco/core/TemporalUtils
@@ -67,48 +90,67 @@ define(["dojo/_base/declare",
       modifiedByProperty: null,
 
       /**
+       * Indicates whether to simply display the date without rendering it within a specific message.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      simple: false,
+
+      /**
        * Set up the attributes to be used when rendering the template.
        * 
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Date__postMixInProperties() {
-
-         if (this.modifiedDateProperty == null)
+         if (this.simple && this.propertyToRender)
          {
-            this.modifiedDateProperty = "jsNode.properties.modified.iso8601";
+            var dateProperty = lang.getObject(this.propertyToRender, false, this.currentItem);
+            if (dateProperty)
+            {
+               this.renderedValue = this.renderDate(dateProperty);
+            }
+            else
+            {
+               this.alfLog("warn", "Could not find '" + this.propertyToRender + "' in currentItem", this);
+               this.renderedValue = "";
+            }
          }
-         var modifiedDate = lang.getObject(this.modifiedDateProperty, false, this.currentItem);
-         
-         if (this.modifiedByProperty == null)
+         else
          {
-            this.modifiedByProperty = "jsNode.properties.modifier.displayName";
-         }
-         var modifiedBy = lang.getObject(this.modifiedByProperty, false, this.currentItem);
+            if (!this.modifiedDateProperty)
+            {
+               this.modifiedDateProperty = "jsNode.properties.modified.iso8601";
+            }
+            var modifiedDate = lang.getObject(this.modifiedDateProperty, false, this.currentItem);
+            
+            if (!this.modifiedByProperty)
+            {
+               this.modifiedByProperty = "jsNode.properties.modifier.displayName";
+            }
+            var modifiedBy = lang.getObject(this.modifiedByProperty, false, this.currentItem);
 
-         var dateI18N = "details.modified-by";
+            var dateI18N = "details.modified-by";
 
-         // TODO: This section is currently commented out as it deals explicitly with 
-         //       working copies. This isn't needed in any production page yet and should
-         //       only be commented out when needed. The unit test should also be updated at
-         //       that time.
-         // if (this.currentItem.workingCopy && this.currentItem.workingCopy.isWorkingCopy)
-         // {
-         //    dateI18N = "details.editing-started-by";
-         // }
-         // else if (dateProperty === properties.created.iso8601)
-         // {
-         //    dateI18N = "details.created-by";
-         // }
-         this.renderedValue = this.message(dateI18N, {
-            0: this.getRelativeTime(modifiedDate), 
-            1: modifiedBy
-         });
-         
-         this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
-         if (this.deemphasized === true)
-         {
-            this.renderedValueClass = this.renderedValueClass + " deemphasized";
+            // TODO: This section is currently commented out as it deals explicitly with 
+            //       working copies. This isn't needed in any production page yet and should
+            //       only be commented out when needed. The unit test should also be updated at
+            //       that time.
+            // if (this.currentItem.workingCopy && this.currentItem.workingCopy.isWorkingCopy)
+            // {
+            //    dateI18N = "details.editing-started-by";
+            // }
+            // else if (dateProperty === properties.created.iso8601)
+            // {
+            //    dateI18N = "details.created-by";
+            // }
+            this.renderedValue = this.message(dateI18N, {
+               0: this.getRelativeTime(modifiedDate), 
+               1: modifiedBy
+            });
          }
+         this.updateRenderedValueClass();
       }
    });
 });
