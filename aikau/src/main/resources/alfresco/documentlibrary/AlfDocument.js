@@ -106,13 +106,17 @@ define(["dojo/_base/declare",
        * @fires ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST
        */
       postCreate: function alfresco_documentlibrary_AlfDocument_postCreate() {
-         if (this.currentItem == null && this.nodeRef != null)
+         if (!this.currentItem && this.nodeRef)
          {
             this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", {
                nodeRef: this.nodeRef,
                rawData: this.rawData,
                alfResponseTopic: this.pubSubScope + this.loadDataPublishTopic
             }, true);
+         }
+         else
+         {
+            this.renderDocument();
          }
       },
 
@@ -132,7 +136,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the document that have been provided.
        */
       onDocumentLoaded: function alfresco_documentlibrary_AlfDocument__onDocumentLoaded(payload) {
-         if (this.itemProperty != null && lang.exists(this.itemProperty, payload))
+         if (this.itemProperty && lang.exists(this.itemProperty, payload))
          {
             this.currentItem = lang.getObject(this.itemProperty, false, payload);
             this.renderDocument();
@@ -153,12 +157,12 @@ define(["dojo/_base/declare",
        * @instance
        */
       renderDocument: function alfresco_documentlibrary_AlfDocument__renderDocument() {
-         if (this.containerNode != null)
+         if (this.containerNode)
          {
             array.forEach(registry.findWidgets(this.containerNode), lang.hitch(this, "destroyWidget"));
             domConstruct.empty(this.containerNode);
          }
-         if (this.currentItem != null && this.containerNode != null)
+         if (this.currentItem && this.containerNode)
          {
             // This relies on the alfresco/lists/views/layouts/_MultiItemRendererMixin implementation of the 
             // createWidget function in order to pass the "currentItem" attribute on to any child widgets...
@@ -177,7 +181,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to destroy
        * @param {number} index The index of the widget
        */
-      destroyWidget: function alfresco_documentlibrary_AlfDocument__destroyWidget(widget, index) {
+      destroyWidget: function alfresco_documentlibrary_AlfDocument__destroyWidget(widget, /*jshint unused:false*/ index) {
          if (typeof widget.destroyRecursive === "function")
          {
             widget.destroyRecursive();

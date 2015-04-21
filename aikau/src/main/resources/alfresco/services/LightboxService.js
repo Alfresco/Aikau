@@ -24,18 +24,28 @@
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
-        "dojo/_base/lang"],
+        "dojo/_base/lang",
+        ""],
         function(declare, AlfCore, lang) {
    
    return declare([AlfCore], {
       
+      /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/LightboxService.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/LightboxService.css"}],
+
       /**
        * Declare the dependencies on "legacy" JS files that this is wrapping.
        * 
        * @instance
        * @type {String[]}
        */
-      nonAmdDependencies: ["/js/lightbox.js"],
+      nonAmdDependencies: ["/js/lib/3rd-party/lightbox.js"],
 
       /**
        * Sets up the subscriptions for the LightboxService
@@ -45,7 +55,7 @@ define(["dojo/_base/declare",
        */
       constructor: function alfresco_services_LightboxService__constructor(args) {
          lang.mixin(this, args);
-         this.alfSubscribe("ALF_DISPLAY_LIGHTBOX", lang.hitch(this, "onDisplayLightbox"));
+         this.alfSubscribe("ALF_DISPLAY_LIGHTBOX", lang.hitch(this, this.onDisplayLightbox));
       },
       
       /**
@@ -64,9 +74,11 @@ define(["dojo/_base/declare",
          else
          {
             // call the non-AMD Lightbox JS to perform the actual work of displaying the image in a lightbox
-            Alfresco.Lightbox.show({
+            Alfresco.AikauLightbox.show({
                src: src,
-               title: title
+               title: title,
+               loadingImage: require.toUrl("alfresco/services") + "/css/images/loading.gif",
+               closeButton: require.toUrl("alfresco/services") + "/css/images/close.gif"
             });
          }
       }

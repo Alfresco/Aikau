@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -47,7 +47,7 @@ define(["dojo/_base/declare",
          // Ensure that an initial attributes instance variable is defined to avoid
          // errors when the [setAttributes]{@link module:alfresco/preview/AlfDocumentPreviewPlugin#setAttributes}
          // function is called.
-         if (this.attributes == null)
+         if (!this.attributes)
          {
             this.attributes = {};
          }
@@ -120,7 +120,11 @@ define(["dojo/_base/declare",
          var h = (docHeight < clientHeight) ? docHeight : clientHeight;
 
          var heightMode = this.previewManager.heightMode;
-         if (heightMode == null || heightMode === "AUTO" || isNaN(heightMode))
+         if (heightMode === "DIALOG")
+         {
+            previewHeight = $(pE).parentsUntil(".alfresco-dialog-AlfDialog").last().height();
+         }
+         else if (!heightMode || heightMode === "AUTO" || isNaN(heightMode))
          {
             previewHeight =  h- previewerOffset.top;
          }
