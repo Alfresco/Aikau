@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>Paginator Test</shortname>
-  <description>This WebScript defines the Paginator page test</description>
+  <shortname>Paginator</shortname>
+  <description>Shows the Paginator, ResultsPerPageGroup and AlfSortablePaginatedList widgets in both the default and variable page size settings.</description>
   <family>aikau-unit-tests</family>
   <url>/Paginator</url>
 </webscript>

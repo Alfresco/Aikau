@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -87,11 +87,11 @@ define(["dojo/_base/declare",
             // Update the label with the selection...
             if (payload.label)
             {
-               this.set('label', this.message(payload.label));
+               this.set("label", this.message(payload.label));
             }
-            else if (payload.value != null)
+            else if (payload.value || payload.value === "")
             {
-               this.set('label', payload.value.toString()); 
+               this.set("label", payload.value.toString()); 
             }
             
             // Update the icon if there is an icon node, it's supported and there is a new iconClass...
