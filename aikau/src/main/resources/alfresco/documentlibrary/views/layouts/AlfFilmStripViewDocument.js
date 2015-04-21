@@ -78,17 +78,7 @@ define(["dojo/_base/declare",
             // TODO: This contains a temporary config override whilst we wait for full adoption of the 
             //       Aikau only PDF.js preview plugin. This override can be removed after adoption occurs.
             this.widgets = [{
-               name: "alfresco/preview/AlfDocumentPreview",
-               config: {
-                  widgetsForPluginsOverrides: [
-                     {
-                        id: "PdfJs",
-                        replace: true,
-                        name: "alfresco/preview/PdfJs/PdfJs",
-                        config: {}
-                     }
-                  ]
-               }
+               name: "alfresco/preview/AlfDocumentPreview"
             }];
             this.alfSubscribe("ALF_FILMSTRIP_DOCUMENT_REQUEST__" + this.nodeRef, lang.hitch(this, this.requestDocument, this.nodeRef));
          }

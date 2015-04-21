@@ -19,20 +19,7 @@ model.jsonModel = {
             nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52",
             widgets: [
                {
-                  name: "alfresco/preview/AlfDocumentPreview",
-                  config: {
-                     widgetsForPluginsOverrides: [
-                        {
-                           id: "PdfJs",
-                           replace: true,
-                           name: "alfresco/preview/PdfJs/PdfJs",
-                           config: {
-                              // Optional configuration that we could add now
-                              // id: "PDF_PLUGIN_1"
-                           }
-                        }
-                     ]
-                  }
+                  name: "alfresco/preview/AlfDocumentPreview"
                }
             ]
          }

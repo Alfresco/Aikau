@@ -34,8 +34,9 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "dojo/dom-class",
+        "dojo/dom-style",
         "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domClass, domAttr) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domClass, domStyle, domAttr) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -76,6 +77,15 @@ define(["dojo/_base/declare",
       colspan: null,
 
       /**
+       * The width to set the cell. This should include units, e.g. "100px" for 100 pixels.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      width: null,
+
+      /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
        * @instance postCreate
@@ -84,6 +94,10 @@ define(["dojo/_base/declare",
          if (this.colspan)
          {
             domAttr.set(this.domNode, "colspan", this.colspan);
+         }
+         if (this.width)
+         {
+            domStyle.set(this.domNode, "width", this.width);
          }
          if(this.additionalCssClasses)
          {
