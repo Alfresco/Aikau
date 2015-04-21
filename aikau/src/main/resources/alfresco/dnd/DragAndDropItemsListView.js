@@ -52,10 +52,28 @@ define(["dojo/_base/declare",
        * @returns {object} A new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        */
       createListRenderer: function alfresco_dnd_DragAndDropItemsListView__createListRenderer() {
-         var dlr = new DragAndDropItems({
+         
+         var config = {
             items: this.currentData.items,
             immediateRender: false
-         });
+         };
+
+         if(this.dragWithHandles)
+         {
+            config.dragWithHandles = this.dragWithHandles;
+         }
+
+         if(this.useItemsOnce)
+         {
+            config.useItemsOnce = this.useItemsOnce;
+         }
+
+         if(this.useItemsOnceComparisonKey)
+         {
+            config.useItemsOnceComparisonKey = this.useItemsOnceComparisonKey;
+         }
+
+         var dlr = new DragAndDropItems(config);
          return dlr;
       },
 
