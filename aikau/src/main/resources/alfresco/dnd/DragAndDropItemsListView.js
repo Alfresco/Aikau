@@ -34,7 +34,36 @@ define(["dojo/_base/declare",
         function(declare, AlfListView, template, DragAndDropItems) {
    
    return declare([AlfListView], {
-      
+
+      /**
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      dragWithHandles: false,
+
+      /**
+       * If this is configured to be true then once an item has been used it will be removed 
+       * so that it cannot be used again. If the item is deleted it will be reinstated.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      useItemsOnce: false,
+
+      /**
+       * When [items can only be used once]{@link module:alfresco/dnd/DragAndDropItemsListView}
+       * this is the dot-notation property to compare deleted items against the configured
+       * datalist items [AlfList]{@link module:alfresco/lists/AlfList} to see if a deleted 
+       * item should be re-instated.
+       *
+       * @instance
+       * @type {string}
+       * @default "name"
+       */
+      useItemsOnceComparisonKey: "name",
+
       /**
        * The HTML template to use for the widget.
        * @instance
@@ -54,7 +83,10 @@ define(["dojo/_base/declare",
       createListRenderer: function alfresco_dnd_DragAndDropItemsListView__createListRenderer() {
          var dlr = new DragAndDropItems({
             items: this.currentData.items,
-            immediateRender: false
+            immediateRender: false,
+            dragWithHandles: this.dragWithHandles,
+            useItemsOnce: this.useItemsOnce,
+            useItemsOnceComparisonKey: this.useItemsOnceComparisonKey
          });
          return dlr;
       },
