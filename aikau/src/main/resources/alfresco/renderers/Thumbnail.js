@@ -122,6 +122,19 @@ define(["dojo/_base/declare",
       customClasses: "",
       
       /**
+       * This allows a tokenized template to be defined where the tokens will be populated from
+       * values in the "currentItem" attribute using the 
+       * [processCurrentItemTokens function]{@link module:alfresco/core/ObjectProcessingMixin#processCurrentItemTokens}
+       * from the [ObjectProcessingMixin]{@link module:alfresco/core/ObjectProcessingMixin} module. Note that the
+       * thumbnail URL template is expected to be appended to the PROXY_URI for accessing an Alfresco Repository.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      thumbnailUrlTemplate: null,
+
+      /**
        * Set up the attributes to be used when rendering the template.
        * 
        * @instance
@@ -132,7 +145,13 @@ define(["dojo/_base/declare",
          this.imgAltText = "";
          this.imgTitle = "";
 
-         if (this.currentItem && this.currentItem.jsNode)
+         if (this.currentItem && this.thumbnailUrlTemplate)
+         {
+            // If we have an explicitly decared thumbnail URL template then use that initially, this
+            // is used by the avatar thumbnail for example...
+            this.thumbnailUrl = AlfConstants.PROXY_URI + this.processCurrentItemTokens(this.thumbnailUrlTemplate);
+         }
+         else if (this.currentItem && this.currentItem.jsNode)
          {
             var jsNode = this.currentItem.jsNode;
             this.thumbnailUrl = this.generateThumbnailUrl();
@@ -142,12 +161,10 @@ define(["dojo/_base/declare",
             {
                this.currentItem.displayName = jsNode.properties["cm:name"];
             }
-            this.setImageTitle();
          }
          else if (this.currentItem && this.currentItem.nodeRef)
          {
             this.imageIdProperty = "nodeRef";
-            this.setImageTitle();
 
             // Fallback to just having a nodeRef available... this has been added to handle rendering of 
             // thumbnails in search results where full node information may not be available...
@@ -175,9 +192,11 @@ define(["dojo/_base/declare",
          }
          else
          {
-            this.setImageTitle();
             this.thumbnailUrl = this.generateFallbackThumbnailUrl();
          }
+
+         // Ensure that image title attributes, etc are set
+         this.setImageTitle();
       },
 
       /**
