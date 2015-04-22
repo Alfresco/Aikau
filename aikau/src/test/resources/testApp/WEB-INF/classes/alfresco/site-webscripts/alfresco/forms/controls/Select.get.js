@@ -188,6 +188,7 @@ model.jsonModel = {
                         fieldId: "SiD",
                         name: "selected",
                         label: "Select",
+                        value: "DO2",
                         optionsConfig: {
                            publishTopic: "GET_OPTIONS_FOR_SELECT_IN_DIALOG"
                         }
