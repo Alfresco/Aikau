@@ -66,13 +66,6 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      pdfNodeData]);
-
-            // http://localhost:8089/aikau/proxy/alfresco/api/node/workspace/SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28/content/thumbnails/imgpreview?c=force&lastModified=1
-            // this.server.respondWith("GET",
-            //                         /\/aikau\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/f8394454-0651-48a5-b583-d067c7d03339(.*)/,
-            //                         [200,
-            //                          {"Content-Type":"application/json;charset=UTF-8"},
-            //                          pdfNodeData]);
             this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
          }
 

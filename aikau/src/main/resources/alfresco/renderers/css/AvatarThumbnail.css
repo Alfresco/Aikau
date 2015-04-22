@@ -1,0 +1,11 @@
+.alfresco-renderers-AvatarThumbnail img {
+   height: 64px;
+   width: 64px;
+   border-radius: 32px;
+   box-shadow: @standard-box-shadow;
+}
+
+/* Click events are currently disabled so the cursor is reset here */
+.alfresco-renderers-AvatarThumbnail > span.inner {
+   cursor: auto;
+}

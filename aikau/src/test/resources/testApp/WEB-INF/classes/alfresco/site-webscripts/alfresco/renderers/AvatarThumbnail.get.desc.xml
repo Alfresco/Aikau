@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Avatar Thumbnail Renderers</shortname>
+  <description>Shows examples of rendering a user avatar thumbnail.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AvatarThumbnail</url>
+</webscript>
