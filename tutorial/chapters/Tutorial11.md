@@ -106,12 +106,15 @@ Update the page model so that after the group AlfSortablePaginatedList the follo
 {
   name: "alfresco/lists/Paginator",
   config: {
-    documentsPerPage: 5
+    documentsPerPage: 5,
+    pageSizes: [5,10,20]
   }
 }
 ```
 
 The default number of results per page is 25, and it’s unlikely that you’ve created that many groups so in order to see pagination in action we’re overriding the default to only display 5 results in each page of data. If you’re currently only seeing 5 (or fewer) groups in the list then create a couple more so that you can test pagination!
+
+We're also changing the default page sizes configuration (which would normally be 25,50,75 & 100) to a more suitable set for this example. You may also note that the page size selection menu is hidden as the browser window changes size. This is done to preserve screen "real estate" can can be controlled by the `hidePageSizeOnWidth` configuration attribute (which defaults to 1024).
 
 We also need to make some updates to the AlfSortablePaginatedList configuration to map it against the data that it will receive (an alternative approach would be to add a callback in our service that normalizes the response to fit the defaults). Add the following to the configuration:
 

@@ -41,10 +41,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-     
       "Test page selector drop-down label intialization": function () {
          browser = this.remote;
          return TestCommon.loadTestWebScript(this.remote, "/Paginator", "Pagination Tests").findByCssSelector(TestCommon.topicSelector("ALF_WIDGETS_READY", "publish", "any"))
@@ -53,6 +49,35 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert(text === "1-25 of 243", "Page selector menu label didn't initialize correctly, expected '1-25 of 243' but saw: " + text);
+            });
+      },
+
+      "Test custom configured page selector drop-down label intialization": function () {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Paginator", "Pagination Tests").findByCssSelector(TestCommon.topicSelector("ALF_WIDGETS_READY", "publish", "any"))
+            .end()
+         .findByCssSelector("#CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_SELECTOR_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "1-10 of 243", "Page selector menu label didn't initialize correctly for custom pagination");
+            });
+      },
+
+      "Test custom configured page size selector value": function() {
+         return browser.findByCssSelector("#CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "10 per page", "Page size menu label didn't initialize correctly for custom pagination");
+            });
+      },
+
+      "Count custom configured page sizes": function() {
+         return browser.findByCssSelector("#CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
+               .click()
+            .end()
+         .findAllByCssSelector("#CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown .alf-checkable-menu-item")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "The wrong number of custom page sizes was found");
             });
       },
 

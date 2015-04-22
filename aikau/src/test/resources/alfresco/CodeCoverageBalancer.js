@@ -42,10 +42,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
-
       "Balance": function () {
          if(args.doCoverage === "true")
          {
