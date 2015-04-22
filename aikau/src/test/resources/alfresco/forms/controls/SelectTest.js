@@ -253,6 +253,16 @@ define(["intern!object",
             });
       },
 
+      "Test pub/sub options value": function() {
+         return browser.findByCssSelector("#DIALOG_WITH_SELECT .confirmationButton > span")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("DIALOG_POST", "selected", "DO2"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Options value was not initialized correctly");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
