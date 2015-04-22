@@ -1735,7 +1735,8 @@ define(["dojo/_base/declare",
                 passedRegExpTest = true; // Assume valid starting point.
             
             // Check that a value has been specified if this is a required field...
-            passedRequiredTest = !(this._required && (value == null || value === ""));
+            var valueIsEmptyArray = ObjectTypeUtils.isArray(value) && value.length === 0;
+            passedRequiredTest = !(this._required && (!value || valueIsEmptyArray));
             
             // Check if any specified regular expression is passed...
             if (this.validationConfig)
