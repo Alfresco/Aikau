@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,8 +18,14 @@
  */
 
 /**
+ * This service should be used for the creation, uploading, updating and deletion of nodes from an
+ * Alfresco Repository. When using for deleting nodes it is important to ensure that the 
+ * [DialogService]{@link module:alfresco/services/DialogService} is included on the page (or an 
+ * alternative service that handles dialog creation requests).
+ * 
  * @module alfresco/services/ContentService
  * @extends module:alfresco/core/Core
+ * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */
@@ -29,27 +35,22 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
+        "dojo/_base/array",
         "alfresco/core/NodeUtils",
         "alfresco/dialogs/AlfFormDialog"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, _AlfDocumentListTopicMixin, lang, NodeUtils, AlfFormDialog) {
+        function(declare, AlfCore, CoreXhr, AlfConstants, _AlfDocumentListTopicMixin, lang, array, NodeUtils, AlfFormDialog) {
    
    return declare([AlfCore, CoreXhr, _AlfDocumentListTopicMixin], {
       
       /**
-       * Re-use the old Alfresco.DocListToolbar scope. This could be replaced with a custom scope if the i18nRequirements file is also changed.
-       * @instance
-       * @type {string}
-       * @default "Alfresco.DocListToolbar"
-       */
-      i18nScope: "Alfresco.DocListToolbar",
-      
-      /**
-       * Re-use the toolbar properties for the DocumentList - this gives us access to the same labels for folders, etc.
+       * An array of the i18n files to use with this widget.
+       *
        * @instance
        * @type {object[]}
+       * @default [{i18nFile: "./i18n/ContentService.properties"}]
        */
-      i18nRequirements: [{i18nFile: "../../../WEB-INF/classes/alfresco/site-webscripts/org/alfresco/components/documentlibrary/toolbar.get.properties"}],
-      
+      i18nRequirements: [{i18nFile: "./i18n/ContentService.properties"}],
+
       /**
        * Sets up the subscriptions for the ContentService
        * 
@@ -61,9 +62,9 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_CURRENT_NODEREF_CHANGED", lang.hitch(this, this.handleCurrentNodeChange));
          this.alfSubscribe("ALF_SHOW_UPLOADER", lang.hitch(this, this.showUploader));
          this.alfSubscribe("ALF_CONTENT_SERVICE_UPLOAD_REQUEST_RECEIVED", lang.hitch(this, this.onFileUploadRequest));
-         this.alfSubscribe("ALF_CREATE_NEW_FOLDER", lang.hitch(this, this.createNewFolder));
          this.alfSubscribe("ALF_CREATE_CONTENT_REQUEST", lang.hitch(this, this.onCreateContent));
          this.alfSubscribe("ALF_UPDATE_CONTENT_REQUEST", lang.hitch(this, this.onUpdateContent));
+         this.alfSubscribe("ALF_DELETE_CONTENT_REQUEST", lang.hitch(this, this.onDeleteContent));
       },
       
       /**
@@ -73,13 +74,12 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the content to create
        */
       onCreateContent: function alfresco_services_ContentService__onCreateFolder(payload) {
-
-         if (payload.alf_destination == null || payload.alf_destination === "")
+         if (!payload.alf_destination)
          {
             payload.alf_destination = this._currentNode.parent.nodeRef;
          }
          var type = null;
-         if (payload.type == null)
+         if (!payload.type)
          {
             type = "cm%3acontent";
          }
@@ -91,33 +91,8 @@ define(["dojo/_base/declare",
          this.serviceXhr({url : url,
                           data: payload,
                           method: "POST",
-                          successCallback: this.contentCreationSuccess,
+                          successCallback: this.onContentCreationSuccess,
                           callbackScope: this});
-      },
-
-      /**
-       * This handles requests to update content
-       *
-       * @instance
-       * @param {object} payload The details of the content to update
-       */
-      onUpdateContent: function alfresco_services_ContentService__onUpdateContent(payload) {
-
-         if (payload.nodeRef == null)
-         {
-            this.alfLog("warn", "A request was made to update content but no 'nodeRef' attribute was provided", payload, this);
-         }
-         else
-         {
-            var nodeRef = NodeUtils.processNodeRef(payload.nodeRef);
-            var url = AlfConstants.PROXY_URI + "api/node/" + nodeRef.uri + "/formprocessor";
-            delete payload["nodeRef"];
-            this.serviceXhr({url : url,
-                             data: payload,
-                             method: "POST",
-                             successCallback: this.contentCreationSuccess,
-                             callbackScope: this});
-         }
       },
 
       /**
@@ -128,8 +103,174 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      contentCreationSuccess: function alfresco_services_ContentService__contentCreationSuccess(response, originalRequestConfig) {
+      onContentCreationSuccess: function alfresco_services_ContentService__onContentCreationSuccess(response, originalRequestConfig) {
+         // jshint unused:false
          this.alfPublish(this.reloadDataTopic, {});
+      },
+
+      /**
+       * This handles requests to update content
+       *
+       * @instance
+       * @param {object} payload The details of the content to update
+       */
+      onUpdateContent: function alfresco_services_ContentService__onUpdateContent(payload) {
+         if (!payload.nodeRef)
+         {
+            this.alfLog("warn", "A request was made to update content but no 'nodeRef' attribute was provided", payload, this);
+         }
+         else
+         {
+            var nodeRef = NodeUtils.processNodeRef(payload.nodeRef);
+            var url = AlfConstants.PROXY_URI + "api/node/" + nodeRef.uri + "/formprocessor";
+            delete payload.nodeRef;
+            this.serviceXhr({url : url,
+                             data: payload,
+                             method: "POST",
+                             successCallback: this.contentCreationSuccess,
+                             callbackScope: this});
+         }
+      },
+
+      /**
+       * This handles requests to delete content
+       *
+       * @instance
+       * @param {object} payload The details of the content to update
+       */
+      onDeleteContent: function alfresco_services_ContentService__onDeleteContent(payload) {
+         var responseTopic = this.generateUuid();
+         this._actionDeleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onActionDeleteConfirmation), true);
+
+         this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+            dialogId: "ALF_DELETE_CONTENT_DIALOG",
+            dialogTitle: this.message("contentService.delete.dialog.title"),
+            widgetsContent: [
+               {
+                  name: "alfresco/lists/views/AlfListView",
+                  config: {
+                     additionalCssClasses: "no-highlight",
+                     currentData: {
+                        items: payload.nodes
+                     },
+                     widgets: [
+                        {
+                           name: "alfresco/lists/views/layouts/Row",
+                           config: {
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/renderers/SmallThumbnail"
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/renderers/Property",
+                                             config: {
+                                                propertyToRender: "displayName",
+                                                renderFilter: [
+                                                   {
+                                                      property: "displayName",
+                                                      values: [""],
+                                                      negate: true
+                                                   }
+                                                ]
+                                             }
+                                          },
+                                          {
+                                             name: "alfresco/renderers/Property",
+                                             config: {
+                                                propertyToRender: "node.properties.cm:name",
+                                                renderFilter: [
+                                                   {
+                                                      property: "displayName",
+                                                      renderOnAbsentProperty: true
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               }
+            ],
+            widgetsButtons: [
+               {
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: this.message("contentService.delete.confirmation"),
+                     publishTopic: responseTopic,
+                     publishPayload: {
+                        nodes: payload.nodes
+                     }
+                  }
+               },
+               {
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: this.message("contentService.delete.cancellation"),
+                     publishTopic: "close"
+                  }
+               }
+            ]
+         });
+      },
+
+      /**
+       * This function is called when the user confirms that they wish to delete a document
+       *
+       * @instance
+       * @param {object} payload An object containing the details of the document(s) to be deleted.
+       */
+      onActionDeleteConfirmation: function alfresco_services_ContentService__onActionDeleteConfirmation(payload) {
+         this.alfUnsubscribeSaveHandles([this._actionDeleteHandle]);
+
+         var nodeRefs = array.map(payload.nodes, function(item) {
+            return item.nodeRef || item.node.nodeRef;
+         });
+         var responseTopic = this.generateUuid();
+         var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onActionDeleteSuccess), true);
+
+         this.serviceXhr({
+            alfTopic: responseTopic,
+            subscriptionHandle: subscriptionHandle,
+            url: AlfConstants.PROXY_URI + "slingshot/doclib/action/files?alf_method=delete",
+            method: "POST",
+            data: {
+               nodeRefs: nodeRefs
+            }
+         });
+      },
+
+      /**
+       * This action will be called when documents are successfully deleted
+       *
+       * @instance
+       * @param {object} payload
+       */
+      onActionDeleteSuccess: function alfresco_services_ContentService__onActionDeleteSuccess(payload) {
+         var subscriptionHandle = lang.getObject("requestConfig.subscriptionHandle", false, payload);
+         if (subscriptionHandle)
+         {
+            this.alfUnsubscribe(subscriptionHandle);
+         }
+         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            message: this.message("contentService.delete.success.message")
+         });
+         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {});
       },
 
       /**
@@ -166,12 +307,11 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      showUploader: function alfresco_services_ContentService__showUploader(payload) {
-
+      showUploader: function alfresco_services_ContentService__showUploader(/*jshint unused:false*/ payload) {
          this.uploadDialog = new AlfFormDialog({
-            dialogTitle: "Select files to upload",
-            dialogConfirmationButtonTitle: "Upload",
-            dialogCancellationButtonTitle: "Cancel",
+            dialogTitle: "contentService.uploader.dialog.title",
+            dialogConfirmationButtonTitle: "contentService.uploader.dialog.confirmation",
+            dialogCancellationButtonTitle: "contentService.uploader.dialog.cancellation",
             formSubmissionTopic: "ALF_CONTENT_SERVICE_UPLOAD_REQUEST_RECEIVED",
             formSubmissionPayload: {
                targetData: {
@@ -190,7 +330,7 @@ define(["dojo/_base/declare",
                {
                   name: "alfresco/forms/controls/FileSelect",
                   config: {
-                     label: "Select files to upload...",
+                     label: "contentService.uploader.dialog.fileSelect.label",
                      name: "files"
                   }
                }
@@ -210,7 +350,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The file upload data payload to pass on
        */
       onFileUploadRequest: function alfresco_services_ContentService__onFileUploadRequest(payload) {
-         if (this.uploadDialog != null)
+         if (this.uploadDialog)
          {
             this.uploadDialog.destroyRecursive();
          }
@@ -230,97 +370,6 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Upload complete");
          this.alfUnsubscribeSaveHandles([this._uploadSubHandle]);
          this.alfPublish(this.reloadDataTopic, {});
-      },
-      
-      /**
-       * @instance
-       */
-      createNewFolder: function alfresco_services_ContentService__createNewFolder(payload) {
-         var destination = this._currentNode.parent.nodeRef;
-
-         // Intercept before dialog show
-         var doBeforeDialogShow = function DLTB_onNewFolder_doBeforeDialogShow(p_form, p_dialog)
-         {
-            Dom.get(p_dialog.id + "-dialogTitle").innerHTML = this.message("label.new-folder.title");
-            Dom.get(p_dialog.id + "-dialogHeader").innerHTML = this.message("label.new-folder.header");
-         };
-         
-         var templateUrl = YAHOO.lang.substitute(AlfConstants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-         {
-            itemKind: "type",
-            itemId: "cm:folder",
-            destination: destination,
-            mode: "create",
-            submitType: "json",
-            formId: "doclib-common"
-         });
-
-         // Using Forms Service, so always create new instance
-         var createFolder = new Alfresco.module.SimpleDialog(this.id + "-createFolder");
-
-         createFolder.setOptions(
-         {
-            width: "33em",
-            templateUrl: templateUrl,
-            actionUrl: null,
-            destroyOnHide: true,
-            doBeforeDialogShow:
-            {
-               fn: doBeforeDialogShow,
-               scope: this
-            },
-            onSuccess:
-            {
-               fn: function DLTB_onNewFolder_success(response)
-               {
-                  var activityData;
-                  var folderName = response.config.dataObj["prop_cm_name"];
-                  var folderNodeRef = response.json.persistedObject;
-                  
-//                  activityData =
-//                  {
-//                     fileName: folderName,
-//                     nodeRef: folderNodeRef,
-//                     path: this.currentPath + (this.currentPath !== "/" ? "/" : "") + folderName
-//                  };
-//                  this.modules.actions.postActivity(this.options.siteId, "folder-added", "documentlibrary", activityData);
-                  
-                  YAHOO.Bubbling.fire("folderCreated",
-                  {
-                     name: folderName,
-                     parentNodeRef: destination
-                  });
-                  this.alfPublish(this.reloadDataTopic, {});
-                  Alfresco.util.PopupManager.displayMessage(
-                  {
-                     text: this.message("message.new-folder.success", {"0": folderName})
-                  });
-               },
-               scope: this
-            },
-            onFailure:
-            {
-               fn: function DLTB_onNewFolder_failure(response)
-               {
-                  if (response)
-                  {
-                     var folderName = response.config.dataObj["prop_cm_name"];
-                     Alfresco.util.PopupManager.displayMessage(
-                     {
-                        text: this.message("message.new-folder.failure", {"0": folderName})
-                     });
-                  }
-                  else
-                  {
-                     Alfresco.util.PopupManager.displayMessage(
-                     {
-                        text: this.message("message.failure")
-                     });
-                  }
-               },
-               scope: this
-            }
-         }).show();
       }
    });
 });
