@@ -47,6 +47,9 @@ model.jsonModel = {
                            resultsProperty: "response.data.items"
                         },
                         searchStartsWith: false
+                     },
+                     requirementConfig: {
+                        initialValue: true
                      }
                   }
                }

@@ -91,7 +91,7 @@ define([
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "tag2", "Did not add selected tag at end of choices");
-               })
+               });
          },
 
          "Typing into search box filters results": function() {
@@ -161,6 +161,21 @@ define([
                   assert.include(dataContent, "labeltag2valueworkspace", "Failed to submit control value of tag2");
                }, function(err) {
                   assert.fail(null, null, "Failed to submit control values [" + err.name + "]: " + err);
+               });
+         },
+
+         "Deleting all items disables confirmation button": function() {
+            return browser.findByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
+               .click()
+               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(2)")
+            .end()
+            .findByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
+               .click()
+               .waitForDeletedByCssSelector(".alfresco-forms-controls-MultiSelect__choice:nth-child(1)")
+            .end()
+            .findAllByCssSelector("#FORM1 .confirmationButton.dijitDisabled")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "The confirmation button was not disabled when all the items were removed");
                });
          },
 
