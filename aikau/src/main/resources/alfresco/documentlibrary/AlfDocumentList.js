@@ -332,7 +332,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onHashChanged: function alfresco_documentlibrary_AlfDocumentList__onHashChanged(payload) {
-         if(this._payloadContainsUpdateableVar(payload))
+         if(this.doHashVarUpdate(payload))
          {
             this.currentFilter = payload;
             if (this._readyToLoad) this.loadData();

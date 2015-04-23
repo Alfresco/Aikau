@@ -418,7 +418,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Hash change detected", payload, this);
 
          // Only update if the payload contains one of the variables we care about
-         if(this._payloadContainsUpdateableVar(payload))
+         if(this.doHashVarUpdate(payload))
          {
             // If the search term has changed then we want to delete the facet filters as
             // they might not be applicable to the new search results...
