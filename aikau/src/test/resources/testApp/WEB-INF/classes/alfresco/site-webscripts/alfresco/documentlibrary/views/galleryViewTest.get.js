@@ -125,7 +125,7 @@ model.jsonModel = {
                         rules: [
                            {
                               topic: "ALF_DOCLIST_DOCUMENTS_LOADED",
-                              attribute: "totalDocuments",
+                              attribute: "totalRecords",
                               isNot: ["0"]
                            }
                         ]

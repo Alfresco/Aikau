@@ -24,58 +24,189 @@ define(["intern!object",
       "intern/chai!assert",
       "require",
       "alfresco/TestCommon",
-      "intern/dojo/node!leadfoot/keys"
-   ],
-   function(registerSuite, assert, require, TestCommon, keys) {
+      "intern/dojo/node!leadfoot/keys"],
+      function(registerSuite, assert, require, TestCommon, keys) {
 
-      var browser;
+   var browser;
 
-      registerSuite({
-         name: "CommentsList Tests",
+   registerSuite({
+      name: "CommentsList Tests",
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/CommentsList", "CommentsList Tests").end();
-         },
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/CommentsList", "CommentsList Tests").end();
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      beforeEach: function() {
+         browser.end();
+      },
 
-         "No comments loaded initially": function() {
-            return browser.findByCssSelector("#COMMENT_LIST .alfresco-lists-AlfList")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "No comments", "Did not display no-comments message at startup");
-               });
-         },
+      "Check initial comments are displayed": function() {
+         return browser.findAllByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row")
+            .then(function(elements) {
+               assert.lengthOf(elements, 5, "An unexpected number of comments were returned");
+            });
+      },
 
-         "Can add comment": function() {
-            return browser.findByCssSelector("#COMMENT_LIST .dijitButtonNode")
-               .click()
-               .end()
+      "Check paginator page selector is visible": function() {
+         return browser.findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(2)")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The page selector should have been displayed");
+            });
+      },
 
-            .findAllByCssSelector(".alfresco-editors-TinyMCE iframe") // Wait for control
-               .end()
+      "Check paginator page selector text": function() {
+         return browser.findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(2) > span")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "1-5 of 6", "The page selector label was incorrect");
+            });
+      },
 
-            .findAllByCssSelector(".alfresco-editors-TinyMCE iframe")
-               .execute("tinymce.get(0).setContent('<p><strong>Hello tester!</strong></p>');")
-               .execute("tinymce.get(0).save();")
-               .end()
+      "Check visibility of sort toggle": function() {
+         return browser.findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(7)")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The sort toggle should have been displayed");
+            });
+      },
 
-            .findByCssSelector(".alfresco-dialog-AlfDialog .dijitButtonNode")
-               .click()
-               .end()
+      "Check initial order": function() {
+         return browser.findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .read .read")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "one", "The order was initially incorrect");
+            });
+      },
 
-            .findByCssSelector("#COMMENT_LIST .alfresco-lists-AlfList")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.include(text, "Hello tester!", "Did not add new comment");
-               });
-         },
+      "Add comment": function() {
+         return browser.findByCssSelector("#COMMENT_LIST .alf-menu-bar-label-node")
+            .click()
+            .end()
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      });
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog .alfresco-editors-TinyMCE iframe") // Wait for control
+            .end()
+
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog .alfresco-editors-TinyMCE iframe")
+            .execute("tinymce.get(0).setContent('<p><strong>Hello tester!</strong></p>');")
+            .execute("tinymce.get(0).save();")
+            .end()
+
+         .findByCssSelector(".alfresco-dialog-AlfDialog .dijitButtonNode")
+            .click()
+            .end()
+
+         .findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(2) > span")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "1-5 of 7", "The page selector label was incorrect");
+            });
+      },
+
+      "Edit a comment": function() {
+         return browser.findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(2) > img")
+            .click()
+         .end()
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-EditableComment .edit")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Editable comment not switched to edit mode");
+            });
+      },
+
+      "Save edit": function() {
+         return browser.findAllByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-editors-TinyMCE iframe") // Wait for control
+            .end()
+         .findAllByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-editors-TinyMCE iframe")
+            .execute("tinymce.get(1).setContent('updated');")
+            .execute("tinymce.get(1).save();")
+         .end()
+         .sleep(500)
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .confirmationButton > span")
+            .click()
+         .end()
+         .sleep(500)
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .read .read")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "updated", "The comment was not updated");
+            });
+      },
+
+      "Reverse order": function() {
+         return browser.findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(7) img.dijitMenuItemIcon")
+            .click()
+         .end()
+         .sleep(500)
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .read .read")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "five", "The order was not reversed");
+            });
+      },
+
+      "Change page size": function() {
+         return browser.findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(6) span")
+            .click()
+         .end()
+         .findByCssSelector(".dijitPopup tr:nth-child(2) .dijitMenuItemLabel")
+            .click()
+         .end()
+         .sleep(500)
+         .findAllByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row")
+            .then(function(elements) {
+               assert.lengthOf(elements, 7, "Page size change didn't work");
+            });
+      },
+
+      "Delete all the comments": function() {
+         return browser.findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+            .click()
+         .end()
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+            .click()
+         .end()
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+            .click()
+         .end()
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+            .click()
+         .end()
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+            .click()
+         .end()
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+            .click()
+         .end()
+         .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+            .click()
+         .end()
+         .findByCssSelector("#COMMENT_LIST .alfresco-lists-AlfList")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "No comments", "Did not display no-comments after deleting comments");
+            });
+      },
+
+      "Check paginator page selector is hidden": function() {
+         return browser.findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(2)")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page selector should have been hidden");
+            });
+      },
+
+      "Check sort toggle is hidden": function() {
+         return browser.findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(7)")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The sort toggle should have been hidden");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
    });
+});

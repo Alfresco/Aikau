@@ -1029,7 +1029,7 @@ define(["dojo/_base/declare",
 
          this.alfPublish(this.documentsLoadedTopic, {
             documents: this.currentData.items,
-            totalDocuments: this.totalRecords,
+            totalRecords: this.totalRecords,
             startIndex: this.startIndex
          });
       },

@@ -1,6 +1,7 @@
 /*jshint maxlen:1000*/
 model.jsonModel = {
-   services: [{
+   services: [
+      {
          name: "alfresco/services/LoggingService",
          config: {
             loggingPreferences: {
@@ -13,27 +14,28 @@ model.jsonModel = {
       "alfresco/services/DialogService",
       "aikauTesting/mockservices/CommentsListMockService"
    ],
-   widgets: [{
-      name: "alfresco/renderers/CommentsList",
-      id: "COMMENT_LIST",
-      config: {
-         pubSubScope: "COMMENTS1_",
-         currentItem: {
-            node: {
-               nodeRef: "workspace://SpacesStore/4fd42b12-361a-4e02-a1da-9131e6fa074d"
-            },
-            parent: {
-               permissions: {
-                  user: {
-                     CreateChildren: true
+   widgets: [
+      {
+         name: "alfresco/renderers/CommentsList",
+         id: "COMMENT_LIST",
+         config: {
+            pubSubScope: "COMMENTS1_",
+            currentItem: {
+               node: {
+                  nodeRef: "workspace://SpacesStore/4fd42b12-361a-4e02-a1da-9131e6fa074d"
+               },
+               parent: {
+                  permissions: {
+                     user: {
+                        CreateChildren: true
+                     }
                   }
                }
             }
          }
+      }, 
+      {
+         name: "alfresco/logging/DebugLog"
       }
-   }, {
-      name: "alfresco/logging/DebugLog"
-   }, {
-      name: "aikauTesting/TestCoverageResults"
-   }]
+   ]
 };
