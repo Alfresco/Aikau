@@ -52,7 +52,7 @@ define(["intern!object",
             .type("one")
          .end()
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalDocuments", "1"))
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalRecords", "1"))
          .end()
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
          .then(function(elements) {
@@ -65,7 +65,7 @@ define(["intern!object",
             .type(keys.BACKSPACE)
             .type(keys.BACKSPACE)
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalDocuments", "3"))
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalRecords", "3"))
          .end()
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
          .then(function(elements) {
@@ -80,7 +80,7 @@ define(["intern!object",
          .findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL_popup1")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalDocuments", "4"))
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalRecords", "4"))
          .end()
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
          .then(function(elements) {
@@ -93,7 +93,7 @@ define(["intern!object",
             .type("t")
          .end()
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalDocuments", "2"))
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalRecords", "2"))
          .end()
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
          .then(function(elements) {

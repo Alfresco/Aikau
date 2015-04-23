@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,6 +18,14 @@
  */
 
 /**
+ * This renderer can be used to both display a count of comments on a particular node as well as providing
+ * a link to where comments can be added, edited or deleted. The link can either be to particular page
+ * or alternatively can be used with a [VerticalReveal]{@link module:alfresco/layout/VerticalReveal},
+ * the [DialogService]{@link module:alfresco/services/DialogService} or some other widget or service to 
+ * display a [Comments List]{@link module:alfresco/renderers/CommentsList}. For example the 
+ * standard Document Library [Detailed View]{@link module:alfresco/documentlibrary/views/AlfDetailedView}
+ * uses the [VerticalReveal]{@link module:alfresco/layout/VerticalReveal} approach to allow inline commenting.
+ * 
  * @module alfresco/renderers/Comments
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -126,7 +134,7 @@ define(["dojo/_base/declare",
          
          // By default this will generate a link to details page for the current Node. However,
          // if a publishTopic is provided then it will publish on topic is provided
-         if (this.publishTopic == null)
+         if (!this.publishTopic)
          {
             // Get the URL for making a comment...
             // TODO: This should be replaced by publishing an action to allow greater control over how comments are made
@@ -146,7 +154,7 @@ define(["dojo/_base/declare",
          
          // Get the count of comments if there are any...
          this.commentCount = lang.getObject(this.commentCountProperty, false, this.currentItem);
-         if (this.commentCount == null)
+         if (!this.commentCount)
          {
             this.commentCount = 0;
          }
@@ -167,13 +175,13 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_renderers_Comments__postCreate() {
-         if (this.commentCount != null)
+         if (this.commentCount || this.commentCount === 0)
          {
             domClass.remove(this.countNode, "hidden");
          }
          this.makeAnchor(this.targetUrl, this.targetUrlType);
 
-         if (this.subscriptionTopic != null)
+         if (this.subscriptionTopic)
          {
             this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.onCommentCountUpdate));
          }
@@ -188,9 +196,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "totalDocuments"
+       * @default "totalRecords"
        */
-      publicationCountProperty: "totalDocuments",
+      publicationCountProperty: "totalRecords",
 
       /**
        * Called whenever the [subscriptionTopic]{@link module:alfresco/renderers/Comments#subscriptionTopic}
@@ -202,7 +210,7 @@ define(["dojo/_base/declare",
        */
       onCommentCountUpdate: function alfresco_renderers_Comments__onCommentCountUpdate(payload) {
          var updatedCount = lang.getObject(this.publicationCountProperty, false, payload);
-         if (updatedCount != null)
+         if (updatedCount || updatedCount === 0)
          {
             this.countNode.innerHTML = updatedCount;
          }
@@ -216,8 +224,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onCommentClick: function alfresco_renderers_Comments__onCommentClick(evt) {
-         if (this.publishTopic != null)
+      onCommentClick: function alfresco_renderers_Comments__onCommentClick(/*jshint unused:false*/ evt) {
+         if (this.publishTopic)
          {
             // Clone the configured payload to avoid collisions with other instances...
             this.publishPayload = lang.clone(this.publishPayload);
