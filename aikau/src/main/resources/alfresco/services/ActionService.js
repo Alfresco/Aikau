@@ -919,115 +919,81 @@ define(["dojo/_base/declare",
        * @param {object} documents The document edit offline.
        */
       onActionDelete: function alfresco_services_ActionService__onActionDelete(payload, documents) {
-
-         var responseTopic = this.generateUuid();
-         this._actionDeleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onActionDeleteConfirmation), true);
-
-         var dialog = new AlfDialog({
-            generatePubSubScope: false,
-            title: this.message("delete-dialog.title"),
-            widgetsContent: [
-               {
-                  name: "alfresco/lists/views/AlfListView",
-                  config: {
-                     additionalCssClasses: "no-highlight",
-                     currentData: {
-                        items: documents
-                     },
-                     widgets: [
-                        {
-                           name: "alfresco/lists/views/layouts/Row",
-                           config: {
-                              widgets: [
-                                 {
-                                    name: "alfresco/lists/views/layouts/Cell",
-                                    config: {
-                                       widgets: [
-                                          {
-                                             name: "alfresco/renderers/SmallThumbnail"
-                                          }
-                                       ]
-                                    }
-                                 },
-                                 {
-                                    name: "alfresco/lists/views/layouts/Cell",
-                                    config: {
-                                       widgets: [
-                                          {
-                                             name: "alfresco/renderers/Property",
-                                             config: {
-                                                propertyToRender: "node.properties.cm:name"
-                                             }
-                                          }
-                                       ]
-                                    }
-                                 }
-                              ]
-                           }
-                        }
-                     ]
-                  }
-               }
-            ],
-            widgetsButtons: [
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: this.message("services.ActionService.button.ok"),
-                     publishTopic: responseTopic,
-                     publishPayload: {
-                        nodes: documents,
-                        completionTopic: payload.completionTopic
-                     }
-                  }
-               },
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: this.message("services.ActionService.button.cancel"),
-                     publishTopic: "close"
-                  }
-               }
-            ]
+         this.alfPublish("ALF_DELETE_CONTENT_REQUEST", {
+            nodes: documents || [payload.document]
          });
-         dialog.show();
-      },
 
-      /**
-       * This function is called when the user confirms that they wish to delete a document
-       *
-       * @instance
-       * @param {object} payload An object containing the details of the document(s) to be deleted.
-       */
-      onActionDeleteConfirmation: function alfresco_services_ActionService__onActionDeleteConfirmation(payload) {
-         this.alfUnsubscribeSaveHandles([this._actionDeleteHandle]);
+         // var responseTopic = this.generateUuid();
+         // this._actionDeleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onActionDeleteConfirmation), true);
 
-         var nodeRefs = array.map(payload.nodes, function(item) {
-            return item.nodeRef;
-         });
-         var responseTopic = this.generateUuid();
-         var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onActionDeleteSuccess), true);
-
-         this.serviceXhr({
-            alfTopic: responseTopic,
-            subscriptionHandle: subscriptionHandle,
-            url: AlfConstants.PROXY_URI + "slingshot/doclib/action/files?alf_method=delete",
-            method: "POST",
-            data: {
-               nodeRefs: nodeRefs
-            }
-         });
-      },
-
-      /**
-       * This action will be called when documents are successfully deleted
-       *
-       * @instance
-       * @param {object} payload
-       */
-      onActionDeleteSuccess: function alfresco_services_ActionService__onActionDeleteSuccess(payload) {
-         // jshint unused:false
-         this.onActionCompleteSuccess(arguments);
+         // var dialog = new AlfDialog({
+         //    generatePubSubScope: false,
+         //    title: this.message("delete-dialog.title"),
+         //    widgetsContent: [
+         //       {
+         //          name: "alfresco/lists/views/AlfListView",
+         //          config: {
+         //             additionalCssClasses: "no-highlight",
+         //             currentData: {
+         //                items: documents
+         //             },
+         //             widgets: [
+         //                {
+         //                   name: "alfresco/lists/views/layouts/Row",
+         //                   config: {
+         //                      widgets: [
+         //                         {
+         //                            name: "alfresco/lists/views/layouts/Cell",
+         //                            config: {
+         //                               widgets: [
+         //                                  {
+         //                                     name: "alfresco/renderers/SmallThumbnail"
+         //                                  }
+         //                               ]
+         //                            }
+         //                         },
+         //                         {
+         //                            name: "alfresco/lists/views/layouts/Cell",
+         //                            config: {
+         //                               widgets: [
+         //                                  {
+         //                                     name: "alfresco/renderers/Property",
+         //                                     config: {
+         //                                        propertyToRender: "node.properties.cm:name"
+         //                                     }
+         //                                  }
+         //                               ]
+         //                            }
+         //                         }
+         //                      ]
+         //                   }
+         //                }
+         //             ]
+         //          }
+         //       }
+         //    ],
+         //    widgetsButtons: [
+         //       {
+         //          name: "alfresco/buttons/AlfButton",
+         //          config: {
+         //             label: this.message("services.ActionService.button.ok"),
+         //             publishTopic: responseTopic,
+         //             publishPayload: {
+         //                nodes: documents,
+         //                completionTopic: payload.completionTopic
+         //             }
+         //          }
+         //       },
+         //       {
+         //          name: "alfresco/buttons/AlfButton",
+         //          config: {
+         //             label: this.message("services.ActionService.button.cancel"),
+         //             publishTopic: "close"
+         //          }
+         //       }
+         //    ]
+         // });
+         // dialog.show();
       },
 
       /**

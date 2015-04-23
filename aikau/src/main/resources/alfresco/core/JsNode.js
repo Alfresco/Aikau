@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
             lang.mixin(this.node, args);
             this.nodeJson = dojoJson.stringify(this.node);
          }
-         if (this.node != null)
+         if (this.node)
          {
             this.nodeRef = NodeUtils.processNodeRef(this.node.nodeRef);
             this.properties = this.node.properties || {};
@@ -118,7 +118,7 @@ define(["dojo/_base/declare",
                   }
                   this.properties[index.replace(/:/g, "_")] = this.properties[index];
                }
-            };
+            }
          }
       },
 
@@ -244,7 +244,7 @@ define(["dojo/_base/declare",
        */
       constructor: function alfresco_core_JsNode__constructor(args) {
          var primaryJsNode = new JsNode(args);
-         if (primaryJsNode.node != null && primaryJsNode.node.linkedNode != null)
+         if (primaryJsNode.node && primaryJsNode.node.linkedNode)
          {
             primaryJsNode.linkedNode = new JsNode(primaryJsNode.linkedNode);
          }

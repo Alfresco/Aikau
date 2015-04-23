@@ -38,6 +38,11 @@ define(["dojo/_base/declare",
       setupServer: function alfresco_testing_CreateContentMockXhr__setupServer() {
          try
          {
+            this.server.respondWith("POST",
+                                    "/aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete",
+                                    [200,
+                                    {"Content-Type":"application/json;charset=UTF-8"},
+                                     ""]);
             this.server.respondWith("GET",
                                     /\/aikau\/proxy\/alfresco\/slingshot\/doclib\/node-templates/,
                                     [200,
