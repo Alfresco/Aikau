@@ -65,6 +65,10 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_CREATE_CONTENT_REQUEST", lang.hitch(this, this.onCreateContent));
          this.alfSubscribe("ALF_UPDATE_CONTENT_REQUEST", lang.hitch(this, this.onUpdateContent));
          this.alfSubscribe("ALF_DELETE_CONTENT_REQUEST", lang.hitch(this, this.onDeleteContent));
+
+         this.alfSubscribe("ALF_EDIT_BASIC_METADATA_REQUEST", lang.hitch(this, this.onEditBasicMetadataRequest));
+         this.alfSubscribe("ALF_BASIC_METADATA_SUCCESS", lang.hitch(this, this.onEditBasicMetadataReceived));
+         
       },
       
       /**
@@ -370,6 +374,112 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Upload complete");
          this.alfUnsubscribeSaveHandles([this._uploadSubHandle]);
          this.alfPublish(this.reloadDataTopic, {});
+      },
+
+      /**
+       * Handles requests to edit the basic metadata of the node provided.
+       *
+       * @instance
+       * @param {object} payload An object containing the node to edit
+       */
+      onEditBasicMetadataRequest: function alfresco_services_ContentService__onEditBasicMetadataRequest(payload) {
+         if (payload.node && payload.node.node)
+         {
+            var node = payload.node.node;
+            // Check to see if properties are already available (this would be expected when used with
+            // some Alfresco APIs but not others, e.g. Document Library APIs, but not Search APIs)...
+            if (node.properties)
+            {
+               this.onEditBasicMetadata(node);
+            }
+            else if (node.nodeRef)
+            {
+               this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", {
+                  alfResponseTopic: "ALF_BASIC_METADATA",
+                  nodeRef: node.nodeRef,
+                  rawData: true
+               });
+            }
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to edit the properties of a node but no node or 'nodeRef' was provided", payload, this);
+         }
+      },
+
+      /**
+       * This function will be called in response to a documents details being successfully retrieved.
+       *
+       * @instance
+       * @param {object} payload
+       */
+      onEditBasicMetadataReceived: function alfresco_services_ContentService__onEditBasicMetadataReceived(payload) {
+         if (lang.exists("response.item.node", payload)) 
+         {
+            this.onEditBasicMetadata(payload.response.item.node);
+         }
+         this.alfLog("Error", "This method hasn't been implemented yet.");
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {object} node The node to display the metadata for
+       */
+      onEditBasicMetadata: function alfresco_services_ContentService__onEditBasicMetadata(node) {
+         var dialogTitle = this.message("contentService.basicMetadata.dialog.title", {
+            0: node.properties["cm:name"]
+         });
+
+         this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
+            dialogId: "ALF_BASIC_METADATA_DIALOG",
+            dialogTitle: dialogTitle,
+            dialogConfirmationButtonTitle: "contentService.basicMetadata.confirmation",
+            dialogCancellationButtonTitle: "contentService.basicMetadata.cancellation",
+            formSubmissionTopic: "ALF_UPDATE_CONTENT_REQUEST",
+            widgets: [
+               {
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     name: "nodeRef",
+                     value: node.nodeRef,
+                     visibilityConfig: {
+                        initialValue: false
+                     }
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     label: "contentService.basicMetadata.name.label",
+                     description: "contentService.basicMetadata.name.description",
+                     name: "prop_cm_name",
+                     value: node.properties["cm:name"],
+                     requirementConfig: {
+                        initialValue: true
+                     }
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     label: "contentService.basicMetadata.title.label",
+                     description: "contentService.basicMetadata.title.description",
+                     name: "prop_cm_title",
+                     value: node.properties["cm:title"]
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/TextArea",
+                  config: {
+                     label: "contentService.basicMetadata.description.label",
+                     description: "contentService.basicMetadata.description.description",
+                     name: "prop_cm_description",
+                     value: node.properties["cm:description"]
+                  }
+               }
+            ]
+         });
       }
    });
 });

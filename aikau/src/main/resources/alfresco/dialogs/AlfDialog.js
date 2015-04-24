@@ -235,6 +235,8 @@ define(["dojo/_base/declare",
       onHide: function alfresco_dialogs_AlfDialog__onHide() {
          this.inherited(arguments);
          domStyle.set(document.documentElement, "overflow", "");
+         domClass.remove(this.domNode, "dialogDisplayed");
+         domClass.add(this.domNode, "dialogHidden");
       },
 
       /**
@@ -264,6 +266,8 @@ define(["dojo/_base/declare",
          }
 
          this.alfPublishResizeEvent(this.domNode);
+         domClass.remove(this.domNode, "dialogHidden");
+         domClass.add(this.domNode, "dialogDisplayed");
          // TODO: We could optionally reveal the dialog after resizing to prevent any resizing jumping?
       },
 

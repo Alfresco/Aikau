@@ -25,8 +25,9 @@
 define(["dojo/_base/declare",
         "aikauTesting/MockXhr",
         "dojo/text!./responseTemplates/CreateContentTest/node_templates.json",
-        "dojo/text!./responseTemplates/CreateContentTest/space_templates.json"], 
-        function(declare, MockXhr, nodeTemplates, spaceTemplates) {
+        "dojo/text!./responseTemplates/CreateContentTest/space_templates.json",
+        "dojo/text!./responseTemplates/previews/PDF.json"], 
+        function(declare, MockXhr, nodeTemplates, spaceTemplates, PdfNode) {
    
    return declare([MockXhr], {
 
@@ -38,6 +39,13 @@ define(["dojo/_base/declare",
       setupServer: function alfresco_testing_CreateContentMockXhr__setupServer() {
          try
          {
+            // /aikau/proxy/alfresco/slingshot/doclib2/node/workspace/SpacesStore/f8394454-0651-48a5-b583-d067c7d03339?view=browse&noCache=1429867834390&includeThumbnails=true
+            this.server.respondWith("GET",
+                                    /\/aikau\/proxy\/alfresco\/slingshot\/doclib2\/node\/workspace\/SpacesStore\/f8394454-0651-48a5-b583-d067c7d03339(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     PdfNode]);
+
             this.server.respondWith("POST",
                                     "/aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete",
                                     [200,
