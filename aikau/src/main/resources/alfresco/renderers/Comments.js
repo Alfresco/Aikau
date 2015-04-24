@@ -26,7 +26,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "dijit/_OnDijitClickMixin",
         "alfresco/renderers/_JsNodeMixin",
@@ -36,37 +36,37 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/_base/lang",
         "alfresco/core/UrlUtils",
-        "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, 
+        "dojo/dom-class"],
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin,
                  _HtmlAnchorMixin, _PublishPayloadMixin, template, AlfCore, lang, UrlUtils, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _HtmlAnchorMixin, AlfCore, UrlUtils, _PublishPayloadMixin], {
-      
+
       /**
        * An array of the i18n files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/Comments.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/Comments.properties"}],
-      
+
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/Comments.css"}]
        */
       cssRequirements: [{cssFile:"./css/Comments.css"}],
-      
+
       /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
        */
       templateString: template,
-      
+
       /**
        * The dot-notation property to use for the count of comments. Can be overridden.
        *
@@ -107,12 +107,12 @@ define(["dojo/_base/declare",
 
       /**
        * Set up the attributes to be used when rendering the template.
-       * 
+       *
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Comments__postMixInProperties() {
          this.commentLabel = this.message("comments.label");
-         
+
          // Get a tooltip appropriate for the node type...
          var isContainer = lang.getObject("node.isContainer", false, this.currentItem);
          if (isContainer)
@@ -123,7 +123,7 @@ define(["dojo/_base/declare",
          {
             this.label = this.message("comments.document.tooltip");
          }
-         
+
          // By default this will generate a link to details page for the current Node. However,
          // if a publishTopic is provided then it will publish on topic is provided
          if (this.publishTopic == null)
@@ -143,7 +143,7 @@ define(["dojo/_base/declare",
                this.targetUrl = "";
             }
          }
-         
+
          // Get the count of comments if there are any...
          this.commentCount = lang.getObject(this.commentCountProperty, false, this.currentItem);
          if (this.commentCount == null)
@@ -159,10 +159,10 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      getAnchorTargetSelectors: function alfresco_renderers_SearchResultPropertyLink__getAnchorTargetSelectors() {
+      getAnchorTargetSelectors: function alfresco_renderers_Comments__getAnchorTargetSelectors() {
          return ["span.comment-link"];
       },
-      
+
       /**
        * @instance
        */
@@ -180,7 +180,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The dot-notation property to retrieve from the payload published on the 
+       * The dot-notation property to retrieve from the payload published on the
        * [subscriptionTopic]{@link module:alfresco/renderers/Comments#subscriptionTopic}
        * to use to set the comment count with. By default this assumes it will be triggered
        * from an [list]{@link module:alfresco/lists/AlfList} publishing on the same scope and
