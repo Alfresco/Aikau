@@ -120,6 +120,7 @@
  * @property {string} [dialogId=null] The ID of the dialog to display. Only one dialog with no dialogId can exist on a page at a time, therefore it is sensible to always include an id for your dialogs to allow stacking.
  * @property {string} [dialogConfirmationButtonTitle="OK"] - The label for the dialog confirmation button
  * @property {string} [dialogCancellationButtonTitle="Cancel"] - The label for the dialog cancellation button
+ * @property {string} [dialogCloseTopic=null] If this is set the the dialog will not automatically be closed when the confirmation button is pressed. Instead the dialog will remain open until this topic is published on.
  * @property {array} [widgets=null] - An array of form controls to include in the dialog
  * @property {string} [dialogWidth=null] The width to make the dialog panel (needs to include units, e.g. "px")
  * @property {string} [contentWidth=null] - The width to set the dialog body (needs to include units, e.g. "px")
