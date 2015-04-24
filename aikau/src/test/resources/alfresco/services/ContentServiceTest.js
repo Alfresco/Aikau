@@ -144,7 +144,7 @@ define(["intern!object",
          .findByCssSelector("tr.mx-row:nth-child(3) .mx-url")
             .getVisibleText()
             .then(function(text) {
-               assert(text.indexOf("aikau/proxy/alfresco/api/node/workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e/formprocessor") !== -1, "Update POST did not include nodeRef: " + text);
+               assert.include(text, "aikau/proxy/alfresco/api/node/workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e/formprocessor", "Update POST did not include nodeRef");
             });
       },
 

@@ -585,7 +585,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The response from the request
-       * @param {object} document The node to get the details for
+       * @param {object} node The node to get the details for
        */
       onActionDetails: function alfresco_services_ActionService__onActionDetails(payload, node) {
          // Sometimes the node might be an array of nodes, can only edit the first...
