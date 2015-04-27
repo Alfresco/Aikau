@@ -25,11 +25,12 @@
       border: none;
    }
    caption {
+      background: #ccc;
       border-bottom: none;
+      cursor: pointer;
       font-size: 1.1em;
       font-weight: 700;
       text-align: left;
-      background: #ccc;
    }
    .mx-response {
       position: relative;
@@ -68,6 +69,15 @@
          .mx-response__info {
             display: block;
          }
+      }
+   }
+   &--hide-body {
+      opacity: .3;
+      caption {
+         border-bottom: 1px solid #808080;
+      }
+      .mx-tbody, .mx-thead {
+         display: none;
       }
    }
 }
