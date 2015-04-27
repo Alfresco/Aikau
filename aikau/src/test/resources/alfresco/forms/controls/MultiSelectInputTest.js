@@ -150,11 +150,12 @@ define([
                .end()
 
             .getLogEntries({
+                  type: "PUBLISH",
                   topic: "FORM_POST",
                   pos: "last"
                })
                .then(function(payload) {
-                  assert.isDefined(payload, "Could not find form submission");
+                  assert.isNotNull(payload, "Could not find form submission");
                   if (payload) {
                      assert.deepPropertyVal(payload, "tags.0.name", "tag1", "Failed to submit tag1 name");
                      assert.deepPropertyVal(payload, "tags.0.value", "workspace://SpacesStore/06bd4708-8998-47be-a4ea-0f418bc7bb38", "Failed to submit tag1 value");
@@ -198,12 +199,17 @@ define([
                .click()
                .end()
 
+            .findByCssSelector("#DIALOG_WITH_MULTISELECT .footer .confirmationButton .dijitButtonNode")
+               .click()
+               .end()
+
             .getLogEntries({
+                  type: "PUBLISH",
                   topic: "DIALOG_POST",
                   pos: "last"
                })
                .then(function(payload) {
-                  assert.isDefined(payload, "Could not find dialog submission");
+                  assert.isNotNull(payload, "Could not find dialog submission");
                   if (payload) {
                      assert.deepPropertyVal(payload, "tags.0.name", "tag2", "Failed to submit tag2 name from dialog");
                      assert.deepPropertyVal(payload, "tags.0.value", "workspace://SpacesStore/84a27335-6008-4ddc-8a27-724225bbed3d", "Failed to submit tag2 value from dialog");
