@@ -80,14 +80,12 @@
       background: @list-background-color;
       box-shadow: @standard-box-shadow;
       display: none;
-      left: -1px;
       list-style: none;
       margin: 0;
       overflow: hidden;
       padding: 0;
       position: absolute;
-      right: -1px;
-      top: 100%;
+      z-index: 1000;
       > * {
          border: solid @standard-border-color;
          border-width: 1px 1px 0;
@@ -98,78 +96,76 @@
          text-overflow: ellipsis;
          white-space: nowrap;
       }
-   }
-   &__result-loading, &__result-error, &__result-no-results {
-      border-width: 1px;
-      display: none;
-   }
-   &__result-no-results {
-      color: @de-emphasized-font-color;
-   }
-   &__result-error {
-      color: #c00;
-      font-family: @bold-font;
-      font-weight: 700;
-      white-space: normal;
-   }
-   &__result {
-      border-top-color: #ccc;
-      cursor: pointer;
-      &__highlighted-label {
+      &__loading-message, &__error-message, &__no-results-message {
+         border-width: 1px;
+         display: none;
+      }
+      &__no-results-message {
+         color: @de-emphasized-font-color;
+      }
+      &__error-message {
+         color: #c00;
          font-family: @bold-font;
          font-weight: 700;
-         text-decoration: underline;
+         white-space: normal;
       }
-      &:first-child {
-         border-top-color: @standard-border-color;
+      &__result {
+         border-top-color: #ccc;
+         cursor: pointer;
+         &__highlighted-label {
+            font-family: @bold-font;
+            font-weight: 700;
+            text-decoration: underline;
+         }
+         &:first-child {
+            border-top-color: @standard-border-color;
+         }
+         &:last-child {
+            border-bottom-width: 1px;
+         }
+         &--focused {
+            background: #06a;
+            color: @highlighted-font-color;
+         }
+         &--already-chosen {
+            background: @list-background-color;
+            color: @de-emphasized-font-color;
+            cursor: default;
+         }
       }
-      &:last-child {
-         border-bottom-width: 1px;
+      &--visible {
+         display: block;
       }
-      &--focused {
-         background: #06a;
-         color: @highlighted-font-color;
+      &--error {
+         .alfresco-forms-controls-MultiSelect {
+            &__results__error-message {
+               border-color: #c00;
+               display: block;
+            }
+         }
       }
-      &--already-chosen {
-         background: @list-background-color;
-         color: @de-emphasized-font-color;
-         cursor: default;
+      &--loading {
+         .alfresco-forms-controls-MultiSelect {
+            &__results__loading-message {
+               display: block;
+            }
+         }
       }
+      &--empty {
+         .alfresco-forms-controls-MultiSelect {
+            &__results__no-results-message {
+               display: block;
+            }
+         }
+      }
+   }
+   &--has-error {
+      border-color: #c00;
+      outline: 1px solid #faa;
    }
    &--focused {
       border-color: #09c;
       outline: 1px solid #0cf;
-   }
-   &--show-results {
-      .alfresco-forms-controls-MultiSelect {
-         &__results {
-            display: block;
-         }
-      }
-   }
-   &--show-error {
-      border-color: #c00;
-      outline: 1px solid #faa;
-      .alfresco-forms-controls-MultiSelect {
-         &__result-error {
-            border-color: #c00;
-            display: block;
-         }
-      }
-   }
-   &--show-loading {
-      .alfresco-forms-controls-MultiSelect {
-         &__result-loading {
-            display: block;
-         }
-      }
-   }
-   &--show-empty {
-      .alfresco-forms-controls-MultiSelect {
-         &__result-no-results {
-            display: block;
-         }
-      }
    }
 }
 

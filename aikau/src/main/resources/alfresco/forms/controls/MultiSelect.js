@@ -58,6 +58,7 @@ define([
       "dojo/_base/lang",
       "dojo/Deferred",
       "dojo/dom-construct",
+      "dojo/dom-geometry",
       "dojo/dom-style",
       "dojo/dom-class",
       "dojo/keys",
@@ -65,7 +66,8 @@ define([
       "dojo/when",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(Core, ObjectTypeUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, Deferred, domConstruct, domStyle, domClass, keys, on, when, template) {
+   function(Core, ObjectTypeUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, Deferred,
+      domConstruct, domGeom, domStyle, domClass, keys, on, when, template) {
 
       return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core], {
 
@@ -116,14 +118,6 @@ define([
          i18nRequirements: [{
             i18nFile: "./i18n/MultiSelect.properties"
          }],
-
-         /**
-          * The localised loading message used by the template
-          *
-          * @instance
-          * @type {string}
-          */
-         loadingMessage: null,
 
          /**
           * The root class of this widget
@@ -217,6 +211,14 @@ define([
          _newSearchTimeoutPointer: 0,
 
          /**
+          * Node pointers for dynamic elements created by this widget (and
+          * not in the template)
+          *
+          * @type {object}
+          */
+         _nodes: null,
+
+         /**
           * Collection of listeners for the results dropdown to help track and
           * remove them when no longer needed
           *
@@ -284,6 +286,7 @@ define([
          buildRendering: function alfresco_forms_controls_MultiSelect__buildRendering() {
             this.inherited(arguments);
             this.width && domStyle.set(this.domNode, "width", this.width);
+            this._createDropdown();
          },
 
          /**
@@ -296,6 +299,7 @@ define([
             this._choices = [];
             this._choiceListeners = {};
             this._itemsToUpdateFromStore = [];
+            this._nodes = {};
             this._results = [];
             this._resultListeners = [];
             this._storeItems = {};
@@ -311,17 +315,6 @@ define([
             this.inherited(arguments);
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
             this.value = [];
-         },
-
-         /**
-          * Widget instantiated and properties mixed, but not been started
-          *
-          * @instance
-          * @override
-          */
-         postMixInProperties: function() {
-            this.inherited(arguments);
-            this.loadingMessage = this.message("multiselect.loading");
          },
 
          /**
@@ -475,6 +468,40 @@ define([
          },
 
          /**
+          * Create this control's dropdown element, which must be at page level to
+          * ensure its stacking context permits proper display even within dialogs.
+          *
+          * @instance
+          */
+         _createDropdown: function alfresco_forms_controls_MultiSelect___createDropdown() {
+            var dropdown = domConstruct.create("ul", {
+                  className: this.rootClass + "__results",
+                  id: this.id + "_RESULTS"
+               }, document.body),
+               loading = domConstruct.create("li", {
+                  className: this.rootClass + "__results__loading-message",
+                  innerHTML: this.message("multiselect.loading")
+               }, dropdown),
+               noResults = domConstruct.create("li", {
+                  className: this.rootClass + "__results__no-results-message"
+               }, dropdown),
+               errorMessage = domConstruct.create("li", {
+                  className: this.rootClass + "__results__error-message"
+               }, dropdown);
+            this.own({
+               remove: function() {
+                  domConstruct.destroy(dropdown);
+               }
+            });
+            lang.mixin(this._nodes, {
+               resultsDropdown: dropdown,
+               loadingMessage: loading,
+               noResultsMessage: noResults,
+               errorMessage: errorMessage
+            });
+         },
+
+         /**
           * Create a document fragment of a label, highlighted with the current search term
           *
           * @instance
@@ -544,8 +571,8 @@ define([
             while ((resultListener = this._resultListeners.pop())) {
                resultListener.remove();
             }
-            while (this.resultsDropdown.childNodes.length > 3) {
-               this.resultsDropdown.removeChild(this.resultsDropdown.lastChild);
+            while (this._nodes.resultsDropdown.childNodes.length > 3) {
+               this._nodes.resultsDropdown.removeChild(this._nodes.resultsDropdown.lastChild);
             }
             this._focusedResult = null;
          },
@@ -582,8 +609,8 @@ define([
           */
          _gotoNextResult: function alfresco_forms_controls_MultiSelect___gotoNextResult(reverseCommand) {
             var results = this._results.slice(0), // Clone the array, so we can reverse if necessary
-               focusedClass = this.rootClass + "__result--focused",
-               alreadyChosenClass = this.rootClass + "__result--already-chosen",
+               focusedClass = this.rootClass + "__results__result--focused",
+               alreadyChosenClass = this.rootClass + "__results__result--already-chosen",
                focusNextResult = false,
                resultToFocus;
             if (reverseCommand) {
@@ -654,7 +681,7 @@ define([
             this._updateResultsDropdown();
             if (!responseItems.length) {
                this._showEmptyMessage();
-            } else {
+            } else if (!this._focusedResult) {
                this._gotoNextResult();
             }
             this._showResultsDropdown();
@@ -666,7 +693,7 @@ define([
           * @instance
           */
          _hideEmptyMessage: function alfresco_forms_controls_MultiSelect___hideEmptyMessage() {
-            domClass.remove(this.domNode, this.rootClass + "--show-empty");
+            domClass.remove(this._nodes.resultsDropdown, this.rootClass + "__results--empty");
          },
 
          /**
@@ -675,7 +702,7 @@ define([
           * @instance
           */
          _hideErrorMessage: function alfresco_forms_controls_MultiSelect___hideError() {
-            domClass.remove(this.domNode, this.rootClass + "--show-error");
+            domClass.remove(this._nodes.resultsDropdown, this.rootClass + "__results--error");
          },
 
          /**
@@ -684,7 +711,7 @@ define([
           * @instance
           */
          _hideLoadingMessage: function alfresco_forms_controls_MultiSelect___hideLoading() {
-            domClass.remove(this.domNode, this.rootClass + "--show-loading");
+            domClass.remove(this._nodes.resultsDropdown, this.rootClass + "__results--loading");
             clearTimeout(this._showLoadingTimeoutPointer);
          },
 
@@ -694,7 +721,7 @@ define([
           * @instance
           */
          _hideResultsDropdown: function alfresco_forms_controls_MultiSelect___hideResults() {
-            domClass.remove(this.domNode, this.rootClass + "--show-results");
+            domClass.remove(this._nodes.resultsDropdown, this.rootClass + "__results--visible");
             this._hideLoadingMessage();
             this._hideErrorMessage();
          },
@@ -774,7 +801,9 @@ define([
             }
             if (this._results.length && !this._resultsDropdownIsVisible()) {
                this._showResultsDropdown();
-               this._gotoNextResult();
+               if (!this._focusedResult) {
+                  this._gotoNextResult();
+               }
             } else {
                this._startSearch(this.searchBox.value);
             }
@@ -789,7 +818,9 @@ define([
             domClass.add(this.domNode, this.rootClass + "--focused");
             if (this._results.length) {
                this._showResultsDropdown();
-               this._gotoNextResult();
+               if (!this._focusedResult) {
+                  this._gotoNextResult();
+               }
             } else {
                this._startSearch(this.searchBox.value);
             }
@@ -812,8 +843,8 @@ define([
           * @param    {object} evt Dojo-normalised event object
           */
          _onResultMouseover: function alfresco_forms_controls_MultiSelect___onResultMouseover(evt) {
-            var focusedClass = this.rootClass + "__result--focused",
-               alreadyChosenClass = this.rootClass + "__result--already-chosen",
+            var focusedClass = this.rootClass + "__results__result--focused",
+               alreadyChosenClass = this.rootClass + "__results__result--already-chosen",
                hoveredResultNode = evt.currentTarget,
                hoveredResultAlreadyChosen = domClass.contains(hoveredResultNode, alreadyChosenClass);
             this._focusedResult = null;
@@ -947,6 +978,21 @@ define([
          },
 
          /**
+          * Position the dropdown appropriately
+          *
+          * @instance
+          */
+         _positionDropdown: function alfresco_forms_controls_MultiSelect___positionDropdown() {
+            var includeScroll = true,
+               widgetPos = domGeom.position(this.domNode, includeScroll);
+            domStyle.set(this._nodes.resultsDropdown, {
+               width: widgetPos.w + "px",
+               left: widgetPos.x + "px",
+               top: (widgetPos.y + widgetPos.h - 1) + "px"
+            });
+         },
+
+         /**
           * Reset the search box (i.e. empty it)
           *
           * @instance
@@ -1021,12 +1067,12 @@ define([
           * @instance
           */
          _showEmptyMessage: function alfresco_forms_controls_MultiSelect___showEmptyMessage() {
-            while (this.noResultsMessage.hasChildNodes()) {
-               this.noResultsMessage.removeChild(this.noResultsMessage.firstChild);
+            while (this._nodes.noResultsMessage.hasChildNodes()) {
+               this._nodes.noResultsMessage.removeChild(this._nodes.noResultsMessage.firstChild);
             }
             var emptyMessage = this.message("multiselect.noresults", this._currentSearchValue);
-            this.noResultsMessage.appendChild(document.createTextNode(emptyMessage));
-            domClass.add(this.domNode, this.rootClass + "--show-empty");
+            this._nodes.noResultsMessage.appendChild(document.createTextNode(emptyMessage));
+            domClass.add(this._nodes.resultsDropdown, this.rootClass + "__results--empty");
             this._hideErrorMessage();
             this._hideLoadingMessage();
             this._showResultsDropdown();
@@ -1041,13 +1087,14 @@ define([
          _showErrorMessage: function alfresco_forms_controls_MultiSelect___showError(message) {
 
             // Remove old message and insert new one
-            while (this.errorMessage.hasChildNodes()) {
-               this.errorMessage.removeChild(this.errorMessage.firstChild);
+            while (this._nodes.errorMessage.hasChildNodes()) {
+               this._nodes.errorMessage.removeChild(this._nodes.errorMessage.firstChild);
             }
-            this.errorMessage.appendChild(document.createTextNode(message));
+            this._nodes.errorMessage.appendChild(document.createTextNode(message));
 
             // Show the error (and hide any loading indicator)
-            domClass.add(this.domNode, this.rootClass + "--show-error");
+            domClass.add(this.domNode, this.rootClass + "--has-error");
+            domClass.add(this._nodes.resultsDropdown, this.rootClass + "__results--error");
             this._hideEmptyMessage();
             this._hideLoadingMessage();
             this._showResultsDropdown();
@@ -1059,7 +1106,7 @@ define([
           * @instance
           */
          _showLoadingMessage: function alfresco_forms_controls_MultiSelect___showLoading() {
-            domClass.add(this.domNode, this.rootClass + "--show-loading");
+            domClass.add(this._nodes.resultsDropdown, this.rootClass + "__results--loading");
             this._hideEmptyMessage();
             this._hideErrorMessage();
             this._showResultsDropdown();
@@ -1071,7 +1118,8 @@ define([
           * @instance
           */
          _showResultsDropdown: function alfresco_forms_controls_MultiSelect___showResults() {
-            domClass.add(this.domNode, this.rootClass + "--show-results");
+            this._positionDropdown();
+            domClass.add(this._nodes.resultsDropdown, this.rootClass + "__results--visible");
          },
 
          /**
@@ -1121,8 +1169,8 @@ define([
             this._focusedResult = null;
 
             // If we have too many current results displaying, remove the excess nodes
-            while (this.resultsDropdown.childNodes.length > this._results.length + 3) {
-               this.resultsDropdown.removeChild(this.resultsDropdown.lastChild);
+            while (this._nodes.resultsDropdown.childNodes.length > this._results.length + 3) {
+               this._nodes.resultsDropdown.removeChild(this._nodes.resultsDropdown.lastChild);
             }
 
             // Update or add as necessary
@@ -1132,15 +1180,15 @@ define([
                var resultIsChosen = array.some(this._choices, function(nextChoice) {
                      return nextChoice.value === nextResult.value;
                   }),
-                  itemNode = this.resultsDropdown.childNodes[index + 3],
+                  itemNode = this._nodes.resultsDropdown.childNodes[index + 3],
                   clickListener,
                   mouseoverListener;
 
                // Construct the item if not already present
                if (!itemNode) {
                   itemNode = domConstruct.create("li", {
-                     "className": this.rootClass + "__result"
-                  }, this.resultsDropdown);
+                     "className": this.rootClass + "__results__result"
+                  }, this._nodes.resultsDropdown);
                }
 
                // Update the value if necessary
@@ -1167,8 +1215,8 @@ define([
                nextResult.domNode = itemNode;
 
                // Mark item as chosen, if appropriate and remove focused indicator
-               domClass[resultIsChosen ? "add" : "remove"](itemNode, this.rootClass + "__result--already-chosen");
-               domClass.remove(itemNode, this.rootClass + "__result--focused");
+               domClass[resultIsChosen ? "add" : "remove"](itemNode, this.rootClass + "__results__result--already-chosen");
+               domClass.remove(itemNode, this.rootClass + "__results__result--focused");
 
             }, this);
          },
@@ -1227,7 +1275,7 @@ define([
          _unfocusResults: function alfresco_forms_controls_MultiSelect___unfocusResults() {
             this._focusedResult = null;
             array.forEach(this._results, function(nextResult) {
-               domClass.remove(nextResult.domNode, this.rootClass + "__result--focused");
+               domClass.remove(nextResult.domNode, this.rootClass + "__results__result--focused");
             }, this);
          }
       });
