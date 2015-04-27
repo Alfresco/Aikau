@@ -175,7 +175,35 @@ define(["intern/dojo/node!fs",
                   fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary");
                });
          };
-         
+         command.session.getLogEntries = function(filter) {
+            filter = filter || {};
+            var selectorBits = [".alfresco_logging_DebugLog__entry"];
+            filter.type && selectorBits.push("[data-aikau-log-type=\"" + filter.type + "\"]"); // Type is "..."
+            filter.topic && selectorBits.push("[data-aikau-log-topic$=\"" + filter.topic + "\"]"); // Topic ends with "..."
+            filter.object && selectorBits.push("[data-aikau-log-object=\"" + filter.object + "\"]"); // Object is "..."
+            if (filter.debug) {
+               console.log("Log entry selector: \"" + selectorBits.join("") + "\"");
+            }
+            return browser.executeAsync(function(entriesSelector, pos, callback) {
+               var entries = document.querySelectorAll(entriesSelector),
+                  dataObjs = [],
+                  entry,
+                  dataAttr;
+               for (var i = 0, j = entries.length; i < j; i++) {
+                  entry = entries[i];
+                  dataAttr = entry.getAttribute("data-aikau-log-data");
+                  dataObjs.push(JSON.parse(dataAttr));
+               }
+               if (pos === "first") {
+                  callback(dataObjs.shift());
+               } else if (pos === "last") {
+                  callback(dataObjs.pop());
+               } else {
+                  callback(dataObjs);
+               }
+            }, [selectorBits.join(""), filter.pos]);
+         };
+
          return command;
       },
 

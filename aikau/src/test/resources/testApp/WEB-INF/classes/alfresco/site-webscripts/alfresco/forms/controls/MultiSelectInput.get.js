@@ -11,9 +11,45 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/TagService"
+      "alfresco/services/TagService",
+      "alfresco/services/DialogService"
    ],
    widgets: [
+      {
+         id: "CREATE_FORM_DIALOG",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Create dialog with MultiSelect",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "DIALOG_WITH_MULTISELECT",
+               dialogTitle: "Dialog With MultiSelect",
+               formSubmissionTopic: "DIALOG_POST",
+               widgets: [
+                  {
+                     id: "MULTISELECT_IN_DIALOG",
+                     name: "alfresco/forms/controls/MultiSelectInput",
+                     config: {
+                        label: "Tags",
+                        name: "tags",
+                        width: "400px",
+                        optionsConfig: {
+                           queryAttribute: "name",
+                           valueAttribute: "nodeRef",
+                           labelAttribute: "name",
+                           pubSubScope: "DIALOG_",
+                           publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",
+                           publishPayload: {
+                              resultsProperty: "response.data.items"
+                           },
+                           searchStartsWith: false
+                        }
+                     }
+                  }
+               ]
+            }
+         }
+      },
       {
          name: "alfresco/buttons/AlfButton",
          id: "FOCUS_HELPER_BUTTON",
@@ -60,7 +96,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/MultiSelectInputMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
