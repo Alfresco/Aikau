@@ -241,7 +241,9 @@ define(["dojo/_base/declare",
          // jshint maxcomplexity:false,unused:false,maxstatements:false
          var totalRecords = lang.getObject(this.totalResultsProperty, false, payload);
          var startIndex = lang.getObject(this.startIndexProperty, false, payload);
-         if (payload && totalRecords !== null && startIndex !== null)
+         if (payload && 
+             (totalRecords || totalRecords === 0) && 
+             (startIndex || startIndex === 0))
          {
             if (totalRecords === 0)
             {
