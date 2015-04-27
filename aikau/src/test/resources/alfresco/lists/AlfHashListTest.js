@@ -46,6 +46,13 @@ define(["intern!object",
             });
       },
 
+      "Check that default view payload is published correctly": function() {
+         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_SELECT_VIEW", "selected", "true"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "The default view was published incorrectly");
+            });
+      },
+
       "Set hash var that won't trigger reload - type 1": function() {
          return browser.findByCssSelector("#SET_HASH1_label")
             .click()

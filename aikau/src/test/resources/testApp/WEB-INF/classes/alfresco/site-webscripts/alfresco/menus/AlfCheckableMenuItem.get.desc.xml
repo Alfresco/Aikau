@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>AlfCheckableMenuItem Test</shortname>
-  <description>This WebScript defines the AlfCheckableMenuItem page test</description>
+  <shortname>AlfCheckableMenuItem</shortname>
+  <description>A page containing a popup menu containing checkable menu items that are function as individual toggles and as a group (where only one item can be checked at a time)</description>
   <family>aikau-unit-tests</family>
   <url>/AlfCheckableMenuItem</url>
 </webscript>

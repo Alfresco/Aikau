@@ -456,7 +456,8 @@ define(["dojo/_base/declare",
 
          this.alfPublish(this.viewSelectionTopic, {
             value: this._currentlySelectedView,
-            preference: this.viewPreferenceProperty
+            preference: this.viewPreferenceProperty,
+            selected: true
          });
 
          if (this.waitForPageWidgets === true)
