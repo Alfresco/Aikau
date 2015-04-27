@@ -181,6 +181,9 @@ define(["intern/dojo/node!fs",
             filter.type && selectorBits.push("[data-aikau-log-type=\"" + filter.type + "\"]"); // Type is "..."
             filter.topic && selectorBits.push("[data-aikau-log-topic$=\"" + filter.topic + "\"]"); // Topic ends with "..."
             filter.object && selectorBits.push("[data-aikau-log-object=\"" + filter.object + "\"]"); // Object is "..."
+            if (filter.debug) {
+               console.log("Log entry selector: \"" + selectorBits.join("") + "\"");
+            }
             return browser.executeAsync(function(entriesSelector, pos, callback) {
                var entries = document.querySelectorAll(entriesSelector),
                   dataObjs = [],
