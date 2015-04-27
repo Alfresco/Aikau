@@ -856,7 +856,7 @@ define([
           * @param {object} evt Dojo-normalised event object
           */
          _onSearchKeypress: function alfresco_forms_controls_MultiSelect___onSearchKeypress(evt) {
-            /*jshint maxcomplexity:21*/
+            /*jshint maxcomplexity:false*/
             var cursorPosBeforeKeypress = this._getCursorPositionWithinTextbox(),
                modifiersPressed = evt.ctrlKey || evt.altKey || evt.shiftKey || evt.metaKey;
             if (!modifiersPressed) {
@@ -892,7 +892,7 @@ define([
                      evt.preventDefault();
                      break;
                   case keys.LEFT_ARROW:
-                     if (!cursorPosBeforeKeypress) {
+                     if (cursorPosBeforeKeypress === 0) {
                         this._selectChoice(-1);
                      }
                      break;
@@ -902,14 +902,18 @@ define([
                         evt.preventDefault();
                      }
                      break;
-                  case keys.DELETE:
                   case keys.BACKSPACE:
+                     if (cursorPosBeforeKeypress === 0 && this._choices.length) {
+                        this._selectChoice(-1);
+                        this._deleteSelectedChoice();
+                        evt.preventDefault();
+                        break;
+                     }
+                     /* falls through */
+                  case keys.DELETE:
                      if (this._selectedChoice) {
                         this._deleteSelectedChoice();
                         evt.preventDefault();
-                     } else if (!cursorPosBeforeKeypress && this._choices.length) {
-                        this._selectChoice(-1);
-                        this._deleteSelectedChoice();
                      }
                      break;
                   default:
