@@ -170,7 +170,7 @@ define([
           * Collection of choice objects
           *
           * @instance
-          * @type {Choice[]}
+          * @type {module:alfresco/forms/controls/MultiSelect#Choice[]}
           */
          _choices: null,
 
@@ -178,7 +178,7 @@ define([
           * The currently focused result item
           *
           * @instance
-          * @type {Result}
+          * @type {module:alfresco/forms/controls/MultiSelect#Result}
           */
          _focusedResult: null,
 
@@ -246,7 +246,7 @@ define([
           * The currently selected choice object
           *
           * @instance
-          * @type {Choice}
+          * @type {module:alfresco/forms/controls/MultiSelect#Choice}
           */
          _selectedChoice: null,
 
