@@ -53,7 +53,8 @@ define(["alfresco/core/Core",
             "author": {
                "username": "admin",
                "firstName": "Administrator",
-               "lastName": ""
+               "lastName": "",
+               "displayName": "Administrator"
             },
             "createdOn": "Apr 17 2015 14:41:59 GMT+0100 (BST)",
             "modifiedOn": "Apr 17 2015 14:41:59 GMT+0100 (BST)",
@@ -78,7 +79,7 @@ define(["alfresco/core/Core",
                "edit": true,
                "delete": true
             },
-            "total": 0, // [Num comments]
+            "totalRecords": 0, // [Num comments]
             "pageSize": 10,
             "startIndex": 0,
             "itemCount": 0, // [Num comments]
@@ -93,9 +94,11 @@ define(["alfresco/core/Core",
           */
          constructor: function alfresco_testing_mockservices_CommentsListMockService__constructor(args) {
             declare.safeMixin(this, args);
-            this._comments = [];
-            this.alfSubscribe("ALF_CRUD_GET_ALL", lang.hitch(this, this._getComments));
+            this._comments = ["one","two","three","four","five","six"];
+            this.alfSubscribe("ALF_GET_COMMENTS", lang.hitch(this, this._getComments));
             this.alfSubscribe("ALF_CRUD_CREATE", lang.hitch(this, this._createComment));
+            this.alfSubscribe("ALF_CRUD_UPDATE", lang.hitch(this, this._updateComment));
+            this.alfSubscribe("ALF_CRUD_DELETE", lang.hitch(this, this._deleteComment));
          },
 
          /**
@@ -117,18 +120,47 @@ define(["alfresco/core/Core",
           * @instance
           * @returns  {object} The response
           */
-         _buildGetResponse: function alfresco_testing_mockservices_CommentsListMockService___buildGetResponse() {
+         _buildGetResponse: function alfresco_testing_mockservices_CommentsListMockService___buildGetResponse(page, pageSize, ascending) {
             var response = lang.mixin({}, this._responseTemplate, {
                items: []
             });
-            array.forEach(this._comments, function(nextComment) {
-               var commentObj = lang.mixin({}, this._commentTemplate, {
-                  content: nextComment
-               });
-               response.total++;
-               response.itemCount++;
-               response.items.push(commentObj);
-            }, this);
+
+            var startIndex = (page - 1) * pageSize;
+            var endIndex = startIndex + pageSize;
+            var commentObj;
+            var i;
+            if (ascending === true)
+            {
+               for (i=startIndex; i < endIndex; i++)
+               {
+                  if (this._comments[i])
+                  {
+                     commentObj = lang.mixin({}, this._commentTemplate, {
+                        content: this._comments[i]
+                     });
+                     response.itemCount++;
+                     response.items.push(commentObj);
+                  }
+               }
+            }
+            else
+            {
+               // NOTE: These indexes are going to be wrong for multiple pages, this isn't
+               //       hugely important for the mock service, but is something to be aware of
+               for (i=endIndex-1; i >= startIndex; i--)
+               {
+                  if (this._comments[i])
+                  {
+                     commentObj = lang.mixin({}, this._commentTemplate, {
+                        content: this._comments[i]
+                     });
+                     response.itemCount++;
+                     response.items.push(commentObj);
+                  }
+               }
+            }
+            response.startIndex = startIndex;
+            response.totalRecords = this._comments.length;
             return response;
          },
 
@@ -144,16 +176,38 @@ define(["alfresco/core/Core",
          },
 
          /**
+          * Handle comment updating
+          *
+          * @instance
+          * @param    {object} payload The publish payload
+          */
+         _updateComment: function alfresco_testing_mockservices_CommentsListMockService___updateComment(payload) {
+            // NOTE: This intentionally only updates the first comment, it's only a mock service after all, 
+            //       make sure that the test only edits the first comment :)
+            this._comments[0] = payload.content;
+            this.alfPublish(payload.pubSubScope + "ALF_DOCLIST_RELOAD_DATA");
+         },
+
+         /**
+          * Handle comment deleting
+          *
+          * @instance
+          * @param    {object} payload The publish payload
+          */
+         _deleteComment: function alfresco_testing_mockservices_CommentsListMockService___deleteComment(payload) {
+            // NOTE: This intentionally only deletes the first comment
+            this._comments.splice(0, 1);
+            this.alfPublish(payload.pubSubScope + "ALF_DOCLIST_RELOAD_DATA");
+         },
+
+         /**
           * Handle a get request
           *
           * @instance
           * @param    {object} payload The payload for the get request
           */
          _getComments: function alfresco_testing_mockservices_CommentsListMockService___getComments(payload) {
-            this.alfPublish(payload.alfResponseTopic + "_SUCCESS", {
-               requestConfig: payload,
-               response: this._buildGetResponse()
-            });
+            this.alfPublish(payload.alfResponseTopic + "_SUCCESS", this._buildGetResponse(payload.page, payload.pageSize, payload.sortAscending));
          }
 
          // POST

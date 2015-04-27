@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,7 +18,12 @@
  */
 
 /**
- * This is a BETA quality widget and not guaranteed for production use. 
+ * This renderer should be used to show an individual comment that can be switched into an edit mode that
+ * shows a [TinyMCE editor]{@link module:alfresco/forms/controls/TinyMCE} for updating the comment. Note that
+ * the widget does not take responsibility for which users have the ability to toggle between read and edit 
+ * modes. It does not provide the controls to switch modes so the other controls for toggling mode should be
+ * rendered based on the current user permissions. Examples of this approach can be found in the 
+ * [CommentsList renderer]{@link module:alfresco/renderers/CommentsList}.
  *
  * @module alfresco/renderers/EditableComment
  * @extends external:dijit/_WidgetBase
@@ -253,8 +258,6 @@ define(["dojo/_base/declare",
       postParam: "content",
 
       /**
-       * TODO: Localize!!!
-       * 
        * @instance
        * @type {string}
        * @default "Save"

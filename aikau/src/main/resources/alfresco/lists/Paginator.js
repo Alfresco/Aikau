@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        * @type {number} 
        * @default null
        */
-      totalDocuments: null,
+      totalRecords: null,
       
       /**
        * Used to keep track of the total number of pages in the current data set
@@ -213,6 +213,24 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * The property in the response that indicates the starting index of overall data to request.
+       *
+       * @instance
+       * @type {string}
+       * @default "startIndex"
+       */
+      startIndexProperty: "startIndex",
+
+      /**
+       * The property in the response that indicates the total number of results available.
+       *
+       * @instance
+       * @type {string}
+       * @default "totalRecords"
+       */
+      totalResultsProperty: "totalRecords",
+
+      /**
        * This function processes the loaded document data to set the appropriate data in the paginator
        * widgets.
        *
@@ -221,21 +239,47 @@ define(["dojo/_base/declare",
        */
       processLoadedDocuments: function alfresco_lists_Paginator__processLoadedDocuments(payload) {
          // jshint maxcomplexity:false,unused:false,maxstatements:false
-         if (payload && payload.totalDocuments !== null && payload.startIndex !== null)
+         var totalRecords = lang.getObject(this.totalResultsProperty, false, payload);
+         var startIndex = lang.getObject(this.startIndexProperty, false, payload);
+         if (payload && 
+             (totalRecords || totalRecords === 0) && 
+             (startIndex || startIndex === 0))
          {
-            if (payload.totalDocuments === 0)
+            if (totalRecords === 0)
             {
                // Hide pagination controls when there are no results...
-               domClass.add(this.domNode, "hidden");
+               // domClass.add(this.domNode, "hidden");
+               if (this.pageSelector)
+               {
+                  domClass.add(this.pageSelector.domNode, "hidden");
+               }
+               domClass.add(this.pageBack.domNode, "hidden");
+               domClass.add(this.pageMarker.domNode, "hidden");
+               domClass.add(this.pageForward.domNode, "hidden");
+               if (this.resultsPerPageGroup)
+               {
+                  domClass.add(this.resultsPerPageGroup.domNode, "hidden");
+               }
             }
             else
             {
                // Make sure the pagination controls aren't hidden...
-               domClass.remove(this.domNode, "hidden");
+               // domClass.remove(this.domNode, "hidden");
+               if (this.pageSelector)
+               {
+                  domClass.remove(this.pageSelector.domNode, "hidden");
+               }
+               domClass.remove(this.pageBack.domNode, "hidden");
+               domClass.remove(this.pageMarker.domNode, "hidden");
+               domClass.remove(this.pageForward.domNode, "hidden");
+               if (this.resultsPerPageGroup)
+               {
+                  domClass.remove(this.resultsPerPageGroup.domNode, "hidden");
+               }
                
-               this.totalDocuments = payload.totalDocuments;
-               this.totalPages = Math.ceil(payload.totalDocuments/this.documentsPerPage);
-               this.currentPage = ((payload.startIndex - (payload.startIndex % this.documentsPerPage))/this.documentsPerPage) + 1;
+               this.totalRecords = totalRecords;
+               this.totalPages = Math.ceil(totalRecords/this.documentsPerPage);
+               this.currentPage = ((startIndex - (startIndex % this.documentsPerPage))/this.documentsPerPage) + 1;
 
                // Update the page back action to disable if on the first page...
                if (this.pageBack)
@@ -283,10 +327,10 @@ define(["dojo/_base/declare",
                      else
                      {
                         // ...for the last page just count up to the last document
-                        pageEnd = this.totalDocuments;
+                        pageEnd = this.totalRecords;
                      }
                      
-                     var label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalDocuments});
+                     var label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords});
                      var menuItem = new AlfCheckableMenuItem({
                         label: label,
                         value: i+1,
@@ -410,6 +454,30 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Since this widget is an implementation of an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} it is 
+       * perfectly reasonable to add additional menu widgets (such as [menu items]{@link module:alfresco/menus/AlfMenuBarItem}
+       * or [drop-down menus]{@link module:alfresco/menus/AlfMenuBarPopup}) before the main pagination controls. This
+       * can be configured to be an array of such menu widgets to be displayed.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      widgetsBefore: null,
+
+      /**
+       * Since this widget is an implementation of an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} it is 
+       * perfectly reasonable to add additional menu widgets (such as [menu items]{@link module:alfresco/menus/AlfMenuBarItem}
+       * or [drop-down menus]{@link module:alfresco/menus/AlfMenuBarPopup}) after the main pagination controls. This
+       * can be configured to be an array of such menu widgets to be displayed.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      widgetsAfter: null,
+
+      /**
        * <p>Calls the [createPageSizeMenuItem function]{@link module:alfresco/lists/Paginator#createPageSizeMenuItem} 
        * for each item in the [pageSizes array]{@link module:alfresco/lists/Paginator#pageSizes} to build the page
        * size selection menu. If a [pageSizes array]{@link module:alfresco/lists/Paginator#pageSizes} has not been
@@ -496,6 +564,10 @@ define(["dojo/_base/declare",
                }
             });
          }
+
+         // Prepend and append any widgets requested to go before or after the pagination controls...
+         this.widgets = (this.widgetsBefore || []).concat(this.widgets, (this.widgetsAfter || []));
+
          this.inherited(arguments);
       },
       
@@ -514,13 +586,15 @@ define(["dojo/_base/declare",
          // postCreate function...
          if (this.compactMode === false)
          {
-            var popupChildren = this._menuBar.getChildren()[0].popup.getChildren();
+            this.pageSelector = registry.byId(this.id + "_PAGE_SELECTOR");
+            var popupChildren = this.pageSelector.popup.getChildren();
             this.pageSelectorGroup = popupChildren[popupChildren.length-1];
          }
          
          this.pageBack = registry.byId(this.id + "_PAGE_BACK");
          this.pageForward = registry.byId(this.id + "_PAGE_FORWARD");
          this.pageMarker = registry.byId(this.id + "_PAGE_MARKER");
+         this.resultsPerPageGroup = registry.byId(this.id + "_RESULTS_PER_PAGE_SELECTOR");
 
          // Check to see if any document data was provided before widget instantiation completed and
          // if so process it with the now available widgets...

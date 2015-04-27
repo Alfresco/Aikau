@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
          // With the pagination items mapped to what the documentList expects
          this.alfPublish(this.documentsLoadedTopic, {
             documents: this._currentData.items,
-            totalDocuments: pagination.totalItems,
+            totalRecords: pagination.totalItems,
             startIndex: pagination.skipCount
          });
 
