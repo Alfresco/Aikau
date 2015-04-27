@@ -172,3 +172,11 @@
       }
    }
 }
+
+.alfresco-dialog-AlfDialog.dijitDialog {
+   .alfresco-forms-controls-MultiSelect {
+      &__search-box {
+         border: 0;
+      }
+   }
+}
