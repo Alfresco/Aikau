@@ -179,6 +179,11 @@ define(["dojo/_base/declare",
          {
             url = this.addQueryParameter(url, "page", payload.page);
          }
+         if (payload.page && payload.pageSize)
+         {
+            var startIndex = (payload.page - 1) * payload.pageSize;
+            url = this.addQueryParameter(url, "startIndex", startIndex);
+         }
          if (payload.dataFilters)
          {
             // TODO: iterate over filters and add each as a request parameter...

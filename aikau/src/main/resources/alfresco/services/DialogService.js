@@ -18,10 +18,91 @@
  */
 
 /**
- * This mixin is intended to be mixed into any buttons or menu items that require an action that creates a new
- * [dialog]{@link module:alfresco/dialogs/AlfDialog} that contains a [form]{@link module:alfresco/forms/Form}.
+ * <p>This service subscribes to [ALF_CREATE_FORM_DIALOG_REQUEST]{@link module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST}
+ * and [ALF_CREATE_DIALOG_REQUEST]{@link module:alfresco/services/DialogService~event:ALF_CREATE_DIALOG_REQUEST} topics 
+ * and should be used to manage [dialogs]{@link module:alfresco/dialogs/AlfDialog} displayed on Aikau pages.</p>
+ * <p>When creating a form dialog the value of the form will be published on the topic set by the <b>formSubmissionTopic</b> 
+ * attribute. You can include additional data in the published payload by using the <b>formSubmissionPayloadMixin</b> attribute.
+ * You only need to include the form controls in the <b>widgets</b> attribute - the underlying [form]{@link module:alfresco/forms/Form} 
+ * will be created automatically.</p>
+ * <p>When creating a normal dialog any buttons included in the dialog will have its payload updated to include a
+ * <b>dialogContent</b> attribute that will be an array containing all the root widgets that were created from the 
+ * <b>widgetsContent</b> attribute.</p>
+ * <p>It is strongly recommended that you include a <b>dialogId</b> attribute when requesting to create either type of dialog since
+ * it is used to help the service manage the dialogs. It is only possible to stack dialogs (e.g. display one dialog on top 
+ * of another) when the dialogs have different <b>dialogId</b> values. If another dialog with the same <b>dialogId</b> then any existing
+ * dialog with that same <b>dialogId</b> will be destroyed. This is done to ensure that the browser DOM does not become
+ * over populated with unusable elements</p>
  *
- * Examples of use include the create content menu items in the document library.
+ * @example <caption>Example button that requests a form dialog</caption>
+ * {
+ *    name: "alfresco/buttons/AlfButton",
+ *    config: {
+ *       label: "Display form dialog",
+ *       publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+ *       publishPayload: {
+ *          dialogId: "NAME_DIALOG",
+ *          dialogTitle: "User name",
+ *          dialogConfirmationButtonTitle: "Save",
+ *          dialogCancellationButtonTitle: "Quit",
+ *          formSubmissionTopic: "MY_CUSTOM_TOPIC",
+ *          formSubmissionPayloadMixin: {
+ *             extra: "bonus data"
+ *          },
+ *          widgets: [
+ *             {
+ *                name: "alfresco/forms/controls/TextBox",
+ *                config: {
+ *                   name: "name",
+ *                   label: "Name?"
+ *                   description: "Please enter your name"
+ *                }
+ *             }
+ *          ]
+ *       }
+ *    }
+ * }
+ *
+ * @example <caption>Example button that requests basic status dialog</caption>
+ * {
+ *    name: "alfresco/buttons/AlfButton",
+ *    config: {
+ *       label: "Alert",
+ *       publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+ *       publishPayload: {
+ *          dialogId: "ALERT_DIALOG",
+ *          dialogTitle: "Warning!",
+ *          textContent: "You have been warned"
+ *       }
+ *    }
+ * }
+ *
+ * @example <caption>Example button that requests a dialog with a custom widget model</caption>
+ * {
+ *    name: "alfresco/buttons/AlfButton",
+ *    config: {
+ *       label: "Show Logo",
+ *       publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+ *       publishPayload: {
+ *          dialogId: "LOGO_DIALOG",
+ *          dialogTitle: "A logo",
+ *          widgetsContent: [
+ *             {
+ *                name: "alfresco/logo/Logo"
+ *             }
+ *          ],
+ *          widgetsButtons: [
+ *             {
+ *                name: "alfresco/buttons/AlfButton",
+ *                config: {
+ *                   label: "Close dialog",
+ *                   publishTopic: "CUSTOM_TOPIC"
+ *                }
+ *             }
+ *          ]
+ *       }
+ *    }
+ * }
  *
  * @module alfresco/services/DialogService
  * @extends module:alfresco/core/Core
@@ -32,15 +113,38 @@
 /**
  * Create a dialog that contains a form
  *
- * @event ALF_CREATE_FORM_DIALOG_REQUEST
- * @property {onCreateDialogRequestPayload} payload
+ * @event module:alfresco/services/DialogService~ALF_CREATE_FORM_DIALOG_REQUEST
+ * @property {string} dialogTitle - The text to set in the dialog title bar
+ * @property {string} formSubmissionTopic - The topic to publish when the confirmation button is used (the published payload will be the form value)
+ * @property {Object} formSubmissionPayloadMixin - An additional object to "mixin" to the form value before it is published
+ * @property {string} [dialogId=null] The ID of the dialog to display. Only one dialog with no dialogId can exist on a page at a time, therefore it is sensible to always include an id for your dialogs to allow stacking.
+ * @property {string} [dialogConfirmationButtonTitle="OK"] - The label for the dialog confirmation button
+ * @property {string} [dialogCancellationButtonTitle="Cancel"] - The label for the dialog cancellation button
+ * @property {string} [dialogCloseTopic=null] If this is set the the dialog will not automatically be closed when the confirmation button is pressed. Instead the dialog will remain open until this topic is published on.
+ * @property {array} [widgets=null] - An array of form controls to include in the dialog
+ * @property {string} [dialogWidth=null] The width to make the dialog panel (needs to include units, e.g. "px")
+ * @property {string} [contentWidth=null] - The width to set the dialog body (needs to include units, e.g. "px")
+ * @property {string} [contentHeight=null] - The height to set the dialog body (needs to include units, e.g. "px")
+ * @property {boolean} [handleOverflow=false] - Should scrollbars be added to if the content is bigger than the dialog
+ * @property {boolean} [fixedWidth=false] - If set to true, prevents the dialog resizing to fit the content
+ * @property {string} [hideTopic=null] - Topic to subscribe to to trigger a dialog hide. If this is set
  */
 
 /**
- * Create a dialog.
+ * Create a dialog containing either widgets or text with and configurable buttons.
  *
- * @event ALF_CREATE_DIALOG_REQUEST
- * @property {onCreateDialogRequestPayload} payload
+ * @event module:alfresco/services/DialogService~ALF_CREATE_DIALOG_REQUEST
+ * @property {string} dialogTitle - The text to set in the dialog title bar
+ * @property {string} [dialogId=null] The ID of the dialog to display. Only one dialog with no dialogId can exist on a page at a time, therefore it is sensible to always include an id for your dialogs to allow stacking.
+ * @property {string} [textContent=null] - Text to display in the dialog body
+ * @property {array} [widgetsContent=null] - A widget model to display in the dialog body (this supercedes any textContent attribute)
+ * @property {Array} [widgetsButtons=null] - A widget model of buttons to display in the dialog footer
+ * @property {String} [dialogWidth=null] The width to make the dialog panel (needs to include units, e.g. "px")
+ * @property {String} [contentWidth=null] - The width to set the dialog body (needs to include units, e.g. "px")
+ * @property {String} [contentHeight=null] - The height to set the dialog body (needs to include units, e.g. "px")
+ * @property {Boolean} [handleOverflow=false] - Should scrollbars be added to if the content is bigger than the dialog
+ * @property {Boolean} [fixedWidth=false] - If set to true, prevents the dialog resizing to fit the content
+ * @property {Array} [publishOnShow=null] - An array of publications objects to make when the dialog is displayed
  */
 
 define(["dojo/_base/declare",
@@ -59,9 +163,8 @@ define(["dojo/_base/declare",
        * up subscriptions for handling show dialog and cancel dialog requests.
        *
        * @instance
-       *
-       * @listens ALF_CREATE_FORM_DIALOG_REQUEST
-       * @listens ALF_CREATE_DIALOG_REQUEST
+       * @listens module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST
+       * @listens module:alfresco/services/DialogService~event:ALF_CREATE_DIALOG_REQUEST
        */
       constructor: function alfresco_services_DialogService__constructor(args) {
          lang.mixin(this, args);
@@ -69,7 +172,7 @@ define(["dojo/_base/declare",
          // Generate a new pub/sub scope for the widget (this will intentionally override any other settings
          // to contrain communication...
          this.publishTopic = "ALF_CREATE_FORM_DIALOG_REQUEST";
-         this.alfSubscribe(this.publishTopic, lang.hitch(this, "onCreateFormDialogRequest"));
+         this.alfSubscribe(this.publishTopic, lang.hitch(this, this.onCreateFormDialogRequest));
          this.alfSubscribe("ALF_CREATE_DIALOG_REQUEST", lang.hitch(this, this.onCreateDialogRequest));
 
          // Create a reference of IDs to dialogs... 
@@ -155,25 +258,11 @@ define(["dojo/_base/declare",
       /**
        * Handles requests to create basic dialogs.
        *
-       * @typedef {Object} onCreateDialogRequestPayload
-       * @property {string} dialogTitle - Title
-       * @property {string} textContent - Any textual content for the dialog body?
-       * @property {array} widgetsContent - What should go in the dialog
-       * @property {Array} widgetsButtons - Any button widgets to display in the footer
-       * @property {String} [contentWidth=null] -
-       * @property {String} [contentHeight=null] -
-       * @property {Boolean} [handleOverflow=true] - Should the dialog expand to fill the content
-       * @property {Boolean} [fixedWidth=null] -
-       * @property {Array} [publishOnShow]
-       * @property {String} [hideTopic] - Topic to subscribe to to trigger a dialog hide.
-       *
-       * @todo This shouldn't destroy previous dialog, but should support stacked dialogs instead.
-       * @todo This should pass an ID and keep a map of dialogs created.
-       *
        * @instance
-       * @param {onCreateDialogRequestPayload} payload The details of the widgets and buttons for the dialog
+       * @param {module:alfresco/services/DialogService~event:ALF_CREATE_DIALOG_REQUEST} payload The details of the widgets and buttons for the dialog
        */
       onCreateDialogRequest: function alfresco_services_DialogService__onCreateDialogRequest(payload) {
+         // jshint maxcomplexity:false
          this.cleanUpAnyPreviousDialog(payload);
 
          var handleOverflow = true;
@@ -239,9 +328,9 @@ define(["dojo/_base/declare",
        * Handles requests to create the [dialog]{@link module:alfresco/dialogs/AlfDialog} containining a
        * [form]{@link module:alfresco/forms/Form}. It will delete any previously created dialog (to ensure
        * no stale data is displayed) and create a new dialog containing the form defined.
-       *
+       * 
        * @instance
-       * @param {object} payload The payload published on the request topic.
+       * @param {module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST} payload The payload published on the request topic.
        */
       onCreateFormDialogRequest: function alfresco_services_DialogService__onCreateFormDialogRequest(payload) {
          this.cleanUpAnyPreviousDialog(payload);

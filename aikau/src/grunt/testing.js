@@ -11,10 +11,10 @@ module.exports = function(grunt) {
    grunt.registerTask("dt", ["intern:local"]);
 
    // Register test tasks for local/vagrant/SauceLabs/grid respectively
-   grunt.registerTask("test_local", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:local"]);
-   grunt.registerTask("test", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:dev"]);
-   grunt.registerTask("test_sl", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:sl"]);
-   grunt.registerTask("test_grid", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:grid"]);
+   grunt.registerTask("test_local", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:local"]);
+   grunt.registerTask("test", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:dev"]);
+   grunt.registerTask("test_sl", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:sl"]);
+   grunt.registerTask("test_grid", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:grid"]);
 
    // Watch for changes and retest
    grunt.registerTask("watchDev", ["watch:dev"]);

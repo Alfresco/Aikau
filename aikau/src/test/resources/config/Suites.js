@@ -174,6 +174,7 @@ define({
       "src/test/resources/alfresco/search/FacetFiltersTest",
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
+      "src/test/resources/alfresco/services/ContentServiceTest",
       "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
       "src/test/resources/alfresco/services/NotificationServiceTest",

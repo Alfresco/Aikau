@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
             }
 
             var currHash = ioQuery.queryToObject(hashString);
-            if(!this._payloadContainsUpdateableVar(currHash))
+            if(!this.doHashVarUpdate(currHash))
             {
                if (this.currentFilter)
                {
@@ -197,41 +197,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Compares the payload object with the hashVarsForUpdate array of key names
-       * Returns true if hashVarsForUpdate is empty
-       * Returns true if the payload contains a key that is specified in hashVarsForUpdate
-       * Returns false otherwise
-       *
-       * @instance
-       * @param {object} payload The payload object
-       * @param {boolean} updateInstanceValues Indicates whether or not the list instance should be updated with the payload values
-       * @return {boolean}
-       */
-      _payloadContainsUpdateableVar: function alfresco_lists_AlfHashList___payloadContainsUpdateableVar(payload, updateInstanceValues) {
-         var containsUpdateableVar = false;
-
-         // No hashVarsForUpdate - return true
-         if(!this.hashVarsForUpdate || this.hashVarsForUpdate.length === 0)
-         {
-            return true;
-         }
-         
-         // Iterate over the keys defined in hashVarsForUpdate - return true if the payload contains one of them
-         for(var i=0; i < this.hashVarsForUpdate.length; i++)
-         {
-            if(this.hashVarsForUpdate[i] in payload)
-            {
-               if (updateInstanceValues === true)
-               {
-                  this[this.hashVarsForUpdate[i]] = payload[this.hashVarsForUpdate[i]];
-               }
-               containsUpdateableVar = true;
-            }
-         }
-         return containsUpdateableVar;
-      },
-
-      /**
        * Sets the current hash in the local storage.
        *
        * @instance
@@ -254,7 +219,7 @@ define(["dojo/_base/declare",
        */
       onHashChanged: function alfresco_lists_AlfHashList__onHashChanged(payload) {
          // Process the hash...
-         if(this._payloadContainsUpdateableVar(payload))
+         if(this.doHashVarUpdate(payload))
          {
             //this.currentFilter = payload;
             if (this._readyToLoad)

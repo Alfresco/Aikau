@@ -23,6 +23,63 @@
  * and creates the name, description and units labels are appropriate. It also provides the capability for
  * form controls to communicate with each other and dynamically update their appearance and behaviour 
  * through configured rules (e.g. to allow progressive disclosure, etc through configuration).</p>
+ *
+ * @example <caption>Example configuration for a required TextBox control:</caption>
+ * {
+ *     name: "alfresco/forms/controls/TextBox",
+ *     config: {
+ *        fieldId: "DISTANCE",
+ *        label: "Distance",
+ *        description: "Enter the distance travelled",
+ *        unitsLabel: "miles",
+ *        name: "distance",
+ *        value: "0",
+ *        requirementConfig: {
+ *           initialValue: true
+ *        }
+ *     }
+ * }
+ * 
+ * @example <caption>Example configuration for Select control:</caption>
+ * {
+ *     name: "alfresco/forms/controls/Select",
+ *     config: {
+ *        fieldId: "COLOUR",
+ *        label: "Colour",
+ *        description: "Select a colour from the list",
+ *        name: "colour",
+ *        value: "RED",
+ *        optionsConfig: {
+ *           fixed: [
+ *              { label: "Red", value: "RED" },
+ *              { label: "Green", value: "GREEN" },
+ *              { label: "Blue", value: "BLUE" }
+ *           ]
+ *        }
+ *     }
+ * }
+ *
+ * @example <caption>Example configuration for a hidden TextBox that can be dynamically revealed:</caption>
+ * {
+ *     name: "alfresco/forms/controls/TextBox",
+ *     config: {
+ *        fieldId: "AGE",
+ *        label: "How old are you?",
+ *        description: "Enter the distance travelled",
+ *        placeHolder: "Age...",
+ *        unitsLabel: "years",
+ *        name: "age",
+ *        visibilityConfig: {
+ *           initialValue: false,
+ *           rules: [
+ *              {
+ *                 targetId": "SHOW_AGE",
+ *                 is: ["true"]
+ *              }
+ *           ]
+ *        }
+ *     }
+ * }
  * 
  * @module alfresco/forms/controls/BaseFormControl
  * @extends external:dijit/_WidgetBase
@@ -766,7 +823,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            var value = this.getValue();
+            var value = this.value;
             this.options = options;
             if (this.wrappedWidget)
             {
@@ -804,7 +861,7 @@ define(["dojo/_base/declare",
             this.setValue(value);
             this.value = value;
          }
-         else if (options.length > 0)
+         else if (options && options.length > 0)
          {
             this.setValue(options[0].value);
             this.value = options[0].value;
@@ -1125,7 +1182,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      postMixInProperties: function alfresco_renderers_Reorder__postMixInProperties() {
+      postMixInProperties: function alfresco_forms_controls_BaseFormControl__postMixInProperties() {
          // Store the initial value to ensure that when the page is added to the document is configured
          // correctly, the value can be set with the intended value (as opposed to what the wrapped widget
          // thinks it should be)...
@@ -1484,6 +1541,11 @@ define(["dojo/_base/declare",
                {
                   value = value.toString();
                }
+               this.value = value; // This is stored for ensuring dynamic options retain the correct value
+
+               // If there are no options, then the current value will be retained, but if their are options
+               // and the new value is not among them then the first available option will be selected instead
+               this.setOptionsValue(value, this.optionsValue);
                this.wrappedWidget.setValue(value);
             }
          }
@@ -1673,7 +1735,8 @@ define(["dojo/_base/declare",
                 passedRegExpTest = true; // Assume valid starting point.
             
             // Check that a value has been specified if this is a required field...
-            passedRequiredTest = !(this._required && (value == null || value === ""));
+            var valueIsEmptyArray = ObjectTypeUtils.isArray(value) && value.length === 0;
+            passedRequiredTest = !(this._required && (!value || valueIsEmptyArray));
             
             // Check if any specified regular expression is passed...
             if (this.validationConfig)

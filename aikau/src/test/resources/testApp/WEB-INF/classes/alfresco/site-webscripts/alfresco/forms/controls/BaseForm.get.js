@@ -37,7 +37,7 @@ model.jsonModel = {
             id: "SET_FORM_VALUE_1",
             label: "Set form value 1 (fault)",
             publishTopic: "SET_FORM_CONTROL_VALUE",
-            pubSubScope: "TEST_SCOPE_",
+            pubSubScope: "TEST_SCOPE_"
          }
       },
       {

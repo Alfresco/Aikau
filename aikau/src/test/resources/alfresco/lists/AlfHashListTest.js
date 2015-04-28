@@ -46,7 +46,7 @@ define(["intern!object",
             });
       },
 
-      "Set hash var that won't trigger reload": function() {
+      "Set hash var that won't trigger reload - type 1": function() {
          return browser.findByCssSelector("#SET_HASH1_label")
             .click()
          .end()
@@ -59,8 +59,26 @@ define(["intern!object",
             });
       },
 
-      "Set hash var that will trigger reload": function() {
+      "Set hash var that won't trigger reload - type 2": function() {
          return browser.findByCssSelector("#SET_HASH2_label")
+            .click()
+         .end()
+         // Check that the hash change topic is last, not a request to load data...
+         .findByCssSelector(TestCommon.topicSelector("ALF_HASH_CHANGED", "publish", "last"))
+         .end();
+      },
+
+      "Set hash var that won't trigger reload - type 3": function() {
+         return browser.findByCssSelector("#SET_HASH3_label")
+            .click()
+         .end()
+         // Check that the hash change topic is last, not a request to load data...
+         .findByCssSelector(TestCommon.topicSelector("ALF_HASH_CHANGED", "publish", "last"))
+         .end();
+      },
+
+      "Set hash var that will trigger reload": function() {
+         return browser.findByCssSelector("#SET_HASH4_label")
             .click()
          .end()
          .findByCssSelector(TestCommon.topicSelector("ALF_RETRIEVE_DOCUMENTS_REQUEST", "publish", "last"))

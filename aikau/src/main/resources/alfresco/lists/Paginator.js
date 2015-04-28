@@ -18,6 +18,41 @@
  */
 
 /**
+ * <p>This module is intended to provide pagination controls for working with the
+ * [AlfSortablePaginatedList]{@link module:alfresco/lists/AlfSortablePaginatedList} (and its
+ * descendant widgets). It provides controls for selecting specific pages of data as well as
+ * navigating back and forward between specific pages of data. It provides the ability to
+ * select from a [configurable array]{@link module:alfresco/lists/Paginator#pageSizes} of page sizes.</p>
+ * <p>If using with a [AlfSortablePaginatedList]{@link module:alfresco/lists/AlfSortablePaginatedList}
+ * it is important to ensure that the [initial page size]{@link module:alfresco/lists/Paginator#documentsPerPage}
+ * configured for the paginator matches that of the 
+ * [list]{@link module:alfresco/lists/AlfSortablePaginatedList#currentPageSize} to ensure they are initially
+ * in sync.</p>
+ * <p>A [compact mode]{@link module:alfresco/lists/Paginator#compactMode} is provided that only rendered
+ * the back and forward controls and omits the page size selection menu.</p>
+ * 
+ * @example <caption>Basic configuration using default page sizes:</caption>
+ * {
+ *    "name": "alfresco/lists/Paginator"
+ * }
+ *
+ * @example <caption>Basic configuration using custom page sizes:</caption>
+ * {
+ *    "name": "alfresco/lists/Paginator",
+ *    "config": {
+ *       "documentsPerPage": 10,
+ *       "pageSizes": [5,10,20]"
+ *    }
+ * }
+ *
+ * @example <caption>Configuration for compact mode:</caption>
+ * {
+ *    "name": "alfresco/lists/Paginator",
+ *    "config": {
+ *       "compactMode": true
+ *    }
+ * }
+ * 
  * @module alfresco/lists/Paginator
  * @extends module:alfresco/menus/AlfMenuBar
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
@@ -64,7 +99,7 @@ define(["dojo/_base/declare",
        * @type {number} 
        * @default null
        */
-      totalDocuments: null,
+      totalRecords: null,
       
       /**
        * Used to keep track of the total number of pages in the current data set
@@ -113,13 +148,16 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Handles updates to the number of documents to display per page.
+       * Handles updates to the number of 
+       * [documents to display per page]{@link module:alfresco/lists/Paginator#documentsPerPage}. The 
+       * [documents to display per page]{@link module:alfresco/lists/Paginator#documentsPerPage} will only be
+       * updated if the requested value is present in the [pageSizes array]{@link module:alfresco/lists/Paginator#pageSizes}.
        * 
        * @instance
        * @param {object} payload
        */
       onDocumentsPerPageChange: function alfresco_lists_Paginator__onDocumentsPerPageChange(payload) {
-         if (payload && payload.value && payload.value !== this.documentsPerPage)
+         if (payload && payload.value && payload.value !== this.documentsPerPage && this.isValidPageSize(payload.value))
          {
             this.documentsPerPage = payload.value;
          }
@@ -175,6 +213,24 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * The property in the response that indicates the starting index of overall data to request.
+       *
+       * @instance
+       * @type {string}
+       * @default "startIndex"
+       */
+      startIndexProperty: "startIndex",
+
+      /**
+       * The property in the response that indicates the total number of results available.
+       *
+       * @instance
+       * @type {string}
+       * @default "totalRecords"
+       */
+      totalResultsProperty: "totalRecords",
+
+      /**
        * This function processes the loaded document data to set the appropriate data in the paginator
        * widgets.
        *
@@ -183,21 +239,47 @@ define(["dojo/_base/declare",
        */
       processLoadedDocuments: function alfresco_lists_Paginator__processLoadedDocuments(payload) {
          // jshint maxcomplexity:false,unused:false,maxstatements:false
-         if (payload && payload.totalDocuments !== null && payload.startIndex !== null)
+         var totalRecords = lang.getObject(this.totalResultsProperty, false, payload);
+         var startIndex = lang.getObject(this.startIndexProperty, false, payload);
+         if (payload && 
+             (totalRecords || totalRecords === 0) && 
+             (startIndex || startIndex === 0))
          {
-            if (payload.totalDocuments === 0)
+            if (totalRecords === 0)
             {
                // Hide pagination controls when there are no results...
-               domClass.add(this.domNode, "hidden");
+               // domClass.add(this.domNode, "hidden");
+               if (this.pageSelector)
+               {
+                  domClass.add(this.pageSelector.domNode, "hidden");
+               }
+               domClass.add(this.pageBack.domNode, "hidden");
+               domClass.add(this.pageMarker.domNode, "hidden");
+               domClass.add(this.pageForward.domNode, "hidden");
+               if (this.resultsPerPageGroup)
+               {
+                  domClass.add(this.resultsPerPageGroup.domNode, "hidden");
+               }
             }
             else
             {
                // Make sure the pagination controls aren't hidden...
-               domClass.remove(this.domNode, "hidden");
+               // domClass.remove(this.domNode, "hidden");
+               if (this.pageSelector)
+               {
+                  domClass.remove(this.pageSelector.domNode, "hidden");
+               }
+               domClass.remove(this.pageBack.domNode, "hidden");
+               domClass.remove(this.pageMarker.domNode, "hidden");
+               domClass.remove(this.pageForward.domNode, "hidden");
+               if (this.resultsPerPageGroup)
+               {
+                  domClass.remove(this.resultsPerPageGroup.domNode, "hidden");
+               }
                
-               this.totalDocuments = payload.totalDocuments;
-               this.totalPages = Math.ceil(payload.totalDocuments/this.documentsPerPage);
-               this.currentPage = ((payload.startIndex - (payload.startIndex % this.documentsPerPage))/this.documentsPerPage) + 1;
+               this.totalRecords = totalRecords;
+               this.totalPages = Math.ceil(totalRecords/this.documentsPerPage);
+               this.currentPage = ((startIndex - (startIndex % this.documentsPerPage))/this.documentsPerPage) + 1;
 
                // Update the page back action to disable if on the first page...
                if (this.pageBack)
@@ -245,10 +327,10 @@ define(["dojo/_base/declare",
                      else
                      {
                         // ...for the last page just count up to the last document
-                        pageEnd = this.totalDocuments;
+                        pageEnd = this.totalRecords;
                      }
                      
-                     var label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalDocuments});
+                     var label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords});
                      var menuItem = new AlfCheckableMenuItem({
                         label: label,
                         value: i+1,
@@ -321,14 +403,106 @@ define(["dojo/_base/declare",
       compactMode: false,
 
       /**
+       * This can be used to configure an array of page sizes that should be displayed in the paginator.
+       * If left as the default of null then an array will automatically created containing page sizes of
+       * 25, 50, 75 and 100. The array should be a simple list of numbers.
+       * 
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      pageSizes: null,
+
+      /**
+       * This function is called to create a new [AlfCheckableMenuItem]{@link module:alfresco/menus/AlfCheckableMenuItem}
+       * for each page size configured in the [pageSizes array]{@link module:alfresco/lists/Paginator#pageSizes}.
+       * 
+       * @instance
+       * @param {array} pageSizeMenuItems The array to add the new menu item to.
+       * @param {number} pageSize The page size to add to create a menu item for.
+       */
+      createPageSizeMenuItem: function alfresco_lists_Paginator__createPageSizeMenuItem(pageSizeMenuItems, pageSize) {
+         var label = this.message("list.paginator.perPage.label", {0: pageSize});
+         var menuItem = {
+            name: "alfresco/menus/AlfCheckableMenuItem",
+            config: {
+               label: label,
+               value: pageSize,
+               group: "DOCUMENTS_PER_PAGE_GROUP",
+               checked: this.documentsPerPage === pageSize,
+               publishTopic: this.docsPerpageSelectionTopic,
+               publishPayload: {
+                  label: label,
+                  value: pageSize
+               }
+            }
+         };
+         pageSizeMenuItems.push(menuItem);
+      },
+
+      /**
+       * Checks whether or not a particular page size is valid or not. A page size is valid if it is defined
+       * in the [pageSizes array]{@link module:alfresco/lists/Paginator#pageSizes}.
+       *
+       * @instance
+       * @param {number} requestedPageSize The page size to check for
+       */
+      isValidPageSize: function alfresco_lists_Paginator__isValidPageSize(requestedPageSize) {
+         return array.some(this.pageSizes, function(pageSize) {
+            return requestedPageSize === pageSize;
+         }, this);
+      },
+
+      /**
+       * Since this widget is an implementation of an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} it is 
+       * perfectly reasonable to add additional menu widgets (such as [menu items]{@link module:alfresco/menus/AlfMenuBarItem}
+       * or [drop-down menus]{@link module:alfresco/menus/AlfMenuBarPopup}) before the main pagination controls. This
+       * can be configured to be an array of such menu widgets to be displayed.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      widgetsBefore: null,
+
+      /**
+       * Since this widget is an implementation of an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} it is 
+       * perfectly reasonable to add additional menu widgets (such as [menu items]{@link module:alfresco/menus/AlfMenuBarItem}
+       * or [drop-down menus]{@link module:alfresco/menus/AlfMenuBarPopup}) after the main pagination controls. This
+       * can be configured to be an array of such menu widgets to be displayed.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      widgetsAfter: null,
+
+      /**
+       * <p>Calls the [createPageSizeMenuItem function]{@link module:alfresco/lists/Paginator#createPageSizeMenuItem} 
+       * for each item in the [pageSizes array]{@link module:alfresco/lists/Paginator#pageSizes} to build the page
+       * size selection menu. If a [pageSizes array]{@link module:alfresco/lists/Paginator#pageSizes} has not been
+       * configured then it will create a default array containing the sizes 25,50,75 and 100.</p>
+       *
+       * <p>It then constructs a widget model containing the menus and buttons that provide the pagination controls</p>
+       * 
        * @instance
        */
       postCreate: function alfresco_lists_Paginator__postCreate() {
-         var label25 = this.message("list.paginator.perPage.label", {0: 25}),
-             label50 = this.message("list.paginator.perPage.label", {0: 50}),
-             label75 = this.message("list.paginator.perPage.label", {0: 75}),
-             label100 = this.message("list.paginator.perPage.label", {0: 100});
-         
+         // Create defaults if none have been configured...
+         if (!this.pageSizes || this.pageSizes.length === 0)
+         {
+            this.pageSizes = [25,50,75,100];
+         }
+
+         if (!this.isValidPageSize(this.documentsPerPage))
+         {
+            this.documentsPerPage = this.pageSizes[0];
+         }
+
+         // Build the page size menu items...
+         var pageSizeMenuItems = [];
+         array.forEach(this.pageSizes, lang.hitch(this, this.createPageSizeMenuItem, pageSizeMenuItems));
+
          this.widgets = [
             {
                name: "alfresco/menus/AlfMenuBarItem",
@@ -383,74 +557,24 @@ define(["dojo/_base/declare",
                      {
                         name: "alfresco/menus/AlfMenuGroup",
                         config: {
-                           widgets: [
-                              {
-                                 name: "alfresco/menus/AlfCheckableMenuItem",
-                                 config: {
-                                    label: label25,
-                                    value: 25,
-                                    group: "DOCUMENTS_PER_PAGE_GROUP",
-                                    checked: this.documentsPerPage === 25,
-                                    publishTopic: this.docsPerpageSelectionTopic,
-                                    publishPayload: {
-                                       label: label25,
-                                       value: 25
-                                    }
-                                 }
-                              },
-                              {
-                                 name: "alfresco/menus/AlfCheckableMenuItem",
-                                 config: {
-                                    label: label50,
-                                    value: 50,
-                                    group: "DOCUMENTS_PER_PAGE_GROUP",
-                                    checked: this.documentsPerPage === 50,
-                                    publishTopic: this.docsPerpageSelectionTopic,
-                                    publishPayload: {
-                                       label: label50,
-                                       value: 50
-                                    }
-                                 }
-                              },
-                              {
-                                 name: "alfresco/menus/AlfCheckableMenuItem",
-                                 config: {
-                                    label: label75,
-                                    value: 75,
-                                    group: "DOCUMENTS_PER_PAGE_GROUP",
-                                    checked: this.documentsPerPage === 75,
-                                    publishTopic: this.docsPerpageSelectionTopic,
-                                    publishPayload: {
-                                       label: label75,
-                                       value: 75
-                                    }
-                                 }
-                              },
-                              {
-                                 name: "alfresco/menus/AlfCheckableMenuItem",
-                                 config: {
-                                    label: label100,
-                                    value: 100,
-                                    group: "DOCUMENTS_PER_PAGE_GROUP",
-                                    checked: this.documentsPerPage === 100,
-                                    publishTopic: this.docsPerpageSelectionTopic,
-                                    publishPayload: {
-                                       label: label100,
-                                       value: 100
-                                    }
-                                 }
-                              }
-                           ]
+                           widgets: pageSizeMenuItems
                         }
                      }
                   ]
                }
             });
          }
+
+         // Prepend and append any widgets requested to go before or after the pagination controls...
+         this.widgets = (this.widgetsBefore || []).concat(this.widgets, (this.widgetsAfter || []));
+
          this.inherited(arguments);
       },
       
       /**
+       * Handles the creation of the paginator widgets and creates references to some of them (such
+       * as the page back and forward controls, etc) so that they can be easily referenced in other functions.
+       * 
        * @instance
        */
       allWidgetsProcessed: function alfresco_lists_Paginator__allWidgetsProcessed() {
@@ -462,13 +586,15 @@ define(["dojo/_base/declare",
          // postCreate function...
          if (this.compactMode === false)
          {
-            var popupChildren = this._menuBar.getChildren()[0].popup.getChildren();
+            this.pageSelector = registry.byId(this.id + "_PAGE_SELECTOR");
+            var popupChildren = this.pageSelector.popup.getChildren();
             this.pageSelectorGroup = popupChildren[popupChildren.length-1];
          }
          
          this.pageBack = registry.byId(this.id + "_PAGE_BACK");
          this.pageForward = registry.byId(this.id + "_PAGE_FORWARD");
          this.pageMarker = registry.byId(this.id + "_PAGE_MARKER");
+         this.resultsPerPageGroup = registry.byId(this.id + "_RESULTS_PER_PAGE_SELECTOR");
 
          // Check to see if any document data was provided before widget instantiation completed and
          // if so process it with the now available widgets...
