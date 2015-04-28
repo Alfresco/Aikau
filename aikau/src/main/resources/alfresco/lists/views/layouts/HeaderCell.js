@@ -33,9 +33,8 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/query",
-        "alfresco/misc/AlfTooltip",
         "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domClass, query, AlfTooltip, domAttr) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domClass, query, domAttr) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -166,11 +165,6 @@ define(["dojo/_base/declare",
          if(this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);
-         }
-
-         if (this.toolTipMsg)
-         {
-            this.addToolTipMsg();
          }
 
          if(this.a11yScope)
@@ -305,21 +299,6 @@ define(["dojo/_base/declare",
                domClass.add(dsn, hideClass);
             break;
          }
-      },
-
-      /**
-       * Controls the display of a tool tip against the header cell label.
-       *
-       * @instance
-       */
-      addToolTipMsg: function alfresco_lists_views_layouts_HeaderCell__addToolTipMsg() {
-         // Find the .label item within the domNode
-         var labelNode = query(".label", this.domNode);
-         var tip = new AlfTooltip({
-            targetNode: labelNode,
-            label: this.message(this.toolTipMsg)
-         });
-         this.alfLog("log", "Created HeaderCell tooltip with label '" + tip.label + "' for item '" + this.domNode + "'", this);
       },
 
       /**

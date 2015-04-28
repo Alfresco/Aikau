@@ -8,8 +8,7 @@ model.jsonModel = {
                all: true
             }
          }
-      },
-      "alfresco/services/ErrorReporter"
+      }
    ],
    widgets:[
       {
@@ -31,8 +30,7 @@ model.jsonModel = {
                      id: "COLUMN1_HEADER",
                      label: "Column 1",
                      sortable: true,
-                     sortValue: "col1",
-                     toolTipMsg: "This is column 1"
+                     sortValue: "col1"
                   }
                },
                {
@@ -41,8 +39,7 @@ model.jsonModel = {
                      id: "COLUMN2_HEADER",
                      label: "Column 2",
                      sortable: true,
-                     sortValue: "col2",
-                     toolTipMsg: "This is column 2"
+                     sortValue: "col2"
                   }
                },
                {
@@ -110,9 +107,6 @@ model.jsonModel = {
       },
       {
          name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

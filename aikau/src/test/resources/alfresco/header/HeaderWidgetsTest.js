@@ -41,10 +41,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
-
       "Test that header CSS is applied": function() {
          // Check that the header CSS is applied...         
          return browser.findByCssSelector(".alfresco-layout-LeftAndRight.alfresco-header-Header")

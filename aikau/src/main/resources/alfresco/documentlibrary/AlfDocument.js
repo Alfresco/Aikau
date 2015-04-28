@@ -90,6 +90,16 @@ define(["dojo/_base/declare",
       rawData: false,
 
       /**
+       * Used to indicate whether or not to force an XHR request to retrieve the full node data. Defaults
+       * to false assuming that all the data required is currently available in "currentItem".
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      xhrRequired: false,
+
+      /**
        * Subscribes to the document load topic
        * 
        * @instance
@@ -106,13 +116,27 @@ define(["dojo/_base/declare",
        * @fires ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST
        */
       postCreate: function alfresco_documentlibrary_AlfDocument_postCreate() {
-         if (!this.currentItem && this.nodeRef)
+         if (this.xhrRequired === true || (!this.currentItem && this.nodeRef))
          {
-            this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", {
-               nodeRef: this.nodeRef,
-               rawData: this.rawData,
-               alfResponseTopic: this.pubSubScope + this.loadDataPublishTopic
-            }, true);
+            // Cover all options for finding a nodeRef!
+            var nodeRef = this.nodeRef || this.currentItem.nodeRef;
+            if (!nodeRef && this.currentItem.node && this.currentItem.node.nodeRef)
+            {
+               nodeRef = this.currentItem.node.nodeRef;
+            }
+
+            if (nodeRef)
+            {
+               this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", {
+                  nodeRef: nodeRef,
+                  rawData: this.rawData,
+                  alfResponseTopic: this.pubSubScope + this.loadDataPublishTopic
+               }, true);
+            }
+            else
+            {
+               this.alfLog("warn", "No 'nodeRef' available to request node data", this);
+            }
          }
          else
          {
