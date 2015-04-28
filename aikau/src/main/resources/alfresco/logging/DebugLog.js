@@ -37,7 +37,9 @@
  * @extends external:alfresco/logging/SubscriptionLog
  * @author Martin Doyle
  */
-define(["alfresco/logging/SubscriptionLog",
+define(["alfresco/core/ObjectTypeUtils",
+      "alfresco/logging/SubscriptionLog",
+      "dojo/_base/array",
       "dojo/_base/declare",
       "dojo/_base/lang",
       "dojo/date/locale",
@@ -46,7 +48,7 @@ define(["alfresco/logging/SubscriptionLog",
       "dojo/on",
       "dojo/text!./templates/DebugLog.html"
    ],
-   function(SubscriptionLog, declare, lang, dateLocale, domClass, domConstruct, on, template) {
+   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template) {
       /*jshint devel:true*/
 
       return declare([SubscriptionLog], {
@@ -98,8 +100,8 @@ define(["alfresco/logging/SubscriptionLog",
           * @type {payloadConfig}
           */
          defaultPayloadConfig: {
-            maxChildren: 50,
-            maxDepth: 6,
+            maxChildren: -1,
+            maxDepth: -1,
             excludedKeys: ["dojo", "dijit", "dojox", "$", "LiveReload", "Alfresco", "sinon", "dojoConfig", "tinyMCE", "tinymce", "cScope"]
          },
 
@@ -223,7 +225,14 @@ define(["alfresco/logging/SubscriptionLog",
 
             // Create the safe object
             var safeData = (function makeSafe(unsafe, ancestors) {
-               /*jshint maxcomplexity:16,maxstatements:31*/
+               /*jshint maxcomplexity:false,maxstatements:false*/
+
+               // If this is an array, deal with it immediately
+               if (ObjectTypeUtils.isArray(unsafe)) {
+                  return array.map(unsafe, lang.hitch(this, function(unsafeChild) {
+                     return makeSafe(unsafeChild, ancestors.concat(unsafe));
+                  }));
+               }
 
                // Setup variables
                var keys = Object.keys(unsafe),
@@ -244,7 +253,7 @@ define(["alfresco/logging/SubscriptionLog",
                   }
 
                   // Check against max children
-                  if (i === maxChildren) {
+                  if (maxChildren !== -1 && i === maxChildren) {
                      safe["MAXIMUM CHILDREN"] = "Maximum child-property count reached";
                      break;
                   }
@@ -280,7 +289,7 @@ define(["alfresco/logging/SubscriptionLog",
                      } else if (ancestors.indexOf(value) !== -1) {
                         safe[key] = "[recursive object";
                         safe[key] += value.id ? " id=" + value.id + "]" : "]";
-                     } else if (ancestors.length === maxDepth) {
+                     } else if (maxDepth !== -1 && ancestors.length === maxDepth) {
                         safe[key] = "[object beyond max-depth]";
                      } else {
                         safe[key] = makeSafe(value, ancestors.concat(unsafe));
