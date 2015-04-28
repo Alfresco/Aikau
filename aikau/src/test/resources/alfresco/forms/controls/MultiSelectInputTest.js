@@ -129,7 +129,11 @@ define([
             .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Did not filter results using special reg exp character");
-               });
+               })
+               .end()
+
+            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+               .clearValue();
          },
 
          "Clicking cross on a chosen item removes it": function() {
@@ -145,7 +149,7 @@ define([
          },
 
          "Submitting form submits correct values from control": function() {
-            return browser.findByCssSelector("#FORM1 .confirmationButton")
+            return browser.findByCssSelector("#FORM1 .confirmationButton .dijitButtonNode")
                .click()
                .end()
 
@@ -157,10 +161,10 @@ define([
                .then(function(payload) {
                   assert.isNotNull(payload, "Could not find form submission");
                   if (payload) {
-                     assert.deepPropertyVal(payload, "tags.0.name", "tag1", "Failed to submit tag1 name");
-                     assert.deepPropertyVal(payload, "tags.0.value", "workspace://SpacesStore/06bd4708-8998-47be-a4ea-0f418bc7bb38", "Failed to submit tag1 value");
-                     assert.deepPropertyVal(payload, "tags.1.name", "tag2", "Failed to submit tag2 name");
-                     assert.deepPropertyVal(payload, "tags.1.value", "workspace://SpacesStore/84a27335-6008-4ddc-8a27-724225bbed3d", "Failed to submit tag2 value");
+                     assert.deepPropertyVal(payload, "tags[0].name", "tag1", "Failed to submit tag1 name");
+                     assert.deepPropertyVal(payload, "tags[0].value", "workspace://SpacesStore/06bd4708-8998-47be-a4ea-0f418bc7bb38", "Failed to submit tag1 value");
+                     assert.deepPropertyVal(payload, "tags[1].name", "tag2", "Failed to submit tag2 name");
+                     assert.deepPropertyVal(payload, "tags[1].value", "workspace://SpacesStore/84a27335-6008-4ddc-8a27-724225bbed3d", "Failed to submit tag2 value");
                   }
                });
          },
@@ -183,7 +187,7 @@ define([
          },
 
          "Opening MultiSelect in dialog still displays dropdown properly": function() {
-            return browser.findByCssSelector("#CREATE_FORM_DIALOG")
+            return browser.findByCssSelector("[widgetid=\"CREATE_FORM_DIALOG\"] .dijitButtonNode")
                .click()
                .end()
 
@@ -211,8 +215,8 @@ define([
                .then(function(payload) {
                   assert.isNotNull(payload, "Could not find dialog submission");
                   if (payload) {
-                     assert.deepPropertyVal(payload, "tags.0.name", "tag2", "Failed to submit tag2 name from dialog");
-                     assert.deepPropertyVal(payload, "tags.0.value", "workspace://SpacesStore/84a27335-6008-4ddc-8a27-724225bbed3d", "Failed to submit tag2 value from dialog");
+                     assert.deepPropertyVal(payload, "tags[0].name", "tag2", "Failed to submit tag2 name from dialog");
+                     assert.deepPropertyVal(payload, "tags[0].value", "workspace://SpacesStore/84a27335-6008-4ddc-8a27-724225bbed3d", "Failed to submit tag2 value from dialog");
                   }
                });
          },
