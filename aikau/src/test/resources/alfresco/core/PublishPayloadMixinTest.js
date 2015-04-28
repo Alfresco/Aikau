@@ -23,7 +23,7 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
+        "alfresco/TestCommon"],
         function (registerSuite, assert, require, TestCommon) {
 
    var browser;
@@ -155,6 +155,53 @@ define(["intern!object",
             });
       },
 
+      // Check that single token payloads are processed correctly for Current Item tokens
+      "Check that PROCESS CI type payload is published": function () {
+         // Check that setting the PROCESS type works...
+         return browser.findByCssSelector("#PA_PROCESS_CI_NOT_FOUND")
+            .click()
+            .end()
+
+            .findAllByCssSelector(TestCommon.topicSelector("TOPIC_CI_NOT_FOUND", "publish", "last"))
+            .then(function (elements) {
+               assert.lengthOf(elements, 1, "processCurrentItem type publish failure");
+            });
+      },
+
+      "Check that PROCESS CI is generated correctly": function () {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "data", "{NOTFOUND}"))
+            .then(function (elements) {
+               assert.lengthOf(elements, 1, "processCurrentItem type payload failure");
+            });
+      },
+
+      // Check that single token payloads are processed correctly for instance tokens
+      "Check that PROCESS INSTANCE type payload is published": function () {
+         // Check that setting the PROCESS type works...
+         return browser.findByCssSelector("#PA_PROCESS_INSTANCE_NOT_FOUND")
+            .click()
+            .end()
+
+            .findAllByCssSelector(TestCommon.topicSelector("TOPIC_INSTANCE_NOT_FOUND", "publish", "last"))
+            .then(function (elements) {
+               assert.lengthOf(elements, 1, "processInstance type publish failure");
+            });
+      },
+
+      "Check that PROCESS INSTANCE missing item is generated correctly": function () {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "data", "{DOESNOTEXIST}"))
+            .then(function (elements) {
+               assert.lengthOf(elements, 1, "processInstance type payload failure");
+            });
+      },
+
+      "Check that PROCESS INSTANCE found item is generated correctly": function () {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "dataReplaced", "mixinValue4"))
+            .then(function (elements) {
+               assert.lengthOf(elements, 1, "processInstance type payload failure");
+            });
+      },
+
       "Check that BUILD type payload is published": function() {
          // Check that setting the BUILD type works...
          return browser.findByCssSelector("#PA_BUILD")
@@ -225,6 +272,8 @@ define(["intern!object",
                assert.lengthOf(elements, 1, "DATELINK url payload failure");
             });
       },
+
+
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);

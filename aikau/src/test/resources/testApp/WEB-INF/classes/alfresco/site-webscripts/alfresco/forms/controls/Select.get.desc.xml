@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>Select Test</shortname>
+  <shortname>Select Form Control</shortname>
+  <description>Shows multiple valid and invalid configurations of the alfresco/forms/controls/Select widget, including examples of both fixed and dynamic options.</description>
   <family>aikau-unit-tests</family>
   <url>/Select</url>
 </webscript>

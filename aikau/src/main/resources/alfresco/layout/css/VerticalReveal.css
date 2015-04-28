@@ -1,23 +1,22 @@
 .alfresco-layout-VerticalReveal {
-   
-}
-
-.alfresco-layout-VerticalReveal > div.toggle.hidden {
-   display: none;
-}
-
-.alfresco-layout-VerticalReveal > div.content {
-   max-height: 0;
-   overflow: hidden;
-   transition: max-height 1s ease;
-}
-
-.alfresco-layout-VerticalReveal > div.content > div {
-   border: 1px solid #ccc;
-   padding: 5px;
-   margin: 5px;
-}
-
-.alfresco-layout-VerticalReveal > div.content.reveal {
-   max-height: 1000px;
+   &__toggle-node {
+      display: none;
+   }
+   &--has-toggle {
+      .alfresco-layout-VerticalReveal__toggle-node {
+         display: block;
+      }
+   }
+   > .content {
+      max-height: 0;
+      overflow: hidden;
+      > div {
+         border: 1px solid #ccc;
+         margin: 5px;
+         padding: 5px;
+      }
+      &--has-transition {
+         transition: max-height .7s cubic-bezier(0,.5,0,1);
+      }
+   }
 }

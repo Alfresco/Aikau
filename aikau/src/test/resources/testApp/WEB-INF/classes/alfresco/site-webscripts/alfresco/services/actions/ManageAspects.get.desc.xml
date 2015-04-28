@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>Manage Aspects Test</shortname>
+  <shortname>Manage Aspects</shortname>
+  <description>Displays buttons that use the ManageAspects service to display aspect management dialogs.</description>
   <family>aikau-unit-tests</family>
   <url>/ManageAspects</url>
 </webscript>

@@ -87,6 +87,7 @@ define(["dojo/_base/declare",
          lang.mixin(this, args);
          this.alfSubscribe(Constants.requestWidgetsForDisplayTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForDisplay"));
          this.alfSubscribe(Constants.requestWidgetsForConfigTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForConfig"));
+         this.alfSubscribe(Constants.requestWidgetsForNestedConfigTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForNestedConfig"));
       },
 
       /**
@@ -98,6 +99,41 @@ define(["dojo/_base/declare",
        * @default null
        */
       models: null,
+
+      /**
+       * This is the default widget model to render for dropped items that are not matched against
+       * any specific model.
+       *
+       * @instance
+       * @type {array}
+       */
+      widgetsForDefaultDisplay: [{
+         name: "alfresco/dnd/DroppedItemWrapper",
+         config: {
+            showEditButton: false,
+            label: "{label}",
+            value: "{value}",
+            widgets: [{
+               name: "alfresco/dnd/DroppedItem"
+            }]
+         }
+      }],
+
+      /**
+       * This is the default widget model to use as for editing dropped items.
+       *
+       * @instance
+       * @type {array}
+       */
+      widgetsForDefaultConfig: [],
+
+      /**
+       * This is the default widget model to include when editing nested dropped items.
+       *
+       * @instance
+       * @type {array}
+       */
+      widgetsForDefaultNestedConfig: [],
 
       /**
        * Handles requests to find a model that matches the value provided in the published payload. If a matching model
@@ -116,27 +152,61 @@ define(["dojo/_base/declare",
             if (success === true)
             {
                // Found a match, resolve a promise or publish on a response topic provided...
-               if (payload.promise && typeof payload.promise.resolve === "function")
-               {
-                  payload.promise.resolve(response);
-               }
-               else if (payload.alfResponseTopic)
-               {
-                  this.alfPublish(payload.alfResponseTopic, response);
-               }
-               else
-               {
-                  this.alfLog("error", "Matching model data was found for dropped item, but no promise or alfResponseTopic was provided in the payload", payload, this);
-               }
-            }
-            else
+               this.provideResponse(payload, response);
+            } 
+            else 
             {
                // Could not find a match, fall back to the default
+               switch (configAttribute) {
+                  case "widgetsForDisplay":
+                     this.provideResponse(payload, {
+                        widgets: lang.clone(this.widgetsForDefaultDisplay)
+                     });
+                     break;
+                  case "widgetsForConfig":
+                     this.provideResponse(payload, {
+                        widgets: lang.clone(this.widgetsForDefaultConfig)
+                     });
+                     break;
+                  case "widgetsForNestedConfig":
+                     this.provideResponse(payload, {
+                        widgets: lang.clone(this.widgetsForDefaultNestedConfig)
+                     });
+                     break;
+                  default:
+                     this.provideResponse(payload, {
+                        widgets: []
+                     });
+                     break;
+               }
             }
-         }
-         else
+         } 
+         else 
          {
             this.alfLog("error", "A request was made to provide a display model for a dropped item, but no value was provided", payload, this);
+         }
+      },
+
+      /**
+       * Provides a response to the request for information via either a promise or on a response topic depending upon
+       * what has been provided in the supplied payload argument.
+       *
+       * @instance
+       * @param {object} payload An object containing the details of the request.
+       * @param {object} response The response to return.
+       */
+      provideResponse: function alfresco_services_DragAndDropModellingService__provideResponse(payload, response) {
+         if (payload.promise && typeof payload.promise.resolve === "function") 
+         {
+            payload.promise.resolve(response);
+         } 
+         else if (payload.alfResponseTopic) 
+         {
+            this.alfPublish(payload.alfResponseTopic, response);
+         } 
+         else 
+         {
+            this.alfLog("error", "Matching model data was found for dropped item, but no promise or alfResponseTopic was provided in the payload", payload, this);
          }
       },
 
@@ -152,9 +222,7 @@ define(["dojo/_base/declare",
        */
       processModel: function alfresco_services_DragAndDropModellingService__processModel(configAttribute, response, value, model) {
          var modelMatchFound = false;
-         if (model.property &&
-             model.targetValues && 
-             value[model.property])
+         if (model.property && model.targetValues && value[model.property]) 
          {
             // The model has a property to check for, and the value contains the property
             // We're going to want to test this value against the configured RegularExpression target
@@ -173,7 +241,7 @@ define(["dojo/_base/declare",
                   // Check that the attriibute we're looking for is actually provided for this model
                   if (model[configAttribute])
                   {
-                     response.widgets = model[configAttribute];
+                     response.widgets = lang.clone(model[configAttribute]);
                      modelMatchFound = true;
                   }
                   else

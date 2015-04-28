@@ -1,0 +1,182 @@
+{
+   "totalRecords": 2,
+   "totalRecordsUpper": -1,
+   "startIndex": 0,
+   "numberFound": 2,
+   "facets":
+   {
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}created":
+      [
+         {
+         "label": "faceted-search.date.one-month.label",
+         "value": "NOW\/DAY-1MONTH\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 2
+         },
+         {
+         "label": "faceted-search.date.one-week.label",
+         "value": "NOW\/DAY-7DAYS\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 1
+         },
+         {
+         "label": "faceted-search.date.one-year.label",
+         "value": "NOW\/DAY-1YEAR\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 4
+         },
+         {
+         "label": "faceted-search.date.six-months.label",
+         "value": "NOW\/DAY-6MONTHS\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 3
+         },
+         {
+         "label": "faceted-search.date.one-day.label",
+         "value": "NOW\/DAY-1DAY\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 0
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}creator":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 1,
+         "index": -1
+         },
+         {
+         "label": "Mike Jackson",
+         "value": "mjackson",
+         "hits": 1,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modified":
+      [
+         {
+         "label": "faceted-search.date.one-month.label",
+         "value": "NOW\/DAY-1MONTH\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 2
+         },
+         {
+         "label": "faceted-search.date.one-year.label",
+         "value": "NOW\/DAY-1YEAR\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 4
+         },
+         {
+         "label": "faceted-search.date.one-day.label",
+         "value": "NOW\/DAY-1DAY\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 0
+         },
+         {
+         "label": "faceted-search.date.six-months.label",
+         "value": "NOW\/DAY-6MONTHS\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 3
+         },
+         {
+         "label": "faceted-search.date.one-week.label",
+         "value": "NOW\/DAY-7DAYS\"..\"NOW\/DAY+1DAY",
+         "hits": 1,
+         "index": 1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modifier":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 1,
+         "index": -1
+         },
+         {
+         "label": "Mike Jackson",
+         "value": "mjackson",
+         "hits": 1,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.mimetype":
+      [
+         {
+         "label": "PNG Image",
+         "value": "image\/png",
+         "hits": 1,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.size":
+      [
+         {
+         "label": "faceted-search.size.100KB-1MB.label",
+         "value": "102400\"..\"1048576",
+         "hits": 1,
+         "index": 2
+         }
+      ]
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8",
+         "type": "document",
+         "name": "inv I200-189.png",
+         "displayName": "inv I200-189.png",
+         "title": "inv I200-189.png",
+         "description": "",
+         "modifiedOn": "2011-03-03T10:33:35.301Z",
+         "modifiedByUser": "mjackson",
+         "modifiedBy": "Mike Jackson",
+         "size": 777461,
+         "mimetype": "image\/png",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "path": "Budget Files\/Invoices",
+         "lastThumbnailModification":
+         [
+          "imgpreview:1429517979717"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/c65e3602-25dc-4590-b615-5e782684d1a0",
+         "type": "folder",
+         "name": "inv",
+         "displayName": "inv",
+         "title": "",
+         "description": "",
+         "modifiedOn": "2015-04-20T11:05:39.822+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "size": -1,
+         "mimetype": "application\/octet-stream",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "path": "Budget Files\/Invoices",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      }
+   ],
+   "spellcheck":
+   {
+         "searchRequest": "inv",
+         "searchSuggestions": [
+         ]
+   }
+}

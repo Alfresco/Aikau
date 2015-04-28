@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>Date Test</shortname>
-  <description>This WebScript defines the Date page test</description>
+  <shortname>Date Renderer</shortname>
+  <description>Shows the Date renderer in both simple and standard modes.</description>
   <family>aikau-unit-tests</family>
   <url>/Date</url>
 </webscript>

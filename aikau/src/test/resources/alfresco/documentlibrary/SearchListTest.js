@@ -40,10 +40,6 @@ define(["intern!object",
          browser.end();
       },
       
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
-      
       "Test that initial search term is not set from hash": function () {
          // Include a facet with no data...
          return browser.findByCssSelector("#INCLUDE_FACET_0")

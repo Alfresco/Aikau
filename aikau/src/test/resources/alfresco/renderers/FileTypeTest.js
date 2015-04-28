@@ -19,16 +19,17 @@
 
 /**
  * This test renders examples of FileTypes.
- * 
+ *
  * The test is simple and much of its validity is in the use of slightly damaged or incomplete models to inspect edge cases.
- * 
+ *
  * @author Richard Smith
  */
 define(["intern!object",
         "intern/chai!expect",
+        "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function (registerSuite, expect, assert, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -46,8 +47,25 @@ define(["intern!object",
      "Check there are the expected number of filetypes": function () {
          return browser.findAllByCssSelector("div.alfresco-renderers-FileType")
             .then(function (filetypes){
-               expect(filetypes).to.have.length(6, "There should be 6 filetypes rendered");
+               expect(filetypes).to.have.length(8, "There should be 8 filetypes rendered");
             });
+      },
+
+      // Tests the imgUrl config attribute.
+      "Check custom image has loaded": function () {
+         return browser.findByCssSelector("#ITEM7 img[alt=logo]")
+            .getAttribute("src")
+            .then(function (imgUrl){
+               assert.include(imgUrl, "alfresco/logo/css/images/AlfrescoLogoOnly.PNG", "Expected Alfresco logo, but got: "+imgUrl);
+            })
+      },
+
+      "Check non-custom image has loaded": function () {
+         return browser.findByCssSelector("#ITEM8 img[alt=notLogo]")
+            .getAttribute("src")
+            .then(function (imgUrl){
+               assert.include(imgUrl, "ppt-file-48.png", "Expected ppt-file-48, but got: "+imgUrl);
+            })
       },
 
       "Post Coverage Results": function() {

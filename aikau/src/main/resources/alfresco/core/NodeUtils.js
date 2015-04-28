@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -20,12 +20,12 @@
 /**
  *
  * @module alfresco/core/NodeUtils
- * @author Dave Draper & David Webster
+ * @author Dave Draper
+ * @author David Webster
  */
 define(["dojo/_base/lang",
         "dojo/_base/array"],
         function(lang, array) {
-
    return {
 
       /**
@@ -38,7 +38,6 @@ define(["dojo/_base/lang",
       processNodeRef: function alfresco_core_NodeUtils__processNodeRef(nodeRefInput) {
          try
          {
-
             // Split the nodeRef and rebuild from composite parts, for clarity and to support input of uri node refs.
             var arr = nodeRefInput.replace(":/", "").split("/"),
                storeType = arr[0],
@@ -75,7 +74,6 @@ define(["dojo/_base/lang",
        * @returns {Array} nodeRefArray
        */
       nodeRefArray: function alfresco_core_NodeUtils__nodeRefArray(nodes) {
-
          if (!lang.isArray(nodes))
          {
             this.alfLog("error", "expected an array of nodes, but didn't receive one");
@@ -86,7 +84,6 @@ define(["dojo/_base/lang",
                return node.nodeRef;
             }
          });
-
          return nodeRefArray;
       },
 
@@ -97,9 +94,8 @@ define(["dojo/_base/lang",
        * @returns {String} comma separated list of nodeRefs
        */
       nodeRefsString: function alfresco_core_NodeUtils_nodeRefString(nodes) {
-
          // Use nodeRefArray to extract the nodeRefs from the object.
-         return this.nodeRefArray(nodes).join(',');
+         return this.nodeRefArray(nodes).join(",");
       },
 
       /**
@@ -128,7 +124,7 @@ define(["dojo/_base/lang",
             {
                for (var i = 1, j = record.length, sameParent = true; i < j && sameParent; i++)
                {
-                  sameParent = (record[i].parent.nodeRef == record[i - 1].parent.nodeRef);
+                  sameParent = (record[i].parent.nodeRef === record[i - 1].parent.nodeRef);
                }
 
                nodeRef = sameParent ? record[0].parent.nodeRef : this.doclistMetadata.container;
@@ -138,7 +134,6 @@ define(["dojo/_base/lang",
          {
             nodeRef = lang.getObject("record.parent.nodeRef", false, this);
          }
-
          return nodeRef;
       }
    };

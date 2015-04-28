@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,7 +18,16 @@
  */
 
 /**
- * This is a BETA quality widget and not guaranteed for production use. 
+ * <p>This widget displays the comments for a particular node. The comments are displayed in a 
+ * [sortable paginated list]{@link alfresco/lists/AlfSortablePaginatedList} with 
+ * [paging controls]{@link module:alfresco/lists/Paginator} for managing the comments displayed. The individual
+ * comments are displayed using the [EditableComment]{@link module:alfresco/renderers/EditableComment} which allows
+ * individual comments to be updated if the current user has the appropriate permissions to work with that comment.<p>
+ *
+ * <p>Please note that for this widget relies on the [CommentService]{@link module:alfresco/services/CommentService}
+ * and [CrudService]{@link module:alfresco/services/CrudService} being present on the page in order to retrieve, create,
+ * update and delete comments. However these services can be substituted for custom versions that subscribe and publish
+ * on the same topics if required.</p>
  *
  * @module alfresco/renderers/CommentsList
  * @extends module:alfresco/core/ProcessWidgets
@@ -31,9 +40,18 @@ define(["dojo/_base/declare",
         function(declare, ProcessWidgets, ObjectProcessingMixin, lang) {
 
    return declare([ProcessWidgets, ObjectProcessingMixin], {
+
+      /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/CommentsList.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/CommentsList.properties"}],
       
       /**
-       * 
+       * Widget has been started, but not necessarily any sub-widgets.
        * 
        * @instance
        */
@@ -44,59 +62,102 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       * The widgets that comprise this CommentsList.
        * 
        * @instance
-       *
        * @fires ALF_CREATE_FORM_DIALOG_REQUEST
        */
       widgets: [
          {
-            name: "alfresco/buttons/AlfButton",
+            name: "alfresco/lists/Paginator",
             config: {
-               label: "Add Comment",
-               publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
-               publishPayloadType: "PROCESS",
-               publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
-               publishPayload: {
-                  dialogTitle: "Add Comment",
-                  dialogConfirmationButtonTitle: "Add",
-                  dialogCancellationButtonTitle: "Cancel",
-                  formSubmissionTopic: "ALF_CRUD_CREATE",
-                  formSubmissionPayloadMixin: {
-                     url: "api/node/{nodeRef}/comments",
-                     pubSubScope: "{pubSubScope}"
-                  },
-                  additionalCssClasses: "no-padding",
-                  fixedWidth: true,
-                  widgets: [
-                     {
-                        name: "alfresco/forms/controls/TinyMCE",
-                        config: {
-                           name: "content"
+               documentsLoadedTopic: "ALF_GET_COMMENTS_SUCCESS",
+               documentsPerPage: 5,
+               pageSizes: [5, 10, 20],
+               widgetsBefore: [
+                  {
+                     name: "alfresco/menus/AlfMenuBarItem",
+                     config: {
+                        label: "comment.add",
+                        publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+                        publishPayloadType: "PROCESS",
+                        publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
+                        publishPayload: {
+                           dialogTitle: "comment.add",
+                           dialogConfirmationButtonTitle: "comment.add.confirm",
+                           dialogCancellationButtonTitle: "comment.add.cancel",
+                           formSubmissionTopic: "ALF_CRUD_CREATE",
+                           formSubmissionPayloadMixin: {
+                              url: "api/node/{node.nodeRef}/comments",
+                              pubSubScope: "{pubSubScope}"
+                           },
+                           additionalCssClasses: "no-padding",
+                           fixedWidth: true,
+                           dialogWidth: "545px",
+                           widgets: [
+                              {
+                                 name: "alfresco/forms/controls/TinyMCE",
+                                 config: {
+                                    name: "content"
+                                 }
+                              }
+                           ]
+                        },
+                        publishGlobal: true,
+                        renderFilter: [
+                           {
+                              target: "currentMetadata",
+                              property: "parent.permissions.user.CreateChildren",
+                              values: [true]
+                           }
+                        ]
+                     }
+                  }
+               ],
+               widgetsAfter: [
+                  {
+                     name: "alfresco/menus/AlfMenuBarToggle",
+                     config: {
+                        checked: true,
+                        onConfig: {
+                           iconClass: "alf-sort-ascending-icon",
+                           publishTopic: "ALF_DOCLIST_SORT",
+                           publishPayload: {
+                              direction: "ascending"
+                           }
+                        },
+                        offConfig: {
+                           iconClass: "alf-sort-descending-icon",
+                           publishTopic: "ALF_DOCLIST_SORT",
+                           publishPayload: {
+                              direction: "descending"
+                           }
+                        },
+                        visibilityConfig: {
+                           initialValue: true,
+                           rules: [
+                              {
+                                 topic: "ALF_GET_COMMENTS_SUCCESS",
+                                 attribute: "totalRecords",
+                                 isNot: [0]
+                              }
+                           ]
                         }
                      }
-                  ]
-               },
-               publishGlobal: true,
-               renderFilter: [
-                  {
-                     target: "currentMetadata",
-                     property: "parent.permissions.user.CreateChildren",
-                     values: [true]
                   }
                ]
             }
          },
          {
-            name: "alfresco/lists/AlfList",
+            name: "alfresco/lists/AlfSortablePaginatedList",
             config: {
+               noDataMessage: "comments.none",
                waitForPageWidgets: false,
-               loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+               loadDataPublishTopic: "ALF_GET_COMMENTS",
                loadDataPublishPayload: {
-                  url: "components/node/{nodeRef}/comments?reverse=true&startIndex=0&pageSize=10",
-                  urlType: "SHARE"
+                  nodeRef: "{node.nodeRef}"
                },
+               currentPageSize: 5,
                documentsLoadedTopic: "ALF_COMMENTS_LOADED",
                widgets: [
                   {
@@ -108,6 +169,21 @@ define(["dojo/_base/declare",
                               config: {
                                  generatePubSubScope: true,
                                  widgets: [
+                                    {
+                                       name: "alfresco/lists/views/layouts/Cell",
+                                       config: {
+                                          width: "80px",
+                                          widgets: [
+                                             {
+                                                name: "alfresco/renderers/AvatarThumbnail",
+                                                config: {
+                                                   userNameProperty: "author.username",
+                                                   imageTitleProperty: "author.displayName"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    },
                                     {
                                        name: "alfresco/lists/views/layouts/Cell",
                                        config: {
@@ -156,6 +232,7 @@ define(["dojo/_base/declare",
                                              {
                                                 name: "alfresco/renderers/PublishAction",
                                                 config: {
+                                                   altText: "comment.edit",
                                                    iconClass: "edit-16",
                                                    publishTopic: "ALF_EDIT_COMMENT",
                                                    renderFilter: [
@@ -169,14 +246,15 @@ define(["dojo/_base/declare",
                                              {
                                                 name: "alfresco/renderers/PublishAction",
                                                 config: {
+                                                   altText: "comment.delete",
                                                    iconClass: "delete-16",
                                                    publishTopic: "ALF_CRUD_DELETE",
                                                    publishPayloadType: "PROCESS",
                                                    publishPayload: {
                                                       url: "{url}",
-                                                      confirmationTitle: "Delete Comment",
-                                                      confirmationPrompt: "Are you sure you want to delete the comment'?",
-                                                      successMessage: "Successfully deleted",
+                                                      confirmationTitle: "comment.delete",
+                                                      confirmationPrompt: "comment.delete.prompt",
+                                                      successMessage: "comment.delete.success",
                                                       requiresConfirmation: true,
                                                       pubSubScope: "{pubSubScope}"
                                                    },

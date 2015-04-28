@@ -2,6 +2,11 @@
    &:hover .editIcon {
       opacity: 1;
    }
+   &.alfresco-renderers-Property {
+      .alfresco-renderers-Property.block {
+         display: inline-block;
+      }
+   }
    .inlineEditValue {
       cursor: pointer;
       line-height: 20px;
@@ -14,6 +19,9 @@
    }
    .alfresco-renderers-Property {
       margin-left: 0;
+   }
+   .alfresco-renderers-Property.block {
+      display: inline-block;
    }
    .editIcon {
       cursor: pointer;

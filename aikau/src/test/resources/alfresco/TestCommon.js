@@ -26,32 +26,13 @@
  */
 define(["intern/dojo/node!fs",
         "intern/dojo/node!http",
+        "intern/dojo/node!os",
         "config/Config",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/lib/args",
         "intern/chai!assert"],
-        function(fs, http, Config, pollUntil, args, assert) {
+        function(fs, http, os, Config, pollUntil, args, assert) {
    return {
-
-      /**
-       * Path configurations.
-       */
-      paths: {
-         bootstrapPath: "/share/page/tp/ws/unit-test-bootstrap",
-         moduleDeploymentPath: "/share/page/modules/deploy"
-      },
-
-      /**
-       * This is the URL to use to bootstrap tests. It is composed of the paths.bootstrapPath and the
-       * Config.urls.bootstrapBaseUrl which is provided in the config package.
-       *
-       * @instance
-       * @type {string}
-       * @default Config.url.bootstrapBaseUrl + this.paths.bootstrapPath
-       */
-      bootstrapUrl: function bootstrapUrl(){
-         return Config.urls.bootstrapBaseUrl + this.paths.bootstrapPath;
-      },
 
       /**
        * Generates the URL to use for loading unit test WebScripts
@@ -61,20 +42,13 @@ define(["intern/dojo/node!fs",
        * @param {string} webScriptPrefix Optional prefix to the test page.
        */
       testWebScriptURL: function (webScriptURL, webScriptPrefix) {
+         if (!Config.urls.unitTestAppBaseUrl) {
+            var testServer = "http://" + this._getLocalIP() + ":8089";
+            Config.urls.unitTestAppBaseUrl = testServer;
+            // console.log("Using test-server URL: " + testServer);
+         }
          var prefix = webScriptPrefix || "/tp/ws";
          return Config.urls.unitTestAppBaseUrl + "/aikau/page" + prefix + webScriptURL;
-      },
-
-      /**
-       * This is the URL to use to access the module deployment screen. It is composed of the
-       * paths.moduleDeploymentPath and the Config.urls.bootstrapBaseUrl which is provided in the config package.
-       *
-       * @instance
-       * @type {string}
-       * @default Config.url.bootstrapBaseUrl + this.paths.moduleDeploymentPath
-       */
-      moduleDeploymentUrl: function moduleDeploymentUrl(){
-         return Config.urls.moduleDeploymentBaseUrl + this.paths.moduleDeploymentPath;
       },
 
       /**
@@ -152,11 +126,6 @@ define(["intern/dojo/node!fs",
          this._applyTimeouts(browser);
          this._maxWindow(browser);
          this._cancelModifierKeys(browser);
-         if(testName && browser.environmentType.browserName)
-         {
-            console.log(">> Starting '" + testName + "' on " + browser.environmentType.browserName);
-            console.log("   Test URL: " + this.testWebScriptURL(testWebScriptURL, testWebScriptPrefix));
-         }
          var command = browser.get(this.testWebScriptURL(testWebScriptURL, testWebScriptPrefix))
             .then(pollUntil(
                function() {
@@ -168,7 +137,7 @@ define(["intern/dojo/node!fs",
                function (element) {
                },
                function (error) {
-                  console.log(">> Test page for '" + testName + "'  failed to load, trying again...");
+                  // Failed to load, trying again...
                   browser.refresh();
                })
             .then(pollUntil(
@@ -179,11 +148,11 @@ define(["intern/dojo/node!fs",
                }, [], 10000, 1000))
             .then(
                function (element) {
-                  console.log(">> Test page for '" + testName + "' loaded successfully");
+                  // Loaded successfully
                },
                function (error) {
-                  console.log(">> Test page for '" + testName + "'  failed to load after two attempts");
-                  assert(false, "Test page could not be loaded");
+                  // Failed to load after two attempts
+                  assert.fail(null, null, "Test page could not be loaded");
                })
             .end();
          command.session.alfPostCoverageResults = function (newBrowser) { 
@@ -206,7 +175,35 @@ define(["intern/dojo/node!fs",
                   fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary");
                });
          };
-         
+         command.session.getLogEntries = function(filter) {
+            filter = filter || {};
+            var selectorBits = [".alfresco_logging_DebugLog__entry"];
+            filter.type && selectorBits.push("[data-aikau-log-type=\"" + filter.type + "\"]"); // Type is "..."
+            filter.topic && selectorBits.push("[data-aikau-log-topic$=\"" + filter.topic + "\"]"); // Topic ends with "..."
+            filter.object && selectorBits.push("[data-aikau-log-object=\"" + filter.object + "\"]"); // Object is "..."
+            if (filter.debug) {
+               console.log("Log entry selector: \"" + selectorBits.join("") + "\"");
+            }
+            return browser.executeAsync(function(entriesSelector, pos, callback) {
+               var entries = document.querySelectorAll(entriesSelector),
+                  dataObjs = [],
+                  entry,
+                  dataAttr;
+               for (var i = 0, j = entries.length; i < j; i++) {
+                  entry = entries[i];
+                  dataAttr = entry.getAttribute("data-aikau-log-data");
+                  dataObjs.push(JSON.parse(dataAttr));
+               }
+               if (pos === "first") {
+                  callback(dataObjs.shift());
+               } else if (pos === "last") {
+                  callback(dataObjs.pop());
+               } else {
+                  callback(dataObjs);
+               }
+            }, [selectorBits.join(""), filter.pos]);
+         };
+
          return command;
       },
 
@@ -222,6 +219,38 @@ define(["intern/dojo/node!fs",
          browser.setFindTimeout(Config.timeout.find);
          browser.setPageLoadTimeout(Config.timeout.pageLoad);
          browser.setExecuteAsyncTimeout(Config.timeout.executeAsync);
+      },
+
+      /**
+       * Get the local machine IP address (for us from other machines on the network). Specifically,
+       * it will pass back the first IPv4, external IP address whose name begins with an "e".
+       * 
+       * [MJD 2015-03-30] Hopefully this will be robust enough (examples seen = en0,en1,eth0,ethernet0)
+       *
+       * @instance
+       * @protected
+       * @returns  {string} The local IP address
+       */
+      _getLocalIP: function() {
+         var networkInterfaces = os.networkInterfaces(),
+            validNameRegex = /^e[a-z]+[0-9]$/i,
+            ipAddress = null;
+         Object.keys(networkInterfaces).every(function(interfaceName) {
+            if (validNameRegex.test(interfaceName)) {
+               networkInterfaces[interfaceName].every(function(interface) {
+                  if (interface.family === "IPv4" && !interface.internal) {
+                     ipAddress = interface.address;
+                     return false;
+                  }
+                  return true;
+               });
+            }
+            if (ipAddress) {
+               return false;
+            }
+            return true;
+         });
+         return ipAddress;
       },
 
       /**

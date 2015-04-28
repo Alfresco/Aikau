@@ -104,6 +104,10 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          this._suspendSpellCheck = false;
          this._cleanResettableVars();
+
+         // NOTE: This is required to ensure that no search is performed when no search hash variables are
+         //       initially provided. Added for backwards compatibility.
+         this.currentFilter = {};
       },
 
       /**
@@ -153,7 +157,7 @@ define(["dojo/_base/declare",
             }
             else
             {
-               if (payload.spellcheck != null && payload.spellcheck === false)
+               if (payload.spellcheck === false)
                {
                   this._suspendSpellCheck = true;
                }
@@ -414,7 +418,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Hash change detected", payload, this);
 
          // Only update if the payload contains one of the variables we care about
-         if(this._payloadContainsUpdateableVar(payload))
+         if(this.doHashVarUpdate(payload))
          {
             // If the search term has changed then we want to delete the facet filters as
             // they might not be applicable to the new search results...
@@ -477,7 +481,7 @@ define(["dojo/_base/declare",
             }
 
             if (!this.useInfiniteScroll ||
-                this.currentData == null ||
+                !this.currentData ||
                 this.currentData.numberFound >= startIndex)
             {
                this.alfPublish(this.requestInProgressTopic, {});
@@ -486,7 +490,10 @@ define(["dojo/_base/declare",
                var filters = "";
                for (var key in this.facetFilters)
                {
-                  filters = filters + key.replace(/\.__.u/g, "").replace(/\.__/g, "") + ",";
+                  if (this.facetFilters.hasOwnProperty(key))
+                  {
+                     filters = filters + key.replace(/\.__.u/g, "").replace(/\.__/g, "") + ",";
+                  }
                }
                filters = filters.substring(0, filters.length - 1);
 
@@ -523,7 +530,10 @@ define(["dojo/_base/declare",
 
                   for (var key in this.query)
                   {
-                     searchPayload[key] = this.query[key];
+                     if (this.query.hasOwnProperty(key))
+                     {
+                        searchPayload[key] = this.query[key];
+                     }
                   }
                }
 
@@ -581,15 +591,18 @@ define(["dojo/_base/declare",
          {
             for (var key in facets)
             {
-               var facet = key;
-               if (key[0] === "@")
+               if (facets.hasOwnProperty(key))
                {
-                  facet = key.substring(1);
+                  var facet = key;
+                  if (key[0] === "@")
+                  {
+                     facet = key.substring(1);
+                  }
+                  this.alfPublish("ALF_FACET_RESULTS_" + facet, {
+                     facetResults: facets[key],
+                     activeFilters: filters
+                  });
                }
-               this.alfPublish("ALF_FACET_RESULTS_" + facet, {
-                  facetResults: facets[key],
-                  activeFilters: filters
-               });
             }
          }
 

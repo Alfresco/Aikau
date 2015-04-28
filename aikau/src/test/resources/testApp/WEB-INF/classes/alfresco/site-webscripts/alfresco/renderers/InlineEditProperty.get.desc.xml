@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>InlineEditProperty Test</shortname>
-  <description>This WebScript defines the InlineEditProperty page test</description>
+  <shortname>InlineEditProperty Renderer</shortname>
+  <description>Shows 2 different variations on inline editing of properties, one InlineEditProperty and InlineEditSelect. These are configured in the same cell but use the renderOnNewLine configuration attribute to ensure they are not rendered on a single line.</description>
   <family>aikau-unit-tests</family>
   <url>/InlineEditProperty</url>
 </webscript>

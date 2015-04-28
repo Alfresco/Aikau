@@ -1,0 +1,9 @@
+{
+   "data" : 
+   {
+      "status" : "success",
+      "actionedUponNode" : "workspace://SpacesStore/f4237587-3d8c-4056-a2cf-62948789d462",
+      "action" : 
+      {"actionDefinitionName":"accept-simpleworkflow"}
+   }
+}

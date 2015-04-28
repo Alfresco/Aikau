@@ -45,6 +45,21 @@
       <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/PDF_faulty.pdf</to>
     </rule>
 
+    <!-- Thumbnail images -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8/content/thumbnails/doclib(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/Thumbnails/doclib_rendition.png</to>
+   </rule>
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8/content/thumbnails/imgpreview(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/Thumbnails/imgpreview_rendition.jpg</to>
+   </rule>
+
+   <rule>
+      <from>/proxy/alfresco/slingshot/profile/avatar/(.*)/thumbnail/avatar</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/Thumbnails/avatar.png</to>
+   </rule>
+
    <!-- Standard Surf redirects -->
    <rule>
       <from>/proxy/(.*)</from>

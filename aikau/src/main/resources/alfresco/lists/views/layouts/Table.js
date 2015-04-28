@@ -18,9 +18,9 @@
  */
 
 /**
- * Use this widget to render a a table of [rows]{@link module:alfresco/lists/views/layouts/Row}
- * 
- * @module alfresco/documentlibrary/views/layouts/alfresco_lists_views_layouts_Table__postCreate
+ * Use this widget to render a table of [rows]{@link module:alfresco/lists/views/layouts/Row}
+ *
+ * @module alfresco/lists/views/layouts/Table
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
@@ -29,36 +29,36 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Table.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing"], 
+        "alfresco/core/CoreWidgetProcessing"],
         function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing) {
 
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing], {
-      
+
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/Table.css"}]
        */
       cssRequirements: [{cssFile:"./css/Table.css"}],
-      
+
       /**
        * The HTML template to use for the widget.
-       * 
+       *
        * @instance
        * @type {String}
        */
       templateString: template,
-      
+
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
-       * 
+       *
        * @instance postCreate
        */
       postCreate: function alfresco_lists_views_layouts_Table__postCreate() {

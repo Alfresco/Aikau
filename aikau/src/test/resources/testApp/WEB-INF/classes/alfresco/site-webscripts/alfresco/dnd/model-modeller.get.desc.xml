@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop (model modeller)</shortname>
+  <description>Provides a page that can be used to create ModellingService configurations for drag-and-drop creation/configuration of other Aikau widgets.</description>
+  <family>aikau-unit-tests</family>
+  <url>/modellingServiceModeller</url>
+</webscript>

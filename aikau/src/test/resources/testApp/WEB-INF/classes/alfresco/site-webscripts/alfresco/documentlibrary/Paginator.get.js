@@ -20,54 +20,134 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         id: "MENU_BAR",
-         name: "alfresco/menus/AlfMenuBar",
+         name: "alfresco/layout/HorizontalWidgets",
          config: {
             widgets: [
                {
-                  id: "PAGINATOR",
-                  name: "alfresco/lists/Paginator",
+                  id: "DEFAULT_CONFIG",
+                  name: "alfresco/layout/ClassicWindow",
                   config: {
-                     hidePageSizeOnWidth: 100
-                  }
-               },
-               {
-                  id: "MENU_BAR_POPUP",
-                  name: "alfresco/menus/AlfMenuBarPopup",
-                  config: {
-                     label: "Popup",
+                     title: "Default page settings",
                      widgets: [
                         {
-                           name: "alfresco/lists/ResultsPerPageGroup"
-                        }
-                     ]
-                  }
-               }
-            ]
-         }
-      },
-      {
-         id: "LIST",
-         name: "alfresco/lists/AlfSortablePaginatedList",
-         config: {
-            useHash: false,
-            widgets: [
-               {
-                  name: "alfresco/lists/views/AlfListView",
-                  config: {
-                     widgets: [
-                        {
-                           name: "alfresco/lists/views/layouts/Row",
+                           id: "MENU_BAR",
+                           name: "alfresco/menus/AlfMenuBar",
                            config: {
                               widgets: [
                                  {
-                                    name: "alfresco/lists/views/layouts/Cell",
+                                    id: "PAGINATOR",
+                                    name: "alfresco/lists/Paginator",
+                                    config: {
+                                       hidePageSizeOnWidth: 100
+                                    }
+                                 },
+                                 {
+                                    id: "MENU_BAR_POPUP",
+                                    name: "alfresco/menus/AlfMenuBarPopup",
+                                    config: {
+                                       label: "Popup",
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/ResultsPerPageGroup"
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           id: "LIST",
+                           name: "alfresco/lists/AlfSortablePaginatedList",
+                           config: {
+                              useHash: false,
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/AlfListView",
                                     config: {
                                        widgets: [
                                           {
-                                             name: "alfresco/renderers/Property",
+                                             name: "alfresco/lists/views/layouts/Row",
                                              config: {
-                                                propertyToRender: "index"
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/lists/views/layouts/Cell",
+                                                      config: {
+                                                         widgets: [
+                                                            {
+                                                               name: "alfresco/renderers/Property",
+                                                               config: {
+                                                                  propertyToRender: "index"
+                                                               }
+                                                            }
+                                                         ]
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "CUSTOM_PAGE_SIZES",
+                  name: "alfresco/layout/ClassicWindow",
+                  config: {
+                     title: "Custom page sizes",
+                     pubSubScope: "CUSTOM_",
+                     widgets: [
+                        {
+                           id: "MENU_BAR",
+                           name: "alfresco/menus/AlfMenuBar",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "CUSTOM_PAGE_SIZE_PAGINATOR",
+                                    name: "alfresco/lists/Paginator",
+                                    config: {
+                                       documentsPerPage: 10,
+                                       hidePageSizeOnWidth: 100,
+                                       pageSizes: [5,10,20]
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           id: "LIST",
+                           name: "alfresco/lists/AlfSortablePaginatedList",
+                           config: {
+                              useHash: false,
+                              currentPageSize: 10,
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/AlfListView",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/views/layouts/Row",
+                                             config: {
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/lists/views/layouts/Cell",
+                                                      config: {
+                                                         widgets: [
+                                                            {
+                                                               name: "alfresco/renderers/Property",
+                                                               config: {
+                                                                  propertyToRender: "index"
+                                                               }
+                                                            }
+                                                         ]
+                                                      }
+                                                   }
+                                                ]
                                              }
                                           }
                                        ]
@@ -90,9 +170,6 @@ model.jsonModel = {
                "ALF_DOCLIST_DOCUMENTS_LOADED"
             ]
          }
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

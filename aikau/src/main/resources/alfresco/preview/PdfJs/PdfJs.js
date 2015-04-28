@@ -600,22 +600,12 @@ define(["dojo/_base/declare",
             {
                // var dialogPane;
                var previewHeight;
-               // TODO: Re-instate...
-               // if (dialogPane = Dom.getAncestorByClassName(this.previewManager.getPreviewerElement(), "dijitDialogPaneContent"))
-               // {
-               //    var h = domStyle.get(dialogPane, "height");
-               //    previewHeight = (parseInt(h) -42 -10 -controlHeight -1) + "px";
-               //    domStyle.set(this.previewManager.getPreviewerElement(), "height", previewHeight);
-               // }
-               // else
-               // {
-                  var docHeight = $(document).height(),
-                      clientHeight = $(window).height();
-                  // Take the smaller of the two
-                  previewHeight = ((docHeight < clientHeight) ? docHeight : clientHeight) - 220;
-                  // Leave space for header etc.
-                  newHeight = previewHeight - 10 - controlHeight -1; // Allow for bottom border of 1px
-               // }
+               var docHeight = $(document).height(),
+                   clientHeight = $(window).height();
+               // Take the smaller of the two
+               previewHeight = ((docHeight < clientHeight) ? docHeight : clientHeight) - 220;
+               // Leave space for header etc.
+               newHeight = previewHeight - 10 - controlHeight -1; // Allow for bottom border of 1px
             }
             else
             {
@@ -1337,7 +1327,7 @@ define(["dojo/_base/declare",
       onToggleSearchBar: function alfresco_preview_PdfJs_PdfJs__onToggleSearchBar(payload) {
          if (payload.value === "show")
          {
-            if (this._findController == null)
+            if (!this._findController)
             {
                this._findController = new PDFFindController({
                   pdfPageSource: this.documentView
@@ -1347,7 +1337,7 @@ define(["dojo/_base/declare",
             this._findController.reset();
             this._findController.extractText();
          }
-         else if (this._findController != null)
+         else if (this._findController)
          {
             this._searchReset();
             this._findController.active = false;

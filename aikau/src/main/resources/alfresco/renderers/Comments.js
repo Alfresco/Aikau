@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,6 +18,14 @@
  */
 
 /**
+ * This renderer can be used to both display a count of comments on a particular node as well as providing
+ * a link to where comments can be added, edited or deleted. The link can either be to particular page
+ * or alternatively can be used with a [VerticalReveal]{@link module:alfresco/layout/VerticalReveal},
+ * the [DialogService]{@link module:alfresco/services/DialogService} or some other widget or service to 
+ * display a [Comments List]{@link module:alfresco/renderers/CommentsList}. For example the 
+ * standard Document Library [Detailed View]{@link module:alfresco/documentlibrary/views/AlfDetailedView}
+ * uses the [VerticalReveal]{@link module:alfresco/layout/VerticalReveal} approach to allow inline commenting.
+ * 
  * @module alfresco/renderers/Comments
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -26,7 +34,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "dijit/_OnDijitClickMixin",
         "alfresco/renderers/_JsNodeMixin",
@@ -36,37 +44,37 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/_base/lang",
         "alfresco/core/UrlUtils",
-        "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, 
+        "dojo/dom-class"],
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin,
                  _HtmlAnchorMixin, _PublishPayloadMixin, template, AlfCore, lang, UrlUtils, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _HtmlAnchorMixin, AlfCore, UrlUtils, _PublishPayloadMixin], {
-      
+
       /**
        * An array of the i18n files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/Comments.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/Comments.properties"}],
-      
+
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/Comments.css"}]
        */
       cssRequirements: [{cssFile:"./css/Comments.css"}],
-      
+
       /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
        */
       templateString: template,
-      
+
       /**
        * The dot-notation property to use for the count of comments. Can be overridden.
        *
@@ -107,12 +115,12 @@ define(["dojo/_base/declare",
 
       /**
        * Set up the attributes to be used when rendering the template.
-       * 
+       *
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Comments__postMixInProperties() {
          this.commentLabel = this.message("comments.label");
-         
+
          // Get a tooltip appropriate for the node type...
          var isContainer = lang.getObject("node.isContainer", false, this.currentItem);
          if (isContainer)
@@ -123,10 +131,10 @@ define(["dojo/_base/declare",
          {
             this.label = this.message("comments.document.tooltip");
          }
-         
+
          // By default this will generate a link to details page for the current Node. However,
          // if a publishTopic is provided then it will publish on topic is provided
-         if (this.publishTopic == null)
+         if (!this.publishTopic)
          {
             // Get the URL for making a comment...
             // TODO: This should be replaced by publishing an action to allow greater control over how comments are made
@@ -143,10 +151,10 @@ define(["dojo/_base/declare",
                this.targetUrl = "";
             }
          }
-         
+
          // Get the count of comments if there are any...
          this.commentCount = lang.getObject(this.commentCountProperty, false, this.currentItem);
-         if (this.commentCount == null)
+         if (!this.commentCount)
          {
             this.commentCount = 0;
          }
@@ -159,28 +167,28 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      getAnchorTargetSelectors: function alfresco_renderers_SearchResultPropertyLink__getAnchorTargetSelectors() {
+      getAnchorTargetSelectors: function alfresco_renderers_Comments__getAnchorTargetSelectors() {
          return ["span.comment-link"];
       },
-      
+
       /**
        * @instance
        */
       postCreate: function alfresco_renderers_Comments__postCreate() {
-         if (this.commentCount != null)
+         if (this.commentCount || this.commentCount === 0)
          {
             domClass.remove(this.countNode, "hidden");
          }
          this.makeAnchor(this.targetUrl, this.targetUrlType);
 
-         if (this.subscriptionTopic != null)
+         if (this.subscriptionTopic)
          {
             this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.onCommentCountUpdate));
          }
       },
 
       /**
-       * The dot-notation property to retrieve from the payload published on the 
+       * The dot-notation property to retrieve from the payload published on the
        * [subscriptionTopic]{@link module:alfresco/renderers/Comments#subscriptionTopic}
        * to use to set the comment count with. By default this assumes it will be triggered
        * from an [list]{@link module:alfresco/lists/AlfList} publishing on the same scope and
@@ -188,9 +196,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "totalDocuments"
+       * @default "totalRecords"
        */
-      publicationCountProperty: "totalDocuments",
+      publicationCountProperty: "totalRecords",
 
       /**
        * Called whenever the [subscriptionTopic]{@link module:alfresco/renderers/Comments#subscriptionTopic}
@@ -202,7 +210,7 @@ define(["dojo/_base/declare",
        */
       onCommentCountUpdate: function alfresco_renderers_Comments__onCommentCountUpdate(payload) {
          var updatedCount = lang.getObject(this.publicationCountProperty, false, payload);
-         if (updatedCount != null)
+         if (updatedCount || updatedCount === 0)
          {
             this.countNode.innerHTML = updatedCount;
          }
@@ -216,8 +224,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onCommentClick: function alfresco_renderers_Comments__onCommentClick(evt) {
-         if (this.publishTopic != null)
+      onCommentClick: function alfresco_renderers_Comments__onCommentClick(/*jshint unused:false*/ evt) {
+         if (this.publishTopic)
          {
             // Clone the configured payload to avoid collisions with other instances...
             this.publishPayload = lang.clone(this.publishPayload);

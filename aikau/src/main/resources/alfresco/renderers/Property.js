@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -22,7 +22,7 @@
  * attribute. The property that will be rendered is determined by the [propertyToRender]{@link module:alfresco/renderers/Property#propertyToRender}
  * attribute which should be defined in "dot-notation" format (e.g. "node.properties.cm:title"). This widget accepts a number
  * of different configuration options that control how the property is ultimately displayed.
- * 
+ *
  * @module alfresco/renderers/Property
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -34,88 +34,94 @@
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "alfresco/renderers/_JsNodeMixin",
-        "alfresco/core/ValueDisplayMapMixin",
-        "alfresco/core/Core",
-        "dojo/text!./templates/Property.html",
-        "alfresco/core/ObjectTypeUtils",
-        "alfresco/core/UrlUtils",
-        "alfresco/core/TemporalUtils",
-        "dojo/_base/lang",
-        "dojo/dom-class",
-        "dojo/dom-style"], 
+        "dijit/_TemplatedMixin", 
+        "alfresco/renderers/_JsNodeMixin", 
+        "alfresco/core/ValueDisplayMapMixin", 
+        "alfresco/core/Core", 
+        "dojo/text!./templates/Property.html", 
+        "alfresco/core/ObjectTypeUtils", 
+        "alfresco/core/UrlUtils", 
+        "alfresco/core/TemporalUtils", 
+        "dojo/_base/lang", 
+        "dojo/dom-class", 
+        "dojo/dom-style", 
+        "dijit/Tooltip", 
+        "dojo/on"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, ValueDisplayMapMixin, AlfCore, template, 
-                 ObjectTypeUtils, UrlUtils, TemporalUtils, lang, domClass, domStyle) {
+            ObjectTypeUtils, UrlUtils, TemporalUtils, lang, domClass, domStyle, Tooltip, on) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils], {
-      
+
       /**
        * An array of the i18n files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/Property.properties"}]
        */
-      i18nRequirements: [{i18nFile: "./i18n/Property.properties"}],
-      
+      i18nRequirements: [{
+         i18nFile: "./i18n/Property.properties"
+      }],
+
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/Property.css"}]
        */
-      cssRequirements: [{cssFile:"./css/Property.css"}],
-      
+      cssRequirements: [{
+         cssFile: "./css/Property.css"
+      }],
+
       /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
        */
       templateString: template,
-      
+
       /**
        * This is the object that the property to be rendered will be retrieved from.
-       * 
+       *
        * @instance
        * @type {object}
        * @default null
        */
       currentItem: null,
-      
+
       /**
        * This should be set to the name of the property to render (e.g. "cm:name"). The property is expected
-       * to be in the properties map for the item being rendered. 
-       * 
+       * to be in the properties map for the item being rendered.
+       *
        * @instance
        * @type {string}
        * @default null
        */
       propertyToRender: null,
-      
+
       /**
        * This will be set with the rendered value.
-       * 
+       *
        * @instance
        * @type {string}
        * @default null
        */
       renderedValue: null,
-      
+
       /**
        * This can be set to apply a CSS class to the rendered property value
-       * 
+       *
        * @instance
        * @type {string}
        * @default "alfresco-renderers-Property"
        */
       renderedValueClass: "alfresco-renderers-Property",
-      
+
       /**
        * A label to go before the rendered value
        * @instance
-       * @type {string} 
+       * @type {string}
        * @default ""
        */
       renderedValuePrefix: "",
@@ -123,19 +129,19 @@ define(["dojo/_base/declare",
       /**
        * A label to go after the rendered value
        * @instance
-       * @type {string} 
+       * @type {string}
        * @default ""
        */
       renderedValueSuffix: "",
-      
+
       /**
        * Indicates whether or not to hide the property if is not available or not set
        * @instance
        * @type {boolean}
-       * @default false 
+       * @default false
        */
       warnIfNotAvailable: false,
-      
+
       /**
        * This can be either small, medium or large.
        * @instance
@@ -143,29 +149,29 @@ define(["dojo/_base/declare",
        * @default "medium"
        */
       renderSize: "medium",
-      
+
       /**
        * This indicates whether or not the requestes property can be found for the current item
-       * 
+       *
        * @instance
-       * @type {boolean} 
+       * @type {boolean}
        * @default true
        */
       renderPropertyNotFound: true,
-      
+
       /**
        * Indicates that this should only be displayed when the item (note: NOT the renderer) is
        * hovered over.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default false
        */
       onlyShowOnHover: false,
-      
+
       /**
        * The label for the property. Won't be shown if left as null.
-       * 
+       *
        * @instance
        * @type {string}
        * @default null
@@ -192,151 +198,171 @@ define(["dojo/_base/declare",
       deemphasized: false,
 
       /**
+       * Specifies a maximum width for the content of the renderer, and will overflow with an ellipsis if necessary
+       *
+       * @instance
+       * @type {string}
+       */
+      maxWidth: null,
+
+      /**
+       * The positions where a tooltip can appear over a truncated value
+       *
+       * @static
+       * @instance
+       * @protected
+       * @type {string[]}
+       */
+      _tooltipPositions: ["below-centered", "above-centered"],
+
+      /**
        * Set up the attributes to be used when rendering the template.
-       * 
+       *
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Property__postMixInProperties() {
-         if (this.label != null)
-         {
+         if (this.label) {
             this.label = this.message(this.label) + ": ";
-         }
-         else
-         {
+         } else {
             this.label = "";
          }
-         
-         if (ObjectTypeUtils.isString(this.propertyToRender) && 
-             ObjectTypeUtils.isObject(this.currentItem) && 
-             lang.exists(this.propertyToRender, this.currentItem))
-         {
+
+         if (ObjectTypeUtils.isString(this.propertyToRender) &&
+            ObjectTypeUtils.isObject(this.currentItem) &&
+            lang.exists(this.propertyToRender, this.currentItem)) {
             this.renderPropertyNotFound = false;
             this.originalRenderedValue = this.getRenderedProperty(lang.getObject(this.propertyToRender, false, this.currentItem));
             this.renderedValue = this.mapValueToDisplayValue(this.originalRenderedValue);
-         }
-         else
-         {
+         } else {
             this.alfLog("log", "Property does not exist:", this);
          }
 
-         this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
-         
-         if (this.renderOnNewLine === true)
-         {
-            this.renderedValueClass = this.renderedValueClass + " block";
-         }
-
-         if (this.deemphasized === true)
-         {
-            this.renderedValueClass = this.renderedValueClass + " deemphasized";
-         }
+         this.updateRenderedValueClass();
 
          // If the renderedValue is not set then display a warning message if requested...
-         if ((this.renderedValue == null || this.renderedValue === "") && this.warnIfNotAvailable)
-         {
-            // Get appropriate message
-            // Check message based on propertyToRender otherwise default to sensible alternative
-            var warningKey = this.warnIfNoteAvailableMessage,
-                warningMessage = "";
-            if (warningKey == null)
-            {
-               warningKey = "no." + this.propertyToRender + ".message";
-               warningMessage = this.message(warningKey);
-               if (warningMessage == warningKey)
-               {
-                  warningMessage = this.message("no.property.message", {0:this.propertyToRender});
+         if (this.renderedValue === null || this.renderedValue === "" || typeof this.renderedValue === "undefined") {
+            if (this.warnIfNotAvailable) {
+               // Get appropriate message
+               // Check message based on propertyToRender otherwise default to sensible alternative
+               var warningKey = this.warnIfNoteAvailableMessage,
+                  warningMessage = "";
+               if (!warningKey) {
+                  warningKey = "no." + this.propertyToRender + ".message";
+                  warningMessage = this.message(warningKey);
+                  if (warningMessage === warningKey) {
+                     warningMessage = this.message("no.property.message", {
+                        0: this.propertyToRender
+                     });
+                  }
+               } else {
+                  warningMessage = this.message(warningKey);
                }
+               this.renderedValue = warningMessage;
+               this.renderedValueClass += " faded";
+            } else {
+               // Reset the prefix and suffix if there's no data to display
+               this.requestedValuePrefix = this.renderedValuePrefix;
+               this.requestedValueSuffix = this.renderedValueSuffix;
+               this.renderedValuePrefix = "";
+               this.renderedValueSuffix = "";
             }
-            else
-            {
-               warningMessage = this.message(warningKey);
-            }
-            this.renderedValue = warningMessage;
-            this.renderedValueClass += " faded";
-         }
-         else if ((this.renderedValue == null || this.renderedValue === "") && !this.warnIfNotAvailable)
-         {
-            // Reset the prefix and suffix if there's no data to display
-            this.requestedValuePrefix = this.renderedValuePrefix;
-            this.requestedValueSuffix = this.renderedValueSuffix;
-            this.renderedValuePrefix = "";
-            this.renderedValueSuffix = "";
          }
       },
-      
+
+      /**
+       * Updates the [renderedValueClass]{@link module:alfresco/renderers/Property#renderedValueClass}
+       * attribute based on the current configuration. This is abstracted to a function so that it can
+       * be easily called by extending renderers.
+       *
+       * @instance
+       */
+      updateRenderedValueClass: function alfresco_renderers_Property__updateRenderedValueClass() {
+         this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
+         if (this.renderOnNewLine === true) {
+            this.renderedValueClass = this.renderedValueClass + " block";
+         }
+         if (this.deemphasized === true) {
+            this.renderedValueClass = this.renderedValueClass + " deemphasized";
+         }
+      },
+
       /**
        * Determines whether or not the property should only be displayed when the item is hovered over.
-       * 
+       *
        * @instance
        */
       postCreate: function alfresco_renderers_Property__postCreate() {
-         if (this.onlyShowOnHover === true)
-         {
-            domClass.add(this.domNode, "hover-only");
+         if (this.maxWidth) {
+            domClass.add(this.domNode, "has-max-width");
+            domStyle.set(this.domNode, {
+               maxWidth: this.maxWidth
+            });
          }
-         else
-         {
+         if (this.onlyShowOnHover === true) {
+            domClass.add(this.domNode, "hover-only");
+         } else {
             // No action
          }
       },
-      
+
       /**
-       * Renders a date property. 
-       * 
+       * Called on widget startup
+       *
+       * @instance
+       */
+      startup: function alfresco_renderers_Property__startup() {
+         this.inherited(arguments);
+         if (this.maxWidth && this.domNode.scrollWidth > this.domNode.clientWidth) {
+            var target = this.domNode,
+               tooltipPositions = this._tooltipPositions;
+            this.own(on(target, "focus,mouseover", function() {
+               var content = lang.trim(target.textContent || target.innerText || "");
+               Tooltip.show(content, target, tooltipPositions);
+            }));
+            this.own(on(target, "blur,mouseout", function() {
+               Tooltip.hide(target);
+            }));
+         }
+      },
+
+      /**
+       * Renders a date property.
+       *
        * @instance
        */
       renderDate: function(date, format) {
          return this.formatDate(this.fromISO8601(date), format);
       },
-      
+
       /**
        * @instance
        * @param {string} property The name of the property to render
        */
       getRenderedProperty: function alfresco_renderers_Property__getRenderedProperty(property) {
+         /*jshint maxcomplexity:15*/
          var value = "";
-         if (property == null)
-         {
+         if (property === null || typeof property === "undefined") {
             // No action required if a property isn't supplied
-         }
-         else if (ObjectTypeUtils.isString(property))
-         {
-            value =  this.encodeHTML(property);
-         }
-         else if (ObjectTypeUtils.isArray(property))
-         {
-            value =  property.length;
-         }
-         else if (ObjectTypeUtils.isBoolean(property))
-         {
-            value =  property;
-         }
-         else if (ObjectTypeUtils.isNumber(property))
-         {
-            value =  property;
-         }
-         else if (ObjectTypeUtils.isObject(property))
-         {
+         } else if (ObjectTypeUtils.isString(property)) {
+            value = this.encodeHTML(property);
+         } else if (ObjectTypeUtils.isArray(property)) {
+            value = property.length;
+         } else if (ObjectTypeUtils.isBoolean(property)) {
+            value = property;
+         } else if (ObjectTypeUtils.isNumber(property)) {
+            value = property;
+         } else if (ObjectTypeUtils.isObject(property)) {
             // TODO: This should probably be moved out into a Node specific sub-class
-            if (property.hasOwnProperty("iso8601"))
-            {
-               value =  this.renderDate(property.iso8601);
-            }
-            else if (property.hasOwnProperty("userName") && property.hasOwnProperty("displayName"))
-            {
-               value =  UrlUtils.userProfileLink(property.userName, property.displayName);
-            }
-            else if (property.hasOwnProperty("displayName"))
-            {
-               value =  this.encodeHTML(property.displayName || "");
-            }
-            else if (property.hasOwnProperty("title"))
-            {
-               value =  this.encodeHTML(property.title || "");
-            }
-            else if (property.hasOwnProperty("name"))
-            {
-               value =  this.encodeHTML(property.name || "");
+            if (property.hasOwnProperty("iso8601")) {
+               value = this.renderDate(property.iso8601);
+            } else if (property.hasOwnProperty("userName") && property.hasOwnProperty("displayName")) {
+               value = UrlUtils.userProfileLink(property.userName, property.displayName);
+            } else if (property.hasOwnProperty("displayName")) {
+               value = this.encodeHTML(property.displayName || "");
+            } else if (property.hasOwnProperty("title")) {
+               value = this.encodeHTML(property.title || "");
+            } else if (property.hasOwnProperty("name")) {
+               value = this.encodeHTML(property.name || "");
             }
          }
          return value;

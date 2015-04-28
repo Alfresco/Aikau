@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop (form creation)</shortname>
+  <description>Uses then imported forms.lib.js library file to configure a 'alfresco/services/DragAndDropModellingService' for creating Aikau form controls. This page also includes the 'alfresco/prototyping/Preview' widget for previewing the form that is created.</description>
+  <family>aikau-unit-tests</family>
+  <url>/form-dnd</url>
+</webscript>

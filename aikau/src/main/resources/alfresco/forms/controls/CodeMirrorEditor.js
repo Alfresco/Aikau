@@ -92,6 +92,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       createFormControl: function alfresco_forms_controls_CodeMirrorEditor__createFormControl(config) {
+         /*jshint unused:false*/
          this.alfSetupResizeSubscriptions(this.onResizeEvent, this);
 
          // Update the DOM node to include a specific class that we can anchor styles off...
@@ -154,7 +155,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          editor.setSize(this.width, this.height);
          
          // Set the initial content...
-         var initialValue = this.value != null ? this.value : "";
+         var initialValue = (this.value !== null && typeof this.value !== "undefined" && this.value) || "";
          this.lastValue = initialValue;
          editor.setValue(initialValue);
          
@@ -184,9 +185,19 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       onEditorChange: function alfresco_forms_controls_CodeMirrorEditor__onEditorChange(editor, changeObject) {
+         /*jshint unused:false*/
          var value = editor.getValue();
          this.onValueChangeEvent(this.name, this.lastValue, value);
          this.lastValue = value;
+      },
+
+      /**
+       * Overrides to prevent any action from occurring.
+       * 
+       * @instance
+       */
+      setupChangeEvents: function alfresco_forms_controls_TinyMCE__setupChangeEvents() {
+         // No action.
       },
       
       /**
@@ -210,13 +221,13 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @returns {string} The JSON value entered into the editor
        */
       getValue: function alfresco_forms_controls_CodeMirrorEditor__getValue() {
-         if (this.wrappedWidget != null &&  typeof this.wrappedWidget.getValue === "function")
+         if (this.wrappedWidget && this.wrappedWidget.getValue)
          {
             return this.wrappedWidget.getValue();
          }
          else
          {
-            return this.value != null ? this.value : "";
+            return (this.value !== null && typeof this.value !== "undefined" && this.value) || "";
          }
       }
    });

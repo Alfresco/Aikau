@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop (additional configuration)</shortname>
+  <description>Shows an example of using a 'alfresco/services/DragAndDropModellingService' to configure configuration options that are inherited by a nested dropped item.</description>
+  <family>aikau-unit-tests</family>
+  <url>/additional-config-dnd</url>
+</webscript>

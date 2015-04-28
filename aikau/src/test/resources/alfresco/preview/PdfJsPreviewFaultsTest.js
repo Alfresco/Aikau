@@ -202,7 +202,6 @@ define(["intern!object",
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog")
             .isDisplayed()
             .then(function(displayed) {
-               TestCommon.log(testname,"Checking dialog is displayed");
                expect(displayed).to.equal(true, "Dialog should be displayed");
             });
       },
@@ -222,12 +221,11 @@ define(["intern!object",
             .click()
          .end()
 
-         .sleep(500)
+         .sleep(1000) // Allow time for the dialog to close and re-open
 
-         .findByCssSelector(".alfresco-dialog-AlfDialog")
-            .isDisplayed()
-            .then(function(displayed) {
-               expect(displayed).to.equal(true, "Dialog should be displayed");
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "publish", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "Another request for a dialog should have been made");
             });
       },
 
@@ -246,12 +244,11 @@ define(["intern!object",
             .click()
          .end()
 
-         .sleep(500)
+         .sleep(1000) // Allow time for the dialog to close and re-open
 
-         .findByCssSelector(".alfresco-dialog-AlfDialog")
-            .isDisplayed()
-            .then(function(displayed) {
-               expect(displayed).to.equal(true, "Dialog should be displayed");
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "publish", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Another request for a dialog should have been made");
             });
       },
 
@@ -270,7 +267,7 @@ define(["intern!object",
             .click()
          .end()
 
-         .sleep(500)
+         .sleep(1000) // Allow for successful password to be applied
 
          .findByCssSelector(".previewer > .controls")
             .isDisplayed()

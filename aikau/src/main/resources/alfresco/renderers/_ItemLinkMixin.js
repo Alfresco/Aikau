@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -76,13 +76,13 @@ define(["dojo/_base/declare",
        */
       generateFileFolderLink: function alfresco_renderers__ItemLinkMixin__generateFileFolderLink(publishPayload) {
          var topic = "ALF_NAVIGATE_TO_PAGE";
-         if (publishPayload == null)
+         if (!publishPayload)
          {
             this.alfLog("warn", "A request was made to generate a file or folder link but no payload object was provided to be updated", this);
          }
          else
          {
-            if (this.currentItem != null && this.currentItem.node)
+            if (this.currentItem && this.currentItem.node)
             {
                var jsNode = this.currentItem.jsNode;
                if (jsNode.isLink && this.currentItem.location.site)
@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
          publishPayload.url = "";
          publishPayload.type = "FULL_PATH";
          publishPayload.target = "CURRENT";
-         if (this.customDetailsURL == null)
+         if (!this.customDetailsURL)
          {
             var actionUrls = this.getActionUrls(this.currentItem);
             publishPayload.url = actionUrls.documentDetailsUrl;

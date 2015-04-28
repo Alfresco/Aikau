@@ -147,6 +147,24 @@ define(["intern!object",
             });
       },
 
+      "Check that form dialog dimensions can be set": function() {
+         return closeAllDialogs()
+            .then(function() {
+               return browser.findById("CREATE_FORM_DIALOG")
+                  .click()
+               .end()
+               .findByCssSelector("#FD2 .dialog-body")
+                  .getComputedStyle("width")
+                     .then(function(width) {
+                        assert.equal(width, "700px", "Width was not set correctly");
+                     })
+                  .getComputedStyle("height")
+                     .then(function(height) {
+                        assert.equal(height, "300px", "Height was not set correctly");
+                     });
+            });
+      },
+
       "Dialog is closed when dialogCloseTopic is set": function() {
          return closeAllDialogs()
             .then(function() {
@@ -195,6 +213,23 @@ define(["intern!object",
             });
       },
 
+      "Check that non-form dialog dimensions can be set": function() {
+         return closeAllDialogs()
+            .then(function() {
+               return browser.findById("LAUNCH_OUTER_DIALOG_BUTTON")
+                  .click()
+               .end()
+               .findByCssSelector("#OUTER_DIALOG .dialog-body")
+                  .getComputedStyle("width")
+                     .then(function(width) {
+                        assert.equal(width, "600px", "Width was not set correctly");
+                     })
+                  .getComputedStyle("height")
+                     .then(function(height) {
+                        assert.equal(height, "400px", "Height was not set correctly");
+                     });
+            });
+      },
 
       "Can launch dialog within dialog": function() {
          return closeAllDialogs()

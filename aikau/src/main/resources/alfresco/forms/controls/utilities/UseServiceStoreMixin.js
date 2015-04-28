@@ -23,21 +23,21 @@
  * [FilteringSelect]{@link module:alfresco/forms/controls/FilteringSelect}
  * form controls. It provides functions for creating and working with
  * a [ServiceStore]{@link module:alfresco/forms/controls/utilities/ServiceStore}.
- * 
+ *
  * @module alfresco/forms/controls/utilities/UseServiceStoreMixin
  * @extends external:dojo/store/JsonRest
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dojo/_base/lang",
-        "alfresco/forms/controls/utilities/ServiceStore"], 
+        "alfresco/forms/controls/utilities/ServiceStore"],
         function(declare, lang, ServiceStore) {
 
    return declare([], {
 
       /**
        * Creates and returns a new service store.
-       * 
+       *
        * @instance
        */
       createServiceStore: function alfresco_forms_controls_utilities_UseServiceStoreMixin__createServiceStore() {
@@ -47,6 +47,7 @@ define(["dojo/_base/declare",
          var labelAttribute = lang.getObject("optionsConfig.labelAttribute", false, this);
          var valueAttribute = lang.getObject("optionsConfig.valueAttribute", false, this);
          var fixedOptions = lang.getObject("optionsConfig.fixed", false, this);
+         var searchStartsWith = lang.getObject("optionsConfig.searchStartsWith", true, this);
          var serviceStore = new ServiceStore({
             idProperty: (valueAttribute != null) ? valueAttribute : "value",
             queryAttribute: (queryAttribute != null) ? queryAttribute : "name",
@@ -54,7 +55,8 @@ define(["dojo/_base/declare",
             valueAttribute: (valueAttribute != null) ? valueAttribute : "value",
             publishTopic: publishTopic,
             publishPayload: publishPayload,
-            fixed: fixedOptions
+            fixed: fixedOptions,
+            searchStartsWith: searchStartsWith
          });
          return serviceStore;
       },

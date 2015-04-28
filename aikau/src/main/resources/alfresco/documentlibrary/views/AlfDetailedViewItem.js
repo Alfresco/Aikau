@@ -213,7 +213,7 @@ define(["alfresco/lists/views/layouts/Row",
             },
             name: "alfresco/renderers/Comments",
             config: {
-               subscriptionTopic: "ALF_COMMENTS_LOADED",
+               subscriptionTopic: "ALF_GET_COMMENTS_SUCCESS",
                publishTopic: "ALF_REVEAL_COMMENTS",
                publishPayload: {}
             }

@@ -1,11 +1,11 @@
 .alfresco-logo-Logo {
-   margin: 10px 16px 10px 8px;
+   margin: 9px 16px 8px 8px;
    border-right: @standard-border;
    padding-right: 14px;
 }
 
-.alfresco-logo-Logo > div.no-background-image {
-   background: none;
+.alfresco-logo-Logo img {
+   height: 48px;
 }
 
 .alfresco-logo-Logo .alfresco-logo-large {

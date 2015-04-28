@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>Nested drag and drop items</shortname>
+  <shortname>Drag-and-drop (nested dropped items)</shortname>
+  <description>Shows a 'alfresco/dnd/DragAndDropTarget' that is configured to create 'alfresco/dnd/DroppedNestingItemWrapper' widgets for each dropped item that will render a nested 'alfresco/dnd/DragAndDropTarget' widget so that one widget can be dropped into another</description>
   <family>aikau-unit-tests</family>
   <url>/nested-dnd</url>
 </webscript>

@@ -47,6 +47,15 @@ define([],function() {
       updateItemsEvent: "onAlfItemsUpdated",
 
       /**
+       * Emitted when an item value is updated
+       *
+       * @instance
+       * @type {String}
+       * @default "onAlfItemSaved"
+       */
+      itemSavedEvent: "onAlfItemSaved",
+
+      /**
        * Emitted when a draggable item is selected.
        *
        * @instance
@@ -54,6 +63,24 @@ define([],function() {
        * @default "onAlfItemSelected"
        */
       itemSelectedEvent: "onAlfItemSelected",
+
+      /**
+       * Emitted when an item requested additional configuration options from an item it has been dropped into.
+       *
+       * @instance
+       * @type {string}
+       * @default "onAlfItemAdditionalConfigRequest"
+       */
+      requestAdditionalConfigEvent: "onAdditionalConfigRequest",
+
+      /**
+       * Emitted when a item is dragged out of a [DragAndDropNestedTarget]{@link module:alfresco/dnd/DragAndDropNestedTarget}.
+       * 
+       * @instance
+       * @type {string}
+       * @default "onNestedDragOutEvent"
+       */
+      nestedDragOutEvent: "onNestedDragOutEvent",
 
       /**
        * This topic is published when using a modelling service to render the dropped items.
@@ -76,6 +103,17 @@ define([],function() {
       requestWidgetsForConfigTopic: "ALF_DND_REQUEST_WIDGETS_FOR_CONFIG",
 
       /**
+       * This topic is published when using a modelling service render the widgets that allow
+       * the user to configure the dropped item using options provided from the item that the 
+       * widget has been dropped into.
+       *
+       * @instance
+       * @type {string}
+       * @default "ALF_DND_REQUEST_WIDGETS_FOR_NESTED_CONFIG"
+       */
+      requestWidgetsForNestedConfigTopic: "ALF_DND_REQUEST_WIDGETS_FOR_NESTED_CONFIG",
+
+      /**
        * This topic is published when using the keyboard to insert a node. It requests the node
        * to be inserted.
        *
@@ -83,6 +121,28 @@ define([],function() {
        * @type {string}
        * @default "ALF_DND_REQUEST_ITEM_TO_ADD"
        */
-      requestItemToAddTopic: "ALF_DND_REQUEST_ITEM_TO_ADD"
+      requestItemToAddTopic: "ALF_DND_REQUEST_ITEM_TO_ADD",
+
+      /**
+       * This topic is published whenever an item in a [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * widget is selected. This is intended to cover the scenario where multiple 
+       * [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems} widgets are included on the same page.
+       *
+       * @instance
+       * @type {String}
+       * @default "ALF_DND_SOURCE_ITEM_SELECTED"
+       */
+      itemSelectedTopic: "ALF_DND_SOURCE_ITEM_SELECTED",
+
+      /**
+       * This topic is published by a [DroppedItemWrapper]{@link module:alfresco/dnd/DroppedItemWrapper} whenever a 
+       * dropped item is deleted. This topic is subscribed to by [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * that are configured to only allow an item to be used so that the deleted item can be reinstated.
+       *
+       * @instance
+       * @type {String}
+       * @default "ALF_DND_DROPPED_ITEM_DELETED"
+       */
+      itemDeletedTopic: "ALF_DND_DROPPED_ITEM_DELETED"
    };
 });

@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
        */
       postMixInProperties: function alfresco_lists_ResultsPerPageGroup__postMixInProperties() {
          this.inherited(arguments);
-         this.alfSubscribe(this.docsPerpageSelectionTopic, lang.hitch(this, "onDocumentsPerPageChange"));
+         this.alfSubscribe(this.docsPerpageSelectionTopic, lang.hitch(this, this.onDocumentsPerPageChange));
          this.alfPublish(this.getPreferenceTopic, {
             preference: "org.alfresco.share.documentList.documentsPerPage",
             callback: this.setDocumentsPerPage,

@@ -1,0 +1,54 @@
+#aikauLightbox
+{
+   background-color:#eee;
+   padding: 10px;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+}
+
+#aikauLightboxDetails
+{
+   font-size: 0.8em;
+   padding-top: 0.4em;
+}
+
+#aikauLightboxCaption
+{
+   float: left;
+}
+
+#keyboardMsg
+{
+   float: right;
+}
+
+#closeButton
+{
+   top: 5px;
+   right: 5px;
+}
+
+#aikauLightbox img
+{
+   border: none;
+   clear: both;
+}
+
+#aikauOverlay img
+{
+   border: none;
+}
+
+#aikauOverlay
+{
+   background-image: url(./images/overlay.png);
+}
+
+/* Commented out as breaking LESS compilation
+* html #aikauOverlay
+{
+   background-color: #333;
+   back\ground-color: transparent;
+   background-image: url(blank.gif);
+   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./images/overlay.png", sizingMethod="scale");
+}*/

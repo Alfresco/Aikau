@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,35 +18,48 @@
  */
 
 /**
- * This is a BETA quality widget and not guaranteed for production use. 
+ * This layout widget allows for the dynamic revealing and hiding of content.
+ *
+ * @example <caption>Sample configuration</caption>
+ * {
+ *   name: "alfresco/layout/VerticalReveal",
+ *   config: {
+ *     initiallyRevealed: true, // Optionally reveal immediately
+ *     subscriptionTopic: "ALF_REVEAL_LOGO",
+ *     widgets: [{
+ *       name: "alfresco/logo/Logo"
+ *     }]
+ *   }
+ * }
  *
  * @module alfresco/layout/VerticalReveal
  * @extends module:alfresco/core/ProcessWidgets
  * @mixes external:dojo/_OnDijitClickMixin
  * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["alfresco/core/ProcessWidgets",
         "dijit/_OnDijitClickMixin",
         "dojo/text!./templates/VerticalReveal.html",
         "dojo/_base/declare",
         "dojo/_base/lang",
+        "dojo/Deferred",
         "dojo/dom-construct",
         "dojo/dom-class",
-        "dojo/dom-style",
-        "dojo/_base/array"], 
-        function(ProcessWidgets, _OnDijitClickMixin, template, declare, lang, domConstruct, domClass, domStyle, array) {
-   
+        "dojo/dom-style"],
+        function(ProcessWidgets, _OnDijitClickMixin, template, declare, lang, Deferred, domConstruct, domClass, domStyle) {
+
    return declare([ProcessWidgets, _OnDijitClickMixin], {
-      
+
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/VerticalWidgets.css"}]
        */
-      cssRequirements: [{cssFile:"./css/VerticalReveal.css"}],
-      
+      cssRequirements: [{cssFile: "./css/VerticalReveal.css"}],
+
       /**
        * The HTML template to use for the widget.
        * @instance
@@ -55,7 +68,15 @@ define(["alfresco/core/ProcessWidgets",
       templateString: template,
 
       /**
+       * The root class for this widget
        *
+       * @instance
+       * @type {string}
+       */
+      rootClass: "alfresco-layout-VerticalReveal",
+
+      /**
+       * The label for the manual toggle
        *
        * @instance
        * @type {string}
@@ -83,55 +104,88 @@ define(["alfresco/core/ProcessWidgets",
       initiallyRevealed: false,
 
       /**
+       * Will be set to true once the widgets have been processed
        *
-       * 
        * @instance
+       * @type {boolean}
+       */
+      _widgetsProcessed: false,
+
+      /**
+       * Called when the child widgets have been processed
+       *
+       * @instance
+       * @override
+       * @param {Array} widgets An array of all the widgets that have been processed
+       */
+      allWidgetsProcessed: function alfresco_layout_VerticalReveal__allWidgetsProcessed( /*jshint unused:false*/ widgets) {
+         this._widgetsProcessed = true;
+         this._doToggle();
+      },
+
+      /**
+       * Widget has been created, but not sub-widgets
+       *
+       * @instance
+       * @override
+       */
+      postCreate: function alfresco_layout_VerticalReveal__postCreate() {
+         if (this.toggleLabel) {
+            domClass.add(this.domNode, this.rootClass + "--has-toggle");
+         }
+         this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this._onToggleDisplay));
+         if (this.initiallyRevealed === true) {
+            this._onToggleDisplay();
+         }
+      },
+
+      /**
+       * Properties have been mixed into this widget instance.
+       *
+       * @instance
+       * @override
        */
       postMixInProperties: function alfresco_layout_VerticalReveal__postMixInProperties() {
-         if (this.toggleLabel == null)
-         {
-            // In the postCreate we'll hide the toggle node...
-         }
-         else
-         {
+         if (this.toggleLabel) {
             this.toggleLabel = this.message(this.toggleLabel);
          }
+         this.inherited(arguments);
       },
 
       /**
+       * Toggle the content node.
        *
-       * 
        * @instance
        */
-      postCreate: function alfresco_layout_VerticalReveal__postCreates() {
-         // Set a boolean flag to record when the child widgets get processed so that we only process them once...
-         this._processedWidgetsToReveal = false;
-         
-         if (this.toggleLabel == null)
-         {
-            domClass.add(this.toggleNode, "hidden");
-         }
-         this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.onDisplayToggle));
-
-         if (this.initiallyRevealed === true && this.widgets)
-         {
-            this.processWidgets(this.widgets, this.containerNode);
-            this._processedWidgetsToReveal = true;
+      _doToggle: function alfresco_layout_VerticalReveal___doToggle() {
+         var maxHeight = this.contentNode.style.maxHeight, // domStyle.get returns 0 instead of "none"
+            isExpanded = maxHeight === "none" || (typeof maxHeight === "number" && maxHeight > 0);
+         if (isExpanded) {
+            domClass.remove(this.contentNode, "content--has-transition");
+            domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
+            setTimeout(lang.hitch(this, function() {
+               domClass.add(this.contentNode, "content--has-transition");
+               domStyle.set(this.contentNode, "maxHeight", 0);
+            }, 0));
+         } else {
+            domStyle.set(this.contentNode, "maxHeight", this.contentNode.scrollHeight + "px");
+            setTimeout(lang.hitch(this, function() {
+               domStyle.set(this.contentNode, "maxHeight", "none");
+            }), 700);
          }
       },
 
       /**
-       * 
+       * Handle requests to toggle the contents visibility
        *
        * @instance
        */
-      onDisplayToggle: function alfresco_layout_VerticalReveal__onDisplayToggle() {
-         if (this._processedWidgetsToReveal === false && this.widgets)
-         {
+      _onToggleDisplay: function alfresco_layout_VerticalReveal___onToggleDisplay() {
+         if (!this._widgetsProcessed) {
             this.processWidgets(this.widgets, this.containerNode);
-            this._processedWidgetsToReveal = true;
+         } else {
+            this._doToggle();
          }
-         domClass.toggle(this.contentNode, "reveal");
       }
    });
 });

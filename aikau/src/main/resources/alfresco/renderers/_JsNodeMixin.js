@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -34,12 +34,12 @@ define(["dojo/_base/declare",
        */
       constructor: function alfresco_renderers__JsNodeMixin__constructor(args) {
          lang.mixin(this, args);
-         if (this.currentItem != null)
+         if (this.currentItem)
          {
             // This checks if the "jsNode" attribute has been created, and if not will make an attempt
             // to create it. This is in place purely for handling node based items, but shouldn't
             // break anything else...
-            if (typeof this.currentItem.jsNode === "undefined" && this.currentItem.node != null)
+            if (typeof this.currentItem.jsNode === "undefined" && this.currentItem.node)
             {
                this.currentItem.jsNode = new JsNode(this.currentItem.node);
             }

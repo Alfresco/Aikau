@@ -1,9 +1,10 @@
-Aikau 1.0.8 Release Notes
-=========================
+Aikau 1.0.14 Release Notes
+==========================
 
 Current deprecations:
 ---------------------
-Previous releases:
+* alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
+* alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
 * alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
 * alfresco/documentlibrary/views/DocumentListRenderer            (use: alfresco/lists/views/ListRenderer)
 * alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin  (use: alfresco/lists/views/_AlfAdditionalViewControlMixin)
@@ -32,6 +33,69 @@ Previous releases:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.14:
+* [AKU-158](https://issues.alfresco.com/jira/browse/AKU-158)       - Improved publication/subscription log
+* [AKU-219](https://issues.alfresco.com/jira/browse/AKU-219)       - Nested "use-once" items returned to palette
+* [AKU-220](https://issues.alfresco.com/jira/browse/AKU-220)       - PubSub options on form controls honour previous value
+* [AKU-221](https://issues.alfresco.com/jira/browse/AKU-221)       - Prevent dropped items being added to palette
+* [AKU-227](https://issues.alfresco.com/jira/browse/AKU-227)       - CommentsList widget improvements
+* [AKU-229](https://issues.alfresco.com/jira/browse/AKU-229)       - Support nested drop targets
+* [AKU-230](https://issues.alfresco.com/jira/browse/AKU-230)       - InlineEditProperty with renderOnNewLine enabled layout fix
+* [AKU-231](https://issues.alfresco.com/jira/browse/AKU-231)       - Simple mode for alfresco/renderers/Date
+* [AKU-233](https://issues.alfresco.com/jira/browse/AKU-233)       - alfresco/renderers/Thumbnail enhancements
+* [AKU-236](https://issues.alfresco.com/jira/browse/AKU-236)       - Updates to alfresco/dnd/DragAndDropItemsListView widget
+* [AKU-245](https://issues.alfresco.com/jira/browse/AKU-245)       - Localize alfresco/services/CrudService messages
+
+1.0.13:
+* [AKU-163](https://issues.alfresco.com/jira/browse/AKU-163)       - alfresco/lists/AlfHashList can update load payload from hash parameters
+* [AKU-178](https://issues.alfresco.com/jira/browse/AKU-178)       - New alfresco/forms/controls/MultiSelectInput widget
+* [AKU-191](https://issues.alfresco.com/jira/browse/AKU-191)       - New alfresco/dnd/DragAndDropItemsListView widget
+* [AKU-196](https://issues.alfresco.com/jira/browse/AKU-196)       - Added support for "document-approve" action
+* [AKU-197](https://issues.alfresco.com/jira/browse/AKU-197)       - Added support for "document-reject" action
+* [AKU-216](https://issues.alfresco.com/jira/browse/AKU-216)       - Updated ContainerPicker to support configurable repository root node.
+* [AKU-218](https://issues.alfresco.com/jira/browse/AKU-218)       - Added modelling service config creator
+
+1.0.12:
+* [AKU-14](https://issues.alfresco.com/jira/browse/AKU-14)       - Code Mirror form control updates
+* [AKU-150](https://issues.alfresco.com/jira/browse/AKU-150)     - CSS updates to support Share title bar
+* [AKU-188](https://issues.alfresco.com/jira/browse/AKU-188)     - Hide edit button on DND items by default
+* [AKU-189](https://issues.alfresco.com/jira/browse/AKU-189)     - Use-once DND items
+* [AKU-190](https://issues.alfresco.com/jira/browse/AKU-190)     - Multiple DND source keyboard control fix
+* [AKU-192](https://issues.alfresco.com/jira/browse/AKU-192)     - Added alfresco/lists/AlfFilteredList widget
+* [AKU-193](https://issues.alfresco.com/jira/browse/AKU-193)     - Form control options localization fix
+* [AKU-217](https://issues.alfresco.com/jira/browse/AKU-217)     - CSS correction for Logo
+
+1.0.11:
+* [AKU-3](https://issues.alfresco.com/jira/browse/AKU-3)     - Updated tests to work against Selenium Grid
+* [AKU-37](https://issues.alfresco.com/jira/browse/AKU-37)   - Added folder view preference handling
+* [AKU-159](https://issues.alfresco.com/jira/browse/AKU-159) - Support for truncated property rendering
+* [AKU-175](https://issues.alfresco.com/jira/browse/AKU-175) - Improved image source logo width handling
+* [AKU-177](https://issues.alfresco.com/jira/browse/AKU-177) - Fixed scoping on AlfDetailedViewItem
+* [AKU-180](https://issues.alfresco.com/jira/browse/AKU-180) - PDF.js preview faults test fix
+* [AKU-182](https://issues.alfresco.com/jira/browse/AKU-182) - Update archetype to include repo connection config
+* [AKU-183](https://issues.alfresco.com/jira/browse/AKU-183) - Index page for unit test application
+* [AKU-184](https://issues.alfresco.com/jira/browse/AKU-184) - DND item label localization
+
+1.0.10:
+* [AKU-133](https://issues.alfresco.com/jira/browse/AKU-133)     - FileType configurable images
+* [AKU-157](https://issues.alfresco.com/jira/browse/AKU-157)     - Ensure HiddenValue form control can be set
+* [AKU-170](https://issues.alfresco.com/jira/browse/AKU-170)     - Improvements to test reporter
+* [AKU-172](https://issues.alfresco.com/jira/browse/AKU-172)     - SearchBox configurability updates
+* [AKU-176](https://issues.alfresco.com/jira/browse/AKU-176)     - Form dialog width setting updates
+
+1.0.9:
+* [AKU-33](https://issues.alfresco.com/jira/browse/AKU-33)     - Add dedicated Detailed View result widget for performance
+* [AKU-115](https://issues.alfresco.com/jira/browse/AKU-115)   - Use keyboard to add DND items
+* [AKU-116](https://issues.alfresco.com/jira/browse/AKU-116)   - Re-order DND items using keyboard navigation
+* [AKU-148](https://issues.alfresco.com/jira/browse/AKU-148)   - Alias AlfDocumentListPaginator
+* [AKU-149](https://issues.alfresco.com/jira/browse/AKU-149)   - When a publishPayloadType 'BUILD' updates
+* [AKU-150](https://issues.alfresco.com/jira/browse/AKU-150)   - Title overflow handling
+* [AKU-155](https://issues.alfresco.com/jira/browse/AKU-155)   - Improved form dialog submission failures
+* [AKU-160](https://issues.alfresco.com/jira/browse/AKU-160)   - Duplicate BaseFormControlfunctions
+* [AKU-161](https://issues.alfresco.com/jira/browse/AKU-161)   - Fix noValueUpdateWhenHiddenOrDisabled
+* [AKU-164](https://issues.alfresco.com/jira/browse/AKU-164)   - SearchBox styling
+* [AKU-168](https://issues.alfresco.com/jira/browse/AKU-168)   - PickedItem fails in singleItemMode
+
 1.0.8:
 * [AKU-5](https://issues.alfresco.com/jira/browse/AKU-5)       - Remove YUI2 and Share dependencies from TinyMCE modules
 * [AKU-30](https://issues.alfresco.com/jira/browse/AKU-30)     - Updates to Indicators renderer

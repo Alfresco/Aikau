@@ -19,25 +19,25 @@
 
 /**
  * This mixin module is primarily provided for allowing publication payloads to be be processed
- * using a set of utility functions. It was written to be used by the 
+ * using a set of utility functions. It was written to be used by the
  * [_PublishPayloadMixin]{@link module:alfresco/renderers/_PublishPayloadMixin} but can be mixed into
  * any module that needs to take advantage of the object processing capabilities that it provides.
- * 
+ *
  * @module alfresco/core/ObjectProcessingMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
-        "alfresco/core/ObjectTypeUtils"], 
+        "alfresco/core/ObjectTypeUtils"],
         function(declare, lang, array, ObjectTypeUtils) {
-   
+
    return declare(null, {
-      
+
       /**
        * This utility function will convert the value "___AlfCurrentItem" into the actual
        * currentItem object. It will return the supplied value if it is anything else.
-       * 
+       *
        * @instance
        * @param {string} v The value to process.
        * @returns The processed value
@@ -50,66 +50,64 @@ define(["dojo/_base/declare",
          else
          {
             return v;
-         } 
+         }
       },
-
 
       /**
        * This utility function will perform token substitution on the supplied string value using the
-       * values from the calling object. If the token cannot be found in the calling object then it will be left 
+       * values from the calling object. If the token cannot be found in the calling object then it will be left
        * as is (including the curly braces).
+       *
+       * @param value {String} - the token to replace
+       * @param object {Object} - the object containing the token
+       * @return {*}
+       */
+      processTokens: function alfresco_core_ObjectProcessingMixin__processTokens(value, object) {
+         // Default to returning the input value if it doesn't match.
+         var processedValue = value;
+
+         // Regular expression to match token in curly braces
+         var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*}$/g;
+
+         // If the whole string is the token, replace it if it matches
+         if (re.test(value)) {
+            // Strip off curly braces
+            var tokenWithoutBraces = value.slice(1, -1);
+
+            // If taken exists in object, replace it.
+            if (typeof object[tokenWithoutBraces] !== "undefined") {
+               processedValue = object[tokenWithoutBraces];
+            }
+         }
+         else {
+            // Deal with multiple tokens in the string.
+            processedValue = lang.replace(value, lang.hitch(this, this.safeReplace, object));
+         }
+         return processedValue;
+      },
+
+      /**
+       * Wrapper for processTokens, searching within this
        *
        * @instance
        * @param {string} v The value to process.
-       * @returns The processed value
+       * @returns {*} The processed value
        */
       processInstanceTokens: function alfresco_core_ObjectProcessingMixin__processInstanceTokens(v) {
-         // Only replace a value if it actually exists, otherwise leave the token exactly as is.
-         var u;
-         var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*}$/g;
-         if (re.test(v))
-         {
-            var tokenWithoutBraces = v.slice(1,-1);
-            if (typeof this[tokenWithoutBraces])
-            {
-               u = this[tokenWithoutBraces];
-            }
-         }
-         else
-         {
-            u = lang.replace(v, lang.hitch(this, this.safeReplace, this));
-         }
-         // var u = lang.replace(v, lang.hitch(this, this.safeReplace, this));
-         return u;
+         // Search for tokens in the current scope
+         return this.processTokens(v, this);
       },
 
       /**
-       * This utility function will perform token substitution on the supplied string value using the
-       * values from currentItem. If the token cannot be found in the currnentItem then it will be left 
-       * as is (including the curly braces).
+       * Wrapper for processTokens, searching within currentItem
        *
        * @instance
        * @param {string} v The value to process.
-       * @returns The processed value
+       * @returns {*} The processed value
        */
       processCurrentItemTokens: function alfresco_core_ObjectProcessingMixin__processCurrentItemTokens(v) {
-         var u;
-
-         // Only replace a value if it actually exists, otherwise leave the token exactly as is.
-         var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*}$/g ;
-         if (re.test(v))
-         {
-            var tokenWithoutBraces = v.slice(1,-1);
-            if (typeof this.currentItem[tokenWithoutBraces] !== "undefined")
-            {
-               u = this.currentItem[tokenWithoutBraces];
-            }
-         }
-         else
-         {
-            u = lang.replace(v, lang.hitch(this, this.safeReplace, this.currentItem));
-         }
-         return u;
+         // Search for tokens in the current item
+         return this.processTokens(v, this.currentItem);
       },
 
       /**
@@ -141,12 +139,12 @@ define(["dojo/_base/declare",
          else
          {
             return existingValue;
-         }  
+         }
       },
 
       /**
        * This utility function will replaced all colons in a string with underscores. This has been provided
-       * for assisting with processing qnames into values that can be included in a URL. 
+       * for assisting with processing qnames into values that can be included in a URL.
        *
        * @instance
        * @param {string} v The value to process.
@@ -159,8 +157,8 @@ define(["dojo/_base/declare",
 
       /**
        * This utility function can be used to work through the supplied object and process string
-       * values with all the supplied functions. 
-       * 
+       * values with all the supplied functions.
+       *
        * @intance
        * @param {array} functions An array of functions to apply to values
        * @param {object} o The object to process
@@ -198,7 +196,7 @@ define(["dojo/_base/declare",
 
       /**
        * Apply the supplied function to the value of the supplied key in the supplied object
-       * 
+       *
        * @instance
        * @param {object} o The object to get the value from
        * @param {string} key The key of the object to use

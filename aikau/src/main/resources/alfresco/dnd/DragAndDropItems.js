@@ -71,6 +71,59 @@ define(["dojo/_base/declare",
       dragWithHandles: false,
       
       /**
+       * If this is configured to be true then once an item has been used it will be removed 
+       * so that it cannot be used again. If the item is deleted it will be reinstated.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      useItemsOnce: false,
+
+      /**
+       * When [items can only be used once]{@link module:alfresco/dnd/DragAndDropItems#useItemsOnce}
+       * this is the dot-notation property to compare deleted items against the configured
+       * [items]{@link module:alfresco/dnd/DragAndDropItems#items} to see if a deleted item should
+       * be re-instated.
+       *
+       * @instance
+       * @type {string}
+       * @default "name"
+       */
+      useItemsOnceComparisonKey: "name",
+
+      /**
+       * Indicates that the items should be rendered immediately. This is a configurable option because
+       * the [DragAndDropItemsListView]{@link module:alfresco/dnd/DragAndDropItemsListView} needs to be able
+       * to prevent immediately rendering the item data.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      immediateRender: true,
+
+      /**
+       * Indicates whether or not items displayed can be re-arranged. Defaults to false.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      selfAccept: false,
+
+      /**
+       * The array of types that this can be dropped if this is to be used as a target. Note that this has been added
+       * purely to support configurablility and extensions. If this is left as the default of null then it means
+       * that this cannot be used as a drag-and-drop target.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      acceptTypes: null,
+
+      /**
        * Creates a palette of items that can be dragged (and dropped).
        * 
        * @instance
@@ -80,15 +133,67 @@ define(["dojo/_base/declare",
          // can be inserted into a drop target when the drop target is actioned by the keyboard
          on(this.paletteNode, Constants.itemSelectedEvent, lang.hitch(this, this.onItemSelected));
 
+         if (this.immediateRender)
+         {
+            this.renderData();
+         }
+
+         this.alfSubscribe(Constants.requestItemToAddTopic, lang.hitch(this, this.onItemToAddRequest));
+         this.alfSubscribe(Constants.itemSelectedTopic, lang.hitch(this, this.onExternalItemSelected));
+
+         if (this.useItemsOnce === true)
+         {
+            this.alfSubscribe(Constants.itemDeletedTopic, lang.hitch(this, this.onItemDeleted));
+         }
+      },
+
+      /**
+       * This function can be called to render the drag-and-drop items. It has this specific name so that
+       * it can be used as the renderer in the [DragAndDropItemsListView]{@link module:alfresco/dnd/DragAndDropItemsListView}
+       *
+       * @instance
+       */
+      renderData: function alfresco_dnd_DragAndDropItems__renderData() {
+         if (this.sourceTarget)
+         {
+            this.sourceTarget.destroy();
+         }
          this.sourceTarget = new Source(this.paletteNode, {
-            copyOnly: true,
+            copyOnly: !this.useItemsOnce,
             selfCopy: false,
+            accept: this.acceptTypes || [],
+            selfAccept: this.selfAccept,
             creator: lang.hitch(this, this.creator),
             withHandles: this.dragWithHandles
          });
          this.sourceTarget.insertNodes(false, this.items);
+      },
 
-         this.alfSubscribe(Constants.requestItemToAddTopic, lang.hitch(this, this.onItemToAddRequest));
+      /**
+       * Handles items being deleted. If the item deleted is a deleted item from this widget then it will
+       * be re-instated.
+       *
+       * @instance
+       * @param  {object} payload A payload containing a deleted item
+       */
+      onItemDeleted: function alfresco_dnd_DragAndDropItems__onItemDeleted(payload) {
+         if (payload && payload.item && this.useItemsOnceComparisonKey)
+         {
+            var a = lang.getObject(this.useItemsOnceComparisonKey, false, payload.item);
+            if (a)
+            {
+               // NOTE: Using some to exit as soon as match is found
+               array.some(this.items, function(item) {
+                  var b = lang.getObject(this.useItemsOnceComparisonKey, false, item.value);
+                  if (a === b)
+                  {
+                     this.sourceTarget.insertNodes(false, [item]);
+                     return true;
+                  }
+                  return false;
+               }, this);
+            }
+         }
       },
 
       /**
@@ -105,11 +210,36 @@ define(["dojo/_base/declare",
             if (item)
             {
                this._selectedItem = item;
+               this._selectedNode = evt.target.parentNode;
                array.forEach(this.sourceTarget.getAllNodes(), function(node) {
                   domClass.remove(node.firstChild, "selected");
                });
                domClass.add(evt.target, "selected");
+
+               // Publish the selected item so that other DragAndDropItems widgets can de-select
+               // any selected items...
+               this.alfPublish(Constants.itemSelectedTopic, {
+                  widget: this
+               });
             }
+         }
+      },
+
+      /**
+       * Handles publications indicating that another [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * widget publishing at the same scope has had an item selected. It checks that the publication didn't
+       * originate from the current instance and if not deselects all the items.
+       * 
+       * @instance
+       * @param {object} payload The payload containing the details of the widget that has had an item selected.
+       */
+      onExternalItemSelected: function alfresco_dnd_DragAndDropItems__onExternalItemSelected(payload) {
+         if (payload && payload.widget !== this)
+         {
+            array.forEach(this.sourceTarget.getAllNodes(), function(node) {
+               domClass.remove(node.firstChild, "selected");
+            });
+            this._selectedItem = null;
          }
       },
 
@@ -117,6 +247,7 @@ define(["dojo/_base/declare",
        * Handles requests to provide an item to insert into a [DragAndDropTarget]{@link module:alfresco/dnd/DragAndDropTarget}
        * 
        * @instance
+       * @param {object} payload The payload of the request to add an item.
        */
       onItemToAddRequest: function alfresco_dnd_DragAndDropItems__onItemToAddRequest(payload) {
          if (payload.promise && typeof payload.promise.resolve === "function")
@@ -124,12 +255,31 @@ define(["dojo/_base/declare",
             if (this._selectedItem)
             {
                payload.promise.resolve({
-                  item: lang.clone(this._selectedItem.data)
+                  item: lang.clone(this._selectedItem.data),
+                  addCallback: this.onItemAddedByKeyboard,
+                  addCallbackScope: this
                });
             }
          }
       },
-      
+
+      /**
+       * Handles items being added via the keyboard. This checks to see whether
+       * [items can only be used once]{@link module:alfresco/dnd/DragAndDropItems#useItemsOnce}
+       * and if this is the case it will remove the selected item.
+       *
+       * @instance
+       * @param  {object} item The item selected
+       */
+      onItemAddedByKeyboard: function alfresco_dnd_DragAndDropItems__onItemAddedByKeyboard(/*jshint unused:false*/ item) {
+         if (this.useItemsOnce === true && this._selectedNode)
+         {
+            this.sourceTarget.delItem(this._selectedNode.id);
+            domConstruct.destroy(this._selectedNode);
+            this._selectedNode = null;
+         }
+      },
+
       /**
        * The widgets model to render as a drag-and-drop item.
        *
@@ -156,10 +306,14 @@ define(["dojo/_base/declare",
        */
       creator: function alfresco_dnd_DragAndDropItems__creator(item, hint) {
          // jshint unused: false
-         var node = domConstruct.create("div");         
+         var node = domConstruct.create("div");
          var clonedItem = lang.clone(item);
          this.currentItem = {};
-         this.currentItem.title = clonedItem.label || "";
+         this.currentItem.title = "";
+         if (clonedItem.label)
+         {
+            this.currentItem.title = this.encodeHTML(this.message(clonedItem.label));
+         }
          this.currentItem.iconClass = clonedItem.iconClass || "";
          var widgetModel = lang.clone(this.widgets);
          this.processObject(["processCurrentItemTokens"], widgetModel);

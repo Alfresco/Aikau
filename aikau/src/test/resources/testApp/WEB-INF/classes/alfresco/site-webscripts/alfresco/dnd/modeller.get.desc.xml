@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>Drag-and-drop with modelling service test</shortname>
+  <shortname>Drag-and-drop (modelling service)</shortname>
+  <description>An example of using the 'alfresco/services/DragAndDropModellingService' to provide finer control over rendering dropped items and editing the configuration of items that have been dropped.</description>
   <family>aikau-unit-tests</family>
   <url>/modelled-dnd</url>
 </webscript>

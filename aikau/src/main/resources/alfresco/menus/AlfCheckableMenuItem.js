@@ -232,7 +232,10 @@ define(["dojo/_base/declare",
          // Clicking on the check cell will result in the menu item being marked as selected
          // but we want to ensure that this is not the case so always remove the class that
          // indicates selection...
-         domClass.remove(this.checkCell.parentNode, "dijitMenuItemSelected");
+         if (this.checkCell && this.checkCell.parentNode)
+         {
+            domClass.remove(this.checkCell.parentNode, "dijitMenuItemSelected");
+         }
       },
 
       /**
@@ -264,6 +267,7 @@ define(["dojo/_base/declare",
             // Perform publish...
             this.publishPayload.selected = this.checked;
             this.publishPayload.value = this.value;
+            this.publishPayload.label = this.label;
             this.alfPublish(this.publishTopic, this.publishPayload);
          }
       },

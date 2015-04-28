@@ -277,6 +277,100 @@ define(["dojo/_base/declare",
             // this.processWidgets(JSON.parse(JSON.stringify(this.widgets)));
             this.processWidgets(this.widgets);
          }
+
+         if (this.filteringTopics)
+         {
+            array.forEach(this.filteringTopics, function(topic) {
+               this.alfSubscribe(topic, lang.hitch(this, this.onFilterRequest));
+            }, this);
+            
+         }
+      },
+
+      /**
+       * @instance
+       * @type {number}
+       * @default 250
+       */
+      _filterDelay: 250,
+
+      /**
+       * An array of the topics to subscribe to that when published provide data that the indicates how the
+       * data requested should be filtered.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      filteringTopics: null,
+
+      /**
+       * An array of filters that should be included in data loading requests. The list itself will
+       * not perform any filtering it is up to the service (or API that the service calls) to filter
+       * the results based on the data provided.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      dataFilters: null,
+
+      /**
+       * Updates the list of filters that should currently be included when requesting data.
+       *
+       * @instance
+       * @param {object} payload The published payload containing the filter data.
+       */
+      onFilterRequest: function alfresco_lists_AlfList__onFilterRequest(payload) {
+         if (payload && payload.name)
+         {
+            if (!this.dataFilters)
+            {
+               // No filters yet, just add this one as the first
+               this.dataFilters = [
+                  {
+                     name: payload.name,
+                     value: payload.value
+                  }
+               ];
+            }
+            else
+            {
+               // Look to see if there is an existing filter that needs to be updated
+               var existingFilter = array.some(this.dataFilters, function(filter) {
+                  var match = filter.name === payload.name;
+                  if (match)
+                  {
+                     filter.value = payload.value;
+                  }
+                  return match;
+               });
+               // If there wasn't an existing filter then add the payload as a new one...
+               if (!existingFilter)
+               {
+                  this.dataFilters.push({
+                     name: payload.name,
+                     value: payload.value
+                  });
+               }
+            }
+
+            if (this._filterTimeoutHandle)
+            {
+               clearTimeout(this._filterTimeoutHandle);
+            }
+            var _this = this;
+            this._filterTimeoutHandle = setTimeout(function() {
+               if (_this.requestInProgress)
+               {
+                  _this.pendingLoadRequest = true;
+               }
+               else
+               {
+                  _this.loadData();
+               }
+            }, this._filterDelay);
+         }
       },
 
       /**
@@ -313,10 +407,10 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onPageWidgetsReady: function alfresco_lists_AlfList__onPageWidgetsReady(payload) {
+      onPageWidgetsReady: function alfresco_lists_AlfList__onPageWidgetsReady(/* jshint unused:false*/ payload) {
          this.alfUnsubscribe(this.pageWidgetsReadySubcription);
          this._readyToLoad = true;
-         if (this.currentData != null)
+         if (this.currentData)
          {
             this.processLoadedData(this.currentData);
             this.renderView();
@@ -349,11 +443,14 @@ define(["dojo/_base/declare",
          array.forEach(widgets, lang.hitch(this, "registerView"));
 
          // If no default view has been provided, then just use the first...
-         if (this._currentlySelectedView == null)
+         if (!this._currentlySelectedView)
          {
             for (var view in this.viewMap) {
-               this._currentlySelectedView = view;
-               break;
+               if (this.viewMap.hasOwnProperty(view))
+               {
+                  this._currentlySelectedView = view;
+                  break;
+               }
             }
          }
 
@@ -390,7 +487,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log", "Registering view", view);
             var viewSelectionConfig = view.getViewSelectionConfig();
-            if (viewSelectionConfig == null || !this.isValidViewSelectionConfig(viewSelectionConfig))
+            if (!viewSelectionConfig || !this.isValidViewSelectionConfig(viewSelectionConfig))
             {
                this.alfLog("error", "The following view does not provide a valid selection menu item upon request", viewSelectionConfig);
             }
@@ -417,7 +514,7 @@ define(["dojo/_base/declare",
        */
       processView: function alfresco_lists_AlfList__processView(view, index) {
          var viewName = view.getViewName();
-         if (viewName == null)
+         if (!viewName)
          {
             viewName = index;
          }
@@ -427,7 +524,7 @@ define(["dojo/_base/declare",
          viewSelectionConfig.value = viewName;
 
          // Check if this is the initially requested view...
-         if (viewName == this.view)
+         if (viewName === this.view)
          {
             this._currentlySelectedView = viewName;
             viewSelectionConfig.checked = true;
@@ -491,19 +588,19 @@ define(["dojo/_base/declare",
        * @param {object} view The view to get the controls for.
        */
       publishAdditionalControls: function alfresco_lists_AlfList__publishAdditionalControls(viewName, view) {
-         if (this.viewControlsMap == null)
+         if (!this.viewControlsMap)
          {
             this.viewControlsMap = {};
          }
 
          // Get any new additional controls (check the map first)
          var newAdditionalControls = this.viewControlsMap[viewName];
-         if (newAdditionalControls == null)
+         if (!newAdditionalControls)
          {
             newAdditionalControls = view.getAdditionalControls();
-            if (this.additionalViewControlVisibilityConfig != null)
+            if (this.additionalViewControlVisibilityConfig)
             {
-               array.forEach(newAdditionalControls, function(control, index) {
+               array.forEach(newAdditionalControls, function(control) {
                   control.visibilityConfig = this.additionalViewControlVisibilityConfig;
                   this.setupVisibilityConfigProcessing(control);
                }, this);
@@ -512,7 +609,7 @@ define(["dojo/_base/declare",
          }
 
          // Publish the new additional controls for anyone wishing to display them...
-         if (newAdditionalControls != null)
+         if (newAdditionalControls)
          {
             this.alfPublish(this.dynamicallyAddWidgetTopic, {
                targetId: this.additionalControlsTarget,
@@ -531,7 +628,7 @@ define(["dojo/_base/declare",
        * @return {boolean} Either true or false depending upon the validity of the supplied configuration.
        */
       isValidViewSelectionConfig: function alfresco_lists_AlfList__isValidViewSelectionConfig(viewSelectionConfig) {
-         return (viewSelectionConfig.label != null && viewSelectionConfig.label !== "");
+         return (viewSelectionConfig.label && viewSelectionConfig.label !== "");
       },
 
       /**
@@ -562,20 +659,20 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload published on the view selection topic.
        */
       onViewSelected: function alfresco_lists_AlfList__onViewSelected(payload) {
-         if (this.currentData == null)
+         if (!this.currentData)
          {
             this.alfLog("warn", "There is no data to render a view with");
             this.showNoDataMessage();
          }
-         else if (payload == null || payload.value == null)
+         else if (!payload || !payload.value)
          {
             this.alfLog("warn", "A request was made to select a view, but not enough information was provided", payload);
          }
-         else if (this._currentlySelectedView == payload.value)
+         else if (this._currentlySelectedView === payload.value)
          {
             // The requested view is the current view. No action required.
          }
-         else if (this.viewMap[payload.value] == null)
+         else if (!this.viewMap[payload.value])
          {
             // An invalid view was requested. Each view will have been mapped to the order in which it occurred in the
             // the "widgets" array provided for the DocumentList. The payload value attribute should correspond to an
@@ -612,10 +709,13 @@ define(["dojo/_base/declare",
       clearViews: function alfresco_lists_AlfList__clearViews() {
          for (var viewName in this.viewMap)
          {
-            var view = this.viewMap[viewName];
-            if (typeof view.clearOldView === "function")
+            if (this.viewMap.hasOwnProperty(viewName))
             {
-               view.clearOldView();
+               var view = this.viewMap[viewName];
+               if (typeof view.clearOldView === "function")
+               {
+                  view.clearOldView();
+               }
             }
          }
       },
@@ -736,6 +836,12 @@ define(["dojo/_base/declare",
             }
 
             payload.alfResponseTopic = this.pubSubScope + this.loadDataPublishTopic;
+
+            if (this.dataFilters)
+            {
+               payload.dataFilters = this.dataFilters;
+            }
+
             this.updateLoadDataPayload(payload);
             this.alfPublish(this.loadDataPublishTopic, payload, true);
          }
@@ -754,6 +860,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload object to update
        */
       updateLoadDataPayload: function alfresco_lists_AlfList__updateLoadDataPayload(payload) {
+         // jshint unused:false
          // Does nothing by default.
       },
 
@@ -803,62 +910,73 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig The configuration that was passed to the the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
        */
       onDataLoadSuccess: function alfresco_lists_AlfList__onDataLoadSuccess(payload) {
-         this.alfLog("log", "Data Loaded", payload, this);
-
-         var foundItems = false;
-         if (this.itemsProperty == null)
+         // There is a pending load request, this will typically be the case when a new filter has been
+         // applied before the last request has returned. By requesting another data load the latest 
+         // filters will be requested...
+         if (this.pendingLoadRequest === true)
          {
-            this.currentData = {};
-            this.currentData.items = payload.response;
-            foundItems = true;
+            this.alfLog("log", "Found pending request, loading data...");
+            this.pendingLoadRequest = false;
+            this.loadData();
          }
          else
          {
-            var items = lang.getObject(this.itemsProperty, false, payload.response);
-            if (items == null)
-            {
-               // As a fallback we're going to check the actual payload object...
-               // It would be reasonable to ask why we don't just look in payload initially and
-               // expect the "itemsProperty" to include "response", however that is not the most common
-               // scenario and this approach catches the edge cases...
-               items = lang.getObject(this.itemsProperty, false, payload);
-            }
-
-            if (items)
+            this.alfLog("log", "Data Loaded", payload, this);
+            var foundItems = false;
+            if (!this.itemsProperty)
             {
                this.currentData = {};
-               this.currentData.items = items;
+               this.currentData.items = payload.response;
                foundItems = true;
-
-               // We lose metaData unless we store that as well.
-               var metadata = lang.getObject(this.metadataProperty, false, payload.response);
-               if (metadata)
+            }
+            else
+            {
+               var items = lang.getObject(this.itemsProperty, false, payload.response);
+               if (!items)
                {
-                  this.currentData.metadata = metadata;
+                  // As a fallback we're going to check the actual payload object...
+                  // It would be reasonable to ask why we don't just look in payload initially and
+                  // expect the "itemsProperty" to include "response", however that is not the most common
+                  // scenario and this approach catches the edge cases...
+                  items = lang.getObject(this.itemsProperty, false, payload);
+               }
+
+               if (items)
+               {
+                  this.currentData = {};
+                  this.currentData.items = items;
+                  foundItems = true;
+
+                  // We lose metaData unless we store that as well.
+                  var metadata = lang.getObject(this.metadataProperty, false, payload.response);
+                  if (metadata)
+                  {
+                     this.currentData.metadata = metadata;
+                  }
+               }
+               else
+               {
+                  this.alfLog("warn", "Failure to retrieve items with given itemsProperty: " + this.itemsProperty, this);
+                  this.showDataLoadFailure();
                }
             }
-            else
-            {
-               this.alfLog("warn", "Failure to retrieve items with given itemsProperty: " + this.itemsProperty, this);
-               this.showDataLoadFailure();
-            }
-         }
 
-         if (foundItems)
-         {
-            if (payload.response) 
+            if (foundItems)
             {
-               this.processLoadedData(payload.response);
+               if (payload.response) 
+               {
+                  this.processLoadedData(payload.response);
+               }
+               else
+               {
+                  this.processLoadedData(this.currentData);
+               }
+               this.renderView();
             }
-            else
-            {
-               this.processLoadedData(this.currentData);
-            }
-            this.renderView();
-         }
 
-         // This request has finished, allow another one to be triggered.
-         this.alfPublish(this.requestFinishedTopic, {});
+            // This request has finished, allow another one to be triggered.
+            this.alfPublish(this.requestFinishedTopic, {});
+         }
       },
 
       /**
@@ -869,7 +987,7 @@ define(["dojo/_base/declare",
       renderView: function alfresco_lists_AlfList__renderView() {
          // Re-render the current view with the new data...
          var view = this.viewMap[this._currentlySelectedView];
-         if (view != null)
+         if (view)
          {
             this.showRenderingMessage();
             view.setData(this.currentData);
@@ -911,7 +1029,7 @@ define(["dojo/_base/declare",
 
          this.alfPublish(this.documentsLoadedTopic, {
             documents: this.currentData.items,
-            totalDocuments: this.totalRecords,
+            totalRecords: this.totalRecords,
             startIndex: this.startIndex
          });
       },
@@ -938,6 +1056,7 @@ define(["dojo/_base/declare",
        * @param payload
        */
       onScrollNearBottom: function  alfresco_lists_AlfList__onScrollNearBottom(payload) {
+         // jshint unused:false
          // No action by default - this is an extension point only.
       },
 

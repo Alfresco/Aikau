@@ -11,19 +11,20 @@ module.exports = function(grunt) {
    grunt.registerTask("dt", ["intern:local"]);
 
    // Register test tasks for local/vagrant/SauceLabs/grid respectively
-   grunt.registerTask("test_local", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:local"]);
-   grunt.registerTask("test", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:dev"]);
-   grunt.registerTask("test_sl", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:sl"]);
-   grunt.registerTask("test_grid", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "intern:grid"]);
+   grunt.registerTask("test_local", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:local"]);
+   grunt.registerTask("test", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:dev"]);
+   grunt.registerTask("test_sl", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:sl"]);
+   grunt.registerTask("test_grid", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:grid"]);
 
    // Watch for changes and retest
+   grunt.registerTask("watchDev", ["watch:dev"]);
    grunt.registerTask("watchTest", ["watch:test"]);
 
    // Restart the test server
    grunt.registerTask("restartTestApp", ["shell:stopTestApp", "startUnitTestApp"]);
 
    // Build and then clear cached stuff
-   grunt.registerTask("updateTest", ["shell:mavenProcessTestResources", "http:testAppReloadWebScripts", "http:testAppClearCaches"]);
+   grunt.registerTask("updateTest", ["notifyTestUpdating", "shell:mavenProcessTestResources", "http:testAppReloadWebScripts", "http:testAppClearCaches", "notifyTestUpdated"]);
 
    // Start jetty server if not already running. Use waitServer to check startup finished
    grunt.registerTask("startUnitTestApp", "Spawn a Maven process to start the Jetty server running the unit test application", function() {
@@ -45,7 +46,19 @@ module.exports = function(grunt) {
          });
    });
 
-   // Display notifications on test passes and failures...
+   // Notifications
+   grunt.registerTask("notifyTestUpdating", "Notify that the 'updatedTest' task has started", function() {
+      notify({
+         title: "Test app updating",
+         message: "The test app is updating..."
+      });
+   });
+   grunt.registerTask("notifyTestUpdated", "Notify that the 'updatedTest' task has completed", function() {
+      notify({
+         title: "Test app updated",
+         message: "The test app has been updated and the caches cleared"
+      });
+   });
    grunt.event.on("intern.fail", function(data) {
       notify({
          title: "Unit Test Failed",
@@ -75,13 +88,6 @@ module.exports = function(grunt) {
                runType: "runner",
                config: "src/test/resources/intern_local",
                doCoverage: false
-            }
-         },
-         local_coverage: {
-            options: {
-               runType: "runner",
-               config: "src/test/resources/intern_local",
-               doCoverage: true
             }
          },
          sl: {

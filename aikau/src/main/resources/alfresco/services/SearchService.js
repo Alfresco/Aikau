@@ -162,6 +162,7 @@ define(["dojo/_base/declare",
                   switch(key) {
                      case "alfTopic":
                      case "alfResponseTopic":
+                     case "alfPublishScope":
                      case "term":
                      case "tag":
                      case "startIndex":

@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.9-SNAPSHOT</version>
+   <version>1.0.16-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -13,6 +13,7 @@
    <description>Aikau is a meta-framework for Alfresco specific UI development</description>
 
    <build>
+
       <!-- Everything gets place into the META-INF folder of the JAR because Surf (the expected platform for Aikau)
            will be able to access resources from that location via the /res/ path -->
       <resources>
@@ -38,6 +39,13 @@
             <targetPath>./alfresco/site-data/extensions/${project.version}</targetPath>
             <filtering>true</filtering>
             <directory>${basedir}/src/main/resources/extension-module</directory>
+         </resource>
+
+         <resource>
+            <!-- WebScript library files go straight into a package -->
+            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/webscript/libs</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/webscript-libs</directory>
          </resource>
 
          <!-- ...but everything else goes into a standard path -->
@@ -67,26 +75,40 @@
 
       <plugins>
 
-        <plugin>
+         <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
             <version>1.8</version>
             <executions>
-                <execution>
-                    <id>duplicate-english-messages</id>
-                    <phase>generate-resources</phase>
-                    <goals>
-                        <goal>run</goal>
-                    </goals>
+               <execution>
+                  <id>duplicate-english-messages</id>
+                  <phase>generate-resources</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <target>
+                        <copy todir="${project.build.outputDirectory}/META-INF/js/aikau/${project.version}">
+                           <fileset dir="${basedir}/src/main/resources" includes="alfresco/**/*.properties" />
+                           <mapper from="^([^_]*).properties$" to="\1_en.properties" type="regexp" />
+                        </copy>
+                     </target>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>copy-webscript-beans</id>
+                  <phase>process-test-classes</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <target>
+                        <copy todir="${project.build.testOutputDirectory}/testApp/WEB-INF/classes">
+                           <fileset dir="${project.build.testOutputDirectory}" includes="**/*.class" />
+                        </copy>
+                      </target>
+                  </configuration>
                 </execution>
             </executions>
-            <configuration>
-                <target>
-                    <copy todir="${project.build.outputDirectory}/META-INF/js/aikau/${project.version}">
-                        <fileset dir="${basedir}/src/main/resources" includes="alfresco/**/*.properties" />
-                        <mapper from="^([^_]*).properties$" to="\1_en.properties" type="regexp" />
-                    </copy>
-                </target>
-            </configuration>
         </plugin>
 
         <plugin>
@@ -151,7 +173,8 @@
                   <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames> 
                </webApp>
                <webAppSourceDirectory>target/test-classes/testApp</webAppSourceDirectory>
-               <classesDirectory>target/test-classes/testApp/WEB-INF/classes</classesDirectory>
+               <classesDirectory>target/classes</classesDirectory>
+               <testClassesDirectory>target/test-classes/testApp/WEB-INF/classes</testClassesDirectory>
                <baseAppFirst>false</baseAppFirst>
             </configuration>
          </plugin>

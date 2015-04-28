@@ -42,9 +42,10 @@ define(["dojo/_base/declare",
         "alfresco/dnd/Constants",
         "dojo/Deferred",
         "dojo/dom-construct",
+        "dojo/dom-style",
         "jquery"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, lang, array, on, 
-                 Constants, Deferred, domConstruct, $) {
+                 Constants, Deferred, domConstruct, domStyle, $) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -162,6 +163,17 @@ define(["dojo/_base/declare",
       editAltText: "droppedItemWrapper.edit.alt.text",
 
       /**
+       * This controls whether or not the edit button is displayed. By default it is not and this should only be 
+       * configured to be true when using a [modelling service]{@link module:alfresco/dnd/DragAndDropTarget#useModellingService}
+       * that is configured to provide edit configuration for the item.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      showEditButton: false,
+
+      /**
        * Sets up images and translations for alt text and titles.
        * 
        * @instance
@@ -181,6 +193,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_dnd_DroppedItemWrapper__postCreate() {
+         if (this.showEditButton === false)
+         {
+            domStyle.set(this.editNode, "display", "none");
+         }
+
          if (this.label)
          {
             this.labelNode.innerHTML = this.encodeHTML(this.message(this.label));
@@ -238,6 +255,9 @@ define(["dojo/_base/declare",
             cancelable: true,
             targetWidget: this
          });
+         this.alfPublish(Constants.itemDeletedTopic, {
+            item: this.getValue()
+         });
       },
 
       /**
@@ -277,6 +297,8 @@ define(["dojo/_base/declare",
                formSubmissionPayloadMixin: {
                   subscriptionHandle: subscriptionHandle
                },
+               dialogWidth: "80%",
+               fixedWidth: true,
                formValue: item,
                widgets: resolvedPromise.widgets
             }, true);
@@ -308,6 +330,12 @@ define(["dojo/_base/declare",
          // or just override it completely. It depends on whether or not we want to be
          // able to remove data.
          $.extend(true, this.value, payload);
+         // this.value = lang.clone(payload);
+         on.emit(this.domNode, Constants.itemSavedEvent, {
+            bubbles: true,
+            cancelable: true,
+            targetWidget: this
+         });
 
          if (this._renderedWidgets)
          {

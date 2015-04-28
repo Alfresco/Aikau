@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Content Service</shortname>
+  <description>Displays buttons that use the ContentService service to create, update, delete and upload content.</description>
+  <family>aikau-unit-tests</family>
+  <url>/ContentService</url>
+</webscript>

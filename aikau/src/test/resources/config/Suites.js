@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/documentlibrary/views/AlfDetailedViewTest"
+      "src/test/resources/alfresco/renderers/CommentsListTest"
    ],
 
    /**
@@ -62,6 +62,8 @@ define({
       "src/test/resources/alfresco/debug/WidgetInfoTest",
 
       "src/test/resources/alfresco/dnd/DndTest",
+      "src/test/resources/alfresco/dnd/FormCreationTest",
+      "src/test/resources/alfresco/dnd/ModelCreationServiceTest",
 
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
@@ -72,12 +74,11 @@ define({
       "src/test/resources/alfresco/documentlibrary/SearchListTest",
       "src/test/resources/alfresco/documentlibrary/SelectedItemsMenuTest",
       "src/test/resources/alfresco/documentlibrary/SitesListTest",
+      "src/test/resources/alfresco/documentlibrary/ViewPreferencesGroupTest",
       "src/test/resources/alfresco/documentlibrary/views/AlfDetailedViewTest",
       "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
       "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
-
-      "src/test/resources/alfresco/editors/TinyMCETest",
 
       "src/test/resources/alfresco/footer/FooterTest",
 
@@ -88,6 +89,7 @@ define({
 
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",
+      "src/test/resources/alfresco/forms/controls/CodeMirrorTest",
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
       "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
       "src/test/resources/alfresco/forms/controls/DateTextBoxTest", // TODO: NEEDS FIXING
@@ -95,9 +97,11 @@ define({
       "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest",
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
       "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
+      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
+      "src/test/resources/alfresco/forms/controls/TinyMCETest",
       "src/test/resources/alfresco/forms/controls/ValidationTest",
       "src/test/resources/alfresco/forms/controls/XssPreventionTest",
 
@@ -113,9 +117,16 @@ define({
       "src/test/resources/alfresco/layout/BasicLayoutTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/TwisterTest",
+      "src/test/resources/alfresco/layout/VerticalRevealTest",
 
+      "src/test/resources/alfresco/lists/AlfHashListTest",
+      "src/test/resources/alfresco/lists/FilteredListTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
+
+      "src/test/resources/alfresco/logging/DebugLogTest",
+
+      "src/test/resources/alfresco/logo/LogoTest",
 
       "src/test/resources/alfresco/menus/AlfCheckableMenuItemTest",
       "src/test/resources/alfresco/menus/AlfContextMenuTest",
@@ -140,6 +151,7 @@ define({
       "src/test/resources/alfresco/renderers/BannerTest",
       "src/test/resources/alfresco/renderers/BooleanTest",
       "src/test/resources/alfresco/renderers/CategoryTest",
+      "src/test/resources/alfresco/renderers/CommentsListTest",
       "src/test/resources/alfresco/renderers/DateLinkTest",
       "src/test/resources/alfresco/renderers/DateTest",
       "src/test/resources/alfresco/renderers/FileTypeTest",
@@ -162,6 +174,7 @@ define({
       "src/test/resources/alfresco/search/FacetFiltersTest",
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
+      "src/test/resources/alfresco/services/ContentServiceTest",
       "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
       "src/test/resources/alfresco/services/NotificationServiceTest",
@@ -169,7 +182,9 @@ define({
       "src/test/resources/alfresco/services/SiteServiceTest",
       "src/test/resources/alfresco/services/UserServiceTest",
 
+      "src/test/resources/alfresco/services/actions/CopyMoveTest",
       "src/test/resources/alfresco/services/actions/ManageAspectsTest",
+      "src/test/resources/alfresco/services/actions/SimpleWorkflowTest",
 
       "src/test/resources/alfresco/upload/UploadTest"
    ],
@@ -180,7 +195,7 @@ define({
     * @instance
     * @type [string]
     */
-   localOnlyFunctionalSuites: ["src/test/resources/alfresco/CodeCoverageBalancer"],
+   localOnlyFunctionalSuites: [],
 
    /**
     * This is the full array of functional test suites for local tests

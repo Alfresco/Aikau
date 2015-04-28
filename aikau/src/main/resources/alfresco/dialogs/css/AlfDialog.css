@@ -38,7 +38,16 @@
 
 .alfresco-dialog-AlfDialog .dialog-body {
    padding: 12px;
+   overflow: auto;
+   height: ~"calc(100% - 50px)";
+   margin-bottom: 37px;
+}
+
+.alfresco-dialog-AlfDialog.iefooter .dialog-body {
+   padding: 12px;
    overflow: hidden;
+   height: auto;
+   margin-bottom: 0;
 }
 
 .alfresco-dialog-AlfDialog.no-padding .dialog-body {
@@ -51,7 +60,7 @@
    overflow: hidden !important; /* Wouldn't normally use !important but has to override direct element setting! */
 }
 
-.alfresco-dialog-AlfDialog.handleOverflow .dijitDialogPaneContent {
+.alfresco-dialog-AlfDialog.iefooter.handleOverflow .dijitDialogPaneContent {
    overflow: auto !important; /* Wouldn't normally use !important but has to override direct element setting! */
 }
 
@@ -84,6 +93,13 @@
    text-align: center;
    padding: 8px 0;
    width: 100%;
+   position: absolute;
+   bottom: 0;
+}
+
+.alfresco-dialog-AlfDialog.iefooter .footer {
+   position: inherit;
+   bottom: inherit;
 }
 
 .alfresco-dialog-AlfDialog.no-padding .footer {

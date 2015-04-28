@@ -29,10 +29,11 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/MockXhr.html",
         "alfresco/core/Core",
         "dojo/_base/lang",
+        "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/aspect",
         "dojo/Deferred"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domConstruct, aspect, Deferred) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domClass, domConstruct, aspect, Deferred) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -43,7 +44,7 @@ define(["dojo/_base/declare",
        * @type {object[]}
        * @default [{cssFile:"./css/MockXhr.css"}]
        */
-   cssRequirements: [{cssFile:"./css/MockXhr.css"}],
+      cssRequirements: [{cssFile:"./css/MockXhr.css"}],
 
       /**
        * The HTML template to use for the widget.
@@ -189,6 +190,15 @@ define(["dojo/_base/declare",
             // Add a new row to the log
             responseNode.innerHTML = responseHtml;
          });
+      },
+
+      /**
+       * Toggle the body visibility for the log
+       *
+       * @instance
+       */
+      _toggleBody: function alfresco_testing_MockXhr___toggleBody() {
+         domClass.toggle(this.domNode, "alfresco-testing-MockXhr--hide-body");
       }
    });
 });

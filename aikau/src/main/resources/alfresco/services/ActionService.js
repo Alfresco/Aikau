@@ -51,6 +51,7 @@ define(["dojo/_base/declare",
         "alfresco/services/_NavigationServiceTopicMixin",
         "alfresco/core/UrlUtils",
         "alfresco/core/ArrayUtils",
+        "alfresco/core/ObjectTypeUtils",
         "alfresco/core/JsNode",
         "alfresco/core/NotificationUtils",
         "dojo/_base/lang",
@@ -59,7 +60,7 @@ define(["dojo/_base/declare",
         "alfresco/pickers/Picker",
         "alfresco/core/NodeUtils"],
         function(declare, AlfCore, AlfCoreXhr, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtils,
-                 ArrayUtils, JsNode, NotificationUtils, lang, array, AlfDialog, Picker, NodeUtils) {
+                 ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang, array, AlfDialog, Picker, NodeUtils) {
 
    // TODO: L18N sweep - lots of widgets defined with hard coded labels...
 
@@ -102,35 +103,6 @@ define(["dojo/_base/declare",
       rootNode: null,
 
       /**
-       * Used by callbacks from picker dialogs to store the picked target.
-       *
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      copyMoveTarget: null,
-
-      /**
-       * URL to call to copy a document
-       *
-       * @instance
-       * @type {string}
-       * @default
-       * @TODO the call to this should be in the document service.
-       */
-      copyAPI: "slingshot/doclib/action/copy-to/node/",
-
-      /**
-       * URL to call to move a document
-       *
-       * @instance
-       * @type {string}
-       * @default
-       * @TODO the call to this should be in the document service.
-       */
-      moveAPI: "slingshot/doclib/action/move-to/node/",
-
-      /**
        * Sets up the subscriptions for the Action Service
        *
        * @instance
@@ -156,7 +128,6 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_MOVE_DOCUMENTS", lang.hitch(this, this.onMoveDocuments));
 
          // Response handlers...
-         this.alfSubscribe("ALF_ON_ACTION_DETAILS_SUCCESS", lang.hitch(this, this.onActionDetailsSuccess));
          this.alfSubscribe("ALF_ON_ACTION_EDIT_INLINE_SUCCESS", lang.hitch(this, this.onActionEditInlineSucess));
          this.alfSubscribe("ALF_DOC_CANCEL_EDIT_SUCCESS", lang.hitch(this, this.onActionCancelEditingSuccess));
       },
@@ -168,8 +139,7 @@ define(["dojo/_base/declare",
        * @param layer {object} Event fired
        * @param args {array} Event parameters (depends on event type)
        */
-      onFileAction: function DL_onFileAction(layer, args)
-      {
+      onFileAction: function alfresco_services_ActionService__onFileAction(layer, args) {
          var obj = args[1];
          if (obj)
          {
@@ -183,7 +153,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        */
-      requestRefresh: function() {
+      requestRefresh: function alfresco_services_ActionService__requestRefresh() {
          this.alfPublish(this.reloadDataTopic, {});
       },
 
@@ -232,8 +202,8 @@ define(["dojo/_base/declare",
       handleSingleDocAction: function alfresco_services_ActionService__handleSingleDocAction(payload) {
          this.alfLog("log", "Single document action request:", payload);
          if (payload &&
-             payload.document != null &&
-             payload.action != null)
+             payload.document &&
+             payload.action)
          {
             if (typeof payload.action === "string")
             {
@@ -268,7 +238,10 @@ define(["dojo/_base/declare",
             var documents = [];
             for (var nodeRef in this.currentlySelectedDocuments)
             {
-               documents.push(this.currentlySelectedDocuments[nodeRef])
+               if (this.currentlySelectedDocuments.hasOwnProperty(nodeRef))
+               {
+                  documents.push(this.currentlySelectedDocuments[nodeRef]);
+               }
             }
             this[payload.action].call(this, payload, documents);
          }
@@ -303,10 +276,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the document selected
        */
       onDocumentSelected: function alfresco_services_ActionService__onDocumentSelected(payload) {
-         if (payload && payload.value && payload.value.nodeRef != null)
+         if (payload && payload.value && payload.value.nodeRef)
          {
             this.currentlySelectedDocuments[payload.value.nodeRef] = payload.value;
-            if (this.selectionTimeout != null)
+            if (this.selectionTimeout)
             {
                clearTimeout(this.selectionTimeout);
             }
@@ -334,10 +307,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the document selected
        */
       onDocumentDeselected: function alfresco_services_ActionService__onDocumentDeselected(payload) {
-         if (payload && payload.value && payload.value.nodeRef != null)
+         if (payload && payload.value && payload.value.nodeRef)
          {
             delete this.currentlySelectedDocuments[payload.value.nodeRef];
-            if (this.selectionTimeout != null)
+            if (this.selectionTimeout)
             {
                clearTimeout(this.selectionTimeout);
             }
@@ -354,7 +327,10 @@ define(["dojo/_base/declare",
          var a = [];
          for (var key in this.currentlySelectedDocuments)
          {
-            a.push(this.currentlySelectedDocuments[key]);
+            if (this.currentlySelectedDocuments.hasOwnProperty(key))
+            {
+               a.push(this.currentlySelectedDocuments[key]);
+            }
          }
          return a;
       },
@@ -373,9 +349,8 @@ define(["dojo/_base/declare",
              commonAspects = [], allAspects = [],
              i, ii, j, jj;
 
-         var fnFileType = function fnFileType(file)
-         {
-            return (file.node.isContainer ? "folder" : "document");
+         var fnFileType = function(_file) {
+            return (_file.node.isContainer ? "folder" : "document");
          };
 
          // Check each file for user permissions
@@ -414,7 +389,7 @@ define(["dojo/_base/declare",
                {
                   if (!ArrayUtils.arrayContains(file.node.aspects, commonAspects[j]))
                   {
-                     ArrayUtils.arrayRemove(commonAspects, commonAspects[j])
+                     ArrayUtils.arrayRemove(commonAspects, commonAspects[j]);
                   }
                }
             }
@@ -424,7 +399,7 @@ define(["dojo/_base/declare",
             {
                if (!ArrayUtils.arrayContains(allAspects, file.node.aspects[j]))
                {
-                  allAspects.push(file.node.aspects[j])
+                  allAspects.push(file.node.aspects[j]);
                }
             }
          }
@@ -489,7 +464,6 @@ define(["dojo/_base/declare",
             {
                if (action.params.sourceNodeRef)
                {
-                  // this.createTemplateContent(action, document);
                   var targetNodeRef = action.params.targetNodeRef || lang.getObject("_currentNode.parent.nodeRef", false, this);
                   this.alfPublish("ALF_CREATE_TEMPLATE_CONTENT", {
                      sourceNodeRef: action.params.sourceNodeRef,
@@ -525,12 +499,12 @@ define(["dojo/_base/declare",
        */
       createPageLinkContent: function alfresco_services_ActionService__createPageLinkContent(payload, document) {
          var url = payload.params.page;
-         if (document != null)
+         if (document)
          {
             // TODO: Need to check other substitution points...
             url = lang.replace(url, document);
          }
-         else if (this._currentNode != null)
+         else if (this._currentNode)
          {
             url = lang.replace(url, { nodeRef: this._currentNode.parent.nodeRef});
          }
@@ -563,7 +537,7 @@ define(["dojo/_base/declare",
          var url = lang.replace(payload.params.href, this.getActionUrls(document, this.siteId, this.repositoryUrl, this.replicationUrlMapping));
          var indexOfTarget = url.indexOf("\" target=\"_blank");
          var target = "CURRENT";
-         if (indexOfTarget != -1)
+         if (indexOfTarget !== -1)
          {
             url = url.substring(0, indexOfTarget);
             target = "NEW";
@@ -583,7 +557,7 @@ define(["dojo/_base/declare",
        * @param {object} document The document to perform the action on.
        */
       createJavaScriptContent: function alfresco_services_ActionService__createJavaScriptContent(payload, document) {
-         if (document == null)
+         if (!document)
          {
             var node = lang.clone(this._currentNode.parent);
             document = {
@@ -602,59 +576,33 @@ define(["dojo/_base/declare",
          }
          else
          {
-            this.callLegacyActionHandler(payload.params["function"], document);
+            this.alfLog("warn", "Could not find action handler", this, payload, document);
          }
       },
 
       /**
-       * Calls a JavaScript function provided (or registered with) the Alfresco.DocLibToolbar widget.
-       *
-       * @instance
-       */
-      callLegacyActionHandler: function alfresco_services_ActionService__callLegacyActionHandler() {
-         this.alfLog("warn", "Legacy toolbar now removed");
-      },
-
-      /**
-       * Handles requests to display the details of the supplied document. This function currently
-       * delegates handling of the request to the Alfresco.DocLibToolbar by calling
-       * [callLegacyActionHandler]{@link module:alfresco/services/ActionsService#callLegacyActionHandler}
+       * Handles requests to edit the basic metadata of the node provided.
        *
        * @instance
        * @param {object} payload The response from the request
-       * @param {object} document The document to get the details for
+       * @param {object} node The node to get the details for
        */
-      onActionDetails: function alfresco_services_ActionService__onActionDetails(payload, document) {
-
-         // Sometimes Document might be an array!
-         document = (lang.isArray(document))? document[0] : document;
-
-         // 1. Get the data.
-         // 2. Create a form dialog containing fields for all the properties
-
-         if (document == null || document.nodeRef == null)
+      onActionDetails: function alfresco_services_ActionService__onActionDetails(payload, node) {
+         // Sometimes the node might be an array of nodes, can only edit the first...
+         if (ObjectTypeUtils.isArray(node) && node.length > 0)
          {
-            this.alfLog("warn", "A request was made to edit the properties of a document but no document or 'nodeRef' attribute was provided", document, this);
+            node = node[0];
+         }
+         if (node)
+         {
+            this.alfPublish("ALF_EDIT_BASIC_METADATA_REQUEST", {
+               node: node
+            });
          }
          else
          {
-            // TODO: We're not yet setting up a failure response handler, this is just working on the golden path at the moment...
-            this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", {
-               alfResponseTopic: "ALF_ON_ACTION_DETAILS",
-               nodeRef: document.nodeRef
-            });
+            this.alfLog("warn", "A request was made to edit the properties of a node but no node was provided", payload, node, this);
          }
-      },
-
-      /**
-       * This function will be called in response to a documents details being successfully retrieved.
-       *
-       * @instance
-       * @param {object} payload
-       */
-      onActionDetailsSuccess: function alfresco_services_ActionService__onActionDetailsSuccess(payload) {
-         // TODO: this needs to use the external forms processor in order to cope with custom models with forms defined.
-         this.alfLog("Error", "This method hasn't been implemented yet.");
       },
 
       /**
@@ -667,6 +615,7 @@ define(["dojo/_base/declare",
        * @param {object} document The document to upload a new version for.
        */
       onActionUploadNewVersion: function alfresco_services_ActionService__onActionUploadNewVersion(payload, document) {
+         // jshint unused:false
          // Call dialog service to open dialog with upload widget in.
          this.alfPublish("ALF_SHOW_UPLOADER", payload);
       },
@@ -689,6 +638,7 @@ define(["dojo/_base/declare",
        * @param payload
        */
       onActionCancelEditingSuccess: function alfresco_services_ActionService_onActionCancelEditingSuccess(payload) {
+         // jshint unused:false
          this.alfPublish(this.reloadDataTopic, {});
       },
 
@@ -700,7 +650,7 @@ define(["dojo/_base/declare",
        * @param {object} document The document to edit.
        */
       onActionEditInline: function alfresco_services_ActionService__onActionEditInline(payload, document) {
-         if (document == null || document.nodeRef == null)
+         if (!document || !document.nodeRef)
          {
             this.alfLog("warn", "A request was made to edit the properties of a document but no document or 'nodeRef' attribute was provided", document, this);
          }
@@ -832,9 +782,7 @@ define(["dojo/_base/declare",
          // Document might be an array.
          document = (lang.isArray(document))? document[0] : document;
 
-         if (document != null &&
-             document.node != null &&
-             document.node.nodeRef != null)
+         if (document && document.node && document.node.nodeRef)
          {
             var data = {
                nodeRef: document.node.nodeRef
@@ -867,10 +815,10 @@ define(["dojo/_base/declare",
       onActionEditOfflineSuccess: function alfresco_services_ActionService__onActionEditOfflineSuccess(response, originalRequestConfig) {
          this.alfLog("log", "Edit offline request success", response, originalRequestConfig);
 
-         if (response != null &&
-             response.results != null &&
+         if (response &&
+             response.results &&
              response.results.length > 0 &&
-             response.results[0].downloadUrl != null)
+             response.results[0].downloadUrl)
          {
             this.displayMessage(this.message("message.edit-offline.success", {"0": response.results[0].id}));
             this.alfPublish(this.navigateToPageTopic, {
@@ -907,7 +855,11 @@ define(["dojo/_base/declare",
        * @param {object} documents The documents edit offline.
        */
       onActionCopyTo: function alfresco_services_ActionService__onActionCopyTo(payload, documents) {
-         this.createCopyMoveDialog(payload, documents); // config not needed as it defaults to copy.
+         this.alfPublish("ALF_COPY_OR_MOVE_REQUEST", {
+            documents: documents,
+            copy: true,
+            singleItemMode: true
+         });
       },
 
       /**
@@ -918,8 +870,9 @@ define(["dojo/_base/declare",
        * @param {object} documents The document edit offline.
        */
       onActionMoveTo: function alfresco_services_ActionService__onActionMoveTo(payload, documents) {
-         this.createCopyMoveDialog(payload, documents, {
-            urlPrefix: this.moveAPI,
+         this.alfPublish("ALF_COPY_OR_MOVE_REQUEST", {
+            documents: documents,
+            copy: false,
             dialogTitle: "services.ActionService.moveTo.title",
             confirmButtonLabel: "services.ActionService.moveTo.ok",
             singleItemMode: true
@@ -927,251 +880,16 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Create a typeDef for the createCopyMoveDialogConfig type used by {@link alfresco/services/ActionService:createCopyMoveDialog}
-       *
-       * @typedef {Object} createCopyMoveDialogConfig
-       * @property [urlPrefix] {String} - The URL prefix for the action
-       * @property [dialogTitle] {string} - The title for the dialog
-       * @property [confirmButtonLabel] {String} - The label for the confirmation button
-       * @property [singleItemMode] {Bool} - {@link alfresco/pickers/PickedItems:singleItemMode}
-       */
-
-      /**
-       * This function handles the creation of dialogs for both copy and move actions because
-       * they are identical apart from the config object (which can be optionally passed in).
-       * It defaults to copy mode if missing.
-       *
-       * @instance
-       * @param {object} payload The action payload
-       * @param {object} documents The documents selected for copy or move
-       * @param {createCopyMoveDialogConfig} [config] The config object.
-       */
-      createCopyMoveDialog: function alfresco_services_ActionService__createCopyMoveDialog(payload, documents, config) {
-
-         config = config || {};
-
-         var urlPrefix = config.urlPrefix || this.copyAPI, // Default to copy API.
-            dialogTitle = config.dialogTitle || "services.ActionService.copyTo.title", // Default to copy title
-            confirmButtonLabel = config.confirmButtonLabel || "services.ActionService.copyTo.ok", // Default to copy confirmation
-            singleItemMode = config.singleItemMode || false; // Default to allow multiple selections
-
-         var responseTopic = this.generateUuid() + "_ALF_MOVE_LOCATION_PICKED",
-            nodes = NodeUtils.nodeRefArray(documents),
-            publishPayload = {
-               nodes: nodes,
-               documents: documents
-            };
-
-         var fileName = (nodes.length === 1)? documents[0].fileName : this.message("services.ActionService.copyMoveTo.multipleFiles");
-
-         this._actionHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onCopyMoveLocationSelected, urlPrefix), true);
-         this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
-            dialogTitle: this.message(dialogTitle, { 0: fileName}),
-            handleOverflow: false,
-            widgetsContent: [
-               {
-                  name: "alfresco/pickers/ContainerPicker",
-                  config: {
-                     singleItemMode: singleItemMode,
-                     generatePubSubScope: true
-                  }
-               }
-            ],
-            widgetsButtons: [
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: confirmButtonLabel,
-                     publishTopic: responseTopic,
-                     publishPayload: publishPayload,
-                     disableOnInvalidControls: true,
-                     validTopic: "ALF_PICKER_VALID",
-                     invalidTopic: "ALF_PICKER_INVALID"
-                  }
-               },
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: "picker.cancel.label",
-                     publishTopic: "NO_OP"
-                  }
-               }
-            ]
-         }, true);
-      },
-
-      /**
-       * Handles the actual copy call - triggered once the location has been selected by
-       * [onActionCopyTo]{@link module:alfresco/services/ActionsService#onActionCopyTo}
-       *
-       * @instance
-       * @param payload
-       */
-      onCopyMoveLocationSelected: function alfresco_services_ActionService__onCopyMoveLocationSelected(urlPrefix, payload) {
-         this.alfUnsubscribeSaveHandles([this._actionCopyHandle]);
-
-         // Get the locations to copy to and the documents to them...
-         var locations = lang.getObject("dialogContent.0.pickedItemsWidget.currentData.items", false, payload);
-         var documents = lang.getObject("documents", false, payload);
-         if (locations == null || locations.length === 0)
-         {
-            this.alfLog("error", "copyMoveTarget not specified");
-         }
-         else if (documents == null || documents.length === 0)
-         {
-            this.alfLog("error", "Documents to copy not specified.");
-         }
-         else
-         {
-            // TODO: The closure should be moved to an instance function...
-            array.forEach(locations, function(location, index) {
-               var nodeRefs = NodeUtils.nodeRefArray(documents),
-                           responseTopic = this.generateUuid(),
-                           subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onActionCopyToSuccess), true);
-
-               this.serviceXhr({
-                  alfTopic: responseTopic,
-                  subscriptionHandle: subscriptionHandle,
-                  url: AlfConstants.PROXY_URI + urlPrefix + location.nodeRef.replace("://", "/"),
-                  method: "POST",
-                  data: {
-                     nodeRefs: nodeRefs,
-                     parentId: location
-                  }
-               });
-            }, this);
-         }
-      },
-
-      /**
-       * What should we do when the copy action succeeds?
-       *
-       * @instance
-       * @param payload
-       */
-      onActionCopyToSuccess: function alfresco_services_ActionService__onActionCopyToSuccess(payload) {
-         // TODO: Not all success is success. Need to check response.overallSuccess rather than just response status.
-         this.onActionCompleteSuccess(arguments);
-      },
-
-      /**
-       * Handles requests to delete the supplied document. This function currently
-       * delegates handling of the request to the Alfresco.DocLibToolbar by calling
-       * [callLegacyActionHandler]{@link module:alfresco/services/ActionsService#callLegacyActionHandler}
+       * Handles requests to delete the supplied document.
        *
        * @instance
        * @param {object} payload The response from the request
        * @param {object} documents The document edit offline.
        */
       onActionDelete: function alfresco_services_ActionService__onActionDelete(payload, documents) {
-
-         var responseTopic = this.generateUuid();
-         this._actionDeleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onActionDeleteConfirmation), true);
-
-         var dialog = new AlfDialog({
-            generatePubSubScope: false,
-            title: this.message("delete-dialog.title"),
-            widgetsContent: [
-               {
-                  name: "alfresco/lists/views/AlfListView",
-                  config: {
-                     additionalCssClasses: "no-highlight",
-                     currentData: {
-                        items: documents
-                     },
-                     widgets: [
-                        {
-                           name: "alfresco/lists/views/layouts/Row",
-                           config: {
-                              widgets: [
-                                 {
-                                    name: "alfresco/lists/views/layouts/Cell",
-                                    config: {
-                                       widgets: [
-                                          {
-                                             name: "alfresco/renderers/SmallThumbnail"
-                                          }
-                                       ]
-                                    }
-                                 },
-                                 {
-                                    name: "alfresco/lists/views/layouts/Cell",
-                                    config: {
-                                       widgets: [
-                                          {
-                                             name: "alfresco/renderers/Property",
-                                             config: {
-                                                propertyToRender: "node.properties.cm:name"
-                                             }
-                                          }
-                                       ]
-                                    }
-                                 }
-                              ]
-                           }
-                        }
-                     ]
-                  }
-               }
-            ],
-            widgetsButtons: [
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: this.message("services.ActionService.button.ok"),
-                     publishTopic: responseTopic,
-                     publishPayload: {
-                        nodes: documents,
-                        completionTopic: payload.completionTopic
-                     }
-                  }
-               },
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: this.message("services.ActionService.button.cancel"),
-                     publishTopic: "close"
-                  }
-               }
-            ]
+         this.alfPublish("ALF_DELETE_CONTENT_REQUEST", {
+            nodes: documents || [payload.document]
          });
-         dialog.show();
-      },
-
-      /**
-       * This function is called when the user confirms that they wish to delete a document
-       *
-       * @instance
-       * @param {object} payload An object containing the details of the document(s) to be deleted.
-       */
-      onActionDeleteConfirmation: function alfresco_services_ActionService__onActionDeleteConfirmation(payload) {
-         this.alfUnsubscribeSaveHandles([this._actionDeleteHandle]);
-
-         var nodeRefs = array.map(payload.nodes, function(item) {
-            return item.nodeRef;
-         });
-         var responseTopic = this.generateUuid();
-         var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onActionDeleteSuccess), true);
-
-         this.serviceXhr({
-            alfTopic: responseTopic,
-            subscriptionHandle: subscriptionHandle,
-            url: AlfConstants.PROXY_URI + "slingshot/doclib/action/files?alf_method=delete",
-            method: "POST",
-            data: {
-               nodeRefs: nodeRefs
-            }
-         });
-      },
-
-      /**
-       * This action will be called when documents are successfully deleted
-       *
-       * @instance
-       * @param {object} payload
-       */
-      onActionDeleteSuccess: function alfresco_services_ActionService__onActionDeleteSuccess(payload) {
-         this.onActionCompleteSuccess(arguments);
       },
 
       /**
@@ -1182,7 +900,7 @@ define(["dojo/_base/declare",
        */
       onActionCompleteSuccess: function alfresco_services_ActionService__onActionCompleteSuccess(payload) {
          var subscriptionHandle = lang.getObject("requestConfig.subscriptionHandle", false, payload);
-         if (subscriptionHandle != null)
+         if (subscriptionHandle)
          {
             this.alfUnsubscribe(subscriptionHandle);
          }
@@ -1199,16 +917,13 @@ define(["dojo/_base/declare",
       onActionAssignWorkflow: function alfresco_services_ActionService__onActionAssignWorkflow(payload, documents)
       {
          var nodeRefs = NodeUtils.nodeRefsString(documents);
-
          var postBody =
          {
             selectedItems: nodeRefs
          };
 
          postBody.destination = window.location.toString();
-
          var url = this.siteURL("start-workflow");
-
          this.alfPublish(this.postToPageTopic, {
             method: "POST",
             type: this.sharePageRelativePath,
@@ -1216,7 +931,6 @@ define(["dojo/_base/declare",
             target: this.currentTarget,
             parameters: postBody
          });
-
       },
 
       /**
@@ -1256,110 +970,40 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * @instance
-       * @param {object} payload
-       */
-      onSyncLocation: function alfresco_services_ActionService__onSyncLocation(payload) {
-         var node = lang.clone(this._currentNode.parent);
-         var record = {
-            nodeRef: node.nodeRef,
-            displayName: node.properties["cm:name"],
-            jsNode: new JsNode(node)
-         };
-         this.callLegacyActionHandler("onActionCloudSync", record);
-      },
-
-      /**
-       * @instance
-       * @param {object} payload
-       */
-      onUnsyncLocation: function alfresco_services_ActionService__onUnsyncLocation(payload) {
-         var node = lang.clone(this._currentNode.parent);
-         var record = {
-            nodeRef: node.nodeRef,
-            displayName: node.properties["cm:name"],
-            jsNode: new JsNode(node)
-         };
-         this.callLegacyActionHandler("onActionCloudUnsync", record);
-      },
-
-      /**
-       * Performs a document move. Note, this doesn't display a dialog for move options - it simply performs the move. The payload
-       * published on this topic must contain a "sourceNodeRefs" attribute which should be an array of strings where each element
-       * is a NodeRef to be moved. It can accept either a "targetNodeRefUri" or a "targetPath". The "targetNodeRefUri" should be
-       * a URI fragment of a NodeRef (e.g. with the "://" converted to "/"). When a "targetPath" is specified then either the
-       * "rootNode" attribute or a combination of "siteId" and "containerId" will be used to construct the POST URL.
-       *
-       * @instance
-       * @param {object} payload
-       */
-      onMoveDocuments: function alfresco_services_ActionService__onMoveDocuments(payload) {
-
-         if (payload &&
-             payload.sourceNodeRefs != null)
-         {
-            var url = null;
-            if (payload.targetNodeRefUri != null)
-            {
-               url = AlfConstants.PROXY_URI + "slingshot/doclib/action/move-to/node/" + payload.targetNodeRefUri;
-            }
-            else if (payload.targetPath != null)
-            {
-               if (this.rootNode != null)
-               {
-                  var currentLocation = new JsNode(this.rootNode).nodeRef.uri;
-                  url = AlfConstants.PROXY_URI + "slingshot/doclib/action/move-to/node/" + currentLocation + payload.targetPath;
-               }
-               else
-               {
-                  url = AlfConstants.PROXY_URI + "slingshot/doclib/action/move-to/site/" + this.siteId + "/" + this.containerId  + "/" + payload.targetPath;
-               }
-            }
-            if (url != null)
-            {
-               var dataObj = {
-                  nodeRefs: payload.sourceNodeRefs,
-                  parentId: this._currentNode.parent.nodeRef
-               };
-               this.serviceXhr({url : url,
-                                data: dataObj,
-                                method: "POST",
-                                successCallback: this.onMoveDocumentsSuccess,
-                                failureCallback: this.onMoveDocumentsFailure,
-                                callbackScope: this});
-            }
-            else
-            {
-               this.alfLog("warn", "Could not process a request to move documents due to missing attributes, either 'targetNodeRefUri' or 'targetPath' is required", payload);
-            }
-         }
-      },
-
-      /**
-       * @instance
-       * @param {object} response
-       * @param {object} originalRequestConfig
-       */
-      onMoveDocumentsSuccess: function alfresco_services_ActionService__onMoveDocumentsSuccess(response, originalRequestConfig) {
-         // TODO: Display a success message.
-         this.alfPublish(this.reloadDataTopic, {});
-      },
-
-      /**
-       * @instance
-       * @param {object} response
-       * @param {object} originalRequestConfig
-       */
-      onMoveDocumentsFailure: function alfresco_services_ActionService__onMoveDocumentsSuccess(response, originalRequestConfig) {
-         // TODO: Publish an error message.
-      },
-
-      /**
        *
        * @param {object} item The item to perform the action on
        */
       onActionManageAspects: function alfresco_services_ActionService__onActionManageAspects(item) {
          this.alfPublish("ALF_MANAGE_ASPECTS_REQUEST", { item: item });
+      },
+
+      /**
+       * Handles the "onActionSimpleRepoAction" that is used by multiple configured actions within Alfresco Share.
+       * The publication that mapped to the "action" attribute is called. Currently this is only supporting the
+       * "document-approve" and "document-reject" actions which are delegated to the 
+       * [SimpleWorkflowService]{@link module:alfresco/services/actions/SimpleWorkflowService}.
+       * 
+       * @instance
+       * @param {object} payload This will contain the details of the configured action
+       * @param {object} nodes The nodes to perform the actions on. 
+       */
+      onActionSimpleRepoAction: function alfresco_services_ActionService__onActionSimpleRepoAction(payload, nodes) {
+         switch (payload.id) {
+            case "document-approve":
+               this.alfPublish("ALF_APPROVE_SIMPLE_WORKFLOW", {
+                  items: nodes,
+                  action: payload.action
+               });
+               break;
+            case "document-reject":
+               this.alfPublish("ALF_REJECT_SIMPLE_WORKFLOW", {
+                  items: nodes,
+                  action: payload.action
+               });
+               break;
+            default:
+               this.alfLog("warn", "A simple repo action request was made but the action is unsupported", payload, this);
+         }
       }
    });
 });

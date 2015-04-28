@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,11 +18,41 @@
  */
 
 /**
- * Renders a standard large thumbnail for a node.
+ * <p>Renders a thumbnail rendition of a node. This widget was originally written to support the
+ * Alfresco Share Document Library but has been expanded to be the base module for all thumbnail
+ * widgets. It attempts to make it possible to render thumbnails renditions or action them 
+ * even when all that is available is the nodeRef of the node.</p>
+ * <p>As well as providing basic actions for navigating a Document Library (e.g. clicking a folder
+ * requests to display the content of that folder and clicking on a document links to the details
+ * page that renders the document) it is also possible to configure custom actions along with the
+ * ability to request a preview of the node be displayed.</p>
+ *
+ * @example <caption>Example configuration for use in Document Library:</caption>
+ * {
+ *    "name": "alfresco/renderers/Thumbnail"
+ * }
+ *
+ * @example <caption>Example setting a fixed width for the imgpreview rendition:</caption>
+ * {
+ *    "name": "alfresco/renderers/Thumbnail",
+ *    "config": {
+ *       "renditionName": "imgpreview",
+ *       "width": "200px"
+ *    }
+ * }
+ *
+ * @example <caption>Example requesting a preview when only nodeRef available:</caption>
+ * {
+ *    "name": "alfresco/renderers/Thumbnail",
+ *    "config": {
+ *       "assumeRendition": true,
+ *       "showDocumentPreview": true
+ *    }
+ * }
  * 
  * @module alfresco/renderers/Thumbnail
  * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @mixes external:dijit/_TemplatedMixin
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/node/DraggableNodeMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
@@ -47,13 +77,24 @@ define(["dojo/_base/declare",
         "dojo/_base/event",
         "dojo/dom-style",
         "alfresco/core/NodeUtils",
-        "dojo/window"], 
+        "dojo/window",
+        "dojo/Deferred",
+        "dojo/when"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
                  _PublishPayloadMixin, _OnDijitClickMixin, template, AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, 
-                 AlfConstants, lang, event, domStyle, NodeUtils, win) {
+                 AlfConstants, lang, event, domStyle, NodeUtils, win, Deferred, when) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, _PublishPayloadMixin], {
       
+      /**
+       * An array of the i18n files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/Thumbnail.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/Thumbnail.properties"}],
+
       /**
        * An array of the CSS files to use with this widget.
        * 
@@ -65,6 +106,7 @@ define(["dojo/_base/declare",
       
       /**
        * The HTML template to use for the widget.
+       * 
        * @instance
        * @type {string}
        */
@@ -72,6 +114,7 @@ define(["dojo/_base/declare",
       
       /**
        * Additional CSS classes to apply to the main DOM node defined in the template
+       * 
        * @instance
        * @type {string}
        * @default ""
@@ -79,31 +122,49 @@ define(["dojo/_base/declare",
       customClasses: "",
       
       /**
+       * This allows a tokenized template to be defined where the tokens will be populated from
+       * values in the "currentItem" attribute using the 
+       * [processCurrentItemTokens function]{@link module:alfresco/core/ObjectProcessingMixin#processCurrentItemTokens}
+       * from the [ObjectProcessingMixin]{@link module:alfresco/core/ObjectProcessingMixin} module. Note that the
+       * thumbnail URL template is expected to be appended to the PROXY_URI for accessing an Alfresco Repository.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      thumbnailUrlTemplate: null,
+
+      /**
        * Set up the attributes to be used when rendering the template.
        * 
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Thumbnail__postMixInProperties() {
-         
          this.imgId = "";
          this.thumbnailUrl = "";
          this.imgAltText = "";
          this.imgTitle = "";
 
-         if (this.currentItem != null && this.currentItem.jsNode)
+         if (this.currentItem && this.thumbnailUrlTemplate)
+         {
+            // If we have an explicitly decared thumbnail URL template then use that initially, this
+            // is used by the avatar thumbnail for example...
+            this.thumbnailUrl = AlfConstants.PROXY_URI + this.processCurrentItemTokens(this.thumbnailUrlTemplate);
+         }
+         else if (this.currentItem && this.currentItem.jsNode)
          {
             var jsNode = this.currentItem.jsNode;
             this.thumbnailUrl = this.generateThumbnailUrl();
-            if (this.currentItem.displayName == null)
+
+            var imageTitle = lang.getObject(this.imageTitleProperty, false, this.currentItem);
+            if (!imageTitle)
             {
                this.currentItem.displayName = jsNode.properties["cm:name"];
             }
-            this.setImageTitle();
          }
-         else if (this.currentItem != null && this.currentItem.nodeRef != null)
+         else if (this.currentItem && this.currentItem.nodeRef)
          {
             this.imageIdProperty = "nodeRef";
-            this.setImageTitle();
 
             // Fallback to just having a nodeRef available... this has been added to handle rendering of 
             // thumbnails in search results where full node information may not be available...
@@ -112,19 +173,30 @@ define(["dojo/_base/declare",
             {
                this.thumbnailUrl = require.toUrl("alfresco/renderers") + "/css/images/" + this.folderImage;
             }
-            else if (this.currentItem.type === "document" && nodeRef.uri != null)
+            else if (this.currentItem.type === "document" && nodeRef.uri)
             {
                this.thumbnailUrl = this.generateRenditionSpecificThumbnailUrl(nodeRef.uri);
-               if (this.thumbnailUrl === null)
+               if (!this.thumbnailUrl)
                {
                   this.thumbnailUrl = AlfConstants.PROXY_URI + "api/node/" + nodeRef.uri + "/content/thumbnails/" + this.renditionName + "/?c=queue&ph=true&lastModified=" + this.currentItem.modifiedOn;
                }
+            }
+            else if (nodeRef && this.assumeRendition)
+            {
+               this.thumbnailUrl = AlfConstants.PROXY_URI + "api/node/" + nodeRef.uri + "/content/thumbnails/" + this.renditionName + "/?c=queue&ph=true";
             }
             else
             {
                this.thumbnailUrl = this.generateFallbackThumbnailUrl();
             }
          }
+         else
+         {
+            this.thumbnailUrl = this.generateFallbackThumbnailUrl();
+         }
+
+         // Ensure that image title attributes, etc are set
+         this.setImageTitle();
       },
 
       /**
@@ -146,18 +218,54 @@ define(["dojo/_base/declare",
       imageIdProperty: "jsNode.nodeRef.nodeRef",
 
       /**
+       * Indicates whether or not a preview of the node represented by the thumbnail should be
+       * displayed when it is clicked. If this is set to true and there is not enough information
+       * to determine whether or not the the node can be previewed then a request will be published
+       * to retrieve that information.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      showDocumentPreview: false,
+
+      /**
+       * Some APIs provide very little information other than the nodeRef, however if we really
+       * believe that the thumbnails are only going to be of something that has a rendition then
+       * we can just "go for it" (all bets are really off though as to what we get back though
+       * so this should only set to true when you're confident that a valid thumbnail rendition
+       * will be available.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      assumeRendition: false,
+
+      /**
+       * The width to render the thumbnail. Units of measurement need to be provided, e.g.
+       * "100px" for 100 pixels. The default is null, and if left as this the thumbnail will
+       * be rendered at the original image size.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      width: null,
+
+      /**
        * Sets the title to display over the thumbnail
        *
        * @instance
        */
       setImageTitle: function alfresco_renderers_Thumbnail__setImageTitle() {
-         var title = this.currentItem[this.imageTitleProperty];
+         var title = lang.getObject(this.imageTitleProperty, false, this.currentItem);
          if (title)
          {
             this.imgTitle = this.encodeHTML(title);
-            this.imgAltText = (title != null) ? title.substring(title.lastIndexOf(".")) : "";
+            this.imgAltText = title ? title.substring(title.lastIndexOf(".")) : "";
          }
-         var id = this.currentItem[this.imageIdProperty];
+         var id = lang.getObject(this.imageIdProperty, false, this.currentItem);
          if (id)
          {
             this.imgId = id;
@@ -194,7 +302,8 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * The type of rendition to use for the thumbnail
+       * The type of rendition to use for the thumbnail.
+       * 
        * @instance
        * @type {string} 
        * @default "doclib"
@@ -202,11 +311,12 @@ define(["dojo/_base/declare",
       renditionName: "doclib",
       
       /**
-       * 
+       * This property is used to determine whether or not a new version of the thumbnail needs
+       * to be generated or if the cached version can be used.
        *
        * @instance
        * @type {string}
-       * @default
+       * @default "jsNode.properties.cm:lastThumbnailModification"
        */
       lastThumbnailModificationProperty: "jsNode.properties.cm:lastThumbnailModification",
 
@@ -219,11 +329,11 @@ define(["dojo/_base/declare",
        */
       generateThumbnailUrl: function alfresco_renderers_Thumbnail__generateThumbnailUrl() {
          var url = null;
-         if (this.renditionName == null)
+         if (!this.renditionName)
          {
             this.renditionName = "doclib";
          }
-         if (this.currentItem != null && this.currentItem.jsNode)
+         if (this.currentItem && this.currentItem.jsNode)
          {
             var jsNode = this.currentItem.jsNode;
             if (jsNode.isContainer || (jsNode.isLink && jsNode.linkedNode.isContainer))
@@ -236,7 +346,7 @@ define(["dojo/_base/declare",
                url = this.generateRenditionSpecificThumbnailUrl(nodeRef.uri);
             }
          }
-         if (url == null)
+         if (!url)
          {
             url = AlfConstants.PROXY_URI + "api/node/" + nodeRef.uri + "/content/thumbnails/" + this.renditionName + "?c=queue&ph=true";
          }
@@ -259,7 +369,7 @@ define(["dojo/_base/declare",
          {
             for (var i = 0; i < thumbnailModData.length; i++)
             {
-               if (thumbnailModData[i].indexOf(this.renditionName) != -1)
+               if (thumbnailModData[i].indexOf(this.renditionName) !== -1)
                {
                   url = AlfConstants.PROXY_URI + "api/node/" + nodeRefUri + "/content/thumbnails/" + this.renditionName + "?c=queue&ph=true&lastModified=" + thumbnailModData[i];
                   break;
@@ -275,88 +385,14 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_Thumbnail__postCreate() {
          this.inherited(arguments);
+         if (this.width)
+         {
+            domStyle.set(this.imgNode, "width", this.width);
+         }
          if (this.hasUploadPermissions() === true)
          {
             this.addUploadDragAndDrop(this.imgNode);
             this.addNodeDropTarget(this.imgNode);
-         }
-
-         // TODO: The following section could be somewhat refactored along with the code
-         // in the SearchThumbnailMixin... this should be a task for 5.1...
-         var type = lang.getObject("node.type", false, this.currentItem),
-             mimetype = lang.getObject("node.mimetype", false, this.currentItem);
-         if (this.showDocumentPreview && type === "cm:content")
-         {
-            // Since we're going to be publishing to services we need to publish globally...
-            this.publishGlobal = true;
-
-            if (mimetype && mimetype.indexOf("image/") === 0)
-            {
-               // get last modified for image preview if present in the metadata
-               var lastModified = lang.getObject(this.lastThumbnailModificationProperty, false, this.currentItem) || 1;
-               this.publishTopic = "ALF_DISPLAY_LIGHTBOX";
-               this.publishPayload = {
-                  src: AlfConstants.PROXY_URI + "api/node/" + lang.getObject("nodeRef", false, this.currentItem).replace(":/", "") +
-                       "/content/thumbnails/imgpreview?c=force&lastModified=" + encodeURIComponent(lastModified),
-                  title: lang.getObject("displayName", false, this.currentItem)
-               };
-            }
-            else
-            {
-               // Because the content of the previewer will load asynchronously it's important that 
-               // we set some dimensions for the dialog body, otherwise it will appear off-center
-               var vs = win.getBox();
-               this.publishTopic = "ALF_CREATE_DIALOG_REQUEST";
-               this.publishPayload = {
-                  contentWidth: (vs.w*0.7) + "px",
-                  contentHeight: (vs.h-64) + "px",
-                  handleOverflow: false,
-                  dialogTitle: this.currentItem.displayName,
-                  additionalCssClasses: "no-padding",
-                  widgetsContent: [
-                     {
-                        name: "alfresco/documentlibrary/AlfDocument",
-                        config: {
-                           widgets: [
-                              {
-                                 name: "alfresco/preview/AlfDocumentPreview"
-                              }
-                           ]
-                        }
-                     }
-                  ],
-                  widgetsButtons: [
-                     {
-                        name: "alfresco/buttons/AlfButton",
-                        config: {
-                           label: this.message("searchThumbnail.preview.dialog.close"),
-                           publishTopic: "NO_OP"
-                        }
-                     }
-                  ],
-                  publishOnShow: [
-                     {
-                        publishTopic: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
-                        publishPayload: {
-                           nodeRef: this.currentItem.nodeRef
-                        }
-                     }
-                  ]
-               };
-            }
-         }
-         else if (this.publishTopic == null)
-         {
-            // If no topic has been provided then set up a default one (presumed to be for use
-            // in a document library)...
-            this.publishPayload = {};
-            this.publishTopic = this.generateFileFolderLink(this.publishPayload);
-            this.publishGlobal = true;
-         }
-         else if (this.publishPayload != null)
-         {
-            // If a payload has been provided then use it...
-            this.publishPayload = this.getGeneratedPayload(false, null);
          }
       },
 
@@ -370,17 +406,221 @@ define(["dojo/_base/declare",
        */
       onLinkClick: function alfresco_renderers_Thumbnail__onLinkClick(evt) {
          event.stop(evt);
-         // var publishTopic = this.getPublishTopic();
-         if (this.publishTopic == null || lang.trim(this.publishTopic) === "")
+
+         // TODO: Need to use a nodeRef property attribute that can be configured
+         var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
+         if (!nodeRef)
+         {
+            nodeRef = lang.getObject("node.nodeRef", false, this.currentItem);
+         }
+
+         // Check to see if the thumbnail is configured to display previews when clicked,
+         // this particular type of action could require an XHR request of the full node
+         // data so it needs to be handled in a specific way...
+         if (this.showDocumentPreview)
+         {
+            this.nodePromise = this.currentItem;
+            var type = lang.getObject("node.type", false, this.currentItem),
+                mimetype = lang.getObject("node.mimetype", false, this.currentItem);
+            if (!type || !mimetype)
+            {
+               this.nodePromise = new Deferred();
+               this.onLoadNode(nodeRef);
+            }
+            when(this.nodePromise, lang.hitch(this, this.onNodePromiseResolved, nodeRef));
+         }
+         else
+         {
+            this.onNonPreviewAction();
+         }
+      },
+
+      /**
+       * Handles non-preview related actions. Non-preview actions are encapsulated in their own function 
+       * as requests for a preview might need to fallback to use them when an XHR request to obtain the
+       * full node data reveals that a preview cannot be supported.
+       *
+       * @instance
+       */
+      onNonPreviewAction: function alfresco_renderers_Thumbnail__onNonPreviewAction() {
+         if (!this.publishTopic)
+         {
+            // If no topic has been provided then set up a default one (presumed to be for use
+            // in a document library)...
+            this.publishPayload = {};
+            this.publishTopic = this.generateFileFolderLink(this.publishPayload);
+            this.publishGlobal = true;
+         }
+         else if (this.publishPayload)
+         {
+            // If a payload has been provided then use it...
+            this.publishPayload = this.getGeneratedPayload(false, null);
+         }
+
+         // ...then do it.
+         if (!this.publishTopic || lang.trim(this.publishTopic) === "")
          {
             this.alfLog("warn", "No publishTopic provided for PropertyLink", this);
          }
          else
          {
-            var publishGlobal = (this.publishGlobal != null) ? this.publishGlobal : false;
-            var publishToParent = (this.publishToParent != null) ? this.publishToParent : false;
+            var publishGlobal = this.publishGlobal !== false;
+            var publishToParent = this.publishToParent !== false;
             this.alfPublish(this.publishTopic, this.publishPayload, publishGlobal, publishToParent);
          }
+      },
+
+      /**
+       * This handles the resolution of the complete node data. This then inspects the node data to see
+       * whether or not it is possible to display a preview.
+       *
+       * @instance
+       * @param  {string} nodeRef  The nodeRef of the node to preview
+       * @param  {object} nodeData The resolved node data.
+       */
+      onNodePromiseResolved: function alfresco_renderers_Thumbnail__onNodePromiseResolved(nodeRef, nodeData) {
+         // First of all, update the currentItem with the full node data that has been resolved...
+         this.currentItem = nodeData;
+
+         // Now check to see whether or not the preview can be shown...
+         var type = lang.getObject("node.type", false, this.currentItem),
+             mimetype = lang.getObject("node.mimetype", false, this.currentItem);
+         if (type === "cm:content")
+         {
+            this.onShowPreview(nodeRef, mimetype);
+         }
+         else
+         {
+            // Fallback to standard actions
+            this.onNonPreviewAction();
+         }
+      },
+
+      /**
+       * Makes a reqeust to load all the data for the node. This is required for preview actions when data
+       * is not available in the currentItem object.
+       *
+       * @instance
+       * @param {string} nodeRef The nodeRef to reqeuest the details for
+       */
+      onLoadNode: function alfresco_renderers_Thumbnail__onLoadNode(nodeRef) {
+         if (nodeRef)
+         {
+            // Generate a UUID for the response to the publication to ensure that only this widget
+            // handles to the XHR data...
+            var responseTopic = this.generateUuid();
+            var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onNodeLoaded), true);
+            this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", {
+               subscriptionHandle: subscriptionHandle,
+               alfResponseTopic: responseTopic,
+               nodeRef: nodeRef,
+               rawData: true
+            }, true);
+         }
+         else
+         {
+            this.alfLog("warn", "No nodeRef supplied to use to retrieve all data.", this);
+         }
+      },
+
+      /**
+       * Handles the loading of the complete node data.
+       * 
+       * @instance
+       * @param {object} payload 
+       */
+      onNodeLoaded: function alfresco_renderers_Thumbnail__onNodeLoaded(payload) {
+         this.alfUnsubscribe(payload.requestConfig.subscriptionHandle);
+         if (lang.exists("response.item", payload)) 
+         {
+            if (this.nodePromise && typeof this.nodePromise.resolve === "function")
+            {
+               this.nodePromise.resolve(payload.response.item);
+            }
+         }
+         else
+         {
+            this.alfLog("warn", "Node data was provided but the 'response.item' attribute was not found", payload, this);
+         }
+      },
+
+      /**
+       * Handles requests to show a preview of the node represented by the Thumbnail. By default this will only
+       * show a lightbox image for image mimetypes and display a dialog containing a preview for all other mime types
+       *
+       * @instance
+       * @param {string} nodeRef The nodeRef of the node to preview
+       * @param {string} mimetype The mimetype of the node
+       */
+      onShowPreview: function alfresco_renderers_Thumbnail__onShowPreview(nodeRef, mimetype) {
+         // Since we're going to be publishing to services we need to publish globally...
+         this.publishGlobal = true;
+         if (mimetype && mimetype.indexOf("image/") === 0)
+         {
+            // get last modified for image preview if present in the metadata
+            var lastModified = lang.getObject(this.lastThumbnailModificationProperty, false, this.currentItem) || 1;
+            this.publishTopic = "ALF_DISPLAY_LIGHTBOX";
+            if (nodeRef)
+            {
+               this.publishPayload = {
+                  src: AlfConstants.PROXY_URI + "api/node/" + nodeRef.replace(":/", "") +
+                       "/content/thumbnails/imgpreview?c=force&lastModified=" + encodeURIComponent(lastModified),
+                  title: this.imgTitle
+               };
+            }
+            else
+            {
+               this.alfLog("warn", "Could not find a nodeRef to process", this.currentItem, this);
+            }
+         }
+         else
+         {
+            // Because the content of the previewer will load asynchronously it's important that 
+            // we set some dimensions for the dialog body, otherwise it will appear off-center
+            var vs = win.getBox();
+            this.publishTopic = "ALF_CREATE_DIALOG_REQUEST";
+            this.publishPayload = {
+               contentWidth: (vs.w*0.7) + "px",
+               contentHeight: (vs.h-64) + "px",
+               handleOverflow: false,
+               dialogTitle: this.imgTitle,
+               additionalCssClasses: "no-padding",
+               widgetsContent: [
+                  {
+                     name: "alfresco/documentlibrary/AlfDocument",
+                     config: {
+                        widgets: [
+                           {
+                              name: "alfresco/preview/AlfDocumentPreview",
+                              config: {
+                                 heightMode: "DIALOG"
+                              }
+                           }
+                        ]
+                     }
+                  }
+               ],
+               widgetsButtons: [
+                  {
+                     name: "alfresco/buttons/AlfButton",
+                     config: {
+                        label: this.message("thumbnail.preview.dialog.close"),
+                        publishTopic: "NO_OP"
+                     }
+                  }
+               ],
+               publishOnShow: [
+                  {
+                     publishTopic: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
+                     publishPayload: {
+                        rawData: true,
+                        nodeRef: nodeRef
+                     }
+                  }
+               ]
+            };
+         }
+         this.alfPublish(this.publishTopic, this.publishPayload, this.publishGlobal, this.publishToParent);
       }
    });
 });

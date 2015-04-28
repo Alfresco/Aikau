@@ -251,5 +251,12 @@ These additional attributes in the configuration argument passed to the `service
 
 ![Screenshot showing newly created group](../resources/Tutorial7-Image4.png "Screenshot showing newly created group")
 
+### Additional Information
+The `alfresco/services/Dialog` supports a number of other useful attributes that can be included in the payload when requesting to create a form dialog. The full details are available in the [online JSDoc](http://dev.alfresco.com/resource/docs/aikau-jsdoc/DialogService.html "Link to Aikau JSDoc"). However there are a couple of attributes that are particularly useful.
+
+The first is the `formSubmissionPayloadMixin` attribute that allows you do define an object that is "mixed" into the value of the form before it is published as on the `formSubmissionTopic`. This can be very useful when you need to include data that doesn't need to be rendered as part of the form.
+
+The other is the `dialogCloseTopic` attribute that when set will prevent the dialog from being automatically closed. Instead the dialog will only be closed when the `dialogCloseTopic` is published. This can be useful when you want to ensure that the dialog action completes successfully before the dialog (and all the data your user has entered into it) gets discarded.
+
 Previous: [Creating a User and Group Management Page](./Tutorial6.md)
 Next: [Widget Dialogs](./Tutorial8.md)

@@ -32,7 +32,7 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/json"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang) {
+        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang, array) {
 
    return declare([AlfCore, CoreXhr], {
 
@@ -79,12 +79,11 @@ define(["dojo/_base/declare",
 
          var message = lang.getObject("successMessage", false, originalRequestConfig);
          if (!message) {
-            message = this.message("crudservice.generic.success.message");
+            message = "crudservice.generic.success.message";
          }
 
-         // TODO: Need a context sensitive, localized message...
          this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
-            message: message
+            message: this.message(message)
          });
 
          var noRefresh = lang.getObject("data.noRefresh", false, originalRequestConfig);
@@ -141,6 +140,27 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function can be used to append the supplied query parameter name and value onto the 
+       * supplied URL string which is then returned.
+       * 
+       * @param {string} url The url to update
+       * @param {string} param The name of the query parameter
+       * @param {string} value The value of the query parameter
+       * @returns {string} The updated URL
+       */
+      addQueryParameter: function alfresco_services_CrudService__addQueryParameter(url, param, value) {
+         if (url.indexOf("?") === -1)
+         {
+            url += "?";
+         }
+         else
+         {
+            url += "&";
+         }
+         return url += param + "=" + value;
+      },
+
+      /**
        * Makes a GET request to the Repository using the 'url' attribute provided in the payload passed
        * in the publication on the topic that this function subscribes to. The 'url' is expected to be a
        * Repository WebScript URL and should not include the Repository proxy stem.
@@ -150,6 +170,28 @@ define(["dojo/_base/declare",
        */
       onGetAll: function alfresco_services_CrudService__onGetAll(payload) {
          var url = this.getUrlFromPayload(payload);
+
+         if (payload.pageSize)
+         {
+            url = this.addQueryParameter(url, "pageSize", payload.pageSize);
+         }
+         if (payload.page)
+         {
+            url = this.addQueryParameter(url, "page", payload.page);
+         }
+         if (payload.page && payload.pageSize)
+         {
+            var startIndex = (payload.page - 1) * payload.pageSize;
+            url = this.addQueryParameter(url, "startIndex", startIndex);
+         }
+         if (payload.dataFilters)
+         {
+            // TODO: iterate over filters and add each as a request parameter...
+            array.forEach(payload.dataFilters, function(filter) {
+               url = this.addQueryParameter(url, filter.name, filter.value);
+            }, this);
+         }
+         
          if (url) {
             this.serviceXhr({
                url: url,
@@ -193,9 +235,9 @@ define(["dojo/_base/declare",
             data: this.clonePayload(payload),
             method: "POST",
             alfTopic: payload.alfResponseTopic,
-            successMessage: payload.successMessage,
+            successMessage: this.message(payload.successMessage || "crudservice.generic.success.message"),
             successCallback: this.refreshRequest,
-            failureMessage: payload.failureMessage,
+            failureMessage: this.message(payload.failureMessage || "crudservice.generic.failure.message"),
             failureCallback: this.failureCallback,
             callbackScope: this
          });
@@ -213,9 +255,9 @@ define(["dojo/_base/declare",
             data: this.clonePayload(payload),
             method: "PUT",
             alfTopic: payload.alfResponseTopic,
-            successMessage: payload.successMessage,
+            successMessage: this.message(payload.successMessage || "crudservice.generic.success.message"),
             successCallback: this.refreshRequest,
-            failureMessage: payload.failureMessage,
+            failureMessage: this.message(payload.failureMessage || "crudservice.generic.failure.message"),
             failureCallback: this.failureCallback,
             callbackScope: this
          });
@@ -258,34 +300,34 @@ define(["dojo/_base/declare",
          var responseTopic = this.generateUuid();
          this._deleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onDeleteConfirmation), true);
 
-         var title = payload.confirmationTitle || this.message("crudservice.generic.delete.title");
-         var prompt = payload.confirmationPrompt || this.message("crudservice.generic.delete.prompt");
-         var confirmButtonLabel = payload.confirmationButtonLabel || this.message("crudservice.generic.delete.confirmationButtonLabel");
-         var cancelButtonLabel = payload.cancellationButtonLabel || this.message("crudservice.generic.delete.cancellationButtonLabel");
+         var title = payload.confirmationTitle || "crudservice.generic.delete.title";
+         var prompt = payload.confirmationPrompt || "crudservice.generic.delete.prompt";
+         var confirmButtonLabel = payload.confirmationButtonLabel || "crudservice.generic.delete.confirmationButtonLabel";
+         var cancelButtonLabel = payload.cancellationButtonLabel || "crudservice.generic.delete.cancellationButtonLabel";
 
          var dialog = new AlfDialog({
             generatePubSubScope: false,
-            title: title,
-            textContent: prompt,
+            title: this.message(title),
+            textContent: this.message(prompt),
             widgetsButtons: [
                {
                   name: "alfresco/buttons/AlfButton",
                   config: {
-                     label: confirmButtonLabel,
+                     label: this.message(confirmButtonLabel),
                      publishTopic: responseTopic,
                      publishPayload: {
                         url: url,
                         pubSubScope: payload.pubSubScope,
                         responseTopic: payload.responseTopic,
-                        successMessage: payload.successMessage,
-                        failureMessage: payload.failureMessage
+                        successMessage: this.message(payload.successMessage || "crudservice.generic.success.message"),
+                        failureMessage: this.message(payload.failureMessage || "crudservice.generic.failure.message")
                      }
                   }
                },
                {
                   name: "alfresco/buttons/AlfButton",
                   config: {
-                     label: cancelButtonLabel,
+                     label: this.message(cancelButtonLabel),
                      publishTopic: "close"
                   }
                }
@@ -310,9 +352,9 @@ define(["dojo/_base/declare",
             method: "DELETE",
             data: this.clonePayload(payload),
             alfTopic: payload.responseTopic,
-            successMessage: payload.successMessage,
+            successMessage: this.message(payload.successMessage || "crudservice.generic.success.message"),
             successCallback: this.refreshRequest,
-            failureMessage: payload.failureMessage,
+            failureMessage: this.message(payload.failureMessage || "crudservice.generic.failure.message"),
             failureCallback: this.failureCallback,
             callbackScope: this
          });
@@ -350,7 +392,7 @@ define(["dojo/_base/declare",
          // Get the failure message and display a notification
          var message = originalRequestConfig.failureMessage || this.message("crudservice.generic.failure.message");
          this.alfPublish("ALF_DISPLAY_PROMPT", {
-            message: message
+            message: this.message(message)
          });
       }
    });
