@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,28 +30,31 @@ define(["dojo/_base/declare",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
-        "service/constants/Default"],
-        function(declare, AlfCore, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin, lang, AlfConstants) {
+        "service/constants/Default",
+        "alfresco/core/ArrayUtils",
+        "jquery"],
+        function(declare, AlfCore, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin, lang, 
+                 AlfConstants, ArrayUtils, $) {
    
    return declare([AlfCore, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin], {
       
       /**
-       * Declare the dependencies on "legacy" JS files that this is wrapping.
+       * This is the dot-notation preferences property address for favourite documents
+       *
        * @instance
-       * @type {string[]}
-       * @default ["/js/alfresco.js"],
+       * @type {string}
+       * @default "org.alfresco.share.documents.favourites"
        */
-      nonAmdDependencies: ["/js/yui-common.js",
-                           "/js/alfresco.js"],
-      
+      FAVOURITE_DOCUMENTS: "org.alfresco.share.documents.favourites",
+
       /**
-       * A reference to the wrapped YUI implemented preferences service.
-       * 
+       * This is the dot-notation preferences property address for favourite folders
+       *
        * @instance
-       * @type {object}
-       * @default null
+       * @type {string}
+       * @default "org.alfresco.share.folders.favourites"
        */
-      _wrappedService: null,
+      FAVOURITE_FOLDERS: "org.alfresco.share.folders.favourites",
       
       /**
        * Sets up the subscriptions for the PreferenceService
@@ -60,37 +63,20 @@ define(["dojo/_base/declare",
        * @param {array} args Constructor arguments
        */
       constructor: function alfresco_services_PreferenceService__constructor(args) {
-
          lang.mixin(this, args);
-         
-         // The preference service currently wraps the existing YUI defined service. The constructor
-         // protects against the code for that wrapped service not being available. At some stage
-         // in the future the old preferences service will need to be replaced with a new version
-         // to avoid the wrapping step...
-         if (Alfresco && Alfresco.service && typeof Alfresco.service.Preferences === "function")
-         {
-            this._wrappedService = new Alfresco.service.Preferences();
-
-            // It's currently only worth subscribing to the events to capture preferences for if
-            // there is a preferences service to post them to!!
-            this.alfSubscribe(this.getPreferenceTopic, lang.hitch(this, this.getPreference));
-            this.alfSubscribe(this.setPreferenceTopic, lang.hitch(this, this.setPreference));
-            
-            this.alfSubscribe(this.showFoldersTopic, lang.hitch(this, this.onShowFolders));
-            this.alfSubscribe(this.showPathTopic, lang.hitch(this, this.onShowPath));
-            this.alfSubscribe(this.showSidebarTopic, lang.hitch(this, this.onShowSidebar));
-            this.alfSubscribe(this.viewSelectionTopic, lang.hitch(this, this.onViewSelection));
-            this.alfSubscribe(this.addFavouriteDocumentTopic, lang.hitch(this, this.onAddFavouriteDocument));
-            this.alfSubscribe(this.removeFavouriteDocumentTopic, lang.hitch(this, this.onRemoveFavouriteDocument));
-            
-            // There are other preferences that are currently handled by the wrapped DocumentList that
-            // will need to be added here when a new DocumentList is created that replaces the wrapped
-            // version.
-         }
+         this.alfSubscribe(this.getPreferenceTopic, lang.hitch(this, this.getPreference));
+         this.alfSubscribe(this.setPreferenceTopic, lang.hitch(this, this.setPreference));
+         this.alfSubscribe(this.showFoldersTopic, lang.hitch(this, this.onShowFolders));
+         this.alfSubscribe(this.showPathTopic, lang.hitch(this, this.onShowPath));
+         this.alfSubscribe(this.showSidebarTopic, lang.hitch(this, this.onShowSidebar));
+         this.alfSubscribe(this.viewSelectionTopic, lang.hitch(this, this.onViewSelection));
+         this.alfSubscribe(this.addFavouriteDocumentTopic, lang.hitch(this, this.onAddFavouriteDocument));
+         this.alfSubscribe(this.removeFavouriteDocumentTopic, lang.hitch(this, this.onRemoveFavouriteDocument));
       },
       
       /**
        * The preferences provided at services instantiation.
+       * 
        * @instance
        * @type {object} 
        * @default null
@@ -98,11 +84,36 @@ define(["dojo/_base/declare",
       localPreferences: null,
       
       /**
+       * Converts a dot-notation property address into a JavaScript object literal. This is done so that
+       * preferences can be set on the object generated from and address.
+       * 
+       * @instance
+       * @param {string} str The dot-notation property to convert into an object
+       * @param {object} value The value to set at the dot-notation property address
+       * @return {object} The object generated from the dot-notation property.
+       */
+      dotNotationToObject: function alfresco_services_PreferenceService__dotNotationToObject(str, value) {
+         var object = {}, obj = object;
+         if (typeof str === "string")
+         {
+            var properties = str.split("."), property, i, ii;
+            for (i = 0, ii = properties.length - 1; i < ii; i++)
+            {
+               property = properties[i];
+               obj[property] = {};
+               obj = obj[property];
+            }
+            obj[properties[i]] = value !== undefined ? value : null;
+         }
+         return object;
+      },
+
+      /**
        * Retrieves a preference from the [local copy]{@link module:alfresco/services/PreferenceService#localPreferences} rather than 
        * getting them remotely.
        * 
        * @instance
-       * @param {{callback: function, callbackScope: object, preference: string}} payload
+       * @param {object} payload
        */
       getPreference: function alfresco_services_PreferenceService__getPreference(payload) {
          if (!lang.exists("callback", payload) || 
@@ -126,7 +137,7 @@ define(["dojo/_base/declare",
        * Sets a preference remotely.
        * 
        * @instance
-       * @param {{preference: string, value: object} payload
+       * @param {object} payload
        */
       setPreference: function alfresco_services_PreferenceService__setPreference(payload) {
          if (!lang.exists("preference", payload))
@@ -137,7 +148,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "A request was made to set a preference, but no 'value' attribute was provided", payload);
          }
-         else if (lang.getObject(payload.preference, false, this.localPreferences) == payload.value)
+         else if (lang.getObject(payload.preference, false, this.localPreferences) === payload.value)
          {
             // Don't save a preference if it hasn't changed...
             this.alfLog("log", "Intentionally not saving a preference that hasn't changed");
@@ -145,18 +156,91 @@ define(["dojo/_base/declare",
          else
          {
             // Set users preference url...
-            var _this = this,
-                url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(AlfConstants.USERNAME) + "/preferences";
+            var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(AlfConstants.USERNAME) + "/preferences";
             
             // Set the remote preference...
             var preferenceObj = {};
             lang.setObject(payload.preference, payload.value, preferenceObj);
             this.serviceXhr({url : url,
+                             alfTopic: payload.alfTopic,
                              data: preferenceObj,
                              method: "POST"});
             
             // Set the local preference...
             lang.setObject(payload.preference, payload.value, this.localPreferences);
+         }
+      },
+
+      /**
+       * This is the default success callback for XHR requests that will be used if no other is provided.
+       *
+       * @instance
+       * @param {object} response The object returned from the successful XHR request
+       * @param {object} requestConfig The original configuration passed when the request was made
+       */
+      onPreferenceRetrieved: function alfresco_services_PreferenceService__onPreferenceRetrieved(response, requestConfig) {
+         if (response && requestConfig.data && requestConfig.data.name && requestConfig.data.value)
+         {
+            var name = requestConfig.data.name;
+            var value = requestConfig.data.value;
+            var preferences = this.dotNotationToObject(name, null);
+            $.extend(true, preferences, response);
+            var values = lang.getObject(name, false, preferences);
+            
+            // Parse string to array, add the value and convert to string again
+            if (typeof values === "string" || values === null)
+            {
+               var arrValues = values ? values.split(",") : [];
+
+               if (requestConfig.data.add === true)
+               {
+                  arrValues.push(value);
+               }
+               else
+               {
+                  ArrayUtils.arrayRemove(arrValues, value);
+               }
+               
+               // Save preference with the new value
+               this.setPreference({
+                  alfTopic: requestConfig.data.alfTopic,
+                  preference: name, 
+                  value: arrValues.join(",")
+               });
+            }
+         }
+      },
+
+      /**
+       * This function updates and existing preference where that preference is intended to be an array
+       * of items. In order to perform the update the existing preferences must be retrieved and then the
+       * preference can be added or removed depending on the supplied mode.
+       * 
+       * @instance
+       * @param {object} payload The details of the preference to add
+       * @param {boolean} add Indicates whether or not the update is to add or remove a preference
+       */
+      update: function alfresco_services_PreferenceService__update(payload, add) {
+         if (payload.name && payload.value)
+         {
+            var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(AlfConstants.USERNAME) + "/preferences" + (name ? "?pf=" + name : "");
+            this.serviceXhr({
+               url: url,
+               method: "GET",
+               data: {
+                  name: payload.name,
+                  value: payload.value,
+                  alfTopic: payload.alfTopic,
+                  add: add
+               },
+               successCallback: this.onPreferenceRetrieved,
+               failureCallback: this.onPreferenceRetrievalFail,
+               callbackScope: this
+            });
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to add a preference but either the preference name or value was missing from the payload", payload, this);
          }
       },
       
@@ -166,7 +250,7 @@ define(["dojo/_base/declare",
        * @param {object} payload 
        */
       onShowFolders: function alfresco_services_PreferenceService__onShowFolders(payload) {
-         if (payload && payload.selected != null)
+         if (payload && (payload.selected || payload.selected === false))
          {
             this.setPreference({
                preference: "org.alfresco.share.documentList.showFolders",
@@ -182,7 +266,7 @@ define(["dojo/_base/declare",
        * @param {object} payload 
        */
       onShowPath: function alfresco_services_PreferenceService__onShowPath(payload) {
-         if (payload && payload.selected != null)
+         if (payload && (payload.selected || payload.selected === false))
          {
             this.setPreference({
                preference: "org.alfresco.share.documentList.hideNavBar",
@@ -198,7 +282,7 @@ define(["dojo/_base/declare",
        * @param {object} payload 
        */
       onShowSidebar: function alfresco_services_PreferenceService__onShowSidebar(payload) {
-         if (payload && payload.selected != null)
+         if (payload && (payload.selected || payload.selected === false))
          {
             this.setPreference({
                preference: "org.alfresco.share.documentList.showSidebar",
@@ -215,22 +299,15 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onViewSelection: function alfresco_services_PreferenceService__onViewSelection(payload) {
-         if (payload && payload.value != null && payload.value !== "Abstract")
+         if (payload && payload.value && payload.value !== "Abstract")
          {
-            var preference = (payload.preference != null) ? payload.preference : "org.alfresco.share.documentList.viewRendererName";
+            var preference = payload.preference || "org.alfresco.share.documentList.viewRendererName";
             this.setPreference({
                preference: preference,
                value: payload.value
             });
          }
       },
-      
-      /* IMPLEMENTATION NOTES:
-       *    It would have been preferential to not wrap the existing preference service. However, due to the 
-       * way in which documents/folders are made favourites (e.g. as a comma separated string as opposed to
-       * a more easily managed JSON structure) it was prudent to use the existing code. Hopefully at some point
-       * in the future when document favourites are maintained as a JSON structure this can be updated. 
-       */
       
       /**
        * Makes the supplied node a favourite of the requesting user
@@ -239,27 +316,16 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onAddFavouriteDocument: function alfresco_services_PreferenceService__onAddFavouriteDocument(payload) {
-         var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : this.onAddFavouriteDocument;
+         var alfTopic = payload.alfResponseTopic || this.onAddFavouriteDocument;
          var jsNode = lang.getObject("node.jsNode", false, payload);
          if (jsNode)
          {
-            var responseConfig =
-            {
-               successCallback: {
-                  fn: this.onAddFavouriteDocumentSuccess,
-                  scope: this,
-                  obj: payload,
-                  alfTopic: alfTopic
-               },
-               failureCallback: {
-                  fn: this.onAddFavouriteDocumentFailure,
-                  scope: this,
-                  obj: payload,
-                  alfTopic: alfTopic
-               }
-            };
-            var prefKey = jsNode.isContainer ? Alfresco.service.Preferences.FAVOURITE_FOLDERS : Alfresco.service.Preferences.FAVOURITE_DOCUMENTS;
-            this._wrappedService.add(prefKey, jsNode.nodeRef.nodeRef, responseConfig);
+            var prefKey = jsNode.isContainer ? this.FAVOURITE_FOLDERS : this.FAVOURITE_DOCUMENTS;
+            this.update({
+               name: prefKey,
+               value: jsNode.nodeRef.nodeRef,
+               alfTopic: alfTopic
+            }, true);
          }
       },
       
@@ -270,88 +336,17 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onRemoveFavouriteDocument: function alfresco_services_PreferenceService__onRemoveFavouriteDocument(payload) {
-         var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : this.onRemoveFavouriteDocument;
+         var alfTopic = payload.alfResponseTopic || this.onRemoveFavouriteDocument;
          var jsNode = lang.getObject("node.jsNode", false, payload);
          if (jsNode)
          {
-            var responseConfig =
-            {
-               successCallback: {
-                  fn: this.onRemoveFavouriteDocumentSuccess,
-                  scope: this,
-                  obj: payload,
-                  alfTopic: alfTopic
-               },
-               failureCallback: {
-                  fn: this.onRemoveFavouriteDocumentFailure,
-                  scope: this,
-                  obj: payload,
-                  alfTopic: alfTopic
-               }
-            };
-            var prefKey = jsNode.isContainer ? Alfresco.service.Preferences.FAVOURITE_FOLDERS : Alfresco.service.Preferences.FAVOURITE_DOCUMENTS;
-            this._wrappedService.remove(prefKey, jsNode.nodeRef.nodeRef, responseConfig);
+            var prefKey = jsNode.isContainer ? this.FAVOURITE_FOLDERS : this.FAVOURITE_DOCUMENTS;
+            this.update({
+               name: prefKey,
+               value: jsNode.nodeRef.nodeRef,
+               alfTopic: alfTopic
+            }, false);
          }
-      },
-      
-      /**
-       * This handles successfully completed requests to add a Favourite.
-       * 
-       * @instance
-       * @param {object} response The response from the request
-       * @param {object} originalRequestConfig The configuration passed on the original request
-       */
-      onAddFavouriteDocumentSuccess: function alfresco_services_PreferenceService__onAddFavouriteSuccess(response, originalRequestConfig) {
-         this.alfLog("log", "Successfully favourited a document", response, originalRequestConfig);
-         this.alfPublish(originalRequestConfig.alfResponseTopic + "_SUCCESS", {
-            response: response,
-            requestConfig: originalRequestConfig
-         });
-      },
-      
-      /**
-       * This handles unsuccessful requests to add a Favourite.
-       * 
-       * @instance
-       * @param {object} response The response from the request
-       * @param {object} originalRequestConfig The configuration passed on the original request
-       */
-      onAddFavouriteDocumentFailure: function alfresco_services_PreferenceService__onAddFavouriteFailure(response, originalRequestConfig) {
-         this.alfLog("error", "Failed to favourite a document", response, originalRequestConfig);
-         this.alfPublish(originalRequestConfig.alfResponseTopic + "_FAILURE", {
-            response: response,
-            requestConfig: originalRequestConfig
-         });
-      },
-      
-      /**
-       * This handles successfully completed requests to remove a Favourite.
-       * 
-       * @instance
-       * @param {object} response The response from the request
-       * @param {object} originalRequestConfig The configuration passed on the original request
-       */
-      onRemoveFavouriteDocumentSuccess: function alfresco_services_PreferenceService__onRemoveFavouriteSuccess(response, originalRequestConfig) {
-         this.alfLog("log", "Successfully removed a document favourite", response, originalRequestConfig);
-         this.alfPublish(originalRequestConfig.alfResponseTopic + "_SUCCESS", {
-            response: response,
-            requestConfig: originalRequestConfig
-         });
-      },
-      
-      /**
-       * This handles unsuccessful requests to remove a Favourite.
-       * 
-       * @instance
-       * @param {object} response The response from the request
-       * @param {object} originalRequestConfig The configuration passed on the original request
-       */
-      onRemoveFavouriteDocumentFailure: function alfresco_services_PreferenceService__onRemoveFavouriteDocumentFailure(response, originalRequestConfig) {
-         this.alfLog("error", "Failed to remove a document favourite", response, originalRequestConfig);
-         this.alfPublish(originalRequestConfig.alfResponseTopic + "_FAILURE", {
-            response: response,
-            requestConfig: originalRequestConfig
-         });
       }
    });
 });
