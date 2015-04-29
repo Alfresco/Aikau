@@ -46,10 +46,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-     
       "Check first column header label": function () {
          return browser.sleep(alfPause)
 
@@ -212,10 +208,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
       "Find first column header": function () {
          return browser.findByCssSelector("#COLUMN1_HEADER > span")
             .then(null, function() {

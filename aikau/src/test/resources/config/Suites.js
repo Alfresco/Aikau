@@ -140,7 +140,7 @@ define({
       "src/test/resources/alfresco/menus/DisableMenuItemTest",
       "src/test/resources/alfresco/menus/MenuTests",
 
-      // "src/test/resources/alfresco/misc/AlfTooltipTest", - COMMENTED OUT - THE TOOLTIP ITSELF NEEDS REWRITING
+      "src/test/resources/alfresco/misc/AlfTooltipTest",
       "src/test/resources/alfresco/misc/TableAndFormDialogTest",
 
       "src/test/resources/alfresco/preview/ImagePreviewTest",
