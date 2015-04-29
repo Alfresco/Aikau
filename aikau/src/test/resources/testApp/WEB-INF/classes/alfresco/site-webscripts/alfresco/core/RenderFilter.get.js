@@ -18,11 +18,64 @@ model.jsonModel = {
          name: "alfresco/menus/AlfMenuBar",
          config: {
             currentItem: {
+               w: ["one","two","three"],
                x: "a",
                y: "b",
                z: "c"
             },
             widgets: [
+               {
+                  id: "MBI9",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Should appear (contains pass)",
+                     renderFilter: [
+                        {
+                           property: "w",
+                           contains: ["two"]
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "MBI10",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Should appear (containsAll pass)",
+                     renderFilter: [
+                        {
+                           property: "w",
+                           containsAll: ["one","three"]
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "MBI11",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Should not appear (contains fail)",
+                     renderFilter: [
+                        {
+                           property: "w",
+                           contains: ["four"]
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "MBI12",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Should not appear (containsAll fail)",
+                     renderFilter: [
+                        {
+                           property: "w",
+                           containsAll: ["two","four"]
+                        }
+                     ]
+                  }
+               },
                {
                   name: "alfresco/menus/AlfMenuBarItem",
                   config: {
@@ -237,9 +290,6 @@ model.jsonModel = {
       },
       {
          name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

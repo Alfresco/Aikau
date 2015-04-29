@@ -52,10 +52,34 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-     
+      "Check that successful contains rule widget is shown": function() {
+         return browser.findAllByCssSelector("#MBI9")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find widget");
+            });
+      },
+
+      "Check that successful containsAll rule widget is shown": function() {
+         return browser.findAllByCssSelector("#MBI10")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find widget");
+            });
+      },
+
+      "Check that failing contains rule widget not rendererd": function() {
+         return browser.findAllByCssSelector("#MBI11")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Should not have been able to find widget");
+            });
+      },
+
+      "Check that failing containsAll rule widget is not rendered": function() {
+         return browser.findAllByCssSelector("#MBI12")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Should not have been able to find widget");
+            });
+      },
+
       "Test single render filter rule": function () {
          return browser.findById("MBI1")
             .then(function (el) {

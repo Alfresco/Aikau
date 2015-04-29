@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -88,11 +88,11 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the widget configuration in the array that it was taken from
        */
       processWidget: function alfresco_core_CoreWidgetProcessing__processWidget(rootNode, widgetConfig, index) {
-         if (widgetConfig != null)
+         if (widgetConfig)
          {
             if (this.filterWidget(widgetConfig, index))
             {
-               var domNode = this.createWidgetDomNode(widgetConfig, rootNode, (widgetConfig.className != null ? widgetConfig.className : ""));
+               var domNode = this.createWidgetDomNode(widgetConfig, rootNode, widgetConfig.className || "");
                this.createWidget(widgetConfig, domNode, this._registerProcessedWidget, this, index);
             }
          }
@@ -134,14 +134,14 @@ define(["dojo/_base/declare",
       _registerProcessedWidget: function alfresco_core_CoreWidgetProcessing___registerProcessedWidget(widget, index) {
          this._processedWidgetCountdown--;
          this.alfLog("log", "Widgets expected: ", this._processedWidgetCountdown, this.id);
-         if (widget != null)
+         if (widget)
          {
-            if (this._processedWidgets == null)
+            if (!this._processedWidgets)
             {
                this._processedWidgets = [];
             }
 
-            if (index == null || isNaN(index))
+            if (!index || index === 0 || isNaN(index))
             {
                this._processedWidgets.push(widget);
             }
@@ -201,16 +201,16 @@ define(["dojo/_base/declare",
                domStyle.set(widget.domNode, "display", "none");
             }
             var rules = lang.getObject(configAttribute + ".rules", false, widget);
-            if (rules != null)
+            if (rules)
             {
-               array.forEach(rules, function(rule, index) {
+               array.forEach(rules, function(rule) {
                   var topic = rule.topic,
                       attribute = rule.attribute,
                       is = rule.is,
                       isNot = rule.isNot,
                       strict = rule.strict != null ? rule.strict : true,
                       useCurrentItem = rule.useCurrentItem != null ? rule.useCurrentItem : false;
-                  if (topic != null && attribute != null && (is != null || isNot != null))
+                  if (topic && attribute && (is || isNot))
                   {
                      widget.alfSubscribe(topic, lang.hitch(this, "processVisibility", widget, is, isNot, attribute, negate, strict, useCurrentItem));
                   }
@@ -237,10 +237,10 @@ define(["dojo/_base/declare",
 
          // Assume that its NOT valid value (we'll only do the actual test if its not set to an INVALID value)...
          // UNLESS there are no valid values specified (in which case any value is valid apart form those in the invalid list)
-         var isValidValue = (typeof is == "undefined" || is.length === 0);
+         var isValidValue = (typeof is === "undefined" || is.length === 0);
 
          // Initialise the invalid value to be false if no invalid values have been declared (and only check values if defined)...
-         var isInvalidValue = (typeof isNot != "undefined" && isNot.length > 0);
+         var isInvalidValue = (typeof isNot !== "undefined" && isNot.length > 0);
          if (isInvalidValue)
          {
             // Check to see if the current value is set to an invalid value (i.e. a value that negates the rule)
@@ -248,7 +248,7 @@ define(["dojo/_base/declare",
          }
 
          // Check to see if the current value is set to a valid value...
-         if (!isInvalidValue && typeof is != "undefined" && is.length > 0)
+         if (!isInvalidValue && typeof is !== "undefined" && is.length > 0)
          {
             isValidValue = array.some(is, lang.hitch(this, "visibilityRuleComparator", target, widget, useCurrentItem));
          }
@@ -308,18 +308,18 @@ define(["dojo/_base/declare",
             return true;
          }
          else if (targetValue != null &&
-                  typeof targetValue.toString == "function" &&
+                  typeof targetValue.toString === "function" &&
                   currValue != null &&
-                  typeof currValue.toString == "function")
+                  typeof currValue.toString === "function")
          {
-            if (useCurrentItem === true && widget.currentItem != null)
+            if (useCurrentItem === true && widget.currentItem)
             {
                var c = lang.getObject(currValue.toString(), false, widget.currentItem);
-               return c == targetValue.toString();
+               return c === targetValue.toString();
             }
             else
             {
-               return currValue.toString() == targetValue.toString();
+               return currValue.toString() === targetValue.toString();
             }
          }
          else
@@ -347,6 +347,7 @@ define(["dojo/_base/declare",
        * @param {Array} widgets An array of all the widgets that have been processed
        */
       allWidgetsProcessed: function alfresco_core_CoreWidgetProcessing__allWidgetsProcessed(widgets) {
+         // jshint unused:false
          this.alfLog("log", "All widgets processed");
       },
 
@@ -364,7 +365,7 @@ define(["dojo/_base/declare",
          // Add a new <div> element to the "main" domNode (defined by the "data-dojo-attach-point"
          // in the HTML template)...
          var tmp = rootNode;
-         if (rootClassName != null && rootClassName !== "")
+         if (rootClassName)
          {
             tmp = domConstruct.create("div", { className: rootClassName}, rootNode);
          }
@@ -388,22 +389,21 @@ define(["dojo/_base/declare",
        * [_processedWidgets]{@link module:alfresco/core/Core#_processedWidgets} array)
        */
       createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(config, domNode, callback, callbackScope, index) {
-
          try
          {
             var _this = this;
             this.alfLog("log", "Creating widget: ",config);
 
             // Make sure we have an instantiation args object...
-            var initArgs = (config && config.config && (typeof config.config === 'object')) ? config.config : {};
+            var initArgs = (config && config.config && (typeof config.config === "object")) ? config.config : {};
 
             // Ensure that each widget has a unique id. Without this Dojo seems to occasionally
             // run into trouble trying to re-use an existing id...
-            if (typeof initArgs.id == "undefined")
+            if (typeof initArgs.id === "undefined")
             {
                // Attempt to use the model ID as the DOM ID if available, but if not just generate an ID
                // based on the module name...
-               if (config.id == null || lang.trim(config.id) === "")
+               if (!config.id || lang.trim(config.id) === "")
                {
                   initArgs.id = config.name.replace(/\//g, "_") + "___" + this.generateUuid();
                }
@@ -425,7 +425,7 @@ define(["dojo/_base/declare",
             }
 
             // Pass on the pub/sub scope from the parent...
-            if (initArgs.pubSubScope == this.pubSubScope)
+            if (initArgs.pubSubScope === this.pubSubScope)
             {
                // If the scope is inherited then also inherit the parent scope...
                if (!this.parentPubSubScope)
@@ -476,7 +476,7 @@ define(["dojo/_base/declare",
             require(requires, function(WidgetType) {
                // Just to be sure, check that no widget doesn't already exist with that id and
                // if it does, generate a new one...
-               if (registry.byId(initArgs.id) != null)
+               if (registry.byId(initArgs.id))
                {
                   initArgs.id = config.name + "___" + _this.generateUuid();
                }
@@ -484,26 +484,26 @@ define(["dojo/_base/declare",
                // Instantiate the new widget
                // This is an asynchronous response so we need a callback method...
                widget = new WidgetType(initArgs, domNode);
-               if (_this.widgetsToDestroy == null)
+               if (!_this.widgetsToDestroy)
                {
                   _this.widgetsToDestroy = [];
                   _this.widgetsToDestroy.push(widget);
                }
                _this.alfLog("log", "Created widget", widget);
                widget.startup();
-               if (config.assignTo != null)
+               if (config.assignTo)
                {
                   _this[config.assignTo] = widget;
                }
 
                // Set any additional style attributes...
-               if (initArgs.style != null && widget.domNode != null)
+               if (initArgs.style && widget.domNode)
                {
                   domStyle.set(widget.domNode, initArgs.style);
                }
 
                // Create a node for debug mode...
-               if (AlfConstants.DEBUG && widget.domNode != null)
+               if (AlfConstants.DEBUG && widget.domNode)
                {
                   domClass.add(widget.domNode, "alfresco-debug-Info highlight");
                   var infoWidget = new WidgetInfo({
@@ -518,11 +518,11 @@ define(["dojo/_base/declare",
                {
                   // If there is a callback then call it with any provided scope (but default to the
                   // "this" as the scope if one isn't provided).
-                  callback.call((callbackScope != null ? callbackScope : this), widget, index);
+                  callback.call((callbackScope || this), widget, index);
                }
             });
 
-            if (widget == null)
+            if (!widget)
             {
                this.alfLog("warn", "A widget was not declared so that it's modules were included in the loader cache", config, this);
             }
@@ -533,7 +533,7 @@ define(["dojo/_base/declare",
             this.alfLog("error", "The following error occurred creating a widget", e, this);
             if (callback)
             {
-               callback.call((callbackScope != null ? callbackScope : this), null, index);
+               callback.call((callbackScope || this), null, index);
             }
             return null;
          }
@@ -550,7 +550,7 @@ define(["dojo/_base/declare",
        */
       filterWidget: function alfresco_core_CoreWidgetProcessing__filterWidget(widgetConfig, index, decrementCounter) {
          var shouldRender = true;
-         if (widgetConfig.config != null && widgetConfig.config.renderFilter != null)
+         if (widgetConfig.config && widgetConfig.config.renderFilter)
          {
             // If filter configuration is provided, then switch the default so that rendering will NOT occur...
             // shouldRender = false;
@@ -566,7 +566,7 @@ define(["dojo/_base/declare",
             {
                // Check that the widget passes all the filter checks...
                var renderFilterMethod = lang.getObject("config.renderFilterMethod", false, widgetConfig);
-               if (renderFilterMethod == null || lang.trim(renderFilterMethod) == "ALL")
+               if (!renderFilterMethod || lang.trim(renderFilterMethod) === "ALL")
                {
                   // Handle AND logic (all filters must pass)
                   shouldRender = array.every(renderFilterConfig, lang.hitch(this, this.processFilterConfig));
@@ -597,14 +597,28 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the filter configuration
        * @returns {boolean} True if the filter criteria have been met and false otherwise.
        */
-      processFilterConfig: function alfresco_core_WidgetsProcessingFilterMixin__processFilterConfig(renderFilterConfig, index) {
+      processFilterConfig: function alfresco_core_WidgetsProcessingFilterMixin__processFilterConfig(renderFilterConfig, /*jshint unused:false*/ index) {
          var passesFilter = false;
          if (this.filterPropertyExists(renderFilterConfig))
          {
             // Compare the property value against the applicable values...
-            var renderFilterProperty = this.getRenderFilterPropertyValue(renderFilterConfig),
-                renderFilterValues = this.getRenderFilterValues(renderFilterConfig);
-            passesFilter = array.some(renderFilterValues, lang.hitch(this, "processFilter", renderFilterConfig, renderFilterProperty));
+            var renderFilterProperty = this.getRenderFilterPropertyValue(renderFilterConfig);
+            if (renderFilterConfig.values)
+            {
+               // Check that the target property matches one of the supplied values...
+               var renderFilterValues = this.getRenderFilterValues(renderFilterConfig);
+               passesFilter = array.some(renderFilterValues, lang.hitch(this, this.processFilter, renderFilterConfig, renderFilterProperty));
+            }
+            else if (renderFilterConfig.contains)
+            {
+               // Check that the target property is an array containing ONE of the target values...
+               passesFilter = array.some(renderFilterConfig.contains, lang.hitch(this, this.processFilterArray, renderFilterConfig, renderFilterProperty));
+            }
+            else if (renderFilterConfig.containsAll)
+            {
+               // Check that the target property is an array containing ALL of the target values...
+               passesFilter = array.every(renderFilterConfig.containsAll, lang.hitch(this, this.processFilterArray, renderFilterConfig, renderFilterProperty));
+            }
          }
          else if (renderFilterConfig.renderOnAbsentProperty === true)
          {
@@ -614,17 +628,47 @@ define(["dojo/_base/declare",
          {
             passesFilter = false;
          }
-         if (renderFilterConfig.negate == null || renderFilterConfig.negate === false)
-         {
-            // No action, leave result as it is...
-         }
-         else
+         if (renderFilterConfig.negate === true)
          {
             // Negate the result...
             passesFilter = !passesFilter;
          }
+         else
+         {
+            // No action, leave result as it is...
+         }
          this.alfLog("log", "Render filter result", passesFilter, this.currentItem, renderFilterConfig);
          return passesFilter;
+      },
+
+      /**
+       * This function is used to compare the value of all the elements in the supplied targetArray against the 
+       * value of the supplied currValue. If a match is found then this will return true.
+       * 
+       * @instance
+       * @param  {object} renderFilterConfig The complete configuration for the render filter
+       * @param  {array} targetArray The array of values to compare against the supplied currValue
+       * @param  {string|boolean} currValue The value to compare against all the elements in the targetArray
+       * @return {boolean} Indicates whether or not the supplied currValue has been found in the targetArray
+       */
+      processFilterArray: function alfresco_core_CoreWidgetProcessing__processFilterArray(renderFilterConfig, targetArray, currValue) {
+         var foundCurrValue = false;
+         if (ObjectTypeUtils.isArray(targetArray))
+         {
+            if (typeof currValue === "boolean")
+            {
+               currValue = currValue.toString();
+            }
+            foundCurrValue = array.some(targetArray, lang.hitch(this, this.processFilterArrayCompare, currValue));
+            foundCurrValue = array.some(targetArray, function(arrayValue) {
+               if (typeof arrayValue === "boolean")
+               {
+                  arrayValue = arrayValue.toString();
+               }
+               return arrayValue === currValue;
+            });
+         }
+         return foundCurrValue;
       },
 
       /**
@@ -666,7 +710,7 @@ define(["dojo/_base/declare",
        */
       filterPropertyExists: function alfresco_core_WidgetsProcessingFilterMixin__filterPropertyExists(renderFilterConfig) {
          var targetObject = this.currentItem;
-         if (renderFilterConfig.target != null && this[renderFilterConfig.target] != null)
+         if (renderFilterConfig.target && this[renderFilterConfig.target])
          {
             targetObject = this[renderFilterConfig.target];
          }
@@ -686,7 +730,7 @@ define(["dojo/_base/declare",
        */
       getRenderFilterPropertyValue: function alfresco_core_WidgetsProcessingFilterMixin__getRenderFilterPropertyValue(renderFilterConfig) {
          var targetObject = this.currentItem;
-         if (renderFilterConfig.target != null && this[renderFilterConfig.target] != null)
+         if (renderFilterConfig.target && this[renderFilterConfig.target])
          {
             targetObject = this[renderFilterConfig.target];
          }
@@ -701,7 +745,7 @@ define(["dojo/_base/declare",
        */
       getCustomRenderFilterProperty: function alfresco_core_WidgetsProcessingFilterMixin__getCustomRenderFilterProperty(currentItem) {
          var result = null;
-         if (currentItem instanceof Boolean || typeof currentItem == "boolean")
+         if (currentItem instanceof Boolean || typeof currentItem === "boolean")
          {
             result = currentItem ? "folder" : "document";
          }
