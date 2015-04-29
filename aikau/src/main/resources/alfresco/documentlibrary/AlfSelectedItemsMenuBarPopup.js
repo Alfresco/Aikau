@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,9 +29,8 @@
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarPopup",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "dojo/_base/lang",
-        "dojo/dom-class"], 
-        function(declare, AlfMenuBarPopup, _AlfDocumentListTopicMixin, lang, domClass) {
+        "dojo/_base/lang"], 
+        function(declare, AlfMenuBarPopup, _AlfDocumentListTopicMixin, lang) {
    
    return declare([AlfMenuBarPopup, _AlfDocumentListTopicMixin], {
       
@@ -118,10 +117,10 @@ define(["dojo/_base/declare",
          if (payload && payload.value)
          {
             var itemKey = lang.getObject(this.itemKeyProperty, false, payload.value);
-            if (itemKey != null)
+            if (itemKey)
             {
                this.currentlySelectedItems[itemKey] = payload.value;
-               if (this.selectionTimeout != null)
+               if (this.selectionTimeout)
                {
                   clearTimeout(this.selectionTimeout);
                }
@@ -146,9 +145,11 @@ define(["dojo/_base/declare",
          var selectedItems = [];
          for (var key in this.currentlySelectedItems)
          {
-            selectedItems.push(this.currentlySelectedItems[key]);
+            if (this.currentlySelectedItems.hasOwnProperty(key)) {
+               selectedItems.push(this.currentlySelectedItems[key]);
+            }
          }
-         this.set('disabled', (selectedItems.length === 0));
+         this.set("disabled", (selectedItems.length === 0));
          this.publishSelectedItems(selectedItems);
          this.selectionTimeout = null;
       },
@@ -176,10 +177,10 @@ define(["dojo/_base/declare",
          if (payload && payload.value)
          {
             var itemKey = lang.getObject(this.itemKeyProperty, false, payload.value);
-            if (itemKey != null)
+            if (itemKey)
             {
                delete this.currentlySelectedItems[itemKey];
-               if (this.selectionTimeout != null)
+               if (this.selectionTimeout)
                {
                   clearTimeout(this.selectionTimeout);
                }
@@ -199,9 +200,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload This is not expected to contain any usable data.
        */
-      onItemSelectionCleared: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onItemSelectionCleared(payload) {
+      onItemSelectionCleared: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onItemSelectionCleared(/*jshint unused:false*/ payload) {
          this.currentlySelectedItems = {};
-         if (this.selectionTimeout != null)
+         if (this.selectionTimeout)
          {
             clearTimeout(this.selectionTimeout);
          }
@@ -216,7 +217,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the selected files.
        */
       onFilesSelected: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onFilesSelected(payload) {
-         this.set('disabled', (payload && payload.selectedFiles && payload.selectedFiles.length === 0));
+         this.set("disabled", (payload && payload.selectedFiles && payload.selectedFiles.length === 0));
       }
    });
 });

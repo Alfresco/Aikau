@@ -344,6 +344,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onSelectedFilesChanged: function alfresco_services_ActionService__onSelectedFilesChanged() {
+         /*jshint maxcomplexity:false*/
          var files = this.getSelectedDocumentArray(), fileTypes = [], file,
              fileType, userAccess = {}, fileAccess, index,
              commonAspects = [], allAspects = [],
@@ -425,6 +426,7 @@ define(["dojo/_base/declare",
        * @param {object} document The document to perform the action on (only applicable to actions of type "javascript")
        */
       processActionObject: function alfresco_services_ActionService__processActionObject(action, document) {
+         /*jshint maxcomplexity:false*/
          if (action && action.type)
          {
             if (action.type === "pagelink")
