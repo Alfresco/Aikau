@@ -175,8 +175,13 @@ define(["intern/dojo/node!fs",
                   fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary");
                });
          };
-         command.session.getLogEntries = function(filter) {
+         command.session.getLogEntries = function(filter, waitPeriod) {
+
+            // Normalise arguments
             filter = filter || {};
+            waitPeriod = waitPeriod || 500;
+
+            // Build the selector
             var selectorBits = [".alfresco_logging_DebugLog__entry"];
             filter.type && selectorBits.push("[data-aikau-log-type=\"" + filter.type + "\"]"); // Type is "..."
             filter.topic && selectorBits.push("[data-aikau-log-topic$=\"" + filter.topic + "\"]"); // Topic ends with "..."
@@ -184,24 +189,40 @@ define(["intern/dojo/node!fs",
             if (filter.debug) {
                console.log("Log entry selector: \"" + selectorBits.join("") + "\"");
             }
-            return browser.executeAsync(function(entriesSelector, pos, callback) {
-               var entries = document.querySelectorAll(entriesSelector),
-                  dataObjs = [],
-                  entry,
-                  dataAttr;
-               for (var i = 0, j = entries.length; i < j; i++) {
-                  entry = entries[i];
-                  dataAttr = entry.getAttribute("data-aikau-log-data");
-                  dataObjs.push(JSON.parse(dataAttr));
-               }
-               if (pos === "first") {
-                  callback(dataObjs.shift());
-               } else if (pos === "last") {
-                  callback(dataObjs.pop());
-               } else {
-                  callback(dataObjs);
-               }
-            }, [selectorBits.join(""), filter.pos]);
+
+            // Declare variable to hold the existing async timeout
+            var existingTimeout;
+
+            // Store the async timeout and then perform the search and reset the timeout
+            return browser.getExecuteAsyncTimeout()
+               .then(function(timeout) {
+                  existingTimeout = timeout;
+               })
+               .setExecuteAsyncTimeout(waitPeriod + 500)
+               .executeAsync(function(entriesSelector, pos, waitPeriod, callback) {
+                  setTimeout(function() {
+                     var dataObjs = [],
+                        entries = document.querySelectorAll(entriesSelector),
+                        entry,
+                        dataAttr;
+                     for (var i = 0, j = entries.length; i < j; i++) {
+                        entry = entries[i];
+                        dataAttr = entry.getAttribute("data-aikau-log-data");
+                        dataObjs.push(JSON.parse(dataAttr));
+                     }
+                     if (pos === "first") {
+                        callback(dataObjs.pop());
+                     } else if (pos === "last") {
+                        callback(dataObjs.shift());
+                     } else {
+                        callback(dataObjs);
+                     }
+                  }, waitPeriod);
+               }, [selectorBits.join(""), filter.pos, waitPeriod])
+               .then(function(entries) {
+                  browser.setExecuteAsyncTimeout(existingTimeout);
+                  return entries;
+               });
          };
 
          return command;
