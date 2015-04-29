@@ -276,9 +276,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the document selected
        */
       onDocumentSelected: function alfresco_services_ActionService__onDocumentSelected(payload) {
-         if (payload && payload.value && payload.value.nodeRef)
+         var payloadNoderef = payload && payload.value && payload.value.node && payload.value.node.nodeRef;
+         if (payloadNoderef)
          {
-            this.currentlySelectedDocuments[payload.value.nodeRef] = payload.value;
+            this.currentlySelectedDocuments[payloadNoderef] = payload.value;
             if (this.selectionTimeout)
             {
                clearTimeout(this.selectionTimeout);
@@ -307,9 +308,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the document selected
        */
       onDocumentDeselected: function alfresco_services_ActionService__onDocumentDeselected(payload) {
-         if (payload && payload.value && payload.value.nodeRef)
+         var payloadNoderef = payload && payload.value && payload.value.node && payload.value.node.nodeRef;
+         if (payloadNoderef)
          {
-            delete this.currentlySelectedDocuments[payload.value.nodeRef];
+            delete this.currentlySelectedDocuments[payloadNoderef];
             if (this.selectionTimeout)
             {
                clearTimeout(this.selectionTimeout);
