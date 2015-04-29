@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Action Service</shortname>
+  <description>Displays buttons that exercise the ActionService service.</description>
+  <family>aikau-unit-tests</family>
+  <url>/ActionService</url>
+</webscript>
