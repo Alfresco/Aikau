@@ -9,7 +9,8 @@ model.jsonModel = {
             }
          }
       },
-      "aikauTesting/mockservices/SocialTestService",
+      "alfresco/services/PreferenceService",
+      "alfresco/services/RatingsService",
       "alfresco/services/ErrorReporter"
    ],
    widgets:[
@@ -20,6 +21,10 @@ model.jsonModel = {
             currentData: {
                items: [
                   {
+                     nodeRef: "some://dummy/nodeRef",
+                     node: {
+                        nodeRef: "some://dummy/nodeRef"
+                     },
                      name: "Test 1",
                      liked: false,
                      likeCount: 4,
@@ -78,10 +83,10 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "aikauTesting/mockservices/SocialMockXhr"
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/SubscriptionLog"
       }
    ]
 };

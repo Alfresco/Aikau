@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>SocialRenderers Test</shortname>
-  <description>This WebScript defines the SocialRenderers page test</description>
+  <shortname>Social renderers</shortname>
+  <description>Shows the favourite, like, comment and quick share renderers</description>
   <family>aikau-unit-tests</family>
   <url>/SocialRenderers</url>
 </webscript>

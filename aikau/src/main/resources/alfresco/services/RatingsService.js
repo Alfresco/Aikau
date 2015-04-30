@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onAddRating: function alfresco_services_RatingsService__onAddRating(payload) {
-         var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : this.addRatingTopic;
+         var alfTopic = payload.alfResponseTopic || this.addRatingTopic;
          var nodeRefUri = lang.getObject("node.jsNode.nodeRef.uri", false, payload);
          if (nodeRefUri)
          {
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onRemoveRating: function alfresco_services_RatingsService__onRemoveRating(payload) {
-         var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : this.onRemoveRating;
+         var alfTopic = payload.alfResponseTopic || this.onRemoveRating;
          var nodeRefUri = lang.getObject("node.jsNode.nodeRef.uri", false, payload);
          if (nodeRefUri)
          {
