@@ -323,6 +323,10 @@ define(["alfresco/core/ObjectTypeUtils",
             return safeData;
          },
 
+         _onClearButtonClick: function alfresco_logging_DebugLog___onClearButtonClick(){
+            domConstruct.empty(this.logNode);
+         },
+
          /**
           * Toggle the collapsed state of a data item
           *
