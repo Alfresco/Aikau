@@ -36,9 +36,11 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "service/constants/Default",
         "alfresco/core/ArrayUtils",
+        "dojo/Deferred",
+        "dojo/when",
         "jquery"],
         function(declare, AlfCore, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin, lang, 
-                 AlfConstants, ArrayUtils, $) {
+                 AlfConstants, ArrayUtils, Deferred, when, $) {
    
    return declare([AlfCore, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin], {
       
@@ -76,6 +78,16 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.viewSelectionTopic, lang.hitch(this, this.onViewSelection));
          this.alfSubscribe(this.addFavouriteDocumentTopic, lang.hitch(this, this.onAddFavouriteDocument));
          this.alfSubscribe(this.removeFavouriteDocumentTopic, lang.hitch(this, this.onRemoveFavouriteDocument));
+
+         // Load the user preferences...
+         this._preferencesLoaded = new Deferred();
+         var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(AlfConstants.USERNAME) + "/preferences";
+         this.serviceXhr({url : url,
+                          successCallback: function(response) {
+                              this._preferencesLoaded.resolve(response);
+                          },
+                          callbackScope: this,
+                          method: "GET"});
       },
       
       /**
@@ -107,9 +119,19 @@ define(["dojo/_base/declare",
          }
          else
          {
-            // Get the preference from the local store.
-            payload.callback.apply(payload.callbackScope, [lang.getObject(payload.preference, false, this.localPreferences)]);
+            when(this._preferencesLoaded, lang.hitch(this, this.setLocalPreferences, payload));
          }
+      },
+
+      /**
+       * Sets the local copy of the preferences onces they've been retrieved from the Repository.
+       * 
+       * @param {object} payload The payload from the original request to get preferences
+       * @param {object} preferences The retrieved preferences object
+       */
+      setLocalPreferences: function alfresco_services_PreferenceService__setLocalPreferences(payload, preferences) {
+         this.localPreferences = preferences;
+         payload.callback.apply(payload.callbackScope, [lang.getObject(payload.preference, false, this.localPreferences)]);
       },
       
       /**
@@ -144,9 +166,12 @@ define(["dojo/_base/declare",
                              alfTopic: payload.alfTopic,
                              data: preferenceObj,
                              method: "POST"});
-            
+
             // Set the local preference...
-            lang.setObject(payload.preference, payload.value, this.localPreferences);
+            when(this._preferencesLoaded, function(preferences) {
+               this.localPreferences = preferences;
+               lang.setObject(payload.preference, payload.value, this.localPreferences);
+            });
          }
       },
 

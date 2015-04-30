@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>AlfSideBarContainer Test</shortname>
-  <description>This WebScript defines the AlfSideBarContainer page test</description>
+  <shortname>AlfSideBarContainer</shortname>
+  <description>Shows an example of a resizeable sidebar that can be snapped open and shut.</description>
   <family>aikau-unit-tests</family>
   <url>/AlfSideBarContainer</url>
 </webscript>
