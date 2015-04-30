@@ -136,7 +136,7 @@ model.jsonModel = {
                                        pubSubScope: "CUSTOM_",
                                        publishTopic: "ALF_DOCUMENTLIST_TAG_CHANGED",
                                        publishPayload: {
-                                          tag: "mytag"
+                                          value: "mytag"
                                        }
                                     }
                                  },
@@ -148,7 +148,7 @@ model.jsonModel = {
                                        pubSubScope: "CUSTOM_",
                                        publishTopic: "ALF_DOCUMENTLIST_CATEGORY_CHANGED",
                                        publishPayload: {
-                                          category: "mycategory"
+                                          path: "mycategory"
                                        }
                                     }
                                  }
