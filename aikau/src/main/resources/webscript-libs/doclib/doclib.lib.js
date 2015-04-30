@@ -357,23 +357,110 @@ function getRepositoryUrl()
  *                                                                                 *
  ***********************************************************************************/
 
-/**
- * Returns a JSON array of the configuration for all the services required by the document library
- */
-function getDocumentLibraryServices() {
-   var services = getHeaderServices();
-   services = services.concat([
-      "alfresco/dialogs/AlfDialogService",
-      "alfresco/services/ActionService",
-      "alfresco/services/ContentService",
-      "alfresco/services/CrudService",
-      "alfresco/services/DocumentService",
-      "alfresco/services/LightboxService",
-      "alfresco/services/QuickShareService",
-      "alfresco/services/RatingsService",
-      "alfresco/services/SearchService",
-      "alfresco/services/TagService"
-   ]);
+function addService(service, existingServices) {
+   // jshint shadow:false
+   for (var i=0; i < existingServices.length; i++)
+   {
+      if (existingServices[i] && 
+          (existingServices[i].name === service || existingServices[i] === service))
+      {
+         return false;
+      }
+   }
+   return true;
+}
+
+function addDocumentLibraryServices(services) {
+   // jshint shadow:false
+   var defaultServices = [
+      {
+         id: "NAVIGATION_SERVICE",
+         name: "alfresco/services/NavigationService"
+      },
+      {
+         id: "DIALOG_SERVICE",
+         name: "alfresco/services/DialogService"
+      },
+      {
+         id: "ACTION_SERVICE",
+         name: "alfresco/services/ActionService"
+      },
+      {
+         id: "CONTENT_SERVICE",
+         name: "alfresco/services/ContentService"
+      },
+      {
+         id: "CRUD_SERVICE",
+         name: "alfresco/services/CrudService"
+      },
+      {
+         id: "DOCUMENT_SERVICE",
+         name: "alfresco/services/DocumentService"
+      },
+      {
+         id: "LIGHTBOX_SERVICE",
+         name: "alfresco/services/LightboxService"
+      },
+      {
+         id: "QUICKSHARE_SERVICE",
+         name: "alfresco/services/QuickShareService"
+      },
+      {
+         id: "RATINGS_SERVICE",
+         name: "alfresco/services/RatingsService"
+      },
+      {
+         id: "SEARCH_SERVICE",
+         name: "alfresco/services/SearchService"
+      },
+      {
+         id: "TAG_SERVICE",
+         name:  "alfresco/services/TagService"
+      },
+      {
+         id: "PREFERENCE_SERVICE",
+         name:  "alfresco/services/PreferenceService"
+      },
+      {
+         id: "NOTIFICATION_SERVICE",
+         name:  "alfresco/services/NotificationService"
+      },
+      {
+         id: "COMMENT_SERVICE",
+         name:  "alfresco/services/CommentService"
+      },
+      {
+         id: "UPLOAD_SERVICE",
+         name:  "alfresco/services/UploadService"
+      },
+      {
+         id: "CREATE_TEMPLATED_CONTENT_SERVICE",
+         name: "alfresco/services/actions/CreateTemplateContentService"
+      },
+      {
+         id: "COPY_AND_MOVE_SERVICE",
+         name: "alfresco/services/actions/CopyMoveService"
+      },
+      {
+         id: "SIMPLE_WORKFLOW_SERVICE",
+         name: "alfresco/services/actions/SimpleWorkflowService"
+      }
+   ];
+     
+   if (services)
+   {
+      for (var i=0; i < defaultServices.length; i++)
+      {
+         if (addService(defaultServices[i].name, services))
+         {
+            services.push(defaultServices[i]);
+         }
+      }
+   }
+   else
+   {
+      services = defaultServices;
+   }
    return services;
 }
 

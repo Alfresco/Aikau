@@ -18,6 +18,10 @@
  */
 
 /**
+ * This service provides access to user preferences as a whole as well as subscribing to specific topics
+ * for setting Document Library preferences (views, sidebar visibility/width, breadcrumb visibility, etc) and
+ * adding and removing documents or folders from a the users favourites list.
+ * 
  * @module alfresco/services/PreferenceService
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
@@ -172,7 +176,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This is the default success callback for XHR requests that will be used if no other is provided.
+       * This is the success callback for retrieving preferences. If a name and value are included then
+       * the preferences will be updated.
        *
        * @instance
        * @param {object} response The object returned from the successful XHR request
@@ -208,6 +213,20 @@ define(["dojo/_base/declare",
                   value: arrValues.join(",")
                });
             }
+         }
+      },
+
+      /**
+       * This is the failure callback for retrieving preferences
+       *
+       * @instance
+       * @param {object} response The object returned from the successful XHR request
+       * @param {object} requestConfig The original configuration passed when the request was made
+       */
+      onPreferenceRetrievalFail: function alfresco_services_PreferenceService__onPreferenceRetrieved(response, requestConfig) {
+         if (requestConfig.data && requestConfig.data.alfTopic)
+         {
+            this.alfPublish(requestConfig.data.alfTopic + "_FAILURE", {});
          }
       },
 
