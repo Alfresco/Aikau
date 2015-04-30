@@ -33,7 +33,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      setupServer: function alfresco_testing_SitesPaginationMockXhr__setupServer() {
+      setupServer: function alfresco_testing_SocialMockXhr__setupServer() {
          try
          {
             this.server.respondWith("POST",
