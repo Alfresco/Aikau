@@ -138,6 +138,7 @@ define(["dojo/_base/declare",
             {
                var currHash = ioQuery.queryToObject(hash());
                currHash.path = payload.path;
+               currHash.currentPage = 1;
                delete currHash.filter;
                delete currHash.category;
                delete currHash.tag;
@@ -148,6 +149,7 @@ define(["dojo/_base/declare",
             }
             else
             {
+               this.currentPage = 1;
                this.currentFilter = {
                   path: payload.path
                };
@@ -174,6 +176,7 @@ define(["dojo/_base/declare",
             {
                var currHash = ioQuery.queryToObject(hash());
                currHash.category = payload.path;
+               currHash.currentPage = 1;
                delete currHash.filter;
                delete currHash.path;
                delete currHash.tag;
@@ -184,6 +187,7 @@ define(["dojo/_base/declare",
             }
             else
             {
+               this.currentPage = 1;
                this.currentFilter = {
                   category: payload.path
                };
@@ -210,6 +214,7 @@ define(["dojo/_base/declare",
             {
                var currHash = ioQuery.queryToObject(hash());
                currHash.filter = payload.value;
+               currHash.currentPage = 1;
                delete currHash.category;
                delete currHash.path;
                delete currHash.tag;
@@ -220,9 +225,11 @@ define(["dojo/_base/declare",
             }
             else
             {
+               this.currentPage = 1;
                this.currentFilter = {
                   filter: payload.value
                };
+               this.loadData();
             }
          }
          else
@@ -245,6 +252,7 @@ define(["dojo/_base/declare",
             {
                var currHash = ioQuery.queryToObject(hash());
                currHash.tag = payload.value;
+               currHash.currentPage = 1;
                delete currHash.category;
                delete currHash.path;
                delete currHash.filter;
@@ -255,9 +263,11 @@ define(["dojo/_base/declare",
             }
             else
             {
+               this.currentPage = 1;
                this.currentFilter = {
                   tag: payload.value
                };
+               this.loadData();
             }
          }
          else
@@ -334,6 +344,9 @@ define(["dojo/_base/declare",
       onHashChanged: function alfresco_documentlibrary_AlfDocumentList__onHashChanged(payload) {
          if(this.doHashVarUpdate(payload))
          {
+            if (payload.currentPage) {
+               this.currentPage = payload.currentPage;
+            }
             this.currentFilter = payload;
             if (this._readyToLoad) this.loadData();
          }
