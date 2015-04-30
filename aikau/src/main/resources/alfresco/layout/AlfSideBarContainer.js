@@ -189,7 +189,7 @@ define(["dojo/_base/declare",
        * @param {number} value The saved width preference
        */
       setSideBarWidth: function alfresco_layout_AlfSideBarContainer__setSideBarWidth(value) {
-         if (value)
+         if (value || value === 0)
          {
             this.initialSidebarWidth = value;
          }
@@ -273,7 +273,7 @@ define(["dojo/_base/declare",
          var size = parseInt(domStyle.get(this.domNode, "width"), 10);
          var w = this.lastSidebarWidth; // Initialise to last known width of the sidebar (needed for window resize events)
          var tmp = lang.getObject("size.width", false, ui);
-         if (tmp)
+         if (tmp || tmp === 0)
          {
             w = tmp;
             this.lastSidebarWidth = w;

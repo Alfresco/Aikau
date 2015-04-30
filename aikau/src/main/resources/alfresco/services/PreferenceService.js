@@ -119,11 +119,19 @@ define(["dojo/_base/declare",
          }
          else
          {
-            when(this._preferencesLoaded, function(preferences) {
-               this.localPreferences = preferences;
-               payload.callback.apply(payload.callbackScope, [lang.getObject(payload.preference, false, this.localPreferences)]);
-            });
+            when(this._preferencesLoaded, lang.hitch(this, this.setLocalPreferences, payload));
          }
+      },
+
+      /**
+       * Sets the local copy of the preferences onces they've been retrieved from the Repository.
+       * 
+       * @param {object} payload The payload from the original request to get preferences
+       * @param {object} preferences The retrieved preferences object
+       */
+      setLocalPreferences: function alfresco_services_PreferenceService__setLocalPreferences(payload, preferences) {
+         this.localPreferences = preferences;
+         payload.callback.apply(payload.callbackScope, [lang.getObject(payload.preference, false, this.localPreferences)]);
       },
       
       /**
