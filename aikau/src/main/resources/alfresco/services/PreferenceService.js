@@ -88,31 +88,6 @@ define(["dojo/_base/declare",
       localPreferences: null,
       
       /**
-       * Converts a dot-notation property address into a JavaScript object literal. This is done so that
-       * preferences can be set on the object generated from and address.
-       * 
-       * @instance
-       * @param {string} str The dot-notation property to convert into an object
-       * @param {object} value The value to set at the dot-notation property address
-       * @return {object} The object generated from the dot-notation property.
-       */
-      dotNotationToObject: function alfresco_services_PreferenceService__dotNotationToObject(str, value) {
-         var object = {}, obj = object;
-         if (typeof str === "string")
-         {
-            var properties = str.split("."), property, i, ii;
-            for (i = 0, ii = properties.length - 1; i < ii; i++)
-            {
-               property = properties[i];
-               obj[property] = {};
-               obj = obj[property];
-            }
-            obj[properties[i]] = value !== undefined ? value : null;
-         }
-         return object;
-      },
-
-      /**
        * Retrieves a preference from the [local copy]{@link module:alfresco/services/PreferenceService#localPreferences} rather than 
        * getting them remotely.
        * 
@@ -188,7 +163,8 @@ define(["dojo/_base/declare",
          {
             var name = requestConfig.data.name;
             var value = requestConfig.data.value;
-            var preferences = this.dotNotationToObject(name, null);
+            var preferences = {};
+            lang.setObject(name, value, preferences);
             $.extend(true, preferences, response);
             var values = lang.getObject(name, false, preferences);
             
