@@ -42,15 +42,17 @@ function getUserDocLibPreferences() {
       if (prefs.org &&
           prefs.org.alfresco &&
           prefs.org.alfresco.share &&
-          prefs.org.alfresco.documentList)
+          prefs.org.alfresco.share.documentList)
       {
-         var docLibPrefrences = prefs.org.alfresco.documentList;
+         var docLibPrefrences = prefs.org.alfresco.share.documentList;
          prefs.viewRendererName = docLibPrefrences.viewRendererName || "detailed";
          prefs.sortField = docLibPrefrences.sortField || "cm:name";
          prefs.sortAscending = docLibPrefrences.sortAscending !== false;
          prefs.showFolders = docLibPrefrences.showFolders !== false;
          prefs.hideBreadcrumbTrail = docLibPrefrences.hideNavBar === true;
          prefs.showSidebar = docLibPrefrences.showSidebar !== false;
+         prefs.galleryColumns = docLibPrefrences.galleryColumns || 4;
+         prefs.sideBarWidth = prefs.org.alfresco.sideBarWidth || 350;
       }
    }
    return prefs;
@@ -1037,7 +1039,10 @@ function getDocLibList(siteId, containerId, rootNode, rawData) {
                name: "alfresco/documentlibrary/views/AlfDetailedView"
             },
             {
-               name: "alfresco/documentlibrary/views/AlfGalleryView"
+               name: "alfresco/documentlibrary/views/AlfGalleryView",
+               config: {
+                  columns: docLibPrefrences.galleryColumns
+               }
             },
             {
                name: "alfresco/documentlibrary/views/AlfTableView"

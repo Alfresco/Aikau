@@ -41,10 +41,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
      "Test preferences requested": function () {
          return browser.findByCssSelector(TestCommon.pubDataCssSelector("ALF_PREFERENCE_GET", "preference", "org.alfresco.share.sideBarWidth"))
             .then(
@@ -93,7 +89,7 @@ define(["intern!object",
          return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
             .getComputedStyle("width")
             .then(function(width) {
-               assert(width === "150px", "The sidebar width wasn't initialised correctly");
+               assert(width === "350px", "The sidebar width wasn't initialised correctly");
             });
       },
 
@@ -115,7 +111,7 @@ define(["intern!object",
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
             .getComputedStyle("width")
             .then(function(width) {
-               assert(width === "150px", "The sidebar wasn't shown via the bar control");
+               assert(width === "350px", "The sidebar wasn't shown via the bar control");
             });
       },
 
@@ -137,7 +133,7 @@ define(["intern!object",
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
             .getComputedStyle("width")
             .then(function(width) {
-               assert(width === "150px", "The sidebar wasn't shown via publication");
+               assert(width === "350px", "The sidebar wasn't shown via publication");
             })
          .end();
       },
