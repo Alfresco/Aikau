@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
             publishTopic: this.navigateToPageTopic,
             publishPayload: {
                type: this.hashPath,
-               url: "filter=tag|" + this.tagName
+               url: "tag=" + this.tagName
             }
          });
          link.placeAt(this.tagNode, "last");
