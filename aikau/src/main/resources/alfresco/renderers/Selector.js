@@ -34,8 +34,10 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Selector.html",
         "alfresco/core/Core",
         "dojo/_base/lang",
-        "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _AlfDocumentListTopicMixin, template, AlfCore, lang, domClass) {
+        "dojo/dom-class",
+        "dojo/_base/event"], 
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _AlfDocumentListTopicMixin, template, 
+                 AlfCore, lang, domClass, Event) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _AlfDocumentListTopicMixin, AlfCore], {
       
@@ -78,24 +80,24 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the selection request.
        */
       onFileSelection: function alfresco_renderers_Selector__onFileSelection(payload) {
-         if (payload != null)
+         if (payload)
          {
-            if (payload.value == "selectAll")
+            if (payload.value === "selectAll")
             {
                // Select regardless of current status...
                this.select();
             }
-            else if (payload.value == "selectNone")
+            else if (payload.value === "selectNone")
             {
                // De-select regardless of current status...
                this.deselect();
             }
-            else if (payload.value == "selectInvert")
+            else if (payload.value === "selectInvert")
             {
                // Invert the current status
                this.onClick();
             }
-            else if (payload.value == "selectFolders" && this.currentItem && this.currentItem.jsNode)
+            else if (payload.value === "selectFolders" && this.currentItem && this.currentItem.jsNode)
             {
                // Select if the current item is a container
                if (this.currentItem.jsNode.isContainer)
@@ -107,7 +109,7 @@ define(["dojo/_base/declare",
                   this.deselect();
                }
             }
-            else if (payload.value == "selectDocuments" && this.currentItem && this.currentItem.jsNode)
+            else if (payload.value === "selectDocuments" && this.currentItem && this.currentItem.jsNode)
             {
                // Select if the current item is NOT a container
                if (this.currentItem.jsNode.isContainer)
@@ -153,7 +155,8 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      onClick: function alfresco_renderers_Selector__onClick() {
+      onClick: function alfresco_renderers_Selector__onClick(evt) {
+         evt && Event.stop(evt);
          if (domClass.contains(this.selectorNode, "checked"))
          {
             // De-select if currently selected...

@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>GalleryView Test</shortname>
-  <description>This WebScript defines the GalleryView page test</description>
+  <shortname>GalleryView</shortname>
+  <description>Shows an example gallery view with all the various supported folder and content type thumbnail renditions.</description>
   <family>aikau-unit-tests</family>
   <url>/GalleryView</url>
 </webscript>
