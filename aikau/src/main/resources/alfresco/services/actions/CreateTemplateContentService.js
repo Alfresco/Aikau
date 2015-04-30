@@ -105,7 +105,8 @@ define(["dojo/_base/declare",
             formSubmissionPayloadMixin: {
                sourceNodeRef: payload.sourceNodeRef,
                targetNodeRef: payload.targetNodeRef,
-               subscriptionHandle: subscriptionHandle
+               subscriptionHandle: subscriptionHandle,
+               urlSuffix: "folder-templates"
             },
             widgets: [
                {
@@ -165,7 +166,7 @@ define(["dojo/_base/declare",
        * @param {string} targetNodeRef The NodeRef of the node to create the new content in
        */
       createTemplate: function alfresco_services_ActionService__createTemplate(payload) {
-         var url = AlfConstants.PROXY_URI + "slingshot/doclib/node-templates";
+         var url = AlfConstants.PROXY_URI + "slingshot/doclib/" + (payload.urlSuffix || "node-templates");
          var data = {
             parentNodeRef: payload.targetNodeRef,
             sourceNodeRef: payload.sourceNodeRef
@@ -211,6 +212,7 @@ define(["dojo/_base/declare",
             parentNodeRef: originalRequestConfig.data.parentNodeRef,
             highlightFile: response.name
          });
+         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {});
       },
 
       /**
