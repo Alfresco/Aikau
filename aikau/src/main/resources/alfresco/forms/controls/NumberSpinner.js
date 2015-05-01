@@ -26,8 +26,9 @@ define(["alfresco/forms/controls/BaseFormControl",
         "alfresco/forms/controls/utilities/TextBoxValueChangeMixin",
         "dojo/_base/declare",
         "dojo/_base/lang",
-        "dijit/form/NumberSpinner"], 
-        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, NumberSpinner) {
+        "dijit/form/NumberSpinner",
+        "alfresco/core/ObjectTypeUtils"], 
+        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, NumberSpinner, ObjectTypeUtils) {
    
    return declare([BaseFormControl, TextBoxValueChangeMixin], {
       
@@ -115,7 +116,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       configureValidation: function alfresco_forms_controls_NumberSpinner__configureValidation() {
-         if (!this.validationConfig)
+         if (!this.validationConfig || ObjectTypeUtils.isObject(this.validationConfig))
          {
             this.validationConfig = [];
          }

@@ -800,12 +800,15 @@ define(["dojo/_base/declare",
        * @return {object} A reference to the widget used for displaying progress.
        */
       getUploadDisplayWidget: function alfresco_services_UploadService__getUploadDisplayWidget() {
-         if (this.progressDialog !== null && 
-             this.progressDialog !== undefined && 
-             this.progressDialog.uploadDisplayWidget !== null && 
-             this.progressDialog.uploadDisplayWidget !== undefined)
+         if (this.progressDialog && 
+             this.progressDialog._dialogPanel && 
+             this.progressDialog._dialogPanel.uploadDisplayWidget)
          {
-            this.uploadDisplayWidget = this.progressDialog.uploadDisplayWidget;
+            this.uploadDisplayWidget = this.progressDialog._dialogPanel.uploadDisplayWidget;
+         }
+         else
+         {
+            this.alfLog("warn", "Could not find 'uploadDisplayWidget' in dialog content", this);
          }
       },
 
