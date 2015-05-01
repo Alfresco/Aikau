@@ -163,6 +163,7 @@ function generateCreateContentMenuItem(menuItemLabel, dialogTitle, iconClass, mo
          publishPayloadType: "PROCESS",
          publishPayloadModifiers: ["processCurrentItemTokens"],
          publishPayload: {
+            contentWidth: "550px",
             dialogTitle: dialogTitle,
             dialogConfirmationButtonTitle: "Create",
             dialogCancellationButtonTitle: "Cancel",
@@ -238,7 +239,7 @@ function generateCreateContentMenuItem(menuItemLabel, dialogTitle, iconClass, mo
 var folder = generateCreateContentMenuItem(msg.get("create.folder.label"), msg.get("create.folder.title"), "alf-showfolders-icon", "cm:folder", null);
 var plainText = generateCreateContentMenuItem(msg.get("create.text-document.label"), msg.get("create.text-document.title"), "alf-textdoc-icon", "cm:content", "text/plain", "alfresco/forms/controls/TextArea");
 var html = generateCreateContentMenuItem(msg.get("create.html-document.label"), msg.get("create.html-document.title"), "alf-htmldoc-icon", "cm:content", "text/html", "alfresco/forms/controls/TinyMCE");
-var xml = generateCreateContentMenuItem(msg.get("create.xml-document.label"), msg.get("create.xml-document.title"), "alf-xmldoc-icon", "cm:content", "text/xml", "alfresco/forms/controls/CodeMirrorEditor", { editMode: "xml"});
+var xml = generateCreateContentMenuItem(msg.get("create.xml-document.label"), msg.get("create.xml-document.title"), "alf-xmldoc-icon", "cm:content", "text/xml", "alfresco/forms/controls/CodeMirrorEditor", { editMode: "xml", width: 538, height: 250 }); // Dimensions as per defaults in TinyMCE control
 createContent.splice(0, 0, folder, plainText, html, xml);
 
 // Create content by template
