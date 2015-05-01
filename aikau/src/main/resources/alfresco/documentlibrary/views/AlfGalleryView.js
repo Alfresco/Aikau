@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -31,9 +31,8 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/AlfGalleryView.html",
         "alfresco/lists/views/layouts/Grid",
         "alfresco/documentlibrary/AlfGalleryViewSlider",
-        "dojo/_base/lang",
-        "dojo/dom-construct"], 
-        function(declare, AlfDocumentListView, template, Grid, AlfGalleryViewSlider, lang, domConstruct) {
+        "dojo/_base/lang"], 
+        function(declare, AlfDocumentListView, template, Grid, AlfGalleryViewSlider, lang) {
    
    return declare([AlfDocumentListView], {
       
@@ -97,11 +96,8 @@ define(["dojo/_base/declare",
        * @param {object}
        */
       updateColumns: function alfresco_documentlibrary_views_AlfGalleryView__updateColumns(payload) {
-         if (this.docListRenderer != null && 
-             payload != null && 
-             payload.value != null &&
-             !isNaN(payload.value) &&
-             this.columns != payload.value)
+         var newNumCols = payload && !isNaN(payload.value) && payload.value;
+         if (this.docListRenderer && newNumCols && newNumCols !== this.columns)
          {
             this.alfLog("log", "Update column count to: ", payload.value);
             this.columns = payload.value;
@@ -139,8 +135,9 @@ define(["dojo/_base/declare",
        * most common example of this is when infinite scroll is being used.
        */
       renderView: function alfresco_documentlibrary_views_AlfGalleryView__renderView(preserveCurrentData) {
+         // jshint unused:false
          this.inherited(arguments);
-         if (this.docListRenderer != null)
+         if (this.docListRenderer)
          {
             this.docListRenderer.resizeCells();
          }
@@ -205,7 +202,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onViewShown: function alfresco_documentlibrary_views_AlfGalleryView__onViewShown() {
-         if (this.docListRenderer != null)
+         if (this.docListRenderer)
          {
             this.docListRenderer.resizeCells();
          }

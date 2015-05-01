@@ -46,10 +46,6 @@ define(["intern!object",
          browser.end();
       },
       
-      // teardown: function() {
-      //    return browser.end().alfPostCoverageResults(browser);
-      // },
-      
       "Test gallery view resize slider exists": function () {
          // 1. Check that the AlfGalleryViewSlider is visible (this is an additional control published from the gallery view)...
          return browser.findByCssSelector("#TOOLBAR .alfresco-documentlibrary-AlfGalleryViewSlider")
@@ -149,10 +145,6 @@ define(["intern!object",
          browser.end();
       },
       
-      // teardown: function() {
-      //    return browser.end().alfPostCoverageResults(browser);
-      // },
-      
       "Test selecting first item (Folder 1)": function () {
          // 1. Focus on the first thumbnail...
          return browser.pressKeys(keys.TAB) // Goes to first thumbnail...
@@ -164,6 +156,13 @@ define(["intern!object",
          .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED", "value", "displayName", "Folder 1"))
             .then(function(elements) {
                assert(elements.length === 1, "The wrong document was selected");
+            });
+      },
+
+      "Check selector click doesn't navigate": function() {
+         return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_NAVIGATE_TO_PAGE","publish","any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Should not have been able to find a navigation request");
             });
       },
       
