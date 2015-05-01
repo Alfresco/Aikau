@@ -95,6 +95,17 @@ define(["alfresco/forms/controls/BaseFormControl",
       },
       
       /**
+       * This validator checks that the value provided is a number
+       *
+       * @instance
+       * @param {object} validationConfig The configuration for this validator
+       */
+      isNumberValidator: function alfresco_forms_controls_FormControlValidationMixin__isNumberValidator(validationConfig) {
+         var isValid = !isNaN(this.wrappedWidget.textbox.value);
+         this.reportValidationResult(validationConfig, isValid);
+      },
+
+      /**
        * This function is used to set or update the validationConfig as required based on the
        * [min]{@link module:alfresco/forms/controls/NumberSpinner#min} and 
        * [max]{@link module:alfresco/forms/controls/NumberSpinner#max} configuration.
@@ -102,6 +113,14 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       configureValidation: function alfresco_forms_controls_NumberSpinner__configureValidation() {
+         if (!this.validationConfig)
+         {
+            this.validationConfig = [];
+         }
+         this.validationConfig.push({
+            validation: "isNumberValidator",
+            errorMessage: this.message("formValidation.numerical.error")
+         });
          if (this.min || this.min === 0 || this.max || this.max === 0)
          {
             var errorMessage;
@@ -116,10 +135,6 @@ define(["alfresco/forms/controls/BaseFormControl",
             else
             {
                errorMessage = this.message("formValidation.numericalRange.error", { 0: this.min, 1: this.max });
-            }
-            if (!this.validationConfig)
-            {
-               this.validationConfig = [];
             }
             this.validationConfig.push({
                validation: "numericalRange",

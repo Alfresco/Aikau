@@ -60,6 +60,98 @@ define(["intern!object",
             });
       },
 
+      "Set value below min (range validation)": function() {
+         return browser.findByCssSelector("#NS2 .dijitInputContainer input")
+            .clearValue()
+            .type("4")
+         .end()
+         .findByCssSelector("#NS2 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Validation error message should be displayed");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Must be greater or equal to 5 and less than or equal to 10", "Validation error message not set correctly");
+            });
+      },
+
+      "Set value above max (range validation)": function() {
+         return browser.findByCssSelector("#NS2 .dijitInputContainer input")
+            .clearValue()
+            .type("11")
+         .end()
+         .findByCssSelector("#NS2 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Validation error message should be displayed");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Must be greater or equal to 5 and less than or equal to 10", "Validation error message not set correctly");
+            });
+      },
+
+      "Clear error message": function() {
+         return browser.findByCssSelector("#NS2 .dijitInputContainer input")
+            .clearValue()
+            .type("7")
+         .end()
+         .findByCssSelector("#NS2 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Validation error message should have been removed");
+            });
+      },
+
+      "Set value below min (min only validation)": function() {
+         return browser.findByCssSelector("#NS4 .dijitInputContainer input")
+            .clearValue()
+            .type("0")
+         .end()
+         .findByCssSelector("#NS4 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Validation error message should be displayed");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Must be greater than or equal to 1", "Validation error message not set correctly");
+            });
+      },
+
+      "Set value above max (max only validation)": function() {
+         return browser.findByCssSelector("#NS5 .dijitInputContainer input")
+            .clearValue()
+            .type("8")
+         .end()
+         .findByCssSelector("#NS5 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Validation error message should be displayed");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Must be less than or equal to 5", "Validation error message not set correctly");
+            });
+      },
+
+      "Enter a non numerical value": function() {
+         return browser.findByCssSelector("#NS1 .dijitInputContainer input")
+            .clearValue()
+            .type("a")
+         .end()
+         .findByCssSelector("#NS1 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Validation error message should be displayed");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Please enter a numerical value", "Validation error message not set correctly");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
