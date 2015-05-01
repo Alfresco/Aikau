@@ -61,6 +61,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("error", "The following error occurred setting up the mock server", e);
          }
+         this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
       }
    });
 });
