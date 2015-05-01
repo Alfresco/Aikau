@@ -62,8 +62,8 @@ define(["dojo/_base/declare",
                }
                var requires = [dep];
                require(requires, function(ServiceType) {
-                  var s = new ServiceType(serviceConfig);
-                  return s;
+                  // jshint nonew:false
+                  new ServiceType(serviceConfig);
                });
             });
          }
