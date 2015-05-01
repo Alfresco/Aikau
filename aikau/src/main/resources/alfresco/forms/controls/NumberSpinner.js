@@ -25,8 +25,9 @@
 define(["alfresco/forms/controls/BaseFormControl",
         "alfresco/forms/controls/utilities/TextBoxValueChangeMixin",
         "dojo/_base/declare",
+        "dojo/_base/lang",
         "dijit/form/NumberSpinner"], 
-        function(BaseFormControl, TextBoxValueChangeMixin, declare, NumberSpinner) {
+        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, NumberSpinner) {
    
    return declare([BaseFormControl, TextBoxValueChangeMixin], {
       
@@ -84,6 +85,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          this.configureValidation();
          return {
             id : this.generateUuid(),
+            intermediateChanges: true,
             name: this.name,
             smallDelta: this.delta,
             constraints: {
@@ -156,6 +158,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          ns.isValid = function() {
             return true;
          };
+         ns.onChange = lang.hitch(this, this.validate);
          return ns;
       },
 
