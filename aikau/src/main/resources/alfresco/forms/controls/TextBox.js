@@ -26,18 +26,20 @@
  * 
  * @module alfresco/forms/controls/TextBox
  * @extends module:alfresco/forms/controls/BaseFormControl
+ * @mixes module:alfresco/forms/controls/utilities/TextBoxValueChangeMixin
  * @mixes module:alfresco/forms/controls/utilities/IconMixin
  * @author Dave Draper
  */
 define(["alfresco/forms/controls/BaseFormControl",
+        "alfresco/forms/controls/utilities/TextBoxValueChangeMixin",
         "alfresco/forms/controls/utilities/IconMixin",
         "dojo/_base/declare",
         "dijit/form/ValidationTextBox",
         "dojo/_base/lang",
         "dojo/dom-class"], 
-        function(BaseFormControl, IconMixin, declare, ValidationTextBox, lang, domClass) {
+        function(BaseFormControl, TextBoxValueChangeMixin, IconMixin, declare, ValidationTextBox, lang, domClass) {
    
-   return declare([BaseFormControl, IconMixin], {
+   return declare([BaseFormControl, TextBoxValueChangeMixin, IconMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -60,7 +62,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       getWidgetConfig: function alfresco_forms_controls_TextBox__getWidgetConfig() {
          // Return the configuration for the widget
-         var placeHolder = (this.placeHolder != null) ? this.message(this.placeHolder) : "";
+         var placeHolder = (this.placeHolder) ? this.message(this.placeHolder) : "";
          return {
             id : this.generateUuid(),
             name: this.name,
@@ -72,57 +74,17 @@ define(["alfresco/forms/controls/BaseFormControl",
       /**
        * @instance
        */
-      createFormControl: function alfresco_forms_controls_TextBox__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_TextBox__createFormControl(config, /*jshint unused:false*/ domNode) {
          var textBox = new ValidationTextBox(config);
          // Handle adding classes
          var additionalCssClasses = "";
-         if (this.additionalCssClasses != null)
+         if (this.additionalCssClasses)
          {
             additionalCssClasses = this.additionalCssClasses;
          }
          domClass.add(this.domNode, "alfresco-forms-controls-TextBox " + additionalCssClasses);
          this.addIcon(textBox);
          return textBox;
-      },
-      
-      /**
-       * This will be set to the last known value of the text box before the current keyup event.
-       * 
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      _oldValue: null,
-      
-      /**
-       * This is used as a temporary buffer variable to keep track of changes to the old value. 
-       * 
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      __oldValue: null,
-
-      /**
-       * Overrides the default change events to use blur events on the text box. This is done so that we can validate
-       * on every single keypress. However, we need to keep track of old values as this information is not readily
-       * available from the text box itself.
-       * 
-       * @instance
-       */
-      setupChangeEvents: function alfresco_forms_controls_TextBox__setupChangeEvents() {
-         var _this = this;
-         if (this.wrappedWidget)
-         {
-            this.wrappedWidget.on("keyup", function() {
-               _this._oldValue = _this.__oldValue; // Set the old value as the last buffer...
-               _this.__oldValue = this.getValue(); // Make the last buffer the current value being set
-               
-               _this.alfLog("log", "keyup - OLD value: " + _this._oldValue + ", NEW value: " + this.getValue());
-               _this.formControlValueChange(_this.name, _this._oldValue, this.getValue());
-               _this.validate();
-            });
-         }
       }
    });
 });
