@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -28,30 +28,37 @@
  * provided then the invalid indicator will be displayed with no message).</p>
  * <p>Multiple validators can be chained together and if more than one validator reports that they are in error
  * then their respective error messages will be displayed in sequence.</p>
- * <p>Example configuration:</p>
- * <p><pre>"validationConfig": [
+ * 
+ * @example <caption>Example using all validators:</caption>
+ * validationConfig: [
  *   {
- *     "validation": "minLength",
- *     "length": 3,
- *     "errorMessage": "Too short"
+ *     validation: "minLength",
+ *     length: 3,
+ *     errorMessage: "Too short"
  *   },
  *   {
- *     "validation": "maxLength",
- *     "length": 5,
- *     "errorMessage": "Too long"
+ *     validation: "maxLength",
+ *     length: 5,
+ *     errorMessage: "Too long"
  *   },
  *   {
- *     "validation": "regex",
- *     "regex": "^[A-Za-z]+$",
- *     "errorMessage": "Letters only"
+ *     validation: "numericalRange",
+ *     min: 500,
+ *     max: 10000,
+ *     errorMessage: "Must be between 500 and 10000"
  *   },
  *   {
- *     "validation": "validateUnique",
- *     "errorMessage": "Already used",
- *     "itemsProperty": "items",
- *     "publishTopic": "GET_VALUES"
+ *     validation: "regex",
+ *     regex: "^[0-9]+$",
+ *     errorMessage: "Numbers only"
+ *   },
+ *   {
+ *     validation: "validateUnique",
+ *     errorMessage: "Already used",
+ *     itemsProperty: "items",
+ *     publishTopic: "GET_VALUES"
  *   }
- * ]</pre></p>
+ * ]
  *
  * @module alfresco/forms/controls/FormControlValidationMixin
  * @extends module:alfresco/core/Core
@@ -61,10 +68,19 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/_base/lang",
         "dojo/_base/array",
-        "dojo/dom-class"], 
-        function(declare, AlfCore, lang, array, domClass) {
+        "dojo/dom-class",
+        "alfresco/core/ObjectTypeUtils"], 
+        function(declare, AlfCore, lang, array, domClass, ObjectTypeUtils) {
    
    return declare([AlfCore], {
+      
+      /**
+       * An array of the i18n files to use with this widget.
+       * 
+       * @instance
+       * @type {Array}
+       */
+      i18nRequirements: [{i18nFile: "./i18n/FormControlValidationMixin.properties"}],
       
       /**
        * Indicates whether or not validation is currently in-progress or not
@@ -153,8 +169,11 @@ define(["dojo/_base/declare",
                // recorded as having completed *before* all the validators have started...
                for (var key in this._validatorsInProgress)
                {
-                  var validationConfig = this._validatorsInProgress[key];
-                  this[validationConfig.validation](validationConfig);
+                  if (this._validatorsInProgress.hasOwnProperty(key))
+                  {
+                     var validationConfig = this._validatorsInProgress[key];
+                     this[validationConfig.validation](validationConfig);
+                  }
                }
             }
          }
@@ -175,7 +194,7 @@ define(["dojo/_base/declare",
        */
       processValidationArrayElement: function alfresco_forms_controls_BaseFormControl__processValidationArrayElement(validationErrors, validationConfig, index) {
          var validationType = lang.getObject("validation", false, validationConfig);
-         if (validationType != null)
+         if (validationType)
          {
             if (typeof this[validationType] === "function")
             {
@@ -225,7 +244,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Validator complete, result: " + result, validationConfig);
 
          var index = lang.getObject("index", false, validationConfig);
-         if (index == null)
+         if (!(index || index === 0))
          {
             this.alfLog("warn", "Validation completion call without index attribute", validationConfig, this);
          }
@@ -234,7 +253,7 @@ define(["dojo/_base/declare",
             // Update the error message...
             if (result === false)
             {
-               if (validationConfig.errorMessage != null)
+               if (validationConfig.errorMessage)
                {
                   if (this._validationErrorMessage.length !== 0)
                   {
@@ -280,7 +299,9 @@ define(["dojo/_base/declare",
 
          // Check requirement validation...
          var value = this.getValue();
-         var requirementTest = !(this._required && (value == null || value === ""));
+
+         var valueIsEmptyArray = ObjectTypeUtils.isArray(value) && value.length === 0;
+         var requirementTest = !(this._required && ((!value && value !== 0 && value !== false) || valueIsEmptyArray));
 
          // Publish the results...
          if (this._validationInProgressState && requirementTest)
@@ -316,7 +337,7 @@ define(["dojo/_base/declare",
       regex: function alfresco_forms_controls_FormControlValidationMixin__regex(validationConfig) {
          var isValid = true;
          var regexPattern = lang.getObject("regex", false, validationConfig);
-         if (regexPattern != null && typeof regexPattern === "string")
+         if (typeof regexPattern === "string")
          {
             var value = this.getValue();
             var regExObj = new RegExp(regexPattern);
@@ -334,6 +355,38 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This validator ensures that the form value is a number that falls within a range. It is acceptable to 
+       * only provide the min or max of the range.
+       *
+       * @instance
+       * @param {object} validationConfig The configuration for this validator
+       */
+      numericalRange: function alfresco_forms_controls_FormControlValidationMixin__numericalRange(validationConfig) {
+         // PLEASE NOTE: isNaN returns false for null
+         var isValid = true;
+         var value = parseFloat(this.getValue());
+         var minValue = lang.getObject("min", false, validationConfig);
+         if (minValue !== null && !isNaN(minValue))
+         {
+            isValid = (!isNaN(value) && value >= minValue);
+         }
+         else
+         {
+            this.alfLog("warn", "A numericalRange validation was configured with an invalid 'min' attribute", validationConfig, this);
+         }
+         var maxValue = lang.getObject("max", false, validationConfig);
+         if (maxValue !== null && !isNaN(maxValue))
+         {
+            isValid = isValid && (!isNaN(value) && value <= maxValue);
+         }
+         else
+         {
+            this.alfLog("warn", "A numericalRange validation was configured with an invalid 'max' attribute", validationConfig, this);
+         }
+         this.reportValidationResult(validationConfig, isValid);
+      },
+
+      /**
        * This validator checks that the current form field value is longer than the configured value.
        *
        * @instance
@@ -342,7 +395,7 @@ define(["dojo/_base/declare",
       maxLength: function alfresco_forms_controls_FormControlValidationMixin__maxLength(validationConfig) {
          var isValid = true;
          var targetLength = lang.getObject("length", false, validationConfig);
-         if (targetLength != null && !isNaN(targetLength))
+         if (!isNaN(targetLength))
          {
             var value = this.getValue();
             isValid = value.length <= targetLength;
@@ -363,7 +416,7 @@ define(["dojo/_base/declare",
       minLength: function alfresco_forms_controls_FormControlValidationMixin__minLength(validationConfig) {
          var isValid = true;
          var targetLength = lang.getObject("length", false, validationConfig);
-         if (targetLength != null && !isNaN(targetLength))
+         if (!isNaN(targetLength))
          {
             var value = this.getValue();
             isValid = value.length >= targetLength;
@@ -385,10 +438,10 @@ define(["dojo/_base/declare",
        */
       validateMatch: function alfresco_forms_controls_FormControlValidationMixin__validateMatch(validationConfig) {
          var targetId = lang.getObject("targetId", false, validationConfig);
-         if (targetId != null)
+         if (targetId)
          {
             // Only subscribe to changes once...
-            if (this._validateMatchSubscriptionHandle == null)
+            if (!this._validateMatchSubscriptionHandle)
             {
                this._validateMatchSubscriptionHandle = this.alfSubscribe("_valueChangeOf_" + targetId, lang.hitch(this, this._validateMatchTargetValueChanged, validationConfig)); 
             }
@@ -480,12 +533,12 @@ define(["dojo/_base/declare",
          var validationConfig = this._validateUniqueConfig;
          this._validateUniqueConfig = null;
 
-         if (payload != null)
+         if (payload)
          {
             // Get the configured items property (this identifies the attribute in the payload containing
             // the array to iterate over)...
             var itemsProperty = lang.getObject("itemsProperty", false, validationConfig);
-            if (itemsProperty == null)
+            if (!itemsProperty)
             {
                itemsProperty = "items"; 
             }
@@ -495,15 +548,15 @@ define(["dojo/_base/declare",
             // Get the array of items and check if the form field 'name' attribute for each item matches the
             // currently entered form field value...
             var items = lang.getObject(itemsProperty, false, payload);
-            if (items == null)
+            if (!items)
             {
                this.alfLog("warn", "Attempting to validate uniqueness but 'itemsProperty' attribute doesn't map to an an array", validationConfig, this);
             }
             else
             {
-               notUnique = array.some(items, function(item, index) {
+               notUnique = array.some(items, function(item) {
                   var itemValue = lang.getObject(this.name, false, item);
-                  return itemValue == value;
+                  return itemValue === value;
                }, this);
             }
          }
