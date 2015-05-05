@@ -51,6 +51,7 @@ model.jsonModel = {
                         fixed: [
                            {label:"select.test.fixed.option.one",value:"1"},
                            {label:"select.test.fixed.option.two",value:"2"},
+                           {label:"No value",value:""},
                            {value:"NO LABEL"},
                            {INVALID:"DATA"}
                         ]

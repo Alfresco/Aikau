@@ -190,13 +190,11 @@ define(["alfresco/core/ObjectTypeUtils",
                   innerHTML: "Payload"
                }, entryNode);
                domConstruct.create("span", {
-                  className: this.rootClass + "__entry__data__collapsed",
-                  innerHTML: simpleData
-               }, dataNode);
+                  className: this.rootClass + "__entry__data__collapsed"
+               }, dataNode).appendChild(document.createTextNode(simpleData));
                domConstruct.create("span", {
-                  className: this.rootClass + "__entry__data__full",
-                  innerHTML: formattedData
-               }, dataNode);
+                  className: this.rootClass + "__entry__data__full"
+               }, dataNode).appendChild(document.createTextNode(formattedData));
                on(entryNode, "click", lang.hitch(this, function() {
                   this._toggleCollapsed(dataNode);
                }));

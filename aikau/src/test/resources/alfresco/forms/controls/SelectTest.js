@@ -18,14 +18,14 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!assert",
-        "require",
+        "intern/chai!assert", 
+        "require", 
         "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+        function(registerSuite, assert, require, TestCommon) {
 
    // Get the options labels using:
    //    #FIXED_INVALID_CHANGES_TO_CONTROL_dropdown .dijitMenuItemLabel
@@ -45,80 +45,84 @@ define(["intern!object",
 
       setup: function() {
          browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/Select", "Select Menu Tests").end();
+         return TestCommon.loadTestWebScript(this.remote, "/Select", "Select Form Control Tests").end();
       },
 
       beforeEach: function() {
          browser.end();
       },
 
-      "Test Label Rendering": function () {
-         return TestCommon.loadTestWebScript(this.remote, "/Select", "Select Form Control Tests").findByCssSelector("#FIXED_INVALID_CHANGES_TO .label")
+      "Test Label Rendering": function() {
+         return browser.findByCssSelector("#FIXED_INVALID_CHANGES_TO .label")
             .getVisibleText()
             .then(function(resultText) {
-               assert.equal(resultText, "Fixed Options", "The label was not rendered correctly: " + resultText);
+               assert.equal(resultText, "Fixed Options", "The label was not rendered correctly");
             });
       },
-      
+
       "Test initial value of fixed config": function() {
-         return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO span[role=option]")
+         return browser.findByCssSelector("#FIXED_INVALID_CHANGES_TO span[role=option]")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "Two", "The initial value was not represented correctly: " + resultText);
+               assert.equal(resultText, "Two", "The initial value was not represented correctly");
             });
       },
-      
+
       "Test fixed options count": function() {
-         return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
+         return browser.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown .dijitMenuItemLabel")
             .then(function(elements) {
-               assert(elements.length === 3, "Three fixed options were expected, found: " + elements.length);
+               assert.lengthOf(elements, 3, "Incorrect number of fixed options found");
             });
       },
-  
+
       "Test fixed option label rendering": function() {
-         return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
+         return browser.findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "Priv\u00e9", "Fixed label not set correctly: " + resultText);
+               assert.equal(resultText, "Priv\u00e9", "Fixed label not set correctly");
             });
       },
-  
+
       "Test fixed option label set from value": function() {
-         return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(3) td.dijitMenuItemLabel")
+         return browser.findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(3) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "NO LABEL", "Fixed label not set correctly from value: " + resultText);
+               assert.equal(resultText, "NO LABEL", "Fixed label not set correctly from value");
             });
       },
 
       "Test initial value of pub sub option": function() {
          return browser.findByCssSelector(".confirmationButton > span")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector(TestCommon.pubDataCssSelector("UNIT_TEST_FORM_POST", "updated1", "Value2_1"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The value was not re-selected in the second set of options");
             });
       },
-   
+
       "Test pub/sub options generated": function() {
-         return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
+         return browser.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_UPDATE_TOPICS .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown .dijitMenuItemLabel")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "The wrong number of options were generated");
             });
       },
-  
+
       "Test updated label set by pub/sub": function() {
-         return this.remote.findByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
+         return browser.findByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Update1_1", "Updated label not set correctly by pub/sub");
@@ -129,24 +133,28 @@ define(["intern!object",
          // The options should have been provided once (the mock service increments the options)...
          return browser.findByCssSelector("#HAS_CHANGES_TO_CONTROL")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "Update1_3", "Updated label not set correctly by pub/sub: " + resultText);
+               assert.equal(resultText, "Update1_3", "Updated label not set correctly by pub/sub");
             });
       },
-  
+
       "Test update topics processed": function() {
-         return this.remote.findByCssSelector("#HAS_CHANGES_TO .dijitArrowButtonInner")
+         return browser.findByCssSelector("#HAS_CHANGES_TO .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#REQUEST_GLOBAL_UPDATE_label")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_UPDATE_TOPICS .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(text) {
@@ -157,7 +165,8 @@ define(["intern!object",
       "Test value of pub sub option after options update": function() {
          return browser.findByCssSelector(".confirmationButton > span")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector(TestCommon.pubDataCssSelector("UNIT_TEST_FORM_POST", "updated1", "Value2_1"))
             .then(function(elements) {
                assert.lengthOf(elements, 2, "The value was not re-selected in the second set of options");
@@ -166,69 +175,78 @@ define(["intern!object",
 
       "Test pub/sub options generated from field change": function() {
          // Check that pub/sub options generated from field changes are correct (should be on 3rd request based on values being set)...
-         return this.remote.findByCssSelector("#HAS_UPDATE_TOPICS .dijitArrowButtonInner")
+         return browser.findByCssSelector("#HAS_UPDATE_TOPICS .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_CHANGES_TO .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown .dijitMenuItemLabel")
             .then(function(elements) {
-               assert(elements.length === 2, "Two options were expected, found: " + elements.length);
+               assert.lengthOf(elements, 2, "Incorrect number of options found");
             });
       },
- 
+
       "Test update topic scoping": function() {
          // Clicking the 2nd button should have no effect (as it's the scoped topic published globally)...
-         return this.remote.findByCssSelector("#REQUEST_SCOPED_UPDATE_GLOBALLY_label")
+         return browser.findByCssSelector("#REQUEST_SCOPED_UPDATE_GLOBALLY_label")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_UPDATE_TOPICS .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "Update1_2", "Updated label not unexpectedly updated: " + resultText);
+               assert.equal(resultText, "Update1_2", "Updated label not unexpectedly updated");
             });
       },
-   
+
       "Test label updated  from external publication": function() {
          // Clicking the 3rd button should perform an update...
-         return this.remote.findByCssSelector("#REQUEST_SCOPED_UPDATE_label")
+         return browser.findByCssSelector("#REQUEST_SCOPED_UPDATE_label")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_UPDATE_TOPICS .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_UPDATE_TOPICS_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "Update1_3", "Updated label not set correctly by external update: " + resultText);
+               assert.equal(resultText, "Update1_3", "Updated label not set correctly by external update");
             });
       },
-   
+
       "Test changing field triggers update": function() {
          // Change a field to check an update is made...
-         return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
+         return browser.findByCssSelector("#FIXED_INVALID_CHANGES_TO .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_CHANGES_TO .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "Update1_4", "Updated label not set correctly by pub/sub: " + resultText);
+               assert.equal(resultText, "Update1_4", "Updated label not set correctly by pub/sub");
             });
       },
-   
+
       "Test XSS attack fails": function() {
          // Change a field to check an update is made...
-         return browser.then(function(){
+         return browser.then(function() {
             var notHacked = browser.execute("!window.hackedLabel && !window.hackedValue");
             assert(notHacked, "XSS prevention failed - script executed in label or value of option");
          });
@@ -239,12 +257,12 @@ define(["intern!object",
          // Create the form dialog...
          return browser.findByCssSelector("#CREATE_FORM_DIALOG_label")
             .click()
-         .end()
+            .end()
 
          // Open the opens...
          .findByCssSelector("#SELECT_IN_DIALOG .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
 
          // Count that there are some...
          .findAllByCssSelector("#SELECT_IN_DIALOG_CONTROL_dropdown .dijitMenuItemLabel")
@@ -256,7 +274,8 @@ define(["intern!object",
       "Test pub/sub options value": function() {
          return browser.findByCssSelector("#DIALOG_WITH_SELECT .confirmationButton > span")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector(TestCommon.pubDataCssSelector("DIALOG_POST", "selected", "DO2"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Options value was not initialized correctly");

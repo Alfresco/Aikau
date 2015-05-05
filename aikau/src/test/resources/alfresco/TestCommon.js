@@ -167,8 +167,8 @@ define(["intern/dojo/node!fs",
                      .toUpperCase() + namePart.substr(1)
                      .toLowerCase() : namePart.toUpperCase();
                })
-               .join("_");
-            var screenshotName = safeBrowserName + "-" + testName + "-" + command.session.screenieIndex++ +".png",
+               .join("_"),
+               screenshotName = safeBrowserName + "-" + testName + "-" + command.session.screenieIndex++ +".png",
                screenshotPath = "src/test/screenshots/" + screenshotName;
             return browser.takeScreenshot()
                .then(function(screenshot) {
