@@ -169,8 +169,33 @@ define([
                });
          },
 
+         "Keyboard can navigate and select items in dropdown": function() {
+            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+               .type("new")
+               .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(7)")
+               .pressKeys([keys.ARROW_DOWN, keys.ARROW_DOWN, keys.ARROW_UP, keys.ENTER])
+               .end()
+
+            .findAllByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 3, "Did not add new choice to control");
+               })
+               .end()
+
+            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(3) .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "newtag13(a)", "Did not add selected tag at end of choices");
+               });
+         },
+
          "Deleting all items disables confirmation button": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
+               .click()
+               .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(3)")
+               .end()
+
+            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
                .click()
                .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(2)")
                .end()

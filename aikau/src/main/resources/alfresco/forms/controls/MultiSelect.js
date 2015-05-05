@@ -1001,7 +1001,7 @@ define([
           *
           * @instance
           */
-         _preventWidgetDropdownDisconnects: function alfresco_forms_controls_MultiSelect___preventWidgetDropdownDisconnects(){
+         _preventWidgetDropdownDisconnects: function alfresco_forms_controls_MultiSelect___preventWidgetDropdownDisconnects() {
 
             // When we're in a dialog, we want to hide the results. There is never going to be a situation
             // (assumption) where a dialog moving is going to cause a problem if we hide the results dropdown
@@ -1012,8 +1012,8 @@ define([
             // moving, so we'll go up the tree trying to find any, and then listen for their scroll events and
             // again hide the dropdown when it happens
             var nextParent = this.domNode;
-            while((nextParent = nextParent.parentNode) && nextParent.tagName !== "body") {
-               if(nextParent.scrollHeight > nextParent.offsetHeight) {
+            while ((nextParent = nextParent.parentNode) && nextParent.tagName !== "body") {
+               if (nextParent.scrollHeight > nextParent.offsetHeight) {
                   this.own(on(nextParent, "scroll", lang.hitch(this, this._hideResultsDropdown)));
                }
             }
@@ -1036,7 +1036,7 @@ define([
           * @returns  {boolean} The results dropdown's visibility
           */
          _resultsDropdownIsVisible: function alfresco_forms_controls_MultiSelect___resultsDropdownIsVisible() {
-            return domClass.contains(this.domNode, this.rootClass + "--show-results");
+            return domClass.contains(this._nodes.resultsDropdown, this.rootClass + "__results--visible");
          },
 
          /**
