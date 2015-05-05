@@ -24,8 +24,9 @@
  */
 define(["dojo/_base/declare",
         "alfresco/core/ProcessWidgets",
-        "dojo/_base/lang"], 
-        function(declare, ProcessWidgets, lang) {
+        "dojo/_base/lang",
+        "dojo/_base/array"], 
+        function(declare, ProcessWidgets, lang, array) {
    
    return declare([ProcessWidgets], {
       
@@ -35,7 +36,41 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_testing_WaitForMockXhrService__postCreate() {
-         this.alfSubscribe("ALF_MOCK_XHR_SERVICE_READY", lang.hitch(this, this.processWidgets, this.widgets, this.containerNode));
+         this.alfSubscribe("ALF_MOCK_XHR_SERVICE_READY", lang.hitch(this, this.onMockXhrServiceReady));
+      },
+
+      /**
+       * Load any services and widgets once the mock XHR service is ready to handle requests that
+       * make XHR requests.
+       * 
+       * @instance
+       */
+      onMockXhrServiceReady: function alfresco_testing_WaitForMockXhrService__onMockXhrServiceReady() {
+         if (this.services)
+         {
+            array.forEach(this.services, function(service) {
+               var dep = null,
+                   serviceConfig = {};
+               if (typeof service === "string")
+               {
+                  dep = service;
+               }
+               else if (typeof service === "object" && service.name)
+               {
+                  dep = service.name;
+                  serviceConfig = service.config || {};
+               }
+               var requires = [dep];
+               require(requires, function(ServiceType) {
+                  // jshint nonew:false
+                  new ServiceType(serviceConfig);
+               });
+            });
+         }
+         if (this.widgets)
+         {
+            this.processWidgets(this.widgets, this.containerNode);
+         }
       }
    });
 });

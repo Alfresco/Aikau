@@ -82,10 +82,10 @@ define(["intern!object",
       },
 
       "Check the link click published the payload as expected (URL)": function() {
-         return browser.findByCssSelector(TestCommon.pubDataCssSelector("ALF_NAVIGATE_TO_PAGE", "url", "filter=tag|Test1"))
+         return browser.findByCssSelector(TestCommon.pubDataCssSelector("ALF_NAVIGATE_TO_PAGE", "url", "tag=Test1"))
             .then(
                function(){},
-               function(){assert(false, "Test #1f - The link did not publish the payload with 'url' as 'filter=tag|Test1'");}
+               function(){assert(false, "Test #1f - The link did not publish the payload with 'url' as 'tag=Test1'");}
             );
       },
 

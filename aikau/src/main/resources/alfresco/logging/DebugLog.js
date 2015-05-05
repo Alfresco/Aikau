@@ -37,7 +37,9 @@
  * @extends external:alfresco/logging/SubscriptionLog
  * @author Martin Doyle
  */
-define(["alfresco/logging/SubscriptionLog",
+define(["alfresco/core/ObjectTypeUtils",
+      "alfresco/logging/SubscriptionLog",
+      "dojo/_base/array",
       "dojo/_base/declare",
       "dojo/_base/lang",
       "dojo/date/locale",
@@ -46,7 +48,7 @@ define(["alfresco/logging/SubscriptionLog",
       "dojo/on",
       "dojo/text!./templates/DebugLog.html"
    ],
-   function(SubscriptionLog, declare, lang, dateLocale, domClass, domConstruct, on, template) {
+   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template) {
       /*jshint devel:true*/
 
       return declare([SubscriptionLog], {
@@ -98,8 +100,8 @@ define(["alfresco/logging/SubscriptionLog",
           * @type {payloadConfig}
           */
          defaultPayloadConfig: {
-            maxChildren: 50,
-            maxDepth: 6,
+            maxChildren: -1,
+            maxDepth: -1,
             excludedKeys: ["dojo", "dijit", "dojox", "$", "LiveReload", "Alfresco", "sinon", "dojoConfig", "tinyMCE", "tinymce", "cScope"]
          },
 
@@ -188,13 +190,11 @@ define(["alfresco/logging/SubscriptionLog",
                   innerHTML: "Payload"
                }, entryNode);
                domConstruct.create("span", {
-                  className: this.rootClass + "__entry__data__collapsed",
-                  innerHTML: simpleData
-               }, dataNode);
+                  className: this.rootClass + "__entry__data__collapsed"
+               }, dataNode).appendChild(document.createTextNode(simpleData));
                domConstruct.create("span", {
-                  className: this.rootClass + "__entry__data__full",
-                  innerHTML: formattedData
-               }, dataNode);
+                  className: this.rootClass + "__entry__data__full"
+               }, dataNode).appendChild(document.createTextNode(formattedData));
                on(entryNode, "click", lang.hitch(this, function() {
                   this._toggleCollapsed(dataNode);
                }));
@@ -211,11 +211,6 @@ define(["alfresco/logging/SubscriptionLog",
           */
          _createSafeData: function alfresco_logging_DebugLog___createSafeData(data) {
 
-            // Return early if it's already falsy
-            if (!data || typeof data !== "object") {
-               return data;
-            }
-
             // Setup variables
             var maxChildren = this.payloadConfig.maxChildren,
                maxDepth = this.payloadConfig.maxDepth,
@@ -223,86 +218,111 @@ define(["alfresco/logging/SubscriptionLog",
 
             // Create the safe object
             var safeData = (function makeSafe(unsafe, ancestors) {
-               /*jshint maxcomplexity:16,maxstatements:31*/
+               /*jshint maxcomplexity:false,maxstatements:false*/
 
-               // Setup variables
-               var keys = Object.keys(unsafe),
-                  safe = {},
-                  key,
-                  value;
+               // Setup return value
+               var safeValue = {};
 
-               // Run through the keys
-               for (var i = 0; i < keys.length; i++) {
+               // Deal with data appropriately
+               if (!unsafe || typeof unsafe !== "object") {
 
-                  // Variables
-                  key = keys[i];
-                  try {
-                     value = unsafe[key];
-                  } catch (e) {
-                     value = "Error: " + e.message;
-                     console.debug("Errored on " + key + " property on object: ", safe);
+                  // Falsy values and non-objects are already safe
+                  safeValue = unsafe;
+
+               } else if (ObjectTypeUtils.isArray(unsafe)) {
+
+                  // Arrays are safe in themselves, but make their items safe
+                  safeValue = array.map(unsafe, lang.hitch(this, function(unsafeChild) {
+                     return makeSafe(unsafeChild, ancestors);
+                  }));
+
+               } else if (unsafe.nodeType === Node.ELEMENT_NODE) {
+
+                  // Display information about which element this is
+                  safeValue = unsafe.tagName.toLowerCase();
+                  if (unsafe.id) {
+                     safeValue += "#" + unsafe.id;
+                  }
+                  if (unsafe.className) {
+                     safeValue += "." + unsafe.className.split(" ").join(".");
                   }
 
-                  // Check against max children
-                  if (i === maxChildren) {
-                     safe["MAXIMUM CHILDREN"] = "Maximum child-property count reached";
-                     break;
-                  }
+               } else if (unsafe.nodeType === Node.TEXT_NODE) {
 
-                  // Ensure key isn't explicitly excluded
-                  if (excludedKeys.indexOf(key) !== -1) {
-                     safe[key] = "[key excluded]";
-                     continue;
-                  }
+                  // Text nodes are just strings
+                  safeValue = unsafe.textContent;
+
+               } else if (unsafe.nodeType) {
+
+                  // Un-handled node type
+                  safeValue = "[" + unsafe.nodeName + "]";
+
+               } else if (unsafe._attachPoints) {
 
                   // Ignore widgets
-                  if (value && value._attachPoints) {
-                     safe[key] = "[widget]";
-                     continue;
-                  }
+                  safeValue = "[widget]";
 
-                  // We only really care about objects
-                  if (value && typeof value === "object") {
+               } else if (ancestors.indexOf(unsafe) !== -1) {
 
-                     // Handle object appropriately
-                     if (value.nodeType === Node.ELEMENT_NODE) {
-                        safe[key] = value.tagName.toLowerCase();
-                        if (value.id) {
-                           safe[key] += "#" + value.id;
-                        }
-                        if (value.className) {
-                           safe[key] += "." + value.className.split(" ").join(".");
-                        }
-                     } else if (value.nodeType === Node.TEXT_NODE) {
-                        safe[key] = value.textContent;
-                     } else if (value.nodeType) {
-                        safe[key] = "[" + value.nodeName + "]";
-                     } else if (ancestors.indexOf(value) !== -1) {
-                        safe[key] = "[recursive object";
-                        safe[key] += value.id ? " id=" + value.id + "]" : "]";
-                     } else if (ancestors.length === maxDepth) {
-                        safe[key] = "[object beyond max-depth]";
-                     } else {
-                        safe[key] = makeSafe(value, ancestors.concat(unsafe));
+                  // Recursion avoidance!
+                  safeValue = "[recursive object";
+                  safeValue += unsafe.id ? " id=" + unsafe.id + "]" : "]";
+
+               } else if (maxDepth !== -1 && ancestors.length === maxDepth) {
+
+                  // Handle max-depth exceptions
+                  safeValue = "[object beyond max-depth]";
+
+               } else {
+
+                  // A normal object, so recurse through its properties
+                  var keys = Object.keys(unsafe),
+                     key,
+                     value;
+                  for (var i = 0; i < keys.length; i++) {
+
+                     // Variables
+                     key = keys[i];
+                     try {
+                        value = unsafe[key];
+                     } catch (e) {
+                        value = "Error (see console for details): " + e.message;
+                        console.warn("Unable to access '" + key + "' property on object: ", unsafe);
                      }
 
-                  } else {
-                     safe[key] = value;
-                  }
+                     // Check against max children
+                     if (maxChildren !== -1 && i === maxChildren) {
+                        safeValue["MAXIMUM CHILDREN"] = "Maximum child-property count reached";
+                        break;
+                     }
 
-                  // Get rid of "proper" linebreaks
-                  if (typeof safe[key] === "string") {
-                     safe[key] = safe[key].replace(/\r/g, "").replace(/\n/g, "\\n");
+                     // Ensure key isn't explicitly excluded
+                     if (excludedKeys.indexOf(key) !== -1) {
+                        safeValue[key] = "[key excluded]";
+                        continue;
+                     }
+
+                     // Make the value safe before adding to the return object
+                     safeValue[key] = makeSafe(value, ancestors.concat(unsafe));
                   }
                }
 
+               // If we end up with a string, make the linebreaks safe
+               if (typeof safeValue === "string") {
+                  safeValue = safeValue.replace(/\r/g, "").replace(/\n/g, "\\n");
+               }
+
                // Pass back the safe object
-               return safe;
+               return safeValue;
 
             })(data, []);
 
             // Pass back the safe object
             return safeData;
+         },
+
+         _onClearButtonClick: function alfresco_logging_DebugLog___onClearButtonClick(){
+            domConstruct.empty(this.logNode);
          },
 
          /**

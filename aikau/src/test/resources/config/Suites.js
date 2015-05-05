@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/renderers/CommentsListTest"
+      "src/test/resources/alfresco/forms/controls/SelectTest"
    ],
 
    /**
@@ -98,6 +98,7 @@ define({
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
       "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
       "src/test/resources/alfresco/forms/controls/MultiSelectInputTest",
+      "src/test/resources/alfresco/forms/controls/NumberSpinnerTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
@@ -140,7 +141,7 @@ define({
       "src/test/resources/alfresco/menus/DisableMenuItemTest",
       "src/test/resources/alfresco/menus/MenuTests",
 
-      // "src/test/resources/alfresco/misc/AlfTooltipTest", - COMMENTED OUT - THE TOOLTIP ITSELF NEEDS REWRITING
+      "src/test/resources/alfresco/misc/AlfTooltipTest",
       "src/test/resources/alfresco/misc/TableAndFormDialogTest",
 
       "src/test/resources/alfresco/preview/ImagePreviewTest",
@@ -174,6 +175,7 @@ define({
       "src/test/resources/alfresco/search/FacetFiltersTest",
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
+      "src/test/resources/alfresco/services/ActionServiceTest",
       "src/test/resources/alfresco/services/ContentServiceTest",
       "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DialogServiceTest",

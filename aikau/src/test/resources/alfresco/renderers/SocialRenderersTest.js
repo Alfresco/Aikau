@@ -44,107 +44,111 @@ define(["intern!object",
          browser.end();
       },
 
-     "Like Test": function () {
+     "Check like PROCESSING image": function () {
          return browser.findByCssSelector(toggleSelector("LIKES", "processing"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === false, "Test #1a - like PROCESSING image displayed incorrectly");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "on"))
+               assert.isFalse(result, "Like PROCESSING image should not be displayed initially");
+            });
+      },
+
+      "Check like ON image": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "on"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === false, "Test #1b - like ON image displayed incorrectly");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "off"))
+               assert.isFalse(result, "Like ON image should not be displayed initially");
+            });
+      },
+
+      "Check like OFF image": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "off"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === true, "Test #1c - like OFF image was not displayed");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "warning"))
+               assert.isTrue(result, "Like OFF image was not displayed");
+            });
+      },
+
+      "Check like WARNING image": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "warning"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === false, "Test #1d - like WARNING image displayed incorrectly");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "count"))
+               assert.isFalse(result, "Like WARNING image should not be displayed initially");
+            });
+      },
+
+      "Check like count": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "count"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "4", "Test #1e - like COUNT is incorrect: " + resultText);
-            })
-            .end()
+               assert.equal(resultText, "4", "Like COUNT is incorrect");
+            });
+      },
 
-         // Click on LIKE and check the response...
-         .findByCssSelector("#LIKES")
+      "Like the document": function() {
+         return browser.findByCssSelector("#LIKES")
             .click()
-            .end()
+         .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_ADD", "publish", "any"))
             .then(function(elements) {
-               assert(elements.length === 1, "Test #2a - Add rating request not published");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "on"))
+               assert.lengthOf(elements, 1, "Add rating request not published");
+            });
+      },
+
+      "Check ON image is toggled": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "on"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === true, "Test #2b - like ON image not displayed following like");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "off"))
+               assert.isTrue(result, "Like ON image not displayed following like");
+            });
+      },
+
+      "Check OFF image is toggled": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "off"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === false, "Test #2c - like OFF image displayed despite liking");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "count"))
+               assert.isFalse(result, "Like OFF image displayed despite liking");
+            });
+      },
+
+      "Check the like count is incremented": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "count"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "5", "Test #2d - like COUNT is incorrect following liking: " + resultText);
-            })
-            .end()
+               assert.equal(resultText, "5", "Like COUNT is incorrect following liking");
+            });
+      },
 
-         // Click on LIKE again and check the response...
-         .findByCssSelector("#LIKES")
+      "Unlike the document": function() {
+         return browser.findByCssSelector("#LIKES")
             .click()
-            .end()
+         .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_REMOVE", "publish", "any"))
             .then(function(elements) {
-               assert(elements.length === 1, "Test #3a - Add rating request not published");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "on"))
+               assert.lengthOf(elements, 1, "Remove rating request not published");
+            });
+      },
+
+      "Check ON image is toggled (on unlike)": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "on"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === false, "Test #3b - like ON image displayed despite removing like");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "off"))
+               assert.isFalse(result, "Like ON image displayed despite removing like");
+            });
+      },
+
+      "Check OFF image is toggled (on unlike)": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "off"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === true, "Test #3c - like OFF image not displayed despite removing like");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "count"))
+               assert.isTrue(result, "Like OFF image not displayed despite removing like");
+            });
+      },
+
+      "Check count is decremented (on unlike)": function() {
+         return browser.findByCssSelector(toggleSelector("LIKES", "count"))
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "4", "Test #3d - like COUNT is incorrect following liking: " + resultText);
-            })
-            .end()
-
-         // Click on the LIKE again to check the simulated failure request...
-         .findByCssSelector("#LIKES")
-            .click()
-            .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_ADD", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 2, "Test #4a - Add rating request not published");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("LIKES", "warning"))
-            .isDisplayed()
-            .then(function(result) {
-               assert(result === true, "Test #4b - like WARNING image not displayed following simulated failure");
+               assert.equal(resultText, "4", "Like COUNT is incorrect after unliking");
             });
       },
 
@@ -165,89 +169,87 @@ define(["intern!object",
          browser.end();
       },
 
-     "Favourite Test": function () {
+     "Check initial PROCESSING image": function () {
          return browser.findByCssSelector(toggleSelector("FAVOURITES", "processing"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === false, "Test #1a - favourite PROCESSING image displayed incorrectly");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("FAVOURITES", "on"))
+               assert.isFalse(result, "Favourite PROCESSING image should not be displayed initially");
+            });
+      },
+
+      "Check initial ON image": function() {
+         return browser.findByCssSelector(toggleSelector("FAVOURITES", "on"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === false, "Test #1b - favourite ON image displayed incorrectly");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("FAVOURITES", "off"))
+               assert.isFalse(result, "Favourite ON image should not be displayed initially");
+            });
+      },
+
+      "Check initial OFF image": function() {
+         return browser.findByCssSelector(toggleSelector("FAVOURITES", "off"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === true, "Test #1c - favourite OFF image was not displayed");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("FAVOURITES", "warning"))
+               assert.isTrue(result, "Favourite OFF image was not displayed");
+            });
+      },
+
+      "Check initial WARNING image": function() {
+         return browser.findByCssSelector(toggleSelector("FAVOURITES", "warning"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === false, "Test #1d - favourite WARNING image displayed incorrectly");
-            })
-            .end()
-         
-         // Click on FAVOURITE and check the response...
-         .findByCssSelector("#FAVOURITES")
+               assert.isFalse(result, "Favourite WARNING image should not be displayed initially");
+            });
+      },
+
+      "Favourite a document": function() {
+         return browser.findByCssSelector("#FAVOURITES")
             .click()
-            .end()
+         .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE", "publish", "any"))
             .then(function(elements) {
-               assert(elements.length === 1, "Test #2a - Add favourite request not published");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("FAVOURITES", "on"))
-            .isDisplayed()
-            .then(function(result) {
-               assert(result === true, "Test #2b - favourite ON image not displayed following favourite");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("FAVOURITES", "off"))
-            .isDisplayed()
-            .then(function(result) {
-               assert(result === false, "Test #2c - favourite OFF image displayed despite liking");
-            })
-            .end()
+               assert.lengthOf(elements, 1, "Add favourite request not published");
+            });
+      },
 
-         // Click on FAVOURITE again and check the response...
-         .findByCssSelector("#FAVOURITES")
+      "Check ON image toggled (add favourite)": function() {
+         return browser.findByCssSelector(toggleSelector("FAVOURITES", "on"))
+            .isDisplayed()
+            .then(function(result) {
+               assert.isTrue(result, "Favourite ON image not displayed following favourite");
+            });
+      },
+
+      "Check OFF image toggled (add favourite)": function() {
+         return browser.findByCssSelector(toggleSelector("FAVOURITES", "off"))
+            .isDisplayed()
+            .then(function(result) {
+               assert.isFalse(result, "Favourite OFF image displayed despite favourite");
+            });
+      },
+
+      "Remove favourite": function() {
+         return browser.findByCssSelector("#FAVOURITES")
             .click()
-            .end()
+         .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE", "publish", "any"))
             .then(function(elements) {
-               assert(elements.length === 1, "Test #3a - Remove favourite request not published");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("FAVOURITES", "on"))
-            .isDisplayed()
-            .then(function(result) {
-               assert(result === false, "Test #3b - favourite ON image displayed despite removing favourite");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("FAVOURITES", "off"))
-            .isDisplayed()
-            .then(function(result) {
-               assert(result === true, "Test #3c - favourite OFF image not displayed despite removing favourite");
-            })
-            .end()
+               assert.lengthOf(elements, 1, "Remove favourite request not published");
+            });
+      },
 
-         // Click on the FAVOURITE again to check the simulated failure request...
-         .findByCssSelector("#FAVOURITES")
-            .click()
-            .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 2, "Test #4a - Add favourite request not published");
-            })
-            .end()
-         .findByCssSelector(toggleSelector("FAVOURITES", "warning"))
+      "Check ON image toggled (remove favourite)": function() {
+         return browser.findByCssSelector(toggleSelector("FAVOURITES", "on"))
             .isDisplayed()
             .then(function(result) {
-               assert(result === true, "Test #4b - favourite WARNING image not displayed following simulated failure");
+               assert.isFalse(result, false, "Favourite ON image displayed despite removing favourite");
+            });
+      },
+
+      "Check OFF image toggled (remove favourite)": function() {
+         return browser.findByCssSelector(toggleSelector("FAVOURITES", "off"))
+            .isDisplayed()
+            .then(function(result) {
+               assert.isTrue(result, "Favourite OFF image not displayed despite removing favourite");
             });
       },
 

@@ -161,6 +161,10 @@ define(["dojo/_base/declare",
                preference: this.loggingPreferencesId + "." + payload.value,
                value: (payload.selected === true)
             });
+            if (!this.loggingPreferences)
+            {
+               this.loggingPreferences = {};
+            }
             this.loggingPreferences[payload.value] = (payload.selected === true);
             this.handleSubscription();
          }

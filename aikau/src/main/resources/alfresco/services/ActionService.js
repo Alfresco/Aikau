@@ -276,9 +276,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the document selected
        */
       onDocumentSelected: function alfresco_services_ActionService__onDocumentSelected(payload) {
-         if (payload && payload.value && payload.value.nodeRef)
+         var payloadNoderef = payload && payload.value && payload.value.node && payload.value.node.nodeRef;
+         if (payloadNoderef)
          {
-            this.currentlySelectedDocuments[payload.value.nodeRef] = payload.value;
+            this.currentlySelectedDocuments[payloadNoderef] = payload.value;
             if (this.selectionTimeout)
             {
                clearTimeout(this.selectionTimeout);
@@ -307,9 +308,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the document selected
        */
       onDocumentDeselected: function alfresco_services_ActionService__onDocumentDeselected(payload) {
-         if (payload && payload.value && payload.value.nodeRef)
+         var payloadNoderef = payload && payload.value && payload.value.node && payload.value.node.nodeRef;
+         if (payloadNoderef)
          {
-            delete this.currentlySelectedDocuments[payload.value.nodeRef];
+            delete this.currentlySelectedDocuments[payloadNoderef];
             if (this.selectionTimeout)
             {
                clearTimeout(this.selectionTimeout);
@@ -344,6 +346,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onSelectedFilesChanged: function alfresco_services_ActionService__onSelectedFilesChanged() {
+         /*jshint maxcomplexity:false*/
          var files = this.getSelectedDocumentArray(), fileTypes = [], file,
              fileType, userAccess = {}, fileAccess, index,
              commonAspects = [], allAspects = [],
@@ -425,6 +428,7 @@ define(["dojo/_base/declare",
        * @param {object} document The document to perform the action on (only applicable to actions of type "javascript")
        */
       processActionObject: function alfresco_services_ActionService__processActionObject(action, document) {
+         /*jshint maxcomplexity:false*/
          if (action && action.type)
          {
             if (action.type === "pagelink")

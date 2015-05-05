@@ -53,9 +53,11 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom-geometry",
         "dojo/html",
-        "dojo/aspect"], 
+        "dojo/aspect",
+        "jquery",
+        "alfresco/layout/SimplePanel"], 
         function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin, lang, sniff, array,
-                 domConstruct, domClass, domStyle, domGeom, html, aspect) {
+                 domConstruct, domClass, domStyle, domGeom, html, aspect, $) {
    
    return declare([Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin], {
       
@@ -203,9 +205,24 @@ define(["dojo/_base/declare",
 
          if (this.widgetsContent)
          {
+            // Workout a maximum height for the dialog as it should always fit in the window...
+            var docHeight = $(document).height(),
+                clientHeight = $(window).height();
+            var h = (docHeight < clientHeight) ? docHeight : clientHeight;
+
             // Add widget content to the container node...
-            var widgetsNode = domConstruct.create("div", {}, this.bodyNode, "last");
-            this.processWidgets(this.widgetsContent, widgetsNode);
+            var widgetsNode = domConstruct.create("div", {
+               style: "max-height:" + (h - 200) + "px"
+            }, this.bodyNode, "last");
+            var bodyModel = [{
+               name: "alfresco/layout/SimplePanel",
+               assignTo: "_dialogPanel",
+               config: {
+                  height: this.contentHeight,
+                  widgets: this.widgetsContent
+               }
+            }];
+            this.processWidgets(bodyModel, widgetsNode);
          }
          else if (this.textContent)
          {
@@ -224,6 +241,18 @@ define(["dojo/_base/declare",
       onShow: function alfresco_dialogs_AlfDialog__onShow() {
          this.inherited(arguments);
          domStyle.set(document.documentElement, "overflow", "hidden");
+      
+         // Publish events if the dialog moves
+         if(this._moveable) {
+            aspect.after(this._moveable, "onMoveStart", lang.hitch(this, function(returnVal, originalArgs) {
+               this.alfPublish("ALF_DIALOG_MOVE_START", null, true);
+               return returnVal;
+            }));
+            aspect.after(this._moveable, "onMoveStop", lang.hitch(this, function(returnVal, originalArgs) {
+               this.alfPublish("ALF_DIALOG_MOVE_STOP", null, true);
+               return returnVal;
+            }));
+         }
       },
       
       /**
@@ -310,7 +339,16 @@ define(["dojo/_base/declare",
                {
                   button.publishPayload = {};
                }
-               button.publishPayload.dialogContent = widgets;
+               // The dialog content is expected to be found in the SimplePanel that is the main content
+               // widget. It's array of processed widgets represent the dialog content that should be worked with
+               if (widgets && widgets[0] && widgets[0]._processedWidgets)
+               {
+                  button.publishPayload.dialogContent = widgets[0]._processedWidgets;
+               }
+               else
+               {
+                  button.publishPayload.dialogContent = [];
+               }
                button.publishPayload.dialogRef = this; // Add a reference to the dialog itself so that it can be destroyed
             });
          }

@@ -21,10 +21,10 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
+        "intern/chai!assert",
         "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        function (registerSuite, assert, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -39,63 +39,50 @@ define(["intern!object",
          browser.end();
       },
 
-      "Tests": function () {
-
-         var testname = "AlfTooltipTest";
-         return browser.findById("TEST_BUTTON")
-         .then(function(el1) {
-            TestCommon.log(testname,"Does the test button exist?");
-            expect(el1).to.be.an("object", "The Test Button could not be found");
-         })
+      "Check tooltip is created": function() {
+         return browser.findByCssSelector("#LOGO1")
+            .moveMouseTo()
          .end()
-
-         // Tool tip should be missing to begin with
-         .hasElementByCss(".dijitTooltip")
-         .then(function(result1) {
-            TestCommon.log(testname,"Tool tip should be missing to begin with");
-            expect(result1).to.equal(false, "The Tooltip should not be available yet");
-         })
-         .end()
-
-         // Move to test button - does the tool tip appear?
-         .findByCssSelector("#TEST_BUTTON > #TEST_BUTTON_label")
-         .sleep(1000)
-         .hasElementByCss(".dijitTooltip")
-         .then(function(result2) {
-            TestCommon.log(testname,"Move to test button - does the tool tip appear?");
-            expect(result2).to.equal(true, "The Tooltip did not appear");
-         })
-         .end()
-
-         // Does the tool tip contain the appropriate copy
-         .findByCssSelector(".dijitTooltipContainer.dijitTooltipContents")
-         .getVisibleText()
-         .then(function(resultText1) {
-            TestCommon.log(testname,"Does the tool tip contain the appropriate copy");
-            expect(resultText1).to.equal("This is the test button", "The tool tip text is incorrect");
-         })
-         .end()
-
-         // Move to test button two - does the tool tip disappear?
-         .findById("TEST_BUTTON_TWO")
-         .sleep(250)
-         .hasElementByCss(".dijitTooltip")
-         .then(function(result3) {
-            TestCommon.log(testname,"Move to test button two - does the tool tip disappear?");
-            expect(result3).to.equal(true, "The Tooltip code should not have disappeared");
-         })
-         .end()
-
-         .findByCssSelector(".dijitTooltip")
-         .isDisplayed()
-         .then(function(result4) {
-            TestCommon.log(testname,"Move to test button two - does the tool tip disappear?");
-            if(browser.environmentType.browserName.indexOf("chrome") === -1) {
-               expect(result4).to.equal(false, "The Tooltip should be hidden");
-            }
-         });
+         .findAllByCssSelector("#SINGLE_ITEM_TOOLTIP")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find tooltip");
+            });
       },
 
+      "Check tooltip is displayed": function() {
+         return browser.findByCssSelector("#SINGLE_ITEM_TOOLTIP")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The tooltip was not displayed");
+            });
+      },
+
+      "Check tooltip content": function() {
+         return browser.findByCssSelector("#LABEL1")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "This is the tooltip content", "The tooltip content was not created");
+            });
+      },
+
+      "Check tooltip is hidden": function() {
+         return browser.findByCssSelector("#LIST2 tr:first-child .alfresco-renderers-Property .value")
+            .moveMouseTo()
+         .end()
+         .findByCssSelector("#SINGLE_ITEM_TOOLTIP")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The tooltip was not hidden");
+            });
+      },
+
+      "Check XHR generated data": function() {
+         return browser.findAllByCssSelector(".alfresco-renderers-Thumbnail")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find XHR generated content");
+            });
+      },
+      
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

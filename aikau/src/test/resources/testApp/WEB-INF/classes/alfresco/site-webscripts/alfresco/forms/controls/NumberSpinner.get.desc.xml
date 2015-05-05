@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Number Spinner</shortname>
+  <description>Shows examples of the NumberSpinner form control in various configurations.</description>
+  <family>aikau-unit-tests</family>
+  <url>/NumberSpinner</url>
+</webscript>

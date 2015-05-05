@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>AlfDocumentListWithHeader Test</shortname>
-  <description>This WebScript defines the AlfDocumentListWithHeader page test</description>
+  <shortname>List with table view</shortname>
+  <description>Shows a list using a table style view that includes headings for columns which can be clicked to sort the displayed items</description>
   <family>aikau-unit-tests</family>
   <url>/AlfDocumentListWithHeader</url>
 </webscript>

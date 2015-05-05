@@ -42,15 +42,17 @@ function getUserDocLibPreferences() {
       if (prefs.org &&
           prefs.org.alfresco &&
           prefs.org.alfresco.share &&
-          prefs.org.alfresco.documentList)
+          prefs.org.alfresco.share.documentList)
       {
-         var docLibPrefrences = prefs.org.alfresco.documentList;
+         var docLibPrefrences = prefs.org.alfresco.share.documentList;
          prefs.viewRendererName = docLibPrefrences.viewRendererName || "detailed";
          prefs.sortField = docLibPrefrences.sortField || "cm:name";
          prefs.sortAscending = docLibPrefrences.sortAscending !== false;
          prefs.showFolders = docLibPrefrences.showFolders !== false;
          prefs.hideBreadcrumbTrail = docLibPrefrences.hideNavBar === true;
          prefs.showSidebar = docLibPrefrences.showSidebar !== false;
+         prefs.galleryColumns = docLibPrefrences.galleryColumns || 4;
+         prefs.sideBarWidth = prefs.org.alfresco.sideBarWidth || 350;
       }
    }
    return prefs;
@@ -161,6 +163,7 @@ function generateCreateContentMenuItem(menuItemLabel, dialogTitle, iconClass, mo
          publishPayloadType: "PROCESS",
          publishPayloadModifiers: ["processCurrentItemTokens"],
          publishPayload: {
+            contentWidth: "550px",
             dialogTitle: dialogTitle,
             dialogConfirmationButtonTitle: "Create",
             dialogCancellationButtonTitle: "Cancel",
@@ -236,7 +239,7 @@ function generateCreateContentMenuItem(menuItemLabel, dialogTitle, iconClass, mo
 var folder = generateCreateContentMenuItem(msg.get("create.folder.label"), msg.get("create.folder.title"), "alf-showfolders-icon", "cm:folder", null);
 var plainText = generateCreateContentMenuItem(msg.get("create.text-document.label"), msg.get("create.text-document.title"), "alf-textdoc-icon", "cm:content", "text/plain", "alfresco/forms/controls/TextArea");
 var html = generateCreateContentMenuItem(msg.get("create.html-document.label"), msg.get("create.html-document.title"), "alf-htmldoc-icon", "cm:content", "text/html", "alfresco/forms/controls/TinyMCE");
-var xml = generateCreateContentMenuItem(msg.get("create.xml-document.label"), msg.get("create.xml-document.title"), "alf-xmldoc-icon", "cm:content", "text/xml", "alfresco/forms/controls/CodeMirrorEditor", { editMode: "xml"});
+var xml = generateCreateContentMenuItem(msg.get("create.xml-document.label"), msg.get("create.xml-document.title"), "alf-xmldoc-icon", "cm:content", "text/xml", "alfresco/forms/controls/CodeMirrorEditor", { editMode: "xml", width: 538, height: 250 }); // Dimensions as per defaults in TinyMCE control
 createContent.splice(0, 0, folder, plainText, html, xml);
 
 // Create content by template
@@ -357,23 +360,110 @@ function getRepositoryUrl()
  *                                                                                 *
  ***********************************************************************************/
 
-/**
- * Returns a JSON array of the configuration for all the services required by the document library
- */
-function getDocumentLibraryServices() {
-   var services = getHeaderServices();
-   services = services.concat([
-      "alfresco/dialogs/AlfDialogService",
-      "alfresco/services/ActionService",
-      "alfresco/services/ContentService",
-      "alfresco/services/CrudService",
-      "alfresco/services/DocumentService",
-      "alfresco/services/LightboxService",
-      "alfresco/services/QuickShareService",
-      "alfresco/services/RatingsService",
-      "alfresco/services/SearchService",
-      "alfresco/services/TagService"
-   ]);
+function addService(service, existingServices) {
+   // jshint shadow:false
+   for (var i=0; i < existingServices.length; i++)
+   {
+      if (existingServices[i] && 
+          (existingServices[i].name === service || existingServices[i] === service))
+      {
+         return false;
+      }
+   }
+   return true;
+}
+
+function addDocumentLibraryServices(services) {
+   // jshint shadow:false
+   var defaultServices = [
+      {
+         id: "NAVIGATION_SERVICE",
+         name: "alfresco/services/NavigationService"
+      },
+      {
+         id: "DIALOG_SERVICE",
+         name: "alfresco/services/DialogService"
+      },
+      {
+         id: "ACTION_SERVICE",
+         name: "alfresco/services/ActionService"
+      },
+      {
+         id: "CONTENT_SERVICE",
+         name: "alfresco/services/ContentService"
+      },
+      {
+         id: "CRUD_SERVICE",
+         name: "alfresco/services/CrudService"
+      },
+      {
+         id: "DOCUMENT_SERVICE",
+         name: "alfresco/services/DocumentService"
+      },
+      {
+         id: "LIGHTBOX_SERVICE",
+         name: "alfresco/services/LightboxService"
+      },
+      {
+         id: "QUICKSHARE_SERVICE",
+         name: "alfresco/services/QuickShareService"
+      },
+      {
+         id: "RATINGS_SERVICE",
+         name: "alfresco/services/RatingsService"
+      },
+      {
+         id: "SEARCH_SERVICE",
+         name: "alfresco/services/SearchService"
+      },
+      {
+         id: "TAG_SERVICE",
+         name:  "alfresco/services/TagService"
+      },
+      {
+         id: "PREFERENCE_SERVICE",
+         name:  "alfresco/services/PreferenceService"
+      },
+      {
+         id: "NOTIFICATION_SERVICE",
+         name:  "alfresco/services/NotificationService"
+      },
+      {
+         id: "COMMENT_SERVICE",
+         name:  "alfresco/services/CommentService"
+      },
+      {
+         id: "UPLOAD_SERVICE",
+         name:  "alfresco/services/UploadService"
+      },
+      {
+         id: "CREATE_TEMPLATED_CONTENT_SERVICE",
+         name: "alfresco/services/actions/CreateTemplateContentService"
+      },
+      {
+         id: "COPY_AND_MOVE_SERVICE",
+         name: "alfresco/services/actions/CopyMoveService"
+      },
+      {
+         id: "SIMPLE_WORKFLOW_SERVICE",
+         name: "alfresco/services/actions/SimpleWorkflowService"
+      }
+   ];
+     
+   if (services)
+   {
+      for (var i=0; i < defaultServices.length; i++)
+      {
+         if (addService(defaultServices[i].name, services))
+         {
+            services.push(defaultServices[i]);
+         }
+      }
+   }
+   else
+   {
+      services = defaultServices;
+   }
    return services;
 }
 
@@ -950,7 +1040,10 @@ function getDocLibList(siteId, containerId, rootNode, rawData) {
                name: "alfresco/documentlibrary/views/AlfDetailedView"
             },
             {
-               name: "alfresco/documentlibrary/views/AlfGalleryView"
+               name: "alfresco/documentlibrary/views/AlfGalleryView",
+               config: {
+                  columns: docLibPrefrences.galleryColumns
+               }
             },
             {
                name: "alfresco/documentlibrary/views/AlfTableView"

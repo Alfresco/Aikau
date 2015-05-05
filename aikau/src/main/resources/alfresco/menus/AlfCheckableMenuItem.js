@@ -18,6 +18,40 @@
  */
 
 /**
+ * <p>This is an extension of the [standard menu item]{@link module:alfresco/menus/AlfMenuItem} where the 
+ * menu item has on and off toggle state represented by a check mark. The menu items can be placed in a group
+ * so that only one item within the group can be checked at a time or can be used as individual items for toggling
+ * things on or off. Each time the a menu item is actioned it will publish on the configured topic and the payload
+ * will include a "selected" attribute indicating whether or not the item has been toggled to the on or off state.
+ * Items can be grouped by simply assigning multiple items with the same 
+ * [group]{@link module:alfresco/menus/AlfCheckableMenuItem#group} value. The other items in the group will automatically
+ * be toggled to the off state when another item is toggled to the on state.</p>
+ * 
+ * @example <caption>This is an example configuration of an ungrouped, initially checked item:</caption>
+ * {
+ *    name: "alfresco/menus/AlfCheckableMenuItem",
+ *    config: {
+ *       label: "Checkable",
+ *       value: "SOME_VALUE",
+ *       checked: true,
+ *       publishTopic: "CUSTOM_TOPIC",
+ *       publishPayload: {
+ *          additional: "bonus data"
+ *       }
+ *    }
+ * }
+ *
+ * @example <caption>This is an example configuration of a grouped item:</caption>
+ * {
+ *    name: "alfresco/menus/AlfCheckableMenuItem",
+ *    config: {
+ *       label: "Grouped Checkable",
+ *       value: "SOME_VALUE",
+ *       group: "GROUP1",
+ *       publishTopic: "CUSTOM_TOPIC"
+ *    }
+ * }
+ * 
  * @module alfresco/menus/AlfCheckableMenuItem
  * @extends module:alfresco/menus/AlfMenuItem
  * @author Dave Draper
@@ -167,12 +201,20 @@ define(["dojo/_base/declare",
          {
             if (this.group)
             {
-               // Clear all group settings if the payload value matches the value represented by the
-               // widget. We need to ensure that only one item in the group is selected...
-               this.alfPublish("ALF_CHECKABLE_MENU_ITEM__" + this.group, {
-                  value: this.value
-               });
-               this.checked = payload.selected;
+               if (payload.selected === true)
+               {
+                  // Clear all group settings if the payload value matches the value represented by the
+                  // widget. We need to ensure that only one item in the group is selected...
+                  this.alfPublish("ALF_CHECKABLE_MENU_ITEM__" + this.group, {
+                     value: this.value,
+                     selected: false
+                  });
+                  this.checked = true;
+               }
+               else
+               {
+                  this.checked = false;
+               }
             }
             else
             {

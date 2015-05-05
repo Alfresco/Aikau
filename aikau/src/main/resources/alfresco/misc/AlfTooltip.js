@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,64 +18,160 @@
  */
 
 /**
- * An Alfresco styled tool tip. Extends the default Dijit Tooltip and provides an overridden stylesheet.
- *
+ * <p>This widget provides a way in which a widget model can be displayed when the mouse moves over another
+ * widget. To use this tooltip you need to define a 
+ * [widgets model to immediately render]{@link module:alfresco/misc/AlfTooltipDialog#widgets} and then another
+ * [widget model]{@link module:alfresco/misc/AlfTooltipDialog#widgetsForTooltip} that will be displayed in the
+ * tooltip when the mouse moves over any of the widgets in the first model.</p>
+ * 
+ * @example <caption>Example configuration:</caption>
+ * {
+ *    name: "alfresco/layout/ClassicWindow",
+ *    config: {
+ *    title: "Tooltip displays on mouse over logo",
+ *    widgets: [
+ *       {
+ *          name: "alfresco/misc/AlfTooltip",
+ *          config: {
+ *             widgets: [
+ *                {
+ *                   name: "alfresco/logo/Logo"
+ *                }
+ *             ],
+ *             widgetsForTooltip: [
+ *                {
+ *                   name: "alfresco/html/Label",
+ *                   config: {
+ *                      label: "This is the tooltip content"
+ *                   }
+ *                }
+ *             ]
+ *          }
+ *       }
+ *    ]
+ * }
+ * 
  * @module alfresco/misc/AlfTooltip
- * @extends module:dijit/Tooltip
- * @author Richard Smith
+ * @extends external:dijit/Menu
+ * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/Tooltip"], 
-        function(declare, Tooltip) {
-
-   return declare([Tooltip], {
+        "dijit/_WidgetBase", 
+        "dijit/_TemplatedMixin",
+        "dojo/text!./templates/AlfTooltip.html",
+        "dijit/TooltipDialog",
+        "alfresco/core/Core",
+        "alfresco/core/CoreWidgetProcessing",
+        "dojo/_base/lang",
+        "dojo/dom-construct",
+        "dojo/on",
+        "dijit/popup"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, TooltipDialog, AlfCore, CoreWidgetProcessing,
+                 lang, domConstruct, on, popup) {
+   
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
       /**
-       * An array of the CSS files to use with this widget.
+       * The HTML template to use for the widget.
+       * @instance
+       * @type {String}
+       */
+      templateString: template,
+      
+      /**
+       * This is the widget model that will be displayed inside the tooltip.
        * 
        * @instance
-       * @type {Array}
+       * @type {array}
+       * @default null
        */
-      cssRequirements: [{cssFile:"./css/AlfTooltip.css"}],
+      widgetsForTooltip: null,
 
       /**
-       * An array of the tool tip positions.
+       * This is the widget model that will be immediately rendered. When the mouse is moved over any
+       * of the widgets in this model then the tooltip will be created (if it hasn't previously been created)
+       * and will then be displayed.
        * 
        * @instance
-       * @type {Array}
-       * @default ['above-centered', 'below-centered']
+       * @type {array}
+       * @default null
        */
-      defaultPosition: ['above-centered', 'below-centered'],
+      widgets: null,
 
       /**
-       * A default show delay time in milliseconds.
-       * 
-       * @instance
-       * @type {Number}
-       * @default 250
-       */
-      showDelay: 250,
-
-      /**
-       * A dom node to attach the tool tip to - object or string.
-       * 
+       * A reference to the dijit/TooltipDialog that will be created.
+       *
        * @instance
        * @type {object}
        * @default null
        */
-      targetNode: null,
+      _tooltip: null,
 
       /**
-       * @instance postCreate
+       * The width of the tooltip. Default is 300 pixels wide.
+       *
+       * @instance
+       * @type {string}
+       * @default "300px"
        */
-      postCreate: function alfresco_menus_AlfTooltip__postCreate() {
-         Tooltip.defaultPosition = this.defaultPosition;
-         // If a targetNode has been provided, use the addTarget method on dijit/Tooltip to apply it
-         if (this.targetNode)
+      width: "300px",
+
+      /**
+       * This is called to display the tooltip when the mouse goes over the target area. If the 
+       * tooltip hasn't been created at this point then it will be created.
+       * 
+       * @instance
+       */
+      onShowTooltip: function alfresco_misc_AlfTooltip__onShowTooltip() {
+         if (!this._tooltip)
          {
-            this.addTarget(this.targetNode);
+            this.dialogContent = domConstruct.create("div");
+            this.processWidgets(this.widgetsForTooltip, this.dialogContent);
+            this._tooltip = new TooltipDialog({
+               id: this.id + "_TOOLTIP",
+               style: this.width,
+               content: this.dialogContent,
+               onMouseLeave: lang.hitch(this, this.onHideTooltip)
+            });
+         }
+         popup.open({
+            popup: this._tooltip,
+            around: this.domNode
+         });
+      },
+
+      /**
+       * Called to hide the tooltip. This is done when the mouse leaves the target area by default.
+       * 
+       * @instance
+       */
+      onHideTooltip: function alfresco_misc_AlfTooltip__onHideTooltip() {
+         popup.close(this._tooltip);
+      },
+
+      /**
+       * Sets up the mouse over listener for displaying the tooltip (if
+       * [widgetsForTooltip]{@link module:alfresco/misc/AlfTooltipDialog#widgetsForTooltip} contains a widget
+       * model) and then processes [widgets]{@link module:alfresco/misc/AlfTooltipDialog#widgets}.
+       * 
+       * @instance
+       */
+      postCreate: function alfresco_misc_AlfTooltip__postCreate() {
+         if (this.widgetsForTooltip)
+         {
+            on(this.domNode, "mouseover", lang.hitch(this, this.onShowTooltip));
+         }
+         else
+         {
+            this.alfLog("warn", "A tooltip dialog was configured without a 'widgetsForTooltip' attribute", this);
+         }
+
+         if (this.widgets)
+         {
+            this.processWidgets(this.widgets, this.domNode);
          }
       }
-
    });
 });

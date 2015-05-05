@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>RenderFilter Test</shortname>
-  <description>This WebScript defines the RenderFilter page test</description>
+  <shortname>RenderFilter configurations</shortname>
+  <description>This page contains a number of widgets with various different renderFilter configurations that control whether or not the widgets are rendered. The source of the WebScript controller for this page is probably more useful to view than the page itself.</description>
   <family>aikau-unit-tests</family>
   <url>/RenderFilter</url>
 </webscript>

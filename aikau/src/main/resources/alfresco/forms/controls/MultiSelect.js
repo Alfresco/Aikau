@@ -314,6 +314,7 @@ define([
          postCreate: function alfresco_forms_controls_MultiSelect__postCreate() {
             this.inherited(arguments);
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
+            this._preventWidgetDropdownDisconnects();
             this.value = [];
          },
 
@@ -990,6 +991,32 @@ define([
                left: widgetPos.x + "px",
                top: (widgetPos.y + widgetPos.h - 1) + "px"
             });
+         },
+
+         /**
+          * Prevent the absolutely positioned dropdown from being disconnected from
+          * the main widget. Because the dropdown is positioned every time it's
+          * displayed, all we need to do is hide it when we detect a circumstance
+          * that could cause a disconnect.
+          *
+          * @instance
+          */
+         _preventWidgetDropdownDisconnects: function alfresco_forms_controls_MultiSelect___preventWidgetDropdownDisconnects(){
+
+            // When we're in a dialog, we want to hide the results. There is never going to be a situation
+            // (assumption) where a dialog moving is going to cause a problem if we hide the results dropdown
+            // so let's just always hide it
+            this.alfSubscribe("ALF_DIALOG_MOVE_START", lang.hitch(this, this._hideResultsDropdown), true);
+
+            // Although the dropdown will move with the body scrolling, it won't cope with scrollable elements
+            // moving, so we'll go up the tree trying to find any, and then listen for their scroll events and
+            // again hide the dropdown when it happens
+            var nextParent = this.domNode;
+            while((nextParent = nextParent.parentNode) && nextParent.tagName !== "body") {
+               if(nextParent.scrollHeight > nextParent.offsetHeight) {
+                  this.own(on(nextParent, "scroll", lang.hitch(this, this._hideResultsDropdown)));
+               }
+            }
          },
 
          /**
