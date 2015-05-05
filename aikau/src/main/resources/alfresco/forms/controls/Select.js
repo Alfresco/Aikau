@@ -41,6 +41,23 @@ define(["alfresco/forms/controls/BaseFormControl",
       cssRequirements: [{cssFile:"./css/Select.css"}],
 
       /**
+       * Adds a new option to the wrapped widget.
+       *
+       * @instance
+       * @override
+       * @param {object} option The option to add
+       * @param {number} index The index of the option to add
+       */
+      addOption: function alfresco_forms_controls_Select__addOption(option, /*jshint unused:false*/ index) {
+         // Dijit Select widget does not support empty values! https://bugs.dojotoolkit.org/ticket/9973
+         if (option.value === "") {
+            this.alfLog("error", "Attempted to add option with empty value", option);
+         } else {
+            this.inherited(arguments);
+         }
+      },
+
+      /**
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_Select__getWidgetConfig() {
@@ -55,7 +72,7 @@ define(["alfresco/forms/controls/BaseFormControl",
       /**
        * @instance
        */
-      createFormControl: function alfresco_forms_controls_Select__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_Select__createFormControl(config) {
          var select = new Select(config);
 
          // Handle adding classes to control...
@@ -76,7 +93,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {object} option The option configuration
        * @param {number} index The index of the option
        */
-      processOptionLabel: function alfresco_forms_controls_BaseFormControl__processOptionLabel(option, index) {
+      processOptionLabel: function alfresco_forms_controls_BaseFormControl__processOptionLabel(option, /*jshint unused:false*/ index) {
          this.inherited(arguments);
          if (option.label)
          {

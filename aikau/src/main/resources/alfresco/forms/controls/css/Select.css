@@ -34,5 +34,5 @@
 }
 
 .claro .dijitMenu .dijitSelectSelectedOption * {
-   color: #ababab;
+   font-family: @bold-font;
 }
