@@ -1,4 +1,4 @@
-Aikau 1.0.15 Release Notes
+Aikau 1.0.16 Release Notes
 ==========================
 
 Current deprecations:
@@ -34,13 +34,20 @@ Current deprecations:
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
 1.0.16:
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-247](https://issues.alfresco.com/jira/browse/AKU-247)       - Ensure value is retained when options updated
+* [AKU-248](https://issues.alfresco.com/jira/browse/AKU-248)       - Ensure filter selection resets pagination
+* [AKU-249](https://issues.alfresco.com/jira/browse/AKU-249)       - Fix to tag render filter selection publication
+* [AKU-250](https://issues.alfresco.com/jira/browse/AKU-250)       - Ensure initially rendered view is marked as selected
+* [AKU-251](https://issues.alfresco.com/jira/browse/AKU-251)       - Fix favouriting and PreferenceService for use in standalone clients
+* [AKU-252](https://issues.alfresco.com/jira/browse/AKU-252)       - Make create content dialog wider
+* [AKU-253](https://issues.alfresco.com/jira/browse/AKU-253)       - Improve sidebar defaults and preference handling
+* [AKU-254](https://issues.alfresco.com/jira/browse/AKU-254)       - Ensure templated content can be created on standalone clients
+* [AKU-257](https://issues.alfresco.com/jira/browse/AKU-257)       - Ensure Gallery View folder thumbnail can be selected
+* [AKU-266](https://issues.alfresco.com/jira/browse/AKU-266)       - Create tooltip that supports widget models
+* [AKU-268](https://issues.alfresco.com/jira/browse/AKU-268)       - Update renderFilter to support array data
+* [AKU-271](https://issues.alfresco.com/jira/browse/AKU-271)       - Ensure required NumberSpinner can have 0 as a valid value
+* [AKU-272](https://issues.alfresco.com/jira/browse/AKU-272)       - NumberSpinner validation handling improvements
+* [AKU-273](https://issues.alfresco.com/jira/browse/AKU-273)       - Add scroll bar to dialog body as content grows
 
 1.0.15:
 * [AKU-195](https://issues.alfresco.com/jira/browse/AKU-195)       - Basic support for edit document properties
