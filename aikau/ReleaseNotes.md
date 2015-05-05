@@ -1,4 +1,4 @@
-Aikau 1.0.14 Release Notes
+Aikau 1.0.15 Release Notes
 ==========================
 
 Current deprecations:
@@ -33,6 +33,26 @@ Current deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.16:
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+
+1.0.15:
+* [AKU-195](https://issues.alfresco.com/jira/browse/AKU-195)       - Basic support for edit document properties
+* [AKU-220](https://issues.alfresco.com/jira/browse/AKU-220)       - PubSub options handling improvements
+* [AKU-232](https://issues.alfresco.com/jira/browse/AKU-232)       - ActionService updates for deleting content
+* [AKU-234](https://issues.alfresco.com/jira/browse/AKU-234)       - Added alfresco/renderers/AvatarThumbnail
+* [AKU-235](https://issues.alfresco.com/jira/browse/AKU-235)       - Update test app and archetype to not use Maven snapshots
+* [AKU-238](https://issues.alfresco.com/jira/browse/AKU-238)       - Ensure MultiSelectInput options are not clipped in dialog
+* [AKU-239](https://issues.alfresco.com/jira/browse/AKU-239)       - Include empty array data as missing required value
+* [AKU-242](https://issues.alfresco.com/jira/browse/AKU-242)       - Support configurable page sizes in alfresco/lists/Paginator
+* [AKU-243](https://issues.alfresco.com/jira/browse/AKU-243)       - Added pagination and sorting to alfresco/renderers/CommentsList
+
 1.0.14:
 * [AKU-158](https://issues.alfresco.com/jira/browse/AKU-158)       - Improved publication/subscription log
 * [AKU-219](https://issues.alfresco.com/jira/browse/AKU-219)       - Nested "use-once" items returned to palette
