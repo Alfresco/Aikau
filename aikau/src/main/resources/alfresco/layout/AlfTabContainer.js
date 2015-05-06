@@ -18,12 +18,146 @@
  */
 
 /**
+ * <p>This layout widget provides the ability to display tabbed content where tabs can be dynamically
+ * added, selected and removed as required. Unless explicitly requested, only the content of the intially
+ * selected tab will be rendered - the content of the other tabs will be rendered as they are selected. The 
+ * height of the widget will grow and shrink based on the content of each tab by default unless
+ * the [height]{@link module:alfresco/layout/AlfTabContainer#height} is explicitly set to a non-percentage
+ * value.</p>
+ * <p>If you want the widget to respond to publicationss to dynamically 
+ * [add]{@link module:alfresco/layout/AlfTabContainer#tabAdditionTopic}, 
+ * [select]{@link module:alfresco/layout/AlfTabContainer#tabSelectionTopic}, 
+ * [disable]{@link module:alfresco/layout/AlfTabContainer#tabDisablementTopic} or
+ * [delete]{@link module:alfresco/layout/AlfTabContainer#tabDeletionTopic} tabs then you will need to
+ * configure the topics to subscribe to. Subscriptions will be made at the configured 
+ * [pubSubScope]{@link module:alfresco/core/Core#pubSubScope} of the widget.</p>
+ *
+ * @example <caption>Basic configuration (first tab will be selected):</caption>
+ * {
+ *    name: "alfresco/layout/AlfTabContainer",
+ *    config: {
+ *       widgets: [
+ *          {
+ *             id: "TAB1",
+ *             name: "alfresco/logo/Logo",
+ *             title: "Tab with Alfresco Logo",
+ *             config: {
+ *                logoClasses: "alfresco-logo-only"
+ *             }
+ *          },
+ *          {
+ *             id: "TAB2",
+ *             name: "alfresco/logo/Logo",
+ *             title: "Tab with Surf Logo",
+ *             config: {
+ *                logoClasses: "surf-logo-large"
+ *             }
+ *          }
+ *       ]
+ *    }
+ * }
+ *
+ * @example <caption>Use "delayProcessing" to force second tab to render before selection:</caption>
+ * {
+ *    name: "alfresco/layout/AlfTabContainer",
+ *    config: {
+ *       widgets: [
+ *          {
+ *             id: "TAB1",
+ *             name: "alfresco/logo/Logo",
+ *             title: "Tab with Alfresco Logo",
+ *             selected
+ *             config: {
+ *                logoClasses: "alfresco-logo-only"
+ *             }
+ *          },
+ *          {
+ *             id: "TAB2",
+ *             name: "alfresco/logo/Logo",
+ *             title: "Tab with Surf Logo",
+ *             delayProcessing: false,
+ *             config: {
+ *                logoClasses: "surf-logo-large"
+ *             }
+ *          }
+ *       ]
+ *    }
+ * }
+ *
+ * @example <caption>Use "selected" make the second tab initially selected:</caption>
+ * {
+ *    name: "alfresco/layout/AlfTabContainer",
+ *    config: {
+ *       widgets: [
+ *          {
+ *             id: "TAB1",
+ *             name: "alfresco/logo/Logo",
+ *             title: "Tab with Alfresco Logo",
+ *             selected
+ *             config: {
+ *                logoClasses: "alfresco-logo-only"
+ *             }
+ *          },
+ *          {
+ *             id: "TAB2",
+ *             name: "alfresco/logo/Logo",
+ *             title: "Tab with Surf Logo",
+ *             selected: true,
+ *             config: {
+ *                logoClasses: "surf-logo-large"
+ *             }
+ *          }
+ *       ]
+ *    }
+ * }
+ * 
+ * @example <caption>Define topics to dynamically manipulate tabs:</caption>
+ * {
+ *    name: "alfresco/layout/AlfTabContainer",
+ *    config: {
+ *       tabSelectionTopic: "SELECT_TAB_TOPIC",
+ *       tabDisablementTopic: "DISABLE_TAB_TOPIC",
+ *       tabAdditionTopic: "ADD_TAB_TOPIC",
+ *       tabDeletionTopic: "DELETE_TAB_TOPIC",
+ *       widgets: [
+ *          {
+ *             id: "TAB1",
+ *             name: "alfresco/logo/Logo",
+ *             title: "Tab with Alfresco Logo",
+ *             selected
+ *             config: {
+ *                logoClasses: "alfresco-logo-only"
+ *             }
+ *          }
+ *       ]
+ *    }
+ * }
+ *
+ * @example <caption>Example publication to add a new tab (based on previous example topic):</caption>
+ * {
+ *    publishTopic: "ADD_TAB_TOPIC",
+ *    publishPayload: {
+ *       widgets: [
+ *          {
+ *             name: "alfresco/html/Label",
+ *             title: "New",
+ *             closable: true,
+ *             selected: true,
+ *             config: {
+ *                label: "This tab was dynamically added"
+ *             }
+ *          }
+ *       ]
+ *    }
+ * }
+ * 
  * @module alfresco/layout/AlfTabContainer
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Richard Smith
+ * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
@@ -140,37 +274,56 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_layout_AlfTabContainer__postCreate() {
-
          // Initialise a TabContainer instance and watch its selectedChildWidget event
          this.tabContainerWidget = new TabContainer({
             style: "height: " + this.height + "; width: " + this.width + ";",
             doLayout: this.doLayout
          }, this.tabNode);
-         this.tabContainerWidget.watch("selectedChildWidget", lang.hitch(this, "_tabChanged"));
+         this.tabContainerWidget.watch("selectedChildWidget", lang.hitch(this, this._tabChanged));
 
          // Setup child widgets and startup()
          if (this.widgets)
          {
+            // By default we want to ensure that we don't unnecessarily process widgets for 
+            // tabs that are not immediately visible. Therefore unless specifically requested 
+            // in the configuration to be the selected tab or the to render immediately then
+            // we'll mark them all as delayed processing. If no tab is marked as selected then
+            // we'll ensure that the first tab is both selected and will be immediately rendered
+            var tabSelected = false;
+            array.forEach(this.widgets, function(widget) {
+               if (widget.delayProcessing !== false && !widget.selected)
+               {
+                  widget.delayProcessing = true;
+               }
+               tabSelected = tabSelected || widget.selected;
+            });
+            if (this.widgets.length && !tabSelected)
+            {
+               this.widgets[0].selected = true;
+               this.widgets[0].delayProcessing = false;
+            }
+
+            // Now add tabs for each widget...
             array.forEach(this.widgets, lang.hitch(this, "addWidget"));
          }
          this.tabContainerWidget.startup();
 
          // Subscribe to some optional topics
-         if (this.tabSelectionTopic != null)
+         if (this.tabSelectionTopic)
          {
-            this.alfSubscribe(this.tabSelectionTopic, lang.hitch(this, "tabSelect"));
+            this.alfSubscribe(this.tabSelectionTopic, lang.hitch(this, this.onTabSelect));
          }
-         if (this.tabDisablementTopic != null)
+         if (this.tabDisablementTopic)
          {
-            this.alfSubscribe(this.tabDisablementTopic, lang.hitch(this, "tabDisable"));
+            this.alfSubscribe(this.tabDisablementTopic, lang.hitch(this, this.onTabDisable));
          }
-         if (this.tabAdditionTopic != null)
+         if (this.tabAdditionTopic)
          {
-            this.alfSubscribe(this.tabAdditionTopic, lang.hitch(this, "tabAdd"));
+            this.alfSubscribe(this.tabAdditionTopic, lang.hitch(this, this.onTabAdd));
          }
-         if (this.tabDeletionTopic != null)
+         if (this.tabDeletionTopic)
          {
-            this.alfSubscribe(this.tabDeletionTopic, lang.hitch(this, "tabDelete"));
+            this.alfSubscribe(this.tabDeletionTopic, lang.hitch(this, this.onTabDelete));
          }
       },
 
@@ -181,46 +334,38 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to add
        * @param {integer} index The index of the required tab position
        */
-      addWidget: function alfresco_layout_AlfTabContainer__addWidget(widget, index) {
-
-         // Create a domNode and ContentPane
+      addWidget: function alfresco_layout_AlfTabContainer__addWidget(widget, /*jshint unused:false*/ index) {
          var domNode = domConstruct.create("div", {}),
              cp = new ContentPane();
 
          // Add content to the ContentPane
          if(widget.content && typeof widget.content === "string")
          {
-            cp.set('content', widget.content);
+            cp.set("content", widget.content);
          }
 
          // Add a title to the ContentPane
          if(widget.title && typeof widget.title === "string")
          {
-            cp.set('title', this.message(widget.title));
+            cp.set("title", this.message(widget.title));
          }
 
          // Add an iconClass to the ContentPane
          if(widget.iconClass && typeof widget.iconClass === "string")
          {
-            cp.set('iconClass', widget.iconClass);
+            cp.set("iconClass", widget.iconClass);
          }
 
          // Should the ContentPane be closable?
          if(widget.closable && typeof widget.closable === "boolean")
          {
-            cp.set('closable', widget.closable);
+            cp.set("closable", widget.closable);
          }
 
          // Should the ContentPane be disabled?
          if(widget.disabled && typeof widget.disabled === "boolean")
          {
-            cp.set('disabled', widget.disabled);
-         }
-
-         // Should the ContentPane be selected?
-         if(widget.selected && typeof widget.selected === "boolean")
-         {
-            cp.set('selected', widget.selected);
+            cp.set("disabled", widget.disabled);
          }
 
          // If not delayed processing, create the widget and add to the panel
@@ -245,7 +390,11 @@ define(["dojo/_base/declare",
          }
 
          // If we have an index add the ContentPane at a particular position otherwise just add it
-         this.tabContainerWidget.addChild(cp, (typeof index !== 'undefined' ? index : null));
+         this.tabContainerWidget.addChild(cp, widget.tabIndex);
+         if (widget.selected === true)
+         {
+            this.tabContainerWidget.selectChild(cp);
+         }
       },
 
       /**
@@ -258,7 +407,6 @@ define(["dojo/_base/declare",
        * @param {object} newTab
        */
       _tabChanged: function alfresco_layout_AlfTabContainer___tabChanged(name, oldTab, newTab) {
-
          var forDeletion = null;
          for(var i = 0; i < this._delayedProcessingWidgets.length; i++)
          {
@@ -274,7 +422,7 @@ define(["dojo/_base/declare",
                break;
             }
          }
-         if(forDeletion != null)
+         if(forDeletion || forDeletion === 0)
          {
             this._delayedProcessingWidgets.splice(forDeletion, 1);
          }
@@ -286,14 +434,14 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload Details of the tab to select
        */
-      tabSelect: function alfresco_layout_AlfTabContainer__tabSelect(payload) {
+      onTabSelect: function alfresco_layout_AlfTabContainer__onTabSelect(payload) {
          var tc = this.tabContainerWidget,
              tabs = tc.getChildren();
-         if(payload && typeof payload.index === 'number' && tabs[payload.index])
+         if(payload && typeof payload.index === "number" && tabs[payload.index])
          {
             tc.selectChild(tabs[payload.index]);
          }
-         else if(payload && (typeof payload.id === 'string' || typeof payload.title === 'string'))
+         else if(payload && (typeof payload.id === "string" || typeof payload.title === "string"))
          {
             for(var i = 0; i < tabs.length; i++) // tabs does not support forEach
             {
@@ -316,20 +464,20 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload Details of the tab to disable or enable
        */
-      tabDisable: function alfresco_layout_AlfTabContainer__tabDisable(payload) {
+      onTabDisable: function alfresco_layout_AlfTabContainer__onTabDisable(payload) {
          var tc = this.tabContainerWidget,
              tabs = tc.getChildren();
-         if(payload && typeof payload.index === 'number' && tabs[payload.index] && typeof payload.value === 'boolean')
+         if(payload && typeof payload.index === "number" && tabs[payload.index] && typeof payload.value === "boolean")
          {
-            tabs[payload.index].set('disabled', payload.value);
+            tabs[payload.index].set("disabled", payload.value);
          }
-         else if(payload && (typeof payload.id === 'string' || typeof payload.title === 'string') && typeof payload.value === 'boolean')
+         else if(payload && (typeof payload.id === "string" || typeof payload.title === "string") && typeof payload.value === "boolean")
          {
             for(var i = 0; i < tabs.length; i++) // tabs does not support forEach
             {
                if((payload.id && tabs[i].id === payload.id) || (payload.title && tabs[i].title === payload.title))
                {
-                  tabs[i].set('disabled', payload.value);
+                  tabs[i].set("disabled", payload.value);
                   break;
                }
             }
@@ -346,20 +494,11 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload Details of the tab to add
        */
-      tabAdd: function alfresco_layout_AlfTabContainer__tabAdd(payload) {
-         // TODO: Complete the tabAdd function
-
-         // if(payload && payload.model)
-         // {
-         //    // Create widget
-         //    // Pass to addWidget function with payload.index if provided
-         // }
-         // else if(payload && payload.widgetId)
-         // {
-         //    // Find widget by ID
-         //    // Pass to addWidget function with payload.index if provided
-         // }
-
+      onTabAdd: function alfresco_layout_AlfTabContainer__onTabAdd(payload) {
+         if (payload && payload.widgets)
+         {
+            array.forEach(payload.widgets, lang.hitch(this, this.addWidget));
+         }
       },
 
       /**
@@ -368,14 +507,14 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload Details of the tab to delete
        */
-      tabDelete: function alfresco_layout_AlfTabContainer__tabDelete(payload) {
+      onTabDelete: function alfresco_layout_AlfTabContainer__onTabDelete(payload) {
          var tc = this.tabContainerWidget,
              tabs = tc.getChildren();
-         if(payload && typeof payload.index === 'number' && tabs[payload.index])
+         if(payload && typeof payload.index === "number" && tabs[payload.index])
          {
             tc.removeChild(tabs[payload.index]);
          }
-         else if(payload && (typeof payload.id === 'string' || typeof payload.title === 'string'))
+         else if(payload && (typeof payload.id === "string" || typeof payload.title === "string"))
          {
             for(var i = 0; i < tabs.length; i++) // tabs does not support forEach
             {
