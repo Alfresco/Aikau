@@ -44,6 +44,8 @@ define(["intern!object",
          return browser.findByCssSelector("#COPY1_label")
             .click()
          .end()
+         .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
+         .end()
          .findByCssSelector(".dijitDialogTitle")
             .getVisibleText()
             .then(function(text) {
@@ -96,9 +98,12 @@ define(["intern!object",
       },
 
       "Test dialog title of move via ActionService": function() {
-         return browser.sleep(500) // Give the previous dialog a chance to close
-            .findByCssSelector("#MOVE1_label")
+         return browser.findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
+         .end()
+         .findByCssSelector("#MOVE1_label")
             .click()
+         .end()
+         .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
          .end()
          .findByCssSelector(".dijitDialogTitle")
             .getVisibleText()
