@@ -178,9 +178,14 @@ define([], function() {
          console.log("");
          console.log("Took " + timeTaken + " to run " + counts.total + " tests in " + environmentNames.length + " environments: \"" + environmentNames.join("\", \"") + "\"");
 
+         // Calculate total success percent (but don't let it be 100% if there are any errors/failures)
+         var totalSuccesses = counts.passed + counts.skipped;
+            successPercent = Math.round(totalSuccesses / counts.total * 1000) / 10;
+         successPercent = successPercent === 100 ? (totalSuccesses === counts.total ? 100 : 99.9) : successPercent;
+
          // Calculate stats for the test-run
          var stats = {
-               "Success rate": Math.round((counts.passed + counts.skipped) / counts.total * 1000) / 10 + "%",
+               "Success rate": successPercent + "%",
                "Total passed": counts.passed,
                "Total skipped": counts.skipped,
                "Total failed": collections.failures.length,
