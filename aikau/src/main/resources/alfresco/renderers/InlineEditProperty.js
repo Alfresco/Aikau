@@ -321,7 +321,7 @@ define(["dojo/_base/declare",
             // NOTE: This line is specifically required to support Firefox, for some reason the standard
             //       key handling is being suppressed, this was uncovered on the move from Dojo 1.9.0 to
             //       both 1.9.6 and then 1.10.4
-            query(".alfresco-forms-controls-BaseFormControl .control input").on("keypress", lang.hitch(this, this.onValueEntryKeyPress));
+            query(".alfresco-forms-controls-BaseFormControl .control input", this.formWidget.domNode).on("keypress", lang.hitch(this, this.onValueEntryKeyPress));
          }
          return this.formWidget;
       },
