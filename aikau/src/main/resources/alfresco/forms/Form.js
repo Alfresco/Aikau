@@ -278,6 +278,8 @@ define(["dojo/_base/declare",
          if (this.okButton)
          {
             this.okButton.set("disabled", this.invalidFormControls.length > 0);
+            // See AKU-275: This is required to ensure that the actual "disabled" attribute is set correctly
+            this.okButton.domNode.firstChild.firstChild.setAttribute("disabled", this.invalidFormControls.length > 0);
          }
          this.publishFormValidity();
 

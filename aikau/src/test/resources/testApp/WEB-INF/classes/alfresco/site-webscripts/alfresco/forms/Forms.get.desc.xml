@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>Forms Test</shortname>
-  <description>This WebScript defines the Forms page test</description>
+  <shortname>Example Forms</shortname>
+  <description>This page shows a variety of different forms and the different ways in which they can be used and configured.</description>
   <family>aikau-unit-tests</family>
   <url>/Forms</url>
 </webscript>

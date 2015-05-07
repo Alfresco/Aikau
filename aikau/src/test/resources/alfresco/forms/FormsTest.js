@@ -40,10 +40,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
-      
       "Test setting browser hash fragment with form post": function () {
          return browser.findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
             .type("test1")
@@ -80,6 +76,12 @@ define(["intern!object",
          return browser.findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
             .then(function(elements) {
                assert(elements.length === 1, "Standard form button was not initially disabled");
+            })
+         .end()
+         .findByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton span.dijitButtonContents")
+            .getAttribute("disabled")
+            .then(function(disabled) {
+               assert.equal(disabled, "true");
             });
       },
 
@@ -93,6 +95,12 @@ define(["intern!object",
          .findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
             .then(function(elements) {
                assert(elements.length === 0, "Standard form button was not enabled following valid data entry");
+            })
+         .end()
+         .findByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton span.dijitButtonContents")
+            .getAttribute("disabled")
+            .then(function(disabled) {
+               assert.equal(disabled, "false");
             });
       },
 
