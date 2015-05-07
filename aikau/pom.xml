@@ -127,8 +127,9 @@
                         <artifactItem>
                            <groupId>org.dojotoolkit</groupId>
                            <artifactId>dojo</artifactId>
-                           <version>1.9.0</version>
+                           <version>1.10.4</version>
                            <type>zip</type>
+                           <classifier>distribution</classifier>
                            <overWrite>true</overWrite>
                            <outputDirectory>${basedir}/target/classes/META-INF/js/lib</outputDirectory>
                         </artifactItem>

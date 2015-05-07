@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -87,7 +87,6 @@ define(["dojo/_base/declare",
       getSites: function alfresco_services_SiteService__getSites(payload) {
          // TODO: Clean this up. Choose on or other as the Aikau standard.
          var alfResponseTopic = payload.alfResponseTopic || payload.responseTopic;
-
          this.serviceXhr({
             url: AlfConstants.PROXY_URI + "api/sites",
             method: "GET",
@@ -102,7 +101,6 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the request
        */
       getAdminSites: function alfresco_services_SiteService__getAdminSites(payload) {
-
          // skipCount is the number of entries to skip, not pages so needs some maths:
          var skipCount = (payload.page - 1) * payload.pageSize;
          this.serviceXhr({
@@ -120,7 +118,6 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig
        */
       getSitesSuccess: function alfresco_services_SiteService__getSitesSuccess(response, originalRequestConfig) {
-
          if (ObjectTypeUtils.isArray(response))
          {
             var topic = originalRequestConfig.responseTopic || "ALF_SITES_LOADED";
@@ -144,7 +141,6 @@ define(["dojo/_base/declare",
        * @param {object} config An object with the details of the site to retrieve the data for.
        */
       getSiteDetails: function alfresco_services_SiteService__getSiteDetails(config) {
-
          if (config && config.site && config.responseTopic)
          {
             var url = AlfConstants.PROXY_URI + "api/sites/" + config.site;
@@ -154,7 +150,6 @@ define(["dojo/_base/declare",
                              responseTopic: config.responseTopic,
                              successCallback: this.publishSiteDetails,
                              callbackScope: this});
-
          }
          else
          {
@@ -170,7 +165,6 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
       publishSiteDetails: function alfresco_services_SiteService__publishSiteDetails(response, originalRequestConfig) {
-
          if (originalRequestConfig && originalRequestConfig.responseTopic)
          {
             this.alfLog("log", "Publishing site details", originalRequestConfig);
@@ -189,7 +183,6 @@ define(["dojo/_base/declare",
        * @param {object} payload Details of the update
        */
       updateSite: function alfresco_services_SiteService__updateSite(payload) {
-
          var shortName = lang.getObject("shortName", false, payload);
          if (shortName)
          {
@@ -214,7 +207,6 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the site to delete
        */
       onActionDeleteSite: function alfresco_services_SiteService__onActionDeleteSite(payload) {
-
          var document = payload.document;
          var shortName = lang.getObject("shortName", false, document);
          if (shortName)
@@ -223,6 +215,7 @@ define(["dojo/_base/declare",
             this._actionDeleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, "onActionDeleteSiteConfirmation"), false);
 
             this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+               dialogId: "ALF_SITE_SERVICE_DIALOG",
                dialogTitle: this.message("message.delete-site-confirm-title"),
                textContent: this.message("message.delete-site-prompt", { "0": shortName}),
                widgetsButtons: [
@@ -257,9 +250,7 @@ define(["dojo/_base/declare",
        * @param {object} payload An object containing the details of the site to be deleted.
        */
       onActionDeleteSiteConfirmation: function alfresco_services_SiteService__onActionDeleteSiteConfirmation(payload) {
-
          this.alfUnsubscribeSaveHandles([this._actionDeleteHandle]);
-
          var responseTopic = this.generateUuid();
          var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onActionDeleteSiteSuccess"), false);
          var document = payload.document;
@@ -302,7 +293,6 @@ define(["dojo/_base/declare",
        * @param {config} config The payload containing the details of the site to add to the favourites list
        */
       addSiteAsFavourite: function alfresco_services_SiteService__addSiteAsFavourite(config) {
-
          if (config.site && config.user)
          {
             // Set up the favourites information...
@@ -336,7 +326,6 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Favourite Site Added Successfully", response, originalRequestConfig);
          this.alfPublish("ALF_FAVOURITE_SITE_ADDED", { site: originalRequestConfig.site, user: originalRequestConfig.user});
       },
-
 
       /**
        * Handles requesting that a site be removed from favourites
@@ -396,7 +385,6 @@ define(["dojo/_base/declare",
             this.alfLog("error", "A request to get the details of a site was made, but either the 'site' or 'responseTopic' attributes was not provided", payload);
          }
       },
-
 
       /**
        * Handles XHR posting to make a user a site manager.
@@ -479,17 +467,15 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig The original configuration passed when the request was made.
        */
       siteMembershipRequestComplete: function alfresco_services_SiteService__siteMembershipRequestComplete(response, originalRequestConfig) {
-
          this.alfLog("log", "User has successfully requested to join a moderated site", response, originalRequestConfig);
-
          this.displayPrompt({
-            title: "",
-            textContent: this.message("message.request-join-success", { "0": originalRequestConfig.user, "1": originalRequestConfig.site}),
+            title: this.message("message.request-join-success-title"),
+            message: this.message("message.request-join-success", { "0": originalRequestConfig.user, "1": originalRequestConfig.site}),
             widgetsButtons: [
                {
                   name: "alfresco/buttons/AlfButton",
                   config: {
-                     label: this.message("label.ok"),
+                     label: this.message("button.leave-site.confirm-label"),
                      publishTopic: "ALF_NAVIGATE_TO_PAGE",
                      publishPayload: {
                         url: "user/" + originalRequestConfig.user + "/dashboard",
@@ -572,7 +558,6 @@ define(["dojo/_base/declare",
        * @param {string} site
        */
       createSite: function alfresco_services_SiteService__editSite(config) {
-
          // TODO: When an edit site request is received we should display the edit site dialog.
          //       We need to wrap the existing YUI widget in a Dojo object.
          this.alfLog("log", "A request has been made to create a site: ", config);
@@ -595,7 +580,6 @@ define(["dojo/_base/declare",
        * @param {string} site
        */
       editSite: function alfresco_services_SiteService__editSite(config) {
-
          // TODO: When an edit site request is received we should display the edit site dialog.
          //       We need to wrap the existing YUI widget in a Dojo object.
          this.alfLog("log", "A request has been made to edit a site: ", config);
@@ -620,8 +604,9 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       leaveSiteRequest: function alfresco_services_SiteService__leaveSiteReqest(payload) {
-         this.displayPrompt({
-            title: this.message("message.leave", { "0": payload.siteTitle}),
+         this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+            dialogId: "ALF_SITE_SERVICE_DIALOG",
+            dialogTitle: this.message("message.leave", { "0": payload.siteTitle}),
             textContent: this.message("message.leave-site-prompt", { "0": payload.siteTitle}),
             widgetsButtons: [
                {
