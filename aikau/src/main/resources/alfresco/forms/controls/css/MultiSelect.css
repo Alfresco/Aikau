@@ -18,9 +18,14 @@
       margin: 0 5px 5px 0;
       padding: 0 20px 0 3px;
       position: relative;
+      vertical-align: top;
       &__content {
          color: #333;
+         display: inline-block;
          line-height: 22px;
+         max-width: 100%;
+         overflow: hidden;
+         text-overflow: ellipsis;
       }
       &__close-button {
          color: #aaa;
@@ -71,6 +76,7 @@
       margin: 0 0 5px 0;
       max-width: 100%;
       padding: 0;
+      vertical-align: baseline;
       width: 50px;
       &:focus {
          outline: 0;
@@ -166,6 +172,11 @@
    &--focused {
       border-color: #09c;
       outline: 1px solid #0cf;
+   }
+   &--choices-nowrap {
+      .alfresco-forms-controls-MultiSelect__choice__content {
+         white-space: nowrap;
+      }
    }
 }
 
