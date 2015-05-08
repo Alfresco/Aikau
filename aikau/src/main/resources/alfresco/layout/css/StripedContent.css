@@ -1,0 +1,24 @@
+.alfresco-layout-StripedContent {
+   &__stripe {
+      &__content {
+         margin: 0 auto;
+         overflow: hidden;
+      }
+      &--header {
+         background-color: #0082c8;
+         box-shadow: inset 0 0 2px 0 rgba(0,0,0,.75);
+         color: #fff;
+      }
+      &--sub-header {
+         background-color: #ccc;
+         font-family: @bold-font;
+         font-weight: 700;
+         padding: 15px 0;
+      }
+      &--menu {
+         border: solid #aaa;
+         border-width: 1px 0;
+         padding: 10px 0;
+      }
+   }
+}
