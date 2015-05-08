@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
          {
             startIndex = (payload.page - 1) * pageSize;
          }
-         var url = AlfConstants.PROXY_URI + "api/node/" + payload.nodeRef + "/comments?reverse=" + reverse + "&startIndex=" + startIndex + "&pageSize=" + pageSize;
+         var url = AlfConstants.URL_SERVICECONTEXT + "/sanitize/response?items=items&attribute=content&ws=/api/node/" + payload.nodeRef + "/comments%3Freverse=" + reverse + "%26startIndex=" + startIndex + "%26pageSize=" + pageSize;
          this.serviceXhr({
             url: url,
             alfTopic: payload.alfResponseTopic || null,
