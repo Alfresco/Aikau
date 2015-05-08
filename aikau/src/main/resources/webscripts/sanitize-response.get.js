@@ -1,7 +1,4 @@
-/* global args */
-/* global remote */
-/* global stringUtils */
-/* global jsonUtils */
+/*global args,remote,stringUtils,jsonUtils*/
 var response = {};
 if (args.ws)
 {
@@ -9,7 +6,6 @@ if (args.ws)
    var json = connector.get(encodeURI(args.ws));
    try
    {
-      // PLEASE NOTE: Very deliberate usage of == in the following line
       if (/*jshint eqeqeq:false*/ json.status == 200)
       {
          var proxyResponse = JSON.parse(json.response);
