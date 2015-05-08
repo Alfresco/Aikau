@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Example AlfTabContainer use case</shortname>
+  <description>This page shows the alfresco/layout/AlfTabContainer in a use case where tabs added and removed to view and edit specific items in a list displayed on the first tab.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfTabContainerUseCase</url>
+</webscript>

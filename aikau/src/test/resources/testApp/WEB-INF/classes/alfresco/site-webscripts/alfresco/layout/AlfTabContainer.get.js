@@ -301,16 +301,6 @@ model.jsonModel = {
                         }
                      ]
                   }
-               },
-               {
-                  name: "alfresco/layout/HorizontalWidgets",
-                  config: {
-                     widgets: [
-                        {
-                           name: "aikauTesting/TestCoverageResults"
-                        }
-                     ]
-                  }
                }
             ]
          }
