@@ -48,6 +48,13 @@
             <directory>${basedir}/src/main/resources/webscript-libs</directory>
          </resource>
 
+         <resource>
+            <!-- WebScripts go into their own package -->
+            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/webscripts</directory>
+         </resource>
+
          <!-- ...but everything else goes into a standard path -->
          <resource>
             <targetPath>META-INF/js/lib</targetPath>
