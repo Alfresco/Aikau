@@ -66,7 +66,7 @@
  *             id: "TAB1",
  *             name: "alfresco/logo/Logo",
  *             title: "Tab with Alfresco Logo",
- *             selected
+ *             selected: true,
  *             config: {
  *                logoClasses: "alfresco-logo-only"
  *             }
@@ -93,7 +93,6 @@
  *             id: "TAB1",
  *             name: "alfresco/logo/Logo",
  *             title: "Tab with Alfresco Logo",
- *             selected
  *             config: {
  *                logoClasses: "alfresco-logo-only"
  *             }
