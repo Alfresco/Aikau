@@ -27,11 +27,10 @@ model.jsonModel = {
             publishPayloadType: "CONFIGURED",
             publishPayload: {
                url: "/1/2/3/4/5",
-               type: "SHARE_PAGE_RELATIVE"
+               type: "PAGE_RELATIVE"
             },
             publishGlobal: true,
-            publishToParent: true,
-            useCurrentItemAsPayload: false
+            publishToParent: true
          }
       },
       {
@@ -55,11 +54,10 @@ model.jsonModel = {
             publishPayloadType: "CONFIGURED",
             publishPayload: {
                url: "/5/4/3/2/1",
-               type: "SHARE_PAGE_RELATIVE"
+               type: "PAGE_RELATIVE"
             },
             publishGlobal: null,
-            publishToParent: null,
-            useCurrentItemAsPayload: true
+            publishToParent: null
          }
       },
       {
@@ -83,7 +81,7 @@ model.jsonModel = {
             publishPayloadType: "CONFIGURED",
             publishPayload: {
                url: "/5/4/3/2/1",
-               type: "SHARE_PAGE_RELATIVE"
+               type: "PAGE_RELATIVE"
             }
          }
       },
@@ -108,7 +106,7 @@ model.jsonModel = {
             publishPayloadType: "CONFIGURED",
             publishPayload: {
                url: "/5/4/3/2/1",
-               type: "SHARE_PAGE_RELATIVE"
+               type: "PAGE_RELATIVE"
             }
          }
       },

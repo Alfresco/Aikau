@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,9 +24,8 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/lists/views/AlfListView",
-        "service/constants/Default"], 
-        function(declare, AlfDocumentListView, AlfConstants) {
+        "alfresco/lists/views/AlfListView"], 
+        function(declare, AlfDocumentListView) {
    
    return declare([AlfDocumentListView], {
       
@@ -228,7 +227,7 @@ define(["dojo/_base/declare",
                                  useCurrentItemAsPayload: false,
                                  publishPayload: {
                                     url: "user/{node.properties.cm:creator.userName}/profile",
-                                    type: "SHARE_PAGE_RELATIVE",
+                                    type: "PAGE_RELATIVE",
                                     target: "CURRENT"
                                  }
                               }
@@ -267,7 +266,7 @@ define(["dojo/_base/declare",
                                  useCurrentItemAsPayload: false,
                                  publishPayload: {
                                     url: "user/{node.properties.cm:creator.userName}/profile",
-                                    type: "SHARE_PAGE_RELATIVE",
+                                    type: "PAGE_RELATIVE",
                                     target: "CURRENT"
                                  }
                               }

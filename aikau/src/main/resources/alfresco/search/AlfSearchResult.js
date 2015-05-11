@@ -201,7 +201,7 @@ define(["dojo/_base/declare",
             publishPayloadModifiers: ["processCurrentItemTokens"],
             publishPayload: {
                url: "user/{modifiedByUser}/profile",
-               type: "SHARE_PAGE_RELATIVE"
+               type: "PAGE_RELATIVE"
             }
          }, this.dateNode);
 
@@ -242,7 +242,7 @@ define(["dojo/_base/declare",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
                   url: "site/{site.shortName}/dashboard",
-                  type: "SHARE_PAGE_RELATIVE"
+                  type: "PAGE_RELATIVE"
                }
             }, this.siteNode);
          }
@@ -271,7 +271,7 @@ define(["dojo/_base/declare",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
                   url: repo ? "repository?path={pathLink}" : "site/{site.shortName}/documentlibrary?path={pathLink}",
-                  type: "SHARE_PAGE_RELATIVE"
+                  type: "PAGE_RELATIVE"
                }
             }, this.pathNode);
          }

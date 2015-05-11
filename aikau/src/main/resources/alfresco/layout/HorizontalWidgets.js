@@ -30,7 +30,7 @@
  * in mind that if using both attributes then the gap between 2 widgets will be the <b>combination</b> of both values).</p>
  * <p><b>PLEASE NOTE: Resize operations are not currently handled - this will be addressed in the future</b></p>
  * <p><pre>{
- *    "name": "alfresco/layout/VerticalWidgets",
+ *    "name": "alfresco/layout/HorizontalWidgets",
  *    "config": {
  *       "widgetMarginLeft": 10,
  *       "widgetMarginRight": 10

@@ -92,7 +92,7 @@ model.jsonModel = {
                                                          publishPayloadType: "PROCESS",
                                                          publishPayloadModifiers: ["processCurrentItemTokens"],
                                                          publishPayload: {
-                                                            type: "SHARE_PAGE_RELATIVE",
+                                                            type: "PAGE_RELATIVE",
                                                             url: "tp/ws{url}"
                                                          }
                                                       }

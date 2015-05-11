@@ -1,41 +1,55 @@
-.alfresco-documentlibrary-AlfBreadcrumb {
+/* CSS for this was adapted from https://css-tricks.com/triangle-breadcrumbs/ */
+.alfresco-documentlibrary-AlfBreadcrumb { 
+   float: left; 
+}
+.alfresco-documentlibrary-AlfBreadcrumb a {
+   text-decoration: none; 
+   padding: 5px 0 5px 50px;
+   background: @breadcrumb-background-color;
+   position: relative; 
+   display: block;
+   float: left;
    cursor: pointer;
-   position: relative;
-   display: inline-block;
 }
 
-.alfresco-documentlibrary-AlfBreadcrumb.Focused.dijitFocused {
-   background-color: #f0f0f0;
-   outline: 0;
-}
-
-.alfresco-documentlibrary-AlfBreadcrumb.dndHighlight .breadcrumb
-{
-   background-color: #dceaf4;
-   outline: 2px solid #4F94C9;
-}
-
-.alfresco-documentlibrary-AlfBreadcrumb .breadcrumb:hover
-{
-   background-color: #f0f0f0;
-}
-
-.alfresco-documentlibrary-AlfBreadcrumb span.droppable
-{
-   background: url(./images/drop-arrow-left-small.png) no-repeat;
-   display: none;
-   height: 14px;
+.alfresco-documentlibrary-AlfBreadcrumb a:after { 
+   content: " ";
+   display: block;
+   width: 0;
+   height: 0;
+   border-top: 50px solid transparent;
+   border-bottom: 50px solid transparent;
+   border-left: 30px solid @breadcrumb-background-color;
    position: absolute;
-   width: 33px;
+   top: 50%;
+   margin-top: -50px;
+   left: 100%;
+   z-index: 2;
+}
+
+.alfresco-documentlibrary-AlfBreadcrumb a:before { 
+   content: " ";
+   display: block;
+   width: 0; 
+   height: 0;
+   border-top: 50px solid transparent;
+   border-bottom: 50px solid transparent;
+   border-left: 30px solid @breadcrumb-border-color;
+   position: absolute;
+   top: 50%;
+   margin-top: -50px;
+   margin-left: 1px;
+   left: 100%;
    z-index: 1;
-   margin-left: 30px;
-   top: -5px;
-   left: -10px;
 }
 
-/* Drag and Drop */
-
-.alfresco-documentlibrary-AlfBreadcrumb.dndHighlight span.droppable
-{
-   display: block !important;
+.alfresco-documentlibrary-AlfBreadcrumb:first-child a {
+   padding-left: 10px;
 }
+
+.alfresco-documentlibrary-AlfBreadcrumb a:focus {
+   outline: none;
+}
+
+.alfresco-documentlibrary-AlfBreadcrumb a:hover { background: @breadcrumb-hover-color; }
+.alfresco-documentlibrary-AlfBreadcrumb a:hover:after { border-left-color: @breadcrumb-hover-color !important; }

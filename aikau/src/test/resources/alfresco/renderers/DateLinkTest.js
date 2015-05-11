@@ -72,10 +72,10 @@ define(["intern!object",
       },
 
       "Check the date click published the payload as expected (1)": function() {
-         return browser.findByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "SHARE_PAGE_RELATIVE"))
+         return browser.findByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "PAGE_RELATIVE"))
             .then(
                function(){},
-               function(){assert(false, "The datelink did not publish the payload with 'type' as 'SHARE_PAGE_RELATIVE'");}
+               function(){assert(false, "The datelink did not publish the payload with 'type' as 'PAGE_RELATIVE'");}
             );
       },
 

@@ -48,19 +48,19 @@ define(["intern!object",
             });
       },
 
-      "Check that 'SHARE_PAGE_RELATIVE' is set as the type": function() {
+      "Check that 'PAGE_RELATIVE' is set as the type": function() {
          return browser.pressKeys(keys.TAB)
          .pressKeys(keys.RETURN)
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "SHARE_PAGE_RELATIVE"))
+         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "PAGE_RELATIVE"))
             .then(function(elements) {
-               assert(elements.length === 1, "'SHARE_PAGE_RELATIVE' was not set as the navigation type");
+               assert(elements.length === 1, "'PAGE_RELATIVE' was not set as the navigation type");
             });
       },
 
       "Check that 'CURRENT' is set as the target": function() {
          return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "target", "CURRENT"))
             .then(function(elements) {
-               assert(elements.length === 1, "'SHARE_PAGE_RELATIVE' was not set as the navigation target");
+               assert(elements.length === 1, "'PAGE_RELATIVE' was not set as the navigation target");
             });
       },
 

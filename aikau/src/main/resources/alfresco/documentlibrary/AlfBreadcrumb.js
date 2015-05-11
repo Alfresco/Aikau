@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -78,41 +78,32 @@ define(["dojo/_base/declare",
       path: null,
       
       /**
-       * The target URL for the breadcrumb
+       * This is the topic that will be published when the breadcrumb is clicked.
+       *
        * @instance
        * @type {string}
-       * @default null 
+       * @default null
        */
-      targetUrl: null,
-      
+      publishTopic: null,
+
       /**
-       * The URL type to use for target URLs. Can be overridden as necessary.
-       * 
+       * This is the payload that will be published when the breadcrumb is clicked.
+       *
        * @instance
-       * @type {string}
-       * @default "SHARE_PAGE_RELATIVE"
+       * @type {object}
+       * @default null
        */
-      targetUrlType: "SHARE_PAGE_RELATIVE",
-      
-      /**
-       * The URL location to use for target URLs. Can be overridden as necessary.
-       * 
-       * @instance
-       * @type {string}
-       * @default "CURRENT"
-       */
-      targetUrlLocation: "CURRENT",
+      publishPayload: null,
       
       /**
        * Implements the Dojo widget lifecycle method to set the label of the widget
        * @instance
        */
       postCreate: function alfresco_documentlibrary_AlfBreadcrumbTrail__postCreate() {
-         if (this.label != null)
+         if (this.label)
          {
             this.breadcrumbNode.innerHTML = this.encodeHTML(this.message(this.label));
          }
-         this.addNodeDropTarget(this.domNode);
       },
       
       /**
@@ -122,20 +113,10 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onClick: function alfresco_documentlibrary_AlfBreadcrumb(evt) {
-         if (this.targetUrl != null)
+      onClick: function alfresco_documentlibrary_AlfBreadcrumb(/* jshint unused:false */ evt) {
+         if (this.publishTopic)
          {
-            // If a URL has been provided then clicking will navigate to that URL (this is typically the 
-            // action for the last breadcrumb in the trail)...
-            this.alfPublish("ALF_NAVIGATE_TO_PAGE", { url: this.targetUrl,
-                                                      type: this.targetUrlType,
-                                                      target: this.targetUrlLocation});
-         }
-         else
-         {
-            this.alfPublish("ALF_NAVIGATE_TO_PAGE", { url: "path=" + this.path,
-                                                      type: "HASH",
-                                                      target: this.targetUrlLocation});
+            this.alfPublish(this.publishTopic, this.publishPayload, (this.publishGlobal === true));
          }
       }
    });

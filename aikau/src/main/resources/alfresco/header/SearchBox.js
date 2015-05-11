@@ -819,7 +819,7 @@ define(["dojo/_base/declare",
                   var url = this.generateSearchPageLink(terms);
                   this.alfPublish("ALF_NAVIGATE_TO_PAGE", { 
                      url: url,
-                     type: "SHARE_PAGE_RELATIVE",
+                     type: "PAGE_RELATIVE",
                      target: "CURRENT"
                   });
                }
