@@ -5,12 +5,13 @@
          overflow: hidden;
       }
       &--header {
-         background-color: #0082c8;
+         background: @headerRowBG;
          box-shadow: inset 0 0 2px 0 rgba(0,0,0,.75);
-         color: #fff;
+         color: @headerRowFG;
       }
       &--sub-header {
-         background-color: #ccc;
+         background: @subheaderBG;
+         color: @subheaderFG;
          font-family: @bold-font;
          font-weight: 700;
          padding: 15px 0;
