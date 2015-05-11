@@ -137,15 +137,15 @@ define(["intern!object",
             .end()
          .findAllByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
             .then(function(elements) {
-               assert(elements.length === 0, "Setting filter didn't remove breadcrumbs");
+               assert(elements.length === 1, "Setting filter didn't remove breadcrumbs");
             });
       },
 
       "Check that filter is displayed correctly": function() {
-         return browser.findByCssSelector("#HASH_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail > ul > div")
+         return browser.findByCssSelector("#HASH_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail > ul > li > a")
             .getVisibleText()
             .then(function(text) {
-               assert(text === "Simulated Filter", "Filter wasn't displayed correctly");
+               assert.equal(text, "Simulated Filter", "Filter wasn't displayed correctly");
             });
       },
 
@@ -163,7 +163,7 @@ define(["intern!object",
          return browser.findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(2) > .breadcrumb")
             .getVisibleText()
             .then(function(text) {
-               assert(text === "different", "Incorrect root text found: " + text);
+               assert.equal(text, "different", "Incorrect root text found");
             });
       },
 
@@ -171,7 +171,7 @@ define(["intern!object",
          return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(3) > .breadcrumb")
             .getVisibleText()
             .then(function(text) {
-               assert(text === "path", "Incorrect breadcrumb text found: " + text);
+               assert.equal(text, "path", "Incorrect breadcrumb text found");
             });
       },
 

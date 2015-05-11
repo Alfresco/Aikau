@@ -199,7 +199,7 @@ define(["dojo/_base/declare",
        * is configured to be "PROCESS".
        *
        * @instance
-       * @type {array}
+       * @type {string[]}
        * @default null
        */
       lastBreadcrumbPublishPayloadModifiers: null,
@@ -210,7 +210,7 @@ define(["dojo/_base/declare",
        * should have an action.
        * 
        * @instance
-       * @type {array}
+       * @type {object[]}
        * @default null
        */
       breadcrumbs: null,
@@ -315,7 +315,7 @@ define(["dojo/_base/declare",
          if (breadcrumb.label)
          {
             var bc = new AlfBreadcrumb(breadcrumb);
-            domConstruct.place(bc.domNode, this.containerNode, "last");
+            bc.placeAt(this.containerNode);
          }
       },
 
@@ -441,11 +441,10 @@ define(["dojo/_base/declare",
          // Empty the current breadcrumb trail...
          if (payload && payload.description)
          {
-            // TODO: Make this work with the CSS
             domConstruct.empty(this.containerNode);
-            domConstruct.create("div", {
-               innerHTML: payload.description
-            }, this.containerNode);
+            this.renderBreadcrumb({
+               label: payload.description
+            });
          }
          else
          {

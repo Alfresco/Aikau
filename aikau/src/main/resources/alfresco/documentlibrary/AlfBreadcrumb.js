@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
       onClick: function alfresco_documentlibrary_AlfBreadcrumb(/* jshint unused:false */ evt) {
          if (this.publishTopic)
          {
-            this.alfPublish(this.publishTopic, this.publishPayload, (this.publishGlobal !== undefined && this.publishGlobal === true));
+            this.alfPublish(this.publishTopic, this.publishPayload, (this.publishGlobal === true));
          }
       }
    });
