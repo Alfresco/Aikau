@@ -5,7 +5,7 @@ New deprecations:
 -----------------
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 
-Current deprecations:
+Previous deprecations:
 ---------------------
 * alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
 * alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
@@ -38,16 +38,14 @@ Current deprecations:
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
 1.0.17:
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-19](https://issues.alfresco.com/jira/browse/AKU-19)         - Upgrade to use Dojo 1.10.4
+* [AKU-244](https://issues.alfresco.com/jira/browse/AKU-244)       - Added HTML sanitizing proxy WebScript
+* [AKU-262](https://issues.alfresco.com/jira/browse/AKU-262)       - Made alfresco/documentlibrary/AlfBreadcrumbTrail more abstract
+* [AKU-275](https://issues.alfresco.com/jira/browse/AKU-275)       - Ensure form button disabled HTML attribute is set correctly
+* [AKU-277](https://issues.alfresco.com/jira/browse/AKU-277)       - Fix keybord navigation of MultiSelectInput form control
+* [AKU-278](https://issues.alfresco.com/jira/browse/AKU-278)       - Added "alfresco/layout/StripedContent" widget
+* [AKU-279](https://issues.alfresco.com/jira/browse/AKU-279)       - Support for add tab in "alfresco/layout/AlfTabContainer"
+* [AKU-280](https://issues.alfresco.com/jira/browse/AKU-280)       - Improved handling of long text in MultiSelectInput
 
 1.0.16:
 * [AKU-247](https://issues.alfresco.com/jira/browse/AKU-247)       - Ensure value is retained when options updated
