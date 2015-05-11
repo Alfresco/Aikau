@@ -1,5 +1,9 @@
-Aikau 1.0.16 Release Notes
+Aikau 1.0.17 Release Notes
 ==========================
+
+New deprecations:
+-----------------
+* alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 
 Current deprecations:
 ---------------------
@@ -33,6 +37,18 @@ Current deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.17:
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+
 1.0.16:
 * [AKU-247](https://issues.alfresco.com/jira/browse/AKU-247)       - Ensure value is retained when options updated
 * [AKU-248](https://issues.alfresco.com/jira/browse/AKU-248)       - Ensure filter selection resets pagination
