@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>StripedContent Test</shortname>
+  <description>Demonstrates the StripedContent widget with four sample stripes</description>
+  <family>aikau-unit-tests</family>
+  <url>/StripedContent</url>
+</webscript>
