@@ -63,18 +63,22 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} publishPayload The publication payload object to update.
+       * @param {object} item An optional item to provide. If this is not provided then "currentItem" is used instead
        */
-      updateFolderLinkPublication: function alfresco_renderers__ItemLinkMIxin__updateFolderLinkPublication(publishPayload) {
-         var locn = this.currentItem.location;
+      updateFolderLinkPublication: function alfresco_renderers__ItemLinkMIxin__updateFolderLinkPublication(publishPayload, item) {
+         item = item || this.currentItem;
+         var locn = item.location;
          publishPayload.path = this.combinePaths(locn.path, locn.file);
       },
 
       /**
        * @instance
        * @param {object} payload The payload to add the link data to
+       * @param {object} item An optional item to provide. If this is not provided then "currentItem" is used instead
        * @returns {string} The topic to publish on
        */
-      generateFileFolderLink: function alfresco_renderers__ItemLinkMixin__generateFileFolderLink(publishPayload) {
+      generateFileFolderLink: function alfresco_renderers__ItemLinkMixin__generateFileFolderLink(publishPayload, item) {
+         item = item || this.currentItem;
          var topic = "ALF_NAVIGATE_TO_PAGE";
          if (!publishPayload)
          {
@@ -82,10 +86,10 @@ define(["dojo/_base/declare",
          }
          else
          {
-            if (this.currentItem && this.currentItem.node)
+            if (item && item.node)
             {
-               var jsNode = this.currentItem.jsNode;
-               if (jsNode.isLink && this.currentItem.location.site)
+               var jsNode = item.jsNode;
+               if (jsNode.isLink && item.location.site)
                {
                   if (jsNode.isContainer)
                   {
@@ -95,7 +99,7 @@ define(["dojo/_base/declare",
                   else
                   {
                      // TODO: This needs re-writing...
-                     publishPayload.url = this.getActionUrls(this.currentItem, this.currentItem.location.site.name).documentDetailsUrl;
+                     publishPayload.url = this.getActionUrls(item, item.location.site.name).documentDetailsUrl;
                   }
                }
                else
@@ -108,8 +112,8 @@ define(["dojo/_base/declare",
                   else
                   {
                      // TODO: It'll be necessary to get the actual actionUrls - but currently it's to tangled to untangle easily
-                     //var actionUrls = this.getActionUrls(this.currentItem);
-                     var actionUrls = this.getActionUrls(this.currentItem);
+                     //var actionUrls = this.getActionUrls(item);
+                     var actionUrls = this.getActionUrls(item);
                      if (jsNode.isLink && jsNode.linkedNode.isContainer)
                      {
                         publishPayload.url = actionUrls.folderDetailsUrl;
@@ -140,14 +144,16 @@ define(["dojo/_base/declare",
        * or by overriding this function in classes that mixin this module.
        *
        * @param {object} publishPayload The publication payload object to update.
+       * @param {object} item An optional item to provide. If this is not provided then "currentItem" is used instead
        */
-      updateDocumentLinkPublication: function alfresco_renderers__ItemLinkMixin__updateDocumentLinkPublication(publishPayload) {
+      updateDocumentLinkPublication: function alfresco_renderers__ItemLinkMixin__updateDocumentLinkPublication(publishPayload, item) {
+         item = item || this.currentItem;
          publishPayload.url = "";
          publishPayload.type = "FULL_PATH";
          publishPayload.target = "CURRENT";
          if (!this.customDetailsURL)
          {
-            var actionUrls = this.getActionUrls(this.currentItem);
+            var actionUrls = this.getActionUrls(item);
             publishPayload.url = actionUrls.documentDetailsUrl;
          }
          else
@@ -159,7 +165,7 @@ define(["dojo/_base/declare",
                // If the current item is a node with an accessible uri attribute then append it to the URL...
                // We should possibly only do this if a boolean attribute is set to true but at the moment
                // I can't see any cases where you wouldn't want to specify the node...
-               publishPayload.url += "/" + this.currentItem.jsNode.nodeRef.uri;
+               publishPayload.url += "/" + item.jsNode.nodeRef.uri;
             }
          }
       }

@@ -447,6 +447,11 @@ function addDocumentLibraryServices(services) {
       {
          id: "SIMPLE_WORKFLOW_SERVICE",
          name: "alfresco/services/actions/SimpleWorkflowService"
+      },
+      {
+         id: "NODE_LOCATION_SERVICE",
+         name: "alfresco/services/actions/NodeLocationService"
+         // TODO: This will need to be configured for the different contexts, e.g. Share and Aikau standalone
       }
    ];
      

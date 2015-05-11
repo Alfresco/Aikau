@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -20,8 +20,7 @@
 /**
  *
  * @module alfresco/documentlibrary/AlfDocumentList
- * @extends alfresco/lists/AlfSortablePaginatedList
- * @mixes module:alfresco/core/FullScreenMixin
+ * @extends module:alfresco/lists/AlfSortablePaginatedList
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -30,9 +29,8 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/hash",
-        "dojo/io-query",
-        "alfresco/core/NodeUtils"],
-        function(declare, AlfSortablePaginatedList, JsNode, array, lang, hash, ioQuery, NodeUtils) {
+        "dojo/io-query"],
+        function(declare, AlfSortablePaginatedList, JsNode, array, lang, hash, ioQuery) {
 
    return declare([AlfSortablePaginatedList], {
 
@@ -316,10 +314,13 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onFolderClick: function alfresco_documentlibrary_AlfDocumentList__onFolderClick(payload) {
-         if (payload.url != null)
+         if (payload.url)
          {
             this.currentFilter = this.processFilter(payload.url);
-            if (this._readyToLoad) this.loadData();
+            if (this._readyToLoad) 
+            {
+               this.loadData();
+            }
          }
          else
          {
@@ -333,6 +334,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onDocumentClick: function alfresco_documentlibrary_AlfDocumentList__onDocumentClick(payload) {
+         // jshint unused:false
          // No action for the moment
       },
 
@@ -348,7 +350,10 @@ define(["dojo/_base/declare",
                this.currentPage = payload.currentPage;
             }
             this.currentFilter = payload;
-            if (this._readyToLoad) this.loadData();
+            if (this._readyToLoad)
+            {
+               this.loadData();
+            }
          }
       },
 
@@ -361,8 +366,8 @@ define(["dojo/_base/declare",
        * @param payload
        * @fires ALF_DOC_GET_PARENT_NODEREF
        */
-      onParentNav: function alfresco_documentlibrary_AlfDocumentList__onParentNav(payload) {
-         if (this.currentFilter.path != null && this.currentFilter.path !== "/")
+      onParentNav: function alfresco_documentlibrary_AlfDocumentList__onParentNav(/*jshint unused:false*/payload) {
+         if (this.currentFilter.path && this.currentFilter.path !== "/")
          {
             // NOTE: It's coded like this to support IE8 (which doesn't support lastIndexOf)...
             var p = this.currentFilter.path;
@@ -450,7 +455,7 @@ define(["dojo/_base/declare",
          payload.libraryRoot = this.rootNode;
          payload.rawData = this.rawData;
 
-         if ((this.siteId == null || this.siteId === "") && this.nodeRef != null)
+         if (!this.siteId && this.nodeRef)
          {
             // Repository mode (don't resolve Site-based folders)
             payload.nodeRef = this.nodeRef.toString();
@@ -465,7 +470,7 @@ define(["dojo/_base/declare",
        * @param {object} response The original response.
        */
       processLoadedData: function alfresco_lists_AlfList__processLoadedData(response) {
-         array.forEach(this.currentData, function(item, index) {
+         array.forEach(this.currentData, function(item) {
             item.jsNode = new JsNode(item.node);
          }, this);
 
@@ -506,10 +511,13 @@ define(["dojo/_base/declare",
        */
       onShowFolders: function alfresco_documentlibrary_AlfDocumentList__onShowFolders(payload) {
          this.alfLog("log", "Show Folders Request: ", payload);
-         if (payload && payload.selected != null)
+         if (payload && (payload.selected || payload.selected === false))
          {
             this.showFolders = payload.selected;
-            if (this._readyToLoad) this.loadData();
+            if (this._readyToLoad)
+            {
+               this.loadData();
+            }
          }
       }
    });

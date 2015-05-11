@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>NodeLocationService</shortname>
+  <description>This page is used to test the NodeLocationService</description>
+  <family>aikau-unit-tests</family>
+  <url>/NodeLocation</url>
+</webscript>

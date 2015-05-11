@@ -1008,6 +1008,14 @@ define(["dojo/_base/declare",
             default:
                this.alfLog("warn", "A simple repo action request was made but the action is unsupported", payload, this);
          }
+      },
+
+      /**
+       *
+       * @param {object} item The item to perform the action on
+       */
+      onActionLocate: function alfresco_services_ActionService__onActionLocate(item) {
+         this.alfPublish("ALF_LOCATE_DOCUMENT", { item: item });
       }
    });
 });

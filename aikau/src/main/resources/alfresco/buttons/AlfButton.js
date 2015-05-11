@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_buttons_AlfButton__postMixInProperties() {
          this.label = this.message(this.label);
          this.inherited(arguments);
-         if (this.publishPayload == null)
+         if (!this.publishPayload)
          {
             this.publishPayload = {};
          }
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_buttons_AlfButton__postCreate() {
          this.inherited(arguments);
-         domClass.add(this.domNode, "alfresco-buttons-AlfButton " + (this.additionalCssClasses != null ? this.additionalCssClasses : ""));
+         domClass.add(this.domNode, "alfresco-buttons-AlfButton " + (this.additionalCssClasses || ""));
 
          if (this.disableOnInvalidControls === true)
          {
@@ -163,7 +163,7 @@ define(["dojo/_base/declare",
        */
       onInvalidControl: function alfresco_buttons_AlfButton__onInvalidControl(payload) {
          var alreadyCaptured = array.some(this.invalidControls, function(item) {
-            return item == payload.name;
+            return item === payload.name;
          });
          if (!alreadyCaptured)
          {
@@ -183,7 +183,7 @@ define(["dojo/_base/declare",
        */
       onValidControl: function alfresco_buttons_AlfButton__onValidControl(payload) {
          this.invalidControls = array.filter(this.invalidControls, function(item) {
-            return item != payload.name;
+            return item !== payload.name;
          });
          this.set("disabled", this.invalidControls.length > 0);
       },
@@ -196,7 +196,7 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event
        */
       onClick: function alfresco_buttons_AlfButton__onClick(evt) {
-         if (this.publishTopic != null && this.publishTopic !== "")
+         if (this.publishTopic)
          {
             this.alfPublish(this.publishTopic, this.publishPayload, (this.publishGlobal !== undefined && this.publishGlobal === true));
          }
