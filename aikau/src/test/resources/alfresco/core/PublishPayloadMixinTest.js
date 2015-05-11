@@ -234,7 +234,7 @@ define(["intern!object",
       },
 
       "Check that PROPERTYLINK type payload was correct": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "SHARE_PAGE_RELATIVE"))
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "PAGE_RELATIVE"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "PROPERTYLINK type payload failure");
             });
@@ -260,7 +260,7 @@ define(["intern!object",
       },
 
       "Check that DATELINK type payload was correct": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "SHARE_PAGE_RELATIVE"))
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "PAGE_RELATIVE"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "DATELINK type payload failure");
             });

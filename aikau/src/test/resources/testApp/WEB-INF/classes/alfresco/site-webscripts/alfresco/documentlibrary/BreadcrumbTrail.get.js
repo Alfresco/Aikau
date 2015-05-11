@@ -15,6 +15,55 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         id: "FIXED_BREADCRUMBS",
+         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
+         config: {
+            breadcrumbs: [
+               {
+                  label: "Small"
+               },
+               {
+                  label: "Crumb"
+               },
+               {
+                  label: "Of"
+               },
+               {
+                  label: "Comfort"
+               }
+            ]
+         }
+      },
+      {
+         id: "PATH_BREADCRUMBS",
+         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
+         config: {
+            showRootLabel: false,
+            pathChangeTopic: "CHANGE_PATH",
+            currentPath: "/the/road/less/travelled"
+         }
+      },
+      {
+         id: "HASH_BREADCRUMBS",
+         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
+         config: {
+            lastBreadcrumbIsCurrentNode: true,
+            useHash: true,
+            rootLabel: "HOME",
+            lastBreadcrumbPublishTopic: "ALF_NAVIGATE_TO_PAGE",
+            lastBreadcrumbPublishPayload: {
+               url: "folder-details?nodeRef={currentNode.parent.nodeRef}",
+               type: "PAGE_RELATIVE",
+               target: "CURRENT"
+            },
+            lastBreadcrumbPublishPayloadType: "PROCESS",
+            lastBreadcrumbPublishPayloadModifiers: ["processInstanceTokens"],
+            currentPath: "/some/imaginary/path",
+            currentNode: {
+            }
+         }
+      },
+      {
          id: "CHANGE_NODEREF",
          name: "alfresco/buttons/AlfButton",
          config: {
@@ -74,19 +123,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
-         config: {
-            rootLabel: "HOME",
-            currentPath: "/some/imaginary/path",
-            _currentNode: {
-            }
-         }
-      },
-      {
          name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

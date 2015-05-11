@@ -40,45 +40,69 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-       
-      "Counting breadcrumbs...": function () {
+      "Counting fixed breadcrumbs...": function () {
          // Test 1...
          // Check the path is initially displayed...
-         return browser.findAllByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
+         return browser.findAllByCssSelector("#FIXED_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
             .then(function(elements) {
                assert.lengthOf(elements, 4, "An unexpected number of breadcrumbs were found");
             });
       },
 
-      "Checking root breadcrumb text...": function() {
-         return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(2) > .breadcrumb")
+      "Counting path breadcrumbs...": function () {
+         // Test 1...
+         // Check the path is initially displayed...
+         return browser.findAllByCssSelector("#PATH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
+            .then(function(elements) {
+               assert.lengthOf(elements, 4, "An unexpected number of breadcrumbs were found");
+            });
+      },
+
+      "Click a path breadcrumb": function() {
+         return browser.findByCssSelector("#PATH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(2) > .breadcrumb")
+            .click()
+         .end()
+         .findAllByCssSelector("#PATH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "Breadcrumb path not updated");
+            });
+      },
+
+      "Counting hash breadcrumbs...": function () {
+         // Test 1...
+         // Check the path is initially displayed...
+         return browser.findAllByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
+            .then(function(elements) {
+               assert.lengthOf(elements, 4, "An unexpected number of breadcrumbs were found");
+            });
+      },
+
+      "Checking root hash breadcrumb text...": function() {
+         return browser.findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(1) > .breadcrumb")
             .getVisibleText()
             .then(function(text) {
                assert(text === "HOME", "Incorrect root text found: " + text);
             });
       },
 
-      "Checking 2nd breadcrumb text": function() {
-         return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(4) > .breadcrumb")
+      "Checking 2nd hash breadcrumb text": function() {
+         return browser.findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(2) > .breadcrumb")
             .getVisibleText()
             .then(function(text) {
                assert(text === "some", "Incorrect breadcrumb text found: " + text);
             });
       },
 
-      "Checking 3rd breadcrumb text": function() {
-         return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(6) > .breadcrumb")
+      "Checking 3rd hash breadcrumb text": function() {
+         return browser.findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(3) > .breadcrumb")
             .getVisibleText()
             .then(function(text) {
                assert(text === "imaginary", "Incorrect breadcrumb text found: " + text);
             });
       },
 
-      "Checking 4th breadcrumb text": function() {
-         return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(8) > .breadcrumb")
+      "Checking 4th hash breadcrumb text": function() {
+         return browser.findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(4) > .breadcrumb")
             .getVisibleText()
             .then(function(text) {
               assert(text === "path", "Incorrect breadcrumb text found: " + text);
@@ -89,7 +113,7 @@ define(["intern!object",
          return browser.findByCssSelector("#HIDE_PATH_label")
             .click()
             .end()
-         .findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumbTrail")
+         .findByCssSelector("#HASH_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail")
             .isDisplayed()
             .then(function(result) {
                assert(result === false, "The breadcrumb trail wasn't hidden");
@@ -100,7 +124,7 @@ define(["intern!object",
          return browser.findByCssSelector("#SHOW_PATH_label")
             .click()
             .end()
-         .findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumbTrail")
+         .findByCssSelector("#HASH_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail")
             .isDisplayed()
             .then(function(result) {
                assert(result === true, "The breadcrumb trail wasn't displayed");
@@ -111,14 +135,14 @@ define(["intern!object",
          return browser.findByCssSelector("#FILTER_SELECTION_label")
             .click()
             .end()
-         .findAllByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
+         .findAllByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
             .then(function(elements) {
                assert(elements.length === 0, "Setting filter didn't remove breadcrumbs");
             });
       },
 
       "Check that filter is displayed correctly": function() {
-         return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumbTrail > div")
+         return browser.findByCssSelector("#HASH_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail > ul > div")
             .getVisibleText()
             .then(function(text) {
                assert(text === "Simulated Filter", "Filter wasn't displayed correctly");
@@ -129,30 +153,30 @@ define(["intern!object",
          return browser.findByCssSelector("#SET_HASH_label")
             .click()
             .end()
-         .findAllByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
+         .findAllByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
             .then(function(elements) {
                assert(elements.length === 3, "An unexpected number of breadcrumbs were found: " + elements.length);
             });
       },
 
-      "Check breadcrumb root label": function() {
-         return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(3) > .breadcrumb")
+      "Check hash breadcrumb root label": function() {
+         return browser.findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(2) > .breadcrumb")
             .getVisibleText()
             .then(function(text) {
                assert(text === "different", "Incorrect root text found: " + text);
             });
       },
 
-      "Check breadcrumb label": function() {
-         return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(5) > .breadcrumb")
+      "Check hash breadcrumb label": function() {
+         return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(3) > .breadcrumb")
             .getVisibleText()
             .then(function(text) {
                assert(text === "path", "Incorrect breadcrumb text found: " + text);
             });
       },
 
-      "Check breadcrumb navigation request publishes": function() {
-         return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(5) > .breadcrumb")
+      "Check hash breadcrumb navigation request publishes": function() {
+         return browser.findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(2) > .breadcrumb")
             .click()
             .end()
 
@@ -162,18 +186,18 @@ define(["intern!object",
             });
       },
 
-      "Check breadcrumb navigation payload": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "path=/different/path"))
+      "Check hash breadcrumb navigation payload": function() {
+         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "path=/different"))
             .then(function(elements) {
                assert(elements.length === 1, "Navigation payload not correct");
             });
       },
 
-      "Check leaf breadcrumb navigation payload": function() {
+      "Check hash final breadcrumb navigation payload": function() {
          return browser.findByCssSelector("#CHANGE_NODEREF_label")
             .click()
             .end()
-         .findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb:nth-child(5) > .breadcrumb")
+         .findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(3) > .breadcrumb")
             .click()
             .end()
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "folder-details?nodeRef=some://fake/nodeRef"))

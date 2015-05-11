@@ -95,22 +95,22 @@ define(["dojo/_base/declare",
 
       // TODO: It might be nice to retrieve this from the NavigationService itself??
       /**
-       * Indicates how the target URL should be handled. This defaults to "SHARE_PAGE_RELATIVE" which means that the URL
+       * Indicates how the target URL should be handled. This defaults to "PAGE_RELATIVE" which means that the URL
        * will be appended to the 'AlfConstants.URL_PAGECONTEXT' Global JavaScript constant. This can be overridden
        * on instantiation to indicate that another URL type, such as "FULL_PATH" should be used.
        *
        * @instance
        * @type {string}
-       * @default "SHARE_PAGE_RELATIVE"
+       * @default "PAGE_RELATIVE"
        */
-      targetUrlType: "SHARE_PAGE_RELATIVE",
+      targetUrlType: "PAGE_RELATIVE",
 
       /**
        * Indicates whether or not the URL should be opened in the current window/tab or in a new window.
        *
        * @instance
        * @type {string}
-       * @default "SHARE_PAGE_RELATIVE"
+       * @default "PAGE_RELATIVE"
        */
       targetUrlLocation: "CURRENT",
 

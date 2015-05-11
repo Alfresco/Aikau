@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -66,8 +66,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.navigateToPageTopic, lang.hitch(this, this.navigateToPage));
          this.alfSubscribe(this.reloadPageTopic, lang.hitch(this, this.reloadPage));
          this.alfSubscribe(this.postToPageTopic, lang.hitch(this, this.postToPage));
-
-         if (this.subscriptions != null)
+         if (this.subscriptions)
          {
             array.forEach(this.subscriptions, lang.hitch(this, "setupNavigationSubscriptions"));
          }
@@ -80,9 +79,7 @@ define(["dojo/_base/declare",
        * @param {object} subscription The subscription to configure
        */
       setupNavigationSubscriptions: function alfresco_services_NavigationService__setupNavigationSubscriptions(subscription) {
-         if (subscription != null &&
-             subscription.topic != null &&
-             subscription.url != null)
+         if (subscription && subscription.topic && subscription.url)
          {
             this.alfSubscribe(subscription.topic, lang.hitch(this, "navigateToPage", subscription));
          }
@@ -102,7 +99,8 @@ define(["dojo/_base/declare",
        * @todo explain what data can contain...
        */
       navigateToPage: function alfresco_services_NavigationService__navigateToPage(data) {
-         if (data.type != this.hashPath && (typeof data.url == "undefined" || data.url == null || data.url === ""))
+         // jshint maxcomplexity:false
+         if (data.type !== this.hashPath && !data.url)
          {
             this.alfLog("error", "A page navigation request was made without a target URL defined as a 'url' attribute", data);
          }
@@ -110,13 +108,9 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log", "Page navigation request received:", data);
             var url;
-            if (typeof data.type == "undefined" ||
-                data.type == null ||
-                data.type === "" ||
-                data.type == this.sharePageRelativePath)
+            if (!data.type || data.type === this.sharePageRelativePath || data.type === this.pageRelativePath)
             {
                var siteStem = "site/" + data.site + "/";
-
                url = data.url;
 
                // Cater for site urls that are sent from a non-site context.
@@ -126,28 +120,25 @@ define(["dojo/_base/declare",
                }
                url = AlfConstants.URL_PAGECONTEXT + url;
             }
-            else if (data.type == this.contextRelativePath)
+            else if (data.type === this.contextRelativePath)
             {
                url = AlfConstants.URL_CONTEXT + data.url;
             }
-            else if (data.type == this.fullPath)
+            else if (data.type === this.fullPath)
             {
                url = data.url;
             }
 
             // Determine the location of the URL...
-            if (data.type == this.hashPath)
+            if (data.type === this.hashPath)
             {
                hash(data.url);
             }
-            else if (typeof data.target == "undefined" ||
-                data.target == null ||
-                data.target === "" ||
-                data.target == this.currentTarget)
+            else if (!data.target ||data.target === this.currentTarget)
             {
                window.location = url;
             }
-            else if (data.target == this.newTarget)
+            else if (data.target === this.newTarget)
             {
                window.open(url);
             }

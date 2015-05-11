@@ -1192,7 +1192,17 @@ function getDocLib(siteId, containerId, rootNode, rootLabel, rawData) {
                         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
                         config: {
                            hide: docLibPrefrences.hideBreadcrumbTrail,
-                           rootLabel: rootLabel
+                           rootLabel: rootLabel,
+                           lastBreadcrumbIsCurrentNode: true,
+                           useHash: true,
+                           lastBreadcrumbPublishTopic: "ALF_NAVIGATE_TO_PAGE",
+                           lastBreadcrumbPublishPayload: {
+                              url: "folder-details?nodeRef={currentNode.parent.nodeRef}",
+                              type: "PAGE_RELATIVE",
+                              target: "CURRENT"
+                           },
+                           lastBreadcrumbPublishPayloadType: "PROCESS",
+                           lastBreadcrumbPublishPayloadModifiers: ["processInstanceTokens"]
                         }
                      },
                      getDocLibList(siteId, containerId, rootNode, rawData)

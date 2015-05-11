@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -39,8 +39,9 @@ define(["dojo/_base/declare",
        * @return {object} The generated payload
        */
       generateSearchLinkPayload: function alfresco_renderers__SearchResultLinkMixin__generateSearchLinkPayload() {
+         // jshint maxcomplexity:false
          var payload = {
-            type: "SHARE_PAGE_RELATIVE",
+            type: "PAGE_RELATIVE",
             target: "CURRENT",
             url: null
          };
@@ -53,95 +54,67 @@ define(["dojo/_base/declare",
                
                var path = lang.getObject("path", false, this.currentItem),
                name = lang.getObject("name", false, this.currentItem);
-               if (site != null)
+               if (site)
                {
                   payload.url = "site/" + site + "/documentlibrary?path=" + path + "/" + name;
                }
-               else if (path != null)
+               else if (path)
                {
-                  path = '/' + path.split('/').slice(2).join('/');
+                  path = "/" + path.split("/").slice(2).join("/");
                   payload.url = "repository?path=" + path + "/" + name;
                }
                break;
 
             case "wikipage":
-
                var title = lang.getObject("name", false, this.currentItem);
-               if (site != null)
+               if (site)
                {
                   payload.url = "site/" + site + "/wiki-page?title=" + title;
                }
                break;
 
             case "blogpost":
-
                var postid = lang.getObject("name", false, this.currentItem);
-               if (site != null)
+               if (site)
                {
                   payload.url = "site/" + site + "/blog-postview?postId=" + postid;
                }
                break;
 
             case "forumpost":
-
                var topicid = lang.getObject("name", false, this.currentItem);
-               if (site != null)
+               if (site)
                {
                   payload.url = "site/" + site + "/discussions-topicview?topicId=" + topicid;
                }
                break;
 
             case "link":
-
                var linkid = lang.getObject("name", false, this.currentItem);
-               if (site != null)
+               if (site)
                {
                   payload.url = "site/" + site + "/links-view?linkId=" + linkid;
                }
                break;
 
             case "datalist":
-
                var listid = lang.getObject("name", false, this.currentItem);
-               if (site != null)
+               if (site)
                {
                   payload.url = "site/" + site + "/data-lists?list=" + listid;
                }
                break;
 
             case "calendarevent":
-
-               //var eventdate = lang.getObject("name", false, this.currentItem);
-               if (site != null)
+               if (site)
                {
-                  //payload.url = "site/" + site + "/calendar?date=" + eventdate; //2014-06-04
-                  payload.url = "site/" + site + "/calendar";
-               }
-               break;
-
-            case "datalist":
-
-               var listid = lang.getObject("name", false, this.currentItem);
-               if (site != null)
-               {
-                  payload.url = "site/" + site + "/data-lists?list=" + listid;
-               }
-               break;
-
-            case "calendarevent":
-
-               //var eventdate = lang.getObject("name", false, this.currentItem);
-               if (site != null)
-               {
-                  //payload.url = "site/" + site + "/calendar?date=" + eventdate; //2014-06-04
                   payload.url = "site/" + site + "/calendar";
                }
                break;
 
             default:
-
                var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
-               if (site != null)
+               if (site)
                {
                   payload.url = "site/" + site + "/document-details?nodeRef=" + nodeRef;
                }

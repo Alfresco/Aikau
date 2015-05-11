@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>BreadcrumbTrail Test</shortname>
-  <description>This WebScript defines the BreadcrumbTrail page test</description>
+  <shortname>AlfBreadcrumbTrail</shortname>
+  <description>Demonstrates the different ways in which a breadcrumb trail can be used.</description>
   <family>aikau-unit-tests</family>
   <url>/BreadcrumbTrail</url>
 </webscript>

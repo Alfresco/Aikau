@@ -479,7 +479,7 @@ define(["dojo/_base/declare",
                      publishTopic: "ALF_NAVIGATE_TO_PAGE",
                      publishPayload: {
                         url: "user/" + originalRequestConfig.user + "/dashboard",
-                        type: "SHARE_PAGE_RELATIVE",
+                        type: "PAGE_RELATIVE",
                         target: "CURRENT"
                      }
                   }
@@ -723,7 +723,7 @@ define(["dojo/_base/declare",
       leaveSiteSuccess: function alfresco_services_SiteService__leaveSiteSuccess(response, requestConfig) {
          this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
             url: "user/" + requestConfig.user + "/dashboard",
-            type: "SHARE_PAGE_RELATIVE",
+            type: "PAGE_RELATIVE",
             target: "CURRENT"
          });
       },

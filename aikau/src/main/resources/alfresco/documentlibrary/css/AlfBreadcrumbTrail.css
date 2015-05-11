@@ -1,20 +1,20 @@
 .alfresco-documentlibrary-AlfBreadcrumbTrail {
    margin-bottom: @standard-line-height;
    margin-top: @standard-line-height;
-   margin-left: @standard-column-width;
    font-family: @bold-font;
-   color: @general-font-color;
+   color: @breadcrumb-font-color;
    font-size: @normal-font-size;
+   border: 1px solid @standard-border-color;
 }
 
 .alfresco-documentlibrary-AlfBreadcrumbTrail.hidden {
    display: none;
 }
 
-.alfresco-share .alfresco-documentlibrary-AlfBreadcrumbTrail .alf-folder-separator {
-   background: url("./images/folder-separator.png") no-repeat scroll 0 center transparent;
-   margin-left: 10px;
-   padding: 0 10px;
-   height: 20px;
-   width: 20px;
+.alfresco-documentlibrary-AlfBreadcrumbTrail ul { 
+   list-style: none; 
+   overflow: hidden; 
+   padding-left: 0;
+   margin-top: 0;
+   margin-bottom: 0;
 }
