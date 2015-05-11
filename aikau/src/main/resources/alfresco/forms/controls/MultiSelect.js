@@ -159,8 +159,9 @@ define([
 
          /**
           * An object that defines the formats of the labels. See main module example for example.
+          * It should be a format string for each of the three label strings
           *
-          * @type {object} A format string for each of the three label strings
+          * @type {object}
           * @see {module:alfresco/forms/controls/MultiSelect#Label}
           * @default undefined
           */
