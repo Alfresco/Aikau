@@ -20,7 +20,10 @@
 // TODO: Add ARIA
 
 /**
- * An input control that allows multiple-selection of defined items
+ * An input control that allows multiple-selection of defined items. Note that, when
+ * specifying the labelAttribute, queryAttribute and valueAttribute in the optionsConfig
+ * as per the below example, the queryAttribute is used to search on and the
+ * labelAttribute is used to display, so they would normally be the same value.
  *
  * @example <caption>Sample configuration:</caption>
  * {
@@ -30,14 +33,22 @@
  *       label: "My multi-select input",
  *       name: "form_field_name",
  *       width: "400px",
+ *       choiceCanWrap: false, // Whether chosen items' text can wrap over multiple lines (defaults to true)
+ *       choiceMaxWidth: "50%", // The maximum width of chosen items (defaults to 100%)
  *       optionsConfig: {
- *          labelAttribute: "name",  // Defaults to label
- *          queryAttribute: "name",  // Defaults to name
- *          valueAttribute: "value", // Defaults to value
+ *          labelAttribute: "name",  // What's displayed in the dropdown and choice (defaults to label)
+ *          queryAttribute: "name",  // The attribute that's used when filtering the dropdown (defaults to name)
+ *          valueAttribute: "value", // The actual submitted value for each chosen item (defaults to value)
  *          publishTopic: "ALF_RETRIEVE_MULTISELECT_INFO",
  *          publishPayload: {
  *             resultsProperty: "response.data.items"
- *          }
+ *          },
+ *          labelFormat: { // Optional label format strings (all default to item[this.store.labelAttribute] if not specified)
+ *             choice: "${value}",
+ *             result: "${label}",
+ *             full: "${value} - ${label}"
+ *          },
+ *          searchStartsWith: false // Whether the query attribute should start with the search string (defaults to true)
  *       }
  *    }
  * }
@@ -49,6 +60,7 @@
  */
 define([
       "alfresco/core/Core",
+      "alfresco/core/ObjectProcessingMixin",
       "alfresco/core/ObjectTypeUtils",
       "dijit/_FocusMixin",
       "dijit/_TemplatedMixin",
@@ -66,10 +78,10 @@ define([
       "dojo/when",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(Core, ObjectTypeUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, Deferred,
-      domConstruct, domGeom, domStyle, domClass, keys, on, when, template) {
+   function(Core, ObjectProcessingMixin, ObjectTypeUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array,
+      declare, lang, Deferred, domConstruct, domGeom, domStyle, domClass, keys, on, when, template) {
 
-      return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core], {
+      return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core, ObjectProcessingMixin], {
 
          /**
           * The Choice object (referenced in other JSDoc comments)
@@ -82,7 +94,6 @@ define([
           * @property {object} selectListener A remove handle for the choice selection listener
           * @property {object} closeListener A remove handle for the close-button listener
           * @property {object} item The store item
-          * @property {string} label The label for this choice
           * @property {string} value The value of this choice
           */
 
@@ -93,9 +104,36 @@ define([
           * @typedef {object} Result
           * @property {object} domNode The main domNode for the result
           * @property {object} item The store item
-          * @property {string} label The label for this choice
           * @property {string} value The value of this choice
           */
+
+         /**
+          * The Label object (referenced in other JSDoc comments)
+          *
+          * @instance
+          * @typedef {object} Label
+          * @property {string} choice The version of the label used for chosen items
+          * @property {string} result The version of the label used for items in the results dropdown
+          * @property {string} full The full version of the label, used as the title attribute for choices and results
+          */
+
+         /**
+          * Whether choices' text can wrap
+          *
+          * @instance
+          * @type {boolean}
+          * @default true
+          */
+         choiceCanWrap: true,
+
+         /**
+          * The maximum width of choices within the control as a CSS string
+          *
+          * @instance
+          * @type {string}
+          * @default "100%"
+          */
+         choiceMaxWidth: "100%",
 
          /**
           * An array of the CSS files to use with this widget.
@@ -118,6 +156,16 @@ define([
          i18nRequirements: [{
             i18nFile: "./i18n/MultiSelect.properties"
          }],
+
+         /**
+          * An object that defines the formats of the labels. See main module example for example.
+          * It should be a format string for each of the three label strings
+          *
+          * @type {object}
+          * @see {module:alfresco/forms/controls/MultiSelect#Label}
+          * @default undefined
+          */
+         labelFormat: undefined,
 
          /**
           * The root class of this widget
@@ -143,6 +191,14 @@ define([
           * @type {object[]}
           */
          value: null,
+
+         /**
+          * The width of the control, specified as a CSS value (optional)
+          *
+          * @instance
+          * @type {string}
+          */
+         width: null,
 
          /**
           * A cache of the current search value
@@ -314,6 +370,9 @@ define([
          postCreate: function alfresco_forms_controls_MultiSelect__postCreate() {
             this.inherited(arguments);
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
+            if (!this.choiceCanWrap) {
+               domClass.add(this.domNode, this.rootClass + "--choices-nowrap");
+            }
             this._preventWidgetDropdownDisconnects();
             this.value = [];
          },
@@ -337,7 +396,8 @@ define([
          setValue: function alfresco_forms_controls_MultiSelect__setValue(newValueParam) {
 
             // Setup helper vars
-            var labelAttrName = this.store.labelAttribute,
+            var nameAttrName = this.store.nameAttribute,
+               labelAttrName = this.store.labelAttribute,
                valueAttrName = this.store.valueAttribute,
                newValuesArray = newValueParam;
             if (!ObjectTypeUtils.isArray(newValuesArray)) {
@@ -365,9 +425,12 @@ define([
                   nextItem = nextNewValue;
                }
 
-               // Add a temporary label if not present
+               // Add a temporary name and label property if not present
+               if (!nextItem.hasOwnProperty(nameAttrName)) {
+                  nextItem[nameAttrName] = nextItem[valueAttrName];
+               }
                if (!nextItem.hasOwnProperty(labelAttrName)) {
-                  nextItem[labelAttrName] = nextItem[valueAttrName];
+                  nextItem[labelAttrName] = nextItem[nameAttrName];
                }
 
                // Put the new item into the items map
@@ -382,11 +445,7 @@ define([
             }, this);
 
             // Add the choices to the control and kick off the label retrieval if necessary
-            array.forEach(chosenItems, function(nextItem) {
-               var label = nextItem[labelAttrName],
-                  value = nextItem[valueAttrName];
-               this._addChoice(label, value);
-            }, this);
+            array.forEach(chosenItems, this._addChoice, this);
             this._updateItemsFromStore();
             this._updateResultsDropdown();
 
@@ -398,10 +457,13 @@ define([
           * Add the specified result item to the choices
           *
           * @instance
-          * @param    {string} label The label of the chosen item
-          * @param    {string} value The value of the chosen item
+          * @param    {object} item The item to choose
           */
-         _addChoice: function alfresco_forms_controls_MultiSelect___addChoice(label, value) {
+         _addChoice: function alfresco_forms_controls_MultiSelect___addChoice(item) {
+
+            // Get the label and value
+            var labelObj = this._getLabel(item),
+               value = item[this.store.valueAttribute];
 
             // Add to the control's value property
             var storeItem = this._storeItems[value];
@@ -410,7 +472,10 @@ define([
             // Construct and attach the DOM nodes
             var choiceClass = this.rootClass + "__choice",
                choiceNode = domConstruct.create("div", {
-                  className: choiceClass
+                  className: choiceClass,
+                  style: {
+                     maxWidth: this.choiceMaxWidth
+                  }
                }, this.searchBox, "before"),
                contentNode = domConstruct.create("span", {
                   className: choiceClass + "__content"
@@ -432,14 +497,14 @@ define([
                selectListener: selectListener,
                closeListener: closeListener,
                item: storeItem,
-               label: label,
                value: value
             });
             this._choices.push(choiceObject);
 
             // Add the label and value
             contentNode.setAttribute(this._valueHtmlAttribute, value);
-            contentNode.appendChild(document.createTextNode(label));
+            contentNode.setAttribute("title", labelObj.full);
+            contentNode.appendChild(document.createTextNode(labelObj.choice));
          },
 
          /**
@@ -457,7 +522,7 @@ define([
             }
 
             // Add the choice
-            this._addChoice(focusedResult.label, focusedResult.value);
+            this._addChoice(focusedResult.item);
 
             // Update the control
             this._resetSearchBox();
@@ -506,23 +571,41 @@ define([
           * Create a document fragment of a label, highlighted with the current search term
           *
           * @instance
-          * @param    {string} label The label
+          * @param    {string} resultLabel The label
           * @returns  {object} A document fragment of the highlighted label
           */
-         _createHighlightedLabel: function alfresco_forms_controls_MultiSelect___createHighlightedLabel(label) {
-            var labelParts = label.split(this._currentSearchValue),
-               labelFrag = document.createDocumentFragment();
-            array.forEach(labelParts, function(labelPart, partIndex) {
-               var highlightSpan;
-               if (partIndex) {
-                  highlightSpan = domConstruct.create("span", {
-                     className: this.rootClass + "__result__highlighted-label"
-                  }, labelFrag);
-                  highlightSpan.appendChild(document.createTextNode(this._currentSearchValue));
-               }
-               labelFrag.appendChild(document.createTextNode(labelPart));
-            }, this);
-            return labelFrag;
+         _createHighlightedResultLabel: function alfresco_forms_controls_MultiSelect___createHighlightedResultLabel(resultLabel) {
+
+            // Create variables
+            var resultLabelFrag = document.createDocumentFragment();
+
+            // Do we have a current search value
+            if (!this._currentSearchValue) {
+
+               // No highlighting
+               resultLabelFrag.appendChild(document.createTextNode(resultLabel));
+
+            } else {
+
+               // Run the regex against the label
+               var searchRegex = this.store.createSearchRegex(this._currentSearchValue, true),
+                  searchResults = searchRegex.exec(resultLabel),
+                  matchedText = searchResults[0],
+                  matchedIndex = searchResults.index,
+                  beforeMatch = resultLabel.substr(0, matchedIndex),
+                  afterMatch = resultLabel.substr(matchedIndex + matchedText.length);
+
+               // Populate the fragment
+               beforeMatch && resultLabelFrag.appendChild(document.createTextNode(beforeMatch));
+               domConstruct.create("span", {
+                  className: this.rootClass + "__results__result__highlighted-label"
+               }, resultLabelFrag).appendChild(document.createTextNode(matchedText));
+               afterMatch && resultLabelFrag.appendChild(document.createTextNode(afterMatch));
+
+            }
+
+            // Pass back the match
+            return resultLabelFrag;
          },
 
          /**
@@ -603,6 +686,30 @@ define([
          },
 
          /**
+          * Build the label for an item. By default, this simply returns item[labelAttribute]
+          * (where labelAttribute is defined in the store config) for both short and full values.
+          *
+          * @instance
+          * @param    {item} item The item whose label to retrieve
+          * @returns {module:alfresco/forms/controls/MultiSelect#Label}
+          */
+         _getLabel: function alfresco_forms_controls_MultiSelect___getLabel(item) {
+
+            // Setup the label format strings
+            var choice = (this.labelFormat && this.labelFormat.choice) || item[this.store.labelAttribute],
+               result = (this.labelFormat && this.labelFormat.result) || item[this.store.labelAttribute],
+               full = (this.labelFormat && this.labelFormat.full) || item[this.store.labelAttribute],
+               labelObj = {
+                  "choice": this.processTokens(choice, item),
+                  "result": this.processTokens(result, item),
+                  "full": this.processTokens(full, item)
+               };
+
+            // Setup and return the label object
+            return labelObj;
+         },
+
+         /**
           * Go to the next result in the dropdown, or the first one if none selected (ignores already-chosen items)
           *
           * @instance
@@ -669,13 +776,11 @@ define([
          _handleSearchSuccess: function alfresco_forms_controls_MultiSelect___handleSearchSuccess(responseItems) {
             this._hideLoadingMessage();
             this._results = array.map(responseItems, function(nextItem) {
-               var label = nextItem[this.store.labelAttribute],
-                  value = nextItem[this.store.valueAttribute];
+               var value = nextItem[this.store.valueAttribute];
                this._storeItems[value] = nextItem;
                return {
                   domNode: null,
                   item: nextItem,
-                  label: label,
                   value: value
                };
             }, this);
@@ -1001,7 +1106,7 @@ define([
           *
           * @instance
           */
-         _preventWidgetDropdownDisconnects: function alfresco_forms_controls_MultiSelect___preventWidgetDropdownDisconnects(){
+         _preventWidgetDropdownDisconnects: function alfresco_forms_controls_MultiSelect___preventWidgetDropdownDisconnects() {
 
             // When we're in a dialog, we want to hide the results. There is never going to be a situation
             // (assumption) where a dialog moving is going to cause a problem if we hide the results dropdown
@@ -1012,8 +1117,8 @@ define([
             // moving, so we'll go up the tree trying to find any, and then listen for their scroll events and
             // again hide the dropdown when it happens
             var nextParent = this.domNode;
-            while((nextParent = nextParent.parentNode) && nextParent.tagName !== "body") {
-               if(nextParent.scrollHeight > nextParent.offsetHeight) {
+            while ((nextParent = nextParent.parentNode) && nextParent.tagName !== "body") {
+               if (nextParent.scrollHeight > nextParent.offsetHeight) {
                   this.own(on(nextParent, "scroll", lang.hitch(this, this._hideResultsDropdown)));
                }
             }
@@ -1036,7 +1141,7 @@ define([
           * @returns  {boolean} The results dropdown's visibility
           */
          _resultsDropdownIsVisible: function alfresco_forms_controls_MultiSelect___resultsDropdownIsVisible() {
-            return domClass.contains(this.domNode, this.rootClass + "--show-results");
+            return domClass.contains(this._nodes.resultsDropdown, this.rootClass + "__results--visible");
          },
 
          /**
@@ -1208,6 +1313,7 @@ define([
                      return nextChoice.value === nextResult.value;
                   }),
                   itemNode = this._nodes.resultsDropdown.childNodes[index + 3],
+                  labelObj = this._getLabel(nextResult.item),
                   clickListener,
                   mouseoverListener;
 
@@ -1218,19 +1324,15 @@ define([
                   }, this._nodes.resultsDropdown);
                }
 
-               // Update the value if necessary
-               if (itemNode.getAttribute(this._valueHtmlAttribute) !== nextResult.value) {
-                  itemNode.setAttribute(this._valueHtmlAttribute, nextResult.value);
-               }
+               // Update the value and title
+               itemNode.setAttribute(this._valueHtmlAttribute, nextResult.value);
+               itemNode.setAttribute("title", labelObj.full);
 
                // Recreate the label
-               var newLabel = this._createHighlightedLabel(nextResult.label);
-               if (itemNode.innerHTML !== newLabel.outerHTML) {
-                  while (itemNode.hasChildNodes()) {
-                     itemNode.removeChild(itemNode.firstChild);
-                  }
-                  itemNode.appendChild(newLabel);
-               }
+               var labelFrag = this._createHighlightedResultLabel(labelObj.result),
+                  tempLabelHolder = domConstruct.create("span");
+               domConstruct.empty(itemNode);
+               itemNode.appendChild(labelFrag);
 
                // Setup event listeners
                clickListener = on(itemNode, "mousedown", lang.hitch(this, this._onResultMousedown));
@@ -1276,11 +1378,12 @@ define([
                   // Run through the choices, updating their labels
                   array.forEach(this._choices, function(nextChoice) {
                      var contentNode = nextChoice.contentNode,
-                        realLabel = nextChoice.item[this.store.labelAttribute];
+                        labelObj = this._getLabel(nextChoice.item);
                      while (contentNode.hasChildNodes()) {
                         contentNode.removeChild(contentNode.firstChild);
                      }
-                     contentNode.appendChild(document.createTextNode(realLabel));
+                     contentNode.appendChild(document.createTextNode(labelObj.choice));
+                     contentNode.setAttribute("title", labelObj.full);
                   }, this);
 
                }),

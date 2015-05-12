@@ -91,6 +91,8 @@ define(["intern!object",
          return browser.findByCssSelector("#REJECT_FAILURE_label")
             .click()
          .end()
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_RELOAD_DATA", "publish", "last"))
+         .end()
          .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action could not be completed."))
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Simple rejection failure notification not found");

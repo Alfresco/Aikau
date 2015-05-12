@@ -280,7 +280,7 @@ define(["dojo/_base/declare",
          var dialogConfig = {
             id: payload.dialogId ? payload.dialogId : this.generateUuid(),
             title: this.message(payload.dialogTitle || ""),
-            textContent: payload.textContent,
+            content: payload.textContent,
             widgetsContent: payload.widgetsContent,
             widgetsButtons: payload.widgetsButtons,
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",

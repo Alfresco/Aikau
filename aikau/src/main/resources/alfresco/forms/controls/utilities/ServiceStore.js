@@ -101,26 +101,26 @@ define(["dojo/_base/declare",
        * @param {object} options Options for finding the item
        * @returns Either the item or a promise of the item
        */
-      get: function alfresco_forms_controls_utilities_ServiceStore__get(id, options){
+      get: function alfresco_forms_controls_utilities_ServiceStore__get(id, /*jshint unused:false*/options){
          var response = null;
-         if (this.publishTopic != null)
+         if (this.publishTopic)
          {
             // If a publishTopic has been specified then publish on it to request the options
             // to search through for the item...
             response = new Deferred();
             var responseTopic = this.generateUuid();
             var payload = lang.clone(this.publishPayload);
-            if (payload == null)
+            if (!payload)
             {
                payload = {};
             }
             payload.alfResponseTopic = responseTopic;
-            var resultsProperty = (this.publishPayload.resultsProperty != null) ? this.publishPayload.resultsProperty : "response";
+            var resultsProperty = this.publishPayload.resultsProperty || "response";
             this._getOptionsHandle = [];
             this._getOptionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onGetOptions", response, resultsProperty, id), true));
             this.alfPublish(this.publishTopic, payload, true);
          }
-         else if (this.fixed != null)
+         else if (this.fixed)
          {
             // ...otherwise search any fixed options that have been supplied...
             response = this.getOption(lang.clone(this.fixed), id);
@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
       onGetOptions: function alfresco_forms_controls_utilities_ServiceStore__onGetOptions(dfd, resultsProperty, id, payload) {
          this.alfUnsubscribeSaveHandles([this._getOptionsHandle]);
          var results = lang.getObject(resultsProperty, false, payload);
-         if (results != null)
+         if (results !== null && typeof results !== "undefined")
          {
             var target = this.getOption(results, id);
             dfd.resolve(target);
@@ -168,8 +168,8 @@ define(["dojo/_base/declare",
        */
       getOption: function alfresco_forms_controls_utilities_ServiceStore__getOption(results, id) {
          var target = "";
-         array.forEach(results, function(item, i) {
-            if (item[this.valueAttribute] == id)
+         array.forEach(results, function(item) {
+            if (item[this.valueAttribute] === id)
             {
                target = item;
             }
@@ -185,31 +185,44 @@ define(["dojo/_base/declare",
        * @param {array} results The results to query.
        */
       queryResults: function alfresco_forms_controls_utilities_ServiceStore__queryResults(results, query) {
+         /*jshint newcap:false*/
+
          // Clone the original fixed set of options to ensure that we're not
          // removing any of the original data...
-         var queryAttribute = (this.queryAttribute != null) ? this.queryAttribute : "name";
-         var labelAttribute = (this.labelAttribute != null) ? this.labelAttribute : "label";
-         var valueAttribute = (this.valueAttribute != null) ? this.valueAttribute : "value";
+         var queryAttribute = this.queryAttribute || "name";
+         var labelAttribute = this.labelAttribute || "label";
+         var valueAttribute = this.valueAttribute || "value";
 
          // Check that all the data is valid, this is done to ensure any data sets that don't contain all the data...
          // This is a workaround for an issue with the Dojo query engine that will break when an item doesn't contain
          // the query attribute...
          array.forEach(results, lang.hitch(this, this.processResult, queryAttribute, labelAttribute, valueAttribute));
 
-         var safeQueryString = regexp.escapeString(query[this.queryAttribute].toString()),
-            rePrefix = "",
-            updatedQuery = {};
-
-         if (this.searchStartsWith) {
-            rePrefix = "^"
-         }
-
-         updatedQuery[this.queryAttribute] = new RegExp(rePrefix + safeQueryString + ".*$", "i");
+         // Create an updated query with a sanitised query/regex in it
+         var updatedQuery = {};
+         updatedQuery[this.queryAttribute] = this.createSearchRegex(query[this.queryAttribute].toString());
 
          // NOTE: Ignore JSHint warnings on the following 2 lines...
          var queryEngine = SimpleQueryEngine(updatedQuery);
          var queriedResults = QueryResults(queryEngine(results));
          return queriedResults;
+      },
+
+      /**
+       * Create the regex used for querying
+       *
+       * @instance
+       * @param    {string}  queryString The supplied query string
+       * @param    {boolean} ignorePostMatch Whether to append ".*$" to the string (defaults to including this)
+       * @returns  {object}  The regular expression to use in the query engine
+       */
+      createSearchRegex: function alfresco_forms_controls_utilities_ServiceStore__createSearchRegex(queryString, ignorePostMatch) {
+         var safeQueryString = regexp.escapeString(queryString),
+            rePrefix = this.searchStartsWith ? "^" : "",
+            reSuffix = ignorePostMatch ? "" : ".*$",
+            reValue = rePrefix + safeQueryString + reSuffix,
+            reModifiers = "i";
+         return new RegExp(reValue, reModifiers);
       },
 
       /**
@@ -225,16 +238,20 @@ define(["dojo/_base/declare",
        * @param {object} item The current item to process as an option
        * @param {number} index The index of the item in the items list
        */
-      processResult: function alfresco_forms_controls_utilities_ServiceStore__processResult(queryAttribute, labelAttribute, valueAttribute, item, index) {
-         if (item[queryAttribute] == null)
+      processResult: function alfresco_forms_controls_utilities_ServiceStore__processResult(queryAttribute, labelAttribute, valueAttribute, item, /*jshint unused:false*/ index) {
+         // Small helper func to remove JSHint errors but absolutely preserve existing logic
+         var isValid = function(o) {
+            return o !== null && typeof o !== "undefined";
+         };
+         if (!isValid(item[queryAttribute]))
          {
             item[queryAttribute] = "";
          }
-         if (item.label == null && item[labelAttribute] != null)
+         if (!isValid(item.label) && isValid(item[labelAttribute]))
          {
             item.label = item[labelAttribute];
          }
-         if (item.value == null && item[valueAttribute] != null)
+         if (!isValid(item.value) && isValid(item[valueAttribute]))
          {
             item.value = item[valueAttribute];
          }
@@ -248,7 +265,7 @@ define(["dojo/_base/declare",
        * @param {object} options The optional arguments to apply to the resultset.
        * @returns {object} The results of the query, extended with iterative methods.
        */
-      queryFixedOptions: function alfresco_forms_controls_utilities_ServiceStore__queryFixedOptions(query, options) {
+      queryFixedOptions: function alfresco_forms_controls_utilities_ServiceStore__queryFixedOptions(query, /*jshint unused:false*/ options) {
          var queriedResults = this.queryResults(lang.clone(this.fixed), query);
          return queriedResults;
       },
@@ -264,11 +281,11 @@ define(["dojo/_base/declare",
        * @param {object} options The optional arguments to apply to the resultset.
        * @returns {object} The results of the query, extended with iterative methods.
        */
-      queryXhrOptions: function alfresco_forms_controls_utilities_ServiceStore__query(query, options) {
+      queryXhrOptions: function alfresco_forms_controls_utilities_ServiceStore__query(query, /*jshint unused:false*/ options) {
          var response = new Deferred();
          var responseTopic = this.generateUuid();
          var payload = lang.clone(this.publishPayload);
-         if (payload == null)
+         if (!payload)
          {
             payload = {};
          }
@@ -276,11 +293,11 @@ define(["dojo/_base/declare",
 
          // Set up a dot-notation address to retrieve the results from, this will be set to response if not included
          // in the payload...
-         var resultsProperty = (this.publishPayload.resultsProperty != null) ? this.publishPayload.resultsProperty : "response";
+         var resultsProperty = payload.resultsProperty || "response";
 
          // Add in an additional query attribute. Some services (e.g. the TagService) will use this as an additional
          // search term request parameter...
-         payload.query = query[(this.queryAttribute != null) ? this.queryAttribute : "name"];
+         payload.query = query[this.queryAttribute || "name"];
 
          this._optionsHandle = [];
          this._optionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onQueryOptions", response, query, resultsProperty), true));
@@ -302,11 +319,11 @@ define(["dojo/_base/declare",
        */
       query: function alfresco_forms_controls_utilities_ServiceStore__query(query, options){
          var response = null;
-         if (this.publishTopic != null)
+         if (this.publishTopic)
          {
             response = this.queryXhrOptions(query, options);
          }
-         else if (this.fixed != null)
+         else if (this.fixed)
          {
             response = this.queryFixedOptions(query, options);
          }
@@ -331,7 +348,7 @@ define(["dojo/_base/declare",
       onQueryOptions: function alfresco_forms_controls_utilities_ServiceStore__onQueryOptions(dfd, query, resultsProperty, payload) {
          this.alfUnsubscribeSaveHandles([this._optionsHandle]);
          var results = lang.getObject(resultsProperty, false, payload);
-         if (results != null)
+         if (results)
          {
             var queriedResults = this.queryResults(results, query);
             dfd.resolve(queriedResults);

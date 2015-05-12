@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.17-SNAPSHOT</version>
+   <version>1.0.18-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -46,6 +46,13 @@
             <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/webscript/libs</targetPath>
             <filtering>false</filtering>
             <directory>${basedir}/src/main/resources/webscript-libs</directory>
+         </resource>
+
+         <resource>
+            <!-- WebScripts go into their own package -->
+            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/webscripts</directory>
          </resource>
 
          <!-- ...but everything else goes into a standard path -->
@@ -127,8 +134,9 @@
                         <artifactItem>
                            <groupId>org.dojotoolkit</groupId>
                            <artifactId>dojo</artifactId>
-                           <version>1.9.0</version>
+                           <version>1.10.4</version>
                            <type>zip</type>
+                           <classifier>distribution</classifier>
                            <overWrite>true</overWrite>
                            <outputDirectory>${basedir}/target/classes/META-INF/js/lib</outputDirectory>
                         </artifactItem>

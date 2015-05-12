@@ -12,6 +12,7 @@ model.jsonModel = {
          }
       },
       "alfresco/services/TagService",
+      "aikauTesting/mockservices/MultiSelectMockService",
       "alfresco/services/DialogService"
    ],
    widgets: [
@@ -41,8 +42,7 @@ model.jsonModel = {
                            publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",
                            publishPayload: {
                               resultsProperty: "response.data.items"
-                           },
-                           searchStartsWith: false
+                           }
                         }
                      }
                   }
@@ -86,6 +86,39 @@ model.jsonModel = {
                      },
                      requirementConfig: {
                         initialValue: true
+                     }
+                  }
+               }
+            ]
+         }
+      },
+      {
+         id: "FORM2",
+         name: "alfresco/forms/Form",
+         config: {
+            okButtonPublishTopic: "FORM2_POST",
+            scopeFormControls: false,
+            value: {
+               categories: ["CAT_01", "CAT_10"]
+            },
+            widgets: [
+               {
+                  id: "MULTISELECT_2",
+                  name: "alfresco/forms/controls/MultiSelectInput",
+                  config: {
+                     label: "Celestial categories",
+                     name: "categories",
+                     width: "310px",
+                     optionsConfig: {
+                        choiceCanWrap: true,
+                        choiceMaxWidth: "150px",
+                        publishTopic: "ALF_RETRIEVE_CELESTIAL_CATEGORIES",
+                        labelFormat: {
+                           choice: "{label}",
+                           result: "{value}: {label}",
+                           full: "ID={value}, Name={label}"
+                        },
+                        searchStartsWith: false
                      }
                   }
                }

@@ -32,24 +32,24 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "service/constants/Default",
-        "alfresco/core/NotificationUtils",],
+        "alfresco/core/NotificationUtils"],
         function(declare, AlfCore, AlfXhr, lang, array, AlfConstants, NotificationUtils) {
-   
+
    return declare([AlfCore, AlfXhr, NotificationUtils], {
-      
+
       /**
        * Sets up the subscriptions for the OptionsService
-       * 
-       * @instance 
+       *
+       * @instance
        * @param {array} args The constructor arguments.
        */
       constructor: function alfresco_services_OptionsService__constructor(args) {
          lang.mixin(this, args);
          this.alfSubscribe("ALF_GET_FORM_CONTROL_OPTIONS", lang.hitch(this, this.onOptionsRequest));
       },
-      
+
       /**
-       * <p>Handles request to retrieve and normalize options data, the following attributes must be 
+       * <p>Handles request to retrieve and normalize options data, the following attributes must be
        * provided on the payload:</p>
        * <ul>url (e.g. AlfConstants.PROXY_URI + "api/groups")<li></li>
        * <li>itemsAttribute - dot-notation address of items array (e.g. "data")(</li>
@@ -81,7 +81,7 @@ define(["dojo/_base/declare",
             this.alfLog("warn", "A request was made to retrieve form control options, but required payload attributes are missing", payload, this);
          }
       },
-      
+
       /**
        * This function is called whenever the raw options data is successfully retrieved. It locates
        * the attribute within the reponse that contains the options (via the "itemsAttribute") and
@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
       /**
        * Uses the dot-notation addresses for the label and value to add a new option to the supplied
        * option array.
-       * 
+       *
        * @instance
        * @param {array} options The array to add the processed item to
        * @param {object} config The configuration to use for processing the option

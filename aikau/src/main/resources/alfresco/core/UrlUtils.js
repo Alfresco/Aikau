@@ -45,7 +45,7 @@ define(["dojo/_base/declare",
       generateUserLink: function alfresco_core_UrlUtils__generateUserLink(oUser) {
          if (oUser.isDeleted === true)
          {
-            return '<span>' + this.message("details.user.deleted", this.encodeHTML(oUser.userName)) + '</span>';
+            return "<span>" + this.message("details.user.deleted", this.encodeHTML(oUser.userName)) + "</span>";
          }
          return this.userProfileLink(oUser.userName, lang.trim(oUser.firstName + " " + oUser.lastName));
       },
@@ -66,13 +66,13 @@ define(["dojo/_base/declare",
          }
 
          var html = this.encodeHTML(ObjectTypeUtils.isString(fullName) && fullName.length > 0 ? fullName : userName),
-               template = AlfConstants.URI_TEMPLATES["userprofilepage"],
+               template = AlfConstants.URI_TEMPLATES.userprofilepage,
                uri = "";
 
          // If the "userprofilepage" template doesn't exist or is empty, we'll just return the user's fullName || userName
          if (disableLink || ObjectTypeUtils.isUndefined(template) || template.length === 0)
          {
-            return '<span>' + html + '</span>';
+            return "<span>" + html + "</span>";
          }
 
          // Generate the link
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
             userid: userName
          });
 
-         return '<a href="' + uri + '" ' + (linkAttr || "") + '>' + html + '</a>';
+         return "<a href=\"" + uri + "\" " + (linkAttr || "") + ">" + html + "</a>";
       },
 
       /**
@@ -93,10 +93,9 @@ define(["dojo/_base/declare",
        *    "folder-details?nodeRef=" + nodeRef
        * </pre>
        * @param {object} obj The object literal containing the token values to substitute within the template
-       * @param {boolean} [absolute] Whether the URL should include the protocol and host
        * @returns {string} The populated URL
        */
-      siteURL: function alfresco_core_UrlUtils__siteURL(pageURI, obj, absolute) {
+      siteURL: function alfresco_core_UrlUtils__siteURL(pageURI, obj) {
          var target = obj || {};
          var source = {
             pageid: pageURI
@@ -183,21 +182,20 @@ define(["dojo/_base/declare",
        * @instance
        * @param {Object} record The current node to generate actions URLs for.
        * @param {String} [siteId] The id of the current site, will be generated if missing from record.
-       * @param {String} [repositoryUrl] The URL of a linked repository
        */
-      getActionUrls: function alfresco_core_UrlUtils__getActionUrls(record, siteId, repositoryUrl) {
+      getActionUrls: function alfresco_core_UrlUtils__getActionUrls(record, siteId) {
          var actionUrls = {},
              jsNode = record.node;
          if (jsNode)
          {
             var nodeRef = jsNode.isLink ? jsNode.linkedNode.nodeRef : jsNode.nodeRef,
-                strNodeRef = nodeRef != null ? nodeRef.toString() : "",
+                strNodeRef = nodeRef ? nodeRef.toString() : "",
                 contentUrl = jsNode.contentURL,
                 workingCopy = record.workingCopy || {},
-                recordSiteId = (record.location != null && record.location.site != null) ? record.location.site.name : null;
+                recordSiteId = (record.location && record.location.site) ? record.location.site.name : null;
 
             var site = {
-               site: (siteId != null) ? siteId : recordSiteId
+               site: siteId || recordSiteId
             };
             try
             {

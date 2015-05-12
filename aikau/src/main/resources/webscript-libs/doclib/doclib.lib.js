@@ -447,6 +447,11 @@ function addDocumentLibraryServices(services) {
       {
          id: "SIMPLE_WORKFLOW_SERVICE",
          name: "alfresco/services/actions/SimpleWorkflowService"
+      },
+      {
+         id: "NODE_LOCATION_SERVICE",
+         name: "alfresco/services/actions/NodeLocationService"
+         // TODO: This will need to be configured for the different contexts, e.g. Share and Aikau standalone
       }
    ];
      
@@ -1192,7 +1197,17 @@ function getDocLib(siteId, containerId, rootNode, rootLabel, rawData) {
                         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
                         config: {
                            hide: docLibPrefrences.hideBreadcrumbTrail,
-                           rootLabel: rootLabel
+                           rootLabel: rootLabel,
+                           lastBreadcrumbIsCurrentNode: true,
+                           useHash: true,
+                           lastBreadcrumbPublishTopic: "ALF_NAVIGATE_TO_PAGE",
+                           lastBreadcrumbPublishPayload: {
+                              url: "folder-details?nodeRef={currentNode.parent.nodeRef}",
+                              type: "PAGE_RELATIVE",
+                              target: "CURRENT"
+                           },
+                           lastBreadcrumbPublishPayloadType: "PROCESS",
+                           lastBreadcrumbPublishPayloadModifiers: ["processInstanceTokens"]
                         }
                      },
                      getDocLibList(siteId, containerId, rootNode, rawData)

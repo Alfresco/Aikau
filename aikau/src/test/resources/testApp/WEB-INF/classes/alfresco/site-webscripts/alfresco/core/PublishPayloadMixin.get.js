@@ -156,7 +156,7 @@ model.jsonModel = {
                      publishPayloadModifiers: ["processCurrentItemTokens"],
                      publishPayload: {
                         url: "site/{site.shortName}/dashboard",
-                        type: "SHARE_PAGE_RELATIVE"
+                        type: "PAGE_RELATIVE"
                      }
                   }
                },
@@ -177,7 +177,7 @@ model.jsonModel = {
                      publishPayloadModifiers: ["processCurrentItemTokens"],
                      publishPayload: {
                         url: "user/{modifiedByUser}/profile",
-                        type: "SHARE_PAGE_RELATIVE"
+                        type: "PAGE_RELATIVE"
                      }
                   }
                }

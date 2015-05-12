@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        * @param {object} e The key press event
        */
       onValueEntryKeyPress: function alfresco_lists_KeyboardNavigationSuppressionMixin__onValueEntryKeyPress(e) {
-         if(e.charOrCode === keys.ESCAPE)
+         if(e.charOrCode === keys.ESCAPE || e.keyCode === keys.ESCAPE)
          {
             event.stop(e);
             if (typeof this.onCancel === "function")
@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
             }
          }
          // NOTE: This isn't currently working because Dojo form controls suppress certain keys, including ENTER...
-         else if(e.charOrCode === keys.ENTER)
+         else if(e.charOrCode === keys.ENTER || e.keyCode === keys.ENTER)
          {
             event.stop(e);
             if (typeof this.onSave === "function")

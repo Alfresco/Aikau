@@ -67,8 +67,19 @@ define(["dojo/_base/declare"],
        * @instance
        * @type {string}
        * @default "SHARE_PAGE_RELATIVE"
+       * @deprecated Since 1.0.17 - Use [pageRelativePath]{@link module:alfresco/services/_NavigationServiceTopicMixin#pageRelativePath} instead.
        */
       sharePageRelativePath: "SHARE_PAGE_RELATIVE",
+
+      /**
+       * This value is used to indicate that the supplied URL is relative to the application Page context (e.g. /<application-context>/page)
+       *
+       * @instance
+       * @type {string}
+       * @default "PAGE_RELATIVE"
+       * @deprecated Since 1.0.17 - Use 
+       */
+      pageRelativePath: "PAGE_RELATIVE",
 
       /**
        * This value is used to indicate that the supplied URL is relative to the application context (e.g. /share)

@@ -82,9 +82,10 @@ define(["dojo/_base/declare",
          onDisplayPrompt: function alfresco_services_NotificationService__onDisplayPrompt(payload) {
             var message = lang.getObject("message", false, payload);
             if (message) {
+               var title = payload.title || "notification.prompt.title";
                this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
                   dialogId: "NOTIFICATION_PROMPT",
-                  dialogTitle: this.message("notification.prompt.title"),
+                  dialogTitle: this.message(title),
                   textContent: message,
                   widgetsButtons: [
                      {
