@@ -39,6 +39,7 @@ Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
 1.0.17:
 * [AKU-19](https://issues.alfresco.com/jira/browse/AKU-19)         - Upgrade to use Dojo 1.10.4
+* [AKU-203](https://issues.alfresco.com/jira/browse/AKU-203)       - Added support for document-locate action
 * [AKU-244](https://issues.alfresco.com/jira/browse/AKU-244)       - Added HTML sanitizing proxy WebScript
 * [AKU-262](https://issues.alfresco.com/jira/browse/AKU-262)       - Made alfresco/documentlibrary/AlfBreadcrumbTrail more abstract
 * [AKU-275](https://issues.alfresco.com/jira/browse/AKU-275)       - Ensure form button disabled HTML attribute is set correctly
