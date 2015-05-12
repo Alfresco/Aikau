@@ -41,10 +41,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    return browser.end().alfPostCoverageResults(browser);
-      // },
-
       "Test path initialised correctly": function () {
          return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "path", "/"))
             .then(function(elements) {

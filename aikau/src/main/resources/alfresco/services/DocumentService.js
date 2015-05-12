@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,7 +23,8 @@
  *
  * @module alfresco/services/DocumentService
  * @extends module:alfresco/core/Core
- * @author Dave Draper & David Webster
+ * @author Dave Draper
+ * @author David Webster
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
@@ -214,7 +215,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload defining the document to retrieve the details for.
        */
       onRetrieveSingleDocumentRequest: function alfresco_services_DocumentService__onRetrieveSingleDocumentRequest(payload) {
-         if (payload == null || payload.nodeRef == null)
+         if (!payload || !payload.nodeRef)
          {
             this.alfLog("warn", "A request was made to retrieve the details of a document but no 'nodeRef' attribute was provided", payload, this);
          }
@@ -224,8 +225,8 @@ define(["dojo/_base/declare",
             targetNodeUri = nodeRef.uri;
 
             // Construct the URI for the request...
-            var uriPart = (payload.site != null && payload.site !== "") ? "{type}/site/{site}/{container}" : "{type}/node/" + targetNodeUri;
-            if (payload.filter != null && payload.filter.filterId === "path")
+            var uriPart = payload.site ? "{type}/site/{site}/{container}" : "{type}/node/" + targetNodeUri;
+            if (payload.filter && payload.filter.filterId === "path")
             {
                // If a path has been provided in the filter then it is necessary to perform some special
                // encoding. We need to ensure that the data is URI encoded, but we want to preserve the
@@ -239,7 +240,7 @@ define(["dojo/_base/declare",
             // View mode and No-cache
             var params = "?view=browse&noCache=" + new Date().getTime() + "&includeThumbnails=true";
 
-            var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST";
+            var alfTopic = payload.alfResponseTopic || "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST";
             var url;
             if (payload.rawData === true)
             {
@@ -278,10 +279,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload published on the topic
        */
       onRetrieveDocumentsRequest: function alfresco_services_DocumentService__onRetrieveDocumentsRequest(payload) {
-
+         // jshint maxcomplexity:false, maxstatements:false
          var targetNode = "alfresco://company/home",
              targetNodeUri = "alfresco/company/home";
-         if (payload.nodeRef != null && payload.nodeRef !== "")
+         if (payload.nodeRef)
          {
             var nodeRef = NodeUtils.processNodeRef(payload.nodeRef);
             targetNode = payload.nodeRef;
@@ -289,8 +290,8 @@ define(["dojo/_base/declare",
          }
 
          // Construct the URI for the request...
-         var uriPart = (payload.site != null && payload.site !== "") ? "{type}/site/{site}/{container}" : "{type}/node/" + targetNodeUri;
-         if (payload.filter != null && payload.filter.path != null)
+         var uriPart = payload.site ? "{type}/site/{site}/{container}" : "{type}/node/" + targetNodeUri;
+         if (payload.filter && payload.filter.path)
          {
             // If a path has been provided in the filter then it is necessary to perform some special
             // encoding. We need to ensure that the data is URI encoded, but we want to preserve the
@@ -317,15 +318,15 @@ define(["dojo/_base/declare",
 
          if (payload.filter)
          {
-            if (payload.filter.filter != null)
+            if (payload.filter.filter)
             {
                params += "?filter=" + payload.filter.filter;
             }
-            else if (payload.filter.tag != null)
+            else if (payload.filter.tag)
             {
                params += "?filter=tag&filterData=" + payload.filter.tag;
             }
-            else if (payload.filter.category != null)
+            else if (payload.filter.category)
             {
                params += "?filter=category&filterData=" + payload.filter.category;
             }
@@ -335,16 +336,17 @@ define(["dojo/_base/declare",
             }
          }
 
-         if (payload.pageSize != null && payload.page != null)
+         // NOTE: It makes no sense for pageSize or page to be zero here in this if statement!
+         if (payload.pageSize && payload.page)
          {
             params += "&size=" + payload.pageSize + "&pos=" + payload.page;
          }
 
          // Sort parameters
          params += "&sortAsc=" + payload.sortAscending + "&sortField=" + encodeURIComponent(payload.sortField);
-         if (payload.site == null)
+         if (payload.site)
          {
-            if (payload.libraryRoot != null)
+            if (payload.libraryRoot)
             {
                params += "&libraryRoot=" + encodeURIComponent(payload.libraryRoot);
             }
@@ -358,7 +360,7 @@ define(["dojo/_base/declare",
          // View mode and No-cache
          params += "&view=browse&noCache=" + new Date().getTime();
 
-         var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : "ALF_RETRIEVE_DOCUMENTS_REQUEST";
+         var alfTopic = payload.alfResponseTopic || "ALF_RETRIEVE_DOCUMENTS_REQUEST";
 
          var url;
          if (payload.rawData === true)
@@ -442,6 +444,7 @@ define(["dojo/_base/declare",
        * @param payload
        */
       onRequestArchiveFailure: function alfresco_services_DocumentService__onRequestArchiveFailure(payload) {
+         // jshint unused:false
          this.alfLog("error", "Unable to request archive");
       },
 
@@ -452,7 +455,6 @@ define(["dojo/_base/declare",
        * @param payload
        */
       onRequestArchiveProgress: function alfresco_services_DocumentService__onRequestArchiveProgress(payload) {
-
          // Payload varies depending on
          var progressRequestPayload = (payload.requestConfig) ? lang.getObject("requestConfig.progressRequestPayload", false, payload) : payload;
          // Check payload has archiveNodeRef in.
@@ -573,7 +575,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            this.alfLog('Warn', "Failed to get archive progress");
+            this.alfLog("warn", "Failed to get archive progress");
             this.alfPublish(this.archiveProgressFailureTopic, payload);
          }
       },
@@ -689,14 +691,14 @@ define(["dojo/_base/declare",
        */
       onGetParentNodeRefSuccess: function alfresco_services_DocumentService__onGetParentNodeRefSuccess(payload) {
          var responseTopic = lang.getObject("requestConfig.originalPayload.originalResponseTopic", false, payload);
-         if (responseTopic != null)
+         if (responseTopic)
          {
             var parent = lang.getObject("response.item.parent", false, payload);
-            if (parent == null)
+            if (!parent)
             {
                parent = lang.getObject("response.metadata.parent", false, payload);
             }
-            if (parent != null)
+            if (parent)
             {
                var publishPayload = {
                   node: parent

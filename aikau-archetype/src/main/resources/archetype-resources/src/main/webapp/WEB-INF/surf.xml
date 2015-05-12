@@ -127,8 +127,8 @@
            <uri-template id="remote-node-page">/{pageid}/p/{pagename}/{store_type}/{store_id}/{id}</uri-template>
            <uri-template id="remote-site-page">/site/{site}/{pageid}/p/{pagename}</uri-template>
            <uri-template id="remote-page">/{pageid}/p/{pagename}</uri-template>
-           <uri-template id="site-page">/site/{site}/{pageid}/ws/{webscript}</uri-template>
-           <uri-template id="user-page">/user/{userid}/{pageid}/ws/{webscript}</uri-template>
+           <uri-template id="sitepage">/site/{site}/{pageid}/ws/{webscript}</uri-template>
+           <uri-template id="userpage">/user/{userid}/{pageid}/ws/{webscript}</uri-template>
            <uri-template id="page">/{pageid}/ws/{webscript}</uri-template>
         </uri-templates>
    </config>
