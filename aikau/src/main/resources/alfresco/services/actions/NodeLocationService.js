@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
        * @param {array} args Constructor arguments
        */
       constructor: function alfresco_services_actions_NodeLocationService__constructor(args) {
-         lang.mixin(this, args);
+         declare.safeMixin(this, args);
          this.alfSubscribe("ALF_LOCATE_DOCUMENT", lang.hitch(this, this.onLocateDocumentRequest));
       },
 
