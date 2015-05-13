@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>NavigationService</shortname>
+  <description>This page is used to test the various capablities provided by the NavigationService</description>
+  <family>aikau-unit-tests</family>
+  <url>/NavigationService</url>
+</webscript>

@@ -23,7 +23,8 @@
  * @module alfresco/services/NavigationService
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/services/_NavigationServiceTopicMixin
- * @author Dave Draper & David Webster
+ * @author Dave Draper
+ * @author David Webster
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
@@ -68,7 +69,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.postToPageTopic, lang.hitch(this, this.postToPage));
          if (this.subscriptions)
          {
-            array.forEach(this.subscriptions, lang.hitch(this, "setupNavigationSubscriptions"));
+            array.forEach(this.subscriptions, lang.hitch(this, this.setupNavigationSubscriptions));
          }
       },
 
@@ -90,6 +91,38 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Builds a URL from the supplied data object.
+       * 
+       * @instance
+       * @param  {object} data The data object form which to construct the URL
+       * @return {string} The built URL
+       */
+      buildUrl: function alfresco_services_NavigationService__buildUrl(data) {
+         var url;
+         if (!data.type || data.type === this.sharePageRelativePath || data.type === this.pageRelativePath)
+         {
+            var siteStem = "site/" + data.site + "/";
+            url = data.url;
+
+            // Cater for site urls that are sent from a non-site context.
+            if (data.site && url.indexOf(siteStem) === -1)
+            {
+               url = siteStem + url;
+            }
+            url = AlfConstants.URL_PAGECONTEXT + url;
+         }
+         else if (data.type === this.contextRelativePath)
+         {
+            url = AlfConstants.URL_CONTEXT + data.url;
+         }
+         else if (data.type === this.fullPath)
+         {
+            url = data.url;
+         }
+         return url;
+      },
+
+      /**
        * This is the default page navigation handler. It is called when the service receives a publication on
        * the [navigateToPageTopic]{@link module:alfresco/services/_NavigationServiceTopicMixin#navigateToPageTopic} topic. At the moment
        * it makes the assumption that the URL data will be relative to the Share page context.
@@ -107,34 +140,14 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("log", "Page navigation request received:", data);
-            var url;
-            if (!data.type || data.type === this.sharePageRelativePath || data.type === this.pageRelativePath)
-            {
-               var siteStem = "site/" + data.site + "/";
-               url = data.url;
-
-               // Cater for site urls that are sent from a non-site context.
-               if (data.site && url.indexOf(siteStem) === -1)
-               {
-                  url = siteStem + url;
-               }
-               url = AlfConstants.URL_PAGECONTEXT + url;
-            }
-            else if (data.type === this.contextRelativePath)
-            {
-               url = AlfConstants.URL_CONTEXT + data.url;
-            }
-            else if (data.type === this.fullPath)
-            {
-               url = data.url;
-            }
+            var url = this.buildUrl(data);
 
             // Determine the location of the URL...
             if (data.type === this.hashPath)
             {
                hash(data.url);
             }
-            else if (!data.target ||data.target === this.currentTarget)
+            else if (!data.target || data.target === this.currentTarget)
             {
                window.location = url;
             }
@@ -155,7 +168,11 @@ define(["dojo/_base/declare",
          // Support for POST requests
          var form = domConstruct.create("form");
          form.method = "POST";
-         form.action = data.url;
+         form.action = this.buildUrl(data);
+         if (data.target === this.newTarget)
+         {
+            form.target = "_blank";
+         }
          var parameters = data.parameters || {};
          for (var name in parameters)
          {
