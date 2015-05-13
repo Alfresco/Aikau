@@ -20,14 +20,14 @@
 /**
  * This renders a drop-down select menu using a wrapped [DojoSelect]{@link module:alfresco/forms/controls/Select}
  * widget that when changed will publish information about the change in value for the current rendered item.
- * 
+ *
  * @module alfresco/renderers/PublishingDropDownMenu
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "dojo/text!./templates/PublishingDropDownMenu.html",
@@ -35,27 +35,27 @@ define(["dojo/_base/declare",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/forms/controls/Select",
         "dojo/_base/lang",
-        "dojo/dom-class"], 
+        "dojo/dom-class"],
         function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, ObjectTypeUtils, Select, lang, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, _PublishPayloadMixin], {
-      
+
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/PublishingDropDownMenu.css"}]
        */
       cssRequirements: [{cssFile:"./css/PublishingDropDownMenu.css"}],
-      
+
       /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
        */
       templateString: template,
-      
+
       /**
        * This is the topic that will be published on when the drop-down menu value is changed.
        *
@@ -66,9 +66,9 @@ define(["dojo/_base/declare",
       publishTopic: null,
 
       /**
-       * This will be set to reference the [DojoSelect]{@link module:alfresco/forms/controls/Select} that is 
+       * This will be set to reference the [DojoSelect]{@link module:alfresco/forms/controls/Select} that is
        * wrapped by this widget.
-       * 
+       *
        * @instance
        * @type {object}
        * @default null
@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
       /**
        * This is the options config that will be passed onto the wrapped [DojoSelect]{@link module:alfresco/forms/controls/Select}
        * widget.
-       * 
+       *
        * @instance
        * @type {object}
        * @default null
@@ -86,13 +86,13 @@ define(["dojo/_base/declare",
       optionsConfig: null,
 
       /**
-       * 
+       *
        * @instance
        */
       postCreate: function alfresco_renderers_PublishingDropDownMenu__postCreate() {
 
-         if (ObjectTypeUtils.isString(this.propertyToRender) && 
-             ObjectTypeUtils.isObject(this.currentItem) && 
+         if (ObjectTypeUtils.isString(this.propertyToRender) &&
+             ObjectTypeUtils.isObject(this.currentItem) &&
              lang.exists(this.propertyToRender, this.currentItem))
          {
             // Get the value of the property to render...
@@ -111,11 +111,11 @@ define(["dojo/_base/declare",
                optionsConfig: this.optionsConfig
             }, this.dropDownNode);
 
-            // Create the subscription AFTER the widget has been instantiated so that we don't 
-            // uncessarily process the setup publications which are intended to be processed by 
+            // Create the subscription AFTER the widget has been instantiated so that we don't
+            // unnecessarily process the setup publications which are intended to be processed by
             // other controls in the same scoped form...
             this.alfSubscribe(subscriptionTopic, lang.hitch(this, "onPublishChange"), true);
-            
+
             if(this.additionalCssClasses)
             {
                domClass.add(this.domNode, this.additionalCssClasses);
@@ -124,11 +124,11 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("warn", "Property for PublishingDropDown renderer does not exist:", this);
-         } 
+         }
       },
 
       /**
-       * 
+       *
        * @instance
        * @param {object} payload The information about the change in value.
        */
@@ -148,6 +148,8 @@ define(["dojo/_base/declare",
             var responseTopic = this.generateUuid();
             this._updateSuccessHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onChangeSuccess"), false);
             this._updateFailureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, "onChangeFailure"), false);
+            this._updateCancelHandle = this.alfSubscribe(responseTopic + "_CANCEL", lang.hitch(this, "onChangeCancel"), false);
+
             updatePayload.responseTopic = responseTopic;
 
             // Request to make the update...
@@ -167,7 +169,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onChangeSuccess: function alfresco_renderers_PublishingDropDownMenu__onChangeSuccess(payload) {
-         this.alfUnsubscribeSaveHandles([this._updateSuccessHandle,this._updateFailureHandle]);
+         this.alfUnsubscribeSaveHandles([this._updateSuccessHandle,this._updateFailureHandle, this._updateCancelHandle]);
          domClass.add(this.processingNode, "hidden");
          domClass.remove(this.successNode, "hidden");
          this.alfLog("log", "Update request success", payload);
@@ -176,7 +178,7 @@ define(["dojo/_base/declare",
       /**
        * This function is called whenever the request to update the value fails. It will hide the
        * processing image and display the warning image.
-       * 
+       *
        * TODO: Ideally this should include a popup failure message
        * TODO: The CoreXhr standard failure dialog should be prevented from being displayed
        *
@@ -184,10 +186,21 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onChangeFailure: function alfresco_renderers_PublishingDropDownMenu__onChangeFailure(payload) {
-         this.alfUnsubscribeSaveHandles([this._updateSuccessHandle,this._updateFailureHandle]);
+         this.alfUnsubscribeSaveHandles([this._updateSuccessHandle,this._updateFailureHandle, this._updateCancelHandle]);
          domClass.add(this.processingNode, "hidden");
          domClass.remove(this.warningNode, "hidden");
-         this.alfLog("log", "Update request success", payload);
+         this.alfLog("log", "Update request failed", payload);
+      },
+
+      /**
+       * This function is called whenever the request to update the value is cancelled. It hides the processing image
+       * and doesn't display anything else.
+       *
+       */
+      onChangeCancel: function alfresco_renderers_PublishingDropDownMenu__onChangeFailure(payload) {
+         this.alfUnsubscribeSaveHandles([this._updateSuccessHandle, this._updateFailureHandle, this._updateCancelHandle]);
+         domClass.add(this.processingNode, "hidden");
+         this.alfLog("log", "Update request cancelled", payload);
       }
    });
 });
