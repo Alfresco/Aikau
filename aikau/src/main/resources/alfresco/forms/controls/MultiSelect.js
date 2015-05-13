@@ -911,7 +911,7 @@ define([
                   this._gotoNextResult();
                }
             } else {
-               this._startSearch(this.searchBox.value);
+               this._debounceNewSearch(this.searchBox.value);
             }
          },
 
@@ -928,7 +928,7 @@ define([
                   this._gotoNextResult();
                }
             } else {
-               this._startSearch(this.searchBox.value);
+               this._debounceNewSearch(this.searchBox.value);
             }
          },
 
@@ -1359,6 +1359,11 @@ define([
 
             // Make sure we have some that need updating
             if (!this._itemsToUpdateFromStore.length) {
+
+               // Add loaded CSS-state to control
+               domClass.add(this.domNode, this.rootClass + "--loaded");
+
+               // Nothing else needed!
                return;
             }
 
@@ -1386,9 +1391,18 @@ define([
                      contentNode.setAttribute("title", labelObj.full);
                   }, this);
 
+                  // Add loaded CSS-state to control
+                  domClass.add(this.domNode, this.rootClass + "--loaded");
+
                }),
                failureHandler = lang.hitch(this, function(err) {
+
+                  // Log the error
                   this.alfLog("error", "Error updating labels from store", err);
+
+                  // Add loaded CSS-state to control
+                  domClass.add(this.domNode, this.rootClass + "--loaded");
+
                });
 
             // Make the query

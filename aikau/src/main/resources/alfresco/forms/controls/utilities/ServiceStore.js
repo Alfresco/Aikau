@@ -299,9 +299,9 @@ define(["dojo/_base/declare",
          // search term request parameter...
          payload.query = query[this.queryAttribute || "name"];
 
-         this._optionsHandle = [];
-         this._optionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onQueryOptions", response, query, resultsProperty), true));
-         this._optionsHandle.push(this.alfSubscribe(responseTopic, lang.hitch(this, "onQueryOptions", response, query, resultsProperty), true));
+         var optionsHandle = [];
+         optionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle), true));
+         optionsHandle.push(this.alfSubscribe(responseTopic, lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle), true));
          this.alfPublish(this.publishTopic, payload, true);
          return response;
       },
@@ -345,8 +345,8 @@ define(["dojo/_base/declare",
        * @param {string} resultsProperty A dot-notation address in the payload that should contain the list of options.
        * @param {object} payload The options to use
        */
-      onQueryOptions: function alfresco_forms_controls_utilities_ServiceStore__onQueryOptions(dfd, query, resultsProperty, payload) {
-         this.alfUnsubscribeSaveHandles([this._optionsHandle]);
+      onQueryOptions: function alfresco_forms_controls_utilities_ServiceStore__onQueryOptions(dfd, query, resultsProperty, optionsHandle, payload) {
+         this.alfUnsubscribeSaveHandles([optionsHandle]);
          var results = lang.getObject(resultsProperty, false, payload);
          if (results)
          {
