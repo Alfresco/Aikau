@@ -58,7 +58,7 @@ define(["dojo/_base/declare"],
        */
       formatFileSize: function alfresco_core_FileSizeMixin__formatFileSize(fileSize, decimalPlaces) {
          decimalPlaces = decimalPlaces || 0;
-         if (typeof fileSize == "string")
+         if (typeof fileSize === "string")
          {
             fileSize = fileSize.replace(/,/gi,"");
             fileSize = parseInt(fileSize, 10);

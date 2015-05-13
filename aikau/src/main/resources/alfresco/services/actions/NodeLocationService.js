@@ -24,7 +24,7 @@
  * Without any additional configuration this service can be used in Aikau pages contained within Alfresco Share,
  * however if you wish to use this in an alternative client (e.g. a standalone client created from the 
  * Aikau Maven Archetype) then it is likely that you will need to set some configuration, e.g. setting
- * [useAikauPages]{@link module:alfresco/services/actions/NodeLocationService#useAikauPages} to be true and
+ * [useAikauPages]{@link module:alfresco/core/UrlUtils#useAikauPages} to be true and
  * setting the [nonSiteUrl]{@link module:alfresco/services/actions/NodeLocationService#nonSiteUrl} and
  * [siteUrl]{@link module:alfresco/services/actions/NodeLocationService#siteUrl} locations to take the 
  * user to.
@@ -78,17 +78,6 @@ define(["dojo/_base/declare",
       nonSiteUrl: "repository",
 
       /**
-       * It's possible to explicitly set a specific URI template to use for generating links. If this is not
-       * set then a default of "sitepage" is used which is known to be configured in in both Alfresco Share
-       * and in applications generated from the Aikau Maven archetype.
-       *
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      sitePageTemplate: null,
-
-      /**
        * The should be configured to be the URL fragment to be used when linking to nodes that located
        * within a site. It defaults to "documentlibrary" as this is the standard site URL expected to be used within
        * Alfresco Share. If this is configured as being null then the 
@@ -100,17 +89,6 @@ define(["dojo/_base/declare",
        * @default "documentlibrary"
        */
       siteUrl: "documentlibrary",
-
-      /**
-       * This indicates whether or not the linked pages are "Aikau-style" page. An Aikau style page is where
-       * the a combination of "page-id" and "ws" URL tokens are used to construct a page. This defaults to false
-       * for use in Alfresco Share where pages for located items are typically standard "Surf-style" pages.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      useAikauPages: false,
 
       /**
        * @instance
@@ -134,25 +112,15 @@ define(["dojo/_base/declare",
             var path = lang.getObject("item.location.path", false, payload);
             var recordSiteName = lang.getObject("item.location.site.name", false, payload);
             var useSiteUrl = (recordSiteName && this.siteUrl);
-            var tokens = {
-               site: useSiteUrl ? recordSiteName : null
-            };
-            if (this.useAikauPages === true)
-            {
-               tokens.webscript = useSiteUrl ? this.siteUrl : this.nonSiteUrl;
-               tokens.pageid = "dp";
-            }
-            else
-            {
-               tokens.pageid = useSiteUrl ? this.siteUrl : this.nonSiteUrl;
-            }
-            var url = this.uriTemplate(this.sitePageTemplate || "sitepage", tokens) + "#path=" + encodeURIComponent(path);
+
+            var page = useSiteUrl ? this.siteUrl : this.nonSiteUrl;
+            var site = useSiteUrl ? recordSiteName : null;
+            var url = this.buildUrl(page, site) + "#path=" + encodeURIComponent(path);
             this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
                url: url,
                target: "CURRENT",
                type: "FULL_PAGE"
             });
-            
          }
          else
          {

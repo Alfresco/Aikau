@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Workflow Actions</shortname>
+  <description>Displays buttons that use the WorkflowService control approval, rejection and assignment of workflows.</description>
+  <family>aikau-unit-tests</family>
+  <url>/WorkflowActions</url>
+</webscript>

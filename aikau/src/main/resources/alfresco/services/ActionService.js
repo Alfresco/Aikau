@@ -54,13 +54,9 @@ define(["dojo/_base/declare",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/JsNode",
         "alfresco/core/NotificationUtils",
-        "dojo/_base/lang",
-        "dojo/_base/array",
-        "alfresco/dialogs/AlfDialog",
-        "alfresco/pickers/Picker",
-        "alfresco/core/NodeUtils"],
+        "dojo/_base/lang"],
         function(declare, AlfCore, AlfCoreXhr, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtils,
-                 ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang, array, AlfDialog, Picker, NodeUtils) {
+                 ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang) {
 
    // TODO: L18N sweep - lots of widgets defined with hard coded labels...
 
@@ -92,6 +88,17 @@ define(["dojo/_base/declare",
        * @default null
        */
       containerId: null,
+
+      /**
+       * This can be set to either "NEW" or "CURRENT" to indicate whether or not a linked page is displayed
+       * in the current or a new window/tab. This setting is only honoured if an action is not explicitly
+       * configured with a target.
+       * 
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      currentTarget: "CURRENT",
 
       /**
        * This should be set if "siteId" is not set.
@@ -514,7 +521,7 @@ define(["dojo/_base/declare",
          }
 
          var publishPayload = {
-            type: this.sharePageRelativePath,
+            type: this.pageRelativePath,
             url: url,
             target: this.currentTarget
             },
@@ -541,7 +548,7 @@ define(["dojo/_base/declare",
          var url = lang.replace(payload.params.href, this.getActionUrls(document, this.siteId, this.repositoryUrl, this.replicationUrlMapping));
          var indexOfTarget = url.indexOf("\" target=\"_blank");
          var target = "CURRENT";
-         if (indexOfTarget !== -1)
+         if (indexOfTarget !== -1 || this.currentTarget === "NEW")
          {
             url = url.substring(0, indexOfTarget);
             target = "NEW";
@@ -914,26 +921,14 @@ define(["dojo/_base/declare",
       /**
        * Assign workflow.
        *
-       * @method onActionAssignWorkflow
+       * @instance
        * @param {object} payload the publishPayload from the action.
        * @param {object} documents Object literal representing the nodes to be actioned
        */
-      onActionAssignWorkflow: function alfresco_services_ActionService__onActionAssignWorkflow(payload, documents)
-      {
-         var nodeRefs = NodeUtils.nodeRefsString(documents);
-         var postBody =
-         {
-            selectedItems: nodeRefs
-         };
-
-         postBody.destination = window.location.toString();
-         var url = this.siteURL("start-workflow");
-         this.alfPublish(this.postToPageTopic, {
-            method: "POST",
-            type: this.sharePageRelativePath,
-            url: url,
-            target: this.currentTarget,
-            parameters: postBody
+      onActionAssignWorkflow: function alfresco_services_ActionService__onActionAssignWorkflow(payload, documents) {
+         this.alfPublish("ALF_ASSIGN_WORKFLOW", {
+            nodes: documents,
+            currentTarget: this.currentTarget
          });
       },
 
