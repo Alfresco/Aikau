@@ -119,6 +119,22 @@ define(["dojo/_base/declare",
       handleOverflow: true,
 
       /**
+       * Extends the default constructor to adjust for changes between 1.9.x and 1.10.x versions
+       * of the dijit/Dialog. This has been done to keep AlfDialog configuration backwards compatible.
+       *
+       * @instance
+       * @param  {object} args The constructor arguments
+       */
+      constructor: function alfresco_dialogs_AlfDialog__constructor(args) {
+         if (!args.content && args.textContent)
+         {
+            args.content = args.textContent;
+            delete args.textContent;
+         }
+         declare.safeMixin(args);
+      },
+
+      /**
        * Extends the superclass implementation to set the dialog as not closeable (by clicking an "X"
        * in the corner).
        * 
