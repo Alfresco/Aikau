@@ -36,6 +36,56 @@ define(["dojo/_base/declare",
    return declare([PathUtils], {
 
       /**
+       * This indicates whether or not the linked pages are "Aikau-style" page. An Aikau style page is where
+       * the a combination of "page-id" and "ws" URL tokens are used to construct a page. This defaults to false
+       * for use in Alfresco Share where pages for located items are typically standard "Surf-style" pages.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      useAikauPages: false,
+
+      /**
+       * It's possible to explicitly set a specific URI template to use for generating links. If this is not
+       * set then a default of "sitepage" is used which is known to be configured in in both Alfresco Share
+       * and in applications generated from the Aikau Maven archetype.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      sitePageTemplate: null,
+
+      /**
+       * This function can be used to build a page taking into account that the page can either be
+       * a Surf Page (as used by Alfresco Share) or an Aikau page (as used by custom page in Share or
+       * a standalone Aikau client).
+       *
+       * @instance
+       * @param  {string} page This is the pageid (for Share) or WebScript URL (for Aikau) for the URL
+       * @param  {string} site This is the site (if available) to use
+       * @param  {string} template A custom template to use in place of "sitepage" (which will be used otherwise)
+       * @return {url} The URL built from the supplied arguments.
+       */
+      buildUrl: function alfresco_core_UrlUtils__buildUrl(page, site) {
+         var tokens = {
+            site: site
+         };
+         if (this.useAikauPages === true)
+         {
+            tokens.webscript = page;
+            tokens.pageid = "dp";
+         }
+         else
+         {
+            tokens.pageid = page;
+         }
+         var url = this.uriTemplate(this.sitePageTemplate || "sitepage", tokens);
+         return url;
+      },
+
+      /**
        * Generate User Profile link
        *
        * @instance

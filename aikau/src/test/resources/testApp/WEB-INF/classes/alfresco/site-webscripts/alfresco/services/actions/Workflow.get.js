@@ -12,7 +12,12 @@ model.jsonModel = {
             }
       },
       "alfresco/services/ActionService",
-      "alfresco/services/actions/SimpleWorkflowService"
+      {
+         name: "alfresco/services/actions/SimpleWorkflowService",
+         config: {
+            useAikauPages: true
+         }
+      }
    ],
    widgets: [
       {
@@ -91,6 +96,27 @@ model.jsonModel = {
                },
                document: {
                   nodeRef: "some://node/four"
+               }
+            }
+         }
+      },
+      {
+         id: "ASSIGN",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Assign workflow",
+            publishTopic: "ALF_SINGLE_DOCUMENT_ACTION_REQUEST",
+            publishPayload: {
+               action: {
+                  type: "javascript",
+                  params: {
+                     "function": "onActionAssignWorkflow"
+                  }
+               },
+               document: {
+                  nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                  displayName: "Some Node Title",
+                  fileName: "File 1"
                }
             }
          }
