@@ -96,6 +96,14 @@ define(["alfresco/core/Core",
          }],
 
          /**
+          * A self-incrementing response delay that permits easy replication of a race-condition bug
+          *
+          * @type {number}
+          * @default  0
+          */
+         _responseDelayMs: 250,
+
+         /**
           * Constructor
           *
           * @instance
@@ -113,9 +121,11 @@ define(["alfresco/core/Core",
           * @param    {object} payload The publish payload
           */
          _getCelestialCategories: function alfresco_testing_mockservices_MultiSelectMockService___getCelestialCategories(payload) {
-            this.alfPublish(payload.alfResponseTopic || payload.responseTopic, {
-               response: this._celestialCategories
-            });
+            setTimeout(lang.hitch(this, function() {
+               this.alfPublish(payload.alfResponseTopic || payload.responseTopic, {
+                  response: this._celestialCategories
+               });
+            }), (this._responseDelayMs += 50));
          }
       });
    });
