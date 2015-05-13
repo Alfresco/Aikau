@@ -308,7 +308,7 @@ define(["dojo/_base/declare",
          var dialog = new AlfDialog({
             generatePubSubScope: false,
             title: this.message(title),
-            textContent: this.message(prompt),
+            content: this.message(prompt),
             widgetsButtons: [
                {
                   name: "alfresco/buttons/AlfButton",
