@@ -25,10 +25,10 @@ define(["intern!object",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
+        "intern/dojo/node!leadfoot/keys"],
         function (registerSuite, expect, assert, require, TestCommon, keys) {
 
-   var browser; 
+   var browser;
    registerSuite({
       name: "PublishingDropDownMenu Tests",
 
@@ -41,13 +41,13 @@ define(["intern!object",
          browser.end();
       },
 
-     "Test drop down menu count": function () {
+      "Test drop down menu count": function () {
          return browser.findAllByCssSelector("div.alfresco-renderers-PublishingDropDownMenu")
             .then(function (dropdowns) {
                expect(dropdowns).to.have.length(3, "There should be 3 dropdown menus rendered, found: " + dropdowns.length);
             });
       },
-      
+
       "Test first drop-down value is 'Public'": function() {
          return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
             .getVisibleText()
@@ -55,7 +55,7 @@ define(["intern!object",
                expect(result1).to.equal("Public", "The start value of dropdown menu 1 should be 'Public'");
             });
       },
-      
+
       "Test menu opens on mouse click": function() {
          return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
             .click()
@@ -65,7 +65,7 @@ define(["intern!object",
                assert(false, "The drop down menu did not appear on mouse clicks");
             });
       },
-      
+
       "Test menu is visible": function() {
          return browser.findByCssSelector(".dijitMenuPopup")
             .isDisplayed()
@@ -73,7 +73,7 @@ define(["intern!object",
                expect(result3).to.equal(true, "The drop down menu should be visible on mouse clicks");
              });
       },
-      
+
       "Test menu code not removed on click": function() {
          return browser.findByCssSelector("tr.dijitMenuItem:nth-of-type(3)")
             .click()
@@ -83,7 +83,7 @@ define(["intern!object",
                 assert(false, "The menu code should not have been removed");
             });
       },
-      
+
       "Test menu disappears after mouse click": function() {
          return browser.findByCssSelector(".dijitMenuPopup")
             .isDisplayed()
@@ -91,14 +91,60 @@ define(["intern!object",
                expect(result5).to.equal(false, "The drop down menu should be hidden after the mouse click");
             });
       },
-      
+
       "Test menu selection published on mouse click": function() {
          return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_PUBLISHING_DROPDOWN_MENU", "alfTopic", "ALF_PUBLISHING_DROPDOWN_MENU"))
             .then(function(elements) {
                assert(elements.length === 1, "The menu did not publish on 'ALF_PUBLISHING_DROPDOWN_MENU' after mouse clicks, expected 1 found: " + elements.length);
             });
       },
-      
+
+      "Test menu success item is displayed": function() {
+         return browser.findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.success:not(.hidden)")
+            .then(function(elements) {
+               assert(elements.length === 1, "The success icon did not display");
+            });
+      },
+
+      "Test menu failure item is displayed": function () {
+         return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
+            .click()
+            .end()
+            .findByCssSelector("tr.dijitMenuItem:nth-of-type(2)")
+            .click()
+            .end()
+            .findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.warning:not(.hidden)")
+            .then(function (elements) {
+               assert(elements.length === 1, "The failure icon did not display");
+            });
+      },
+
+      "Test menu status icon is hidden on cancel": function () {
+         return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
+            .click()
+            .end()
+            .findByCssSelector("tr.dijitMenuItem:nth-of-type(1)")
+            .click()
+            .end()
+            .findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator:not(.hidden)")
+            .then(function (elements) {
+               assert(elements.length === 0, "There is still a visible status icon when there shouldn't be");
+            });
+      },
+
+      "Test menu spinner icon is displayed": function () {
+         return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
+            .click()
+            .end()
+            .findByCssSelector("tr.dijitMenuItem:nth-of-type(3)")
+            .click()
+            .end()
+            .findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.processing:not(.hidden)")
+            .then(function (elements) {
+               assert(elements.length === 1, "The spinner icon is not present");
+            });
+      },
+
       "Test menu publish is cleared on refresh": function() {
          return browser.refresh().end()
             .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_PUBLISHING_DROPDOWN_MENU", "alfTopic", "ALF_PUBLISHING_DROPDOWN_MENU"))
@@ -106,7 +152,7 @@ define(["intern!object",
                assert(elements.length === 0, "The menu publish should have gone after a refresh, expected 0 found: ", elements.length);
             });
       },
-      
+
       "Test menu can be opened via keyboard": function() {
          return browser.pressKeys(keys.TAB)
          .pressKeys(keys.TAB)
@@ -121,7 +167,7 @@ define(["intern!object",
                expect(result8).to.equal(true, "The drop down menu should be visible after key presses");
             });
       },
-      
+
       "Test menu hidden after keyboard selection": function() {
          return browser.pressKeys(keys.ARROW_DOWN)
          .pressKeys(keys.RETURN)
@@ -132,7 +178,7 @@ define(["intern!object",
                expect(elements).to.equal(false, "The drop down menu should be hidden after key presses");
             });
       },
-      
+
       "Test menu published after keyboard selection": function() {
          return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_PUBLISHING_DROPDOWN_MENU", "alfTopic", "ALF_PUBLISHING_DROPDOWN_MENU"))
             .then(function(elements) {
