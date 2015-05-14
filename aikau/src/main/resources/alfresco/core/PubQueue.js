@@ -72,10 +72,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            if (AlfConstants.DEBUG === true)
-            {
-               PubSubLog.getSingleton().pub(scopedTopic, payload, caller);
-            }
+            this.log(scopedTopic, payload, caller);
             pubSub.publish(scopedTopic, payload);
          }
       },
@@ -88,14 +85,31 @@ define(["dojo/_base/declare",
       release: function alfresco_core_PubQueue__release() {
          this._released = true;
          array.forEach(this._queue, function(publication) {
-            if (AlfConstants.DEBUG === true)
-            {
-               PubSubLog.getSingleton().pub(publication.topic, 
-                                            publication.payload, 
-                                            publication.caller);
-            }
+            this.log(publication.topic, publication.payload, publication.caller);
             pubSub.publish(publication.topic, publication.payload);
          }, this);
+      },
+
+      /**
+       * Logs the publication if the publication to be logged isn't a log request or 
+       * a request to log publications or subscriptions.
+       * 
+       * @param {string} scopedTopic The topic to publish on
+       * @param {object} payload The payload to be delivered
+       * @param {object} caller The widget or service requesting the publication
+       */
+      log: function alfresco_core_PubQueue__log(scopedTopic, payload, caller) {
+         if (scopedTopic && (scopedTopic !== "ALF_LOG_REQUEST" &&
+                             scopedTopic !== "ALF_LOG_PUBLICATION_ACTIVITY" &&
+                             scopedTopic !== "ALF_LOG_SUBSCRIPTION_ACTIVITY" &&
+                             scopedTopic !== "ALF_LOG_UNSUBSCRIPTION_ACTIVITY"))
+         {
+            if (AlfConstants.DEBUG === true)
+            {
+               PubSubLog.getSingleton().pub(scopedTopic, payload, caller);
+               pubSub.publish("ALF_LOG_PUBLICATION_ACTIVITY", payload, caller);
+            }
+         }
       }
    });
    

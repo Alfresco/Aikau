@@ -473,6 +473,11 @@ define(["dojo/_base/declare",
          if (AlfConstants.DEBUG)
          {
             PubSubLog.getSingleton().sub(scopedTopic, callback, this);
+            this.alfPublish("ALF_LOG_SUBSCRIPTION_ACTIVITY", {
+               subscribedTopic: scopedTopic,
+               callback: callback,
+               subscriber: this
+            }, true);
          }
 
          var handle = pubSub.subscribe(scopedTopic, callback);
@@ -480,6 +485,7 @@ define(["dojo/_base/declare",
          {
             this.alfSubscriptions = [];
          }
+         handle.scopedTopic = scopedTopic;
          this.alfSubscriptions.push(handle);
          return handle;
       },
@@ -506,6 +512,10 @@ define(["dojo/_base/declare",
                if (AlfConstants.DEBUG === true)
                {
                   PubSubLog.getSingleton().unsub(individualHandle, this);
+                  this.alfPublish("ALF_LOG_UNSUBSCRIPTION_ACTIVITY", {
+                     unsubscribedTopic: individualHandle.scopedTopic,
+                     subscriber: this
+                  }, true);
                }
 
                individualHandle.remove();
