@@ -53,6 +53,16 @@ define(["alfresco/core/ProcessWidgets",
       baseClass: "alfresco-core-Page",
 
       /**
+       * This is the callback handler for any require based errors that may occur during page load.
+       *
+       * @instance
+       * @param  {object} error Details of the error that has occurred
+       */
+      onError: function alfresco_core_Page__onError(error) {
+         this.alfLog("error", "The following AMD module loading error occurred", error);
+      },
+
+      /**
        * Overrides the superclass implementation to call [processServices]{@link module:alfresco/core/Core#processServices}
        * and [processWidgets]{@link module:alfresco/core/Core#processWidgets} as applicable.
        *
@@ -61,6 +71,7 @@ define(["alfresco/core/ProcessWidgets",
       postCreate: function alfresco_core_Page__postCreate() {
          /*jshint devel:true*/
          shims.apply();
+         require.on("error", this.onError);
          try
          {
             // If we're in debug mode, then we should add some DOM elements for the Developer View. This will
@@ -94,7 +105,6 @@ define(["alfresco/core/ProcessWidgets",
          }
          catch (e)
          {
-            console.error("BOOM!", e);
             this.alfLog("error", "The following error occurred building the page", e);
             PubQueue.getSingleton().release();
          }
@@ -187,9 +197,26 @@ define(["alfresco/core/ProcessWidgets",
          var _this = this;
          var requires = [dep];
          require(requires, function(ServiceType) {
-            var service = new ServiceType(serviceConfig);
-            _this.servicesToDestroy.push(service);
-
+            if (typeof ServiceType === "function")
+            {
+               try
+               {
+                  var service = new ServiceType(serviceConfig);
+                  _this.servicesToDestroy.push(service);
+               }
+               catch (e) 
+               {
+                  _this.alfLog("error", "The following error occurred creating a service", e);
+                  if (callback)
+                  {
+                     callback.call((callbackScope || _this), service, index);
+                  }
+               }
+            }
+            else
+            {
+               _this.alfLog("error", "The following service could not be found, so is not included on the page '" +  dep + "'. Please correct the use of this service in your page definition");
+            }
             if (callback)
             {
                // If there is a callback then call it with any provided scope (but default to the

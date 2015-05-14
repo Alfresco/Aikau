@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,9 +24,8 @@
  * @module alfresco/core/PubSubLog
  * @author Dave Draper
  */
-define(["dojo/_base/declare",
-        "service/constants/Default"],
-        function(declare, AlfConstants) {
+define(["dojo/_base/declare"],
+        function(declare) {
 
    // This is a simple singleton pattern. Technically it is still possible to instantiate a new log,
    // but as the core will always use the singleton and it is expected that all calls will go through the core
@@ -59,11 +58,7 @@ define(["dojo/_base/declare",
 
          // Send details to the console to enable better filter, searching and clearing.
          // This specifically avoids the logging & preference services to keep it simple & be available instantly.
-         if (console && typeof console.log === "function" && AlfConstants.DEBUG)
-         {
-            console.log(entry);
-         }
-
+         // this.alfLog("log", "PubSub Activity", entry);
          this.addEntry(entry);
       },
 
@@ -83,7 +78,7 @@ define(["dojo/_base/declare",
        * @param {object} object The object that made the subscription
        */
       pub: function alfresco_core_PubSubLog__pub(topic, payload, object) {
-         if (topic != "ALF_LOG_REQUEST")
+         if (topic !== "ALF_LOG_REQUEST")
          {
             this.updateLog("PUBLISH", topic, payload, object.id);
          }
@@ -113,7 +108,7 @@ define(["dojo/_base/declare",
 
    var instance;
    PubSubLog.getSingleton = function() {
-      if (instance == null)
+      if (!instance)
       {
          instance = new PubSubLog();
       }
