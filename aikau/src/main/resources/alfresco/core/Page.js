@@ -187,23 +187,11 @@ define(["alfresco/core/ProcessWidgets",
          var _this = this;
          var requires = [dep];
          require(requires, function(ServiceType) {
-            // Error handling. If the require call is successful, ServiceType will be a function.
-            if (typeof ServiceType !== "function") {
-
-               // Use the closure variables to infer the current service name
-               var serviceName = _this.services[_this._processedServices.length];
-               if (typeof serviceName === "object" && serviceName.name) {
-                  serviceName = serviceName.name;
-               }
-
-               // Throw the error. Most common reason for require call to fail is a typo in the service name.
-               throw "Unable to locate service: " + serviceName;
-            }
-
             var service = new ServiceType(serviceConfig);
             _this.servicesToDestroy.push(service);
 
-            if (callback) {
+            if (callback)
+            {
                // If there is a callback then call it with any provided scope (but default to the
                // "this" as the scope if one isn't provided).
                callback.call((callbackScope || _this), service, index);
