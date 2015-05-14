@@ -41,9 +41,34 @@ define(["intern!object",
             browser.end();
          },
 
-         "Test": function() {
-            return browser.findByCssSelector("*")
-               .getLogEntries();
+         "Total height is correct": function() {
+            return browser.findById("HEADER_FOOTER")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, 300, "Height not as per widget config");
+               });
+         },
+
+         "Only content is scrollable": function() {
+            function nodeOverflows(selector) {
+               var node = document.querySelector(selector);
+               return node.scrollHeight > node.offsetHeight;
+            }
+
+            return browser.execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__header"])
+               .then(function(overflows) {
+                  assert.isFalse(overflows, "Header is not same height as its content");
+               })
+
+            .execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__content"])
+               .then(function(overflows) {
+                  assert.isTrue(overflows, "Content is not overflowing");
+               })
+
+            .execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__footer"])
+               .then(function(overflows) {
+                  assert.isFalse(overflows, "Footer is not same height as its content");
+               });
          },
 
          "Post Coverage Results": function() {

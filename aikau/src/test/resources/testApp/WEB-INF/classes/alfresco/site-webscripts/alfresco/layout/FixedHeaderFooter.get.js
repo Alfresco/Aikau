@@ -8,6 +8,12 @@ model.jsonModel = {
                all: true
             }
          }
+      },
+      {
+         name: "aikauTesting/mockservices/PaginationService",
+         config: {
+            loadDataSubscriptionTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST"
+         }
       }
    ],
    widgets: [
@@ -18,37 +24,86 @@ model.jsonModel = {
             widgets: [
                {
                   name: "alfresco/layout/FixedHeaderFooter",
-                  stripeStyle: "margin: 50px 0;",
+                  id: "HEADER_FOOTER",
+                  stripeStyle: "margin: 0 0 50px;",
                   config: {
                      height: "300px",
                      widgetsForHeader: [
                         {
-                           name: "alfresco/logo/Logo"
+                           id: "FIXED_BREADCRUMBS",
+                           name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
+                           config: {
+                              breadcrumbs: [
+                                 {
+                                    label: "Stairway"
+                                 },
+                                 {
+                                    label: "To"
+                                 },
+                                 {
+                                    label: "Heaven"
+                                 }
+                              ]
+                           }
                         }
                      ],
                      widgets: [
                         {
-                           name: "alfresco/logo/Logo"
-                        },
-                        {
-                           name: "alfresco/logo/Logo"
-                        },
-                        {
-                           name: "alfresco/logo/Logo"
-                        },
-                        {
-                           name: "alfresco/logo/Logo"
-                        },
-                        {
-                           name: "alfresco/logo/Logo"
-                        },
-                        {
-                           name: "alfresco/logo/Logo"
+                           id: "LIST",
+                           name: "alfresco/documentlibrary/AlfDocumentList",
+                           config: {
+                              useHash: false,
+                              currentPageSize: 10,
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/AlfListView",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/views/layouts/Row",
+                                             config: {
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/lists/views/layouts/Cell",
+                                                      config: {
+                                                         widgets: [
+                                                            {
+                                                               name: "alfresco/renderers/Property",
+                                                               config: {
+                                                                  propertyToRender: "index"
+                                                               }
+                                                            }
+                                                         ]
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
                         }
                      ],
                      widgetsForFooter: [
                         {
-                           name: "alfresco/logo/Logo"
+                           id: "MENU_BAR",
+                           name: "alfresco/menus/AlfMenuBar",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "CUSTOM_PAGE_SIZE_PAGINATOR",
+                                    name: "alfresco/lists/Paginator",
+                                    config: {
+                                       useHash: false,
+                                       documentsPerPage: 10,
+                                       hidePageSizeOnWidth: 100,
+                                       pageSizes: [5,10,20]
+                                    }
+                                 }
+                              ]
+                           }
                         }
                      ]
                   }
