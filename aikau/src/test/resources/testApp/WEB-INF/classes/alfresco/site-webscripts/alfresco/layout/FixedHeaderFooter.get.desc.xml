@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FixedHeaderFooter Test</shortname>
+  <description>Demonstrates the FixedHeaderFooter layout widget by showing a list with menus above and below</description>
+  <family>aikau-unit-tests</family>
+  <url>/FixedHeaderFooter</url>
+</webscript>
