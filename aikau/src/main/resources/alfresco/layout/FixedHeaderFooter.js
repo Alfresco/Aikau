@@ -21,7 +21,39 @@
  * A layout control used to provide a scrollable central area with fixed-position header/footer widgets.
  *
  * @example <caption>Sample configuration:</caption>
- * {}
+ * {
+ *    name: "alfresco/layout/FixedHeaderFooter",
+ *    config: {
+ *       height: "300px",
+ *       widgetsForHeader: [
+ *          {
+ *             name: "alfresco/logo/Logo"
+ *          }
+ *       ],
+ *       widgets: [
+ *          {
+ *             name: "alfresco/logo/Logo"
+ *          },
+ *          {
+ *             name: "alfresco/logo/Logo"
+ *          },
+ *          {
+ *             name: "alfresco/logo/Logo"
+ *          },
+ *          {
+ *             name: "alfresco/logo/Logo"
+ *          },
+ *          {
+ *             name: "alfresco/logo/Logo"
+ *          }
+ *       ],
+ *       widgetsForFooter: [
+ *          {
+ *             name: "alfresco/logo/Logo"
+ *          }
+ *       ]
+ *    }
+ * }
  *
  * @module alfresco/layout/FixedHeaderFooter
  * @extends module:alfresco/core/ProcessWidgets
