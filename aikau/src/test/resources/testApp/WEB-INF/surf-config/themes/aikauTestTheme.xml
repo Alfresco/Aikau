@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<theme>
+   <title>Aikau Test Theme</title>
+   <title-id>theme.aikauTestTheme</title-id>
+   <css-tokens>
+      <less-variables>
+         @header-background-color: #0082c8;
+         @header-font-color: #ccc;
+         @header-hover-background-color: orange;
+         @header-hover-font-color: green;
+         @header-focus-background-color: yellow;
+         @header-focus-font-color: red;
+         @header-menubar-font-color: pink;
+         @header-dropdown-menu-font-color: purple;
+      </less-variables>
+   </css-tokens>
+</theme>

@@ -9,14 +9,14 @@
 }
 
 .alfresco-logo-Logo .alfresco-logo-large {
-   background-image: url("./images/AlfrescoLogo.PNG");
+   background-image: url("./images/alfresco.png");
    background-repeat: no-repeat;
    height: 48px;
    width: 184px;
 }
 
 .alfresco-logo-Logo .alfresco-logo-only {
-   background-image: url("./images/AlfrescoLogoOnly.PNG");
+   background-image: url("./images/app-logo-48.png");
    background-repeat: no-repeat;
    height: 48px;
    width: 48px;

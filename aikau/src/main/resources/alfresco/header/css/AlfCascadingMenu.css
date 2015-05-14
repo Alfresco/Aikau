@@ -3,25 +3,25 @@
 .alfresco-share .alfresco-header-AlfCascadingMenu .dijitMenu .dijitMenuItemHover,
 .alfresco-share .alfresco-header-AlfCascadingMenu .dijitComboBoxMenu .dijitMenuItemHover,
 .alfresco-share .alfresco-header-AlfCascadingMenu .dijitMenuItemSelected {
-   background-color: #717171;
+   background-color: @header-hover-background-color;
    background-image: none;
    background-repeat: no-repeat;
-   color: #fff;
+   color: @header-hover-font-color;
 }
 
 /* This has been added to set the display for cascading menus - TODO this needs to be changed
    for cases where groups have not been specified. */
 .alfresco-share .dijitPopup.Popup .alfresco-header-AlfCascadingMenu {
-  border: 1px solid #4D4D4D;
-  background-color: #4D4D4D;
+  border: 1px solid @header-focus-background-color;
+  background-color: @header-focus-background-color;
   box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.3);
   padding: 5px;
 }
 
 /* This ensures that the menu text color is white */
 .alfresco-share .dijitPopup.Popup .alfresco-header-AlfCascadingMenu .dijitMenuItem {
-  color: #fff;
-  background-color: #4D4D4D;
+  color: @header-focus-font-color;
+  background-color: @header-focus-background-color;
 }
 
 /* This overrides whatever Dojo theme is used */
@@ -29,16 +29,16 @@
 .alfresco-share .dijitPopup.Popup .alfresco-header-AlfCascadingMenu .dijitSelectMenu .dijitMenuItemSelected td, 
 .alfresco-share .dijitPopup.Popup .alfresco-header-AlfCascadingMenu .dijitMenuItemHover,
 .alfresco-share .dijitPopup.Popup .alfresco-header-AlfCascadingMenu .dijitMenuItemSelected {
-  background-color: #717171;
+  background-color: @header-hover-background-color;
   background-image: none;
   background-repeat: no-repeat;
-  color: #fff;
+  color: @header-hover-font-color;
 }
 
 /* More specific rule for properly grouped items */
 .dijitPopup.Popup .alfresco-header-AlfCascadingMenu .alf-menu-group.dijitMenu .alf-menu-group-items .alf-dropdown-menu {
-  border: 1px solid #4D4D4D;
-  background-color: #4D4D4D;
+  border: 1px solid @header-focus-background-color;
+  background-color: @header-focus-background-color;
   box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.3);
   padding: 5px;
 }
