@@ -218,6 +218,25 @@ model.jsonModel = {
                                              config: {
                                                 propertyToRender: "title"
                                              }
+                                          },
+                                          {
+                                             name: "alfresco/renderers/PublishingDropDownMenu",
+                                             config: {
+                                                publishTopic: "RM_USER_SECURITY_CLEARANCE_SET",
+                                                publishPayload: {
+                                                   username: "username",
+                                                   clearanceId: "classificationId"
+                                                },
+                                                propertyToRender: "name",
+                                                renderedValueClass: "security-clearance-user-classification-level",
+                                                optionsConfig: {
+                                                   fixed: [
+                                                      {name:"one",value:"Res1"},
+                                                      {name:"two",value:"Res2"},
+                                                      {name:"three",value:"Res3"}
+                                                   ]
+                                                }
+                                             }
                                           }
                                        ]
                                     }
