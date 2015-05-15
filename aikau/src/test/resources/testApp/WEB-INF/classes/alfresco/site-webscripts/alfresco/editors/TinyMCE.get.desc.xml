@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>TinyMCE Form Control Test</shortname>
+  <shortname>TinyMCE Form Control</shortname>
+  <description>This demonstrates the TinyMCE form control that can be used for rich-text content creation or editing.</description>
   <family>aikau-unit-tests</family>
   <url>/TinyMCE</url>
 </webscript>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,8 +18,7 @@
  */
 
 /**
- * This is an initial prototype form control that wraps the [TinyMCE editor]{@link module:alfresco/editors/TinyMCE}.
- * It is not recommended for production use yet as there as still some outstanding issues to resolve.
+ * This a form control that wraps the [TinyMCE editor]{@link module:alfresco/editors/TinyMCE}.
  *
  * @module alfresco/forms/controls/TinyMCE
  * @extends module:alfresco/forms/controls/BaseFormControl
@@ -27,10 +26,8 @@
  */
 define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
-        "alfresco/editors/TinyMCE",
-        "dojo/_base/lang",
-        "dojo/aspect"], 
-        function(BaseFormControl, declare, TinyMCE, lang, aspect) {
+        "alfresco/editors/TinyMCE"], 
+        function(BaseFormControl, declare, TinyMCE) {
    
    return declare([BaseFormControl], {
       
@@ -90,7 +87,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        */
-      onEditorValueChange: function alfresco_forms_controls_TinyMCE__onEditorValueChange(evt) {
+      onEditorValueChange: function alfresco_forms_controls_TinyMCE__onEditorValueChange(/*jshint unused:false*/ evt) {
          var value = this.wrappedWidget.getValue();
          this.onValueChangeEvent(this.name, this.lastValue, value);
          this.lastValue = value;
@@ -103,9 +100,9 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        * @param {boolean} status Indicates the current status
        */
-      alfDisabled: function alfresco_forms_controls_BaseFormControl__alfDisabled(status) {
+      alfDisabled: function alfresco_forms_controls_BaseFormControl__alfDisabled(/*jshint unused:false*/ status) {
          this.inherited(arguments);
-         if (this.wrappedWidget != null)
+         if (this.wrappedWidget)
          {
             this.wrappedWidget.setDisabled(this._disabled);
          }
