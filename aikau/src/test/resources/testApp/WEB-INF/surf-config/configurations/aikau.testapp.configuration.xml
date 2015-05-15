@@ -4,7 +4,7 @@
    <description>Configuration for application to unit test Aikau widgets</description>
    <source-id>site</source-id>
    <properties>
-      <theme>lightTheme</theme>
+      <theme>aikauTestTheme</theme>
       <root-page>site-index</root-page>
    </properties>
 </configuration>
