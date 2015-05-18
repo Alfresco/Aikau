@@ -18,16 +18,10 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/buttons/AlfButton",
-         config: {
-            label: "Retrieve activity",
-            publishTopic: "RETRIEVE_ACTIVITY"
-         }
-      },
-      {
          name: "alfresco/lists/views/AlfListView",
          config: {
             documentSubscriptionTopic: "ACTIVITY_RETRIEVED",
+            subscribeToDocRequests: true,
             itemsProperty: "activities",
             widgets: [
                {
