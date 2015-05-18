@@ -581,7 +581,7 @@ define(["dojo/_base/declare",
 
       /**
        * Processes filter configuration. This looks for either "renderFilters" (e.g. a filter containing
-       * sub-filters) or "renderFilter" (e.g a single filter containing one or more rules to evaluate).
+       * sub-filters) or "renderFilter" (i.e. a single filter containing one or more rules to evaluate).
        * It then delegates processing to the appropriate function
        * 
        * @param  {object} filterConfig The configuration to inspect
@@ -591,7 +591,7 @@ define(["dojo/_base/declare",
          var shouldRender = true;
          if (filterConfig && filterConfig.renderFilters)
          {
-            // If "renderFilters" (e.g. more than one "renderFilter" - see following else/if block)
+            // If "renderFilters" (i.e. more than one "renderFilter" - see following else/if block)
             var renderFiltersConfig = filterConfig.renderFilters;
             var renderFiltersMethod = lang.getObject("renderFilterMethod", false, filterConfig);
             shouldRender = this.processMultipleFilters(renderFiltersConfig, renderFiltersMethod);
