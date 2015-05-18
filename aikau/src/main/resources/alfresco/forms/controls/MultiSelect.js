@@ -905,14 +905,7 @@ define([
             if (evt.target !== this.searchBox) {
                this.searchBox.focus();
             }
-            if (this._results.length && !this._resultsDropdownIsVisible()) {
-               this._showResultsDropdown();
-               if (!this._focusedResult) {
-                  this._gotoNextResult();
-               }
-            } else {
-               this._debounceNewSearch(this.searchBox.value);
-            }
+            this._showOrSearch();
          },
 
          /**
@@ -922,14 +915,7 @@ define([
           */
          _onFocus: function alfresco_forms_controls_MultiSelect___onSearchFocus() {
             domClass.add(this.domNode, this.rootClass + "--focused");
-            if (this._results.length) {
-               this._showResultsDropdown();
-               if (!this._focusedResult) {
-                  this._gotoNextResult();
-               }
-            } else {
-               this._debounceNewSearch(this.searchBox.value);
-            }
+            this._showOrSearch();
          },
 
          /**
@@ -1018,7 +1004,7 @@ define([
                      if (this._resultsDropdownIsVisible()) {
                         this._gotoNextResult();
                      } else {
-                        this._showResultsDropdown();
+                        this._showOrSearch();
                      }
                      evt.preventDefault();
                      break;
@@ -1132,6 +1118,7 @@ define([
          _resetSearchBox: function alfresco_forms_controls_MultiSelect___resetSearchBox() {
             this._currentSearchValue = "";
             this.searchBox.value = "";
+            this._results = [];
          },
 
          /**
@@ -1242,6 +1229,26 @@ define([
             this._hideEmptyMessage();
             this._hideErrorMessage();
             this._showResultsDropdown();
+         },
+
+         /**
+          * If we have current results then toggle the dropdown, otherwise perform a new search.
+          *
+          * @instance
+          */
+         _showOrSearch: function() {
+            if (this._results.length) {
+               if (!this._resultsDropdownIsVisible()) {
+                  this._showResultsDropdown();
+                  if (!this._focusedResult) {
+                     this._gotoNextResult();
+                  }
+               } else {
+                  this._hideResultsDropdown();
+               }
+            } else {
+               this._debounceNewSearch(this.searchBox.value);
+            }
          },
 
          /**

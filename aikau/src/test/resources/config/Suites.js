@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/renderers/ActionsTest"
+      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest"
    ],
 
    /**

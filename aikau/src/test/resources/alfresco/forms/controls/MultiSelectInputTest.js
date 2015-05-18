@@ -229,6 +229,21 @@ define([
                });
          },
 
+         "Selecting item with keyboard does not persist previous search": function() {
+            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+               .click()
+               .end()
+
+            .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 7, "Did not return full list of results after keyboard choice selection");
+               })
+               .end()
+
+            .findById("FOCUS_HELPER_BUTTON")
+               .click()
+         },
+
          "Deleting all items disables confirmation button": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
                .click()
