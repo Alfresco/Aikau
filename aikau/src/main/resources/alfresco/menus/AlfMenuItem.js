@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,8 +27,9 @@
 define(["dojo/_base/declare",
         "dijit/MenuItem",
         "alfresco/menus/_AlfMenuItemMixin",
-        "alfresco/core/Core"], 
-        function(declare, MenuItem, _AlfMenuItemMixin, AlfCore) {
+        "alfresco/core/Core",
+        "dojo/dom-class"], 
+        function(declare, MenuItem, _AlfMenuItemMixin, AlfCore, domClass) {
    
    /**
     * Currently this extends the default Dojo implementation of a MenuItem without making any changes. Despite
@@ -44,6 +45,7 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_menus_AlfMenuItem__postCreate() {
          this.setupIconNode();
          this.inherited(arguments);
+         domClass.add(this.domNode, "alfresco-menus-AlfMenuItem");
       }
    });
 });

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>UploadNewVersion Action</shortname>
+  <description>Shows an action renderer configured with the UploadNewVersion actions</description>
+  <family>aikau-unit-tests</family>
+  <url>/UploadNewVersionAction</url>
+</webscript>

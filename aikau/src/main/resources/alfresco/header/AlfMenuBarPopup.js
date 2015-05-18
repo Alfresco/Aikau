@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,9 +24,8 @@
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarPopup",
-        "dojo/dom-class",
-        "dojo/dom-construct"], 
-        function(declare, AlfMenuBarPopup, domClass, domConstruct) {
+        "dojo/dom-class"], 
+        function(declare, AlfMenuBarPopup, domClass) {
    
    return declare([AlfMenuBarPopup], {
       
@@ -62,7 +61,6 @@ define(["dojo/_base/declare",
             // This ensures that we can differentiate between header menu popups and regular menu popups with our CSS selectors
             domClass.add(this.popup.domNode, "alf-header-menu-bar");
          }
-         
       }
    });
 });

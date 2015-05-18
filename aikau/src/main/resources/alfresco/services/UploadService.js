@@ -18,7 +18,8 @@
  */
 
 /**
- * This module is in BETA.
+ * This service can be used to control the uploading of content as well as the updating the content 
+ * of existing nodes on an Alfresco Repository.
  * 
  * @module alfresco/services/UploadService
  * @extends module:alfresco/core/Core
@@ -262,7 +263,7 @@ define(["dojo/_base/declare",
        * @param {object} file The file to validate
        * @param {number} index The index of the file in the list
        */
-      validateRequestedFile: function alfresco_services_UploadService__validateRequestedFile(file, index) {
+      validateRequestedFile: function alfresco_services_UploadService__validateRequestedFile(file, /*jshint unused:false*/ index) {
          // Validation could possibly moved out to another method, but would this be overkill?
          if (file.size === 0)
          {
@@ -351,20 +352,6 @@ define(["dojo/_base/declare",
             on(request.upload, "load", lang.hitch(this, "successListener", fileId));
             on(request.upload, "error", lang.hitch(this, "failureListener", fileId));
             
-            // Construct the data that will be used for the upload
-            // var data = {
-            //    id: fileId,
-            //    name: fileName,
-            //    size: file.size
-            // };
-
-            // // Get the nodeRef to update if available (this is required to perform version update)...
-            var updateNodeRef = null;
-            // if (this.suppliedConfig && this.suppliedConfig.updateNodeRef)
-            // {
-            //    updateNodeRef = this.suppliedConfig.updateNodeRef;
-            // }
-            
             // Construct an object containing the data required for file upload...
             var uploadData = this.constructUploadData(file, fileName, targetData);
             
@@ -376,7 +363,7 @@ define(["dojo/_base/declare",
             {
                state: this.STATE_ADDED,
                fileName: fileName,
-               nodeRef: updateNodeRef,
+               // nodeRef: updateNodeRef,
                uploadData: uploadData,
                request: request,
                lastProgress: 0
@@ -443,14 +430,17 @@ define(["dojo/_base/declare",
       spawnFileUploads: function alfresco_services_UploadService__spawnFileUploads() {
          for (var key in this.fileStore)
          {
-            var fileInfo = this.fileStore[key];
-            if (fileInfo.state === this.STATE_ADDED)
+            if (this.fileStore.hasOwnProperty(key))
             {
-               // Start upload
-               this.startFileUpload(fileInfo);
+               var fileInfo = this.fileStore[key];
+               if (fileInfo.state === this.STATE_ADDED)
+               {
+                  // Start upload
+                  this.startFileUpload(fileInfo);
 
-               // For now only allow 1 upload at a time
-               return;
+                  // For now only allow 1 upload at a time
+                  return;
+               }
             }
          }
       },
@@ -818,7 +808,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the button click.
        */
-      onProgressDialogOkClick: function alfresco_services_UploadService__onProgressDialogOkClick(payload) {
+      onProgressDialogOkClick: function alfresco_services_UploadService__onProgressDialogOkClick(/*jshint unused:false*/ payload) {
          // TODO: Close the dialog (this should be all?) - what about post upload actions? Set metadata, etc?
          this.alfLog("log", "Upload progress dialog 'ok' button clicked");
          this.reset();
@@ -845,7 +835,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the button click.
        */
-      onProgressDialogCancelClick: function alfresco_services_UploadService__onProgressDialogCancelClick(payload) {
+      onProgressDialogCancelClick: function alfresco_services_UploadService__onProgressDialogCancelClick(/*jshint unused:false*/ payload) {
          this.alfLog("log", "Upload progress dialog 'cancel' button clicked");
          this.reset();
          if (this.uploadDisplayWidget !== null && 
