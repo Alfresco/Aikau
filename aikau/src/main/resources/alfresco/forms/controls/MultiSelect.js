@@ -671,7 +671,7 @@ define([
          _getCursorPositionWithinTextbox: function alfresco_forms_controls_MultiSelect___getCursorPositionWithinTextbox() {
             var cursorPos = 0,
                range;
-            if (this.searchBox.createTextRange) {
+            if (this.searchBox.createTextRange && document.selection) { // IE11 passes first condition, but fails on second (AKU-306)
                range = document.selection.createRange().duplicate();
                range.moveEnd("character", this.searchBox.value.length);
                if (!range.text) {
