@@ -172,12 +172,12 @@ define(["dojo/_base/declare",
          on(this.domNode, "contextmenu", lang.hitch(this, "onContextMenu"));
          this.makeAnchor(this.targetUrl, this.targetUrlType);
 
-         if (this.disablementTopic != null)
+         if (this.disablementTopic)
          {
             this.alfSubscribe(this.disablementTopic, lang.hitch(this, "disable"));
          }
 
-         if (this.selectionTopic != null)
+         if (this.selectionTopic)
          {
             this.alfSubscribe(this.selectionTopic, lang.hitch(this, "handleSelection"));
          }
@@ -201,6 +201,7 @@ define(["dojo/_base/declare",
        * @param {event} evt The context menu event
        */
       onContextMenu: function(evt) {
+         // jshint unused:false
          // No action by default.
       },
 
@@ -208,7 +209,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       setupIconNode: function alfresco_menus__AlfMenuItemMixin__setupIconNode() {
-         if (this.iconClass && this.iconClass != "dijitNoIcon" && this.iconNode)
+         if (this.iconClass && this.iconClass !== "dijitNoIcon" && this.iconNode)
          {
             var iconNodeParent = this.iconNode.parentNode;
             domConstruct.destroy(this.iconNode);
@@ -243,7 +244,7 @@ define(["dojo/_base/declare",
                                           display: "inline-block",
                                           verticalAlign: "middle" });
          }
-         else if (this.iconNode != null)
+         else if (this.iconNode)
          {
             // If there is no iconClass or iconImage then we need to explicitly set the the
             // parent element of the icon node to have an inherited width. This is because there
@@ -275,7 +276,7 @@ define(["dojo/_base/declare",
          // Emit the event to close popups in the stack...
          this.emitClosePopupEvent();
 
-         if (this.targetUrl != null)
+         if (this.targetUrl)
          {
             // Stop the event (to prevent the browser processing <a> elements
             event.stop(evt);
@@ -285,12 +286,12 @@ define(["dojo/_base/declare",
                                                       type: this.targetUrlType,
                                                       target: targetUrlLocation});
          }
-         else if (this.publishTopic != null)
+         else if (this.publishTopic)
          {
             // Handle publish requests...
             //var payload = (this.publishPayload) ? this.publishPayload : {};
-            var publishGlobal = (this.publishGlobal != null) ? this.publishGlobal : false;
-            var publishToParent = (this.publishToParent != null) ? this.publishToParent : false;
+            var publishGlobal = this.publishGlobal || false;
+            var publishToParent = this.publishToParent || false;
 
             // TODO: DD: Not keen on the fact that somehow this "document" specific stuff has crept in here...
             //           Ideally it shouldn't be there...
@@ -310,9 +311,9 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       disable: function alfresco_menus__AlfMenuItemMixin__disable(payload) {
-         if(payload && typeof payload.value === 'boolean' && typeof this.set === "function")
+         if(payload && typeof payload.value === "boolean" && typeof this.set === "function")
          {
-            this.set('disabled', payload.value);
+            this.set("disabled", payload.value);
          }
          else
          {
@@ -332,11 +333,11 @@ define(["dojo/_base/declare",
             // Update the label with the selection...
             if (payload.label)
             {
-               this.set('label', this.message(payload.label));
+               this.set("label", this.message(payload.label));
             }
-            else if (payload.value != null)
+            else if (payload.value || payload.value === false || payload.value === 0)
             {
-               this.set('label', payload.value.toString()); 
+               this.set("label", payload.value.toString()); 
             }
          }
       }
