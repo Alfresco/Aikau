@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/layout/FixedHeaderFooterTest"
+      "src/test/resources/alfresco/renderers/ActivitySummaryTest"
    ],
 
    /**
@@ -151,6 +151,7 @@ define({
       "src/test/resources/alfresco/preview/PdfJsPreviewTest",
       "src/test/resources/alfresco/preview/PreviewerTests",
 
+      "src/test/resources/alfresco/renderers/ActivitySummaryTest",
       "src/test/resources/alfresco/renderers/BannerTest",
       "src/test/resources/alfresco/renderers/BooleanTest",
       "src/test/resources/alfresco/renderers/CategoryTest",
