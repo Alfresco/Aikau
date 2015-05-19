@@ -71,7 +71,7 @@ define(["dojo/_base/declare",
             // to prevent future maintenance issues, but given this is "non-functional" code it's not important at the moment.
             // We want to build a URL to set as the "href" attribute of the <a> element.
             var anchorUrl;
-            if (!type || type === this.pageRelativePath)
+            if (!type || type === this.pageRelativePath  || type === this.sharePageRelativePath)
             {
                anchorUrl = AlfConstants.URL_PAGECONTEXT + url;
             }

@@ -376,6 +376,14 @@ define(["intern!object",
                );
       },
 
+      "Share relative page URLs are correct": function() {
+         return browser.findByCssSelector("#MENU_ITEM_7 .alfresco-navigation-_HtmlAnchorMixin")
+            .getAttribute("href")
+            .then(function(href) {
+               assert.equal(href, "/aikau/page/MENU_ITEM_7", "Share relative page URL incorrect");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
