@@ -1,12 +1,9 @@
-Aikau 1.0.17 Release Notes
+Aikau 1.0.18 Release Notes
 ==========================
 
-New deprecations:
------------------
-* alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
-
-Previous deprecations:
+Current deprecations:
 ---------------------
+* alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 * alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
 * alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
 * alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
@@ -37,6 +34,25 @@ Previous deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
 ----------------
+1.0.18: 
+* [AKU-204](https://issues.alfresco.com/jira/browse/AKU-204)       - Add support for "document-upload-new-version" action
+* [AKU-281](https://issues.alfresco.com/jira/browse/AKU-281)       - NavigationService postToPage ignores target
+* [AKU-282](https://issues.alfresco.com/jira/browse/AKU-282)       - ActionService is ignoring the currentTarget config value for action type "link"
+* [AKU-283](https://issues.alfresco.com/jira/browse/AKU-283)       - MultiSelectInput: Loading... message is not replaced by results
+* [AKU-284](https://issues.alfresco.com/jira/browse/AKU-284)       - Pub/sub logging goes directly to console when client-debug is enabled
+* [AKU-285](https://issues.alfresco.com/jira/browse/AKU-285)       - Create activity summary widget
+* [AKU-286](https://issues.alfresco.com/jira/browse/AKU-286)       - Update alfresco/header package widgets to use LESS variables
+* [AKU-289](https://issues.alfresco.com/jira/browse/AKU-289)       - PublishingDropDownMenu does not always render options if loaded within a List
+* [AKU-291](https://issues.alfresco.com/jira/browse/AKU-291)       - Update tutorial 1 to include instructions on using remote Repo
+* [AKU-294](https://issues.alfresco.com/jira/browse/AKU-294)       - Fixed header and footer
+* [AKU-295](https://issues.alfresco.com/jira/browse/AKU-295)       - PublishingDropDownMenu does not support aborted change requests.
+* [AKU-305](https://issues.alfresco.com/jira/browse/AKU-305)       - Right Click on header menu issue
+* [AKU-306](https://issues.alfresco.com/jira/browse/AKU-306)       - Keyboard navigation for the multi select input widget does not work with IE11
+* [AKU-312](https://issues.alfresco.com/jira/browse/AKU-312)       - MultiSelectInput: Dropdown list not populated fully if previous item was selected using keyboard.
+
+1.0.17.1:
+* [AKU-304](https://issues.alfresco.com/jira/browse/AKU-304)       - The confirmation dialog is not displayed correctly
+
 1.0.17:
 * [AKU-19](https://issues.alfresco.com/jira/browse/AKU-19)         - Upgrade to use Dojo 1.10.4
 * [AKU-203](https://issues.alfresco.com/jira/browse/AKU-203)       - Added support for document-locate action
