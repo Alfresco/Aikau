@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>CheckBox Test</shortname>
+  <description>This is a test page for the alfresco/forms/controls/CheckBox control</description>
+  <family>aikau-unit-tests</family>
+  <url>/CheckBox</url>
+</webscript>
