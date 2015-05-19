@@ -37,6 +37,16 @@ define(["dojo/_base/declare",
    return declare([AlfHashList, _PreferenceServiceTopicMixin], {
 
       /**
+       * An array of the i18n files to use with this widget. This re-uses the 
+       * [Paginator]{@link module:alfresco/lists/Paginator} i18n properties.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/Paginator.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/Paginator.properties"}],
+
+      /**
        * Indicates whether pagination should be used when requesting documents (e.g. include the page number and the number of
        * results per page)
        *
@@ -91,6 +101,27 @@ define(["dojo/_base/declare",
        */
       postMixInProperties: function alfresco_lists_AlfSortablePaginatedList__postMixInProperties() {
          this.inherited(arguments);
+
+         if (this.useHash === true)
+         {
+            // If using the browser URL hash, then we want to update the currentPage and currentPageSize
+            // attribute with the values set as hash parameters in the URL...
+            this.updateInstanceValues = true;
+            if (!this.hashVarsForUpdate || this.hashVarsForUpdate.length === 0)
+            {
+               // this.hashVarsForUpdate = ["currentPage"];
+               this.hashVarsForUpdate = ["currentPage","currentPageSize"];
+            }
+            else
+            {
+               // NOTE: Duplications in the list don't really matter, so there's not
+               //       a great deal of point in expending the effort to check if they're
+               //       already present...
+               // this.hashVarsForUpdate.push("currentPage");
+               // this.hashVarsForUpdate.push("currentPageSzie");
+            }
+         }
+
          this.alfPublish(this.getPreferenceTopic, {
             preference: "org.alfresco.share.documentList.documentsPerPage",
             callback: this.setPageSize,
@@ -110,6 +141,10 @@ define(["dojo/_base/declare",
             value = 25;
          }
          this.currentPageSize = value;
+         this.alfPublish(this.docsPerpageSelectionTopic, {
+            label: this.message("list.paginator.perPage.label", {0: this.currentPageSize}),
+            value: this.currentPageSize
+         });
       },
 
       /**
@@ -271,6 +306,9 @@ define(["dojo/_base/declare",
             // Set the new page size, and log the previous page size for some calculations we'll do in a moment...
             var previousPageSize = this.currentPageSize;
             this.currentPageSize = payload.value;
+            // this.alfPublish(this.docsPerpageSelectionTopic, {
+            //    value: this.currentPageSize
+            // });
 
             if (this._readyToLoad === true)
             {
@@ -366,6 +404,10 @@ define(["dojo/_base/declare",
             payload.page = this.currentPage;
             payload.pageSize = this.currentPageSize;
          }
+         this.alfPublish(this.docsPerpageSelectionTopic, {
+            label: this.message("list.paginator.perPage.label", {0: this.currentPageSize}),
+            value: this.currentPageSize
+         });
       },
 
       /**

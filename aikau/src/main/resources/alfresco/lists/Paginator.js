@@ -322,7 +322,7 @@ define(["dojo/_base/declare",
                      if (i+1 !== this.totalPages)
                      {
                         // If we're not getting the labels for the last page...
-                        pageEnd = pageStart + this.documentsPerPage - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
+                        pageEnd = pageStart + parseInt(this.documentsPerPage, 10) - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
                      }
                      else
                      {
@@ -449,7 +449,7 @@ define(["dojo/_base/declare",
        */
       isValidPageSize: function alfresco_lists_Paginator__isValidPageSize(requestedPageSize) {
          return array.some(this.pageSizes, function(pageSize) {
-            return requestedPageSize === pageSize;
+            return requestedPageSize.toString() === pageSize.toString();
          }, this);
       },
 
