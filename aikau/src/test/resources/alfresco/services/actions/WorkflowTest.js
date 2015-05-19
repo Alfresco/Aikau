@@ -29,11 +29,38 @@ define(["intern!object",
 
    var browser;
    registerSuite({
+      name: "Assign Workflow Test",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions", "Assign Workflow Test").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Assign a workflow": function() {
+         return browser.findByCssSelector("#ASSIGN_label")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "url", "/aikau/page/dp/ws/start-workflow"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Workflow not assigned");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   registerSuite({
       name: "Simple Workflow Actions Tests (Successes)",
 
       setup: function() {
          browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SimpleWorkflowActions?responseCode=200", "Simple Workflow Actions Tests").end();
+         return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions?responseCode=200", "Simple Workflow Actions Tests").end();
       },
 
       beforeEach: function() {
@@ -70,7 +97,7 @@ define(["intern!object",
 
       setup: function() {
          browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SimpleWorkflowActions?responseCode=500", "Simple Workflow Actions Tests").end();
+         return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions?responseCode=500", "Simple Workflow Actions Tests").end();
       },
 
       beforeEach: function() {

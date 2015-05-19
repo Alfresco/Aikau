@@ -1,0 +1,98 @@
+[{
+   "id": 10664609,
+   "postUserAvatar": "workspace://SpacesStore/01b5eae0-8b09-44e2-b1f4-587070cbb90a",
+   "siteNetwork": "alfresco-uk-photo",
+   "feedUserId": "mdoyle",
+   "postUserId": "ahealey",
+   "postDate": "2015-05-15T09:28:50.000+01:00",
+   "activitySummary": "{\"parentNodeRef\":\"workspace://SpacesStore/741f6cef-5c01-4923-9162-970e63336548\",\"lastName\":\"Healey\",\"title\":\"P9111608.jpg\",\"page\":\"document-details?nodeRef=workspace://SpacesStore/cf915354-7cf3-4b32-947e-fed68ad23a9a\",\"nodeRef\":\"workspace://SpacesStore/cf915354-7cf3-4b32-947e-fed68ad23a9a\",\"firstName\":\"Andy\"}",
+   "activityType": "org.alfresco.documentlibrary.file-previewed"
+}, {
+   "id": 10662847,
+   "postUserAvatar": "workspace://SpacesStore/ad18fe73-957e-430b-92cc-c55997c0f5fc",
+   "siteNetwork": "alfresco-uk-photo",
+   "feedUserId": "mdoyle",
+   "postUserId": "tpage",
+   "postDate": "2015-05-15T08:33:23.000+01:00",
+   "activitySummary": "{\"parentNodeRef\":\"workspace://SpacesStore/741f6cef-5c01-4923-9162-970e63336548\",\"lastName\":\"Page\",\"title\":\"boats.jpg\",\"page\":\"document-details?nodeRef=workspace://SpacesStore/c8236060-f9ed-4eef-9f96-e255cbeb16ca\",\"nodeRef\":\"workspace://SpacesStore/c8236060-f9ed-4eef-9f96-e255cbeb16ca\",\"firstName\":\"Tom\"}",
+   "activityType": "org.alfresco.documentlibrary.file-liked"
+}, {
+   "id": 10662553,
+   "siteNetwork": "security",
+   "feedUserId": "mdoyle",
+   "postUserId": "pphilips",
+   "postDate": "2015-05-15T08:26:03.000+01:00",
+   "activitySummary": "{\"lastName\":\"Philips\",\"title\":\"Security_Blog\",\"page\":\"wiki-page?title=Security_Blog\",\"firstName\":\"Pete\"}",
+   "activityType": "org.alfresco.wiki.page-edited"
+}, {
+   "id": 10653807,
+   "postUserAvatar": "workspace://SpacesStore/01b5eae0-8b09-44e2-b1f4-587070cbb90a",
+   "siteNetwork": "alfresco-uk-photo",
+   "feedUserId": "mdoyle",
+   "postUserId": "ahealey",
+   "postDate": "2015-05-14T19:34:48.000+01:00",
+   "activitySummary": "{\"parentNodeRef\":\"workspace://SpacesStore/741f6cef-5c01-4923-9162-970e63336548\",\"lastName\":\"Healey\",\"title\":\"black sand beach, iceland.jpg\",\"page\":\"document-details?nodeRef=workspace://SpacesStore/ebdd5ab2-d3b8-409a-8c35-c4ab8d4b06ad\",\"nodeRef\":\"workspace://SpacesStore/ebdd5ab2-d3b8-409a-8c35-c4ab8d4b06ad\",\"firstName\":\"Andy\"}",
+   "activityType": "org.alfresco.documentlibrary.file-added"
+}, {
+   "id": 10649703,
+   "siteNetwork": "hr",
+   "feedUserId": "mdoyle",
+   "postUserId": "lnguyen",
+   "postDate": "2015-05-14T17:10:09.000+01:00",
+   "activitySummary": "{\"parentNodeRef\":\"workspace://SpacesStore/e6aae00f-6c5e-4ab1-aa16-a43dd0cdd364\",\"lastName\":\"Nguyen\",\"title\":\"401K_InfoSheet_2015.pdf\",\"page\":\"documentlibrary?path=/Benefits/US/Fidelity 401K Plan\",\"nodeRef\":\"workspace://SpacesStore/bc031241-2718-448f-9662-edb158756358\",\"firstName\":\"Lambert\"}",
+   "activityType": "org.alfresco.documentlibrary.file-deleted"
+}, {
+   "id": 10631957,
+   "postUserAvatar": "workspace://SpacesStore/785eb130-3d8c-496a-b6cc-abaf27655c13",
+   "siteNetwork": "security",
+   "feedUserId": "mdoyle",
+   "postUserId": "pbrodner",
+   "postDate": "2015-05-14T09:18:59.000+01:00",
+   "activitySummary": "{\"parentNodeRef\":\"workspace://SpacesStore/81219d55-8d20-4957-b05e-983bb808f709\",\"lastName\":\"brodner\",\"title\":\"Pentest Secure Code Workshop 2013.pdf\",\"page\":\"document-details?nodeRef=workspace://SpacesStore/faee91a9-4be1-44f5-8d6d-a306d52144e9\",\"nodeRef\":\"workspace://SpacesStore/faee91a9-4be1-44f5-8d6d-a306d52144e9\",\"firstName\":\"Paul\"}",
+   "activityType": "org.alfresco.documentlibrary.file-downloaded"
+}, {
+   "id": 10630110,
+   "postUserAvatar": "workspace://SpacesStore/2c9bb1de-a42e-4cd8-bf61-213d45c59264",
+   "siteNetwork": "alfresco-uk-photo",
+   "feedUserId": "mdoyle",
+   "postUserId": "kholyszko",
+   "postDate": "2015-05-14T08:26:03.000+01:00",
+   "activitySummary": "{\"lastName\":\"Holyszko\",\"title\":\"David Webster (dwebster)\",\"memberLastName\":\"Webster\",\"role\":\"SiteContributor\",\"firstName\":\"Kimberly\",\"memberUserName\":\"dwebster\",\"memberFirstName\":\"David\"}",
+   "activityType": "org.alfresco.site.user-role-changed"
+}, {
+   "id": 10577594,
+   "postUserAvatar": "workspace://SpacesStore/2e3ddf9c-51e6-4b19-bffd-76124e27458b",
+   "siteNetwork": "aikau",
+   "feedUserId": "mdoyle",
+   "postUserId": "ddraper",
+   "postDate": "2015-05-13T08:32:51.000+01:00",
+   "activitySummary": "{\"parentNodeRef\":\"workspace://SpacesStore/e15cfa7b-38b4-4d66-b963-6e815f40276d\",\"lastName\":\"Draper\",\"title\":\"Aikau Code Coverage Test Results Graph.png\",\"page\":\"document-details?nodeRef=workspace://SpacesStore/d5bf822d-bab8-4f31-b3a5-3246384fda64\",\"nodeRef\":\"workspace://SpacesStore/d5bf822d-bab8-4f31-b3a5-3246384fda64\",\"firstName\":\"David\"}",
+   "activityType": "org.alfresco.documentlibrary.file-updated"
+}, {
+   "id": 10547319,
+   "postUserAvatar": "workspace://SpacesStore/c50bb2db-6de3-4e51-84f8-50177d3fec3d",
+   "siteNetwork": "alfresco-uk-photo",
+   "feedUserId": "mdoyle",
+   "postUserId": "dwebster",
+   "postDate": "2015-05-12T15:44:26.000+01:00",
+   "activitySummary": "{\"lastName\":\"Webster\",\"title\":\"David Webster (dwebster)\",\"memberLastName\":\"Webster\",\"role\":\"SiteConsumer\",\"firstName\":\"David\",\"memberUserName\":\"dwebster\",\"memberFirstName\":\"David\"}",
+   "activityType": "org.alfresco.site.user-joined"
+}, {
+   "id": 10542741,
+   "postUserAvatar": "workspace://SpacesStore/de17f867-95e4-49b7-94eb-48ad33160a17",
+   "siteNetwork": "alfresco-uk-photo",
+   "feedUserId": "mdoyle",
+   "postUserId": "hkalsi",
+   "postDate": "2015-05-12T13:38:27.000+01:00",
+   "activitySummary": "{\"parentNodeRef\":\"workspace://SpacesStore/34149db4-5e40-4989-b935-12de187fedb7\",\"lastName\":\"Kalsi\",\"title\":\"DSC00347.JPG\",\"page\":\"document-details?nodeRef=workspace://SpacesStore/deebb14e-b185-4643-a1e4-c8efbb2ed764\",\"nodeRef\":\"workspace://SpacesStore/deebb14e-b185-4643-a1e4-c8efbb2ed764\",\"firstName\":\"Harpritt\"}",
+   "activityType": "org.alfresco.comments.comment-created"
+}, {
+   "id": 10535707,
+   "postUserAvatar": "workspace://SpacesStore/817a0936-18a4-4bbe-89d1-8a75ae2947d2",
+   "siteNetwork": "eng",
+   "feedUserId": "mdoyle",
+   "postUserId": "ophillips",
+   "postDate": "2015-05-12T10:25:42.000+01:00",
+   "activitySummary": "{\"parentNodeRef\":\"workspace://SpacesStore/1c08dcfd-ff68-4681-a771-f8ac22ff7ffe\",\"lastName\":\"Phillips\",\"title\":\"Connectivity Test - New Instructions\",\"page\":\"documentlibrary?path=/Engineering Operations/Training Courses/Training Courses 2015/Java SE8 New Features/Java 8 Training Course with QA/Connectivity Tests/Connectivity Test - New Instructions\",\"nodeRef\":\"workspace://SpacesStore/38c1dbaf-29b1-4ecd-9a19-2d4444960e03\",\"firstName\":\"Ola\"}",
+   "activityType": "org.alfresco.documentlibrary.folder-added"
+}]

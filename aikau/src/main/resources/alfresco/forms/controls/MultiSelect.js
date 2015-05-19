@@ -671,7 +671,7 @@ define([
          _getCursorPositionWithinTextbox: function alfresco_forms_controls_MultiSelect___getCursorPositionWithinTextbox() {
             var cursorPos = 0,
                range;
-            if (this.searchBox.createTextRange) {
+            if (this.searchBox.createTextRange && document.selection) { // IE11 passes first condition, but fails on second (AKU-306)
                range = document.selection.createRange().duplicate();
                range.moveEnd("character", this.searchBox.value.length);
                if (!range.text) {
@@ -905,14 +905,7 @@ define([
             if (evt.target !== this.searchBox) {
                this.searchBox.focus();
             }
-            if (this._results.length && !this._resultsDropdownIsVisible()) {
-               this._showResultsDropdown();
-               if (!this._focusedResult) {
-                  this._gotoNextResult();
-               }
-            } else {
-               this._startSearch(this.searchBox.value);
-            }
+            this._showOrSearch();
          },
 
          /**
@@ -922,14 +915,7 @@ define([
           */
          _onFocus: function alfresco_forms_controls_MultiSelect___onSearchFocus() {
             domClass.add(this.domNode, this.rootClass + "--focused");
-            if (this._results.length) {
-               this._showResultsDropdown();
-               if (!this._focusedResult) {
-                  this._gotoNextResult();
-               }
-            } else {
-               this._startSearch(this.searchBox.value);
-            }
+            this._showOrSearch();
          },
 
          /**
@@ -1018,7 +1004,7 @@ define([
                      if (this._resultsDropdownIsVisible()) {
                         this._gotoNextResult();
                      } else {
-                        this._showResultsDropdown();
+                        this._showOrSearch();
                      }
                      evt.preventDefault();
                      break;
@@ -1132,6 +1118,7 @@ define([
          _resetSearchBox: function alfresco_forms_controls_MultiSelect___resetSearchBox() {
             this._currentSearchValue = "";
             this.searchBox.value = "";
+            this._results = [];
          },
 
          /**
@@ -1242,6 +1229,26 @@ define([
             this._hideEmptyMessage();
             this._hideErrorMessage();
             this._showResultsDropdown();
+         },
+
+         /**
+          * If we have current results then toggle the dropdown, otherwise perform a new search.
+          *
+          * @instance
+          */
+         _showOrSearch: function() {
+            if (this._results.length) {
+               if (!this._resultsDropdownIsVisible()) {
+                  this._showResultsDropdown();
+                  if (!this._focusedResult) {
+                     this._gotoNextResult();
+                  }
+               } else {
+                  this._hideResultsDropdown();
+               }
+            } else {
+               this._debounceNewSearch(this.searchBox.value);
+            }
          },
 
          /**
@@ -1359,6 +1366,11 @@ define([
 
             // Make sure we have some that need updating
             if (!this._itemsToUpdateFromStore.length) {
+
+               // Add loaded CSS-state to control
+               domClass.add(this.domNode, this.rootClass + "--loaded");
+
+               // Nothing else needed!
                return;
             }
 
@@ -1386,9 +1398,18 @@ define([
                      contentNode.setAttribute("title", labelObj.full);
                   }, this);
 
+                  // Add loaded CSS-state to control
+                  domClass.add(this.domNode, this.rootClass + "--loaded");
+
                }),
                failureHandler = lang.hitch(this, function(err) {
+
+                  // Log the error
                   this.alfLog("error", "Error updating labels from store", err);
+
+                  // Add loaded CSS-state to control
+                  domClass.add(this.domNode, this.rootClass + "--loaded");
+
                });
 
             // Make the query

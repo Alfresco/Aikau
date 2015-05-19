@@ -129,7 +129,8 @@ model.jsonModel = {
                            config: {
                               id: "MENU_ITEM_7",
                               label: "dd2.mi7",
-                              targetUrl: "MENU_ITEM_7"
+                              targetUrl: "MENU_ITEM_7",
+                              targetUrlType: "SHARE_PAGE_RELATIVE"
                            }
                         },
                         {

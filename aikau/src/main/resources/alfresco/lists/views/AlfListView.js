@@ -435,7 +435,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onViewShown: function alfresco_lists_views_AlfListView__onViewShown() {
-         // No action by default.
+         this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
       },
 
       /**

@@ -1,10 +1,12 @@
+@shareTitleBG: #fafafa;
+
 .alfresco-share {
    h1.alfresco-header-Title {
       font-size: 185%;
       font-weight: normal;
       margin-top: 19px;
       > .text {
-         color: #333 !important;
+         color: @general-font-color !important;
          font-family: Open Sans Condensed, Arial, sans-serif;
          text-decoration: none;
          &.has-max-width {
@@ -16,9 +18,9 @@
       }
    }
    .share-header-title {
-      border-bottom: 1px solid #ccc;
+      border-bottom: @standard-border;
       > div {
-         background-color: #fafafa;
+         background-color: @shareTitleBG;
 
          .right-widgets {
             height: 67px;

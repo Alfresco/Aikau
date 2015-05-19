@@ -19,8 +19,12 @@
 
 /*globals tinymce*/
 /**
- * This is a prototype widget that handles requirements and instantiation of a TinyMCE editor. It is
- * not ready for production use yet as there as still outstanding issues.
+ * This module can be used to create a TinyMCE editor it is primarily used by the 
+ * [TinyMCE form control]{@link module:alfresco/forms/controls/TinyMCE} but can be used independently
+ * if required. Without any additional configuration it will instantiate an editor using the Alfresco
+ * preferred configuration, however this can be overridden by providing 
+ * [specific configuration]{@link module:alfresco/forms/controls/TinyMCE#editorConfig} that will
+ * augment or override the [default configuration]{@link module:alfresco/forms/controls/TinyMCE#defaultEditorConfig}.
  *
  * @module alfresco/editors/TinyMCE
  * @extends external:dijit/_WidgetBase
@@ -39,6 +43,15 @@ define(["dojo/_base/declare",
 
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
+
+      /**
+       * An array of the i18n files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/TinyMCE.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/TinyMCE.properties"}],
 
       /**
        * Make sure TinyMCE is included on the page.
@@ -160,29 +173,28 @@ define(["dojo/_base/declare",
          }
          if (!config.menu) {
             config.menu = {
-               // TODO: I18N
                file: {
-                  title: "File",
+                  title: this.message("TinyMCE.toolbar.file.title"),
                   items: "newdocument | print"
                },
                edit: {
-                  title: "Edit",
+                  title: this.message("TinyMCE.toolbar.edit.title"),
                   items: "undo redo | cut copy paste pastetext | selectall | searchreplace"
                },
                insert: {
-                  title: "Insert",
+                  title: this.message("TinyMCE.toolbar.insert.title"),
                   items: "link image | charmap hr anchor pagebreak inserttime nonbreaking"
                },
                view: {
-                  title: "View",
+                  title: this.message("TinyMCE.toolbar.view.title"),
                   items: "fullscreen preview visualblocks code"
                },
                format: {
-                  title: "Format",
+                  title: this.message("TinyMCE.toolbar.format.title"),
                   items: "bold italic underline strikethrough superscript subscript | formats | removeformat"
                },
                table: {
-                  title: "Table",
+                  title: this.message("TinyMCE.toolbar.table.title"),
                   items: "inserttable tableprops deletetable | cell row column"
                }
             };

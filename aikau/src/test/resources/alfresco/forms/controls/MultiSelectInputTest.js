@@ -42,6 +42,19 @@ define([
             browser.end();
          },
 
+         "Controls are fully loaded": function() {
+            return browser.findAllByCssSelector("#MULTISELECT_1_CONTROL.alfresco-forms-controls-MultiSelect--loaded")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "First MultiSelect control not fully loaded");
+               })
+               .end()
+
+            .findAllByCssSelector("#MULTISELECT_2_CONTROL.alfresco-forms-controls-MultiSelect--loaded")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Second MultiSelect control not fully loaded");
+               });
+         },
+
          "Preset values are rendered by control": function() {
             return browser.findAllByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice")
                .then(function(elements) {
@@ -60,6 +73,17 @@ define([
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "tag11", "Did not display second tag label correctly");
+               });
+         },
+
+         "Clicking on control no longer loses responses to a second query": function() {
+            return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+               .click()
+               .end()
+
+            .findAllByCssSelector("#MULTISELECT_2_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 14, "Did not bring up results");
                });
          },
 
@@ -203,6 +227,21 @@ define([
                .then(function(text) {
                   assert.equal(text, "newtag13(a)", "Did not add selected tag at end of choices");
                });
+         },
+
+         "Selecting item with keyboard does not persist previous search": function() {
+            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+               .click()
+               .end()
+
+            .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 7, "Did not return full list of results after keyboard choice selection");
+               })
+               .end()
+
+            .findById("FOCUS_HELPER_BUTTON")
+               .click()
          },
 
          "Deleting all items disables confirmation button": function() {

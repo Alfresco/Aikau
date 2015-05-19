@@ -1,0 +1,20 @@
+.alfresco-layout-FixedHeaderFooter {
+   overflow: hidden;
+   position: relative;
+   &__header, &__content, &__footer {
+      left: 0;
+      position: absolute;
+      right: 0;
+   }
+   &__header {
+      top: 0;
+   }
+   &__footer {
+      bottom: 0;
+   }
+   &__content {
+      height: 0;
+      overflow: auto;
+      top: 0;
+   }
+}

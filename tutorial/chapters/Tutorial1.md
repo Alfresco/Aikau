@@ -8,6 +8,8 @@ In this tutorial we're going to create a very simple application that allows a u
 
 The only thing required to complete the tutorial is an installed and operational instance of Alfresco. If you don't have Alfresco installed then you can download and install it from [here](http://www.alfresco.com/products/community "Alfresco Community Download Page"). It’s recommended that you download and install a new version of Alfresco Community because you’ll need administrator privileges to work through the entire tutorial.
 
+**NOTE: If you wish to use an Alfresco Repository that is not locally hosted then you should follow the instructions described [here](./UsingRemoteRepository.md "Link to instructions for configuring a remote Alfresco Repository") to update the default client configuration.**
+
 ### Step 1. Create a new client via Maven Archetype
 From the command line of your operating system, create (or navigate to) a folder in which you wish to create your new client project and then run the following command:
 

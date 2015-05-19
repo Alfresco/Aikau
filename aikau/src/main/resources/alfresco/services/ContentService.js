@@ -21,7 +21,9 @@
  * This service should be used for the creation, uploading, updating and deletion of nodes from an
  * Alfresco Repository. When using for deleting nodes it is important to ensure that the 
  * [DialogService]{@link module:alfresco/services/DialogService} is included on the page (or an 
- * alternative service that handles dialog creation requests).
+ * alternative service that handles dialog creation requests). When uploading new content or updating
+ * existing content then it is important to ensure that the [UploadService]{@link module:alfresco/services/UploadService}
+ * is included on the page.
  * 
  * @module alfresco/services/ContentService
  * @extends module:alfresco/core/Core
@@ -36,9 +38,8 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
-        "alfresco/core/NodeUtils",
-        "alfresco/dialogs/AlfFormDialog"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, _AlfDocumentListTopicMixin, lang, array, NodeUtils, AlfFormDialog) {
+        "alfresco/core/NodeUtils"],
+        function(declare, AlfCore, CoreXhr, AlfConstants, _AlfDocumentListTopicMixin, lang, array, NodeUtils) {
    
    return declare([AlfCore, CoreXhr, _AlfDocumentListTopicMixin], {
       
@@ -302,6 +303,63 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * These are the widgets to render in a dialog for basic content upload (e.g. uploading new content
+       * rather than updating the content of an existing Node). By default only a basic file selection
+       * control will be displayed.
+       *
+       * @instance
+       * @type {object[]}
+       */
+      widgetsForUpload: [
+         {
+            name: "alfresco/forms/controls/FileSelect",
+            config: {
+               label: "contentService.uploader.dialog.fileSelect.label",
+               name: "files"
+            }
+         }
+      ],
+
+      /**
+       * These are the widgets to render in a dialog when updating an existing Node. A file selection
+       * control along with version increment radio buttons and comment text box are rendered.
+       *
+       * @instance
+       * @type {object[]}
+       */
+      widgetsForUpdate: [
+         {
+            name: "alfresco/forms/controls/FileSelect",
+            config: {
+               label: "contentService.updater.dialog.fileSelect.label",
+               name: "files"
+            }
+         },
+         {
+            name: "alfresco/forms/controls/RadioButtons",
+            config: {
+               label: "contentService.updater.dialog.majorVersion.label",
+               name: "targetData.majorVersion",
+               value: "false",
+               optionsConfig: {
+                  fixed: [
+                     { label: "contentService.updater.dialog.majorVersion.false.label", value: "false" },
+                     { label: "contentService.updater.dialog.majorVersion.true.label", value: "true" }
+                  ]
+               }
+            }
+         },
+         {
+            name: "alfresco/forms/controls/TextArea",
+            config: {
+               label: "contentService.updater.dialog.comments",
+               name: "targetData.description",
+               value: ""
+            }
+         }
+      ],
+
+      /**
        * This function will open a [AlfFormDialog]{@link module:alfresco/forms/AlfFormDialog} containing a 
        * [file select form control]{@link module:alfresco/forms/controls/FileSelect} so that the user can 
        * select one or more files to upload. When the dialog is confirmed the 
@@ -312,35 +370,32 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       showUploader: function alfresco_services_ContentService__showUploader(/*jshint unused:false*/ payload) {
-         this.uploadDialog = new AlfFormDialog({
-            dialogTitle: "contentService.uploader.dialog.title",
+
+         // Check to see what we're uploading, either new content to a location or updating a 
+         // specific node...
+         var parentNodeRef = lang.getObject("parent.nodeRef", false, this._currentNode);
+         var updateNodeRef = lang.getObject("node.nodeRef", false, payload);
+
+         this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
+            dialogTitle: (updateNodeRef ? "contentService.updater.dialog.title" : "contentService.uploader.dialog.title"),
             dialogConfirmationButtonTitle: "contentService.uploader.dialog.confirmation",
             dialogCancellationButtonTitle: "contentService.uploader.dialog.cancellation",
             formSubmissionTopic: "ALF_CONTENT_SERVICE_UPLOAD_REQUEST_RECEIVED",
-            formSubmissionPayload: {
+            formSubmissionPayloadMixin: {
                targetData: {
-                  destination: this._currentNode.parent.nodeRef,
+                  destination: parentNodeRef,
                   siteId: null,
                   containerId: null,
                   uploadDirectory: null,
-                  updateNodeRef: null,
+                  updateNodeRef: updateNodeRef,
                   description: "",
                   overwrite: false,
                   thumbnails: "doclib",
                   username: null
                }
             },
-            widgets: [
-               {
-                  name: "alfresco/forms/controls/FileSelect",
-                  config: {
-                     label: "contentService.uploader.dialog.fileSelect.label",
-                     name: "files"
-                  }
-               }
-            ]
+            widgets: (updateNodeRef ? lang.clone(this.widgetsForUpdate) : lang.clone(this.widgetsForUpload))
          });
-         this.uploadDialog.show();
       },
 
       /**
@@ -354,12 +409,8 @@ define(["dojo/_base/declare",
        * @param {object} payload The file upload data payload to pass on
        */
       onFileUploadRequest: function alfresco_services_ContentService__onFileUploadRequest(payload) {
-         if (this.uploadDialog)
-         {
-            this.uploadDialog.destroyRecursive();
-         }
          var responseTopic = this.generateUuid();
-         this._uploadSubHandle = this.alfSubscribe(responseTopic, lang.hitch(this, "onFileUploadComplete"), true);
+         this._uploadSubHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onFileUploadComplete), true);
          payload.alfResponseTopic = responseTopic;
          this.alfPublish("ALF_UPLOAD_REQUEST", payload);
       },

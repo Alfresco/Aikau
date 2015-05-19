@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/services/actions/NodeLocationTest"
+      "src/test/resources/alfresco/menus/MenuTests"
    ],
 
    /**
@@ -116,6 +116,7 @@ define({
       "src/test/resources/alfresco/layout/AlfSideBarContainerTest",
       "src/test/resources/alfresco/layout/AlfTabContainerTest",
       "src/test/resources/alfresco/layout/BasicLayoutTest",
+      "src/test/resources/alfresco/layout/FixedHeaderFooterTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/StripedContentTest",
       "src/test/resources/alfresco/layout/TwisterTest",
@@ -150,6 +151,8 @@ define({
       "src/test/resources/alfresco/preview/PdfJsPreviewTest",
       "src/test/resources/alfresco/preview/PreviewerTests",
 
+      "src/test/resources/alfresco/renderers/ActionsTest",
+      "src/test/resources/alfresco/renderers/ActivitySummaryTest",
       "src/test/resources/alfresco/renderers/BannerTest",
       "src/test/resources/alfresco/renderers/BooleanTest",
       "src/test/resources/alfresco/renderers/CategoryTest",
@@ -180,6 +183,7 @@ define({
       "src/test/resources/alfresco/services/ContentServiceTest",
       "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
+      "src/test/resources/alfresco/services/NavigationServiceTest",
       "src/test/resources/alfresco/services/NotificationServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",
       "src/test/resources/alfresco/services/SiteServiceTest",
@@ -188,7 +192,7 @@ define({
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
       "src/test/resources/alfresco/services/actions/ManageAspectsTest",
       "src/test/resources/alfresco/services/actions/NodeLocationTest",
-      "src/test/resources/alfresco/services/actions/SimpleWorkflowTest",
+      "src/test/resources/alfresco/services/actions/WorkflowTest",
 
       "src/test/resources/alfresco/upload/UploadTest"
    ],

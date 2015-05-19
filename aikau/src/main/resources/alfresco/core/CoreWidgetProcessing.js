@@ -373,6 +373,86 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function is used to build the configuration used to instantiate a widget.
+       * 
+       * @instance
+       * @param  {object} widget The widget configuration build configuration for
+       * @return {object} The arguments that can be used when instantiating the widget configuration processed
+       */
+      processWidgetConfig: function alfresco_core_CoreWidgetProcessing__processWidgetConfig(widget) {
+         // jshint maxcomplexity:false
+         // Make sure we have an instantiation args object...
+         var initArgs = (widget && widget.config && (typeof widget.config === "object")) ? widget.config : {};
+
+         // Ensure that each widget has a unique id. Without this Dojo seems to occasionally
+         // run into trouble trying to re-use an existing id...
+         if (typeof initArgs.id === "undefined")
+         {
+            // Attempt to use the model ID as the DOM ID if available, but if not just generate an ID
+            // based on the module name...
+            if (!widget.id || lang.trim(widget.id) === "")
+            {
+               initArgs.id = widget.name.replace(/\//g, "_") + "___" + this.generateUuid();
+            }
+            else
+            {
+               initArgs.id = widget.id;
+            }
+         }
+
+         if (initArgs.generatePubSubScope === true)
+         {
+            // Generate a new pubSubScope if requested to...
+            initArgs.pubSubScope = this.generateUuid();
+         }
+         else if (initArgs.pubSubScope === undefined)
+         {
+            // ...otherwise inherit the callers pubSubScope if one hasn't been explicitly configured...
+            initArgs.pubSubScope = this.pubSubScope;
+         }
+
+         // Pass on the pub/sub scope from the parent...
+         if (initArgs.pubSubScope === this.pubSubScope)
+         {
+            // If the scope is inherited then also inherit the parent scope...
+            if (!this.parentPubSubScope)
+            {
+               // ...set as global if not set already
+               initArgs.parentPubSubScope = "";
+            }
+            else
+            {
+               // ...but try to inherit...
+               initArgs.parentPubSubScope = this.parentPubSubScope;
+            }
+         }
+         else
+         {
+            // If the scope has changed then inherit the my scope...
+            initArgs.parentPubSubScope = this.pubSubScope;
+         }
+
+         if (initArgs.dataScope === undefined)
+         {
+            initArgs.dataScope = this.dataScope;
+         }
+
+         if (initArgs.currentItem === undefined)
+         {
+            initArgs.currentItem = this.currentItem;
+         }
+         if (initArgs.currentMetadata === undefined)
+         {
+            initArgs.currentMetadata = this.currentMetadata;
+         }
+         if (initArgs.groupMemberships === undefined)
+         {
+            initArgs.groupMemberships = this.groupMemberships;
+         }
+         return initArgs;
+      },
+
+      /**
        * This method will instantiate a new widget having requested that its JavaScript resource and
        * dependent resources be downloaded. In principle all of the required resources should be available
        * if the widget is being processed in the context of the Surf framework and dependency analysis of
@@ -381,162 +461,102 @@ define(["dojo/_base/declare",
        * to ensure that successfully instantiated modules can be kept track of.
        *
        * @instance
-       * @param {object} config The configuration for the widget
+       * @param {object} widget The configuration for the widget
        * @param {element} domNode The DOM node to attach the widget to
        * @param {function} callback A function to call once the widget has been instantiated
        * @param {object} callbackScope The scope with which to call the callback
        * @param {number} index The index of the widget to create (this will effect it's location in the
        * [_processedWidgets]{@link module:alfresco/core/Core#_processedWidgets} array)
        */
-      createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(config, domNode, callback, callbackScope, index) {
-         try
-         {
-            var _this = this;
-            this.alfLog("log", "Creating widget: ",config);
+      createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(widget, domNode, callback, callbackScope, index) {
+         var _this = this;
+         this.alfLog("log", "Creating widget: ",widget);
+         var initArgs = this.processWidgetConfig(widget);
 
-            // Make sure we have an instantiation args object...
-            var initArgs = (config && config.config && (typeof config.config === "object")) ? config.config : {};
+         // Create a reference for the widget to be added to. Technically the require statement
+         // will need to asynchronously request the widget module - however, assuming the widget
+         // has been included in such a way that it will have been included in the generated
+         // module cache then the require call will actually process synchronously and the widget
+         // variable will be returned with an assigned value...
+         var instantiatedWidget = null;
 
-            // Ensure that each widget has a unique id. Without this Dojo seems to occasionally
-            // run into trouble trying to re-use an existing id...
-            if (typeof initArgs.id === "undefined")
+         // Dynamically require the specified widget
+         // The use of indirection is done so modules will not rolled into a build (should we do one)
+         var requires = [widget.name];
+         require(requires, function(WidgetType) {
+            // jshint maxcomplexity:false
+            // Just to be sure, check that no widget doesn't already exist with that id and
+            // if it does, generate a new one...
+            if (typeof WidgetType === "function")
             {
-               // Attempt to use the model ID as the DOM ID if available, but if not just generate an ID
-               // based on the module name...
-               if (!config.id || lang.trim(config.id) === "")
+               try
                {
-                  initArgs.id = config.name.replace(/\//g, "_") + "___" + this.generateUuid();
+                  if (registry.byId(initArgs.id))
+                  {
+                     initArgs.id = widget.name + "___" + _this.generateUuid();
+                  }
+
+                  // Instantiate the new widget
+                  // This is an asynchronous response so we need a callback method...
+                  instantiatedWidget = new WidgetType(initArgs, domNode);
+                  if (!_this.widgetsToDestroy)
+                  {
+                     _this.widgetsToDestroy = [];
+                     _this.widgetsToDestroy.push(widget);
+                  }
+                  _this.alfLog("log", "Created widget", instantiatedWidget);
+                  instantiatedWidget.startup();
+                  if (widget.assignTo)
+                  {
+                     _this[widget.assignTo] = instantiatedWidget;
+                  }
+
+                  // Set any additional style attributes...
+                  if (initArgs.style && instantiatedWidget.domNode)
+                  {
+                     domStyle.set(instantiatedWidget.domNode, initArgs.style);
+                  }
+
+                  // Create a node for debug mode...
+                  if (AlfConstants.DEBUG && instantiatedWidget.domNode)
+                  {
+                     domClass.add(instantiatedWidget.domNode, "alfresco-debug-Info highlight");
+                     var infoWidget = new WidgetInfo({
+                        displayId: widget.id || "",
+                        displayType: widget.name,
+                        displayConfig: initArgs
+                     }).placeAt(instantiatedWidget.domNode);
+                     domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
+                  }
                }
-               else
+               catch (e)
                {
-                  initArgs.id = config.id;
-               }
-            }
-
-            if (initArgs.generatePubSubScope === true)
-            {
-               // Generate a new pubSubScope if requested to...
-               initArgs.pubSubScope = this.generateUuid();
-            }
-            else if (initArgs.pubSubScope === undefined)
-            {
-               // ...otherwise inherit the callers pubSubScope if one hasn't been explicitly configured...
-               initArgs.pubSubScope = this.pubSubScope;
-            }
-
-            // Pass on the pub/sub scope from the parent...
-            if (initArgs.pubSubScope === this.pubSubScope)
-            {
-               // If the scope is inherited then also inherit the parent scope...
-               if (!this.parentPubSubScope)
-               {
-                  // ...set as global if not set already
-                  initArgs.parentPubSubScope = "";
-               }
-               else
-               {
-                  // ...but try to inherit...
-                  initArgs.parentPubSubScope = this.parentPubSubScope;
+                  _this.alfLog("error", "The following error occurred creating a widget", e, this);
+                  if (callback)
+                  {
+                     callback.call((callbackScope || this), null, index);
+                  }
+                  return null;
                }
             }
             else
             {
-               // If the scope has changed then inherit the my scope...
-               initArgs.parentPubSubScope = this.pubSubScope;
+               _this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  widget.name + "'. Please correct the use of this widget in your page definition", this);
             }
-
-            if (initArgs.dataScope === undefined)
-            {
-               initArgs.dataScope = this.dataScope;
-            }
-
-            if (initArgs.currentItem === undefined)
-            {
-               initArgs.currentItem = this.currentItem;
-            }
-            if (initArgs.currentMetadata === undefined)
-            {
-               initArgs.currentMetadata = this.currentMetadata;
-            }
-            if (initArgs.groupMemberships === undefined)
-            {
-               initArgs.groupMemberships = this.groupMemberships;
-            }
-
-            // Create a reference for the widget to be added to. Technically the require statement
-            // will need to asynchronously request the widget module - however, assuming the widget
-            // has been included in such a way that it will have been included in the generated
-            // module cache then the require call will actually process synchronously and the widget
-            // variable will be returned with an assigned value...
-            var widget = null;
-
-            // Dynamically require the specified widget
-            // The use of indirection is done so modules will not rolled into a build (should we do one)
-            var requires = [config.name];
-            require(requires, function(WidgetType) {
-               // Just to be sure, check that no widget doesn't already exist with that id and
-               // if it does, generate a new one...
-               if (registry.byId(initArgs.id))
-               {
-                  initArgs.id = config.name + "___" + _this.generateUuid();
-               }
-
-               // Instantiate the new widget
-               // This is an asynchronous response so we need a callback method...
-               widget = new WidgetType(initArgs, domNode);
-               if (!_this.widgetsToDestroy)
-               {
-                  _this.widgetsToDestroy = [];
-                  _this.widgetsToDestroy.push(widget);
-               }
-               _this.alfLog("log", "Created widget", widget);
-               widget.startup();
-               if (config.assignTo)
-               {
-                  _this[config.assignTo] = widget;
-               }
-
-               // Set any additional style attributes...
-               if (initArgs.style && widget.domNode)
-               {
-                  domStyle.set(widget.domNode, initArgs.style);
-               }
-
-               // Create a node for debug mode...
-               if (AlfConstants.DEBUG && widget.domNode)
-               {
-                  domClass.add(widget.domNode, "alfresco-debug-Info highlight");
-                  var infoWidget = new WidgetInfo({
-                     displayId: config.id || "",
-                     displayType: config.name,
-                     displayConfig: initArgs
-                  }).placeAt(widget.domNode);
-                  domConstruct.place(infoWidget.domNode, widget.domNode, "first");
-               }
-
-               if (callback)
-               {
-                  // If there is a callback then call it with any provided scope (but default to the
-                  // "this" as the scope if one isn't provided).
-                  callback.call((callbackScope || this), widget, index);
-               }
-            });
-
-            if (!widget)
-            {
-               this.alfLog("warn", "A widget was not declared so that it's modules were included in the loader cache", config, this);
-            }
-            return widget;
-         }
-         catch (e)
-         {
-            this.alfLog("error", "The following error occurred creating a widget", e, this);
+            
             if (callback)
             {
-               callback.call((callbackScope || this), null, index);
+               // If there is a callback then call it with any provided scope (but default to the
+               // "this" as the scope if one isn't provided).
+               callback.call((callbackScope || this), instantiatedWidget, index);
             }
-            return null;
+         });
+
+         if (!widget)
+         {
+            this.alfLog("warn", "A widget was not declared so that it's modules were included in the loader cache", widget, this);
          }
+         return instantiatedWidget;
       },
 
       /**
@@ -549,44 +569,106 @@ define(["dojo/_base/declare",
        * @returns {boolean} The result of the filter evaluation or true if no "renderFilter" is provided
        */
       filterWidget: function alfresco_core_CoreWidgetProcessing__filterWidget(widgetConfig, index, decrementCounter) {
-         var shouldRender = true;
-         if (widgetConfig.config && widgetConfig.config.renderFilter)
-         {
-            // If filter configuration is provided, then switch the default so that rendering will NOT occur...
-            // shouldRender = false;
-
-            // Check that the object has a the supplied property...
-            var renderFilterConfig = widgetConfig.config.renderFilter;
-            if (!ObjectTypeUtils.isArray(renderFilterConfig))
-            {
-               this.alfLog("warn", "A request was made to filter a widget, but the filter configuration was not an array", this, widgetConfig);
-               shouldRender = true;
-            }
-            else
-            {
-               // Check that the widget passes all the filter checks...
-               var renderFilterMethod = lang.getObject("config.renderFilterMethod", false, widgetConfig);
-               if (!renderFilterMethod || lang.trim(renderFilterMethod) === "ALL")
-               {
-                  // Handle AND logic (all filters must pass)
-                  shouldRender = array.every(renderFilterConfig, lang.hitch(this, this.processFilterConfig));
-               }
-               else
-               {
-                  // Handle OR logic (only one filter needs to pass)
-                  shouldRender = array.some(renderFilterConfig, lang.hitch(this, this.processFilterConfig));
-               }
-            }
-         }
-         else
-         {
-            // this.alfLog("log", "A request was made to filter a widget but the configuration does not have a 'config.renderFilter' attribute.", this, widgetConfig);
-         }
+         var shouldRender = this.processAllFilters(widgetConfig.config);
          if (!shouldRender && decrementCounter !== false)
          {
             // It is not always necessary to call the _registerProcessedWidget. This is relevant for widgets
             // that work through an entire model before performing any processing (e.g. alfresco/core/FilteredPage)
             this._registerProcessedWidget(null, index);
+         }
+         return shouldRender;
+      },
+
+      /**
+       * Processes filter configuration. This looks for either "renderFilters" (e.g. a filter containing
+       * sub-filters) or "renderFilter" (i.e. a single filter containing one or more rules to evaluate).
+       * It then delegates processing to the appropriate function
+       * 
+       * @param  {object} filterConfig The configuration to inspect
+       * @return {boolean} True if all filters have evaluated successfully and false otherwise.
+       */
+      processAllFilters: function alfresco_core_CoreWidgetProcessing__processAllFilters(filterConfig) {
+         var shouldRender = true;
+         if (filterConfig && filterConfig.renderFilters)
+         {
+            // If "renderFilters" (i.e. more than one "renderFilter" - see following else/if block)
+            var renderFiltersConfig = filterConfig.renderFilters;
+            var renderFiltersMethod = lang.getObject("renderFilterMethod", false, filterConfig);
+            shouldRender = this.processMultipleFilters(renderFiltersConfig, renderFiltersMethod);
+         }
+         else if (filterConfig && filterConfig.renderFilter)
+         {
+            // If filter configuration is provided, then switch the default so that rendering will NOT occur...
+            // Check that the object has a the supplied property...
+            var renderFilterConfig = filterConfig.renderFilter;
+            var renderFilterMethod = lang.getObject("renderFilterMethod", false, filterConfig);
+            shouldRender = this.processSingleFilter(renderFilterConfig, renderFilterMethod);
+         }
+         return shouldRender;
+      },
+
+      /**
+       * This function is used to to determine whether or not a filter containing multiple sub-filters evaluates to true. 
+       * The sub-filters themselves can contain further nested filters.
+       * 
+       * @param  {object[]} renderFilterConfig The configuration for the filter array
+       * @param  {string} renderFilterMethod Either ANY or ALL 
+       * @return {boolean} True if the filter passes and false otherwise
+       */
+      processMultipleFilters: function alfresco_core_CoreWidgetProcessing__processMultipleFilters(renderFiltersConfig, renderFilterMethod) {
+         var shouldRender = true;
+         if (!ObjectTypeUtils.isArray(renderFiltersConfig))
+         {
+            // Invalid configuration counts as being allowed to render...
+            this.alfLog("warn", "A request was made to filter a widget, but the 'renderFilters' configuration was not an array", this, renderFiltersConfig, renderFilterMethod);
+            shouldRender = true;
+         }
+         else
+         {
+            // Check that the widget passes all the filter checks...
+            if (!renderFilterMethod || lang.trim(renderFilterMethod) === "ALL")
+            {
+               // Handle AND logic (all filters must pass)
+               shouldRender = array.every(renderFiltersConfig, lang.hitch(this, this.processAllFilters));
+            }
+            else
+            {
+               // Handle OR logic (only one filter needs to pass)
+               shouldRender = array.some(renderFiltersConfig, lang.hitch(this, this.processAllFilters));
+            }
+         }
+         return shouldRender;
+      },
+
+      /**
+       * This function is used to to determine whether or not a single filter evaluates to true. Note that a single
+       * filter can consist of multiple rules where all rules or just one rule must evaluate to true in order for
+       * the filter to pass.
+       * 
+       * @param  {object[]} renderFilterConfig The configuration for the filter array
+       * @param  {string} renderFilterMethod Either ANY or ALL 
+       * @return {boolean} True if the filter passes and false otherwise
+       */
+      processSingleFilter: function alfresco_core_CoreWidgetProcessing__processSingleFilter(renderFilterConfig, renderFilterMethod) {
+         var shouldRender = true;
+         if (!ObjectTypeUtils.isArray(renderFilterConfig))
+         {
+            this.alfLog("warn", "A request was made to filter a widget, but the 'renderFilter' configuration was not an array", this, renderFilterConfig, renderFilterMethod);
+            shouldRender = true;
+         }
+         else
+         {
+            // Check that the widget passes all the filter checks...
+            if (!renderFilterMethod || lang.trim(renderFilterMethod) === "ALL")
+            {
+               // Handle AND logic (all filters must pass)
+               shouldRender = array.every(renderFilterConfig, lang.hitch(this, this.processFilterConfig));
+            }
+            else
+            {
+               // Handle OR logic (only one filter needs to pass)
+               shouldRender = array.some(renderFilterConfig, lang.hitch(this, this.processFilterConfig));
+            }
          }
          return shouldRender;
       },

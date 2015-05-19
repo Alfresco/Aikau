@@ -205,6 +205,22 @@ define(["intern!object",
             });
       },
 
+      "Check PublishingDropDownMenu options": function() {
+         // See AKU-289
+         return browser.findAllByCssSelector(".alfresco-forms-controls-Select")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Couldn't find select controls in PublishingDropDownMenu widgets");
+            })
+         .end()
+         .findByCssSelector(".alfresco-forms-controls-Select .dijitButtonContents")
+            .click()
+         .end()
+         .findAllByCssSelector(".dijitPopup tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "No options provided available");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -42,7 +42,7 @@ define(["dojo/_base/declare",
         "dojo/query",
         "dojo/NodeList",
         "dojo/NodeList-manipulate"], 
-        function(declare, AlfCore, _NavigationServiceTopicMixin, AlfConstants, lang, array, query, NodeList, NodeListManipulate) {
+        function(declare, AlfCore, _NavigationServiceTopicMixin, AlfConstants, lang, array, query /*, NodeList, NodeListManipulate*/) {
    
    return declare([AlfCore, _NavigationServiceTopicMixin], {
 
@@ -65,24 +65,21 @@ define(["dojo/_base/declare",
        * @param {string} type The target configured
        */
       makeAnchor: function alfresco_navigation__HtmlAnchorMixin__makeAnchor(url, type) {
-         if (url != null)
+         if (url)
          {
             // The following code is based on the NavigationService, it should possibly be abstracted to a mixin
             // to prevent future maintenance issues, but given this is "non-functional" code it's not important at the moment.
             // We want to build a URL to set as the "href" attribute of the <a> element.
             var anchorUrl;
-            if (typeof type == "undefined" ||
-                type == null ||
-                type === "" ||
-                type == this.sharePageRelativePath)
+            if (!type || type === this.pageRelativePath  || type === this.sharePageRelativePath)
             {
                anchorUrl = AlfConstants.URL_PAGECONTEXT + url;
             }
-            else if (type == this.contextRelativePath)
+            else if (type === this.contextRelativePath)
             {
                anchorUrl = AlfConstants.URL_CONTEXT + url;
             }
-            else if (type == this.fullPath)
+            else if (type === this.fullPath)
             {
                anchorUrl = url;
             }
@@ -100,12 +97,9 @@ define(["dojo/_base/declare",
        * @param {string} url The URL to use for the anchor
        */
       _addAnchors: function alfresco_navigation__HtmlAnchorMixin__addAnchors(url) {
-         array.forEach(this.getAnchorTargetSelectors(), function(selector, index) {
-            dojo.query(selector, this.domNode).wrapInner("<a tabIndex='-1' class='alfresco-navigation-_HtmlAnchorMixin' title='" + this.label + "' href='" + url + "'></a>");
+         array.forEach(this.getAnchorTargetSelectors(), function(selector) {
+            query(selector, this.domNode).wrapInner("<a tabIndex='-1' class='alfresco-navigation-_HtmlAnchorMixin' title='" + this.label + "' href='" + url + "'></a>");
          }, this);
-         // dojo.query("td.dijitMenuItemLabel", this.domNode).wrapInner("<a class='alfresco-menus-_AlfMenuItemMixin' href='" + url + "'></a>");
-         // dojo.query("span.alf-menu-bar-label-node", this.domNode).wrapInner("<a class='alfresco-menus-_AlfMenuItemMixin' href='" + url + "'></a>");
-         // dojo.query("span.alfresco-renderers-PropertyLink", this.domNode).wrapInner("<a class='alfresco-menus-_AlfMenuItemMixin' href='" + url + "'></a>");
       },
 
       /**

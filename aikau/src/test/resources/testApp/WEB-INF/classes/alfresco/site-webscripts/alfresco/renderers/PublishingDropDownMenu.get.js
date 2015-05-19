@@ -9,6 +9,7 @@ model.jsonModel = {
             }
          }
       },
+      "aikauTesting/mockservices/PublishingDropDownMenuMockService",
       "alfresco/services/ErrorReporter"
    ],
    widgets:[

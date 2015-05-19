@@ -190,11 +190,39 @@ define(["dojo/_base/declare",
          if (this.loggingPreferences.enabled && !this.logSubscriptionHandle)
          {
             this.logSubscriptionHandle = this.alfSubscribe(this.alfLoggingTopic, lang.hitch(this, this.onLogRequest));
+
+            // Only log pub/sub activity if either all logging is enabled or PUBSUB logging has been
+            // explicitly requested...
+            if (this.loggingPreferences.all === true ||
+                this.loggingPreferences.pubSub === true)
+            {
+               this.subLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_SUBSCRIPTION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "SUBSCRIPTION"));
+               this.pubLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_PUBLICATION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "PUBLICATION"));
+               this.unsubLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_UNSUBSCRIPTION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "UNSUBSCRIPTION"));
+            }
          }
          else if (!this.loggingPreferences.enabled && this.logSubscriptionHandle)
          {
-            this.alfUnsubscribe(this.logSubscriptionHandle);
-            this.logSubscriptionHandle = null;
+            if (this.logSubscriptionHandle)
+            {
+               this.alfUnsubscribe(this.logSubscriptionHandle);
+               this.logSubscriptionHandle = null;
+            }
+            if (this.subLogSubscriptionHandle)
+            {
+               this.alfUnsubscribe(this.subLogSubscriptionHandle);
+               this.subLogSubscriptionHandle = null;
+            }
+            if (this.pubLogSubscriptionHandle)
+            {
+               this.alfUnsubscribe(this.pubLogSubscriptionHandle);
+               this.pubLogSubscriptionHandle = null;
+            }
+            if (this.unsubLogSubscriptionHandle)
+            {
+               this.alfUnsubscribe(this.unsubLogSubscriptionHandle);
+               this.unsubLogSubscriptionHandle = null;
+            }
          }
       },
 
@@ -318,6 +346,16 @@ define(["dojo/_base/declare",
       loggingPreferences: null,
 
       /**
+       * This logging is explicitly for publication, subscription and unsubscription events.
+       * 
+       * @param  {string} type This is the PubSub activity type (e.g. "SUBSCRIPTION", "PUBLICATION", etc).
+       * @param  {object} payload The details of the PubSub activity
+       */
+      onPubSubLogRequest: function alfresco_services_LoggingService__onPubSubLogRequest(type, payload) {
+         console.log(type + " >> ", payload);
+      },
+
+      /**
        *
        *
        * @typedef {Object} logPayload
@@ -326,7 +364,7 @@ define(["dojo/_base/declare",
        * @property messageArgs {Object[]}
        */
 
-      /**
+      /**onLogRequest
        * @instance
        * @param {logPayload} payload
        */
