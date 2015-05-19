@@ -24,17 +24,6 @@ model.jsonModel = {
             }
          }
       },
-      // {
-      //    id: "CHECK_CHECKBOX",
-      //    name: "alfresco/buttons/AlfButton",
-      //    config: {
-      //       label: "Check checkbox",
-      //       publishTopic: "SET_FORM_VALUE",
-      //       publishPayload: {
-      //          canbuild: true
-      //       }
-      //    }
-      // },
       {
          name: "alfresco/html/Spacer",
          config: {
@@ -74,5 +63,4 @@ model.jsonModel = {
          name: "alfresco/logging/DebugLog"
       }
    ]
-   // simple stuff, setting checkbox via publication, making sure it can be toggled on/off with mouse and keyboard
 };
