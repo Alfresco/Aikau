@@ -177,11 +177,32 @@ model.jsonModel = {
                      modifiedByUser: "bsmith",
                      description: "Wiki result description",
                      site: {
-                     	title: "Wiki result site title",
-                     	shortName: "wikiResult"
+                        title: "Wiki result site title",
+                        shortName: "wikiResult"
                      },
                      path: "/one/two/three/four",
                      size: 283746
+                  },
+                  {
+                     nodeRef: "dummy://nodeRef/1",
+                     "type": "calendarevent",
+                     "name": "1432113732076-6118.ics",
+                     "displayName": "Event result",
+                     "description": "",
+                     "modifiedOn": "2015-05-20T10:22:12.079+01:00",
+                     "modifiedByUser": "admin",
+                     "modifiedBy": "Administrator",
+                     "fromDate": "2015-04-01T12:00:00.000+01:00",
+                     "size": -1,
+                     "mimetype": "",
+                     "site":
+                     {
+                        "shortName": "eventResult",
+                        "title": "Event result site title"
+                     },
+                     "container": "calendar",
+                     "lastThumbnailModification": [],
+                     "tags": []
                   }
                ]
             },
@@ -220,7 +241,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       },
       {
          name: "aikauTesting/TestCoverageResults"

@@ -91,11 +91,7 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "POST_FORM",
-                  pos: "last"
-               })
+            .getLastPublish("POST_FORM")
                .then(function(payload) {
                   assert.deepPropertyVal(payload, "canbuild", false, "Failed to submit checkbox value correctly");
                });

@@ -193,11 +193,7 @@ define([
                .click()
                .end()
 
-            .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "FORM_POST",
-                  pos: "last"
-               })
+            .getLastPublish("FORM_POST")
                .then(function(payload) {
                   assert.isNotNull(payload, "Could not find form submission");
                   if (payload) {
@@ -324,11 +320,7 @@ define([
                .click()
                .end()
 
-            .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "DIALOG_POST",
-                  pos: "last"
-               })
+            .getLastPublish("DIALOG_POST")
                .then(function(payload) {
                   assert.isNotNull(payload, "Could not find dialog submission");
                   if (payload) {

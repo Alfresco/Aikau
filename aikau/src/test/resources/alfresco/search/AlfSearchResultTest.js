@@ -19,59 +19,68 @@
 
 /**
  * This test generates some variations on AlfSearchResult to test the various if statements in the rendering widgets involved
- * 
+ *
  * @author Richard Smith
  */
 define(["intern!object",
-        "intern/chai!expect",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+      "intern/chai!assert",
+      "alfresco/TestCommon"
+   ],
+   function(registerSuite, assert, TestCommon) {
 
-   var browser;
-   var activeElementId;
-      
-   registerSuite({
-      name: "AlfSearchResult Tests",
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfSearchResult", "AlfSearchResult Tests").end();
-      },
+      registerSuite({
+         name: "AlfSearchResult Tests",
 
-      beforeEach: function() {
-         browser.end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/AlfSearchResult", "AlfSearchResult Tests").end();
+         },
 
-     "Check the correct number of rows is shown": function () {
-         return browser.findAllByCssSelector("#SEARCH_RESULTS table tbody tr")
-            .then(function (rows){
-               expect(rows).to.have.length(11, "There should be 11 search result rows shown");
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Correct number of rows is shown": function() {
+            return browser.findAllByCssSelector(".alfresco-search-AlfSearchResult")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 12, "Wrong number of results rendered");
+               });
+         },
+
+         "Clicked result becomes focused": function() {
+            var activeElementId;
+            return browser.findByCssSelector(".alfresco-search-AlfSearchResult:last-child")
+               .click()
+               .end()
+
+            .getActiveElement()
+               .then(function(element) {
+                  activeElementId = element.elementId;
+               })
+               .end()
+
+            .findByCssSelector(".alfresco-search-AlfSearchResult:last-child")
+
+            .then(function(element) {
+               assert.equal(element.elementId, activeElementId, "The clicked element has not become focused");
             });
-      },
+         },
 
-      "Check that a clicked search result at the bottom of the screen becomes focused": function() {
-         return browser.findByCssSelector("#SEARCH_RESULTS table tbody tr:last-of-type")
-            .click()
-         .end()
+         "Event result opens correct date in calendar": function() {
+            return browser.findByCssSelector(".alfresco-search-AlfSearchResult:last-child .nameAndTitleCell .alfresco-renderers-PropertyLink > .inner")
+               .click()
+               .end()
 
-         // Store the id of the currently focused (active) element
-         .getActiveElement()
-            .then(function (element){
-               activeElementId = element._elementId;
-            })
-         .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "url", "site/eventResult/calendar?date=2015-04-01", "Did not navigate to correct page");
+               });
+         },
 
-         // Are the clicked row of the results and the currently focused item the same?
-         .findByCssSelector("#SEARCH_RESULTS table tbody tr:last-of-type")
-            .then(function (clickedElement){
-               var clickedElementId = clickedElement._elementId;
-               expect(clickedElementId).to.equal(activeElementId, "The clicked element has not become focused");
-            });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      });
    });
-});

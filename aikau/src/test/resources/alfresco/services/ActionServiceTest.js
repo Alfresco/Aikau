@@ -47,11 +47,7 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "ALF_SELECTED_FILES_CHANGED",
-                  pos: "last"
-               })
+            .getLastPublish("ALF_SELECTED_FILES_CHANGED")
                .then(function(payload) {
                   assert.isNotNull(payload, "Selected files change not published");
                   if (payload) {
@@ -66,11 +62,7 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "ALF_SELECTED_FILES_CHANGED",
-                  pos: "last"
-               })
+            .getLastPublish("ALF_SELECTED_FILES_CHANGED")
                .then(function(payload) {
                   assert.isNotNull(payload, "Selected files change not published");
                   if (payload) {
