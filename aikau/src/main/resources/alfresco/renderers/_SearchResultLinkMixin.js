@@ -23,11 +23,12 @@
  * @module alfresco/renderers/_SearchResultLinkMixin
  * @author Richard Smith
  */
-define(["dojo/_base/declare",
+define(["alfresco/core/TemporalUtils",
+        "dojo/_base/declare",
         "dojo/_base/lang"], 
-        function(declare, lang) {
+        function(TemporalUtils, declare, lang) {
    
-   return declare(null, {
+   return declare([TemporalUtils], {
 
       /**
        * This function generates a payload for the [NavigationService]{@link module:alfresco/services/NavigationService}
@@ -106,9 +107,12 @@ define(["dojo/_base/declare",
                break;
 
             case "calendarevent":
+               var dateProperty = lang.getObject("fromDate", false, this.currentItem),
+                  eventDate = dateProperty && this.fromISO8601(dateProperty),
+                  formattedDate = eventDate && this.formatDate(eventDate, "yyyy-mm-dd");
                if (site)
                {
-                  payload.url = "site/" + site + "/calendar";
+                  payload.url = "site/" + site + "/calendar?date=" + formattedDate;
                }
                break;
 
