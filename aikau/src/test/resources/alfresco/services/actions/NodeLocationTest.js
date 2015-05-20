@@ -43,11 +43,7 @@ define(["intern!object",
          return browser.findByCssSelector("#SITE_NODE_DEFAULT_label")
             .click()
          .end()
-         .getLogEntries({
-            type: "PUBLISH",
-            topic: "ALF_NAVIGATE_TO_PAGE",
-            pos: "last"
-         })
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
          .then(function(payload) {
             assert.isNotNull(payload, "Navigation publication not found");
             if (payload) {
@@ -60,11 +56,7 @@ define(["intern!object",
          return browser.findByCssSelector("#NODE_DEFAULT_label")
             .click()
          .end()
-         .getLogEntries({
-            type: "PUBLISH",
-            topic: "ALF_NAVIGATE_TO_PAGE",
-            pos: "last"
-         })
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
          .then(function(payload) {
             assert.isNotNull(payload, "Navigation publication not found");
             if (payload) {
@@ -77,11 +69,7 @@ define(["intern!object",
          return browser.findByCssSelector("#SITE_NODE_CUSTOM_label")
             .click()
          .end()
-         .getLogEntries({
-            type: "PUBLISH",
-            topic: "CUSTOM_ALF_NAVIGATE_TO_PAGE",
-            pos: "last"
-         })
+         .getLastPublish("CUSTOM_ALF_NAVIGATE_TO_PAGE")
          .then(function(payload) {
             assert.isNotNull(payload, "Navigation publication not found");
             if (payload) {
@@ -94,11 +82,7 @@ define(["intern!object",
          return browser.findByCssSelector("#NODE_CUSTOM_label")
             .click()
          .end()
-         .getLogEntries({
-            type: "PUBLISH",
-            topic: "CUSTOM_ALF_NAVIGATE_TO_PAGE",
-            pos: "last"
-         })
+         .getLastPublish("CUSTOM_ALF_NAVIGATE_TO_PAGE")
          .then(function(payload) {
             assert.isNotNull(payload, "Navigation publication not found");
             if (payload) {

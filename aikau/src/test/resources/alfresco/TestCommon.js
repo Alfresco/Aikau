@@ -175,6 +175,13 @@ define(["intern/dojo/node!fs",
                   fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary");
                });
          };
+         command.session.getLastPublish = function(topicName) {
+            return this.getLogEntries({
+               type: "PUBLISH",
+               topic: topicName,
+               pos: "last"
+            });
+         };
          command.session.getLogEntries = function(filter, waitPeriod) {
 
             // Normalise arguments
