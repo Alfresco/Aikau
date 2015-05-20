@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
                 this.payloadContainsRequiredUpdateableVars(payload) && 
                 this.payloadContainsEqualUpdateableVars(payload);
       },
-      
+
       /**
        * Compares the payload object with the hashVarsForUpdate array of key names
        * Returns true if hashVarsForUpdate is empty
@@ -153,19 +153,36 @@ define(["dojo/_base/declare",
          // No hashVarsForUpdate - return true
          if(!this.hashVarsForUpdate || this.hashVarsForUpdate.length === 0)
          {
-            return true;
+            containsUpdateableVar = true;
          }
-         
-         // Iterate over the keys defined in hashVarsForUpdate - return true if the payload contains one of them
-         for(var i=0; i < this.hashVarsForUpdate.length; i++)
+         else
          {
-            if(this.hashVarsForUpdate[i] in payload)
+            // Iterate over the keys defined in hashVarsForUpdate - return true if the payload contains one of them
+            for(var i=0; i < this.hashVarsForUpdate.length; i++)
             {
-               if (updateInstanceValues === true)
+               if(this.hashVarsForUpdate[i] in payload)
                {
-                  this[this.hashVarsForUpdate[i]] = payload[this.hashVarsForUpdate[i]];
+                  if (updateInstanceValues === true)
+                  {
+                     this[this.hashVarsForUpdate[i]] = payload[this.hashVarsForUpdate[i]];
+                  }
+                  containsUpdateableVar = true;
                }
-               containsUpdateableVar = true;
+            }
+
+            // This code block has been added to address hash related pagination issues reported in 
+            // AKU-293 and AKU-302. We want to be able to support updates for hash parameters that
+            // do NOT require updating instance values. At some point we should be able to remove
+            // this code block with refactoring to the AlfSearchList and AlfDocumentList
+            if (this._coreHashVars)
+            {
+               for(i=0; i < this._coreHashVars.length; i++)
+               {
+                  if(this._coreHashVars[i] in payload)
+                  {
+                     containsUpdateableVar = true;
+                  }
+               }
             }
          }
          return containsUpdateableVar;
@@ -218,7 +235,6 @@ define(["dojo/_base/declare",
        * @private
        */
       payloadContainsEqualUpdateableVars: function alfresco_documentlibrary__AlfHashMixin__payloadContainsEqualUpdateableVars(payload) {
-         
          // No hashVarsForUpdateMustEqual - return true
          if(!this.hashVarsForUpdateMustEqual || this.hashVarsForUpdateMustEqual.length === 0)
          {

@@ -57,6 +57,13 @@ define(["intern!object",
             });
       },
 
+      "Count the rows": function() {
+         return browser.findAllByCssSelector(".alfresco-lists-views-layouts-Row")
+            .then(function(elements) {
+               assert.lengthOf(elements, 20, "There should only be twenty rows");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

@@ -104,22 +104,10 @@ define(["dojo/_base/declare",
 
          if (this.useHash === true)
          {
-            // If using the browser URL hash, then we want to update the currentPage and currentPageSize
-            // attribute with the values set as hash parameters in the URL...
-            this.updateInstanceValues = true;
-            if (!this.hashVarsForUpdate || this.hashVarsForUpdate.length === 0)
-            {
-               // this.hashVarsForUpdate = ["currentPage"];
-               this.hashVarsForUpdate = ["currentPage","currentPageSize"];
-            }
-            else
-            {
-               // NOTE: Duplications in the list don't really matter, so there's not
-               //       a great deal of point in expending the effort to check if they're
-               //       already present...
-               // this.hashVarsForUpdate.push("currentPage");
-               // this.hashVarsForUpdate.push("currentPageSzie");
-            }
+            // If using the browser URL hash, then we want to update the currentPage, currentPageSize
+            // sortField, sortAscending as these are the core parameters relating to sorting and pagination
+            // and they should be handled irrespective of any other hashVarsForUpdate parameters requested
+            this._coreHashVars = ["currentPage","currentPageSize","sortField","sortAscending"];
          }
 
          this.alfPublish(this.getPreferenceTopic, {
@@ -143,7 +131,8 @@ define(["dojo/_base/declare",
          this.currentPageSize = value;
          this.alfPublish(this.docsPerpageSelectionTopic, {
             label: this.message("list.paginator.perPage.label", {0: this.currentPageSize}),
-            value: this.currentPageSize
+            value: this.currentPageSize,
+            selected: true
          });
       },
 
@@ -176,6 +165,35 @@ define(["dojo/_base/declare",
             });
          }
          this.inherited(arguments);
+      },
+
+      /**
+       * Checks the hash for updates relating to pagination and sorting.
+       *
+       * @instance
+       * @param {object} hashParameters An object containing the current hash parameters
+       */
+      _updateCoreHashVars: function alfresco_lists_AlfSortablePaginatedList___updateCoreHashVars(hashParameters) {
+         if (hashParameters.currentPage) {
+            var cp = parseInt(hashParameters.currentPage, 10);
+            if (!isNaN(cp))
+            {
+               this.currentPage = cp;
+            }
+         }
+         if (hashParameters.currentPageSize) {
+            var cps = parseInt(hashParameters.currentPageSize, 10);
+            if (!isNaN(cps))
+            {
+               this.currentPageSize = cps;
+            }
+         }
+         if (hashParameters.sortField) {
+            this.sortField = hashParameters.sortField;
+         }
+         if (hashParameters.sortAscending) {
+            this.sortAscending = hashParameters.sortAscending;
+         }
       },
 
       /**
@@ -396,7 +414,6 @@ define(["dojo/_base/declare",
        */
       updateLoadDataPayload: function alfresco_lists_AlfSortablePaginatedList__updateLoadDataPayload(payload) {
          this.inherited(arguments);
-
          payload.sortAscending = this.sortAscending;
          payload.sortField = this.sortField;
          if (this.usePagination || this.useInfiniteScroll)
@@ -406,7 +423,8 @@ define(["dojo/_base/declare",
          }
          this.alfPublish(this.docsPerpageSelectionTopic, {
             label: this.message("list.paginator.perPage.label", {0: this.currentPageSize}),
-            value: this.currentPageSize
+            value: this.currentPageSize,
+            selected: true
          });
       },
 

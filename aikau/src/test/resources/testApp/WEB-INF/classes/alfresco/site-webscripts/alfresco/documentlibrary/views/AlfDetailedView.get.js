@@ -30,7 +30,5 @@ model.jsonModel = {
       name: "aikauTesting/mockservices/DocumentLibraryDetailedViewMockXhr"
    }, {
       name: "alfresco/logging/SubscriptionLog"
-   }, {
-      name: "aikauTesting/TestCoverageResults"
    }]
 };

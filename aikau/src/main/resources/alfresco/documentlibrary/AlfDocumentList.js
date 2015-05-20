@@ -94,6 +94,13 @@ define(["dojo/_base/declare",
        */
       postMixInProperties: function alfresco_documentlibrary_AlfDocumentList__postMixInProperties() {
          this.inherited(arguments);
+
+         if (this.useHash === true)
+         {
+            // Push the core hash update variables into the array configured by the extended AlfSortablePaginatedList
+            this._coreHashVars.push("path","filter","tag","category");
+         }
+
          this.currentFilter = {
             path: "/"
          };
@@ -339,22 +346,14 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Checks the hash for updates relating to pagination and sorting.
        *
        * @instance
-       * @param {object} payload
+       * @param {object} hashParameters An object containing the current hash parameters
        */
-      onHashChanged: function alfresco_documentlibrary_AlfDocumentList__onHashChanged(payload) {
-         if(this.doHashVarUpdate(payload))
-         {
-            if (payload.currentPage) {
-               this.currentPage = payload.currentPage;
-            }
-            this.currentFilter = payload;
-            if (this._readyToLoad)
-            {
-               this.loadData();
-            }
-         }
+      _updateCoreHashVars: function alfresco_documentlibrary_AlfDocumentList___updateCoreHashVars(hashParameters) {
+         this.inherited(arguments);
+         this.currentFilter = hashParameters;
       },
 
       /**
