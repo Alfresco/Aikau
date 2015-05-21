@@ -344,7 +344,7 @@ define(["dojo/_base/declare",
 
          // Sort parameters
          params += "&sortAsc=" + payload.sortAscending + "&sortField=" + encodeURIComponent(payload.sortField);
-         if (payload.site)
+         if (!payload.site)
          {
             if (payload.libraryRoot)
             {
