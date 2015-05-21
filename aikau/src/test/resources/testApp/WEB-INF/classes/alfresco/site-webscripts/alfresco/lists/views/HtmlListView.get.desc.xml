@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>HtmlListView</shortname>
+  <description>This is an example of an AlfList using the HtmlListView. It is a very simple view that just renders single properties from each listed item in an HTML li element.</description>
+  <family>aikau-unit-tests</family>
+  <url>/HtmlListView</url>
+</webscript>
