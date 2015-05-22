@@ -33,6 +33,21 @@ define([
       registerSuite({
          name: "Multi Select Input Tests",
 
+         // STARTING STATE
+         // 
+         // Control 1
+         //    choices: "tag1", "tag11"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: none
+         //    
          setup: function() {
             browser = this.remote;
             return TestCommon.loadTestWebScript(this.remote, "/MultiSelectInput", "Multi Select Input Tests").end();
@@ -42,6 +57,21 @@ define([
             browser.end();
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag11"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: none
+         //    
          "Controls are fully loaded": function() {
             return browser.findAllByCssSelector("#MULTISELECT_1_CONTROL.alfresco-forms-controls-MultiSelect--loaded")
                .then(function(elements) {
@@ -55,6 +85,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag11"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: none
+         //    
          "Preset values are rendered by control": function() {
             return browser.findAllByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice")
                .then(function(elements) {
@@ -76,6 +121,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag11"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    *results dropdown: visible
+         //    
+         // Misc
+         //    *focused element: Control 2
+         //    
          "Clicking on control no longer loses responses to a second query": function() {
             return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
                .click()
@@ -87,6 +147,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag11"
+         //    searchbox: ""
+         //    *results dropdown: visible
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    *results dropdown: hidden
+         //    
+         // Misc
+         //    *focused element: Control 1
+         //    
          "Focusing on control brings up initial results": function() {
             return browser.findById("FOCUS_HELPER_BUTTON")
                .click()
@@ -99,15 +174,25 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag11"
+         //    searchbox: ""
+         //    *results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: Control 1
+         //    
          "Selecting already-chosen item in dropdown does not choose item again": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(4)")
                .click()
                .pressKeys(keys.ESCAPE)
-               .end()
-
-            .findById("FOCUS_HELPER_BUTTON")
-               .click()
-               .pressKeys(keys.TAB)
                .end()
 
             .findAllByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice")
@@ -116,8 +201,28 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    *choices: "tag1", "tag11", "tag2"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: Control 1
+         //    
          "Selecting item in dropdown chooses that item": function() {
-            return browser.findByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
+            return browser.findById("FOCUS_HELPER_BUTTON")
+               .click()
+               .pressKeys(keys.TAB)
+               .end()
+
+            .findByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
                .click()
                .end()
 
@@ -134,6 +239,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag11", "tag2"
+         //    *searchbox: "tag2"
+         //    *results dropdown: visible
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: Control 1
+         //    
          "Typing into search box filters results": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
                .type("tag2")
@@ -146,6 +266,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag11", "tag2"
+         //    *searchbox: "12"
+         //    results dropdown: visible
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: Control 1
+         //    
          "Typing into search box filters results for strings in middle of name": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
                .clearValue()
@@ -159,6 +294,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag11", "tag2"
+         //    *searchbox: "(a"
+         //    results dropdown: visible
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: Control 1
+         //    
          "Search box correctly filters on special reg exp chars": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
                .clearValue()
@@ -176,6 +326,21 @@ define([
                .clearValue();
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    *choices: "tag1", "tag2"
+         //    *searchbox: ""
+         //    *results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: Control 1
+         //    
          "Clicking cross on a chosen item removes it": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__close-button")
                .click()
@@ -188,6 +353,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag2"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    *focused element: Form 1 submit
+         //    
          "Submitting form submits correct values from control": function() {
             return browser.findByCssSelector("#FORM1 .confirmationButton .dijitButtonNode")
                .click()
@@ -205,6 +385,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    *choices: "tag1", "tag2", "newtag13(a)"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    *focused element: Control 1
+         //    
          "Keyboard can navigate and select items in dropdown": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
                .type("new")
@@ -225,9 +420,24 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: "tag1", "tag2", "newtag13(a)"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    *focused element: Focus helper
+         //    
          "Selecting item with keyboard does not persist previous search": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
-               .click()
+               .pressKeys(keys.ARROW_DOWN)
                .end()
 
             .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
@@ -237,9 +447,24 @@ define([
                .end()
 
             .findById("FOCUS_HELPER_BUTTON")
-               .click()
+               .click();
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    *choices: None
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    *focused element: Control 1
+         //    
          "Deleting all items disables confirmation button": function() {
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
                .click()
@@ -262,6 +487,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: None
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: Control 1
+         //    
          "Custom label format is used for choices": function() {
             return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
                .getVisibleText()
@@ -274,6 +514,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: None
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    *searchbox: "the"
+         //    *results dropdown: visible
+         //    
+         // Misc
+         //    *focused element: Control 2
+         //    
          "Custom label format is used for results": function() {
             return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
                .type("the")
@@ -291,6 +546,21 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: None
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor", "Innumerable ones"
+         //    searchbox: "the"
+         //    results dropdown: visible
+         //    
+         // Misc
+         //    focused element: Control 2
+         //    
          "Choices do not exceed max width": function() {
             return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
                .getSize()
@@ -299,6 +569,63 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: None
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    *choices: "Those that belong to the emperor"
+         //    *searchbox: ""
+         //    *results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: Control 2
+         //    
+         "Arrow key selects choice and backspace key deletes selected choice only": function() {
+            return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+               .pressKeys(keys.ESCAPE)
+               .sleep(100)
+               .pressKeys(keys.ARROW_LEFT)
+               .end()
+
+            .findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice--selected .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Innumerable ones", "Did not select correct choice");
+               })
+               .end()
+
+            .findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+               .pressKeys(keys.BACKSPACE)
+               .waitForDeletedByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(2)")
+               .end()
+
+            .findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Those that belong to the emperor", "Did not delete correct choice");
+               });
+         },
+
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: None
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    *focused element: Dialog control
+         //    *[Dialog displayed and dialog control has results visible]
+         //    
          "Opening MultiSelect in dialog still displays dropdown properly": function() {
             return browser.findByCssSelector("[widgetid=\"CREATE_FORM_DIALOG\"] .dijitButtonNode")
                .click()
@@ -311,6 +638,22 @@ define([
                });
          },
 
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: None
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    *focused element: Create dialog button
+         //    *
+         //    
          "Dialog MultiSelect submits correct data": function() {
             return browser.findByCssSelector("#MULTISELECT_IN_DIALOG_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
                .click()

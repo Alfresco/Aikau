@@ -326,6 +326,16 @@ define([
          _storeItems: null,
 
          /**
+          * Sometimes we want to prevent key-up from performing a search, which we
+          * will know immediately before in the keypress handler. This property
+          * supports that behaviour.
+          *
+          * @instance
+          * @type {boolean}
+          */
+         _suppressKeyUp: false,
+
+         /**
           * The attribute name against which to store the value of an item in the HTML
           *
           * @instance
@@ -525,9 +535,8 @@ define([
             this._addChoice(focusedResult.item);
 
             // Update the control
-            this._resetSearchBox();
+            this._resetControl();
             this._updateResultsDropdown();
-            this._hideResultsDropdown();
 
             // Return true to indicate item was chosen
             return true;
@@ -985,17 +994,12 @@ define([
             if (!modifiersPressed) {
                switch (evt.charOrCode) {
                   case keys.ESCAPE:
-                     this._resetSearchBox();
-                     this._hideResultsDropdown();
-                     evt.preventDefault();
-                     evt.stopPropagation();
+                     this._resetControl();
+                     this._suppressKeyUp = true;
                      break;
                   case keys.ENTER:
                      if (this._resultsDropdownIsVisible()) {
-                        if (this._chooseFocusedItem()) {
-                           this._resetSearchBox();
-                           this._hideResultsDropdown();
-                        }
+                        this._chooseFocusedItem();
                      }
                      evt.preventDefault();
                      evt.stopPropagation();
@@ -1026,11 +1030,8 @@ define([
                      }
                      break;
                   case keys.BACKSPACE:
-                     if (cursorPosBeforeKeypress === 0 && this._choices.length) {
+                     if (cursorPosBeforeKeypress === 0 && this._choices.length && !this._selectedChoice) {
                         this._selectChoice(-1);
-                        this._deleteSelectedChoice();
-                        evt.preventDefault();
-                        break;
                      }
                      /* falls through */
                   case keys.DELETE:
@@ -1053,7 +1054,11 @@ define([
           */
          _onSearchKeyup: function alfresco_forms_controls_MultiSelect___onSearchKeyup(evt) {
             /*jshint unused:false*/
-            this._onSearchUpdate();
+            if (this._suppressKeyUp) {
+               this._suppressKeyUp = false;
+            } else {
+               this._onSearchUpdate();
+            }
          },
 
          /**
@@ -1111,14 +1116,19 @@ define([
          },
 
          /**
-          * Reset the search box (i.e. empty it)
+          * Reset the control. Empties the search box, hides the dropdown and cancels any pending requests
           *
           * @instance
           */
-         _resetSearchBox: function alfresco_forms_controls_MultiSelect___resetSearchBox() {
-            this._currentSearchValue = "";
-            this.searchBox.value = "";
-            this._results = [];
+         _resetControl: function alfresco_forms_controls_MultiSelect___resetControl() {
+            clearTimeout(this._newSearchTimeoutPointer); // Prevent any pending search
+            this._latestSearchRequestIndex++; // Invalidate any existing request index
+            this._currentSearchValue = ""; // Reset the current search
+            this._results = []; // Remove all results
+            this._hideResultsDropdown(); // Hide the dropdown
+            setTimeout(lang.hitch(this, function() {
+               this.searchBox.value = ""; // Empty the search box (FF needs this in a setTimeout)
+            }), 0);
          },
 
          /**
