@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,10 +30,8 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/menus/AlfMenuItemWrapper",
         "dojo/_base/array",
-        "dojo/dom-class",
-        "dojo/_base/event",
-        "dojo/on"], 
-        function(declare, DropDownMenu, AlfCore, CoreWidgetProcessing, AlfMenuItemWrapper, array, domClass, event, on) {
+        "dojo/dom-class"], 
+        function(declare, DropDownMenu, AlfCore, CoreWidgetProcessing, AlfMenuItemWrapper, array, domClass) {
    
    return declare([DropDownMenu, AlfCore, CoreWidgetProcessing], {
       
@@ -53,7 +51,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfDropDownMenu__postCreate() {
-         
          this.inherited(arguments);
          
          // Add a custom class to the container node (this has been done to prevent us overriding the default
@@ -76,7 +73,7 @@ define(["dojo/_base/declare",
        */
       allWidgetsProcessed: function alfresco_menus_AlfDropDownMenu__allWidgetsProcessed(widgets) {
          var _this = this;
-         array.forEach(widgets, function(widget, i) {
+         array.forEach(widgets, function(widget) {
              // Add the widget to the drop down menu...
             _this.addChild(widget);
          });
@@ -89,8 +86,7 @@ define(["dojo/_base/declare",
        * @param {integer} insertIndex The index at which to insert the child
        */
       addChild: function alfresco_menus_AlfDropDownMenu__addChild(widget, insertIndex) {
-         
-         if (widget.domNode.tagName.toUpperCase() != "TR")
+         if (widget.domNode.tagName.toUpperCase() !== "TR")
          {
             // If the entry is not a table row then we will wrap it within one (provided by the
             // AlfMenuItemWrapper widget) such that the menu item is rendered correctly within the
@@ -119,7 +115,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       focusNext: function alfresco_menus_AlfDropDownMenu__focusNext() {
-         
          var groupParent = this.getParent();
          if (domClass.contains(this.focusedChild.domNode, "last-focusable-entry"))
          {
@@ -155,7 +150,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       focusPrev: function alfresco_menus_AlfDropDownMenu__focusPrev() {
-         
          // Set up sensible variables for the various contexts...
          var groupParent = this.getParent(); 
 
@@ -197,7 +191,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} widget The child to remove
        */
-      removeChild: function alfresco_menus_AlfDropDownMenu__removeChild(widget) {
+      removeChild: function alfresco_menus_AlfDropDownMenu__removeChild(/*jshint unused:false*/ widget) {
          this.inherited(arguments);
          this.setFirstAndLastMarkerClasses();
       },
@@ -212,12 +206,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       setFirstAndLastMarkerClasses: function alfresco_menus_AlfDropDownMenu__setFirstAndLastMarkerClasses() {
-         
          var noOfChildren = this.getChildren().length;
          if (noOfChildren > 0)
          {
             // Remove any previous first/last class markers...
-            array.forEach(this.getChildren(), function(child, index) {
+            array.forEach(this.getChildren(), function(child) {
                domClass.remove(child.domNode, "first-focusable-entry");
                domClass.remove(child.domNode, "last-focusable-entry");
             });
