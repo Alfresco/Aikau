@@ -124,6 +124,7 @@ define({
       "src/test/resources/alfresco/layout/VerticalRevealTest",
 
       "src/test/resources/alfresco/lists/AlfHashListTest",
+      "src/test/resources/alfresco/lists/AlfSortablePaginatedListTest",
       "src/test/resources/alfresco/lists/FilteredListTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",

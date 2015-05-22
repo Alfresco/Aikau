@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfSortablePaginatedList</shortname>
+  <description>Shows an AlfSortablePaginatedList which is a list that supports sorting and pagination. In particular this example tests that URL hashing works across page reloading.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfSortablePaginatedList</url>
+</webscript>

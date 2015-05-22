@@ -51,18 +51,14 @@ define(["intern!object",
 
       setup: function() {
          browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SearchListScroll", "SearchList Scroll Tests").end();
+         return TestCommon.loadTestWebScript(this.remote, "/SearchListScroll#searchTerm=test", "SearchList Scroll Tests").end();
       },
 
       beforeEach: function() {
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-     "Check for the search request being made": function () {
+      "Check for the search request being made": function () {
          return browser.findByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
             .then(null, function() {
                assert(false, "Search request not made");
