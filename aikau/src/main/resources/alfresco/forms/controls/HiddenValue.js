@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,10 +18,57 @@
  */
 
 /**
- * This can be used in forms where it is necessary to set hidden values that are not relevant
+ * <p>This can be used in forms where it is necessary to set hidden values that are not relevant
  * for the user to see but need to be included in form posts. It was written with the intention
  * of working with the [autoSetConfig]{@link module:alfresco/forms/controls/BaseFormControl#autoSetConfig}
- * capabilities of form controls so that additional data can be set as other fields are updated.
+ * capabilities of form controls so that additional data can be set as other fields are updated.</p>
+ * <p>This widget should only be used in a [Form]{@link module:alfresco/forms/Form} where either the value of 
+ * field is simply fixed (in which case you should just consider including that value in the
+ * [form confirmation button payload]{@link module:alfresco/forms/Form#okButtonPublishPayload})) or where
+ * it is the target of some [auto-set configuration rules]{@link module:alfresco/forms/controls/BaseFormControl#autoSetConfig}.
+ * This widget can also be used programmatically in other widget (e.g. see how it is used in the 
+ * [InlineEditProperty renderer]{@link module:alfresco/renderers/InlineEditProperty}).</p>
+ * <p>If your intention is to be able to see an assigned value in the browser DOM model then you should consider just using
+ * a [TextBox]{@link module:alfresco/forms/controls/TextBox} with the 
+ * [visibilityConfig]{@link module:alfresco/forms/controls/BaseFormControl#visibilityConfig} configured
+ * such that the "initialValue" attribute is set to be false so that the TextBox is hidden.</p>
+ *
+ * @example <caption>Example usage:</caption>
+ * {
+ *    id: "SOURCE",
+ *    name: "alfresco/forms/controls/Select", 
+ *    config: {
+ *       fieldId: "SOURCE_FIELD",
+ *       label: "Choose whether to set a hidden value",
+ *       name: "choice",
+ *       value: "1",
+ *       optionsConfig: {
+ *          fixed: [
+ *             { label: "Don't set hidden value", value: "1"},
+ *             { label: "Set hidden value", value: "2"}
+ *         ]
+ *       }
+ *    }
+ * },
+ * {
+ *    id: "TARGET",
+ *    name: "alfresco/forms/controls/HiddenValue",
+ *    config: {
+ *       name: "hidden",
+ *       autoSetConfig: [
+ *          {
+ *             rulePassValue: "VALUE_SET",
+ *             ruleFailValue: "",
+ *             rules: [
+ *                {
+ *                   targetId: "SOURCE_FIELD",
+ *                   is: ["2"]
+ *                }
+ *             ]
+ *          }
+ *       ]
+ *    }
+ * }
  *
  * @module alfresco/forms/controls/HiddenValue
  * @extends module:alfresco/forms/controls/TextBox
