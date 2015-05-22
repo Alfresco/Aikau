@@ -145,7 +145,10 @@ getGroups: function tutorial_UserAndGroupService__getGroups(payload) {
   var skipCount = (pageNo - 1) * pageSize;
 
   this.serviceXhr({
-    url: AlfConstants.PROXY_URI + "api/groups?dir=" + sortDir + "&sortBy=" + sortField + "&zone=APP.DEFAULT&maxItems=" + pageSize + "&skipCount=" + skipCount,
+    url: AlfConstants.PROXY_URI + "api/groups?dir=" + sortDir + 
+         "&sortBy=" + sortField + 
+         "&zone=APP.DEFAULT&maxItems=" + pageSize + 
+         "&skipCount=" + skipCount,
     method: "GET",
     alfTopic: alfTopic
   });
