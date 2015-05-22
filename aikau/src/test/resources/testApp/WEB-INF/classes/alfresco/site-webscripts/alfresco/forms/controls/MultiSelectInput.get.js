@@ -62,6 +62,7 @@ model.jsonModel = {
          name: "alfresco/forms/Form",
          config: {
             okButtonPublishTopic: "FORM_POST",
+            pubSubScope: "FORM1_",
             scopeFormControls: false,
             value: {
                tags: ["workspace://SpacesStore/06bd4708-8998-47be-a4ea-0f418bc7bb38", "workspace://SpacesStore/d37d7dfa-8410-46be-af6a-5d5880ca478e"]
@@ -97,6 +98,7 @@ model.jsonModel = {
          name: "alfresco/forms/Form",
          config: {
             okButtonPublishTopic: "FORM2_POST",
+            pubSubScope: "FORM2_",
             scopeFormControls: false,
             value: {
                categories: ["CAT_01", "CAT_10"]
