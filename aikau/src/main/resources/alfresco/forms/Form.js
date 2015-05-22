@@ -316,7 +316,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @defualt null
+       * @default null
        */
       validFormValuesPublishPayload: null,
 
