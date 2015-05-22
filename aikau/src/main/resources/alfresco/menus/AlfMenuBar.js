@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -45,6 +45,20 @@ define(["dojo/_base/declare",
     */
    var CustomMenuBar = declare([MenuBar, AlfCore], {
       
+      /**
+       * Extends the default menu bar capabilities to prevent any popup menus from being opened purely by
+       * hovering over them. See AKU-290.
+       *
+       * @instance
+       * @param {object} item The item hovered over
+       */
+      onItemHover: function alfresco_menus_AlfMenuBar_CustomMenuBar__onItemHover(/*jshint unused:false*/item){
+         if(this.activated){
+            this.activated = false;
+         }
+         this.inherited(arguments);
+      },
+
       /**
        * This boolean attribute is used as an indicator of whether or not the MenuBar popups should
        * be locked in the open state.
@@ -135,15 +149,13 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfMenuBar__postCreate() {
-         
-         // We need a menu...
          this._menuBar = new CustomMenuBar({});
          this._menuBar.placeAt(this.containerNode);
 
          if (this.widgets && this.widgets instanceof Array)
          {
             // Convert any i18n keys into the translated labels...
-            array.forEach(this.widgets, function(entry, i) {
+            array.forEach(this.widgets, function(entry) {
                if (entry.config && entry.config.label)
                {
                   entry.config.label = this.message(entry.config.label);
@@ -164,7 +176,7 @@ define(["dojo/_base/declare",
        * @param widgets The widgets that have been successfully instantiated.
        */
       allWidgetsProcessed: function alfresco_menus_AlfMenuBar__allWidgetsProcessed(widgets) {
-         array.forEach(widgets, function(entry, i) {
+         array.forEach(widgets, function(entry) {
             this._menuBar.addChild(entry);
          }, this);
       }

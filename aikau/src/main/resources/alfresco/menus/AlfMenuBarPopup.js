@@ -34,10 +34,8 @@ define(["dojo/_base/declare",
         "alfresco/menus/_AlfPopupCloseMixin",
         "dojo/dom-construct",
         "dojo/dom-class",
-        "alfresco/menus/AlfMenuGroups",
-        "service/constants/Default",
-        "dijit/place"], 
-        function(declare, PopupMenuBarItem, AlfCore, CoreWidgetProcessing, AlfCoreRwd, _AlfPopupCloseMixin, domConstruct, domClass, AlfMenuGroups, AlfConstants, place) {
+        "alfresco/menus/AlfMenuGroups"], 
+        function(declare, PopupMenuBarItem, AlfCore, CoreWidgetProcessing, AlfCoreRwd, _AlfPopupCloseMixin, domConstruct, domClass) {
    
    return declare([PopupMenuBarItem, AlfCore, CoreWidgetProcessing, AlfCoreRwd, _AlfPopupCloseMixin], {
       
@@ -123,8 +121,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfMenuBarPopup__postCreate() {
-         
-         if (this.iconClass && this.iconClass != "dijitNoIcon")
+         if (this.iconClass && this.iconClass !== "dijitNoIcon")
          {
             this.iconNode = domConstruct.create("img", { 
                className: this.iconClass, 
@@ -161,24 +158,5 @@ define(["dojo/_base/declare",
          // Call the method provided by the _AlfPopupCloseMixin to handle popup close events...
          this.registerPopupCloseEvent();
       }
-      
-      // The following code has been left intentionally commented out...
-      // When popup menu items are used the popup is automatically moved to be a child of the document
-      // body to prevent clipping issues, however when a menu bar is used as part of a widget running
-      // in full-screen mode (e.g. as we would like to for the DocumentLibrary) then the menu is never 
-      // displayed. A bug has been filed with the Dojo Community to address this here: https://bugs.dojotoolkit.org/ticket/18085
-      // startup: function alfresco_menus_AlfMenuBarPopup__startup() {
-      //    this.inherited(arguments);
-      //    this.ownerDocumentBody.removeChild(this.popup.domNode);
-      //    this.domNode.appendChild(this.popup.domNode);
-      //    this.popup.ownerDocumentBody = this.domNode;
-      // },
-
-      // _openPopup: function alfresco_menus_AlfMenuBarPopup___openPopup() {
-      //    this.inherited(arguments);
-      //    this.ownerDocumentBody.removeChild(this.popup.domNode.parentNode);
-      //    this.domNode.appendChild(this.popup.domNode.parentNode);
-      //    place.around(this.popup.domNode, this.domNode, ["below"], true);
-      // }
    });
 });

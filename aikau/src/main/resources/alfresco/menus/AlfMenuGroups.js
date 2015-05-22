@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -58,7 +58,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfMenuGroups__postCreate() {
-         
          // Set up keyboard handling...
          var l = this.isLeftToRight();
          this._openSubMenuKey = l ? keys.RIGHT_ARROW : keys.LEFT_ARROW;
@@ -77,7 +76,7 @@ define(["dojo/_base/declare",
        */
       allWidgetsProcessed: function alfresco_menus_AlfMenuGroups__allWidgetsProcessed(widgets) {
          var _this = this;
-         array.forEach(widgets, function(widget, i) {
+         array.forEach(widgets, function(widget) {
             _this.addChild(widget);
          });
       },
@@ -91,7 +90,6 @@ define(["dojo/_base/declare",
        * @param {integer} insertIndex The index to add the widget at
        */
       addChild: function alfresco_menus_AlfMenuGroups__addChild(widget, insertIndex) {
-         
          if (widget.isInstanceOf(AlfMenuGroup))
          {
             // Check to see if the current entry is an AlfMenuGroup.
