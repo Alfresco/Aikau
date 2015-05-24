@@ -20,7 +20,8 @@
 /**
  * The most basic representation of an item dragged from a [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
  * widget and dropped onto a [DragAndDropTargetControl]{@link module:alfresco/form/controls/DragAndDropTargetControl} it
- * simply renders the "name" attribute of the value of the dropped item.
+ * renders the [propertyToRender]{@link module:alfresco/dnd/DroppedItem#propertyToRender} (which defaults to "name")
+ * attribute of the value of the dropped item.
  * 
  * @module alfresco/dnd/DroppedItem
  * @extends external:dijit/_WidgetBase
@@ -32,8 +33,9 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/DroppedItem.html",
-        "alfresco/core/Core"], 
-        function(declare, _Widget, _Templated, template, AlfCore) {
+        "alfresco/core/Core",
+        "dojo/_base/lang"], 
+        function(declare, _Widget, _Templated, template, AlfCore, lang) {
    
    return declare([_Widget, _Templated, AlfCore], {
       
@@ -53,11 +55,25 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * This is the dot-notation property of the dropped item value that should be displayed
+       * for the dropped item.
+       *
+       * @instance
+       * @type {string}
+       * @default "name"
+       */
+      propertyToRender: "name",
+
+      /**
        * @instance
        */
       setValue: function alfresco_dnd_DroppedItem__setValue(value) {
          this.value = value;
-         this.labelNode.innerHTML = value.name;
+         if (this.value)
+         {
+            var displayValue = lang.getObject(this.propertyToRender || "name", false, this.value);
+            this.labelNode.innerHTML = displayValue;
+         }
       }
    });
 });
