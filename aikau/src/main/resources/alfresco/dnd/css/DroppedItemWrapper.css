@@ -11,7 +11,7 @@
    position: relative;
    min-width: 100px;
    box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.3);
-   transition: margin-top .2s .2s ease-out, margin-bottom .2s .2s ease-out;
+   /*transition: margin-top .2s .2s ease-out, margin-bottom .2s .2s ease-out;*/
 }
 
 .alfresco-dnd-DroppedItemWrapper.dojoDndItemOver {
@@ -43,7 +43,7 @@
    clear: right;
 }
 
-.alfresco-dnd-DroppedItemWrapper.dojoDndItem.dojoDndItemOver.dojoDndItemBefore {
+/*.alfresco-dnd-DroppedItemWrapper.dojoDndItem.dojoDndItemOver.dojoDndItemBefore {
    margin-top: 20px;
    transition: margin-top .2s ease-out;
 }
@@ -51,7 +51,7 @@
 .alfresco-dnd-DroppedItemWrapper.dojoDndItem.dojoDndItemOver.dojoDndItemAfter {
    margin-bottom: 20px;
    transition: margin-bottom .2s ease-out;
-}
+}*/
 
 .alfresco-dnd-DroppedItemWrapper > .control {
    display: inline-block;
