@@ -101,6 +101,17 @@ define(["intern!object",
             });
       },
 
+      "Clicking info button does not activate click event on widget": function() {
+         return browser.findByCssSelector("#LINK .alfresco-debug-WidgetInfo img")
+            .click()
+            .end()
+
+         .getLastPublish("LINK_CLICKED")
+            .then(function(payload) {
+               assert.isNull(payload, "Payload published incorrectly when clicking info link");
+            });
+      },
+      
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
