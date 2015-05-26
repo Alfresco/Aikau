@@ -258,7 +258,7 @@ define(["dojo/_base/declare",
 
             // Set the value to be processed...
             this.currentItem = {};
-            this.currentItem.label = item.label;
+            this.currentItem.label = item.label || item.value.label; // If no label is provided on the item, check the value (See AKU-318)
             this.currentItem.value = item.value;
             this.processObject(["processCurrentItemTokens"], widgetModel);
             
@@ -295,7 +295,7 @@ define(["dojo/_base/declare",
 
                // Set the value to be processed...
                this.currentItem.value = clonedItem.value;
-               this.currentItem.label = clonedItem.label;
+               this.currentItem.label = clonedItem.label || clonedItem.value.label;
 
                // Check to see if a specific widget model has been requested for rendering the dropped item...
                // TODO Not sure that we actually care about this yet? If at all... shouldn't everything be part of the value?
