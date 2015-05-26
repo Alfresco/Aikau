@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -79,7 +79,6 @@ define(["dojo/_base/declare",
          this.templateString = string.substitute(template, { ddmTemplateString: AlfDropDownMenu.prototype.templateString});
       },
       
-      
       /**
        * Sets the group label and creates a new alfresco/menus/AlfDropDownMenu to contain the items 
        * in the group.
@@ -87,7 +86,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfMenuGroup__postCreate() {
-         
          if (this.label === "")
          {
             // If there is no label for the title then hide the title node entirely...
@@ -124,7 +122,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt
        */
-      _onRightArrow: function(/*Event*/ evt){
+      _onRightArrow: function(evt){
          if(this.focusedChild && this.focusedChild.popup && !this.focusedChild.disabled)
          {
              // This first block is identical to that of the inherited function...
@@ -218,7 +216,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {boolean} bool 
        */
-      _setSelected: function alfresco_menus_AlfMenuGroup___setSelected(bool) {
+      _setSelected: function alfresco_menus_AlfMenuGroup___setSelected(/*jshint unused:false*/bool) {
          this._selected = true;
       }
    });

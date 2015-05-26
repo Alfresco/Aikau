@@ -57,6 +57,16 @@ define(["dojo/_base/declare",
       hashVarsForUpdate: [],
 
       /**
+       * Indicates whether or not changing URL hash parameters should be set as instance variables
+       * on the list.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      updateInstanceValues: false,
+
+      /**
        * Indicates whether or not the [hashVarsForUpdate]{@link module:alfresco/lists/AlfHashList#hashVarsForUpdate}
        * that are present in the current hash should be mapped directly into the 
        * [loadDataPublishPayload]{@link module:alfresco/lists/AlfList#loadDataPublishPayload}.
@@ -219,14 +229,30 @@ define(["dojo/_base/declare",
        */
       onHashChanged: function alfresco_lists_AlfHashList__onHashChanged(payload) {
          // Process the hash...
-         if(this.doHashVarUpdate(payload))
+         if(this.doHashVarUpdate(payload, this.updateInstanceValues))
          {
-            //this.currentFilter = payload;
+            this._updateCoreHashVars(payload);
             if (this._readyToLoad)
             {
                this.loadData();
             }
          }
+      },
+
+      /**
+       * This is an extension point function that is provided to allow core URL hash parameters to be
+       * addressed when the URL hash change triggers a reload. For example this allows the
+       * [AlfSortablePaginatedList]{@link module:alfresco/lists/AlfSortablePaginatedList} to address
+       * hash parameters relating to sorting and pagination and the 
+       * [AlfDocumentList]{@link module:alfresco/documentlibrary/AlfDocumentList} to further address
+       * hash parameters relating to filtering.
+       *
+       * @instance
+       * @param {object} hashParameters An object containing the current hash parameters
+       */
+      _updateCoreHashVars: function alfresco_lists_AlfHashList___updateCoreHashVars(hashParameters) {
+         // jshint unused:false
+         // No action by default
       }
    });
 });

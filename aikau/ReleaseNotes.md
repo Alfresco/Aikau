@@ -1,4 +1,4 @@
-Aikau 1.0.18 Release Notes
+Aikau 1.0.19 Release Notes
 ==========================
 
 Current deprecations:
@@ -32,8 +32,22 @@ Current deprecations:
 * alfresco/forms/controls/DojoSelect                             (use: alfresco/forms/controls/Select)
 * alfresco/forms/controls/DojoTextarea                           (use: alfresco/forms/controls/TextArea)
 
-Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>:
+Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
 ----------------
+1.0.19:
+* [AKU-290](https://issues.alfresco.com/jira/browse/AKU-290)       - Prevent menu items opening on hover
+* [AKU-293](https://issues.alfresco.com/jira/browse/AKU-293)       - Fix URL hash sorting/pagination support
+* [AKU-296](https://issues.alfresco.com/jira/browse/AKU-296)       - Dialog CSS tweaks
+* [AKU-297](https://issues.alfresco.com/jira/browse/AKU-297)       - Remove "flutter" on DND, set explicit target
+* [AKU-300](https://issues.alfresco.com/jira/browse/AKU-300)       - Improved search result calendar links
+* [AKU-302](https://issues.alfresco.com/jira/browse/AKU-302)       - Page size URL hash attribute fix
+* [AKU-307](https://issues.alfresco.com/jira/browse/AKU-307)       - Fix potential memory leak in ResizeMixin
+* [AKU-313](https://issues.alfresco.com/jira/browse/AKU-313)       - Added configurable display for "alfresco/dnd/DroppedItem" widget
+* [AKU-314](https://issues.alfresco.com/jira/browse/AKU-314)       - Improved JSDoc on "alfresco/forms/controls/HiddenValue"
+* [AKU-319](https://issues.alfresco.com/jira/browse/AKU-319)       - "alfresco/services/ActionService" createLinkContent fix
+* [AKU-323](https://issues.alfresco.com/jira/browse/AKU-323)       - "alfresco/services/DocumentService" fixes
+* [AKU-325](https://issues.alfresco.com/jira/browse/AKU-325)       - "alfresco/forms/controls/MultiSelectInput" keyboard navigation fixes
+
 1.0.18: 
 * [AKU-204](https://issues.alfresco.com/jira/browse/AKU-204)       - Add support for "document-upload-new-version" action
 * [AKU-281](https://issues.alfresco.com/jira/browse/AKU-281)       - NavigationService postToPage ignores target

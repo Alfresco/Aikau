@@ -105,6 +105,12 @@ define(["dojo/_base/declare",
          this._suspendSpellCheck = false;
          this._cleanResettableVars();
 
+         if (this.useHash === true)
+         {
+            // Push the core hash update variables into the array configured by the extended AlfSortablePaginatedList
+            this._coreHashVars.push("searchTerm","scope","facetFilters");
+         }
+
          // NOTE: This is required to ensure that no search is performed when no search hash variables are
          //       initially provided. Added for backwards compatibility.
          this.currentFilter = {};
@@ -418,7 +424,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Hash change detected", payload, this);
 
          // Only update if the payload contains one of the variables we care about
-         if(this.doHashVarUpdate(payload))
+         if(this.doHashVarUpdate(payload, this.updateInstanceValues))
          {
             // If the search term has changed then we want to delete the facet filters as
             // they might not be applicable to the new search results...

@@ -75,11 +75,7 @@ define(["intern!object",
             .click()
          .end()
          // Wait for page load
-         .getLogEntries({
-            type: "PUBLISH",
-            topic: "ALF_WIDGET_PROCESSING_COMPLETE",
-            pos: "last"
-         })
+         .getLastPublish("ALF_WIDGET_PROCESSING_COMPLETE")
          .findAllByCssSelector("#NOTHING_POSTED")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Original URL not reloaded");

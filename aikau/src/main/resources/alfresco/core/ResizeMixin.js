@@ -77,8 +77,11 @@ define(["dojo/_base/declare",
          }
          else
          {
-            var scope = (resizeHandlerCallScope != null) ? resizeHandlerCallScope : this;
-            on(window, "resize", lang.hitch(scope, resizeHandler));
+            var scope = (resizeHandlerCallScope != null) ? resizeHandlerCallScope : this,
+               resizeListener = on(window, "resize", lang.hitch(scope, resizeHandler));
+            if(typeof this.own === "function") { // If we're in a widget, use it to handle cleaning up the listener
+               this.own(resizeListener);
+            }
             this.alfSubscribe(this.alfResizeNodeTopic, lang.hitch(this, this.alfOnNodeResized, resizeHandler, scope), true);
          }
       },

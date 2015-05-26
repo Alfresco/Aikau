@@ -60,7 +60,7 @@ define(["alfresco/forms/controls/BaseFormControl",
       /**
        * @instance
        */
-      createFormControl: function alfresco_forms_controls_CheckBox__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_CheckBox__createFormControl(config, /*jshint unused:false*/ domNode) {
          var additionalCssClasses = "";
          if (this.additionalCssClasses !== null)
          {

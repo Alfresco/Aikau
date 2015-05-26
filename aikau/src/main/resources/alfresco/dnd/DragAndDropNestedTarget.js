@@ -56,11 +56,6 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_dnd_DragAndDropNestedTarget__postCreate() {
          this.inherited(arguments);
          on(this.domNode, Constants.itemSavedEvent, lang.hitch(this, this.onItemSaved));
-
-         if (this.previewTarget)
-         {
-            this.previewTarget.onDraggingOut = lang.hitch(this, this.onItemDraggedOut);
-         }
       },
 
       /**
@@ -69,7 +64,22 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
+      onItemDraggedOver: function alfresco_dnd_DragAndDropNestedTarget__onItemDraggedOver() {
+         this.inherited(arguments);
+         on.emit(this.domNode, Constants.nestedDragOverEvent, {
+            bubbles: true,
+            cancelable: true
+         });
+      },
+      
+      /**
+       * Called whenever an item is dragged out of the current drop target. This is emits an event
+       * to indicating that this has occurred to enabled nested drop targets to be supported.
+       * 
+       * @instance
+       */
       onItemDraggedOut: function alfresco_dnd_DragAndDropNestedTarget__onItemDraggedOut() {
+         this.inherited(arguments);
          on.emit(this.domNode, Constants.nestedDragOutEvent, {
             bubbles: true,
             cancelable: true

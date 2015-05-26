@@ -548,9 +548,13 @@ define(["dojo/_base/declare",
          var url = lang.replace(payload.params.href, this.getActionUrls(document, this.siteId, this.repositoryUrl, this.replicationUrlMapping));
          var indexOfTarget = url.indexOf("\" target=\"_blank");
          var target = "CURRENT";
-         if (indexOfTarget !== -1 || this.currentTarget === "NEW")
+         if (indexOfTarget !== -1)
          {
             url = url.substring(0, indexOfTarget);
+            target = "NEW";
+         }
+         else if (this.currentTarget === "NEW")
+         {
             target = "NEW";
          }
          this.alfPublish(this.navigateToPageTopic, {

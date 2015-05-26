@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/menus/MenuTests"
+      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest"
    ],
 
    /**
@@ -89,6 +89,7 @@ define({
 
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",
+      "src/test/resources/alfresco/forms/controls/CheckBoxTest",
       "src/test/resources/alfresco/forms/controls/CodeMirrorTest",
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
       "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
@@ -123,6 +124,7 @@ define({
       "src/test/resources/alfresco/layout/VerticalRevealTest",
 
       "src/test/resources/alfresco/lists/AlfHashListTest",
+      "src/test/resources/alfresco/lists/AlfSortablePaginatedListTest",
       "src/test/resources/alfresco/lists/FilteredListTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",

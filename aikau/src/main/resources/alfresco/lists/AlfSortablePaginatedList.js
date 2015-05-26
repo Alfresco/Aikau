@@ -37,6 +37,16 @@ define(["dojo/_base/declare",
    return declare([AlfHashList, _PreferenceServiceTopicMixin], {
 
       /**
+       * An array of the i18n files to use with this widget. This re-uses the 
+       * [Paginator]{@link module:alfresco/lists/Paginator} i18n properties.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/Paginator.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/Paginator.properties"}],
+
+      /**
        * Indicates whether pagination should be used when requesting documents (e.g. include the page number and the number of
        * results per page)
        *
@@ -91,6 +101,15 @@ define(["dojo/_base/declare",
        */
       postMixInProperties: function alfresco_lists_AlfSortablePaginatedList__postMixInProperties() {
          this.inherited(arguments);
+
+         if (this.useHash === true)
+         {
+            // If using the browser URL hash, then we want to update the currentPage, currentPageSize
+            // sortField, sortAscending as these are the core parameters relating to sorting and pagination
+            // and they should be handled irrespective of any other hashVarsForUpdate parameters requested
+            this._coreHashVars = ["currentPage","currentPageSize","sortField","sortAscending"];
+         }
+
          this.alfPublish(this.getPreferenceTopic, {
             preference: "org.alfresco.share.documentList.documentsPerPage",
             callback: this.setPageSize,
@@ -110,6 +129,11 @@ define(["dojo/_base/declare",
             value = 25;
          }
          this.currentPageSize = value;
+         this.alfPublish(this.docsPerpageSelectionTopic, {
+            label: this.message("list.paginator.perPage.label", {0: this.currentPageSize}),
+            value: this.currentPageSize,
+            selected: true
+         });
       },
 
       /**
@@ -141,6 +165,35 @@ define(["dojo/_base/declare",
             });
          }
          this.inherited(arguments);
+      },
+
+      /**
+       * Checks the hash for updates relating to pagination and sorting.
+       *
+       * @instance
+       * @param {object} hashParameters An object containing the current hash parameters
+       */
+      _updateCoreHashVars: function alfresco_lists_AlfSortablePaginatedList___updateCoreHashVars(hashParameters) {
+         if (hashParameters.currentPage) {
+            var cp = parseInt(hashParameters.currentPage, 10);
+            if (!isNaN(cp))
+            {
+               this.currentPage = cp;
+            }
+         }
+         if (hashParameters.currentPageSize) {
+            var cps = parseInt(hashParameters.currentPageSize, 10);
+            if (!isNaN(cps))
+            {
+               this.currentPageSize = cps;
+            }
+         }
+         if (hashParameters.sortField) {
+            this.sortField = hashParameters.sortField;
+         }
+         if (hashParameters.sortAscending) {
+            this.sortAscending = hashParameters.sortAscending;
+         }
       },
 
       /**
@@ -271,6 +324,9 @@ define(["dojo/_base/declare",
             // Set the new page size, and log the previous page size for some calculations we'll do in a moment...
             var previousPageSize = this.currentPageSize;
             this.currentPageSize = payload.value;
+            // this.alfPublish(this.docsPerpageSelectionTopic, {
+            //    value: this.currentPageSize
+            // });
 
             if (this._readyToLoad === true)
             {
@@ -358,7 +414,6 @@ define(["dojo/_base/declare",
        */
       updateLoadDataPayload: function alfresco_lists_AlfSortablePaginatedList__updateLoadDataPayload(payload) {
          this.inherited(arguments);
-
          payload.sortAscending = this.sortAscending;
          payload.sortField = this.sortField;
          if (this.usePagination || this.useInfiniteScroll)
@@ -366,6 +421,11 @@ define(["dojo/_base/declare",
             payload.page = this.currentPage;
             payload.pageSize = this.currentPageSize;
          }
+         this.alfPublish(this.docsPerpageSelectionTopic, {
+            label: this.message("list.paginator.perPage.label", {0: this.currentPageSize}),
+            value: this.currentPageSize,
+            selected: true
+         });
       },
 
       /**

@@ -64,9 +64,6 @@ model.jsonModel = {
          config: {
             topicsToIgnore: ["ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS"]
          }
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

@@ -171,7 +171,6 @@ model.jsonModel = {
                                              id: "CUSTOM_PAGE_SIZE_PAGINATOR",
                                              name: "alfresco/lists/Paginator",
                                              config: {
-                                                useHash: false,
                                                 documentsPerPage: 10,
                                                 hidePageSizeOnWidth: 100,
                                                 pageSizes: [5,10,20]
@@ -297,7 +296,6 @@ model.jsonModel = {
                                              id: "HASH_CUSTOM_PAGE_SIZE_PAGINATOR",
                                              name: "alfresco/lists/Paginator",
                                              config: {
-                                                useHash: false,
                                                 documentsPerPage: 10,
                                                 hidePageSizeOnWidth: 100,
                                                 pageSizes: [5,10,20]
@@ -352,9 +350,10 @@ model.jsonModel = {
                               ]
                            }
                         }
-                  ]
+                     ]
+                  }
                }
-            }]
+            ]
          }
       },
       {

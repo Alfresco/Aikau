@@ -74,6 +74,15 @@ define([],function() {
       requestAdditionalConfigEvent: "onAdditionalConfigRequest",
 
       /**
+       * Emitted when a item is dragged over a [DragAndDropNestedTarget]{@link module:alfresco/dnd/DragAndDropNestedTarget}.
+       * 
+       * @instance
+       * @type {string}
+       * @default "onNestedDragOverEvent"
+       */
+      nestedDragOverEvent: "onNestedDragOverEvent",
+
+      /**
        * Emitted when a item is dragged out of a [DragAndDropNestedTarget]{@link module:alfresco/dnd/DragAndDropNestedTarget}.
        * 
        * @instance
