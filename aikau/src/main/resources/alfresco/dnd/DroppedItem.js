@@ -72,6 +72,12 @@ define(["dojo/_base/declare",
          if (this.value)
          {
             var displayValue = lang.getObject(this.propertyToRender || "name", false, this.value);
+            if (displayValue)
+            {
+               // If a display value is found then check to see if it is an NLS key, and then
+               // encode it just to be on the safe side...
+               displayValue = this.encodeHTML(this.message(displayValue));
+            }
             this.labelNode.innerHTML = displayValue;
          }
       }
