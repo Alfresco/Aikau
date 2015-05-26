@@ -134,7 +134,7 @@ define(["alfresco/layout/HorizontalWidgets",
        * @param {object} widget The widget to get the value from
        * @param {number} index The index of the widget
        */
-      addChildFormControlValue: function alfresco_forms_ControlRow__addChildFormControlValue(values, widget, index) {
+      addChildFormControlValue: function alfresco_forms_ControlRow__addChildFormControlValue(values, widget, /*jshint unused:false*/ index) {
          if (typeof widget.addFormControlValue === "function")
          {
             widget.addFormControlValue(values);
@@ -157,7 +157,7 @@ define(["alfresco/layout/HorizontalWidgets",
        * @param {object} widget The widget to get the value from
        * @param {number} index The index of the widget
        */
-      updateChildFormControlValue: function alfresco_forms_ControlRow__updateChildFormControlValue(values, widget, index) {
+      updateChildFormControlValue: function alfresco_forms_ControlRow__updateChildFormControlValue(values, widget, /*jshint unused:false*/ index) {
          if (typeof widget.addFormControlValue === "function")
          {
             widget.updateFormControlValue(values);
@@ -179,10 +179,37 @@ define(["alfresco/layout/HorizontalWidgets",
        * @param {object} widget The widget to validate
        * @param {number} index The index of the widget to validate
        */
-      validateChildFormControlValue: function alfresco_forms_ControlRow__validateChildFormControlValue(widget, index) {
+      validateChildFormControlValue: function alfresco_forms_ControlRow__validateChildFormControlValue(widget, /*jshint unused:false*/ index) {
          if (typeof widget.validateFormControlValue === "function")
          {
             widget.validateFormControlValue();
+         }
+      },
+
+      /**
+       * Iterates over the child form controls and publishes the value of each one.
+       * 
+       * @instance
+       * @param {Deferred} deferred A deferred object can optionally be passed. This will only be resolved as widget value
+       */
+      publishValue: function alfresco_forms_ControlRow__publishValue(deferred) {
+         array.forEach(this._processedWidgets, lang.hitch(this, this.publishChildValue, deferred));
+      },
+
+      /**
+       * This is called by the [publishValue]{@link module:alfresco/forms/ControlRow#publishValue} function for each
+       * of the child form controls in the row and calls its 
+       * [publishValue]{@link module:alfresco/forms/controls/BaseFormControl#publishValue} function.
+       * 
+       * @instance
+       * @param {Deferred} deferred A deferred object can optionally be passed. This will only be resolved as widget value
+       * @param {object} widget The widget to validate
+       * @param {number} index The index of the widget to validate
+       */
+      publishChildValue: function alfresco_forms_ControlRow__publishChildValue(deferred, widget, /*jshint unused:false*/ index) {
+         if (typeof widget.publishValue === "function")
+         {
+            widget.publishValue(deferred);
          }
       }
    });
