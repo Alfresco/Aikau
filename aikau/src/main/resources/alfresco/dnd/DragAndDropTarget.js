@@ -164,10 +164,17 @@ define(["dojo/_base/declare",
                widget.onItemsUpdated();
             }
          }, true);
+
+         if (this.previewTarget)
+         {
+            this.previewTarget.onDraggingOut = lang.hitch(this, this.onItemDraggedOut);
+            this.previewTarget.onDraggingOver = lang.hitch(this, this.onItemDraggedOver);
+         }
          
          // Listen for widgets requesting to be deleted...
          on(this.previewNode, Constants.deleteItemEvent, lang.hitch(this, this.deleteItem));
          on(this.previewNode, Constants.nestedDragOutEvent, lang.hitch(this, this.onNestedDragOut));
+         on(this.previewNode, Constants.nestedDragOverEvent, lang.hitch(this, this.onNestedDragOver));
 
          var _this = this;
          this.watch("value", function(name, oldValue, newValue) {
@@ -417,6 +424,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onItemsUpdated: function alfresco_dnd_DragAndDropTarget__onItemsUpdated() {
+         domClass.remove(this.previewNode, "alfresco-dnd-DragAndDropTarget--over");
          on.emit(this.domNode, Constants.updateItemsEvent, {
             bubbles: true,
             cancelable: true,
@@ -469,6 +477,26 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Called whenever an item is dragged out of the current drop target. This is emits an event
+       * to indicating that this has occurred to enabled nested drop targets to be supported.
+       * 
+       * @instance
+       */
+      onItemDraggedOver: function alfresco_dnd_DragAndDropTarget__onItemDraggedOver() {
+         domClass.add(this.previewNode, "alfresco-dnd-DragAndDropTarget--over");
+      },
+
+      /**
+       * Called whenever an item is dragged out of the current drop target. This is emits an event
+       * to indicating that this has occurred to enabled nested drop targets to be supported.
+       * 
+       * @instance
+       */
+      onItemDraggedOut: function alfresco_dnd_DragAndDropTarget__onItemDraggedOut() {
+         domClass.remove(this.previewNode, "alfresco-dnd-DragAndDropTarget--over");
+      },
+
+      /**
        * This function is called when a [DragAndDropNestedTarget]{@link module:alfresco/dnd/DragAndDropNestedTarget}
        * has an item dragged out of it. This function will then call the Dojo dojo.dnd.Manager singleton to let it know
        * that the item is currently over the current target. This is required because the Dojo drag and drop framework
@@ -478,9 +506,23 @@ define(["dojo/_base/declare",
        * @param {object} evt The drag out event
        */
       onNestedDragOut: function alfresco_dnd_DragAndDropTarget__onNestedDragOut(evt) {
+         domClass.add(this.previewNode, "alfresco-dnd-DragAndDropTarget--over");
          evt && Event.stop(evt);
          var m = DndManager.manager();
          m.overSource(this.previewTarget);
+      },
+
+      /**
+       * This function is called when a [DragAndDropNestedTarget]{@link module:alfresco/dnd/DragAndDropNestedTarget}
+       * has an item dragged over it. This then updates the CSS classes to indicate that the item is no longer
+       * the current target (because the nested target is the current target).
+       *
+       * @instance 
+       * @param {object} evt The drag out event
+       */
+      onNestedDragOver: function alfresco_dnd_DragAndDropTarget__onNestedDragOver(evt) {
+         // jshint unused:false
+         domClass.remove(this.previewNode, "alfresco-dnd-DragAndDropTarget--over");
       }
    });
 });

@@ -18,3 +18,8 @@
    /*border: none;*/
    padding-right: 50px;
 }
+
+.alfresco-dnd-DragAndDropTarget .previewPanel.alfresco-dnd-DragAndDropTarget--over {
+   box-shadow: inset 5px 5px 10px -4px rgba(255, 165, 0, 0.75);
+   border: 1px solid orange;
+}
