@@ -42,6 +42,7 @@ When deleting a group it is possible to use the CrudService because we can use t
       url: "api/groups/{shortName}"
     },
     publishGlobal: true
+  }
 }
 ```
 
