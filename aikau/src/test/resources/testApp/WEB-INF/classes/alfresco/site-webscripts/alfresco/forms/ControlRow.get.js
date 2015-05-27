@@ -39,6 +39,17 @@ model.jsonModel = {
                                  ]
                               }
                            }
+                        },
+                        {
+                           id: "TEXTBOX1",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              fieldId: "TEXTBOX1",
+                              name: "textbox",
+                              label: "Some Text",
+                              description: "Created to ensure that initial value is published",
+                              value: "Initial Value"
+                           }
                         }
                      ]
                   }

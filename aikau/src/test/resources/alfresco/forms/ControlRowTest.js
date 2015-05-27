@@ -47,6 +47,10 @@ define(["intern!object",
             .then(function(payload) {
                assert.equal(payload.value, "ONE", "The initial value of the select field wasn't published");
             })
+         .getLastPublish("FORM1__valueChangeOf_TEXTBOX1")
+         .then(function(payload) {
+            assert.equal(payload.value, "Initial Value", "The initial value of the text box field wasn't published");
+         })
          .getLastPublish("FORM1_TEST")
             .then(function(payload) {
                assert.equal(payload.selected, "ONE", "The dynamic payload button didn't get the published update");
