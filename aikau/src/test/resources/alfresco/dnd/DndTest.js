@@ -488,7 +488,8 @@ define(["intern!object",
             .click()
          .end()
 
-         .sleep(1000) // Make sure dialog disappears...
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for the dialog to be hidden
+         .end()
          .pressKeys(keys.TAB)
          .sleep(pause)
          .pressKeys(keys.ENTER)
@@ -514,6 +515,51 @@ define(["intern!object",
                assert.lengthOf(elements, 3, "Found an unexpected number of form controls");
             });
 
+      },
+
+      "Edit outer widget and check label is persisted": function() {
+         return browser.findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .cancellationButton > span")
+               .click()
+            .end()
+            
+            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for the dialog to be hidden
+            .end()
+
+            .pressKeys(keys.SHIFT) // Need to tab backwards to the outer edit action
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .pressKeys(keys.SHIFT)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+
+            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for the dialog to render
+            .end()
+
+            // Now tab to confirmation button and close the dialog
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.TAB)
+            .sleep(pause)
+            .pressKeys(keys.ENTER)
+
+            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for the dialog to be hidden
+            .end()
+
+            // Check that the label has been preserved...
+            .findByCssSelector(".alfresco-dnd-DragAndDropTarget .alfresco-dnd-DragAndDropTarget span.label")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Horizontal Widgets", "The dropped item label was not preserved after editing parent");
+               });
       },
 
       "Post Coverage Results": function() {

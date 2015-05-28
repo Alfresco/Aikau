@@ -201,6 +201,13 @@ define(["dojo/_base/declare",
          if (this.label)
          {
             this.labelNode.innerHTML = this.encodeHTML(this.message(this.label));
+
+            // Save the label as part of the overall value so that it is not lost when an enclosing
+            // widget is edited. See AKU-318
+            if (this.value)
+            {
+               this.value.label = this.label;
+            }
          }
          if (this.widgets !== null && this.widgets !== undefined)
          {
@@ -290,13 +297,18 @@ define(["dojo/_base/declare",
             var subscriptionTopic = this.generateUuid();
             var subscriptionHandle = this.alfSubscribe(subscriptionTopic, lang.hitch(this, this.onEditSave));
 
+            var payloadMixin = {
+               label: this.label,
+               subscriptionHandle: subscriptionHandle,
+               widgets: this.widgets
+            };
+            $.extend(true, payloadMixin, item);
+
             this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
                dialogId: "ALF_DROPPED_ITEM_CONFIGURATION_DIALOG",
                dialogTitle: item.name,
                formSubmissionTopic: subscriptionTopic,
-               formSubmissionPayloadMixin: {
-                  subscriptionHandle: subscriptionHandle
-               },
+               formSubmissionPayloadMixin: payloadMixin,
                dialogWidth: "80%",
                fixedWidth: true,
                formValue: item,
