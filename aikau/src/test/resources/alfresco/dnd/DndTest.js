@@ -370,6 +370,20 @@ define(["intern!object",
             });
       },
 
+      "Check that custom wrapper CSS defined in the model is present": function() {
+         return browser.findAllByCssSelector(".custom-wrapper-class")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find custom wrapper class");
+            });
+      },
+
+      "Check that custom item CSS defined in the model is present": function() {
+         return browser.findAllByCssSelector(".custom-item-class")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find custom item class");
+            });
+      },
+
       "Drag and drop and item": function () {
          return browser.findByCssSelector("#dojoUnique1 .title")
             .moveMouseTo()
@@ -430,7 +444,7 @@ define(["intern!object",
             });
       },
 
-     "Post Coverage Results": function() {
+      "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
    });

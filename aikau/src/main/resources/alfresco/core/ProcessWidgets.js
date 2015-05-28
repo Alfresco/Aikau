@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -35,9 +35,8 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "dojo/text!./templates/ProcessWidgets.html",
         "dojo/dom-construct",
-        "dojo/dom-class",
-        "dojo/_base/array"], 
-        function(declare, _Widget, _Templated, AlfCore, CoreWidgetProcessing, template, domConstruct, domClass, array) {
+        "dojo/dom-class"], 
+        function(declare, _Widget, _Templated, AlfCore, CoreWidgetProcessing, template, domConstruct, domClass) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing], {
       
@@ -84,7 +83,7 @@ define(["dojo/_base/declare",
        * @instance postCreate
        */
       postCreate: function alfresco_core_ProcessWidgets__postCreate() {
-         domClass.add(this.domNode, (this.additionalCssClasses != null ? this.additionalCssClasses : ""));
+         domClass.add(this.domNode, this.additionalCssClasses || "");
          if (this.widgets)
          {
             this.processWidgets(this.widgets, this.containerNode);
