@@ -34,7 +34,7 @@ define(["intern!object",
 
          setup: function() {
             browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/FixedHeaderFooter", "FixedHeaderFooter Tests").end();
+            return TestCommon.loadTestWebScript(this.remote, "/FixedHeaderFooter#currentItem=10", "FixedHeaderFooter Tests").end();
          },
 
          beforeEach: function() {
@@ -68,6 +68,20 @@ define(["intern!object",
             .execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__footer"])
                .then(function(overflows) {
                   assert.isFalse(overflows, "Footer is not same height as its content");
+               });
+         },
+
+         "List has automatically scrolled to correct location": function() {
+            // See AKU-330
+            // The FixedHeaderFooter widget provides the best way of testing scrolling that is NOT on the
+            // main document...
+            function getScrollTop(selector) {
+               var node = document.querySelector(selector);
+               return node.scrollTop;
+            }
+            return browser.execute(getScrollTop, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__content"])
+               .then(function(scrollTop) {
+                  assert.notEqual(scrollTop, 0, "List did not scroll");
                });
          },
 
