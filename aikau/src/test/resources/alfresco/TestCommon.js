@@ -333,7 +333,7 @@ define(["intern/dojo/node!fs",
          "td[data-publish-topic='" + publishTopic + "'] + " +
          "td.sl-data > table > tr.sl-object-row > " +
          "td[data-pubsub-object-key=" + key + "] + " +
-         "td[data-pubsub-object-value='" + value + "']";
+         "td[data-pubsub-object-value=\"" + value + "\"]";
          return selector;
       },
 

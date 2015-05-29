@@ -364,6 +364,38 @@ define(["intern!object",
       }
    });
 
+   // See AKU-330...
+   registerSuite({
+      name: "Scroll to item test",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Paginator#currentPage=1&currentPageSize=20&currentItem=18", "Pagination Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check scrollTop": function() {
+         // Interestingly Firefox registers the scrollTop on html and Chrome on body... so we need to check both!
+         function getScrollTops() {
+               /* global document */
+               var html = document.querySelector("html");
+               var body = document.querySelector("body");
+               return {html: html.scrollTop, body:body.scrollTop};
+            }
+            return browser.execute(getScrollTops)
+               .then(function(scrollTops) {
+                  assert((scrollTops.html !== 0 || scrollTops.body !== 0), "Page did not scroll, html scrollTop=" + scrollTops.html + ", body scrollTop=" + scrollTops.body);
+               });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
    /********************/
    /* Helper functions */
    /********************/

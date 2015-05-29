@@ -52,12 +52,12 @@ model.jsonModel = {
                            id: "LIST",
                            name: "alfresco/documentlibrary/AlfDocumentList",
                            config: {
-                              useHash: false,
-                              currentPageSize: 10,
+                              useHash: true,
                               widgets: [
                                  {
                                     name: "alfresco/lists/views/AlfListView",
                                     config: {
+                                       itemKey: "index",
                                        widgets: [
                                           {
                                              name: "alfresco/lists/views/layouts/Row",

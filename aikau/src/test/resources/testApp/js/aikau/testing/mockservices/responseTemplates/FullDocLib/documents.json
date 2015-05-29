@@ -1,1 +1,850 @@
-{"totalRecords": 3, "startIndex": 0, "metadata": {"repositoryId": "87677116-4e54-4bd2-902f-b96693499aff", "container": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f", "parent": {"isLink": false, "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"], "permissions": {"roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"], "inherited": true, "user": {"ChangePermissions": true, "CancelCheckOut": false, "CreateChildren": true, "Write": true, "Delete": true, "Unlock": false}}, "nodeRef": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f", "properties": {"cm:modified": {"value": "Mon Mar 23 13:26:13 GMT 2015", "iso8601": "2015-03-23T13:26:13.692Z"}, "sys:node-uuid": null, "cm:name": "documentLibrary", "sys:locale": null, "cm:owner": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "sys:store-protocol": null, "cm:tagScopeSummary": ["tag2=1", "tag1=1"], "sys:node-dbid": null, "cm:description": "Document Library", "cm:creator": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "st:componentId": "documentLibrary", "cm:created": {"value": "Mon Mar 23 13:24:25 GMT 2015", "iso8601": "2015-03-23T13:24:25.146Z"}, "cm:modifier": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "cm:tagScopeCache": "contentUrl=store:\/\/2015\/3\/23\/13\/28\/b7e10ab8-7e01-407b-98eb-6fe60c7589af.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=310", "sys:store-identifier": null}, "type": "cm:folder", "isContainer": true, "isLocked": false}, "custom": {"vtiServer": null, "aos": {"baseUrl": "http:\/\/dave-Latitude-E6530:8080\/alfresco\/aos"}}, "onlineEditing": false, "itemCounts": {"folders": 3, "documents": 0}, "workingCopyLabel": " (Working Copy)"}, "items": [{"node": {"isLink": false, "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized"], "permissions": {"roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"], "inherited": true, "user": {"ChangePermissions": true, "CancelCheckOut": false, "CreateChildren": true, "Write": true, "Delete": true, "Unlock": false}}, "nodeRef": "workspace:\/\/SpacesStore\/4307d3f5-7d49-461a-bf86-b9510956ee2f", "properties": {"cm:modified": {"value": "Mon Mar 23 13:28:28 GMT 2015", "iso8601": "2015-03-23T13:28:28.432Z"}, "sys:node-dbid": null, "cm:taggable": [{"name": "tag1", "nodeRef": "workspace:\/\/SpacesStore\/a895c71b-14e2-4928-8b72-c064dfcea303"}, {"name": "tag2", "nodeRef": "workspace:\/\/SpacesStore\/e8193471-9956-4200-8187-f9caa17c2f16"}], "cm:description": "", "cm:creator": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "sys:node-uuid": null, "cm:created": {"value": "Mon Mar 23 13:25:04 GMT 2015", "iso8601": "2015-03-23T13:25:04.117Z"}, "cm:name": "DetailedView", "cm:title": "", "sys:store-protocol": null, "sys:locale": null, "cm:modifier": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "sys:store-identifier": null}, "type": "cm:folder", "isContainer": true, "isLocked": false}, "version": "1.0", "webdavUrl": "\/webdav\/Sites\/site1\/documentLibrary\/DetailedView", "isFavourite": false, "likes": {"isLiked": false, "totalLikes": 0}, "location": {"repositoryId": "87677116-4e54-4bd2-902f-b96693499aff", "site": {"name": "site1", "title": "Site1", "preset": "site-dashboard"}, "container": {"name": "documentLibrary", "type": "cm:folder", "nodeRef": ""}, "path": "\/", "repoPath": "\/Sites\/site1\/documentLibrary", "file": "DetailedView", "parent": {}}, "parent": {"isLink": false, "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"], "permissions": {"roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"], "inherited": true, "user": {"ChangePermissions": true, "CancelCheckOut": false, "CreateChildren": true, "Write": true, "Delete": true, "Unlock": false}}, "nodeRef": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f", "properties": {"cm:modified": {"value": "Mon Mar 23 13:26:13 GMT 2015", "iso8601": "2015-03-23T13:26:13.692Z"}, "sys:node-uuid": null, "cm:name": "documentLibrary", "sys:locale": null, "cm:owner": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "sys:store-protocol": null, "cm:tagScopeSummary": ["tag2=1", "tag1=1"], "sys:node-dbid": null, "cm:description": "Document Library", "cm:creator": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "st:componentId": "documentLibrary", "cm:created": {"value": "Mon Mar 23 13:24:25 GMT 2015", "iso8601": "2015-03-23T13:24:25.146Z"}, "cm:modifier": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "cm:tagScopeCache": "contentUrl=store:\/\/2015\/3\/23\/13\/28\/b7e10ab8-7e01-407b-98eb-6fe60c7589af.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=310", "sys:store-identifier": null}, "type": "cm:folder", "isContainer": true, "isLocked": false}, "nodeRef": "workspace:\/\/SpacesStore\/4307d3f5-7d49-461a-bf86-b9510956ee2f", "fileName": "DetailedView", "displayName": "DetailedView", "actionGroupId": "folder-browse", "actions": [{"id": "folder-download", "icon": "document-download", "type": "javascript", "label": "actions.folder.download", "params": {"function": "onActionFolderDownload"}, "index": "100"}, {"id": "folder-view-details", "icon": "folder-view-details", "type": "pagelink", "label": "actions.folder.view-details", "params": {"page": "folder-details?nodeRef={node.nodeRef}"}, "index": "105"}, {"id": "document-edit-properties", "icon": "folder-edit-properties", "type": "javascript", "label": "actions.folder.edit-metadata", "params": {"function": "onActionDetails"}, "index": "110"}, {"id": "document-copy-to", "icon": "folder-copy-to", "type": "javascript", "label": "actions.folder.copy-to", "params": {"function": "onActionCopyTo"}, "index": "150"}, {"id": "document-move-to", "icon": "folder-move-to", "type": "javascript", "label": "actions.folder.move-to", "params": {"function": "onActionMoveTo"}, "index": "160"}, {"id": "folder-manage-rules", "icon": "folder-manage-rules", "type": "pagelink", "label": "actions.folder.rules", "params": {"page": "folder-rules?nodeRef={node.nodeRef}"}, "index": "170"}, {"id": "document-delete", "icon": "folder-delete", "type": "javascript", "label": "actions.folder.delete", "params": {"function": "onActionDelete"}, "index": "180"}, {"id": "document-manage-granular-permissions", "icon": "folder-manage-permissions", "type": "link", "label": "actions.folder.manage-permissions", "params": {"href": "{managePermissionsUrl}"}, "index": "190"}, {"id": "document-manage-aspects", "icon": "document-manage-aspects", "type": "javascript", "label": "actions.folder.manage-aspects", "params": {"function": "onActionManageAspects"}, "index": "210"}, {"id": "document-cloud-sync", "icon": "document-cloud-sync", "type": "javascript", "label": "actions.document.cloud-sync", "params": {"function": "onActionCloudSync"}, "index": "360"}], "indicators": [], "metadataTemplate": {"id": "default", "title": null, "banners": [], "lines": [{"index": "10", "template": "{date}{size}", "view": ""}, {"index": "20", "template": "{description}", "view": "detailed"}, {"index": "30", "template": "{tags}", "view": "detailed"}, {"index": "50", "template": "{social}", "view": "detailed"}]}}, {"node": {"isLink": false, "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized", "cm:generalclassifiable"], "permissions": {"roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"], "inherited": true, "user": {"ChangePermissions": true, "CancelCheckOut": false, "CreateChildren": true, "Write": true, "Delete": true, "Unlock": false}}, "nodeRef": "workspace:\/\/SpacesStore\/f1ad751a-b1f5-41c2-bd3e-d5878c9f4267", "properties": {"cm:modified": {"value": "Mon Mar 23 13:29:14 GMT 2015", "iso8601": "2015-03-23T13:29:14.409Z"}, "cm:taggable": null, "cm:categories": [{"name": "English", "path": "\/Languages", "nodeRef": "workspace:\/\/SpacesStore\/3fe4db54-97e1-4a0d-8aa3-a596b48724e9"}], "sys:node-uuid": null, "cm:name": "GalleryView", "sys:locale": null, "sys:store-protocol": null, "sys:node-dbid": null, "cm:description": "", "cm:creator": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "cm:created": {"value": "Mon Mar 23 13:26:13 GMT 2015", "iso8601": "2015-03-23T13:26:13.676Z"}, "cm:title": "", "cm:modifier": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "sys:store-identifier": null}, "type": "cm:folder", "isContainer": true, "isLocked": false}, "version": "1.0", "webdavUrl": "\/webdav\/Sites\/site1\/documentLibrary\/GalleryView", "isFavourite": false, "likes": {"isLiked": false, "totalLikes": 0}, "location": {"repositoryId": "87677116-4e54-4bd2-902f-b96693499aff", "site": {"name": "site1", "title": "Site1", "preset": "site-dashboard"}, "container": {"name": "documentLibrary", "type": "cm:folder", "nodeRef": ""}, "path": "\/", "repoPath": "\/Sites\/site1\/documentLibrary", "file": "GalleryView", "parent": {}}, "parent": {"isLink": false, "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"], "permissions": {"roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"], "inherited": true, "user": {"ChangePermissions": true, "CancelCheckOut": false, "CreateChildren": true, "Write": true, "Delete": true, "Unlock": false}}, "nodeRef": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f", "properties": {"cm:modified": {"value": "Mon Mar 23 13:26:13 GMT 2015", "iso8601": "2015-03-23T13:26:13.692Z"}, "sys:node-uuid": null, "cm:name": "documentLibrary", "sys:locale": null, "cm:owner": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "sys:store-protocol": null, "cm:tagScopeSummary": ["tag2=1", "tag1=1"], "sys:node-dbid": null, "cm:description": "Document Library", "cm:creator": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "st:componentId": "documentLibrary", "cm:created": {"value": "Mon Mar 23 13:24:25 GMT 2015", "iso8601": "2015-03-23T13:24:25.146Z"}, "cm:modifier": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "cm:tagScopeCache": "contentUrl=store:\/\/2015\/3\/23\/13\/28\/b7e10ab8-7e01-407b-98eb-6fe60c7589af.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=310", "sys:store-identifier": null}, "type": "cm:folder", "isContainer": true, "isLocked": false}, "nodeRef": "workspace:\/\/SpacesStore\/f1ad751a-b1f5-41c2-bd3e-d5878c9f4267", "fileName": "GalleryView", "displayName": "GalleryView", "actionGroupId": "folder-browse", "actions": [{"id": "folder-download", "icon": "document-download", "type": "javascript", "label": "actions.folder.download", "params": {"function": "onActionFolderDownload"}, "index": "100"}, {"id": "folder-view-details", "icon": "folder-view-details", "type": "pagelink", "label": "actions.folder.view-details", "params": {"page": "folder-details?nodeRef={node.nodeRef}"}, "index": "105"}, {"id": "document-edit-properties", "icon": "folder-edit-properties", "type": "javascript", "label": "actions.folder.edit-metadata", "params": {"function": "onActionDetails"}, "index": "110"}, {"id": "document-copy-to", "icon": "folder-copy-to", "type": "javascript", "label": "actions.folder.copy-to", "params": {"function": "onActionCopyTo"}, "index": "150"}, {"id": "document-move-to", "icon": "folder-move-to", "type": "javascript", "label": "actions.folder.move-to", "params": {"function": "onActionMoveTo"}, "index": "160"}, {"id": "folder-manage-rules", "icon": "folder-manage-rules", "type": "pagelink", "label": "actions.folder.rules", "params": {"page": "folder-rules?nodeRef={node.nodeRef}"}, "index": "170"}, {"id": "document-delete", "icon": "folder-delete", "type": "javascript", "label": "actions.folder.delete", "params": {"function": "onActionDelete"}, "index": "180"}, {"id": "document-manage-granular-permissions", "icon": "folder-manage-permissions", "type": "link", "label": "actions.folder.manage-permissions", "params": {"href": "{managePermissionsUrl}"}, "index": "190"}, {"id": "document-manage-aspects", "icon": "document-manage-aspects", "type": "javascript", "label": "actions.folder.manage-aspects", "params": {"function": "onActionManageAspects"}, "index": "210"}, {"id": "document-cloud-sync", "icon": "document-cloud-sync", "type": "javascript", "label": "actions.document.cloud-sync", "params": {"function": "onActionCloudSync"}, "index": "360"}], "indicators": [], "metadataTemplate": {"id": "default", "title": null, "banners": [], "lines": [{"index": "10", "template": "{date}{size}", "view": ""}, {"index": "20", "template": "{description}", "view": "detailed"}, {"index": "30", "template": "{tags}", "view": "detailed"}, {"index": "40", "template": "{categories}", "view": "detailed"}, {"index": "50", "template": "{social}", "view": "detailed"}]}}, {"node": {"isLink": false, "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "sys:localized", "fm:discussable", "fm:commentsRollup"], "permissions": {"roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"], "inherited": true, "user": {"ChangePermissions": true, "CancelCheckOut": false, "CreateChildren": true, "Write": true, "Delete": true, "Unlock": false}}, "nodeRef": "workspace:\/\/SpacesStore\/79186cae-80c8-4f9f-b859-1539a0fe7367", "properties": {"fm:commentCount": "1", "cm:modified": {"value": "Mon Mar 23 13:25:58 GMT 2015", "iso8601": "2015-03-23T13:25:58.305Z"}, "sys:node-dbid": null, "cm:description": "", "cm:creator": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "sys:node-uuid": null, "cm:created": {"value": "Mon Mar 23 13:24:52 GMT 2015", "iso8601": "2015-03-23T13:24:52.807Z"}, "cm:name": "SimpleView", "cm:title": "", "sys:store-protocol": null, "sys:locale": null, "cm:modifier": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "sys:store-identifier": null}, "type": "cm:folder", "isContainer": true, "isLocked": false}, "version": "1.0", "webdavUrl": "\/webdav\/Sites\/site1\/documentLibrary\/SimpleView", "isFavourite": false, "likes": {"isLiked": false, "totalLikes": 0}, "location": {"repositoryId": "87677116-4e54-4bd2-902f-b96693499aff", "site": {"name": "site1", "title": "Site1", "preset": "site-dashboard"}, "container": {"name": "documentLibrary", "type": "cm:folder", "nodeRef": ""}, "path": "\/", "repoPath": "\/Sites\/site1\/documentLibrary", "file": "SimpleView", "parent": {}}, "parent": {"isLink": false, "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"], "permissions": {"roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"], "inherited": true, "user": {"ChangePermissions": true, "CancelCheckOut": false, "CreateChildren": true, "Write": true, "Delete": true, "Unlock": false}}, "nodeRef": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f", "properties": {"cm:modified": {"value": "Mon Mar 23 13:26:13 GMT 2015", "iso8601": "2015-03-23T13:26:13.692Z"}, "sys:node-uuid": null, "cm:name": "documentLibrary", "sys:locale": null, "cm:owner": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "sys:store-protocol": null, "cm:tagScopeSummary": ["tag2=1", "tag1=1"], "sys:node-dbid": null, "cm:description": "Document Library", "cm:creator": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "st:componentId": "documentLibrary", "cm:created": {"value": "Mon Mar 23 13:24:25 GMT 2015", "iso8601": "2015-03-23T13:24:25.146Z"}, "cm:modifier": {"lastName": "", "userName": "admin", "displayName": "Administrator", "firstName": "Administrator"}, "cm:tagScopeCache": "contentUrl=store:\/\/2015\/3\/23\/13\/28\/b7e10ab8-7e01-407b-98eb-6fe60c7589af.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=310", "sys:store-identifier": null}, "type": "cm:folder", "isContainer": true, "isLocked": false}, "nodeRef": "workspace:\/\/SpacesStore\/79186cae-80c8-4f9f-b859-1539a0fe7367", "fileName": "SimpleView", "displayName": "SimpleView", "actionGroupId": "folder-browse", "actions": [{"id": "folder-download", "icon": "document-download", "type": "javascript", "label": "actions.folder.download", "params": {"function": "onActionFolderDownload"}, "index": "100"}, {"id": "folder-view-details", "icon": "folder-view-details", "type": "pagelink", "label": "actions.folder.view-details", "params": {"page": "folder-details?nodeRef={node.nodeRef}"}, "index": "105"}, {"id": "document-edit-properties", "icon": "folder-edit-properties", "type": "javascript", "label": "actions.folder.edit-metadata", "params": {"function": "onActionDetails"}, "index": "110"}, {"id": "document-copy-to", "icon": "folder-copy-to", "type": "javascript", "label": "actions.folder.copy-to", "params": {"function": "onActionCopyTo"}, "index": "150"}, {"id": "document-move-to", "icon": "folder-move-to", "type": "javascript", "label": "actions.folder.move-to", "params": {"function": "onActionMoveTo"}, "index": "160"}, {"id": "folder-manage-rules", "icon": "folder-manage-rules", "type": "pagelink", "label": "actions.folder.rules", "params": {"page": "folder-rules?nodeRef={node.nodeRef}"}, "index": "170"}, {"id": "document-delete", "icon": "folder-delete", "type": "javascript", "label": "actions.folder.delete", "params": {"function": "onActionDelete"}, "index": "180"}, {"id": "document-manage-granular-permissions", "icon": "folder-manage-permissions", "type": "link", "label": "actions.folder.manage-permissions", "params": {"href": "{managePermissionsUrl}"}, "index": "190"}, {"id": "document-manage-aspects", "icon": "document-manage-aspects", "type": "javascript", "label": "actions.folder.manage-aspects", "params": {"function": "onActionManageAspects"}, "index": "210"}, {"id": "document-cloud-sync", "icon": "document-cloud-sync", "type": "javascript", "label": "actions.document.cloud-sync", "params": {"function": "onActionCloudSync"}, "index": "360"}], "indicators": [], "metadataTemplate": {"id": "default", "title": null, "banners": [], "lines": [{"index": "10", "template": "{date}{size}", "view": ""}, {"index": "20", "template": "{description}", "view": "detailed"}, {"index": "30", "template": "{tags}", "view": "detailed"}, {"index": "50", "template": "{social}", "view": "detailed"}]}}]}
+{
+   "totalRecords": 3,
+   "startIndex": 0,
+   "metadata": {
+      "repositoryId": "87677116-4e54-4bd2-902f-b96693499aff",
+      "container": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f",
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f",
+         "properties": {
+            "cm:modified": {
+               "value": "Mon Mar 23 13:26:13 GMT 2015",
+               "iso8601": "2015-03-23T13:26:13.692Z"
+            },
+            "sys:node-uuid": null,
+            "cm:name": "documentLibrary",
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-protocol": null,
+            "cm:tagScopeSummary": ["tag2=1", "tag1=1"],
+            "sys:node-dbid": null,
+            "cm:description": "Document Library",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "st:componentId": "documentLibrary",
+            "cm:created": {
+               "value": "Mon Mar 23 13:24:25 GMT 2015",
+               "iso8601": "2015-03-23T13:24:25.146Z"
+            },
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:tagScopeCache": "contentUrl=store:\/\/2015\/3\/23\/13\/28\/b7e10ab8-7e01-407b-98eb-6fe60c7589af.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=310",
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "custom": {
+         "vtiServer": null,
+         "aos": {
+            "baseUrl": "http:\/\/dave-Latitude-E6530:8080\/alfresco\/aos"
+         }
+      },
+      "onlineEditing": false,
+      "itemCounts": {
+         "folders": 3,
+         "documents": 0
+      },
+      "workingCopyLabel": " (Working Copy)"
+   },
+   "items": [{
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/4307d3f5-7d49-461a-bf86-b9510956ee2f",
+         "properties": {
+            "cm:modified": {
+               "value": "Mon Mar 23 13:28:28 GMT 2015",
+               "iso8601": "2015-03-23T13:28:28.432Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": [{
+               "name": "tag1",
+               "nodeRef": "workspace:\/\/SpacesStore\/a895c71b-14e2-4928-8b72-c064dfcea303"
+            }, {
+               "name": "tag2",
+               "nodeRef": "workspace:\/\/SpacesStore\/e8193471-9956-4200-8187-f9caa17c2f16"
+            }],
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Mon Mar 23 13:25:04 GMT 2015",
+               "iso8601": "2015-03-23T13:25:04.117Z"
+            },
+            "cm:name": "DetailedView",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/site1\/documentLibrary\/DetailedView",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "87677116-4e54-4bd2-902f-b96693499aff",
+         "site": {
+            "name": "site1",
+            "title": "Site1",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/",
+         "repoPath": "\/Sites\/site1\/documentLibrary",
+         "file": "DetailedView",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f",
+         "properties": {
+            "cm:modified": {
+               "value": "Mon Mar 23 13:26:13 GMT 2015",
+               "iso8601": "2015-03-23T13:26:13.692Z"
+            },
+            "sys:node-uuid": null,
+            "cm:name": "documentLibrary",
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-protocol": null,
+            "cm:tagScopeSummary": ["tag2=1", "tag1=1"],
+            "sys:node-dbid": null,
+            "cm:description": "Document Library",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "st:componentId": "documentLibrary",
+            "cm:created": {
+               "value": "Mon Mar 23 13:24:25 GMT 2015",
+               "iso8601": "2015-03-23T13:24:25.146Z"
+            },
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:tagScopeCache": "contentUrl=store:\/\/2015\/3\/23\/13\/28\/b7e10ab8-7e01-407b-98eb-6fe60c7589af.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=310",
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/4307d3f5-7d49-461a-bf86-b9510956ee2f",
+      "fileName": "DetailedView",
+      "displayName": "DetailedView",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "folder-edit-properties",
+         "type": "javascript",
+         "label": "actions.folder.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "110"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }, {
+         "id": "document-move-to",
+         "icon": "folder-move-to",
+         "type": "javascript",
+         "label": "actions.folder.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "160"
+      }, {
+         "id": "folder-manage-rules",
+         "icon": "folder-manage-rules",
+         "type": "pagelink",
+         "label": "actions.folder.rules",
+         "params": {
+            "page": "folder-rules?nodeRef={node.nodeRef}"
+         },
+         "index": "170"
+      }, {
+         "id": "document-delete",
+         "icon": "folder-delete",
+         "type": "javascript",
+         "label": "actions.folder.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "180"
+      }, {
+         "id": "document-manage-granular-permissions",
+         "icon": "folder-manage-permissions",
+         "type": "link",
+         "label": "actions.folder.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "190"
+      }, {
+         "id": "document-manage-aspects",
+         "icon": "document-manage-aspects",
+         "type": "javascript",
+         "label": "actions.folder.manage-aspects",
+         "params": {
+            "function": "onActionManageAspects"
+         },
+         "index": "210"
+      }, {
+         "id": "document-cloud-sync",
+         "icon": "document-cloud-sync",
+         "type": "javascript",
+         "label": "actions.document.cloud-sync",
+         "params": {
+            "function": "onActionCloudSync"
+         },
+         "index": "360"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized", "cm:generalclassifiable"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/f1ad751a-b1f5-41c2-bd3e-d5878c9f4267",
+         "properties": {
+            "cm:modified": {
+               "value": "Mon Mar 23 13:29:14 GMT 2015",
+               "iso8601": "2015-03-23T13:29:14.409Z"
+            },
+            "cm:taggable": null,
+            "cm:categories": [{
+               "name": "English",
+               "path": "\/Languages",
+               "nodeRef": "workspace:\/\/SpacesStore\/3fe4db54-97e1-4a0d-8aa3-a596b48724e9"
+            }],
+            "sys:node-uuid": null,
+            "cm:name": "GalleryView",
+            "sys:locale": null,
+            "sys:store-protocol": null,
+            "sys:node-dbid": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:created": {
+               "value": "Mon Mar 23 13:26:13 GMT 2015",
+               "iso8601": "2015-03-23T13:26:13.676Z"
+            },
+            "cm:title": "",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/site1\/documentLibrary\/GalleryView",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "87677116-4e54-4bd2-902f-b96693499aff",
+         "site": {
+            "name": "site1",
+            "title": "Site1",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/",
+         "repoPath": "\/Sites\/site1\/documentLibrary",
+         "file": "GalleryView",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f",
+         "properties": {
+            "cm:modified": {
+               "value": "Mon Mar 23 13:26:13 GMT 2015",
+               "iso8601": "2015-03-23T13:26:13.692Z"
+            },
+            "sys:node-uuid": null,
+            "cm:name": "documentLibrary",
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-protocol": null,
+            "cm:tagScopeSummary": ["tag2=1", "tag1=1"],
+            "sys:node-dbid": null,
+            "cm:description": "Document Library",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "st:componentId": "documentLibrary",
+            "cm:created": {
+               "value": "Mon Mar 23 13:24:25 GMT 2015",
+               "iso8601": "2015-03-23T13:24:25.146Z"
+            },
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:tagScopeCache": "contentUrl=store:\/\/2015\/3\/23\/13\/28\/b7e10ab8-7e01-407b-98eb-6fe60c7589af.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=310",
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/f1ad751a-b1f5-41c2-bd3e-d5878c9f4267",
+      "fileName": "GalleryView",
+      "displayName": "GalleryView",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "folder-edit-properties",
+         "type": "javascript",
+         "label": "actions.folder.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "110"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }, {
+         "id": "document-move-to",
+         "icon": "folder-move-to",
+         "type": "javascript",
+         "label": "actions.folder.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "160"
+      }, {
+         "id": "folder-manage-rules",
+         "icon": "folder-manage-rules",
+         "type": "pagelink",
+         "label": "actions.folder.rules",
+         "params": {
+            "page": "folder-rules?nodeRef={node.nodeRef}"
+         },
+         "index": "170"
+      }, {
+         "id": "document-delete",
+         "icon": "folder-delete",
+         "type": "javascript",
+         "label": "actions.folder.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "180"
+      }, {
+         "id": "document-manage-granular-permissions",
+         "icon": "folder-manage-permissions",
+         "type": "link",
+         "label": "actions.folder.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "190"
+      }, {
+         "id": "document-manage-aspects",
+         "icon": "document-manage-aspects",
+         "type": "javascript",
+         "label": "actions.folder.manage-aspects",
+         "params": {
+            "function": "onActionManageAspects"
+         },
+         "index": "210"
+      }, {
+         "id": "document-cloud-sync",
+         "icon": "document-cloud-sync",
+         "type": "javascript",
+         "label": "actions.document.cloud-sync",
+         "params": {
+            "function": "onActionCloudSync"
+         },
+         "index": "360"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "40",
+            "template": "{categories}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "sys:localized", "fm:discussable", "fm:commentsRollup"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/79186cae-80c8-4f9f-b859-1539a0fe7367",
+         "properties": {
+            "fm:commentCount": "1",
+            "cm:modified": {
+               "value": "Mon Mar 23 13:25:58 GMT 2015",
+               "iso8601": "2015-03-23T13:25:58.305Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Mon Mar 23 13:24:52 GMT 2015",
+               "iso8601": "2015-03-23T13:24:52.807Z"
+            },
+            "cm:name": "SimpleView",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/site1\/documentLibrary\/SimpleView",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "87677116-4e54-4bd2-902f-b96693499aff",
+         "site": {
+            "name": "site1",
+            "title": "Site1",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/",
+         "repoPath": "\/Sites\/site1\/documentLibrary",
+         "file": "SimpleView",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/2f2ea581-74af-479d-a733-1ee28512b80f",
+         "properties": {
+            "cm:modified": {
+               "value": "Mon Mar 23 13:26:13 GMT 2015",
+               "iso8601": "2015-03-23T13:26:13.692Z"
+            },
+            "sys:node-uuid": null,
+            "cm:name": "documentLibrary",
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-protocol": null,
+            "cm:tagScopeSummary": ["tag2=1", "tag1=1"],
+            "sys:node-dbid": null,
+            "cm:description": "Document Library",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "st:componentId": "documentLibrary",
+            "cm:created": {
+               "value": "Mon Mar 23 13:24:25 GMT 2015",
+               "iso8601": "2015-03-23T13:24:25.146Z"
+            },
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:tagScopeCache": "contentUrl=store:\/\/2015\/3\/23\/13\/28\/b7e10ab8-7e01-407b-98eb-6fe60c7589af.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=310",
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/79186cae-80c8-4f9f-b859-1539a0fe7367",
+      "fileName": "SimpleView",
+      "displayName": "SimpleView",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "folder-edit-properties",
+         "type": "javascript",
+         "label": "actions.folder.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "110"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }, {
+         "id": "document-move-to",
+         "icon": "folder-move-to",
+         "type": "javascript",
+         "label": "actions.folder.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "160"
+      }, {
+         "id": "folder-manage-rules",
+         "icon": "folder-manage-rules",
+         "type": "pagelink",
+         "label": "actions.folder.rules",
+         "params": {
+            "page": "folder-rules?nodeRef={node.nodeRef}"
+         },
+         "index": "170"
+      }, {
+         "id": "document-delete",
+         "icon": "folder-delete",
+         "type": "javascript",
+         "label": "actions.folder.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "180"
+      }, {
+         "id": "document-manage-granular-permissions",
+         "icon": "folder-manage-permissions",
+         "type": "link",
+         "label": "actions.folder.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "190"
+      }, {
+         "id": "document-manage-aspects",
+         "icon": "document-manage-aspects",
+         "type": "javascript",
+         "label": "actions.folder.manage-aspects",
+         "params": {
+            "function": "onActionManageAspects"
+         },
+         "index": "210"
+      }, {
+         "id": "document-cloud-sync",
+         "icon": "document-cloud-sync",
+         "type": "javascript",
+         "label": "actions.document.cloud-sync",
+         "params": {
+            "function": "onActionCloudSync"
+         },
+         "index": "360"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }]
+}

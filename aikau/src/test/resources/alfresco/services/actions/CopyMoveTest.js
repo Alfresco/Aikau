@@ -84,7 +84,7 @@ define(["intern!object",
       },
 
       "Test that a notification of complete success is displayed": function() {
-         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "The copy operation completed successfully"))
+         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Copy completed successfully"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The copy success message was not found");
             });
@@ -132,7 +132,7 @@ define(["intern!object",
             .click();
       },
 
-      "Test the partial success promot": function() {
+      "Test the partial success prompt": function() {
          return browser.findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
             .getVisibleText()
             .then(function(text) {
@@ -140,7 +140,7 @@ define(["intern!object",
             })
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_PROMPT", "message", "The move operation was partially successful, the following items could not be moved: File2, File3"))
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_PROMPT", "message", "Move partially successful, the following files or folders couldn't be moved: File2, File3"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The copy success message was not found");
             });
