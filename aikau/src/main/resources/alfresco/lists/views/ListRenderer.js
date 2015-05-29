@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
 
          if (this.itemKey)
          {
-            this.alfSubscribe("ALF_BRING_ITEM_INTO_VIEW", lang.hitch(this, this.onFindItemToBringItemIntoView));
+            this.alfSubscribe("ALF_BRING_ITEM_INTO_VIEW", lang.hitch(this, this.onBringItemIntoView));
          }
       },
 
@@ -197,7 +197,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param  {object} payload The details of the item to find
        */
-      onFindItemToBringItemIntoView: function alfresco_lists_views_ListRenderer__onFindItemToBringItemIntoView(payload) {
+      onBringItemIntoView: function alfresco_lists_views_ListRenderer__onBringItemIntoView(payload) {
          if (payload && (payload.item || payload.item === 0))
          {
             array.some(this._renderedItemWidgets, function(widgets) {

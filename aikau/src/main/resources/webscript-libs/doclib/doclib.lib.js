@@ -1023,12 +1023,6 @@ function getDocLibList(siteId, containerId, rootNode, rawData) {
       config: {
          rawData: rawData || false,
          useHash: true,
-         // hashVarsForUpdate: [
-         //    "path",
-         //    "filter",
-         //    "tag",
-         //    "category"
-         // ],
          siteId: siteId,
          containerId: containerId,
          rootNode: rootNode,
