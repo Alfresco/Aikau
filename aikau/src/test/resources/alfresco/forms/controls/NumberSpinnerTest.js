@@ -72,7 +72,7 @@ define(["intern!object",
             })
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "Must be greater or equal to 5 and less than or equal to 10", "Validation error message not set correctly");
+               assert.equal(text, "Enter a number that's at least 5 and no more than 10", "Validation error message not set correctly");
             });
       },
 
@@ -88,7 +88,7 @@ define(["intern!object",
             })
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "Must be greater or equal to 5 and less than or equal to 10", "Validation error message not set correctly");
+               assert.equal(text, "Enter a number that's at least 5 and no more than 10", "Validation error message not set correctly");
             });
       },
 
@@ -116,7 +116,7 @@ define(["intern!object",
             })
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "Must be greater than or equal to 1", "Validation error message not set correctly");
+               assert.equal(text, "Enter a number that's at least 1", "Validation error message not set correctly");
             });
       },
 
@@ -132,7 +132,7 @@ define(["intern!object",
             })
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "Must be less than or equal to 5", "Validation error message not set correctly");
+               assert.equal(text, "Enter a number that's no more than 5", "Validation error message not set correctly");
             });
       },
 
@@ -148,7 +148,7 @@ define(["intern!object",
             })
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "Please enter a numerical value", "Validation error message not set correctly");
+               assert.equal(text, "Enter a number", "Validation error message not set correctly");
             });
       },
 
