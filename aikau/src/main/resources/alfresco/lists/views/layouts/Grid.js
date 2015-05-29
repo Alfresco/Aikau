@@ -364,7 +364,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       allItemsRendered: function alfresco_lists_views_layouts_Grid__allItemsRendered() {
-         if(this.showNextLink && this.currentData.totalRecords < this.currentData.numberFound)
+         if(this.showNextLink && 
+            ((this.totalRecords > (this.startIndex + this.currentPageSize)) ||
+            (this.currentData.totalRecords < this.currentData.numberFound)))
          {
             this.processWidgets([{
                name: "alfresco/layout/VerticalWidgets",

@@ -398,7 +398,12 @@ define(["dojo/_base/declare",
        */
       onScrollNearBottom: function alfresco_lists_AlfSortablePaginatedList__onScrollNearBottom(/*jshint unused:false*/payload) {
          // Process Infinite Scroll, if enabled & if we've not hit the end of the results
-         if(this.useInfiniteScroll && this.currentData.totalRecords < this.currentData.numberFound)
+         // NOTE: The use of the currentData.totalRecords and currentData.numberFound is only retained to support
+         //       AlfSearchList and faceted search in Share - generic infinite scroll should be done via the
+         //       totalRecords, startIndex and currentPageSize values...
+         if(this.useInfiniteScroll && 
+            ((this.totalRecords > (this.startIndex + this.currentPageSize)) ||
+            (this.currentData.totalRecords < this.currentData.numberFound)))
          {
             this.currentPage++;
             this.loadData();
