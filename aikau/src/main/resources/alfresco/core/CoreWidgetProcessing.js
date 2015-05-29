@@ -528,6 +528,15 @@ define(["dojo/_base/declare",
                      }).placeAt(instantiatedWidget.domNode);
                      domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
                   }
+
+                  // Look to see if we can add any additional CSS classes configured onto the instantiated widgets
+                  // This should cover any widgets created by a call to the processWidgets function but will
+                  // not capture widgets instantiated directly (which we should look to phase out) but this is
+                  // why "additionalCssClasses" may still be defined and set explicitly in some widgets.
+                  if (instantiatedWidget.domNode && initArgs.additionalCssClasses)
+                  {
+                     domClass.add(instantiatedWidget.domNode, initArgs.additionalCssClasses);
+                  }
                }
                catch (e)
                {
