@@ -320,6 +320,7 @@ model.jsonModel = {
                                           {
                                              name: "alfresco/lists/views/AlfListView",
                                              config: {
+                                                itemKey: "index",
                                                 widgets: [
                                                    {
                                                       name: "alfresco/lists/views/layouts/Row",

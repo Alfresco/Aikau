@@ -37,9 +37,10 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/_base/window",
         "alfresco/core/PubQueue",
         "jquery", // NOTE: Need to include JQuery at root page to prevent XHR require request for first module that uses it
+        "jqueryui", // NOTE: Need to include JQuery UI at root page to prevent XHR require request for first module that uses it
         "alfresco/core/shims"],
         function(ProcessWidgets, AlfConstants, string, declare, domConstruct, array,
-                 lang, domClass, win, PubQueue, jquery, shims) {
+                 lang, domClass, win, PubQueue, jquery, jqueryui, shims) {
 
    return declare([ProcessWidgets], {
 

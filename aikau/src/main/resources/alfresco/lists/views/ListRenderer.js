@@ -18,10 +18,24 @@
  */
 
 /**
- * This module has been created to ensure that keyboard navigation (via the dijit/_KeyNavContainer) can be used
+ * Makes a request to bring a specific item into view, i.e. so that a previously actioned item is displayed
+ * when the list data updated. The payload contains a single attribute "item" that should be a value that
+ * will map to the [itemKey]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#itemKey}
+ * of the renderer (which should be configured on the [view]{@link module:alfresco/lists/views/AlfListView#itemKey}).
+ *
+ * @event module:alfresco/lists/views/ListRenderer~ALF_BRING_ITEM_INTO_VIEW
+ * @property {string} item - This is an attribute value of the item that uniquely identifies it.
+ */
+
+/**
+ * <p>This module has been created to ensure that keyboard navigation (via the dijit/_KeyNavContainer) can be used
  * without impacting the rest of the view. An instance of this module should be created within each 
- * [document list view]{@link module:alfresco/lists/views/AlfListView} (unless a view requires 
- * a specific renderer implementation).
+ * [list view]{@link module:alfresco/lists/views/AlfListView} (unless a view requires 
+ * a specific renderer implementation).</p>
+ * <p>This module can be extended if required to provide custom rendering of lists. In particular it may be necessary
+ * to override the [bringItemIntoView]{@link module:alfresco/lists/views/ListRenderer#bringItemIntoView} function if
+ * an extending module lays out item in a non-vertical style (as the default behaviour is simply to scroll down until
+ * the requested item comes into view)</p>
  * 
  * @module alfresco/lists/views/ListRenderer
  * @extends external:dijit/_WidgetBase
@@ -43,11 +57,10 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/on",
         "dojo/keys",
-        "dojo/dom-construct",
-        "dojo/dom-class",
-        "dijit/registry"], 
+        "jquery",
+        "jqueryui"], 
         function(declare, _WidgetBase, _TemplatedMixin, _KeyNavContainer, template, _MultiItemRendererMixin, 
-                 AlfCore, JsNode, lang, array, on, keys) {
+                 AlfCore, JsNode, lang, array, on, keys, $) {
    
    return declare([_WidgetBase, _TemplatedMixin, _KeyNavContainer, _MultiItemRendererMixin, AlfCore], {
       
@@ -73,12 +86,18 @@ define(["dojo/_base/declare",
        * and uploaded to the location represented by the document list. 
        * 
        * @instance
+       * @listens module:alfresco/lists/views/ListRenderer~event:ALF_BRING_ITEM_INTO_VIEW
        */
       postCreate: function alfresco_lists_views_ListRenderer__postCreate() {
          this.inherited(arguments);
          this.setupKeyboardNavigation();
          on(this.domNode, "onSuppressKeyNavigation", lang.hitch(this, this.onSuppressKeyNavigation));
          on(this.domNode, "onItemFocused", lang.hitch(this, this.onItemFocused));
+
+         if (this.itemKey)
+         {
+            this.alfSubscribe("ALF_BRING_ITEM_INTO_VIEW", lang.hitch(this, this.onBringItemIntoView));
+         }
       },
 
       /**
@@ -135,7 +154,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The keyboard event
        */
-      _onContainerKeydown: function alfresco_lists_views_ListRenderer___onContainerKeydown(evt) {
+      _onContainerKeydown: function alfresco_lists_views_ListRenderer___onContainerKeydown(/*jshint unused:false*/ evt) {
          if (this.suppressKeyNavigation === false)
          {
             this.inherited(arguments);
@@ -150,7 +169,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The keyboard event
        */
-      _onContainerKeypress: function alfresco_lists_views_ListRenderer___onContainerKeypress(evt) {
+      _onContainerKeypress: function alfresco_lists_views_ListRenderer___onContainerKeypress(/*jshint unused:false*/ evt) {
          if (this.suppressKeyNavigation === false)
          {
             this.inherited(arguments);
@@ -167,6 +186,71 @@ define(["dojo/_base/declare",
        */
       onItemFocused: function alfresco_lists_views_ListRenderer__onItemFocused(evt) {
          this.focusChild(evt.item);
+      },
+
+      /**
+       * This function is called whenever a parent [list]{@link module:alfresco/lists/AlfList} publishes a request
+       * to bring a specfic item into view, e.g. to ensure that a requested item that is displayed off the page is
+       * brought into view by automatically setting the scroll position. This function only checks to see whether or not
+       * the current widget represents that item - it does not perform the actual action to bring the item into view.
+       *
+       * @instance
+       * @param  {object} payload The details of the item to find
+       */
+      onBringItemIntoView: function alfresco_lists_views_ListRenderer__onBringItemIntoView(payload) {
+         if (payload && (payload.item || payload.item === 0))
+         {
+            array.some(this._renderedItemWidgets, function(widgets) {
+               return array.some(widgets, function(widget) {
+
+                  var found = false;
+                  if (widget && 
+                      widget.currentItem && 
+                      (widget.currentItem[this.itemKey] || widget.currentItem[this.itemKey] === 0) &&
+                      widget.currentItem[this.itemKey].toString() === payload.item)
+                  {
+                     this.bringItemIntoView(widget);
+                     found = true;
+                  }
+                  return found;
+               }, this);
+            }, this);
+         }
+      },
+
+      /**
+       * This function is called to bring a specific item into the users view. By default this is done by scrolling
+       * the item into view.
+       *
+       * @instance
+       * @param {object} widget The widget to bring into view.
+       */
+      bringItemIntoView: function alfresco_lists_views_ListRenderer__bringItemIntoView(widget) {
+         if (widget.domNode)
+         {
+            // Find the scroll parent and check to see if it is the document, we need to special case scrolling within
+            // the document as we need to animate the scrollTop of both the html and body elements.
+            var scrollParent = $(widget.domNode).scrollParent();
+            if (scrollParent.is("html"))
+            {
+               var offset = $(widget.domNode).offset();
+               $("html, body").animate({
+                  scrollTop: offset.top
+               });
+            }
+            else
+            {
+               // When dealing with a scrollable element within the main document we just need to calculate the 
+               // appropriate position to scroll to based on the position within the item and the current
+               // scrollTop value...
+               var position = $(widget.domNode).position();
+               var currentScrollTop = $(widget.domNode).scrollParent().scrollTop();
+               var scrollTo = currentScrollTop + position.top;
+               $(widget.domNode).scrollParent().animate({
+                  scrollTop: scrollTo
+               });
+            }
+         }
       }
    });
 });
