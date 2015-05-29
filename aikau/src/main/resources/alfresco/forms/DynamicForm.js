@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -50,28 +50,61 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_forms_DynamicForm__postCreate() {
-         this.inherited(arguments);
          this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, "onFormRedrawRequest"));
+         this.inherited(arguments);
       },
 
       /**
+       * This is the property in the payload published on the 
+       * [subscriptionTopic]{@link module:alfresco/forms/DynamicForm#subscriptionTopic}
+       * that contains the JSON model to render as form widgets.
+       *
+       * @instance
+       * @type {string}
+       * @default "value"
+       */
+      formWidgetsProperty: "value",
+
+      /**
+       * This indicates whether or not the 
+       * [formWidgetsProperty]{@link module:alfresco/forms/DynamicForm#formWidgetsProperty} is 
+       * expected to be "stringified" (e.g. it is pure JSON that requires parsing). If this is set to
+       * true (which is the default) then an attempt will be made to parse any data found.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      formWidetsPropertyStringified: true,
+
+      /**
+       * This is the property in the payload published on the 
+       * [subscriptionTopic]{@link module:alfresco/forms/DynamicForm#subscriptionTopic}
+       * that contains a value to set on the form.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      formValueProperty: null,
+
+      /**
        * This function is called whenever the [subscriptionTopic]{@link module:alfresco/forms/DynamicForm#subscriptionTopic}
-       * is published on. The payload is expected to contain a 'value' attribute containing the JSON model to use to render
-       * the new form.
+       * is published on. 
        * 
        * @instance
        * @param {object} payload A payload containing a 'value' attribute with the the JSON model to render
        */
       onFormRedrawRequest: function alfresco_forms_DynamicForm__onFormRedrawRequest(payload) {
-         var value = lang.getObject("value", false, payload);
-         if (value == null)
+         var widgetModel = lang.getObject(this.formWidgetsProperty, false, payload);
+         if (!widgetModel)
          {
-            this.alfLog("warn", "No 'value' attribute found in redraw form request payload", payload, this);
+            this.alfLog("warn", "No '" + this.formWidgetsProperty + "' attribute found in redraw form request payload", payload, this);
          }
          else
          {
             // Destroy all the previous form fields...
-            if (this._form != null)
+            if (this._form)
             {
                this._form.destroyDescendants(false);
             }
@@ -81,16 +114,44 @@ define(["dojo/_base/declare",
                // data does not get published
                // TODO: This should also be done for additional buttons, but is harder to do without preserving
                //       the default publishPayload for them.
-               if (this.okButton != null)
+               if (this.okButton)
                {
                   this.okButton.publishPayload = {};
                }
-               var widgets = dojoJson.parse(value);
-               this.processWidgets(widgets, this._form.domNode);
+               if (this.formWidetsPropertyStringified)
+               {
+                  try
+                  {
+                     var widgets = JSON.parse(widgetModel);
+                     this.processWidgets(widgets, this._form.domNode);
+                  }
+                  catch(e)
+                  {
+                     this.alfLog("error", "The following error occurred attempting to parse a DynamicForm widget model", e, this, widgetModel);
+                  }
+               }
+               else
+               {
+                  this.processWidgets(widgetModel, this._form.domNode);
+               }
+
+               if (this.formValueProperty)
+               {
+                  var value = lang.getObject(this.formValueProperty, false, payload);
+                  if (value)
+                  {
+                     this.setValue(value);
+                  }
+               }
+
+               if (payload.formSubmissionTopic && this.okButton)
+               {
+                  this.okButton.publishTopic = payload.formSubmissionTopic;
+               }
             }
             catch (e)
             {
-               this.alfLog("error", "An error occurred redrawing the form", e, value, this);
+               this.alfLog("error", "An error occurred redrawing the form", e, this);
             }
          }
       }
