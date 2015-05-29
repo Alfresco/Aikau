@@ -347,12 +347,46 @@ define(["dojo/_base/declare",
 
       /**
        * This logging is explicitly for publication, subscription and unsubscription events.
-       * 
+       *
        * @param  {string} type This is the PubSub activity type (e.g. "SUBSCRIPTION", "PUBLICATION", etc).
        * @param  {object} payload The details of the PubSub activity
        */
-      onPubSubLogRequest: function alfresco_services_LoggingService__onPubSubLogRequest(type, payload) {
-         console.log(type + " >> ", payload);
+      onPubSubLogRequest: function alfresco_services_LoggingService__onPubSubLogRequest(type, payload, caller) {
+         var event = {
+            type: type
+         };
+
+         // Build a custom object type depending on the log type
+         switch (type)
+         {
+            case "PUBLICATION":
+               event.topic = payload.alfPublishScope + payload.alfTopic;
+               event.payload = payload;
+
+               // If the widget that triggered the publish has an id, pass that through.
+               if (caller.id)
+               {
+                  event.publisherId = caller.id;
+               }
+               if (caller)
+               {
+                  event.publisher = caller;
+               }
+
+               break;
+            case "SUBSCRIPTION":
+               event.topic = payload.subscribedTopic;
+               event.subscriberId = payload.subscriber.id;
+               event.subscriber = payload.subscriber;
+               break;
+            case "UNSUBSCRIPTION":
+               event.topic = payload.unsubscribedTopic;
+               event.subscriberId = payload.subscriber.id;
+               event.subscriber = payload.subscriber;
+               break;
+         }
+
+         console.log(event);
       },
 
       /**
