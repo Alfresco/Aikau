@@ -474,11 +474,18 @@ define(["dojo/_base/declare",
          // but is not actually part of the form data)...
          delete payload.alfTopic;
          delete payload.alfPublishScope;
-         var currHash = ioQuery.objectToQuery(payload);
          
+         // Make sure that only the controls with names listed in hashVarsForUpdate are set on the URL hash...
+         var updatedHash = {};
+         this.payloadContainsUpdateableVar(payload, true, updatedHash);
+
+         var currHash =  ioQuery.queryToObject(hash());
+         lang.mixin(currHash, updatedHash);
+         var hashString = ioQuery.objectToQuery(currHash);
+
          // Publish so that the NavigationService can set the hash fragment...
          this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-            url: currHash,
+            url: hashString,
             type: "HASH"
          }, true);
       },
@@ -491,11 +498,13 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The publication topic.
        */
-      onHashChange: function alfresco_forms_Form__onHashChange(payload) {
+      onHashChange: function alfresco_forms_Form__onHashChange(hashString) {
          if (this.useHash === true)
          {
-            var hashData = this.processFilter(payload);
-            this.setValue(hashData);
+            var currHash = ioQuery.queryToObject(hashString);
+            var updatedFormValue = {};
+            this.doHashVarUpdate(currHash, true, updatedFormValue);
+            this.setValue(updatedFormValue);
          }
       },
 
@@ -525,7 +534,7 @@ define(["dojo/_base/declare",
                if (this.okButtonPublishTopic &&
                    lang.trim(this.okButtonPublishTopic) !== "")
                {
-                  this.alfSubscribe(this.okButtonPublishTopic, lang.hitch(this, "setHashFragment"), this.okButtonPublishGlobal);
+                  this.alfSubscribe(this.okButtonPublishTopic, lang.hitch(this, this.setHashFragment), this.okButtonPublishGlobal);
                }
                else
                {
@@ -587,7 +596,9 @@ define(["dojo/_base/declare",
             if (this.useHash)
             {
                var currHash = ioQuery.queryToObject(hash());
-               this.setValue(currHash);
+               var updatedFormValue = {};
+               this.doHashVarUpdate(currHash, true, updatedFormValue);
+               this.setValue(updatedFormValue);
             }
             else
             {
