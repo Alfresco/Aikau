@@ -28,6 +28,7 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -36,6 +37,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/DroppedItemWrapper.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
+        "alfresco/renderers/_PublishPayloadMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/on",
@@ -44,10 +46,10 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-style",
         "jquery"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, lang, array, on, 
-                 Constants, Deferred, domConstruct, domStyle, $) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, _PublishPayloadMixin,
+                 lang, array, on, Constants, Deferred, domConstruct, domStyle, $) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _PublishPayloadMixin], {
       
       /**
        * The array of file(s) containing internationalised strings.
@@ -297,29 +299,109 @@ define(["dojo/_base/declare",
             var subscriptionTopic = this.generateUuid();
             var subscriptionHandle = this.alfSubscribe(subscriptionTopic, lang.hitch(this, this.onEditSave));
 
+            var clonedItem = lang.clone(item);
             var payloadMixin = {
-               label: this.label,
-               subscriptionHandle: subscriptionHandle,
-               widgets: this.widgets
+               subscriptionHandle: subscriptionHandle
             };
-            $.extend(true, payloadMixin, item);
+            $.extend(true, payloadMixin, clonedItem);
 
-            this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
-               dialogId: "ALF_DROPPED_ITEM_CONFIGURATION_DIALOG",
-               dialogTitle: item.name,
-               formSubmissionTopic: subscriptionTopic,
-               formSubmissionPayloadMixin: payloadMixin,
-               dialogWidth: "80%",
-               fixedWidth: true,
-               formValue: item,
-               widgets: resolvedPromise.widgets
-            }, true);
+            // Set the current item for processing purposes...
+            this.currentItem = {
+               item: clonedItem,
+               subscriptionTopic: subscriptionTopic,
+               payloadMixin: payloadMixin,
+               widgets:resolvedPromise.widgets
+            };
+
+            // Generate a payload and publish it...
+            var publishPayload = this.generatePayload(this.editPublishPayload, this.currentItem, null, this.editPublishPayloadType, this.editPublishPayloadItemMixin, this.editPublishPayloadModifiers);
+            this.currentItem = {};
+            this.alfPublish(this.editPublishTopic, publishPayload, this.editPublishGlobal, this.editPublishToParent);
          }
          else
          {
             this.alfLog("warn", "Wigets were not provided in the resolved promise", item, resolvedPromise, this);
          }
       },
+
+      /**
+       * This is the topic that is published when a request is made to edit the value of the item
+       * represented by this wrapper. The default behaviour is to request that a dialog be displayed.
+       *
+       * @instance
+       * @type {string}
+       * @default "ALF_CREATE_FORM_DIALOG_REQUEST"
+       */
+      editPublishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+
+      /**
+       * Indicates whether the edit publication should be published globally.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      editPublishGlobal: true,
+
+      /**
+       * Indicates whether edit publications should be published on the parent scope.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      editPublishToParent: false,
+
+      /**
+       * This is the payload that will be published when a request is made to edit the value of the 
+       * item represented by this wrapper. If required the 
+       *
+       * @instance
+       * @type {object}
+       */
+      editPublishPayload: {
+         dialogId: "ALF_DROPPED_ITEM_CONFIGURATION_DIALOG",
+         dialogTitle: "{item.name}",
+         formSubmissionTopic: "{subscriptionTopic}",
+         formSubmissionPayloadMixin: "{payloadMixin}",
+         dialogWidth: "80%",
+         fixedWidth: true,
+         formValue: "{item}",
+         widgets: "{widgets}"
+      },
+
+      /**
+       * This is the type of payload defined by the 
+       * [editPublishPayload]{@link module:alfresco/dnd/DroppedItemWrapper#editPublishPayload}. By 
+       * default this is set to "PROCESS" indicating that the payload contains tokens to be substituted.
+       *
+       * @instance
+       * @type {string}
+       * @default "PROCESS"
+       */
+      editPublishPayloadType: "PROCESS",
+
+      /**
+       * This indicates whether ot not the payload should have the "currentItem" attribute mixed into it.
+       * By default this is set to false.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      editPublishPayloadItemMixin: false,
+
+      /**
+       * This defines any processor functions that should be used to process the 
+       * [editPublishPayload]{@link module:alfresco/dnd/DroppedItemWrapper#editPublishPayload}. These will
+       * only be applied if the [editPublishPayloadType]{@link module:alfresco/dnd/DroppedItemWrapper#editPublishPayloadType}
+       * is configured to be "PROCESS" (which is the default behaviour).
+       *
+       * @instance
+       * @type {string[]}
+       * @default ["processCurrentItemTokens"]
+       */
+      editPublishPayloadModifiers: ["processCurrentItemTokens"],
 
       /**
        * Handles submission of the dialog requested when the user edits the value of the widget.

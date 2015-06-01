@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop (alternate edit display)</shortname>
+  <description>Shows an example configuring an alternative editor for dropped items</description>
+  <family>aikau-unit-tests</family>
+  <url>/alternative-editor-dnd</url>
+</webscript>
