@@ -148,6 +148,7 @@ model.jsonModel = {
                   }
                },
                {
+                  id: "DYNAMIC_FORM",
                   name: "alfresco/forms/DynamicForm",
                   config: {
                      subscriptionTopic: "EDIT_ITEM",
