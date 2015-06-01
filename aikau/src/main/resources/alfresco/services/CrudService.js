@@ -47,7 +47,7 @@ define(["dojo/_base/declare",
 
       /**
        * Constructor
-       * 
+       *
        * @instance
        * @param {array} args Constructor arguments
        */
@@ -140,9 +140,9 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function can be used to append the supplied query parameter name and value onto the 
+       * This function can be used to append the supplied query parameter name and value onto the
        * supplied URL string which is then returned.
-       * 
+       *
        * @param {string} url The url to update
        * @param {string} param The name of the query parameter
        * @param {string} value The value of the query parameter
@@ -186,19 +186,25 @@ define(["dojo/_base/declare",
          }
          if (payload.dataFilters)
          {
-            // TODO: iterate over filters and add each as a request parameter...
             array.forEach(payload.dataFilters, function(filter) {
                url = this.addQueryParameter(url, filter.name, filter.value);
             }, this);
          }
-         
+
+         var config = {
+            url: url,
+            data: this.clonePayload(payload),
+            alfTopic: payload.alfResponseTopic || null,
+            method: "GET"
+         };
+
+         if (payload.preventCache)
+         {
+            config.preventCache = payload.preventCache
+         }
+
          if (url) {
-            this.serviceXhr({
-               url: url,
-               data: this.clonePayload(payload),
-               alfTopic: payload.alfResponseTopic || null,
-               method: "GET"
-            });
+            this.serviceXhr(config);
          }
       },
 

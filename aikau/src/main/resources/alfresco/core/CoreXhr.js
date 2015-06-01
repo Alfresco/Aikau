@@ -38,6 +38,15 @@ define(["dojo/_base/declare",
    return declare(null, {
 
       /**
+       * Should a cache busting parameter be added to the URL?
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      preventCache: false,
+
+      /**
        * Ensures that the csrfProperties are retrieved from the Alfresco constants provided by Surf.
        *
        * @instance
@@ -134,13 +143,23 @@ define(["dojo/_base/declare",
                {
                   data = config.data;
                }
-               var request = xhr(config.url, {
+
+               var options = {
                   handleAs: (config.handleAs) ? config.handleAs : "text",
                   method: (config.method) ? config.method : "POST",
                   data: data,
                   query: (config.query) ? config.query : null,
                   headers: headers
-               }).then(function(response) {
+               };
+
+               // Add in cache busting?
+               if (config.method === "GET" && (config.preventCache || this.preventCache))
+               {
+                  // Add it from either the config (if supplied) or the default if not.
+                  options.preventCache = (config.preventCache !== null)? config.preventCache : this.preventCache;
+               }
+
+               var request = xhr(config.url, options).then(function(response) {
 
                   var id = lang.getObject("requestId", false, config);
                   if (id)

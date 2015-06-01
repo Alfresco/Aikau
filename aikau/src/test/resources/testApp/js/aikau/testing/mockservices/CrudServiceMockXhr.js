@@ -37,6 +37,12 @@ define(["dojo/_base/declare",
                this.server.respondWith("DELETE", "/aikau/proxy/alfresco/resources/123", [200, {}, ""]);
                this.server.respondWith("POST", "/aikau/proxy/alfresco/resources/123", [200, {}, ""]);
                this.server.respondWith("PUT", "/aikau/proxy/alfresco/resources/123", [200, {}, ""]);
+               this.server.respondWith("GET", "/aikau/proxy/alfresco/resources/cache", [200, {}, ""]);
+
+               // Match URLs going to the nocache resource with a preventCache param that includes a long number:
+               var preventCacheRE = /\/aikau\/proxy\/alfresco\/resources\/nocache\?request.preventCache=[0-9].+/;
+               this.server.respondWith("GET", preventCacheRE, [200, {}, ""]);
+
                this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
             } catch (e) {
                this.alfLog("error", "The following error occurred setting up the mock server", e);

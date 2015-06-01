@@ -92,6 +92,33 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "GET_ALL_DEFAULT_CACHE_BUTTON",
+         config: {
+            label: "Get with default cache options",
+            publishTopic: "ALF_CRUD_GET_ALL",
+            publishPayload: {
+               url: "resources/cache",
+               alfResponseTopic: "ALF_GET_ALL_DEFAULT_CACHE",
+               failureMessage: "Test get all message"
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "GET_ALL_PREVENT_CACHE_BUTTON",
+         config: {
+            label: "Get with prevent cache options",
+            publishTopic: "ALF_CRUD_GET_ALL",
+            publishPayload: {
+               url: "resources/nocache",
+               preventCache: true,
+               alfResponseTopic: "ALF_GET_ALL_PREVENT_CACHE",
+               failureMessage: "Test get all prevent cache message"
+            }
+         }
+      },
+      {
          name: "aikauTesting/mockservices/CrudServiceMockXhr"
       },
       {
