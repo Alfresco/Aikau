@@ -991,7 +991,16 @@ define(["dojo/_base/declare",
          if (view)
          {
             this.showRenderingMessage();
-            view.setData(this.currentData);
+
+            if (this.useInfiniteScroll)
+            {
+               view.augmentData(this.currentData);
+               this.currentData = view.getData();
+            }
+            else
+            {
+               view.setData(this.currentData);
+            }
             view.renderView(this.useInfiniteScroll);
             this.showView(view);
 
