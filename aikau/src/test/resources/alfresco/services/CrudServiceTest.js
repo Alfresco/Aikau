@@ -24,7 +24,7 @@ define(["intern!object",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/helpers/pollUntil"], 
+        "intern/dojo/node!leadfoot/helpers/pollUntil"],
         function(registerSuite, assert, require, TestCommon, pollUntil) {
 
       var browser;
@@ -144,25 +144,50 @@ define(["intern!object",
                });
          },
 
-         "Invalid CREATE call fails": function() {
+         "Invalid CREATE call fails": function () {
             return browser.findById("CREATE_FAILURE_BUTTON")
                .click()
                .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_FAILURE", "publish", "any"))
-               .then(function(elements) {
+               .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_FAILURE", "publish", "any"))
+               .then(function (elements) {
                   assert.lengthOf(elements, 1, "Invalid create did not fail");
                });
          },
 
-         "Failed CREATE displays failure message": function() {
+         "Failed CREATE displays failure message": function () {
             return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
-               .then(function(dialogBody) {
+               .then(function (dialogBody) {
                   return dialogBody.getVisibleText()
-                     .then(function(messageText) {
+                     .then(function (messageText) {
                         var trimmed = messageText.replace(/^\s+|\s+$/g, "");
                         assert.equal(trimmed, "Test create-failure message", "Create failure message not displayed");
                      });
+               });
+         },
+
+         "GET ALL success": function () {
+            return closeAllDialogs()
+               .then(function() {
+                  return browser.findById("GET_ALL_DEFAULT_CACHE_BUTTON")
+                     .click()
+                     .end()
+
+                     .findAllByCssSelector(TestCommon.topicSelector("ALF_GET_ALL_DEFAULT_CACHE_SUCCESS", "publish", "any"))
+                     .then(function (elements) {
+                        assert.lengthOf(elements, 1, "GET ALL didn't succeed");
+                     });
+               })
+         },
+
+         "GET ALL with prevent cache option success": function () {
+            return browser.findById("GET_ALL_PREVENT_CACHE_BUTTON")
+               .click()
+               .end()
+
+               .findAllByCssSelector(TestCommon.topicSelector("ALF_GET_ALL_PREVENT_CACHE_SUCCESS", "publish", "any"))
+               .then(function (elements) {
+                  assert.lengthOf(elements, 1, "GET ALL with preventCache flag failed");
                });
          },
 
