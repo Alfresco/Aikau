@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
        */
       processFilter: function alfresco_documentlibrary__AlfFilterMixin__processFilter(data) {
          var filterObj = ioQuery.queryToObject(data);
-         if (filterObj == null)
+         if (!filterObj)
          {
             // The default filter is root location in a document lib...
             filterObj = {
