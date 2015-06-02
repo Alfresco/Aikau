@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log", "Page navigation request received:", data);
             var url = this.buildUrl(data);
-            if (url)
+            if (url || url === "")
             {
                // Determine the location of the URL...
                if (data.type === this.hashPath)
