@@ -1,6 +1,11 @@
 /* CSS for this was adapted from https://css-tricks.com/triangle-breadcrumbs/ */
 .alfresco-documentlibrary-AlfBreadcrumb { 
    float: left; 
+   height: 30px;
+   padding-top: 1px;
+   padding-bottom: 1px;
+   padding-right: 1px;
+   background: @breadcrumb-border-color;
 }
 .alfresco-documentlibrary-AlfBreadcrumb a {
    text-decoration: none; 
@@ -10,6 +15,7 @@
    display: block;
    float: left;
    cursor: pointer;
+   height: 20px;
 }
 
 .alfresco-documentlibrary-AlfBreadcrumb a:after { 
@@ -17,12 +23,12 @@
    display: block;
    width: 0;
    height: 0;
-   border-top: 50px solid transparent;
-   border-bottom: 50px solid transparent;
-   border-left: 30px solid @breadcrumb-background-color;
+   border-top: 15px solid transparent;
+   border-bottom: 15px solid transparent;
+   border-left: 10px solid @breadcrumb-background-color;
    position: absolute;
    top: 50%;
-   margin-top: -50px;
+   margin-top: -15px;
    left: 100%;
    z-index: 2;
 }
@@ -32,12 +38,12 @@
    display: block;
    width: 0; 
    height: 0;
-   border-top: 50px solid transparent;
-   border-bottom: 50px solid transparent;
-   border-left: 30px solid @breadcrumb-border-color;
+   border-top: 15px solid transparent;
+   border-bottom: 15px solid transparent;
+   border-left: 10px solid @breadcrumb-border-color;
    position: absolute;
    top: 50%;
-   margin-top: -50px;
+   margin-top: -15px;
    margin-left: 1px;
    left: 100%;
    z-index: 1;
