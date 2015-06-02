@@ -1,7 +1,11 @@
-Aikau 1.0.19 Release Notes
+Aikau 1.0.20 Release Notes
 ==========================
 
-Current deprecations:
+New deprecations:
+-----------------
+* alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
+
+Previous deprecations:
 ---------------------
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 * alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
@@ -34,6 +38,18 @@ Current deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
 ----------------
+1.0.20:
+* [AKU-298](https://issues.alfresco.com/jira/browse/AKU-298)       - Global support for "additionalCssClasses" attribute
+* [AKU-301](https://issues.alfresco.com/jira/browse/AKU-301)       - Configurable edit publication for drag and dropped items
+* [AKU-316](https://issues.alfresco.com/jira/browse/AKU-316)       - Added support for "hashVarsForUpdate" to alfresco/forms/Form
+* [AKU-317](https://issues.alfresco.com/jira/browse/AKU-317)       - Added support for automatic cache busting to alfresco/core/CoreXhr
+* [AKU-318](https://issues.alfresco.com/jira/browse/AKU-318)       - Ensure nested drag and dropped item label data is retained when editing parent item
+* [AKU-321](https://issues.alfresco.com/jira/browse/AKU-321)       - Added alfresco/lists/views/HtmlListView
+* [AKU-322](https://issues.alfresco.com/jira/browse/AKU-322)       - Ensure form controls nested within alfresco/forms/ControlRow publish initial value
+* [AKU-328](https://issues.alfresco.com/jira/browse/AKU-328)       - Prevent event bubbling on alfresco/debug/WidgetInfo image click
+* [AKU-330](https://issues.alfresco.com/jira/browse/AKU-330)       - Added support for automatic scroll to item in list
+* [AKU-342](https://issues.alfresco.com/jira/browse/AKU-342)       - Infinite scroll support in all paginated lists
+
 1.0.19:
 * [AKU-290](https://issues.alfresco.com/jira/browse/AKU-290)       - Prevent menu items opening on hover
 * [AKU-293](https://issues.alfresco.com/jira/browse/AKU-293)       - Fix URL hash sorting/pagination support
