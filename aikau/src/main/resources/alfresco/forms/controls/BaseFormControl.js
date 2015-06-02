@@ -1576,7 +1576,7 @@ define(["dojo/_base/declare",
        * all of its controls values to process all rules.
        * 
        * @instance
-       * @param {Deferred} deferred A deferred object can optionally be passed. This will only be resolved as widget value
+       * @param {Deferred} [deferred] A deferred object can optionally be passed. This will only be resolved as widget value
        * initialization completes.
        */
       publishValue: function alfresco_forms_controls_BaseFormControl__publishValue(deferred) {

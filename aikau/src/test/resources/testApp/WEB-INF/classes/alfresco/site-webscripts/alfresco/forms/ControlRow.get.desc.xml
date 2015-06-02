@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>ControlRow</shortname>
+  <description>Demonstrates the use of an alfresco/forms/ControlRow to place multiple form controls on a single row.</description>
+  <family>aikau-unit-tests</family>
+  <url>/ControlRow</url>
+</webscript>

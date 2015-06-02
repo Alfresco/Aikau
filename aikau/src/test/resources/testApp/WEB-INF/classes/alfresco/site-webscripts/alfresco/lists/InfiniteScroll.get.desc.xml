@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfList (using infinite scroll)</shortname>
+  <description>Shows an AlfList configured with infinite scrolling</description>
+  <family>aikau-unit-tests</family>
+  <url>/InfiniteScrollList</url>
+</webscript>

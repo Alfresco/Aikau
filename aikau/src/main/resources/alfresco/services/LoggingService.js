@@ -107,8 +107,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      showPubSubLog: function alfresco_services_LoggingService__showPubSubLog(payload) {
-         /*jshint unused:false*/
+      showPubSubLog: function alfresco_services_LoggingService__showPubSubLog(/*jshint unused:false*/ payload) {
          if (!this.pubSubLog)
          {
             this.pubSubLog = new AlfDialog({
@@ -180,25 +179,40 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Updates the subscription to the logging topic
+       * Updates the subscription to the logging topic.
+       * Checks each subscription individually and only subscribes if one doesn't already exist.
        *
        * @instance
        *
        * @listens alfLoggingTopic
        */
       handleSubscription: function alfresco_services_LoggingService__handleSubscription() {
-         if (this.loggingPreferences.enabled && !this.logSubscriptionHandle)
+         if (this.loggingPreferences.enabled)
          {
-            this.logSubscriptionHandle = this.alfSubscribe(this.alfLoggingTopic, lang.hitch(this, this.onLogRequest));
+            if (!this.logSubscriptionHandle)
+            {
+               this.logSubscriptionHandle = this.alfSubscribe(this.alfLoggingTopic, lang.hitch(this, this.onLogRequest));
+            }
 
             // Only log pub/sub activity if either all logging is enabled or PUBSUB logging has been
             // explicitly requested...
             if (this.loggingPreferences.all === true ||
-                this.loggingPreferences.pubSub === true)
+               this.loggingPreferences.pubSub === true)
             {
-               this.subLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_SUBSCRIPTION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "SUBSCRIPTION"));
-               this.pubLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_PUBLICATION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "PUBLICATION"));
-               this.unsubLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_UNSUBSCRIPTION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "UNSUBSCRIPTION"));
+               if (!this.subLogSubscriptionHandle)
+               {
+                  this.subLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_SUBSCRIPTION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "SUBSCRIPTION"));
+               }
+
+               if (!this.pubLogSubscriptionHandle)
+               {
+                  this.pubLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_PUBLICATION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "PUBLICATION"));
+               }
+
+               if (!this.unsubLogSubscriptionHandle)
+               {
+                  this.unsubLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_UNSUBSCRIPTION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "UNSUBSCRIPTION"));
+               }
             }
          }
          else if (!this.loggingPreferences.enabled && this.logSubscriptionHandle)
@@ -347,12 +361,47 @@ define(["dojo/_base/declare",
 
       /**
        * This logging is explicitly for publication, subscription and unsubscription events.
-       * 
+       *
        * @param  {string} type This is the PubSub activity type (e.g. "SUBSCRIPTION", "PUBLICATION", etc).
        * @param  {object} payload The details of the PubSub activity
+       * @param  {object} [caller] A reference to the object that published the event
        */
-      onPubSubLogRequest: function alfresco_services_LoggingService__onPubSubLogRequest(type, payload) {
-         console.log(type + " >> ", payload);
+      onPubSubLogRequest: function alfresco_services_LoggingService__onPubSubLogRequest(type, payload, caller) {
+         var event = {
+            type: type
+         };
+
+         // Build a custom object type depending on the log type
+         switch (type)
+         {
+            case "PUBLICATION":
+               event.topic = payload.alfPublishScope + payload.alfTopic;
+               event.payload = payload;
+
+               // If the widget that triggered the publish has been passed, pass that through, highlighting the id.
+               if (caller)
+               {
+                  if (caller.id)
+                  {
+                     event.publisherId = caller.id;
+                  }
+                  event.publisher = caller;
+               }
+
+               break;
+            case "SUBSCRIPTION":
+               event.topic = payload.subscribedTopic;
+               event.subscriberId = payload.subscriber.id;
+               event.subscriber = payload.subscriber;
+               break;
+            case "UNSUBSCRIPTION":
+               event.topic = payload.unsubscribedTopic;
+               event.subscriberId = payload.subscriber.id;
+               event.subscriber = payload.subscriber;
+               break;
+         }
+
+         console.log(event);
       },
 
       /**

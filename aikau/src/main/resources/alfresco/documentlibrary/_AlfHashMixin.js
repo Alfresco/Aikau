@@ -128,8 +128,8 @@ define(["dojo/_base/declare",
        * @return {boolean}
        * @private
        */
-      doHashVarUpdate: function alfresco_documentlibrary__AlfHashMixin__doHashVarUpdate(payload, updateInstanceValues) {
-         return this.payloadContainsUpdateableVar(payload, updateInstanceValues) && 
+      doHashVarUpdate: function alfresco_documentlibrary__AlfHashMixin__doHashVarUpdate(payload, updateInstanceValues, updateObject) {
+         return this.payloadContainsUpdateableVar(payload, updateInstanceValues, updateObject) && 
                 this.payloadContainsRequiredUpdateableVars(payload) && 
                 this.payloadContainsEqualUpdateableVars(payload);
       },
@@ -147,13 +147,18 @@ define(["dojo/_base/declare",
        * @param {boolean} updateInstanceValues Indicates whether or not the list instance should be updated with the payload values
        * @return {boolean}
        */
-      payloadContainsUpdateableVar: function alfresco_documentlibrary__AlfHashMixin__payloadContainsUpdateableVar(payload, updateInstanceValues) {
+      payloadContainsUpdateableVar: function alfresco_documentlibrary__AlfHashMixin__payloadContainsUpdateableVar(payload, updateInstanceValues, updateObject) {
+         // jshint maxcomplexity:false
          var containsUpdateableVar = false;
 
          // No hashVarsForUpdate - return true
          if(!this.hashVarsForUpdate || this.hashVarsForUpdate.length === 0)
          {
             containsUpdateableVar = true;
+            if (updateInstanceValues === true)
+            {
+               lang.mixin(updateObject || this, payload);
+            }
          }
          else
          {
@@ -164,7 +169,8 @@ define(["dojo/_base/declare",
                {
                   if (updateInstanceValues === true)
                   {
-                     this[this.hashVarsForUpdate[i]] = payload[this.hashVarsForUpdate[i]];
+                     var objectToUpdate = updateObject || this;
+                     objectToUpdate[this.hashVarsForUpdate[i]] = payload[this.hashVarsForUpdate[i]];
                   }
                   containsUpdateableVar = true;
                }

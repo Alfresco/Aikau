@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Form (using URL hashing)</shortname>
+  <description>Demonstrates how the browser URL hash can be used to control the value of the form</description>
+  <family>aikau-unit-tests</family>
+  <url>/HashForm</url>
+</webscript>

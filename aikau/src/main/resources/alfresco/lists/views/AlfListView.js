@@ -180,6 +180,17 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This is the property of each item in the list that uniquely identifies that item. This
+       * should be configured correctly in order for items to be 
+       * [brought into view]{@link module alfresco/lists/views/ListRenderer#bringItemIntoView} as required.
+       * 
+       * @instance
+       * @type {string}
+       * @default "nodeRef"
+       */
+      itemKey: "nodeRef",
+
+      /**
        * This is the property that is used to lookup documents in the subscribed topic.
        *
        * @instance
@@ -335,6 +346,10 @@ define(["dojo/_base/declare",
                   this.docListRenderer.placeAt(this.tableNode, "last");
                }
 
+               // Ensure that the renderer has has the same itemKey value as configured on the view. This is
+               // so that comparisons can be made for selection and items can be brought into view as necessary
+               this.docListRenderer.itemKey = this.itemKey;
+               
                // Finally, render the current data (when using infinite scroll the data should have been augmented)
                this.docListRenderer.renderData();
 

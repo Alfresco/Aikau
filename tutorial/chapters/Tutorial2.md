@@ -16,7 +16,7 @@ Each widget is considered a module and modules are referenced relative to the pa
 
 ### Step 1. Adding a New Package
 
-Package locations are defined in the configuration used to bootstrap Dojo but Surf will take care of that for you. Look in the `<PROJECT>/src/main/webapp/WEB-INF/surf.xml` file and you’ll find the following section of configuration (it should be at line 96):
+Package locations are defined in the configuration used to bootstrap Dojo but Surf will take care of that for you. Look in the `<PROJECT>/src/main/webapp/WEB-INF/surf.xml` file and you’ll find the following section of configuration (it should be at line 103):
 
 ```XML
 <dojo-pages>

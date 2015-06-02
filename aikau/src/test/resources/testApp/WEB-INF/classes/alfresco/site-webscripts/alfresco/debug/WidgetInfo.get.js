@@ -33,10 +33,16 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/navigation/Link",
+         id: "LINK",
+         config: {
+            label: "Test link",
+            title: "This link will do a test publish",
+            publishTopic: "LINK_CLICKED"
+         }
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

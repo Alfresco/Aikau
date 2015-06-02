@@ -55,7 +55,7 @@ define(["intern!object",
          return browser.findByCssSelector(".dijitDialogTitle")
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "Confirm Delete", "The confirmation dialog title was wrong");
+               assert.equal(text, "Confirm Deletion", "The confirmation dialog title was wrong");
             });
       },
 

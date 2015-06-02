@@ -1,5 +1,6 @@
 <webscript>
   <shortname>WidgetInfo Test</shortname>
+  <description>Simple test page for demonstrating the WidgetInfo functionality</description>
   <family>aikau-unit-tests</family>
   <url>/WidgetInfo</url>
 </webscript>

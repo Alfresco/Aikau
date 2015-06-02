@@ -89,8 +89,9 @@ define(["dojo/_base/declare",
        * selecte widget.
        * 
        * @instance
+       * @param {object} evt Dojo-normalised event object
        */
-      showInfo: function alfresco_debug_WidgetInfo__showInfo() {
+      showInfo: function alfresco_debug_WidgetInfo__showInfo(evt) {
          if (!this.ttd)
          {
             this.displayIdLabel = this.message("widgetInfo.displayId.label");
@@ -125,6 +126,9 @@ define(["dojo/_base/declare",
                popup.close(this.ttd);
             }
          });
+
+         // Prevent bubbling
+         evt && evt.stopPropagation();
       }
    });
 });

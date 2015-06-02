@@ -47,6 +47,11 @@ define(["intern!object",
          .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "url", "/aikau/page/dp/ws/start-workflow"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Workflow not assigned");
+            })
+         .end()
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "type", "FULL_PATH"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Workflow URL type incorrect");
             });
       },
 
@@ -71,7 +76,7 @@ define(["intern!object",
          return browser.findByCssSelector("#APPROVE_SUCCESS_label")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Item marked as approved"))
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "File marked as approved"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Simple approval success notification not found");
             });
@@ -81,7 +86,7 @@ define(["intern!object",
          return browser.findByCssSelector("#REJECT_SUCCESS_label")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Item marked as rejected"))
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "File marked as rejected"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Simple rejection success notification not found");
             });
@@ -108,7 +113,7 @@ define(["intern!object",
          return browser.findByCssSelector("#APPROVE_FAILURE_label")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action could not be completed."))
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action couldn't be completed."))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Simple approval failure notification not found");
             });
@@ -120,7 +125,7 @@ define(["intern!object",
          .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_RELOAD_DATA", "publish", "last"))
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action could not be completed."))
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action couldn't be completed."))
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Simple rejection failure notification not found");
             });

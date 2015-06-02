@@ -253,6 +253,27 @@ define(["dojo/_base/declare",
       _updateCoreHashVars: function alfresco_lists_AlfHashList___updateCoreHashVars(hashParameters) {
          // jshint unused:false
          // No action by default
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#onDataLoadSuccess} to check
+       * whether or not a URL hash parameter is set to indicate a particular item to bring into view.
+       * This URL hash parameter checked is the "currentItem" and if this is found it will publish the
+       * value on the "ALF_BRING_ITEM_INTO_VIEW" topic.
+       * 
+       * @param  {object} payload The payload containing the loaded data.
+       * @fires module:alfresco/lists/views/ListRenderer~event:ALF_BRING_ITEM_INTO_VIEW
+       */
+      onDataLoadSuccess: function alfresco_lists_AlfHashList__onDataLoadSuccess(/*jshint unused:false*/ payload) {
+         this.inherited(arguments);
+         var hashString = hash();
+         var currHash = ioQuery.queryToObject(hashString);
+         if (currHash.currentItem)
+         {
+            this.alfPublish("ALF_BRING_ITEM_INTO_VIEW", {
+               item: currHash.currentItem
+            });
+         }
       }
    });
 });

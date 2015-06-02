@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Menu bar orientation</shortname>
+  <description>Demonstrates how menu popups can be configured to open upwards as well as drop down</description>
+  <family>aikau-unit-tests</family>
+  <url>/MenuBarOrientation</url>
+</webscript>
