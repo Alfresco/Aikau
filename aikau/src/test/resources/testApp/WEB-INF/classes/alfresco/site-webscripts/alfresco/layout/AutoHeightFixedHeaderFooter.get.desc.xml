@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Auto height FixedHeaderFooter</shortname>
+  <description>Demonstrates the alfresco/layout/FixedHeaderFooter widget using the default height configuration so that it automatically takes up enough space to take it to take up the available room on page load.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AutoHeightFixedHeaderFooter</url>
+</webscript>

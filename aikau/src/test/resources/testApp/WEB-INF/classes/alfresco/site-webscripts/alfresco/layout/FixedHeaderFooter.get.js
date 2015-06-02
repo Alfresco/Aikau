@@ -88,21 +88,13 @@ model.jsonModel = {
                      ],
                      widgetsForFooter: [
                         {
-                           id: "MENU_BAR",
-                           name: "alfresco/menus/AlfMenuBar",
+                           id: "CUSTOM_PAGE_SIZE_PAGINATOR",
+                           name: "alfresco/lists/Paginator",
                            config: {
-                              widgets: [
-                                 {
-                                    id: "CUSTOM_PAGE_SIZE_PAGINATOR",
-                                    name: "alfresco/lists/Paginator",
-                                    config: {
-                                       useHash: false,
-                                       documentsPerPage: 10,
-                                       hidePageSizeOnWidth: 100,
-                                       pageSizes: [5,10,20]
-                                    }
-                                 }
-                              ]
+                              useHash: false,
+                              documentsPerPage: 10,
+                              hidePageSizeOnWidth: 10,
+                              pageSizes: [5,10,20]
                            }
                         }
                      ]
