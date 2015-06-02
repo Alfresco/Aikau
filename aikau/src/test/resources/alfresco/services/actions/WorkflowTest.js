@@ -47,6 +47,11 @@ define(["intern!object",
          .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "url", "/aikau/page/dp/ws/start-workflow"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Workflow not assigned");
+            })
+         .end()
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "type", "FULL_PATH"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Workflow URL type incorrect");
             });
       },
 

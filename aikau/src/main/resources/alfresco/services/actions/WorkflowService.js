@@ -26,19 +26,21 @@
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/core/UrlUtils
+ * @mixes module:alfresco/services/_NavigationServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreXhr",
         "alfresco/core/UrlUtils",
+        "alfresco/services/_NavigationServiceTopicMixin",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/NodeUtils"],
-        function(declare, AlfCore, AlfCoreXhr, UrlUtils, AlfConstants, lang, array, NodeUtils) {
+        function(declare, AlfCore, AlfCoreXhr, UrlUtils, _NavigationServiceTopicMixin, AlfConstants, lang, array, NodeUtils) {
 
-   return declare([AlfCore, AlfCoreXhr, UrlUtils], {
+   return declare([AlfCore, AlfCoreXhr, UrlUtils, _NavigationServiceTopicMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -128,11 +130,11 @@ define(["dojo/_base/declare",
             };
 
             var url = this.buildUrl(this.startWorkflowPage, null);
-            this.alfPublish("ALF_POST_TO_PAGE", {
+            this.alfPublish(this.postToPageTopic, {
                method: "POST",
-               type: "FULL_PAGE",
+               type: this.fullPath,
                url: url,
-               target: payload.currentTarget || "CURRENT",
+               target: payload.currentTarget || this.currentTarget,
                parameters: postBody
             });
          }
