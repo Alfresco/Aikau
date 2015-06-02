@@ -38,6 +38,19 @@ model.jsonModel = {
    widgets: [
       label,
       {
+         id: "SET_HASH",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Set a hash",
+            publishTopic: "ALF_NAVIGATE_TO_PAGE",
+            publishPayload: {
+               url: "#hash1=bob&hash2=ted",
+               type: "HASH",
+               target: "CURRENT"
+            }
+         }
+      },
+      {
          id: "POST_TO_CURRENT_PAGE",
          name: "alfresco/buttons/AlfButton",
          config: {

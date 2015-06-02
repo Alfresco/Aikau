@@ -115,9 +115,13 @@ define(["dojo/_base/declare",
          {
             url = AlfConstants.URL_CONTEXT + data.url;
          }
-         else if (data.type === this.fullPath)
+         else if (data.type === this.fullPath || data.type === this.hashPath)
          {
             url = data.url;
+         }
+         else
+         {
+            this.alfLog("error", "An unknown URL type of '" + data.type + "' was provided for a navigation request", data, this);
          }
          return url;
       },
@@ -141,19 +145,21 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log", "Page navigation request received:", data);
             var url = this.buildUrl(data);
-
-            // Determine the location of the URL...
-            if (data.type === this.hashPath)
+            if (url)
             {
-               hash(data.url);
-            }
-            else if (!data.target || data.target === this.currentTarget)
-            {
-               window.location = url;
-            }
-            else if (data.target === this.newTarget)
-            {
-               window.open(url);
+               // Determine the location of the URL...
+               if (data.type === this.hashPath)
+               {
+                  hash(url);
+               }
+               else if (!data.target || data.target === this.currentTarget)
+               {
+                  window.location = url;
+               }
+               else if (data.target === this.newTarget)
+               {
+                  window.open(url);
+               }
             }
          }
       },
@@ -165,34 +171,36 @@ define(["dojo/_base/declare",
        * @param data
        */
       postToPage: function alfresco_services_NavigationService__postToPage(data) {
-         // Support for POST requests
-         var form = domConstruct.create("form");
-         form.method = "POST";
-         form.action = this.buildUrl(data);
-         if (data.target === this.newTarget)
+         var url = this.buildUrl(data);
+         if (url)
          {
-            form.target = "_blank";
-         }
-         var parameters = data.parameters || {};
-         for (var name in parameters)
-         {
-            if (parameters.hasOwnProperty(name))
+            var form = domConstruct.create("form");
+            form.method = "POST";
+            form.action = url;
+            if (data.target === this.newTarget)
             {
-               var value = parameters[name];
-               if (value)
+               form.target = "_blank";
+            }
+            var parameters = data.parameters || {};
+            for (var name in parameters)
+            {
+               if (parameters.hasOwnProperty(name))
                {
-                  var input;
-                  input = domConstruct.create("input");
-                  input.setAttribute("name", name);
-                  input.setAttribute("type", "hidden");
-                  input.value = value;
-                  domConstruct.place(input, form);
+                  var value = parameters[name];
+                  if (value)
+                  {
+                     var input;
+                     input = domConstruct.create("input");
+                     input.setAttribute("name", name);
+                     input.setAttribute("type", "hidden");
+                     input.value = value;
+                     domConstruct.place(input, form);
+                  }
                }
             }
+            domConstruct.place(form, document.body);
+            form.submit();
          }
-
-         domConstruct.place(form, document.body);
-         form.submit();
       },
 
       /**
