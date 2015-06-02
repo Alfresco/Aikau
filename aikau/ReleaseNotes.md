@@ -49,6 +49,8 @@ Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
 * [AKU-328](https://issues.alfresco.com/jira/browse/AKU-328)       - Prevent event bubbling on alfresco/debug/WidgetInfo image click
 * [AKU-330](https://issues.alfresco.com/jira/browse/AKU-330)       - Added support for automatic scroll to item in list
 * [AKU-342](https://issues.alfresco.com/jira/browse/AKU-342)       - Infinite scroll support in all paginated lists
+* [AKU-345](https://issues.alfresco.com/jira/browse/AKU-345)       - Improvements to logging in alfresco/services/NavigationService
+* [AKU-346](https://issues.alfresco.com/jira/browse/AKU-346)       - Ensure assign workflow URL is generated correctly
 
 1.0.19:
 * [AKU-290](https://issues.alfresco.com/jira/browse/AKU-290)       - Prevent menu items opening on hover
