@@ -148,6 +148,7 @@ define({
       "src/test/resources/alfresco/menus/AlfMenuTextForClipboardTest",
       "src/test/resources/alfresco/menus/AlfVerticalMenuBarTest",
       "src/test/resources/alfresco/menus/DisableMenuItemTest",
+      "src/test/resources/alfresco/menus/MenuBarOrientationTest",
       "src/test/resources/alfresco/menus/MenuTests",
 
       "src/test/resources/alfresco/misc/AlfTooltipTest",

@@ -18,6 +18,62 @@
  */
 
 /**
+ * <p>This widget is the base to be used when constructing menus. Typically this widget should be configured with
+ * a combination of [menu bar items]{@link module:alfresco/menus/AlfMenuBarItem} and
+ * [popup menus]{@link module:alfresco/menus/AlfMenuBarPopup} (although custom menu widgets could also be included).
+ * This widget supports keyboard navigation using the cursor keys and enter or space for selection (please note that
+ * using the tab key will jump to the next widget - tab is not used to navigate items within the menu bar).</p>
+ * <p>The default menu bar behaviour is for all [popup menus]{@link module:alfresco/menus/AlfMenuBarPopup} to appear
+ * below the menu bar, however it is possible to configure this widget so that they appear above the menu bar by 
+ * configuring the [popupMenusAbove]{@link module:alfresco/menus/AlfMenuBar#popupMenusAbove} attribute to be true.</p>
+ *
+ * @example <caption>Typical menu bar configuration</caption>
+ * {
+ *   name: "alfresco/menus/AlfMenuBar",
+ *   config: {
+ *     widgets: [
+ *        {
+ *          name: "alfresco/menus/AlfMenuBarItem",
+ *          config: {
+ *            label: "Do something",
+ *            publishTopic: "DO_SOMETHING",
+ *            publishPayload: {
+ *               data: "INFO_ABOUT_WHAT_TO_DO"
+ *            }
+ *          }
+ *        }
+ *     ]
+ *   }
+ * }
+ *
+ * @example <caption>Configuring a menu bar with popups above</caption>
+ * {
+ *   name: "alfresco/menus/AlfMenuBar",
+ *   config: {
+ *     popupMenusAbove: true,
+ *     widgets: [
+ *        {
+ *          name: "alfresco/menus/AlfMenuBarPopup",
+ *          config: {
+ *            label: "More options...",
+ *            widgets: [
+ *              {
+ *                name: "alfresco/menus/AlfMenuItem",
+ *                config: {
+ *                  label: "Do something",
+ *                  publishTopic: "DO_SOMETHING",
+ *                  publishPayload: {
+ *                    data: "INFO_ABOUT_WHAT_TO_DO"
+ *                  }
+ *                }
+ *              }
+ *            ]
+ *          }
+ *        }
+ *     ]
+ *   }
+ * }
+ * 
  * @module alfresco/menus/AlfMenuBar
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -121,6 +177,18 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * In some circumstances it may be required to have the [popup menus]{@link module:alfresco/menus/AlfMenuBarPopup}
+       * appear above the menu bar (e.g. if the menu bar is at the bottom of a page or layout control). This attribute
+       * can be configured to be true in order to support that requirement. The default value is false which will result
+       * in [popup menus]{@link module:alfresco/menus/AlfMenuBarPopup} being displayed below the menu bar.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      popupMenusAbove: false,
+
+      /**
        * A reference to the MenuBar
        * 
        * @instance
@@ -149,7 +217,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfMenuBar__postCreate() {
-         this._menuBar = new CustomMenuBar({});
+         this._menuBar = new CustomMenuBar({
+            _orient: this.popupMenusAbove === true ? ["above"] : ["below"]
+         });
          this._menuBar.placeAt(this.containerNode);
 
          if (this.widgets && this.widgets instanceof Array)
