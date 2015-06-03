@@ -61,6 +61,7 @@
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBar",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
+        "alfresco/services/_PreferenceServiceTopicMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/menus/AlfMenuBarSelect",
@@ -69,10 +70,10 @@ define(["dojo/_base/declare",
         "alfresco/menus/AlfCheckableMenuItem",
         "dijit/registry",
         "dojo/dom-class"], 
-        function(declare, AlfMenuBar, _AlfDocumentListTopicMixin, lang, array, AlfMenuBarSelect, AlfMenuGroups, 
-                 AlfMenuGroup, AlfCheckableMenuItem, registry, domClass) {
+        function(declare, AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin, lang, array, 
+                 AlfMenuBarSelect, AlfMenuGroups, AlfMenuGroup, AlfCheckableMenuItem, registry, domClass) {
 
-   return declare([AlfMenuBar, _AlfDocumentListTopicMixin], {
+   return declare([AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -160,6 +161,10 @@ define(["dojo/_base/declare",
          if (payload && payload.value && payload.value !== this.documentsPerPage && this.isValidPageSize(payload.value))
          {
             this.documentsPerPage = payload.value;
+            this.alfPublish(this.setPreferenceTopic, {
+               preference: "org.alfresco.share.documentList.documentsPerPage",
+               value: this.documentsPerPage
+            });
          }
       },
       
