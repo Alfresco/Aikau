@@ -104,8 +104,18 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {object} validationConfig The configuration for this validator
        */
       isNumberValidator: function alfresco_forms_controls_FormControlValidationMixin__isNumberValidator(validationConfig) {
-         var isValid = !isNaN(this.wrappedWidget.textbox.value);
-         this.reportValidationResult(validationConfig, isValid);
+         try
+         {
+            // See AKU-341 for details of why we handle commas and spaces...
+            var value = this.wrappedWidget.textbox.value.replace(",","").replace(" ","");
+            var parsedValue = parseFloat(value);
+            var isValid = !isNaN(parsedValue);
+            this.reportValidationResult(validationConfig, isValid);
+         }
+         catch(e)
+         {
+            this.reportValidationResult(validationConfig, false);
+         }
       },
 
       /**
