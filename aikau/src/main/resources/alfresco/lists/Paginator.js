@@ -245,9 +245,10 @@ define(["dojo/_base/declare",
              (totalRecords || totalRecords === 0) && 
              (startIndex || startIndex === 0))
          {
-            if (totalRecords === 0)
+            if (totalRecords === 0 || startIndex > totalRecords)
             {
                // Hide pagination controls when there are no results...
+               // Or if the startIndex is greater than the number of available results
                // domClass.add(this.domNode, "hidden");
                if (this.pageSelector)
                {

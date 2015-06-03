@@ -364,6 +364,119 @@ define(["intern!object",
       }
    });
 
+   registerSuite({
+      name: "Pagination Tests (invalid current page)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Paginator#currentPage=14&currentPageSize=20", "Pagination Tests (invalid current page)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check no data message": function() {
+         return browser.findByCssSelector("#HASH_LIST .rendered-view")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "There is no data to render a view from", "No data message not displayed");
+            });
+      },
+
+      "Check that the pagination controls are all hidden": function() {
+         return browser.findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page selector was not hidden");
+            })
+         .end()
+         .findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_BACK")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page back button was not hidden");
+            })
+         .end()
+         .findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_MARKER")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page indicator was not hidden");
+            })
+         .end()
+         .findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_FORWARD")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page forward button was not hidden");
+            })
+         .end()
+         .findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The items per page selector was not hidden");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   registerSuite({
+      name: "Pagination Tests (valid current page)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Paginator#currentPage=13&currentPageSize=20", "Pagination Tests (invalid current page)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check results": function() {
+         return browser.findAllByCssSelector("#HASH_LIST tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Unexpected number of results shown");
+            });
+      },
+
+      "Check that the pagination controls are all hidden": function() {
+         return browser.findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The page selector was hidden");
+            })
+         .end()
+         .findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_BACK")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The page back button was hidden");
+            })
+         .end()
+         .findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_MARKER")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The page indicator was hidden");
+            })
+         .end()
+         .findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_FORWARD")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The page forward button was hidden");
+            })
+         .end()
+         .findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The items per page selector was hidden");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
    // See AKU-330...
    registerSuite({
       name: "Scroll to item test",
