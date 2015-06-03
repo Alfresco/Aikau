@@ -152,6 +152,14 @@ define(["intern!object",
             });
       },
 
+      "Check number with commas is valid": function() {
+         return browser.findByCssSelector("#NS6 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Validation error message should NOT be displayed");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

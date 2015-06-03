@@ -77,6 +77,17 @@ model.jsonModel = {
                      value: 3,
                      max: 5
                   }
+               },
+               {
+                  id: "NS6",
+                  name: "alfresco/forms/controls/NumberSpinner", 
+                  config: {
+                     fieldId: "NS6",
+                     name: "five",
+                     label: "Handle commas",
+                     description: "This is a number spinner initialised to a value over a 1000",
+                     value: 1001
+                  }
                }
             ]
          }
