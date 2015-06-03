@@ -129,6 +129,20 @@ define(["intern!object",
             });
       },
 
+      "Test that user page size user preference is updated": function() {
+         return browser.findByCssSelector("tr.mx-row:nth-child(1) .mx-url")
+            .getVisibleText()
+            .then(function(text) {
+               assert.include(text, "aikau/proxy/alfresco/api/people/guest/preferences", "Page size preference not updated");
+            })
+         .end()
+         .findByCssSelector("tr.mx-row:nth-child(1) .mx-payload")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "{\"org\":{\"alfresco\":{\"share\":{\"documentList\":{\"documentsPerPage\":50}}}}}", "Page size preference not with correct value");
+            });
+      },
+
       "Test previous page button is still disabled (after increasing page size)": function() {
          browser.findAllByCssSelector("#PAGINATOR_PAGE_BACK.dijitDisabled")
             .then(function(elements) {
@@ -297,6 +311,24 @@ define(["intern!object",
             .then(function(text) {
                assert(text === "9", "Page number not correct, expected '9' but saw: " + text);
             });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   // See AKU-330...
+   registerSuite({
+      name: "Pagination Tests (Custom page sizes)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Paginator", "Pagination Tests (Custom page sizes)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
       },
 
       "Starting page is initialised and working (useHash=false)": function() {

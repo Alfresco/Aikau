@@ -21,6 +21,9 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         name: "aikauTesting/mockservices/PreferenceServiceMockXhr"
+      },
+      {
          name: "alfresco/layout/HorizontalWidgets",
          config: {
             widgets: [
@@ -62,6 +65,7 @@ model.jsonModel = {
                            name: "alfresco/lists/AlfSortablePaginatedList",
                            config: {
                               useHash: false,
+                              currentPageSize: 50, // This will be overridden by the user preference
                               widgets: [
                                  {
                                     name: "alfresco/lists/views/AlfListView",
