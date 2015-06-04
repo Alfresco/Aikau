@@ -75,12 +75,19 @@ define(["intern!object",
       },
 
       "Test menu code not removed on click": function() {
+         // Select "Private" (should succeed)...
          return browser.findByCssSelector("tr.dijitMenuItem:nth-of-type(3)")
             .click()
          .end()
          .findByCssSelector(".dijitMenuPopup")
             .then(null, function() {
                 assert(false, "The menu code should not have been removed");
+            })
+         .end()
+         .findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
+            .getVisibleText()
+            .then(function (text) {
+               assert.equal(text, "Private", "The drop-down was not reset on failure");
             });
       },
 
@@ -109,39 +116,68 @@ define(["intern!object",
       "Test menu failure item is displayed": function () {
          return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
             .click()
-            .end()
-            .findByCssSelector("tr.dijitMenuItem:nth-of-type(2)")
+         .end()
+         // Select "Moderated" (should fail, and reset to "Private")...
+         .findByCssSelector("tr.dijitMenuItem:nth-of-type(2)")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.warning:not(.hidden)")
+         .end()
+         .findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.warning:not(.hidden)")
             .then(function (elements) {
                assert(elements.length === 1, "The failure icon did not display");
+            })
+         .end()
+         .findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
+            .getVisibleText()
+            .then(function (text) {
+               assert.equal(text, "Private", "The drop-down was not reset on failure");
             });
       },
 
       "Test menu status icon is hidden on cancel": function () {
          return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
             .click()
-            .end()
-            .findByCssSelector("tr.dijitMenuItem:nth-of-type(1)")
+         .end()
+         .findByCssSelector("tr.dijitMenuItem:nth-of-type(1)")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator:not(.hidden)")
+         .end()
+         .findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator:not(.hidden)")
             .then(function (elements) {
                assert(elements.length === 0, "There is still a visible status icon when there shouldn't be");
+            })
+         .end()
+         .findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
+            .getVisibleText()
+            .then(function (text) {
+               assert.equal(text, "Private", "The drop-down was not reset on cancel");
             });
       },
 
       "Test menu spinner icon is displayed": function () {
          return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
             .click()
-            .end()
-            .findByCssSelector("tr.dijitMenuItem:nth-of-type(3)")
+         .end()
+         // Select "Public" (there should be no response so the spinner will just keep spinning...)
+         .findByCssSelector("tr.dijitMenuItem:nth-of-type(1)")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.processing:not(.hidden)")
+         .end()
+         .findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.processing:not(.hidden)")
             .then(function (elements) {
                assert(elements.length === 1, "The spinner icon is not present");
+            });
+      },
+
+      "Test escape key cancels action": function() {
+         return browser.pressKeys(keys.ESCAPE)
+            .findByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.processing")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The spinner should have been hidden on ESC");
+            })
+         .end()
+         .findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
+            .getVisibleText()
+            .then(function (text) {
+               assert.equal(text, "Private", "The drop-down was not reset on cancel");
             });
       },
 
@@ -155,28 +191,28 @@ define(["intern!object",
 
       "Test menu can be opened via keyboard": function() {
          return browser.pressKeys(keys.TAB)
-         .pressKeys(keys.TAB)
-         .pressKeys(keys.TAB)
-         .pressKeys(keys.TAB)
-         .pressKeys(keys.TAB)
-         .pressKeys(keys.ARROW_DOWN)
-         .sleep(500)
-         .findByCssSelector(".dijitMenuPopup")
-            .isDisplayed()
-            .then(function(result8) {
-               expect(result8).to.equal(true, "The drop down menu should be visible after key presses");
-            });
+            .pressKeys(keys.TAB)
+            .pressKeys(keys.TAB)
+            .pressKeys(keys.TAB)
+            .pressKeys(keys.TAB)
+            .pressKeys(keys.ARROW_DOWN)
+            .sleep(500)
+            .findByCssSelector(".dijitMenuPopup")
+               .isDisplayed()
+               .then(function(result8) {
+                  expect(result8).to.equal(true, "The drop down menu should be visible after key presses");
+               });
       },
 
       "Test menu hidden after keyboard selection": function() {
          return browser.pressKeys(keys.ARROW_DOWN)
-         .pressKeys(keys.RETURN)
-         .sleep(500)
-         .findByCssSelector(".dijitMenuPopup")
-            .isDisplayed()
-            .then(function(elements) {
-               expect(elements).to.equal(false, "The drop down menu should be hidden after key presses");
-            });
+            .pressKeys(keys.RETURN)
+            .sleep(500)
+            .findByCssSelector(".dijitMenuPopup")
+               .isDisplayed()
+               .then(function(elements) {
+                  expect(elements).to.equal(false, "The drop down menu should be hidden after key presses");
+               });
       },
 
       "Test menu published after keyboard selection": function() {

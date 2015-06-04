@@ -78,7 +78,9 @@ model.jsonModel = {
                                              {label: "Moderated", value: "MODERATED"},
                                              {label: "Private", value: "PRIVATE"}
                                           ]
-                                       }
+                                       },
+                                       cancellationPublishTopic: "CANCEL_UPDATE",
+                                       cancellationPublishPayloadType: "CURRENT_ITEM"
                                     }
                                  }
                               ]
