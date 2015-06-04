@@ -69,9 +69,11 @@ define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuGroup",
         "alfresco/menus/AlfCheckableMenuItem",
         "dijit/registry",
-        "dojo/dom-class"], 
+        "dojo/dom-class",
+        "dojo/Deferred",
+        "dojo/when"], 
         function(declare, AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin, lang, array, 
-                 AlfMenuBarSelect, AlfMenuGroups, AlfMenuGroup, AlfCheckableMenuItem, registry, domClass) {
+                 AlfMenuBarSelect, AlfMenuGroups, AlfMenuGroup, AlfCheckableMenuItem, registry, domClass, Deferred, when) {
 
    return declare([AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin], {
       
@@ -133,7 +135,7 @@ define(["dojo/_base/declare",
        * @default "ALF_PAGE_FORWARD"
        */
       pageForwardTopic: "ALF_PAGE_FORWARD",
-      
+
       /**
        * @instance
        * @listens documentsLoadedTopic
@@ -146,6 +148,12 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.docsPerpageSelectionTopic, lang.hitch(this, this.onDocumentsPerPageChange));
          this.alfSubscribe(this.pageBackTopic, lang.hitch(this, this.onPageBack));
          this.alfSubscribe(this.pageForwardTopic, lang.hitch(this, this.onPageForward));
+         this.alfSubscribe(this.documentLoadFailedTopic, lang.hitch(this, this.hideControls));
+
+         // We're setting up a promise here primarily to ensure that any attempt to work with the
+         // controls (e.g. if data fails to be loaded and we want to hide the controls) will wait
+         // until after the controls have been created.
+         this._controlsLoaded = new Deferred();
       },
       
       /**
@@ -218,6 +226,28 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Hides all the pagination controls.
+       *
+       * @instance
+       * @param  {object} payload Any payload included with the publication (not required)
+       */
+      hideControls: function alfresco_lists_Paginator__hideControls(/*jshint unused:false*/ payload) {
+         when(this._controlsLoaded, lang.hitch(this, function() {
+            if (this.pageSelector)
+            {
+               domClass.add(this.pageSelector.domNode, "hidden");
+            }
+            domClass.add(this.pageBack.domNode, "hidden");
+            domClass.add(this.pageMarker.domNode, "hidden");
+            domClass.add(this.pageForward.domNode, "hidden");
+            if (this.resultsPerPageGroup)
+            {
+               domClass.add(this.resultsPerPageGroup.domNode, "hidden");
+            }
+         }));
+      },
+
+      /**
        * The property in the response that indicates the starting index of overall data to request.
        *
        * @instance
@@ -254,18 +284,7 @@ define(["dojo/_base/declare",
             {
                // Hide pagination controls when there are no results...
                // Or if the startIndex is greater than the number of available results
-               // domClass.add(this.domNode, "hidden");
-               if (this.pageSelector)
-               {
-                  domClass.add(this.pageSelector.domNode, "hidden");
-               }
-               domClass.add(this.pageBack.domNode, "hidden");
-               domClass.add(this.pageMarker.domNode, "hidden");
-               domClass.add(this.pageForward.domNode, "hidden");
-               if (this.resultsPerPageGroup)
-               {
-                  domClass.add(this.resultsPerPageGroup.domNode, "hidden");
-               }
+               this.hideControls();
             }
             else
             {
@@ -609,6 +628,7 @@ define(["dojo/_base/declare",
             this.processLoadedDocuments(this.__deferredLoadedDocumentData);
          }
          delete this.__deferredLoadedDocumentData;
+         this._controlsLoaded.resolve();
       }
    });
 });

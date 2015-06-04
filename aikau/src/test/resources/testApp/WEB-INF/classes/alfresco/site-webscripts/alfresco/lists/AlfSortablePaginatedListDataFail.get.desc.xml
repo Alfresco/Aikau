@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfSortablePaginatedList (data failure)</shortname>
+  <description>Shows an AlfSortablePaginatedList configured to make a data request that will fail.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfSortablePaginatedListDataFail</url>
+</webscript>
