@@ -18,10 +18,13 @@
  */
 
 /**
- * This is a generic service for handling CRUD requests between widgets and the repository.
+ * This is a generic service for handling CRUD requests between widgets and the repository. By default
+ * all URLs will be encoded unless [encodeURIs]{@link module:alfresco/services/CrudService#encodeURIs}
+ * is configured to be false.
  *
  * @module alfresco/services/CrudService
  * @extends module:alfresco/core/Core
+ * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -44,6 +47,17 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/CrudService.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/CrudService.properties"}],
+
+      /**
+       * Indicates whether or not to call the JavaScript encodeURI function on URLs before they
+       * are passed to [serviceXhr]{@link module:alfresc/core/CoreXhr#serviceXhr}. This defaults
+       * to true but can be overridden if required.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      encodeURIs: true,
 
       /**
        * Constructor
@@ -108,15 +122,23 @@ define(["dojo/_base/declare",
        */
       getUrlFromPayload: function alfresco_services_CrudService__getUrlFromPayload(payload) {
          var url = lang.getObject("url", false, payload);
-         if (!url) {
+         if (!url) 
+         {
             this.alfLog("warn", "A request was made to service a CRUD request but no 'url' attribute was provided on the payload", payload, this);
-         } else {
+         } 
+         else 
+         {
             var urlType = payload.urlType;
-            if (!urlType || urlType === "PROXY") {
+            if (!urlType || urlType === "PROXY") 
+            {
                url = AlfConstants.PROXY_URI + url;
-            } else if (urlType === "SHARE") {
+            } 
+            else if (urlType === "SHARE") 
+            {
                url = AlfConstants.URL_SERVICECONTEXT + url;
-            } else {
+            }
+            else 
+            {
                this.alfLog("warn", "An unknown URL type was requested, using provided URL", payload, this);
             }
          }
@@ -170,7 +192,6 @@ define(["dojo/_base/declare",
        */
       onGetAll: function alfresco_services_CrudService__onGetAll(payload) {
          var url = this.getUrlFromPayload(payload);
-
          if (payload.pageSize)
          {
             url = this.addQueryParameter(url, "pageSize", payload.pageSize);
@@ -192,7 +213,7 @@ define(["dojo/_base/declare",
          }
 
          var config = {
-            url: url,
+            url: this.encodeURIs ? encodeURI(url) : url,
             data: this.clonePayload(payload),
             alfTopic: payload.alfResponseTopic || null,
             method: "GET"
@@ -200,10 +221,11 @@ define(["dojo/_base/declare",
 
          if (payload.preventCache)
          {
-            config.preventCache = payload.preventCache
+            config.preventCache = payload.preventCache;
          }
 
-         if (url) {
+         if (url) 
+         {
             this.serviceXhr(config);
          }
       },
@@ -219,7 +241,7 @@ define(["dojo/_base/declare",
          var url = this.getUrlFromPayload(payload);
          if (url) {
             this.serviceXhr({
-               url: url,
+               url: this.encodeURIs ? encodeURI(url) : url,
                data: this.clonePayload(payload),
                method: "GET"
             });
@@ -237,7 +259,7 @@ define(["dojo/_base/declare",
       onCreate: function alfresco_services_CrudService__onCreate(payload) {
          var url = this.getUrlFromPayload(payload);
          this.serviceXhr({
-            url: url,
+            url: this.encodeURIs ? encodeURI(url) : url,
             data: this.clonePayload(payload),
             method: "POST",
             alfTopic: payload.alfResponseTopic,
@@ -257,7 +279,7 @@ define(["dojo/_base/declare",
       onUpdate: function alfresco_services_CrudService__onUpdate(payload) {
          var url = this.getUrlFromPayload(payload);
          this.serviceXhr({
-            url: url,
+            url: this.encodeURIs ? encodeURI(url) : url,
             data: this.clonePayload(payload),
             method: "PUT",
             alfTopic: payload.alfResponseTopic,
@@ -282,10 +304,14 @@ define(["dojo/_base/declare",
          // TODO: Need to determine whether or not the ID should be provided in the payload or
          //       as part of the URL.
          var url = this.getUrlFromPayload(payload);
-         if (url !== null) {
-            if (payload.requiresConfirmation === true) {
+         if (url !== null) 
+         {
+            if (payload.requiresConfirmation === true) 
+            {
                this.requestDeleteConfirmation(url, payload);
-            } else {
+            }
+            else 
+            {
                this.performDelete(url, payload);
             }
          }
@@ -302,7 +328,6 @@ define(["dojo/_base/declare",
        * @param {object} payload The original request payload.
        */
       requestDeleteConfirmation: function alfresco_services_CrudService__requestDeleteConfirmation(url, payload) {
-
          var responseTopic = this.generateUuid();
          this._deleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onDeleteConfirmation), true);
 
@@ -354,7 +379,7 @@ define(["dojo/_base/declare",
        */
       performDelete: function alfresco_services_CrudService__performDelete(url, payload) {
          this.serviceXhr({
-            url: url,
+            url: this.encodeURIs ? encodeURI(url) : url,
             method: "DELETE",
             data: this.clonePayload(payload),
             alfTopic: payload.responseTopic,
@@ -386,7 +411,6 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig The configuration passed to the original XHR request.
        */
       failureCallback: function alfresco_services_CrudService__failureCallback(response, originalRequestConfig) {
-
          // Publish failure topic as necessary
          if (originalRequestConfig.alfTopic) {
             this.alfPublish(originalRequestConfig.alfTopic + "_FAILURE", {

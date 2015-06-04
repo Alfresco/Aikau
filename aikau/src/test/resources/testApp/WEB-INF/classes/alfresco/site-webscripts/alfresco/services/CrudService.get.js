@@ -119,6 +119,19 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "URL_ENCODING_REQUIRED_BUTTON",
+         config: {
+            label: "Encoded URI check",
+            publishTopic: "ALF_CRUD_GET_ALL",
+            publishPayload: {
+               url: "resources/nocache?filter=%moomin",
+               alfResponseTopic: "ALF_GET_ALL_PREVENT_CACHE",
+               failureMessage: "Test get all prevent cache message"
+            }
+         }
+      },
+      {
          name: "aikauTesting/mockservices/CrudServiceMockXhr"
       },
       {
