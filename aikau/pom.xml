@@ -134,7 +134,7 @@
                         <artifactItem>
                            <groupId>org.dojotoolkit</groupId>
                            <artifactId>dojo</artifactId>
-                           <version>1.10.4</version>
+                           <version>${dependency.dojo.version}</version>
                            <type>zip</type>
                            <classifier>distribution</classifier>
                            <overWrite>true</overWrite>
