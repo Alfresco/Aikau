@@ -19,7 +19,7 @@
 
 /**
  * This is a generic service for handling CRUD requests between widgets and the repository. By default
- * all URLs will be encoded unless [encodeURIs]{@link module:alfresco/services/CrudService#encodeURIs}
+ * all URLs will be encoded unless [encodeURIs]{@link module:alfresco/core/CoreXhr#encodeURIs}
  * is configured to be false.
  *
  * @module alfresco/services/CrudService
@@ -47,17 +47,6 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/CrudService.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/CrudService.properties"}],
-
-      /**
-       * Indicates whether or not to call the JavaScript encodeURI function on URLs before they
-       * are passed to [serviceXhr]{@link module:alfresc/core/CoreXhr#serviceXhr}. This defaults
-       * to true but can be overridden if required.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      encodeURIs: true,
 
       /**
        * Constructor
@@ -213,7 +202,7 @@ define(["dojo/_base/declare",
          }
 
          var config = {
-            url: this.encodeURIs ? encodeURI(url) : url,
+            url: url,
             data: this.clonePayload(payload),
             alfTopic: payload.alfResponseTopic || null,
             method: "GET"
@@ -241,7 +230,7 @@ define(["dojo/_base/declare",
          var url = this.getUrlFromPayload(payload);
          if (url) {
             this.serviceXhr({
-               url: this.encodeURIs ? encodeURI(url) : url,
+               url: url,
                data: this.clonePayload(payload),
                method: "GET"
             });
@@ -259,7 +248,7 @@ define(["dojo/_base/declare",
       onCreate: function alfresco_services_CrudService__onCreate(payload) {
          var url = this.getUrlFromPayload(payload);
          this.serviceXhr({
-            url: this.encodeURIs ? encodeURI(url) : url,
+            url: url,
             data: this.clonePayload(payload),
             method: "POST",
             alfTopic: payload.alfResponseTopic,
@@ -279,7 +268,7 @@ define(["dojo/_base/declare",
       onUpdate: function alfresco_services_CrudService__onUpdate(payload) {
          var url = this.getUrlFromPayload(payload);
          this.serviceXhr({
-            url: this.encodeURIs ? encodeURI(url) : url,
+            url: url,
             data: this.clonePayload(payload),
             method: "PUT",
             alfTopic: payload.alfResponseTopic,
@@ -379,7 +368,7 @@ define(["dojo/_base/declare",
        */
       performDelete: function alfresco_services_CrudService__performDelete(url, payload) {
          this.serviceXhr({
-            url: this.encodeURIs ? encodeURI(url) : url,
+            url: url,
             method: "DELETE",
             data: this.clonePayload(payload),
             alfTopic: payload.responseTopic,
