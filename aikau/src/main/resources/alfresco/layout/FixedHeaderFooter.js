@@ -18,38 +18,72 @@
  */
 
 /**
- * A layout control used to provide a scrollable central area with fixed-position header/footer widgets.
+ * <p>This widget provides a simple way in which you can keep a "header" and/or "footer" always visible whilst
+ * any overflowing main content is scrolled. The [header]{@link module:alfresco/layout/FixedHeaderFooter#widgetsForHeader},
+ * [footer]{@link module:alfresco/layout/FixedHeaderFooter#widgetsForFooter} and 
+ * [main content]{@link module:alfresco/layout/FixedHeaderFooter#widgetsForFooter} should be defined as standard
+ * widget models.</p>
+ * <p>The overall [height]{@link module:alfresco/layout/FixedHeaderFooter#height} of the widget can be explicitly 
+ * set but can also be left (or set) to the default value of "auto" which will make the widget take up all the available
+ * space in the client window below it. It is also possible to 
+ * [configure]{@link module:alfresco/layout/FixedHeaderFooter#recalculateAutoHeightOnResize} the widget so that it will
+ * automatically reset the height as the window changes in size.</p>
  *
- * @example <caption>Sample configuration:</caption>
+ * @example <caption>Example configuration:</caption>
  * {
  *    name: "alfresco/layout/FixedHeaderFooter",
  *    config: {
- *       height: "300px",
+ *       height: "auto",
+ *       recalculateAutoHeightOnResize: true,
  *       widgetsForHeader: [
  *          {
- *             name: "alfresco/logo/Logo"
+ *             name: "alfresco/menus/AlfMenuBar",
+ *             config: {
+ *                widgets: [
+ *                   {
+ *                      name: "alfresco/menus/AlfMenuBarItem",
+ *                      config: {
+ *                         label: "Menu item in header"
+ *                      }
+ *                   }
+ *                ]
+ *             }
  *          }
  *       ],
  *       widgets: [
  *          {
- *             name: "alfresco/logo/Logo"
- *          },
- *          {
- *             name: "alfresco/logo/Logo"
- *          },
- *          {
- *             name: "alfresco/logo/Logo"
- *          },
- *          {
- *             name: "alfresco/logo/Logo"
- *          },
- *          {
- *             name: "alfresco/logo/Logo"
+ *             name: "alfresco/lists/AlfList",
+ *             config: {
+ *                currentData: {
+ *                   items: [
+ *                      { name: "one" }, { name: "two" }, { name: "three" }
+ *                   ]
+ *                },
+ *                widgets: [
+ *                   {
+ *                      name: "alfresco/lists/views/HtmlListView",
+ *                      config: {
+ *                         propertyToRender: "name"
+ *                      }
+ *                   }
+ *                ]
+ *             }
  *          }
  *       ],
  *       widgetsForFooter: [
  *          {
- *             name: "alfresco/logo/Logo"
+ *             name: "alfresco/menus/AlfMenuBar",
+ *             config: {
+ *                popupMenusAbove: true,
+ *                widgets: [
+ *                   {
+ *                      name: "alfresco/menus/AlfMenuBarItem",
+ *                      config: {
+ *                         label: "Menu item in footer"
+ *                      }
+ *                   }
+ *                ]
+ *             }
  *          }
  *       ]
  *    }
@@ -58,6 +92,7 @@
  * @module alfresco/layout/FixedHeaderFooter
  * @extends module:alfresco/core/ProcessWidgets
  * @author Martin Doyle
+ * @author Dave Draper
  */
 define(["alfresco/core/ProcessWidgets",
         "alfresco/core/ResizeMixin",
