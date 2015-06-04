@@ -236,7 +236,7 @@ define(["dojo/_base/declare",
       onKeyUp: function alfresco_renderers_PublishingDropDownMenu__onKeyUp(evt) {
          if (evt.keyCode === 27)
          {
-            if (this.cancellationPublishTopic)
+            if (this.cancellationPublishTopic && this._reponsePending === true)
             {
                var payload = this.generatePayload(this.cancellationPublishPayload, 
                                                   this.currentItem, 
@@ -279,6 +279,7 @@ define(["dojo/_base/declare",
             updatePayload.responseTopic = responseTopic;
 
             // Request to make the update...
+            this._reponsePending = true;
             this.alfPublish(this.publishTopic, updatePayload, false);
          }
          else
@@ -298,8 +299,11 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._updateSuccessHandle,this._updateFailureHandle, this._updateCancelHandle]);
          domClass.add(this.processingNode, "hidden");
          domClass.remove(this.successNode, "hidden");
-         this.value = this._updatedValue;
          this.alfLog("log", "Update request success", payload);
+
+         // Update with the successfully applied value...
+         this.value = this._updatedValue;
+         this._reponsePending = false;
       },
 
       /**
@@ -316,12 +320,13 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._updateSuccessHandle,this._updateFailureHandle, this._updateCancelHandle]);
          domClass.add(this.processingNode, "hidden");
          domClass.remove(this.warningNode, "hidden");
+         this.alfLog("log", "Update request failed", payload);
 
          // Reset the value on failure...
          this._resetInProgress = true;
          this._dropDownWidget.setValue(this.value);
          this._resetInProgress = false;
-         this.alfLog("log", "Update request failed", payload);
+         this._reponsePending = false;
       },
 
       /**
@@ -338,6 +343,7 @@ define(["dojo/_base/declare",
          this._resetInProgress = true;
          this._dropDownWidget.setValue(this.value);
          this._resetInProgress = false;
+         this._reponsePending = false;
       }
    });
 });

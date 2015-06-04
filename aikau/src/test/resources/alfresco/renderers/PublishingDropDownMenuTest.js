@@ -181,6 +181,13 @@ define(["intern!object",
             });
       },
 
+      "Test escape key publishes cancellation topic": function() {
+         return browser.findAllByCssSelector(TestCommon.topicSelector("CANCEL_UPDATE", "publish", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Cancel publication not made on escape key");
+            });
+      },
+
       "Test menu publish is cleared on refresh": function() {
          return browser.refresh().end()
             .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_PUBLISHING_DROPDOWN_MENU", "alfTopic", "ALF_PUBLISHING_DROPDOWN_MENU"))
