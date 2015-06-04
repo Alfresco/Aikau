@@ -1055,6 +1055,7 @@ define(["dojo/_base/declare",
          this.alfLog("error", "Data Load Failed", response, originalRequestConfig);
          this.currentData = null;
          this.showDataLoadFailure();
+         this.alfPublish(this.documentLoadFailedTopic, {});
          this.alfPublish(this.requestFinishedTopic, {});
       },
 
