@@ -38,6 +38,17 @@ define(["dojo/_base/declare",
    return declare(null, {
 
       /**
+       * Indicates whether or not to call the JavaScript encodeURI function on URLs before they
+       * are passed to [serviceXhr]{@link module:alfresc/core/CoreXhr#serviceXhr}. This defaults
+       * to true but can be overridden if required.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      encodeURIs: true,
+
+      /**
        * Should a cache busting parameter be added to the URL?
        *
        * @instance
@@ -107,8 +118,7 @@ define(["dojo/_base/declare",
        * @param {serviceXhrConfig} config The configuration for the request
        */
       serviceXhr: function alfresco_core_CoreXhr__serviceXhr(config) {
-         /*jshint maxcomplexity:12*/
-
+         /*jshint maxcomplexity:false*/
          var _this = this;
 
          if (config)
@@ -159,7 +169,8 @@ define(["dojo/_base/declare",
                   options.preventCache = (config.preventCache !== null)? config.preventCache : this.preventCache;
                }
 
-               var request = xhr(config.url, options).then(function(response) {
+               var url = this.encodeURIs ? encodeURI(config.url) : config.url;
+               var request = xhr(url, options).then(function(response) {
 
                   var id = lang.getObject("requestId", false, config);
                   if (id)
