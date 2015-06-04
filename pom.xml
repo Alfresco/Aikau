@@ -129,7 +129,7 @@
                       </manifestEntries>
                       <manifestSections>
                           <manifestSection>
-                              <name>Libraries</name>
+                              <name>Aikau Libraries</name>
                               <manifestEntries>
                                 <Surf>${dependency.surf.version}</Surf>
                                 <Dojo>${dependency.dojo.version}</Dojo>
