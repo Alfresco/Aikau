@@ -87,6 +87,7 @@
  * @mixes external:dojo/_FocusMixin
  * @mixes module:alfresco/forms/controls/FormControlValidationMixin
  * @mixes module:alfresco/core/Core
+ * @extendSafe
  * @author Dave Draper
  * @Richard Smith
  */
@@ -631,7 +632,7 @@ define(["dojo/_base/declare",
        * @param {object} option The option configuration
        * @param {number} index The index of the option
        */
-      processOptionLabel: function alfresco_forms_controls_BaseFormControl__processOptionLabel(option, index) {
+      processOptionLabel: function alfresco_forms_controls_BaseFormControl__processOptionLabel(option, /*jshint unused:false*/ index) {
          // Get the option label and value attributes...
          // These are the values to look up in each item of the the options data array...
          // They default to "label" and "value" if not specified
@@ -660,7 +661,7 @@ define(["dojo/_base/declare",
        * @param {object} subscription The details of the subscription to create
        * @param {number} index The index of the topic
        */
-      createOptionsChangesTo: function alfresco_forms_controls_BaseFormControl__createOptionsChangesTo(optionsConfig, subscription, index) {
+      createOptionsChangesTo: function alfresco_forms_controls_BaseFormControl__createOptionsChangesTo(optionsConfig, subscription, /*jshint unused:false*/ index) {
          if (subscription.targetId)
          {
             // Create the subscription...
@@ -672,7 +673,6 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "No 'targetId' defined in subscription config", subscription, optionsConfig, this);
          }
-         
       },
       
       /**
@@ -684,7 +684,7 @@ define(["dojo/_base/declare",
        * @param {object} subscription The details of the subscription to create
        * @param {number} index The index of the topic
        */
-      createOptionsSubscriptions: function alfresco_forms_controls_BaseFormControl__createOptionsSubscriptions(optionsConfig, subscription, index) {
+      createOptionsSubscriptions: function alfresco_forms_controls_BaseFormControl__createOptionsSubscriptions(optionsConfig, subscription, /*jshint unused:false*/ index) {
          if (subscription.topic)
          {
             // Create the subscription...
@@ -918,7 +918,6 @@ define(["dojo/_base/declare",
        * @param {object} config
        */
       processConfig: function alfresco_forms_controls_BaseFormControl__processConfig(attribute, config) {
-         
          if (config)
          {
             // Set the initial value...
@@ -999,7 +998,7 @@ define(["dojo/_base/declare",
        * @param {object} rule The rule to process.
        * @param {number} index The index of the rule.
        */
-      processRule: function alfresco_forms_controls_BaseFormControl__processRule(attribute, rule, index) {
+      processRule: function alfresco_forms_controls_BaseFormControl__processRule(attribute, rule, /*jshint unused:false*/ index) {
          if (rule.targetId)
          {
             if (typeof this._rulesEngineData[attribute][rule.targetId] === "undefined")
@@ -1030,7 +1029,6 @@ define(["dojo/_base/declare",
        * @param {object} payload The publication posted on the topic that triggered the rule
        */
       evaluateRules: function alfresco_forms_controls_BaseFormControl__evaluateRules(attribute, payload) {
-         
          this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + this.fieldId + "'");
 
          // Set the current value that triggered the evaluation of rules...
@@ -1293,7 +1291,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload This is expected to be an empty object or null.
        */
-      onWidgetAddedToDocument: function alfresco_forms_controls_BaseFormControl__onWidgetAddedToDocument(payload) {
+      onWidgetAddedToDocument: function alfresco_forms_controls_BaseFormControl__onWidgetAddedToDocument(/*jshint unused:false*/ payload) {
+         // jshint maxstatements:false
          if ($.contains(document.body, this.domNode))
          {
             this.alfUnsubscribe(this.widgetProcessingCompleteSubscription);
@@ -1411,6 +1410,7 @@ define(["dojo/_base/declare",
        * once it's part of the document to ensure that no unsafe value (e.g. an XSS attack) can be
        * executed as part of the initial page rendering.
        *
+       * @extendable
        * @instance
        */
       completeWidgetSetup: function alfresco_forms_controls_BaseFormControl__completeWidgetSetup() {
@@ -1422,22 +1422,24 @@ define(["dojo/_base/declare",
        * Whenever a widgets value changes we need to publish the details out to the other form controls (that exist in the
        * same scope) so that they can modify their appearance/behaviour as necessary). This function sets up the default events 
        * that indicate that a wigets value has changed. This function can be overridden to handle non-Dojo widgets or when 
-       * multiple widgets represent a single control. 
-       * 
+       * multiple widgets represent a single control. If this function is overridden then the overriding function
+       * must ensure that the [onValueChangeEvent]{@link module:alfresco/forms/controls/BaseFormControl#onValueChangeEvent}
+       * is function is called when the value of the form control created by the
+       * [createFormControl]{@link module:alfresco/forms/controls/BaseFormControl#createFormControl} function
+       * changes.
+       *
        * @instance
+       * @overrideable
        */
       setupChangeEvents: function alfresco_forms_controls_BaseFormControl__setupChangeEvents() {
-         if (this.wrappedWidget)
+         if (this.wrappedWidget && typeof this.wrappedWidget.watch === "function")
          {
-            if (this.wrappedWidget.watch)
-            {
-               // TODO: Do we need to do anything with the watch handle when the widget is destroyed?
-               this.wrappedWidget.watch("value", lang.hitch(this, this.onValueChangeEvent));
-            } 
-            else
-            {
-               this.alfLog("warn", "No watch method found on wrapped widget", this);
-            }
+            // TODO: Do we need to do anything with the watch handle when the widget is destroyed?
+            this.wrappedWidget.watch("value", lang.hitch(this, this.onValueChangeEvent));
+         } 
+         else
+         {
+            this.alfLog("warn", "No watch method found on wrapped widget", this);
          }
       },
       
@@ -1461,6 +1463,7 @@ define(["dojo/_base/declare",
        * Dojo widgets (or use multiple widgets) should override this implementation to return the correct value.
        * 
        * @instance
+       * @extendable
        * @returns {object} The current value of the field.
        */
       getValue: function alfresco_forms_controls_BaseFormControl__getValue() {
@@ -1518,8 +1521,12 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       * Sets the value of the form control created by the 
+       * [createFormControl]{@link module:alfresco/forms/controls/BaseFormContro#createFormControl}
+       * function.
+       *  
        * @instance
+       * @extendable
        * @param {object} value The value to set.
        */
       setValue: function alfresco_forms_controls_BaseFormControl__setValue(value) {
@@ -1561,7 +1568,7 @@ define(["dojo/_base/declare",
        */
       valueSubscribe: function alfresco_forms_controls_BaseFormControl__valueSubscribe(payload) {
          var value = lang.getObject("value", false, payload);
-         if (value != null)
+         if (value || value === false || value === 0)
          {
             this.setValue(value);
          }
@@ -1635,31 +1642,37 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * This function must be overriden by extending widgets to create and return an actual form control instance.
        * 
        * @instance
-       * @param {object} config
+       * @overrideable
+       * @param {object} config The configuration to use when instantiating the form control
        */
-      createFormControl: function alfresco_forms_controls_BaseFormControl__createFormControl(config) {
+      createFormControl: function alfresco_forms_controls_BaseFormControl__createFormControl(/*jshint unused:false*/ config) {
          // Extension point
       },
       
       /**
+       * This is a method that is expected to be overridden. We won't even assume that the widget configuration
+       * will be standard Dojo configuration because we might be instantiated a custom or 3rd party library widget.
        * 
        * @instance
+       * @overrideable
        * @returns {object} The configuration for the form control.
        */
       getWidgetConfig: function alfresco_forms_controls_BaseFormControl__getWidgetConfig() {
-         // This is a method that is expected to be overridden. We won't even assume that the widget configuration
-         // will be standard Dojo configuration because we might be instantiated a custom or 3rd party library widget.
          return {};
       },
       
       /**
+       * This is a life-cycle is provided as an extension point to be overridden to perform additional 
+       * actions once the form control has been created.
        * 
        * @instance
+       * @extensionPoint
        */
       startup: function alfresco_forms_controls_BaseFormControl__startup() {
-         
+         // No action by default
       },
       
       /**

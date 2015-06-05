@@ -29,6 +29,7 @@
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @mixes module:alfresco/documentlibrary/_AlfHashMixin
+ * @pageSafe
  * @author Dave Draper
  */
 define(["dojo/_base/declare",

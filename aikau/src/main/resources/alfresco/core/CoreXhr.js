@@ -18,7 +18,11 @@
  */
 
 /**
+ * This module should be mixed into any widget or service that needs to make XHR calls to REST APIs on
+ * either the client or the Alfresco Repository.
+ * 
  * @module alfresco/core/CoreXhr
+ * @mixinSafe
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -115,6 +119,7 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
+       * @callable
        * @param {serviceXhrConfig} config The configuration for the request
        */
       serviceXhr: function alfresco_core_CoreXhr__serviceXhr(config) {
@@ -399,8 +404,7 @@ define(["dojo/_base/declare",
        * @instance
        * @return {*}
        */
-      isCsrfFilterEnabled: function alfresco_core_CoreXhr__isCsrfFilterEnabled()
-      {
+      isCsrfFilterEnabled: function alfresco_core_CoreXhr__isCsrfFilterEnabled() {
          return AlfConstants.CSRF_POLICY.enabled;
       },
 
@@ -410,8 +414,7 @@ define(["dojo/_base/declare",
        * @instance
        * @return {String} The name of the request header to put the token in.
        */
-      getCsrfHeader: function alfresco_core_CoreXhr__getCsrfHeader()
-      {
+      getCsrfHeader: function alfresco_core_CoreXhr__getCsrfHeader() {
          return this.csrfResolve(AlfConstants.CSRF_POLICY.header);
       },
 
@@ -421,8 +424,7 @@ define(["dojo/_base/declare",
        * @instance
        * @return {String} The name of the request header to put the token in.
        */
-      getCsrfParameter: function alfresco_core_CoreXhr__getCsrfParameter()
-      {
+      getCsrfParameter: function alfresco_core_CoreXhr__getCsrfParameter() {
          return this.csrfResolve(AlfConstants.CSRF_POLICY.parameter);
       },
 
@@ -432,8 +434,7 @@ define(["dojo/_base/declare",
        * @instance
        * @return {String} The name of the request header to put the token in.
        */
-      getCsrfCookie: function alfresco_core_CoreXhr__getCsrfCookie()
-      {
+      getCsrfCookie: function alfresco_core_CoreXhr__getCsrfCookie() {
          return this.csrfResolve(AlfConstants.CSRF_POLICY.cookie);
       },
 
@@ -446,8 +447,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns {String} The name of the request header to put the token in.
        */
-      getCsrfToken: function alfresco_core_CoreXhr__getCsrfToken()
-      {
+      getCsrfToken: function alfresco_core_CoreXhr__getCsrfToken() {
          var token = null;
          var cookieName = this.getCsrfCookie();
          if (cookieName)

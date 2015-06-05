@@ -22,6 +22,7 @@
  *
  * @module alfresco/core/CoreWidgetProcessing
  * @extends module:alfresco/core/Core
+ * @mixinSafe
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -44,6 +45,7 @@ define(["dojo/_base/declare",
        * widgets array is passed to the [processWidget]{@link module:alfresco/core/Core#processWidget} function
        * to handle it's creation.
        *
+       * @callable
        * @instance
        * @param {array} widgets An array of the widget definitions to instantiate
        * @param {element} rootNode The DOM node which should be used to add instantiated widgets to
@@ -181,7 +183,6 @@ define(["dojo/_base/declare",
        * @param {boolean} negate Whether or not to negate the evaluated rule
        */
       setupVisibilityConfigProcessing: function alfresco_core_CoreWidgetProcessing__setupVisibilityConfigProcessing(widget, negate) {
-
          // Set a default for negation if not provided...
          negate = (negate != null) ? negate : false;
 
@@ -343,6 +344,7 @@ define(["dojo/_base/declare",
       /**
        * This is an extension point for handling the completion of calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        *
+       * @extensionPoint
        * @instance
        * @param {Array} widgets An array of all the widgets that have been processed
        */
@@ -592,7 +594,8 @@ define(["dojo/_base/declare",
        * Processes filter configuration. This looks for either "renderFilters" (e.g. a filter containing
        * sub-filters) or "renderFilter" (i.e. a single filter containing one or more rules to evaluate).
        * It then delegates processing to the appropriate function
-       * 
+       *
+       * @instance
        * @param  {object} filterConfig The configuration to inspect
        * @return {boolean} True if all filters have evaluated successfully and false otherwise.
        */
@@ -619,7 +622,8 @@ define(["dojo/_base/declare",
       /**
        * This function is used to to determine whether or not a filter containing multiple sub-filters evaluates to true. 
        * The sub-filters themselves can contain further nested filters.
-       * 
+       *
+       * @instance
        * @param  {object[]} renderFilterConfig The configuration for the filter array
        * @param  {string} renderFilterMethod Either ANY or ALL 
        * @return {boolean} True if the filter passes and false otherwise
@@ -653,7 +657,8 @@ define(["dojo/_base/declare",
        * This function is used to to determine whether or not a single filter evaluates to true. Note that a single
        * filter can consist of multiple rules where all rules or just one rule must evaluate to true in order for
        * the filter to pass.
-       * 
+       *
+       * @instance
        * @param  {object[]} renderFilterConfig The configuration for the filter array
        * @param  {string} renderFilterMethod Either ANY or ALL 
        * @return {boolean} True if the filter passes and false otherwise

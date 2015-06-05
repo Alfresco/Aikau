@@ -106,6 +106,7 @@
  *
  * @module alfresco/services/DialogService
  * @extends module:alfresco/core/Core
+ * @pageSafe
  * @author Dave Draper
  * @author David Webster
  */
