@@ -18,12 +18,14 @@
  */
 
 /**
- * This renders a drop-down select menu using a wrapped [DojoSelect]{@link module:alfresco/forms/controls/Select}
+ * This renders a drop-down select menu using a wrapped [Select]{@link module:alfresco/forms/controls/Select}
  * widget that when changed will publish information about the change in value for the current rendered item.
  *
  * @module alfresco/renderers/PublishingDropDownMenu
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
+ * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -35,8 +37,10 @@ define(["dojo/_base/declare",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/forms/controls/Select",
         "dojo/_base/lang",
-        "dojo/dom-class"],
-        function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, ObjectTypeUtils, Select, lang, domClass) {
+        "dojo/dom-class",
+        "dojo/on"],
+        function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, ObjectTypeUtils, 
+                 Select, lang, domClass, on) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, _PublishPayloadMixin], {
 
@@ -86,17 +90,106 @@ define(["dojo/_base/declare",
       optionsConfig: null,
 
       /**
+       * Indicates that requests will be cancelled when in flight.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      cancelOnEscape: true,
+
+      /**
+       * If [cancelOnEscape]{@link module:alfresco/renderers/PublishingDropDownMenu#cancelOnEscape} is 
+       * configured to be true and the escape key is used to attempt to cancel an action, then this
+       * topic will be published. Note that this does not actually cancel anything itself, the operation
+       * is entirely reliant upon a subscribring widget or service being able to cancel whatever action
+       * is pending (e.g. cancelling an XHR request).
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      cancellationPublishTopic: null,
+
+      /**
+       * The payload that will be published on the 
+       * [cancellationPublishTopic]{@link module:alfresco/renderers/PublishingDropDownMenu#cancellationPublishTopic}
+       * topic.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      cancellationPublishPayload: null,
+
+      /**
+       * Indicates whether or not the payload published on the 
+       * [cancellationPublishTopic]{@link module:alfresco/renderers/PublishingDropDownMenu#cancellationPublishTopic}
+       * topic will be published globally.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      cancellationPublishGlobal: false,
+
+      /**
+       * Indicates whether or not the payload published on the 
+       * [cancellationPublishTopic]{@link module:alfresco/renderers/PublishingDropDownMenu#cancellationPublishTopic}
+       * topic will be published on the parent scope.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      cancellationPublishToParent: false,
+
+      /**
+       * Sets the type of payload to be published on the 
+       * [cancellationPublishTopic]{@link module:alfresco/renderers/PublishingDropDownMenu#cancellationPublishTopic}
+       * topic.
+       * 
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      cancellationPublishPayloadType: null,
+
+      /**
+       * Indicates whether or not the payload published on the 
+       * [cancellationPublishTopic]{@link module:alfresco/renderers/PublishingDropDownMenu#cancellationPublishTopic}
+       * topic should have the current item value mixed into it.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      cancellationPublishPayloadItemMixin: true,
+
+      /**
+       * Defines any modifying functions that should be applied to the payload to be published on the 
+       * [cancellationPublishTopic]{@link module:alfresco/renderers/PublishingDropDownMenu#cancellationPublishTopic}
+       * topic. These are only used when the 
+       * [cancellationPublishPayloadType]{@link module:alfresco/renderers/PublishingDropDownMenu#cancellationPublishPayloadType}
+       * is configured to be "PROCESS"
+       * 
+       * @instance
+       * @type {string[]}
+       * @default null
+       */
+      cancellationPublishPayloadModifiers: null,
+
+      /**
        *
        * @instance
        */
       postCreate: function alfresco_renderers_PublishingDropDownMenu__postCreate() {
-
          if (ObjectTypeUtils.isString(this.propertyToRender) &&
              ObjectTypeUtils.isObject(this.currentItem) &&
              lang.exists(this.propertyToRender, this.currentItem))
          {
             // Get the value of the property to render...
-            var value = lang.getObject(this.propertyToRender, false, this.currentItem);
+            this.value = lang.getObject(this.propertyToRender, false, this.currentItem);
 
             // Set up the values needed to handle the pub/sub events coming out of the wrapped dropdown...
             var uuid = this.generateUuid();
@@ -107,23 +200,53 @@ define(["dojo/_base/declare",
             this._dropDownWidget = new Select({
                pubSubScope: uuid,
                fieldId: fieldId,
-               value: value,
+               value: this.value,
                optionsConfig: this.optionsConfig
             }, this.dropDownNode);
 
             // Create the subscription AFTER the widget has been instantiated so that we don't
             // unnecessarily process the setup publications which are intended to be processed by
             // other controls in the same scoped form...
-            this.alfSubscribe(subscriptionTopic, lang.hitch(this, "onPublishChange"), true);
+            this.alfSubscribe(subscriptionTopic, lang.hitch(this, this.onPublishChange), true);
 
             if(this.additionalCssClasses)
             {
                domClass.add(this.domNode, this.additionalCssClasses);
             }
+
+            if (this.cancelOnEscape === true)
+            {
+               on(document, "keyup", lang.hitch(this, this.onKeyUp));
+            }
          }
          else
          {
             this.alfLog("warn", "Property for PublishingDropDown renderer does not exist:", this);
+         }
+      },
+
+      /**
+       * When [cancelOnEscape]{@link module:alfresco/renderers/PublishingDropDownMenu#cancelOnEscape} is
+       * configured to be true and the escape key is pressed whilst an update request is in flight then
+       * it will be cancelled.
+       *
+       * @instance
+       * @param  {object} evt The key up event
+       */
+      onKeyUp: function alfresco_renderers_PublishingDropDownMenu__onKeyUp(evt) {
+         if (evt.keyCode === 27)
+         {
+            if (this.cancellationPublishTopic && this._reponsePending === true)
+            {
+               var payload = this.generatePayload(this.cancellationPublishPayload, 
+                                                  this.currentItem, 
+                                                  null, 
+                                                  this.cancellationPublishPayloadType, 
+                                                  this.cancellationPublishPayloadItemMixin, 
+                                                  this.cancellationPublishPayloadModifiers);
+               this.alfPublish(this.cancellationPublishTopic, payload, this.cancellationPublishGlobal, this.cancellationPublishToParent);
+            }
+            this.onChangeCancel();
          }
       },
 
@@ -135,9 +258,12 @@ define(["dojo/_base/declare",
       onPublishChange: function alfresco_renderers_PublishingDropDownMenu__onPublishChange(payload) {
          this.alfLog("log", "Drop down property changed", payload);
 
-         if (this.publishTopic !== null)
+         if (this.publishTopic !== null && !this._resetInProgress)
          {
-            var updatePayload = this.generatePayload(this.publishPayload, this.currentItem, payload, this.publishPayloadType, this.publishPayloadItemMixin);
+            var updatePayload = this.generatePayload(this.publishPayload, this.currentItem, payload, this.publishPayloadType, this.publishPayloadItemMixin, this.publishPayloadModifiers);
+
+            // Get the selected value, this will only be confirmed on publication success
+            this._updatedValue = payload.value;
 
             // Hide any previously displayed warning image and show the processing image...
             domClass.remove(this.processingNode, "hidden");
@@ -146,13 +272,14 @@ define(["dojo/_base/declare",
 
             // Genereate a uuid for the response to ensure we only provide an update for our request...
             var responseTopic = this.generateUuid();
-            this._updateSuccessHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onChangeSuccess"), false);
-            this._updateFailureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, "onChangeFailure"), false);
-            this._updateCancelHandle = this.alfSubscribe(responseTopic + "_CANCEL", lang.hitch(this, "onChangeCancel"), false);
+            this._updateSuccessHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onChangeSuccess), false);
+            this._updateFailureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onChangeFailure), false);
+            this._updateCancelHandle = this.alfSubscribe(responseTopic + "_CANCEL", lang.hitch(this, this.onChangeCancel), false);
 
             updatePayload.responseTopic = responseTopic;
 
             // Request to make the update...
+            this._reponsePending = true;
             this.alfPublish(this.publishTopic, updatePayload, false);
          }
          else
@@ -173,6 +300,10 @@ define(["dojo/_base/declare",
          domClass.add(this.processingNode, "hidden");
          domClass.remove(this.successNode, "hidden");
          this.alfLog("log", "Update request success", payload);
+
+         // Update with the successfully applied value...
+         this.value = this._updatedValue;
+         this._reponsePending = false;
       },
 
       /**
@@ -190,6 +321,12 @@ define(["dojo/_base/declare",
          domClass.add(this.processingNode, "hidden");
          domClass.remove(this.warningNode, "hidden");
          this.alfLog("log", "Update request failed", payload);
+
+         // Reset the value on failure...
+         this._resetInProgress = true;
+         this._dropDownWidget.setValue(this.value);
+         this._resetInProgress = false;
+         this._reponsePending = false;
       },
 
       /**
@@ -201,6 +338,12 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._updateSuccessHandle, this._updateFailureHandle, this._updateCancelHandle]);
          domClass.add(this.processingNode, "hidden");
          this.alfLog("log", "Update request cancelled", payload);
+
+         // Reset the value on cancellation...
+         this._resetInProgress = true;
+         this._dropDownWidget.setValue(this.value);
+         this._resetInProgress = false;
+         this._reponsePending = false;
       }
    });
 });
