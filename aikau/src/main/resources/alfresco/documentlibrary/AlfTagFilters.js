@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -153,7 +153,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to destroy
        * @param {number} index The index of the widget
        */
-      clearTags: function alfresco_documentlibrary_AlfTagFilters__clearTags(widget, index) {
+      clearTags: function alfresco_documentlibrary_AlfTagFilters__clearTags(widget, /*jshint unused:false*/ index) {
          if (typeof widget.destroy === "function")
          {
             widget.destroy();
@@ -168,8 +168,8 @@ define(["dojo/_base/declare",
        */
       createTagFilter: function alfresco_documentlibrary_AlfTagFilters__createTagFilter(tagData) {
          if (tagData && 
-             tagData.name != null &&
-             tagData.count != null)
+             tagData.name &&
+             tagData.count)
          {
             var tagFilter = new AlfDocumentFilter({
                filterSelectionTopic: this.filterSelectionTopic,
@@ -200,7 +200,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onDocumentTagged: function alfresco_documentlibrary_AlfTagFilters__onDocumentTagged(payload) {
+      onDocumentTagged: function alfresco_documentlibrary_AlfTagFilters__onDocumentTagged(/*jshint unused:false*/ payload) {
       },
       
       /**
@@ -209,8 +209,8 @@ define(["dojo/_base/declare",
        * @param {object} tagFilter One of the existing filters to compare against
        * @param {number} index The index of the tag filter being compared.
        */
-      compareTags: function alfresco_documentlibrary_AlfTagFilters__compareTags(tag, tagFilter, index) {
-         return tagFilter.filterData == tag;
+      compareTags: function alfresco_documentlibrary_AlfTagFilters__compareTags(tag, tagFilter, /*jshint unused:false*/ index) {
+         return tagFilter.filterData === tag;
       }
    });
 });

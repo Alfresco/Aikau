@@ -279,7 +279,6 @@ define(["dojo/_base/declare",
          if (payload && payload.node)
          {
             this.currentNode = payload.node;
-            this.renderPathBreadcrumbTrail();
          }
          else
          {

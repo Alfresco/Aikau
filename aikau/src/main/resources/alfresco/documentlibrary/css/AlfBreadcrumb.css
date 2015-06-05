@@ -9,7 +9,7 @@
 }
 .alfresco-documentlibrary-AlfBreadcrumb a {
    text-decoration: none; 
-   padding: 5px 0 5px 50px;
+   padding: 5px 15px 5px 30px;
    background: @breadcrumb-background-color;
    position: relative; 
    display: block;
