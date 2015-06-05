@@ -19,17 +19,17 @@
 
 /**
  * <p>This service subscribes to [ALF_CREATE_FORM_DIALOG_REQUEST]{@link module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST}
- * and [ALF_CREATE_DIALOG_REQUEST]{@link module:alfresco/services/DialogService~event:ALF_CREATE_DIALOG_REQUEST} topics 
+ * and [ALF_CREATE_DIALOG_REQUEST]{@link module:alfresco/services/DialogService~event:ALF_CREATE_DIALOG_REQUEST} topics
  * and should be used to manage [dialogs]{@link module:alfresco/dialogs/AlfDialog} displayed on Aikau pages.</p>
- * <p>When creating a form dialog the value of the form will be published on the topic set by the <b>formSubmissionTopic</b> 
+ * <p>When creating a form dialog the value of the form will be published on the topic set by the <b>formSubmissionTopic</b>
  * attribute. You can include additional data in the published payload by using the <b>formSubmissionPayloadMixin</b> attribute.
- * You only need to include the form controls in the <b>widgets</b> attribute - the underlying [form]{@link module:alfresco/forms/Form} 
+ * You only need to include the form controls in the <b>widgets</b> attribute - the underlying [form]{@link module:alfresco/forms/Form}
  * will be created automatically.</p>
  * <p>When creating a normal dialog any buttons included in the dialog will have its payload updated to include a
- * <b>dialogContent</b> attribute that will be an array containing all the root widgets that were created from the 
+ * <b>dialogContent</b> attribute that will be an array containing all the root widgets that were created from the
  * <b>widgetsContent</b> attribute.</p>
  * <p>It is strongly recommended that you include a <b>dialogId</b> attribute when requesting to create either type of dialog since
- * it is used to help the service manage the dialogs. It is only possible to stack dialogs (e.g. display one dialog on top 
+ * it is used to help the service manage the dialogs. It is only possible to stack dialogs (e.g. display one dialog on top
  * of another) when the dialogs have different <b>dialogId</b> values. If another dialog with the same <b>dialogId</b> then any existing
  * dialog with that same <b>dialogId</b> will be destroyed. This is done to ensure that the browser DOM does not become
  * over populated with unusable elements</p>
@@ -175,7 +175,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.publishTopic, lang.hitch(this, this.onCreateFormDialogRequest));
          this.alfSubscribe("ALF_CREATE_DIALOG_REQUEST", lang.hitch(this, this.onCreateDialogRequest));
 
-         // Create a reference of IDs to dialogs... 
+         // Create a reference of IDs to dialogs...
          // The idea is that we shouldn't have multiple instances of a dialog with the same ID, but we
          // can have multiple dialogs with different IDs...
          this.idToDialogMap = {};
@@ -328,7 +328,7 @@ define(["dojo/_base/declare",
        * Handles requests to create the [dialog]{@link module:alfresco/dialogs/AlfDialog} containining a
        * [form]{@link module:alfresco/forms/Form}. It will delete any previously created dialog (to ensure
        * no stale data is displayed) and create a new dialog containing the form defined.
-       * 
+       *
        * @instance
        * @param {module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST} payload The payload published on the request topic.
        */
@@ -418,10 +418,12 @@ define(["dojo/_base/declare",
 
          // If a specific dialogCloseTopic has been requeste then add the "confirmationButton" CSS class as
          // a value that will suppress dialog closure.
-         var suppressCloseClasses = config.dialogCloseTopic ? ["confirmationButton"]: null;
-         
+         var suppressCloseClasses = config.dialogCloseTopic ? ["confirmationButton"]: null,
+            dialogId = config.dialogId ? config.dialogId : this.generateUuid();
+
+
          var dialogConfig = {
-            id: config.dialogId ? config.dialogId : this.generateUuid(),
+            id: dialogId,
             title: this.message(config.dialogTitle || ""),
             pubSubScope: config.pubSubScope, // Scope the dialog content so that it doesn't pollute any other widgets,,
             handleOverflow: handleOverflow,
@@ -437,6 +439,7 @@ define(["dojo/_base/declare",
                   {
                      name: "alfresco/buttons/AlfButton",
                      config: {
+                        id: (config.dialogConfirmationButtonId) ? config.dialogConfirmationButtonId : dialogId + "_OK",
                         label: config.dialogConfirmationButtonTitle,
                         disableOnInvalidControls: true,
                         additionalCssClasses: "confirmationButton",
@@ -450,6 +453,7 @@ define(["dojo/_base/declare",
                   {
                      name: "alfresco/buttons/AlfButton",
                      config: {
+                        id: (config.dialogCancellationButtonId) ? config.dialogCancellationButtonId : dialogId + "_CANCEL",
                         label: config.dialogCancellationButtonTitle,
                         additionalCssClasses: "cancellationButton",
                         publishTopic: "ALF_CLOSE_DIALOG"
