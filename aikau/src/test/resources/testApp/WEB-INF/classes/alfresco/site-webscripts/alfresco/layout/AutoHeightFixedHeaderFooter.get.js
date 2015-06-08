@@ -92,7 +92,6 @@ model.jsonModel = {
                      popupMenusAbove: true,
                      useHash: false,
                      documentsPerPage: 10,
-                     hidePageSizeOnWidth: 10,
                      pageSizes: [5,10,20]
                   }
                }

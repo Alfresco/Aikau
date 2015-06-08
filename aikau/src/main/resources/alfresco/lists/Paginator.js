@@ -408,16 +408,6 @@ define(["dojo/_base/declare",
       pageSelectorGroup: null,
       
       /**
-       * This is the minimum width the container node must be in order for the page size selector
-       * to be displayed.
-       *
-       * @instance
-       * @type {number}
-       * @default 1024
-       */
-      hidePageSizeOnWidth: 1024,
-
-      /**
        * Indicates whether the paginator should be displayed in "compact" mode where only
        * the back and forward buttons are displayed.
        *
@@ -577,7 +567,6 @@ define(["dojo/_base/declare",
                   id: this.id + "_RESULTS_PER_PAGE_SELECTOR",
                   label: this.message("list.paginator.docsPerPageSelect.label"),
                   selectionTopic: this.docsPerpageSelectionTopic,
-                  minRwdWidth: this.hidePageSizeOnWidth,
                   widgets: [
                      {
                         name: "alfresco/menus/AlfMenuGroup",

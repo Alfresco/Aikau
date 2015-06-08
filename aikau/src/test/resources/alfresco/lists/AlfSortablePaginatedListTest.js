@@ -121,6 +121,15 @@ define(["intern!object",
             });
       },
 
+      "Resize and check that controls are all still hidden": function() {
+         return browser.setWindowSize(null, 1024, 300)
+            .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The items per page selector was revealed on resize");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

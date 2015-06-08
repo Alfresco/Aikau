@@ -24,7 +24,6 @@ model.jsonModel = {
                   name: "alfresco/lists/Paginator",
                   config: {
                      documentsPerPage: 10,
-                     hidePageSizeOnWidth: 100,
                      pageSizes: [5,10,20]
                   }
                },
