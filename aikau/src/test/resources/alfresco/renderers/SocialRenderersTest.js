@@ -28,7 +28,7 @@ define(["intern!object",
         function (registerSuite, expect, assert, require, TestCommon) {
 
    var toggleSelector = function(id, status) {
-      return "#" + id + " ." + status;
+      return "#" + id + "_ITEM_0 ." + status;
    };
 
    var browser;
@@ -85,7 +85,7 @@ define(["intern!object",
       },
 
       "Like the document": function() {
-         return browser.findByCssSelector("#LIKES")
+         return browser.findByCssSelector("#LIKES_ITEM_0")
             .click()
          .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_ADD", "publish", "any"))
@@ -119,7 +119,7 @@ define(["intern!object",
       },
 
       "Unlike the document": function() {
-         return browser.findByCssSelector("#LIKES")
+         return browser.findByCssSelector("#LIKES_ITEM_0")
             .click()
          .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_REMOVE", "publish", "any"))
@@ -202,7 +202,7 @@ define(["intern!object",
       },
 
       "Favourite a document": function() {
-         return browser.findByCssSelector("#FAVOURITES")
+         return browser.findByCssSelector("#FAVOURITES_ITEM_0")
             .click()
          .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE", "publish", "any"))
@@ -228,7 +228,7 @@ define(["intern!object",
       },
 
       "Remove favourite": function() {
-         return browser.findByCssSelector("#FAVOURITES")
+         return browser.findByCssSelector("#FAVOURITES_ITEM_0")
             .click()
          .end()
          .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE", "publish", "any"))

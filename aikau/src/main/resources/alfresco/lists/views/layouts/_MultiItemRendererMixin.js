@@ -323,15 +323,12 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to add the styling to
        * @param {number} index The index of the widget
        */
-      rootWidgetProcessing: function alfresco_lists_views_layout___MultiItemRendererMixin__rootWidgetProcessing(widget, index) {
+      rootWidgetProcessing: function alfresco_lists_views_layout___MultiItemRendererMixin__rootWidgetProcessing(widget, /*jshint unused:false*/ index) {
          domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin--item");
          if (!this.rootWidgetSubscriptions)
          {
             this.rootWidgetSubscriptions = [];
          }
-
-         // Create an id based on the index of the item...
-         widget.domNode.id = this.id + "_ITEM_" + index;
 
          if (this.supportsItemSelection === true)
          {
