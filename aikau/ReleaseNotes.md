@@ -1,13 +1,10 @@
-Aikau 1.0.20 Release Notes
+Aikau 1.0.21 Release Notes
 ==========================
 
-New deprecations:
------------------
-* alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
-
-Previous deprecations:
+Current deprecations:
 ---------------------
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
+* alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
 * alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
 * alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
 * alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
@@ -38,6 +35,17 @@ Previous deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
 ----------------
+1.0.21:
+* [AKU-331](https://issues.alfresco.com/jira/browse/AKU-331)       - Updated alfresco/services/CoreXhr to support configurable encoding of URLs
+* [AKU-336](https://issues.alfresco.com/jira/browse/AKU-336)       - Began to annotate modules with support status
+* [AKU-341](https://issues.alfresco.com/jira/browse/AKU-341)       - Ensure alfresco/forms/controls/NumberSpinner can be initialised with value over 999 without initial validation error
+* [AKU-343](https://issues.alfresco.com/jira/browse/AKU-343)       - Improved alfresco/lists/Paginator preference handling
+* [AKU-344](https://issues.alfresco.com/jira/browse/AKU-344)       - Improved cancellation handling in alfresco/renderers/PublishingDropDownMenu
+* [AKU-347](https://issues.alfresco.com/jira/browse/AKU-347)       - Ensure alfresco/documentlibrary/AlfBreadcrumbTrail can be wrapped
+* [AKU-350](https://issues.alfresco.com/jira/browse/AKU-350)       - Improved default config rendering of alfresco/layout/FixedHeaderFooter
+* [AKU-352](https://issues.alfresco.com/jira/browse/AKU-352)       - Improved alfresco/lists/Paginator control visibility handling on invalid data
+ 
+
 1.0.20:
 * [AKU-298](https://issues.alfresco.com/jira/browse/AKU-298)       - Global support for "additionalCssClasses" attribute
 * [AKU-301](https://issues.alfresco.com/jira/browse/AKU-301)       - Configurable edit publication for drag and dropped items
