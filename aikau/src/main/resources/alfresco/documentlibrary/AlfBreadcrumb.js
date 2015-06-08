@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        * Implements the Dojo widget lifecycle method to set the label of the widget
        * @instance
        */
-      postCreate: function alfresco_documentlibrary_AlfBreadcrumbTrail__postCreate() {
+      postCreate: function alfresco_documentlibrary_AlfBreadcrumb__postCreate() {
          if (this.label)
          {
             this.breadcrumbNode.innerHTML = this.message(this.label);
