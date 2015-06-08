@@ -245,7 +245,6 @@ define(["dojo/_base/declare",
                domClass.add(this.resultsPerPageGroup.domNode, "hidden");
             }
          }));
-         this._hideControlsOnResize = true;
       },
 
       /**
@@ -289,9 +288,6 @@ define(["dojo/_base/declare",
             }
             else
             {
-               // Ensure that controls can be redisplayed...
-               this._hideControlsOnResize = false;
-
                // Make sure the pagination controls aren't hidden...
                // domClass.remove(this.domNode, "hidden");
                if (this.pageSelector)
