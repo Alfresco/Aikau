@@ -18,6 +18,14 @@
  */
 
 /**
+ * This mixin module extends [CoreWidgetProcessing]{@link module:alfresco/core/CoreWidgetProcessing} to provide
+ * some additional identification processing for widgets in the alfresco/lists/layouts package. This is necessary to ensure
+ * that an "id" attribute can be given to an widget in the alfresco/renderers package and for that attribute to be
+ * updated to include the index of the current item. This is required because the renderers and list layout controls
+ * are typically used when iterating over multiple items and Aikau ensures that each widget has a unique "id". Therefore
+ * in order to be able to use unique identifiers within a page model it is necessary to update the "id" on each iteration
+ * to prevent duplications.
+ * 
  * @module alfresco/lists/views/layouts/_LayoutMixin
  * @extends module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper

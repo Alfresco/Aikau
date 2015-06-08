@@ -41,11 +41,10 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-style",
-        "dojo/dom-attr",
         "dojo/on",
         "dojo/_base/event"], 
         function(declare, CoreWidgetProcessing, ObjectProcessingMixin, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
-                 domClass, array, lang, domStyle, domAttr, on, event) {
+                 domClass, array, lang, domStyle, on, event) {
    
    return declare([CoreWidgetProcessing, ObjectProcessingMixin, _AlfDocumentListTopicMixin], {
 
