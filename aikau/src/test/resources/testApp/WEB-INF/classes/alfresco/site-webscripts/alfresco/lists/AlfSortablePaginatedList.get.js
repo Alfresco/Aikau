@@ -38,7 +38,6 @@ model.jsonModel = {
                            config: {
                               useHash: true,
                               documentsPerPage: 10,
-                              hidePageSizeOnWidth: 100,
                               pageSizes: [5,10,20]
                            }
                         }
