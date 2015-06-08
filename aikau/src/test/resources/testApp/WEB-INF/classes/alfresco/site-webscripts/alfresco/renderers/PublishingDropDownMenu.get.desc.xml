@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>PublishingDropDownMenu Test</shortname>
-  <description>This WebScript defines the PublishingDropDownMenu page test</description>
+  <shortname>PublishingDropDownMenu</shortname>
+  <description>Shows a list that includes examples of the alfresco/renderers/PublishingDropDownMenu. This renderer can be used to publish updates about the value it is changed to as the user makes those changes.</description>
   <family>aikau-unit-tests</family>
   <url>/PublishingDropDownMenu</url>
 </webscript>

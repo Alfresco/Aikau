@@ -25,7 +25,7 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -34,11 +34,11 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Row.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing",
+        "alfresco/lists/views/layouts/_LayoutMixin",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing, domClass) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, _LayoutMixin, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing], {
+   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _LayoutMixin], {
       
       /**
        * An array of the CSS files to use with this widget.

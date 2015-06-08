@@ -188,6 +188,38 @@ define(["intern!object",
             });
       },
 
+      "Test use in dialog": function() {
+         return browser.findByCssSelector("#SHOW_DIALOG_label")
+            .click()
+         .end()
+         // Wait for dialog...
+         .findAllByCssSelector("#DIALOG1.dialogDisplayed")
+         .end()
+         .findByCssSelector("#DIALOG_PDM_ITEM_2_SELECT_CONTROL")
+            .click()
+         .end()
+         // Select "Public" (there should be no response so the spinner will just keep spinning...)
+         .findByCssSelector("#DIALOG_PDM_ITEM_2_SELECT_CONTROL_menu tr:nth-child(1) .dijitMenuItemLabel")
+            .click()
+         .end()
+         .findByCssSelector("#DIALOG1 tr:nth-child(3) .alfresco-renderers-PublishingDropDownMenu .indicator.processing")
+            .isDisplayed()
+            .then(function (displayed) {
+               assert.isTrue(displayed, "The spinner icon is not present");
+            })
+         .end()
+         .findByCssSelector(".dijitDialogCloseIcon")
+            .click()
+         .end()
+         // Wait for dialog to be hidden...
+         .findAllByCssSelector("#DIALOG1.dialogHidden")
+         .end()
+         .findAllByCssSelector(TestCommon.topicSelector("CANCEL_UPDATE", "publish", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "Cancel publication not made on escape key");
+            });
+      },
+
       "Test menu publish is cleared on refresh": function() {
          return browser.refresh().end()
             .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_PUBLISHING_DROPDOWN_MENU", "alfTopic", "ALF_PUBLISHING_DROPDOWN_MENU"))

@@ -27,7 +27,7 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -38,7 +38,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Grid.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing",
+        "alfresco/lists/views/layouts/_LayoutMixin",
         "dojo/keys",
         "dojo/_base/lang",
         "dojo/_base/array",
@@ -46,12 +46,11 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/query",
         "dojo/dom-style",
-        "dijit/registry",
-        "dojo/dom",
-        "dojo/on"], 
-        function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing, keys, lang, array, domConstruct, domGeom, query, domStyle, registry, dom, on) {
+        "dijit/registry"], 
+        function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, template, _MultiItemRendererMixin, 
+                 AlfCore, _LayoutMixin, keys, lang, array, domConstruct, domGeom, query, domStyle, registry) {
 
-   return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing], {
+   return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, _MultiItemRendererMixin, AlfCore, _LayoutMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -255,7 +254,7 @@ define(["dojo/_base/declare",
        * @param {element} node The node to set width on
        * @param {number} index The current index of the element in the array
        */
-      resizeCell: function alfresco_lists_views_layouts_Grid__resizeCell(containerNodeMarginBox, widthToSet, node, index) {
+      resizeCell: function alfresco_lists_views_layouts_Grid__resizeCell(containerNodeMarginBox, widthToSet, node, /*jshint unused:false*/ index) {
          domStyle.set(node, {"width": widthToSet});
          var dimensions = {
             w: widthToSet,
@@ -272,9 +271,9 @@ define(["dojo/_base/declare",
        * @param {object} widgetNode The DOM node that possibly has a widget associated. Use registry to check
        * @param {integer} index The index of the node
        */
-      resizeWidget: function alfresco_lists_views_layouts_Grid__resizeWidget(dimensions, widgetNode, index) {
+      resizeWidget: function alfresco_lists_views_layouts_Grid__resizeWidget(dimensions, widgetNode, /*jshint unused:false*/ index) {
          var widget = registry.byNode(widgetNode);
-         if (widget != null && typeof widget.resize === "function")
+         if (widget && typeof widget.resize === "function")
          {
             widget.resize(dimensions);
          }
@@ -289,8 +288,7 @@ define(["dojo/_base/declare",
        * @param {element} rootNode The DOM node to create the new DOM node as a child of
        * @param {string} rootClassName A string containing one or more space separated CSS classes to set on the DOM node
        */
-      createWidgetDomNode: function alfresco_lists_views_layouts_Grid__createWidgetDomNode(widget, rootNode, rootClassName) {
-         
+      createWidgetDomNode: function alfresco_lists_views_layouts_Grid__createWidgetDomNode(widget, rootNode, /*jshint unused:false*/ rootClassName) {
          var nodeToAdd = rootNode;
          if (this.currentIndex % this.columns === 0)
          {
@@ -316,7 +314,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      renderNextItem: function alfresco_lists_views_layout__MultiItemRendererMixin__renderNextItem() {
+      renderNextItem: function alfresco_lists_views_layouts_Grid__renderNextItem() {
          if (this.nextLinkDisplay)
          {
             var cell = this.nextLinkDisplay.domNode.parentNode;

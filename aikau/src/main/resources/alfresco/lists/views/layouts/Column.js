@@ -24,7 +24,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -32,11 +32,11 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Column.html",
         "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing",
+        "alfresco/lists/views/layouts/_LayoutMixin",
         "dojo/dom-construct"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domConstruct) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, _LayoutMixin, domConstruct) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _LayoutMixin], {
       
       /**
        * An array of the CSS files to use with this widget.

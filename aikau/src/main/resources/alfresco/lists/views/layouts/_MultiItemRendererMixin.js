@@ -41,10 +41,11 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-style",
+        "dojo/dom-attr",
         "dojo/on",
         "dojo/_base/event"], 
         function(declare, CoreWidgetProcessing, ObjectProcessingMixin, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
-                 domClass, array, lang, domStyle, on, event) {
+                 domClass, array, lang, domStyle, domAttr, on, event) {
    
    return declare([CoreWidgetProcessing, ObjectProcessingMixin, _AlfDocumentListTopicMixin], {
 
@@ -265,7 +266,6 @@ define(["dojo/_base/declare",
        * @param {Object[]}
        */
       allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets) {
-         
          // Push the processed widgets for the last item into the array of rendered widgets...
          if (!this._renderedItemWidgets)
          {
@@ -329,6 +329,9 @@ define(["dojo/_base/declare",
          {
             this.rootWidgetSubscriptions = [];
          }
+
+         // Create an id based on the index of the item...
+         widget.domNode.id = this.id + "_ITEM_" + index;
 
          if (this.supportsItemSelection === true)
          {
