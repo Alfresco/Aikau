@@ -47,7 +47,7 @@ define(["intern!object",
       },
 
       "Test colspan can be set on cell": function() {
-         return browser.findByCssSelector("#ONE_CELL td.alfresco-lists-views-layouts-Cell")
+         return browser.findByCssSelector("#CELL3_ITEM_0")
             .getAttribute("colspan")
             .then(function(colspan) {
                assert.equal(colspan, 2, "Colspan attribute not set on cell");

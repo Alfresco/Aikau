@@ -54,10 +54,11 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/html",
         "dojo/aspect",
+        "dojo/on",
         "jquery",
         "alfresco/layout/SimplePanel"], 
         function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin, lang, sniff, array,
-                 domConstruct, domClass, domStyle, domGeom, html, aspect, $) {
+                 domConstruct, domClass, domStyle, domGeom, html, aspect, on, $) {
    
    return declare([Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin], {
       
@@ -168,6 +169,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_dialogs_AlfDialog__postCreate() {
+         // jshint maxcomplexity:false
          this.inherited(arguments);
 
          // Listen for requests to resize the dialog...
@@ -261,11 +263,11 @@ define(["dojo/_base/declare",
       
          // Publish events if the dialog moves
          if(this._moveable) {
-            aspect.after(this._moveable, "onMoveStart", lang.hitch(this, function(returnVal, originalArgs) {
+            aspect.after(this._moveable, "onMoveStart", lang.hitch(this, function(returnVal, /*jshint unused:false*/ originalArgs) {
                this.alfPublish("ALF_DIALOG_MOVE_START", null, true);
                return returnVal;
             }));
-            aspect.after(this._moveable, "onMoveStop", lang.hitch(this, function(returnVal, originalArgs) {
+            aspect.after(this._moveable, "onMoveStop", lang.hitch(this, function(returnVal, /*jshint unused:false*/ originalArgs) {
                this.alfPublish("ALF_DIALOG_MOVE_STOP", null, true);
                return returnVal;
             }));
@@ -283,6 +285,18 @@ define(["dojo/_base/declare",
          domStyle.set(document.documentElement, "overflow", "");
          domClass.remove(this.domNode, "dialogDisplayed");
          domClass.add(this.domNode, "dialogHidden");
+         
+         // Normalise closing dialog by re-issuing escape key use (which could 
+         // actually have been used to close the dialog, but this ensures that
+         // any widgets listening for this keyup event get notificed)...
+         on.emit(this.domNode, "keyup", {
+            bubbles: true, 
+            cancelable: true, 
+            keyCode: 27, 
+            charCode: 27, 
+            keyCodeArg : 27, 
+            charCodeArg: 0
+         }); 
       },
 
       /**

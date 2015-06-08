@@ -45,7 +45,7 @@ define(["intern!object",
       },
 
       "Property is rendered correctly": function() {
-         return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Test", "Value not rendered correctly");
@@ -53,7 +53,7 @@ define(["intern!object",
       },
 
       "Edit widget not initially created": function() {
-         return browser.findAllByCssSelector("#INLINE_EDIT > .editWidgetNode > *")
+         return browser.findAllByCssSelector("#INLINE_EDIT_ITEM_0 > .editWidgetNode > *")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Edit widget node should be empty until needed");
             });
@@ -64,7 +64,7 @@ define(["intern!object",
             .moveMouseTo()
          .end()
          .sleep(250) // Make sure the mouse isn't over the row!
-         .findByCssSelector("#INLINE_EDIT .editIcon")
+         .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Icon should not be displayed");
@@ -73,13 +73,13 @@ define(["intern!object",
 
       "Render on new line configuration doesn't effect icon": function() {
          var valueX;
-         return browser.findByCssSelector("#INLINE_EDIT .inlineEditValue")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .inlineEditValue")
             .getPosition()
             .then(function(p) {
                valueX = p.x;
             })
          .end()
-         .findByCssSelector("#INLINE_EDIT .editIcon")
+         .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
             .getPosition()
             .then(function(p) {
                assert.notEqual(valueX, p.x, "The value and icon should NOT be starting at the same X co-ordinate");
@@ -88,12 +88,12 @@ define(["intern!object",
       },
 
       "Icon appears on focus": function() {
-         return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .then(function(element) {
                element.type(""); // Focus on element
 
                browser.end()
-                  .findByCssSelector("#INLINE_EDIT .editIcon")
+                  .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
                   .isDisplayed()
                   .then(function(result) {
                      assert.isTrue(result, "Edit icon was not revealed on focus");
@@ -102,12 +102,12 @@ define(["intern!object",
       },
 
       "Icon disappears on blur": function() {
-         return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .then(function(element) {
                element.type([keys.SHIFT, keys.TAB]); // Focus away from element
 
                browser.end()
-                  .findByCssSelector("#INLINE_EDIT .editIcon")
+                  .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
                   .isDisplayed()
                   .then(function(result) {
                      assert.isFalse(result, "Edit icon was not hidden on blur");
@@ -116,11 +116,11 @@ define(["intern!object",
       },
 
       "Icon appears on mouseover": function() {
-         return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .moveMouseTo()
             .end()
 
-         .findByCssSelector("#INLINE_EDIT .editIcon")
+         .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Edit icon was not revealed on mouse over");
@@ -132,7 +132,7 @@ define(["intern!object",
             .moveMouseTo(0, 0)
             .then(function() {
                browser.end()
-                  .findByCssSelector("#INLINE_EDIT .editIcon")
+                  .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
                   .isDisplayed()
                   .then(function(result) {
                      assert.isFalse(result, "Edit icon was not hidden on mouse out");
@@ -141,7 +141,7 @@ define(["intern!object",
       },
 
       "Edit widgets are created on edit": function() {
-         return browser.findByCssSelector("#INLINE_EDIT .editIcon")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
             .click()
             .end()
 
@@ -152,7 +152,7 @@ define(["intern!object",
       },
 
       "Read property is hidden when editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Read-only span was not hidden");
@@ -160,14 +160,14 @@ define(["intern!object",
       },
 
       "Save and cancel buttons are displayed when editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT .action.save")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .action.save")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Save button not visible when editing");
             })
             .end()
 
-         .findByCssSelector("#INLINE_EDIT .action.cancel")
+         .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.cancel")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Cancel button not visible when editing");
@@ -179,7 +179,7 @@ define(["intern!object",
             .pressKeys([keys.ESCAPE])
             .end()
 
-         .findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Read-only value not revealed on cancelling edit");
@@ -187,7 +187,7 @@ define(["intern!object",
       },
 
       "Clicking on read-only value starts editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .click()
             .end()
 
@@ -199,11 +199,11 @@ define(["intern!object",
       },
 
       "Clicking on cancel button stops editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT .action.cancel")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .action.cancel")
             .click()
             .end()
 
-         .findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Read-only value not revealed on cancelling edit");
@@ -211,7 +211,7 @@ define(["intern!object",
       },
 
       "CTRL-E starts editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .pressKeys([keys.CONTROL, "e"])
             .pressKeys(keys.NULL)
             .end()
@@ -224,12 +224,12 @@ define(["intern!object",
       },
 
       "Changes published on save": function() {
-         return browser.findByCssSelector("#INLINE_EDIT .dijitInputContainer input")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .dijitInputContainer input")
             .clearValue()
             .type("New")
             .end()
 
-         .findByCssSelector("#INLINE_EDIT .action.save")
+         .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.save")
             .click()
             .end()
 
@@ -252,7 +252,7 @@ define(["intern!object",
       },
 
       "Readonly view displayed when finished editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT > .alfresco-renderers-Property")
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Read-only span not revealed on save");
@@ -265,16 +265,16 @@ define(["intern!object",
       },
 
       "Inline-edit select restores values on failed save": function() {
-         return browser.findByCssSelector("#INLINE_SELECT > .alfresco-renderers-Property")
+         return browser.findByCssSelector("#INLINE_SELECT_ITEM_0 > .alfresco-renderers-Property")
             .then(function(element) {
                return browser.moveMouseTo(element)
                   .then(function() {
                      return browser.end()
-                        .findByCssSelector("#INLINE_SELECT .editIcon")
+                        .findByCssSelector("#INLINE_SELECT_ITEM_0 .editIcon")
                         .click()
                         .end()
 
-                     .findByCssSelector("#INLINE_SELECT .alfresco-forms-controls-BaseFormControl .dijitArrowButtonInner")
+                     .findByCssSelector("#INLINE_SELECT_ITEM_0 .alfresco-forms-controls-BaseFormControl .dijitArrowButtonInner")
                         .click()
                         .end()
 
@@ -282,11 +282,11 @@ define(["intern!object",
                         .click()
                         .end()
 
-                     .findByCssSelector("#INLINE_SELECT .action.save")
+                     .findByCssSelector("#INLINE_SELECT_ITEM_0 .action.save")
                         .click()
                         .end()
 
-                     .findByCssSelector("#INLINE_SELECT > .alfresco-renderers-Property")
+                     .findByCssSelector("#INLINE_SELECT_ITEM_0 > .alfresco-renderers-Property")
                         .isDisplayed()
                         .then(function(result) {
                            assert.isTrue(result, "Read-only span not revealed on failed save");
