@@ -1,3 +1,5 @@
+/* global config,remote,user,msg */
+
 // Look for any DocumentLibrary XML configuration. This is expected to exist in Alfresco Share
 // but may not exist in other clients...
 var docLibXmlConfig = config.scoped.DocumentLibrary;
@@ -23,7 +25,7 @@ function getSyncMode() {
  ***********************************************************************************/
 function getUserDocLibPreferences() {
    // Initialise some default preferences...
-   var prefs = {
+   var docLibPrefrences = {
       viewRendererName: "detailed",
       sortField: "cm:name",
       sortAscending: true,
@@ -33,29 +35,41 @@ function getUserDocLibPreferences() {
    };
 
    // NOTE: Using "this" in reference to the global scope
-   if (this.preferences)
+   var prefs;
+   if (!this.preferences)
+   {
+      var result = remote.call("/api/people/" + encodeURIComponent(user.name) + "/preferences");
+      if (result.status.code === status.STATUS_OK)
+      {
+         prefs = JSON.parse(result);
+      }
+   }
+   else
+   {
+      prefs = JSON.parse(this.preferences.value);
+   }
+   if (prefs)
    {
       // NOTE: In this initial implementation we're assuming the continued use of the
       //       Alfresco Share document library user preferences. This could be updated
       //       in the future to accept alternative preference addresses.
-      prefs = JSON.parse(this.preferences.value);
       if (prefs.org &&
           prefs.org.alfresco &&
           prefs.org.alfresco.share &&
           prefs.org.alfresco.share.documentList)
       {
-         var docLibPrefrences = prefs.org.alfresco.share.documentList;
-         prefs.viewRendererName = docLibPrefrences.viewRendererName || "detailed";
-         prefs.sortField = docLibPrefrences.sortField || "cm:name";
-         prefs.sortAscending = docLibPrefrences.sortAscending !== false;
-         prefs.showFolders = docLibPrefrences.showFolders !== false;
-         prefs.hideBreadcrumbTrail = docLibPrefrences.hideNavBar === true;
-         prefs.showSidebar = docLibPrefrences.showSidebar !== false;
-         prefs.galleryColumns = docLibPrefrences.galleryColumns || 4;
-         prefs.sideBarWidth = prefs.org.alfresco.sideBarWidth || 350;
+         var dlp = prefs.org.alfresco.share.documentList;
+         docLibPrefrences.viewRendererName = dlp.viewRendererName || "detailed";
+         docLibPrefrences.sortField = dlp.sortField || "cm:name";
+         docLibPrefrences.sortAscending = dlp.sortAscending !== false;
+         docLibPrefrences.showFolders = dlp.showFolders !== false;
+         docLibPrefrences.hideBreadcrumbTrail = dlp.hideNavBar === true;
+         docLibPrefrences.showSidebar = dlp.showSidebar !== false;
+         docLibPrefrences.galleryColumns = dlp.galleryColumns || 4;
+         docLibPrefrences.sideBarWidth = prefs.org.alfresco.sideBarWidth || 350;
       }
    }
-   return prefs;
+   return docLibPrefrences;
 }
 
 /* *********************************************************************************

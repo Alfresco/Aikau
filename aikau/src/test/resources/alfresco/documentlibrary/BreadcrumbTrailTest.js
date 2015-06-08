@@ -152,7 +152,7 @@ define(["intern!object",
       "Count breadcrumbs after changing path via hash": function() {
          return browser.findByCssSelector("#SET_HASH_label")
             .click()
-            .end()
+         .end()
          .findAllByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
             .then(function(elements) {
                assert(elements.length === 3, "An unexpected number of breadcrumbs were found: " + elements.length);
@@ -196,13 +196,18 @@ define(["intern!object",
       "Check hash final breadcrumb navigation payload": function() {
          return browser.findByCssSelector("#CHANGE_NODEREF_label")
             .click()
-            .end()
+         .end()
+         // NOTE: It's not expected that changing the root node alone will re-render the breadcrumb trail,
+         //       the path will be subsequently updated as well (the path uses the base nodeRef)...
+         .findByCssSelector("#SET_HASH_label")
+            .click()
+         .end()
          .findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(3) > .breadcrumb")
             .click()
             .end()
          .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "folder-details?nodeRef=some://fake/nodeRef"))
             .then(function(elements) {
-               assert(elements.length === 1, " Navigation payload not correct");
+               assert(elements.length === 1, "Navigation payload not correct");
             });
       },
 

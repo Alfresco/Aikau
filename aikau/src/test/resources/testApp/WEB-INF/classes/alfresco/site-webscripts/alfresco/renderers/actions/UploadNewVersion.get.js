@@ -37,6 +37,11 @@ model.jsonModel = {
                         nodeRef: "some://dummy/node",
                         isLocked: false,
                         isContainer: false,
+                        permissions: {
+                           user: {
+                              Write: true
+                           }
+                        },
                         properties: {}
                      }
                   },
@@ -47,6 +52,11 @@ model.jsonModel = {
                         nodeRef: "some://dummy/node",
                         isLocked: false,
                         isContainer: false,
+                        permissions: {
+                           user: {
+                              Write: true
+                           }
+                        },
                         properties: {
                            "cm:workingCopyOwner": {
                               userName: "guest"
@@ -61,6 +71,11 @@ model.jsonModel = {
                         nodeRef: "some://dummy/node",
                         isLocked: false,
                         isContainer: false,
+                        permissions: {
+                           user: {
+                              Write: true
+                           }
+                        },
                         properties: {
                            "cm:workingCopyOwner": {
                               userName: "not_me"
@@ -75,6 +90,11 @@ model.jsonModel = {
                         nodeRef: "some://dummy/node",
                         isLocked: true,
                         isContainer: false,
+                        permissions: {
+                           user: {
+                              Write: true
+                           }
+                        },
                         properties: {
                            "cm:lockOwner": "guest"
                         }
@@ -87,6 +107,11 @@ model.jsonModel = {
                         nodeRef: "some://dummy/node",
                         isLocked: true,
                         isContainer: false,
+                        permissions: {
+                           user: {
+                              Write: true
+                           }
+                        },
                         properties: {
                            "cm:lockOwner": "bob"
                         }
@@ -99,9 +124,23 @@ model.jsonModel = {
                         nodeRef: "some://dummy/node",
                         isLocked: false,
                         isContainer: false,
+                        permissions: {
+                           user: {
+                              Write: true
+                           }
+                        },
                         properties: {
                            "cm:lockType": "NODE_LOCK"
                         }
+                     }
+                  },
+                  {
+                     displayName: "No write permission",
+                     node: {
+                        aspects: [],
+                        nodeRef: "some://dummy/node",
+                        isLocked: false,
+                        isContainer: false
                      }
                   }
                ]
