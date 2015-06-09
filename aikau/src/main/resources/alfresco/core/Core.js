@@ -18,10 +18,11 @@
  */
 
 /**
- * This should be mixed into all Alfresco widgets as it provides the essential functions that they will
+ * This should be mixed into all Alfresco widgets and services as it provides the essential functions that they will
  * undoubtedly required, e.g. logging, publication/subscription handling, i18n message handling, etc.
  *
  * @module alfresco/core/Core
+ * @mixinSafe
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -75,6 +76,7 @@ define(["dojo/_base/declare",
        * This function is based on the version that can be found in alfresco.js. It searches through all of
        * the available scopes for the widget and for all of the widgets inherited from.
        *
+       * @callable
        * @instance
        * @param {string} p_messageId The id of the message to be displayed.
        * @returns {string} A localized form of the supplied message
@@ -180,6 +182,7 @@ define(["dojo/_base/declare",
        * attacks. This wraps the dojox/html/entities encode function. It is intentionally wrapped so that
        * if we need to make a change (e.g. change the encoding handling) we can make it in one place
        *
+       * @callable
        * @instance
        * @returns The encoded input string
        */
@@ -208,6 +211,13 @@ define(["dojo/_base/declare",
        */
       dataBindingCallbacks: null,
 
+      /**
+       * This function converts notation into an internal notation style.
+       * 
+       * @instance
+       * @param  {string} dotNotation A dot notation representation of the location within the data model to set.
+       * @return {string} The processed notation
+       */
       alfProcessDataDotNotation: function alfresco_core_Core__alfProcessDataDotNotation(dotNotation) {
          var re = /(\.|\[)/g;
          return dotNotation.replace(re, "._alfValue$1");
@@ -383,6 +393,7 @@ define(["dojo/_base/declare",
        * calling the Dojo implementation directly to allow us to make changes to the implementation or
        * to introduce additional features (such as scoping) or updates to the payload.
        *
+       * @callable
        * @instance
        * @param {String | Array} topics The topic(s) on which to publish
        * @param {object} payload The payload to publish on the supplied topic
@@ -428,6 +439,7 @@ define(["dojo/_base/declare",
       /**
        * Publish an event after waiting for the specified delay.
        *
+       * @instance
        * @param topic {String} topic to publish
        * @param payload {Object} the payload to be pushed to the publish event
        * @param delay {Number} ms delay in how long to wait before publishing the event
@@ -448,6 +460,7 @@ define(["dojo/_base/declare",
        * to introduce additional features (such as scoping) or updates to the callback. The subscription
        * handle that gets created is add to [alfSubscriptions]{@link module:alfresco/core/Core#alfSubscriptions}
        *
+       * @callable
        * @instance
        * @param {string} topic The topic on which to subscribe
        * @param {function} callback The callback function to call when the topic is published on.
@@ -494,6 +507,7 @@ define(["dojo/_base/declare",
        * This function wraps the standard unsubscribe function. It should always be used rather than call
        * the Dojo implementation directly.
        *
+       * @callable
        * @instance
        * @param {object|array} handle The subscription handle to unsubscribe
        */
@@ -527,6 +541,7 @@ define(["dojo/_base/declare",
        * This is a helper function for unsubscribing from subscription handles that are set-up with unique
        * topics to guarantee recipients.
        *
+       * @callable
        * @instance
        * @param {array} handles The handles to unsubscribe
        */
@@ -550,6 +565,7 @@ define(["dojo/_base/declare",
        *
        * This also removes any data binding listeners that have been registered.
        *
+       * @callable
        * @instance
        * @param {boolean} preserveDom
        */
@@ -629,6 +645,7 @@ define(["dojo/_base/declare",
        * default it simply delegates to the standard browser console object but could optionally be overridden or
        * extended to provide advanced capabilities like posting client-side logs back to the server, etc.
        *
+       * @callable
        * @instance
        * @param {string} severity The severity of the message to be logged
        * @param {string} message The message to be logged
@@ -657,7 +674,6 @@ define(["dojo/_base/declare",
        * @returns {object} A dojo/promise/Promise
        */
       alfPublishToPromise: function alfresco_core_Core__alfPubSubToPromise(topic, payload, global, parentScope) {
-
          // Setup the publish variables and handlers
          var deferred = new Deferred(),
             responseTopic = uuid(),
