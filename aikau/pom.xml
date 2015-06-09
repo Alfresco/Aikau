@@ -12,6 +12,52 @@
    <name>Aikau</name>
    <description>Aikau is a meta-framework for Alfresco specific UI development</description>
 
+
+
+    <!-- Run profile that invokes the tomcat plugin -->
+    <profiles>
+        <profile>
+            <id>run</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <executions>
+                            <execution>
+                                <id>run-embedded-tomcat</id>
+                                <!-- Bind to the integration-test phase -->
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <!-- Run will run the project as a dynamic webapp -->
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <port>8089</port>
+                                    <ignorePackaging>true</ignorePackaging>
+                                    <warSourceDirectory>${basedir}/target/test-classes/testApp</warSourceDirectory>
+                                    <!-- The context file allows us to map static resources in a virtual webapp -->
+                                    <contextFile>${project.basedir}/tomcat/context.xml</contextFile>
+                                    <useTestClasspath>true</useTestClasspath>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+               <dependency>
+                  <groupId>javax.servlet</groupId>
+                  <artifactId>servlet-api</artifactId>
+                  <version>2.5</version>
+                  <scope>provided</scope>
+               </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+
    <build>
 
       <!-- Everything gets place into the META-INF folder of the JAR because Surf (the expected platform for Aikau)
@@ -61,24 +107,27 @@
             <filtering>false</filtering>
             <directory>${basedir}/src/main/resources/lib</directory>
          </resource>
+
+          <!-- The tomcat plugin can't have a virtual classpath for this proejct, and it wont accept
+               additional classpaths, so we have to copy these into the test classpath
+          -->
+         <resource>
+            <directory>${project.build.outputDirectory}/alfresco</directory>
+            <targetPath>${project.build.testOutputDirectory}/testApp/WEB-INF/classes/alfresco</targetPath>
+         </resource>
       </resources>
 
-      <testResources>
-         <testResource>
-            <directory>src/test/resources</directory>
-            <filtering>true</filtering>
-            <includes>
-               <include>testApp/WEB-INF/surf.xml</include>
-            </includes>
-         </testResource>
-         <testResource>
-            <directory>src/test/resources</directory>
-            <filtering>false</filtering>
-            <excludes>
-               <exclude>testApp/WEB-INF/surf.xml</exclude>
-            </excludes>
-         </testResource>
-      </testResources>
+       <testResources>
+           <testResource>
+               <directory>src/test/resources/testApp</directory>
+               <filtering>true</filtering>
+               <targetPath>testApp</targetPath>
+           </testResource>
+           <testResource>
+               <directory>src/test/resources/alfresco</directory>
+               <targetPath>alfresco</targetPath>
+           </testResource>
+       </testResources>
 
       <plugins>
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="${project.build.directory}/test-classes/testApp" path="/aikau">
+
+    <!-- To avoid too much copying resources back and forth, we map the following:
+        target/classes/META-INF ===  /
+        target/test-classes/alfresco === /js/alfresco
+
+        More can be added as we need, just be sure not to have linebreaks in the definition as it breaks the whole thing
+     -->
+    <Resources className="org.apache.naming.resources.VirtualDirContext"
+    extraResourcePaths="/=${project.build.directory}/classes/META-INF,/js/alfresco=${project.build.directory}/test-classes/alfresco" />
+
+  <!-- This enables hot reloading of web resources from uncompressed jars (while in prod they would be loaded from  WEB-INF/lib/{\*.jar}/META-INF/resources -->
+  <JarScanner scanAllDirectories="true" />
+
+</Context>
