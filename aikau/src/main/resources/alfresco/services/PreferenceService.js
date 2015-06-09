@@ -25,6 +25,7 @@
  * @module alfresco/services/PreferenceService
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
+ * @mixes module:alfresco/services/_PreferenceServiceTopicMixin
  * @mixes module:alfresco/services/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */

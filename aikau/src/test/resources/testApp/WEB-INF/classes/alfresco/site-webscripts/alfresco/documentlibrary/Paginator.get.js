@@ -21,6 +21,9 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         name: "aikauTesting/mockservices/PreferenceServiceMockXhr"
+      },
+      {
          name: "alfresco/layout/HorizontalWidgets",
          config: {
             widgets: [
@@ -37,10 +40,7 @@ model.jsonModel = {
                               widgets: [
                                  {
                                     id: "PAGINATOR",
-                                    name: "alfresco/lists/Paginator",
-                                    config: {
-                                       hidePageSizeOnWidth: 100
-                                    }
+                                    name: "alfresco/lists/Paginator"
                                  },
                                  {
                                     id: "MENU_BAR_POPUP",
@@ -62,6 +62,7 @@ model.jsonModel = {
                            name: "alfresco/lists/AlfSortablePaginatedList",
                            config: {
                               useHash: false,
+                              currentPageSize: 50, // This will be overridden by the user preference
                               widgets: [
                                  {
                                     name: "alfresco/lists/views/AlfListView",
@@ -172,7 +173,6 @@ model.jsonModel = {
                                              name: "alfresco/lists/Paginator",
                                              config: {
                                                 documentsPerPage: 10,
-                                                hidePageSizeOnWidth: 100,
                                                 pageSizes: [5,10,20]
                                              }
                                           }
@@ -297,7 +297,6 @@ model.jsonModel = {
                                              name: "alfresco/lists/Paginator",
                                              config: {
                                                 documentsPerPage: 10,
-                                                hidePageSizeOnWidth: 100,
                                                 pageSizes: [5,10,20]
                                              }
                                           }

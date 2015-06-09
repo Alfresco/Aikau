@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.21-SNAPSHOT</version>
+   <version>1.0.22-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -134,7 +134,7 @@
                         <artifactItem>
                            <groupId>org.dojotoolkit</groupId>
                            <artifactId>dojo</artifactId>
-                           <version>1.10.4</version>
+                           <version>${dependency.dojo.version}</version>
                            <type>zip</type>
                            <classifier>distribution</classifier>
                            <overWrite>true</overWrite>

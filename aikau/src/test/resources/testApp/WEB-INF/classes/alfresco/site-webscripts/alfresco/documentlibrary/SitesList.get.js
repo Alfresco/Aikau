@@ -63,10 +63,7 @@ model.jsonModel = {
       },
       {
          id: "SITES_LIST_PAGINATION_MENU",
-         name: "alfresco/lists/Paginator",
-         config: {
-            hidePageSizeOnWidth: 50
-         }
+         name: "alfresco/lists/Paginator"
       },
       {
          name: "aikauTesting/mockservices/SitesPaginationMockXhr"

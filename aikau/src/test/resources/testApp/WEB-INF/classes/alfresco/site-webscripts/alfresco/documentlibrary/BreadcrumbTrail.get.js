@@ -64,6 +64,74 @@ model.jsonModel = {
          }
       },
       {
+         id: "OVERFLOW_BREADCRUMBS",
+         name: "alfresco/layout/HorizontalWidgets",
+         config: {
+            widgets: [
+               {
+                  id: "FIXED_BREADCRUMBS",
+                  widthPx: 400,
+                  name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
+                  config: {
+                     breadcrumbs: [
+                        {
+                           label: "There's"
+                        },
+                        {
+                           label: "a"
+                        },
+                        {
+                           label: "lady"
+                        },
+                        {
+                           label: "who's"
+                        },
+                        {
+                           label: "sure"
+                        },
+                        {
+                           label: "all"
+                        },
+                        {
+                           label: "that"
+                        },
+                        {
+                           label: "glitters"
+                        },
+                        {
+                           label: "is"
+                        },
+                        {
+                           label: "gold,"
+                        },
+                        {
+                           label: "and"
+                        },
+                        {
+                           label: "she's"
+                        },
+                        {
+                           label: "buying"
+                        },
+                        {
+                           label: "a"
+                        },
+                        {
+                           label: "breadcrumb"
+                        },
+                        {
+                           label: "to"
+                        },
+                        {
+                           label: "heaven"
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
          id: "CHANGE_NODEREF",
          name: "alfresco/buttons/AlfButton",
          config: {

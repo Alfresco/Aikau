@@ -12,20 +12,20 @@
                   <dojo-pages>
                      <enabled>true</enabled>
                      <loader-trace-enabled>false</loader-trace-enabled>
-                     <bootstrap-file>/res/js/lib/dojo-1.10.4/dojo/dojo.js</bootstrap-file>
+                     <bootstrap-file>/res/js/lib/dojo-${dependency.dojo.version}/dojo/dojo.js</bootstrap-file>
                      <page-widget>alfresco/core/Page</page-widget>
                      <base-url>/res/</base-url>
                      <default-less-configuration>/js/aikau/${project.version}/alfresco/css/less/defaults.less</default-less-configuration><messages-object>Alfresco</messages-object>
                      <packages>
                          <package name="service"      location="../service"/>
-                         <package name="dojo"         location="js/lib/dojo-1.10.4/dojo"/>
-                         <package name="dijit"        location="js/lib/dojo-1.10.4/dijit"/>
-                         <package name="dojox"        location="js/lib/dojo-1.10.4/dojox"/>
+                         <package name="dojo"         location="js/lib/dojo-${dependency.dojo.version}/dojo"/>
+                         <package name="dijit"        location="js/lib/dojo-${dependency.dojo.version}/dijit"/>
+                         <package name="dojox"        location="js/lib/dojo-${dependency.dojo.version}/dojox"/>
                          <package name="alfresco"     location="js/aikau/${project.version}/alfresco"/>
                          <package name="surf"         location="js/surf"/>
                          <package name="cm"           location="js/lib/code-mirror"/>
-                         <package name="jquery"       location="js/lib/jquery-1.11.1" main="jquery-1.11.1.min"/>
-                         <package name="jqueryui"     location="js/lib/jquery-ui-1.11.1" main="jquery-ui.min"/>
+                         <package name="jquery"       location="js/lib/jquery-${dependency.jquery.version}" main="jquery-${dependency.jquery.version}.min"/>
+                         <package name="jqueryui"     location="js/lib/jquery-ui-${dependency.jquery-ui.version}" main="jquery-ui.min"/>
                      </packages>
                   </dojo-pages>
                </web-framework>

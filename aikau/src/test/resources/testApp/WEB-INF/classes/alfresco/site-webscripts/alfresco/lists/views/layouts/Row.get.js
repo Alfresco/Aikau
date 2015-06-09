@@ -26,12 +26,12 @@ model.jsonModel = {
             },
             widgets: [
                {
-                  id: "TWO_CELLS",
                   name: "alfresco/lists/views/layouts/Row",
                   config: {
                      additionalCssClasses: "extra",
                      widgets: [
                         {
+                           id: "CELL1",
                            name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
@@ -45,6 +45,7 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "CELL2",
                            name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
@@ -61,11 +62,11 @@ model.jsonModel = {
                   }
                },
                {
-                  id: "ONE_CELL",
                   name: "alfresco/lists/views/layouts/Row",
                   config: {
                      widgets: [
                         {
+                           id: "CELL3",
                            name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               colspan: 2,

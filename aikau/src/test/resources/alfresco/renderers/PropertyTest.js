@@ -47,7 +47,7 @@ define(["intern!object",
                // .moveMouseTo(null, 0, 0)
                //    .end()
 
-               .findByCssSelector("#BASIC .value")
+               .findByCssSelector("#BASIC_ITEM_0 .value")
                .getVisibleText()
                .then(function(resultText) {
                   assert(resultText === "Test", "Standard property not rendered correctly: " + resultText);
@@ -55,7 +55,7 @@ define(["intern!object",
          },
 
          "Check prefixed/suffixed property is rendered correctly": function() {
-            return browser.findByCssSelector("#PREFIX_SUFFIX .value")
+            return browser.findByCssSelector("#PREFIX_SUFFIX_ITEM_0 .value")
                .getVisibleText()
                .then(function(resultText) {
                   assert(resultText === "(Test)", "Prefix and suffix not rendered correctly: " + resultText);
@@ -63,7 +63,7 @@ define(["intern!object",
          },
 
          "Check new line property is rendered correctly": function() {
-            return browser.findByCssSelector("#NEW_LINE")
+            return browser.findByCssSelector("#NEW_LINE_ITEM_0")
                .getComputedStyle("display")
                .then(function(result) {
                   assert(result === "block", "New line not applied");
@@ -71,7 +71,7 @@ define(["intern!object",
          },
 
          "Check standard warning is rendered correctly": function() {
-            return browser.findByCssSelector("#WARN1 .value")
+            return browser.findByCssSelector("#WARN1_ITEM_0 .value")
                .getVisibleText()
                .then(function(resultText) {
                   assert.equal(resultText, "No property for: \"missing\"", "Standard warning not rendered correctly");
@@ -79,7 +79,7 @@ define(["intern!object",
          },
 
          "Check explicit warning is rendered correctly": function() {
-            return browser.findByCssSelector("#WARN2 .value")
+            return browser.findByCssSelector("#WARN2_ITEM_0 .value")
                .getVisibleText()
                .then(function(resultText) {
                   assert(resultText === "No description", "Explicit warning not rendered correctly: " + resultText);
@@ -93,7 +93,7 @@ define(["intern!object",
                })
                .end()
 
-            .findByCssSelector("#HOVER .inner")
+            .findByCssSelector("#HOVER_ITEM_0 .inner")
                .isDisplayed()
                .then(function(result) {
                   assert(result === false, "Hover displayed unexpectedly");
@@ -107,7 +107,7 @@ define(["intern!object",
                })
                .end()
 
-            .findByCssSelector("#HOVER .value")
+            .findByCssSelector("#HOVER_ITEM_0 .value")
                .isDisplayed()
                .then(function(result) {
                   assert(result === true, "Hover displayed unexpectedly");
@@ -115,7 +115,7 @@ define(["intern!object",
          },
 
          "Check label is rendered correctly": function() {
-            return browser.findByCssSelector("#LABEL .label")
+            return browser.findByCssSelector("#LABEL_ITEM_0 .label")
                .getVisibleText()
                .then(function(resultText) {
                   assert(resultText === "Label:", "Label not rendered correctly: " + resultText);
@@ -124,7 +124,7 @@ define(["intern!object",
 
          "Property is truncated when too long for max-width": function() {
             return browser.execute(function() {
-                  var property = document.getElementById("MAX_LENGTH"),
+                  var property = document.getElementById("MAX_LENGTH_ITEM_0"),
                      truncated = property.clientWidth < property.scrollWidth;
                   return truncated;
                })
@@ -133,7 +133,7 @@ define(["intern!object",
                })
                .end()
 
-            .findById("MAX_LENGTH")
+            .findById("MAX_LENGTH_ITEM_0")
                .then(function(elem) {
                   return elem.getSize();
                })
@@ -146,7 +146,7 @@ define(["intern!object",
          },
 
          "Truncated property displays full text on focus": function() {
-            return browser.findById("MAX_LENGTH")
+            return browser.findById("MAX_LENGTH_ITEM_0")
                .then(function(element) {
                   element.type(""); // Focus on element
 
@@ -160,7 +160,7 @@ define(["intern!object",
          },
 
          "Truncated property hides full text on blur": function() {
-            return browser.findById("MAX_LENGTH")
+            return browser.findById("MAX_LENGTH_ITEM_0")
                .then(function(element) {
                   element.type([keys.SHIFT, keys.TAB]); // Focus away from element
 
@@ -174,7 +174,7 @@ define(["intern!object",
          },
 
          "Truncated property displays full text on mouseover": function() {
-            return browser.findById("MAX_LENGTH")
+            return browser.findById("MAX_LENGTH_ITEM_0")
                .moveMouseTo()
                .end()
 

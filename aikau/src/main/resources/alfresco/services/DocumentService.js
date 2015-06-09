@@ -49,6 +49,15 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/DocumentService.properties"}],
 
       /**
+       * Overrides the default setting for encoding URIs
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      encodeURIs: false,
+
+      /**
        * The URL to the download API
        *
        * @instance

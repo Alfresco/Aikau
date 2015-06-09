@@ -59,6 +59,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       constructor: function alfresco_core_JsNode__constructor(args) {
+         // jshint maxcomplexity:false
          if (ObjectTypeUtils.isString(args))
          {
             // The supplied node is a String (and is expected to be a JSON string so should be parsed into an object)...

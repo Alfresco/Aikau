@@ -142,6 +142,15 @@ define(["intern!object",
          });
       },
 
+      "Check node without Write permission": function() {
+         return browser.findByCssSelector("#LIST tr:nth-child(8) .dijitMenuItemLabel > span:first-child")
+            .click()
+         .end()
+         .then(function() {
+            return checkAction(8, 0, "Upload new version action should not be rendered for a node without user write permissions");
+         });
+      },
+
       "Upload a new verion": function() {
          return browser.findByCssSelector("#LIST tr:nth-child(2) .dijitMenuItemLabel > span:first-child")
             .click()

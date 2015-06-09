@@ -18,7 +18,11 @@
  */
 
 /**
+ * This module should be mixed into any widget or service that needs to make XHR calls to REST APIs on
+ * either the client or the Alfresco Repository.
+ * 
  * @module alfresco/core/CoreXhr
+ * @mixinSafe
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -36,6 +40,17 @@ define(["dojo/_base/declare",
         function(declare, AlfConstants, registry, pubSub, array, lang, domConstruct, uuid, xhr, JSON, stamp, dojoCookie) {
 
    return declare(null, {
+
+      /**
+       * Indicates whether or not to call the JavaScript encodeURI function on URLs before they
+       * are passed to [serviceXhr]{@link module:alfresc/core/CoreXhr#serviceXhr}. This defaults
+       * to true but can be overridden if required.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      encodeURIs: true,
 
       /**
        * Should a cache busting parameter be added to the URL?
@@ -104,11 +119,11 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
+       * @callable
        * @param {serviceXhrConfig} config The configuration for the request
        */
       serviceXhr: function alfresco_core_CoreXhr__serviceXhr(config) {
-         /*jshint maxcomplexity:12*/
-
+         /*jshint maxcomplexity:false*/
          var _this = this;
 
          if (config)
@@ -159,7 +174,8 @@ define(["dojo/_base/declare",
                   options.preventCache = (config.preventCache !== null)? config.preventCache : this.preventCache;
                }
 
-               var request = xhr(config.url, options).then(function(response) {
+               var url = this.encodeURIs ? encodeURI(config.url) : config.url;
+               var request = xhr(url, options).then(function(response) {
 
                   var id = lang.getObject("requestId", false, config);
                   if (id)
@@ -388,8 +404,7 @@ define(["dojo/_base/declare",
        * @instance
        * @return {*}
        */
-      isCsrfFilterEnabled: function alfresco_core_CoreXhr__isCsrfFilterEnabled()
-      {
+      isCsrfFilterEnabled: function alfresco_core_CoreXhr__isCsrfFilterEnabled() {
          return AlfConstants.CSRF_POLICY.enabled;
       },
 
@@ -399,8 +414,7 @@ define(["dojo/_base/declare",
        * @instance
        * @return {String} The name of the request header to put the token in.
        */
-      getCsrfHeader: function alfresco_core_CoreXhr__getCsrfHeader()
-      {
+      getCsrfHeader: function alfresco_core_CoreXhr__getCsrfHeader() {
          return this.csrfResolve(AlfConstants.CSRF_POLICY.header);
       },
 
@@ -410,8 +424,7 @@ define(["dojo/_base/declare",
        * @instance
        * @return {String} The name of the request header to put the token in.
        */
-      getCsrfParameter: function alfresco_core_CoreXhr__getCsrfParameter()
-      {
+      getCsrfParameter: function alfresco_core_CoreXhr__getCsrfParameter() {
          return this.csrfResolve(AlfConstants.CSRF_POLICY.parameter);
       },
 
@@ -421,8 +434,7 @@ define(["dojo/_base/declare",
        * @instance
        * @return {String} The name of the request header to put the token in.
        */
-      getCsrfCookie: function alfresco_core_CoreXhr__getCsrfCookie()
-      {
+      getCsrfCookie: function alfresco_core_CoreXhr__getCsrfCookie() {
          return this.csrfResolve(AlfConstants.CSRF_POLICY.cookie);
       },
 
@@ -435,8 +447,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns {String} The name of the request header to put the token in.
        */
-      getCsrfToken: function alfresco_core_CoreXhr__getCsrfToken()
-      {
+      getCsrfToken: function alfresco_core_CoreXhr__getCsrfToken() {
          var token = null;
          var cookieName = this.getCsrfCookie();
          if (cookieName)

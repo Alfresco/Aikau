@@ -27,172 +27,182 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/helpers/pollUntil"],
         function(registerSuite, assert, require, TestCommon, pollUntil) {
 
-      var browser;
-
-      function closeAllDialogs() {
-         return browser.end()
-            .findAllByCssSelector(".dijitDialogCloseIcon")
-            .then(function(closeButtons) {
-               closeButtons.forEach(function(closeButton) {
-                  if (closeButton.isDisplayed()) {
-                     closeButton.click();
-                  }
-               });
-               browser.end();
-            })
-            .then(pollUntil(function() {
-               /*globals document*/
-               var underlay = document.getElementById("dijit_DialogUnderlay_0"),
-                  underlayHidden = underlay && underlay.style.display === "none";
-               return underlayHidden || null;
-            }, 5000));
-      }
-
-      registerSuite({
-         name: "CrudService",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/CrudService", "CrudService")
-               .end();
-         },
-
-         beforeEach: function() {
+   var browser;
+   function closeAllDialogs() {
+      return browser.end()
+         .findAllByCssSelector(".dijitDialogCloseIcon")
+         .then(function(closeButtons) {
+            closeButtons.forEach(function(closeButton) {
+               if (closeButton.isDisplayed()) {
+                  closeButton.click();
+               }
+            });
             browser.end();
-         },
+         })
+         .then(pollUntil(function() {
+            /*globals document*/
+            var underlay = document.getElementById("dijit_DialogUnderlay_0"),
+               underlayHidden = underlay && underlay.style.display === "none";
+            return underlayHidden || null;
+         }, 5000));
+   }
 
-         "Valid DELETE call succeeds": function() {
-            return browser.findById("DELETE_SUCCESS_BUTTON")
-               .click()
+   registerSuite({
+      name: "CrudService",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/CrudService", "CrudService")
+            .end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Valid DELETE call succeeds": function() {
+         return browser.findById("DELETE_SUCCESS_BUTTON")
+            .click()
+         .end()
+
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_DELETED_SUCCESS", "publish", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Delete did not succeed");
+            });
+      },
+
+      "Invalid DELETE call fails": function() {
+         return browser.findById("DELETE_FAILURE_BUTTON")
+            .click()
+         .end()
+
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_DELETED_FAILURE", "publish", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Invalid delete did not fail");
+            });
+      },
+
+      "Failed DELETE displays failure message": function() {
+         return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
+            .then(function(dialogBody) {
+               return dialogBody.getVisibleText()
+                  .then(function(messageText) {
+                     var trimmed = messageText.replace(/^\s+|\s+$/g, "");
+                     assert.equal(trimmed, "Test delete-failure message", "Delete failure message not displayed");
+                  });
+            });
+      },
+
+      "Valid UPDATE call succeeds": function() {
+         return closeAllDialogs()
+            .then(function() {
+               return browser.findById("UPDATE_SUCCESS_BUTTON")
+                  .click()
                .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_DELETED_SUCCESS", "publish", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Delete did not succeed");
-               });
-         },
+               .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATED_SUCCESS", "publish", "any"))
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 1, "Update did not succeed");
+                  });
+            });
+      },
 
-         "Invalid DELETE call fails": function() {
-            return browser.findById("DELETE_FAILURE_BUTTON")
-               .click()
+      "Invalid UPDATE call fails": function() {
+         return browser.findById("UPDATE_FAILURE_BUTTON")
+            .click()
+         .end()
+
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATED_FAILURE", "publish", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Invalid update did not fail");
+            });
+      },
+
+      "Failed UPDATE displays failure message": function() {
+         return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
+            .then(function(dialogBody) {
+               return dialogBody.getVisibleText()
+                  .then(function(messageText) {
+                     var trimmed = messageText.replace(/^\s+|\s+$/g, "");
+                     assert.equal(trimmed, "Test update-failure message", "Update failure message not displayed");
+                  });
+            });
+      },
+
+      "Valid CREATE call succeeds": function() {
+         return closeAllDialogs()
+            .then(function() {
+               return browser.findById("CREATE_SUCCESS_BUTTON")
+                  .click()
                .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_DELETED_FAILURE", "publish", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Invalid delete did not fail");
-               });
-         },
+               .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_SUCCESS", "publish", "any"))
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 1, "Create did not succeed");
+                  });
+            });
+      },
 
-         "Failed DELETE displays failure message": function() {
-            return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
-               .then(function(dialogBody) {
-                  return dialogBody.getVisibleText()
-                     .then(function(messageText) {
-                        var trimmed = messageText.replace(/^\s+|\s+$/g, "");
-                        assert.equal(trimmed, "Test delete-failure message", "Delete failure message not displayed");
-                     });
-               });
-         },
+      "Invalid CREATE call fails": function () {
+         return browser.findById("CREATE_FAILURE_BUTTON")
+            .click()
+         .end()
 
-         "Valid UPDATE call succeeds": function() {
-            return closeAllDialogs()
-               .then(function() {
-                  return browser.findById("UPDATE_SUCCESS_BUTTON")
-                     .click()
-                     .end()
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_FAILURE", "publish", "any"))
+            .then(function (elements) {
+               assert.lengthOf(elements, 1, "Invalid create did not fail");
+            });
+      },
 
-                  .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATED_SUCCESS", "publish", "any"))
-                     .then(function(elements) {
-                        assert.lengthOf(elements, 1, "Update did not succeed");
-                     });
-               });
-         },
+      "Failed CREATE displays failure message": function () {
+         return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
+            .then(function (dialogBody) {
+               return dialogBody.getVisibleText()
+                  .then(function (messageText) {
+                     var trimmed = messageText.replace(/^\s+|\s+$/g, "");
+                     assert.equal(trimmed, "Test create-failure message", "Create failure message not displayed");
+                  });
+            });
+      },
 
-         "Invalid UPDATE call fails": function() {
-            return browser.findById("UPDATE_FAILURE_BUTTON")
-               .click()
+      "GET ALL success": function () {
+         return closeAllDialogs()
+            .then(function() {
+               return browser.findById("GET_ALL_DEFAULT_CACHE_BUTTON")
+                  .click()
                .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATED_FAILURE", "publish", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Invalid update did not fail");
-               });
-         },
+               .findAllByCssSelector(TestCommon.topicSelector("ALF_GET_ALL_DEFAULT_CACHE_SUCCESS", "publish", "any"))
+                  .then(function (elements) {
+                     assert.lengthOf(elements, 1, "GET ALL didn't succeed");
+                  });
+            });
+      },
 
-         "Failed UPDATE displays failure message": function() {
-            return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
-               .then(function(dialogBody) {
-                  return dialogBody.getVisibleText()
-                     .then(function(messageText) {
-                        var trimmed = messageText.replace(/^\s+|\s+$/g, "");
-                        assert.equal(trimmed, "Test update-failure message", "Update failure message not displayed");
-                     });
-               });
-         },
+      "GET ALL with prevent cache option success": function () {
+         return browser.findById("GET_ALL_PREVENT_CACHE_BUTTON")
+            .click()
+         .end()
 
-         "Valid CREATE call succeeds": function() {
-            return closeAllDialogs()
-               .then(function() {
-                  return browser.findById("CREATE_SUCCESS_BUTTON")
-                     .click()
-                     .end()
+         .findAllByCssSelector(TestCommon.topicSelector("ALF_GET_ALL_PREVENT_CACHE_SUCCESS", "publish", "any"))
+            .then(function (elements) {
+               assert.lengthOf(elements, 1, "GET ALL with preventCache flag failed");
+            });
+      },
 
-                  .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_SUCCESS", "publish", "any"))
-                     .then(function(elements) {
-                        assert.lengthOf(elements, 1, "Create did not succeed");
-                     });
-               });
-         },
+      "Check URI encoding": function() {
+         return browser.findById("URL_ENCODING_REQUIRED_BUTTON")
+            .click()
+         .end()
+         .findByCssSelector("tr.mx-row:nth-child(9) .mx-url")
+            .getVisibleText()
+            .then(function(text) {
+               assert.include(text, "/aikau/proxy/alfresco/resources/nocache?filter=%25moomin", "URI was not encoded");
+            });
+      },
 
-         "Invalid CREATE call fails": function () {
-            return browser.findById("CREATE_FAILURE_BUTTON")
-               .click()
-               .end()
-
-               .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_FAILURE", "publish", "any"))
-               .then(function (elements) {
-                  assert.lengthOf(elements, 1, "Invalid create did not fail");
-               });
-         },
-
-         "Failed CREATE displays failure message": function () {
-            return browser.findByCssSelector("#NOTIFICATION_PROMPT .dialog-body")
-               .then(function (dialogBody) {
-                  return dialogBody.getVisibleText()
-                     .then(function (messageText) {
-                        var trimmed = messageText.replace(/^\s+|\s+$/g, "");
-                        assert.equal(trimmed, "Test create-failure message", "Create failure message not displayed");
-                     });
-               });
-         },
-
-         "GET ALL success": function () {
-            return closeAllDialogs()
-               .then(function() {
-                  return browser.findById("GET_ALL_DEFAULT_CACHE_BUTTON")
-                     .click()
-                     .end()
-
-                     .findAllByCssSelector(TestCommon.topicSelector("ALF_GET_ALL_DEFAULT_CACHE_SUCCESS", "publish", "any"))
-                     .then(function (elements) {
-                        assert.lengthOf(elements, 1, "GET ALL didn't succeed");
-                     });
-               })
-         },
-
-         "GET ALL with prevent cache option success": function () {
-            return browser.findById("GET_ALL_PREVENT_CACHE_BUTTON")
-               .click()
-               .end()
-
-               .findAllByCssSelector(TestCommon.topicSelector("ALF_GET_ALL_PREVENT_CACHE_SUCCESS", "publish", "any"))
-               .then(function (elements) {
-                  assert.lengthOf(elements, 1, "GET ALL with preventCache flag failed");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      });
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
    });
+});

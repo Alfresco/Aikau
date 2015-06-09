@@ -4,7 +4,7 @@
    <groupId>org.alfresco</groupId>
    <artifactId>aikau-parent</artifactId>
    <packaging>pom</packaging>
-   <version>1.0.21-SNAPSHOT</version>
+   <version>1.0.22-SNAPSHOT</version>
    
    <name>Aikau Project Aggregator</name>
 
@@ -14,6 +14,10 @@
 
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <dependency.surf.version>5.0.d</dependency.surf.version>
+      <dependency.dojo.version>1.10.4</dependency.dojo.version>
+      <dependency.jquery.version>1.11.1</dependency.jquery.version>
+      <dependency.jquery-ui.version>1.11.1</dependency.jquery-ui.version>      
    </properties>
 
    <repositories> 
@@ -58,7 +62,7 @@
       <dependency>
          <groupId>org.springframework.extensions.surf</groupId>
          <artifactId>spring-surf-api</artifactId>
-         <version>5.0.d</version>
+         <version>${dependency.surf.version}</version>
          <scope>runtime</scope>
       </dependency>
 
@@ -104,8 +108,40 @@
                  <source>1.7</source>
                  <target>1.7</target>
              </configuration>
-            </plugin>
-      </plugins>
+         </plugin>
+         <plugin>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>2.6</version>
+              <configuration>
+                  <skipIfEmpty>true</skipIfEmpty>
+                  <archive>
+                      <manifest>
+                          <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                          <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                      </manifest>
+                      <manifestEntries>
+                          <Implementation-Version>${project.version}</Implementation-Version>
+                          <Build-Date>${maven.build.timestamp}</Build-Date>
+                          <Build-Name>${bamboo_planName}</Build-Name>
+                          <Build-Key>${bamboo_fullBuildKey}</Build-Key>
+                          <Build-Number>${bamboo_buildNumber}</Build-Number>
+                          <Build-Revision>${bamboo_repository_revision_number}</Build-Revision>
+                      </manifestEntries>
+                      <manifestSections>
+                          <manifestSection>
+                              <name>Aikau Libraries</name>
+                              <manifestEntries>
+                                <Surf>${dependency.surf.version}</Surf>
+                                <Dojo>${dependency.dojo.version}</Dojo>
+                                <Jquery>${dependency.jquery.version}</Jquery>
+                                <Jquery-ui>${dependency.jquery-ui.version}</Jquery-ui>
+                              </manifestEntries>
+                          </manifestSection>
+                      </manifestSections>
+                  </archive>
+              </configuration>
+           </plugin>
+      </plugins>            
    </build>
 
    <modules>

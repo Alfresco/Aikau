@@ -265,7 +265,6 @@ define(["dojo/_base/declare",
        * @param {Object[]}
        */
       allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets) {
-         
          // Push the processed widgets for the last item into the array of rendered widgets...
          if (!this._renderedItemWidgets)
          {
@@ -323,7 +322,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to add the styling to
        * @param {number} index The index of the widget
        */
-      rootWidgetProcessing: function alfresco_lists_views_layout___MultiItemRendererMixin__rootWidgetProcessing(widget, index) {
+      rootWidgetProcessing: function alfresco_lists_views_layout___MultiItemRendererMixin__rootWidgetProcessing(widget, /*jshint unused:false*/ index) {
          domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin--item");
          if (!this.rootWidgetSubscriptions)
          {

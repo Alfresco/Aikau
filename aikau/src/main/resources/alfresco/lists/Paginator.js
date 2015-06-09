@@ -61,6 +61,7 @@
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBar",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
+        "alfresco/services/_PreferenceServiceTopicMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/menus/AlfMenuBarSelect",
@@ -68,11 +69,13 @@ define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuGroup",
         "alfresco/menus/AlfCheckableMenuItem",
         "dijit/registry",
-        "dojo/dom-class"], 
-        function(declare, AlfMenuBar, _AlfDocumentListTopicMixin, lang, array, AlfMenuBarSelect, AlfMenuGroups, 
-                 AlfMenuGroup, AlfCheckableMenuItem, registry, domClass) {
+        "dojo/dom-class",
+        "dojo/Deferred",
+        "dojo/when"], 
+        function(declare, AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin, lang, array, 
+                 AlfMenuBarSelect, AlfMenuGroups, AlfMenuGroup, AlfCheckableMenuItem, registry, domClass, Deferred, when) {
 
-   return declare([AlfMenuBar, _AlfDocumentListTopicMixin], {
+   return declare([AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -132,7 +135,7 @@ define(["dojo/_base/declare",
        * @default "ALF_PAGE_FORWARD"
        */
       pageForwardTopic: "ALF_PAGE_FORWARD",
-      
+
       /**
        * @instance
        * @listens documentsLoadedTopic
@@ -145,6 +148,12 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.docsPerpageSelectionTopic, lang.hitch(this, this.onDocumentsPerPageChange));
          this.alfSubscribe(this.pageBackTopic, lang.hitch(this, this.onPageBack));
          this.alfSubscribe(this.pageForwardTopic, lang.hitch(this, this.onPageForward));
+         this.alfSubscribe(this.documentLoadFailedTopic, lang.hitch(this, this.hideControls));
+
+         // We're setting up a promise here primarily to ensure that any attempt to work with the
+         // controls (e.g. if data fails to be loaded and we want to hide the controls) will wait
+         // until after the controls have been created.
+         this._controlsLoaded = new Deferred();
       },
       
       /**
@@ -160,6 +169,10 @@ define(["dojo/_base/declare",
          if (payload && payload.value && payload.value !== this.documentsPerPage && this.isValidPageSize(payload.value))
          {
             this.documentsPerPage = payload.value;
+            this.alfPublish(this.setPreferenceTopic, {
+               preference: "org.alfresco.share.documentList.documentsPerPage",
+               value: this.documentsPerPage
+            });
          }
       },
       
@@ -213,6 +226,28 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Hides all the pagination controls.
+       *
+       * @instance
+       * @param  {object} payload Any payload included with the publication (not required)
+       */
+      hideControls: function alfresco_lists_Paginator__hideControls(/*jshint unused:false*/ payload) {
+         when(this._controlsLoaded, lang.hitch(this, function() {
+            if (this.pageSelector)
+            {
+               domClass.add(this.pageSelector.domNode, "hidden");
+            }
+            domClass.add(this.pageBack.domNode, "hidden");
+            domClass.add(this.pageMarker.domNode, "hidden");
+            domClass.add(this.pageForward.domNode, "hidden");
+            if (this.resultsPerPageGroup)
+            {
+               domClass.add(this.resultsPerPageGroup.domNode, "hidden");
+            }
+         }));
+      },
+
+      /**
        * The property in the response that indicates the starting index of overall data to request.
        *
        * @instance
@@ -245,21 +280,11 @@ define(["dojo/_base/declare",
              (totalRecords || totalRecords === 0) && 
              (startIndex || startIndex === 0))
          {
-            if (totalRecords === 0)
+            if (totalRecords === 0 || startIndex > totalRecords)
             {
                // Hide pagination controls when there are no results...
-               // domClass.add(this.domNode, "hidden");
-               if (this.pageSelector)
-               {
-                  domClass.add(this.pageSelector.domNode, "hidden");
-               }
-               domClass.add(this.pageBack.domNode, "hidden");
-               domClass.add(this.pageMarker.domNode, "hidden");
-               domClass.add(this.pageForward.domNode, "hidden");
-               if (this.resultsPerPageGroup)
-               {
-                  domClass.add(this.resultsPerPageGroup.domNode, "hidden");
-               }
+               // Or if the startIndex is greater than the number of available results
+               this.hideControls();
             }
             else
             {
@@ -382,16 +407,6 @@ define(["dojo/_base/declare",
        */
       pageSelectorGroup: null,
       
-      /**
-       * This is the minimum width the container node must be in order for the page size selector
-       * to be displayed.
-       *
-       * @instance
-       * @type {number}
-       * @default 1024
-       */
-      hidePageSizeOnWidth: 1024,
-
       /**
        * Indicates whether the paginator should be displayed in "compact" mode where only
        * the back and forward buttons are displayed.
@@ -552,7 +567,6 @@ define(["dojo/_base/declare",
                   id: this.id + "_RESULTS_PER_PAGE_SELECTOR",
                   label: this.message("list.paginator.docsPerPageSelect.label"),
                   selectionTopic: this.docsPerpageSelectionTopic,
-                  minRwdWidth: this.hidePageSizeOnWidth,
                   widgets: [
                      {
                         name: "alfresco/menus/AlfMenuGroup",
@@ -603,6 +617,7 @@ define(["dojo/_base/declare",
             this.processLoadedDocuments(this.__deferredLoadedDocumentData);
          }
          delete this.__deferredLoadedDocumentData;
+         this._controlsLoaded.resolve();
       }
    });
 });

@@ -53,6 +53,34 @@ if (data.defaultvalue && data.defaultvaluetype === 'object') {
         <?js }); ?></ul>
     </dd>
 
+    <?js if (data.pageSafe) { ?>
+    <dt class="tag-default">Support:</dt>
+    <dd class="tag-default">
+        <ul><li>This module is safe to be used in an Aikau page model (at least until the next major release).</li></ul>
+    </dd>
+    <?js } ?> 
+
+    <?js if (data.extendSafe) { ?>
+    <dt class="tag-default">Support:</dt>
+    <dd class="tag-default">
+        <ul><li>This module is safe to be extended by 3rd-party widgets or services (at least until the next major release).</li></ul>
+    </dd>
+    <?js } ?> 
+
+    <?js if (data.mixinSafe) { ?>
+    <dt class="tag-default">Support:</dt>
+    <dd class="tag-default">
+        <ul><li>This module is safe to be mixed into 3rd-party widgets and services (at least until the next major release).</li></ul>
+    </dd>
+    <?js } ?> 
+
+    <?js if (data.useSafe) { ?>
+    <dt class="tag-default">Support:</dt>
+    <dd class="tag-default">
+        <ul><li>This module is safe to be used in 3rd party modules (at least until the next major release).</li></ul>
+    </dd>
+    <?js } ?> 
+
     <dt class="tag-copyright">Copyright:</dt>
     <dd class="tag-copyright"><ul class="dummy"><li>Copyright (C) 2005-<?js= new Date().getFullYear() ?> Alfresco Software Limited</li></ul></dd>
 
@@ -60,6 +88,35 @@ if (data.defaultvalue && data.defaultvaluetype === 'object') {
     <dd class="tag-license"><ul class="dummy"><li>GNU Lesser General Public License, see: <a href="https://wiki.alfresco.com/wiki/Open_Source_Licensing">Open Source Licensing</a></li></ul></dd>
 
     <?js } ?>
+
+    <?js if (data.callable) { ?>
+    <dt class="tag-default">Support:</dt>
+    <dd class="tag-default">
+        <ul><li>This function is safe to call by extending or mixing modules (at least until the next major release).</li></ul>
+    </dd>
+    <?js } ?> 
+
+    <?js if (data.extendable) { ?>
+    <dt class="tag-default">Support:</dt>
+    <dd class="tag-default">
+        <ul><li>This function is safe to be overridden by extending or mixing modules (at least until the next major release). The inherited code must be called in the overriding function and if the inherited function returns a value then that value must be returned by the overriding function.</li></ul>
+    </dd>
+    <?js } ?> 
+
+    <?js if (data.overrideable) { ?>
+    <dt class="tag-default">Support:</dt>
+    <dd class="tag-default">
+        <ul><li>This function is safe to be overridden by extending or mixing modules (at least until the next major release). The inherited code does not need to be called however the overriding function must perform the
+        designated action and return the appropriate data where appropriate.</li></ul>
+    </dd>
+    <?js } ?> 
+
+    <?js if (data.extensionPoint) { ?>
+    <dt class="tag-default">Support:</dt>
+    <dd class="tag-default">
+        <ul><li>This function is provided as an extension point and is safe to be overridden by extending or mixing modules (at least until the next major release).</li></ul>
+    </dd>
+    <?js } ?> 
 
     <?js if (data.defaultvalue) {?>
     <dt class="tag-default">Default Value:</dt>

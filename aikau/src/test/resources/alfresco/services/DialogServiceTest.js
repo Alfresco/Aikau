@@ -30,6 +30,7 @@ define(["intern!object",
    var browser;
 
    function closeAllDialogs() {
+      // Todo: this fails to close multiple dialogs in Chrome
       return browser.end()
          .findAllByCssSelector(".dijitDialogCloseIcon")
          .then(function(closeButtons) {
@@ -228,6 +229,27 @@ define(["intern!object",
                      .then(function(height) {
                         assert.equal(height, "400px", "Height was not set correctly");
                      });
+            });
+      },
+
+      "Check form dialog has customised IDs for buttons": function () {
+         return closeAllDialogs()
+            .then(function () {
+               return browser.findById("LAUNCH_CUSTOM_BUTTON_ID_DIALOG")
+                  .click()
+                  .end()
+
+                  .findAllByCssSelector("#CUSTOM_OK_BUTTON_ID")
+                  .then(function (elements) {
+                     assert.lengthOf(elements, 1, "OK Button missing custom id");
+                  })
+                  .end()
+
+                  .findAllByCssSelector("#CUSTOM_DIALOG_CANCEL")
+                  .then(function (elements) {
+                     assert.lengthOf(elements, 1, "CANCEL Button missing default id");
+                  });
+
             });
       },
 

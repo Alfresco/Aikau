@@ -222,7 +222,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_documentlibrary_AlfBreadcrumbTrail__postCreate() {
-
          this.alfSubscribe(this.showPathTopic, lang.hitch(this, this.onShowBreadcrumb));
          this.alfSubscribe(this.filterSelectionTopic, lang.hitch(this, this.onFilterSelection));
          this.alfSubscribe("ALF_DOCUMENTLIST_CATEGORY_CHANGED", lang.hitch(this, this.onFilterSelection));
@@ -279,7 +278,6 @@ define(["dojo/_base/declare",
          if (payload && payload.node)
          {
             this.currentNode = payload.node;
-            this.renderPathBreadcrumbTrail();
          }
          else
          {

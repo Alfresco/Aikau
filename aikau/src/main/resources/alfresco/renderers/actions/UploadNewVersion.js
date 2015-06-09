@@ -35,7 +35,7 @@ define(["service/constants/Default"],
        function(AlfConstants) {
 
    return  {
-      label: "actions.upload-new-version.label", // TODO: Localization
+      label: "actions.upload-new-version.label",
       iconClass: "alf-upload-new-version-icon",
       publishTopic: "ALF_SHOW_UPLOADER",
       publishPayloadType: "CURRENT_ITEM", // TODO: Need to make sure this is correct
@@ -47,7 +47,16 @@ define(["service/constants/Default"],
       renderFilters: [
          // Replacing: evaluator.doclib.action.upload
          // TODO: Browser user-agent filter to only render for browsers that support upload
-
+         
+         // The current user needs to have Write permission on the node
+         {
+            renderFilter: [
+               {
+                  property: "node.permissions.user.Write",
+                  values: [true]
+               }
+            ]
+         },
          {
             // Any of the following can be true:
             // 1) Node is NOT locked and is NOT the workingCopy and does NOT have a cm:locktype property set to "NODE_LOCK"

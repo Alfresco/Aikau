@@ -8,7 +8,9 @@
         "includePattern": ".+\\.js(doc)?$",
         "excludePattern": "(^|\\/|\\\\)\\$"
     },
-    "plugins": [],
+    "plugins": [
+      "src/jsdoc-plugins/customization-support-tags"
+    ],
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": false

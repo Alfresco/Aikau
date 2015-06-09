@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -92,6 +92,16 @@ define(["dojo/_base/declare"],
        * @default "ALF_DOCLIST_DOCUMENTS_LOADED"
        */
       documentsLoadedTopic: "ALF_DOCLIST_DOCUMENTS_LOADED",
+
+      /**
+       * This topic is used to indicate that documents could not be loaded.
+       * 
+       * @event documentLoadFailedTopic
+       * @instance
+       * @type {string} 
+       * @default "ALF_DOCLIST_DOCUMENTS_LOAD_FAILED"
+       */
+      documentLoadFailedTopic: "ALF_DOCLIST_DOCUMENTS_LOAD_FAILED",
       
       /**
        * This topic is used to publish changes of page within the current location.
