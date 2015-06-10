@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -159,7 +159,7 @@ define(["dojo/_base/declare",
        *  
        * @instance
        */
-      postCreate: function alf_menus_header_AlfSitesMenu__postCreate() {
+      postCreate: function alfresco_header_AlfSitesMenu__postCreate() {
          if (!this.label)
          {
             this.set("label", this.message("menu.label"));
@@ -208,7 +208,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log", "Loading menu");
             var url = this._menuUrl;
-            if (url == null)
+            if (!url)
             {
                url = AlfConstants.URL_SERVICECONTEXT + "header/sites-menu/recent";
                if (this.currentSite)
@@ -230,7 +230,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      _menuDataLoaded: function alfresco_header_AlfSitesMenu___menuDataLoaded(response, originalRequestConfig) {
+      _menuDataLoaded: function alfresco_header_AlfSitesMenu___menuDataLoaded(response, /*jshint unused:false*/ originalRequestConfig) {
          this.alfLog("log", "Menu data loaded successfully", response);
          this._menuLoaded = true;
          
@@ -276,7 +276,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} widgetsRecent An array of the recently visited site menu item widget configurations
        */
-      addRecentGroup: function alf_header_AlfSitesMenu__addRecentGroup(widgetsRecent) {
+      addRecentGroup: function alfresco_header_AlfSitesMenu__addRecentGroup(widgetsRecent) {
          if (this.popup && this.showRecentSites)
          {
             // Create the 'Recent' group widget...
@@ -298,7 +298,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      _menuDataLoadFailed: function alfresco_header_AlfSitesMenu___menuDataLoadFailed(response, originalRequestConfig) {
+      _menuDataLoadFailed: function alfresco_header_AlfSitesMenu___menuDataLoadFailed(response, /*jshint unused:false*/ originalRequestConfig) {
          this.alfLog("error", "Could not load sites menu items", response);
          var _this = this;
          array.forEach(this.popup.getChildren(), function(widget, index) {
@@ -325,7 +325,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      addMenuFailMessageItem: function alf_header_AlfSitesMenu__addMenuFailMessageItem() {
+      addMenuFailMessageItem: function alfresco_header_AlfSitesMenu__addMenuFailMessageItem() {
          this._menuMessageItem = new AlfMenuItem({
             label: "menu.load.error"
          });
@@ -355,7 +355,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      loadFavourites: function alf_header_AlfSitesMenu__loadFavourites() {
+      loadFavourites: function alfresco_header_AlfSitesMenu__loadFavourites() {
          if (this._favouritesLoaded)
          {
             this.alfLog("log", "Favourites already loaded");
@@ -364,7 +364,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log", "Loading favourites");
             var url = this._favouritesUrl;
-            if (url == null)
+            if (!url)
             {
                url = AlfConstants.URL_SERVICECONTEXT + "header/sites-menu/favourites";
             }
@@ -382,18 +382,21 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      _favouritesDataLoaded: function alfresco_header_AlfSitesMenu___favouritesDataLoaded(response, originalRequestConfig) {
+      _favouritesDataLoaded: function alfresco_header_AlfSitesMenu___favouritesDataLoaded(response, /*jshint unused:false*/ originalRequestConfig) {
          this.alfLog("log", "Menu data loaded successfully", response);
          this._favouritesLoaded = true;
          
+         // Close the popup before adding favourites so that it can be re-opened once populated
+         // to ensure consistency of popup placement (see AKU-354)...
+         popup.close(this.favoritesCascade.popup);
+
          // Check for keyboard access by seeing if the first child is focused...
          var focusFirstChild = (this.favouritesList && this.favouritesList.getChildren().length > 0 && this.favouritesList.getChildren()[0].focused);
          
          // Remove the loading favourites item...
-         var _this = this;
          array.forEach(this.favouritesList.getChildren(), function(widget, index) {
-            _this.favouritesList.removeChild(widget);
-         });
+            this.favouritesList.removeChild(widget);
+         }, this);
          
          // Add recent groups if there are some...
          if (response.widgetsFavourites)
@@ -412,6 +415,31 @@ define(["dojo/_base/declare",
             }
          }
          
+         // Re-open the popup (see AKU-354)...
+         var self = this.usefulGroup;
+         this.favoritesCascade._openPopup({
+            parent: this.usefulGroup,
+            // popup: this.favoritesCascade.popup,
+            orient: ["after", "before"],
+            onCancel: function(){ // called when the child menu is canceled
+               if(focus){
+                  // put focus back on my node before focused node is hidden
+                  self.focusChild(this.favoritesCascade);
+               }
+
+               // close the submenu (be sure this is done _after_ focus is moved)
+               self._cleanUp();
+            },
+            onExecute: lang.hitch(this, "_cleanUp", true),
+            onClose: function(){
+               // Remove handler created by onItemHover
+               if(self._mouseoverHandle){
+                  self._mouseoverHandle.remove();
+                  delete self._mouseoverHandle;
+               }
+            }
+         }, false);
+
          if (focusFirstChild)
          {
             // Focus the first favourite (or the no favourites item)...
@@ -455,7 +483,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      _favouritesDataLoadFailed: function alfresco_header_AlfSitesMenu___favouritesDataLoadFailed(response, originalRequestConfig) {
+      _favouritesDataLoadFailed: function alfresco_header_AlfSitesMenu___favouritesDataLoadFailed(response, /*jshint unused:false*/ originalRequestConfig) {
          this.alfLog("error", "Could not load favourites menu items", response);
          // Remove the loading favourites item...
          var _this = this;
@@ -481,7 +509,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      addNoFavouritesMessageItem: function alf_header_AlfSitesMenu__addNoFavouritesMessageItem() {
+      addNoFavouritesMessageItem: function alfresco_header_AlfSitesMenu__addNoFavouritesMessageItem() {
          this._favouritesMessageItem = new AlfMenuItem({
             label: "no.favourites.label"
          });
@@ -496,7 +524,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      addFavouritesFailMessageItem: function alf_header_AlfSitesMenu__addFavouritesFailMessageItem() {
+      addFavouritesFailMessageItem: function alfresco_header_AlfSitesMenu__addFavouritesFailMessageItem() {
          this._favouritesMessageItem = new AlfMenuItem({
             label: "favourites.load.error"
          });
@@ -511,7 +539,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The menu item to add
        * @param {integer} index The index to add the menu item at.
        */
-      _addMenuItem: function(group, widget, index) {
+      _addMenuItem: function alfresco_header_AlfSitesMenu___addMenuItem(group, widget, index) {
          this.alfLog("log", "Adding menu item", widget, index, group);
          var item = new AlfMenuItem(widget.config);
          group.addChild(item);
@@ -524,7 +552,7 @@ define(["dojo/_base/declare",
        * @param {boolean} showAddFavourite Indicates whether or not to display the "Add Favourite" menu item
        * @param {boolean} showRemoveFavourite Indicates whether or not to display the "Remove Favourite" menu item
        */
-      addUsefulGroup: function alf_header_AlfSitesMenu__addUsefulGroup(showAddFavourite, showRemoveFavourite) {
+      addUsefulGroup: function alfresco_header_AlfSitesMenu__addUsefulGroup(showAddFavourite, showRemoveFavourite) {
          this.alfLog("log", "Creating 'Useful' group");
          if (this.popup && this.showUsefulGroup)
          {
@@ -726,7 +754,7 @@ define(["dojo/_base/declare",
          {
             var currFavourites = this.favouritesList.getChildren(),
             foundIndex = null;
-            for (var i=0; i<currFavourites.length && foundIndex == null; i++)
+            for (var i=0; i<currFavourites.length && foundIndex === null; i++)
             {
                if (newFavourite.label < currFavourites[i].label)
                {
@@ -748,7 +776,7 @@ define(["dojo/_base/declare",
          
          if (data.site)
          {
-            if (data.site == this.currentSite)
+            if (data.site === this.currentSite)
             {
                // The site removed is the site the user is currently viewing, so we can removed the option to make the 
                // current site a favourite...
@@ -773,7 +801,7 @@ define(["dojo/_base/declare",
       favouriteRemoved: function alfresco_header_AlfSitesMenu__favouriteRemoved(data) {
          this.alfLog("log", "Favourite Site Removed", data);
          
-         if (data && data.site == this.currentSite)
+         if (data && data.site === this.currentSite)
          {
             // A request has been made to remove the current site.
             this.usefulGroup.removeChild(this.removeFavourite);
@@ -784,8 +812,8 @@ define(["dojo/_base/declare",
          if (this.favouritesList)
          {
             var _this = this;
-            array.forEach(this.favouritesList.getChildren(), function(currFavourite, index) {
-               if (currFavourite.siteShortName == data.site)
+            array.forEach(this.favouritesList.getChildren(), function(currFavourite, /*jshint unused:false*/ index) {
+               if (currFavourite.siteShortName === data.site)
                {
                   // Remove the favourite, but keep a reference to the removed menu item in case
                   // the user decides to add it back in. This makes sense because we don't want
@@ -811,7 +839,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} data An object that should include details of the user and the joined site
        */
-      siteJoined: function alfresco_header_AlfSitesMenu__siteJoined(data) {
+      siteJoined: function alfresco_header_AlfSitesMenu__siteJoined(/*jshint unused:false*/ data) {
          // At the moment nothing is being implemented here, because the page will be reloaded anyway
       },
       
@@ -822,7 +850,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} data An object that should include details of the user and the joined left
        */
-      siteLeft: function alfresco_header_AlfSitesMenu__siteLeft(data) {
+      siteLeft: function alfresco_header_AlfSitesMenu__siteLeft(/*jshint unused:false*/ data) {
          // At the moment nothing is being implemented here, because the page will be reloaded anyway
       },
       
@@ -831,7 +859,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} data 
        */
-      siteDetailsUpdated: function alfresco_header_AlfSitesMenu__siteDetailsUpdated(data) {
+      siteDetailsUpdated: function alfresco_header_AlfSitesMenu__siteDetailsUpdated(/*jshint unused:false*/ data) {
          this.alfLog("log", "Not yet implemented!");
          // TODO: Implement this!
       },
