@@ -20,7 +20,7 @@ model.jsonModel = {
                   targetValues: ["alfresco/layout/HorizontalWidgets"],
                   widgetsForConfig: [
                      {
-                        id: "ALF_EDIT_FORM_CONTROL_LABEL",
+                        id: "MARGINS_LEFT",
                         name: "alfresco/forms/controls/NumberSpinner",
                         config: {
                            fieldId: "MARGINS_LEFT",
@@ -29,7 +29,7 @@ model.jsonModel = {
                         }
                      },
                      {
-                        id: "ALF_EDIT_FORM_CONTROL_DESCRIPTION",
+                        id: "MARGINS_RIGHT",
                         name: "alfresco/forms/controls/NumberSpinner",
                         config: {
                            fieldId: "MARGINS_RIGHT",
@@ -41,7 +41,7 @@ model.jsonModel = {
                   ],
                   widgetsForNestedConfig: [
                      {
-                        id: "ALF_EDIT_FORM_CONTROL_LABEL",
+                        id: "WIDTH_PX",
                         name: "alfresco/forms/controls/NumberSpinner",
                         config: {
                            fieldId: "WIDTH_PX",
@@ -77,20 +77,20 @@ model.jsonModel = {
                   targetValues: ["alfresco/layout/VerticalWidgets"],
                   widgetsForConfig: [
                      {
-                        id: "ALF_EDIT_FORM_CONTROL_LABEL",
+                        id: "MARGINS_TOP",
                         name: "alfresco/forms/controls/NumberSpinner",
                         config: {
-                           fieldId: "MARGINS_LEFT",
-                           label: "Margins Left",
+                           fieldId: "MARGINS_TOP",
+                           label: "Margins Top",
                            name: "config.widgetMarginTop"
                         }
                      },
                      {
-                        id: "ALF_EDIT_FORM_CONTROL_DESCRIPTION",
+                        id: "MARGINS_BOTTOM",
                         name: "alfresco/forms/controls/NumberSpinner",
                         config: {
-                           fieldId: "MARGINS_RIGHT",
-                           label: "Margins Right",
+                           fieldId: "MARGINS_BOTTOM",
+                           label: "Margins Bottom",
                            name: "config.widgetMarginBottom",
                            value: 0
                         }
@@ -100,6 +100,7 @@ model.jsonModel = {
                      {
                         name: "alfresco/dnd/DroppedNestingItemWrapper",
                         config: {
+                           additionalCssClasses: "vertical-widgets-wrapper",
                            showEditButton: true,
                            label: "{label}",
                            value: "{value}",
@@ -135,16 +136,6 @@ model.jsonModel = {
                            label: "Horizontal Widgets",
                            value: {
                               name: "alfresco/layout/HorizontalWidgets",
-                              config: {
-                                
-                              }
-                           }
-                        },
-                        {
-                           type: [ "widget" ],
-                           label: "Vertical Widgets",
-                           value: {
-                              name: "alfresco/layout/VerticalWidgets",
                               config: {
                                 
                               }

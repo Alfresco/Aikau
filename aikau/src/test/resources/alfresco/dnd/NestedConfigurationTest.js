@@ -69,6 +69,9 @@ define(["intern!object",
             .pressKeys(keys.ENTER)
             .sleep(pause)
 
+            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for the dialog to render
+            .end()
+
             // Now check that there are 2 form controls (should have inherited one additional configuration field)
             .findAllByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .alfresco-forms-controls-BaseFormControl")
                .then(function(elements) {
@@ -153,6 +156,55 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Horizontal Widgets", "The dropped item label was not preserved after editing parent");
+            });
+      },
+
+      "Check prepopulated nested widget configuration": function() {
+         return browser.findByCssSelector(".vertical-widgets-wrapper .action.edit > img")
+            .click()
+         .end()
+
+         // Wait for dialog to be displayed...
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed")
+         .end()
+
+         .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #MARGINS_TOP .dijitInputContainer input")
+         .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, 5, "The margins top value was not set correctly");
+            })
+         .end()
+
+         .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #MARGINS_BOTTOM .dijitInputContainer input")
+         .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, 4, "The margins bottom value was not set correctly");
+            })
+         .end();
+      },
+
+      "Update config values and check form save": function() {
+         return browser.findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #MARGINS_TOP .dijitArrowButton")
+            .click()
+            .click()
+         .end()
+         .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .confirmationButton > span")
+            .click()
+         .end()
+            
+         // Wait for the dialog to be hidden...
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") 
+         .end()
+
+         // Post the form...
+         .findByCssSelector("#FORM2 .confirmationButton > span")
+            .click()
+         .end()
+
+         // Check that the updated values are correctly logged
+         .getLastPublish("FORM2_POST")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "data.0.config.widgets.0.config.widgetMarginTop", 7, "Updated value not saved on form post");
             });
       },
 
