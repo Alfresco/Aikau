@@ -65,6 +65,7 @@ define({
       "src/test/resources/alfresco/dnd/DndTest",
       "src/test/resources/alfresco/dnd/FormCreationTest",
       "src/test/resources/alfresco/dnd/ModelCreationServiceTest",
+      "src/test/resources/alfresco/dnd/NestedConfigurationTest",
 
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",

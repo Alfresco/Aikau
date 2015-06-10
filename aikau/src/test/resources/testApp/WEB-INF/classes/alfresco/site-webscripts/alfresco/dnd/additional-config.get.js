@@ -71,6 +71,49 @@ model.jsonModel = {
                         }
                      }
                   ]
+               },
+               {
+                  property: "name",
+                  targetValues: ["alfresco/layout/VerticalWidgets"],
+                  widgetsForConfig: [
+                     {
+                        id: "ALF_EDIT_FORM_CONTROL_LABEL",
+                        name: "alfresco/forms/controls/NumberSpinner",
+                        config: {
+                           fieldId: "MARGINS_LEFT",
+                           label: "Margins Left",
+                           name: "config.widgetMarginTop"
+                        }
+                     },
+                     {
+                        id: "ALF_EDIT_FORM_CONTROL_DESCRIPTION",
+                        name: "alfresco/forms/controls/NumberSpinner",
+                        config: {
+                           fieldId: "MARGINS_RIGHT",
+                           label: "Margins Right",
+                           name: "config.widgetMarginBottom",
+                           value: 0
+                        }
+                     }
+                  ],
+                  widgetsForDisplay: [
+                     {
+                        name: "alfresco/dnd/DroppedNestingItemWrapper",
+                        config: {
+                           showEditButton: true,
+                           label: "{label}",
+                           value: "{value}",
+                           widgets: [
+                              {
+                                 name: "alfresco/dnd/DroppedItem",
+                                 config: {
+                                    label: "Vertical Widgets"
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  ]
                }
             ]
          }
@@ -92,6 +135,16 @@ model.jsonModel = {
                            label: "Horizontal Widgets",
                            value: {
                               name: "alfresco/layout/HorizontalWidgets",
+                              config: {
+                                
+                              }
+                           }
+                        },
+                        {
+                           type: [ "widget" ],
+                           label: "Vertical Widgets",
+                           value: {
+                              name: "alfresco/layout/VerticalWidgets",
                               config: {
                                 
                               }
@@ -127,6 +180,50 @@ model.jsonModel = {
                                  }
                               ]
                            }
+                        },
+                        {
+                           id: "FORM2",
+                           name: "alfresco/forms/Form",
+                           config: {
+                              scopeFormControls: false,
+                              okButtonLabel: "Save",
+                              okButtonPublishTopic: "FORM2_POST",
+                              okButtonPublishGlobal: true,
+                              showCancelButton: false,
+                              widgets: [
+                                 {
+                                    id: "ROOT_DROPPED_ITEMS2",
+                                    name: "alfresco/forms/controls/DragAndDropTargetControl",
+                                    config: {
+                                       label: "Data",
+                                       name: "data",
+                                       value: [
+                                          {
+                                             label: "Horizontal Widgets",
+                                             name: "alfresco/layout/HorizontalWidgets",
+                                             config: {
+                                                widgetMarginLeft: 7,
+                                                widgetMarginRight: 6,
+                                                widgets: [
+                                                   {
+                                                      label: "Vertical Widgets",
+                                                      name: "alfresco/layout/VerticalWidgets",
+                                                      config: {
+                                                         widgetMarginTop: 5,
+                                                         widgetMarginBottom: 4,
+                                                         widthPx: 3
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ],
+                                       acceptTypes: ["widget"],
+                                       useModellingService: true
+                                    }
+                                 }
+                              ]
+                           }
                         }
                      ]
                   }
@@ -135,7 +232,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
