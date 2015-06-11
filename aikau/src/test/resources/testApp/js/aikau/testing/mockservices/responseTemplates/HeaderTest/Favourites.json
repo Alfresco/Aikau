@@ -25,6 +25,222 @@
             "targetUrl": "site\/site2\/dashboard"
          }, 
          "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site3", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site3", 
+            "siteShortName": "site3", 
+            "siteRole": "SiteManager", 
+            "label": "Site3", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site3\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site4", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site4", 
+            "siteShortName": "site4", 
+            "siteRole": "SiteManager", 
+            "label": "Site4", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site4\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site5", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site5", 
+            "siteShortName": "site5", 
+            "siteRole": "SiteManager", 
+            "label": "Site5", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site5\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site6", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site6", 
+            "siteShortName": "site6", 
+            "siteRole": "SiteManager", 
+            "label": "Site6", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site6\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site7", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site7", 
+            "siteShortName": "site7", 
+            "siteRole": "SiteManager", 
+            "label": "Site7", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site7\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site8", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site8", 
+            "siteShortName": "site8", 
+            "siteRole": "SiteManager", 
+            "label": "Site8", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site8\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site9", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site9", 
+            "siteShortName": "site9", 
+            "siteRole": "SiteManager", 
+            "label": "Site9", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site9\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site10", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site10", 
+            "siteShortName": "site10", 
+            "siteRole": "SiteManager", 
+            "label": "Site10", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site10\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site11", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site11", 
+            "siteShortName": "site11", 
+            "siteRole": "SiteManager", 
+            "label": "Site11", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site11\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site12", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site12", 
+            "siteShortName": "site12", 
+            "siteRole": "SiteManager", 
+            "label": "Site12", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site12\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site13", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site13", 
+            "siteShortName": "site13", 
+            "siteRole": "SiteManager", 
+            "label": "Site13", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site13\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site14", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site14", 
+            "siteShortName": "site14", 
+            "siteRole": "SiteManager", 
+            "label": "Site14", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site14\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site15", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site15", 
+            "siteShortName": "site15", 
+            "siteRole": "SiteManager", 
+            "label": "Site15", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site15\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site16", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site16", 
+            "siteShortName": "site16", 
+            "siteRole": "SiteManager", 
+            "label": "Site16", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site16\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site17", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site17", 
+            "siteShortName": "site17", 
+            "siteRole": "SiteManager", 
+            "label": "Site17", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site17\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site18", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site18", 
+            "siteShortName": "site18", 
+            "siteRole": "SiteManager", 
+            "label": "Site18", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site18\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site19", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site19", 
+            "siteShortName": "site19", 
+            "siteRole": "SiteManager", 
+            "label": "Site19", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site19\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
+      }, 
+      {
+         "id": "ALF_FAVOURITE_SITE___site20", 
+         "config": {
+            "id": "HEADER_SITES_MENU_FAVOURITE_site20", 
+            "siteShortName": "site20", 
+            "siteRole": "SiteManager", 
+            "label": "Site20", 
+            "iconClass": "alf-favourite-site-icon", 
+            "targetUrl": "site\/site20\/dashboard"
+         }, 
+         "name": "alfresco\/header\/AlfMenuItem"
       }
    ]
 } 
