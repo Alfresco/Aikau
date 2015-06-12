@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfListView</shortname>
+  <description>This is an example of an AlfList using the AlfListView</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfListView</url>
+</webscript>
