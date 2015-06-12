@@ -1,4 +1,5 @@
 # Ignored directories (please keep alphabetical)
+/.settings/
 /bin/
 /code-coverage-reports/
 /docs/
@@ -8,6 +9,8 @@
 /target/
 
 # Ignored files (please keep alphabetical)
+/.classpath
+/.project
 /.sublime-grunt.cache
 /clientConfig.js
 /phantomjsdriver.log
