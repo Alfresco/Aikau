@@ -39,11 +39,38 @@ define(["dojo/_base/declare",
         "alfresco/dnd/DragAndDropTarget",
         "dojo/_base/lang",
         "dojo/on",
-        "alfresco/dnd/Constants"], 
-        function(declare, BaseFormControl, CoreWidgetProcessing, DragAndDropTarget, lang, on, Constants) {
+        "alfresco/dnd/Constants",
+        "dijit/registry"], 
+        function(declare, BaseFormControl, CoreWidgetProcessing, DragAndDropTarget, lang, on, Constants, registry) {
    
    return declare([BaseFormControl, CoreWidgetProcessing], {
       
+      /**
+       * Defines a topic to subscribe to that if published on will result in all of the dropped items being
+       * deleted. The difference between this topic and the 
+       * [clearDroppedItemsTopic]{@link module:alfresco/forms/controls/DragAndDropTargetControl#clearDroppedItemsTopic}
+       * is that single-use items that have been used will NOT be returned to the 
+       * [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems#items} widget from which they were dragged.
+       * 
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      clearTopic: null,
+      
+      /**
+       * Defines a topic to subscribe to that if published on will result in all of the dropped items being
+       * deleted. The difference between this topic and the 
+       * [clearTopic]{@link module:alfresco/forms/controls/DragAndDropTargetControl#clearTopic}
+       * is that single-use items that have been used WILL be returned to the 
+       * [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems#items} widget from which they were dragged.
+       * 
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      clearDroppedItemsTopic: null,
+
       /**
        * Indicates whether or not to use a modelling service to render the dropped items.
        * This will result in publications being made to request the widgets to use for each
@@ -116,6 +143,58 @@ define(["dojo/_base/declare",
          else
          {
             return new DragAndDropTarget(config);
+         }
+      },
+
+      /**
+       * Creates subscriptions to the [clearTopic]{@link module:alfresco/forms/controls/DragAndDropTargetControl#clearTopic}
+       * and [clearDroppedItemsTopic]{@link module:alfresco/forms/controls/DragAndDropTargetControl#clearDroppedItemsTopic}
+       * topics (if configured) in order 
+       * 
+       * @instance
+       */
+      startup: function alfresco_dnd_DragAndDropFormControlTarget__startup() {
+         if(this.clearTopic)
+         {
+            this.alfSubscribe(this.clearTopic, lang.hitch(this, this.onClear));
+         }
+         if(this.clearDroppedItemsTopic)
+         {
+            this.alfSubscribe(this.clearDroppedItemsTopic, lang.hitch(this, this.onClearDroppedItems));
+         }
+      },
+
+      /**
+       * This function wipes the canvas, discarding nodes it contains.
+       * 
+       * @instance
+       */
+      onClear: function cmm_forms_controls_DragAndDropTargetControl__onClear() {
+         var canvas = lang.getObject("wrappedWidget.previewTarget", false, this);
+         if (canvas)
+         {
+            canvas.selectAll().deleteSelectedNodes();
+         }
+      },
+
+      /**
+       * This function wipes the canvas by running the deletion process of any nodes it contains. The 
+       * nodes will therefore return to their palettes of origin if required.
+       * 
+       * @instance
+       */
+      onClearDroppedItems: function cmm_forms_controls_DragAndDropTargetControl__onClearDroppedItems() {
+         var nodes = lang.getObject("wrappedWidget.previewTarget.map", false, this);
+         for (var node in nodes)
+         {
+            if (nodes.hasOwnProperty(node))
+            {
+               var widget = registry.byId(node);
+               if(widget && typeof widget.onItemDelete === "function")
+               {
+                  widget.onItemDelete();
+               }
+            }
          }
       },
 

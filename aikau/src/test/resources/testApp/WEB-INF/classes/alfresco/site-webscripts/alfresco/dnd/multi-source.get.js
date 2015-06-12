@@ -108,7 +108,9 @@ model.jsonModel = {
                               name: "data",
                               value: null,
                               acceptTypes: ["widget"],
-                              useModellingService: true
+                              useModellingService: true,
+                              clearTopic: "BRUTAL_CLEAR",
+                              clearDroppedItemsTopic: "NICE_CLEAR"
                            }
                         }
                      ]
@@ -131,6 +133,22 @@ model.jsonModel = {
                   }
                }
             ]
+         }
+      },
+      {
+         id: "BRUTAL_CLEAR_BUTTON",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Brute Force Clear",
+            publishTopic: "BRUTAL_CLEAR"
+         }
+      },
+      {
+         id: "NICE_CLEAR_BUTTON",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Clear With Return",
+            publishTopic: "NICE_CLEAR"
          }
       },
       {
