@@ -192,7 +192,7 @@ define(["dojo/_base/declare",
                var widget = registry.byId(node);
                if(widget && typeof widget.onItemDelete === "function")
                {
-                  widget.onItemDelete.apply(widget);
+                  widget.onItemDelete();
                }
             }
          }
