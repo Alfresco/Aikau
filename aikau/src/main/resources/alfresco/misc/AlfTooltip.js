@@ -50,6 +50,34 @@
  *       }
  *    ]
  * }
+ * @example <caption>Example configuration using a click event rather than hover and width styling:</caption>
+ * {
+ *    name: "alfresco/layout/ClassicWindow",
+ *    config: {
+ *    title: "Tooltip displays on mouse over logo",
+ *    widgets: [
+ *       {
+ *          name: "alfresco/misc/AlfTooltip",
+ *          config: {
+ *             widgets: [
+ *                {
+ *                   name: "alfresco/logo/Logo"
+ *                }
+ *             ],
+ *             widgetsForTooltip: [
+ *                {
+ *                   name: "alfresco/html/Label",
+ *                   config: {
+ *                      label: "This is the tooltip content"
+ *                   }
+ *                }
+ *             ],
+ *             triggeringEvent: "click",
+ *             tooltipStyle: "width: 350px;"
+ *          }
+ *       }
+ *    ]
+ * }
  * 
  * @module alfresco/misc/AlfTooltip
  * @extends external:dijit/Menu
@@ -110,13 +138,22 @@ define(["dojo/_base/declare",
       _tooltip: null,
 
       /**
-       * The width of the tooltip. Default is 300 pixels wide.
+       * The style to be applied to the tooltip. Default is null.
        *
        * @instance
        * @type {string}
-       * @default "300px"
+       * @default null
        */
-      width: "300px",
+      tooltipStyle: null,
+
+      /**
+       * The Javascript "dojo/on" event to listen for. Default is mouseover.
+       *
+       * @instance
+       * @type {string}
+       * @default "mouseover"
+       */
+      triggeringEvent: "mouseover",
 
       /**
        * This is called to display the tooltip when the mouse goes over the target area. If the 
@@ -131,7 +168,7 @@ define(["dojo/_base/declare",
             this.processWidgets(this.widgetsForTooltip, this.dialogContent);
             this._tooltip = new TooltipDialog({
                id: this.id + "_TOOLTIP",
-               style: this.width,
+               style: this.tooltipStyle,
                content: this.dialogContent,
                onMouseLeave: lang.hitch(this, this.onHideTooltip)
             });
@@ -161,7 +198,7 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_misc_AlfTooltip__postCreate() {
          if (this.widgetsForTooltip)
          {
-            on(this.domNode, "mouseover", lang.hitch(this, this.onShowTooltip));
+            on(this.domNode, this.triggeringEvent, lang.hitch(this, this.onShowTooltip));
          }
          else
          {

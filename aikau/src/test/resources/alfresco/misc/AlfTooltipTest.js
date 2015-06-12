@@ -57,6 +57,16 @@ define(["intern!object",
             });
       },
 
+      "Check width of tooltip is correct": function() {
+         return browser.findByCssSelector("#SINGLE_ITEM_TOOLTIP")
+            .getSize()
+            .then(function(size) {
+               // width set is 300, 306 accounts for styling
+               assert(size.width == 306, "The tooltip width was incorrect, " +
+               		"expected 306 but was " + size.width); 
+            });
+      },
+
       "Check tooltip content": function() {
          return browser.findByCssSelector("#LABEL1")
             .getVisibleText()
@@ -73,6 +83,16 @@ define(["intern!object",
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The tooltip was not hidden");
+            });
+      },
+
+      "Check click tooltip is not displayed": function() {
+         return browser.findByCssSelector("#LOGO1_REQUIRES_CLICK")
+            .moveMouseTo()
+         .end()
+         .findAllByCssSelector("#LABEL1_REQUIRES_CLICK")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The tooltip was displayed but should require click");
             });
       },
 
