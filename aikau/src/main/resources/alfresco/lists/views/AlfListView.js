@@ -51,6 +51,15 @@ define(["dojo/_base/declare",
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _AlfDndDocumentUploadMixin], {
 
       /**
+       * The base CSS class for this widget
+       *
+       * @instance
+       * @type {string}
+       * @default "alfresco-lists-views-AlfListView"
+       */
+      baseClass: "alfresco-lists-views-AlfListView",
+
+      /**
        * An array of the i18n files to use with this widget.
        *
        * @instance
@@ -475,6 +484,7 @@ define(["dojo/_base/declare",
          if (this.noItemsMessage || this.widgetsForNoDataDisplay)
          {
             this.messageNode = domConstruct.create("div", {
+               className: this.baseClass + "__no-data",
                innerHTML: this.noItemsMessage
             }, this.domNode);
          }
@@ -499,6 +509,7 @@ define(["dojo/_base/declare",
       renderErrorDisplay: function alfresco_lists_views_AlfListView__renderErrorDisplay() {
          this.clearOldView();
          this.messageNode = domConstruct.create("div", {
+            className: this.baseClass + "__render-error",
             innerHTML: this.message("doclistview.rendering.error.message")
          }, this.domNode);
       },
