@@ -94,10 +94,18 @@
    color: #ED2525;
    font-weight: bold;
    font-size: @normal-font-size - 3;
+   margin: 0;
+}
+
+.alfresco-dialog-AlfDialog .dialog-body .alfresco-forms-controls-BaseFormControl > .title-row > .validation-message {
    margin: 4px 0 0 -8px;
 }
 
 .alfresco-forms-controls-BaseFormControl > .title-row > .validation-message.display {
+   display: inline-block;
+}
+
+.alfresco-dialog-AlfDialog .dialog-body .alfresco-forms-controls-BaseFormControl > .title-row > .validation-message.display {
    display: block;
 }
 
