@@ -139,6 +139,9 @@ define(["dojo/_base/declare",
       onPathChanged: function alfresco_documentlibrary_AlfDocumentList__onPathChanged(payload) {
          if (payload.path)
          {
+            // Clear any old data when infinite scroll is enabled (see AKU-358)
+            this.useInfiniteScroll && this.clearViews();
+
             if (this.useHash === true)
             {
                var currHash = ioQuery.queryToObject(hash());
@@ -177,6 +180,9 @@ define(["dojo/_base/declare",
       onCategoryChanged: function alfresco_documentlibrary_AlfDocumentList__onCategoryChanged(payload) {
          if (payload.path)
          {
+            // Clear any old data when infinite scroll is enabled (see AKU-358)
+            this.useInfiniteScroll && this.clearViews();
+
             if (this.useHash === true)
             {
                var currHash = ioQuery.queryToObject(hash());
@@ -215,6 +221,9 @@ define(["dojo/_base/declare",
       onFilterChanged: function alfresco_documentlibrary_AlfDocumentList__onFilterChanged(payload) {
          if (payload.value)
          {
+            // Clear any old data when infinite scroll is enabled (see AKU-358)
+            this.useInfiniteScroll && this.clearViews();
+
             if (this.useHash === true)
             {
                var currHash = ioQuery.queryToObject(hash());
@@ -253,6 +262,9 @@ define(["dojo/_base/declare",
       onTagChanged: function alfresco_documentlibrary_AlfDocumentList__onTagChanged(payload) {
          if (payload.value)
          {
+            // Clear any old data when infinite scroll is enabled (see AKU-358)
+            this.useInfiniteScroll && this.clearViews();
+
             if (this.useHash === true)
             {
                var currHash = ioQuery.queryToObject(hash());

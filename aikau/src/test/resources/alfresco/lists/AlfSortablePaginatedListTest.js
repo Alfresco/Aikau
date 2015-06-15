@@ -23,10 +23,57 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"], 
+        function (registerSuite, assert, require, TestCommon, keys) {
+
+   
 
    var browser;
+
+   var testClearingDocumentList = function(buttonId, errorMsg) {
+      return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
+         .click()
+      .end()
+      .findByCssSelector("#DOCUMENT_LIST tr:nth-child(1) .alfresco-renderers-Property")
+         .click()
+         .pressKeys(keys.ARROW_DOWN)
+         .pressKeys(keys.ARROW_DOWN)
+         .pressKeys(keys.ARROW_DOWN)
+         .pressKeys(keys.ARROW_DOWN)
+         .pressKeys(keys.ARROW_DOWN)
+         .pressKeys(keys.ARROW_DOWN)
+         .pressKeys(keys.ARROW_DOWN)
+         .pressKeys(keys.ARROW_DOWN)
+      .end()
+      .getLastPublish("DOCUMENT_LIST_ALF_EVENTS_SCROLL")
+         .then(function(payload) {
+            assert.isNotNull(payload, "Document list scroll event not registered");
+         })
+      .end()
+      .findAllByCssSelector("#DOCUMENT_LIST tr")
+         .then(function(elements) {
+            assert.lengthOf(elements, 20, "Additional rows were not loaded when the bottom of the list was reached");
+         })
+      .end()
+      .findByCssSelector(".alfresco_logging_DebugLog__clear-button")
+         .click()
+      .end()
+      .findByCssSelector(buttonId)
+         .click()
+      .end()
+      .getLastPublish("DOCUMENT_LIST_ALF_DOCLIST_REQUEST_FINISHED")
+         .then(function(payload) {
+            assert.isNotNull(payload, "More results not loaded");
+         })
+      .end()
+      .findAllByCssSelector("#DOCUMENT_LIST tr")
+         .then(function(elements) {
+            assert.lengthOf(elements, 10, errorMsg);
+         });
+   };
+
+
    registerSuite({
       name: "AlfSortablePaginatedList Tests",
       
@@ -41,7 +88,7 @@ define(["intern!object",
 
       "Check URL hash controls displayed page": function() {
          // See AKU-293
-         return browser.findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-Property .value")
+         return browser.findByCssSelector("#HASH_LIST tr:nth-child(1) .alfresco-renderers-Property .value")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "21", "The currentPage URL hash parameter was ignored on load");
@@ -58,10 +105,77 @@ define(["intern!object",
       },
 
       "Count the rows": function() {
-         return browser.findAllByCssSelector(".alfresco-lists-views-layouts-Row")
+         return browser.findAllByCssSelector("#HASH_LIST .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
                assert.lengthOf(elements, 20, "There should only be twenty rows");
             });
+      },
+
+      "Scroll to bottom of basic infinite scroll area": function() {
+         // Click on the first row to give it focus...
+         return browser.findByCssSelector("#INFITE_SCROLL_LIST tr:nth-child(1) .alfresco-renderers-Property")
+            .click()
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+         .end()
+         .getLastPublish("INFINITE_SCROLL_AREA_ALF_EVENTS_SCROLL")
+            .then(function(payload) {
+               assert.isNotNull(payload, "List scroll event not registered");
+            })
+         .end()
+         .findAllByCssSelector("#INFITE_SCROLL_LIST tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 20, "Additional rows were not loaded when the bottom of the list was reached");
+            });
+      },
+
+      "Simulate a filter data request": function() {
+         // Clear previous pub/sub log (so that we can detect the next load)...
+         return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
+            .click()
+         .end()
+         .findByCssSelector("#SIMULATE_FILTER_label")
+            .click()
+         .end()
+         .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED")
+            .then(function(payload) {
+               assert.isNotNull(payload, "More results not loaded");
+            })
+         .end()
+         .findAllByCssSelector("#INFITE_SCROLL_LIST tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 10, "Old data not cleared when data filter request applied");
+            });
+      },
+
+      "Simulate a path change": function() {
+         return browser.then(function() {
+            return testClearingDocumentList("#SIMULATE_PATH_CHANGE_label", "Old data not cleared when path change request applied");
+         });
+      },
+
+      "Simulate a category change": function() {
+         return browser.then(function() {
+            return testClearingDocumentList("#SIMULATE_CATEGORY_CHANGE_label", "Old data not cleared when category change request applied");
+         });
+      },
+
+      "Simulate a tag change": function() {
+         return browser.then(function() {
+            return testClearingDocumentList("#SIMULATE_TAG_CHANGE_label", "Old data not cleared when tag change request applied");
+         });
+      },
+
+      "Simulate a filter change": function() {
+         return browser.then(function() {
+            return testClearingDocumentList("#SIMULATE_FILTER_CHANGE_label", "Old data not cleared when filter change request applied");
+         });
       },
 
       "Post Coverage Results": function() {
