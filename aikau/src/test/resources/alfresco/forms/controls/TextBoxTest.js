@@ -314,7 +314,7 @@ define(["intern!object",
          return browser.findByCssSelector("#HAS_VALIDATION_CONFIG span.validation-message")
             .getComputedStyle("display")
             .then(function(result) {
-               assert(result === "block", "Validation error message should be displayed");
+               assert(result === "inline-block", "Validation error message should be displayed");
             })
             .getVisibleText()
             .then(function(text) {
