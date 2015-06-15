@@ -16,8 +16,12 @@
 .alfresco-forms-controls-BaseFormControl > .description-row > .description {
    font-size: @small-font-size;
    line-height: ceil(@small-font-size/@standard-line-height) * @standard-line-height;
-   margin: 0 0 @standard-line-height @dialog-label-section + 4;
+   margin: 0 0 @standard-line-height 0;
    color: @de-emphasized-font-color;
+}
+
+.alfresco-dialog-AlfDialog .dialog-body .alfresco-forms-controls-BaseFormControl > .description-row > .description {
+   margin: 0 0 @standard-line-height @dialog-label-section + 4;
 }
 
 .alfresco-forms-controls-BaseFormControl > .control-row {
@@ -30,6 +34,10 @@
 }
 
 .alfresco-forms-controls-BaseFormControl > .title-row {
+   display: block;
+}
+
+.alfresco-dialog-AlfDialog .dialog-body .alfresco-forms-controls-BaseFormControl > .title-row {
    display: inline;
    float: left;
    width: @dialog-label-section;
