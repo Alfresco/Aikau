@@ -47,6 +47,9 @@ define(["intern!object",
          .pressKeys(keys.ARROW_DOWN)
       .end()
       .getLastPublish("DOCUMENT_LIST_ALF_EVENTS_SCROLL")
+         .then(function(payload) {
+            assert.isNotNull(payload, "Document list scroll event not registered");
+         })
       .end()
       .findAllByCssSelector("#DOCUMENT_LIST tr")
          .then(function(elements) {
@@ -60,6 +63,9 @@ define(["intern!object",
          .click()
       .end()
       .getLastPublish("DOCUMENT_LIST_ALF_DOCLIST_REQUEST_FINISHED")
+         .then(function(payload) {
+            assert.isNotNull(payload, "More results not loaded");
+         })
       .end()
       .findAllByCssSelector("#DOCUMENT_LIST tr")
          .then(function(elements) {
@@ -119,6 +125,9 @@ define(["intern!object",
             .pressKeys(keys.ARROW_DOWN)
          .end()
          .getLastPublish("INFINITE_SCROLL_AREA_ALF_EVENTS_SCROLL")
+            .then(function(payload) {
+               assert.isNotNull(payload, "List scroll event not registered");
+            })
          .end()
          .findAllByCssSelector("#INFITE_SCROLL_LIST tr")
             .then(function(elements) {
@@ -135,6 +144,9 @@ define(["intern!object",
             .click()
          .end()
          .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED")
+            .then(function(payload) {
+               assert.isNotNull(payload, "More results not loaded");
+            })
          .end()
          .findAllByCssSelector("#INFITE_SCROLL_LIST tr")
             .then(function(elements) {
