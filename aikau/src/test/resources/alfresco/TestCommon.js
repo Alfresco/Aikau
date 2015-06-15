@@ -175,6 +175,10 @@ define(["intern/dojo/node!fs",
                   fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary");
                });
          };
+         command.session.clearLog = function() {
+            return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
+               .click();
+         };
          command.session.getLastPublish = function(topicName) {
             return this.getLogEntries({
                type: "PUBLISH",

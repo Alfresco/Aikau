@@ -15,27 +15,10 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/forms/Form",
-         config: {
-            widgets: [
-               {
-                  id: "FORM_FIELD",
-                  name: "alfresco/forms/controls/DojoValidationTextBox",
-                  config: {
-                     pubSubScope: "TEST_SCOPE_",
-                     valueSubscriptionTopic: "SET_FORM_CONTROL_VALUE",
-                     name: "control",
-                     label: "This is my form control:"
-                  }
-               }
-            ]
-         }
-      },
-      {
          name: "alfresco/buttons/AlfButton",
          config: {
             id: "SET_FORM_VALUE_1",
-            label: "Set form value 1 (fault)",
+            label: "Publish update without payload",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_"
          }
@@ -44,7 +27,7 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          config: {
             id: "SET_FORM_VALUE_2",
-            label: "Set form value 2 (fault)",
+            label: "Incorrect fieldname in update payload",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_",
             publishPayload: {
@@ -56,7 +39,7 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          config: {
             id: "SET_FORM_VALUE_3",
-            label: "Set form value 3",
+            label: "Update and set string value",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_",
             publishPayload: {
@@ -68,7 +51,7 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          config: {
             id: "SET_FORM_VALUE_4",
-            label: "Set form value 4",
+            label: "Update and set number value",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_",
             publishPayload: {
@@ -80,7 +63,7 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          config: {
             id: "SET_FORM_VALUE_5",
-            label: "Set form value 5",
+            label: "Update and set boolean value",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_",
             publishPayload: {
@@ -89,10 +72,92 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "10px"
+         }
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/forms/Form",
+         id: "BASIC_FORM",
+         config: {
+            widgets: [
+               {
+                  id: "FORM_FIELD",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     pubSubScope: "TEST_SCOPE_",
+                     valueSubscriptionTopic: "SET_FORM_CONTROL_VALUE",
+                     name: "control",
+                     label: "Basic form control"
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "30px"
+         }
+      },
+      {
+         name: "alfresco/forms/Form",
+         id: "AUTOSAVE_FORM",
+         config: {
+            autoSavePublishTopic: "AUTOSAVE_FORM_1",
+            autoSavePublishGlobal: true,
+            pubSubScope: "AUTOSAVE1_",
+            widgets: [
+               {
+                  id: "AUTOSAVE_FORM_FIELD",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     name: "control",
+                     label: "Autosave form control",
+                     value: "Foo",
+                     valueSubscriptionTopic: "SET_FORM_CONTROL_VALUE",
+                     requirementConfig: {
+                        initialValue: true
+                     }
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "30px"
+         }
+      },
+      {
+         name: "alfresco/forms/Form",
+         id: "AUTOSAVE_FORM_INVALID",
+         config: {
+            autoSavePublishTopic: "AUTOSAVE_FORM_2",
+            autoSavePublishGlobal: true,
+            autoSaveOnInvalid: true,
+            pubSubScope: "AUTOSAVE2_",
+            widgets: [
+               {
+                  id: "AUTOSAVE_INVALID_FORM_FIELD",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     name: "control",
+                     label: "Autosave form control (even invalid)",
+                     value: "Bar",
+                     valueSubscriptionTopic: "SET_FORM_CONTROL_VALUE",
+                     requirementConfig: {
+                        initialValue: true
+                     }
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
