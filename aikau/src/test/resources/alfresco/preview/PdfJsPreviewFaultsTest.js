@@ -157,7 +157,8 @@ define(["intern!object",
       },
 
       "Checking controls are hidden": function () {
-         return browser.sleep(500)
+         return browser.findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog
+            .end()
             .findByCssSelector(".previewer > .controls")
                .isDisplayed()
                .then(function(displayed) {
@@ -198,7 +199,6 @@ define(["intern!object",
       },
 
       "Test PdfJs with a password protected PDF displays a password request": function () {
-         var testname = "PdfJs password protected PDF dialog test";
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog")
             .isDisplayed()
             .then(function(displayed) {
@@ -221,7 +221,10 @@ define(["intern!object",
             .click()
          .end()
 
-         .sleep(1000) // Allow time for the dialog to close and re-open
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for dialog to close
+         .end()
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog to open
+         .end()
 
          .findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "publish", "any"))
             .then(function(elements) {
@@ -244,7 +247,10 @@ define(["intern!object",
             .click()
          .end()
 
-         .sleep(1000) // Allow time for the dialog to close and re-open
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for dialog to close
+         .end()
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog to open
+         .end()
 
          .findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "publish", "any"))
             .then(function(elements) {
@@ -267,8 +273,9 @@ define(["intern!object",
             .click()
          .end()
 
-         .sleep(1000) // Allow for successful password to be applied
-
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for dialog to close
+         .end()
+         
          .findByCssSelector(".previewer > .controls")
             .isDisplayed()
             .then(function(displayed) {
