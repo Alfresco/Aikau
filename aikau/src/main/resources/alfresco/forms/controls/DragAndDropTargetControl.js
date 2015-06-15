@@ -113,7 +113,8 @@ define(["dojo/_base/declare",
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.pubSubScope,
             acceptTypes: this.acceptTypes,
-            useModellingService: this.useModellingService
+            useModellingService: this.useModellingService,
+            withHandles: this.withHandles
          };
          if (this.widgetsForWrappingDroppedItems)
          {
