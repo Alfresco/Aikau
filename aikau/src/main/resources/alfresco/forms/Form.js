@@ -290,7 +290,7 @@ define(["dojo/_base/declare",
             valid: isValid,
             invalidFormControls: this.invalidFormControls
          });
-         if(this.autoSavePublishTopic !== null && (isValid || this.autoSaveOnInvalid)) {
+         if(this.autoSavePublishTopic && typeof this.autoSavePublishTopic === "string" && (isValid || this.autoSaveOnInvalid)) {
             this.alfPublish(this.autoSavePublishTopic, this.autoSavePublishPayload || this.getValue(), this.autoSavePublishGlobal);
          }
       },
@@ -585,7 +585,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       createButtons: function alfresco_forms_Form__createButtons() {
-         if (this.showOkButton === true && this.autoSavePublishTopic === null)
+         if (this.showOkButton === true && !this.autoSavePublishTopic)
          {
             var onButtonClass = this.okButtonClass ? this.okButtonClass : "";
             this.okButton = new AlfButton({
@@ -618,7 +618,7 @@ define(["dojo/_base/declare",
             domConstruct.destroy(this.okButtonNode);
          }
          
-         if (this.showCancelButton === true && this.autoSavePublishTopic === null)
+         if (this.showCancelButton === true && !this.autoSavePublishTopic)
          {
             this.cancelButton = new AlfButton({
                pubSubScope: this.pubSubScope,
