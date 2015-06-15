@@ -367,6 +367,7 @@ define(["dojo/_base/declare",
                }
                else
                {
+                  _this.clearViews();
                   _this.loadData();
                }
             }, this._filterDelay);
