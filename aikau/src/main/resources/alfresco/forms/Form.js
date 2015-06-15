@@ -377,7 +377,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @defualt null
+       * @default null
        */
       okButtonPublishPayload: null,
       
@@ -408,14 +408,14 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @defualt null
+       * @default null
        */
       cancelButtonPublishPayload: null,
 
       /**
        * @instance
        * @type {object}
-       * @defualt null
+       * @default null
        */
       cancelButtonPublishGlobal: null,
       
