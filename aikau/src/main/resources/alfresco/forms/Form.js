@@ -257,10 +257,14 @@ define(["dojo/_base/declare",
        * @instance
        */
       publishFormValidity: function alfresco_forms_Form__publishFormValidity() {
+         var isValid = this.invalidFormControls.length === 0;
          this.alfPublish("ALF_FORM_VALIDITY", {
-            valid: this.invalidFormControls.length === 0,
+            valid: isValid,
             invalidFormControls: this.invalidFormControls
          });
+         if(this.autoSavePublishTopic !== null && (isValid || this.autoSaveOnInvalid)) {
+            this.alfPublish(this.autoSavePublishTopic, this.autoSavePublishPayload || this.getValue(), this.autoSavePublishGlobal);
+         }
       },
       
       /**
@@ -420,6 +424,44 @@ define(["dojo/_base/declare",
       cancelButtonPublishGlobal: null,
       
       /**
+       * If this is not null, then the form will auto-publish on this topic whenever a form's
+       * values change. This setting overrides and will remove the OK and Cancel buttons.
+       * 
+       * @instance 
+       * @type {string}
+       * @default null
+       */
+      autoSavePublishTopic: null,
+      
+      /**
+       * The payload to publish (will be the form's values if not specified)
+       * 
+       * @instance
+       * @type {object}
+       * @default null
+       */
+      autoSavePublishPayload: null,
+      
+      /**
+       * @instance 
+       * @type {string}
+       * @default null
+       */
+      autoSavePublishGlobal: null,
+
+      /**
+       * Whether, when autoSavePublish is enabled (i.e. autoSavePublishTopic is not null),
+       * to also publish when the form contains invalid values. If this is enabled, then
+       * the publish payload will have an additional alfFormInvalid property, which will
+       * be set to true.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      autoSaveOnInvalid: false,
+      
+      /**
        * This can be configured with details of additional buttons to be included with the form.
        * Any button added will have the publishPayload set with the form value. 
        * 
@@ -515,7 +557,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       createButtons: function alfresco_forms_Form__createButtons() {
-         if (this.showOkButton === true)
+         if (this.showOkButton === true && this.autoSavePublishTopic === null)
          {
             var onButtonClass = this.okButtonClass ? this.okButtonClass : "";
             this.okButton = new AlfButton({
@@ -548,7 +590,7 @@ define(["dojo/_base/declare",
             domConstruct.destroy(this.okButtonNode);
          }
          
-         if (this.showCancelButton === true)
+         if (this.showCancelButton === true && this.autoSavePublishTopic === null)
          {
             this.cancelButton = new AlfButton({
                pubSubScope: this.pubSubScope,
