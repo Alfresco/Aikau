@@ -100,7 +100,16 @@ define(["dojo/_base/declare",
        * @default null
        */
       widgetsForDroppedItems: null,
-      
+
+      /**
+       * Indicates whether or not dragging should be done with handles.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      withHandles: true,
+
       /**
        * Return the configuration for the widget
        * 
@@ -113,7 +122,8 @@ define(["dojo/_base/declare",
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.pubSubScope,
             acceptTypes: this.acceptTypes,
-            useModellingService: this.useModellingService
+            useModellingService: this.useModellingService,
+            withHandles: this.withHandles
          };
          if (this.widgetsForWrappingDroppedItems)
          {
