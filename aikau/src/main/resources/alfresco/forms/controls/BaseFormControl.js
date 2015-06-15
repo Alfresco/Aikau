@@ -1568,7 +1568,7 @@ define(["dojo/_base/declare",
        */
       valueSubscribe: function alfresco_forms_controls_BaseFormControl__valueSubscribe(payload) {
          var value = lang.getObject("value", false, payload);
-         if (value || value === false || value === 0)
+         if (value !== null && typeof value !== "undefined")
          {
             this.setValue(value);
          }
