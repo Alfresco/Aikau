@@ -36,10 +36,8 @@ define(["dojo/_base/declare",
         "alfresco/core/Events",
         "alfresco/core/EventsTopicMixin",
         "alfresco/core/DomElementUtils",
-        "dojo/dom-geometry",
-        "jquery",
-        "jqueryui"],
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, lang, AlfCoreEvents, AlfCoreEventsTopicMixin, AlfDomUtils, domGeom, $) {
+        "dojo/dom-geometry"],
+        function(declare, AlfCore, _AlfDocumentListTopicMixin, lang, AlfCoreEvents, AlfCoreEventsTopicMixin, AlfDomUtils, domGeom) {
 
    return declare([AlfCore, _AlfDocumentListTopicMixin, AlfCoreEvents, AlfCoreEventsTopicMixin, AlfDomUtils], {
 
@@ -132,8 +130,8 @@ define(["dojo/_base/declare",
       nearBottom: function alfresco_services_InfiniteScrollService__nearBottom() {
          if (this.scrollElement)
          {
-            var scrollPos = $(this.scrollElement).scrollTop();
-            var height = $(this.domNode).height();
+            var scrollPos = this.scrollElement.scrollTop;
+            var height = this.domNode.offsetHeight;
             return 0 >= (height - scrollPos - this.scrollTolerance);
          }
          else
