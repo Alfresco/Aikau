@@ -171,69 +171,69 @@ define(["intern!object",
       }
    });
 
-   // registerSuite({
-   //    name: "AlfSortablePaginatedList Tests (data load failure)",
+   registerSuite({
+      name: "AlfSortablePaginatedList Tests (data load failure)",
       
-   //    setup: function() {
-   //       browser = this.remote;
-   //       return TestCommon.loadTestWebScript(this.remote, "/AlfSortablePaginatedListDataFail", "AlfSortablePaginatedList Tests (data load failure)").end();
-   //    },
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfSortablePaginatedListDataFail", "AlfSortablePaginatedList Tests (data load failure)").end();
+      },
       
-   //    beforeEach: function() {
-   //       browser.end();
-   //    },
+      beforeEach: function() {
+         browser.end();
+      },
 
-   //    "Check data failure message": function() {
-   //       return browser.findByCssSelector("#LIST .data-failure")
-   //          .isDisplayed()
-   //          .then(function(displayed) {
-   //             assert.isTrue(displayed, "Loading message not displayed");
-   //          });
-   //    },
+      "Check data failure message": function() {
+         return browser.findByCssSelector("#LIST .data-failure")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Loading message not displayed");
+            });
+      },
 
-   //    "Check that the pagination controls are all hidden": function() {
-   //       return browser.findByCssSelector("#PAGINATOR_PAGE_SELECTOR")
-   //          .isDisplayed()
-   //          .then(function(displayed) {
-   //             assert.isFalse(displayed, "The page selector was NOT hidden");
-   //          })
-   //       .end()
-   //       .findByCssSelector("#PAGINATOR_PAGE_BACK")
-   //          .isDisplayed()
-   //          .then(function(displayed) {
-   //             assert.isFalse(displayed, "The page back button was NOT hidden");
-   //          })
-   //       .end()
-   //       .findByCssSelector("#PAGINATOR_PAGE_MARKER")
-   //          .isDisplayed()
-   //          .then(function(displayed) {
-   //             assert.isFalse(displayed, "The page indicator was NOT hidden");
-   //          })
-   //       .end()
-   //       .findByCssSelector("#PAGINATOR_PAGE_FORWARD")
-   //          .isDisplayed()
-   //          .then(function(displayed) {
-   //             assert.isFalse(displayed, "The page forward button was NOT hidden");
-   //          })
-   //       .end()
-   //       .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
-   //          .isDisplayed()
-   //          .then(function(displayed) {
-   //             assert.isFalse(displayed, "The items per page selector was NOT hidden");
-   //          });
-   //    },
+      "Check that the pagination controls are all hidden": function() {
+         return browser.findByCssSelector("#PAGINATOR_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page selector was NOT hidden");
+            })
+         .end()
+         .findByCssSelector("#PAGINATOR_PAGE_BACK")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page back button was NOT hidden");
+            })
+         .end()
+         .findByCssSelector("#PAGINATOR_PAGE_MARKER")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page indicator was NOT hidden");
+            })
+         .end()
+         .findByCssSelector("#PAGINATOR_PAGE_FORWARD")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page forward button was NOT hidden");
+            })
+         .end()
+         .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The items per page selector was NOT hidden");
+            });
+      },
 
-   //    "Resize and check that controls are all still hidden": function() {
-   //       return browser.setWindowSize(null, 1024, 300)
-   //          .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
-   //          .isDisplayed()
-   //          .then(function(displayed) {
-   //             assert.isFalse(displayed, "The items per page selector was revealed on resize");
-   //          });
-   //    },
+      "Resize and check that controls are all still hidden": function() {
+         return browser.setWindowSize(null, 1024, 300)
+            .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The items per page selector was revealed on resize");
+            });
+      },
 
-   //    "Post Coverage Results": function() {
-   //       TestCommon.alfPostCoverageResults(this, browser);
-   //    }
-   // });
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 });
