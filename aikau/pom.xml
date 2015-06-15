@@ -117,17 +117,22 @@
          </resource>
       </resources>
 
-       <testResources>
-           <testResource>
-               <directory>src/test/resources/testApp</directory>
-               <filtering>true</filtering>
-               <targetPath>testApp</targetPath>
-           </testResource>
-           <testResource>
-               <directory>src/test/resources/alfresco</directory>
-               <targetPath>alfresco</targetPath>
-           </testResource>
-       </testResources>
+      <testResources>
+         <testResource>
+            <directory>src/test/resources</directory>
+            <filtering>true</filtering>
+            <includes>
+               <include>testApp/WEB-INF/surf.xml</include>
+            </includes>
+         </testResource>
+         <testResource>
+            <directory>src/test/resources</directory>
+            <filtering>false</filtering>
+            <excludes>
+               <exclude>testApp/WEB-INF/surf.xml</exclude>
+            </excludes>
+         </testResource>
+      </testResources>
 
       <plugins>
 
