@@ -18,10 +18,38 @@
  */
 
 /**
- * This is the root module for all Aikau forms. It is intended to work with widgets that extend the
+ * <p>This is the root module for all Aikau forms. It is intended to work with widgets that extend the
  * [BaseFormControl]{@link module:alfresco/forms/controls/BaseFormControl} and handles setting and 
  * getting there values as well as creating and controlling the behaviour of buttons that can be
- * used to publish the overall value of the controls that the form contains.
+ * used to publish the overall value of the controls that the form contains.</p>
+ * 
+ * <p>Auto-publishing forms:<br />
+ * It is also possible to setup a form to automatically publish itself whenever its values change,
+ * and optionally to also do so if any of its values are invalid (see example below).<br />
+ * NOTE: If the autoSavePublishTopic is specified, then the OK and Cancel buttons are automatically
+ * disabled.</p>
+ *
+ * @example <caption>Example configuration for auto-publishing (including invalid) form:</caption>
+ * {
+ *    name: "alfresco/forms/Form",
+ *    config: {
+ *       autoSavePublishTopic: "AUTOSAVE_FORM",
+ *       autoSavePublishGlobal: true,
+ *       autoSaveOnInvalid: true,
+ *       widgets: [
+ *          {
+ *             name: "alfresco/forms/controls/TextBox",
+ *             config: {
+ *                name: "control",
+ *                label: "Autosave form control (even invalid)",
+ *                requirementConfig: {
+ *                   initialValue: true
+ *                }
+ *             }
+ *           }
+ *        ]
+ *     }
+ *  }
  * 
  * @module alfresco/forms/Form
  * @extends external:dijit/_WidgetBase
