@@ -6,10 +6,10 @@ define(["./config/Suites"],
       return {
 
          // The port on which the instrumenting proxy will listen
-         proxyPort: 9000,
+         proxyPort: ${proxyPort},
 
          // A fully qualified URL to the Intern proxy
-         proxyUrl: "http://localhost:9000/",
+         proxyUrl: "http://${proxyUrl}:${proxyPort}/",
 
          // Default desired capabilities for all environments. Individual capabilities can be overridden by any of the
          // specified browser environments in the `environments` array below as well. See

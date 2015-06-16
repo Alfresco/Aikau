@@ -32,7 +32,7 @@ define({
     * @type {object}
     */
    urls: {
-      unitTestAppBaseUrl: null
+      unitTestAppBaseUrl: ${unitTestAppBaseUrl}
    },
 
    /**

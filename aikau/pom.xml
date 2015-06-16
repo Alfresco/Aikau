@@ -62,6 +62,8 @@
             <filtering>true</filtering>
             <includes>
                <include>testApp/WEB-INF/surf.xml</include>
+               <include>config/grid/Config.js</include>
+               <include>intern_grid.js</include>
             </includes>
          </testResource>
          <testResource>
@@ -69,6 +71,8 @@
             <filtering>false</filtering>
             <excludes>
                <exclude>testApp/WEB-INF/surf.xml</exclude>
+               <exclude>config/grid/Config.js</exclude>
+               <exclude>intern_grid.js</exclude>
             </excludes>
          </testResource>
       </testResources>
