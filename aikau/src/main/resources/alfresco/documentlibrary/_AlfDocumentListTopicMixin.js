@@ -310,7 +310,7 @@ define(["dojo/_base/declare"],
        * @event requestInProgressTopic
        * @instance
        * @type {string}
-       * @default ALF_DOCLIST_REQUEST_IN_PROGRESS
+       * @default "ALF_DOCLIST_REQUEST_IN_PROGRESS"
        */
       requestInProgressTopic: "ALF_DOCLIST_REQUEST_IN_PROGRESS",
 
@@ -321,9 +321,20 @@ define(["dojo/_base/declare"],
        * @event requestFinishedTopic
        * @instance
        * @type {string}
-       * @default ALF_DOCLIST_REQUEST_FINISHED
+       * @default "ALF_DOCLIST_REQUEST_FINISHED"
        */
-      requestFinishedTopic: "ALF_DOCLIST_REQUEST_FINISHED"
+      requestFinishedTopic: "ALF_DOCLIST_REQUEST_FINISHED",
 
+      /**
+       * This topic should be published to indicate that a path has been changed. It is used by both the
+       * [AlfDocumentList]{@link module:alfresco/documentlibrary/AlfDocumentList} and the
+       * [AlfBreadcrumbTrail]{@link module:alfresco/documentlibrary/AlfBreadcrumbTrail}, but the default
+       * value can be overridden through configuration if required.
+       * 
+       * @instance
+       * @type {string}
+       * @default "ALF_DOCUMENTLIST_PATH_CHANGED"
+       */
+      pathChangeTopic: "ALF_DOCUMENTLIST_PATH_CHANGED"
    });
 });

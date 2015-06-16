@@ -23,7 +23,9 @@ model.jsonModel = {
          siteId: "site1", 
          containerId: "documentlibrary", 
          rootNode: null, 
-         rootLabel: "Documents"
+         rootLabel: "Documents",
+         useHash: false,
+         pubSubScope: "TEST_"
       }),
       {
          name: "aikauTesting/mockservices/FullDocLibMockXhr"
