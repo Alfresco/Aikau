@@ -1,42 +1,59 @@
 .claro .dijitMenu {
    border-color: @standard-border-color;
 }
-
 .alfresco-forms-controls-BaseFormControl {
    margin-bottom: @standard-line-height;
+}
+
+.alfresco-forms-controls-BaseFormControl > .description-row {
+   max-width: @dialog-control-section;
+}
+
+.alfresco-dialog-AlfDialog .dialog-body .alfresco-forms-controls-BaseFormControl {
+   min-width: @dialog-control-section + 2;
+}
+
+.alfresco-forms-controls-BaseFormControl > .description-row > .description {
+   font-size: @small-font-size;
+   line-height: ceil(@small-font-size/@standard-line-height) * @standard-line-height;
+   margin: 0 0 @standard-line-height 0;
+   color: @de-emphasized-font-color;
+}
+
+.alfresco-dialog-AlfDialog .dialog-body .alfresco-forms-controls-BaseFormControl > .description-row > .description {
+   margin: 0 0 @standard-line-height @dialog-label-section + 4;
+}
+
+.alfresco-forms-controls-BaseFormControl > .control-row {
+   display: inline-block;
+}
+
+.alfresco-forms-controls-BaseFormControl > .control-row > .control {
+   margin-right: 5px;
+   display: inline-block;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row {
+   display: block;
+}
+
+.alfresco-dialog-AlfDialog .dialog-body .alfresco-forms-controls-BaseFormControl > .title-row {
+   display: inline;
+   float: left;
+   width: @dialog-label-section;
+   text-align: right;
+   margin-right: 4px;
 }
 
 .alfresco-forms-controls-BaseFormControl > .title-row > label {
    font-size: @normal-font-size;
    line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
-   margin-bottom: 3px;
-   display: inline-block;
 }
 
 .alfresco-forms-controls-BaseFormControl.hiddenlabel > .title-row {
    position: absolute;
    left: -999em;
    height: 0;
-}
-
-.alfresco-forms-controls-BaseFormControl > .description-row {
-   max-width: 472px;
-}
-
-.alfresco-forms-controls-BaseFormControl > .description-row > .description {
-   font-size: @small-font-size;
-   line-height: ceil(@small-font-size/@standard-line-height) * @standard-line-height;
-   margin-bottom: @standard-line-height;
-   color: @de-emphasized-font-color;
-}
-
-.alfresco-forms-controls-BaseFormControl > .control-row {
-   max-width: 472px;
-}
-
-.alfresco-forms-controls-BaseFormControl > .control-row > .control {
-   margin-right: 5px;
-   display: inline-block;
 }
 
 .alfresco-forms-controls-BaseFormControl > .title-row > .requirementIndicator {
@@ -47,10 +64,6 @@
    display: inline-block;
 }
 
-.alfresco-forms-controls-BaseFormControl > .units {
-   margin-top: 5px;
-}
-
 .alfresco-forms-controls-BaseFormControl > .title-row > .validation {
    display: none;
 }
@@ -58,7 +71,7 @@
 .alfresco-forms-controls-BaseFormControl > .title-row > img.validationInProgress {
    width: 16px;
    height: 16px;
-   margin: 0 5px;
+   margin: 2px 0;
    vertical-align: top;
 }
 
@@ -72,18 +85,32 @@
    height: 16px;
    width: 16px;
    background-repeat: no-repeat;
-   margin: 0 5px;
+   margin: 0 4px;
 }
 
 .alfresco-forms-controls-BaseFormControl > .title-row > .validation-message {
    display: none;
+   width: @dialog-label-section;
    color: #ED2525;
    font-weight: bold;
-   margin: 0 5px;
+   font-size: @normal-font-size - 3;
+   margin: 0;
+}
+
+.alfresco-dialog-AlfDialog .dialog-body .alfresco-forms-controls-BaseFormControl > .title-row > .validation-message {
+   margin: 4px 0 0 -8px;
 }
 
 .alfresco-forms-controls-BaseFormControl > .title-row > .validation-message.display {
    display: inline-block;
+}
+
+.alfresco-dialog-AlfDialog .dialog-body .alfresco-forms-controls-BaseFormControl > .title-row > .validation-message.display {
+   display: block;
+}
+
+.alfresco-forms-controls-BaseFormControl > .units {
+   margin-top: 5px;
 }
 
 .alfresco-forms-controls-BaseFormControl > .clear-both {
@@ -121,7 +148,6 @@
 
 .alfresco-forms-controls-BaseFormControl div.control div.dijitComboBox {
    border-color: @standard-border-color;
-   font-size: @large-font-size;
 }
 
 .alfresco-forms-controls-BaseFormControl div.control div.dijitComboBox.dijitTextBoxFocused,

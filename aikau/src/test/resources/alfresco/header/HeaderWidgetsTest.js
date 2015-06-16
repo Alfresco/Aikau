@@ -238,10 +238,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
-
       "Test add favourite request published": function() {
          return browser.findByCssSelector("#SITES_MENU_text")
             .click()
@@ -281,10 +277,6 @@ define(["intern!object",
       beforeEach: function() {
          browser.end();
       },
-
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
 
       "Test remove favourite request published": function() {
          return browser.findByCssSelector("#SITES_MENU_text")
@@ -372,10 +364,6 @@ define(["intern!object",
       beforeEach: function() {
          browser.end();
       },
-
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
 
       "Test title gets set": function() {
          return browser.findByCssSelector(".alfresco-header-Title > .text")

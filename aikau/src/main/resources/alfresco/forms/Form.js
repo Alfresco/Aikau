@@ -18,10 +18,38 @@
  */
 
 /**
- * This is the root module for all Aikau forms. It is intended to work with widgets that extend the
+ * <p>This is the root module for all Aikau forms. It is intended to work with widgets that extend the
  * [BaseFormControl]{@link module:alfresco/forms/controls/BaseFormControl} and handles setting and 
  * getting there values as well as creating and controlling the behaviour of buttons that can be
- * used to publish the overall value of the controls that the form contains.
+ * used to publish the overall value of the controls that the form contains.</p>
+ * 
+ * <p>Auto-publishing forms:<br />
+ * It is also possible to setup a form to automatically publish itself whenever its values change,
+ * and optionally to also do so if any of its values are invalid (see example below).<br />
+ * NOTE: If the autoSavePublishTopic is specified, then the OK and Cancel buttons are automatically
+ * disabled.</p>
+ *
+ * @example <caption>Example configuration for auto-publishing (including invalid) form:</caption>
+ * {
+ *    name: "alfresco/forms/Form",
+ *    config: {
+ *       autoSavePublishTopic: "AUTOSAVE_FORM",
+ *       autoSavePublishGlobal: true,
+ *       autoSaveOnInvalid: true,
+ *       widgets: [
+ *          {
+ *             name: "alfresco/forms/controls/TextBox",
+ *             config: {
+ *                name: "control",
+ *                label: "Autosave form control (even invalid)",
+ *                requirementConfig: {
+ *                   initialValue: true
+ *                }
+ *             }
+ *           }
+ *        ]
+ *     }
+ *  }
  * 
  * @module alfresco/forms/Form
  * @extends external:dijit/_WidgetBase
@@ -257,10 +285,14 @@ define(["dojo/_base/declare",
        * @instance
        */
       publishFormValidity: function alfresco_forms_Form__publishFormValidity() {
+         var isValid = this.invalidFormControls.length === 0;
          this.alfPublish("ALF_FORM_VALIDITY", {
-            valid: this.invalidFormControls.length === 0,
+            valid: isValid,
             invalidFormControls: this.invalidFormControls
          });
+         if(this.autoSavePublishTopic && typeof this.autoSavePublishTopic === "string" && (isValid || this.autoSaveOnInvalid)) {
+            this.alfPublish(this.autoSavePublishTopic, this.autoSavePublishPayload || this.getValue(), this.autoSavePublishGlobal);
+         }
       },
       
       /**
@@ -377,7 +409,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @defualt null
+       * @default null
        */
       okButtonPublishPayload: null,
       
@@ -408,16 +440,54 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @defualt null
+       * @default null
        */
       cancelButtonPublishPayload: null,
 
       /**
        * @instance
        * @type {object}
-       * @defualt null
+       * @default null
        */
       cancelButtonPublishGlobal: null,
+      
+      /**
+       * If this is not null, then the form will auto-publish on this topic whenever a form's
+       * values change. This setting overrides and will remove the OK and Cancel buttons.
+       * 
+       * @instance 
+       * @type {string}
+       * @default null
+       */
+      autoSavePublishTopic: null,
+      
+      /**
+       * The payload to publish (will be the form's values if not specified)
+       * 
+       * @instance
+       * @type {object}
+       * @default null
+       */
+      autoSavePublishPayload: null,
+      
+      /**
+       * @instance 
+       * @type {string}
+       * @default null
+       */
+      autoSavePublishGlobal: null,
+
+      /**
+       * Whether, when autoSavePublish is enabled (i.e. autoSavePublishTopic is not null),
+       * to also publish when the form contains invalid values. If this is enabled, then
+       * the publish payload will have an additional alfFormInvalid property, which will
+       * be set to true.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      autoSaveOnInvalid: false,
       
       /**
        * This can be configured with details of additional buttons to be included with the form.
@@ -515,7 +585,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       createButtons: function alfresco_forms_Form__createButtons() {
-         if (this.showOkButton === true)
+         if (this.showOkButton === true && !this.autoSavePublishTopic)
          {
             var onButtonClass = this.okButtonClass ? this.okButtonClass : "";
             this.okButton = new AlfButton({
@@ -548,7 +618,7 @@ define(["dojo/_base/declare",
             domConstruct.destroy(this.okButtonNode);
          }
          
-         if (this.showCancelButton === true)
+         if (this.showCancelButton === true && !this.autoSavePublishTopic)
          {
             this.cancelButton = new AlfButton({
                pubSubScope: this.pubSubScope,

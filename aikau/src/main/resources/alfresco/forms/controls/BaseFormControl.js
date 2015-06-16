@@ -1434,8 +1434,7 @@ define(["dojo/_base/declare",
       setupChangeEvents: function alfresco_forms_controls_BaseFormControl__setupChangeEvents() {
          if (this.wrappedWidget && typeof this.wrappedWidget.watch === "function")
          {
-            // TODO: Do we need to do anything with the watch handle when the widget is destroyed?
-            this.wrappedWidget.watch("value", lang.hitch(this, this.onValueChangeEvent));
+            this.own(this.wrappedWidget.watch("value", lang.hitch(this, this.onValueChangeEvent)));
          } 
          else
          {
@@ -1568,7 +1567,7 @@ define(["dojo/_base/declare",
        */
       valueSubscribe: function alfresco_forms_controls_BaseFormControl__valueSubscribe(payload) {
          var value = lang.getObject("value", false, payload);
-         if (value || value === false || value === 0)
+         if (value !== null && typeof value !== "undefined")
          {
             this.setValue(value);
          }

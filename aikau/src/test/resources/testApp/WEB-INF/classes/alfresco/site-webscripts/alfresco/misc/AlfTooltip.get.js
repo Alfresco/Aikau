@@ -36,7 +36,39 @@ model.jsonModel = {
                               label: "This is the tooltip content"
                            }
                         }
-                     ]
+                     ],
+                     tooltipStyle: "width: 300px;"
+                  }
+               }
+            ]
+         }
+      },
+      {
+         id: "WINDOW_REQUIRES_CLICK",
+         name: "alfresco/layout/ClassicWindow",
+         config: {
+            title: "Single tooltip with click",
+            widgets: [
+               {
+                  id: "SINGLE_ITEM_REQUIRES_CLICK",
+                  name: "alfresco/misc/AlfTooltip",
+                  config: {
+                     widgets: [
+                        {
+                           id: "LOGO1_REQUIRES_CLICK",
+                           name: "alfresco/logo/Logo"
+                        }
+                     ],
+                     widgetsForTooltip: [
+                        {
+                           id: "LABEL1_REQUIRES_CLICK",
+                           name: "alfresco/html/Label",
+                           config: {
+                              label: "This is the tooltip content when clicked"
+                           }
+                        }
+                     ],
+                     triggeringEvent: "click"
                   }
                }
             ]

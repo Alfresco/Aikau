@@ -475,6 +475,7 @@ define(["dojo/_base/declare",
          if (this.noItemsMessage || this.widgetsForNoDataDisplay)
          {
             this.messageNode = domConstruct.create("div", {
+               className: "alfresco-lists-views-AlfListView__no-data",
                innerHTML: this.noItemsMessage
             }, this.domNode);
          }
@@ -499,6 +500,7 @@ define(["dojo/_base/declare",
       renderErrorDisplay: function alfresco_lists_views_AlfListView__renderErrorDisplay() {
          this.clearOldView();
          this.messageNode = domConstruct.create("div", {
+            className: "alfresco-lists-views-AlfListView__render-error",
             innerHTML: this.message("doclistview.rendering.error.message")
          }, this.domNode);
       },

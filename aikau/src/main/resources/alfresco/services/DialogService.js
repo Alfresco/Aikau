@@ -49,6 +49,9 @@
  *          formSubmissionPayloadMixin: {
  *             extra: "bonus data"
  *          },
+ *          formValue: {
+ *             name: "Bob"
+ *          },
  *          widgets: [
  *             {
  *                name: "alfresco/forms/controls/TextBox",
@@ -118,6 +121,7 @@
  * @property {string} dialogTitle - The text to set in the dialog title bar
  * @property {string} formSubmissionTopic - The topic to publish when the confirmation button is used (the published payload will be the form value)
  * @property {Object} formSubmissionPayloadMixin - An additional object to "mixin" to the form value before it is published
+ * @property {Object} [formValue={}] - The initial value to apply to the form when created. This should be an object with attributes mapping to the "name" attribute of each form control.
  * @property {string} [dialogId=null] The ID of the dialog to display. Only one dialog with no dialogId can exist on a page at a time, therefore it is sensible to always include an id for your dialogs to allow stacking.
  * @property {string} [dialogConfirmationButtonTitle="OK"] - The label for the dialog confirmation button
  * @property {string} [dialogCancellationButtonTitle="Cancel"] - The label for the dialog cancellation button

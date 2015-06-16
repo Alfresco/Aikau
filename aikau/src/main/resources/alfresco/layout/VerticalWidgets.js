@@ -66,7 +66,7 @@ define(["alfresco/core/ProcessWidgets",
        * 
        * @instance
        * @type {string}
-       * @default "horizontal-widgets"
+       * @default "alfresco-layout-VerticalWidgets"
        */
       baseClass: "alfresco-layout-VerticalWidgets",
 

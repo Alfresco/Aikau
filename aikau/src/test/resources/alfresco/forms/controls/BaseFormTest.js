@@ -18,15 +18,16 @@
  */
 
 /**
- * This is a unit test for AlfTabContainer
+ * This is a unit test for the BaseForm control
  * 
  * @author Richard Smith
+ * @author Martin Doyle
  */
 define(["intern!object",
-        "intern/chai!expect",
-        "require",
+        "intern/chai!assert", 
+        "intern/dojo/node!leadfoot/keys", 
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        function(registerSuite, assert, keys, TestCommon) {
 
    var browser;
    registerSuite({
@@ -41,75 +42,116 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-
-      "Checking the form field is empty (1)": function () {
+      "Checking the form field is initially empty": function() {
          return browser.findByCssSelector("div#FORM_FIELD div.control input[name='control']")
             .getProperty("value")
-            .then(function(val){
-               expect(val).to.equal("", "The form field should be empty");
+            .then(function(value) {
+               assert.equal(value, "", "Form field not initially empty");
             });
       },
 
-      "Checking the form field is empty (2)": function() {
+      "No payload does not update value": function() {
          return browser.findById("SET_FORM_VALUE_1")
             .click()
-         .end()
+            .end()
 
          .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
             .getProperty("value")
-            .then(function(val){
-               expect(val).to.equal("", "The form field should be empty");
+            .then(function(value) {
+               assert.equal(value, "", "No payload published but field value updated");
             });
       },
 
-      "Checking the form field is empty (3)": function() {
+      "Invalid field name does not update value": function() {
          return browser.findById("SET_FORM_VALUE_2")
             .click()
-         .end()
+            .end()
 
          .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
             .getProperty("value")
-            .then(function(val){
-               expect(val).to.equal("", "The form field should be empty");
+            .then(function(value) {
+               assert.equal(value, "", "Invalid field name provided but value updated");
             });
       },
 
-      "Checking the form field now contains 'this is the new value'": function() {
+      "Setting string value updates field appropriately": function() {
          return browser.findById("SET_FORM_VALUE_3")
             .click()
-         .end()
+            .end()
 
          .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
             .getProperty("value")
-            .then(function(val){
-               expect(val).to.equal("this is the new value", "The form field should now contain 'this is the new value'");
+            .then(function(value) {
+               assert.equal(value, "this is the new value", "Field value not updated to published string value");
             });
       },
 
-      "Checking the form field now contains '3.14159265'": function() {
+      "Setting number value updates field appropriately": function() {
          return browser.findById("SET_FORM_VALUE_4")
             .click()
-         .end()
+            .end()
 
          .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
             .getProperty("value")
-            .then(function(val){
-               expect(val).to.equal("3.14159265", "The form field should now contain '3.14159265'");
+            .then(function(value) {
+               assert.equal(value, "3.14159265", "Field value not updated to published numeric value");
             });
       },
 
-      "Checking the form field now contains 'true'": function() {
+      "Setting boolean value updates field appropriately": function() {
          return browser.findById("SET_FORM_VALUE_5")
             .click()
-         .end()
+            .end()
 
          .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
             .getProperty("value")
-            .then(function(val){
-               expect(val).to.equal("true", "The form field should now contain 'true'");
+            .then(function(value) {
+               assert.equal(value, "true", "Field value not updated to published boolean value");
+            });
+      },
+
+      "Autosave on a form removes OK/Cancel buttons": function() {
+         return browser.findAllByCssSelector("#BASIC_FORM .confirmationButton, #BASIC_FORM .cancelButton")
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "OK/Cancel buttons not found on basic form");
+            })
+            .end()
+
+         .findAllByCssSelector("#AUTOSAVE_FORM .confirmationButton, #AUTOSAVE_FORM .cancelButton")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "OK/Cancel buttons found on autosave form");
+            })
+      },
+
+      "Updating autosave value publishes form": function() {
+         return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD .dijitInputInner")
+            .clearValue()
+            .type("wibble")
+            .getLastPublish("AUTOSAVE_FORM_1")
+            .then(function(payload) {
+               assert.propertyVal(payload, "control", "wibble", "Did not autosave updated value");
+            });
+      },
+
+      "Updating to invalid value does not autosave form": function() {
+         return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD .dijitInputInner")
+            .clearLog()
+            .clearValue()
+            .pressKeys(keys.BACKSPACE) // Need to trigger an update!
+            .getLastPublish("AUTOSAVE_FORM_1")
+            .then(function(payload) {
+               assert.isNull(payload, "Published form when invalid");
+            });
+      },
+
+      "Autosave on invalid flag publishes invalid form": function() {
+         return browser.findByCssSelector("#AUTOSAVE_INVALID_FORM_FIELD .dijitInputInner")
+            .clearLog()
+            .clearValue()
+            .pressKeys(keys.BACKSPACE) // Need to trigger an update!
+            .getLastPublish("AUTOSAVE_FORM_2")
+            .then(function(payload) {
+               assert.propertyVal(payload, "control", "", "Did not autosave updated, invalid value");
             });
       },
 

@@ -62,6 +62,16 @@ define(["dojo/_base/declare",
       scrollTolerance: 500,
 
       /**
+       * This overrides the [inherited default]{@link module:alfresco/services/InfiniteScrollService#_deferEventListenerRegistration}
+       * to ensure that the [registerEventListeners function]{@link module:alfresco/core/Events#registerEventListeners} is not called.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      _deferEventListenerRegistration: false,
+
+      /**
        * @instance
        * @listens scrollReturn
        * @listens requestFinishedTopic
@@ -70,6 +80,12 @@ define(["dojo/_base/declare",
       constructor: function alfresco_services_InfiniteScrollService__constructor(args) {
          declare.safeMixin(this, args);
 
+         // Register the events listeners...
+         if (!this._deferEventListenerRegistration)
+         {
+            this.registerEventListeners();
+         }
+         
          // hook point to allow other widgets to let us know when they're done processing a scroll request.
          this.alfSubscribe(this.scrollReturn, lang.hitch(this, this.onScrollReturn));
 
@@ -112,10 +128,19 @@ define(["dojo/_base/declare",
        * @returns {boolean}
        */
       nearBottom: function alfresco_services_InfiniteScrollService__nearBottom() {
-         var currentScrollPos = domGeom.docScroll().y,
-             docHeight = this.getDocumentHeight(),
-             viewport = domGeom.getContentBox(document.body).h;
-         return 0 >= (docHeight - viewport - currentScrollPos - this.scrollTolerance);
+         if (this.scrollElement)
+         {
+            var scrollPos = this.scrollElement.scrollTop;
+            var height = this.domNode.offsetHeight;
+            return 0 >= (height - scrollPos - this.scrollTolerance);
+         }
+         else
+         {
+            var currentScrollPos = domGeom.docScroll().y;
+            var docHeight = this.getDocumentHeight();
+            var viewport = domGeom.getContentBox(document.body).h;
+            return 0 >= (docHeight - viewport - currentScrollPos - this.scrollTolerance);
+         }
       }
    });
 });
