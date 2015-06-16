@@ -32,7 +32,7 @@ define(["./config/Suites"],
          // }, {
          //    browserName: "firefox"
          // }, {
-            browserName: "internet explorer"
+            browserName: "${browserName}"
          }],
 
          // Maximum number of simultaneous integration tests that should be executed on the remote WebDriver service
