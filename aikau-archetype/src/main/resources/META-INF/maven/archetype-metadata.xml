@@ -25,28 +25,5 @@
         <include>**/*.tld</include>
       </includes>
     </fileSet>
-    <fileSet filtered="true" encoding="UTF-8">
-      <directory>.settings</directory>
-      <includes>
-        <include>**/*.xml</include>
-      </includes>
-    </fileSet>
-    <fileSet encoding="UTF-8">
-      <directory>.settings</directory>
-      <includes>
-        <include>**/*.prefs</include>
-        <include>**/*.component</include>
-        <include>**/*.container</include>
-        <include>**/*.jsdtscope</include>
-        <include>**/*.name</include>
-      </includes>
-    </fileSet>
-    <fileSet filtered="true" encoding="UTF-8">
-      <directory></directory>
-      <includes>
-        <include>.classpath</include>
-        <include>.project</include>
-      </includes>
-    </fileSet>
   </fileSets>
 </archetype-descriptor>
