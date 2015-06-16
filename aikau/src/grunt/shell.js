@@ -13,10 +13,18 @@ module.exports = function(grunt) {
 
          // Aikau test server
          startTestApp: {
-            command: "mvn jetty:run",
+            command: "mvn clean jetty:run",
             options: {
                stderr: false,
-               async: true
+               async: false
+            }
+         },
+         // Aikau test server start up for Bamboo.
+         startTestAppOptions: {
+            command: "mvn clean jetty:run " + grunt.option("mvnOptions"),
+            options: {
+               stderr: false,
+               async: false
             }
          },
          stopTestApp: {
@@ -25,7 +33,7 @@ module.exports = function(grunt) {
 
          // Maven
          mavenInstall: {
-            command: "mvn install"
+            command: "mvn clean install"
          },
          mavenProcessTestResources: {
             command: "mvn -q process-test-resources"
