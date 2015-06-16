@@ -34,7 +34,12 @@ module.exports = function(grunt) {
          .then(function(inUse) {
             if (!inUse) {
                grunt.log.writeln("Starting unit test app...");
-               grunt.task.run("shell:startTestApp");
+               // Bamboo needs to add parameters when the test app starts up.
+               if (grunt.option("mvnOptions")) {
+                  grunt.task.run("shell:startTestAppOptions");
+               } else {
+                  grunt.task.run("shell:startTestApp");
+               }
                done();
             } else {
                grunt.log.writeln("Jetty unit test application appears to be running already...");
