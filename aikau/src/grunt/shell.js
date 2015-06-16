@@ -87,7 +87,7 @@ module.exports = function(grunt) {
             }
          },
          vagrantMountSharedFoldersFix: {
-            command: "vagrant ssh -c \"sudo ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions\"",
+            command: "vagrant ssh -c \"sudo ln -s /opt/VBoxGuestAdditions-*/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions\"",
             options: {
                execOptions: {
                   cwd: alfConfig.dir.vagrant,
