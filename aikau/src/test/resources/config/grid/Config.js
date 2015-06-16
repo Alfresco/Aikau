@@ -32,7 +32,7 @@ define({
     * @type {object}
     */
    urls: {
-      unitTestAppBaseUrl: ${unitTestAppBaseUrl}
+      unitTestAppBaseUrl: "http://${unitTestAppBaseUrl}:8089"
    },
 
    /**
