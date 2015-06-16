@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
        * @param {int} triggerInterval Optional override for this.triggerInterval
        * @param {bool} throttle switches to throttle mode.
        */
-      _limit: function alfresco_core_Events__debounce(timeout, topic, triggerInterval, throttle) {
+      _limit: function alfresco_core_Events___limit(timeout, topic, triggerInterval, throttle) {
          // If we've already got a timeout, we need to rate limit
          if (this[timeout]) {
             if (throttle) {
@@ -152,7 +152,7 @@ define(["dojo/_base/declare",
        * @param {string} topic
        * @param {int} triggerInterval
        */
-      _debounce: function alfresco_core_Events__debounce(timeout, topic, triggerInterval) {
+      _debounce: function alfresco_core_Events___debounce(timeout, topic, triggerInterval) {
          this._limit(timeout, topic, triggerInterval, false);
       },
 
@@ -163,7 +163,7 @@ define(["dojo/_base/declare",
        * @param {string} topic
        * @param {int} triggerInterval
        */
-      _throttle: function alfresco_core_Events__throttle(timeout, topic, triggerInterval) {
+      _throttle: function alfresco_core_Events___throttle(timeout, topic, triggerInterval) {
          this._limit(timeout, topic, triggerInterval, true);
       },
 
@@ -175,7 +175,7 @@ define(["dojo/_base/declare",
        * @param {string} topic
        * @param {string} timeout variable name for var containing the timeout ref.
        */
-      onTimeout: function alfresco_core_Events_onTimeout(topic, timeout) {
+      onTimeout: function alfresco_core_Events__onTimeout(topic, timeout) {
          this.alfPublish(topic);
          // clear the timeout so events can trigger again.
          this[timeout] = false;
@@ -188,7 +188,7 @@ define(["dojo/_base/declare",
        * @instance
        * @fires eventsScrollTopic
        */
-      onScroll: function alfresco_core_Events_onScroll() {
+      onScroll: function alfresco_core_Events__onScroll() {
          // TODO: For performance, the throttle call probably shouldn't happen in an if statement.
          if (this.ignoreInitialScroll && !this.hasInitialScrollHappened)
          {
@@ -207,7 +207,7 @@ define(["dojo/_base/declare",
        * @instance
        * @fires eventsResizeTopic
        */
-      onResize: function alfresco_core_Events_onResize() {
+      onResize: function alfresco_core_Events__onResize() {
          this._debounce("resizeTimeout", this.eventsResizeTopic);
       }
    });
