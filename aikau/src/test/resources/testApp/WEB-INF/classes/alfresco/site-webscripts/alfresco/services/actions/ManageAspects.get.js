@@ -40,13 +40,6 @@ model.jsonModel = {
          }
       }
    ],
-   // We want to test...
-   // 1. Request where aspects are provided
-   // 2. Request where aspects must be retrieved
-   // 3. Request where aspect retrieval fails
-   // 4. Request where update fails
-   // 5. Request using service where some aspects are not addable
-   // 6. Request using service where some aspects are not removable
    widgets: [
       {
          id: "MANAGE_ASPECTS1",
@@ -57,30 +50,10 @@ model.jsonModel = {
             publishPayload: {
                action: "onActionManageAspects",
                document: {
-                  nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
-                  displayName: "Some Node Title"
-               }
-            }
-         }
-      },
-      {
-         id: "MANAGE_ASPECTS2",
-         name: "alfresco/buttons/AlfButton",
-         config: {
-            label: "Manage Aspects (includes current aspects)",
-            publishTopic: "ALF_SINGLE_DOCUMENT_ACTION_REQUEST",
-            publishPayload: {
-               action: "onActionManageAspects",
-               document: {
-                  nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
-                  displayName: "Some Other Node Title",
                   node: {
-                     aspects: [
-                        "cm:generalclassifiable",
-                        "cm:complianceable",
-                        "cm:effectivity"
-                     ]
-                  }
+                     nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"
+                  },
+                  displayName: "Some Node Title"
                }
             }
          }
@@ -94,8 +67,10 @@ model.jsonModel = {
             publishPayload: {
                action: "onActionManageAspects",
                document: {
-                  nodeRef: "going://to/fail",
-                  displayName: "No Data Node"
+                  displayName: "No Data Node",
+                  node: {
+                     nodeRef: "fail://to/retrieve"
+                  }
                }
             }
          }
@@ -109,12 +84,9 @@ model.jsonModel = {
             publishPayload: {
                action: "onActionManageAspects",
                document: {
-                  nodeRef: "going://to/fail",
                   displayName: "Save Fail Node",
                   node: {
-                     aspects: [
-                        "cm:generalclassifiable"
-                     ]
+                     nodeRef: "fail://to/save"
                   }
                }
             }

@@ -35,6 +35,7 @@ define(["service/constants/Default"],
        function(AlfConstants) {
 
    return  {
+      id: "UPLOAD_NEW_VERSION",
       label: "actions.upload-new-version.label",
       iconClass: "alf-doclib-action alf-upload-new-version-icon",
       publishTopic: "ALF_SHOW_UPLOADER",

@@ -35,6 +35,7 @@ define([],
        function() {
 
    return  {
+      id: "MANAGE_ASPECTS",
       label: "actions.manage-aspects.label",
       iconClass: "alf-doclib-action alf-manage-aspects-icon",
       publishTopic: "ALF_MANAGE_ASPECTS_REQUEST",
