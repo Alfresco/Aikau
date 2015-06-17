@@ -23,6 +23,7 @@ model.jsonModel = {
             publishPayload: {
                dialogId: "FD1",
                dialogTitle: "Form Dialog 1",
+               additionalCssClasses: "custom-classes",
                textContent: "Hello World",
                publishOnShow: [
                   {
