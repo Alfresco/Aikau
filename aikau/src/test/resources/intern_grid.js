@@ -59,7 +59,7 @@ define(["./config/Suites"],
                location: "./src/test/resources/alfresco"
             }, {
                name: "config",
-               location: "./src/test/resources/config/grid"
+               location: "./target/test-classes/config/grid"
             }, {
                name: "reporters",
                location: "./src/test/resources/reporters"
