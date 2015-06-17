@@ -16,7 +16,7 @@ module.exports = function(grunt) {
             command: "mvn clean jetty:run",
             options: {
                stderr: false,
-               async: false
+               async: true
             }
          },
          // Aikau test server start up for Bamboo.
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
             command: "mvn clean jetty:run " + grunt.option("mvnOptions"),
             options: {
                stderr: false,
-               async: false
+               async: true
             }
          },
          stopTestApp: {
