@@ -10,8 +10,25 @@ model.jsonModel = {
          }
       },
       "alfresco/services/DialogService",
-      "alfresco/services/ContentService",
-      "alfresco/services/UploadService"
+      {
+         name: "alfresco/services/actions/ManageAspectsService",
+         config: {
+            availableAspects: ["cm:generalclassifiable",
+                               "cm:complianceable",
+                               "cm:effectivity",
+                               "cm:summarizable",
+                               "cm:versionable",
+                               "cm:templatable",
+                               "cm:emailed",
+                               "emailserver:aliasable",
+                               "app:inlineeditable",
+                               "cm:geographic",
+                               "exif:exif",
+                               "audio:audio",
+                               "cm:indexControl",
+                               "dp:restrictable"]
+         }
+      }
    ],
    widgets:[
       {
@@ -21,20 +38,11 @@ model.jsonModel = {
             currentData: {
                items: [
                   {
-                     displayName: "Folder node",
-                     node: {
-                        aspects: [],
-                        nodeRef: "some://dummy/node",
-                        isLocked: false,
-                        isContainer: true,
-                        properties: {}
-                     }
-                  },
-                  {
                      displayName: "Basic node",
+                     nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
                      node: {
                         aspects: [],
-                        nodeRef: "some://dummy/node",
+                        nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
                         isLocked: false,
                         isContainer: false,
                         permissions: {
@@ -47,9 +55,10 @@ model.jsonModel = {
                   },
                   {
                      displayName: "Working copy (user owned)",
+                     nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
                      node: {
                         aspects: ["cm:workingcopy"],
-                        nodeRef: "some://dummy/node",
+                        nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
                         isLocked: false,
                         isContainer: false,
                         permissions: {
@@ -65,29 +74,11 @@ model.jsonModel = {
                      }
                   },
                   {
-                     displayName: "Working copy (other owner)",
-                     node: {
-                        aspects: ["cm:workingcopy"],
-                        nodeRef: "some://dummy/node",
-                        isLocked: false,
-                        isContainer: false,
-                        permissions: {
-                           user: {
-                              Write: true
-                           }
-                        },
-                        properties: {
-                           "cm:workingCopyOwner": {
-                              userName: "not_me"
-                           }
-                        }
-                     }
-                  },
-                  {
                      displayName: "Locked (lock owner)",
+                     nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
                      node: {
                         aspects: [],
-                        nodeRef: "some://dummy/node",
+                        nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
                         isLocked: true,
                         isContainer: false,
                         permissions: {
@@ -101,44 +92,11 @@ model.jsonModel = {
                      }
                   },
                   {
-                     displayName: "Locked (other owner)",
-                     node: {
-                        aspects: [],
-                        nodeRef: "some://dummy/node",
-                        isLocked: true,
-                        isContainer: false,
-                        permissions: {
-                           user: {
-                              Write: true
-                           }
-                        },
-                        properties: {
-                           "cm:lockOwner": "bob"
-                        }
-                     }
-                  },
-                  {
-                     displayName: "Node Lock",
-                     node: {
-                        aspects: [],
-                        nodeRef: "some://dummy/node",
-                        isLocked: false,
-                        isContainer: false,
-                        permissions: {
-                           user: {
-                              Write: true
-                           }
-                        },
-                        properties: {
-                           "cm:lockType": "NODE_LOCK"
-                        }
-                     }
-                  },
-                  {
                      displayName: "No write permission",
+                     nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
                      node: {
                         aspects: [],
-                        nodeRef: "some://dummy/node",
+                        nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
                         isLocked: false,
                         isContainer: false
                      }
@@ -155,17 +113,19 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
+                                    id: "DISPLAY_NAME",
                                     name: "alfresco/renderers/Property",
                                     config: {
                                        propertyToRender: "displayName"
                                     }
                                  },
                                  {
+                                    id: "ACTIONS",
                                     name: "alfresco/renderers/Actions",
                                     config: {
                                        widgetsForActions: [
                                           {
-                                             name: "alfresco/renderers/actions/UploadNewVersion"
+                                             name: "alfresco/renderers/actions/ManageAspects"
                                           }
                                        ]
                                     }
@@ -180,7 +140,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "aikauTesting/mockservices/UploadMockXhr"
+         name: "aikauTesting/mockservices/ManageAspectsMockXhr"
       },
       {
          name: "alfresco/logging/DebugLog"

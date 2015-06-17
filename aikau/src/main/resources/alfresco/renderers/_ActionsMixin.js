@@ -130,6 +130,9 @@ define(["dojo/_base/declare",
       widgetsForActions: [
          {
             name: "alfresco/renderers/actions/UploadNewVersion"
+         },
+         {
+            name: "alfresco/renderers/actions/ManageAspects"
          }
       ],
 
@@ -166,7 +169,7 @@ define(["dojo/_base/declare",
                         //       or augmentation of the default renderFilters.
                         actions.push({
                            name: "alfresco/menus/AlfMenuItem",
-                           config: config
+                           config: lang.clone(config)
                         });
                      }
                   });

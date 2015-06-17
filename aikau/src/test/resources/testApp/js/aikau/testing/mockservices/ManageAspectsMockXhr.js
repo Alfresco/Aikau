@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
             // Request to successfully update aspects...
             //http://localhost:8081/share/proxy/alfresco/slingshot/doclib/action/aspects/node/workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e
             this.server.respondWith("POST",
-                                    "/aikau/proxy/alfresco/slingshot/doclib/aspects/node/workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                                    "/aikau/proxy/alfresco/slingshot/doclib/action/aspects/node/workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8",
                                      "Content-Length":7962},

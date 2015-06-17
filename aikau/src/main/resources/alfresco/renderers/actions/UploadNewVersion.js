@@ -36,12 +36,10 @@ define(["service/constants/Default"],
 
    return  {
       label: "actions.upload-new-version.label",
-      iconClass: "alf-upload-new-version-icon",
+      iconClass: "alf-doclib-action alf-upload-new-version-icon",
       publishTopic: "ALF_SHOW_UPLOADER",
       publishPayloadType: "CURRENT_ITEM", // TODO: Need to make sure this is correct
-      publishPayload: {
-         
-      },
+      publishPayload: {},
       publishGlobal: true,
       renderFilterMethod: "ALL",
       renderFilters: [
