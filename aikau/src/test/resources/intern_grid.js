@@ -6,10 +6,10 @@ define(["./config/Suites"],
       return {
 
          // The port on which the instrumenting proxy will listen
-         proxyPort: ${proxyPort},
+         proxyPort: 9000,
 
          // A fully qualified URL to the Intern proxy
-         proxyUrl: "http://${proxyUrl}:${proxyPort}/",
+         proxyUrl: "http://localhost:9000/",
 
          // Default desired capabilities for all environments. Individual capabilities can be overridden by any of the
          // specified browser environments in the `environments` array below as well. See
@@ -32,7 +32,7 @@ define(["./config/Suites"],
          // }, {
          //    browserName: "firefox"
          // }, {
-            browserName: "${browserName}"
+            browserName: "internet explorer"
          }],
 
          // Maximum number of simultaneous integration tests that should be executed on the remote WebDriver service
