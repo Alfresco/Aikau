@@ -105,7 +105,7 @@ module.exports = function(grunt) {
          grid: {
             options: {
                runType: "runner",
-               config: "src/test/resources/intern_grid",
+               config: "target/test-classes/intern_grid",
                doCoverage: false
             }
          }
