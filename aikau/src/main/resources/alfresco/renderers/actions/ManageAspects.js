@@ -27,6 +27,7 @@
  * <li>The Node is NOT locked</li>
  * <li>The Node is NOT a working copy</li>
  * </ul>
+ * </p>
  * 
  * @module alfresco/renderers/actions/ManageAspects
  * @author Dave Draper
