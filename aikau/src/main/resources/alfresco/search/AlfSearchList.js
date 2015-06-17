@@ -464,7 +464,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       loadData: function alfresco_search_AlfSearchList__loadData() {
-         if (this.requestInProgress && this.blockConcurrentRequests)
+         // jshint maxcomplexity:false
+         if (this.requestInProgress)
          {
             // TODO: Inform user that request is in progress?
             this.alfLog("log", "Search request ignored because progress is already in progress");

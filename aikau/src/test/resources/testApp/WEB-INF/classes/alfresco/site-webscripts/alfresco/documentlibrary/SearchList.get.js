@@ -221,7 +221,6 @@ model.jsonModel = {
                "sortField",
                "sortAscending"
             ],
-            blockConcurrentRequests: false,
             widgets: [
                {
                   name: "alfresco/search/AlfSearchListView"
