@@ -137,6 +137,9 @@ model.jsonModel = {
          config: {
             autoSavePublishTopic: "AUTOSAVE_FORM_2",
             autoSavePublishGlobal: true,
+            autoSavePublishPayload: {
+               customProperty: "awooga"
+            },
             autoSaveOnInvalid: true,
             pubSubScope: "AUTOSAVE2_",
             widgets: [
