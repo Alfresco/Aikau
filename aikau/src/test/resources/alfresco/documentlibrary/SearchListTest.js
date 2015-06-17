@@ -231,149 +231,93 @@ define(["intern!object",
          .then(function(payload) {
             assert.equal(payload.term, "testTerm2", "Search term not set appropriately from hash change");
             assert.equal(payload.facetFields, "qname1", "Facet fields not set appropriately from hash change");
+            assert.equal(payload.filters, "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
+            assert.equal(payload.sortAscending, "false", "Sort order not set appropriately from hash change");
+            assert.equal(payload.sortField, "cm:title", "Sort property not set appropriately from hash change");
          });
       },
 
-      // "Test setting term and facet filters together (facet field 1)": function() {
-      //    // Check that updating the hash results in a search request being made...
-      //    return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "facetFields", "qname1"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 1, "Facet fields not set appropriately from hash change");
-      //       });
-      // },
+      "Test removing facet filter": function() {
+         // Click the button to remove filter2 from the filters list...
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
+         .end()
+         .findByCssSelector("#REMOVE_FACET_FILTER")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.equal(payload.filters, "filter1,filter3", "Facet filters not set appropriately from hash change");
+         });
+      },
 
-      // "Test setting term and facet filters together (facet field 2)": function() {
-      //    // Check that updating the hash results in a search request being made...
-      //    return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", "filter1,filter2,filter3"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 1, "Facet filters not set appropriately from hash change");
-      //       });
-      // },
+      "Test setting bad facet filter doesn't issue search": function() {
+         // Test facet includes...
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
+         .end()
+         .clearLog()
+         // Click the button to include an additional facet in search requests...
+         .findByCssSelector("#INCLUDE_FACET_2")
+            .click()
+         .end()
+         .findByCssSelector("#APPLY_FACET_FILTER_0")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.isNull(payload, "Bad facet filter triggered search");
+         });
+      },
 
-      // "Test setting term and facet filters together (sort direction)": function() {
-      //    return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortAscending", "false"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 1, "Sort order not set appropriately from hash change");
-      //       });
-      // },
+      "Test applying new filter over pub/sub issues a search": function() {
+         // Click the button to add filter4 to the filters list...
+         return browser.findByCssSelector("#APPLY_FACET_FILTER")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.equal(payload.filters, "filter1,filter3,filter4", "Applying a filter didn't trigger a search");
+            assert.equal(payload.facetFields, "qname1", "Facet fields not set appropriately from hash change");
+         });
+      },
 
-      // "Test setting term and facet filters together (sort field)": function() {
-      //    return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortField", "cm:title"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 1, "Sort property not set appropriately from hash change");
-      //       });
-      // },
+      "Test setting new search data on hash (term)": function() {
+         // Publish data to prevent block on concurrent requests...
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
+         .end()
+         .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA_2")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.equal(payload.term, "testTerm3", "Search term not set appropriately from hash change");
+            assert.equal(payload.filters, "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
+         });
+      },
 
-      // "Test removing facet filter": function() {
-      //    // Click the button to remove filter2 from the filters list...
-      //    return browser.findByCssSelector("#REMOVE_FACET_FILTER")
-      //       .click()
-      //    .end()
-      //    .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", "filter1,filter3"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 1, "Facet filter 'filter2' was not removed");
-      //       });
-      // },
-
-      // "Test setting bad facet filter doesn't issue search": function() {
-      //    // Test facet includes...
-      //    return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 10, "Unexpected number of previous searches " + elements.length);
-      //       })
-      //    .end()
-      //    // Click the button to include an additional facet in search requests...
-      //    .findByCssSelector("#INCLUDE_FACET_2")
-      //       .click()
-      //    .end()
-      //    .findByCssSelector("#APPLY_FACET_FILTER_0")
-      //       .click()
-      //    .end()
-      //    .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 10, "Bad facet filter triggered search");
-      //       });
-      // },
-
-      // "Test applying new filter over pub/sub issues a search": function() {
-      //    // Click the button to add filter4 to the filters list...
-      //    return browser.findByCssSelector("#APPLY_FACET_FILTER")
-      //       .click()
-      //    .end()
-      //    .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 11, "Applying a filter didn't trigger a search");
-      //       });
-      // },
-
-      // "Test applying facet filter values over pub/sub updates search request": function() {
-      //    return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", "filter1,filter3,filter4"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 1, "Test #5d - facet filter 'filter4' was not applied");
-      //       });
-      // },
-
-      // "Test that additinal facet field is included": function() {
-      //    // Check that the additional qname was included...
-      //    return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "facetFields", "qname1"))
-      //       .then(function(elements) {
-      //          // console.log("TODO: Failing test needs looking at");
-      //          // selector used to be "qname1,qname2" and failed - can see no reason why this changed?
-      //          assert.lengthOf(elements, 1, "Additional facet qnames were not included");
-      //       });
-      // },
-
-      // "Test setting new search data on hash (term)": function() {
-      //    // Publish data to prevent block on concurrent requests...
-      //    return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-      //       .click()
-      //    .end()
-      //    .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA_2")
-      //       .click()
-      //    .end()
-      //    .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 12, "Setting different multiple data didn't trigger a new search");
-      //       })
-      //    .end()
-      //    .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "term", "testTerm3"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 1, "Search term not set appropriately from hash change");
-      //       });
-      // },
-
-      // "Test setting new search data on hash (filters)": function() {
-      //    return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", "filter1,filter2,filter3"))
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 1, "Previous filters not cleared on new search term");
-      //       });
-      // },
-
-      // "Test search result count publishes correctly": function() {
-      //    // Click the button to generate a fake search request response...
-      //    return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-      //       .click()
-      //    .end()
-      //    // Check that facet data is published... NOTE: TOPIC THROWS AN ERROR IN TESTING - MUST BE THE @
-      //    // .findAllByCssSelector(TestCommon.topicSelector("ALF_FACET_RESULTS_@qname1", "publish", "any"))
-      //    //    .then(function(elements) {
-      //    //       TestCommon.log(testname,"Check that facet search results were published");
-      //    //       assert(elements.length == 1, "Test #7 - Search result facet data not published");
-      //    //    })
-      //    //    .end()
-      //    // Commented out whilst updating the unit test...
-      //    // Check that search result count is published...
-      //    .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_RESULTS_COUNT", "publish", "any"))
-      //       .then(function(elements) {
-      //          assert(elements.length > 0, "Search resultset size not published");
-      //       })
-      //    .end()
-      //    // Test that Number of search results is as expected.
-      //    .findAllByCssSelector(".alfresco-search-AlfSearchResult")
-      //       .then(function(elements) {
-      //          assert.lengthOf(elements, 3, "Number of results expected is 3, actual results displayed is: " + elements.length);
-      //       });
-      // },
+      "Test search result count publishes correctly": function() {
+         // Click the button to generate a fake search request response...
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
+         .end()
+         // Check that facet data is published... NOTE: TOPIC THROWS AN ERROR IN TESTING - MUST BE THE @
+         .getLastPublish("ALF_FACET_RESULTS_qname1")
+         .then(function(payload) {
+            assert.equal(payload.facetResults.test, 3, "Search result facet data not published");
+         })
+         // Check that search result count is published...
+         .getLastPublish("ALF_SEARCH_RESULTS_COUNT")
+         .then(function(payload) {
+            assert.equal(payload.count, 3, "Search resultset size not published");
+         })
+         // Test that Number of search results is as expected.
+         .findAllByCssSelector(".alfresco-search-AlfSearchResult")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Number of results expected is 3, actual results displayed is: " + elements.length);
+            });
+      },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
