@@ -62,14 +62,15 @@ define(["dojo/_base/declare",
       scrollTolerance: 500,
 
       /**
-       * This overrides the [inherited default]{@link module:alfresco/services/InfiniteScrollService#_deferEventListenerRegistration}
-       * to ensure that the [registerEventListeners function]{@link module:alfresco/core/Events#registerEventListeners} is not called.
+       * By default, the [registerEventListeners function]{@link module:alfresco/core/Events#registerEventListeners}
+       * will be called in the constructor. If overridden and set to false then it will not, and should instead be
+       * called manually later on.
        *
        * @instance
        * @type {boolean}
        * @default true
        */
-      _deferEventListenerRegistration: false,
+      _registerEventListenersImmediately: true,
 
       /**
        * @instance
@@ -81,7 +82,7 @@ define(["dojo/_base/declare",
          declare.safeMixin(this, args);
 
          // Register the events listeners...
-         if (!this._deferEventListenerRegistration)
+         if (this._registerEventListenersImmediately)
          {
             this.registerEventListeners();
          }
