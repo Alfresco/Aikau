@@ -285,13 +285,17 @@ define(["dojo/_base/declare",
        * @instance
        */
       publishFormValidity: function alfresco_forms_Form__publishFormValidity() {
-         var isValid = this.invalidFormControls.length === 0;
+         var isValid = this.invalidFormControls.length === 0,
+            autoSavePayload;
          this.alfPublish("ALF_FORM_VALIDITY", {
             valid: isValid,
             invalidFormControls: this.invalidFormControls
          });
          if(this.autoSavePublishTopic && typeof this.autoSavePublishTopic === "string" && (isValid || this.autoSaveOnInvalid)) {
-            this.alfPublish(this.autoSavePublishTopic, this.autoSavePublishPayload || this.getValue(), this.autoSavePublishGlobal);
+            autoSavePayload = lang.mixin(this.autoSavePublishPayload || {}, {
+               alfValidForm: isValid
+            }, this.getValue());
+            this.alfPublish(this.autoSavePublishTopic, autoSavePayload, this.autoSavePublishGlobal);
          }
       },
       
