@@ -135,10 +135,9 @@ define(["intern!object",
       },
 
       "Updating to invalid value does not autosave form": function() {
-         return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD .dijitInputInner")
+         return browser.findById("CLEAR_AUTOSAVE_1")
+            .click()
             .clearLog()
-            .clearValue()
-            .pressKeys(keys.BACKSPACE) // Need to trigger an update!
             .getLastPublish("AUTOSAVE_FORM_1")
             .then(function(payload) {
                assert.isNull(payload, "Published form when invalid");
