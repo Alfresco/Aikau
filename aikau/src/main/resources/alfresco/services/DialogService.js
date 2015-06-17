@@ -295,6 +295,13 @@ define(["dojo/_base/declare",
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth
          };
+
+         // Ensure that text content is center aligned (see AKU-368)...
+         if (dialogConfig.content)
+         {
+            dialogConfig.additionalCssClasses += " alfresco-dialogs-AlfDialog--textContent";
+         }
+
          var dialog = new AlfDialog(dialogConfig);
 
          if (payload.publishOnShow)

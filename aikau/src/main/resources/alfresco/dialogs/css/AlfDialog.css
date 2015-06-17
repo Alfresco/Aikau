@@ -55,6 +55,10 @@
    padding: 0px;
 }
 
+.alfresco-dialogs-AlfDialog--textContent .dialog-body {
+  text-align: center;
+}
+
 .alfresco-dialog-AlfDialog .dijitDialogPaneContent {
    border-top: @standard-border;
    padding: 0;
