@@ -113,15 +113,6 @@ define(["dojo/_base/declare",
       requestInProgress: false,
 
       /**
-       * Should we prevent multiple simultaneous requests
-       *
-       * @instance
-       * @default false
-       * @type {Boolean}
-       */
-      blockConcurrentRequests: false,
-
-      /**
        * Indicates whether Infinite Scroll should be used when requesting documents
        *
        * @instance
