@@ -38,6 +38,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/CoreWidgetProcessing
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
@@ -47,6 +48,7 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/AlfBreadcrumbTrail.html",
         "alfresco/core/Core",
+        "alfresco/core/CoreWidgetProcessing",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/documentlibrary/AlfBreadcrumb",
@@ -54,10 +56,10 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template,  AlfCore, _AlfDocumentListTopicMixin, _PublishPayloadMixin,
-                 AlfBreadcrumb, lang, array, domConstruct, domClass) {
+        function(declare, _WidgetBase, _TemplatedMixin, template,  AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, 
+                 _PublishPayloadMixin, AlfBreadcrumb, lang, array, domConstruct, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _PublishPayloadMixin, _AlfDocumentListTopicMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _PublishPayloadMixin, _AlfDocumentListTopicMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -117,9 +119,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default "/"
        */
-      currentPath: null,
+      currentPath: "/",
 
       /**
        * Indicates whether the browser URL hash will be used to provide the breadcrumb trail. If this is
@@ -130,16 +132,6 @@ define(["dojo/_base/declare",
        * @default false
        */
       useHash: false,
-
-      /**
-       * The topic to subscribe to for listening to changes to the path. This is only used when 
-       * [useHash]{@link module:alfresco/documentlibrary/AlfBreadcrumbTrail#useHash} is set to false.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      pathChangeTopic: null,
 
       /**
        * This indicates that the final breadcrumb in the trail  is 
@@ -312,7 +304,10 @@ define(["dojo/_base/declare",
       renderBreadcrumb: function alfresco_documentlibrary_AlfBreadcrumbTrail__renderBreadcrumb(breadcrumb, /*jshint unused:false*/ index) {
          if (breadcrumb.label)
          {
-            var bc = new AlfBreadcrumb(breadcrumb);
+            var bc = this.createWidget({
+               name: "alfresco/documentlibrary/AlfBreadcrumb",
+               config: breadcrumb
+            });
             bc.placeAt(this.containerNode);
          }
       },

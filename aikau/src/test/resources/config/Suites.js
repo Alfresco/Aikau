@@ -70,6 +70,7 @@ define({
 
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
+      "src/test/resources/alfresco/documentlibrary/DocumentLibraryTest",
       "src/test/resources/alfresco/documentlibrary/DocumentListTest",
       "src/test/resources/alfresco/documentlibrary/DocumentSelectorTest",
       "src/test/resources/alfresco/documentlibrary/PaginationTest",

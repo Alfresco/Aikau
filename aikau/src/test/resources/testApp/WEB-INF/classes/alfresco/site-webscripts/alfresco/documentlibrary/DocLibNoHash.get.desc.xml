@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Document Library Example (no URL hashing)</shortname>
+  <description>This provides an example of building a Document Library using the doclib.lib.js library file that does not use URL hash to log the current location within the document library.</description>
+  <family>aikau-unit-tests</family>
+  <url>/DocLibNoHash</url>
+</webscript>
