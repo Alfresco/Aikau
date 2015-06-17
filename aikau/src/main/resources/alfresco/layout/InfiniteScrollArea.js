@@ -73,14 +73,16 @@ define(["dojo/_base/declare",
       baseClass: "alfresco-layout-InfiniteScrollArea",
 
       /**
-       * This overrides the [inherited default]{@link module:alfresco/services/InfiniteScrollService#_deferEventListenerRegistration}
-       * to ensure that the [registerEventListeners function]{@link module:alfresco/core/Events#registerEventListeners} is not called.
+       * This overrides the [inherited default]{@link module:alfresco/services/InfiniteScrollService#_registerEventListenersImmediately}
+       * to ensure that the [registerEventListeners function]{@link module:alfresco/core/Events#registerEventListeners} is NOT called
+       * automatically in the constructor.
        *
        * @instance
+       * @override
        * @type {boolean}
-       * @default true
+       * @default false
        */
-      _deferEventListenerRegistration: true,
+      _registerEventListenersImmediately: false,
 
       /**
        * Extends the [inherited function]{@link module:alfresco/core/ProcessWidgets#postCreate} to
