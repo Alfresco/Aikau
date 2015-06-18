@@ -55,19 +55,19 @@
         padding-left: 20px !important; /* Important is only required to override base.css use of important */
     }
 
-    .label,
-    .label h3 {
+    >.label,
+    >.label h3 {
         font-family: @bold-font;
         color: @general-font-color;
         font-size: @normal-font-size;
         font-weight: normal;
     }
-    .label {
+    > .label {
         margin-left: @standard-column-width;
         padding-bottom: @standard-line-height - 2;
     }
 
-    .content {
+    > .content {
         margin-left: (@standard-column-width + @standard-column-spacing) * 2;
     }
 }

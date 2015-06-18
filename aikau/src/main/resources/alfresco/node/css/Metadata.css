@@ -1,0 +1,16 @@
+.alfresco-node-Metadata {
+
+   > span {
+      vertical-align: top;
+   }
+
+   .alfresco-node-Metadata__label {
+      display: inline-block;
+      width: 80px;
+   }
+
+   .alfresco-node-Metadata__value {
+      display: inline-block;
+      width: 180px;
+   }
+}
