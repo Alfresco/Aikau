@@ -79,7 +79,8 @@ define(["./config/Suites"],
          reporters: [
             // "console",
             // "runner",
-            "reporters/AikauReporter"
+            "reporters/AikauReporter",
+            "JUnit"
          ]
 
       };
