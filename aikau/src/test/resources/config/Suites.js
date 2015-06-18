@@ -188,6 +188,7 @@ define({
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
       "src/test/resources/alfresco/renderers/actions/ManageAspectsActionTest",
+      "src/test/resources/alfresco/renderers/actions/UploadNewVersionActionTest",
 
       "src/test/resources/alfresco/search/AlfSearchResultTest",
       "src/test/resources/alfresco/search/FacetFiltersTest",
