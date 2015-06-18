@@ -68,7 +68,7 @@ define(["intern!object",
          .end()
          .findAllByCssSelector("#MERGED_ACTIONS_ITEM_0_GROUP tr")
             .then(function(elements) {
-               assert.lengthOf(elements, 4, "Unexpected number of filtered merged REST API and custom actions rendered");
+               assert.lengthOf(elements, 5, "Unexpected number of filtered merged REST API and custom actions rendered");
             });
       },
 

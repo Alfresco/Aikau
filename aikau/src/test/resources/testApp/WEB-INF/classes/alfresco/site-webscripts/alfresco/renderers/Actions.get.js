@@ -109,7 +109,7 @@ model.jsonModel = {
                                              name: "alfresco/renderers/Actions",
                                              config: {
                                                 filterActions: true,
-                                                mergeCustomActions: true,
+                                                mergeActions: true,
                                                 allowedActions: [
                                                    "folder-manage-rules",
                                                    "folder-download",
@@ -124,6 +124,11 @@ model.jsonModel = {
                                                       index: "10",
                                                       publishTopic: "DELETE_ACTION_TOPIC",
                                                       type: "javascript"
+                                                   }
+                                                ],
+                                                widgetsForActions: [
+                                                   {
+                                                      name: "alfresco/renderers/actions/ManageAspects"
                                                    }
                                                 ]
                                              }
