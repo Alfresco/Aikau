@@ -80,7 +80,7 @@ define(["./config/Suites"],
             // "console",
             // "runner",
             "reporters/AikauReporter",
-            "JUnit"
+            "junit"
          ]
 
       };
