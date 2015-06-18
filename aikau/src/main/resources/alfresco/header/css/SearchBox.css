@@ -30,6 +30,16 @@
       width: 35px;
    }
 
+   .alfresco-header-SearchBox-menu--hideAdvancedSearch {
+      display: inline-block;
+      background-repeat: no-repeat;
+      background-image: url("./images/search-16.png");
+      height: 16px;
+      width: 16px;
+      vertical-align: middle;
+      margin-left: 3px;
+   }
+
    input.alfresco-header-SearchBox-text {
       background-color: @primary-title-color;
       border: none;

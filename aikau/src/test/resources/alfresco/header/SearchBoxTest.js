@@ -336,4 +336,36 @@ define(["intern!object",
          TestCommon.alfPostCoverageResults(this, browser);
       }
    });
+
+   registerSuite({
+      name: "Search Box Tests (Custom publication)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/SearchBox", "Search Box Tests", "/site/site1/tp/ws").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Click on result with custom result publication": function() {
+         return browser.findByCssSelector("#SB4 input.alfresco-header-SearchBox-text")
+            .type("site")
+         .end()
+         .findAllByCssSelector(".alf-livesearch-item")
+         .end()
+         .findByCssSelector(".alf-livesearch-item a")
+            .click()
+         .end()
+         .findAllByCssSelector(TestCommon.pubDataCssSelector("CUSTOM_TOPIC", "name", "WebSiteReview.mp4"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Custom publication not made for result click");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 });
