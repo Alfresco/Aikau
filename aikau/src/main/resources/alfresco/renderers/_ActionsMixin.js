@@ -130,6 +130,9 @@ define(["dojo/_base/declare",
       widgetsForActions: [
          {
             name: "alfresco/renderers/actions/UploadNewVersion"
+         },
+         {
+            name: "alfresco/renderers/actions/ManageAspects"
          }
       ],
 
@@ -155,18 +158,23 @@ define(["dojo/_base/declare",
             // current item to be actioned...
 
             // TODO: We probably want to avoid rendering all the actions until the menu is opened...
+            var idPrefix = this.id + "_";
             var actions = [];
             array.forEach(this.widgetsForActions, function(action) {
                if (action && action.name)
                {
+
                   require([action.name], function(config) {
                      if (config)
                      {
+                        var clonedConfig = lang.clone(config);
+                        clonedConfig.id = idPrefix + clonedConfig.id;
+
                         // TODO: A potential future improvement here would be to allow replacement
                         //       or augmentation of the default renderFilters.
                         actions.push({
                            name: "alfresco/menus/AlfMenuItem",
-                           config: config
+                           config: clonedConfig
                         });
                      }
                   });

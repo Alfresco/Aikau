@@ -95,12 +95,14 @@ define(["dojo/_base/declare",
 
          // Create a group to hold all the actions...
          this.actionsGroup = new AlfMenuGroup({
+            id: this.id + "_GROUP",
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope
          });
          
          // Create a menu popup to hold the group...
          this.actionsMenu = new AlfMenuBarPopup({
+            id: this.id + "_MENU",
             label:  this.message("alf.renderers.Actions.menuLabel"),
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope
