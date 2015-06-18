@@ -77,8 +77,8 @@ define(["intern!object",
          // Check that updating the hash results in a search request being made...
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.term, "testTerm1", "Search term didn't request search");
-            assert.equal(payload.facetFields, "qname1", "Facet fields not set appropriately from request");
+            assert.propertyVal(payload, "term", "testTerm1", "Search term didn't request search");
+            assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from request");
          });
       },
 
@@ -102,7 +102,7 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.term, "testTerm2", "Search term didn't request search");
+            assert.propertyVal(payload, "term","testTerm2", "Search term didn't request search");
          });
       },
 
@@ -120,7 +120,7 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.term, "testTerm2", "Search term didn't request search");
+            assert.propertyVal(payload, "term","testTerm2", "Search term didn't request search");
          });
       },
 
@@ -135,7 +135,7 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.filters, "filter1,filter2,filter3", "Facet fields were not set appropriately from hash change");
+            assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet fields were not set appropriately from hash change");
          });
       },
 
@@ -149,8 +149,8 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.term, "testTerm1", "New search term not issued");
-            assert.equal(payload.filters, "", "Facet fields were not cleared");
+            assert.propertyVal(payload, "term","testTerm1", "New search term not issued");
+            assert.propertyVal(payload, "filters", "", "Facet fields were not cleared");
          });
       },
 
@@ -186,8 +186,8 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.repo, false, "Setting a new scope didn't issue a search request (and repo wasn't set to false)");
-            assert.equal(payload.site, "", "Site wasn't set to empty string for ALL_SITES scope");
+            assert.propertyVal(payload, "repo", false, "Setting a new scope didn't issue a search request (and repo wasn't set to false)");
+            assert.propertyVal(payload, "site", "", "Site wasn't set to empty string for ALL_SITES scope");
          });
       },
 
@@ -200,8 +200,8 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.repo, false, "Repo wasn't set to false for site scope search");
-            assert.equal(payload.site, "site1", "Site wasn't set requested site");
+            assert.propertyVal(payload, "repo", false, "Repo wasn't set to false for site scope search");
+            assert.propertyVal(payload, "site", "site1", "Site wasn't set requested site");
          });
       },
 
@@ -214,8 +214,8 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.repo, true, "Repo wasn't set to true for repo scope search");
-            assert.equal(payload.site, "", "Site wasn't cleared for repo scope search");
+            assert.propertyVal(payload, "repo", true, "Repo wasn't set to true for repo scope search");
+            assert.propertyVal(payload, "site", "", "Site wasn't cleared for repo scope search");
          });
       },
 
@@ -229,11 +229,11 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.term, "testTerm2", "Search term not set appropriately from hash change");
-            assert.equal(payload.facetFields, "qname1", "Facet fields not set appropriately from hash change");
-            assert.equal(payload.filters, "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
-            assert.equal(payload.sortAscending, "false", "Sort order not set appropriately from hash change");
-            assert.equal(payload.sortField, "cm:title", "Sort property not set appropriately from hash change");
+            assert.propertyVal(payload, "term","testTerm2", "Search term not set appropriately from hash change");
+            assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from hash change");
+            assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
+            assert.propertyVal(payload, "sortAscending", "false", "Sort order not set appropriately from hash change");
+            assert.propertyVal(payload, "sortField", "cm:title", "Sort property not set appropriately from hash change");
          });
       },
 
@@ -247,7 +247,7 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.filters, "filter1,filter3", "Facet filters not set appropriately from hash change");
+            assert.propertyVal(payload, "filters", "filter1,filter3", "Facet filters not set appropriately from hash change");
          });
       },
 
@@ -277,8 +277,8 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.filters, "filter1,filter3,filter4", "Applying a filter didn't trigger a search");
-            assert.equal(payload.facetFields, "qname1", "Facet fields not set appropriately from hash change");
+            assert.propertyVal(payload, "filters", "filter1,filter3,filter4", "Applying a filter didn't trigger a search");
+            assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from hash change");
          });
       },
 
@@ -292,8 +292,8 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
          .then(function(payload) {
-            assert.equal(payload.term, "testTerm3", "Search term not set appropriately from hash change");
-            assert.equal(payload.filters, "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
+            assert.propertyVal(payload, "term","testTerm3", "Search term not set appropriately from hash change");
+            assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
          });
       },
 
@@ -305,12 +305,12 @@ define(["intern!object",
          // Check that facet data is published... NOTE: TOPIC THROWS AN ERROR IN TESTING - MUST BE THE @
          .getLastPublish("ALF_FACET_RESULTS_qname1")
          .then(function(payload) {
-            assert.equal(payload.facetResults.test, 3, "Search result facet data not published");
+            assert.deepPropertyVal(payload, "facetResults.test", 3, "Search result facet data not published");
          })
          // Check that search result count is published...
          .getLastPublish("ALF_SEARCH_RESULTS_COUNT")
          .then(function(payload) {
-            assert.equal(payload.count, 3, "Search resultset size not published");
+            assert.propertyVal(payload, "count", 3, "Search resultset size not published");
          })
          // Test that Number of search results is as expected.
          .findAllByCssSelector(".alfresco-search-AlfSearchResult")
