@@ -14,7 +14,7 @@ module.exports = function(grunt) {
    grunt.registerTask("test_local", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:local"]);
    grunt.registerTask("test", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:dev"]);
    grunt.registerTask("test_sl", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:sl"]);
-   grunt.registerTask("test_grid", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:grid"]);
+   grunt.registerTask("test_grid", ["waitServer", "clean:testScreenshots", "generate-require-everything", "intern:grid"]);
 
    // Watch for changes and retest
    grunt.registerTask("watchDev", ["watch:dev"]);
