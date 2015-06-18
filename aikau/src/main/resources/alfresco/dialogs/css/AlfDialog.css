@@ -114,4 +114,5 @@
 
 .dialog-body .control .dijitTextBox {
    width: 360px;
+   border-radius: 3px;
 }
