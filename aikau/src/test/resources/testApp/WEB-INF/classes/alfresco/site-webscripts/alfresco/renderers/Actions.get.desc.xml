@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Actions Renderer</shortname>
+  <description>Shows examples of action rendering using REST API actions and custom actions</description>
+  <description></description>
+  <family>aikau-unit-tests</family>
+  <url>/ActionsRenderer</url>
+</webscript>

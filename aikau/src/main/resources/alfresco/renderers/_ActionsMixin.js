@@ -65,16 +65,6 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/_ActionsMixin.properties"}],
 
       /**
-       * Indicates whether or not actions should be filtered according to the
-       * [allowedActions array]{@link module:alfresco/renderers/Actions#allowedActions}.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      filterActions: false,
-
-      /**
        *  Array containing a list of allowed actions
        *  This is used to filter out actions that the actions API returns, but haven't yet been implemented.
        *  TODO: Remove this once all actions have been implemented by the actions service.
@@ -96,6 +86,39 @@ define(["dojo/_base/declare",
        * @default null
        */
       allowedActionsString: null,
+
+      /**
+       * An array of action configuration objects to render in the action menu. This array will take precedence
+       * over any actions defined on the "currentItem" unless the
+       * [mergeCustomActions]{@link module:alfresco/renderers/_ActionsMixin#mergeCustomActions}) attribute is
+       * configured to be true (in which case both the actions defined on the "currentItem" will be rendered along
+       * with the actions defined in this array).
+       * 
+       * @instance
+       * @type {object[]}
+       * @default null
+       */
+      customActions: null,
+
+      /**
+       * Indicates whether or not actions should be filtered according to the
+       * [allowedActions array]{@link module:alfresco/renderers/Actions#allowedActions}.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      filterActions: false,
+
+      /**
+       * This indicates that both actions defined on the "currentItem" as well as actions defined by the
+       * [customActions]{@link module:alfresco/renderers/_ActionsMixin#customActions}) will be rendered.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      mergeCustomActions: false,
 
       /**
        * Handles parsing of [allowedActionsString]{@link module:alfresco/renderers/_ActionsMixin#allowedActionsString} if configured
@@ -144,7 +167,13 @@ define(["dojo/_base/declare",
        */
       addActions: function alfresco_renderers__ActionsMixin__addActions() {
          // Iterate over the actions to create a menu item for each of them...
-         if (this.customActions && this.customActions.length > 0)
+         if (this.mergeCustomActions === true && this.currentItem.actions && this.customActions)
+         {
+            // Add the actions on the currentItem and then add additional custom actions...
+            array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
+            array.forEach(this.customActions, lang.hitch(this, this.addAction));
+         }
+         else if (this.customActions && this.customActions.length > 0)
          {
             array.forEach(this.customActions, lang.hitch(this, this.addAction));
          }
@@ -184,6 +213,13 @@ define(["dojo/_base/declare",
          }
       },
 
+      /**
+       * This overrides the [inherited extension point]{@link module:alfresco/core/CoreWidgetProcessing#allWidgetsProcessed}
+       * to add each created action [menu item]{@link module:alfresco/menus/AlfMenuItem} to the menu.
+       * 
+       * @instance
+       * @param {object[]} widgets The widgets created (this is expected to be a single item)
+       */
       allWidgetsProcessed: function alfresco_renderers__ActionsMixin__allWidgetsProcessed(widgets) {
          array.forEach(widgets, function(widget) {
             this.actionsGroup.addChild(widget);
@@ -215,8 +251,10 @@ define(["dojo/_base/declare",
                action.label = this.processTokens(action.label, this.currentItem);
             }
 
+            var id = action.id ? (this.id + "_" + action.id) : null;
             var payload = (action.publishPayload) ? action.publishPayload : {document: this.currentItem, action: action};
             var menuItem = new AlfMenuItem({
+               id: id,
                label: action.label,
                iconImage: AlfConstants.URL_RESCONTEXT + "components/documentlibrary/actions/" + action.icon + "-16.png",
                type: action.type,
