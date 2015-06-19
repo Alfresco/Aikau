@@ -6,12 +6,10 @@
    background-color: @list-zebra-color-even;
 }
 
-.alfresco-lists-views-layouts-Row.zebra-striping:nth-child(odd):hover,
-.alfresco-lists-views-layouts-Row.zebra-striping:nth-child(even):hover {
+.alfresco-lists-views-layouts-Row.zebra-striping:hover {
    background-color: @list-hover-color;
 }
 
-.alfresco-lists-views-layouts-Row.zebra-striping:nth-child(odd):focus,
-.alfresco-lists-views-layouts-Row.zebra-striping:nth-child(even):focus {
+.alfresco-lists-views-layouts-Row.zebra-striping:focus {
    background-color: @list-focus-color;
 }
