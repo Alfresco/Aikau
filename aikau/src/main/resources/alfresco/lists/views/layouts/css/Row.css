@@ -1,0 +1,15 @@
+.alfresco-lists-views-layouts-Row.zebra-striping:nth-child(odd) {
+   background-color: @list-zebra-color-odd;
+}
+
+.alfresco-lists-views-layouts-Row.zebra-striping:nth-child(even) {
+   background-color: @list-zebra-color-even;
+}
+
+.alfresco-lists-views-layouts-Row.zebra-striping:hover {
+   background-color: @list-hover-color;
+}
+
+.alfresco-lists-views-layouts-Row.zebra-striping:focus {
+   background-color: @list-focus-color;
+}

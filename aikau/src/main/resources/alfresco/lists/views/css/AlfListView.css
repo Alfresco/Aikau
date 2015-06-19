@@ -14,14 +14,6 @@
    background-color: transparent;
 }
 
-.alfresco-lists-views-AlfListView > table > tbody > tr:nth-child(even) {
-   /*background-color: @docListEvenRowColour;*/
-}
-
-.alfresco-lists-views-AlfListView > table > tbody > tr:nth-child(odd) {
-   /*background-color: @docListOddRowColour;*/
-}
-
 .alfresco-lists-views-AlfListView > table > tbody > tr > td {
    padding: @standard-line-height @standard-column-width @standard-line-height 0;
    margin: 0;
@@ -34,20 +26,20 @@
 }
 
 .alfresco-lists-views-AlfListView.dndHighlight {
-   outline: 2px solid @docListDndHighlight;
+   outline: @list-dnd-hover-outline;
    outline-offset: -2px;
 }
 
 /* bordered table modifiers */
 
 .alfresco-lists-views-AlfListView.bordered > table {
-   border-bottom: 1px solid @docListBorderColour; 
+   border-bottom: 1px solid @list-border-color; 
 }
 
 .alfresco-lists-views-AlfListView.bordered > table > tbody > tr > td {
-   border-top: 1px dashed @docListBorderColour;
-   border-bottom: 1px dashed @docListBorderColour;
-   border-right: 1px solid @docListBorderColour;
+   border-top: 1px dashed @list-border-color;
+   border-bottom: 1px dashed @list-border-color;
+   border-right: 1px solid @list-border-color;
 }
 
 .alfresco-lists-views-AlfListView.bordered > table > tbody > tr > td.last,
