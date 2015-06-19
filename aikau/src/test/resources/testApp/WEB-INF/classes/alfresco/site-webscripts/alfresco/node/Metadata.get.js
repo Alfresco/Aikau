@@ -15,51 +15,131 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/documentlibrary/AlfDocument",
+         name: "alfresco/layout/VerticalWidgets",
          config: {
-            nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52",
             widgets: [
                {
-                  name: "alfresco/node/MetadataGroups",
+                  name: "alfresco/layout/ClassicWindow",
                   config: {
-                     metadata: [
-                        {
-                           title: "Audio Details",
-                           widgets: [
-                              {
-                                 label: "Artist",
-                                 name: "alfresco/renderers/Property",
-                                 config: {
-                                    propertyToRender: "node.properties.audio:artist"
+                     title: "Defaults",
+                     widgets: [
+                         {
+                           name: "alfresco/documentlibrary/AlfDocument",
+                           config: {
+                              nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52",
+                              widgets: [
+                                 {
+                                    name: "alfresco/node/MetadataGroups",
+                                    config: {
+                                       groups: [
+                                          {
+                                             title: "Audio Details",
+                                             widgets: [
+                                                {
+                                                   label: "Artist",
+                                                   name: "alfresco/renderers/Property",
+                                                   config: {
+                                                      propertyToRender: "node.properties.audio:artist"
+                                                   }
+                                                },
+                                                {
+                                                   label: "Genre",
+                                                   name: "alfresco/renderers/Property",
+                                                   config: {
+                                                      propertyToRender: "node.properties.audio:genre"
+                                                   }
+                                                },
+                                                {
+                                                   label: "Channel Type",
+                                                   name: "alfresco/renderers/InlineEditProperty",
+                                                   config: {
+                                                      propertyToRender: "node.properties.audio:channelType"
+                                                   }
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             title: "General",
+                                             widgets: [
+                                                {
+                                                   label: "Last modified",
+                                                   name: "alfresco/renderers/Property",
+                                                   config: {
+                                                      propertyToRender: "node.properties.cm:modified"
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
                                  }
-                              },
-                              {
-                                 label: "Genre",
-                                 name: "alfresco/renderers/Property",
-                                 config: {
-                                    propertyToRender: "node.properties.audio:genre"
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  name: "alfresco/layout/ClassicWindow",
+                  config: {
+                     title: "Custom Dimensions",
+                     widgets: [
+                         {
+                           name: "alfresco/documentlibrary/AlfDocument",
+                           config: {
+                              nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52",
+                              widgets: [
+                                 {
+                                    name: "alfresco/node/MetadataGroups",
+                                    config: {
+                                       additionalCssClasses: "alf-rounded-border",
+                                       separated: true,
+                                       width: "500px",
+                                       labelToValueRatio: 40,
+                                       groups: [
+                                          {
+                                             title: "Audio Details",
+                                             widgets: [
+                                                {
+                                                   label: "Artist",
+                                                   name: "alfresco/renderers/Property",
+                                                   config: {
+                                                      propertyToRender: "node.properties.audio:artist"
+                                                   }
+                                                },
+                                                {
+                                                   label: "Genre",
+                                                   name: "alfresco/renderers/Property",
+                                                   config: {
+                                                      propertyToRender: "node.properties.audio:genre"
+                                                   }
+                                                },
+                                                {
+                                                   label: "Channel Type",
+                                                   name: "alfresco/renderers/InlineEditProperty",
+                                                   config: {
+                                                      propertyToRender: "node.properties.audio:channelType"
+                                                   }
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             title: "General",
+                                             widgets: [
+                                                {
+                                                   label: "Last modified",
+                                                   name: "alfresco/renderers/Property",
+                                                   config: {
+                                                      propertyToRender: "node.properties.cm:modified"
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
                                  }
-                              },
-                              {
-                                 label: "Channel Type",
-                                 name: "alfresco/renderers/InlineEditProperty",
-                                 config: {
-                                    propertyToRender: "node.properties.audio:channelType"
-                                 }
-                              }
-                           ]
-                        },
-                        {
-                           title: "General",
-                           widgets: [
-                              {
-                                 label: "Last modified",
-                                 name: "alfresco/renderers/Property",
-                                 config: {
-                                    propertyToRender: "node.properties.cm:modified"
-                                 }
-                              }
-                           ]
+                              ]
+                           }
                         }
                      ]
                   }

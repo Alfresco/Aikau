@@ -41,6 +41,15 @@ define(["dojo/_base/declare",
    return declare([AlfCore], {
 
       /**
+       * An array of the CSS files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/CoreWidgetProcessing.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/CoreWidgetProcessing.css"}],
+
+      /**
        * This function can be used to instantiate an array of widgets. Each widget configuration in supplied
        * widgets array is passed to the [processWidget]{@link module:alfresco/core/Core#processWidget} function
        * to handle it's creation.

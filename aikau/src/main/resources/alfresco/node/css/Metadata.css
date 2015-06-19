@@ -1,16 +1,20 @@
 .alfresco-node-Metadata {
 
    > span {
+      display: inline-block;
       vertical-align: top;
    }
 
    .alfresco-node-Metadata__label {
-      display: inline-block;
       width: 80px;
    }
 
    .alfresco-node-Metadata__value {
-      display: inline-block;
       width: 180px;
+   }
+
+   /* Ensure that there is some nice white-space after the last entry */
+   &:last-child {
+      margin-bottom: 15px;
    }
 }

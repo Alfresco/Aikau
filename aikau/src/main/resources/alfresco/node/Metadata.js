@@ -18,6 +18,12 @@
  */
 
 /**
+ * This module has been created to be used by the [MetadataGroups]{@link module:alfresco/node/MetadataGroups}
+ * widget to render a single metadata property with a [label]{@link module:alfresco/node/Metadata#label} and a 
+ * value renderer. The value renderer should be defined by the [widgets]{@link module:alfresco/node/Metadata#widgets}
+ * array. The most basic value renderer is expected to be the [Property]{@link module:alfresco/renderers/Property}
+ * widget.
+ * 
  * @module alfresco/node/Metadata
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -30,8 +36,9 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Metadata.html",
         "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing) {
+        "alfresco/core/CoreWidgetProcessing",
+        "dojo/dom-style"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domStyle) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -52,11 +59,70 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * The label for the metadata property. An attempt will be made to find a localized version
+       * of the configured label so providing NLS property keys is acceptable.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      label: null,
+
+      /**
+       * An optional width for the metadata labels. Units should be included. 
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      labelWidth: null,
+
+      /**
+       * An optional width for the metadata values. Units should be included. 
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      valueWidth: null,
+
+      /**
+       * The widgets to use to render the metadata value.
+       *
+       * @instance
+       * @type {object[]}
+       * @default null
+       */
+      widgets: null,
+
+      /**
+       * Process the configured [label]{@link module:alfresco/node/Metadata#label} to ensure
+       * that a label is defined and attempt to find a localized version of that label.
+       * 
+       * @instance
+       */
+      postMixInProperties: function alfresco_node_Metadata__postMixInProperties() {
+         if (!this.label)
+         {
+            this.label = "";
+         }
+         this.label = this.message(this.label);
+      },
+
+      /**
        * Processes the widgets into the content node.
        * 
        * @instance
        */
       postCreate: function alfresco_node_Metadata__postCreate() {
+         if (this.labelWidth)
+         {
+            domStyle.set(this.labelNode, "width", this.labelWidth);
+         }
+         if (this.valueWidth)
+         {
+            domStyle.set(this.valueNode, "width", this.valueWidth);
+         }
          this.processWidgets(this.widgets, this.valueNode);
       }
    });

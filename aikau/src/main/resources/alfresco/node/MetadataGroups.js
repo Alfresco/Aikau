@@ -18,6 +18,42 @@
  */
 
 /**
+ * This widget provides a way in which the metadata from a given node can be displayed in 
+ * one or more groups. Each group should be provided with its own title along with a
+ * "widgets" array defining all the metadata properties to be rendered in that group. This
+ * allows complete control over what metadata properties are displayed, the order that they
+ * are displayed and the renderer to display their values. The most basic read-only value
+ * renderer used is most likely to be the [Property]{@link module:alfresco/renderers/Property}
+ * widget.
+ *
+ * @example <caption>Basic configuration of a single group rendering two properties</caption>
+ * {
+ *   name: "alfresco/node/MetadataGroups",
+ *   config: {
+ *     groups: [
+ *       {
+ *         title: "Audio Details",
+ *         widgets: [
+ *           {
+ *             label: "Artist",
+ *             name: "alfresco/renderers/Property",
+ *             config: {
+ *               propertyToRender: "node.properties.audio:artist"
+ *             }
+ *           },
+ *           {
+ *             label: "Genre",
+ *             name: "alfresco/renderers/Property",
+ *             config: {
+ *               propertyToRender: "node.properties.audio:genre"
+ *             }
+ *           }
+ *         ]
+ *       }
+ *     ]
+ *   }
+ * }
+ * 
  * @module alfresco/node/MetadataGroups
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -61,22 +97,60 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * An array of groups of metadata to be rendered.
        * 
        * @instance
-       * @type {object]}
+       * @type {object[]}
        * @default null
        */
-      metadata: null,
+      groups: null,
 
       /**
+       * When a specific [width]{@link module:alfresco/node/MetadataGroups#width} is configured then this atttribute
+       * can be used to define what ratio the width of the label should be to the width of the value. This should be
+       * a percentage figure (the % symbol should not be included) between 1 and 99.
+       *
+       * @instance
+       * @type {number}
+       * @default 30
+       */
+      labelToValueRatio: 30,
+
+      /**
+       * Indicates whether or not each group should be separated by a standard horizontal border line. Defaults
+       * to false.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      separated: false,
+
+      /**
+       * An optional width of the displayed metadata groups. If not configured then the width will be that of
+       * the standard [Twister]{@link module:alfresco/layout/Twister} which is defined by the 
+       * "@sidebar-component-width" LESS variable. This is expected to be a value in pixels (the "px" units
+       * suffix should not be included).
+       *
+       * @instance
+       * @type {number}
+       * @default null
+       */
+      width: null,
+
+      /**
+       * Constructs a new [metadata item]{@link module:alfresco/node/Metadata} for the metadata configuration
+       * provided and then adds it to the supplied array.
        * 
-       * @isntance
+       * @instance
        * @param {object} group A single grouping of metadata properties to render 
        */
       addMetadata: function alfresco_node_MetadataGroups__addMetadata(widgets, metadata) {
          widgets.push({
             name: "alfresco/node/Metadata",
             config: {
+               labelWidth: this._labelWidth,
+               valueWidth: this._valueWidth,
                label: metadata.label || "",
                widgets: [
                   {
@@ -89,8 +163,12 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
-       * @isntance
+       * Calls the [addMetadata]{@link module:alfresco/node/MetadataGroups#addMetadata} for each
+       * "widgets" attribute defined in the group to construct the individual
+       * [metadata item widget]{@link module:alfresco/node/Metadata} and then creates a single
+       * [twister]{@link module:alfresco/layout/Twister} containing all the requested metadata
+       *
+       * @instance
        * @param {object} group A single grouping of metadata properties to render 
        */
       addMetadataGroup: function alfresco_node_MetadataGroups__addMetadataGroup(group) {
@@ -99,11 +177,14 @@ define(["dojo/_base/declare",
             var widgets = [];
             array.forEach(group.widgets, lang.hitch(this, this.addMetadata, widgets));
 
-            // TODO: Create the twister
+            var additionalCssClasses = this.separated ? "separated" : "";
+
             var groupNode = domConstruct.create("div", {}, this.domNode);
             this.createWidget({
                name: "alfresco/layout/Twister",
                config: {
+                  width: this.width,
+                  additionalCssClasses: additionalCssClasses,
                   label: group.title,
                   widgets: widgets
                }
@@ -112,14 +193,37 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Processes the widgets into the content node.
+       * Processes any custom width values to ensure that labels and values of each 
+       * [metadata item]{@link module:alfresco/node/Metadata} have the correct widths
+       * according to the configured [labelToValueRatio]{@link module:alfresco/node/MetadataGroups#labelToValueRatio}.
+       * It then iterates over the configured [groups]{@link module:alfresco/node/MetadataGroups#groups} and calls the
+       * [addMetadataGroup]{@link module:alfresco/node/MetadataGroups#addMetadataGroup} to add each group
+       * into a [twister]{@link module:alfresco/layout/Twister}.
        * 
        * @instance
        */
       postCreate: function alfresco_node_MetadataGroups__postCreate() {
-         if (this.metadata)
+         if (this.width)
          {
-            array.forEach(this.metadata, lang.hitch(this, this.addMetadataGroup));
+            domStyle.set(this.domNode, "width", this.width);
+            if (this.labelToValueRatio)
+            {
+               var ratio = parseInt(this.labelToValueRatio, 10);
+               if (isNaN(ratio) || ratio < 1 || ratio > 99) {
+                  this._labelWidth = "49%";
+                  this._valueWidth = "49%";
+               }
+               else
+               {
+                  // Need to give the elements some breathing room so we need to knockoff a %...
+                  this._labelWidth = (ratio - 1) + "%";
+                  this._valueWidth = (100 - ratio - 1) + "%";
+               }
+            }
+         }
+         if (this.groups)
+         {
+            array.forEach(this.groups, lang.hitch(this, this.addMetadataGroup));
          }
       }
    });
