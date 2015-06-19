@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -74,10 +74,21 @@ define(["dojo/_base/declare",
       headingLevel: null,
 
       /**
+       * The width to make the twister. This is null by default and the standard width of a twister is controlled
+       * by the "@sidebar-component-width" LESS variable. However, this can be overridden by configuring this
+       * attribute to be a specific width. Units such as "px" should be included.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      width: null,
+
+      /**
        * @instance
        */
       postMixInProperties: function alfresco_layout_Twister__postMixInProperties() {
-         if (this.label != null)
+         if (this.label)
          {
             this.label = this.encodeHTML(this.message(this.label));
          }
@@ -89,9 +100,14 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_layout_Twister__postCreate() {
-         if (this.label != null && this.label !== "")
+         if (this.width)
          {
-            if (this.additionalCssClasses != null)
+            domStyle.set(this.domNode, "width", this.width);
+         }
+
+         if (this.label)
+         {
+            if (this.additionalCssClasses)
             {
                domClass.add(this.domNode, this.additionalCssClasses);
             }
@@ -132,7 +148,7 @@ define(["dojo/_base/declare",
        * @param {object[]} widgets The widgets that were created.
        */
       allWidgetsProcessed: function alfresco_layout_Twister__allWidgetsProcessed(widgets) {
-         array.forEach(widgets, lang.hitch(this, function(widget, index) {
+         array.forEach(widgets, lang.hitch(this, function(widget) {
             widget.placeAt(this.contentNode);
          }), this);
       },

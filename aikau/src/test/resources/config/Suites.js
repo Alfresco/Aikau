@@ -158,6 +158,10 @@ define({
       "src/test/resources/alfresco/misc/AlfTooltipTest",
       "src/test/resources/alfresco/misc/TableAndFormDialogTest",
 
+      "src/test/resources/alfresco/navigation/PathTreeTest",
+
+      "src/test/resources/alfresco/node/MetadataGroupsTest",
+
       "src/test/resources/alfresco/preview/ImagePreviewTest",
       "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest",
       "src/test/resources/alfresco/preview/PdfJsPreviewTest",
