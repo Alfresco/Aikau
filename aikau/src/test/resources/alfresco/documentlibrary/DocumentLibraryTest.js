@@ -34,7 +34,7 @@ define(["intern!object",
    // so the tests are abstracted to their own individual functions for re-use (this is slightly different
    // that other tests)...
    var countInitialBreadcrumbs = function() {
-      return browser.findAllByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
+      return browser.setFindTimeout(10000).findAllByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
          .then(function(elements) {
             assert.lengthOf(elements, 1, "No breadcrumbs were rendered on page load");
          }); 
