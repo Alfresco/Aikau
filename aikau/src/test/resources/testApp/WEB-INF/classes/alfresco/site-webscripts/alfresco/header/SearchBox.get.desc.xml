@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>SearchBox Test Page</shortname>
+  <shortname>SearchBox</shortname>
+  <description>Shows the alfresco/header/SearchBox widget configured in various ways to customize it's results and appearance</description>
   <family>aikau-unit-tests</family>
   <url>/SearchBox</url>
 </webscript>

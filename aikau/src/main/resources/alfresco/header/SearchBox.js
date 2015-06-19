@@ -45,6 +45,7 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "alfresco/core/TemporalUtils",
         "alfresco/core/FileSizeMixin",
+        "alfresco/renderers/_PublishPayloadMixin",
         "dojo/text!./templates/SearchBox.html",
         "dojo/text!./templates/LiveSearch.html",
         "dojo/text!./templates/LiveSearchItem.html",
@@ -59,8 +60,8 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/date/stamp",
         "dojo/on"], 
-        function(declare, lang, array, _Widget, _Templated, TemporalUtils, FileSizeMixin, SearchBoxTemplate, 
-                 LiveSearchTemplate, LiveSearchItemTemplate, AlfCore, AlfXhr, AlfMenuBar, 
+        function(declare, lang, array, _Widget, _Templated, TemporalUtils, FileSizeMixin, _PublishPayloadMixin,
+                 SearchBoxTemplate, LiveSearchTemplate, LiveSearchItemTemplate, AlfCore, AlfXhr, AlfMenuBar, 
                  AlfConstants, JSON, domAttr, domStyle, domClass, domConstruct, Stamp, on) {
 
    /**
@@ -144,7 +145,7 @@ define(["dojo/_base/declare",
    /**
     * LiveSearchItem widget
     */
-   var LiveSearchItem = declare([_Widget, _Templated, AlfCore], {
+   var LiveSearchItem = declare([_Widget, _Templated, AlfCore, _PublishPayloadMixin], {
 
       /**
        * @instance
@@ -167,11 +168,19 @@ define(["dojo/_base/declare",
       onResultClick: function alfresco_header_LiveSearchItem__onResultClick(evt) {
          this.searchBox.onSaveLastUserSearch();
 
-         this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-            type: "FULL_PATH",
-            url: this.link
-         });
-
+         if (this.publishTopic)
+         {
+            var payload = this.getGeneratedPayload(true);
+            this.alfPublish(this.publishTopic, payload, this.publishGlobal, this.publishToParent);
+         }
+         else
+         {
+            this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+               type: "FULL_PATH",
+               url: this.link
+            });
+         }
+         
          evt.preventDefault();
          evt.stopPropagation();
       },
@@ -184,13 +193,20 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event
        */
       onMetaClick: function alfresco_header_LiveSearchItem__onMetaClick(evt) {
-
          if (evt.target && evt.target.href)
          {
-            this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-               type: "FULL_PATH",
-               url: evt.target.href
-            });
+            if (this.publishTopic)
+            {
+               var payload = this.getGeneratedPayload(true);
+               this.alfPublish(this.publishTopic, payload, this.publishGlobal, this.publishToParent);
+            }
+            else
+            {
+               this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+                  type: "FULL_PATH",
+                  url: evt.target.href
+               });
+            }
          }
 
          evt.preventDefault();
@@ -348,6 +364,85 @@ define(["dojo/_base/declare",
       alignment: "right",
 
       /**
+       * This is an optional topic to publish on when a results is clicked. Configuring a publishTopic
+       * means that clicking on any results (e.g. wiki, blog, document, site, person, etc) will result
+       * in that topic being published. The [payload]{@link module:alfresco/header/SearchBox#publishPayload}
+       * can be configured using a combination of the 
+       * [publishPayloadType]{@link module:alfresco/header/SearchBox#publishPayloadType},
+       * [publishPayloadModifiers]{@link module:alfresco/header/SearchBox#publishPayloadModifiers} and
+       * [publishPayloadItemMixin]{@link module:alfresco/header/SearchBox#publishPayloadItemMixin} attributes.
+       * 
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      publishTopic: null,
+
+      /**
+       * This is an optional payload to publish when a results is clicked. This is only used when
+       * [publishTopic]{@link module:alfresco/header/SearchBox#publishTopic} is configured to be a topic
+       * string.
+       * 
+       * @instance
+       * @type {object}
+       * @default null
+       */
+      publishPayload: null,
+
+      /**
+       * Indicates whether publications made when clicking on a result are published
+       * globally or not
+       * 
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      publishGlobal: false,
+
+      /**
+       * Indicates whether publications made when clicking on a result are published
+       * on the parent pub/sub scope or not.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      publishToParent: false,
+
+      /**
+       * The type of payload to use when clicking on results. This can be set to one of 
+       * "CONFIGURED", "CURRENT_ITEM", "PROCESS" or "BUILD" depending on how the payload
+       * should be generated.
+       * 
+       * @instance
+       * @type {object}
+       * @default null
+       */
+      publishPayloadType: null,
+
+      /**
+       * Modifiers to use when processing the payload published when clicking on a result.
+       * This is only used when the [publishPayloadType]{@link module:alfresco/header/SearchBox#publishPayloadType}
+       * is configured to be "PROCESS".
+       * 
+       * @instance
+       * @type {string[]}
+       * @default null
+       */
+      publishPayloadModifiers: null,
+
+      /**
+       * Indicates whether or not to include the current item in the payload published when clicking on
+       * a result. By default this is configured to be true so that the details of the result that has been
+       * clicked on will be included in the payload.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      publishPayloadItemMixin: true,
+
+      /**
        * This is the page to navigate to for document container links. It defaults
        * to the "documentlibrary" (as this is the standard document library page in
        * Alfresco Share) but it can be configured to go to a custom page.
@@ -391,7 +486,7 @@ define(["dojo/_base/declare",
        */
       wikiPage: "wiki-page",
 
-      /**
+       /**
        * This is the page to navigate to for site home links. It defaults to 
        * "dashboard" (as this is the standard dashboard page in 
        * Alfresco Share) but it can be configured to go to a custom page. The page
@@ -592,6 +687,14 @@ define(["dojo/_base/declare",
             this._searchMenu.placeAt(this._searchMenuNode);
             this._searchMenu.startup();
          }
+         else
+         {
+            // When not including the advanced search menu, we'll just include an element that indicates
+            // that indicates the control is still related to search. It's purely for decoration though.
+            domConstruct.create("span", {
+               "class": "alfresco-header-SearchBox-menu--hideAdvancedSearch"
+            }, this._searchMenuNode);
+         }
 
          if (this.liveSearch)
          {
@@ -737,6 +840,7 @@ define(["dojo/_base/declare",
        * @param {object} evt The keydown event
        */
       onSearchBoxKeyDown: function alfresco_header_SearchBox__onSearchBoxKeyDown(evt) {
+         // jshint maxcomplexity:false
          var searches;
          switch (evt.keyCode)
          {
@@ -912,6 +1016,7 @@ define(["dojo/_base/declare",
                      {
                         case "wiki":
                            link = this.wikiPage + "?title=" + encodeURIComponent(item.name);
+                           
                            break;
                         case "blog":
                            link = this.blogPage + "?postId=" + encodeURIComponent(item.name);
@@ -930,7 +1035,15 @@ define(["dojo/_base/declare",
                         link: AlfConstants.URL_PAGECONTEXT + site + link,
                         icon: AlfConstants.PROXY_URI + "api/node/" + item.nodeRef.replace(":/", "") + "/content/thumbnails/doclib?c=queue&ph=true&lastModified=" + lastModified,
                         alt: this.encodeHTML(item.name),
-                        meta: info
+                        meta: info,
+                        currentItem: lang.clone(item),
+                        publishTopic: this.publishTopic,
+                        publishPayload: this.publishPayload,
+                        publishGlobal: this.publishGlobal,
+                        publishToParent: this.publishToParent,
+                        publishPayloadType: this.publishPayloadType,
+                        publishPayloadItemMixin: this.publishPayloadItemMixin,
+                        publishPayloadModifiers: this.publishPayloadModifiers
                      });
                      itemLink.placeAt(this._LiveSearch.containerNodeDocs);
                   }, this);
@@ -980,7 +1093,15 @@ define(["dojo/_base/declare",
                         link: AlfConstants.URL_PAGECONTEXT + "site/" + item.shortName + "/" + this.sitePage,
                         icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-32.png",
                         alt: this.encodeHTML(item.title),
-                        meta: item.description ? this.encodeHTML(item.description) : "&nbsp;"
+                        meta: item.description ? this.encodeHTML(item.description) : "&nbsp;",
+                        currentItem: lang.clone(item),
+                        publishTopic: this.publishTopic,
+                        publishPayload: this.publishPayload,
+                        publishGlobal: this.publishGlobal,
+                        publishToParent: this.publishToParent,
+                        publishPayloadType: this.publishPayloadType,
+                        publishPayloadItemMixin: this.publishPayloadItemMixin,
+                        publishPayloadModifiers: this.publishPayloadModifiers
                      });
                      itemLink.placeAt(this._LiveSearch.containerNodeSites);
                   }, this);
@@ -1021,7 +1142,15 @@ define(["dojo/_base/declare",
                         link: AlfConstants.URL_PAGECONTEXT + "user/" + encodeURIComponent(item.userName) + "/" + this.peoplePage,
                         icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar32",
                         alt: this.encodeHTML(fullName),
-                        meta: meta ? meta : "&nbsp;"
+                        meta: meta ? meta : "&nbsp;",
+                        currentItem: lang.clone(item),
+                        publishTopic: this.publishTopic,
+                        publishPayload: this.publishPayload,
+                        publishGlobal: this.publishGlobal,
+                        publishToParent: this.publishToParent,
+                        publishPayloadType: this.publishPayloadType,
+                        publishPayloadItemMixin: this.publishPayloadItemMixin,
+                        publishPayloadModifiers: this.publishPayloadModifiers
                      });
                      itemLink.placeAt(this._LiveSearch.containerNodePeople);
                   }, this);

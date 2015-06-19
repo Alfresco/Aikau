@@ -3,7 +3,6 @@
 }
 
 .alfresco-share .alfresco-header-SearchBox {
-   position: relative;;
    margin: 0 10px 0px 10px;
    background-color: @primary-title-color;
    border-radius: 12px;
@@ -28,6 +27,16 @@
    .alfresco-header-SearchBox-menu {
       display: inline-block;
       width: 35px;
+   }
+
+   .alfresco-header-SearchBox-menu--hideAdvancedSearch {
+      display: inline-block;
+      background-repeat: no-repeat;
+      background-image: url("./images/search-16.png");
+      height: 16px;
+      width: 16px;
+      vertical-align: middle;
+      margin-left: 3px;
    }
 
    input.alfresco-header-SearchBox-text {
