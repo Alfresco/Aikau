@@ -143,10 +143,14 @@ define(["dojo/_base/declare",
        * provided and then adds it to the supplied array.
        * 
        * @instance
+       * @param {string} idPrefix The identifier of the parent to use as a prefix
+       * @param {object[]} widgets An array to add the new metadata widget to
        * @param {object} group A single grouping of metadata properties to render 
        */
-      addMetadata: function alfresco_node_MetadataGroups__addMetadata(widgets, metadata) {
+      addMetadata: function alfresco_node_MetadataGroups__addMetadata(idPrefix, widgets, metadata) {
+         var id = (idPrefix && metadata.id) ? (idPrefix + "_"  + metadata.id) : null;
          widgets.push({
+            id: id,
             name: "alfresco/node/Metadata",
             config: {
                labelWidth: this._labelWidth,
@@ -174,13 +178,16 @@ define(["dojo/_base/declare",
       addMetadataGroup: function alfresco_node_MetadataGroups__addMetadataGroup(group) {
          if (group.title)
          {
+            var id = (this.id && group.id) ? (this.id + "_" + group.id) : null;
+
             var widgets = [];
-            array.forEach(group.widgets, lang.hitch(this, this.addMetadata, widgets));
+            array.forEach(group.widgets, lang.hitch(this, this.addMetadata, id, widgets));
 
             var additionalCssClasses = this.separated ? "separated" : "";
-
+            
             var groupNode = domConstruct.create("div", {}, this.domNode);
             this.createWidget({
+               id: id,
                name: "alfresco/layout/Twister",
                config: {
                   width: this.width,

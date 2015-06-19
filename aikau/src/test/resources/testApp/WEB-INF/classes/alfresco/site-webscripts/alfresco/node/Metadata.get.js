@@ -29,20 +29,24 @@ model.jsonModel = {
                               nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52",
                               widgets: [
                                  {
+                                    id: "DEFAULTS",
                                     name: "alfresco/node/MetadataGroups",
                                     config: {
                                        groups: [
                                           {
-                                             title: "Audio Details",
+                                             id: "AUDIO",
+                                             title: "audio.group.label",
                                              widgets: [
                                                 {
-                                                   label: "Artist",
+                                                   id: "ARTIST",
+                                                   label: "audio.property.artist.label",
                                                    name: "alfresco/renderers/Property",
                                                    config: {
                                                       propertyToRender: "node.properties.audio:artist"
                                                    }
                                                 },
                                                 {
+                                                   id: "GENRE",
                                                    label: "Genre",
                                                    name: "alfresco/renderers/Property",
                                                    config: {
@@ -67,6 +71,13 @@ model.jsonModel = {
                                                    config: {
                                                       propertyToRender: "node.properties.cm:modified"
                                                    }
+                                                },
+                                                {
+                                                   label: "Won't exist",
+                                                   name: "alfresco/renderers/Property",
+                                                   config: {
+                                                      propertyToRender: "moomin"
+                                                   }
                                                 }
                                              ]
                                           }
@@ -90,6 +101,7 @@ model.jsonModel = {
                               nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52",
                               widgets: [
                                  {
+                                    id: "CUSTOM",
                                     name: "alfresco/node/MetadataGroups",
                                     config: {
                                        additionalCssClasses: "alf-rounded-border",
@@ -98,9 +110,11 @@ model.jsonModel = {
                                        labelToValueRatio: 40,
                                        groups: [
                                           {
+                                             id: "AUDIO",
                                              title: "Audio Details",
                                              widgets: [
                                                 {
+                                                   id: "ARTIST",
                                                    label: "Artist",
                                                    name: "alfresco/renderers/Property",
                                                    config: {
