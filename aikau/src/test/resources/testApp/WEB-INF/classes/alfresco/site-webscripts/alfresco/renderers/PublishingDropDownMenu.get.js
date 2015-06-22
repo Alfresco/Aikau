@@ -54,6 +54,7 @@ var widgets = {
                               id: "PDM",
                               name: "alfresco/renderers/PublishingDropDownMenu",
                               config: {
+                                 additionalCssClasses: "custom-css",
                                  publishTopic: "ALF_PUBLISHING_DROPDOWN_MENU",
                                  publishPayload: {
                                     shortName: {
