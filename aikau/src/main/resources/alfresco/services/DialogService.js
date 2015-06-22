@@ -417,6 +417,7 @@ define(["dojo/_base/declare",
        * @returns {object} The dialog configuration.
        */
       createDialogConfig: function alfresco_services_DialogService__createDialogConfig(config, formConfig) {
+         // jshint maxcomplexity:false
          var handleOverflow = true;
          if (config.handleOverflow === false)
          {
@@ -488,6 +489,7 @@ define(["dojo/_base/declare",
          var formConfig = {
             name: "alfresco/forms/Form",
             config: {
+               additionalCssClasses: "root-dialog-form",
                displayButtons: false,
                widgets: widgets,
                value: formValue
