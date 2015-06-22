@@ -44,6 +44,10 @@
    min-width: 560px;
 }
 
+.alfresco-dialog-AlfDialog .dialog-body.no-buttons {
+   margin-bottom: 0;
+}
+
 .alfresco-dialog-AlfDialog.iefooter .dialog-body {
    padding: 12px;
    overflow: hidden;
