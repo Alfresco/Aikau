@@ -199,6 +199,7 @@ define(["dojo/_base/declare",
             // Create the widget...
             this._dropDownWidget = new Select({
                id: this.id + "_SELECT",
+               additionalCssClasses: this.additionalCssClasses || "",
                pubSubScope: uuid,
                fieldId: fieldId,
                value: this.value,

@@ -26,8 +26,12 @@ define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
         "dijit/form/Select",
         "dijit/focus",
-        "dojo/dom-class"], 
-        function(BaseFormControl, declare, Select, focusUtil, domClass) {
+        "dojo/_base/lang",
+        "dojo/_base/array",
+        "dojo/dom-class",
+        "dojo/dom-attr",
+        "dojo/aspect"], 
+        function(BaseFormControl, declare, Select, focusUtil, lang, array, domClass, domAttr, aspect) {
 
    return declare([BaseFormControl], {
 
@@ -74,14 +78,24 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       createFormControl: function alfresco_forms_controls_Select__createFormControl(config) {
          var select = new Select(config);
+         
+         this.additionalCssClasses = this.additionalCssClasses || "";
 
-         // Handle adding classes to control...
-         var additionalCssClasses = "";
-         if (this.additionalCssClasses !== null)
-         {
-            additionalCssClasses = this.additionalCssClasses;
-         }
-         domClass.add(this.domNode, "alfresco-forms-controls-Select " + additionalCssClasses);
+         // See AKU-353: Update the created Select menu so that its popup menu DOM node also contains any
+         // configured additionalCssClasses and update each option DOM node so that it's value is available via
+         // CSS selector.
+         var handle = aspect.after(select, "openDropDown", lang.hitch(this, function(returnVal, /*jshint unused:false*/ originalArgs) {
+            handle.remove();
+            if (this.additionalCssClasses && lang.exists("wrappedWidget.dropDown._popupWrapper", this))
+            {
+               domClass.add(this.wrappedWidget.dropDown._popupWrapper, this.additionalCssClasses);
+            }
+
+            array.forEach(this.wrappedWidget.dropDown.getChildren(), function(child, index) {
+               domAttr.set(child.domNode, "data-value", this.options[index].value);
+            }, this);
+         }));
+         domClass.add(this.domNode, "alfresco-forms-controls-Select " + this.additionalCssClasses);
          return select;
       },
 
@@ -93,7 +107,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {object} option The option configuration
        * @param {number} index The index of the option
        */
-      processOptionLabel: function alfresco_forms_controls_BaseFormControl__processOptionLabel(option, /*jshint unused:false*/ index) {
+      processOptionLabel: function alfresco_forms_controls_Select__processOptionLabel(option, /*jshint unused:false*/ index) {
          this.inherited(arguments);
          if (option.label)
          {

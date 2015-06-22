@@ -74,6 +74,20 @@ define(["intern!object",
              });
       },
 
+      "Test that additional CSS classes are included in the popup": function() {
+         return browser.findAllByCssSelector("#PDM_ITEM_0_SELECT_CONTROL_dropdown.custom-css")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find additional CSS classes on select popup");
+            });
+      },
+
+      "Test that value is included in data attribute of select option": function() {
+         return browser.findAllByCssSelector("#PDM_ITEM_0_SELECT_CONTROL_dropdown tr[data-value='PUBLIC']")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find select option via data-value attribute");
+            });
+      },
+
       "Test menu code not removed on click": function() {
          // Select "Private" (should succeed)...
          return browser.findByCssSelector("tr.dijitMenuItem:nth-of-type(3)")
