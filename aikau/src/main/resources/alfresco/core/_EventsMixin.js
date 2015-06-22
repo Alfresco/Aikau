@@ -112,7 +112,7 @@ define(["alfresco/core/Core",
           * @param {Object} [scrollNode=window] The scroll node
           */
          publishScrollEvents: function(scrollNode) {
-            var scrollListener = on(scrollNode || window, "scroll", lang.hitch(this, this.throttledPublish, this.eventsScrollTopic));
+            var scrollListener = on(scrollNode || window, "scroll", lang.hitch(this, this.debouncedPublish, this.eventsScrollTopic));
             this.own && this.own(scrollListener);
          },
 
@@ -123,7 +123,7 @@ define(["alfresco/core/Core",
           * @instance
           */
          publishResizeEvents: function() {
-            var resizeListener = on(window, "resize", lang.hitch(this, this.throttledPublish, this.eventsResizeTopic));
+            var resizeListener = on(window, "resize", lang.hitch(this, this.debouncedPublish, this.eventsResizeTopic));
             this.own && this.own(resizeListener);
          }
       });
