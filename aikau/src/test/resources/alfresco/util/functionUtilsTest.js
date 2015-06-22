@@ -132,7 +132,7 @@ define([
                   });
                })
                .then(function(timeOfExecution) {
-                  assert.closeTo(timeOfExecution, (170 + 250), 10, "Did not debounce correctly");
+                  assert.closeTo(timeOfExecution, (170 + 250), 25, "Did not debounce correctly");
                });
          },
 
@@ -165,7 +165,7 @@ define([
                   });
                })
                .then(function(timeOfExecution) {
-                  assert.closeTo(timeOfExecution, 0, 10, "Did not handle execFirst option in debounce function correctly");
+                  assert.closeTo(timeOfExecution, 0, 25, "Did not handle execFirst option in debounce function correctly");
                });
          }
       });
