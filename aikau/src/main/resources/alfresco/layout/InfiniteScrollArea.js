@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
 
       /**
        * This overrides the [inherited default]{@link module:alfresco/services/InfiniteScrollService#_registerScrollListenerImmediately}
-       * to ensure that the [registerScrollListener function]{@link module:alfresco/core/_EventsMixin#registerScrollListener} is NOT called
+       * to ensure that the [publishScrollEvents function]{@link module:alfresco/core/_EventsMixin#publishScrollEvents} is NOT called
        * automatically in the constructor.
        *
        * @instance
@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_layout_InfiniteScrollArea__postCreate() {
          this.inherited(arguments);
-         this.registerScrollListener(this.domNode.parentNode);
+         this.publishScrollEvents(this.domNode.parentNode);
       }
    });
 });
