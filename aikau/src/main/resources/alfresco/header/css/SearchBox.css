@@ -3,7 +3,7 @@
 }
 
 .alfresco-share .alfresco-header-SearchBox {
-   margin: 0 10px 0px 10px;
+   margin: 2px 10px 0px 10px;
    background-color: @primary-title-color;
    border-radius: 12px;
    box-shadow: @inset-box-shadow;
