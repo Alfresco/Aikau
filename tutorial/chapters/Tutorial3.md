@@ -127,5 +127,7 @@ widgets: [
 
 When you reload the page you should see the header exactly as it was before. Now you have a header widget that is being reused in each page of your client.
 
+_You can [download the project files from here](../resources/aikau-tutorial_003.zip?raw=true) as they exist at the end of this tutorial._
+
 Previous: [How to Create a new Widget](./Tutorial2.md),
 Next: [Configuring Logging and Debug](./Tutorial4.md)
