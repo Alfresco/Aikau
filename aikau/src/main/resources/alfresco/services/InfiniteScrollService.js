@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
       scrollTolerance: 500,
 
       /**
-       * By default, the [registerScrollListener function]{@link module:alfresco/core/_EventsMixin#registerScrollListener}
+       * By default, the [publishScrollEvents function]{@link module:alfresco/core/_EventsMixin#publishScrollEvents}
        * will be called in the constructor. If overridden and set to false then it will not, and should instead be
        * called manually later on.
        *
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
          // Register the events listeners...
          if (this._registerScrollListenerImmediately)
          {
-            this.registerScrollListener();
+            this.publishScrollEvents();
          }
          
          // hook point to allow other widgets to let us know when they're done processing a scroll request.
