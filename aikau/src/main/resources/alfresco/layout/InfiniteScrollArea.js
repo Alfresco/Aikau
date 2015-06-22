@@ -73,31 +73,27 @@ define(["dojo/_base/declare",
       baseClass: "alfresco-layout-InfiniteScrollArea",
 
       /**
-       * This overrides the [inherited default]{@link module:alfresco/services/InfiniteScrollService#_registerEventListenersImmediately}
-       * to ensure that the [registerEventListeners function]{@link module:alfresco/core/Events#registerEventListeners} is NOT called
+       * This overrides the [inherited default]{@link module:alfresco/services/InfiniteScrollService#_registerScrollListenerImmediately}
+       * to ensure that the [registerScrollListener function]{@link module:alfresco/core/_EventsMixin#registerScrollListener} is NOT called
        * automatically in the constructor.
        *
        * @instance
        * @override
        * @type {boolean}
-       * @default false
+       * @default
        */
-      _registerEventListenersImmediately: false,
+      _registerScrollListenerImmediately: false,
 
       /**
        * Extends the [inherited function]{@link module:alfresco/core/ProcessWidgets#postCreate} to
-       * set the mixed in [element]{@link module:alfresco/core/Events#scrollElement}
+       * set the mixed in [element]{@link module:alfresco/core/_EventsMixin#scrollElement}
        * to detect scroll position on
        *
        * @instance
        */
       postCreate: function alfresco_layout_InfiniteScrollArea__postCreate() {
          this.inherited(arguments);
-
-         // Set the scrollElement to be the element containing this widget (this is expect to have the scroll
-         // bars)...
-         this.scrollElement = this.domNode.parentNode;
-         this.registerEventListeners();
+         this.registerScrollListener(this.domNode.parentNode);
       }
    });
 });

@@ -25,21 +25,19 @@
  * @module alfresco/services/InfiniteScrollService
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
- * @mixes module:alfresco/core/Events
- * @mixes module:alfresco/core/AlfCoreEventsTopicMixin
+ * @mixes module:alfresco/core/_EventsMixin
  * @author david.webster@alfresco.com
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
-        "alfresco/core/Events",
-        "alfresco/core/EventsTopicMixin",
+        "alfresco/core/_EventsMixin",
         "alfresco/core/DomElementUtils",
         "dojo/dom-geometry"],
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, lang, AlfCoreEvents, AlfCoreEventsTopicMixin, AlfDomUtils, domGeom) {
+        function(declare, AlfCore, _AlfDocumentListTopicMixin, lang, _EventsMixin, AlfDomUtils, domGeom) {
 
-   return declare([AlfCore, _AlfDocumentListTopicMixin, AlfCoreEvents, AlfCoreEventsTopicMixin, AlfDomUtils], {
+   return declare([AlfCore, _AlfDocumentListTopicMixin, _EventsMixin, AlfDomUtils], {
 
       /**
        * Used to keep track of the current status of the InfiniteScroll
@@ -62,15 +60,15 @@ define(["dojo/_base/declare",
       scrollTolerance: 500,
 
       /**
-       * By default, the [registerEventListeners function]{@link module:alfresco/core/Events#registerEventListeners}
+       * By default, the [registerScrollListener function]{@link module:alfresco/core/_EventsMixin#registerScrollListener}
        * will be called in the constructor. If overridden and set to false then it will not, and should instead be
        * called manually later on.
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
-      _registerEventListenersImmediately: true,
+      _registerScrollListenerImmediately: true,
 
       /**
        * @instance
@@ -82,9 +80,9 @@ define(["dojo/_base/declare",
          declare.safeMixin(this, args);
 
          // Register the events listeners...
-         if (this._registerEventListenersImmediately)
+         if (this._registerScrollListenerImmediately)
          {
-            this.registerEventListeners();
+            this.registerScrollListener();
          }
          
          // hook point to allow other widgets to let us know when they're done processing a scroll request.
