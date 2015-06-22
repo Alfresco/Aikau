@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
       toggleFullScreen: function alfresco_core_FullScreenMixin__toggleFullScreen(isWindowOnly, payload) {
          if (payload.selected === true)
          {
-            if (this.domNode != null)
+            if (this.domNode)
             {
                if (!dojo.doc.fullscreen && !dojo.doc.mozFullScreen && !dojo.doc.webkitFullScreen)
                {
@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
        * @param {boolean} isWindowOnly Indicates whether to make the element the size of the window
        */
       requestFullScreen: function alfresco_core_FullScreenMixin__requestFullScreen(isWindowOnly) {
-         this.isWindowOnly = (isWindowOnly != null) ? isWindowOnly : false;
+         this.isWindowOnly = isWindowOnly || false;
 
          // Always enter full window mode first... this is done so that popups that are outide the target
          // DOM element can still be displayed. We're going to make the document body NOT the target DOM
@@ -185,7 +185,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onFullScreenChange: function alfresco_core_FullScreenMixin__onFullScreenChange() {
-         if (this.domNode != null)
+         if (this.domNode)
          {
             if (domClass.contains(this.domNode, enteringFullScreenClass))
             {
@@ -255,7 +255,7 @@ define(["dojo/_base/declare",
        * @param {boolean} enable Whether to enable the mode
        */
       toggleFullWindow: function alfresco_core_FullScreenMixin__toggleFullWindow(enable) {
-         if (this.domNode != null)
+         if (this.domNode)
          {
             if (enable === true && !domClass.contains(this.domNode, fullWindowClass))
             {
@@ -280,7 +280,7 @@ define(["dojo/_base/declare",
        * @param {object} evt The key up event
        */
       onKeyUp: function alfresco_core_FullScreenMixin__onKeyUp(evt) {
-         if (evt.keyCode == 27)
+         if (evt.keyCode === 27)
          {
             this.alfPublish(this.fullScreenTopic, {
                selected: false

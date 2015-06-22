@@ -59,7 +59,7 @@
    width: 500px;
 }
 /* Add some specific styling for the search controls */
-.alfresco-preview-PdfJs .search-controls {
+.alfresco-preview-PdfJs .pdfjs-search-controls {
    padding: 10px 10px 0 10px;
    border-top: @standard-border;
 }
