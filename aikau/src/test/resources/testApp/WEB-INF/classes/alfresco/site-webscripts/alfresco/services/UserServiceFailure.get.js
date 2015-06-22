@@ -1,6 +1,6 @@
-var overThreeYearsAgo = new Date(); // Start with now
-overThreeYearsAgo.setFullYear(overThreeYearsAgo.getFullYear() - 3); // Remove three years
-overThreeYearsAgo.setTime(overThreeYearsAgo.getTime() - (1000 * 60 * 60 * 24 * 30)); // Remove about a month 
+var overFourYearsAgo = new Date(); // Start with now
+overFourYearsAgo.setFullYear(overFourYearsAgo.getFullYear() - 4); // Remove four years
+overFourYearsAgo.setTime(overFourYearsAgo.getTime() - (1000 * 60 * 60 * 24 * 30)); // Remove about a month 
 
 model.jsonModel = {
    services: [
@@ -25,7 +25,7 @@ model.jsonModel = {
          config: {
             id: "HEADER_USER_STATUS",
             userStatus: "I\'m not so very happy",
-            userStatusTime: overThreeYearsAgo.toISOString()
+            userStatusTime: overFourYearsAgo.toISOString()
          }
       },
       {
