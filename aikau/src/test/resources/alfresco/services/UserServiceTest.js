@@ -46,7 +46,7 @@ define(["intern!object",
          return browser.findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
             .getVisibleText()
             .then(function (text){
-               expect(text).to.equal("Last updated: over 3 years ago", "The 'last updated' should read 'Last updated: over 3 years ago' to begin with");
+               expect(text).to.equal("Last updated: over 4 years ago", "The 'last updated' should read 'Last updated: over 4 years ago' to begin with");
             });
       },
 
@@ -99,7 +99,7 @@ define(["intern!object",
             .getVisibleText()
             .then(function (text){
                TestCommon.log(testname,"Check the starting 'last updated' copy");
-               expect(text).to.equal("Last updated: over 3 years ago", "The 'last updated' should read 'Last updated: over 3 years ago' to begin with");
+               expect(text).to.equal("Last updated: over 4 years ago", "The 'last updated' should read 'Last updated: over 4 years ago' to begin with");
             });
       },
 
@@ -125,7 +125,7 @@ define(["intern!object",
          .findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
             .getVisibleText()
             .then(function (text){
-               expect(text).to.equal("Last updated: over 3 years ago", "The 'last updated' should read 'Last updated: over 3 years ago' to finish");
+               expect(text).to.equal("Last updated: over 4 years ago", "The 'last updated' should read 'Last updated: over 4 years ago' to finish");
             })
          .end();
       },
