@@ -1,3 +1,7 @@
+var overThreeYearsAgo = new Date(); // Start with now
+overThreeYearsAgo.setFullYear(overThreeYearsAgo.getFullYear() - 3); // Remove three years
+overThreeYearsAgo.setTime(overThreeYearsAgo.getTime() - (1000 * 60 * 60 * 24 * 30)); // Remove about a month 
+
 model.jsonModel = {
    services: [
       {
@@ -21,7 +25,7 @@ model.jsonModel = {
          config: {
             id: "HEADER_USER_STATUS",
             userStatus: "I\'m not so very happy",
-            userStatusTime: "2011-12-19T15:28:46.493Z"
+            userStatusTime: overThreeYearsAgo.toISOString()
          }
       },
       {
