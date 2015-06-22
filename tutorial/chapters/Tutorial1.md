@@ -165,7 +165,7 @@ Each widget and service is intended to serve a specific purpose. The AlfDocument
 
 If you really want to learn more about the inner workings of Aikau then you can watch [this presentation](https://www.youtube.com/watch?v=qcaotLDJq9U&noredirect=1 "Link to YouTube") from Alfresco Summit 2013  and read [this blog post](http://blogs.alfresco.com/wp/developer/2013/03/05/under-the-hood-of-the-surf-updates/ "Link to Alfresco Developer Blogs").
 
-_You can [download the project files from here](../resources/aikau-tutorial_001.zip) as they exist at the end of this tutorial._
+_You can [download the project files from here](../resources/aikau-tutorial_001.zip?raw=true) as they exist at the end of this tutorial._
 
 Next: [How to Create a new Widget](./Tutorial2.md)
 
