@@ -172,10 +172,10 @@ define(["dojo/_base/declare",
          this.integratedFind = options.integratedFind;
 
          var events = [
-            'find',
-            'findagain',
-            'findhighlightallchange',
-            'findcasesensitivitychange'
+            "find",
+            "findagain",
+            "findhighlightallchange",
+            "findcasesensitivitychange"
          ];
 
          this.firstPagePromise = new Promise(function (resolve) {
@@ -263,7 +263,7 @@ define(["dojo/_base/declare",
             self.pdfPageSource.pages[pageIndex].getTextContent().then(
                function textContentResolved(textContent) {
                   var textItems = textContent.items;
-                  var str = '';
+                  var str = "";
 
                   for (var i = 0; i < textItems.length; i++) {
                      str += textItems[i].str;
@@ -288,7 +288,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       handleEvent: function alfresco_preview_PdfJs_PDFFindController__handleEvent(e) {
-         if (this.state === null || e.type !== 'findagain') {
+         if (this.state === null || e.type !== "findagain") {
             this.dirtyMatch = true;
          }
          this.state = e.detail;
@@ -298,7 +298,7 @@ define(["dojo/_base/declare",
             this.extractText();
 
             clearTimeout(this.findTimeout);
-            if (e.type === 'find')
+            if (e.type === "find")
             {
               // Only trigger the find action after 250ms of silence.
               this.findTimeout = setTimeout(this.nextMatch.bind(this), 250);
@@ -371,7 +371,7 @@ define(["dojo/_base/declare",
          }
 
          // If there's no query there's no point in searching.
-         if (this.state.query === '') {
+         if (this.state.query === "") {
             this.updateUIState(this.FindStates.FIND_FOUND);
             return;
          }
@@ -516,8 +516,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       updateUIState: function alfresco_preview_PdfJs_PDFFindController__updateUIState(state, previous) {
-         var findMsg = '';
-         // var status = '';
+         var findMsg = "";
+         // var status = "";
 
          // ALFRESCO - updateUIState method impl
          
@@ -527,26 +527,28 @@ define(["dojo/_base/declare",
          // See pdf.js default Implementation
 
          if(state===this.FindStates.FIND_FOUND||state===this.FindStates.FIND_PENDING)
+         {
             return;
+         }
          
          switch (state) {
             case this.FindStates.FIND_FOUND:
-               findMsg = this.pdfPageSource.pdfJsPlugin.wp.msg('search.message.found');
+               findMsg = this.pdfPageSource.pdfJsPlugin.previewManager.message("search.message.found");
                break;
 
             case this.FindStates.FIND_PENDING:
-               findMsg = this.pdfPageSource.pdfJsPlugin.wp.msg('search.message.pending');
+               findMsg = this.pdfPageSource.pdfJsPlugin.previewManager.message("search.message.pending");
                break;
 
             case this.FindStates.FIND_NOTFOUND:
-               findMsg = this.pdfPageSource.pdfJsPlugin.wp.msg('search.message.notfound');
+               findMsg = this.pdfPageSource.pdfJsPlugin.previewManager.message("search.message.notfound");
                break;
 
             case this.FindStates.FIND_WRAPPED:
                if (previous) {
-                  findMsg = this.pdfPageSource.pdfJsPlugin.wp.msg('search.message.wrapped.bottom');
+                  findMsg = this.pdfPageSource.pdfJsPlugin.previewManager.message("search.message.wrapped.bottom");
                } else {
-                  findMsg = this.pdfPageSource.pdfJsPlugin.wp.msg('search.message.wrapped.top');
+                  findMsg = this.pdfPageSource.pdfJsPlugin.previewManager.message("search.message.wrapped.top");
                }
                break;
          }

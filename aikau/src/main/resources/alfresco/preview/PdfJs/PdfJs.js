@@ -454,7 +454,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onViewerLoaded: function alfresco_preview_PdfJs_PdfJs__onViewerLoaded(p_obj) {
-         // jshint unused:false
+         // jshint unused:false, maxcomplexity:false, maxstatements: false
          // This is the construction of a previewer elements...
          this.controls = domConstruct.create("div", {"class": "controls"}, this.previewManager.getPreviewerElement());
          this.sidebar = domConstruct.create("div", {"class": "sidebar"}, this.previewManager.getPreviewerElement());
@@ -586,43 +586,46 @@ define(["dojo/_base/declare",
        * @instance
        */
       _setViewerHeight: function alfresco_preview_PdfJs_PdfJs__setViewerHeight() {
-
-         var computedStyle = domStyle.getComputedStyle(this.viewer.parentNode);
-         var previewRegion = domGeom.getContentBox(this.viewer.parentNode, computedStyle);
-         computedStyle = domStyle.getComputedStyle(this.controls);
-         var controlRegion = domGeom.getContentBox(this.controls, computedStyle);
-         var controlHeight = !this.fullscreen ? controlRegion.h : 0;
-         var newHeight = previewRegion.h - controlHeight -1; // Allow for bottom border
-         
-         if (newHeight === 0)
+         var pE = this.previewManager.getPreviewerElement();
+         if (pE)
          {
-            if (!this.maximized)
+            var computedStyle = domStyle.getComputedStyle(this.viewer.parentNode);
+            var previewRegion = domGeom.getContentBox(this.viewer.parentNode, computedStyle);
+            computedStyle = domStyle.getComputedStyle(this.controls);
+            var controlRegion = domGeom.getContentBox(this.controls, computedStyle);
+            var controlHeight = !this.fullscreen ? controlRegion.h : 0;
+            var newHeight = previewRegion.h - controlHeight -1; // Allow for bottom border
+            
+            if (newHeight === 0)
             {
-               // var dialogPane;
-               var previewHeight;
-               var docHeight = $(document).height(),
-                   clientHeight = $(window).height();
-               // Take the smaller of the two
-               previewHeight = ((docHeight < clientHeight) ? docHeight : clientHeight) - 220;
-               // Leave space for header etc.
-               newHeight = previewHeight - 10 - controlHeight -1; // Allow for bottom border of 1px
+               if (!this.maximized)
+               {
+                  // var dialogPane;
+                  var previewHeight;
+                  var docHeight = $(document).height(),
+                      clientHeight = $(window).height();
+                  // Take the smaller of the two
+                  previewHeight = ((docHeight < clientHeight) ? docHeight : clientHeight) - 220;
+                  // Leave space for header etc.
+                  newHeight = previewHeight - 10 - controlHeight -1; // Allow for bottom border of 1px
+               }
+               else
+               {
+                  newHeight = $(window).height() - controlHeight - 1;
+               }
+            }
+            
+            if (!this.fullscreen)
+            {
+               this.alfLog("log","Setting viewer height to " + newHeight + "px (toolbar " + controlHeight + "px, container " + previewRegion.h + "px");
+               domStyle.set(this.viewer, "height", newHeight.toString() + "px");
+               domStyle.set(this.sidebar, "height", newHeight.toString() + "px");
             }
             else
             {
-               newHeight = $(window).height() - controlHeight - 1;
+               this.alfLog("log","Setting viewer height to 100% (full-screen)");
+               domStyle.set(this.viewer, "height", "100%");
             }
-         }
-         
-         if (!this.fullscreen)
-         {
-            this.alfLog("log","Setting viewer height to " + newHeight + "px (toolbar " + controlHeight + "px, container " + previewRegion.h + "px");
-            domStyle.set(this.viewer, "height", newHeight.toString() + "px");
-            domStyle.set(this.sidebar, "height", newHeight.toString() + "px");
-         }
-         else
-         {
-            this.alfLog("log","Setting viewer height to 100% (full-screen)");
-            domStyle.set(this.viewer, "height", "100%");
          }
       },
 
@@ -1989,47 +1992,48 @@ define(["dojo/_base/declare",
                                  ]
                               }
                            },
-                           {
-                              id: "{id}_MAXIMISE_MENU",
-                              name: "alfresco/menus/AlfMenuBarPopup",
-                              config: {
-                                 label: "pdfjs.maximise.menu.label",
-                                 title: "pdfjs.maximise.menu.title",
-                                 widgets: [
-                                    {
-                                       name: "alfresco/menus/AlfMenuGroup",
-                                       config: {
-                                          widgets: [
-                                             {
-                                                id: "{id}_FULL_WINDOW",
-                                                name: "alfresco/menus/AlfCheckableMenuItem",
-                                                config: {
-                                                   label: "pdfjs.maximise.full-window.label",
-                                                   title: "pdfjs.maximise.full-window.title",
-                                                   iconClass: "alf-fullscreen-icon",
-                                                   group: "PDFJS_MAXIMISE_GROUP",
-                                                   checked: false,
-                                                   publishTopic: "ALF_FULL_WINDOW"
-                                                }
-                                             },
-                                             {
-                                                id: "{id}_FULL_SCREEN",
-                                                name: "alfresco/menus/AlfCheckableMenuItem",
-                                                config: {
-                                                   label: "pdfjs.maximise.full-screen.label",
-                                                   title: "pdfjs.maximise.full-screen.title",
-                                                   iconClass: "alf-fullscreen-icon",
-                                                   group: "PDFJS_MAXIMISE_GROUP",
-                                                   checked: false,
-                                                   publishTopic: "ALF_FULL_SCREEN"
-                                                }
-                                             }
-                                          ]
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
+                           // Temporarily commented out as not working correctly in context.
+                           // {
+                           //    id: "{id}_MAXIMISE_MENU",
+                           //    name: "alfresco/menus/AlfMenuBarPopup",
+                           //    config: {
+                           //       label: "pdfjs.maximise.menu.label",
+                           //       title: "pdfjs.maximise.menu.title",
+                           //       widgets: [
+                           //          {
+                           //             name: "alfresco/menus/AlfMenuGroup",
+                           //             config: {
+                           //                widgets: [
+                           //                   {
+                           //                      id: "{id}_FULL_WINDOW",
+                           //                      name: "alfresco/menus/AlfCheckableMenuItem",
+                           //                      config: {
+                           //                         label: "pdfjs.maximise.full-window.label",
+                           //                         title: "pdfjs.maximise.full-window.title",
+                           //                         iconClass: "alf-fullscreen-icon",
+                           //                         group: "PDFJS_MAXIMISE_GROUP",
+                           //                         checked: false,
+                           //                         publishTopic: "ALF_FULL_WINDOW"
+                           //                      }
+                           //                   },
+                           //                   {
+                           //                      id: "{id}_FULL_SCREEN",
+                           //                      name: "alfresco/menus/AlfCheckableMenuItem",
+                           //                      config: {
+                           //                         label: "pdfjs.maximise.full-screen.label",
+                           //                         title: "pdfjs.maximise.full-screen.title",
+                           //                         iconClass: "alf-fullscreen-icon",
+                           //                         group: "PDFJS_MAXIMISE_GROUP",
+                           //                         checked: false,
+                           //                         publishTopic: "ALF_FULL_SCREEN"
+                           //                      }
+                           //                   }
+                           //                ]
+                           //             }
+                           //          }
+                           //       ]
+                           //    }
+                           // },
                            {
                               id: "{id}_DOWNLOAD_MENU",
                               name: "alfresco/menus/AlfMenuBarPopup",
@@ -2136,7 +2140,7 @@ define(["dojo/_base/declare",
                      id: "{id}_SEARCH_CONTROLS",
                      name: "alfresco/layout/LeftAndRight",
                      config: {
-                        additionalCssClasses: "search-controls",
+                        additionalCssClasses: "pdfjs-search-controls",
                         visibilityConfig: {
                            initialValue: false,
                            rules: [
@@ -2154,7 +2158,8 @@ define(["dojo/_base/declare",
                               id: "{id}_SEARCH_FORM",
                               name: "alfresco/forms/SingleTextFieldForm",
                               config: {
-                                 useHash: true,
+                                 useHash: false,
+                                 scopeFormControls: false,
                                  okButtonLabel: "pdfjs.search.find.label", // TODO: Localization
                                  okButtonPublishTopic: PdfJsConstants.FIND_TOPIC,
                                  okButtonPublishGlobal: false,
