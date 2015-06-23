@@ -324,9 +324,9 @@ define(["dojo/_base/declare",
          // it will provide the current form data...
          var formValue = this.getValue();
          array.forEach(this.additionalButtons, function(button) {
-            if (button.publishPayload !== null)
+            if (button._alfOriginalButtonPayload)
             {
-               lang.mixin(button.publishPayload, formValue);
+               lang.mixin(button._alfOriginalButtonPayload, formValue);
             }
             else
             {
@@ -604,7 +604,7 @@ define(["dojo/_base/declare",
 
             // If useHash is set to true then set up a subcription on the publish topic for the OK button which will
             // set the hash fragment with the form contents...
-            if (this.useHash === true)
+            if (this.useHash === true && this.setHash === true)
             {
                if (this.okButtonPublishTopic &&
                    lang.trim(this.okButtonPublishTopic) !== "")
@@ -650,6 +650,18 @@ define(["dojo/_base/declare",
          {
             this.additionalButtons = registry.findWidgets(this.buttonsNode);
          }
+
+         // Iterate over all the buttons and make a copy of the original button payload (before any value is
+         // applied to it). This is required since it is possible for values to be removed from the payload
+         // so the original payload needs to be used rather than the payload as it was after the previous update
+         // (e.g. a field has become disabled since the last payload update and is configured to not have its value
+         // included when it is hidden, therefore we need to ensure its previous value is NOT included in the payload)
+         array.forEach(this.additionalButtons, function(button) {
+            if (button.payload)
+            {
+               button._alfOriginalButtonPayload = lang.clone(button.payload);
+            }
+         });
       },
       
       /**
