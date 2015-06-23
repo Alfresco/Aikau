@@ -34,7 +34,7 @@ define([
 
          setup: function() {
             browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Index", "Multi Select Input Tests").end();
+            return TestCommon.loadTestWebScript(this.remote, "/Index", "Function Utils Test").end();
          },
 
          beforeEach: function() {
