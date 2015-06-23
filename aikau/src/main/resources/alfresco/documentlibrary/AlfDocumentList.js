@@ -324,7 +324,6 @@ define(["dojo/_base/declare",
          {
             this.onDocumentClick(payload);
          }
-
       },
 
       /**
@@ -336,9 +335,9 @@ define(["dojo/_base/declare",
          if (payload.url)
          {
             this.currentFilter = this.processFilter(payload.url);
-            if (this._readyToLoad) 
+            if (!this.useHash && this.currentFilter.path)
             {
-               this.loadData();
+               this.alfPublish(this.pathChangeTopic, this.currentFilter);
             }
          }
          else

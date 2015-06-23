@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Manage Aspects Action</shortname>
+  <description>Shows an action renderer configured with the Manage Aspects action</description>
+  <family>aikau-unit-tests</family>
+  <url>/ManageAspectsAction</url>
+</webscript>

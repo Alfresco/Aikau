@@ -161,7 +161,14 @@ model.jsonModel = {
                                     }
                                  },
                                  {
-                                    name: "alfresco/renderers/Actions"
+                                    name: "alfresco/renderers/Actions",
+                                    config: {
+                                       widgetsForActions: [
+                                          {
+                                             name: "alfresco/renderers/actions/UploadNewVersion"
+                                          }
+                                       ]
+                                    }
                                  }
                               ]
                            }

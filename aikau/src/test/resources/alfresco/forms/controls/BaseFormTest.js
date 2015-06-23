@@ -130,14 +130,14 @@ define(["intern!object",
             .getLastPublish("AUTOSAVE_FORM_1")
             .then(function(payload) {
                assert.propertyVal(payload, "control", "wibble", "Did not autosave updated value");
+               assert.propertyVal(payload, "alfValidForm", true, "Did not autosave validity property");
             });
       },
 
       "Updating to invalid value does not autosave form": function() {
-         return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD .dijitInputInner")
+         return browser.findById("CLEAR_AUTOSAVE_1")
+            .click()
             .clearLog()
-            .clearValue()
-            .pressKeys(keys.BACKSPACE) // Need to trigger an update!
             .getLastPublish("AUTOSAVE_FORM_1")
             .then(function(payload) {
                assert.isNull(payload, "Published form when invalid");
@@ -152,6 +152,15 @@ define(["intern!object",
             .getLastPublish("AUTOSAVE_FORM_2")
             .then(function(payload) {
                assert.propertyVal(payload, "control", "", "Did not autosave updated, invalid value");
+               assert.propertyVal(payload, "alfValidForm", false, "Did not autosave validity property");
+            });
+      },
+
+      "Autosaving with defined payload mixes payload into form values": function(){
+         return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD") // Need to get session to check for publish
+            .getLastPublish("AUTOSAVE_FORM_2")
+            .then(function(payload) {
+               assert.propertyVal(payload, "customProperty", "awooga", "Did not mix custom payload into form values");
             });
       },
 

@@ -134,38 +134,10 @@ define(["intern!object",
             });
       },
 
-      "Test aspects dialog opens (when current aspects are provided)": function() {
-         return browser.sleep(500).findByCssSelector("#MANAGE_ASPECTS2_label")
-            .click()
-         .end()
-         .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.alfresco-dialog-AlfDialog")
-            .then(null, function() {
-               assert(false, "The manage aspects dialog did not appear");
-            });
-      },
-
-      "Test pre-configured aspects count": function()  {
-         return browser.findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .picked-items .alfresco-lists-views-AlfListView tr")
-            .then(function(elements) {
-               assert.lengthOf(elements, 3, "Incorrect number of selected aspects");
-            });
-      },
-
-      "Test cancelling aspects dialog ": function() {
-         return browser.findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .cancellationButton > span")
-            .click()
-         .end()
-         .sleep(500)
-         .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isFalse(displayed, "The dialog was not hidden");
-            });
-      },
-
       "Test managing aspects when aspects can't be retrieved": function() {
          // By using a node that the mock service doesn't cater for we can rely on a 404 producing an error...
-         return browser.sleep(500).findByCssSelector("#MANAGE_ASPECTS3_label")
+         return browser.findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogHidden").end()
+         .findByCssSelector("#MANAGE_ASPECTS3_label")
             .click()
          .end()
          .findByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_PROMPT", "message", "It was not possible to retrieve the aspects applied to No Data Node"))
@@ -176,11 +148,15 @@ define(["intern!object",
 
       "Test failure to save aspect changes": function() {
          // By using a node that the mock service doesn't cater for we can rely on a 404 producing an error...
-         return browser.sleep(500).findByCssSelector("#MANAGE_ASPECTS4_label")
+         return browser.findByCssSelector("#MANAGE_ASPECTS4_label")
             .click()
+         .end()
+         .findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogDisplayed")
          .end()
          .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .confirmationButton > span")
             .click()
+         .end()
+         .findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogHidden")
          .end()
          .findByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_PROMPT", "message", "It was not possible to update the aspects applied to Save Fail Node"))
             .then(null, function() {

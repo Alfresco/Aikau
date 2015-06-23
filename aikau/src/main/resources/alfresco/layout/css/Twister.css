@@ -28,46 +28,53 @@
 }
 
 .alfresco-layout-Twister {
-    border-top: @standard-border;
-    width: @sidebar-component-width;
-    display: block;
-    padding-top: @standard-line-height;
+   width: @sidebar-component-width;
+   display: block;
+   padding-top: @standard-line-height;
 
-    &:first-child {
-        border: none;
-    }
+   &.separated {
+      border-top: @standard-border;
+   }
 
-    &.hidden {
-        display: none;
-    }
+   &.separated:first-child {
+      border-top: none;
+   }
 
-    &.no-borders {
-        border: none;
-    }
+   &.hidden {
+      display: none;
+   }
 
-    > div.alfresco-layout-Twister-open {
-        padding-left: 20px !important; /* Important is only required to override base.css use of important */
-        background-position: 0 3px !important;
-    }
+   &.no-borders {
+      border: none;
+   }
 
-    > div.alfresco-layout-Twister-closed {
-        background-position: 0 3px !important;
-        padding-left: 20px !important; /* Important is only required to override base.css use of important */
-    }
+   > div.alfresco-layout-Twister-open {
+      padding-left: 20px !important; /* Important is only required to override base.css use of important */
+      background-position: 0 3px !important;
+   }
 
-    .label,
-    .label h3 {
-        font-family: @bold-font;
-        color: @general-font-color;
-        font-size: @normal-font-size;
-        font-weight: normal;
-    }
-    .label {
-        margin-left: @standard-column-width;
-        padding-bottom: @standard-line-height - 2;
-    }
+   > div.alfresco-layout-Twister-closed {
+      background-position: 0 3px !important;
+      padding-left: 20px !important; /* Important is only required to override base.css use of important */
+   }
 
-    .content {
-        margin-left: (@standard-column-width + @standard-column-spacing) * 2;
-    }
+   >.label:focus {
+      outline: none;
+   }
+   
+   >.label,
+   >.label h3 {
+      font-family: @bold-font;
+      color: @general-font-color;
+      font-size: @normal-font-size;
+      font-weight: normal;
+   }
+   > .label {
+      margin-left: @standard-column-width;
+      padding-bottom: @standard-line-height - 2;
+   }
+
+   > .content {
+      margin-left: (@standard-column-width + @standard-column-spacing) * 2;
+   }
 }

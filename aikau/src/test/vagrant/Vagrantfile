@@ -2,35 +2,27 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure("2") do |config|
+Vagrant.configure(2) do |config|
 
-   # VM name and location of image to start from
-   config.vm.box = "precise64"
-   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+   # VM name
+   config.vm.box = "ubuntu/trusty64"
 
    # Enable ssh
    config.ssh.forward_agent = true
 
-   config.vm.provider :aws do |aws, override|
-
-      # Assign memory of 2Gb to the VM
-      aws.customize ["modifyvm", :id, "--memory", "2048"]
-
-      aws.access_key_id = 'XXXX'      # Replace this
-      aws.secret_access_key = 'XXXX'  # Replace this
-      aws.keypair_name = 'XXXX'       # Replace this
-      aws.ami = 'ami-7747d01e'        # ubuntu 12.04
-      
-      # Assign the user credentials used by the vagrant ssh
-      override.ssh.username = 'ubuntu'
-      override.ssh.private_key_path = '~/.ssh/amazon-ubuntu.pem'
+   # Provider-specific configuration
+   config.vm.provider "virtualbox" do |v|
+      v.name = "Aikau Testing VM"
+      v.memory = 8192
+      v.cpus = 4
+      v.customize ["modifyvm", :id, "--vram", "128"]
    end
+
+   # Configure the VM on its own private_network with IP 192.168.56.4
+   # The host machine will be assigned a new network connection on 192.168.56.1
+   config.vm.network "private_network", ip: "192.168.56.4"
 
    # Run the setup.sh file to provision this VM
    config.vm.provision :shell, :path => "setup.sh"
-
-   # Configure the VM on it's own private_network with IP 192.168.56.4
-   # The host machine will be assigned a new network connection on 192.168.56.1
-   config.vm.network "private_network", ip: "192.168.56.4"
 
 end

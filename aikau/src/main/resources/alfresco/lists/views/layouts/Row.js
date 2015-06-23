@@ -67,6 +67,16 @@ define(["dojo/_base/declare",
       additionalCssClasses: null,
 
       /**
+       * Indicates that a "zebra striping" style should be applied (e.g. odd and even rows being different
+       * colours). 
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      zebraStriping: false,
+
+      /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
        * @instance postCreate

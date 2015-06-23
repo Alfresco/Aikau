@@ -19,12 +19,17 @@ model.jsonModel = {
       "alfresco/services/UploadService"
    ],
    widgets: [
-      getDocLib("site1", "documentlibrary", null, "Documents"),
+      getDocLib({
+         siteId: "site1", 
+         containerId: "documentlibrary", 
+         rootNode: null, 
+         rootLabel: "Documents"
+      }),
       {
          name: "aikauTesting/mockservices/FullDocLibMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

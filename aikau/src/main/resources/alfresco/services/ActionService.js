@@ -977,7 +977,7 @@ define(["dojo/_base/declare",
        * @param {object} item The item to perform the action on
        */
       onActionManageAspects: function alfresco_services_ActionService__onActionManageAspects(item) {
-         this.alfPublish("ALF_MANAGE_ASPECTS_REQUEST", { item: item });
+         this.alfPublish("ALF_MANAGE_ASPECTS_REQUEST", item);
       },
 
       /**

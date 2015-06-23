@@ -41,6 +41,15 @@ define(["dojo/_base/declare",
    return declare([AlfCore], {
 
       /**
+       * An array of the CSS files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/CoreWidgetProcessing.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/CoreWidgetProcessing.css"}],
+
+      /**
        * This function can be used to instantiate an array of widgets. Each widget configuration in supplied
        * widgets array is passed to the [processWidget]{@link module:alfresco/core/Core#processWidget} function
        * to handle it's creation.
@@ -192,7 +201,7 @@ define(["dojo/_base/declare",
          // If the widget has dynamic visibility behaviour configured then we need to set up the necessary
          // subscriptions to handle the rules that have been defined. We will set the initial visibility
          // as requested and then set up the subcriptions...
-         if (widget[configAttribute] !== undefined)
+         if (widget[configAttribute])
          {
             var initialValue = lang.getObject(configAttribute + ".initialValue", false, widget);
             initialValue = negate ? !initialValue : initialValue;

@@ -70,6 +70,7 @@ define({
 
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
+      "src/test/resources/alfresco/documentlibrary/DocumentLibraryTest",
       "src/test/resources/alfresco/documentlibrary/DocumentListTest",
       "src/test/resources/alfresco/documentlibrary/DocumentSelectorTest",
       "src/test/resources/alfresco/documentlibrary/PaginationTest",
@@ -157,6 +158,10 @@ define({
       "src/test/resources/alfresco/misc/AlfTooltipTest",
       "src/test/resources/alfresco/misc/TableAndFormDialogTest",
 
+      "src/test/resources/alfresco/navigation/PathTreeTest",
+
+      "src/test/resources/alfresco/node/MetadataGroupsTest",
+
       "src/test/resources/alfresco/preview/ImagePreviewTest",
       "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest",
       "src/test/resources/alfresco/preview/PdfJsPreviewTest",
@@ -185,6 +190,9 @@ define({
       "src/test/resources/alfresco/renderers/TagsTest",
       "src/test/resources/alfresco/renderers/ThumbnailTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
+
+      "src/test/resources/alfresco/renderers/actions/ManageAspectsActionTest",
+      "src/test/resources/alfresco/renderers/actions/UploadNewVersionActionTest",
 
       "src/test/resources/alfresco/search/AlfSearchResultTest",
       "src/test/resources/alfresco/search/FacetFiltersTest",

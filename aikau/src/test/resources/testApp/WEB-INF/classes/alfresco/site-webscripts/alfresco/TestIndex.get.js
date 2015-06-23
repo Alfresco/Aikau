@@ -77,6 +77,7 @@ model.jsonModel = {
                                  {
                                     name: "alfresco/lists/views/layouts/Row",
                                     config: {
+                                       additionalCssClasses: "zebra-striping",
                                        widgets: [
                                           {
                                              name: "alfresco/lists/views/layouts/Cell",

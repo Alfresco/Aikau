@@ -339,7 +339,7 @@ define(["dojo/_base/declare",
        * @param {string} property The name of the property to render
        */
       getRenderedProperty: function alfresco_renderers_Property__getRenderedProperty(property) {
-         /*jshint maxcomplexity:15*/
+         /*jshint maxcomplexity:false*/
          var value = "";
          if (property === null || typeof property === "undefined") {
             // No action required if a property isn't supplied

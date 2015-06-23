@@ -112,32 +112,35 @@ define(["dojo/_base/declare",
       _setPreviewerElementHeight: function alfresco_preview_AlfDocumentPreviewPlugin___setPreviewerElementHeight() {
          var previewHeight;
          var pE = this.previewManager.getPreviewerElement();
-         var previewerOffset = $(pE).offset();
-         var docHeight = $(document).height(),
-             clientHeight = $(window).height();
+         if (pE)
+         {
+            var previewerOffset = $(pE).offset();
+            var docHeight = $(document).height(),
+                clientHeight = $(window).height();
 
-         // Work with either the window or document height depending upon which is smallest...
-         var h = (docHeight < clientHeight) ? docHeight : clientHeight;
+            // Work with either the window or document height depending upon which is smallest...
+            var h = (docHeight < clientHeight) ? docHeight : clientHeight;
 
-         var heightMode = this.previewManager.heightMode;
-         if (heightMode === "DIALOG")
-         {
-            previewHeight = $(pE).parentsUntil(".alfresco-dialog-AlfDialog").last().height();
+            var heightMode = this.previewManager.heightMode;
+            if (heightMode === "DIALOG")
+            {
+               previewHeight = $(pE).parentsUntil(".alfresco-dialog-AlfDialog").last().height();
+            }
+            else if (!heightMode || heightMode === "AUTO" || isNaN(heightMode))
+            {
+               previewHeight =  h- previewerOffset.top;
+            }
+            else if (heightMode < 0)
+            {
+               // If the height mode is a number less than zero, then deduct that height from the available space.
+               previewHeight = h + heightMode; // NOTE: Not a mistake, remember adding a negative number substracts! :)
+            }
+            else
+            {
+               previewHeight = heightMode;
+            }
+            domStyle.set(pE, "height", previewHeight + "px");
          }
-         else if (!heightMode || heightMode === "AUTO" || isNaN(heightMode))
-         {
-            previewHeight =  h- previewerOffset.top;
-         }
-         else if (heightMode < 0)
-         {
-            // If the height mode is a number less than zero, then deduct that height from the available space.
-            previewHeight = h + heightMode; // NOTE: Not a mistake, remember adding a negative number substracts! :)
-         }
-         else
-         {
-            previewHeight = heightMode;
-         }
-         domStyle.set(pE, "height", previewHeight + "px");
       }
    });
 });

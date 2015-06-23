@@ -1,9 +1,9 @@
 .alfresco-lists-views-layout-_MultiItemRendererMixin--item:hover {
-   background-color: #F5F5F5;
+   background-color: @list-hover-color;
 }
 
 .alfresco-lists-views-layout-_MultiItemRendererMixin--item:focus {
-   background-color: #F5F5F5;
+   background-color: @list-focus-color;
 }
 
 .alfresco-lists-views-layout-_MultiItemRendererMixin--item.alfresco-lists-views-layouts-Row {

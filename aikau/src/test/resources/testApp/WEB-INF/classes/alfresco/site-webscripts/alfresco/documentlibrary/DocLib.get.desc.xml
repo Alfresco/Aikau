@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>DocLib Test</shortname>
+  <shortname>Document Library Example </shortname>
+  <description>This provides an example of building the standard Document Library using the doclib.lib.js library file.</description>
   <family>aikau-unit-tests</family>
   <url>/DocLib</url>
 </webscript>

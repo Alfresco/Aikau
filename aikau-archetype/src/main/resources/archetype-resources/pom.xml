@@ -1,3 +1,4 @@
+#set( $symbol_dollar = '$' )
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
@@ -53,18 +54,18 @@
    <build>
       <finalName>aikau-sample</finalName>
       
-      <plugin>
-         <groupId>org.apache.tomcat.maven</groupId>
-         <artifactId>tomcat7-maven-plugin</artifactId>
-         <version>2.2</version>
-         <configuration>
-            <port>8089</port>
-            <path>/aikau</path>
-            <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
-         </configuration>
-      </plugin>
 
       <plugins>
+         <plugin>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+               <port>8090</port>
+               <path>/aikau-sample</path>
+               <warSourceDirectory>${symbol_dollar}{project.basedir}/src/main/webapp</warSourceDirectory>
+            </configuration>
+         </plugin>
          <plugin>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-maven-plugin</artifactId>

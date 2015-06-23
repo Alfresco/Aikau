@@ -52,10 +52,10 @@ define(["intern!object",
          // The initial AlfSearchList doesn't perform an initial search when "useHash" is set to true (which
          // for this test it is).
          // Check that no request to search exists...
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 0, "Search term set unexpectedly");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.isNull(payload, "Search request made unexpectedly");
+         });
       },
       
       "Test setting empty search term": function() {
@@ -63,10 +63,10 @@ define(["intern!object",
          return browser.findByCssSelector("#SET_SEARCH_TERM_1")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 0, "Search term set unexpectedly");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.isNull(payload, "Search request made unexpectedly");
+         });
       },
       
       "Test updating hash sets search term": function() {
@@ -75,79 +75,68 @@ define(["intern!object",
             .click()
          .end()
          // Check that updating the hash results in a search request being made...
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "term", "testTerm1"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Search term didn't request search");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "term", "testTerm1", "Search term didn't request search");
+            assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from request");
+         });
       },
 
-      "Test that facet fields are included in search": function() {
-         // Make sure our facet was included...
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "facetFields", "qname1"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Facet fields not set appropriately from request");
-            });
-      },
-
-      "Test that setting identical search term does not re-issue search": function() {
-         // Click the button to set the SAME search term (a new request shouldn't be issued)...
-         return browser.findByCssSelector("#SET_SEARCH_TERM_2")
-            .click()
-         .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Duplicate search term made the same search (before response provided)");
-            });
-      },
-
-      "Test that setting different search term issues new search request": function() {
-         // Click the button to set a DIFFERENT search term (a new request SHOULD be issued)...
+      "Test that setting different search term does not issues new search request when current request is ongoing": function() {
+         // Click the button to set a DIFFERENT search term (a new request SHOULD NOT be issued because a request is in progress)...
          return browser.findByCssSelector("#SET_SEARCH_TERM_3")
+            .clearLog()
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 2, "New search term made issues a new search request");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.isNull(payload, "Another search request made before previous response returned");
+         });
       },
 
-      "Test that a new search with the same term does not start before last search completes": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "term", "testTerm2"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Duplicate search term made the same search (before response provided)");
-            });
-      },
-
-      "Test that a new search with the same term starts once last search completes": function() {
+      "Test that the pending search is requested": function() {
          // Send some response data, and then issue the search again, there should now be 3 search 
          // requests and the last one should be for the last search term...
          return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
          .end()
-         .findByCssSelector("#SET_SEARCH_TERM_3")
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "term","testTerm2", "Search term didn't request search");
+         });
+      },
+
+      "Test that setting identical search term DOES not re-issue search (to address eventual consistency)": function() {
+         // Click the button to set the SAME search term (a new request shouldn't be issued)...
+         // Return response from previous request...
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 3, "New search term made issues a new search request");
-            })
+
+         // Set identical search term...
+         .findByCssSelector("#SET_SEARCH_TERM_3")
+            .clearLog()
+            .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "term", "testTerm2"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Duplicate search term made the same search (before response provided)");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "term","testTerm2", "Search term didn't request search");
+         });
       },
 
       "Test setting search with facet filters via hash": function() {
          // Click the button to set a variety of data (including facet filters)....
          // Set the same term again to check that the filters are removed...
-         return browser.findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", "filter1,filter2,filter3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Facet fields were not set appropriately from hash change");
-            });
+         .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet fields were not set appropriately from hash change");
+         });
       },
 
       "Test new search term clears previous filters": function() {
@@ -155,178 +144,119 @@ define(["intern!object",
          return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
          .end()
-         .findByCssSelector("#SET_SEARCH_TERM_3")
+         .findByCssSelector("#SET_SEARCH_TERM_2")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "term", "testTerm2"))
-            .then(function(elements) {
-               assert(elements.length === 1, "New search term not issued");
-            })
-         .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", ""))
-            .then(function(elements) {
-               assert(elements.length === 1, "Facet fields were not cleared");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "term","testTerm1", "New search term not issued");
+            assert.propertyVal(payload, "filters", "", "Facet fields were not cleared");
+         });
       },
 
       "Test setting null scope doesn't issue a search": function() {
          // Test scope settings...
          // Set empty scope...
-         return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 5, "Unexpected number of search requests made before testing scope settings, expected 5 found " + elements.length);
-            })
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
          .end()
+         .clearLog()
          .findByCssSelector("#SET_SCOPE_0")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 5, "Setting a null scope issued a search request");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.isNull(payload, "Setting a null scope issued a search request");
+         });
       },
 
       "Test that setting the same scope doesn't issue new search": function() {
          return browser.findByCssSelector("#SET_SCOPE_1")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 5, "Setting the same scope issued a search request.");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.isNull(payload, "Setting the same scope issued a search request.");
+         });
       },
 
       "Test that setting a new scope issues a new search": function() {
          return browser.findByCssSelector("#SET_SCOPE_2")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 6, "Setting a new scope didn't issue a search request");
-            });
-      },
-
-      "Test that setting ALL_SITES scope makes repo parameter false": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "repo", "false"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Repo param not set to false when ALL_SITES scope set");
-            });
-      },
-
-      "Test that setting ALL_SITES scope makes site parameter empty": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", ""))
-            .then(function(elements) {
-               assert(elements.length === 1, "Site data passed when ALL_SITES scope set");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "repo", false, "Setting a new scope didn't issue a search request (and repo wasn't set to false)");
+            assert.propertyVal(payload, "site", "", "Site wasn't set to empty string for ALL_SITES scope");
+         });
       },
 
       "Test that setting specific site scope issues a new search": function() {
-         return browser.findByCssSelector("#SET_SCOPE_3")
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 7, "Setting a site scope didn't issue a search request");
-            });
-      },
-
-      "Test that setting site scope makes repo param false": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "repo", "false"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Repo param not set to false when ALL_SITES scope set");
-            });
-      },
-
-      "Test that setting site scope sets site parameter": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", "site1"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Site data not when site scope set");
-            });
+         .findByCssSelector("#SET_SCOPE_3")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "repo", false, "Repo wasn't set to false for site scope search");
+            assert.propertyVal(payload, "site", "site1", "Site wasn't set requested site");
+         });
       },
 
       "Test that setting repo scope issues a new search": function() {
-         return browser.findByCssSelector("#SET_SCOPE_1")
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 8, "Setting the REPO scope didn't issue a search request");
-            });
-      },
-
-      "Test that setting repo scope sets repo parameter to true": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "repo", "true"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Repo param not set to true when REPO scope set");
-            });
-      },
-
-      "Test that setting repo scope clears site parameter": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", ""))
-            .then(function(elements) {
-               assert(elements.length === 1, "Site data not cleared when REPO scope set");
-            });
+         .findByCssSelector("#SET_SCOPE_1")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "repo", true, "Repo wasn't set to true for repo scope search");
+            assert.propertyVal(payload, "site", "", "Site wasn't cleared for repo scope search");
+         });
       },
 
       "Test setting multiple search attributes on hash (term)": function() {
          // Check that updating the hash results in a search request being made...
-         return browser.findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "term", "testTerm2"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Search term not set appropriately from hash change");
-            });
-      },
-
-      "Test setting term and facet filters together (facet field 1)": function() {
-         // Check that updating the hash results in a search request being made...
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "facetFields", "qname1"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Facet fields not set appropriately from hash change");
-            });
-      },
-
-      "Test setting term and facet filters together (facet field 2)": function() {
-         // Check that updating the hash results in a search request being made...
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", "filter1,filter2,filter3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Facet filters not set appropriately from hash change");
-            });
-      },
-
-      "Test setting term and facet filters together (sort direction)": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortAscending", "false"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Sort order not set appropriately from hash change");
-            });
-      },
-
-      "Test setting term and facet filters together (sort field)": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "sortField", "cm:title"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Sort property not set appropriately from hash change");
-            });
+         .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "term","testTerm2", "Search term not set appropriately from hash change");
+            assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from hash change");
+            assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
+            assert.propertyVal(payload, "sortAscending", "false", "Sort order not set appropriately from hash change");
+            assert.propertyVal(payload, "sortField", "cm:title", "Sort property not set appropriately from hash change");
+         });
       },
 
       "Test removing facet filter": function() {
          // Click the button to remove filter2 from the filters list...
-         return browser.findByCssSelector("#REMOVE_FACET_FILTER")
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", "filter1,filter3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Facet filter 'filter2' was not removed");
-            });
+         .findByCssSelector("#REMOVE_FACET_FILTER")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "filters", "filter1,filter3", "Facet filters not set appropriately from hash change");
+         });
       },
 
       "Test setting bad facet filter doesn't issue search": function() {
          // Test facet includes...
-         return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 10, "Unexpected number of previous searches " + elements.length);
-            })
+         return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
          .end()
+         .clearLog()
          // Click the button to include an additional facet in search requests...
          .findByCssSelector("#INCLUDE_FACET_2")
             .click()
@@ -334,10 +264,10 @@ define(["intern!object",
          .findByCssSelector("#APPLY_FACET_FILTER_0")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 10, "Bad facet filter triggered search");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.isNull(payload, "Bad facet filter triggered search");
+         });
       },
 
       "Test applying new filter over pub/sub issues a search": function() {
@@ -345,27 +275,11 @@ define(["intern!object",
          return browser.findByCssSelector("#APPLY_FACET_FILTER")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 11, "Applying a filter didn't trigger a search");
-            });
-      },
-
-      "Test applying facet filter values over pub/sub updates search request": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", "filter1,filter3,filter4"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Test #5d - facet filter 'filter4' was not applied");
-            });
-      },
-
-      "Test that additinal facet field is included": function() {
-         // Check that the additional qname was included...
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "facetFields", "qname1"))
-            .then(function(elements) {
-               // console.log("TODO: Failing test needs looking at");
-               // selector used to be "qname1,qname2" and failed - can see no reason why this changed?
-               assert(elements.length === 1, "Additional facet qnames were not included");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "filters", "filter1,filter3,filter4", "Applying a filter didn't trigger a search");
+            assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from hash change");
+         });
       },
 
       "Test setting new search data on hash (term)": function() {
@@ -376,22 +290,11 @@ define(["intern!object",
          .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA_2")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 12, "Setting different multiple data didn't trigger a new search");
-            })
-         .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "term", "testTerm3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Search term not set appropriately from hash change");
-            });
-      },
-
-      "Test setting new search data on hash (filters)": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "filters", "filter1,filter2,filter3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Previous filters not cleared on new search term");
-            });
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "term","testTerm3", "Search term not set appropriately from hash change");
+            assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
+         });
       },
 
       "Test search result count publishes correctly": function() {
@@ -400,23 +303,19 @@ define(["intern!object",
             .click()
          .end()
          // Check that facet data is published... NOTE: TOPIC THROWS AN ERROR IN TESTING - MUST BE THE @
-         // .findAllByCssSelector(TestCommon.topicSelector("ALF_FACET_RESULTS_@qname1", "publish", "any"))
-         //    .then(function(elements) {
-         //       TestCommon.log(testname,"Check that facet search results were published");
-         //       assert(elements.length == 1, "Test #7 - Search result facet data not published");
-         //    })
-         //    .end()
-         // Commented out whilst updating the unit test...
+         .getLastPublish("ALF_FACET_RESULTS_qname1")
+         .then(function(payload) {
+            assert.deepPropertyVal(payload, "facetResults.test", 3, "Search result facet data not published");
+         })
          // Check that search result count is published...
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_SEARCH_RESULTS_COUNT", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length > 0, "Search resultset size not published");
-            })
-         .end()
+         .getLastPublish("ALF_SEARCH_RESULTS_COUNT")
+         .then(function(payload) {
+            assert.propertyVal(payload, "count", 3, "Search resultset size not published");
+         })
          // Test that Number of search results is as expected.
          .findAllByCssSelector(".alfresco-search-AlfSearchResult")
             .then(function(elements) {
-               assert(elements.length === 3, "Number of results expected is 3, actual results displayed is: " + elements.length);
+               assert.lengthOf(elements, 3, "Number of results expected is 3, actual results displayed is: " + elements.length);
             });
       },
 

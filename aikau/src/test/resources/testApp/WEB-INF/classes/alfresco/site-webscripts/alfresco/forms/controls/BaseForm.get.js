@@ -102,6 +102,24 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "CLEAR_AUTOSAVE_1",
+         config: {
+            label: "Clear autosave text box",
+            publishTopic: "SET_FORM_CONTROL_VALUE",
+            pubSubScope: "AUTOSAVE1_",
+            publishPayload: {
+               value: ""
+            }
+         }
+      },
+      {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "10px"
+         }
+      },
+      {
          name: "alfresco/forms/Form",
          id: "AUTOSAVE_FORM",
          config: {
@@ -137,6 +155,9 @@ model.jsonModel = {
          config: {
             autoSavePublishTopic: "AUTOSAVE_FORM_2",
             autoSavePublishGlobal: true,
+            autoSavePublishPayload: {
+               customProperty: "awooga"
+            },
             autoSaveOnInvalid: true,
             pubSubScope: "AUTOSAVE2_",
             widgets: [

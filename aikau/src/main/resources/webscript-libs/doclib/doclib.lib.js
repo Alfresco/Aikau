@@ -1,4 +1,4 @@
-/* global config,remote,user,msg */
+/* global config,remote,user,msg,url */
 
 // Look for any DocumentLibrary XML configuration. This is expected to exist in Alfresco Share
 // but may not exist in other clients...
@@ -572,7 +572,7 @@ function getDocLibFilters() {
    return filters;
 }
 
-function getDocLibTree(siteId, containerId, rootNode, rootLabel) {
+function getDocLibTree(options) {
    var tree = {
       name: "alfresco/layout/Twister",
       config: {
@@ -582,10 +582,10 @@ function getDocLibTree(siteId, containerId, rootNode, rootLabel) {
             {
                name: "alfresco/navigation/PathTree",
                config: {
-                  siteId: siteId,
-                  containerId: containerId,
-                  rootNode: rootNode,
-                  rootLabel: rootLabel
+                  siteId: options.siteId,
+                  containerId: options.containerId,
+                  rootNode: options.rootNode,
+                  rootLabel: options.rootLabel
                }
             }
          ]
@@ -594,16 +594,16 @@ function getDocLibTree(siteId, containerId, rootNode, rootLabel) {
    return tree;
 }
 
-function getDocLibTags(siteId, containerId, rootNode) {
+function getDocLibTags(options) {
    var tags = {
       id: "DOCLIB_TAGS",
       name: "alfresco/documentlibrary/AlfTagFilters",
       config: {
          label: "filter.label.tags",
          additionalCssClasses: "no-borders",
-         siteId: siteId,
-         containerId: containerId,
-         rootNode: rootNode
+         siteId: options.siteId,
+         containerId: options.containerId,
+         rootNode: options.rootNode
       }
    };
    return tags;
@@ -1030,16 +1030,16 @@ function getDocLibConfigMenu() {
  * DOCUMENT LIST CONSTRUCTION                                                      *
  *                                                                                 *
  ***********************************************************************************/
-function getDocLibList(siteId, containerId, rootNode, rawData) {
+function getDocLibList(options) {
    return {
       id: "DOCLIB_DOCUMENT_LIST",
       name: "alfresco/documentlibrary/AlfDocumentList",
       config: {
-         rawData: rawData || false,
-         useHash: true,
-         siteId: siteId,
-         containerId: containerId,
-         rootNode: rootNode,
+         rawData: options.rawData || false,
+         useHash: (options.useHash !== false),
+         siteId: options.siteId,
+         containerId: options.containerId,
+         rootNode: options.rootNode,
          usePagination: true,
          showFolders: docLibPrefrences.showFolders,
          sortAscending: docLibPrefrences.sortAscending,
@@ -1167,12 +1167,10 @@ function getDocLibToolbar() {
 /**
  * Builds the JSON model for rendering a DocumentLibrary. 
  * 
- * @param {string} siteId The id of the site to render the document library for (if applicable)
- * @param {string} containerId The id of the container to render (if applicable - sites only)
- * @param {string} rootNode The node that is the root of the DocumentLibrary to render
+ * 
  * @returns {object} An object containing the JSON model for a DocumentLibrary
  */
-function getDocLib(siteId, containerId, rootNode, rootLabel, rawData) {
+function getDocLib(options) {
    var docLibModel = {
       id: "DOCLIB_SIDEBAR",
       name: "alfresco/layout/AlfSideBarContainer",
@@ -1188,8 +1186,8 @@ function getDocLib(siteId, containerId, rootNode, rootLabel, rawData) {
                config: {
                   widgets: [
                      getDocLibFilters(),
-                     getDocLibTree(siteId, containerId, rootNode, rootLabel),
-                     getDocLibTags(siteId, containerId, rootNode),
+                     getDocLibTree(options),
+                     getDocLibTags(options),
                      getDocLibCategories()
                   ]
                }
@@ -1205,9 +1203,10 @@ function getDocLib(siteId, containerId, rootNode, rootLabel, rawData) {
                         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
                         config: {
                            hide: docLibPrefrences.hideBreadcrumbTrail,
-                           rootLabel: rootLabel,
+                           rootLabel: options.rootLabel,
                            lastBreadcrumbIsCurrentNode: true,
-                           useHash: true,
+                           useHash: (options.useHash !== false),
+                           pathChangeTopic: "ALF_DOCUMENTLIST_PATH_CHANGED",
                            lastBreadcrumbPublishTopic: "ALF_NAVIGATE_TO_PAGE",
                            lastBreadcrumbPublishPayload: {
                               url: "folder-details?nodeRef={currentNode.parent.nodeRef}",
@@ -1218,12 +1217,15 @@ function getDocLib(siteId, containerId, rootNode, rootLabel, rawData) {
                            lastBreadcrumbPublishPayloadModifiers: ["processInstanceTokens"]
                         }
                      },
-                     getDocLibList(siteId, containerId, rootNode, rawData)
+                     getDocLibList(options)
                   ]
                }
             }
          ]
       }
    };
+   if (options.pubSubScope) {
+      docLibModel.pubSubScope = options.pubSubScope;
+   }
    return docLibModel;
 }
