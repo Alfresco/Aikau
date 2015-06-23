@@ -1,4 +1,4 @@
-Aikau 1.0.21 Release Notes
+Aikau 1.0.23 Release Notes
 ==========================
 
 Current deprecations:
@@ -35,6 +35,24 @@ Current deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
 ----------------
+1.0.23:
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+1.0.22:
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+
 1.0.21:
 * [AKU-331](https://issues.alfresco.com/jira/browse/AKU-331)       - Updated alfresco/services/CoreXhr to support configurable encoding of URLs
 * [AKU-336](https://issues.alfresco.com/jira/browse/AKU-336)       - Began to annotate modules with support status
