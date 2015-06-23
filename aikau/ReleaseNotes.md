@@ -36,22 +36,25 @@ Current deprecations:
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
 ----------------
 1.0.23:
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-66](https://issues.alfresco.com/jira/browse/AKU-66)       - Improved concurrent request handling in alfresco/lists/AlfList and alfresco/search/AlfSearchList
+* [AKU-353](https://issues.alfresco.com/jira/browse/AKU-353)       - Improved testability of alfresco/renderers/PublishingDropDownMenu
+* [AKU-359](https://issues.alfresco.com/jira/browse/AKU-359)       - Added alfresco/node/MetdataGroups widget for node metadata rendering
+* [AKU-360](https://issues.alfresco.com/jira/browse/AKU-360)       - Further improvements to alfresco/header/SeachBox configurability
+* [AKU-361](https://issues.alfresco.com/jira/browse/AKU-361)       - Support ability to merge REST API and custom  actions in alfresco/renderers/Actions
+* [AKU-362](https://issues.alfresco.com/jira/browse/AKU-362)       - Ensure that alfresco/documentlibrary/AlfBreadcrumbList supports useHash false
+* [AKU-366](https://issues.alfresco.com/jira/browse/AKU-366)       - Added support for zebra striping using LESS variables in lists 
+* [AKU-368](https://issues.alfresco.com/jira/browse/AKU-368)       - Ensure that text only content in dialogs is centered
+* [AKU-370](https://issues.alfresco.com/jira/browse/AKU-370)       - Fixed issues with ManageAspects action
+* [AKU-381](https://issues.alfresco.com/jira/browse/AKU-381)       - Remove unnecessary whitespace from dialog without buttons
+
+
 1.0.22:
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
-* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-299](https://issues.alfresco.com/jira/browse/AKU-299)       - Add support for clearing alfresco/forms/controls/DragAndDropTargetControl via pub/sub
+* [AKU-332](https://issues.alfresco.com/jira/browse/AKU-332)       - Added classes to improve testing for list state
+* [AKU-354](https://issues.alfresco.com/jira/browse/AKU-354)       - Ensure consistency in favourites display in alfresco/header/AlfSitesMenu
+* [AKU-356](https://issues.alfresco.com/jira/browse/AKU-356)       - Added support for auto-save in forms
+* [AKU-364](https://issues.alfresco.com/jira/browse/AKU-364)       - Added alfresco/layout/InfiniteScrollArea
+* [AKU-365](https://issues.alfresco.com/jira/browse/AKU-365)       - Improvements to alfresco/misc/AlfTooltip
 
 1.0.21:
 * [AKU-331](https://issues.alfresco.com/jira/browse/AKU-331)       - Updated alfresco/services/CoreXhr to support configurable encoding of URLs
