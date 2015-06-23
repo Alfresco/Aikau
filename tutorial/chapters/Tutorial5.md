@@ -255,6 +255,7 @@ The third instance replaces the default widget model but still leverages the sub
 
 ![Close up of third widget](../resources/Tutorial5-Image4.png "Close up of third widget")
 
+_You can [download the project files from here](../resources/aikau-tutorial_005.zip?raw=true) as they exist at the end of this tutorial._
 
 Previous: [Configuring Logging and Debug](./Tutorial4.md),
 Next: [Creating a User and Group Management Page](./Tutorial6.md)
