@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,38 +25,88 @@
  * <li>the current item</li>
  * <li>the configured payload processed through one or more modifier functions</li>
  * <li>a new payload built from properties in the current item or a triggering publication payload</li>
- * <li>any of the above with the current item "mixed in"</li></ul>
- * 
- * <p>In the following example one variable called shortName is defined as being sourced from the shortName 
- * property of the currentItem. A second variable called visibility is defined as being the value property 
- * found within the payload.</p>
- * 
- * <p>Example model configuration:</p>
- * 
- * <p><pre>publishTopic: "ALF_DO_SOMETHING",
- * publishPayload: {
- *    shortName: {
- *       alfType: "item",
- *       alfProperty: "shortName"
- *    },
- *    visibility: {
- *       alfType: "payload",
- *       alfProperty: "value"
+ * <li>any of the above with the current item "mixed in"</li></ul></p>
+ *
+ * @example <caption>Standard configured payload</caption>
+ * {
+ *   name: "alfresco/menus/AlfMenuItem",
+ *   config: {
+ *     label: "Configured payload",
+ *     publishTopic: "CUSTOM_TOPIC",
+ *     publishPayloadType: "CONFIGURED",
+ *     publishPayload: {
+ *       value: "one"
+ *     }
+ *   }
+ * }
+ *
+ * @example <caption>Standard configured payload with current item mixed in</caption>
+ * {
+ *   name: "alfresco/menus/AlfMenuItem",
+ *   config: {
+ *     label: "Configured payload with current item data",
+ *     publishTopic: "CUSTOM_TOPIC",
+ *     publishPayloadType: "CONFIGURED",
+ *     publishPayload: {
+ *       value: "one"
+ *     },
+ *     publishPayloadItemMixin: true
+ *   }
+ * }
+ *
+ * @example <caption>Current item payload</caption>
+ * {
+ *   name: "alfresco/menus/AlfMenuItem",
+ *   config: {
+ *     label: "Current item as payload",
+ *     publishTopic: "CUSTOM_TOPIC",
+ *     publishPayloadType: "CURRENT_ITEM"
+ *   }
+ * }
+ *
+ * @example <caption>Processed payload using values from current item</caption>
+ * {
+ *   name: "alfresco/menus/AlfMenuItem",
+ *   config: {
+ *     label: "Configured payload with current item data",
+ *     publishTopic: "CUSTOM_TOPIC",
+ *     publishPayloadType: "PROCESS",
+ *     publishPayload: {
+ *       value: "{value.on.currentItem}"
+ *     },
+ *     publishPayloadModifiers: ["processCurrentItemTokens"]
+ *   }
+ * }
+ *
+ * @example <caption>Build payload (using data from both the currentItem and the received payload)</caption>
+ * {
+ *   name: "alfresco/menus/AlfMenuItem",
+ *   config: {
+ *     label: "Configured payload with current item data",
+ *     publishTopic: "CUSTOM_TOPIC",
+ *     publishPayloadType: "BUILD",
+ *     publishPayload: {
+ *       shortName: {
+ *         alfType: "item",
+ *         alfProperty: "shortName"
+ *       },
+ *       visibility: {
+ *         alfType: "payload",
+ *         alfProperty: "value"
+ *      }
  *    }
- * }</pre></p>
- * 
- * <p>Widgets mixing in the _PublishPayloadMixin will support the model configuration shown.</p>
+ * }
  * 
  * @module alfresco/renderers/_PublishPayloadMixin
+ * @extends alfresco/core/ObjectProcessingMixin
  * @auther Dave Draper
  * @author Richard Smith
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
         "alfresco/core/ObjectProcessingMixin",
         "dojo/_base/lang",
         "alfresco/core/ObjectTypeUtils"], 
-        function(declare, AlfCore, ObjectProcessingMixin, lang, ObjectTypeUtils) {
+        function(declare, ObjectProcessingMixin, lang, ObjectTypeUtils) {
    
    return declare([ObjectProcessingMixin], {
 
