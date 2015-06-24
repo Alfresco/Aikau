@@ -148,6 +148,7 @@ define({
       "src/test/resources/alfresco/menus/AlfMenuBarSelectItemsTest",
       "src/test/resources/alfresco/menus/AlfMenuBarSelectTest",
       "src/test/resources/alfresco/menus/AlfMenuBarToggleTest",
+      "src/test/resources/alfresco/menus/AlfMenuItemTest",
       "src/test/resources/alfresco/menus/AlfMenuItemWrapperTest",
       "src/test/resources/alfresco/menus/AlfMenuTextForClipboardTest",
       "src/test/resources/alfresco/menus/AlfVerticalMenuBarTest",

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfMenuItems</shortname>
+  <description>Demonstrates the basic alfresco/menus/AlfMenuItem widget</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfMenuItem</url>
+</webscript>
