@@ -64,6 +64,7 @@ model.jsonModel = {
                      okButtonLabel: "Set Hash",
                      showCancelButton: false,
                      useHash: true,
+                     setHash:true,
                      scopeFormControls: false,
                      widgets: [
                         {

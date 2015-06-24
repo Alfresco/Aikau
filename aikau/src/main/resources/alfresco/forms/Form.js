@@ -361,7 +361,9 @@ define(["dojo/_base/declare",
          array.forEach(this.additionalButtons, function(button) {
             if (button._alfOriginalButtonPayload)
             {
-               lang.mixin(button._alfOriginalButtonPayload, formValue);
+               var newPayload = {};
+               lang.mixin(newPayload, button._alfOriginalButtonPayload, formValue);
+               button.publishPayload = newPayload;
             }
             else
             {
@@ -705,9 +707,9 @@ define(["dojo/_base/declare",
          // (e.g. a field has become disabled since the last payload update and is configured to not have its value
          // included when it is hidden, therefore we need to ensure its previous value is NOT included in the payload)
          array.forEach(this.additionalButtons, function(button) {
-            if (button.payload)
+            if (button.publishPayload)
             {
-               button._alfOriginalButtonPayload = lang.clone(button.payload);
+               button._alfOriginalButtonPayload = lang.clone(button.publishPayload);
             }
          });
       },
@@ -796,11 +798,16 @@ define(["dojo/_base/declare",
        */
       updateButtonPayloads: function alfresco_forms_Form__updateButtonPayloads(values) {
          array.forEach(this.additionalButtons, function(button) {
-            if (!button.payload)
+            if (button._alfOriginalButtonPayload)
             {
-               button.payload = {};
+               var payload = {};
+               lang.mixin(payload, button._alfOriginalButtonPayload, values);
+               button.publishPayload = payload;
             }
-            lang.mixin(button.payload, values);
+            else
+            {
+               button.publishPayload = values;
+            }
          });
       },
 
@@ -861,9 +868,9 @@ define(["dojo/_base/declare",
                   }
                });
             }
+            this.validate();
+            this.updateButtonPayloads(this.getValue());
          }
-         this.validate();
-         this.updateButtonPayloads(values);
       },
       
       /**
