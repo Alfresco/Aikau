@@ -39,10 +39,9 @@ define(["dojo/_base/declare",
    "dojo/_base/array",
    "dojo/dom-construct",
    "dojo/dom-class",
-   "dojo/dom-style",
-   "dijit/registry"],
+   "dojo/dom-style"],
       function(declare, _WidgetBase, _TemplatedMixin, template,
-               AlfCore, CoreWidgetProcessing, lang, array, domConstruct, domClass, domStyle, registry) {
+               AlfCore, CoreWidgetProcessing, lang, array, domConstruct, domClass, domStyle) {
 
          return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
 
@@ -248,14 +247,14 @@ define(["dojo/_base/declare",
              * @param container The container to place the widgets in
              */
             processContainer: function alfresco_dashlets_Dashlet__processContainer(widgets, container) {
-               if (widgets != null && widgets.length > 0)
+               if (widgets && widgets.length)
                {
                   this.processWidgets(lang.clone(widgets), container);
-                  domClass.add(container, this.baseClass + '--widgets');
+                  domClass.add(container, this.baseClass + "--widgets");
                }
                else
                {
-                  domClass.remove(container, this.baseClass + '--widgets');
+                  domClass.remove(container, this.baseClass + "--widgets");
                }
             },
 
