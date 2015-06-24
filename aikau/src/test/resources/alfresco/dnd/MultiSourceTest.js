@@ -89,6 +89,7 @@ define(["intern!object",
             .click()
          .end()
          .pressKeys(keys.ENTER)
+         .pressKeys(keys.ENTER)
          .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
                   assert.lengthOf(elements, 2, "The dropped item was not found");
