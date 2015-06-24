@@ -29,8 +29,6 @@
    "globals": {
       "module": false,
       "model": false,
-      "Alfresco": false,
-      "YAHOO": false,
       "appContext": false,
       "PDFJS": false
    },
