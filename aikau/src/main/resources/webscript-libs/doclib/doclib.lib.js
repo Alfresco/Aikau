@@ -24,6 +24,7 @@ function getSyncMode() {
  *                                                                                 *
  ***********************************************************************************/
 function getUserDocLibPreferences() {
+
    // Initialise some default preferences...
    var docLibPrefrences = {
       viewRendererName: "detailed",
@@ -72,13 +73,28 @@ function getUserDocLibPreferences() {
    return docLibPrefrences;
 }
 
-/* *********************************************************************************
- *                                                                                 *
- * DEFAULTS                                                                        *
- *                                                                                 *
- ***********************************************************************************/
-var docLibPrefrences = getUserDocLibPreferences();
-
+function setupDocLibPreferences(options) {
+   if (options.docLibPrefrences)
+   {
+      // Preferences have already been setup - no action required.
+   }
+   else if (options.getUserPreferences !== false)
+   {
+      options.docLibPrefrences = getUserDocLibPreferences();
+   }
+   else
+   {
+      // ...otherwise just define some sensible defaults
+      options.docLibPrefrences = {
+         viewRendererName: "detailed",
+         sortField: "cm:name",
+         sortAscending: true,
+         showFolders: true,
+         hideBreadcrumbTrail: false,
+         showSidebar: true
+      };
+   }
+}
 
 /* *********************************************************************************
  *                                                                                 *
@@ -374,22 +390,9 @@ function getRepositoryUrl()
  *                                                                                 *
  ***********************************************************************************/
 
-function addService(service, existingServices) {
+function getDocumentLibraryServices() {
    // jshint shadow:false
-   for (var i=0; i < existingServices.length; i++)
-   {
-      if (existingServices[i] && 
-          (existingServices[i].name === service || existingServices[i] === service))
-      {
-         return false;
-      }
-   }
-   return true;
-}
-
-function addDocumentLibraryServices(services) {
-   // jshint shadow:false
-   var defaultServices = [
+   var services = [
       {
          id: "NAVIGATION_SERVICE",
          name: "alfresco/services/NavigationService"
@@ -435,10 +438,6 @@ function addDocumentLibraryServices(services) {
          name:  "alfresco/services/TagService"
       },
       {
-         id: "PREFERENCE_SERVICE",
-         name:  "alfresco/services/PreferenceService"
-      },
-      {
          id: "NOTIFICATION_SERVICE",
          name:  "alfresco/services/NotificationService"
       },
@@ -460,29 +459,34 @@ function addDocumentLibraryServices(services) {
       },
       {
          id: "SIMPLE_WORKFLOW_SERVICE",
-         name: "alfresco/services/actions/SimpleWorkflowService"
+         name: "alfresco/services/actions/WorkflowService"
       },
       {
          id: "NODE_LOCATION_SERVICE",
          name: "alfresco/services/actions/NodeLocationService"
          // TODO: This will need to be configured for the different contexts, e.g. Share and Aikau standalone
-      }
-   ];
-     
-   if (services)
-   {
-      for (var i=0; i < defaultServices.length; i++)
+      },
       {
-         if (addService(defaultServices[i].name, services))
-         {
-            services.push(defaultServices[i]);
+         id: "MANAGE_ASPECTS_SERVICE",
+         name: "alfresco/services/actions/ManageAspectsService",
+         config: {
+            availableAspects: ["cm:generalclassifiable",
+                               "cm:complianceable",
+                               "cm:effectivity",
+                               "cm:summarizable",
+                               "cm:versionable",
+                               "cm:templatable",
+                               "cm:emailed",
+                               "emailserver:aliasable",
+                               "app:inlineeditable",
+                               "cm:geographic",
+                               "exif:exif",
+                               "audio:audio",
+                               "cm:indexControl",
+                               "dp:restrictable"]
          }
       }
-   }
-   else
-   {
-      services = defaultServices;
-   }
+   ];
    return services;
 }
 
@@ -827,7 +831,8 @@ function getDocLibSelectedItemActions() {
  *                                                                                 *
  ***********************************************************************************/
 
-function getDocLibSortOptions(sortingConfigItems) {
+function getDocLibSortOptions(options, sortingConfigItems) {
+   setupDocLibPreferences(options);
    var sortOptions = [],
        sortingConfig = docLibXmlConfig.sorting;
    if (sortingConfigItems)
@@ -913,7 +918,7 @@ function getDocLibSortOptions(sortingConfigItems) {
                value: valueTokens[0],
                group: "DOCUMENT_LIBRARY_SORT_FIELD",
                publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
-               checked: docLibPrefrences.sortField === valueTokens[0],
+               checked: options.docLibPrefrences.sortField === valueTokens[0],
                publishPayload: {
                   label: msg.get(sortLabel),
                   direction: valueTokens[1] || null
@@ -931,7 +936,8 @@ function getDocLibSortOptions(sortingConfigItems) {
  *                                                                                 *
  ***********************************************************************************/
 
-function getDocLibConfigMenu() {
+function getDocLibConfigMenu(options) {
+   setupDocLibPreferences(options);
    return {
       id: "DOCLIB_CONFIG_MENU",
       name: "alfresco/menus/AlfMenuBarPopup",
@@ -987,7 +993,7 @@ function getDocLibConfigMenu() {
                         config: {
                            label: msg.get("show-folders.label"),
                            iconClass: "alf-showfolders-icon",
-                           checked: docLibPrefrences.showFolders,
+                           checked: options.docLibPrefrences.showFolders,
                            publishTopic: "ALF_DOCLIST_SHOW_FOLDERS"
                         }
                      },
@@ -996,7 +1002,7 @@ function getDocLibConfigMenu() {
                         name: "alfresco/menus/AlfCheckableMenuItem",
                         config: {
                            label: msg.get("show-path.label"),
-                           checked: !docLibPrefrences.hideBreadcrumbTrail,
+                           checked: !options.docLibPrefrences.hideBreadcrumbTrail,
                            iconClass: "alf-showpath-icon",
                            publishTopic: "ALF_DOCLIST_SHOW_PATH"
                         }
@@ -1007,7 +1013,7 @@ function getDocLibConfigMenu() {
                         config: {
                            label: msg.get("show-sidebar.label"),
                            iconClass: "alf-showsidebar-icon",
-                           checked: docLibPrefrences.showSidebar,
+                           checked: options.docLibPrefrences.showSidebar,
                            publishTopic: "ALF_DOCLIST_SHOW_SIDEBAR"
                         }
                      }
@@ -1031,20 +1037,22 @@ function getDocLibConfigMenu() {
  *                                                                                 *
  ***********************************************************************************/
 function getDocLibList(options) {
+   setupDocLibPreferences(options);
    return {
       id: "DOCLIB_DOCUMENT_LIST",
       name: "alfresco/documentlibrary/AlfDocumentList",
       config: {
+         waitForPageWidgets: (options.waitForPageWidgets !== false),
          rawData: options.rawData || false,
          useHash: (options.useHash !== false),
          siteId: options.siteId,
          containerId: options.containerId,
          rootNode: options.rootNode,
          usePagination: true,
-         showFolders: docLibPrefrences.showFolders,
-         sortAscending: docLibPrefrences.sortAscending,
-         sortField: docLibPrefrences.sortField,
-         view: docLibPrefrences.viewRendererName,
+         showFolders: options.docLibPrefrences.showFolders,
+         sortAscending: options.docLibPrefrences.sortAscending,
+         sortField: options.docLibPrefrences.sortField,
+         view: options.docLibPrefrences.viewRendererName,
          widgets: [
             {
                name: "alfresco/documentlibrary/views/AlfSimpleView"
@@ -1055,7 +1063,7 @@ function getDocLibList(options) {
             {
                name: "alfresco/documentlibrary/views/AlfGalleryView",
                config: {
-                  columns: docLibPrefrences.galleryColumns
+                  columns: options.docLibPrefrences.galleryColumns
                }
             },
             {
@@ -1072,8 +1080,8 @@ function getDocLibList(options) {
 /**
  * This creates the menu toolbar that sits above the list of documents.
  */
-function getDocLibToolbar() {
-
+function getDocLibToolbar(options) {
+   setupDocLibPreferences(options);
    var leftToolbar = [
       {
          id: "DOCLIB_SELECT_ITEMS_MENU",
@@ -1121,7 +1129,7 @@ function getDocLibToolbar() {
                         id: "DOCLIB_SORT_ORDER_TOGGLE",
                         name: "alfresco/menus/AlfMenuBarToggle",
                         config: {
-                           checked: docLibPrefrences.sortAscending,
+                           checked: options.docLibPrefrences.sortAscending,
                            onConfig: {
                               iconClass: "alf-sort-ascending-icon",
                               publishTopic: "ALF_DOCLIST_SORT",
@@ -1148,13 +1156,13 @@ function getDocLibToolbar() {
                                  id: "DOCLIB_SORT_FIELD_SELECT_GROUP",
                                  name: "alfresco/menus/AlfMenuGroup",
                                  config: {
-                                    widgets: getDocLibSortOptions()
+                                    widgets: getDocLibSortOptions(options)
                                  }
                               }
                            ]
                         }
                      },
-                     getDocLibConfigMenu()
+                     getDocLibConfigMenu(options)
                   ]
                }
             }
@@ -1171,11 +1179,12 @@ function getDocLibToolbar() {
  * @returns {object} An object containing the JSON model for a DocumentLibrary
  */
 function getDocLib(options) {
+   setupDocLibPreferences(options);
    var docLibModel = {
       id: "DOCLIB_SIDEBAR",
       name: "alfresco/layout/AlfSideBarContainer",
       config: {
-         showSidebar: docLibPrefrences.showSidebar,
+         showSidebar: options.docLibPrefrences.showSidebar,
          customResizeTopics: ["ALF_DOCLIST_READY","ALF_RESIZE_SIDEBAR"],
          footerHeight: 50,
          widgets: [
@@ -1197,12 +1206,12 @@ function getDocLib(options) {
                name: "alfresco/layout/FullScreenWidgets",
                config: {
                   widgets: [
-                     getDocLibToolbar(),
+                     getDocLibToolbar(options),
                      {
                         id: "DOCLIB_BREADCRUMB_TRAIL",
                         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
                         config: {
-                           hide: docLibPrefrences.hideBreadcrumbTrail,
+                           hide: options.docLibPrefrences.hideBreadcrumbTrail,
                            rootLabel: options.rootLabel,
                            lastBreadcrumbIsCurrentNode: true,
                            useHash: (options.useHash !== false),
