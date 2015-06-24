@@ -86,6 +86,7 @@ define({
 
       "src/test/resources/alfresco/footer/FooterTest",
 
+      "src/test/resources/alfresco/forms/AutoSaveFormsTest",
       "src/test/resources/alfresco/forms/ControlRowTest",
       "src/test/resources/alfresco/forms/CrudFormTest",
       "src/test/resources/alfresco/forms/DynamicFormTest",
