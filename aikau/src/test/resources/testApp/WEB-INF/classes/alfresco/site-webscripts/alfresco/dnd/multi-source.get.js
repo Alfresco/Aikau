@@ -34,7 +34,8 @@ model.jsonModel = {
                                  config: {
                                     useModellingService: true,
                                     label: "Widgets",
-                                    targetProperty: "config.widgets"
+                                    targetProperty: "config.widgets",
+                                    acceptTypes: [ "not_a_widget" ]
                                  }
                               }
                            ]
@@ -123,7 +124,7 @@ model.jsonModel = {
                      useItemsOnce: true,
                      items: [
                         {
-                           type: [ "widget" ],
+                           type: [ "not_a_widget" ],
                            label: "Item 2",
                            value: {
                               name: "ted"

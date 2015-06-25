@@ -318,10 +318,9 @@ define(["dojo/_base/declare",
             }
          }
 
-         // TODO: Specify type from item data
          // NOTE that the node returned is the firstChild of the element we created. This is because the widget is created
          // as a child of the node we passed
-         return {node: node.firstChild, data: clonedItem, type: ["widget"]};
+         return {node: node.firstChild, data: clonedItem, type: clonedItem.type};
       },
       
       /**
