@@ -16,7 +16,6 @@ model.jsonModel = {
          config: {
             title: "Test Dashlet",
             componentId: "RESIZE_DASHLET",
-            resizeDisabled: true,
             widgetsForBody: [
                {
                   name: "alfresco/html/Label",
