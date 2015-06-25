@@ -1,14 +1,212 @@
-.alfresco-dashlets-Dashlet--toolbar,
-.alfresco-dashlets-Dashlet--titleBarActions,
-.alfresco-dashlets-Dashlet--toolbar2,
-.alfresco-dashlets-Dashlet--body {
-   display: none;
+/* alfresco/dashlets/Dashlet CSS */
+.alfresco-dashlets-Dashlet {
+   &__toolbar, &__title-bar-actions, &__toolbar2, &__body {
+      display: none;
+   }
+   &__widgets {
+      display: block;
+   }
+   &__body {
+      overflow: hidden;
+      padding-bottom: 15px;
+      position: relative;
+   }
+   &__resize-bar {
+      bottom: 0;
+      cursor: s-resize;
+      cursor: ns-resize; /* Make sure this is after the s-resize value */
+      height: 10px;
+      left: 0;
+      position: absolute;
+      right: 0;
+   }
+   &--no-resize {
+      .alfresco-dashlets-Dashlet {
+         &__body {
+            padding-bottom: 0;
+         }
+         &__resize-bar {
+            display: none;
+         }
+      }
+   }
 }
 
-.alfresco-dashlets-Dashlet--widgets {
-   display: block;
+
+/* From /share/res/themes/lightTheme/presentation_c6e759e694404a65d5f581153e2f7136.css */
+.dashlet {
+   background-color: #fff;
+   border: 1px solid #ccc;
+   border-top-left-radius: 6px;
+   border-top-right-radius: 6px;
+   .title {
+      background-color: #eee;
+      border-bottom: 1px solid #ccc;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      color: #333;
+   }
+   .feed {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAW1JREFUeNqkUz2Lg0AQnXwQQRIQ0qWyEG1MlTSmskuTwEEqbe6u8e9cb5Xrk+LIH8gPiHCQLpWVVsJBrATxfMOtmOS8D/Jg2Vl3972ZN26rKAoCfN+36e/48DzvHUELBOXldRk/0v/wXJKsO6PRCMovg8GAxuMxSZJEeZ5TlmW/ETwEQfDWFSsQTCaTajdNUzoejzx+gNIW0fl8ppKRwjBk9X6/T5Zlkeu6NBwOGxm61wQCuq7TdDplotVqRfv9nk6nUzNB6QUtFgtKkoTiOObUN5sNzWYzJrNtm/cw6mhfMyJd0zRZVVXVC+X5fE69Xu/ifGe5XKrl/CRKgIIsy6QoChPgO7LRNI3LQYeQ4RdebzIAwW63q/xA6mjt4XDgtWEYzSWgVsdxeBYdAdBelCG6U+9Ku/4fQE2o4pDIAqUAURRVPt0QoFYYBkCt7rgwTqwhdtPG7y4C2+2WPRD7MBBi4lHd/Zha9z7nTwEGABoRwRrAu08DAAAAAElFTkSuQmCC);
+      background-repeat: no-repeat;
+   }
+   .toolbar {
+      border-bottom: 1px solid #ccc;
+   }
+   .body {
+      background-color: #fff;
+   }
 }
 
-.alfresco-dashlets-Dashlet--body {
-   overflow: hidden;
+
+
+/* From /share/res/css/base_593afcd1c18e4b8b6d9a95b90fafe87b.css */
+.dashlet {
+   background-color: white;
+   margin: 20px 0;
+   padding: 0;
+   position: relative;
+   .title {
+      overflow-x: hidden;
+      padding: 5px 9px 5px 9px;
+   }
+   .toolbar {
+      min-height: 28px;
+      padding: 2px 9px 1px;
+      .align-left {
+         float: left;
+      }
+      .align-right {
+         float: right;
+      }
+      .clear {
+         clear: both;
+      }
+   }
+   .body {
+      overflow-x: hidden;
+      a {
+         cursor: pointer;
+         &:link, &:visited, &:active {
+            text-decoration: none;
+         }
+         &:hover {
+            text-decoration: underline;
+         }
+      }
+      h3 {
+         font-weight: normal;
+      }
+      .empty {
+         h3 {
+            font-weight: bold;
+            padding-bottom: .5em;
+         }
+         span {
+            line-height: 1.5;
+         }
+      }
+   }
+   .scrollableList {
+      height: 208px;
+      overflow: auto;
+      padding: 4px 0;
+   }
+   .scrollablePanel {
+      height: 208px;
+      margin-right: 1px;
+      overflow: auto;
+      div.resize-mask {
+         display: none;
+      }
+   }
+   .dashlet-padding {
+      padding: 8px;
+   }
+   a.site-link {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAUJJREFUeNqkU7tuwkAQxCi9+QNc5AOgooQ6DdelJGlMl3xCUlE7rSUkS3wAKG2KOPkCqGnObZokBWXkzEaz1uZAQoKVRievd+dmHxfVdd06xy4OOfM8v8ExAhK6voBVmqZFGBtZBUjsSSDQpasChMwB9/x2IFprTjtILg15RSJPBWolY/dKkJsfmWClim8CfANPQM3YpFHAmj2kZfwhEjMSTHjGwDWTNadR4MytP8Ad8Bz0awp8AFfAnE0utAcd3iq2AN5NI8VemLhkM7f/SlAVkLVmD+Lg9hnKE5V9YABchlOQpAcqkY5vAoI/dTI+QP7vdDJKoOMT2RIkY7o1BJ9QZ0c51mY2i4QAT4I3EIzok/PVJPZZe4aYJNwDRyVDLornDljTMbtjq+zpGgYEe6scHXqNXBLHpmqTy6OP6RT7FWAAfGN6HLnSpUoAAAAASUVORK5CYII=);
+      background-repeat: no-repeat;
+      padding-left: 18px;
+   }
+   .msg {
+      padding-bottom: 8px;
+      padding-top: 8px;
+      p {
+         margin-bottom: .3em;
+      }
+   }
+   .text-list-item {
+      padding-bottom: 6px;
+   }
+   .detail-list-item {
+      clear: both;
+      line-height: 1.4;
+      padding: 7px 9px;
+      &.last-item {
+         border-bottom: none;
+      }
+      .icon, .avatar {
+         float: left;
+      }
+      .avatar img {
+         width: 48px;
+      }
+      .details {
+         padding-left: 40px;
+      }
+      .person {
+         padding-left: 54px;
+      }
+      .details2 {
+         padding-left: 20px;
+      }
+      .user-status {
+         background-position: 0 1px;
+         background-repeat: no-repeat;
+         padding-left: 20px;
+      }
+   }
+   .titleBarActions {
+      height: 16px;
+      opacity: 0;
+      position: absolute;
+      right: 4px;
+      top: 1px;
+      visibility: visible;
+      .titleBarActionIcon {
+         background-repeat: no-repeat;
+         cursor: pointer;
+         float: right;
+         height: 16px;
+         margin: 3px;
+         width: 16px;
+      }
+      .edit {
+         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJdJREFUeNpi/P//PwMlgIkUxbNmzVoAwmQZANUYD8LIhjCRqBkG4IYwkaGZ+DDAo3lhWlpaAl4DiNGM0wBiNWM1gBTNpEQjVs0gwIJkM0iBA0ghkM2A5AqcmlEMAAKQInuQZiRDGPBpBgFGUF4AKlYAsu8T42RcYVCAJHYQiA8Qm8RhXggA4olAPAFo8wNSMhgjpdkZIMAAdFRMXo75bNwAAAAASUVORK5CYII=);
+      }
+      .help {
+         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMRJREFUeNpi/P//PwMlgAVdYNasWQJAqgCIA4BYHyr8EYgXAHFDWlraB7wGAMEEII5HE+MH4nwgNgBiB2QJRmQvAG1XAFL3kWwtQDKUH8o2BLriAi4XKCC7BKhwAdRgA6gLQEAApwuwAWiYgGyUhwoJIocDExGaDyBpnogeiEwEYukAUkwsBGouQFeA0wtoAboRqDmAqHSABhqh9AJcChgpTYlMDBQCFjwxAAqDBFhgAsPgAKlhADKgHi1GqO8FigMRIMAAIrpBE9CbJaoAAAAASUVORK5CYII=);
+      }
+      .search {
+         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOdJREFUeNqcUsENgzAMTBB/GIENYARGYIP++JYROgJvXh2hI2SEskFHgAmoT7ogizqq4CQryPEdF9t+2zZ3xDRNFc6+7z/uD3wUEFIpx8AoeL9KjAgRW5ICJAeJioTA+5aCcNJaIjnPgWQUvdV9EPEXBVHzOApkSmA8kB37gNyTNT/I2LBC2bYAFwWfajq4jIyjWtmwFDrUWE2MDtD5QSw2xk4gd2eNS01h5F/QdT3GjmTHKV1eJJBvzM16J3xilUuOcFE5XbiL5JatxNqCVPO75jObM2NsKXJtD+gqisxxKmYPzuArwABAUWZhm1pf/AAAAABJRU5ErkJggg==);
+      }
+      .info {
+         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAO9JREFUeNqsU8ENgzAMTCIGoBswAiN0A9igvHh3BEboF15hA7oBI2QENmg3SO8qg6JUrYBi6ZTI9l1s2dHeexVb13UZjjOQiWsCxrqupzhXhwJCbIALcAechHKgAHrGQ6FFAGQmjYCVpGdUVSriFatD3C0C8jIdVwSs+mHIpcCNVbESI34q25iMZE+EPsmxwlGJvM6eT2q9kfwAt9Ft27KkEsrlBgFWN+AYjIzKfUn6aCEwcjKj/jQjS5Lv4JLzngJnX8ic1/afymKNRraqn8eyYQo9uUngcFB24S7grr8sUjW3fcwqH/KZ9n7nlwADAGbLiVfOThJRAAAAAElFTkSuQmCC);
+      }
+      .rss {
+         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAW1JREFUeNqkUz2Lg0AQnXwQQRIQ0qWyEG1MlTSmskuTwEEqbe6u8e9cb5Xrk+LIH8gPiHCQLpWVVsJBrATxfMOtmOS8D/Jg2Vl3972ZN26rKAoCfN+36e/48DzvHUELBOXldRk/0v/wXJKsO6PRCMovg8GAxuMxSZJEeZ5TlmW/ETwEQfDWFSsQTCaTajdNUzoejzx+gNIW0fl8ppKRwjBk9X6/T5Zlkeu6NBwOGxm61wQCuq7TdDplotVqRfv9nk6nUzNB6QUtFgtKkoTiOObUN5sNzWYzJrNtm/cw6mhfMyJd0zRZVVXVC+X5fE69Xu/ifGe5XKrl/CRKgIIsy6QoChPgO7LRNI3LQYeQ4RdebzIAwW63q/xA6mjt4XDgtWEYzSWgVsdxeBYdAdBelCG6U+9Ku/4fQE2o4pDIAqUAURRVPt0QoFYYBkCt7rgwTqwhdtPG7y4C2+2WPRD7MBBi4lHd/Zha9z7nTwEGABoRwRrAu08DAAAAAElFTkSuQmCC);
+      }
+   }
+}
+
+div.dashlet {
+   div.detail-list-item.first-item {
+      float: none;
+      padding-top: 0;
+   }
+   div.hdr {
+      margin-bottom: 5px;
+      padding-left: 8px;
+      padding-top: 3px;
+   }
 }
