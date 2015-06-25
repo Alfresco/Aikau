@@ -103,14 +103,6 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile: "./css/Dashlet.css"}],
 
       /**
-       * We use the DashletResizer to handle the resizing.
-       *
-       * @instance
-       * @type {array}
-       */
-      nonAmdDependencies: ["/js/share.js"],
-
-      /**
        * The HTML template to use for the widget.
        * @instance
        * @type {String}

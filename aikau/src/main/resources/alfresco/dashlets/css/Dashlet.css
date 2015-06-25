@@ -19,6 +19,21 @@
       left: 0;
       position: absolute;
       right: 0;
+      &__icon {
+         margin: 0 auto;
+         position: relative;
+         &, &:after {
+            background: #eee;
+            border-radius: 1px;
+            height: 2px;
+            width: 25px;
+         }
+         &:after {
+            content: "";
+            position: absolute;
+            top: 4px;
+         }
+      }
    }
    &--no-resize {
       .alfresco-dashlets-Dashlet {
