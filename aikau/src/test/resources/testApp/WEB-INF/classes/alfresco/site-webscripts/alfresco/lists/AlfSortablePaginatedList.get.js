@@ -110,6 +110,14 @@ model.jsonModel = {
                                           name: "simulated"
                                        }
                                     }
+                                 },
+                                 {
+                                    id: "SIMULATE_RELOAD",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Simulate reload",
+                                       publishTopic: "ALF_DOCLIST_RELOAD_DATA"
+                                    }
                                  }
                               ],
                               widgets: [
