@@ -211,10 +211,38 @@ define(["dojo/_base/declare",
       setValueTopicParentScope: false,
 
       /**
+       * When using the optional auto-saving capability (configured by setting an [autoSavePublishTopic]{@link module:alfresco/forms/Form#autoSavePublishTopic})
+       * the form will typically need to wait until page setup is complete before allowing automatic saving to commence. However,
+       * if a form (configured to auto-save) is dynamically created after the page has been loaded (e.g. when created within a
+       * dialog for example) then it this should be configured to be false (otherwise auto-save will not occur)
+       * 
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      waitForPageWidgets: true,
+
+      /**
        * @instance
        */
       postCreate: function alfresco_forms_Form__postCreate() {
-         
+         // A form is configured to auto-save updates we want to be sure that it doesn't start saving until the 
+         // use has actually made any changes. Therefore we want to wait until all the widgets are properly setup
+         // before we allow autosaving to commence. However, when the form is included directly on a page (e.g. it is
+         // not part of a dialog, etc) then we want to wait until the page has completed being setup, as this publications
+         // are queued up until this occurs.
+         if (this.waitForPageWidgets === true)
+         {
+            this.pageWidgetsReadySubcription = this.alfSubscribe("ALF_WIDGETS_READY", lang.hitch(this, function() {
+               this.alfUnsubscribe(this.pageWidgetsReadySubcription);
+               this._readyToAutoSave = true;
+            }), true);
+         }
+         else
+         {
+            this._readyToAutoSave = true;
+         }
+
          // Setup some arrays for recording the valid and invalid widgets...
          this.invalidFormControls = [];
          
@@ -255,7 +283,7 @@ define(["dojo/_base/declare",
             this.processWidgets(this.widgets, this._form.domNode);
          }
       },
-      
+
       /**
        * Handles the reporting of an invalid field. This will disable the "OK" button if it has
        * been created to prevent users from attempting to submit invalid data.
@@ -286,12 +314,19 @@ define(["dojo/_base/declare",
        */
       publishFormValidity: function alfresco_forms_Form__publishFormValidity() {
          var isValid = this.invalidFormControls.length === 0,
-            autoSavePayload;
+             autoSavePayload;
+
          this.alfPublish("ALF_FORM_VALIDITY", {
             valid: isValid,
             invalidFormControls: this.invalidFormControls
          });
-         if(this.autoSavePublishTopic && typeof this.autoSavePublishTopic === "string" && (isValid || this.autoSaveOnInvalid)) {
+
+         if(this._formSetupComplete === true && 
+            this._readyToAutoSave === true &&
+            this.autoSavePublishTopic && 
+            typeof this.autoSavePublishTopic === "string" && 
+            (isValid || this.autoSaveOnInvalid)) {
+
             autoSavePayload = lang.mixin(this.autoSavePublishPayload || {}, {
                alfValidForm: isValid
             }, this.getValue());
@@ -326,7 +361,9 @@ define(["dojo/_base/declare",
          array.forEach(this.additionalButtons, function(button) {
             if (button._alfOriginalButtonPayload)
             {
-               lang.mixin(button._alfOriginalButtonPayload, formValue);
+               var newPayload = {};
+               lang.mixin(newPayload, button._alfOriginalButtonPayload, formValue);
+               button.publishPayload = newPayload;
             }
             else
             {
@@ -457,7 +494,10 @@ define(["dojo/_base/declare",
       
       /**
        * If this is not null, then the form will auto-publish on this topic whenever a form's
-       * values change. This setting overrides and will remove the OK and Cancel buttons.
+       * values change. This setting overrides and will remove the OK and Cancel buttons. If the form
+       * is being dynamically created after page load has completed (e.g. if the form is being displayed in 
+       * a dialog for example) then in order for auto-saving to occur it will also be necessary to configure 
+       * the [waitForPageWidgets]{@link module:alfresco/forms/Form#waitForPageWidgets} attribute to be false.
        * 
        * @instance 
        * @type {string}
@@ -536,6 +576,16 @@ define(["dojo/_base/declare",
        */
       setHash: false,
       
+      /**
+       * This attribute is used to indicate whether or not the form has completed setting up all of the controls it has been 
+       * configured with.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      _formSetupComplete: false,
+
       /**
        * This function is called when [useHash]{@link module:alfresco/forms/Form#useHash} is set to true
        * and the OK button is clicked to publish the form data. It will take the value of the form and
@@ -657,9 +707,9 @@ define(["dojo/_base/declare",
          // (e.g. a field has become disabled since the last payload update and is configured to not have its value
          // included when it is hidden, therefore we need to ensure its previous value is NOT included in the payload)
          array.forEach(this.additionalButtons, function(button) {
-            if (button.payload)
+            if (button.publishPayload)
             {
-               button._alfOriginalButtonPayload = lang.clone(button.payload);
+               button._alfOriginalButtonPayload = lang.clone(button.publishPayload);
             }
          });
       },
@@ -692,6 +742,12 @@ define(["dojo/_base/declare",
                this.setValue(this.value);
             }
             
+            // Create an object that we're going to use to check off all the form controls as they report their
+            // initial value...
+            var rollCallObject = {
+               count: widgets.length
+            };
+            
             // Once all the controls have been added to the form we're going to ask them each to
             // publish their initial value. However, in order to ensure that we don't publish before
             // their value has completely initialised (e.g. if a control with options has not been set
@@ -706,17 +762,33 @@ define(["dojo/_base/declare",
                   // has not been foolishly overridden!) detect the Deferred object and only resolve it
                   // when value initialization is complete...
                   var deferred = new Deferred();
-                  deferred.then(lang.hitch(widget, widget.publishValue));
+                  deferred.then(lang.hitch(widget, widget.publishValue)).then(lang.hitch(this, this.onRollCall, rollCallObject));
                   widget.publishValue(deferred);
                }
-            });
+            }, this);
          }
+      },
 
-         this.validate();
+      /**
+       * This function is used to register the successful setup of all the form controls. As each form control is added
+       * to the page it will publish its value and after the value is published this function will "check it off" from 
+       * an overall count of all the expected controls. This is done as a final check so that we can be absolutely sure
+       * that everything is complete before we allow validation or auto-saving to commence.
+       *
+       * @instance
+       * @param  {object} rollCallObject An object containing a simple count of all the form controls yet to register themselves
+       */
+      onRollCall: function alfresco_forms_Form__onRollCall(rollCallObject) {
+         rollCallObject.count--;
+         if (rollCallObject.count === 0)
+         {
+            this.validate();
 
-         // If requested publish a topic now that the form has been initially processed
-         if (this.validFormValuesPublishOnInit) {
-            this.publishValidValue();
+            // If requested publish a topic now that the form has been initially processed
+            if (this.validFormValuesPublishOnInit) {
+               this.publishValidValue();
+            }
+            this._formSetupComplete = true;
          }
       },
       
@@ -726,11 +798,16 @@ define(["dojo/_base/declare",
        */
       updateButtonPayloads: function alfresco_forms_Form__updateButtonPayloads(values) {
          array.forEach(this.additionalButtons, function(button) {
-            if (!button.payload)
+            if (button._alfOriginalButtonPayload)
             {
-               button.payload = {};
+               var payload = {};
+               lang.mixin(payload, button._alfOriginalButtonPayload, values);
+               button.publishPayload = payload;
             }
-            lang.mixin(button.payload, values);
+            else
+            {
+               button.publishPayload = values;
+            }
          });
       },
 
@@ -791,9 +868,9 @@ define(["dojo/_base/declare",
                   }
                });
             }
+            this.validate();
+            this.updateButtonPayloads(this.getValue());
          }
-         this.validate();
-         this.updateButtonPayloads(values);
       },
       
       /**

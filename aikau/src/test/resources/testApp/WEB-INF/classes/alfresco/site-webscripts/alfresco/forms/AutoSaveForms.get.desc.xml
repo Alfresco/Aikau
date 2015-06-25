@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AutoSave Forms</shortname>
+  <description>Demonstrates a form configured to auto save on changes</description>
+  <family>aikau-unit-tests</family>
+  <url>/AutoSaveForm</url>
+</webscript>
