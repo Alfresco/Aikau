@@ -48,9 +48,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default false
        */
-      encodeURIs: true,
+      encodeURIs: false,
 
       /**
        * Should a cache busting parameter be added to the URL?
