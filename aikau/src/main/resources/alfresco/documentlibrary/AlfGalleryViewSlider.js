@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,7 +25,7 @@
  * @extends external:dijit/form/HorizontalSlider
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/lists/views/_AlfAdditionalViewControlMixin
- * @mixed module:alfresco/services/_PreferenceServiceTopicMixin
+ * @mixes module:alfresco/services/_PreferenceServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -33,9 +33,8 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/lists/views/_AlfAdditionalViewControlMixin",
         "alfresco/services/_PreferenceServiceTopicMixin",
-        "dojo/dom-class",
-        "dojo/dom-style"], 
-        function(declare, HorizontalSlider, AlfCore, _AlfAdditionalViewControlMixin, _PreferenceServiceTopicMixin, domClass, domStyle) {
+        "dojo/dom-class"], 
+        function(declare, HorizontalSlider, AlfCore, _AlfAdditionalViewControlMixin, _PreferenceServiceTopicMixin, domClass) {
    
    return declare([HorizontalSlider, AlfCore, _AlfAdditionalViewControlMixin, _PreferenceServiceTopicMixin], {
       
@@ -110,7 +109,7 @@ define(["dojo/_base/declare",
        * @param {number} value The number of columns to set.
        */
       setColumns: function(value) {
-         if (value == null)
+         if (!value || isNaN(value))
          {
             value = 4;
          }

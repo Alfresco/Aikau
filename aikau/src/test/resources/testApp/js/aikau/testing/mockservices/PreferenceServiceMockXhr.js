@@ -64,6 +64,8 @@ define(["dojo/_base/declare",
                                      {"Content-Type":"application/json;charset=UTF-8",
                                      "Content-Length":7962},
                                      Preferences]);
+
+            this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
          }
          catch(e)
          {

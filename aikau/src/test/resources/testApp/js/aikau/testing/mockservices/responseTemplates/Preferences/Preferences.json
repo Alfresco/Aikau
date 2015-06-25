@@ -66,6 +66,10 @@
                      "filter": "activeTasks"
                   }
                }
+            },
+            "twisters": {
+               "twister1": true,
+               "twister2": false
             }
          }
       }
