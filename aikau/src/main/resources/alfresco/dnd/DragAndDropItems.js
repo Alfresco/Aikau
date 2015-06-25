@@ -259,6 +259,12 @@ define(["dojo/_base/declare",
                   addCallback: this.onItemAddedByKeyboard,
                   addCallbackScope: this
                });
+
+               // See AKU-379 - ensure use once items can only be added via the keyboard once...
+               if (this.useItemsOnce)
+               {
+                  this._selectedItem = null;
+               }
             }
          }
       },
