@@ -11,7 +11,12 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/CrudService",
+      {
+         name: "alfresco/services/CrudService",
+         config: {
+            encodeURIs: true
+         }
+      },
       "alfresco/services/NotificationService",
       "alfresco/services/DialogService"
    ],
