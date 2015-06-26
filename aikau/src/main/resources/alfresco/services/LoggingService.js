@@ -469,7 +469,7 @@ define(["dojo/_base/declare",
             // If the filter is mapped (or if there is no filter) output the log...
             if (this.passesLoggingFilter(payload.callerName))
             {
-               payload.messageArgs[0] = (payload.callerName || "") + payload.messageArgs[0];
+               payload.messageArgs[0] = (payload.callerName || "") + " >> " + payload.messageArgs[0];
                var logFunc = (typeof console[payload.severity] === "function" && payload.severity) || "log";
                console[logFunc].apply(console, payload.messageArgs);
             }
