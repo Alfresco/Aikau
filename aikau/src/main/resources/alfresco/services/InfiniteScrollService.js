@@ -102,8 +102,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onEventsScroll: function alfresco_services_InfiniteScrollService__onEventsScroll(/*jshint unused:false*/ payload) {
-         if (this.nearBottom() && !this.dataloadInProgress) {
+      onEventsScroll: function alfresco_services_InfiniteScrollService__onEventsScroll(payload) {
+         if (this.nearBottom(payload.node) && !this.dataloadInProgress) {
             this.dataloadInProgress = true;
             this.alfPublish(this.scrollNearBottom);
          }
@@ -120,26 +120,27 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The calculation to determine if we're at or close to the bottom of the page yet or now.
-       * "close to" bottom is defined by scrollTolerance var.
+       * Determine if we're at or close to the bottom of the monitored node as defined by the
+       * [scrollTolerance variable]{@link module:alfresco/services/InfiniteScrollService#scrollTolerance}.
        *
        * @instance
+       * @param {Object} scrollNode The node being scrolled
        * @returns {boolean}
        */
-      nearBottom: function alfresco_services_InfiniteScrollService__nearBottom() {
-         if (this.scrollElement)
-         {
-            var scrollPos = this.scrollElement.scrollTop;
-            var height = this.domNode.offsetHeight;
-            return 0 >= (height - scrollPos - this.scrollTolerance);
+      nearBottom: function alfresco_services_InfiniteScrollService__nearBottom(scrollNode) {
+         var scrollHeight,
+            clientHeight,
+            scrollTop;
+         if(scrollNode === window) {
+            scrollHeight = document.body.offsetHeight;
+            clientHeight = window.innerHeight;
+            scrollTop = window.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+         } else {
+            scrollHeight= scrollNode.scrollHeight ;
+            clientHeight= scrollNode.clientHeight;
+            scrollTop= scrollNode.scrollTop;
          }
-         else
-         {
-            var currentScrollPos = domGeom.docScroll().y;
-            var docHeight = this.getDocumentHeight();
-            var viewport = domGeom.getContentBox(document.body).h;
-            return 0 >= (docHeight - viewport - currentScrollPos - this.scrollTolerance);
-         }
+         return (scrollHeight - clientHeight - scrollTop) < this.scrollTolerance;
       }
    });
 });

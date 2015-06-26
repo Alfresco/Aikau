@@ -78,12 +78,12 @@ define(["dojo/_base/lang"],
 
          // See JSDoc in API below
          debounce: function alfresco_core_Events__debounce(args) {
-            this._limit("debounce", args);
+            return this._limit("debounce", args);
          },
 
          // See JSDoc in API below
          throttle: function alfresco_core_Events__throttle(args) {
-            this._limit("throttle", args);
+            return this._limit("throttle", args);
          },
 
          /**
@@ -94,6 +94,7 @@ define(["dojo/_base/lang"],
           * @param {string} type Either "throttle" or "debounce"
           * @param {Object} args See the [debounce]{@link module:alfresco/util/functionUtils#debounce} and
           *                      [throttle]{@link module:alfresco/util/functionUtils#throttle} methods
+          * @return {Object} An object containing a remove() function which will clear any outstanding timeout
           */
          _limit: function alfresco_core_Events___limit(type, args) {
 
@@ -147,6 +148,13 @@ define(["dojo/_base/lang"],
                   lastExecutions[name] = Date.now(); // Update the last execution (request) time
                }
             }
+
+            // Pass back a remove-object for cancelling the queued function
+            return {
+               remove: function() {
+                  clearTimeout(currentTimeout);
+               }
+            }
          }
       };
 
@@ -176,6 +184,7 @@ define(["dojo/_base/lang"],
           *                                      function received within that period extending it by the debounce timeout.
           * @param {int} [args.timeoutMs] The length of the debounce, if different from the
           *                               [default]{@link module:alfresco/util/functionUtils#defaultDebounceMs}
+          * @return {Object} An object containing a remove() function which will clear any outstanding timeout
           */
          debounce: lang.hitch(util, util.debounce),
 
@@ -201,6 +210,7 @@ define(["dojo/_base/lang"],
           *                                        be executed.
           * @param {int} [args.timeoutMs] The length of the throttle, if different from the
           *                               [default]{@link module:alfresco/util/functionUtils#defaultThrottleMs}
+          * @return {Object} An object containing a remove() function which will clear any outstanding timeout
           */
          throttle: lang.hitch(util, util.throttle)
       };

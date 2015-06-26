@@ -75,16 +75,18 @@ define(["alfresco/core/Core",
           *
           * @instance
           * @param {String} topic The topic to be published
+          * @param {Object} [payload] An optional payload to be published on the supplied topic
           * @param {Object} [args] Can take any of the optional arguments from the
           *                        [functionUtils debounce method]{@link module:alfresco/util/functionUtils#debounce}
+          * @return {Object} An object containing a remove() function which will clear any outstanding publish
           */
-         debouncedPublish: function(topic, args) {
-            var publishFunc = lang.hitch(this, this.alfPublish, topic),
+         debouncedPublish: function(topic, payload, args) {
+            var publishFunc = lang.hitch(this, this.alfPublish, topic, payload),
                debounceArgs = lang.mixin({
                   name: topic,
                   func: publishFunc
                }, args || {});
-            funcUtils.debounce(debounceArgs);
+            return funcUtils.debounce(debounceArgs);
          },
 
          /**
@@ -92,16 +94,18 @@ define(["alfresco/core/Core",
           *
           * @instance
           * @param {String} topic The topic to be published
+          * @param {Object} [payload] An optional payload to be published on the supplied topic
           * @param {Object} [args] Can take any of the optional arguments from the
           *                        [functionUtils throttle method]{@link module:alfresco/util/functionUtils#throttle}
+          * @return {Object} An object containing a remove() function which will clear any outstanding publish
           */
-         throttledPublish: function(topic, args) {
-            var publishFunc = lang.hitch(this, this.alfPublish, topic),
+         throttledPublish: function(topic, payload, args) {
+            var publishFunc = lang.hitch(this, this.alfPublish, topic, payload),
                throttleArgs = lang.mixin({
                   name: topic,
                   func: publishFunc
                }, args || {});
-            funcUtils.throttle(throttleArgs);
+            return funcUtils.throttle(throttleArgs);
          },
 
          /**
@@ -110,10 +114,15 @@ define(["alfresco/core/Core",
           *
           * @instance
           * @param {Object} [scrollNode=window] The scroll node
+          * @return {Object} The scroll-listener, which contains a remove() function which can be called to release the listener
           */
          publishScrollEvents: function(scrollNode) {
-            var scrollListener = on(scrollNode || window, "scroll", lang.hitch(this, this.debouncedPublish, this.eventsScrollTopic));
+            var nodeToMonitor = scrollNode || window,
+               scrollListener = on(nodeToMonitor, "scroll", lang.hitch(this, this.debouncedPublish, this.eventsScrollTopic, {
+                  node: nodeToMonitor
+               }));
             this.own && this.own(scrollListener);
+            return scrollListener;
          },
 
          /**
@@ -121,10 +130,12 @@ define(["alfresco/core/Core",
           * to the [resize topic]{@link module:alfresco/core/_EventsMixin#eventsResizeTopic}.
           *
           * @instance
+          * @return {Object} The resize-listener, which contains a remove() function which can be called to release the listener
           */
          publishResizeEvents: function() {
             var resizeListener = on(window, "resize", lang.hitch(this, this.debouncedPublish, this.eventsResizeTopic));
             this.own && this.own(resizeListener);
+            return resizeListener;
          }
       });
    });
