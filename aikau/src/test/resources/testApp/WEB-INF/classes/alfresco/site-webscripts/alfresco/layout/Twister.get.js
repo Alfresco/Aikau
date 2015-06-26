@@ -61,7 +61,7 @@ model.jsonModel = {
                            config: {
                               label: "Twister with faulty heading level 'a'",
                               initiallyOpen: false,
-                              twisterPreferenceName: "twister1",
+                              preferenceName: "twister1",
                               headingLevel: "a",
                               widgets: [
                                  {
@@ -78,7 +78,7 @@ model.jsonModel = {
                               label: "Twister with heading level 0",
                               headingLevel: 0,
                               initiallyOpen: true,
-                              twisterPreferenceName: "twister2",
+                              preferenceName: "twister2",
                               widgets: [
                                  {
                                     id: "LOGO4",

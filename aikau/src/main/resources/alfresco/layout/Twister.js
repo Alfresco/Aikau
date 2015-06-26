@@ -24,9 +24,9 @@
  * [initiallyOpen]{@link module:alfresco/layout/Twister#initiallyOpen} attribute to true (for open) or false (for closed).</p>
  * 
  * <p>It is also possible for the open or closed state to be stored to a users personal preferences. This can be done 
- * by configuring a [twisterPreferenceName]{@link module:alfresco/layout/Twister#twisterPreferenceName} attribute
+ * by configuring a [preferenceName]{@link module:alfresco/layout/Twister#preferenceName} attribute
  * and ensuring that the [PreferenceService]{@link module:alfresco/services/PreferenceService} (or equivilant) is included
- * on the page. A single [twisterPreferenceName]{@link module:alfresco/layout/Twister#twisterPreferenceName} can be 
+ * on the page. A single [preferenceName]{@link module:alfresco/layout/Twister#preferenceName} can be 
  * shared between multiple widgets but this will result in all those twisters being in the same state when the page loads.
  * Using user preferences will override whatever [initiallyOpen]{@link module:alfresco/layout/Twister#initiallyOpen} 
  * attribute has been configured.</p>
@@ -56,7 +56,7 @@
  *   name: "alfresco/layout/Twister",
  *   config: {
  *     label: "Twister State Based on User Preference",
- *     twisterPreferenceName: "Twister1",
+ *     preferenceName: "Twister1",
  *     widgets: [
  *       {
  *         id: "LOGO1",
@@ -139,7 +139,7 @@ define(["dojo/_base/declare",
 
       /**
        * The initial open/closed state of the twister. This value could be overridden by a previously stored user preference
-       * if a [twisterPreferenceName]{@link module:alfresco/layout/Twister#twisterPreferenceName} is configured and the 
+       * if a [preferenceName]{@link module:alfresco/layout/Twister#preferenceName} is configured and the 
        * [PreferenceService]{@link module:alfresco/services/PreferenceService} is included on the page.
        *
        * @instance
@@ -157,7 +157,7 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default null
        */
-      twisterPreferenceName: null,
+      preferenceName: null,
 
       /**
        * This is the prefix that will be applied to all preferences. It can be optionally configured to a different value
@@ -168,7 +168,7 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default "org.alfresco.share.twisters."
        */
-      twisterPreferencePrefix: "org.alfresco.share.twisters.",
+      preferencePrefix: "org.alfresco.share.twisters.",
       
       /**
        * The width to make the twister. This is null by default and the standard width of a twister is controlled
@@ -256,10 +256,10 @@ define(["dojo/_base/declare",
        * @instance
        */
       createTwister: function alfresco_layout_Twister__createTwister() {
-         if (this.twisterPreferencePrefix && this.twisterPreferenceName)
+         if (this.preferencePrefix && this.preferenceName)
          {
             this.alfPublish(this.getPreferenceTopic, {
-               preference: this.twisterPreferencePrefix + this.twisterPreferenceName,
+               preference: this.preferencePrefix + this.preferenceName,
                callback: this.onSetTwistState,
                callbackScope: this
             });
@@ -310,10 +310,10 @@ define(["dojo/_base/declare",
          var open = domClass.contains(this.labelNode, this.CLASS_CLOSED);
          this.onSetTwistState(open);
 
-         if (this.twisterPreferencePrefix && this.twisterPreferenceName)
+         if (this.preferencePrefix && this.preferenceName)
          {
             this.alfPublish(this.setPreferenceTopic, {
-               preference: this.twisterPreferencePrefix + this.twisterPreferenceName,
+               preference: this.preferencePrefix + this.preferenceName,
                value: open
             });
          }
