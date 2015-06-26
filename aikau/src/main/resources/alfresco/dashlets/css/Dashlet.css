@@ -8,19 +8,20 @@
    }
    &__body {
       overflow: hidden;
-      padding-bottom: 15px;
+      padding-bottom: 15px; /* This is referenced within Dashlet.js! */
       position: relative;
    }
    &__resize-bar {
+      background: linear-gradient(to bottom, rgba(255,255,255,0), #fff 50%);
       bottom: 0;
       cursor: s-resize;
       cursor: ns-resize; /* Make sure this is after the s-resize value */
-      height: 10px;
+      height: 15px;
       left: 0;
       position: absolute;
       right: 0;
       &__icon {
-         margin: 0 auto;
+         margin: 5px auto 0;
          position: relative;
          &, &:after {
             background: #eee;
