@@ -19,15 +19,13 @@
 
 /**
  * @author Dave Draper
- * @author Richard Smith
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        function (registerSuite, assert, require, TestCommon, keys) {
 
    var browser;
    registerSuite({
@@ -42,66 +40,115 @@ define(["intern!object",
          browser.end();
       },
 
-     "Initial Rendering": function () {
-         var testname = "Initial Rendering";
+      "Check the first twister gets H3 element": function () {
          return browser.findByCssSelector("#TWISTER_HEADING_LEVEL > div.label > h3")
             .getVisibleText()
             .then(function (text) {
-               TestCommon.log(testname,"Check the first twister gets H3 element");
-               expect(text).to.equal("Twister with heading level", "Test #1a - The 1st twister did not render an H3 element");
-            })
-         .end()
-
-         .findByCssSelector("#TWISTER_NO_HEADING_LEVEL > div.label")
-            .getVisibleText()
-            .then(function (text) {
-               TestCommon.log(testname,"Check the second twister renders without header element");
-               expect(text).to.equal("Twister with no heading level", "Test #1b - The 2n twister label was rendered incorrectly");
-            })
-         .end()
-
-         .findByCssSelector("#TWISTER_BAD_HEADING_LEVEL > div.label")
-            .getVisibleText()
-            .then(function (text) {
-               TestCommon.log(testname,"Check that invalid heading level 'a' does not render invalid element");
-               expect(text).to.equal("Twister with faulty heading level 'a'", "Test #1c -The 3rd twister did not render correctly");
-            })
-         .end()
-
-         .findByCssSelector("#TWISTER_BAD_HEADING_LEVEL_TWO > div.label")
-            .getVisibleText()
-            .then(function (text) {
-               TestCommon.log(testname,"Check that invalid heading level '0' does not render invalid element");
-               expect(text).to.equal("Twister with heading level 0", "Test #1d -The 4th twister did not render correctly");
-            })
-         .end()
-
-         .findByCssSelector("#TWISTER_BAD_HEADING_LEVEL_THREE > div.label")
-            .getVisibleText()
-            .then(function (text) {
-               TestCommon.log(testname,"Check that invalid heading level '7' does not render invalid element");
-               expect(text).to.equal("Twister with heading level 7", "Test #1e -The 5th twister did not render correctly");
-            })
-         .end()
-
-         .findByCssSelector("#TWISTER_NULL_LABEL")
-            .isDisplayed()
-            .then(function(result) {
-               TestCommon.log(testname,"Check that null label twister is not displayed");
-               assert(result === false, "Test #1f - Twister with null label was unexpectedly displayed");
-            })
-         .end()
-
-         .findByCssSelector("#TWISTER_EMPTY_LABEL")
-            .isDisplayed()
-            .then(function(result) {
-               TestCommon.log(testname,"Check that empty string label twister is not displayed");
-               assert(result === false, "Test #1g - Twister with empty string label was unexpectedly displayed");
+               assert.equal(text,"Twister with heading level", "The 1st twister did not render an H3 element");
             });
       },
 
-      "Twister mouse tests": function () {
-         var testname = "Twister mouse tests";
+      "Check the second twister renders without header element": function () {
+         return browser.findByCssSelector("#TWISTER_NO_HEADING_LEVEL > div.label")
+            .getVisibleText()
+            .then(function (text) {
+               assert.equal(text,"Twister with no heading level", "The 2n twister label was rendered incorrectly");
+            });
+      },
+
+      "Check that invalid heading level 'a' does not render invalid element": function () {
+         return browser.findByCssSelector("#TWISTER_BAD_HEADING_LEVEL > div.label")
+            .getVisibleText()
+            .then(function (text) {
+               assert.equal(text,"Twister with faulty heading level 'a'", "The 3rd twister did not render correctly");
+            });
+      },
+
+      "Check that invalid heading level '0' does not render invalid element": function () {
+         return browser.findByCssSelector("#TWISTER_BAD_HEADING_LEVEL_TWO > div.label")
+            .getVisibleText()
+            .then(function (text) {
+               assert.equal(text,"Twister with heading level 0", "The 4th twister did not render correctly");
+            });
+      },
+
+      "Check that invalid heading level '7' does not render invalid element": function () {
+         return browser.findByCssSelector("#TWISTER_BAD_HEADING_LEVEL_THREE > div.label")
+            .getVisibleText()
+            .then(function (text) {
+               assert.equal(text,"Twister with heading level 7", "The 5th twister did not render correctly");
+            });
+      },
+
+      "Check that null label twister is not displayed": function () {
+         return browser.findByCssSelector("#TWISTER_NULL_LABEL")
+            .isDisplayed()
+            .then(function(result) {
+               assert.isFalse(result, "Twister with null label was unexpectedly displayed");
+            });
+      },
+
+      "Check that empty string label twister is not displayed": function () {
+         return browser.findByCssSelector("#TWISTER_EMPTY_LABEL")
+            .isDisplayed()
+            .then(function(result) {
+               assert.isFalse(result, "Twister with empty string label was unexpectedly displayed");
+            });
+      },
+
+      "Check that first twister is open": function() {
+         return browser.findAllByCssSelector("#TWISTER_HEADING_LEVEL .alfresco-layout-Twister-open")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Twister configured to be open, was closed");
+            })
+         .end()
+         .findByCssSelector("#TWISTER_HEADING_LEVEL .content")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Twister configured to be open is NOT displaying its contents");
+            });
+      },
+
+      "Check that second twister is closed": function() {
+         return browser.findAllByCssSelector("#TWISTER_NO_HEADING_LEVEL .alfresco-layout-Twister-closed")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Twister configured to be closed, was open");
+            })
+         .end()
+         .findByCssSelector("#TWISTER_NO_HEADING_LEVEL .content")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Twister configured to be closed is displaying its contents");
+            });
+      },
+
+      "Check that third twister is open (using preferences)": function() {
+         return browser.findAllByCssSelector("#TWISTER_BAD_HEADING_LEVEL .alfresco-layout-Twister-open")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Twister preferred to be open, was closed");
+            })
+         .end()
+         .findByCssSelector("#TWISTER_BAD_HEADING_LEVEL .content")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Twister preferred to be open is NOT displaying its contents");
+            });
+      },
+
+      "Check that fourth twister is closed (using preferences)": function() {
+         return browser.findAllByCssSelector("#TWISTER_BAD_HEADING_LEVEL_TWO .alfresco-layout-Twister-closed")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Twister preferred to be closed, was open");
+            })
+         .end()
+         .findByCssSelector("#TWISTER_BAD_HEADING_LEVEL_TWO .content")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Twister preferred to be closed is displaying its contents");
+            });
+      },
+
+      "Check the first twister title is still visible": function () {
          return browser.findByCssSelector("#TWISTER_HEADING_LEVEL > div.label > h3")
             .click()
          .end()
@@ -110,21 +157,20 @@ define(["intern!object",
          .findByCssSelector("#TWISTER_HEADING_LEVEL > div.label > h3")
             .getVisibleText()
             .then(function (text) {
-               TestCommon.log(testname,"Check the first twister title is still visible");
-               expect(text).to.equal("Twister with heading level", "Test #2a - The first twister title is not visible");
-            })
-         .end()
+               assert.equal(text,"Twister with heading level", "The first twister title is not visible");
+            });
+      },
 
-         .findByCssSelector("#TWISTER_HEADING_LEVEL #LOGO1")
+      "Check that logo in the first twister is hidden when the twister is clicked": function() {
+         return browser.findByCssSelector("#TWISTER_HEADING_LEVEL #LOGO1")
             .isDisplayed()
             .then(function(result) {
-               TestCommon.log(testname,"Check that logo in the first twister is hidden when the twister is clicked");
-               assert(result === false, "Test #2b - The logo was unexpectedly shown");
-            })
-         .end()
-
-         // Click the title of twister 1
-         .findByCssSelector("#TWISTER_HEADING_LEVEL > div.label > h3")
+               assert.isFalse(result, "The logo was unexpectedly shown");
+            });
+      },
+      
+      "Check the first twister title is still visible (2)": function() {
+         return browser.findByCssSelector("#TWISTER_HEADING_LEVEL > div.label > h3")
             .click()
          .end()
 
@@ -132,16 +178,39 @@ define(["intern!object",
          .findByCssSelector("#TWISTER_HEADING_LEVEL > div.label > h3")
             .getVisibleText()
             .then(function (text) {
-               TestCommon.log(testname,"Check the first twister title is still visible");
-               expect(text).to.equal("Twister with heading level", "Test #2c - The first twister title is not visible");
-            })
-         .end()
-
-         .findByCssSelector("#TWISTER_HEADING_LEVEL #LOGO1")
+               assert.equal(text,"Twister with heading level", "The first twister title is not visible");
+            });
+      },
+      
+      "Check that logo in the first twister is hidden when the twister is clicked (2)": function() {
+         return browser.findByCssSelector("#TWISTER_HEADING_LEVEL #LOGO1")
             .isDisplayed()
             .then(function(result) {
-               TestCommon.log(testname,"Check that logo in the first twister is hidden when the twister is clicked");
-               assert(result === true, "Test #2d - The logo was unexpectedly hidden");
+               assert.isTrue(result, "The logo was unexpectedly hidden");
+            });
+      },
+
+      "Check that closing a twister updates its preferences": function() {
+         return browser.findByCssSelector("#TWISTER_BAD_HEADING_LEVEL > div.label")
+            .click()
+         .end()
+
+         .findByCssSelector("tr.mx-row:nth-child(1) td.mx-payload")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "{\"org\":{\"alfresco\":{\"share\":{\"twisters\":{\"twister1\":false}}}}}", "Preference not saved on close");
+            });
+      },
+
+      "Check that opending a twister updates its preferences": function() {
+         return browser.findByCssSelector("#TWISTER_BAD_HEADING_LEVEL > div.label")
+            .click()
+         .end()
+
+         .findByCssSelector("tr.mx-row:nth-child(2) td.mx-payload")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "{\"org\":{\"alfresco\":{\"share\":{\"twisters\":{\"twister1\":true}}}}}", "Preference not saved on open");
             });
       },
 
@@ -150,8 +219,7 @@ define(["intern!object",
          TestCommon.alfPostCoverageResults(this, browser);
       },
 
-      "Twister keyboard tests": function () {
-         var testname = "Twister keyboard tests";
+      "Check the first twister title is visible after keyboard [RETURN]": function () {
          return browser.refresh()
 
             // Focus the title of twister 1
@@ -164,38 +232,35 @@ define(["intern!object",
             .findByCssSelector("#TWISTER_HEADING_LEVEL > div.label > h3")
                .getVisibleText()
                .then(function (text) {
-                  TestCommon.log(testname,"Check the first twister title is visible after keyboard [RETURN]");
-                  expect(text).to.equal("Twister with heading level", "Test #3a - The first twister title is not visible after keyboard [RETURN]");
-               })
-            .end()
+                  assert.equal(text,"Twister with heading level", "The first twister title is not visible after keyboard [RETURN]");
+               });
+         },
 
+         "Check that logo in the first twister is hidden after keyboard [RETURN]": function() {
             // Content should be hidden
-            .findByCssSelector("#TWISTER_HEADING_LEVEL #LOGO1")
+            return browser.findByCssSelector("#TWISTER_HEADING_LEVEL #LOGO1")
                .isDisplayed()
                .then(function(result) {
-                  TestCommon.log(testname,"Check that logo in the first twister is hidden after keyboard [RETURN]");
-                  assert(result === false, "Test #3b - The logo was unexpectedly shown");
-               })
-            .end()
+                  assert.isFalse(result, "The logo was unexpectedly shown");
+               });
+         },
 
-            // 'Click' the title with the return key again
-            .pressKeys(keys.RETURN)
+         "Check the first twister title is visible after re-pressing keyboard [RETURN]": function() {
+            return browser.pressKeys(keys.RETURN)
 
             // Title should still be visible
             .findByCssSelector("#TWISTER_HEADING_LEVEL > div.label > h3")
                .getVisibleText()
                .then(function (text) {
-                  TestCommon.log(testname,"Check the first twister title is visible after re-pressing keyboard [RETURN]");
-                  expect(text).to.equal("Twister with heading level", "Test #3c - The first twister title is not visible after re-pressing keyboard [RETURN]");
-               })
-            .end()
+                  assert.equal(text,"Twister with heading level", "The first twister title is not visible after re-pressing keyboard [RETURN]");
+               });
+         },
 
-            // Facets should not be hidden
-            .findByCssSelector("#TWISTER_HEADING_LEVEL #LOGO1")
+         "Check that logo in the first twister is displayed after re-pressing keyboard [RETURN]": function() {
+            return browser.findByCssSelector("#TWISTER_HEADING_LEVEL #LOGO1")
                .isDisplayed()
                .then(function(result) {
-                  TestCommon.log(testname,"Check that logo in the first twister is displayed after re-pressing keyboard [RETURN]");
-                  assert(result === true, "Test #3d - The logo was unexpectedly hidden");
+                  assert.isTrue(result, "The logo was unexpectedly hidden");
                });
       },
 

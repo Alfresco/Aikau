@@ -60,6 +60,7 @@ model.jsonModel = {
                            name: "alfresco/layout/Twister",
                            config: {
                               label: "Twister with faulty heading level 'a'",
+                              initiallyOpen: false,
                               twisterPreferenceName: "twister1",
                               headingLevel: "a",
                               widgets: [
@@ -76,6 +77,7 @@ model.jsonModel = {
                            config: {
                               label: "Twister with heading level 0",
                               headingLevel: 0,
+                              initiallyOpen: true,
                               twisterPreferenceName: "twister2",
                               widgets: [
                                  {

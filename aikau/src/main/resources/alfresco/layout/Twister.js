@@ -18,9 +18,53 @@
  */
 
 /**
- * <p>This widget provides the means to progressively reveal it's contents via a "twisty" arrow. When
- * the user clicks (or actions via keyboard) the widget label it will reveal or hide the widgets that
- * it contains.</p>
+ * <p>This widget provides the means to dynamically reveal and hide its contents by clicking on its label. The 
+ * open or closed state is indicated by a "twister" icon. The widget can be configured to render any other widget
+ * model as its contents. The twister can be configured to be intially open or closed by setting the 
+ * [initiallyOpen]{@link module:alfresco/layout/Twister#initiallyOpen} attribute to true (for open) or false (for closed).</p>
+ * 
+ * <p>It is also possible for the open or closed state to be stored to a users personal preferences. This can be done 
+ * by configuring a [twisterPreferenceName]{@link module:alfresco/layout/Twister#twisterPreferenceName} attribute
+ * and ensuring that the [PreferenceService]{@link module:alfresco/services/PreferenceService} (or equivilant) is included
+ * on the page. A single [twisterPreferenceName]{@link module:alfresco/layout/Twister#twisterPreferenceName} can be 
+ * shared between multiple widgets but this will result in all those twisters being in the same state when the page loads.
+ * Using user preferences will override whatever [initiallyOpen]{@link module:alfresco/layout/Twister#initiallyOpen} 
+ * attribute has been configured.</p>
+ *
+ * <p>It is also possible to configure an optional [headingLevel]{@link module:alfresco/layout/Twister#headingLevel} to improve
+ * the overall accessibility of the page containing the twisters. The level provided should be a number between 1 and 6
+ * and will control the HTML element that is used for the twister label (e.g. 1 will render an H1 element, etc).</p>
+ *
+ * @example <caption>Example twister that is initially closed</caption>
+ * {
+ *   name: "alfresco/layout/Twister",
+ *   config: {
+ *     label: "Initially Closed Twister",
+ *     headingLevel: 3,
+ *     initiallyOpen: false,
+ *     widgets: [
+ *       {
+ *         id: "LOGO1",
+ *         name: "alfresco/logo/Logo"
+ *       }
+ *     ]
+ *   }
+ * }
+ *
+ * @example <caption>Example twister that uses user preferences to control the open/closed state</caption>
+ * {
+ *   name: "alfresco/layout/Twister",
+ *   config: {
+ *     label: "Twister State Based on User Preference",
+ *     twisterPreferenceName: "Twister1",
+ *     widgets: [
+ *       {
+ *         id: "LOGO1",
+ *         name: "alfresco/logo/Logo"
+ *       }
+ *     ]
+ *   }
+ * }
  * 
  * @module alfresco/layout/Twister
  * @extends external:dijit/_WidgetBase
