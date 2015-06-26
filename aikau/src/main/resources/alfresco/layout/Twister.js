@@ -18,9 +18,53 @@
  */
 
 /**
- * <p>This widget provides the means to progressively reveal it's contents via a "twisty" arrow. When
- * the user clicks (or actions via keyboard) the widget label it will reveal or hide the widgets that
- * it contains.</p>
+ * <p>This widget provides the means to dynamically reveal and hide its contents by clicking on its label. The 
+ * open or closed state is indicated by a "twister" icon. The widget can be configured to render any other widget
+ * model as its contents. The twister can be configured to be intially open or closed by setting the 
+ * [initiallyOpen]{@link module:alfresco/layout/Twister#initiallyOpen} attribute to true (for open) or false (for closed).</p>
+ * 
+ * <p>It is also possible for the open or closed state to be stored to a users personal preferences. This can be done 
+ * by configuring a [preferenceName]{@link module:alfresco/layout/Twister#preferenceName} attribute
+ * and ensuring that the [PreferenceService]{@link module:alfresco/services/PreferenceService} (or equivilant) is included
+ * on the page. A single [preferenceName]{@link module:alfresco/layout/Twister#preferenceName} can be 
+ * shared between multiple widgets but this will result in all those twisters being in the same state when the page loads.
+ * Using user preferences will override whatever [initiallyOpen]{@link module:alfresco/layout/Twister#initiallyOpen} 
+ * attribute has been configured.</p>
+ *
+ * <p>It is also possible to configure an optional [headingLevel]{@link module:alfresco/layout/Twister#headingLevel} to improve
+ * the overall accessibility of the page containing the twisters. The level provided should be a number between 1 and 6
+ * and will control the HTML element that is used for the twister label (e.g. 1 will render an H1 element, etc).</p>
+ *
+ * @example <caption>Example twister that is initially closed</caption>
+ * {
+ *   name: "alfresco/layout/Twister",
+ *   config: {
+ *     label: "Initially Closed Twister",
+ *     headingLevel: 3,
+ *     initiallyOpen: false,
+ *     widgets: [
+ *       {
+ *         id: "LOGO1",
+ *         name: "alfresco/logo/Logo"
+ *       }
+ *     ]
+ *   }
+ * }
+ *
+ * @example <caption>Example twister that uses user preferences to control the open/closed state</caption>
+ * {
+ *   name: "alfresco/layout/Twister",
+ *   config: {
+ *     label: "Twister State Based on User Preference",
+ *     preferenceName: "Twister1",
+ *     widgets: [
+ *       {
+ *         id: "LOGO1",
+ *         name: "alfresco/logo/Logo"
+ *       }
+ *     ]
+ *   }
+ * }
  * 
  * @module alfresco/layout/Twister
  * @extends external:dijit/_WidgetBase
@@ -28,12 +72,14 @@
  * @mixes external:dijit/_OnDijitClickMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @mixes module:alfresco/services/_PreferenceServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dijit/_OnDijitClickMixin",
+        "alfresco/services/_PreferenceServiceTopicMixin",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "dojo/text!./templates/Twister.html",
@@ -44,9 +90,9 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom-attr",
         "dojo/_base/event"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, CoreWidgetProcessing, template,  
-                 lang, array, domConstruct, domClass, domStyle, domAttr, event) {
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, CoreWidgetProcessing], {
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PreferenceServiceTopicMixin, AlfCore, CoreWidgetProcessing, 
+                 template, lang, array, domConstruct, domClass, domStyle, domAttr, event) {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, CoreWidgetProcessing, _PreferenceServiceTopicMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -65,6 +111,24 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * The CSS class applied when the twister is opened (and removed when closed).
+       *
+       * @instance
+       * @type {string}
+       * @default "alfresco-layout-Twister--open"
+       */
+      CLASS_OPEN: "alfresco-layout-Twister--open",
+      
+      /**
+       * The CSS class applied when the twister is closed (and removed when opened).
+       *
+       * @instance
+       * @type {string}
+       * @default "alfresco-layout-Twister--closed"
+       */
+      CLASS_CLOSED: "alfresco-layout-Twister--closed",
+
+      /**
        * Should the generated twister use a heading or div for it's heading?
        *
        * @instance
@@ -73,6 +137,39 @@ define(["dojo/_base/declare",
        */
       headingLevel: null,
 
+      /**
+       * The initial open/closed state of the twister. This value could be overridden by a previously stored user preference
+       * if a [preferenceName]{@link module:alfresco/layout/Twister#preferenceName} is configured and the 
+       * [PreferenceService]{@link module:alfresco/services/PreferenceService} is included on the page.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      initiallyOpen: true,
+
+      /**
+       * The preference name to use for storing and retrieving the users preferred open/closed state for this twister.
+       * In order for this preference to be used it will also be necessary to ensure that the 
+       * [PreferenceService]{@link module:alfresco/services/PreferenceService} is included on the page.
+       * 
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      preferenceName: null,
+
+      /**
+       * This is the prefix that will be applied to all preferences. It can be optionally configured to a different value
+       * but this is typically not necessary. One possible reason to change the prefix would be to allow user preferences
+       * to be split across different client implementations.
+       * 
+       * @instance
+       * @type {string}
+       * @default "org.alfresco.share.twisters."
+       */
+      preferencePrefix: "org.alfresco.share.twisters.",
+      
       /**
        * The width to make the twister. This is null by default and the standard width of a twister is controlled
        * by the "@sidebar-component-width" LESS variable. However, this can be overridden by configuring this
@@ -131,12 +228,12 @@ define(["dojo/_base/declare",
             else
             {
                domAttr.set(this.labelNode, "innerHTML", this.label);
-               this.createTwister(this.filterPrefsName);
+               this.createTwister();
             }
          }
          else
          {
-            this.alfLog("error", "A twister was configured without a 'lable' attribute, so it will not be rendered", this);
+            this.alfLog("error", "A twister was configured without a 'label' attribute, so it will not be rendered", this);
             domStyle.set(this.domNode, "display", "none");
          }
       },
@@ -154,57 +251,51 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
-       *
-       * @instance
-       * @type {string}
-       * @default "alfresco-layout-Twister-open"
-       */
-      CLASS_OPEN: "alfresco-layout-Twister-open",
-      
-      /**
-       * 
-       *
-       * @instance
-       * @type {string}
-       * @default "alfresco-layout-Twister-closed"
-       */
-      CLASS_CLOSED: "alfresco-layout-Twister-closed",
-
-      /**
        * Creates a "disclosure twister" UI control from existing mark-up.
        *
        * @instance
-       * @param {string} twisterName Twister name under which to save it's collapsed state via preferences
        */
-      createTwister: function alfresco_layout_Twister__createTwister(twisterName) {
-         // // MNT-11316 fix, populate Alfresco.util.createTwister.collapsed if required 
-         // if (Alfresco.util.createTwister.collapsed === undefined)
-         // {
-         //    var preferences = new Alfresco.service.Preferences();
-         //    if (Alfresco.service.Preferences.COLLAPSED_TWISTERS)
-         //    {
-         //       Alfresco.util.createTwister.collapsed = Alfresco.util.findValueByDotNotation(preferences.get(), Alfresco.service.Preferences.COLLAPSED_TWISTERS) || "";
-         //    }
-         //    else
-         //    {
-         //       Alfresco.util.createTwister.collapsed = "";
-         //    }
-         // }
-
-         // See if panel should be collapsed via value stored in preferences
-         // var collapsedPrefs = Alfresco.util.arrayToObject(Alfresco.util.createTwister.collapsed.split(",")),
-         //     isCollapsed = !!collapsedPrefs[p_filterName];
-
-         var isCollapsed = false;
+      createTwister: function alfresco_layout_Twister__createTwister() {
+         if (this.preferencePrefix && this.preferenceName)
+         {
+            this.alfPublish(this.getPreferenceTopic, {
+               preference: this.preferencePrefix + this.preferenceName,
+               callback: this.onSetTwistState,
+               callbackScope: this
+            });
+         }
 
          // Initial State
-         domClass.add(this.labelNode, isCollapsed ? this.CLASS_CLOSED : this.CLASS_OPEN);
-         domStyle.set(this.contentNode, "display", isCollapsed ? "none" : "block");
+         domClass.add(this.labelNode, this.initiallyOpen ? this.CLASS_OPEN : this.CLASS_CLOSED);
+         domStyle.set(this.contentNode, "display", this.initiallyOpen ? "block" : "none");
 
          if (this.widgets)
          {
             this.processWidgets(this.widgets);
+         }
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {boolean} value Whether or not the twister should be opened or closed.
+       */
+      onSetTwistState: function alfresco_layout_Twister_onSetTwistState(open) {
+         if (open === true)
+         {
+            domClass.add(this.labelNode, this.CLASS_OPEN);
+            domClass.remove(this.labelNode, this.CLASS_CLOSED);
+            domStyle.set(this.contentNode, "display", "block");
+         }
+         else if (open === false)
+         {
+            domClass.remove(this.labelNode, this.CLASS_OPEN);
+            domClass.add(this.labelNode, this.CLASS_CLOSED);
+            domStyle.set(this.contentNode, "display", "none");
+         }
+         else
+         {
+            // Don't do anything on unexpected values...
          }
       },
 
@@ -214,23 +305,21 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click or keyboard event triggering the twist
        */
-      onTwist: function alfresco_layout_Twister__onTwist(evt)
-         {
-            // Update UI to new state
-            var collapse = domClass.contains(this.labelNode, this.CLASS_OPEN);
-            domClass.toggle(this.labelNode, this.CLASS_OPEN);
-            domClass.toggle(this.labelNode, this.CLASS_CLOSED);
-            domStyle.set(this.contentNode, "display", collapse ? "none" : "block");
+      onTwist: function alfresco_layout_Twister__onTwist(evt) {
+         // Update UI to new state
+         var open = domClass.contains(this.labelNode, this.CLASS_CLOSED);
+         this.onSetTwistState(open);
 
-            // if (p_obj.filterName)
-            // {
-            //    // Save to preferences
-            //    var fnPref = collapse ? "add" : "remove",
-            //       preferences = new Alfresco.service.Preferences();
-            //    preferences[fnPref].call(preferences, Alfresco.service.Preferences.COLLAPSED_TWISTERS, p_obj.filterName);
-            // }
-            // Stop the event propogating any further (ie into the parent element)
-            event.stop(evt);
+         if (this.preferencePrefix && this.preferenceName)
+         {
+            this.alfPublish(this.setPreferenceTopic, {
+               preference: this.preferencePrefix + this.preferenceName,
+               value: open
+            });
          }
+
+         // Stop the event propogating any further (ie into the parent element)
+         event.stop(evt);
+      }
    });
 });
