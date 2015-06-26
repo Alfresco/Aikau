@@ -142,7 +142,7 @@ define(["dojo/_base/declare",
          }
          
          this.previewTarget = new Source(this.previewNode, { 
-            accept: this.acceptTypes,
+            accept: lang.clone(this.acceptTypes),
             creator: lang.hitch(this, this.creator),
             withHandles: this.withHandles,
             horizontal: this.horizontal
@@ -167,8 +167,8 @@ define(["dojo/_base/declare",
 
          if (this.previewTarget)
          {
-            this.previewTarget.onDraggingOut = lang.hitch(this, this.onItemDraggedOut);
-            this.previewTarget.onDraggingOver = lang.hitch(this, this.onItemDraggedOver);
+            aspect.after(this.previewTarget, "onOutEvent", lang.hitch(this, this.onItemDraggedOut), true);
+            aspect.after(this.previewTarget, "onOverEvent", lang.hitch(this, this.onItemDraggedOver), true);
          }
          
          // Listen for widgets requesting to be deleted...
@@ -366,7 +366,7 @@ define(["dojo/_base/declare",
          {
             array.forEach(value, function(item) {
                var data = {
-                  type: this.acceptTypes,
+                  type: lang.clone(this.acceptTypes),
                   value: item
                };
                var createdItem = this.creator(data);
