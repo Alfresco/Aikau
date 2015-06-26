@@ -75,13 +75,15 @@ define(["alfresco/core/Core",
           *
           * @instance
           * @param {String} topic The topic to be published
-          * @param {Object} [payload] An optional payload to be published on the supplied topic
+          * @param {object} [payload] The payload to publish on the supplied topic
+          * @param {boolean} [global] Indicates that the pub/sub scope should not be applied
+          * @param {boolean} [parentScope] Indicates that the pub/sub scope inherited from the parent should be applied
           * @param {Object} [args] Can take any of the optional arguments from the
           *                        [functionUtils debounce method]{@link module:alfresco/util/functionUtils#debounce}
           * @return {Object} An object containing a remove() function which will clear any outstanding publish
           */
-         debouncedPublish: function(topic, payload, args) {
-            var publishFunc = lang.hitch(this, this.alfPublish, topic, payload),
+          debouncedPublish: function alfresco_core_Core__debouncedPublish(topic, payload, global, parentScope, args) {
+            var publishFunc = lang.hitch(this, this.alfPublish, topic, payload, global, parentScope),
                debounceArgs = lang.mixin({
                   name: topic,
                   func: publishFunc
@@ -94,13 +96,15 @@ define(["alfresco/core/Core",
           *
           * @instance
           * @param {String} topic The topic to be published
-          * @param {Object} [payload] An optional payload to be published on the supplied topic
+          * @param {object} [payload] The payload to publish on the supplied topic
+          * @param {boolean} [global] Indicates that the pub/sub scope should not be applied
+          * @param {boolean} [parentScope] Indicates that the pub/sub scope inherited from the parent should be applied
           * @param {Object} [args] Can take any of the optional arguments from the
           *                        [functionUtils throttle method]{@link module:alfresco/util/functionUtils#throttle}
           * @return {Object} An object containing a remove() function which will clear any outstanding publish
           */
-         throttledPublish: function(topic, payload, args) {
-            var publishFunc = lang.hitch(this, this.alfPublish, topic, payload),
+         throttledPublish: function(topic, payload, global, parentScope, args) {
+            var publishFunc = lang.hitch(this, this.alfPublish, topic, payload, global, parentScope),
                throttleArgs = lang.mixin({
                   name: topic,
                   func: publishFunc
