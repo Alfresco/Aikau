@@ -408,11 +408,15 @@ define(["dojo/_base/declare",
             topics = [topics];
          }
 
+         /*jshint -W059 */
+         var callerName = arguments.callee.caller.name;
          array.forEach(topics, function(topic) {
             if (!payload)
             {
                payload = {};
             }
+            payload.alfCallerName = callerName;
+
             var scopedTopic = topic;
             if (global !== false && global === true)
             {
