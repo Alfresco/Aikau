@@ -115,18 +115,18 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-layout-Twister-open"
+       * @default "alfresco-layout-Twister--open"
        */
-      CLASS_OPEN: "alfresco-layout-Twister-open",
+      CLASS_OPEN: "alfresco-layout-Twister--open",
       
       /**
        * The CSS class applied when the twister is closed (and removed when opened).
        *
        * @instance
        * @type {string}
-       * @default "alfresco-layout-Twister-closed"
+       * @default "alfresco-layout-Twister--closed"
        */
-      CLASS_CLOSED: "alfresco-layout-Twister-closed",
+      CLASS_CLOSED: "alfresco-layout-Twister--closed",
 
       /**
        * Should the generated twister use a heading or div for it's heading?

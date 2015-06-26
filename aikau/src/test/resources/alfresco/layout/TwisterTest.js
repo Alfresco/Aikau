@@ -97,7 +97,7 @@ define(["intern!object",
       },
 
       "Check that first twister is open": function() {
-         return browser.findAllByCssSelector("#TWISTER_HEADING_LEVEL .alfresco-layout-Twister-open")
+         return browser.findAllByCssSelector("#TWISTER_HEADING_LEVEL .alfresco-layout-Twister--open")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Twister configured to be open, was closed");
             })
@@ -110,7 +110,7 @@ define(["intern!object",
       },
 
       "Check that second twister is closed": function() {
-         return browser.findAllByCssSelector("#TWISTER_NO_HEADING_LEVEL .alfresco-layout-Twister-closed")
+         return browser.findAllByCssSelector("#TWISTER_NO_HEADING_LEVEL .alfresco-layout-Twister--closed")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Twister configured to be closed, was open");
             })
@@ -123,7 +123,7 @@ define(["intern!object",
       },
 
       "Check that third twister is open (using preferences)": function() {
-         return browser.findAllByCssSelector("#TWISTER_BAD_HEADING_LEVEL .alfresco-layout-Twister-open")
+         return browser.findAllByCssSelector("#TWISTER_BAD_HEADING_LEVEL .alfresco-layout-Twister--open")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Twister preferred to be open, was closed");
             })
@@ -136,7 +136,7 @@ define(["intern!object",
       },
 
       "Check that fourth twister is closed (using preferences)": function() {
-         return browser.findAllByCssSelector("#TWISTER_BAD_HEADING_LEVEL_TWO .alfresco-layout-Twister-closed")
+         return browser.findAllByCssSelector("#TWISTER_BAD_HEADING_LEVEL_TWO .alfresco-layout-Twister--closed")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Twister preferred to be closed, was open");
             })
