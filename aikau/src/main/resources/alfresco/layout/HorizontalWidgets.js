@@ -33,7 +33,7 @@
  *    "name": "alfresco/layout/HorizontalWidgets",
  *    "config": {
  *       "widgetMarginLeft": 10,
- *       "widgetMarginRight": 10
+ *       "widgetMarginRight": 10,
  *       "widgets": [
  *          {
  *             "name": "alfresco/logo/Logo",
