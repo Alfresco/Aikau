@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,9 +18,58 @@
  */
 
 /**
- * An abstract view for the Alfresco Share document list. It can be used in JSON page models if
- * configured with a widgets definition. Otherwise it can be extended to define specific views
+ * A dashlet for use on a dashboard. It can be used in JSON page models if configured with
+ * a widgets definition. Otherwise it can be extended to define specific views.
  *
+ * By passing in certain pre-supported classes to the additionalCssClasses config property, it's
+ * possible add padding to the body. The current available padding classes are smallpad (4px
+ * padding), mediumpad (10px padding - recommended) and largepad (16px padding).
+ *
+ * @example <caption>Sample configuration</caption>
+ * {
+ *    name: "alfresco/dashlets/Dashlet",
+ *    id: "MY_DASHLET",
+ *    config: {
+ *       additionalCssClasses: "mediumpad",
+ *       bodyHeight: 300,                             // Specify the initial height of the body
+ *       componentId: "component.valid-dashlet",      // A valid component ID (for Share height persistence)
+ *       pubSubScope: "DASHLET_SCOPE_",
+ *       title: "My Dashlet",
+ *       widgetsForTitleBarActions: [
+ *          {
+ *             name: "alfresco/html/Label",
+ *             config: {
+ *                label: "Title-bar actions"
+ *             }
+ *          }
+ *       ],
+ *       widgetsForToolbar: [
+ *          {
+ *             name: "alfresco/html/Label",
+ *             config: {
+ *                label: "Toolbar"
+ *             }
+ *          }
+ *       ],
+ *       widgetsForToolbar2: [
+ *          {
+ *             name: "alfresco/html/Label",
+ *             config: {
+ *                label: "Toolbar2"
+ *             }
+ *          }
+ *       ],
+ *       widgetsForBody: [
+ *          {
+ *             name: "alfresco/html/Label",
+ *             config: {
+ *                label: "Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base *benefits. Dramatically visualize customer directed convergence without revolutionary ROI. Efficiently unleash cross-media information wit*hout *cross-media value. Quickly maximize timely deliverables for real-time schemas. Dramatically maintain clicks-and-mortar solutions without *functional solutions. Completely synergize resource sucking relationships via premier niche markets. Professionally cultivate one-to-one *customer service with robust ideas. Dynamically innovate resource-leveling customer service for state of the art customer service."
+ *             }
+ *          }
+ *       ]
+ *    }
+ * }
+ *  
  * @module alfresco/dashlets/Dashlet
  * @extends external:dijit/_WidgetBase
  * @extends module:alfresco/core/ResizeMixin
@@ -268,7 +317,7 @@ define(["dojo/_base/declare",
             var hasWidgets = widgets && widgets.length,
                containerNode = container;
             hasWidgets && this.processWidgets(lang.clone(widgets), container);
-            while(containerNode !== this.domNode) {
+            while (containerNode !== this.domNode) {
                domClass[hasWidgets ? "add" : "remove"](containerNode, this.baseClass + "--has-widgets");
                containerNode = containerNode.parentNode;
             }
