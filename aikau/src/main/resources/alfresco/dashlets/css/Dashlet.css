@@ -91,7 +91,6 @@
    }
    &__body {
       background-color: #fff;
-      overflow: hidden;
       padding-bottom: 15px; /* This is referenced within Dashlet.js! */
       position: relative;
       a {
@@ -115,7 +114,12 @@
             line-height: 1.5;
          }
       }
+
+      .alfresco-dashlets-Dashlet__body__widgets {
+         overflow: auto;
+      }
    }
+   
    /* Same-level classes */
    &.smallpad {
       .alfresco-dashlets-Dashlet__body__widgets {
