@@ -24,8 +24,33 @@ model.jsonModel = {
                   name: "alfresco/dashlets/Dashlet",
                   id: "NO_ID_DASHLET",
                   config: {
+                     additionalCssClasses: "smallpad",
                      pubSubScope: "NO_ID_",
                      title: "Dashlet (no ID)",
+                     widgetsForTitleBarActions: [
+                        {
+                           name: "alfresco/html/Label",
+                           config: {
+                              label: "Title-bar actions"
+                           }
+                        }
+                     ],
+                     widgetsForToolbar: [
+                        {
+                           name: "alfresco/html/Label",
+                           config: {
+                              label: "Toolbar"
+                           }
+                        }
+                     ],
+                     widgetsForToolbar2: [
+                        {
+                           name: "alfresco/html/Label",
+                           config: {
+                              label: "Toolbar2"
+                           }
+                        }
+                     ],
                      widgetsForBody: [
                         {
                            name: "alfresco/html/Label",
@@ -40,6 +65,7 @@ model.jsonModel = {
                   name: "alfresco/dashlets/Dashlet",
                   id: "VALID_ID_DASHLET",
                   config: {
+                     additionalCssClasses: "mediumpad",
                      pubSubScope: "VALID_ID_",
                      title: "Dashlet (valid ID, presized)",
                      componentId: "component.valid-dashlet",
@@ -58,6 +84,7 @@ model.jsonModel = {
                   name: "alfresco/dashlets/Dashlet",
                   id: "INVALID_ID_DASHLET",
                   config: {
+                     additionalCssClasses: "largepad",
                      pubSubScope: "INVALID_ID_",
                      title: "Dashlet (invalid ID)",
                      componentId: "component.invalid-dashlet",

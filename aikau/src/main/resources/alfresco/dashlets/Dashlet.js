@@ -242,7 +242,7 @@ define(["dojo/_base/declare",
             if (this.bodyHeight) {
                domStyle.set(this.bodyNode, "height", this.bodyHeight + "px");
             }
-            this.processContainer(this.widgetsForBody, this.bodyNode);
+            this.processContainer(this.widgetsForBody, this.bodyWidgetsNode);
             if (this.componentId && !this.resizeDisabled) {
                // Only make it resizable if a componentId has been provided, otherwise it will not be persisted correctly
                $(this.bodyNode).resizable({
@@ -265,11 +265,12 @@ define(["dojo/_base/declare",
           * @param container The container to place the widgets in
           */
          processContainer: function alfresco_dashlets_Dashlet__processContainer(widgets, container) {
-            if (widgets && widgets.length) {
-               this.processWidgets(lang.clone(widgets), container);
-               domClass.add(container, this.baseClass + "__widgets");
-            } else {
-               domClass.remove(container, this.baseClass + "__widgets");
+            var hasWidgets = widgets && widgets.length,
+               containerNode = container;
+            hasWidgets && this.processWidgets(lang.clone(widgets), container);
+            while(containerNode !== this.domNode) {
+               domClass[hasWidgets ? "add" : "remove"](containerNode, this.baseClass + "--has-widgets");
+               containerNode = containerNode.parentNode;
             }
          },
 
@@ -296,7 +297,7 @@ define(["dojo/_base/declare",
           * @instance
           * @param {Object} payload The payload from the publishing of the failure topic
           */
-         onHeightStorageError: function(payload){
+         onHeightStorageError: function(payload) {
             this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
                message: "Error occurred while storing dashlet height"
             }, true);
@@ -304,6 +305,7 @@ define(["dojo/_base/declare",
          },
 
          /**
+          * Handle resize events
           * 
           * @instance
           * @param {object} evt The resize event object
