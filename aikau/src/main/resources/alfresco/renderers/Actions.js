@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -22,13 +22,73 @@
  * [drop-down menu]{@link module:alfresco/menus/AlfMenuBarPopup} of [menu items]{@link module:alfresco/menus/AlfMenuItem}
  * representing an action set.</p>
  * 
- * <p>This module was written to intially support Alfresco document and folder actions as generated for a 
- * individual nodes but has since been expanded to support custom actions. The majority of the action handling
- * code is done by the [_ActionsMixin]{@link module:alfresco/renderers/_ActionsMixin}</p>
+ * <p>Actions are either derived from the "actions" attribute on the "currentItem" (which is typically populated through
+ * a REST API call to Share and it should be noted that calls to the Repository REST APIs will not include actions), or
+ * are defined by the [customActions]{@link module:alfresco/renderers/_ActionsMixin#customActions} and
+ * [widgetsForActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions} attributes.</p>
+ *
+ * <p>[Custom actions]{@link module:alfresco/renderers/_ActionsMixin#customActions} take precedence over all other actions
+ * and the [widgetsForActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions} attribute will only be
+ * used when neither [customActions]{@link module:alfresco/renderers/_ActionsMixin#customActions} or "actions" on the
+ * "currentItem" can be found. The purpose of the [widgetsForActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions}
+ * is to provide a set of default actions that are rendered based on the metadata of a node. The default set of actions
+ * can be replaced through configuration if required.</p>
+ *
+ * <p>It is possible to filter actions by configuring the [filterActions]{@link module:alfresco/renderers/_ActionsMixin#filterActions}
+ * to true and then providing either an [allowedActions]{@link module:alfresco/renderers/_ActionsMixin#allowedActions} array
+ * or [allowedActionsString]{@link module:alfresco/renderers/_ActionsMixin#allowedActionsString} string. Filtering only
+ * applied to actions on defined on the "currentItem" or in the 
+ * [customActions]{@link module:alfresco/renderers/_ActionsMixin#customActions} array.</p>
+ *
+ * <p>It is also possible to merge all types of actions by configured the 
+ * [mergeActions]{@link module:alfresco/renderers/_ActionsMixin#mergeActions} attribute to be true</p>
+ *
+ * @example <caption>Example of filtering currentItem actions</caption>
+ * {
+ *   name: "alfresco/renderers/Actions",
+ *   config: {
+ *     filterActions: true,
+ *     allowedActions: [
+ *       "folder-manage-rules",
+ *        "folder-download",
+ *        "folder-view-details"
+ *     ]
+ *   }
+ * }
+ * 
+ * @example <caption>Example of merging a custom action with currentItem actions (hiding all widgetsForActions)</caption>
+ * {
+ *   name: "alfresco/renderers/Actions",
+ *   config: {
+ *     mergeActions: true,
+ *     customActions: [
+ *       {
+ *         id: "CUSTOM",
+ *         label: "Custom Action",
+ *         publishTopic: "CUSTOM_ACTION_TOPIC",
+ *         publishPayloadType: "CURRENT_ITEM",
+ *         type: "javascript"
+ *       },
+ *     ],
+ *     widgetsForActions: []
+ *   }
+ * }
+ *
+ * @example <caption>Example of overriding widgetsForActions</caption>
+ * {
+ *   name: "alfresco/renderers/Actions",
+ *   config: {
+ *     widgetsForActions: [
+ *       {
+ *         name: "alfresco/renderers/actions/ManageAspects"
+ *       }
+ *     ]
+ *   }
+ * }
  * 
  * @module alfresco/renderers/Actions
  * @extends module:alfresco/menus/AlfMenuBar
- * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
+ * @mixes module:alfresco/renderers/_ActionsMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -41,7 +101,6 @@ define(["dojo/_base/declare",
         function(declare, AlfMenuBar, _ActionsMixin, AlfMenuBarPopup, AlfMenuGroup, AlfMenuItem, domClass) {
 
    return declare([AlfMenuBar, _ActionsMixin], {
-
       
       /**
        * An array of the CSS files to use with this widget.
@@ -95,12 +154,14 @@ define(["dojo/_base/declare",
 
          // Create a group to hold all the actions...
          this.actionsGroup = new AlfMenuGroup({
+            id: this.id + "_GROUP",
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope
          });
          
          // Create a menu popup to hold the group...
          this.actionsMenu = new AlfMenuBarPopup({
+            id: this.id + "_MENU",
             label:  this.message("alf.renderers.Actions.menuLabel"),
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope

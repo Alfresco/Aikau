@@ -60,7 +60,8 @@ define(["alfresco/core/ProcessWidgets",
        * @param  {object} error Details of the error that has occurred
        */
       onError: function alfresco_core_Page__onError(error) {
-         this.alfLog("error", "The following AMD module loading error occurred", error);
+         /* global console */
+         console.error("The following AMD module loading error occurred", error);
       },
 
       /**
@@ -72,9 +73,14 @@ define(["alfresco/core/ProcessWidgets",
       postCreate: function alfresco_core_Page__postCreate() {
          /*jshint devel:true*/
          shims.apply();
-         require.on("error", this.onError);
+         
          try
          {
+            if (AlfConstants.DEBUG)
+            {
+               require.on("error", this.onError);
+            }
+
             // If we're in debug mode, then we should add some DOM elements for the Developer View. This will
             // allow developers to see which WebScript has generated the page and to click a link to generate
             // a sample JAR to customize the page.

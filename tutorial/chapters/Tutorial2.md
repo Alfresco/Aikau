@@ -143,5 +143,7 @@ When you reload the page you will see the greeting message displayed. If you swi
 ![Image showing widget rendered in English](../resources/Tutorial 2 - Image 1.png "Image showing widget rendered in English")
 ![Image showing widget rendered in French](../resources/Tutorial 2 - Image 2.png "Image showing widget rendered in French")
 
+_You can [download the project files from here](../resources/aikau-tutorial_002.zip?raw=true) as they exist at the end of this tutorial._
+
 Previous: [Getting Started](./Tutorial1.md),
 Next: [Create a Composite Widget](./Tutorial3.md)

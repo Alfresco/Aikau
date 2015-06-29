@@ -295,6 +295,13 @@ define(["dojo/_base/declare",
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth
          };
+
+         // Ensure that text content is center aligned (see AKU-368)...
+         if (dialogConfig.content)
+         {
+            dialogConfig.additionalCssClasses += " alfresco-dialogs-AlfDialog--textContent";
+         }
+
          var dialog = new AlfDialog(dialogConfig);
 
          if (payload.publishOnShow)
@@ -410,6 +417,7 @@ define(["dojo/_base/declare",
        * @returns {object} The dialog configuration.
        */
       createDialogConfig: function alfresco_services_DialogService__createDialogConfig(config, formConfig) {
+         // jshint maxcomplexity:false
          var handleOverflow = true;
          if (config.handleOverflow === false)
          {
@@ -481,6 +489,7 @@ define(["dojo/_base/declare",
          var formConfig = {
             name: "alfresco/forms/Form",
             config: {
+               additionalCssClasses: "root-dialog-form",
                displayButtons: false,
                widgets: widgets,
                value: formValue

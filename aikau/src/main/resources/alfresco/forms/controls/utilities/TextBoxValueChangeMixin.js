@@ -24,8 +24,9 @@
  * @module alfresco/forms/controls/utilities/TextBoxValueChangeMixin
  * @author Dave Draper
  */
-define(["dojo/_base/declare"], 
-        function(declare) {
+define(["dojo/_base/declare",
+        "dojo/_base/lang"], 
+        function(declare, lang) {
 
    return declare([], {
 
@@ -66,8 +67,15 @@ define(["dojo/_base/declare"],
                _this.formControlValueChange(_this.name, _this._oldValue, this.getValue());
                _this.validate();
             });
+            if (typeof this.wrappedWidget.watch === "function")
+            {
+               this.own(this.wrappedWidget.watch("value", lang.hitch(this, function(name, oldValue, newValue){
+                  if(this.__oldValue !== newValue) {
+                     this.onValueChangeEvent(name, oldValue, newValue);
+                  }
+               })));
+            } 
          }
-         this.inherited(arguments);
       }
    });
 });

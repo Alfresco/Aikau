@@ -390,6 +390,20 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#onReloadData} to reset the
+       * current page size on a reload request when [infinite scroll]{@link module:alfresco/lists/AlfList#useInfiniteScroll}
+       * is enabled.
+       * 
+       * @instance
+       */
+      onReloadData: function alfresco_lists_AlfSortablePaginatedList__onReloadData() {
+         if (this.useInfiniteScroll) {
+            this.currentPage = 1;
+         }
+         this.inherited(arguments);
+      },
+
+      /**
        * Overrides the [inherited function]{@link module:alfresco/lists/AlfList#onScrollNearBottom} to request
        * more data when the user scrolls to the bottom of the browser page.
        *

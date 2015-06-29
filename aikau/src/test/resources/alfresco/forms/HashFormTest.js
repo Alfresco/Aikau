@@ -56,6 +56,14 @@ define(["intern!object",
             });
       },
 
+      "Test that disabled field 1 is NOT updated in FORM3": function() {
+         return browser.findByCssSelector("#HASH_TEXT_BOX_7 .dijitInputInner")
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "", "Field 1 in third form should not have been set");
+            });
+      },
+
       "Update field 1 and field3 and check that only field 1 updates the URL hash": function() {
          return browser.findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputInner")
             .clearValue()
@@ -103,6 +111,38 @@ define(["intern!object",
             .getProperty("value")
             .then(function(value) {
                assert.equal(value, "Update2", "Field 3 in first form should NOT have been updated");
+            });
+      },
+
+      "Check that updating FORM3 does NOT update hash": function() {
+         return browser.findByCssSelector("#HASH_TEXT_BOX_8 .dijitInputInner")
+            .clearValue()
+            .type("NoUpdate")
+         .end()
+         .findByCssSelector("#HASH_FORM3 .confirmationButton > span")
+            .click()
+            .execute("return window.location.hash.toString()")
+            .then(function(hash) {
+               assert.equal(hash, "#field1=Reset1&field2=two&field3=Reset2", "Hash updated when form configured not to");
+            });
+      },
+
+      "Check that updating form configured not to update hash does NOT update hash": function() {
+         // Set a value that won't be updated once the field is disabled...
+         return browser.findByCssSelector("#HASH_TEXT_BOX_5 .dijitInputInner")
+            .clearValue()
+            .type("NoUpdate")
+         .end()
+         // Set a value in another field to dynamically make the test field disabled...
+         .findByCssSelector("#HASH_TEXT_BOX_4 .dijitInputInner")
+            .clearValue()
+            .type("disableField2")
+         .end()
+         .findByCssSelector("#HASH_FORM2 .confirmationButton > span")
+            .click()
+            .execute("return window.location.hash.toString()")
+            .then(function(hash) {
+               assert.equal(hash, "#field1=disableField2&field2=two&field3=Reset2", "Hash updated when form configured not to");
             });
       },
 

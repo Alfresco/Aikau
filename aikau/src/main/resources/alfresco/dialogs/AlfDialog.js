@@ -221,6 +221,10 @@ define(["dojo/_base/declare",
             this.processWidgets(this.widgetsButtons, this.buttonsNode);
             this.creatingButtons = false;
          }
+         else
+         {
+            domClass.add(this.bodyNode, "no-buttons");
+         }
 
          if (this.widgetsContent)
          {

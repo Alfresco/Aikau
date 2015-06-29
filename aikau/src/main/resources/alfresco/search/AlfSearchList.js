@@ -379,7 +379,6 @@ define(["dojo/_base/declare",
        * @fires ALF_NAVIGATE_TO_PAGE
        */
       updateFilterHash: function alfresco_search_AlfSearchList__updateFilterHash(fullFilter, mode) {
-
          // Get the existing hash and extract the individual facetFilters into an array
          var aHash = ioQuery.queryToObject(hash()),
              facetFilters = aHash.facetFilters ? aHash.facetFilters : "",
@@ -464,10 +463,12 @@ define(["dojo/_base/declare",
        * @instance
        */
       loadData: function alfresco_search_AlfSearchList__loadData() {
-         if (this.requestInProgress && this.blockConcurrentRequests)
+         // jshint maxcomplexity:false
+         if (this.requestInProgress)
          {
             // TODO: Inform user that request is in progress?
             this.alfLog("log", "Search request ignored because progress is already in progress");
+            this._searchPending = true;
          }
          else
          {
@@ -735,6 +736,21 @@ define(["dojo/_base/declare",
             }
          }
          return hasTerm;
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#onRequestFinished} to reissue
+       * a search request if additional search data was provided whilst a request was in-progress.
+       *
+       * @instance
+       */
+      onRequestFinished: function alfresco_search_AlfSearchList___onRequestFinished() {
+         this.inherited(arguments);
+         if (this._searchPending ===true)
+         {
+            this._searchPending = false;
+            this.loadData();
+         }
       }
    });
 });

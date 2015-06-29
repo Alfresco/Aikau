@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.23-SNAPSHOT</version>
+   <version>1.0.24-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -43,6 +43,80 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+               <dependency>
+                  <groupId>javax.servlet</groupId>
+                  <artifactId>servlet-api</artifactId>
+                  <version>2.5</version>
+                  <scope>provided</scope>
+               </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>unitTestsGrid</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <executions>
+                            <execution>
+                                <id>run-embedded-tomcat</id>
+                                <!-- Bind to the pre-integration-test phase -->
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <!-- Run will run the project as a dynamic webapp -->
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <fork>true</fork>
+                                    <port>8089</port>
+                                    <ignorePackaging>true</ignorePackaging>
+                                    <warSourceDirectory>${basedir}/target/test-classes/testApp</warSourceDirectory>
+                                    <!-- The context file allows us to map static resources in a virtual webapp -->
+                                    <contextFile>${project.basedir}/tomcat/context.xml</contextFile>
+                                    <useTestClasspath>true</useTestClasspath>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>shutdown-embedded-tomcat</id>
+                                <!-- Bind to the post-integration-test phase -->
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <!-- Safely stop tomcat when integration-test phase is done -->
+                                    <goal>shutdown</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                      <artifactId>maven-antrun-plugin</artifactId>
+                      <version>1.8</version>
+                      <executions>
+                        <execution>
+                          <id>run-unit-tests</id>
+                          <phase>integration-test</phase>
+                          <goals>
+                            <goal>run</goal>
+                          </goals>
+                          <configuration>
+                            <target>
+                              <echo>Running npm install</echo>
+                              <exec executable="npm" dir="${project.basedir}">
+                                <arg line="install" />
+                              </exec>
+                              <echo>Running grunt test_grid</echo>
+                              <exec executable="grunt" dir="${project.basedir}">
+                                <arg line="test_grid" />
+                              </exec>
+                            </target>
+                          </configuration>
+                        </execution>
+                      </executions>
                     </plugin>
                 </plugins>
             </build>

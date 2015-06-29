@@ -163,6 +163,7 @@ define(["dojo/_base/declare",
                      case "alfTopic":
                      case "alfResponseTopic":
                      case "alfPublishScope":
+                     case "alfCallerName":
                      case "term":
                      case "tag":
                      case "startIndex":

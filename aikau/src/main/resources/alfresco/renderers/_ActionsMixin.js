@@ -65,16 +65,6 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/_ActionsMixin.properties"}],
 
       /**
-       * Indicates whether or not actions should be filtered according to the
-       * [allowedActions array]{@link module:alfresco/renderers/Actions#allowedActions}.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      filterActions: false,
-
-      /**
        *  Array containing a list of allowed actions
        *  This is used to filter out actions that the actions API returns, but haven't yet been implemented.
        *  TODO: Remove this once all actions have been implemented by the actions service.
@@ -96,6 +86,40 @@ define(["dojo/_base/declare",
        * @default null
        */
       allowedActionsString: null,
+
+      /**
+       * An array of action configuration objects to render in the action menu. This array will take precedence
+       * over any actions defined on the "currentItem" unless the
+       * [mergeActions]{@link module:alfresco/renderers/_ActionsMixin#mergeActions}) attribute is
+       * configured to be true (in which case both the actions defined on the "currentItem" will be rendered along
+       * with the actions defined in this array).
+       * 
+       * @instance
+       * @type {object[]}
+       * @default null
+       */
+      customActions: null,
+
+      /**
+       * Indicates whether or not actions should be filtered according to the
+       * [allowedActions array]{@link module:alfresco/renderers/_ActionsMixin#allowedActions}.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      filterActions: false,
+
+      /**
+       * This indicates that both actions defined on the "currentItem" as well as actions defined by the
+       * [customActions]{@link module:alfresco/renderers/_ActionsMixin#customActions} and
+       * [widgetsForActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions} will be rendered.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      mergeActions: false,
 
       /**
        * Handles parsing of [allowedActionsString]{@link module:alfresco/renderers/_ActionsMixin#allowedActionsString} if configured
@@ -130,9 +154,11 @@ define(["dojo/_base/declare",
       widgetsForActions: [
          {
             name: "alfresco/renderers/actions/UploadNewVersion"
+         },
+         {
+            name: "alfresco/renderers/actions/ManageAspects"
          }
       ],
-
 
       /**
        * Add the actions provided by the current item.
@@ -141,7 +167,14 @@ define(["dojo/_base/declare",
        */
       addActions: function alfresco_renderers__ActionsMixin__addActions() {
          // Iterate over the actions to create a menu item for each of them...
-         if (this.customActions && this.customActions.length > 0)
+         if (this.mergeActions === true)
+         {
+            // Add the actions on the currentItem and then add additional custom actions...
+            this.currentItem.actions && array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
+            this.customActions && array.forEach(this.customActions, lang.hitch(this, this.addAction));
+            this.processWidgetsForActions();
+         }
+         else if (this.customActions && this.customActions.length > 0)
          {
             array.forEach(this.customActions, lang.hitch(this, this.addAction));
          }
@@ -153,29 +186,51 @@ define(["dojo/_base/declare",
          {
             // Provide default actions based on sensible defaults evaluated based on the 
             // current item to be actioned...
-
-            // TODO: We probably want to avoid rendering all the actions until the menu is opened...
-            var actions = [];
-            array.forEach(this.widgetsForActions, function(action) {
-               if (action && action.name)
-               {
-                  require([action.name], function(config) {
-                     if (config)
-                     {
-                        // TODO: A potential future improvement here would be to allow replacement
-                        //       or augmentation of the default renderFilters.
-                        actions.push({
-                           name: "alfresco/menus/AlfMenuItem",
-                           config: config
-                        });
-                     }
-                  });
-               }
-            }, this);
-            this.processWidgets(actions);
+            this.processWidgetsForActions();
          }
       },
 
+      /**
+       * This function handles the creation of actions based on the 
+       * [widgetsForActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions} array. This
+       * aims to provide a sensible set of default actions based on the metadata of the current node.
+       * 
+       * @instance
+       */
+      processWidgetsForActions: function alfresco_renderers__ActionsMixin__processWidgetsForActions() {
+         // TODO: We probably want to avoid rendering all the actions until the menu is opened...
+         var idPrefix = this.id + "_";
+         var actions = [];
+         array.forEach(this.widgetsForActions, function(action) {
+            if (action && action.name)
+            {
+
+               require([action.name], function(config) {
+                  if (config)
+                  {
+                     var clonedConfig = lang.clone(config);
+                     clonedConfig.id = idPrefix + clonedConfig.id;
+
+                     // TODO: A potential future improvement here would be to allow replacement
+                     //       or augmentation of the default renderFilters.
+                     actions.push({
+                        name: "alfresco/menus/AlfMenuItem",
+                        config: clonedConfig
+                     });
+                  }
+               });
+            }
+         }, this);
+         this.processWidgets(actions);
+      },
+
+      /**
+       * This overrides the [inherited extension point]{@link module:alfresco/core/CoreWidgetProcessing#allWidgetsProcessed}
+       * to add each created action [menu item]{@link module:alfresco/menus/AlfMenuItem} to the menu.
+       * 
+       * @instance
+       * @param {object[]} widgets The widgets created (this is expected to be a single item)
+       */
       allWidgetsProcessed: function alfresco_renderers__ActionsMixin__allWidgetsProcessed(widgets) {
          array.forEach(widgets, function(widget) {
             this.actionsGroup.addChild(widget);
@@ -207,8 +262,10 @@ define(["dojo/_base/declare",
                action.label = this.processTokens(action.label, this.currentItem);
             }
 
+            var id = action.id ? (this.id + "_" + action.id) : null;
             var payload = (action.publishPayload) ? action.publishPayload : {document: this.currentItem, action: action};
             var menuItem = new AlfMenuItem({
+               id: id,
                label: action.label,
                iconImage: AlfConstants.URL_RESCONTEXT + "components/documentlibrary/actions/" + action.icon + "-16.png",
                type: action.type,

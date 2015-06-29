@@ -110,6 +110,7 @@ define(["alfresco/lists/views/layouts/Row",
           */
          widgetsAndAttachPoints: [{
             _attachPoint: "selector",
+            id: "DETAILED_VIEW_SELECTOR",
             name: "alfresco/renderers/Selector",
             config: {
                publishGlobal: false,
@@ -117,10 +118,12 @@ define(["alfresco/lists/views/layouts/Row",
             }
          }, {
             _attachPoint: "indicators",
+            id: "DETAILED_VIEW_INDICATORS",
             name: "alfresco/renderers/Indicators"
          }, {
             _attachPoint: "thumbnail",
             name: "alfresco/renderers/Thumbnail",
+            id: "DETAILED_VIEW_THUMBNAIL",
             config: {
                showDocumentPreview: true,
                publishGlobal: false,
@@ -128,20 +131,25 @@ define(["alfresco/lists/views/layouts/Row",
             }
          }, {
             _attachPoint: "lockedBanner",
+            id: "DETAILED_VIEW_LOCKED_BANNER",
             name: "alfresco/renderers/LockedBanner"
          }, {
             _attachPoint: "name",
+            id: "DETAILED_VIEW_NAME",
             name: "alfresco/renderers/InlineEditPropertyLink",
             config: {
                propertyToRender: "node.properties.cm:name",
                postParam: "prop_cm_name",
-               renderSize: "large"
+               renderSize: "large",
+               linkPublishGlobal: false,
+               linkPublishToParent: true
             }
          }, {
             _attachPoint: "title",
             _render: function(item) {
                return item.node.properties["cm:title"];
             },
+            id: "DETAILED_VIEW_TITLE",
             name: "alfresco/renderers/InlineEditProperty",
             config: {
                propertyToRender: "node.properties.cm:title",
@@ -154,21 +162,25 @@ define(["alfresco/lists/views/layouts/Row",
             _render: function(item) {
                return !item.node.isContainer && !(item.workingCopy && item.workingCopy.isWorkingCopy);
             },
+            id: "DETAILED_VIEW_VERSION",
             name: "alfresco/renderers/Version",
             config: {
                onlyShowOnHover: true
             }
          }, {
             _attachPoint: "date",
+            id: "DETAILED_VIEW_DATE",
             name: "alfresco/renderers/Date"
          }, {
             _attachPoint: "size",
             _render: function(item) {
                return !item.node.isContainer;
             },
+            id: "DETAILED_VIEW_SIZE",
             name: "alfresco/renderers/Size"
          }, {
             _attachPoint: "description",
+            id: "DETAILED_VIEW_DESCRIPTION",
             name: "alfresco/renderers/InlineEditProperty",
             config: {
                propertyToRender: "node.properties.cm:description",
@@ -181,6 +193,7 @@ define(["alfresco/lists/views/layouts/Row",
             _render: function(item) {
                return !(item.workingCopy && item.workingCopy.isWorkingCopy);
             },
+            id: "DETAILED_VIEW_TAGS",
             name: "alfresco/renderers/Tags",
             config: {
                propertyToRender: "node.properties.cm:taggable",
@@ -193,24 +206,28 @@ define(["alfresco/lists/views/layouts/Row",
             _render: function(item) {
                return item.node.properties["cm:categories"];
             },
+            id: "DETAILED_VIEW_CATEGORY",
             name: "alfresco/renderers/Category"
          }, {
             _attachPoint: "favourite",
             _render: function(item) {
                return !(item.workingCopy && item.workingCopy.isWorkingCopy);
             },
+            id: "DETAILED_VIEW_FAVOURITE",
             name: "alfresco/renderers/Favourite"
          }, {
             _attachPoint: "like",
             _render: function(item) {
                return !(item.workingCopy && item.workingCopy.isWorkingCopy);
             },
+            id: "DETAILED_VIEW_LIKE",
             name: "alfresco/renderers/Like"
          }, {
             _attachPoint: "comments",
             _render: function(item) {
                return !(item.workingCopy && item.workingCopy.isWorkingCopy);
             },
+            id: "DETAILED_VIEW_COMMENTS",
             name: "alfresco/renderers/Comments",
             config: {
                subscriptionTopic: "ALF_GET_COMMENTS_SUCCESS",
@@ -222,6 +239,7 @@ define(["alfresco/lists/views/layouts/Row",
             _render: function(item) {
                return !item.node.isContainer && !(item.workingCopy && item.workingCopy.isWorkingCopy);
             },
+            id: "DETAILED_VIEW_QUICKSHARE",
             name: "alfresco/renderers/QuickShare"
          }, {
             _attachPoint: "commentsReveal",
@@ -229,11 +247,13 @@ define(["alfresco/lists/views/layouts/Row",
             config: {
                subscriptionTopic: "ALF_REVEAL_COMMENTS",
                widgets: [{
+                  id: "DETAILED_VIEW_COMMENTS_LIST",
                   name: "alfresco/renderers/CommentsList"
                }]
             }
          }, {
             _attachPoint: "actions",
+            id: "DETAILED_VIEW_ACTIONS",
             name: "alfresco/renderers/Actions",
             config: {
                publishGlobal: false,

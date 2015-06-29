@@ -430,6 +430,11 @@ define(["dojo/_base/declare",
          // TODO: Merge configuration...
          var plugin = new PluginType(config);
          this.plugins[pluginName] = plugin;
+         if (!this.widgetsToDestroy)
+         {
+            this.widgetsToDestroy = [];
+         }
+         this.widgetsToDestroy.push(plugin);
          this.alfLog("log", "Created plugin: ", pluginName, plugin);
          return plugin;
       },
@@ -458,6 +463,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       setupPreview: function alfresco_preview_AlfDocumentPreview__setupPreview() {
+         // jshint maxcomplexity:false,maxstatements:false
 
          // Display the preparing previewer message
          this.messageNode.innerHTML = this.message("label.preparingPreviewer");

@@ -129,32 +129,27 @@ define(["dojo/_base/declare",
       },
 
       /**
-       *
+       * Handles requests to manage aspects by making a request to get the currently applied aspects for the 
+       * requested Node. This is always performed to ensure that the data is not stale.
+       * 
+       * @instance
        * @param {object} item The item to perform the action on
        */
       onManageAspects: function alfresco_services_actions_ManageAspectsService__onManageAspects(payload) {
-         if (payload && payload.item && payload.item.nodeRef)
+         if (payload && payload.node)
          {
-            // This is the array of aspects that are currently applied to the node. These will automatically
-            // be hidden from the list of available aspects to be applied...
-            var aspects = [];
-
-            // The aspects may already be available in the node data, if not they will need to be requested...
-            if (payload.item.node && payload.item.node.aspects)
-            {
-               // Aspects are already provided, use these...
-               array.forEach(payload.item.node.aspects, lang.hitch(this, this.processAspect, aspects));
-               this.showAspectsDialog(payload.item, aspects);
-            }
-            else
-            {
-               // We need to request the aspects for the current node...
-               this.onAspects(payload.item);
-            }
+            this.serviceXhr({
+               url: AlfConstants.PROXY_URI + "slingshot/doclib/aspects/node/" + payload.node.nodeRef.replace("://", "/"),
+               method: "GET",
+               item: payload,
+               successCallback: this.onAspectsSuccess,
+               failureCallback: this.onAspectsFailure,
+               callbackScope: this
+            });
          }
          else
          {
-            this.alfLog("warning", "A request was made to manage aspects, but no 'item.nodeRef' was provided in the 'payload' object", payload, this);
+            this.alfLog("warning", "A request was made to manage aspects, but no 'node' was provided in the 'payload' object", payload, this);
          }
       },
 
@@ -186,8 +181,6 @@ define(["dojo/_base/declare",
                {
                   name: "alfresco/forms/controls/SimplePicker",
                   config: {
-                     label: "services.actionservice.ManageAspects.label",
-                     description: "services.actionservice.ManageAspects.description",
                      name: "selectedAspects",
                      itemKey: this.itemKey,
                      propertyToRender: "label",
@@ -207,21 +200,6 @@ define(["dojo/_base/declare",
                }
             ]
          });
-      },
-
-      /**
-       * Handles requests to retrieve the currently applied aspects to the supplied item. It is expected that the
-       * item will have a "nodeRef" attribute.
-       * 
-       * @param {object} item The item to retrieve the currently applied aspects to.
-       */
-      onAspects: function alfresco_services_actions_ManageAspectsService__onAspects(item) {
-         this.serviceXhr({url: AlfConstants.PROXY_URI + "slingshot/doclib/aspects/node/" + item.nodeRef,
-                          method: "GET",
-                          item: item,
-                          successCallback: this.onAspectsSuccess,
-                          failureCallback: this.onAspectsFailure,
-                          callbackScope: this});
       },
 
       /**
@@ -329,7 +307,8 @@ define(["dojo/_base/declare",
             added: added,
             removed: removed
          };
-         this.serviceXhr({url: AlfConstants.PROXY_URI + "slingshot/doclib/aspects/node/" + payload.item.nodeRef,
+         var processedNodeRef = payload.item.node.nodeRef.replace("://", "/");
+         this.serviceXhr({url: AlfConstants.PROXY_URI + "slingshot/doclib/action/aspects/node/" + processedNodeRef,
                           method: "POST",
                           item: payload.item,
                           data: data,
@@ -388,6 +367,11 @@ define(["dojo/_base/declare",
        */
       onUpdateSuccess: function  alfresco_services_actions_ManageAspectsService__onUpdateSuccess(response, originalRequestConfig) {
          this.alfLog("info", "Aspects updated successfully", response, originalRequestConfig, this);
+         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            message: this.message("services.actionservice.ManageAspects.aspectUpdateSuccess", {
+               "0": originalRequestConfig.item.displayName
+            })
+         });
       },
 
       /**

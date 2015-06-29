@@ -187,6 +187,7 @@ define(["dojo/_base/declare",
        * @listens alfLoggingTopic
        */
       handleSubscription: function alfresco_services_LoggingService__handleSubscription() {
+         // jshint maxcomplexity:false
          if (this.loggingPreferences.enabled)
          {
             if (!this.logSubscriptionHandle)
@@ -197,7 +198,7 @@ define(["dojo/_base/declare",
             // Only log pub/sub activity if either all logging is enabled or PUBSUB logging has been
             // explicitly requested...
             if (this.loggingPreferences.all === true ||
-               this.loggingPreferences.pubSub === true)
+                this.loggingPreferences.pubSub === true)
             {
                if (!this.subLogSubscriptionHandle)
                {
@@ -367,41 +368,43 @@ define(["dojo/_base/declare",
        * @param  {object} [caller] A reference to the object that published the event
        */
       onPubSubLogRequest: function alfresco_services_LoggingService__onPubSubLogRequest(type, payload, caller) {
-         var event = {
-            type: type
-         };
-
-         // Build a custom object type depending on the log type
-         switch (type)
+         if (this.passesLoggingFilter(payload.alfCallerName))
          {
-            case "PUBLICATION":
-               event.topic = payload.alfPublishScope + payload.alfTopic;
-               event.payload = payload;
+            var event = {
+               type: type
+            };
 
-               // If the widget that triggered the publish has been passed, pass that through, highlighting the id.
-               if (caller)
-               {
-                  if (caller.id)
+            // Build a custom object type depending on the log type
+            switch (type)
+            {
+               case "PUBLICATION":
+                  event.topic = payload.alfPublishScope + payload.alfTopic;
+                  event.payload = payload;
+
+                  // If the widget that triggered the publish has been passed, pass that through, highlighting the id.
+                  if (caller)
                   {
-                     event.publisherId = caller.id;
+                     if (caller.id)
+                     {
+                        event.publisherId = caller.id;
+                     }
+                     event.publisher = caller;
                   }
-                  event.publisher = caller;
-               }
 
-               break;
-            case "SUBSCRIPTION":
-               event.topic = payload.subscribedTopic;
-               event.subscriberId = payload.subscriber.id;
-               event.subscriber = payload.subscriber;
-               break;
-            case "UNSUBSCRIPTION":
-               event.topic = payload.unsubscribedTopic;
-               event.subscriberId = payload.subscriber.id;
-               event.subscriber = payload.subscriber;
-               break;
+                  break;
+               case "SUBSCRIPTION":
+                  event.topic = payload.subscribedTopic;
+                  event.subscriberId = payload.subscriber.id;
+                  event.subscriber = payload.subscriber;
+                  break;
+               case "UNSUBSCRIPTION":
+                  event.topic = payload.unsubscribedTopic;
+                  event.subscriberId = payload.subscriber.id;
+                  event.subscriber = payload.subscriber;
+                  break;
+            }
+            console.log(event);
          }
-
-         console.log(event);
       },
 
       /**
@@ -412,6 +415,45 @@ define(["dojo/_base/declare",
        * @property callerName {string}
        * @property messageArgs {Object[]}
        */
+
+      /**
+       * Checks to see whether or not the current log request caller passes the logging filter.
+       *
+       * @instance
+       * @param {string} callerName The name of the function requesting logging.
+       * @return {boolean} true if the filter passes and false otherwise
+       */
+      passesLoggingFilter: function alfresco_services_LoggingService__passesLoggingFilter(callerName) {
+         var matchesFilter = true;
+         if (callerName && callerName !== "")
+         {
+            var fIndex = callerName.lastIndexOf("__"),
+                re1 = /([^_])_/g;
+            if (fIndex !== -1)
+            {
+               var mName = callerName.substring(0, fIndex);
+               var fName = callerName.substring(fIndex + 2);
+               callerName = mName.replace(re1, "$1/") + "[" + fName + "] >> ";
+            }
+            else
+            {
+               callerName = callerName + " >> ";
+            }
+         }
+         else
+         {
+            callerName = "";
+         }
+
+         // Check to see whether or not there is a log filter and if so, whether or
+         // not the current caller passes the filter...
+         if (this.loggingPreferences.filter)
+         {
+            var test = new RegExp(this.loggingPreferences.filter);
+            matchesFilter = test.test(callerName);
+         }
+         return matchesFilter;
+      },
 
       /**onLogRequest
        * @instance
@@ -424,41 +466,10 @@ define(["dojo/_base/declare",
              (this.loggingPreferences.all === true ||
               this.loggingPreferences[payload.severity] === true))
          {
-            // Call the console method passing all the additional arguments)...
-            var callerName = payload.callerName;
-            if (callerName && callerName !== "")
-            {
-               var fIndex = callerName.lastIndexOf("__"),
-                   re1 = /([^_])_/g;
-               if (fIndex !== -1)
-               {
-                  var mName = callerName.substring(0, fIndex);
-                  var fName = callerName.substring(fIndex + 2);
-                  callerName = mName.replace(re1, "$1/") + "[" + fName + "] >> ";
-               }
-               else
-               {
-                  callerName = callerName + " >> ";
-               }
-            }
-            else
-            {
-               callerName = "";
-            }
-
-            // Check to see whether or not there is a log filter and if so, whether or
-            // not the current caller passes the filter...
-            var matchesFilter = true;
-            if (this.loggingPreferences.filter)
-            {
-               var test = new RegExp(this.loggingPreferences.filter);
-               matchesFilter = test.test(callerName);
-            }
-
             // If the filter is mapped (or if there is no filter) output the log...
-            if (matchesFilter)
+            if (this.passesLoggingFilter(payload.callerName))
             {
-               payload.messageArgs[0] = callerName + payload.messageArgs[0];
+               payload.messageArgs[0] = (payload.callerName || "") + " >> " + payload.messageArgs[0];
                var logFunc = (typeof console[payload.severity] === "function" && payload.severity) || "log";
                console[logFunc].apply(console, payload.messageArgs);
             }

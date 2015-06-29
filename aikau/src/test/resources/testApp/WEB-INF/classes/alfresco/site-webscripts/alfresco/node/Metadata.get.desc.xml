@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Node Metadata</shortname>
+  <description>Shows an example of rendering Node metadata</description>
+  <family>aikau-unit-tests</family>
+  <url>/NodeMetadata</url>
+</webscript>

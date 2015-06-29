@@ -161,7 +161,7 @@ define(["dojo/_base/declare",
          this.sourceTarget = new Source(this.paletteNode, {
             copyOnly: !this.useItemsOnce,
             selfCopy: false,
-            accept: this.acceptTypes || [],
+            accept: lang.clone(this.acceptTypes) || [],
             selfAccept: this.selfAccept,
             creator: lang.hitch(this, this.creator),
             withHandles: this.dragWithHandles
@@ -259,6 +259,12 @@ define(["dojo/_base/declare",
                   addCallback: this.onItemAddedByKeyboard,
                   addCallbackScope: this
                });
+
+               // See AKU-379 - ensure use once items can only be added via the keyboard once...
+               if (this.useItemsOnce)
+               {
+                  this._selectedItem = null;
+               }
             }
          }
       },

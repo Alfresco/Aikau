@@ -1,3 +1,4 @@
+/* global page */
 // Switch search box configuration depending upon whether the page is loaded
 // with a site URI template or not...
 var searchBox;
@@ -72,7 +73,15 @@ model.jsonModel = {
          config: {
             alignment: "left",
             placeholder: "Won't show people",
-            showPeopleResults: false
+            showPeopleResults: false,
+            publishTopic: "CUSTOM_TOPIC",
+            publishPayload: {
+
+            },
+            publishPayloadType: "CONFIGURED",
+            publishPayloadItemMixin: true,
+            publishGlobal: true,
+            publishToParent: false
          }
       },
       {
@@ -82,7 +91,8 @@ model.jsonModel = {
             alignment: "left",
             placeholder: "Has hidden search terms",
             showPeopleResults: false,
-            hiddenSearchTerms: " secret squirrels"
+            hiddenSearchTerms: " secret squirrels",
+            advancedSearch: false
          }
       },
       {
