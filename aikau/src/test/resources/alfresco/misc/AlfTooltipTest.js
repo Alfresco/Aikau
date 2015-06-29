@@ -78,6 +78,7 @@ define(["intern!object",
       "Check tooltip is hidden": function() {
          return browser.findByCssSelector("#LIST2 tr:first-child .alfresco-renderers-Property .value")
             .moveMouseTo()
+            .sleep(500)
          .end()
          .findByCssSelector("#SINGLE_ITEM_TOOLTIP")
             .isDisplayed()
