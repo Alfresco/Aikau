@@ -157,7 +157,8 @@ define(["dojo/_base/declare",
          }, rowNode);
          domConstruct.create("td", {
             className: "mx-payload",
-            innerHTML: xhrRequest.requestBody || ""
+            innerHTML: xhrRequest.requestBody || "",
+            "data-aikau-xhr-payload": xhrRequest.requestBody || ""
          }, rowNode);
          var responseNode = domConstruct.create("td", {
             className: "mx-response",
@@ -187,8 +188,9 @@ define(["dojo/_base/declare",
             responseHtml += "<dd>" + responseText + "</dd>";
             responseHtml += "</dl>";
 
-            // Add a new row to the log
+            // Add a new row to the log and update the data attribute
             responseNode.innerHTML = responseHtml;
+            responseNode.setAttribute("data-aikau-xhr-response-text", responseText);
          });
       },
 
