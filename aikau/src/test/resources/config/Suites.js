@@ -62,6 +62,7 @@ define({
       "src/test/resources/alfresco/debug/WidgetInfoTest",
 
       "src/test/resources/alfresco/dashlets/DashletTest",
+      "src/test/resources/alfresco/dashlets/InfiniteScrollDashletTest",
 
       "src/test/resources/alfresco/dnd/AlternateEditorTest",
       "src/test/resources/alfresco/dnd/DndTest",
