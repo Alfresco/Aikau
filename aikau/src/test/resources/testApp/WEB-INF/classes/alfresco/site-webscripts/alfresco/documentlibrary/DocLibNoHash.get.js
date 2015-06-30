@@ -1,23 +1,24 @@
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/doclib/doclib.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/service-filtering.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/doclib/doclib.lib.js">
+
+var pageServices = [
+   {
+      name: "alfresco/services/LoggingService",
+      config: {
+         loggingPreferences: {
+            enabled: true,
+            all: true
+         }
+      }
+   },
+   "alfresco/services/NavigationService",
+   "alfresco/services/LogoutService"];
+
+var docLibServices = getDocumentLibraryServices();
+var services = alfAddUniqueServices(pageServices, docLibServices);
 
 model.jsonModel = {
-   services: [
-      {
-         name: "alfresco/services/LoggingService",
-         config: {
-            loggingPreferences: {
-               enabled: true,
-               all: true
-            }
-         }
-      },
-      "alfresco/services/NavigationService",
-      "alfresco/services/DocumentService",
-      "alfresco/services/DialogService",
-      "alfresco/services/ContentService",
-      "alfresco/services/ActionService",
-      "alfresco/services/UploadService"
-   ],
+   services: services,
    widgets: [
       getDocLib({
          siteId: "site1", 
@@ -25,7 +26,8 @@ model.jsonModel = {
          rootNode: null, 
          rootLabel: "Documents",
          useHash: false,
-         pubSubScope: "TEST_"
+         pubSubScope: "TEST_",
+         getUserPreferences: false
       }),
       {
          name: "aikauTesting/mockservices/FullDocLibMockXhr"
