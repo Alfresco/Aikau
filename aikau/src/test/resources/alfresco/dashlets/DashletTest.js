@@ -96,7 +96,7 @@ define(["alfresco/TestCommon",
             return browser.findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__body__widgets")
                .getSize()
                .then(function(size) {
-                  assert.equal(size.height, (300 + 20), "Body not equal to set height (300) plus padding");
+                  assert.equal(size.height, 300, "Body not equal to set height");
                });
          },
 
@@ -111,7 +111,7 @@ define(["alfresco/TestCommon",
 
             .getLastPublish("VALID_ID_ALF_STORE_DASHLET_HEIGHT_SUCCESS")
                .then(function(payload) {
-                  assert.deepPropertyVal(payload, "requestConfig.data.height", 270, "Did not publish new height");
+                  assert.deepPropertyVal(payload, "requestConfig.data.height", 250, "Did not publish new height");
                });
          },
 
