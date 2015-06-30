@@ -39,8 +39,6 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/DashletService",
-      "alfresco/services/NotificationService",
       {
          name: "aikauTesting/mockservices/PaginationService",
          config: {
@@ -65,30 +63,6 @@ model.jsonModel = {
                      pubSubScope: "BELOW_",
                      title: "Dashlet (height BELOW scroll tolerance)",
                      bodyHeight: 200,
-                     widgetsForTitleBarActions: [
-                        {
-                           name: "alfresco/html/Label",
-                           config: {
-                              label: "Title-bar actions"
-                           }
-                        }
-                     ],
-                     widgetsForToolbar: [
-                        {
-                           name: "alfresco/html/Label",
-                           config: {
-                              label: "Toolbar"
-                           }
-                        }
-                     ],
-                     widgetsForToolbar2: [
-                        {
-                           name: "alfresco/html/Label",
-                           config: {
-                              label: "Toolbar2"
-                           }
-                        }
-                     ],
                      widgetsForBody: [
                         {
                            name: "alfresco/layout/InfiniteScrollArea",
@@ -96,7 +70,7 @@ model.jsonModel = {
                               scrollTolerance: 300,
                               widgets: [
                                  {
-                                    id: "INFITE_SCROLL_LIST_1",
+                                    id: "INFINITE_SCROLL_LIST_1",
                                     name: "alfresco/lists/AlfSortablePaginatedList",
                                     config: {
                                        useHash: false,
@@ -119,30 +93,6 @@ model.jsonModel = {
                      pubSubScope: "ABOVE_",
                      title: "(height ABOVE scroll tolerance)",
                      bodyHeight: 500,
-                     widgetsForTitleBarActions: [
-                        {
-                           name: "alfresco/html/Label",
-                           config: {
-                              label: "Title-bar actions"
-                           }
-                        }
-                     ],
-                     widgetsForToolbar: [
-                        {
-                           name: "alfresco/html/Label",
-                           config: {
-                              label: "Toolbar"
-                           }
-                        }
-                     ],
-                     widgetsForToolbar2: [
-                        {
-                           name: "alfresco/html/Label",
-                           config: {
-                              label: "Toolbar2"
-                           }
-                        }
-                     ],
                      widgetsForBody: [
                         {
                            name: "alfresco/layout/InfiniteScrollArea",
@@ -150,7 +100,7 @@ model.jsonModel = {
                               scrollTolerance: 300,
                               widgets: [
                                  {
-                                    id: "INFITE_SCROLL_LIST_2",
+                                    id: "INFINITE_SCROLL_LIST_2",
                                     name: "alfresco/lists/AlfSortablePaginatedList",
                                     config: {
                                        useHash: false,
@@ -167,9 +117,6 @@ model.jsonModel = {
                }
             ]
          }
-      },
-      {
-         name: "aikauTesting/mockservices/DashletServiceMockXhr"
       },
       {
          name: "alfresco/logging/DebugLog"
