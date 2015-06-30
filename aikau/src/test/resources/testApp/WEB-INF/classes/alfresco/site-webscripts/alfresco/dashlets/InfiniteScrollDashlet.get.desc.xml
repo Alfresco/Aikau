@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Infinite Scroll Dashlet</shortname>
+  <description>This page shows a dashlet containing a list configured with infinite scrolling</description>
+  <family>aikau-unit-tests</family>
+  <url>/InfiniteScrollDashlet</url>
+</webscript>

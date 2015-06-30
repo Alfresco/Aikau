@@ -289,7 +289,7 @@ define(["dojo/_base/declare",
             this.processContainer(this.widgetsForToolbar, this.toolbarNode);
             this.processContainer(this.widgetsForToolbar2, this.toolbar2Node);
             if (this.bodyHeight) {
-               domStyle.set(this.bodyNode, "height", this.bodyHeight + "px");
+               domStyle.set(this.bodyWidgetsNode, "height", this.bodyHeight + "px");
             }
             this.processContainer(this.widgetsForBody, this.bodyWidgetsNode);
             if (this.componentId && !this.resizeDisabled) {

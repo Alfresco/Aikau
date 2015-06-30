@@ -82,7 +82,7 @@ define(["alfresco/core/Core",
           *                        [functionUtils debounce method]{@link module:alfresco/util/functionUtils#debounce}
           * @return {Object} An object containing a remove() function which will clear any outstanding publish
           */
-          debouncedPublish: function alfresco_core_Core__debouncedPublish(topic, payload, global, parentScope, args) {
+          debouncedPublish: function alfresco_core__EventsMixin__debouncedPublish(topic, payload, global, parentScope, args) {
             var publishFunc = lang.hitch(this, this.alfPublish, topic, payload, global, parentScope),
                debounceArgs = lang.mixin({
                   name: topic,
@@ -103,7 +103,7 @@ define(["alfresco/core/Core",
           *                        [functionUtils throttle method]{@link module:alfresco/util/functionUtils#throttle}
           * @return {Object} An object containing a remove() function which will clear any outstanding publish
           */
-         throttledPublish: function(topic, payload, global, parentScope, args) {
+         throttledPublish: function alfresco_core__EventsMixin__throttledPublish(topic, payload, global, parentScope, args) {
             var publishFunc = lang.hitch(this, this.alfPublish, topic, payload, global, parentScope),
                throttleArgs = lang.mixin({
                   name: topic,
@@ -120,7 +120,7 @@ define(["alfresco/core/Core",
           * @param {Object} [scrollNode=window] The scroll node
           * @return {Object} The scroll-listener, which contains a remove() function which can be called to release the listener
           */
-         publishScrollEvents: function(scrollNode) {
+         publishScrollEvents: function alfresco_core__EventsMixin__publishScrollEvents(scrollNode) {
             var nodeToMonitor = scrollNode || window,
                scrollListener = on(nodeToMonitor, "scroll", lang.hitch(this, this.debouncedPublish, this.eventsScrollTopic, {
                   node: nodeToMonitor
@@ -136,7 +136,7 @@ define(["alfresco/core/Core",
           * @instance
           * @return {Object} The resize-listener, which contains a remove() function which can be called to release the listener
           */
-         publishResizeEvents: function() {
+         publishResizeEvents: function alfresco_core__EventsMixin__publishResizeEvents() {
             var resizeListener = on(window, "resize", lang.hitch(this, this.debouncedPublish, this.eventsResizeTopic));
             this.own && this.own(resizeListener);
             return resizeListener;
