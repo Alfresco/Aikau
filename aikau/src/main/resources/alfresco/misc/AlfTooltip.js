@@ -235,8 +235,8 @@ define(["dojo/_base/declare",
                id: this.id + "_TOOLTIP",
                style: this.tooltipStyle,
                content: this.dialogContent,
-               onMouseEnter: lang.hitch(this, this.onTooltipMouseover),
-               onMouseLeave: lang.hitch(this, this.onTooltipMouseout)
+               onMouseEnter: lang.hitch(this, this.onTooltipMouseEnter),
+               onMouseLeave: lang.hitch(this, this.onTooltipMouseLeave)
             });
          }
          popup.open({
@@ -282,21 +282,41 @@ define(["dojo/_base/declare",
          }
       },
 
-      onMouseover: function(){
+      /**
+       * Handle mousing-over the widget.
+       *
+       * @instance
+       */
+      onMouseover: function alfresco_misc_AlfTooltip__onMouseover() {
          clearTimeout(this._hideTooltipTimeout);
          this._showTooltipTimeout = setTimeout(lang.hitch(this, this.showTooltip), this.mouseoverShowDelay);
       },
 
-      onMouseout: function(){
+      /**
+       * Handle mousing-out of the widget.
+       *
+       * @instance
+       */
+      onMouseout: function alfresco_misc_AlfTooltip__onMouseout() {
          clearTimeout(this._showTooltipTimeout);
          this._hideTooltipTimeout = setTimeout(lang.hitch(this, this.hideTooltip), this.mouseoutHideDelay);
       },
 
-      onTooltipMouseover: function(){
+      /**
+       * Handle mousing-over the tooltip.
+       *
+       * @instance
+       */
+      onTooltipMouseEnter: function alfresco_misc_AlfTooltip__onTooltipMouseEnter() {
          clearTimeout(this._hideTooltipTimeout);
       },
 
-      onTooltipMouseout: function(){
+      /**
+       * Handle mousing-out of the tooltip.
+       *
+       * @instance
+       */
+      onTooltipMouseLeave: function alfresco_misc_AlfTooltip__onTooltipMouseLeave() {
          this._hideTooltipTimeout = setTimeout(lang.hitch(this, this.hideTooltip), this.mouseoutHideDelay);
       }
    });

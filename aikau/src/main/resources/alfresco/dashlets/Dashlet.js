@@ -184,15 +184,6 @@ define(["dojo/_base/declare",
          titleConfig: null,
 
          /**
-          * The container that holds the title.
-          * Will be populated by dojo.
-          *
-          * @instance
-          * @type {HTMLElement}
-          */
-         titleNode: null,
-
-         /**
           * Widgets to place as title bar actions.
           *
           * @instance
@@ -223,42 +214,6 @@ define(["dojo/_base/declare",
           * @type {object[]}
           */
          widgetsForBody: null,
-
-         /**
-          * The container that holds the title bar action widgets.
-          * Will be populated by dojo.
-          *
-          * @instance
-          * @type {HTMLElement}
-          */
-         titleBarActionsNode: null,
-
-         /**
-          * The container that holds the first toolbar widgets.
-          * Will be populated by dojo.
-          *
-          * @instance
-          * @type {HTMLElement}
-          */
-         toolbarNode: null,
-
-         /**
-          * The container that holds the title second tollbar widgets.
-          * Will be populated by dojo.
-          *
-          * @instance
-          * @type {HTMLElement}
-          */
-         toolbar2Node: null,
-
-         /**
-          * The container that holds the body widgets.
-          * Will be populated by dojo.
-          *
-          * @instance
-          * @type {HTMLElement}
-          */
-         bodyNode: null,
 
          /**
           * Explicit height in pixels of the dashlet body
