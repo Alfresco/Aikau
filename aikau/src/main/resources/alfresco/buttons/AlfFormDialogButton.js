@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -47,6 +47,7 @@
  * @extends alfresco/menus/AlfMenuItem
  * @mixes module:alfresco/dialogs/_AlfCreateFormDialogMixin
  * @author Dave Draper
+ * @deprecated Since 1.0.25 - use the [DialogService]{@link module:alfresco/services/DialogService} instead.
  */
 define(["dojo/_base/declare",
         "alfresco/buttons/AlfButton",
