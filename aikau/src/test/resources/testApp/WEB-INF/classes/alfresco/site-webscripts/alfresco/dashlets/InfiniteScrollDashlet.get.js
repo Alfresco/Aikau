@@ -61,6 +61,7 @@ model.jsonModel = {
                   id: "BELOW_DASHLET",
                   config: {
                      additionalCssClasses: "smallpad",
+                     componentId: "component.dashlet-id",
                      pubSubScope: "BELOW_",
                      title: "Dashlet (height BELOW scroll tolerance)",
                      bodyHeight: 200,
