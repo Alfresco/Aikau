@@ -62,7 +62,7 @@ model.jsonModel = {
                      componentId: "component.dashlet-id",
                      pubSubScope: "BELOW_",
                      title: "Dashlet (height BELOW scroll tolerance)",
-                     bodyHeight: 200,
+                     bodyHeight: 175,
                      widgetsForBody: [
                         {
                            name: "alfresco/layout/InfiniteScrollArea",
@@ -75,7 +75,7 @@ model.jsonModel = {
                                     config: {
                                        useHash: false,
                                        useInfiniteScroll: true,
-                                       currentPageSize: 10,
+                                       currentPageSize: 5,
                                        widgets: [view]
                                     }
                                  }

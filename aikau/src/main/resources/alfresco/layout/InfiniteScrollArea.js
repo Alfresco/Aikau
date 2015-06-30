@@ -57,9 +57,10 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
+        "dojo/_base/lang",
         "alfresco/core/ProcessWidgets",
         "alfresco/services/InfiniteScrollService"], 
-        function(declare, ProcessWidgets, InfiniteScrollService) {
+        function(declare, lang, ProcessWidgets, InfiniteScrollService) {
    
    return declare([ProcessWidgets, InfiniteScrollService], {
       
@@ -85,6 +86,15 @@ define(["dojo/_base/declare",
       _registerScrollListenerImmediately: false,
 
       /**
+       * The constructor
+       *
+       * @instance
+       */
+      constructor: function() {
+         this.alfSubscribe(this.eventsResizeTopic, lang.hitch(this, this.onEventsResize));
+      },
+
+      /**
        * Extends the [inherited function]{@link module:alfresco/core/ProcessWidgets#postCreate} to
        * set the mixed in [element]{@link module:alfresco/core/_EventsMixin#scrollElement}
        * to detect scroll position on
@@ -94,6 +104,21 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_layout_InfiniteScrollArea__postCreate() {
          this.inherited(arguments);
          this.publishScrollEvents(this.domNode.parentNode);
+         this.publishResizeEvents(this.domNode.parentNode);
+      },
+
+      /**
+       * Handle resize events on the parent node
+       *
+       * @instance
+       * @param {Object} payload The payload from the resize
+       */
+      onEventsResize: function alfresco_layout_InfiniteScrollArea__onEventsResize(payload) {
+         if (payload.node === this.domNode.parentNode) {
+            this.alfPublish("ALF_EVENTS_SCROLL", {
+               node: payload.node
+            });
+         }
       }
    });
 });

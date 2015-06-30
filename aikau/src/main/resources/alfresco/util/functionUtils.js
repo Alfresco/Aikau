@@ -48,7 +48,7 @@ define(["dojo/_base/lang"],
           * @type {number}
           * @default
           */
-         defaultThrottleMs: 100,
+         defaultThrottleMs: 250,
 
          /**
           * A holder for the debounce-functionality pointers/variables, where the keys are the names provided to the
