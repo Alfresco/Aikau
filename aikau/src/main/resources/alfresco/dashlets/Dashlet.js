@@ -316,7 +316,7 @@ define(["dojo/_base/declare",
           * @param {object} ui The data about the resize
           */
          onResize: function alfresco_layout_AlfSideBarContainer__onResize( /*jshint unused:false*/ evt, /*jshint unused:false*/ ui) {
-            this.bodyHeight = this.bodyNode.clientHeight - 15; // The bottom-padding that the resize bar lives in
+            this.bodyHeight = this.bodyNode.clientHeight;
             this.alfPublishResizeEvent(this.bodyNode);
          },
 
