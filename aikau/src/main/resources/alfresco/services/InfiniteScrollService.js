@@ -25,21 +25,19 @@
  * @module alfresco/services/InfiniteScrollService
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
- * @mixes module:alfresco/core/Events
- * @mixes module:alfresco/core/AlfCoreEventsTopicMixin
+ * @mixes module:alfresco/core/_EventsMixin
  * @author david.webster@alfresco.com
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
-        "alfresco/core/Events",
-        "alfresco/core/EventsTopicMixin",
+        "alfresco/core/_EventsMixin",
         "alfresco/core/DomElementUtils",
         "dojo/dom-geometry"],
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, lang, AlfCoreEvents, AlfCoreEventsTopicMixin, AlfDomUtils, domGeom) {
+        function(declare, AlfCore, _AlfDocumentListTopicMixin, lang, _EventsMixin, AlfDomUtils, domGeom) {
 
-   return declare([AlfCore, _AlfDocumentListTopicMixin, AlfCoreEvents, AlfCoreEventsTopicMixin, AlfDomUtils], {
+   return declare([AlfCore, _AlfDocumentListTopicMixin, _EventsMixin, AlfDomUtils], {
 
       /**
        * Used to keep track of the current status of the InfiniteScroll
@@ -62,14 +60,15 @@ define(["dojo/_base/declare",
       scrollTolerance: 500,
 
       /**
-       * This overrides the [inherited default]{@link module:alfresco/services/InfiniteScrollService#_deferEventListenerRegistration}
-       * to ensure that the [registerEventListeners function]{@link module:alfresco/core/Events#registerEventListeners} is not called.
+       * By default, the [publishScrollEvents function]{@link module:alfresco/core/_EventsMixin#publishScrollEvents}
+       * will be called in the constructor. If overridden and set to false then it will not, and should instead be
+       * called manually later on.
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
-      _deferEventListenerRegistration: false,
+      _registerScrollListenerImmediately: true,
 
       /**
        * @instance
@@ -81,9 +80,9 @@ define(["dojo/_base/declare",
          declare.safeMixin(this, args);
 
          // Register the events listeners...
-         if (!this._deferEventListenerRegistration)
+         if (this._registerScrollListenerImmediately)
          {
-            this.registerEventListeners();
+            this.publishScrollEvents();
          }
          
          // hook point to allow other widgets to let us know when they're done processing a scroll request.
@@ -103,8 +102,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onEventsScroll: function alfresco_services_InfiniteScrollService__onEventsScroll(/*jshint unused:false*/ payload) {
-         if (this.nearBottom() && !this.dataloadInProgress) {
+      onEventsScroll: function alfresco_services_InfiniteScrollService__onEventsScroll(payload) {
+         if (this.nearBottom(payload.node) && !this.dataloadInProgress) {
             this.dataloadInProgress = true;
             this.alfPublish(this.scrollNearBottom);
          }
@@ -121,26 +120,27 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The calculation to determine if we're at or close to the bottom of the page yet or now.
-       * "close to" bottom is defined by scrollTolerance var.
+       * Determine if we're at or close to the bottom of the monitored node as defined by the
+       * [scrollTolerance variable]{@link module:alfresco/services/InfiniteScrollService#scrollTolerance}.
        *
        * @instance
+       * @param {Object} scrollNode The node being scrolled
        * @returns {boolean}
        */
-      nearBottom: function alfresco_services_InfiniteScrollService__nearBottom() {
-         if (this.scrollElement)
-         {
-            var scrollPos = this.scrollElement.scrollTop;
-            var height = this.domNode.offsetHeight;
-            return 0 >= (height - scrollPos - this.scrollTolerance);
+      nearBottom: function alfresco_services_InfiniteScrollService__nearBottom(scrollNode) {
+         var scrollHeight,
+            clientHeight,
+            scrollTop;
+         if(scrollNode === window) {
+            scrollHeight = document.body.offsetHeight;
+            clientHeight = window.innerHeight;
+            scrollTop = window.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+         } else {
+            scrollHeight= scrollNode.scrollHeight ;
+            clientHeight= scrollNode.clientHeight;
+            scrollTop= scrollNode.scrollTop;
          }
-         else
-         {
-            var currentScrollPos = domGeom.docScroll().y;
-            var docHeight = this.getDocumentHeight();
-            var viewport = domGeom.getContentBox(document.body).h;
-            return 0 >= (docHeight - viewport - currentScrollPos - this.scrollTolerance);
-         }
+         return (scrollHeight - clientHeight - scrollTop) < this.scrollTolerance;
       }
    });
 });

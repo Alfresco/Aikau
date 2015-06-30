@@ -25,21 +25,21 @@
 define({
 
    /**
-    * This is the base array of non-functional test suites
+    * This is the base array of functional test suites
     *
     * @instance
-    * @type [string]
+    * @type {string[]}
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/forms/controls/BaseFormTest"
+      "src/test/resources/alfresco/dashlets/DashletTest"
    ],
 
    /**
     * This is the base array of functional test suites
     *
     * @instance
-    * @type [string]
+    * @type {string[]}
     */
    baseFunctionalSuites: [
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
@@ -60,6 +60,9 @@ define({
       "src/test/resources/alfresco/creation/WidgetConfigTest",
 
       "src/test/resources/alfresco/debug/WidgetInfoTest",
+
+      "src/test/resources/alfresco/dashlets/DashletTest",
+      "src/test/resources/alfresco/dashlets/InfiniteScrollDashletTest",
 
       "src/test/resources/alfresco/dnd/AlternateEditorTest",
       "src/test/resources/alfresco/dnd/DndTest",
@@ -86,6 +89,7 @@ define({
 
       "src/test/resources/alfresco/footer/FooterTest",
 
+      "src/test/resources/alfresco/forms/AutoSaveFormsTest",
       "src/test/resources/alfresco/forms/ControlRowTest",
       "src/test/resources/alfresco/forms/CrudFormTest",
       "src/test/resources/alfresco/forms/DynamicFormTest",
@@ -148,6 +152,7 @@ define({
       "src/test/resources/alfresco/menus/AlfMenuBarSelectItemsTest",
       "src/test/resources/alfresco/menus/AlfMenuBarSelectTest",
       "src/test/resources/alfresco/menus/AlfMenuBarToggleTest",
+      "src/test/resources/alfresco/menus/AlfMenuItemTest",
       "src/test/resources/alfresco/menus/AlfMenuItemWrapperTest",
       "src/test/resources/alfresco/menus/AlfMenuTextForClipboardTest",
       "src/test/resources/alfresco/menus/AlfVerticalMenuBarTest",
@@ -214,14 +219,16 @@ define({
       "src/test/resources/alfresco/services/actions/NodeLocationTest",
       "src/test/resources/alfresco/services/actions/WorkflowTest",
 
-      "src/test/resources/alfresco/upload/UploadTest"
+      "src/test/resources/alfresco/upload/UploadTest",
+
+      "src/test/resources/alfresco/util/functionUtilsTest"
    ],
 
    /**
     * This is the array of functional test suites that should only be applied to local tests
     *
     * @instance
-    * @type [string]
+    * @type {string[]}
     */
    localOnlyFunctionalSuites: [],
 
@@ -229,7 +236,7 @@ define({
     * This is the full array of functional test suites for local tests
     *
     * @instance
-    * @type [string]
+    * @type {Function}
     */
    localFunctionalSuites: function localFunctionalSuites() {
       return this.baseFunctionalSuites.concat(this.localOnlyFunctionalSuites);
@@ -239,7 +246,7 @@ define({
     * This is the array of functional test suites that should only be applied to virtual machine tests
     *
     * @instance
-    * @type [string]
+    * @type {string[]}
     */
    vmOnlyFunctionalSuites: ["src/test/resources/alfresco/CodeCoverageBalancer"],
 
@@ -247,7 +254,7 @@ define({
     * This is the full array of functional test suites for virtual machine tests
     *
     * @instance
-    * @type [string]
+    * @type {Function}
     */
    vmFunctionalSuites: function vmFunctionalSuites() {
       return this.baseFunctionalSuites.concat(this.vmOnlyFunctionalSuites);
@@ -257,7 +264,7 @@ define({
     * This is the array of functional test suites that should only be applied to sauce labs tests
     *
     * @instance
-    * @type [string]
+    * @type {string[]}
     */
    slOnlyFunctionalSuites: [],
 
@@ -265,7 +272,7 @@ define({
     * This is the full array of functional test suites for sauce labs tests
     *
     * @instance
-    * @type [string]
+    * @type {Function}
     */
    slFunctionalSuites: function slFunctionalSuites() {
       return this.baseFunctionalSuites.concat(this.slOnlyFunctionalSuites);
@@ -275,7 +282,7 @@ define({
     * This is the array of functional test suites that should only be applied to selenium grid tests
     *
     * @instance
-    * @type [string]
+    * @type {string[]}
     */
    gridOnlyFunctionalSuites: [],
 
@@ -283,7 +290,7 @@ define({
     * This is the full array of functional test suites for selenium grid tests
     *
     * @instance
-    * @type [string]
+    * @type {Function}
     */
    gridFunctionalSuites: function gridFunctionalSuites() {
       return this.baseFunctionalSuites.concat(this.gridOnlyFunctionalSuites);

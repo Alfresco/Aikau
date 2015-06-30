@@ -295,7 +295,7 @@ define(["dojo/_base/declare",
 
             // TODO: DD: Not keen on the fact that somehow this "document" specific stuff has crept in here...
             //           Ideally it shouldn't be there...
-            var payload = this.generatePayload((this.publishPayload) ? this.publishPayload : {document: this.currentItem}, this.currentItem, null, this.publishPayloadType, this.publishPayloadItemMixin);
+            var payload = this.generatePayload((this.publishPayload) ? this.publishPayload : {document: this.currentItem}, this.currentItem, null, this.publishPayloadType, this.publishPayloadItemMixin, this.publishPayloadModifiers);
             this.alfPublish(this.publishTopic, payload, publishGlobal, publishToParent);
          }
          else

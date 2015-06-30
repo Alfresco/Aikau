@@ -1393,8 +1393,6 @@ define(["dojo/_base/declare",
             {
                this.deferredValuePublication.resolve();
             }
-
-            this.validate();
          }
          else
          {

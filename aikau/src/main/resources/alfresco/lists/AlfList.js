@@ -158,7 +158,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       setupSubscriptions: function alfresco_lists_AlfList__setupSubscriptions() {
-         this.alfSubscribe(this.reloadDataTopic, lang.hitch(this, this.loadData));
+         this.alfSubscribe(this.reloadDataTopic, lang.hitch(this, this.onReloadData));
          this.alfSubscribe(this.viewSelectionTopic, lang.hitch(this, this.onViewSelected));
          this.alfSubscribe(this.loadDataPublishTopic + "_SUCCESS", lang.hitch(this, this.onDataLoadSuccess));
          this.alfSubscribe(this.loadDataPublishTopic + "_FAILURE", lang.hitch(this, this.onDataLoadFailure));
@@ -796,6 +796,18 @@ define(["dojo/_base/declare",
 
          // Tell the view that it's now on display...
          view.onViewShown();
+      },
+
+      /**
+       * Handles requests to reload the current list data by clearing all the previous data and then calling
+       * [loadData]{@link module:alfresco/lists/AlfList#loadData}.
+       * 
+       * @instance
+       */
+      onReloadData: function alfresco_lists_AlfList__onReloadData() {
+         this.hideChildren(this.domNode);
+         this.clearViews();
+         this.loadData();
       },
 
       /**

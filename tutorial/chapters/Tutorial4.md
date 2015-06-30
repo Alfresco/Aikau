@@ -127,7 +127,7 @@ And you should see the following (when you scroll down to the bottom of the page
 
 Using this log is one of the best ways of seeing exactly how widgets are attempting to communicate with one another and is a useful tool to use when trying to get to resolve issues on your page.
 
-
+_You can [download the project files from here](../resources/aikau-tutorial_004.zip?raw=true) as they exist at the end of this tutorial._
 
 Previous: [Create a Composite Widget](./Tutorial3.md),
 Next: [Variable Substitutions in Models](./Tutorial5.md)

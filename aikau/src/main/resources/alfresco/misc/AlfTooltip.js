@@ -50,6 +50,35 @@
  *       }
  *    ]
  * }
+ * 
+ * @example <caption>Example configuration with longer delay before displaying:</caption>
+ * {
+ *    name: "alfresco/layout/ClassicWindow",
+ *    config: {
+ *    title: "Tooltip displays on mouse over logo",
+ *    widgets: [
+ *       {
+ *          name: "alfresco/misc/AlfTooltip",
+ *          config: {
+ *             mouseoverShowDelay: 1000,
+ *             widgets: [
+ *                {
+ *                   name: "alfresco/logo/Logo"
+ *                }
+ *             ],
+ *             widgetsForTooltip: [
+ *                {
+ *                   name: "alfresco/html/Label",
+ *                   config: {
+ *                      label: "This is the tooltip content"
+ *                   }
+ *                }
+ *             ]
+ *          }
+ *       }
+ *    ]
+ * }
+ * 
  * @example <caption>Example configuration using a click event rather than hover and width styling:</caption>
  * {
  *    name: "alfresco/layout/ClassicWindow",
@@ -84,6 +113,7 @@
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
@@ -156,12 +186,47 @@ define(["dojo/_base/declare",
       triggeringEvent: "mouseover",
 
       /**
-       * This is called to display the tooltip when the mouse goes over the target area. If the 
-       * tooltip hasn't been created at this point then it will be created.
+       * How long (ms) to delay displaying the tooltip on mouseover-triggered tooltips.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      mouseoverShowDelay: 250,
+
+      /**
+       * How long (ms) to delay hiding the tooltip on mouseover-triggered tooltips.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      mouseoutHideDelay: 250,
+
+      /**
+       * The pointer for the timeout that will display a tooltip
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      _showTooltipTimeout: 0,
+
+      /**
+       * The pointer for the timeout that will hide a tooltip
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      _hideTooltipTimeout: 0,
+
+      /**
+       * This is called to display the tooltip. If the tooltip hasn't been created at this point then it will be created.
        * 
        * @instance
        */
-      onShowTooltip: function alfresco_misc_AlfTooltip__onShowTooltip() {
+      showTooltip: function alfresco_misc_AlfTooltip__showTooltip() {
          if (!this._tooltip)
          {
             this.dialogContent = domConstruct.create("div");
@@ -170,7 +235,8 @@ define(["dojo/_base/declare",
                id: this.id + "_TOOLTIP",
                style: this.tooltipStyle,
                content: this.dialogContent,
-               onMouseLeave: lang.hitch(this, this.onHideTooltip)
+               onMouseEnter: lang.hitch(this, this.onTooltipMouseEnter),
+               onMouseLeave: lang.hitch(this, this.onTooltipMouseLeave)
             });
          }
          popup.open({
@@ -184,7 +250,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      onHideTooltip: function alfresco_misc_AlfTooltip__onHideTooltip() {
+      hideTooltip: function alfresco_misc_AlfTooltip__hideTooltip() {
          popup.close(this._tooltip);
       },
 
@@ -198,7 +264,12 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_misc_AlfTooltip__postCreate() {
          if (this.widgetsForTooltip)
          {
-            on(this.domNode, this.triggeringEvent, lang.hitch(this, this.onShowTooltip));
+            if (this.triggeringEvent === "mouseover") {
+               on(this.domNode, "mouseover", lang.hitch(this, this.onMouseover));
+               on(this.domNode, "mouseout", lang.hitch(this, this.onMouseout));
+            } else {
+               on(this.domNode, this.triggeringEvent, lang.hitch(this, this.showTooltip));
+            }
          }
          else
          {
@@ -209,6 +280,44 @@ define(["dojo/_base/declare",
          {
             this.processWidgets(this.widgets, this.domNode);
          }
+      },
+
+      /**
+       * Handle mousing-over the widget.
+       *
+       * @instance
+       */
+      onMouseover: function alfresco_misc_AlfTooltip__onMouseover() {
+         clearTimeout(this._hideTooltipTimeout);
+         this._showTooltipTimeout = setTimeout(lang.hitch(this, this.showTooltip), this.mouseoverShowDelay);
+      },
+
+      /**
+       * Handle mousing-out of the widget.
+       *
+       * @instance
+       */
+      onMouseout: function alfresco_misc_AlfTooltip__onMouseout() {
+         clearTimeout(this._showTooltipTimeout);
+         this._hideTooltipTimeout = setTimeout(lang.hitch(this, this.hideTooltip), this.mouseoutHideDelay);
+      },
+
+      /**
+       * Handle mousing-over the tooltip.
+       *
+       * @instance
+       */
+      onTooltipMouseEnter: function alfresco_misc_AlfTooltip__onTooltipMouseEnter() {
+         clearTimeout(this._hideTooltipTimeout);
+      },
+
+      /**
+       * Handle mousing-out of the tooltip.
+       *
+       * @instance
+       */
+      onTooltipMouseLeave: function alfresco_misc_AlfTooltip__onTooltipMouseLeave() {
+         this._hideTooltipTimeout = setTimeout(lang.hitch(this, this.hideTooltip), this.mouseoutHideDelay);
       }
    });
 });

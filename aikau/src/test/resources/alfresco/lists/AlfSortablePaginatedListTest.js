@@ -154,6 +154,24 @@ define(["intern!object",
             });
       },
 
+      "Simulate a reload request": function() {
+         return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
+            .click()
+         .end()
+         .findByCssSelector("#SIMULATE_RELOAD_label")
+            .click()
+         .end()
+         .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED")
+            .then(function(payload) {
+               assert.isNotNull(payload, "More results not loaded");
+            })
+         .end()
+         .findAllByCssSelector("#INFITE_SCROLL_LIST tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 10, "Old data not cleared when data filter request applied");
+            });
+      },
+
       "Simulate a path change": function() {
          return browser.then(function() {
             return testClearingDocumentList("#SIMULATE_PATH_CHANGE_label", "Old data not cleared when path change request applied");

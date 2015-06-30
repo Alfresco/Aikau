@@ -210,6 +210,10 @@ define(["dojo/_base/declare",
          // Set up the resizer that allows the sidebar to be dynamically made larger or smaller...
          var size = parseInt(domStyle.get(this.domNode, "width"), 10);
          var max = (size - this.minSidebarWidth);
+         if (max < this.minSidebarWidth)
+         {
+            max = null;
+         }
          
          $(this.sidebarNode).resizable({
             handles: {

@@ -8,7 +8,7 @@
    right: 1em;
 }
 
-.alfresco-layout-Twister-closed .alfresco-layout-Twister-actions {
+.alfresco-layout-Twister--closed .alfresco-layout-Twister-actions {
    display: none;
 }
 
@@ -19,11 +19,11 @@
    text-decoration: none;
 }
 
-.alfresco-layout-Twister-open {
+.alfresco-layout-Twister--open {
    background: transparent url(./images/expanded.png) no-repeat scroll 0 50%;
 }
 
-.alfresco-layout-Twister-closed {
+.alfresco-layout-Twister--closed {
    background: transparent url(./images/collapsed.png) no-repeat scroll 0 50% !important;
 }
 
@@ -48,12 +48,12 @@
       border: none;
    }
 
-   > div.alfresco-layout-Twister-open {
+   > div.alfresco-layout-Twister--open {
       padding-left: 20px !important; /* Important is only required to override base.css use of important */
       background-position: 0 3px !important;
    }
 
-   > div.alfresco-layout-Twister-closed {
+   > div.alfresco-layout-Twister--closed {
       background-position: 0 3px !important;
       padding-left: 20px !important; /* Important is only required to override base.css use of important */
    }

@@ -26,15 +26,6 @@
    "undef": true,
    "unused": true,
 
-   "globals": {
-      "module": false,
-      "model": false,
-      "Alfresco": false,
-      "YAHOO": false,
-      "appContext": false,
-      "PDFJS": false
-   },
-
    "expr": true,
    "strict": false,
 

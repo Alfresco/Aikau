@@ -1,9 +1,16 @@
-<div class="${baseClass} ${subClass} dashlet">
-   <div data-dojo-attach-point="titleNode" class="${baseClass}--title title">
+<div class="${baseClass} ${subClass}">
+   <div data-dojo-attach-point="titleNode" class="${baseClass}__title">
       ${label.title}
    </div>
-   <div data-dojo-attach-point="toolbarNode" class="${baseClass}--toolbar toolbar"></div>
-   <div data-dojo-attach-point="titleBarActionsNode" class="${baseClass}--titleBarActions titleBarActions"></div>
-   <div data-dojo-attach-point="toolbar2Node" class="${baseClass}--toolbar2 toolbar"></div>
-   <div data-dojo-attach-point="bodyNode" class="${baseClass}--body body"></div>
+   <div data-dojo-attach-point="toolbarNode" class="${baseClass}__toolbar"></div>
+   <div data-dojo-attach-point="titleBarActionsNode" class="${baseClass}__title-bar-actions"></div>
+   <div data-dojo-attach-point="toolbar2Node" class="${baseClass}__toolbar2"></div>
+   <div data-dojo-attach-point="bodyNode" class="${baseClass}__body">
+      <div data-dojo-attach-point="bodyWidgetsNode" class="${baseClass}__body__widgets"></div>
+      <div class="${baseClass}__resize-bar ui-resizable-handle ui-resizable-s" data-dojo-attach-point="resizeNode">
+         <div class="${baseClass}__resize-bar__icon-holder">
+            <div class="${baseClass}__resize-bar__icon"></div>
+         </div>
+      </div>
+   </div>
 </div>
