@@ -599,6 +599,7 @@ define(["dojo/_base/declare",
          // but is not actually part of the form data)...
          delete payload.alfTopic;
          delete payload.alfPublishScope;
+         delete payload.alfCallerName;
          
          // Make sure that only the controls with names listed in hashVarsForUpdate are set on the URL hash...
          var updatedHash = {};
