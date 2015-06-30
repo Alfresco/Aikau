@@ -58,10 +58,10 @@ define([
                            }, delayMs);
                         };
                      invokeThrottle("A", 0);
-                     invokeThrottle("B", 30);
-                     invokeThrottle("C", 60);
-                     invokeThrottle("D", 120);
-                     invokeThrottle("E", 170);
+                     invokeThrottle("B", 60);
+                     invokeThrottle("C", 120);
+                     invokeThrottle("D", 280);
+                     invokeThrottle("E", 400);
                      setTimeout(function() {
                         callback(results);
                      }, 1000);
@@ -90,10 +90,10 @@ define([
                            }, delayMs);
                         };
                      invokeThrottle("A", 0);
-                     invokeThrottle("B", 30);
-                     invokeThrottle("C", 60);
-                     invokeThrottle("D", 120);
-                     invokeThrottle("E", 170);
+                     invokeThrottle("B", 60);
+                     invokeThrottle("C", 120);
+                     invokeThrottle("D", 280);
+                     invokeThrottle("E", 400);
                      setTimeout(function() {
                         callback(results);
                      }, 1000);
