@@ -115,7 +115,7 @@
          }
       }
 
-      .alfresco-dashlets-Dashlet__body__widgets {
+      &__widgets {
          overflow: auto;
       }
    }
