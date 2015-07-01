@@ -39,12 +39,13 @@ define(["dojo/_base/declare",
         "dojo/dnd/Source",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/dom",
         "dojo/on",
         "dojo/string",
         "dojo/dom-construct",
         "dojo/dom-class"], 
         function(declare, _Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, template, AlfCore, Constants, 
-                 Source, lang, array, on, stringUtil, domConstruct, domClass) {
+                 Source, lang, array, dom, on, stringUtil, domConstruct, domClass) {
    
    return declare([_Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore], {
       
@@ -215,8 +216,10 @@ define(["dojo/_base/declare",
                   var b = lang.getObject(this.useItemsOnceComparisonKey, false, item.value);
                   if (a === b)
                   {
-                     this.sourceTarget.delItem(b);
-                     // console.info("Remove this node", item);
+                     this.sourceTarget.forInItems(function(i, id, map) {
+                        map.delItem(id);
+                        domConstruct.destroy(dom.byId(id));
+                     });
                      return true;
                   }
                   return false;
