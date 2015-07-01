@@ -375,7 +375,10 @@ define(["dojo/_base/declare",
                };
                var createdItem = this.creator(data);
                this.previewTarget.insertNodes(true, [createdItem.data]);
+               this.alfPublish(Constants.itemAddedTopic, createdItem.data);
             }, this);
+
+            this.previewTarget.selectNone();
          }
       },
       

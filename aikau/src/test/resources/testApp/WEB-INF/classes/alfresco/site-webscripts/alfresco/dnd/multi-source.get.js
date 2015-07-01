@@ -1,3 +1,30 @@
+/* global page */
+var value = null;
+if (page.url.args.preset)
+{
+   value = [
+      {
+         name:"bob",
+         label:"Item 1",
+         type: ["widget"],
+         config:{
+            widgets:[
+               {
+                  name:"ted",
+                  label:"Item 2",
+                  type: ["not_a_widget"]
+               }
+            ]
+         }
+      },
+      {
+         name:"bob",
+         label:"Item 1",
+         type: ["widget"]
+      }
+   ];
+}
+
 model.jsonModel = {
    services: [
       {
@@ -36,7 +63,7 @@ model.jsonModel = {
                                     useModellingService: true,
                                     label: "Widgets",
                                     targetProperty: "config.widgets",
-                                    acceptTypes: [ "not_a_widget" ]
+                                    acceptTypes: [ "not_a_widget", "something_else" ]
                                  }
                               }
                            ]
@@ -84,7 +111,7 @@ model.jsonModel = {
                   config: {
                      items: [
                         {
-                           type: [ "widget" ],
+                           type: [ "widget"],
                            label: "Item 1",
                            value: {
                               name: "bob"
@@ -109,24 +136,8 @@ model.jsonModel = {
                            config: {
                               label: "Data",
                               name: "data",
-                              value: null,
-                              // value: [
-                              //    {
-                              //       name: "bob",
-                              //       label: "Item 1",
-                              //       type: ["widget"],
-                              //       config: {
-                              //          widgets: [
-                              //             {
-                              //                name: "ted",
-                              //                label: "Item 2",
-                              //                type: ["not_a_widget"]
-                              //             }
-                              //          ]
-                              //       }
-                              //    }
-                              // ],
-                              acceptTypes: ["widget"],
+                              value: value,
+                              acceptTypes: ["widget", "something_else"],
                               useModellingService: true,
                               clearTopic: "BRUTAL_CLEAR",
                               clearDroppedItemsTopic: "NICE_CLEAR"

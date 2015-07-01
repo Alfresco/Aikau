@@ -144,6 +144,7 @@ define(["dojo/_base/declare",
          if (this.useItemsOnce === true)
          {
             this.alfSubscribe(Constants.itemDeletedTopic, lang.hitch(this, this.onItemDeleted));
+            this.alfSubscribe(Constants.itemAddedTopic, lang.hitch(this, this.onItemAdded));
          }
       },
 
@@ -188,6 +189,34 @@ define(["dojo/_base/declare",
                   if (a === b)
                   {
                      this.sourceTarget.insertNodes(false, [item]);
+                     return true;
+                  }
+                  return false;
+               }, this);
+            }
+         }
+      },
+
+      /**
+       * Handles items being deleted. If the item deleted is a deleted item from this widget then it will
+       * be re-instated.
+       *
+       * @instance
+       * @param  {object} payload A payload containing a deleted item
+       */
+      onItemAdded: function alfresco_dnd_DragAndDropItems__onItemAdded(payload) {
+         if (payload && payload.value && this.useItemsOnceComparisonKey)
+         {
+            var a = lang.getObject(this.useItemsOnceComparisonKey, false, payload.value);
+            if (a)
+            {
+               // NOTE: Using some to exit as soon as match is found
+               array.some(this.items, function(item) {
+                  var b = lang.getObject(this.useItemsOnceComparisonKey, false, item.value);
+                  if (a === b)
+                  {
+                     this.sourceTarget.delItem(b);
+                     // console.info("Remove this node", item);
                      return true;
                   }
                   return false;
