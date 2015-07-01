@@ -28,6 +28,7 @@ model.jsonModel = {
                            showEditButton: false,
                            label: "{label}",
                            value: "{value}",
+                           type: "{type}",
                            widgets: [
                               {
                                  name: "alfresco/dnd/DragAndDropNestedTarget",
@@ -56,6 +57,7 @@ model.jsonModel = {
                            showEditButton: false,
                            label: "{label}",
                            value: "{value}",
+                           type: "{type}",
                            widgets: [
                               {
                                  name: "alfresco/dnd/DroppedItem"
@@ -108,6 +110,22 @@ model.jsonModel = {
                               label: "Data",
                               name: "data",
                               value: null,
+                              // value: [
+                              //    {
+                              //       name: "bob",
+                              //       label: "Item 1",
+                              //       type: ["widget"],
+                              //       config: {
+                              //          widgets: [
+                              //             {
+                              //                name: "ted",
+                              //                label: "Item 2",
+                              //                type: ["not_a_widget"]
+                              //             }
+                              //          ]
+                              //       }
+                              //    }
+                              // ],
                               acceptTypes: ["widget"],
                               useModellingService: true,
                               clearTopic: "BRUTAL_CLEAR",
@@ -153,7 +171,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
