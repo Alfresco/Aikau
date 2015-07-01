@@ -59,10 +59,11 @@
 define(["dojo/_base/declare",
         "dojo/_base/lang",
         "alfresco/core/ProcessWidgets",
+        "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/services/InfiniteScrollService"], 
-        function(declare, lang, ProcessWidgets, InfiniteScrollService) {
+        function(declare, lang, ProcessWidgets, _AlfDocumentListTopicMixin, InfiniteScrollService) {
    
-   return declare([ProcessWidgets, InfiniteScrollService], {
+   return declare([ProcessWidgets, InfiniteScrollService, _AlfDocumentListTopicMixin], {
       
       /**
        * The CSS class (or a space separated list of classes) to include in the DOM node.
@@ -86,6 +87,29 @@ define(["dojo/_base/declare",
       _registerScrollListenerImmediately: false,
 
       /**
+       * <p>The primary purpose of this widget is to support infinite scrolling of [lists]{@link module:alfresco/lists/AlfList} within a fixed 
+       * height area. Loadingmore data requires that either a scroll bar is present or the area is resized. However there may be circumstances
+       * where the area is too tall, and the initial [page size]{@link module:alfresco/lists/AlfSortablePaginatedList#currentPageSize} to small
+       * for list data to fill. If this attribute is configured to be true then the height of the parent element will be compared against the
+       * height of this widget each time list data is loaded, and if the height of this widget is not as big as that of its parent element
+       * then a request for more data will be made.</p>
+       *
+       * <p>However, in order for this to work it is important that both the [list]{@link module:alfresco/lists/AlfList} and this
+       * widget share the same pubSubScope, the same 
+       * [requestFinishedTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#requestFinishedTopic} topic and the same
+       * [scrollNearBottom]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#scrollNearBottom} topic. Each time the
+       * [requestFinishedTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#requestFinishedTopic} is published the
+       * [onDataLoaded]{@link module:alfresco/layout/InfiniteScrollArea#onDataLoaded} function will be called to compare heights and
+       * request more data by publishing the [scrollNearBottom]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#scrollNearBottom}
+       * topic if necessary</p>
+       * 
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      fillAvailableHeight: true,
+
+      /**
        * The constructor
        *
        * @instance
@@ -105,6 +129,25 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          this.publishScrollEvents(this.domNode.parentNode);
          this.publishResizeEvents(this.domNode.parentNode);
+
+         if (this.fillAvailableHeight)
+         {
+            this.alfSubscribe(this.requestFinishedTopic, lang.hitch(this, this.onDataLoaded));
+         }
+      },
+
+      /**
+       * This function is called when data is successfully loaded by a [list]{@link module:alfresco/lists/AlfList} 
+       * contained within this widget and it compares the height of the widget with that of its parent to determine
+       * whether or not to make a request for more data.
+       *
+       * @instance
+       */
+      onDataLoaded: function alfresco_layout_InfiniteScrollArea__onDataLoaded() {
+         if (this.domNode.clientHeight < this.domNode.parentNode.clientHeight)
+         {
+            this.alfPublish(this.scrollNearBottom);
+         }
       },
 
       /**
