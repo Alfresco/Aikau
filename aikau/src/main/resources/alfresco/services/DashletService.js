@@ -49,7 +49,7 @@ define([
           */
          constructor: function alfresco_services_DashletService__constructor(args) {
             declare.safeMixin(this, args);
-            this.alfSubscribe(this.storeDashletHeightTopic, lang.hitch(this, this.storeDashletHeight));
+            this.alfSubscribe(this.storeDashletHeightTopic, lang.hitch(this, this.storeDashletHeight), true);
          },
 
          /**
