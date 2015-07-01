@@ -49,6 +49,11 @@ define(["dojo/_base/declare",
        * @param msg {String} The message to be displayed.
        */
       displayPrompt: function alfresco_core_Core__displayPrompt(config) {
+         // See AKU-400 - support changes to Dojo dialog following upgrade to 1.10.0
+         if (config.textContent)
+         {
+            config.message = config.textContent;
+         }
          this.alfPublish("ALF_DISPLAY_PROMPT", config);
       }
    });
