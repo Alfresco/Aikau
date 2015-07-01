@@ -33,9 +33,8 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
         "alfresco/core/_EventsMixin",
-        "alfresco/core/DomElementUtils",
-        "dojo/dom-geometry"],
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, lang, _EventsMixin, AlfDomUtils, domGeom) {
+        "alfresco/core/DomElementUtils"],
+        function(declare, AlfCore, _AlfDocumentListTopicMixin, lang, _EventsMixin, AlfDomUtils) {
 
    return declare([AlfCore, _AlfDocumentListTopicMixin, _EventsMixin, AlfDomUtils], {
 
@@ -136,7 +135,7 @@ define(["dojo/_base/declare",
             clientHeight = window.innerHeight;
             scrollTop = window.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
          } else {
-            scrollHeight= scrollNode.scrollHeight ;
+            scrollHeight= scrollNode.scrollHeight;
             clientHeight= scrollNode.clientHeight;
             scrollTop= scrollNode.scrollTop;
          }
