@@ -23,9 +23,9 @@
  * @author Dave Draper
  */
 define(["alfresco/TestCommon",
-        "intern/chai!assert",
-        "intern!object",
-        "intern/dojo/node!leadfoot/keys"],
+        "intern/chai!assert", 
+        "intern!object", 
+        "intern/dojo/node!leadfoot/keys"], 
         function(TestCommon, assert, registerSuite, keys) {
 
    var browser;
@@ -42,10 +42,26 @@ define(["alfresco/TestCommon",
       },
 
       "Scroll to bottom of first dashlet body": function() {
-         return browser.execute(function() {
-               document.querySelector("#BELOW_DASHLET .alfresco-dashlets-Dashlet__body__widgets").scrollTop += 20;
+         var numRowsBeforeResize;
+         return browser.findAllByCssSelector("#INFINITE_SCROLL_LIST_1 tr")
+            .then(function(elements) {
+               numRowsBeforeResize = elements.length;
             })
-            .getLastPublish("BELOW_ALF_EVENTS_SCROLL")
+            .end()
+
+         .findByCssSelector("#INFINITE_SCROLL_LIST_1 tr:nth-child(1) .alfresco-renderers-Property")
+            .click()
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .end()
+
+         .getLastPublish("BELOW_ALF_EVENTS_SCROLL")
             .then(function(payload) {
                assert.isNotNull(payload, "List scroll event not registered");
             })
@@ -53,20 +69,39 @@ define(["alfresco/TestCommon",
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_1 tr")
             .then(function(elements) {
-               assert.lengthOf(elements, 15, "Additional rows were not loaded when the bottom of the list was reached");
+               assert(elements.length > numRowsBeforeResize, "Additional rows were not loaded when the bottom of the list was reached");
             });
       },
 
       "Scroll to bottom of second dashlet body": function() {
-         return browser.execute(function() {
-               document.querySelector("#ABOVE_DASHLET .alfresco-dashlets-Dashlet__body__widgets").scrollTop += 100;
-            })
-            .getLastPublish("ABOVE_ALF_EVENTS_SCROLL")
+         // Click on the first row to give it focus...
+         return browser.findByCssSelector("#INFINITE_SCROLL_LIST_2 tr:nth-child(1) .alfresco-renderers-Property")
+            .click()
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .pressKeys(keys.ARROW_DOWN)
+            .end()
+
+         .getLastPublish("ABOVE_ALF_EVENTS_SCROLL")
             .then(function(payload) {
                assert.isNotNull(payload, "List scroll event not registered");
             })
             .end()
-            .findAllByCssSelector("#INFINITE_SCROLL_LIST_2 tr")
+
+         .findAllByCssSelector("#INFINITE_SCROLL_LIST_2 tr")
             .then(function(elements) {
                assert.lengthOf(elements, 40, "Additional rows were not loaded when the bottom of the list was reached");
             });
@@ -74,7 +109,14 @@ define(["alfresco/TestCommon",
 
       // This does not work in Chrome currently, however we expect the FF test to pass, so this provides some level of regression testability
       "Resizing first dashlet prompts data-load (NOT EXPECTED TO WORK IN CHROME)": function() {
-         return browser.findByCssSelector("#BELOW_DASHLET .alfresco-dashlets-Dashlet__resize-bar__icon")
+         var numRowsBeforeResize;
+         return browser.findAllByCssSelector("#INFINITE_SCROLL_LIST_1 tr")
+            .then(function(elements) {
+               numRowsBeforeResize = elements.length;
+            })
+            .end()
+
+         .findByCssSelector("#BELOW_DASHLET .alfresco-dashlets-Dashlet__resize-bar__icon")
             .moveMouseTo(0, 0)
             .pressMouseButton()
             .moveMouseTo(0, 50)
@@ -83,7 +125,7 @@ define(["alfresco/TestCommon",
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_1 tr")
             .then(function(elements) {
-               assert.lengthOf(elements, 18, "Additional rows were not loaded when the dashlet was resized");
+               assert(elements.length > numRowsBeforeResize, "Additional rows were not loaded when the dashlet was resized");
             });
       },
 
