@@ -136,31 +136,39 @@ define(["intern!object",
 
       "Test managing aspects when aspects can't be retrieved": function() {
          // By using a node that the mock service doesn't cater for we can rely on a 404 producing an error...
-         return browser.findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogHidden").end()
+         return browser.findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogHidden")
+            .end()
+
          .findByCssSelector("#MANAGE_ASPECTS3_label")
             .click()
-         .end()
-         .findByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_PROMPT", "message", "It was not possible to retrieve the aspects applied to No Data Node"))
-            .then(null, function() {
-               assert(false, "The error prompt was not requested when failing to retrieve aspects");
+            .end()
+
+         .getLastPublish("ALF_DISPLAY_PROMPT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "message", "It was not possible to retrieve the aspects applied to No Data Node", "The error prompt was not requested when failing to retrieve aspects");
             });
       },
+
 
       "Test failure to save aspect changes": function() {
          // By using a node that the mock service doesn't cater for we can rely on a 404 producing an error...
          return browser.findByCssSelector("#MANAGE_ASPECTS4_label")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogDisplayed")
-         .end()
+            .end()
+
          .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .confirmationButton > span")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogHidden")
-         .end()
-         .findByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_PROMPT", "message", "It was not possible to update the aspects applied to Save Fail Node"))
-            .then(null, function() {
-               assert(false, "The error prompt was not requested when failure occurred saving data");
+            .end()
+
+         .getLastPublish("ALF_DISPLAY_PROMPT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "message", "It was not possible to update the aspects applied to Save Fail Node", "The error prompt was not requested when failure occurred saving data");
             });
       },
 
