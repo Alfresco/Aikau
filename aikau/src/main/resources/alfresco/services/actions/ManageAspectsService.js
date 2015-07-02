@@ -288,7 +288,7 @@ define(["dojo/_base/declare",
        * 
        * @param {object} payload The payload containing the updated aspects.
        */
-      onActionManageAspectsConfirmation: function alfresco_services_ActionService__onActionManageAspectsConfirmation(payload) {
+      onActionManageAspectsConfirmation: function alfresco_services_actions_ManageAspectsService__onActionManageAspectsConfirmation(payload) {
          // Clean up any subscription handles
          if (payload && payload.subscriptionHandle)
          {
