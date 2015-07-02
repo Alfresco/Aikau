@@ -249,4 +249,51 @@ define(["intern!object",
          TestCommon.alfPostCoverageResults(this, browser);
       }
    });
+
+   registerSuite({
+
+      name: "Multi-source DND tests (test preset value loading)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/multi-source-dnd?preset=true", "Multi-source DND tests (test preset value loading)")
+            .end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Check that the single use item has been removed (as it has been used)": function() {
+         return browser.findAllByCssSelector("#DRAG_PALETTE2 .alfresco-dnd-DragAndDropItem")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The single use item was not removed");
+            });
+      },
+
+      "Check that all items are present and correct": function() {
+         return browser.findAllByCssSelector(".alfresco-dnd-DroppedItemWrapper")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Not all the items were recreated");
+            });
+      },
+
+      "Drag a preset item and check only one item is selected": function() {
+         return browser.findByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DroppedItemWrapper:first-child .dojoDndHandle")
+            .moveMouseTo()
+            .click()
+            .pressMouseButton()
+            .moveMouseTo(1, 1)
+            .moveMouseTo(1, 50)
+         .end()
+         .findAllByCssSelector(".alfresco-dnd-DroppedItemWrapper")
+            .then(function(elements) {
+               assert.lengthOf(elements, 5, "The wrong number of items were pre-selected for dragging");
+            });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 });

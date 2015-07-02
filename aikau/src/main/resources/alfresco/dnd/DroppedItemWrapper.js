@@ -209,6 +209,7 @@ define(["dojo/_base/declare",
             if (this.value)
             {
                this.value.label = this.label;
+               this.value.type = this.type;
             }
          }
          if (this.widgets !== null && this.widgets !== undefined)
