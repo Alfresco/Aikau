@@ -95,6 +95,7 @@ define({
       "src/test/resources/alfresco/forms/CrudFormTest",
       "src/test/resources/alfresco/forms/DynamicFormTest",
       "src/test/resources/alfresco/forms/FormsTest",
+      "src/test/resources/alfresco/forms/FormValidationTest",
       "src/test/resources/alfresco/forms/HashFormTest",
       "src/test/resources/alfresco/forms/SingleTextFieldFormTest",
 

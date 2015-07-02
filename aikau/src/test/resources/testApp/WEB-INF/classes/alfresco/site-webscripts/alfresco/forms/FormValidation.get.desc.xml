@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Form Validation</shortname>
+  <description>This loads a form that contains initially invalid data.</description>
+  <family>aikau-unit-tests</family>
+  <url>/FormValidation</url>
+</webscript>
