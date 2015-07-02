@@ -147,6 +147,7 @@ define(["dojo/_base/declare",
             config: {
                label: "{label}",
                value: "{value}",
+               type: "{type}",
                widgets: [
                   {
                      name: "alfresco/dnd/DragAndDropNestedTarget",
