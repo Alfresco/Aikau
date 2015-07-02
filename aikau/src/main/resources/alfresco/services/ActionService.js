@@ -38,7 +38,7 @@
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @mixes module:alfresco/services/_NavigationServiceTopicMixin
- * @mixes module:alfresco/core/UrlUtils
+ * @mixes module:alfresco/core/UrlUtilsMixin
  * @mixes module:alfresco/core/NotificationUtils
  * @author Dave Draper & David Webster
  */
@@ -49,18 +49,18 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/services/_NavigationServiceTopicMixin",
-        "alfresco/core/UrlUtils",
+        "alfresco/core/UrlUtilsMixin",
         "alfresco/core/ArrayUtils",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/JsNode",
         "alfresco/core/NotificationUtils",
         "dojo/_base/lang"],
-        function(declare, AlfCore, AlfCoreXhr, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtils,
+        function(declare, AlfCore, AlfCoreXhr, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtilsMixin,
                  ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang) {
 
    // TODO: L18N sweep - lots of widgets defined with hard coded labels...
 
-   return declare([AlfCore, AlfCoreXhr, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtils, NotificationUtils], {
+   return declare([AlfCore, AlfCoreXhr, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtilsMixin, NotificationUtils], {
 
       /**
        * An array of the i18n files to use with this widget.

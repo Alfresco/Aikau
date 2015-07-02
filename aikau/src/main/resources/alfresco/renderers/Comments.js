@@ -30,7 +30,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/UrlUtils
+ * @mixes module:alfresco/core/UrlUtilsMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -43,12 +43,12 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Comments.html",
         "alfresco/core/Core",
         "dojo/_base/lang",
-        "alfresco/core/UrlUtils",
+        "alfresco/core/UrlUtilsMixin",
         "dojo/dom-class"],
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin,
-                 _HtmlAnchorMixin, _PublishPayloadMixin, template, AlfCore, lang, UrlUtils, domClass) {
+                 _HtmlAnchorMixin, _PublishPayloadMixin, template, AlfCore, lang, UrlUtilsMixin, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _HtmlAnchorMixin, AlfCore, UrlUtils, _PublishPayloadMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _HtmlAnchorMixin, AlfCore, UrlUtilsMixin, _PublishPayloadMixin], {
 
       /**
        * An array of the i18n files to use with this widget.

@@ -24,7 +24,7 @@
  * Without any additional configuration this service can be used in Aikau pages contained within Alfresco Share,
  * however if you wish to use this in an alternative client (e.g. a standalone client created from the 
  * Aikau Maven Archetype) then it is likely that you will need to set some configuration, e.g. setting
- * [useAikauPages]{@link module:alfresco/core/UrlUtils#useAikauPages} to be true and
+ * [useAikauPages]{@link module:alfresco/core/UrlUtilsMixin#useAikauPages} to be true and
  * setting the [nonSiteUrl]{@link module:alfresco/services/actions/NodeLocationService#nonSiteUrl} and
  * [siteUrl]{@link module:alfresco/services/actions/NodeLocationService#siteUrl} locations to take the 
  * user to.
@@ -55,16 +55,16 @@
  *
  * @module alfresco/services/actions/NodeLocationService
  * @extends module:alfresco/core/Core
- * @mixes module:alfresco/core/UrlUtils
+ * @mixes module:alfresco/core/UrlUtilsMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
-        "alfresco/core/UrlUtils",
+        "alfresco/core/UrlUtilsMixin",
         "dojo/_base/lang"],
-        function(declare, AlfCore, UrlUtils, lang) {
+        function(declare, AlfCore, UrlUtilsMixin, lang) {
 
-   return declare([AlfCore, UrlUtils], {
+   return declare([AlfCore, UrlUtilsMixin], {
 
       /**
        * The should be configured to be the URL fragment to be used when linking to nodes that are not located
