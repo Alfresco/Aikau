@@ -59,11 +59,10 @@
 define(["dojo/_base/declare",
         "dojo/_base/lang",
         "alfresco/core/ProcessWidgets",
-        "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/services/InfiniteScrollService"], 
-        function(declare, lang, ProcessWidgets, _AlfDocumentListTopicMixin, InfiniteScrollService) {
+        function(declare, lang, ProcessWidgets, InfiniteScrollService) {
    
-   return declare([ProcessWidgets, InfiniteScrollService, _AlfDocumentListTopicMixin], {
+   return declare([ProcessWidgets, InfiniteScrollService], {
       
       /**
        * The CSS class (or a space separated list of classes) to include in the DOM node.

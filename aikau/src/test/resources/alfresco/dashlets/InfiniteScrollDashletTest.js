@@ -53,7 +53,7 @@ define(["alfresco/TestCommon",
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_1 tr")
             .then(function(elements) {
-               assert.lengthOf(elements, 10, "Additional rows were not loaded when the bottom of the list was reached");
+               assert.lengthOf(elements, 15, "Additional rows were not loaded when the bottom of the list was reached");
             });
       },
 
@@ -83,7 +83,7 @@ define(["alfresco/TestCommon",
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_1 tr")
             .then(function(elements) {
-               assert.lengthOf(elements, 15, "Additional rows were not loaded when the dashlet was resized");
+               assert.lengthOf(elements, 18, "Additional rows were not loaded when the dashlet was resized");
             });
       },
 
