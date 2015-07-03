@@ -34,7 +34,6 @@ define(["dojo/_base/declare",
         "alfresco/dialogs/AlfDialog",
         "dojo/_base/lang",
         "dojo/_base/array",
-        "dojo/json",
         "alfresco/util/urlUtils"],
         function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang, array, urlUtils) {
 

@@ -178,8 +178,8 @@ define(["dojo/_base/lang"],
           * [throttle period]{@link module:alfresco/util/functionUtils#defaultThrottleMs} will execute, but all others will
           * be discarded.</p>
           * 
-          * <p>Example: If the throttle period were 100ms and the function was called at 0ms, 30ms, 60ms, 120ms and 170ms
-          * then the first, third and fifth functions would execute at 0ms, 100ms and 200ms respectively, and the second
+          * <p>Example: If the throttle period were 250ms and the function was called at 0ms, 60ms, 120ms, 280ms and 400ms
+          * then the first, third and fifth functions would execute at 0ms, 250ms and 500ms respectively, and the second
           * and fourth function calls would be discarded.</p>
           *
           * @instance
