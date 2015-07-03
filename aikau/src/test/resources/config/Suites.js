@@ -32,7 +32,8 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/services/actions/ManageAspectsTest"
+      "src/test/resources/alfresco/dashlets/InfiniteScrollDashletTest",
+      "src/test/resources/alfresco/dashlets/DashletTest"
    ],
 
    /**

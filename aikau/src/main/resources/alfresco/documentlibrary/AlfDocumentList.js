@@ -101,9 +101,12 @@ define(["dojo/_base/declare",
             this._coreHashVars.push("path","filter","tag","category");
          }
 
-         this.currentFilter = {
-            path: "/"
-         };
+         if (!this.currentFilter)
+         {
+            this.currentFilter = {
+               path: "/"
+            };
+         }
       },
 
       /**

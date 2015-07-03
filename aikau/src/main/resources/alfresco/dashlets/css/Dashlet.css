@@ -47,7 +47,7 @@
          height: 15px;
          margin: 0 auto;
          padding: 5px 10px;
-         transition: background .3s ease-out;
+         transition: background .2s ease-out;
          width: 45px;
       }
       &__icon {
@@ -56,7 +56,7 @@
             background: #eee;
             border-radius: 1px;
             height: 2px;
-            transition: background .3s ease-out;
+            transition: background .2s ease-out;
             width: 25px;
          }
          &:after {

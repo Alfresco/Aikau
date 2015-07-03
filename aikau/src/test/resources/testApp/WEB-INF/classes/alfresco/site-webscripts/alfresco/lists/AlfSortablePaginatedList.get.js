@@ -127,7 +127,7 @@ model.jsonModel = {
                                        scrollTolerance: 300,
                                        widgets: [
                                           {
-                                             id: "INFITE_SCROLL_LIST",
+                                             id: "INFINITE_SCROLL_LIST",
                                              name: "alfresco/lists/AlfSortablePaginatedList",
                                              config: {
                                                 useHash: false,
