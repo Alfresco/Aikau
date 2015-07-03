@@ -18,7 +18,7 @@
  */
 
 /**
- * Utility class for function-related utilities. Note that this is not a Class, and so does
+ * Utility object for function-related utilities. Note that this is not a Class, and so does
  * not need to be instantiated before use.
  *
  * @module alfresco/util/functionUtils
@@ -30,73 +30,36 @@ define(["dojo/_base/lang"],
       // The private container for the functionality and properties of the util
       var util = {
 
-         /**
-          * The default timeout for debounce calls
-          *
-          * @instance
-          * @private
-          * @type {number}
-          * @default
-          */
+         // See API below
          defaultDebounceMs: 250,
 
-         /**
-          * The default timeout for throttle calls
-          *
-          * @instance
-          * @private
-          * @type {number}
-          * @default
-          */
-         defaultThrottleMs: 100,
+         // See API below
+         defaultThrottleMs: 250,
 
-         /**
-          * A holder for the debounce-functionality pointers/variables, where the keys are the names provided to the
-          * limiting function
-          *
-          * @instance
-          * @private
-          * @type {Object}
-          */
+         // A holder for the debounce-functionality pointers/variables, where the keys are the names provided to the limiting function
          debounceVars: {
             lastExecutions: {},
             timeouts: {}
          },
 
-         /**
-          * A holder for the debounce-functionality pointers/variables, where the keys are the names provided to the
-          * limiting function
-          *
-          * @instance
-          * @private
-          * @type {Object}
-          */
+         // A holder for the debounce-functionality pointers/variables, where the keys are the names provided to the limiting function
          throttleVars: {
             lastExecutions: {},
             timeouts: {}
          },
 
-         // See JSDoc in API below
-         debounce: function alfresco_core_Events__debounce(args) {
+         // See API below
+         debounce: function alfresco_util_functionUtils__debounce(args) {
             return this._limit("debounce", args);
          },
 
-         // See JSDoc in API below
-         throttle: function alfresco_core_Events__throttle(args) {
+         // See API below
+         throttle: function alfresco_util_functionUtils__throttle(args) {
             return this._limit("throttle", args);
          },
 
-         /**
-          * Implements the functionality of the [debounce]{@link module:alfresco/util/functionUtils#debounce}
-          * and [throttle]{@link module:alfresco/util/functionUtils#throttle} methods.
-          *
-          * @instance
-          * @param {string} type Either "throttle" or "debounce"
-          * @param {Object} args See the [debounce]{@link module:alfresco/util/functionUtils#debounce} and
-          *                      [throttle]{@link module:alfresco/util/functionUtils#throttle} methods
-          * @return {Object} An object containing a remove() function which will clear any outstanding timeout
-          */
-         _limit: function alfresco_core_Events___limit(type, args) {
+         // Implements the functionality of the debounce and throttle methods
+         _limit: function alfresco_util_functionUtils___limit(type, args) {
 
             // Setup variables
             var pointers = this[type + "Vars"],
@@ -161,9 +124,27 @@ define(["dojo/_base/lang"],
       /**
        * The public API for this utility class
        * 
-       * @alias module:alfresco/util/func
+       * @alias module:alfresco/util/functionUtils
        */
       return {
+
+         /**
+          * The default timeout for debounce calls
+          *
+          * @instance
+          * @type {number}
+          * @default 250
+          */
+         defaultDebounceMs: util.defaultDebounceMs,
+
+         /**
+          * The default timeout for throttle calls
+          *
+          * @instance
+          * @type {number}
+          * @default 250
+          */
+         defaultThrottleMs: util.defaultThrottleMs,
 
          /**
           * <p>Debounce the supplied function.</p>
@@ -174,6 +155,7 @@ define(["dojo/_base/lang"],
           * this is for debouncing keypress events (in a text box) that will ultimately trigger an XHR request.</p>
           *
           * @instance
+          * @function
           * @param {Object} args The arguments for this function
           * @param {string} args.name Debounce calls under different names will not be limited by each other,
           *                           so this specifies the name for the group of functions to debounce
@@ -196,11 +178,12 @@ define(["dojo/_base/lang"],
           * [throttle period]{@link module:alfresco/util/functionUtils#defaultThrottleMs} will execute, but all others will
           * be discarded.</p>
           * 
-          * <p>Example: If the throttle period were 100ms and the function was called at 0ms, 30ms, 60ms, 120ms and 170ms
-          * then the first, third and fifth functions would execute at 0ms, 100ms and 200ms respectively, and the second
+          * <p>Example: If the throttle period were 250ms and the function was called at 0ms, 60ms, 120ms, 280ms and 400ms
+          * then the first, third and fifth functions would execute at 0ms, 250ms and 500ms respectively, and the second
           * and fourth function calls would be discarded.</p>
           *
           * @instance
+          * @function
           * @param {Object} args The arguments for this function
           * @param {string} args.name Throttle calls under different names will not be limited by each other,
           *                           so this specifies the name for the group of functions to throttle
