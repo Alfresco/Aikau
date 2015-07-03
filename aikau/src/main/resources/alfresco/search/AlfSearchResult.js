@@ -111,7 +111,8 @@ define(["dojo/_base/declare",
             "document-assign-workflow",
             "document-cancel-editing",
             "document-approve",
-            "document-reject"
+            "document-reject",
+            "document-manage-aspects"
 
 //            TODO: Needs to use forms runtime or equiv.
 //            "document-edit-properties",
@@ -120,7 +121,6 @@ define(["dojo/_base/declare",
 //            "document-upload-new-version",
 //            "folder-view-details"
 //            
-//            "document-manage-aspects"
 //            "document-cloud-sync"
 //            "document-cloud-unsync"
 //            "document-view-in-cloud"

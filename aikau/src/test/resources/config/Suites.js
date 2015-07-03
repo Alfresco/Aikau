@@ -52,6 +52,7 @@ define({
 
       "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
       "src/test/resources/alfresco/core/CoreRwdTest",
+      "src/test/resources/alfresco/core/NotificationUtilsTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
       "src/test/resources/alfresco/core/TemporalUtilsTest",
@@ -95,6 +96,7 @@ define({
       "src/test/resources/alfresco/forms/CrudFormTest",
       "src/test/resources/alfresco/forms/DynamicFormTest",
       "src/test/resources/alfresco/forms/FormsTest",
+      "src/test/resources/alfresco/forms/FormValidationTest",
       "src/test/resources/alfresco/forms/HashFormTest",
       "src/test/resources/alfresco/forms/SingleTextFieldFormTest",
 

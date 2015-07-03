@@ -24,8 +24,7 @@
  * @module alfresco/services/DashletService
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
- * @mixes module:alfresco/core/UrlUtils
- * @mixes module:alfresco/core/NotificationUtils
+ * @mixes module:alfresco/services/_DashletServiceTopicMixin
  * @author Martin Doyle
  */
 

@@ -20,16 +20,16 @@
 /**
  * @module alfresco/renderers/LockedBanner
  * @extends module:alfresco/renderers/Banner
- * @mixes module:alfresco/core/UrlUtils
+ * @mixes module:alfresco/core/UrlUtilsMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/Banner",
-        "alfresco/core/UrlUtils",
+        "alfresco/core/UrlUtilsMixin",
         "service/constants/Default"], 
-        function(declare, Banner, UrlUtils, AlfConstants) {
+        function(declare, Banner, UrlUtilsMixin, AlfConstants) {
 
-   return declare([Banner, UrlUtils], {
+   return declare([Banner, UrlUtilsMixin], {
       
       /**
        * An array of the i18n files to use with this widget.

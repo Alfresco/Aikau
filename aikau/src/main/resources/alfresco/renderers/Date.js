@@ -44,17 +44,17 @@
  * @module alfresco/renderers/Date
  * @extends module:alfresco/renderers/Property
  * @mixes module:alfresco/core/TemporalUtils
- * @mixes module:alfresco/core/UrlUtils
+ * @mixes module:alfresco/core/UrlUtilsMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/Property", 
         "alfresco/core/TemporalUtils",
-        "alfresco/core/UrlUtils",
+        "alfresco/core/UrlUtilsMixin",
         "dojo/_base/lang"], 
-        function(declare, Property, TemporalUtils, UrlUtils, lang) {
+        function(declare, Property, TemporalUtils, UrlUtilsMixin, lang) {
 
-   return declare([Property, UrlUtils, TemporalUtils], {
+   return declare([Property, UrlUtilsMixin, TemporalUtils], {
       
       /**
        * An array of the i18n files to use with this widget.

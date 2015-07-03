@@ -1,7 +1,12 @@
 Aikau 1.0.24 Release Notes
 ==========================
 
-Current deprecations:
+New deprecations: 
+-----------------
+* alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
+* alfresco/dialogs/_AlfCreateFormDialogMixin.js                  (use alfresco/services/DialogService)
+
+Previous deprecations:
 ---------------------
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 * alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
