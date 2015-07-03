@@ -131,7 +131,7 @@ define(["dojo/_base/declare",
             clientHeight,
             scrollTop;
          if(scrollNode === window) {
-            scrollHeight = document.body.offsetHeight;
+            scrollHeight = document.body.scrollHeight;
             clientHeight = window.innerHeight;
             scrollTop = window.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
          } else {
