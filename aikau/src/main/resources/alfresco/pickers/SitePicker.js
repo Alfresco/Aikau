@@ -146,6 +146,7 @@ define(["dojo/_base/declare",
             }
          }];
          this.pickedItemsLabel = this.singleItemMode ? "sitePicker.pickedItems.single" : "sitePicker.pickedItems.multi";
+         this.subPickersLabel = "sitePicker.category";
          this.inherited(arguments);
       },
 
@@ -173,6 +174,8 @@ define(["dojo/_base/declare",
                               {
                                  name: "alfresco/lists/AlfSortablePaginatedList",
                                  config: {
+                                    noDataMessage: "sitePicker.list.noSitesFound",
+                                    dataFailureMessage: "sitePicker.list.errorLoadingSites",
                                     itemsProperty: "",
                                     loadDataPublishTopic: "ALF_GET_RECENT_SITES",
                                     waitForPageWidgets: false,
@@ -195,6 +198,8 @@ define(["dojo/_base/declare",
                               {
                                  name: "alfresco/lists/AlfSortablePaginatedList",
                                  config: {
+                                    noDataMessage: "sitePicker.list.noSitesFound",
+                                    dataFailureMessage: "sitePicker.list.errorLoadingSites",
                                     itemsProperty: "",
                                     loadDataPublishTopic: "ALF_GET_FAVOURITE_SITES",
                                     waitForPageWidgets: false,
@@ -217,6 +222,8 @@ define(["dojo/_base/declare",
                               {
                                  name: "alfresco/lists/AlfSortablePaginatedList",
                                  config: {
+                                    noDataMessage: "sitePicker.list.noSitesFound",
+                                    dataFailureMessage: "sitePicker.list.errorLoadingSites",
                                     itemsProperty: "",
                                     loadDataPublishTopic: "ALF_GET_SITES",
                                     waitForPageWidgets: false,

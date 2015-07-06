@@ -153,7 +153,7 @@ define(["alfresco/forms/controls/Picker",
                                  {
                                     name: "alfresco/pickers/SitePicker",
                                     config: {
-                                       singleItemMode: this.singleItemModel
+                                       singleItemMode: this.singleItemMode
                                     }
                                  }
                               ],
