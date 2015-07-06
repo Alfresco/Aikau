@@ -34,7 +34,7 @@
  *                name: "site",
  *                description: "Pick a site, any site",
  *                label: "Site",
- *                multiSite: false
+ *                singleItemMode: true
  *             }
  *          }
  *       ]
@@ -78,7 +78,7 @@ define(["alfresco/forms/controls/Picker",
        * @type {boolean}
        * @default
        */
-      multiSite: false,
+      singleItemMode: true,
 
       /**
        * After config has been mixed in, setup the widget model
@@ -144,16 +144,16 @@ define(["alfresco/forms/controls/Picker",
                         assignTo: "formDialogButton",
                         config: {
                            additionalCssClasses: "alfresco-forms-controls-Picker__add-button",
-                           label: this.multiSite ? "sitePicker.launchPicker.multi" : "sitePicker.launchPicker.single",
+                           label: this.singleItemMode ? "sitePicker.launchPicker.single" : "sitePicker.launchPicker.multi",
                            publishTopic: "ALF_CREATE_DIALOG_REQUEST",
                            publishPayload: {
-                              dialogTitle: this.multiSite ? "sitePicker.pickerTitle.multi" : "sitePicker.pickerTitle.single",
+                              dialogTitle: this.singleItemMode ? "sitePicker.pickerTitle.single" : "sitePicker.pickerTitle.multi",
                               handleOverflow: false,
                               widgetsContent: [
                                  {
                                     name: "alfresco/pickers/SitePicker",
                                     config: {
-                                       multiSite: this.multiSite
+                                       singleItemMode: this.singleItemModel
                                     }
                                  }
                               ],
@@ -181,7 +181,7 @@ define(["alfresco/forms/controls/Picker",
                      {
                         name: "alfresco/buttons/AlfButton",
                         config: {
-                           label: this.multiSite ? "sitePicker.removeAll.multi" : "sitePicker.removeAll.single",
+                           label: this.singleItemMode ? "sitePicker.removeAll.single" : "sitePicker.removeAll.multi",
                            additionalCssClasses: "cancelButton alfresco-forms-controls-Picker__remove-button",
                            publishTopic: "ALF_ITEMS_SELECTED",
                            publishPayload: {

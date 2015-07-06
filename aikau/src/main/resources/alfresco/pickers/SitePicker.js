@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        * @type {boolean}
        * @default
        */
-      multiSite: false,
+      singleItemMode: true,
 
       /**
        *
@@ -102,7 +102,7 @@ define(["dojo/_base/declare",
             name: "alfresco/pickers/PickedItems",
             assignTo: "pickedItemsWidget",
             config: {
-               singleItemMode: !this.multiSite,
+               singleItemMode: this.singleItemMode,
                itemKey: "shortName",
                widgets: [
                   {
@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
                ]
             }
          }];
-         this.pickedItemsLabel = this.multiSite ? "sitePicker.pickedItems.multi" : "sitePicker.pickedItems.single";
+         this.pickedItemsLabel = this.singleItemMode ? "sitePicker.pickedItems.single" : "sitePicker.pickedItems.multi";
          this.inherited(arguments);
       },
 

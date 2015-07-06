@@ -33,7 +33,7 @@ model.jsonModel = {
                               name: "site",
                               description: "Pick a site, any site",
                               label: "Site",
-                              multiSite: false
+                              singleItemMode: true
                            }
                         }
                      ]
@@ -53,7 +53,7 @@ model.jsonModel = {
                               name: "sites",
                               description: "Pick some sites, any sites",
                               label: "Sites",
-                              multiSite: true
+                              singleItemMode: false
                            }
                         }
                      ]
