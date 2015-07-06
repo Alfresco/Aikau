@@ -47,6 +47,15 @@ define([],function() {
       updateItemsEvent: "onAlfItemsUpdated",
 
       /**
+       * Emitted when an item is moved up or down within its parent
+       *
+       * @instance
+       * @type {String}
+       * @default "onAlfItemsReordered"
+       */
+      reorderItemsEvent: "onAlfItemsReordered",
+
+      /**
        * Emitted when an item value is updated
        *
        * @instance

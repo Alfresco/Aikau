@@ -29,12 +29,14 @@
 define(["dojo/_base/declare",
         "alfresco/dnd/DroppedItemWrapper",
         "alfresco/dnd/Constants",
+        "alfresco/core/ObjectTypeUtils",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/on",
         "dojo/Deferred",
-        "dijit/registry"], 
-        function(declare, DroppedItemWrapper, Constants, lang, array, on, Deferred, registry) {
+        "dijit/registry",
+        "jquery"], 
+        function(declare, DroppedItemWrapper, Constants, ObjectTypeUtils, lang, array, on, Deferred, registry, $) {
    
    return declare([DroppedItemWrapper], {
       
@@ -55,6 +57,7 @@ define(["dojo/_base/declare",
 
          this.inherited(arguments);
          on(this.domNode, Constants.updateItemsEvent, lang.hitch(this, this.onNestedTargetUpdated));
+         on(this.domNode, Constants.reorderItemsEvent, lang.hitch(this, this.onNestedTargetReordered));
       },
 
       /**
@@ -92,6 +95,11 @@ define(["dojo/_base/declare",
        * @param {object} evt The deletion event
        */
       onItemDelete: function alfresco_dnd_DroppedNestingItemWrapper__onItemDelete(/* jshint unused:false */ evt) {
+         // Need to get the index of the node BEFORE we delete it (otherwise it'll lost when we remove the node,
+         // and the index is the best way of knowing what to delete from the underlying data model)...
+         var deleteIndex = $(this.domNode).index();
+
+         // Now remove the the item...
          array.forEach(this._renderedWidgets, function(widget) {
             if (widget.previewTarget && typeof widget.previewTarget.getAllNodes === "function")
             {
@@ -104,7 +112,18 @@ define(["dojo/_base/declare",
                });
             }
          });
-         this.inherited(arguments);
+
+         // We're deliberately NOT going to call the inherited function here, instead we'll ALMOST (but not quite)
+         // duplicate it, because we want to include the deleteIndex we retrieved earlier...
+         on.emit(this.domNode, Constants.deleteItemEvent, {
+            bubbles: true,
+            cancelable: true,
+            targetWidget: this,
+            deleteIndex: deleteIndex
+         });
+         this.alfPublish(Constants.itemDeletedTopic, {
+            item: this.getValue()
+         });
       },
 
       /**
@@ -114,31 +133,139 @@ define(["dojo/_base/declare",
        * @param {object} evt The drop event.
        */
       onNestedTargetUpdated: function alfresco_dnd_DroppedNestingItemWrapper__onNestedTargetUpdated(evt) {
-         if (typeof evt.stopPropagation === "function")
+         if (evt.targetWidget === this)
          {
-            evt.stopPropagation();
-         }
-         if (typeof evt.preventDefault === "function")
-         {
-            evt.preventDefault();
-         }
-
-         // Attempt to mix the updated target value into the wrapped value...
-         if (evt.targetWidget)
-         {
-            if (evt.targetWidget.targetProperty && typeof evt.targetWidget.getValue === "function")
-            {
-               lang.setObject(evt.targetWidget.targetProperty, evt.targetWidget.getValue(), this.value);
-            }
-            else
-            {
-               this.alfLog("warn", "The 'targetWidget' has no 'targetProperty' or no 'getValue' function", evt.targetWidget, this);
-            }
+            // We've managed to catch our own emitted event, allow bubbling to continue...
          }
          else
          {
-            this.alfLog("warn", "The update event contains no 'targetWidget' attribute", evt, this);
+            if (typeof evt.stopPropagation === "function")
+            {
+               evt.stopPropagation();
+            }
+            if (typeof evt.preventDefault === "function")
+            {
+               evt.preventDefault();
+            }
+
+            // Attempt to mix the updated target value into the wrapped value...
+            if (evt.targetWidget)
+            {
+               if (evt.targetWidget.targetProperty && typeof evt.targetWidget.getValue === "function")
+               {
+                  var listToReorder = lang.getObject(evt.targetWidget.targetProperty, false, this.value);
+                  if (!ObjectTypeUtils.isArray(listToReorder))
+                  {
+                     // The target value will usually be an array, but just in case - just set the value as given...
+                     lang.setObject(evt.targetWidget.targetProperty, evt.targetWidget.getValue(), this.value);
+                     this.notifyParentOfChange();
+                  }
+                  else if (!isNaN(evt.index))
+                  {
+                     // Set the supplied index...
+                     listToReorder[evt.index] = evt.targetWidget.getValue();
+                     this.notifyParentOfChange();
+                  }
+                  else if (!isNaN(evt.deleteIndex))
+                  {
+                     // Delete an item...
+                     listToReorder.splice(evt.deleteIndex, 1);
+                     this.notifyParentOfChange();
+                  }
+                  else
+                  {
+                     // If all else fails, then we're just going to try and work out the new value based on the current
+                     // value of the target widgets preview target. This is expected to be the case when items are dragged
+                     // around in a target...
+                     var value = [];
+                     array.forEach(evt.targetWidget.previewTarget.getAllNodes(), function(node) {
+                        var widget = registry.getEnclosingWidget(node);
+                        if (widget && typeof widget.getValue === "function")
+                        {
+                           value.push(widget.getValue());
+                        }
+                     }, this);
+                     lang.setObject(evt.targetWidget.targetProperty, value, this.value);
+                     this.notifyParentOfChange();
+                  }
+               }
+               else
+               {
+                  this.alfLog("warn", "The 'targetWidget' has no 'targetProperty' or no 'getValue' function", evt.targetWidget, this);
+               }
+            }
+            else
+            {
+               this.alfLog("warn", "The update event contains no 'targetWidget' attribute", evt, this);
+            }
          }
+      },
+
+      /**
+       * Handles items in a target being reordered
+       * 
+       * @instance
+       * @param {object} evt The drop event.
+       */
+      onNestedTargetReordered: function alfresco_dnd_DroppedNestingItemWrapper__onNestedTargetReordered(evt) {
+         if (evt.targetWidget === this)
+         {
+            // We've managed to catch our own emitted event, allow bubbling to continue...
+         }
+         else
+         {
+            if (typeof evt.stopPropagation === "function")
+            {
+               evt.stopPropagation();
+            }
+            if (typeof evt.preventDefault === "function")
+            {
+               evt.preventDefault();
+            }
+
+            // Attempt to mix the updated target value into the wrapped value...
+            if (evt.targetWidget && evt.targetWidget.targetProperty)
+            {
+               var listToReorder = lang.getObject(evt.targetWidget.targetProperty, false, this.value);
+               if (!ObjectTypeUtils.isArray(listToReorder))
+               {
+                  this.alfLog("warn", "Can't reorder because the targetProperty does not exist or is not an array", evt.targetWidget.targetProperty, this.value, this);
+               }
+               else if (isNaN(evt.oldIndex) || isNaN(evt.newIndex))
+               {
+                  this.alfLog("warn", "Can't reorder because either the oldIndex or the newIndex (or both) are missing or are not numbers", evt, this);
+               }
+               else
+               {
+                  // Do the re-ordering...
+                  var tmp1 = listToReorder[evt.oldIndex];
+                  var tmp2 = listToReorder[evt.newIndex];
+                  listToReorder[evt.oldIndex] = tmp2;
+                  listToReorder[evt.newIndex] = tmp1;
+
+                  // ...then emit an event to capture the new value...
+                  this.notifyParentOfChange();
+               }
+            }
+            else
+            {
+               this.alfLog("warn", "The update event contains no 'targetWidget' attribute", evt, this);
+            }
+         }
+      },
+
+      /**
+       * This function can be called to update wrapping widgets that the current item has changed.
+       *
+       * @instance
+       */
+      notifyParentOfChange: function alfresco_dnd_DroppedNestingItemWrapper__notifyParentOfChange() {
+         on.emit(this.domNode, Constants.updateItemsEvent, {
+            bubbles: true,
+            cancelable: true,
+            targetWidget: this,
+            index: $(this.domNode).index()
+         });
       },
 
       /**
