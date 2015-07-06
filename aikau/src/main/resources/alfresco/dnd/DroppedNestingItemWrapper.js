@@ -158,19 +158,19 @@ define(["dojo/_base/declare",
                   {
                      // The target value will usually be an array, but just in case - just set the value as given...
                      lang.setObject(evt.targetWidget.targetProperty, evt.targetWidget.getValue(), this.value);
-                     this.onUpdateParentOfChange();
+                     this.notifyParentOfChange();
                   }
                   else if (!isNaN(evt.index))
                   {
                      // Set the supplied index...
                      listToReorder[evt.index] = evt.targetWidget.getValue();
-                     this.onUpdateParentOfChange();
+                     this.notifyParentOfChange();
                   }
                   else if (!isNaN(evt.deleteIndex))
                   {
                      // Delete an item...
                      listToReorder.splice(evt.deleteIndex, 1);
-                     this.onUpdateParentOfChange();
+                     this.notifyParentOfChange();
                   }
                   else
                   {
@@ -186,7 +186,7 @@ define(["dojo/_base/declare",
                         }
                      }, this);
                      lang.setObject(evt.targetWidget.targetProperty, value, this.value);
-                     this.onUpdateParentOfChange();
+                     this.notifyParentOfChange();
                   }
                }
                else
@@ -244,7 +244,7 @@ define(["dojo/_base/declare",
                   listToReorder[evt.newIndex] = tmp1;
 
                   // ...then emit an event to capture the new value...
-                  this.onUpdateParentOfChange();
+                  this.notifyParentOfChange();
                }
             }
             else
@@ -259,7 +259,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      onUpdateParentOfChange: function alfresco_dnd_DroppedNestingItemWrapper__onUpdateParentOfChange() {
+      notifyParentOfChange: function alfresco_dnd_DroppedNestingItemWrapper__notifyParentOfChange() {
          on.emit(this.domNode, Constants.updateItemsEvent, {
             bubbles: true,
             cancelable: true,
