@@ -1,4 +1,3 @@
-/* global page */
 var value = [
  {
    name: "A",
@@ -104,6 +103,7 @@ model.jsonModel = {
                      {
                         name: "alfresco/dnd/DroppedNestingItemWrapper",
                         config: {
+                           additionalCssClasses: "outerTestItemWrapper",
                            showEditButton: false,
                            label: "{label}",
                            value: "{value}",
@@ -112,6 +112,7 @@ model.jsonModel = {
                               {
                                  name: "alfresco/dnd/DragAndDropNestedTarget",
                                  config: {
+                                    additionalCssClasses: "outerTestItemTarget",
                                     useModellingService: true,
                                     label: "Widgets",
                                     targetProperty: "config.widgets",
@@ -133,6 +134,7 @@ model.jsonModel = {
                      {
                         name: "alfresco/dnd/DroppedNestingItemWrapper",
                         config: {
+                           additionalCssClasses: "middleTestItemWrapper",
                            showEditButton: false,
                            label: "{label}",
                            value: "{value}",
@@ -141,6 +143,7 @@ model.jsonModel = {
                               {
                                  name: "alfresco/dnd/DragAndDropNestedTarget",
                                  config: {
+                                    additionalCssClasses: "middleTestItemTarget",
                                     useModellingService: true,
                                     label: "Widgets",
                                     targetProperty: "config.widgets",
@@ -162,13 +165,17 @@ model.jsonModel = {
                      {
                         name: "alfresco/dnd/DroppedNestingItemWrapper",
                         config: {
+                           additionalCssClasses: "innerTestItemWrapper",
                            showEditButton: false,
                            label: "{label}",
                            value: "{value}",
                            type: "{type}",
                            widgets: [
                               {
-                                 name: "alfresco/dnd/DroppedItem"
+                                 name: "alfresco/dnd/DroppedItem",
+                                 config: {
+                                    additionalCssClasses: "innerTestItem"
+                                 }
                               }
                            ]
                         }

@@ -31,9 +31,14 @@ define({
     * @type {string[]}
     */
    // Uncomment and add specific tests as necessary during development!
-   xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/dashlets/InfiniteScrollDashletTest",
-      "src/test/resources/alfresco/dashlets/DashletTest"
+   baseFunctionalSuites: [
+      "src/test/resources/alfresco/dnd/AlternateEditorTest",
+      "src/test/resources/alfresco/dnd/DndTest",
+      "src/test/resources/alfresco/dnd/FormCreationTest",
+      "src/test/resources/alfresco/dnd/ModelCreationServiceTest",
+      "src/test/resources/alfresco/dnd/MultiSourceTest",
+      "src/test/resources/alfresco/dnd/NestedConfigurationTest",
+      "src/test/resources/alfresco/dnd/NestedReorderTest"
    ],
 
    /**
@@ -42,7 +47,7 @@ define({
     * @instance
     * @type {string[]}
     */
-   baseFunctionalSuites: [
+   xbaseFunctionalSuites: [
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 
@@ -72,6 +77,7 @@ define({
       "src/test/resources/alfresco/dnd/ModelCreationServiceTest",
       "src/test/resources/alfresco/dnd/MultiSourceTest",
       "src/test/resources/alfresco/dnd/NestedConfigurationTest",
+      "src/test/resources/alfresco/dnd/NestedReorderTest",
 
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
