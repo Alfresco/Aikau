@@ -55,6 +55,10 @@ define(["intern!object",
                .click()
                .end()
 
+            .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
+               .click()
+               .end()
+
             .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
                .click()
                .end()
@@ -73,6 +77,7 @@ define(["intern!object",
             .getLastPublish("SITE_PICKED")
                .then(function(payload) {
                   assert.deepPropertyVal(payload, "site[0]", "site1", "Did not pick and publish correct site");
+                  assert.notDeepProperty(payload, "site[1]", "Second site exists when it should not");
                })
                .clearLog();
          },
