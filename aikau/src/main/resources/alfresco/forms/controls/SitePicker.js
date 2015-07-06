@@ -57,10 +57,7 @@ define(["alfresco/forms/controls/Picker",
        * @instance
        * @type {Object[]}
        */
-      i18nRequirements: [
-         {i18nFile: "./i18n/Picker.properties"},
-         {i18nFile: "./i18n/SitePicker.properties"}
-      ],
+      i18nRequirements: [{i18nFile: "./i18n/SitePicker.properties"}],
 
       /**
        * Overrides the default itemKey to be "shortName"

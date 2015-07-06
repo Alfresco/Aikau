@@ -78,10 +78,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {Array}
        */
-      i18nRequirements: [
-         {i18nFile: "./i18n/Picker.properties"},
-         {i18nFile: "./i18n/SitePicker.properties"}
-      ],
+      i18nRequirements: [{i18nFile: "./i18n/SitePicker.properties"}],
 
       /**
        * Whether to select multiple sites in the picker or just one
