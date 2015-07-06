@@ -24,12 +24,16 @@
  * and match). Pixel dimensions will be allocated first and the percentages will be of the remaining available
  * width after fixed sizes are deducted. Any widgets that do not request a specific width will be allocated 
  * an equal amount of whatever is left.</p>
+ * 
  * <p>It is also possible to define gaps between widgets by using the 
  * [widgetMarginLeft]{@link module:alfresco/layout/HorizontalWidgets#widgetMarginLeft} and
  * [widgetMarginRight]{@link module:alfresco/layout/HorizontalWidgets#widgetMarginRight} attributes (but you should bear
  * in mind that if using both attributes then the gap between 2 widgets will be the <b>combination</b> of both values).</p>
+ * 
  * <p><b>PLEASE NOTE: Resize operations are not currently handled - this will be addressed in the future</b></p>
- * <p><pre>{
+ * 
+ * @example <caption>Sample usage:</caption>
+ * {
  *    "name": "alfresco/layout/HorizontalWidgets",
  *    "config": {
  *       "widgetMarginLeft": 10,
@@ -45,7 +49,8 @@
  *          }
  *       ]
  *    }
- * }</pre></p>
+ * }
+ * 
  * @module alfresco/layout/HorizontalWidgets
  * @extends module:alfresco/core/ProcessWidgets
  * @author Dave Draper

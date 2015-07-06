@@ -18,7 +18,6 @@
  */
 
 /**
- *
  * @module alfresco/pickers/SitePicker
  * @extends module:alfresco/pickers/Picker
  * @author Dave Draper
@@ -74,6 +73,26 @@ define(["dojo/_base/declare",
    return declare([Picker], {
 
       /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {Array}
+       */
+      i18nRequirements: [
+         {i18nFile: "./i18n/Picker.properties"},
+         {i18nFile: "./i18n/SitePicker.properties"}
+      ],
+
+      /**
+       * Whether to select multiple sites in the picker or just one
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      multiSite: false,
+
+      /**
        *
        * @instance
        */
@@ -83,7 +102,7 @@ define(["dojo/_base/declare",
             name: "alfresco/pickers/PickedItems",
             assignTo: "pickedItemsWidget",
             config: {
-               singleItemMode: true,
+               singleItemMode: !this.multiSite,
                itemKey: "shortName",
                widgets: [
                   {
@@ -126,6 +145,7 @@ define(["dojo/_base/declare",
                ]
             }
          }];
+         this.pickedItemsLabel = this.multiSite ? "sitePicker.pickedItems.multi" : "sitePicker.pickedItems.single";
          this.inherited(arguments);
       },
 
