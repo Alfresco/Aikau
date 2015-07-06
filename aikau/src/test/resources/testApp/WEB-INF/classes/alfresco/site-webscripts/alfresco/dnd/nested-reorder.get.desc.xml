@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop (nested item reordering)</shortname>
+  <description>Shows pre-loaded DND data where items nested within an object are reordered</description>
+  <family>aikau-unit-tests</family>
+  <url>/nested-reorder-dnd</url>
+</webscript>
