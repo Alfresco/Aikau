@@ -40,7 +40,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core", 
         "dojo/text!./templates/Property.html", 
         "alfresco/core/ObjectTypeUtils", 
-        "alfresco/core/UrlUtils", 
+        "alfresco/core/UrlUtilsMixin", 
         "alfresco/core/TemporalUtils", 
         "dojo/_base/lang", 
         "dojo/dom-class", 
@@ -48,9 +48,9 @@ define(["dojo/_base/declare",
         "dijit/Tooltip", 
         "dojo/on"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, ValueDisplayMapMixin, AlfCore, template, 
-            ObjectTypeUtils, UrlUtils, TemporalUtils, lang, domClass, domStyle, Tooltip, on) {
+            ObjectTypeUtils, UrlUtilsMixin, TemporalUtils, lang, domClass, domStyle, Tooltip, on) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils, UrlUtilsMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -356,7 +356,7 @@ define(["dojo/_base/declare",
             if (property.hasOwnProperty("iso8601")) {
                value = this.renderDate(property.iso8601);
             } else if (property.hasOwnProperty("userName") && property.hasOwnProperty("displayName")) {
-               value = UrlUtils.userProfileLink(property.userName, property.displayName);
+               value = this.userProfileLink(property.userName, property.displayName);
             } else if (property.hasOwnProperty("displayName")) {
                value = this.encodeHTML(property.displayName || "");
             } else if (property.hasOwnProperty("title")) {

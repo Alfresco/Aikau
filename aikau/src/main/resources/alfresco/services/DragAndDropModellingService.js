@@ -45,6 +45,7 @@
  *          config: {
  *             label: "{label}",
  *             value: "{value}",
+ *             type: "{type}",
  *             widgets: [
  *                {
  *                   name: "alfresco/dnd/DroppedItemWidgets"
@@ -113,6 +114,7 @@ define(["dojo/_base/declare",
             showEditButton: false,
             label: "{label}",
             value: "{value}",
+            type: "{type}",
             widgets: [{
                name: "alfresco/dnd/DroppedItem"
             }]

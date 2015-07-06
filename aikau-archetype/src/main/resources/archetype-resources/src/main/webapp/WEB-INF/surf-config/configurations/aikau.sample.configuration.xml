@@ -6,7 +6,7 @@
    <name>Aikau Sample Application</name>
    <source-id>site</source-id>
    <properties>
-      <theme>lightTheme</theme>
+      <theme>theme_1-theme</theme>
       <root-page>home-page</root-page>
    </properties>
 </configuration>

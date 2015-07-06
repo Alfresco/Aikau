@@ -34,8 +34,8 @@ define(["dojo/_base/declare",
         "alfresco/dialogs/AlfDialog",
         "dojo/_base/lang",
         "dojo/_base/array",
-        "dojo/json"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang, array) {
+        "alfresco/util/urlUtils"],
+        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang, array, urlUtils) {
 
    return declare([AlfCore, CoreXhr], {
 
@@ -151,24 +151,11 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function can be used to append the supplied query parameter name and value onto the
-       * supplied URL string which is then returned.
-       *
-       * @param {string} url The url to update
-       * @param {string} param The name of the query parameter
-       * @param {string} value The value of the query parameter
-       * @returns {string} The updated URL
+       * @instance
+       * @see module:alfresco/util/urlUtils#addQueryParameter
        */
-      addQueryParameter: function alfresco_services_CrudService__addQueryParameter(url, param, value) {
-         if (url.indexOf("?") === -1)
-         {
-            url += "?";
-         }
-         else
-         {
-            url += "&";
-         }
-         return url += param + "=" + value;
+      addQueryParameter: function alfresco_services_CrudService__addQueryParameter() {
+         return urlUtils.addQueryParameter.apply(urlUtils, arguments);
       },
 
       /**

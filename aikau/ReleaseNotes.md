@@ -1,7 +1,12 @@
-Aikau 1.0.23 Release Notes
+Aikau 1.0.24 Release Notes
 ==========================
 
-Current deprecations:
+New deprecations: 
+-----------------
+* alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
+* alfresco/dialogs/_AlfCreateFormDialogMixin.js                  (use alfresco/services/DialogService)
+
+Previous deprecations:
 ---------------------
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 * alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
@@ -35,6 +40,25 @@ Current deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
 ----------------
+1.0.24:
+* [AKU-337](https://issues.alfresco.com/jira/browse/AKU-337)       - Remove Share dependencies from alfresco/dashlets/Dashlet
+* [AKU-375](https://issues.alfresco.com/jira/browse/AKU-375)       - Improvements to alfresco/layout/Twister
+* [AKU-376](https://issues.alfresco.com/jira/browse/AKU-376)       - Improvements to alfresco/services/InfiniteScrollService
+* [AKU-379](https://issues.alfresco.com/jira/browse/AKU-379)       - Prevent single use DND times being added via keyboard actions
+* [AKU-380](https://issues.alfresco.com/jira/browse/AKU-380)       - Support for DND nested accept types 
+* [AKU-382](https://issues.alfresco.com/jira/browse/AKU-382)       - Fixes for alfresco/forms/Form useHash behaviour
+* [AKU-383](https://issues.alfresco.com/jira/browse/AKU-383)       - Fixes for alfresco/forms/Form auto-save behaviour
+* [AKU-385](https://issues.alfresco.com/jira/browse/AKU-385)       - Apply logging filters to pub/sub console output
+* [AKU-388](https://issues.alfresco.com/jira/browse/AKU-388)       - Ensure alfresco/menus/AlfMenuItem supports PROCESS payload type
+* [AKU-392](https://issues.alfresco.com/jira/browse/AKU-392)       - Fix reload behaviour on infinite scroll lists
+* [AKU-395](https://issues.alfresco.com/jira/browse/AKU-395)       - Ensure dashlet supports alfresco/layout/InfiniteScrollArea
+
+1.0.23.2:
+* [AKU-394](https://issues.alfresco.com/jira/browse/AKU-394)       - Revert URI encoding back to false on alfresco/core/CoreXhr
+
+1.0.23.1:
+* [AKU-393](https://issues.alfresco.com/jira/browse/AKU-393)       - Added service-filtering.lib.js
+
 1.0.23:
 * [AKU-66](https://issues.alfresco.com/jira/browse/AKU-66)       - Improved concurrent request handling in alfresco/lists/AlfList and alfresco/search/AlfSearchList
 * [AKU-353](https://issues.alfresco.com/jira/browse/AKU-353)       - Improved testability of alfresco/renderers/PublishingDropDownMenu

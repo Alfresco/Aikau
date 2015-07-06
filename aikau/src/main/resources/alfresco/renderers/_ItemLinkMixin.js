@@ -20,18 +20,18 @@
 /**
  * @module alfresco/renderers/_ItemLinkMixin
  * @extends module:alfresco/core/Core
- * @mixes module:alfresco/core/UrlUtils
+ * @mixes module:alfresco/core/UrlUtilsMixin
  * @mixes module:alfresco/core/PathUtils
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "service/constants/Default",
-        "alfresco/core/UrlUtils",
+        "alfresco/core/UrlUtilsMixin",
         "dojo/_base/lang",
         "dojo/_base/event"], 
-        function(declare, AlfConstants, UrlUtils, lang, event) {
+        function(declare, AlfConstants, UrlUtilsMixin, lang, event) {
    
-   return declare([UrlUtils], {
+   return declare([UrlUtilsMixin], {
 
       /**
        * This is the topic that will be published when the item is clicked. The default is aimed at being processed

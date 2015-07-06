@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -26,13 +26,14 @@
  * @module alfresco/dialogs/_AlfCreateFormDialogMixin
  * @extends module:alfresco/core/Core
  * @author Dave Draper
+ * @deprecated Since 1.0.25 - use the [DialogService]{@link module:alfresco/services/DialogService} instead.
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/_base/lang",
         "alfresco/dialogs/AlfDialog",
         "alfresco/forms/Form"],
-        function(declare, AlfCore, lang, AlfDialog, AlfForm) {
+        function(declare, AlfCore, lang, AlfDialog, /*jshint unused:false*/ AlfForm) {
 
    return declare([AlfCore], {
 
@@ -45,12 +46,12 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_dialogs__CreateFormDialogMixin__postCreate() {
          this.inherited(arguments);
 
-         if (this.dialogConfirmationButtonTitle == null)
+         if (!this.dialogConfirmationButtonTitle)
          {
             this.dialogConfirmationButtonTitle = this.message("services.ActionService.button.ok");
          }
 
-         if (this.dialogCancellationButtonTitle == null)
+         if (!this.dialogCancellationButtonTitle)
          {
             this.dialogCancellationButtonTitle = this.message("services.ActionService.button.cancel");
          }
@@ -119,14 +120,14 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The payload published on the request topic.
        */
-      onCreateFormDialogRequest: function alfresco_dialogs__CreateFormDialogMixin__onCreateFormDialogRequest(payload) {
+      onCreateFormDialogRequest: function alfresco_dialogs__CreateFormDialogMixin__onCreateFormDialogRequest(/*jshint unused:false*/ payload) {
          // Destroy any previously created dialog...
-         if (this.dialog != null)
+         if (this.dialog)
          {
             this.dialog.destroyRecursive();
          }
 
-         if (this.widgets == null)
+         if (!this.widgets)
          {
             this.alfLog("warn", "A request was made to display a dialog but no 'widgets' attribute has been defined", this);
          }
@@ -238,9 +239,9 @@ define(["dojo/_base/declare",
        * @param {object} payload The dialog content
        */
       onDialogConfirmation: function alfresco_dialogs__CreateFormDialogMixin__onDialogConfirmation(payload) {
-         if (payload != null &&
-             payload.dialogContent != null &&
-             payload.dialogContent.length == 1 &&
+         if (payload &&
+             payload.dialogContent &&
+             payload.dialogContent.length === 1 &&
              typeof payload.dialogContent[0].getValue === "function")
          {
             var data = payload.dialogContent[0].getValue();

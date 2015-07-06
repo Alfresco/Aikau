@@ -25,22 +25,22 @@
  * @module alfresco/services/actions/WorkflowService
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
- * @mixes module:alfresco/core/UrlUtils
+ * @mixes module:alfresco/core/UrlUtilsMixin
  * @mixes module:alfresco/services/_NavigationServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreXhr",
-        "alfresco/core/UrlUtils",
+        "alfresco/core/UrlUtilsMixin",
         "alfresco/services/_NavigationServiceTopicMixin",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/NodeUtils"],
-        function(declare, AlfCore, AlfCoreXhr, UrlUtils, _NavigationServiceTopicMixin, AlfConstants, lang, array, NodeUtils) {
+        function(declare, AlfCore, AlfCoreXhr, UrlUtilsMixin, _NavigationServiceTopicMixin, AlfConstants, lang, array, NodeUtils) {
 
-   return declare([AlfCore, AlfCoreXhr, UrlUtils, _NavigationServiceTopicMixin], {
+   return declare([AlfCore, AlfCoreXhr, UrlUtilsMixin, _NavigationServiceTopicMixin], {
 
       /**
        * An array of the i18n files to use with this widget.

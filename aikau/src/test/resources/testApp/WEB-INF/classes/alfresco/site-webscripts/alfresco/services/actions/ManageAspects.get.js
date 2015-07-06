@@ -48,7 +48,16 @@ model.jsonModel = {
             label: "Manage Aspects (no aspects in payload)",
             publishTopic: "ALF_SINGLE_DOCUMENT_ACTION_REQUEST",
             publishPayload: {
-               action: "onActionManageAspects",
+               action: {
+                  "id": "document-manage-aspects",
+                  "icon": "document-manage-aspects",
+                  "type": "javascript",
+                  "label": "actions.document.manage-aspects",
+                  "params": {
+                     "function": "onActionManageAspects"
+                  },
+                  "index": "300"
+               },
                document: {
                   node: {
                      nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"
@@ -65,7 +74,16 @@ model.jsonModel = {
             label: "Manage Aspects (fail on aspect request)",
             publishTopic: "ALF_SINGLE_DOCUMENT_ACTION_REQUEST",
             publishPayload: {
-               action: "onActionManageAspects",
+               action: {
+                  "id": "document-manage-aspects",
+                  "icon": "document-manage-aspects",
+                  "type": "javascript",
+                  "label": "actions.document.manage-aspects",
+                  "params": {
+                     "function": "onActionManageAspects"
+                  },
+                  "index": "300"
+               },
                document: {
                   displayName: "No Data Node",
                   node: {
@@ -82,7 +100,16 @@ model.jsonModel = {
             label: "Manage Aspects (fail on save)",
             publishTopic: "ALF_SINGLE_DOCUMENT_ACTION_REQUEST",
             publishPayload: {
-               action: "onActionManageAspects",
+               action: {
+                  "id": "document-manage-aspects",
+                  "icon": "document-manage-aspects",
+                  "type": "javascript",
+                  "label": "actions.document.manage-aspects",
+                  "params": {
+                     "function": "onActionManageAspects"
+                  },
+                  "index": "300"
+               },
                document: {
                   displayName: "Save Fail Node",
                   node: {
@@ -96,7 +123,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/ManageAspectsMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

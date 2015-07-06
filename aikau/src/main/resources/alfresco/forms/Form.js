@@ -22,12 +22,17 @@
  * [BaseFormControl]{@link module:alfresco/forms/controls/BaseFormControl} and handles setting and 
  * getting there values as well as creating and controlling the behaviour of buttons that can be
  * used to publish the overall value of the controls that the form contains.</p>
+ *
+ * <p>By default forms will show error messages against any fields that contain invalid data when the 
+ * form is first displayed. If you'd prefer to give the user a chance to enter or change the data before
+ * validation errors are displayed then this can be achieved by configuring the 
+ * [showValidationErrorsImmediately]{@link module:alfresco/forms/Form#showValidationErrorsImmediately}
+ * to be false.</p>
  * 
- * <p>Auto-publishing forms:<br />
- * It is also possible to setup a form to automatically publish itself whenever its values change,
- * and optionally to also do so if any of its values are invalid (see example below).<br />
- * NOTE: If the autoSavePublishTopic is specified, then the OK and Cancel buttons are automatically
- * disabled.</p>
+ * <p>It is also possible to setup a form to automatically publish itself whenever its values change,
+ * and optionally to also do so if any of its values are invalid. If the 
+ * [autoSavePublishTopic]{@link module:alfresco/forms/Form#autoSavePublishTopic} is specified, 
+ * then the OK and Cancel buttons are automatically hidden.</p>
  *
  * @example <caption>Example configuration for auto-publishing (including invalid) form:</caption>
  * {
@@ -42,6 +47,28 @@
  *             config: {
  *                name: "control",
  *                label: "Autosave form control (even invalid)",
+ *                requirementConfig: {
+ *                   initialValue: true
+ *                }
+ *             }
+ *           }
+ *        ]
+ *     }
+ *  }
+ *
+ * @example <caption>Example configuration for form that does not show validation errors on initial display:</caption>
+ * {
+ *    name: "alfresco/forms/Form",
+ *    config: {
+ *       okButtonPublishTopic: "SAVE_FORM",
+ *       okButtonLabel: "Save",
+ *       showValidationErrorsImmediately: false,
+ *       widgets: [
+ *          {
+ *             name: "alfresco/forms/controls/TextBox",
+ *             config: {
+ *                name: "control",
+ *                label: "Name",
  *                requirementConfig: {
  *                   initialValue: true
  *                }
@@ -211,6 +238,17 @@ define(["dojo/_base/declare",
       setValueTopicParentScope: false,
 
       /**
+       * Indicates that any validation errors that are present on the fields contained within the form will be 
+       * shown immediately when the form is displayed. Validation will still occur if this is configured to be
+       * false (so it will not be possible to submit an invalid form).
+       * 
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      showValidationErrorsImmediately: true,
+
+      /**
        * When using the optional auto-saving capability (configured by setting an [autoSavePublishTopic]{@link module:alfresco/forms/Form#autoSavePublishTopic})
        * the form will typically need to wait until page setup is complete before allowing automatic saving to commence. However,
        * if a form (configured to auto-save) is dynamically created after the page has been loaded (e.g. when created within a
@@ -280,6 +318,13 @@ define(["dojo/_base/declare",
          // to this widget. However, this widget will need to be assigned with a pubSubScope... 
          if (this.widgets)
          {
+            array.forEach(this.widgets, function(widget) {
+               if (widget && widget.config)
+               {
+                  widget.config.showValidationErrorsImmediately = this.showValidationErrorsImmediately;
+               }
+            }, this);
+
             this.processWidgets(this.widgets, this._form.domNode);
          }
       },
@@ -599,6 +644,7 @@ define(["dojo/_base/declare",
          // but is not actually part of the form data)...
          delete payload.alfTopic;
          delete payload.alfPublishScope;
+         delete payload.alfCallerName;
          
          // Make sure that only the controls with names listed in hashVarsForUpdate are set on the URL hash...
          var updatedHash = {};

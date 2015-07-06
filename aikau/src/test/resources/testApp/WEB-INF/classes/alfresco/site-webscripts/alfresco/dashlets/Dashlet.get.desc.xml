@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Dashlet Tests</shortname>
+  <description>This page demonstrates and permits testing of the alfresco/dashlets/Dashlet widget</description>
+  <family>aikau-unit-tests</family>
+  <url>/Dashlet</url>
+</webscript>

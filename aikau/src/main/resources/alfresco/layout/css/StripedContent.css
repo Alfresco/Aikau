@@ -8,6 +8,11 @@
          background: @header-stripe-background-color;
          box-shadow: inset 0 0 2px 0 rgba(0,0,0,.75);
          color: @header-stripe-font-color;
+
+         /* Special handling for title widgets in header, important is sadly required here! :( */
+         h1.alfresco-header-Title > .text {
+            color: @header-stripe-font-color !important;
+         }
       }
       &--sub-header {
          background: @sub-header-stripe-background-color;
