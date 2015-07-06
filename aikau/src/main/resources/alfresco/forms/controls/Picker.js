@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -87,11 +87,11 @@ define(["alfresco/forms/controls/BaseFormControl",
          // Update the model to set the main picked items display and the overall picker config
          var clonedWidgetsForControl = lang.clone(this.widgetsForControl);
          this.processObject(["processInstanceTokens"], clonedWidgetsForControl);
-         if (this.configForPickedItems != null)
+         if (this.configForPickedItems)
          {
             this.setModelPickedItemsConfig(lang.clone(this.configForPickedItems), config.value, clonedWidgetsForControl);
          }
-         if (this.configForPicker != null)
+         if (this.configForPicker)
          {
             this.setModelPickerConfig(lang.clone(this.configForPicker), clonedWidgetsForControl);
          }
@@ -141,7 +141,7 @@ define(["alfresco/forms/controls/BaseFormControl",
       getValue: function alfresco_forms_controls_Picker__getValue() {
          var processedItems = [];
          var items = this.getPickedItemsWidget().currentData.items;
-         array.forEach(items, function(item, index) {
+         array.forEach(items, function(item) {
             processedItems.push(item[this.itemKey]);
          }, this);
          return processedItems;
@@ -181,7 +181,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       updateFormDialogButton: function alfresco_forms_controls_Picker__updateFormDialogButton(value) {
          var button = lang.getObject("verticalWidgets.formDialogButton", false, this);
-         if (button != null)
+         if (button)
          {
             lang.setObject("publishPayload.widgetsContent.0.config.value", value, button);
          }
@@ -211,18 +211,18 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       onItemsSelected: function alfresco_forms_controls_Picker__onItemsSelected(payload) {
          var pickedItemsWidget = this.getPickedItemsWidget();
-         if (pickedItemsWidget != null && payload != null)
+         if (pickedItemsWidget && payload)
          {
             // Check if a "pickedItems" attribute was provided in the payload. This would be provided
             // when using the remove or remove all buttons in the main picker...
             var pickedItems = payload.pickedItems;
-            if (pickedItems == null)
+            if (!pickedItems)
             {
                // ...if a "pickedItems" attribute was not provided then attempt to get the picked items
                // directly from the dialog.
                pickedItems = lang.getObject(this.dialogPickedItemsProperty, false, payload);
             }
-            if (pickedItems != null)
+            if (pickedItems)
             {
                pickedItemsWidget.currentData.items = pickedItems;
                pickedItemsWidget.renderView(false);

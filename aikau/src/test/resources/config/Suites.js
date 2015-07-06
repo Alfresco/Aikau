@@ -32,8 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/dashlets/InfiniteScrollDashletTest",
-      "src/test/resources/alfresco/dashlets/DashletTest"
+      "src/test/resources/alfresco/forms/controls/SitePickerTest"
    ],
 
    /**
@@ -115,6 +114,7 @@ define({
       "src/test/resources/alfresco/forms/controls/NumberSpinnerTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
+      "src/test/resources/alfresco/forms/controls/SitePickerTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
       "src/test/resources/alfresco/forms/controls/TinyMCETest",
       "src/test/resources/alfresco/forms/controls/ValidationTest",
