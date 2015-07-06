@@ -95,6 +95,11 @@ define(["dojo/_base/declare",
        * @param {object} evt The deletion event
        */
       onItemDelete: function alfresco_dnd_DroppedNestingItemWrapper__onItemDelete(/* jshint unused:false */ evt) {
+         // Need to get the index of the node BEFORE we delete it (otherwise it'll lost when we remove the node,
+         // and the index is the best way of knowing what to delete from the underlying data model)...
+         var deleteIndex = $(this.domNode).index();
+
+         // Now remove the the item...
          array.forEach(this._renderedWidgets, function(widget) {
             if (widget.previewTarget && typeof widget.previewTarget.getAllNodes === "function")
             {
@@ -107,7 +112,18 @@ define(["dojo/_base/declare",
                });
             }
          });
-         this.inherited(arguments);
+
+         // We're deliberately NOT going to call the inherited function here, instead we'll ALMOST (but not quite)
+         // duplicate it, because we want to include the deleteIndex we retrieved earlier...
+         on.emit(this.domNode, Constants.deleteItemEvent, {
+            bubbles: true,
+            cancelable: true,
+            targetWidget: this,
+            deleteIndex: deleteIndex
+         });
+         this.alfPublish(Constants.itemDeletedTopic, {
+            item: this.getValue()
+         });
       },
 
       /**
@@ -142,15 +158,35 @@ define(["dojo/_base/declare",
                   {
                      // The target value will usually be an array, but just in case - just set the value as given...
                      lang.setObject(evt.targetWidget.targetProperty, evt.targetWidget.getValue(), this.value);
+                     this.onUpdateParentOfChange();
                   }
                   else if (!isNaN(evt.index))
                   {
                      // Set the supplied index...
                      listToReorder[evt.index] = evt.targetWidget.getValue();
+                     this.onUpdateParentOfChange();
+                  }
+                  else if (!isNaN(evt.deleteIndex))
+                  {
+                     // Delete an item...
+                     listToReorder.splice(evt.deleteIndex, 1);
+                     this.onUpdateParentOfChange();
                   }
                   else
                   {
-                     this.alfLog("warn", "Can't determine what to update as no index is provided to update the array", listToReorder, evt, this);
+                     // If all else fails, then we're just going to try and work out the new value based on the current
+                     // value of the target widgets preview target. This is expected to be the case when items are dragged
+                     // around in a target...
+                     var value = [];
+                     array.forEach(evt.targetWidget.previewTarget.getAllNodes(), function(node) {
+                        var widget = registry.getEnclosingWidget(node);
+                        if (widget && typeof widget.getValue === "function")
+                        {
+                           value.push(widget.getValue());
+                        }
+                     }, this);
+                     lang.setObject(evt.targetWidget.targetProperty, value, this.value);
+                     this.onUpdateParentOfChange();
                   }
                }
                else
@@ -208,12 +244,7 @@ define(["dojo/_base/declare",
                   listToReorder[evt.newIndex] = tmp1;
 
                   // ...then emit an event to capture the new value...
-                  on.emit(this.domNode, Constants.updateItemsEvent, {
-                     bubbles: true,
-                     cancelable: true,
-                     targetWidget: this,
-                     index: $(this.domNode).index()
-                  });
+                  this.onUpdateParentOfChange();
                }
             }
             else
@@ -221,6 +252,20 @@ define(["dojo/_base/declare",
                this.alfLog("warn", "The update event contains no 'targetWidget' attribute", evt, this);
             }
          }
+      },
+
+      /**
+       * This function can be called to update wrapping widgets that the current item has changed.
+       *
+       * @instance
+       */
+      onUpdateParentOfChange: function alfresco_dnd_DroppedNestingItemWrapper__onUpdateParentOfChange() {
+         on.emit(this.domNode, Constants.updateItemsEvent, {
+            bubbles: true,
+            cancelable: true,
+            targetWidget: this,
+            index: $(this.domNode).index()
+         });
       },
 
       /**

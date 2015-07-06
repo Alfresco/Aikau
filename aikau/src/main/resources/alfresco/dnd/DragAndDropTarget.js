@@ -152,18 +152,9 @@ define(["dojo/_base/declare",
          aspect.after(this.previewTarget, "onMouseDown", lang.hitch(this, this.onWidgetSelected), true);
          
          // Capture widgets being dropped...
-         aspect.after(this.previewTarget, "onDrop", lang.hitch(this, this.onItemsUpdated), true);
-         
-         // We need to make sure that when a previously dropped item is dragged to a new location
-         // that the target it has been dragged out of is updated after a successful relocation
-         aspect.after(this.previewTarget, "onDndDrop", function(source, nodes, copy, target) {
-            var widget = registry.getEnclosingWidget(target.node);
-            widget = registry.getEnclosingWidget(source.node);
-            if (typeof widget.onItemsUpdated === "function")
-            {
-               widget.onItemsUpdated();
-            }
-         }, true);
+         aspect.after(this.previewTarget, "insertNodes", lang.hitch(this, this.onItemsUpdated), true);
+         aspect.after(this.previewTarget, "deleteSelectedNodes", lang.hitch(this, this.onItemsUpdated), true);
+
 
          if (this.previewTarget)
          {
@@ -405,7 +396,12 @@ define(["dojo/_base/declare",
                domClass.remove(this.previewNode, "containsItems");
             }
             // Emit the event to alert wrapping widgets to changes...
-            this.onItemsUpdated();
+            on.emit(this.domNode, Constants.updateItemsEvent, {
+               bubbles: true,
+               cancelable: true,
+               targetWidget: this,
+               deleteIndex: evt.deleteIndex
+            });
          }
       },
 
@@ -425,7 +421,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called after a new item is dropped onto the page.
+       * This function is called after a new item is dropped onto the target or when items are deleted from it
        *
        * @instance
        */
