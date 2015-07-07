@@ -144,8 +144,8 @@ define(["dojo/_base/declare",
        * @param {object} configuredPayload The configured payload
        * @param {object} currentItem The current item
        * @param {object} receivedPayload A payload that may have been received to trigger the request to generate a new payload (set as null if not applicable)
-       * @param {string} payloadType The type of payload to generate
-       * @param {boolean} mixinCurrentItem Whether to mixin the current item into the generated payload
+       * @param {string} [payloadType] The type of payload to generate (one of "CONFIGURED", "CURRENT_ITEM", "PROCESS" or "BUILD")
+       * @param {boolean} [mixinCurrentItem] Whether to mixin the current item into the generated payload
        * @param {array} publishPayloadModifiers An array of modifier functions to apply when the type is "PROCESS"
        * @returns {object} The generated payload
        */
