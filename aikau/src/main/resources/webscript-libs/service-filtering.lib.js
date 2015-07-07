@@ -1,17 +1,21 @@
 // This library file provides a convenient way in which services provided from multiple libraries can be filtered 
 // against each other to ensure that there are no duplicates (e.g. you want to avoid having two DialogServices on a
 // page otherwise you'll get two dialogs for each request!).
-function alfAddUniqueServices(currentServices, servicesToFilter) {
-   // Add the current services into the array that will ultimately be returned...
-   // Unique services not already defined (or that are configured with a different pubSubScope
-   // will be added) as well...
-   var filteredServices = [].concat(currentServices);
-
+function alfAddUniqueServices(currentServices, servicesToFilter, includeCurrentServices) {
+   var filteredServices = [];
+   
    // There's only filtering to do with we have been provided with some services to
    // filter against an array of current services...
    if (servicesToFilter && servicesToFilter.length &&
        currentServices && currentServices.length)
    {
+      // It is possible to request to NOT include the currentServices in the filtered result,
+      // this allows multiple Surf Components using Aikau on a page to avoid duplicating each other
+      if (includeCurrentServices !== false)
+      {
+         filteredServices = [].concat(currentServices);
+      }
+
       // Re-usable function for getting service names (since services can either
       // be defined in an array as Strings or Objects)...
       var getServiceName = function(s) {
@@ -72,6 +76,20 @@ function alfAddUniqueServices(currentServices, servicesToFilter) {
             filteredServices.push(a);
          }
       }
+   }
+   else if (currentServices && currentServices.length === 0 &&
+            servicesToFilter && servicesToFilter.length)
+   {
+      // If there are no currentServices, but there are servicesToFilter, then just return the complete
+      // list of servicesToFilter
+      filteredServices = servicesToFilter;
+   }
+   else if (currentServices && currentServices.length &&
+            servicesToFilter && servicesToFilter.length === 0 &&
+            includeCurrentServices !== false)
+   {
+      // If there ARE currentServices but no servicesToFilter, and we want to include the currentServices
+      // then just return them
    }
    return filteredServices;
 }
