@@ -1,7 +1,13 @@
-Aikau 1.0.24 Release Notes
+Aikau 1.0.25 Release Notes
 ==========================
 
-Current deprecations:
+New deprecations: 
+-----------------
+* alfresco/core/UrlUtils.js                                      (use alfresco/util/urlUtils or alfresco/core/UrlUtilsMixin)
+* alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
+* alfresco/dialogs/_AlfCreateFormDialogMixin.js                  (use alfresco/services/DialogService)
+
+Previous deprecations:
 ---------------------
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 * alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
@@ -35,6 +41,17 @@ Current deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
 ----------------
+1.0.25:
+* [AKU-367](https://issues.alfresco.com/jira/browse/AKU-367)       - Added alfresco/html/HR widget
+* [AKU-377](https://issues.alfresco.com/jira/browse/AKU-377)       - Update alfresco/layout/InfiniteScrollArea to request more list data when vertical space is available
+* [AKU-378](https://issues.alfresco.com/jira/browse/AKU-378)       - Update form to provide option to not validate on load
+* [AKU-390](https://issues.alfresco.com/jira/browse/AKU-390)       - Drag and drop nested item re-ordering fixes
+* [AKU-396](https://issues.alfresco.com/jira/browse/AKU-396)       - Update alfresco/search/AlfSearchResult to include manage aspects in filtered actions
+* [AKU-397](https://issues.alfresco.com/jira/browse/AKU-397)       - Refactor of alfresco/core/UrlUtils and including abstraction of addQueryParam from alfresco/services/CrudService
+* [AKU-398](https://issues.alfresco.com/jira/browse/AKU-398)       - Added alfresco/forms/controls/SitePicker
+* [AKU-399](https://issues.alfresco.com/jira/browse/AKU-399)       - Drag amd drop nested acceptance type verification handling
+* [AKU-400](https://issues.alfresco.com/jira/browse/AKU-400)       - Update alfresco/core/NotificationUtils to fix displayPrompt function regression
+
 1.0.24:
 * [AKU-337](https://issues.alfresco.com/jira/browse/AKU-337)       - Remove Share dependencies from alfresco/dashlets/Dashlet
 * [AKU-375](https://issues.alfresco.com/jira/browse/AKU-375)       - Improvements to alfresco/layout/Twister

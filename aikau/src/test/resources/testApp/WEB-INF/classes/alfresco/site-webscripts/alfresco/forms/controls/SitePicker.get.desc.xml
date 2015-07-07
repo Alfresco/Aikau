@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Site Picker</shortname>
+  <description>This demonstrates a site picker form control</description>
+  <family>aikau-unit-tests</family>
+  <url>/SitePicker</url>
+</webscript>

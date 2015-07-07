@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>NotificationUtils Mixin</shortname>
+  <description>This page is used to test the now deprecated alfresco/core/NotificationUtils mixin.</description>
+  <family>aikau-unit-tests</family>
+  <url>/NotificationUtils</url>
+</webscript>

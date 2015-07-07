@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/dashlets/DashletTest"
+      "src/test/resources/alfresco/forms/controls/SitePickerTest"
    ],
 
    /**
@@ -51,6 +51,7 @@ define({
 
       "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
       "src/test/resources/alfresco/core/CoreRwdTest",
+      "src/test/resources/alfresco/core/NotificationUtilsTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
       "src/test/resources/alfresco/core/TemporalUtilsTest",
@@ -70,6 +71,7 @@ define({
       "src/test/resources/alfresco/dnd/ModelCreationServiceTest",
       "src/test/resources/alfresco/dnd/MultiSourceTest",
       "src/test/resources/alfresco/dnd/NestedConfigurationTest",
+      "src/test/resources/alfresco/dnd/NestedReorderTest",
 
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
@@ -94,6 +96,7 @@ define({
       "src/test/resources/alfresco/forms/CrudFormTest",
       "src/test/resources/alfresco/forms/DynamicFormTest",
       "src/test/resources/alfresco/forms/FormsTest",
+      "src/test/resources/alfresco/forms/FormValidationTest",
       "src/test/resources/alfresco/forms/HashFormTest",
       "src/test/resources/alfresco/forms/SingleTextFieldFormTest",
 
@@ -112,6 +115,7 @@ define({
       "src/test/resources/alfresco/forms/controls/NumberSpinnerTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
+      "src/test/resources/alfresco/forms/controls/SitePickerTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
       "src/test/resources/alfresco/forms/controls/TinyMCETest",
       "src/test/resources/alfresco/forms/controls/ValidationTest",

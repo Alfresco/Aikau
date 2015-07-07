@@ -152,18 +152,9 @@ define(["dojo/_base/declare",
          aspect.after(this.previewTarget, "onMouseDown", lang.hitch(this, this.onWidgetSelected), true);
          
          // Capture widgets being dropped...
-         aspect.after(this.previewTarget, "onDrop", lang.hitch(this, this.onItemsUpdated), true);
-         
-         // We need to make sure that when a previously dropped item is dragged to a new location
-         // that the target it has been dragged out of is updated after a successful relocation
-         aspect.after(this.previewTarget, "onDndDrop", function(source, nodes, copy, target) {
-            var widget = registry.getEnclosingWidget(target.node);
-            widget = registry.getEnclosingWidget(source.node);
-            if (typeof widget.onItemsUpdated === "function")
-            {
-               widget.onItemsUpdated();
-            }
-         }, true);
+         aspect.after(this.previewTarget, "insertNodes", lang.hitch(this, this.onItemsUpdated), true);
+         aspect.after(this.previewTarget, "deleteSelectedNodes", lang.hitch(this, this.onItemsUpdated), true);
+
 
          if (this.previewTarget)
          {
@@ -194,6 +185,7 @@ define(["dojo/_base/declare",
             config: {
                label: "{label}",
                value: "{value}",
+               type: "{type}",
                widgets: "{widgets}"
             }
          }
@@ -236,6 +228,7 @@ define(["dojo/_base/declare",
          var promise = new Deferred();
          promise.then(lang.hitch(this, this.createDroppedItemsWidgets, item, node));
          this.alfPublish(Constants.requestWidgetsForDisplayTopic, {
+            type: item.type,
             value: item.value,
             promise: promise
          });
@@ -260,6 +253,7 @@ define(["dojo/_base/declare",
             this.currentItem = {};
             this.currentItem.label = item.label || item.value.label; // If no label is provided on the item, check the value (See AKU-318)
             this.currentItem.value = item.value;
+            this.currentItem.type = item.type;
             this.processObject(["processCurrentItemTokens"], widgetModel);
             
             // Create the widgets...
@@ -296,6 +290,7 @@ define(["dojo/_base/declare",
                // Set the value to be processed...
                this.currentItem.value = clonedItem.value;
                this.currentItem.label = clonedItem.label || clonedItem.value.label;
+               this.currentItem.type = clonedItem.type;
 
                // Check to see if a specific widget model has been requested for rendering the dropped item...
                // TODO Not sure that we actually care about this yet? If at all... shouldn't everything be part of the value?
@@ -366,12 +361,15 @@ define(["dojo/_base/declare",
          {
             array.forEach(value, function(item) {
                var data = {
-                  type: lang.clone(this.acceptTypes),
+                  type: lang.clone(item.type),
                   value: item
                };
                var createdItem = this.creator(data);
                this.previewTarget.insertNodes(true, [createdItem.data]);
+               this.alfPublish(Constants.itemAddedTopic, createdItem.data);
             }, this);
+
+            this.previewTarget.selectNone();
          }
       },
       
@@ -398,7 +396,12 @@ define(["dojo/_base/declare",
                domClass.remove(this.previewNode, "containsItems");
             }
             // Emit the event to alert wrapping widgets to changes...
-            this.onItemsUpdated();
+            on.emit(this.domNode, Constants.updateItemsEvent, {
+               bubbles: true,
+               cancelable: true,
+               targetWidget: this,
+               deleteIndex: evt.deleteIndex
+            });
          }
       },
 
@@ -418,7 +421,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called after a new item is dropped onto the page.
+       * This function is called after a new item is dropped onto the target or when items are deleted from it
        *
        * @instance
        */

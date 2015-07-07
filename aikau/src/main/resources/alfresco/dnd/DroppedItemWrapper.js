@@ -209,6 +209,7 @@ define(["dojo/_base/declare",
             if (this.value)
             {
                this.value.label = this.label;
+               this.value.type = this.type;
             }
          }
          if (this.widgets !== null && this.widgets !== undefined)
@@ -456,10 +457,12 @@ define(["dojo/_base/declare",
             var previousItem = $(this.domNode.parentNode).children().eq(currentIndex -1);
             $(this.domNode).after($(previousItem));
 
-            on.emit(this.domNode, Constants.updateItemsEvent, {
+            on.emit(this.domNode, Constants.reorderItemsEvent, {
                bubbles: true,
                cancelable: true,
-               targetWidget: this
+               targetWidget: this,
+               oldIndex: currentIndex,
+               newIndex: currentIndex - 1 
             });
          }
       },
@@ -469,7 +472,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      onItemDown: function alfresco_dnd_DroppedItemWrapper__onItemonItemDown() {
+      onItemDown: function alfresco_dnd_DroppedItemWrapper__onItemDown() {
          var currentIndex = $(this.domNode).index();
          var itemCount = $(this.domNode.parentNode).children().length;
          if (currentIndex !== itemCount - 1)
@@ -482,10 +485,12 @@ define(["dojo/_base/declare",
             //    $(this).insertAfter(nextItem).slideDown(300);
             // });
 
-            on.emit(this.domNode, Constants.updateItemsEvent, {
+            on.emit(this.domNode, Constants.reorderItemsEvent, {
                bubbles: true,
                cancelable: true,
-               targetWidget: this
+               targetWidget: this,
+               oldIndex: currentIndex,
+               newIndex: currentIndex + 1 
             });
          }
       }

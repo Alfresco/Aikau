@@ -24,8 +24,7 @@
  * @module alfresco/services/DashletService
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
- * @mixes module:alfresco/core/UrlUtils
- * @mixes module:alfresco/core/NotificationUtils
+ * @mixes module:alfresco/services/_DashletServiceTopicMixin
  * @author Martin Doyle
  */
 
@@ -49,7 +48,7 @@ define([
           */
          constructor: function alfresco_services_DashletService__constructor(args) {
             declare.safeMixin(this, args);
-            this.alfSubscribe(this.storeDashletHeightTopic, lang.hitch(this, this.storeDashletHeight));
+            this.alfSubscribe(this.storeDashletHeightTopic, lang.hitch(this, this.storeDashletHeight), true);
          },
 
          /**

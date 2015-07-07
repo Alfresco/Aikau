@@ -47,6 +47,15 @@ define([],function() {
       updateItemsEvent: "onAlfItemsUpdated",
 
       /**
+       * Emitted when an item is moved up or down within its parent
+       *
+       * @instance
+       * @type {String}
+       * @default "onAlfItemsReordered"
+       */
+      reorderItemsEvent: "onAlfItemsReordered",
+
+      /**
        * Emitted when an item value is updated
        *
        * @instance
@@ -152,6 +161,17 @@ define([],function() {
        * @type {String}
        * @default "ALF_DND_DROPPED_ITEM_DELETED"
        */
-      itemDeletedTopic: "ALF_DND_DROPPED_ITEM_DELETED"
+      itemDeletedTopic: "ALF_DND_DROPPED_ITEM_DELETED",
+
+      /**
+       * This topic is published by a [DragAndDropTarget]{@link module:alfresco/dnd/DragAndDropTarget} whenever a 
+       * dropped item is inserted into a target. This topic is subscribed to by [DragAndDropItems]{@link module:alfresco/dnd/DragAndDropItems}
+       * that are configured to only allow an item to be used so that the deleted item can be reinstated.
+       *
+       * @instance
+       * @type {String}
+       * @default "ALF_DND_ITEM_ADDED"
+       */
+      itemAddedTopic: "ALF_DND_ITEM_ADDED"
    };
 });

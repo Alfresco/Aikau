@@ -44,6 +44,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST", lang.hitch(this, "onRetrieveDocumentsRequest"));
          this.alfSubscribe("ALF_GET_RECENT_SITES", lang.hitch(this, "getRecentSites"));
          this.alfSubscribe("ALF_GET_FAVOURITE_SITES", lang.hitch(this, "getFavouriteSites"));
+         this.alfSubscribe("ALF_GET_SITES", lang.hitch(this, "getSites"));
 
       },
 
@@ -86,6 +87,19 @@ define(["dojo/_base/declare",
          var alfTopic = payload.alfResponseTopic + "_SUCCESS";
          this.alfPublish(alfTopic, {
             response: dojoJson.parse(favouriteSites)
+         });
+      },
+
+      /**
+       * Handles requests to retrieve the current users list of favourite sites.
+       *
+       * @instance
+       * @param {object} payload
+       */
+      getSites: function alfresco_testing_mockservices_DocumentPickerTestService__getSites(payload) {
+         var alfTopic = payload.alfResponseTopic + "_SUCCESS";
+         this.alfPublish(alfTopic, {
+            response: []
          });
       }
    });

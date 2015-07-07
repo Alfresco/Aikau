@@ -1439,6 +1439,38 @@ define(["dojo/_base/declare",
             this.alfLog("warn", "No watch method found on wrapped widget", this);
          }
       },
+
+      /**
+       * This is used to log whether or not this form control has had user focus or not. The reason being that in 
+       * certain circumstances we might not want to show validation errors until the user has at least made an attempt
+       * to enter a value before they are shown validation error messages. 
+       * 
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      _hadFocus: false,
+
+      /**
+       * This function is called whenever the form control loses focus. When this happens the 
+       * [_hadFocus]{@link module:alfresco/forms/controls/BaseFormControl#_hadFocus} attribute is set to
+       * true and if the 
+       * [_pendingValidationFailureDisplay]{@link module:alfresco/forms/controls/BaseFormControl#_pendingValidationFailureDisplay}
+       * has been set to true (by the [showValidationFailure]{@link module:alfresco/forms/controls/BaseFormControl#showValidationFailure}
+       * function) then the [showValidationFailure]{@link module:alfresco/forms/controls/BaseFormControl#showValidationFailure}
+       * will be called again to actually display the error message.
+       *
+       * @instance
+       */
+      _onBlur: function alfresco_forms_controls_BaseFormControl___onBlur() {
+         this._hadFocus = true;
+         if (this._pendingValidationFailureDisplay)
+         {
+            this._pendingValidationFailureDisplay = false;
+            this.showValidationFailure();
+         }
+         this.inherited(arguments);
+      },
       
       /**
        * Handles the change in value for the current form control by publishing the details of the change and calling the
@@ -1713,6 +1745,7 @@ define(["dojo/_base/declare",
                   name: this.name,
                   fieldId: this.fieldId
                });
+
                this.showValidationFailure();
             }
          }
@@ -1771,6 +1804,27 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * Indicates whether or not any validation errors will be shown as soon as the form control is displayed
+       * 
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      showValidationErrorsImmediately: true,
+
+      /**
+       * This is used to log that a validation error message should be displayed once the form control has gained
+       * and then lost focus (as indicated by the [_hadFocus]{@link module:alfresco/forms/controls/BaseFormControl#_hadFocus})
+       * attribute. It will be set to true if the form control has not yet gained focus but validation has occurred and
+       * revealed that there are error conditions in the current form value.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      _pendingValidationFailureDisplay: false,
+
+      /**
        * By default this simply adds the "validation-error" and "display" classes to the _validationIndicator
        * and _validationMessage DOM nodes respectively. However, the code has been broken out into a separate function
        * to support extending classes that may provide alternative HTML templates or wish to render errors
@@ -1779,8 +1833,15 @@ define(["dojo/_base/declare",
        * @instance
        */
       showValidationFailure: function alfresco_forms_controls_BaseFormControl__showValidationFailure() {
-         domClass.add(this._validationIndicator, "validation-error");
-         domClass.add(this._validationMessage, "display");
+         if (this.showValidationErrorsImmediately || this._hadFocus)
+         {
+            domClass.add(this._validationIndicator, "validation-error");
+            domClass.add(this._validationMessage, "display");
+         }
+         else
+         {
+            this._pendingValidationFailureDisplay = true;
+         }
       },
       
       /**

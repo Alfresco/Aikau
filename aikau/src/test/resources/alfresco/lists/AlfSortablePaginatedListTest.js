@@ -34,18 +34,10 @@ define(["intern!object",
    var testClearingDocumentList = function(buttonId, errorMsg) {
       return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
          .click()
-      .end()
-      .findByCssSelector("#DOCUMENT_LIST tr:nth-child(1) .alfresco-renderers-Property")
-         .click()
-         .pressKeys(keys.ARROW_DOWN)
-         .pressKeys(keys.ARROW_DOWN)
-         .pressKeys(keys.ARROW_DOWN)
-         .pressKeys(keys.ARROW_DOWN)
-         .pressKeys(keys.ARROW_DOWN)
-         .pressKeys(keys.ARROW_DOWN)
-         .pressKeys(keys.ARROW_DOWN)
-         .pressKeys(keys.ARROW_DOWN)
-      .end()
+         .end()
+      .execute(function() {
+         document.querySelector("#INFINITE_SCROLL_AREA_WITH_DOCLIST .alfresco-layout-FixedHeaderFooter__content").scrollTop += 50;
+      })
       .getLastPublish("DOCUMENT_LIST_ALF_EVENTS_SCROLL")
          .then(function(payload) {
             assert.isNotNull(payload, "Document list scroll event not registered");
@@ -113,23 +105,15 @@ define(["intern!object",
 
       "Scroll to bottom of basic infinite scroll area": function() {
          // Click on the first row to give it focus...
-         return browser.findByCssSelector("#INFITE_SCROLL_LIST tr:nth-child(1) .alfresco-renderers-Property")
-            .click()
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-         .end()
+         return browser.execute(function() {
+               document.querySelector("#INFINITE_SCROLL_AREA .alfresco-layout-FixedHeaderFooter__content").scrollTop += 50;
+            })
          .getLastPublish("INFINITE_SCROLL_AREA_ALF_EVENTS_SCROLL")
             .then(function(payload) {
                assert.isNotNull(payload, "List scroll event not registered");
             })
          .end()
-         .findAllByCssSelector("#INFITE_SCROLL_LIST tr")
+         .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
             .then(function(elements) {
                assert.lengthOf(elements, 20, "Additional rows were not loaded when the bottom of the list was reached");
             });
@@ -148,7 +132,7 @@ define(["intern!object",
                assert.isNotNull(payload, "More results not loaded");
             })
          .end()
-         .findAllByCssSelector("#INFITE_SCROLL_LIST tr")
+         .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
             .then(function(elements) {
                assert.lengthOf(elements, 10, "Old data not cleared when data filter request applied");
             });
@@ -166,7 +150,7 @@ define(["intern!object",
                assert.isNotNull(payload, "More results not loaded");
             })
          .end()
-         .findAllByCssSelector("#INFITE_SCROLL_LIST tr")
+         .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
             .then(function(elements) {
                assert.lengthOf(elements, 10, "Old data not cleared when data filter request applied");
             });
