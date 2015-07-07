@@ -40,10 +40,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
       "Test Drag From Palette To Drop Zone": function () {
          return browser.findByCssSelector("#dojoUnique1 > .title")
             .moveMouseTo()
@@ -53,10 +49,11 @@ define(["intern!object",
          .end()
          .findByCssSelector(".alfresco-creation-DropZone > div")
             .then(function(element) {
-               browser.moveMouseTo(element);
+               return browser.moveMouseTo(element)
+                  .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
+                  .releaseMouseButton();
             })
-            .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-            .releaseMouseButton()
+            
          .end()
          .findByCssSelector(".dojoDndHandle")
             .click()

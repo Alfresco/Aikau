@@ -211,19 +211,16 @@ define(["dojo/_base/declare",
             var a = lang.getObject(this.useItemsOnceComparisonKey, false, payload.value);
             if (a)
             {
-               // NOTE: Using some to exit as soon as match is found
-               array.some(this.items, function(item) {
-                  var b = lang.getObject(this.useItemsOnceComparisonKey, false, item.value);
+               var _this = this;
+               this.sourceTarget.forInItems(function(i, id, map) {
+                  var _item = map.getItem(id);
+                  var b = lang.getObject(_this.useItemsOnceComparisonKey, false, _item.data.value);
                   if (a === b)
                   {
-                     this.sourceTarget.forInItems(function(i, id, map) {
-                        map.delItem(id);
-                        domConstruct.destroy(dom.byId(id));
-                     });
-                     return true;
+                     map.delItem(id);
+                     domConstruct.destroy(dom.byId(id));
                   }
-                  return false;
-               }, this);
+               });
             }
          }
       },

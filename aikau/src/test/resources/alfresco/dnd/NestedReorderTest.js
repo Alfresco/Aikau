@@ -23,11 +23,9 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, require, TestCommon) {
 
-   var pause = 150;
    var browser;
    registerSuite({
 
@@ -41,6 +39,35 @@ define(["intern!object",
 
       beforeEach: function() {
          browser.end();
+      },
+
+      "Check that only 3 items are shown on the palette": function() {
+         // ...as all the others have been used...
+         return browser.findAllByCssSelector("#DRAG_PALETTE1 .dojoDndItem")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "There should only be 3 elements remaining on the palette as the others have been used");
+            });
+      },
+
+      "Drag nested items and check that palette is not cleared": function() {
+         // See AKU-413...
+         return browser.findByCssSelector(".middleTestItemWrapper:nth-child(1) > .dojoDndHandle")
+            .moveMouseTo()
+            .click()
+            .pressMouseButton()
+            .moveMouseTo(1, 1)
+         .end()
+         .findByCssSelector("#DRAG_PALETTE1 .dojoDndItem:first-child > div")
+            .then(function(element) {
+                  return browser.moveMouseTo(element)
+                     .sleep(1000) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
+                     .releaseMouseButton();
+               })
+         .end()
+         .findAllByCssSelector("#DRAG_PALETTE1 .dojoDndItem")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "There should still be 3 elements remaining on the palette after drag");
+            });
       },
 
       "Move a deep nested item down a place": function() {
@@ -83,10 +110,10 @@ define(["intern!object",
          .end()
          .findByCssSelector(".middleTestItemWrapper:nth-child(2) .previewPanel > div:first-child")
             .then(function(element) {
-                  browser.moveMouseTo(element);
+                  return browser.moveMouseTo(element)
+                     .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
+                     .releaseMouseButton();
                })
-            .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-            .releaseMouseButton()
          .end()
          .clearLog()
          .findByCssSelector(".confirmationButton > span")

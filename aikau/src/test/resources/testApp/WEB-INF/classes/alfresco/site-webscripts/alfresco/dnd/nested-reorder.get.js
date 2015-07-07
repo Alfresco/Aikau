@@ -197,6 +197,8 @@ model.jsonModel = {
                   id: "DRAG_PALETTE1",
                   name: "alfresco/dnd/DragAndDropItems",
                   config: {
+                     useItemsOnce: true,
+                     useItemsOnceComparisonKey: "name",
                      items: [
                         {
                            type: [ "outer"],
@@ -238,6 +240,27 @@ model.jsonModel = {
                            label: "F",
                            value: {
                               name: "F"
+                           }
+                        },
+                        {
+                           type: [ "outer"],
+                           label: "G",
+                           value: {
+                              name: "G"
+                           }
+                        },
+                        {
+                           type: [ "middle"],
+                           label: "H",
+                           value: {
+                              name: "H"
+                           }
+                        },
+                        {
+                           type: [ "inner"],
+                           label: "I",
+                           value: {
+                              name: "I"
                            }
                         }
                      ]
