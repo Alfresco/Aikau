@@ -1,7 +1,7 @@
 // This library file provides a convenient way in which services provided from multiple libraries can be filtered 
 // against each other to ensure that there are no duplicates (e.g. you want to avoid having two DialogServices on a
 // page otherwise you'll get two dialogs for each request!).
-function alfAddUniqueServices(currentServices, servicesToFilter, includeCurrentServices) {
+function alfAddUniqueServices(currentServices, servicesToFilter, excludeCurrentServices) {
    var filteredServices = [];
    
    // There's only filtering to do with we have been provided with some services to
@@ -11,7 +11,7 @@ function alfAddUniqueServices(currentServices, servicesToFilter, includeCurrentS
    {
       // It is possible to request to NOT include the currentServices in the filtered result,
       // this allows multiple Surf Components using Aikau on a page to avoid duplicating each other
-      if (includeCurrentServices !== false)
+      if (!excludeCurrentServices)
       {
          filteredServices = [].concat(currentServices);
       }
@@ -86,10 +86,11 @@ function alfAddUniqueServices(currentServices, servicesToFilter, includeCurrentS
    }
    else if (currentServices && currentServices.length &&
             servicesToFilter && servicesToFilter.length === 0 &&
-            includeCurrentServices !== false)
+            !excludeCurrentServices)
    {
       // If there ARE currentServices but no servicesToFilter, and we want to include the currentServices
       // then just return them
+      filteredServices = currentServices;
    }
    return filteredServices;
 }
