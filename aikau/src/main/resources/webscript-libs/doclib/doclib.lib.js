@@ -1090,11 +1090,9 @@ function getDocLibToolbar(options) {
       getDocLibCreateContentMenu(),
       {
          id: "DOCLIB_UPLOAD_BUTTON",
-         name: "alfresco/documentlibrary/AlfCreateContentMenuBarItem",
+         name: "alfresco/documentlibrary/UploadButton",
          config: {
-            label: msg.get("upload.label"),
-            iconClass: "alf-upload-icon",
-            publishTopic: "ALF_SHOW_UPLOADER"
+            label: msg.get("upload.label")
          }
       }
    ].concat(getDocLibCloudSyncToolbarActions())

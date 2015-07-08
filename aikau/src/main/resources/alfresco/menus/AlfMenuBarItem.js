@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,9 +29,8 @@ define(["dojo/_base/declare",
         "alfresco/menus/_AlfMenuItemMixin",
         "alfresco/core/Core",
         "dojo/dom-construct",
-        "dojo/dom-class",
-        "service/constants/Default"],
-        function(declare, MenuBarItem, _AlfMenuItemMixin, AlfCore, domConstruct, domClass, AlfConstants) {
+        "dojo/dom-class"],
+        function(declare, MenuBarItem, _AlfMenuItemMixin, AlfCore, domConstruct, domClass) {
 
    /**
     * Currently this extends the default Dojo implementation of a MenuBarItem without making any changes. Despite
@@ -59,8 +58,8 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_menus_AlfMenuBarItem__postCreate() {
          domClass.add(this.containerNode, "alf-menu-bar-label-node");
-         if ((this.iconClass && this.iconClass != "dijitNoIcon") ||
-             this.iconImage != null)
+         if ((this.iconClass && this.iconClass !== "dijitNoIcon") ||
+             this.iconImage)
          {
             this.iconNode = domConstruct.create("img", {
                className: this.iconClass,

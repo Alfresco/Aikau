@@ -492,7 +492,7 @@ define(["dojo/_base/declare",
          {
             this.alfPublish(this.metadataChangeTopic, {
                node: response.metadata
-            });
+            }, true);
 
             // Publish the details of the permissions for the current user. This will
             // only be available when the a specific node is shown rather than a set
