@@ -18,6 +18,19 @@
  */
 
 /**
+ * Creates a date-field input box
+ *
+ * @example <caption>Sample usage:</caption>
+ * {
+ *    name: "alfresco/forms/controls/DateTextBox",
+ *    id: "VALID_DATE_VALUE_1",
+ *    config: {
+ *       name: "validDate1",
+ *       value: "2012-12-12",
+ *       label: "Valid date #1"
+ *    }
+ * }
+ * 
  * @module alfresco/forms/controls/DateTextBox
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @author Dave Draper
@@ -41,10 +54,12 @@ define(["alfresco/forms/controls/BaseFormControl",
       cssRequirements: [{cssFile:"./css/DateTextBox.css"}],
 
       /**
+       * Get the configuration for the wrapped widget
+       * 
        * @instance
+       * @returns {object} The configuration for the form control
        */
       getWidgetConfig: function alfresco_forms_controls_DateTextBox__getWidgetConfig() {
-         // Return the configuration for the widget
          var value = null;
          if (this.value instanceof Date)
          {
@@ -61,15 +76,24 @@ define(["alfresco/forms/controls/BaseFormControl",
          };
       },
 
+      /**
+       * Get the value currently assigned to the wrapped widget
+       * 
+       * @instance
+       * @returns {object} The current value of the field
+       */
       getValue: function alfresco_forms_controls_DateTextBox__getValue() {
          var value = this.inherited(arguments);
          return stamp.toISOString(value, { selector: "date" });
       },
 
       /**
+       * Create and return form control instance
+       *
        * @instance
+       * @param {object} config The configuration to use when instantiating the form control
        */
-      createFormControl: function alfresco_forms_controls_DateTextBox__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_DateTextBox__createFormControl(config) {
          domClass.add(this.domNode, "alfresco-forms-controls-DateTextBox");
          return new DateTextBox(config);
       }

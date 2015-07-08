@@ -43,12 +43,13 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/TemporalUtils.properties"}],
 
       /**
-       * @constructs TemporalUtils
-       * @param {object} args modules to mixin
+       * Constructor
+       * 
+       * @param {object} config Config to mixin
        */
-      constructor: function alfresco_core_TemporalUtils__constructor(args) {
+      constructor: function alfresco_core_TemporalUtils__constructor(config) {
 
-         lang.mixin(this, args);
+         lang.mixin(this, config);
          
          this.dateFormats = {};
          this.dateFormats.DAY_NAMES = (this.message("days.medium") + "," + this.message("days.long")).split(",");
@@ -79,11 +80,12 @@ define(["dojo/_base/declare",
        * Generate a relative time between two Date objects.
        *
        * @instance
-       * @param from {Date|String} JavaScript Date object or ISO8601-formatted date string
-       * @param to {Date|String} (Optional) JavaScript Date object or ISO8601-formatted date string, defaults to now if not supplied
+       * @param {Date|String} from JavaScript Date object or ISO8601-formatted date string
+       * @param {Date|String} [to] JavaScript Date object or ISO8601-formatted date string, defaults to now if not supplied
        * @return {String} Relative time description
        */
       getRelativeTime: function alfresco_core_TemporalUtils__getRelativeTime(from, to) {
+         /*jshint maxstatements:false, maxcomplexity:false*/
 
          var originalFrom = from;
 
@@ -97,7 +99,7 @@ define(["dojo/_base/declare",
             return originalFrom;
          }
 
-         if (to === undefined)
+         if (typeof to === "undefined")
          {
             to = new Date();
          }
@@ -117,7 +119,7 @@ define(["dojo/_base/declare",
          {
             return fnTime("relative.seconds", seconds_ago);
          }
-         if (minutes_ago == 1)
+         if (minutes_ago === 1)
          {
             return fnTime("relative.minute");
          }
@@ -164,20 +166,20 @@ define(["dojo/_base/declare",
        * Convert an ISO8601 date string into a native JavaScript Date object
        *
        * @instance
-       * @param date {String} ISO8601 formatted date string
-       * @param ignoreTime {Boolean} Optional. Ignores any time (and therefore timezone) components.
-       * @return {Date|null} JavaScript native Date object
+       * @param {String} date ISO8601 formatted date string
+       * @param {Boolean} [ignoreTime] Ignores any time (and therefore timezone) components.
+       * @return {Date} JavaScript native Date object or null on errors
        */
-      fromISO8601: function alfresco_core_TemporalUtils__fromISO8601(date, ignoreTime) {
+      fromISO8601: function alfresco_core_TemporalUtils__fromISO8601(dateString, ignoreTime) {
 
          if (ignoreTime)
          {
-            date = date.split('T')[0];
+            dateString = dateString.split("T")[0];
          }
 
          try
          {
-            return stamp.fromISOString(date);
+            return stamp.fromISOString(dateString);
          }
          catch(e)
          {
@@ -189,14 +191,14 @@ define(["dojo/_base/declare",
        * Convert a native JavaScript Date object into an ISO8601 date string
        *
        * @instance
-       * @param date {Date} JavaScript native Date object
+       * @param {Date} date JavaScript native Date object
        * @return {String} ISO8601 formatted date string
        */
       toISO8601: function alfresco_core_TemporalUtils__toISO8601(date) {
 
          try
          {
-            return stamp.toISOString.apply(this, arguments);
+            return stamp.toISOString(date);
          }
          catch(e)
          {
@@ -208,25 +210,21 @@ define(["dojo/_base/declare",
        * Formats a date time into a more UI-friendly format
        *
        * @instance
-       * @param date {String|Date} Optional: Date as ISO8601 compatible string or JavaScript Date Object. Today used if missing.
-       * @param format {String} Optional: Mask to use to override default.
+       * @param {String|Date} [date] Date as ISO8601 compatible string or JavaScript Date Object. Today used if missing.
+       * @param {String} [format] Mask to use to override default.
        * @return {String} Date formatted for UI
        */
-      formatDate: function alfresco_core_TemporalUtils__formatDate(date, format) {
+      formatDate: function alfresco_core_TemporalUtils__formatDate(date, /*jshint unused:false*/ format) {
 
+         var dateToUse = date;
          if (lang.isString(date))
          {
             // if we've got a date as an ISO8601 string, convert to date Object before proceeding - otherwise pass it through
-            var dateObj = this.fromISO8601(date);
-            if (dateObj)
-            {
-               arguments[0] = dateObj;
-            }
+            dateToUse = this.fromISO8601(date) || date;
          }
          try
          {
-            // return locale.format.apply(this, arguments);
-            return this.formatDate3rd.apply(this, arguments);
+            return this.formatDate3rd(dateToUse, format);
          }
          catch(e)
          {
@@ -249,6 +247,7 @@ define(["dojo/_base/declare",
        * @return {String}
        */
       formatDate3rd: function alfresco_core_TemporalUtils__formatDate3rd() {
+         /*jshint noarg:false*/
 
          /* dateFormat
           Accepts a date, a mask, or a date and a mask.
@@ -257,7 +256,7 @@ define(["dojo/_base/declare",
           The mask defaults ``"ddd mmm d yyyy HH:MM:ss"``.
           */
          var _this = this,
-             dateFormat = function() {
+             dateFormat = (function() {
             
             var token        = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloZ]|"[^"]*"|'[^']*'/g,
                 timezone     = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
@@ -274,17 +273,18 @@ define(["dojo/_base/declare",
 
             // Regexes and supporting functions are cached through closure
             return function (date, mask) {
+               /*jshint maxcomplexity:false*/
 
                // Treat the first argument as a mask if it doesn't contain any numbers
-               if (arguments.length == 1 &&
-                  (typeof date == "string" || date instanceof String) &&
+               if (arguments.length === 1 &&
+                  (typeof date === "string" || date instanceof String) &&
                   !/\d/.test(date))
                {
                   mask = date;
                   date = undefined;
                }
 
-               if (typeof date == "string")
+               if (typeof date === "string")
                {
                   date = date.replace(".", "");
                }
@@ -339,7 +339,7 @@ define(["dojo/_base/declare",
                   return ($0 in flags) ? flags[$0] : $0.slice(1, $0.length - 1);
                });
             };
-         }();
+         })();
 
          /**
           * Alfresco wrapper: delegate to wrapped code
@@ -354,16 +354,20 @@ define(["dojo/_base/declare",
        * Only accepts hours and minutes. Seconds are zeroed.
        *
        * @instance
-       * @param timeString {String} User input time
+       * @param {String} timeString User input time
        * @return {Date}
        */
       parseTime: function alfresco_core_TemporalUtils__parseTime(timeString) {
+         /*jshint maxcomplexity:false*/
 
          var d = new Date(); // Today's date
          var time = timeString.toString().match(/^(\d{1,2})(?::?(\d\d))?\s*(a*)([p]?)\.*m?\.*$/i);
 
          // Exit early if we've not got a match, if the hours are greater than 24, or greater than 12 if AM/PM is specified, or minutes are larger than 59.
-         if (time === null || !time[1] || time[1] > 24 || (time[1] > 12 && (time[3]||time[4])) || (time[2] && time[2] > 59)) return null;
+         if (time === null || typeof time === "undefined" || !time[1] || time[1] > 24 || (time[1] > 12 && (time[3]||time[4])) || (time[2] && time[2] > 59))
+         {
+            return null;
+         }
 
          // Add 12?
          var add12 = false;
@@ -377,7 +381,7 @@ define(["dojo/_base/declare",
          // if we've got EITHER AM or PM, the 12th hour behaves different:
          // 12am = 00:00 (which is the same as 24:00 if the date is ignored), 12pm = 12:00
          // if we don't have AM or PM, then default to 12 === noon (i.e. add nothing).
-         if (time[1] == 12 && (time[3] || time[4]))
+         if (time[1] === "12" && (time[3] || time[4]))
          {
             add12 = !add12;
          }
@@ -396,7 +400,7 @@ define(["dojo/_base/declare",
        * (indicated by <span class="relativeTime">{date.iso8601}</span>)
        *
        * @instance
-       * @param id {String} ID of HTML element containing dates for conversion
+       * @param {String} id ID of HTML element containing dates for conversion
        */
       renderRelativeTime: function alfresco_core_TemporalUtils__renderRelativeTime(id) {
          query("span.relativeTime", id).forEach(function(node){
