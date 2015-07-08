@@ -66,39 +66,35 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-     
       "Test Previous Preview control is hidden": function () {
          return browser.findByCssSelector(prevPreviewControlSelector)
-            .isVisible()
+            .isDisplayed()
             .then(function(result) {
-               assert(result === false, "The previous preview control should not be displayed");
+               assert.isFalse(result, "The previous preview control should not be displayed");
             });
       },
 
       "Test Next Preview control is displayed": function () {
          return this.remote.findByCssSelector(nextPreviewControlSelector)
-            .isVisible()
+            .isDisplayed()
             .then(function(result) {
-               assert(result === true, "The previous preview control should have been displayed");
+               assert.isTrue(result, "The previous preview control should have been displayed");
             });
       },
 
       "Test Previous Thumbnails Control is not displayed": function () {
          return this.remote.findByCssSelector(prevThumbnailControlSelector)
-            .isVisible()
+            .isDisplayed()
             .then(function(result) {
-               assert(result === false, "The previous thumbnails control should not be displayed");
+               assert.isFalse(result, "The previous thumbnails control should not be displayed");
             });
       },
 
       "Test Next Thumbnails Control is displayed": function () {
          return this.remote.findByCssSelector(nextThumbnailControlSelector)
-            .isVisible()
+            .isDisplayed()
             .then(function(result) {
-               assert(result === false, "The next thumbnails control should not be displayed");
+               assert.isFalse(result, "The next thumbnails control should not be displayed");
             });
       },
 
@@ -111,17 +107,17 @@ define(["intern!object",
 
       "Test First Preview is displayed": function () {
          return this.remote.findByCssSelector(previewFrameItemsSelector + ":nth-child(1)")
-            .isVisible()
+            .isDisplayed()
             .then(function(result) {
-               assert(result === true, "The first preview item should be displayed");
+               assert.isTrue(result, "The first preview item should be displayed");
             });
       },
 
       "Test Second Preview is hidden": function () {
          return this.remote.findByCssSelector(previewFrameItemsSelector + ":nth-child(2)")
-            .isVisible()
+            .isDisplayed()
             .then(function(result) {
-               assert(result === false, "The second preview item should be hidden");
+               assert.isFalse(result, "The second preview item should be hidden");
             });
       },
 
@@ -144,10 +140,6 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
       "Test Next Preview Control": function () {
          // Click on the next preview item to scroll along...
          return browser.findByCssSelector(nextPreviewControlSelector)
@@ -160,24 +152,24 @@ define(["intern!object",
             // NOTE: Not easy to test that the first preview is off the screen at the moment (the widget may
             //       need updating to support the test!)
             // .findByCssSelector(previewFrameItemsSelector + ":nth-child(1)")
-            //    .isVisible()
+            //    .isDisplayed()
             //    .then(function(result) {
-            //       assert(result === false, "Test #3a - The first preview should now be hidden");
+            //       assert.isFalse(result, "Test #3a - The first preview should now be hidden");
             //    })
             //    .end()
 
          .findByCssSelector(previewFrameItemsSelector + ":nth-child(2)")
-            .isVisible()
+            .isDisplayed()
             .then(function(result) {
-               assert(result === true, "The second preview item should now be displayed");
+               assert.isTrue(result, "The second preview item should now be displayed");
             });
       },
 
       "Test Previous Preview Control displayed after Next Preview": function () {
          return this.remote.findByCssSelector(prevPreviewControlSelector)
-            .isVisible()
+            .isDisplayed()
             .then(function(result) {
-               assert(result === true, "The previous button is not displayed after clicking next preview control");
+               assert.isTrue(result, "The previous button is not displayed after clicking next preview control");
             })
             .click()
             .sleep(pause); // Wait for just over a second for the animation to complete...
@@ -185,9 +177,9 @@ define(["intern!object",
 
       "Test Preview Control is hidden when used on second preview": function () {
          return this.remote.findByCssSelector(prevPreviewControlSelector)
-            .isVisible()
+            .isDisplayed()
             .then(function(result) {
-               assert(result === false, "The previous button was not hidden after clicking it (to show first preview)");
+               assert.isFalse(result, "The previous button was not hidden after clicking it (to show first preview)");
             });
       },
 
@@ -218,7 +210,7 @@ define(["intern!object",
             .sleep(pause)
          .end()
          .findByCssSelector(prevThumbnailControlSelector)
-            .isVisible()
+            .isDisplayed()
             .then(function(visible) {
                assert(visible === true, "The previous thumbnail selection should be visible");
             });
