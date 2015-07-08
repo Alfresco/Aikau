@@ -66,10 +66,10 @@ define(["intern!object",
          .end()
          .findByCssSelector(".alfresco-dnd-DragAndDropTarget > div")
             .then(function(element) {
-               browser.moveMouseTo(element);
+               return browser.moveMouseTo(element)
+                  .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
+                  .releaseMouseButton();
             })
-            .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-            .releaseMouseButton()
          .end()
          .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
@@ -393,10 +393,10 @@ define(["intern!object",
          .end()
          .findByCssSelector(".alfresco-dnd-DragAndDropTarget > div")
             .then(function(element) {
-               browser.moveMouseTo(element);
+               return browser.moveMouseTo(element)
+                  .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
+                  .releaseMouseButton();
             })
-            .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-            .releaseMouseButton()
          .end()
          .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
