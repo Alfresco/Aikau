@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       constructor: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__constructor() {
-         this.dndUploadCapable = ('draggable' in document.createElement('span'));
+         this.dndUploadCapable = ("draggable" in document.createElement("span"));
       },
       
       /**
@@ -77,11 +77,11 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} domNode The DOM node to remove drag and drop capabilities from
        */
-      removeUploadDragAndDrop: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__removeUploadDragAndDrop(domNode) {
+      removeUploadDragAndDrop: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__removeUploadDragAndDrop(/*jshint unused:false*/ domNode) {
          this.alfLog("log", "Removing drag and drop upload handlers");
          
          // Clean up any previously created event handlers...
-         if (this.dndUploadEventHandlers != null)
+         if (this.dndUploadEventHandlers)
          {
             array.forEach(this.dndUploadEventHandlers, function(handle){ handle.remove(); });
          }
@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
        */
       onFilterChange: function alfresco_documentlibrary___AlfDndDocumentUploadMixin__onFilterChange(payload) {
          var path = lang.getObject("path", false, payload);
-         if (path == null)
+         if (!path)
          {
             this.removeUploadDragAndDrop(this.dragAndDropNode);
          }
@@ -182,7 +182,7 @@ define(["dojo/_base/declare",
          var isContainer = lang.getObject("currentItem.jsNode.isContainer", false, this);
          var userPermissions = lang.getObject("currentItem.jsNode.permissions.user", false, this);
 
-         return userPermissions != null &&
+         return userPermissions &&
                 ((isContainer === true && userPermissions.CreateChildren === true) ||
                  (isContainer === false && userPermissions.Write === true));
       },
@@ -204,7 +204,7 @@ define(["dojo/_base/declare",
                this.dragAndDropNode = domNode;
                
                // Clean up any previously created event handlers...
-               if (this.dndUploadEventHandlers != null)
+               if (this.dndUploadEventHandlers)
                {
                   array.forEach(this.dndUploadEventHandlers, function(handle){ handle.remove(); });
                }
@@ -323,7 +323,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       addDndHighlight: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__addDragEnterHighlight() {
-         if (this.domNode != null)
+         if (this.domNode)
          {
             domClass.add(this.domNode, "dndHighlight");
          }
@@ -335,7 +335,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       removeDndHighlight: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__addDragEnterHighlight() {
-         if (this.domNode != null)
+         if (this.domNode)
          {
             domClass.remove(this.domNode, "dndHighlight");
          }
@@ -361,15 +361,14 @@ define(["dojo/_base/declare",
       checkApplicable: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__checkApplicable(domNode, currentFunctionName) {
          var applicable = false;
          var widget = registry.getEnclosingWidget(domNode);
-         if (widget == null)
+         if (!widget)
          {
             // Something odd has happened. This should never really occur since in order for this function to be
             // called a widget must have DnD capabilities added!
             this.alfLog("log", "No widget found - unexpected behaviour: ", this);
          }
-         else if (widget != this && 
+         else if (widget !== this && 
                   typeof widget[currentFunctionName] === "function" &&
-                  widget.dndUploadEnabled != null && 
                   widget.dndUploadEnabled === true)
          {
             // The event relates to a different widget
@@ -547,7 +546,7 @@ define(["dojo/_base/declare",
             try
             {
                config = {
-                  destination: this.currentItem.nodeRef
+                  destination: this.currentItem.node.nodeRef
                };
             }
             catch (e)
@@ -563,7 +562,7 @@ define(["dojo/_base/declare",
             try
             {
                config = {
-                  updateNodeRef: this.currentItem.nodeRef,
+                  updateNodeRef: this.currentItem.node.nodeRef,
                   overwrite: true,
                   majorVersion: false,
                   destination: null
