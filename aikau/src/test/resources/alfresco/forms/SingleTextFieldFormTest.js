@@ -49,7 +49,7 @@ define(["intern!object",
          // The first form is configured to not update values from the browser hash fragment, so the
          // initial URL shouldn't set a value...
          return browser.findByCssSelector("#STFF1 .dijitInputContainer > input")
-            .getValue()
+            .getProperty("value")
             .then(function(value) {
                assert(value === "", "The value of the first form was set with: " + value);
             });
@@ -59,7 +59,7 @@ define(["intern!object",
          // The second form is configured to update values from the browser hash fragment, so the
          // initial URL should be set to "bob" (the value of "search" in the hash fragment)...
          return browser.findByCssSelector("#STFF2 .dijitInputContainer > input")
-            .getValue()
+            .getProperty("value")
             .then(function(value) {
                assert(value === "bob", "The value of the first form was set with: " + value);
             });

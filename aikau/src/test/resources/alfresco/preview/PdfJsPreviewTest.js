@@ -355,7 +355,7 @@ define(["intern!object",
             .click()
          .end()
          .findByCssSelector("#PDF_PLUGIN_1_LINK .dijitInputContainer input")
-            .getValue()
+            .getProperty("value")
             .then(function(value) {
                assert(value.indexOf("/aikau/page/tp/ws/PdfJsPreview#page=2") !== -1, "The link was not generated correctly: " + value);
             });
@@ -482,12 +482,15 @@ define(["intern!object",
       },
 
       "Test First Page is active": function() {
-         return browser.findByCssSelector("#PDF_PLUGIN_1-thumbnails-canvas-1")
+         return browser.setFindTimeout(5000)
+            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification__message")
+         .end()
+         .findByCssSelector("#PDF_PLUGIN_1-thumbnails-canvas-1")
             .click()
          .end()
-         .findByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-1.activePage")
-            .then(null, function() {
-               assert(false, "The first page was not active before starting find tests");
+         .findAllByCssSelector("#PDF_PLUGIN_1-viewer-pageContainer-1.activePage")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "The first page was not active before starting find tests");
             });
       },
 
