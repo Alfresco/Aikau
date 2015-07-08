@@ -84,7 +84,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       getValue: function alfresco_forms_controls_DateTextBox__getValue() {
          var value = this.inherited(arguments);
-         return stamp.toISOString(value, { selector: "date" });
+         return value && stamp.toISOString(value, { selector: "date" });
       },
 
       /**
