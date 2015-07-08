@@ -439,7 +439,8 @@ define([
             return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
                .pressKeys(keys.ARROW_DOWN)
                .end()
-
+            .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(7)")
+            .end()
             .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
                .then(function(elements) {
                   assert.lengthOf(elements, 7, "Did not return full list of results after keyboard choice selection");
