@@ -1,19 +1,12 @@
-.alfresco-forms-controls-TextBox .dijitCalendar,
-.alfresco-forms-controls-TextBox .dijitCalendar:hover,
-.alfresco-forms-controls-TextBox .dijitCalendarHover {
-   background-color: #fff !important;
+.alfresco-forms-controls-TextBox {
+   .dijitCalendar, .dijitCalendar:hover, .dijitCalendarHover, .dijitCalendarDateTemplate, .dijitCalendarPreviousMonth, .dijitCalendarNextMonth {
+      background-color: #fff !important;
+   }
+   .dijitCalendarDateTemplate, .dijitCalendarPreviousMonth, .dijitCalendarNextMonth {
+      border-bottom-color: #fff !important;
+   }
+   .dijitCalendarPreviousMonth .dijitCalendarDateLabel, .dijitCalendarNextMonth .dijitCalendarDateLabel {
+      border-color: #fff !important;
+      color: #ccc !important;
+   }
 }
-
-.alfresco-forms-controls-TextBox .dijitCalendarDateTemplate,
-.alfresco-forms-controls-TextBox .dijitCalendarPreviousMonth,
-.alfresco-forms-controls-TextBox .dijitCalendarNextMonth {
-   border-bottom-color: #fff !important;
-   background-color: #fff !important;
-}
-
-.alfresco-forms-controls-TextBox .dijitCalendarPreviousMonth .dijitCalendarDateLabel,
-.alfresco-forms-controls-TextBox .dijitCalendarNextMonth .dijitCalendarDateLabel {
-   color: #cccccc !important;
-   border-color: #fff !important;
-}
-

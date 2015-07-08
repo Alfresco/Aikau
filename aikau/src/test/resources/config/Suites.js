@@ -106,7 +106,7 @@ define({
       "src/test/resources/alfresco/forms/controls/CodeMirrorTest",
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
       "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
-      "src/test/resources/alfresco/forms/controls/DateTextBoxTest", // TODO: NEEDS FIXING
+      "src/test/resources/alfresco/forms/controls/DateTextBoxTest",
       "src/test/resources/alfresco/forms/controls/DocumentPickerTest",
       "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest",
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",

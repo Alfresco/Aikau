@@ -23,10 +23,10 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!assert",
-        "require",
+        "intern/chai!assert", 
+        "require", 
         "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+        function(registerSuite, assert, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -41,45 +41,48 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-     "Test initial values": function () {
-         return browser.findByCssSelector("#DOJODATETEXTBOX_CONTROL")
-            .getProperty("value")
-            .then(function(value) {
-               assert(value === "12/12/2012", "Unexpected date value found in control");
+      "Test initial valid values": function() {
+         return browser.findByCssSelector("#VALID_DATES_FORM .confirmationButton .dijitButtonNode")
+            .click()
+            .getLastPublish("VALID_DATES_FORM_SUBMIT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "validDate1", "2012-12-12", "Incorrect date value retrieved from control");
+               assert.propertyVal(payload, "validDate2", "2015-07-07", "Incorrect date value retrieved from control");
+            });
+      },
+
+      "Test initial invalid values": function() {
+         return browser.findByCssSelector("#INVALID_DATES_FORM .confirmationButton .dijitButtonNode")
+            .click()
+            .getLastPublish("INVALID_DATES_FORM_SUBMIT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "lettersDate", null, "Invalid starting date-value (arbitrary letters) was not published with null value");
+               assert.propertyVal(payload, "nullDate", null, "Invalid starting date-value (null) was not published with null value");
+               assert.propertyVal(payload, "undefinedDate", null, "Invalid starting date-value (undefined) was not published with null value");
+            });
+      },
+
+      "Changed date publishes correct value": function() {
+         return browser.findByCssSelector("#VALID_DATE_VALUE_2 .dijitArrowButton") // Click down arrow
+            .clearLog()
+            .click()
+            .end()
+
+         .findByCssSelector("#VALID_DATE_VALUE_2_CONTROL_popup tr:nth-child(3) td:nth-child(3)") // Choose third date on third row
+            .click()
+            .end()
+
+         .findByCssSelector("#VALID_DATES_FORM .confirmationButton .dijitButtonNode") // Submit the form
+            .click()
+            .getLastPublish("VALID_DATES_FORM_SUBMIT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "validDate1", "2012-12-12", "Incorrect date value retrieved from control after other control updated");
+               assert.propertyVal(payload, "validDate2", "2015-07-14", "Incorrect date value retrieved from control after this control updated");
             });
       },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
-
-      // TODO: Can't get this to pass...
-      // TEST 2
-      // .findByCssSelector("#DOJODATETEXTBOX .control .dijitArrowButton input.dijitArrowButtonInner")
-      //    .click()
-      //    .end()
-      // .findByCssSelector("#DOJODATETEXTBOX_CONTROL_popup tbody tr:nth-of-type(3) td:nth-of-type(5) span")
-      //    .click()
-      //    .end()
-      // .findByCssSelector("#DOJODATETEXTBOX_CONTROL")
-      //    .getProperty('value')
-      //    .then(function(value) {
-      //       assert(value == "14/12/2012", "Unexpected date value found in control after date change");
-      //    })
-      //    .end()
-
-      // // TEST 3
-      // .findByCssSelector("#FORM > .buttons > span:nth-of-type(1) > span > span > span:nth-of-type(3)")
-      //    .click()
-      //    .end()
-      // .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "someDate", "2012-12-14"))
-      //    .then(null, function() {
-      //       assert(false, "Form submission did not publish the expected event");
-      //    })
-      //    .end()
    });
 });
