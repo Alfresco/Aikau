@@ -121,8 +121,9 @@ define(["intern/dojo/node!fs",
        * @param {string} testWebScriptURL The URL of the test WebScript
        * @param {string} testName The name of the test to run
        * @param {string} testWebScriptPrefix Optional prefix to use before the WebScript URL
+       * @param {boolean} noPageLoadError Optional boolean to suppress page load failure errors
        */
-      loadTestWebScript: function (browser, testWebScriptURL, testName, testWebScriptPrefix) {
+      loadTestWebScript: function (browser, testWebScriptURL, testName, testWebScriptPrefix, noPageLoadError) {
          this._applyTimeouts(browser);
          this._maxWindow(browser);
          this._cancelModifierKeys(browser);
@@ -152,7 +153,14 @@ define(["intern/dojo/node!fs",
                },
                function (error) {
                   // Failed to load after two attempts
-                  assert.fail(null, null, "Test page could not be loaded");
+                  if (noPageLoadError === true)
+                  {
+                     // Don't output an error message
+                  }
+                  else
+                  {
+                     assert.fail(null, null, "Test page could not be loaded");
+                  }
                })
             .end();
          command.session.alfPostCoverageResults = function (newBrowser) { 
