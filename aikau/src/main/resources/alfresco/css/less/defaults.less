@@ -51,17 +51,17 @@
 @highlighted-font-color: #fff;
 
 // Dashlets
-@dashlet-background: #fff;
-@dashlet-border: 1px solid #ccc;
-@dashlet-border-radius: 6px 6px 0 0;
-@dashlet-title-background: #eee;
-@dashlet-title-border-bottom: 1px solid #ccc;
-@dashlet-title-border-radius: 6px 6px 0 0;
-@dashlet-title-color: #333;
+@dashlet-background: @primary-background-color;
+@dashlet-border: @standard-border;
+@dashlet-border-radius: @standard-border-radius @standard-border-radius 0 0; // This gives rounding at the top of the dashlet only
+@dashlet-title-background: @alternate-background-color;
+@dashlet-title-border-bottom: @standard-border;
+@dashlet-title-border-radius: @standard-border-radius @standard-border-radius 0 0; // This gives rounding at the top of the dashlet only
+@dashlet-title-color: @alternate-font-color;
 @dashlet-toolbar-background: transparent;
-@dashlet-toolbar-border-bottom: 1px solid #ccc;
-@dashlet-body-background: #fff;
-@dashlet-body-border-radius: 0;
+@dashlet-toolbar-border-bottom: @standard-border;
+@dashlet-body-background: @primary-background-color;
+@dashlet-body-border-radius: 0; // This gives rounding at the top of the dashlet only
 
 // Lists
 @list-header-border-color: #e5e5e5;
@@ -128,7 +128,7 @@
 @standard-border-style: solid;
 @standard-border-color: #d3d3d3;
 @standard-border: @standard-border-width @standard-border-style @standard-border-color;
-
+@standard-border-radius: 6px;
 @hover-border-color: #d3d3d3;
 @focused-border-color: #8dc63f;
 
