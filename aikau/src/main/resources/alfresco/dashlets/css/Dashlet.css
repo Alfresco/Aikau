@@ -1,8 +1,8 @@
 /* alfresco/dashlets/Dashlet CSS */
 .alfresco-dashlets-Dashlet {
-   background-color: #fff;
-   border: 1px solid #ccc;
-   border-radius: 6px 6px 0 0;
+   background: @dashlet-background;
+   border: @dashlet-border;
+   border-radius: @dashlet-border-radius;
    margin: 20px 0;
    padding: 0;
    position: relative;
@@ -11,11 +11,10 @@
       display: none;
    }
    &__title {
-      background-color: #eee;
-      border-bottom: 1px solid #ccc;
-      border-top-left-radius: 6px;
-      border-top-right-radius: 6px;
-      color: #333;
+      background: @dashlet-title-background;
+      border-bottom: @dashlet-title-border-bottom;
+      border-radius: @dashlet-title-border-radius;
+      color: @dashlet-title-color;
       overflow-x: hidden;
       padding: 5px 9px 5px 9px;
    }
@@ -67,7 +66,8 @@
       }
    }
    &__toolbar, &__toolbar2 {
-      border-bottom: 1px solid #ccc;
+      background: @dashlet-toolbar-background;
+      border-bottom: @dashlet-toolbar-border-bottom;
       min-height: 28px;
       padding: 2px 9px 1px;
       .align-left {
@@ -112,7 +112,8 @@
       }
    }
    &__body {
-      background-color: #fff;
+      background: @dashlet-body-background;
+      border-radius: @dashlet-body-border-radius;
       position: relative;
       a {
          cursor: pointer;
