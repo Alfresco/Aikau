@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
 
          // Call DND upload mixin functions to add support for uploading behaviour...
          this.subscribeToCurrentNodeChanges(this.domNode);
-         this.addUploadDragAndDrop(this.domNode);
+         // this.addUploadDragAndDrop(this.domNode);
 
          if (this.subscribeToDocRequests)
          {

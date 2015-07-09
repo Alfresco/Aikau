@@ -757,6 +757,7 @@ define(["dojo/_base/declare",
          if (!this.useInfiniteScroll)
          {
             this.hideChildren(this.domNode);
+            domClass.add(this.noDataNode, "share-hidden");
             domClass.remove(this.dataLoadingNode, "share-hidden");
          }
          else

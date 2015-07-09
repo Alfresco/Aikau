@@ -106,8 +106,7 @@ define(["dojo/_base/declare",
                         publishGlobal: true,
                         renderFilter: [
                            {
-                              target: "currentMetadata",
-                              property: "parent.permissions.user.CreateChildren",
+                              property: "node.permissions.user.CreateChildren",
                               values: [true]
                            }
                         ]

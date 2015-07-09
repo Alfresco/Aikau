@@ -263,8 +263,7 @@ define(["dojo/_base/declare",
        */
       onShow: function alfresco_dialogs_AlfDialog__onShow() {
          this.inherited(arguments);
-         domStyle.set(document.documentElement, "overflow", "hidden");
-      
+         
          // Publish events if the dialog moves
          if(this._moveable) {
             aspect.after(this._moveable, "onMoveStart", lang.hitch(this, function(returnVal, /*jshint unused:false*/ originalArgs) {

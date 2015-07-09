@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        */
       constructor: function alfresco_services_ContentService__constructor(args) {
          lang.mixin(this, args);
-         this.alfSubscribe("ALF_CURRENT_NODEREF_CHANGED", lang.hitch(this, this.handleCurrentNodeChange));
+         this.alfSubscribe(this.metadataChangeTopic, lang.hitch(this, this.handleCurrentNodeChange));
          this.alfSubscribe("ALF_SHOW_UPLOADER", lang.hitch(this, this.showUploader));
          this.alfSubscribe("ALF_CONTENT_SERVICE_UPLOAD_REQUEST_RECEIVED", lang.hitch(this, this.onFileUploadRequest));
          this.alfSubscribe("ALF_CREATE_CONTENT_REQUEST", lang.hitch(this, this.onCreateContent));
@@ -370,12 +370,19 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       showUploader: function alfresco_services_ContentService__showUploader(/*jshint unused:false*/ payload) {
-
          // Check to see what we're uploading, either new content to a location or updating a 
-         // specific node...
-         var parentNodeRef = lang.getObject("parent.nodeRef", false, this._currentNode);
+         // specific node. Ideally we want to get the parent nodeRef from the payload provided
+         // but if this information isn't availabel then we'll fall back to whatever this service
+         // things is the "current" node.
+         // 
+         // This reason why this is important is that multiple Document Libraries can be displayed on the same
+         // page and we want to make sure that they're not "competing" to set the _currentNode
+         var parentNodeRef = lang.getObject("parent.nodeRef", false, payload);
+         if (!parentNodeRef)
+         {
+            parentNodeRef = lang.getObject("parent.nodeRef", false, this._currentNode);
+         }         
          var updateNodeRef = lang.getObject("node.nodeRef", false, payload);
-
          this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
             dialogTitle: (updateNodeRef ? "contentService.updater.dialog.title" : "contentService.uploader.dialog.title"),
             dialogConfirmationButtonTitle: "contentService.uploader.dialog.confirmation",
