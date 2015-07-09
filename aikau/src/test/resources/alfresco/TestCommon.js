@@ -187,14 +187,14 @@ define(["intern/dojo/node!fs",
             return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
                .click();
          };
-         command.session.getLastPublish = function(topicName) {
+         command.session.getLastPublish = function(topicName, isGlobal) {
             return this.getLogEntries({
                type: "PUBLISH",
                topic: topicName,
                pos: "last"
-            });
+            }, null, isGlobal);
          };
-         command.session.getLogEntries = function(filter, waitPeriod) {
+         command.session.getLogEntries = function(filter, waitPeriod, isGlobal) {
 
             // Normalise arguments
             filter = filter || {};
@@ -203,7 +203,11 @@ define(["intern/dojo/node!fs",
             // Build the selector
             var selectorBits = [".alfresco_logging_DebugLog__entry"];
             filter.type && selectorBits.push("[data-aikau-log-type=\"" + filter.type + "\"]"); // Type is "..."
-            filter.topic && selectorBits.push("[data-aikau-log-topic$=\"" + filter.topic + "\"]"); // Topic ends with "..."
+            if(isGlobal) {
+               filter.topic && selectorBits.push("[data-aikau-log-topic=\"" + filter.topic + "\"]"); // Topic is "..."
+            } else {
+               filter.topic && selectorBits.push("[data-aikau-log-topic$=\"" + filter.topic + "\"]"); // Topic ends with "..."
+            }
             filter.object && selectorBits.push("[data-aikau-log-object=\"" + filter.object + "\"]"); // Object is "..."
             if (filter.debug) {
                console.log("Log entry selector: \"" + selectorBits.join("") + "\"");
