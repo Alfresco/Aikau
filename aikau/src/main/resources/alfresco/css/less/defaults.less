@@ -50,6 +50,36 @@
 @de-emphasized-font-color: #999;
 @highlighted-font-color: #fff;
 
+// Borders...
+// These have been initially added for form controls...
+@standard-border-width: 1px;
+@standard-border-style: solid;
+@standard-border-color: #d3d3d3;
+@standard-border: @standard-border-width @standard-border-style @standard-border-color;
+@standard-border-radius: 6px;
+@hover-border-color: #d3d3d3;
+@focused-border-color: #8dc63f;
+
+// Buttons
+// The standard button is what is normally seen...
+@standard-button-border-color: #ccc;
+@standard-button-background-color: #fff;
+@standard-button-border: 1px solid @standard-button-border-color;
+@standard-button-focus-border: 1px solid @standard-button-border-color;
+@standard-button-font-color: @general-font-color;
+@standard-button-font-size: @normal-font-size;
+
+// "Call-to-action" buttons should be darker with larger text to capture the users attention
+@call-to-action-button-background-color: #8dc63f;
+@call-to-action-button-border: 1px solid #8dc63f;
+@call-to-action-button-focus-border: 1px solid #5eae41;
+@call-to-action-button-font-color: #fff;
+@call-to-action-button-font-size: @large-font-size;
+
+// Shadows
+@standard-box-shadow: .33px 2px 8px rgba(0, 0, 0, .3);
+@inset-box-shadow: 1px 1px 3px @standard-button-border-color inset;
+
 // Dashlets
 @dashlet-background: @primary-background-color;
 @dashlet-border: @standard-border;
@@ -121,36 +151,6 @@
    color: @de-emphasized-font-color;
    font-family: @standard-font;
 }
-
-// Borders...
-// These have been initially added for form controls...
-@standard-border-width: 1px;
-@standard-border-style: solid;
-@standard-border-color: #d3d3d3;
-@standard-border: @standard-border-width @standard-border-style @standard-border-color;
-@standard-border-radius: 6px;
-@hover-border-color: #d3d3d3;
-@focused-border-color: #8dc63f;
-
-// Buttons
-// The standard button is what is normally seen...
-@standard-button-border-color: #ccc;
-@standard-button-background-color: #fff;
-@standard-button-border: 1px solid @standard-button-border-color;
-@standard-button-focus-border: 1px solid @standard-button-border-color;
-@standard-button-font-color: @general-font-color;
-@standard-button-font-size: @normal-font-size;
-
-// "Call-to-action" buttons should be darker with larger text to capture the users attention
-@call-to-action-button-background-color: #8dc63f;
-@call-to-action-button-border: 1px solid #8dc63f;
-@call-to-action-button-focus-border: 1px solid #5eae41;
-@call-to-action-button-font-color: #fff;
-@call-to-action-button-font-size: @large-font-size;
-
-// Shadows
-@standard-box-shadow: .33px 2px 8px rgba(0, 0, 0, .3);
-@inset-box-shadow: 1px 1px 3px @standard-button-border-color inset;
 
 // Breadcrumbs
 @breadcrumb-font-color: @general-font-color;
