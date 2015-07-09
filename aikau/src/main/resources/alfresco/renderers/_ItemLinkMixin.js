@@ -113,7 +113,7 @@ define(["dojo/_base/declare",
                      // TODO: It'll be necessary to get the actual actionUrls - but currently it's to tangled to untangle easily
                      //var actionUrls = this.getActionUrls(item);
                      var actionUrls = this.getActionUrls(item);
-                     if (item.node.isLink && item.nod.linkedNode.isContainer)
+                     if (item.node.isLink && item.node.linkedNode.isContainer)
                      {
                         publishPayload.url = actionUrls.folderDetailsUrl;
                      }
