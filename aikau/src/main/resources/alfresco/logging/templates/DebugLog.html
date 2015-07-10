@@ -1,5 +1,10 @@
 <div class="${rootClass}">
    <h3 class="${rootClass}__header">Subscription Log</h3>
    <button class="${rootClass}__clear-button" data-dojo-attach-event="click:_onClearButtonClick">Clear</button>
+   <input type="checkbox" id="display-publications" class="${rootClass}__checkbox-publications" checked="checked" />
+   <label for="display-publications" class="${rootClass}__label">Publications</label>
+   <input type="checkbox" id="display-subscriptions" class="${rootClass}__checkbox-subscriptions" checked="checked" />
+   <label for="display-subscriptions" class="${rootClass}__label">Subscriptions</label>
+   <input type="text" class="${rootClass}__filter" data-dojo-attach-point="filter" data-dojo-attach-event="keyup:_onFilterKeyup" placeholder="Type to filter by topic ..." value="" />
    <ul class="${rootClass}__log" data-dojo-attach-point="logNode"></ul>
 </div>
