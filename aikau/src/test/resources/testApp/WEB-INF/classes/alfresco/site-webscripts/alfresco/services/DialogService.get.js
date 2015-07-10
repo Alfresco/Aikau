@@ -171,6 +171,8 @@ model.jsonModel = {
                formSubmissionTopic: "POST_FORM_DIALOG",
                dialogConfirmationButtonId: "CUSTOM_OK_BUTTON_ID",
                dialogConfirmAndRepeatButtonId: "CUSTOM_REPEAT_BUTTON_ID",
+               dialogConfirmationButtonTitle: "Create",
+               dialogConfirmAndRepeatButtonTitle: "Create and create another",
                widgets: [
                   {
                      id: "GOLDEN_REPEATING_INPUT",
