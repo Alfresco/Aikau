@@ -219,9 +219,9 @@ define(["alfresco/core/ObjectTypeUtils",
             }
 
             // Add the entry to the collection of nodes
-            logData.topic && this._entries.push({
+            this._entries.push({
                node: entryNode,
-               topic: logData.topic
+               topic: logData.topic || ""
             });
          },
 
@@ -365,8 +365,8 @@ define(["alfresco/core/ObjectTypeUtils",
             var filterValue = this.filter.value;
             array.forEach(this._entries, function(entry) {
                var matchesTopic = entry.topic.toLowerCase().indexOf(filterValue) !== -1;
-               domClass[matchesTopic ? "remove" : "add"](entry.node, this.rootClass + "__log_entry--hidden");
-            });
+               domClass[matchesTopic ? "remove" : "add"](entry.node, this.rootClass + "__log__entry--hidden");
+            }, this);
          },
 
          /**
