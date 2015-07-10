@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>PaginatedSearchList Test</shortname>
+  <description>This test page uses the AlfSearchList widget in pagination, rather than infinite-scroll, mode</description>
+  <family>aikau-unit-tests</family>
+  <url>/PaginatedSearchList</url>
+</webscript>
