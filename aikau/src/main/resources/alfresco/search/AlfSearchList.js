@@ -433,6 +433,8 @@ define(["dojo/_base/declare",
                this._cleanResettableVars();
             }
 
+            var pageOrSizeHasChanged = (this.currentPage !== payload.currentPage || this.currentPageSize !== payload.currentPageSize);
+
             // The facet filters need to be handled directly because they are NOT just passed as
             // a simple string. Create a new object for the filters and then break up the filters
             // based on comma delimition and assign each element as a new key in the filters object
@@ -451,7 +453,7 @@ define(["dojo/_base/declare",
             }
 
             lang.mixin(this, payload);
-            this.resetResultsList();
+            this.resetResultsList(pageOrSizeHasChanged);
             this.loadData();
          }
       },
@@ -480,12 +482,7 @@ define(["dojo/_base/declare",
             }
 
             // InfiniteScroll uses pagination under the covers.
-            var startIndex = 0;
-            if (this.useInfiniteScroll)
-            {
-               // Search API wants startIndex rather than page, so we need to convert here.
-               startIndex = (this.currentPage - 1) * this.currentPageSize;
-            }
+            var startIndex = (this.currentPage - 1) * this.currentPageSize;
 
             if (!this.useInfiniteScroll ||
                 !this.currentData ||
@@ -692,9 +689,11 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      resetResultsList: function alfresco_search_AlfSearchList__resetResultsList() {
-         this.startIndex = 0;
-         this.currentPage = 1;
+      resetResultsList: function alfresco_search_AlfSearchList__resetResultsList(doNotChangePages) {
+         if(!doNotChangePages) {
+            this.startIndex = 0;
+            this.currentPage = 1;
+         }
          this.hideChildren(this.domNode);
          this.clearViews();
       },

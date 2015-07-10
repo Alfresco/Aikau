@@ -284,15 +284,14 @@ define(["dojo/_base/declare",
       onPageChange: function alfresco_lists_AlfSortablePaginatedList__onPageChange(payload) {
          if (payload && payload.value !== null && payload.value !== this.currentPage)
          {
-            this.currentPage = payload.value;
             if (this._readyToLoad === true) 
             {
                if (this.useHash === true)
                {
                   var currHash = ioQuery.queryToObject(hash());
-                  if (this.currentPage)
+                  if (payload.value)
                   {
-                     currHash.currentPage = this.currentPage;
+                     currHash.currentPage = payload.value;
                   }
                   this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
                      url: ioQuery.objectToQuery(currHash),
@@ -301,6 +300,7 @@ define(["dojo/_base/declare",
                }
                else
                {
+                  this.currentPage = payload.value;
                   this.loadData();
                }
             }
