@@ -212,7 +212,6 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default
        */
       defaultFormDialogConfig: {
          dialogTitle: "",
