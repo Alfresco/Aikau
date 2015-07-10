@@ -211,7 +211,7 @@ define(["dojo/_base/declare",
        * The default configuration for form dialogs. This is used as a base when requests are received.
        *
        * @instance
-       * @type {string}
+       * @type {object}
        */
       defaultFormDialogConfig: {
          dialogTitle: "",
