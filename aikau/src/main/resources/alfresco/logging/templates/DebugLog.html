@@ -5,6 +5,7 @@
    <label for="display-publications" class="${rootClass}__label">Publications</label>
    <input type="checkbox" id="display-subscriptions" class="${rootClass}__checkbox-subscriptions" checked="checked" />
    <label for="display-subscriptions" class="${rootClass}__label">Subscriptions</label>
-   <input type="text" class="${rootClass}__filter" data-dojo-attach-point="filter" data-dojo-attach-event="keyup:_onFilterKeyup" placeholder="Type to filter by topic ..." value="" />
+   <input type="text" class="${rootClass}__filter" data-dojo-attach-point="filter" data-dojo-attach-event="keyup:_applyFilter" placeholder="Type to filter by topic ..." value="" />
+   <button class="${rootClass}__filter-button" data-dojo-attach-event="click:_applyFilter">Filter</button>
    <ul class="${rootClass}__log" data-dojo-attach-point="logNode"></ul>
 </div>

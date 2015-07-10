@@ -223,6 +223,23 @@ define(["alfresco/core/ObjectTypeUtils",
                node: entryNode,
                topic: logData.topic || ""
             });
+
+            // Re-apply the filter
+            this._applyFilter();
+         },
+
+         /**
+          * Update the filter
+          *
+          * @instance
+          * @returns {[type]} [description]
+          */
+         _applyFilter: function alfresco_logging_DebugLog___applyFilter() {
+            var filterValue = this.filter.value;
+            array.forEach(this._entries, function(entry) {
+               var matchesTopic = entry.topic.toLowerCase().indexOf(filterValue) !== -1;
+               domClass[matchesTopic ? "remove" : "add"](entry.node, this.rootClass + "__log__entry--hidden");
+            }, this);
          },
 
          /**
@@ -353,20 +370,6 @@ define(["alfresco/core/ObjectTypeUtils",
          _onClearButtonClick: function alfresco_logging_DebugLog___onClearButtonClick() {
             domConstruct.empty(this.logNode);
             this._entries = [];
-         },
-
-         /**
-          * Handle keyup's on the filter
-          *
-          * @instance
-          * @returns {[type]} [description]
-          */
-         _onFilterKeyup: function alfresco_logging_DebugLog___onFilterKeyup() {
-            var filterValue = this.filter.value;
-            array.forEach(this._entries, function(entry) {
-               var matchesTopic = entry.topic.toLowerCase().indexOf(filterValue) !== -1;
-               domClass[matchesTopic ? "remove" : "add"](entry.node, this.rootClass + "__log__entry--hidden");
-            }, this);
          },
 
          /**
