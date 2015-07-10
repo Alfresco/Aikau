@@ -433,7 +433,7 @@ define(["dojo/_base/declare",
                this._cleanResettableVars();
             }
 
-            var pageOrSizeHasChanged = (this.currentPage !== payload.currentPage || this.currentPageSize !== payload.currentPageSize);
+            var pageOrSizeHasChanged = !this.useInfiniteScroll && (this.currentPage !== payload.currentPage || this.currentPageSize !== payload.currentPageSize);
 
             // The facet filters need to be handled directly because they are NOT just passed as
             // a simple string. Create a new object for the filters and then break up the filters
