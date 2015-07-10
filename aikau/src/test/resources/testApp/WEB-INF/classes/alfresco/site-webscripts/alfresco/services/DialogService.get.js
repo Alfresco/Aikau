@@ -131,7 +131,8 @@ model.jsonModel = {
                ]
             }
          }
-      }, {
+      }, 
+      {
          name: "alfresco/buttons/AlfButton",
          id: "LAUNCH_CUSTOM_BUTTON_ID_DIALOG",
          config: {
@@ -158,10 +159,60 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_AND_CREATE_ANOTHER_1",
+         config: {
+            label: "Launch repeating dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogTitle: "Repeating dialog (golden path)",
+               dialogId: "CUSTOM_DIALOG",
+               dialogRepeats: true,
+               formSubmissionTopic: "POST_FORM_DIALOG",
+               dialogConfirmationButtonId: "CUSTOM_OK_BUTTON_ID",
+               dialogConfirmAndRepeatButtonId: "CUSTOM_REPEAT_BUTTON_ID",
+               widgets: [
+                  {
+                     id: "GOLDEN_REPEATING_INPUT",
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text"
+                     }
+                  }
+               ]
+            }
+         }
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_AND_CREATE_ANOTHER_2",
+         config: {
+            label: "Launch repeating dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogTitle: "Repeating dialog (error path)",
+               dialogId: "ERROR_REPEATING",
+               formSubmissionTopic: "POST_FORM_DIALOG",
+               dialogRepeats: true,
+               dialogCloseTopic: "FORM_POST_SUCCESS",
+               dialogConfirmationButtonId: "DIFFERENT_OK_BUTTON_ID",
+               widgets: [
+                  {
+                     id: "ERROR_REPEATING_INPUT",
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        description: "The service will fail when value is 'fail'"
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

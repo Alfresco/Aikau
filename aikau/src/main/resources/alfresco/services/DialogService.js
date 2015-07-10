@@ -33,6 +33,10 @@
  * of another) when the dialogs have different <b>dialogId</b> values. If another dialog with the same <b>dialogId</b> then any existing
  * dialog with that same <b>dialogId</b> will be destroyed. This is done to ensure that the browser DOM does not become
  * over populated with unusable elements</p>
+ * <p>It is also possible to create form dialogs that follow the "Create and create again" pattern by configuring the
+ * "dialogRepeats" attribute in the [ALF_CREATE_FORM_DIALOG_REQUEST]{@link module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST}
+ * to be true. This will include an additional button in the dialog that when used will publish the value of the current form
+ * and then recreate a new dialog with a new copy of the form.</p>
  *
  * @example <caption>Example button that requests a form dialog</caption>
  * {
@@ -123,7 +127,9 @@
  * @property {Object} formSubmissionPayloadMixin - An additional object to "mixin" to the form value before it is published
  * @property {Object} [formValue={}] - The initial value to apply to the form when created. This should be an object with attributes mapping to the "name" attribute of each form control.
  * @property {string} [dialogId=null] The ID of the dialog to display. Only one dialog with no dialogId can exist on a page at a time, therefore it is sensible to always include an id for your dialogs to allow stacking.
+ * @property {boolean} [dialogRepeats=false] Indicates that an additional button the publishes the current form and then recreates the dialog again
  * @property {string} [dialogConfirmationButtonTitle="OK"] - The label for the dialog confirmation button
+ * @property {string} [dialogConfirmAndRepeatButtonId="OK (and repeat)"] The label for the button indicating the dialog should be repeated
  * @property {string} [dialogCancellationButtonTitle="Cancel"] - The label for the dialog cancellation button
  * @property {string} [dialogCloseTopic=null] If this is set the the dialog will not automatically be closed when the confirmation button is pressed. Instead the dialog will remain open until this topic is published on.
  * @property {array} [widgets=null] - An array of form controls to include in the dialog
@@ -158,10 +164,105 @@ define(["dojo/_base/declare",
         "alfresco/dialogs/AlfDialog",
         "alfresco/forms/Form",
         "dojo/_base/array",
-        "jquery"],
-        function(declare, AlfCore, lang, AlfDialog, AlfForm, array, $) {
+        "jquery",
+        "dojo/aspect"],
+        function(declare, AlfCore, lang, AlfDialog, AlfForm, array, $, aspect) {
 
    return declare([AlfCore], {
+
+      /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/DialogService.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/DialogService.properties"}],
+
+      /**
+       * The topic published when the confirmation button is used.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      _formConfirmationTopic: "ALF_CREATE_FORM_DIALOG_MIXIN_CONFIRMATION_TOPIC",
+
+      /**
+       * The topic published when the button confirming the current dialog, but requesting to
+       * repeat the dialog is used.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       */
+      _formConfirmationRepeatTopic: "ALF_CREATE_REPEATING_FORM_DIALOG_MIXIN_CONFIRMATION_TOPIC",
+
+      /**
+       * The topic published when the cancellation button is used.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       */
+      _formCancellationTopic: "ALF_CLOSE_DIALOG",
+
+      /**
+       * The default configuration for form dialogs. This is used as a base when requests are received.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      defaultFormDialogConfig: {
+         dialogTitle: "",
+         dialogConfirmationButtonTitle: "dialogService.formDialog.ok.button.label",
+         dialogCancellationButtonTitle: "dialogService.formDialog.cancel.button.label",
+         dialogConfirmAndRepeatButtonTitle: "dialogService.formDialog.repeat.button.label"
+      },
+
+      /**
+       * This is the topic that will be published when the dialog is "confirmed" (e.g. the "OK" button is clicked)
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      formSubmissionTopic: null,
+      
+      /**
+       * This is used to map the dialog created on for each request against the "dialogId" associated with that request.
+       * Only one instance of a dialog with the same "dialogId" can exist at one time. If a new request is made with
+       * the same "dialogId" as has been used for an existing dialog, then that existing dialog will be destroyed.
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      idToDialogMap: null,
+
+      /**
+       * This us used to map all the subscription and aspect handles created for each requested dialog against the
+       * "dialogId" associated with the request to create that dialog. This is done so that all handles can be removed
+       * when the dialog is destroyed. Each "dialogId" is associated with an object into which handles can be mapped
+       * against a specific key. This allows the service to check for an existing handle before creating duplicates
+       * (e.g. when handling repeating dialog requests).
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      idToHandleMap: null,
+
+      /**
+       * The configuration for the contents of the dialog to be displayed. This should be provided either on instantiation
+       * or by the widget that mixes this module in
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      widgets: null,
 
       /**
        * Create a new 'publishTopic' for the action and generates a new 'pubSubScope' and then sets
@@ -184,6 +285,7 @@ define(["dojo/_base/declare",
          // The idea is that we shouldn't have multiple instances of a dialog with the same ID, but we
          // can have multiple dialogs with different IDs...
          this.idToDialogMap = {};
+         this.idToHandleMap = {};
       },
 
       /**
@@ -199,12 +301,41 @@ define(["dojo/_base/declare",
             // We have a reference to an existing dialog, so we'll destroy it
             this.idToDialogMap[payload.dialogId].destroyRecursive();
             delete this.idToDialogMap[payload.dialogId];
+
+            this.cleanUpDialogHandles(this.idToHandleMap[payload.dialogId]);
+            delete this.idToHandleMap[payload.dialogId];
          }
          else if (this.idToDialogMap[null] &&
                   typeof this.idToDialogMap[null].destroyRecursive === "function")
          {
             this.idToDialogMap[null].destroyRecursive();
             delete this.idToDialogMap[null];
+
+            this.cleanUpDialogHandles(this.idToHandleMap[null]);
+            delete this.idToHandleMap[null];
+         }
+      },
+
+      /**
+       * Cleans up any subscription or aspect handles created for a dialog that has been destroyed.
+       *
+       * @instance
+       * @param  {object} map A map of handles to remove
+       */
+      cleanUpDialogHandles: function alfresco_services_DialogService__cleanUpDialogHandles(map) {
+         for (var key in map)
+         {
+            if (map.hasOwnProperty(key))
+            {
+               if (typeof map[key].remove === "function")
+               {
+                  // NOTE: In some respects we shouldn't do this, we should probably go via alfUnsubscribe
+                  //       but in this specific case it is better to explicitly deal with the handle
+                  //       Should we every swap out Dojo subscription handling then we will need to deal 
+                  //       with aspects and subscription handles separately
+                  map[key].remove();
+               }
+            }
          }
       },
 
@@ -231,33 +362,21 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * @instance
-       * @type {string}
-       * @default "ALF_CREATE_FORM_DIALOG_MIXIN_CONFIRMATION_TOPIC"
+       * Maps a handle against a specific handle id within the map of dialogId to handles.
+       * 
+       * @param  {object} payload The create dialog request payload
+       * @param  {string} id The id to map the handle against
+       * @param  {object} handle A subscription or aspect handle
        */
-      _formConfirmationTopic: "ALF_CREATE_FORM_DIALOG_MIXIN_CONFIRMATION_TOPIC",
-
-      /**
-       * The configuration for the contents of the dialog to be displayed. This should be provided either on instantiation
-       * or by the widget that mixes this module in
-       *
-       * @instance
-       * @type {object}
-       * @default null
-       */
-      widgets: null,
-
-      /**
-       * The default configuration for form dialogs. This is used as a base when requests are received.
-       *
-       * @instance
-       * @type {string}
-       * @default ""
-       */
-      defaultFormDialogConfig: {
-         dialogTitle: "",
-         dialogConfirmationButtonTitle: "OK",
-         dialogCancellationButtonTitle: "Cancel"
+      mapRequestedIdToHandle: function alfresco_services_DialogService__mapRequestedIdToHandles(payload, id, handle) {
+         var dialogId = payload.dialogId || null;
+         var map = this.idToHandleMap[dialogId];
+         if (!map)
+         {
+            map = {};
+            this.idToHandleMap[dialogId] = map;
+         }
+         map[id] = handle;
       },
 
       /**
@@ -313,7 +432,8 @@ define(["dojo/_base/declare",
 
          if (payload.hideTopic)
          {
-            this.alfSubscribe(payload.hideTopic, lang.hitch(dialog, dialog.hide));
+            var handle = this.alfSubscribe(payload.hideTopic, lang.hitch(dialog, dialog.hide));
+            this.mapRequestedIdToHandle(payload, "dialog.hide", handle);
          }
       },
 
@@ -361,8 +481,15 @@ define(["dojo/_base/declare",
                // Create a new pubSubScope just for this request (to allow multiple dialogs to behave independently)...
                var pubSubScope = this.generateUuid();
                var subcriptionTopic =  pubSubScope + this._formConfirmationTopic;
-               this.alfSubscribe(subcriptionTopic, lang.hitch(this, this.onFormDialogConfirmation));
+               var confirmationHandle = this.alfSubscribe(subcriptionTopic, lang.hitch(this, this.onFormDialogConfirmation));
+               this.mapRequestedIdToHandle(payload, "dialog.confirmation", confirmationHandle);
 
+               if (payload.dialogRepeats)
+               {
+                  // Create a copy of the original dialog request payload, we'll need it later...
+                  var repeatPayload = lang.clone(payload);
+               }
+               
                // Take a copy of the default configuration and mixin in the supplied config to override defaults
                // as appropriate...
                var config = lang.clone(this.defaultFormDialogConfig);
@@ -385,7 +512,15 @@ define(["dojo/_base/declare",
 
                if (config.dialogCloseTopic)
                {
-                  this.alfSubscribe(config.dialogCloseTopic, lang.hitch(this, this.onCloseDialog, dialog));
+                  var closeHandle = this.alfSubscribe(config.dialogCloseTopic, lang.hitch(this, this.onCloseDialog, dialog));
+                  this.mapRequestedIdToHandle(payload, "dialog.close", closeHandle);
+               }
+
+               if (payload.dialogRepeats)
+               {
+                  var repeatSubscriptionTopic = pubSubScope + this._formConfirmationRepeatTopic;
+                  var repeatHandle = this.alfSubscribe(repeatSubscriptionTopic, lang.hitch(this, this.repeatFormDialogRequest, repeatPayload, dialog));
+                  this.mapRequestedIdToHandle(payload, "dialog.repeat", repeatHandle);
                }
             }
             catch (e)
@@ -393,6 +528,46 @@ define(["dojo/_base/declare",
                this.alfLog("error", "The following error occurred creating a dialog for defined configuration", e, this.dialogConfig, this);
             }
          }
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {object} payload The original payload request
+       */
+      repeatFormDialogRequest: function alfresco_services_DialogService__repeatFormDialogRequest(repeatPayload, dialog, confirmationPayload) {
+         if (repeatPayload.dialogCloseTopic)
+         {
+            // For the "error path" we want to set up a new subscription to handle the expected success publication
+            // (if not previously created) and then forward the confirmationPayload on so that it can be processed...
+            if (!this.idToHandleMap[repeatPayload.dialogId || null]["dialog.repeat.close"])
+            {
+               var handle = this.alfSubscribe(repeatPayload.dialogCloseTopic, lang.hitch(this, this._repeatFormDialogRequestAfterHide, repeatPayload, dialog));
+               this.mapRequestedIdToHandle(repeatPayload, "dialog.repeat.close", handle);
+            }
+            this.onFormDialogConfirmation(confirmationPayload);
+         }
+         else
+         {
+            // For the "golden path" we can just publish the confirmation payload and then immediately
+            // request a repeat of the dialog. It is up to the developer to ensure that they are validating
+            // their form configuration to guarantee a successful publication everytime...
+            this.onFormDialogConfirmation(confirmationPayload);
+            this._repeatFormDialogRequestAfterHide(repeatPayload, dialog);
+         }
+      },
+
+      /**
+       * When repeating a request for a dialog (the "Create and then create another" paradigm) it is necessary to wait
+       * until the previous dialog has been completely hidden before attempting to create another one.
+       *
+       * @instance
+       * @param {object} payload A copy of the original form dialog creation request
+       * @param {object} dialog The dialog that must be fully hidden before the request for a new dialog is made.
+       */
+      _repeatFormDialogRequestAfterHide: function alfresco_services_DialogService___repeatFormDialogRequestAfterHide(payload, dialog) {
+         var handle = aspect.after(dialog, "onHide", lang.hitch(this, this.onCreateFormDialogRequest, payload));
+         this.mapRequestedIdToHandle(payload, "dialog.repeat.hide", handle);
       },
 
       /**
@@ -431,9 +606,8 @@ define(["dojo/_base/declare",
 
          // If a specific dialogCloseTopic has been requeste then add the "confirmationButton" CSS class as
          // a value that will suppress dialog closure.
-         var suppressCloseClasses = config.dialogCloseTopic ? ["confirmationButton"]: null,
+         var suppressCloseClasses = config.dialogCloseTopic ? ["confirmationButton","confirmAndRepeatButton"]: null,
             dialogId = config.dialogId ? config.dialogId : this.generateUuid();
-
 
          var dialogConfig = {
             id: dialogId,
@@ -469,11 +643,30 @@ define(["dojo/_base/declare",
                         id: (config.dialogCancellationButtonId) ? config.dialogCancellationButtonId : dialogId + "_CANCEL",
                         label: config.dialogCancellationButtonTitle,
                         additionalCssClasses: "cancellationButton",
-                        publishTopic: "ALF_CLOSE_DIALOG"
+                        publishTopic: this._formCancellationTopic
                      }
                   }
                ]
          };
+
+         if (config.dialogRepeats)
+         {
+            dialogConfig.widgetsButtons.splice(1,0,{
+               name: "alfresco/buttons/AlfButton",
+               config: {
+                  id: config.dialogConfirmAndRepeatButtonId || (dialogId + "_OK_AND_REPEAT"),
+                  label: config.dialogConfirmAndRepeatButtonTitle,
+                  disableOnInvalidControls: true,
+                  additionalCssClasses: "confirmAndRepeatButton",
+                  publishTopic: this._formConfirmationRepeatTopic,
+                  publishPayload: {
+                     formSubmissionTopic: config.formSubmissionTopic,
+                     formSubmissionPayloadMixin: config.formSubmissionPayloadMixin
+                  }
+               }
+            });
+         }
+
          return dialogConfig;
       },
 
@@ -499,15 +692,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This is the topic that will be published when the dialog is "confirmed" (e.g. the "OK" button is clicked)
-       *
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      formSubmissionTopic: null,
-
-      /**
        * This handles the user clicking the confirmation button on the dialog (typically, and by default the "OK" button). This has a special
        * handler to process the  payload and construct a simple object reqpresenting the
        * content of the inner [form]{@link module:alfresco/forms/Form}.
@@ -524,10 +708,10 @@ define(["dojo/_base/declare",
             var data = {};
             var formData = payload.dialogContent[0].getValue();
 
-            if (payload.subcriptionTopic)
-            {
-               this.alfUnsubscribe(payload.subcriptionTopic); // Remove the subscription...
-            }
+            // if (payload.subcriptionTopic)
+            // {
+            //    this.alfUnsubscribe(payload.subcriptionTopic); // Remove the subscription...
+            // }
 
             // Destroy the dialog if a reference is provided...
             if (payload.dialogReference && typeof payload.dialogReference.destroyRecursive === "function")
