@@ -114,6 +114,24 @@ define(["alfresco/core/ObjectTypeUtils",
          payloadConfig: null,
 
          /**
+          * The log entry nodes
+          *
+          * @instance
+          * @type {Object[]}
+          */
+         _entries: null,
+
+         /**
+          * The constructor
+          *
+          * @instance
+          * @override
+          */
+         constructor: function() {
+            this._entries = [];
+         },
+
+         /**
           * Called after properties have been mixed into widget
           *
           * @instance
@@ -152,24 +170,24 @@ define(["alfresco/core/ObjectTypeUtils",
                "data-aikau-log-topic": logData.topic,
                "data-aikau-log-object": logData.object,
                "data-aikau-log-data": simpleData,
-               className: this.rootClass + "__entry"
+               className: this.rootClass + "__log__entry"
             }, this.logNode, "first");
             if (logData.type === "SUBSCRIBE") {
-               domClass.add(entryNode, this.rootClass + "__entry--subscribe");
+               domClass.add(entryNode, this.rootClass + "__log__entry--subscribe");
             } else {
-               domClass.add(entryNode, this.rootClass + "__entry--publish");
+               domClass.add(entryNode, this.rootClass + "__log__entry--publish");
             }
 
             // Add the basic info
             infoNode = domConstruct.create("span", {
-               className: this.rootClass + "__entry__info"
+               className: this.rootClass + "__log__entry__info"
             }, entryNode);
             domConstruct.create("span", {
-               className: this.rootClass + "__entry__info__topic",
+               className: this.rootClass + "__log__entry__info__topic",
                innerHTML: logData.topic || "N/A"
             }, infoNode);
             domConstruct.create("span", {
-               className: this.rootClass + "__entry__info__timestamp",
+               className: this.rootClass + "__log__entry__info__timestamp",
                innerHTML: dateLocale.format(now, {
                   datePattern: "yyyy-MM-dd",
                   timePattern: "HH:mm:ss.SSS"
@@ -178,7 +196,7 @@ define(["alfresco/core/ObjectTypeUtils",
             if (logData.object) {
                source = logData.object;
                domConstruct.create("span", {
-                  className: this.rootClass + "__entry__info__object",
+                  className: this.rootClass + "__log__entry__info__object",
                   innerHTML: "Source: \"" + source + "\""
                }, infoNode);
             }
@@ -186,19 +204,42 @@ define(["alfresco/core/ObjectTypeUtils",
             // Add the data if we have it
             if (hasData) {
                dataNode = domConstruct.create("span", {
-                  className: this.rootClass + "__entry__data " + this.rootClass + "__entry__data--collapsed",
+                  className: this.rootClass + "__log__entry__data " + this.rootClass + "__log__entry__data--collapsed",
                   innerHTML: "Payload"
                }, entryNode);
                domConstruct.create("span", {
-                  className: this.rootClass + "__entry__data__collapsed"
+                  className: this.rootClass + "__log__entry__data__collapsed"
                }, dataNode).appendChild(document.createTextNode(simpleData));
                domConstruct.create("span", {
-                  className: this.rootClass + "__entry__data__full"
+                  className: this.rootClass + "__log__entry__data__full"
                }, dataNode).appendChild(document.createTextNode(formattedData));
                on(entryNode, "click", lang.hitch(this, function() {
                   this._toggleCollapsed(dataNode);
                }));
             }
+
+            // Add the entry to the collection of nodes
+            this._entries.push({
+               node: entryNode,
+               topic: logData.topic || ""
+            });
+
+            // Re-apply the filter
+            this._applyFilter();
+         },
+
+         /**
+          * Update the filter
+          *
+          * @instance
+          * @returns {[type]} [description]
+          */
+         _applyFilter: function alfresco_logging_DebugLog___applyFilter() {
+            var filterValue = this.filter.value;
+            array.forEach(this._entries, function(entry) {
+               var matchesTopic = entry.topic.toLowerCase().indexOf(filterValue) !== -1;
+               domClass[matchesTopic ? "remove" : "add"](entry.node, this.rootClass + "__log__entry--hidden");
+            }, this);
          },
 
          /**
@@ -321,8 +362,14 @@ define(["alfresco/core/ObjectTypeUtils",
             return safeData;
          },
 
-         _onClearButtonClick: function alfresco_logging_DebugLog___onClearButtonClick(){
+         /**
+          * Clear the log
+          *
+          * @instance
+          */
+         _onClearButtonClick: function alfresco_logging_DebugLog___onClearButtonClick() {
             domConstruct.empty(this.logNode);
+            this._entries = [];
          },
 
          /**
@@ -332,7 +379,7 @@ define(["alfresco/core/ObjectTypeUtils",
           * @param    {object} dataNode The node to toggle
           */
          _toggleCollapsed: function alfresco_logging_DebugLog___toggleCollapsed(dataNode) {
-            domClass.toggle(dataNode, this.rootClass + "__entry__data--collapsed");
+            domClass.toggle(dataNode, this.rootClass + "__log__entry__data--collapsed");
          }
       });
    });

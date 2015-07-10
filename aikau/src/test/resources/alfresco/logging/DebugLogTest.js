@@ -46,7 +46,7 @@ define(["intern!object",
                .click()
                .end()
 
-            .findAllByCssSelector(".alfresco_logging_DebugLog__entry[data-aikau-log-type=\"PUBLISH\"][data-aikau-log-topic=\"ALF_SHOW_PUBSUB_LOG\"]")
+            .findAllByCssSelector(".alfresco_logging_DebugLog__log__entry[data-aikau-log-type=\"PUBLISH\"][data-aikau-log-topic=\"ALF_SHOW_PUBSUB_LOG\"]")
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Did not show show pub-sub log in pub-sub log");
                });

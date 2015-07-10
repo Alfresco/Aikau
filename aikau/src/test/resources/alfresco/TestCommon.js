@@ -201,7 +201,7 @@ define(["intern/dojo/node!fs",
             waitPeriod = waitPeriod || 500;
 
             // Build the selector
-            var selectorBits = [".alfresco_logging_DebugLog__entry"];
+            var selectorBits = [".alfresco_logging_DebugLog__log__entry"];
             filter.type && selectorBits.push("[data-aikau-log-type=\"" + filter.type + "\"]"); // Type is "..."
             if(isGlobal) {
                filter.topic && selectorBits.push("[data-aikau-log-topic=\"" + filter.topic + "\"]"); // Topic is "..."
