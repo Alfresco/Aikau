@@ -232,7 +232,6 @@ define(["alfresco/core/ObjectTypeUtils",
           * Update the filter
           *
           * @instance
-          * @returns {[type]} [description]
           */
          _applyFilter: function alfresco_logging_DebugLog___applyFilter() {
             var filterValue = this.filter.value;
