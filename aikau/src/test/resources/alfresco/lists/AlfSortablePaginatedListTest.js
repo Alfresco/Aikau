@@ -78,6 +78,39 @@ define(["intern!object",
          browser.end();
       },
 
+      "Preference names are honoured when retrieving pageSize": function() {
+         return browser.findByCssSelector("body") // Need to create the session
+            .getLogEntries({
+               type: "PUBLISH",
+               topic: "ALF_PREFERENCE_GET",
+               object: "HASH_LIST",
+               pos: "last"
+            })
+            .then(function(payload) {
+               assert.propertyVal(payload, "preference", "org.alfresco.share.documentList.documentsPerPage", "Incorrect preference used for HASH_LIST list");
+            })
+
+         .getLogEntries({
+               type: "PUBLISH",
+               topic: "ALF_PREFERENCE_GET",
+               object: "DOCUMENT_LIST",
+               pos: "last"
+            })
+            .then(function(payload) {
+               assert.propertyVal(payload, "preference", "org.alfresco.share.documentList.documentsPerPage", "Incorrect preference used for DOCUMENT_LIST list");
+            })
+
+         .getLogEntries({
+               type: "PUBLISH",
+               topic: "ALF_PREFERENCE_GET",
+               object: "INFINITE_SCROLL_LIST",
+               pos: "last"
+            })
+            .then(function(payload) {
+               assert.propertyVal(payload, "preference", "custom.pageSize.preference", "Incorrect preference used for INFINITE_SCROLL_LIST list");
+            })
+      },
+
       "Check URL hash controls displayed page": function() {
          // See AKU-293
          return browser.findByCssSelector("#HASH_LIST tr:nth-child(1) .alfresco-renderers-Property .value")
