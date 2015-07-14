@@ -18,37 +18,44 @@
  */
 
 /**
- * @author Martin Doyle
+ * @author Dave Draper
  */
 define(["intern!object",
       "intern/chai!assert",
       "require",
-      "alfresco/TestCommon"
+      "alfresco/TestCommon",
+      "intern/dojo/node!leadfoot/keys"
    ],
-   function(registerSuite, assert, require, TestCommon) {
+   function(registerSuite, assert, require, TestCommon, keys) {
 
       var browser;
-
       registerSuite({
-         name: "DebugLog Tests",
+         name: "Avatar Thumbnail Tests",
 
          setup: function() {
             browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/DebugLog", "DebugLog Tests").end();
+            return TestCommon.loadTestWebScript(this.remote, "/AvatarThumbnail", "Avatar Thumbnail Tests").end();
          },
 
          beforeEach: function() {
             browser.end();
          },
 
-         "Log displayed on button click": function() {
-            return browser.findById("SHOW_LOG_BUTTON")
-               .click()
-               .end()
+         "Image src is correct": function() {
+            return browser.findByCssSelector("#ADMIN_THUMBNAIL .inner img")
+               .getAttribute("src")
+               .then(function(src) {
+                  assert.match(src, /\/aikau\/proxy\/alfresco\/slingshot\/profile\/avatar\/admin\/thumbnail\/avatar/, "Avatar thumbnail src incorrect");
+               });
+         },
 
-            .findAllByCssSelector(".alfresco_logging_DebugLog__log__entry[data-aikau-log-type=\"PUBLISH\"][data-aikau-log-topic=\"ALF_SHOW_PUBSUB_LOG\"]")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Did not show show pub-sub log in pub-sub log");
+         "Publishes topic when clicked": function() {
+            return browser.findByCssSelector("#GUEST_THUMBNAIL .inner")
+               .click()
+               .getLastPublish("ALF_DISPLAY_NOTIFICATION", true)
+               .then(function(payload) {
+                  assert.isNotNull(payload, "Did not publish correct topic when clicked");
+                  assert.propertyVal(payload, "message", "You clicked on the guest thumbnail", "Did not publish correct payload");
                });
          },
 

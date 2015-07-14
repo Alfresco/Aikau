@@ -109,29 +109,4 @@ define(["intern!object",
          TestCommon.alfPostCoverageResults(this, browser);
       }
    });
-
-   registerSuite({
-      name: "Avatar Thumbnail Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AvatarThumbnail", "Avatar Thumbnail Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check avatar img src attribute": function () {
-         return browser.findByCssSelector(".alfresco-renderers-Thumbnail .inner img")
-            .getAttribute("src")
-            .then(function (src){
-               assert(src.indexOf("/aikau/proxy/alfresco/slingshot/profile/avatar/admin/thumbnail/avatar") !== -1, "Avatar thumbnail src attribute wrong: " + src);
-            });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   });
 });

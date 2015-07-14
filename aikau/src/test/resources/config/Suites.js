@@ -32,7 +32,8 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/forms/controls/SitePickerTest"
+      "src/test/resources/alfresco/renderers/AvatarThumbnailTest",
+      "src/test/resources/alfresco/renderers/ThumbnailTest"
    ],
 
    /**
@@ -106,7 +107,7 @@ define({
       "src/test/resources/alfresco/forms/controls/CodeMirrorTest",
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
       "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
-      "src/test/resources/alfresco/forms/controls/DateTextBoxTest", // TODO: NEEDS FIXING
+      "src/test/resources/alfresco/forms/controls/DateTextBoxTest",
       "src/test/resources/alfresco/forms/controls/DocumentPickerTest",
       "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest",
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
@@ -178,6 +179,7 @@ define({
 
       "src/test/resources/alfresco/renderers/ActionsTest",
       "src/test/resources/alfresco/renderers/ActivitySummaryTest",
+      "src/test/resources/alfresco/renderers/AvatarThumbnailTest",
       "src/test/resources/alfresco/renderers/BannerTest",
       "src/test/resources/alfresco/renderers/BooleanTest",
       "src/test/resources/alfresco/renderers/CategoryTest",

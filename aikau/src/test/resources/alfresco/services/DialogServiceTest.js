@@ -73,9 +73,11 @@ define(["intern!object",
       },
 
       "Test publication on dialog show": function() {
-         return browser.findAllByCssSelector(TestCommon.topicSelector("DISPLAYED_FD1", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Could not find topic published when displayed dialog");
+         return browser.findByCssSelector(".alfresco-dialog-AlfDialog")
+         .end()
+         .getLastPublish("DISPLAYED_FD1").findAllByCssSelector(TestCommon.topicSelector("DISPLAYED_FD1", "publish", "any"))
+            .then(function(payload) {
+               assert.isNotNull(payload, "Could not find topic published when displayed dialog");
             });
       },
 
@@ -111,8 +113,9 @@ define(["intern!object",
          return closeAllDialogs()
             .then(function() {
                return browser.findById("CREATE_FORM_DIALOG")
+                  .clearLog()
                   .click()
-                  .end()
+               .end()
 
                .findAllByCssSelector(".alfresco-dialog-AlfDialog")
                   .then(function(elements) {
@@ -123,28 +126,23 @@ define(["intern!object",
 
       "Test that updated value is included in post": function() {
          // Type a value into the field...
-         return browser.findByCssSelector("#TB2 .dijitInputContainer input")
-            .clearValue()
-            .type("Some value")
+         return browser.findByCssSelector("#FD2.dialogDisplayed").end()
+
+            .findByCssSelector("#TB2 .dijitInputContainer input")
+               .clearValue()
+               .type("Some value")
             .end()
 
-         // Post the form...
-         .findByCssSelector("#FD2 .confirmationButton > span")
-            .click()
+            // Post the form...
+            .findByCssSelector("#FD2 .confirmationButton > span")
+               .click()
             .end()
 
-         // Check the values have been set
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("POST_DIALOG_2", "text", "Some value"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Textbox value was not posted");
-            });
-      },
-
-      "Test that additional data is included in post": function() {
-         // Type a value into the field...
-         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("POST_DIALOG_2", "bonusData", "test"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Additional data was not posted");
+            // Check the values have been set
+            .getLastPublish("POST_DIALOG_2")
+            .then(function(payload) {
+               assert.propertyVal(payload, "text","Some value", "Textbox value was not posted");
+               assert.propertyVal(payload, "bonusData","test", "Additional data was not posted");
             });
       },
 
@@ -253,20 +251,133 @@ define(["intern!object",
             });
       },
 
+      "Count golden path repeating dialog buttons": function() {
+         return closeAllDialogs()
+            .then(function() {
+               return browser.findById("CREATE_AND_CREATE_ANOTHER_1")
+                  .click()
+               .end()
+               .findAllByCssSelector("#CUSTOM_DIALOG .footer .alfresco-buttons-AlfButton")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 3, "Unexpected number of buttons");
+                  });
+            });
+      },
+
+      "Check that golden path repeating dialog repeats on repeat confirmation": function() {
+         return browser.findByCssSelector("#GOLDEN_REPEATING_INPUT .dijitInputContainer input")
+            .clearValue()
+            .type("another")
+         .end()
+
+         .findById("CUSTOM_REPEAT_BUTTON_ID")
+            .click()
+         .end()
+
+         .getLastPublish("POST_FORM_DIALOG")
+            .then(function(payload) {
+               assert.propertyVal(payload, "text","another", "Textbox value was not posted");
+            })
+
+         .findAllByCssSelector("#CUSTOM_DIALOG.dialogDisplayed")
+         .end()
+         .findByCssSelector("#GOLDEN_REPEATING_INPUT .dijitInputContainer input")
+            .getProperty("value")
+            .then(function(resultText) {
+               assert.equal(resultText, "", "The form was not reset on repeat");
+            });
+      },
+
+      "Check that golden path repeating dialog does NOT repeat on basic confirmation": function() {
+         return browser.findByCssSelector("#GOLDEN_REPEATING_INPUT .dijitInputContainer input")
+            .clearValue()
+            .type("encore")
+         .end()
+
+         .findById("CUSTOM_OK_BUTTON_ID")
+            .click()
+         .end()
+
+         .getLastPublish("POST_FORM_DIALOG")
+            .then(function(payload) {
+               assert.propertyVal(payload, "text","encore", "Textbox value was not posted");
+            })
+
+         .findAllByCssSelector("#CUSTOM_DIALOG.dialogHidden")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Dialog was not hidden");
+            });
+      },
+
+      "Count error path repeating dialog buttons": function() {
+         return browser.findById("CREATE_AND_CREATE_ANOTHER_2")
+            .click()
+         .end()
+         .findAllByCssSelector("#ERROR_REPEATING .footer .alfresco-buttons-AlfButton")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Unexpected number of buttons");
+            });
+      },
+
+      "Check that error path repeating dialog repeats on repeat confirmation with GOOD data": function() {
+         return browser.findByCssSelector("#ERROR_REPEATING_INPUT .dijitInputContainer input")
+            .clearValue()
+            .type("more")
+         .end()
+
+         .findById("ERROR_REPEATING_OK_AND_REPEAT")
+            .click()
+         .end()
+            
+         .getLastPublish("POST_FORM_DIALOG")
+            .then(function(payload) {
+               assert.propertyVal(payload, "text", "more", "Textbox value was not posted");
+            })
+
+         .findAllByCssSelector("#ERROR_REPEATING.dialogDisplayed")
+         .end()
+         .findByCssSelector("#ERROR_REPEATING_INPUT .dijitInputContainer input")
+            .getProperty("value")
+            .then(function(resultText) {
+               assert.equal(resultText, "", "The form was not reset on repeat");
+            });
+      },
+
+      "Check that error path repeating dialog does NOT repeat on basic confirmation": function() {
+         return browser.findByCssSelector("#ERROR_REPEATING_INPUT .dijitInputContainer input")
+            .clearValue()
+            .type("repeat")
+         .end()
+
+         .findById("DIFFERENT_OK_BUTTON_ID")
+            .click()
+         .end()
+            
+         .getLastPublish("POST_FORM_DIALOG")
+            .then(function(payload) {
+               assert.propertyVal(payload, "text", "repeat", "Textbox value was not posted");
+            })
+
+         .findAllByCssSelector("#ERROR_REPEATING.dialogHidden")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Dialog was not hidden");
+            });
+      },
+
       "Can launch dialog within dialog": function() {
          return closeAllDialogs()
             .then(function() {
                return browser.findById("LAUNCH_OUTER_DIALOG_BUTTON")
                   .click()
-                  .end()
+               .end()
 
                .findById("LAUNCH_INNER_DIALOG_BUTTON")
                   .click()
-                  .end()
+               .end()
 
-               .findAllByCssSelector(TestCommon.topicSelector("DISPLAYED_INNER_DIALOG", "publish", "any"))
-                  .then(function(elements) {
-                     assert.lengthOf(elements, 1, "Inner dialog not displayed");
+               .getLastPublish("DISPLAYED_INNER_DIALOG")
+                  .then(function(payload) {
+                     assert.isNotNull(payload, "Inner dialog not displayed");
                   });
             });
       },

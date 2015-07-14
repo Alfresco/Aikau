@@ -213,7 +213,7 @@ define(["intern!object",
 
       "Check that search field is cleared": function() {
          return browser.findByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
-            .getValue()
+            .getProperty("value")
             .then(function(value) {
                assert.equal(value, "", "The previous search terms weren't cleared");
             });

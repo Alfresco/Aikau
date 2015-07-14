@@ -88,10 +88,9 @@ define(["dojo/_base/declare",
          {
             if (item && item.node)
             {
-               var jsNode = item.jsNode;
-               if (jsNode.isLink && item.location.site)
+               if (item.node.isLink && item.location.site)
                {
-                  if (jsNode.isContainer)
+                  if (item.node.isContainer)
                   {
                      this.updateFolderLinkPublication(publishPayload);
                      topic = "ALF_DOCUMENTLIST_PATH_CHANGED";
@@ -104,7 +103,7 @@ define(["dojo/_base/declare",
                }
                else
                {
-                  if (jsNode.isContainer)
+                  if (item.node.isContainer)
                   {
                      this.updateFolderLinkPublication(publishPayload);
                      topic = "ALF_DOCUMENTLIST_PATH_CHANGED";
@@ -114,7 +113,7 @@ define(["dojo/_base/declare",
                      // TODO: It'll be necessary to get the actual actionUrls - but currently it's to tangled to untangle easily
                      //var actionUrls = this.getActionUrls(item);
                      var actionUrls = this.getActionUrls(item);
-                     if (jsNode.isLink && jsNode.linkedNode.isContainer)
+                     if (item.node.isLink && item.node.linkedNode.isContainer)
                      {
                         publishPayload.url = actionUrls.folderDetailsUrl;
                      }

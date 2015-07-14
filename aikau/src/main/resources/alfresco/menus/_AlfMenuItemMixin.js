@@ -264,10 +264,7 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event
        */
       onClick: function alfresco_menus__AlfMenuItemMixin__onClick(evt) {
-         this.alfLog("log", "AlfMenuBarItem clicked");
-
          var targetUrlLocation = this.targetUrlLocation;
-
          if (has("mac") && evt.metaKey)
          {
             targetUrlLocation = "NEW";

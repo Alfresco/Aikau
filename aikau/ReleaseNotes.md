@@ -1,15 +1,16 @@
-Aikau 1.0.25 Release Notes
+Aikau 1.0.26 Release Notes
 ==========================
 
 New deprecations: 
 -----------------
-* alfresco/core/UrlUtils.js                                      (use alfresco/util/urlUtils or alfresco/core/UrlUtilsMixin)
-* alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
-* alfresco/dialogs/_AlfCreateFormDialogMixin.js                  (use alfresco/services/DialogService)
+None
 
 Previous deprecations:
 ---------------------
+* alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
+* alfresco/core/UrlUtils.js                                      (use alfresco/util/urlUtils or alfresco/core/UrlUtilsMixin)
+* alfresco/dialogs/_AlfCreateFormDialogMixin.js                  (use alfresco/services/DialogService)
 * alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
 * alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
 * alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
@@ -41,6 +42,17 @@ Previous deprecations:
 
 Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
 ----------------
+1.0.26:
+* [AKU-18](https://issues.alfresco.com/jira/browse/AKU-18)         - Update [`DebugLog`](src/main/resources/alfresco/logging/DebugLog.js) to make it more useful for testing
+* [AKU-267](https://issues.alfresco.com/jira/browse/AKU-267)       - Add a mechanism to allow a "Create Another" pattern for dialogs
+* [AKU-403](https://issues.alfresco.com/jira/browse/AKU-403)       - [`Dashlet`](src/main/resources/alfresco/dashlets/Dashlet.js) does not support LESS theming
+* [AKU-407](https://issues.alfresco.com/jira/browse/AKU-407)       - Add support for publishing when clicking on an [`AvatarThumbnail`](src/main/resources/alfresco/renderers/AvatarThumbnail.js)
+* [AKU-409](https://issues.alfresco.com/jira/browse/AKU-409)       - Fix [`DateTextBox`](src/main/resources/alfresco/forms/controls/DateTextBox.js) to handle invalid initial values better
+* [AKU-410](https://issues.alfresco.com/jira/browse/AKU-410)       - Create prototype [`Dashlet`](src/main/resources/alfresco/dashlets/Dashlet.js) for displaying _Favorites_ and _Recents_
+* [AKU-412](https://issues.alfresco.com/jira/browse/AKU-412)       - Fix intermittent unit test failures
+* [AKU-413](https://issues.alfresco.com/jira/browse/AKU-413)       - Fix "dragging an item containing nested items causes single-use palette to empty"
+* [AKU-414](https://issues.alfresco.com/jira/browse/AKU-414)       - [`AlfSearchList`](src/main/resources/alfresco/search/AlfSearchList.js) does not work with [`Paginator`](src/main/resources/alfresco/lists/Paginator.js)
+
 1.0.25:
 * [AKU-367](https://issues.alfresco.com/jira/browse/AKU-367)       - Added alfresco/html/HR widget
 * [AKU-377](https://issues.alfresco.com/jira/browse/AKU-377)       - Update alfresco/layout/InfiniteScrollArea to request more list data when vertical space is available

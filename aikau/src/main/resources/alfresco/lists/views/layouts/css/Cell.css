@@ -13,3 +13,7 @@
 .alfresco-lists-views-layouts-Cell.largepad {
    padding: 16px;
 }
+
+.alfresco-lists-views-layouts-Cell.center {
+   text-align: center;
+}

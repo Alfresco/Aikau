@@ -5,6 +5,8 @@
 Aikau is a meta-framework of custom JavaScript widgets designed to work with Alfresco. It is dependant upon the Surf framework but is not dependent upon Alfresco Share application.
 
 The framework provides a suite of widgets that can be referenced in JSON models to build complete pages. These page models can be defined in WebScripts or remotely stored and rendered from an Alfresco Repository. This means that it possible to dynamically create and render new pages from within an application without needing to restart the server.
+
+[Release notes for the latest version of Aikau](aikau/ReleaseNotes.md) are available on GitHub.
  
 #### Simple Third Party Customizations
 The page models are intended to be dynamically customizable through Surf extension modules meaning that a client (such as Alfresco Share) can be dynamically customized by third parties without needing to write any code. The modular approach means that it is easy for 3rd parties to provide custom widgets that are either completely new or extend the Aikau base.

@@ -22,9 +22,7 @@ model.jsonModel = {
             pubSubScope: "COMMENTS1_",
             currentItem: {
                node: {
-                  nodeRef: "workspace://SpacesStore/4fd42b12-361a-4e02-a1da-9131e6fa074d"
-               },
-               parent: {
+                  nodeRef: "workspace://SpacesStore/4fd42b12-361a-4e02-a1da-9131e6fa074d",
                   permissions: {
                      user: {
                         CreateChildren: true

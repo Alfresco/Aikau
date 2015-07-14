@@ -121,8 +121,9 @@ define(["intern/dojo/node!fs",
        * @param {string} testWebScriptURL The URL of the test WebScript
        * @param {string} testName The name of the test to run
        * @param {string} testWebScriptPrefix Optional prefix to use before the WebScript URL
+       * @param {boolean} noPageLoadError Optional boolean to suppress page load failure errors
        */
-      loadTestWebScript: function (browser, testWebScriptURL, testName, testWebScriptPrefix) {
+      loadTestWebScript: function (browser, testWebScriptURL, testName, testWebScriptPrefix, noPageLoadError) {
          this._applyTimeouts(browser);
          this._maxWindow(browser);
          this._cancelModifierKeys(browser);
@@ -152,7 +153,14 @@ define(["intern/dojo/node!fs",
                },
                function (error) {
                   // Failed to load after two attempts
-                  assert.fail(null, null, "Test page could not be loaded");
+                  if (noPageLoadError === true)
+                  {
+                     // Don't output an error message
+                  }
+                  else
+                  {
+                     assert.fail(null, null, "Test page could not be loaded");
+                  }
                })
             .end();
          command.session.alfPostCoverageResults = function (newBrowser) { 
@@ -179,23 +187,27 @@ define(["intern/dojo/node!fs",
             return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
                .click();
          };
-         command.session.getLastPublish = function(topicName) {
+         command.session.getLastPublish = function(topicName, isGlobal) {
             return this.getLogEntries({
                type: "PUBLISH",
                topic: topicName,
                pos: "last"
-            });
+            }, null, isGlobal);
          };
-         command.session.getLogEntries = function(filter, waitPeriod) {
+         command.session.getLogEntries = function(filter, waitPeriod, isGlobal) {
 
             // Normalise arguments
             filter = filter || {};
             waitPeriod = waitPeriod || 500;
 
             // Build the selector
-            var selectorBits = [".alfresco_logging_DebugLog__entry"];
+            var selectorBits = [".alfresco_logging_DebugLog__log__entry"];
             filter.type && selectorBits.push("[data-aikau-log-type=\"" + filter.type + "\"]"); // Type is "..."
-            filter.topic && selectorBits.push("[data-aikau-log-topic$=\"" + filter.topic + "\"]"); // Topic ends with "..."
+            if(isGlobal) {
+               filter.topic && selectorBits.push("[data-aikau-log-topic=\"" + filter.topic + "\"]"); // Topic is "..."
+            } else {
+               filter.topic && selectorBits.push("[data-aikau-log-topic$=\"" + filter.topic + "\"]"); // Topic ends with "..."
+            }
             filter.object && selectorBits.push("[data-aikau-log-object=\"" + filter.object + "\"]"); // Object is "..."
             if (filter.debug) {
                console.log("Log entry selector: \"" + selectorBits.join("") + "\"");

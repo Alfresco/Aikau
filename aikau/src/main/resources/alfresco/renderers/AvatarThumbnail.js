@@ -19,8 +19,9 @@
 
 /**
  * <p>This extends the standard [thumbnail widget]{@link module:alfresco/renderers/Thumbnail} to render user avatar
- * thumbnails. In this current implementation click events are suppressed, however in the future this widget is likely
- * to be enhanced to support configurable previews or navigation actions.</p>
+ * thumbnails. By default, it has no click action, however it is possible to specify a custom publishTopic which
+ * will then render the thumbnail clickable. For more information, please see the example below.</p>
+ * 
  * <p>The Alfresco REST APIs greatly vary in the attribute that user names are assigned to so it is important when
  * using this widget to set the [userNameProperty]{@link module:alfresco/renderers/AvatarThumbnail#userNameProperty}
  * for the context in which the thumbnail is to be used. If the REST API supports it you should also look to set the
@@ -35,14 +36,31 @@
  *    }
  * }
  * 
+ * @example <caption>Example configuration with click/publish:</caption>
+ * {
+ *    name: "alfresco/renderers/AvatarThumbnail",
+ *    id: "GUEST_THUMBNAIL",
+ *    config: {
+ *       currentItem: {
+ *          userName: "guest"
+ *       },
+ *       publishTopic: "ALF_DISPLAY_NOTIFICATION",
+ *       publishPayload: {
+ *          message: "You clicked on the guest thumbnail"
+ *       },
+ *       publishGlobal: true
+ *    }
+ * }
+ *
  * @module alfresco/renderers/AvatarThumbnail
  * @extends module:alfresco/renderers/Thumbnail
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/Thumbnail",
+        "dojo/dom-style",
         "dojo/_base/event"], 
-        function(declare, Thumbnail, event) {
+        function(declare, Thumbnail, domStyle, event) {
 
    return declare([Thumbnail], {
       
@@ -87,7 +105,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      postMixInProperties: function alfresco_renderers_Thumbnail__postMixInProperties() {
+      postMixInProperties: function alfresco_renderers_AvatarThumbnail__postMixInProperties() {
          if (!this.thumbnailUrlTemplate)
          {
             this.thumbnailUrlTemplate = "slingshot/profile/avatar/{" + this.userNameProperty + "}/thumbnail/avatar";
@@ -96,14 +114,24 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Called after widget has been created.
+       *
+       * @instance
+       */
+      postCreate: function alfresco_renderers_AvatarThumbnail__postCreate(){
+         this.inherited(arguments);
+         this.publishTopic && domStyle.set(this.clickNode, "cursor", "pointer");
+      },
+
+      /**
        * Overrides the [inherited function]{@link module:alfresco/renderers/Thumbnail#onLinkClick} to prevent
-       * click actions from having any effect. In the future this is likely to be updated to support previewing
-       * the user data or navigating to a configurable user details page.
+       * click actions from having any effect unless a publishTopic has been specified.
        * 
        * @param  {object} evt The click event
        */
       onLinkClick: function alfresco_renderers_AvatarThumbnail__onLinkClick(evt) {
          evt && event.stop(evt);
+         this.publishTopic && this.alfPublish(this.publishTopic, this.getGeneratedPayload(), this.publishGlobal, this.publishToParent);
       }
    });
 });
