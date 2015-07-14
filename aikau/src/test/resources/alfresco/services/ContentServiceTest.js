@@ -77,11 +77,13 @@ define(["intern!object",
       "Confirm delete (basic data)": function() {
          return browser.findByCssSelector(".footer .alfresco-buttons-AlfButton:first-child .dijitButtonText")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Delete successful"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Could not find success notification");
-            });
+            .end()
+
+         .getLastPublish("ALF_DISPLAY_NOTIFICATION")
+            .then(function(payload){
+               assert.propertyVal(payload, "message", "Delete successful", "Did not display successful delete notification");
+            })
+            .clearLog();
       },
 
       "Delete node (doclib data)": function() {
@@ -102,12 +104,14 @@ define(["intern!object",
       "Confirm delete (doclib data)": function() {
          return browser.findByCssSelector(".footer .alfresco-buttons-AlfButton:first-child .dijitButtonText")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Delete successful"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "Could not find success notification");
+            .end()
+
+         .getLastPublish("ALF_DISPLAY_NOTIFICATION")
+            .then(function(payload){
+               assert.propertyVal(payload, "message", "Delete successful", "Did not display successful delete notification");
             });
       },
 
@@ -150,15 +154,18 @@ define(["intern!object",
 
       "Edit basic metadata (nodeRef only)": function() {
          return browser.findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogHidden")
-         .end()
+            .end()
+         
          .findByCssSelector("#EDIT_BASIC_METADATA_NODEREF_ONLY_label")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogDisplayed") // Wait for dialog
-         .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_BASIC_METADATA_SUCCESS", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Node data was not retrieved");
+            .end()
+
+         .getLastPublish("ALF_BASIC_METADATA_SUCCESS")
+            .then(function(payload){
+               assert.isNotNull(payload, "Did not publish basic metadata success");
             });
       },
 
@@ -179,6 +186,10 @@ define(["intern!object",
             .click()
          .end()
          .findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogHidden");
+      },
+
+      "Upload file": function() {
+         // return 
       },
 
       "Post Coverage Results": function() {
