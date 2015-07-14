@@ -189,7 +189,21 @@ define(["intern!object",
       },
 
       "Upload file": function() {
-         // return 
+         return browser.findByCssSelector(".alfresco-buttons-AlfButton[widgetid=\"UPLOAD_NEW_FILE\"] .dijitButtonNode")
+            .click()
+            .end()
+
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog
+            .end()
+
+         .findByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed .confirmationButton .dijitButtonNode")
+            .click()
+            .end()
+
+         .getLastPublish("ALF_UPLOAD_REQUEST")
+            .then(function(payload){
+               assert.isNotNull(payload, "Did not publish upload request");
+            });
       },
 
       "Post Coverage Results": function() {
