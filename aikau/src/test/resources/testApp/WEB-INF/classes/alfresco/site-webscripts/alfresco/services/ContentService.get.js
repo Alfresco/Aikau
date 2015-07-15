@@ -12,7 +12,8 @@ model.jsonModel = {
       "alfresco/services/DialogService",
       "alfresco/services/ActionService",
       "alfresco/services/ContentService",
-      "alfresco/services/DocumentService"
+      "alfresco/services/DocumentService",
+      "alfresco/services/UploadService"
    ],
    widgets: [
       {
@@ -107,10 +108,23 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "UPLOAD_NEW_FILE",
+         config: {
+            label: "Launch upload dialog",
+            publishTopic: "ALF_SHOW_UPLOADER",
+            publishPayload: {
+               parent: {
+                  nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
+               }
+            }
+         }
+      },
+      {
          name: "aikauTesting/mockservices/CreateContentMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
