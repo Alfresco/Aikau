@@ -133,6 +133,7 @@ model.jsonModel = {
                                                 useHash: false,
                                                 useInfiniteScroll: true,
                                                 currentPageSize: 10,
+                                                pageSizePreferenceName: "custom.pageSize.preference",
                                                 filteringTopics: ["FILTER_THIS"],
                                                 widgets: [view]
                                              }

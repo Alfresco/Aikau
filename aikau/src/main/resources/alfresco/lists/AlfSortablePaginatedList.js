@@ -18,8 +18,11 @@
  */
 
 /**
- * This extends the [hash list]{@link module:alfresco/lists/AlfHashList} to provide support
- * for common pagination and sorting behaviour.
+ * <p>This extends the [hash list]{@link module:alfresco/lists/AlfHashList} to provide support
+ * for common pagination and sorting behaviour.</p>
+ *
+ * <p>It is possible to specify the [pageSizePreferenceName]{@link module:alfresco/lists/AlfSortablePaginatedList#pageSizePreferenceName}
+ * to be used by this widget (or its descendants), by setting a new value for the property in the model config.</p>
  *
  * @module alfresco/lists/AlfSortablePaginatedList
  * @extends module:alfresco/lists/AlfHashList
@@ -75,6 +78,15 @@ define(["dojo/_base/declare",
       currentPageSize: 25,
 
       /**
+       * The name of the property to access in order to retrieve the page-size preference for this widget
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      pageSizePreferenceName: "org.alfresco.share.documentList.documentsPerPage",
+
+      /**
        * The inital sort order.
        *
        * @instance
@@ -111,7 +123,7 @@ define(["dojo/_base/declare",
          }
 
          this.alfPublish(this.getPreferenceTopic, {
-            preference: "org.alfresco.share.documentList.documentsPerPage",
+            preference: this.pageSizePreferenceName,
             callback: this.setPageSize,
             callbackScope: this
          });
