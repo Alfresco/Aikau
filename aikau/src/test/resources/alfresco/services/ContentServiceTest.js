@@ -22,9 +22,9 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
+        "intern/chai!assert", 
+        "require", 
+        "alfresco/TestCommon"], 
         function(registerSuite, assert, require, TestCommon) {
 
    var browser;
@@ -43,16 +43,13 @@ define(["intern!object",
       "Delete node (basic data)": function() {
          return browser.findByCssSelector("#DELETE_CONTENT_1_label")
             .click()
-         .end()
-         .findByCssSelector(".dijitDialogTitle")
+            .end()
+
+         .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed .dijitDialogTitle")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The confirmation dialog was not displayed");
-            });
-      },
-
-      "Check dialog title (basic data)": function() {
-         return browser.findByCssSelector(".dijitDialogTitle")
+            })
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Confirm Deletion", "The confirmation dialog title was wrong");
@@ -75,12 +72,15 @@ define(["intern!object",
       },
 
       "Confirm delete (basic data)": function() {
-         return browser.findByCssSelector(".footer .alfresco-buttons-AlfButton:first-child .dijitButtonText")
+         return browser.findByCssSelector("#ALF_DELETE_CONTENT_DIALOG .dijitButton:first-child .dijitButtonNode")
             .click()
             .end()
 
+         .findAllByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
+            .end()
+
          .getLastPublish("ALF_DISPLAY_NOTIFICATION")
-            .then(function(payload){
+            .then(function(payload) {
                assert.propertyVal(payload, "message", "Delete successful", "Did not display successful delete notification");
             })
             .clearLog();
@@ -88,12 +88,15 @@ define(["intern!object",
 
       "Delete node (doclib data)": function() {
          return browser.findAllByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
-         .end()
+            .end()
+
          .findByCssSelector("#DELETE_CONTENT_2_label")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed")
-         .end()
+            .end()
+
          .findByCssSelector(".dialog-body .alfresco-renderers-Property .value")
             .getVisibleText()
             .then(function(text) {
@@ -102,7 +105,7 @@ define(["intern!object",
       },
 
       "Confirm delete (doclib data)": function() {
-         return browser.findByCssSelector(".footer .alfresco-buttons-AlfButton:first-child .dijitButtonText")
+         return browser.findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed .dijitButton:first-child .dijitButtonNode")
             .click()
             .end()
 
@@ -110,7 +113,7 @@ define(["intern!object",
             .end()
 
          .getLastPublish("ALF_DISPLAY_NOTIFICATION")
-            .then(function(payload){
+            .then(function(payload) {
                assert.propertyVal(payload, "message", "Delete successful", "Did not display successful delete notification");
             });
       },
@@ -118,33 +121,37 @@ define(["intern!object",
       "Edit basic metadata": function() {
          return browser.findByCssSelector("#EDIT_BASIC_METADATA_label")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogDisplayed") // Wait for dialog
-         .end()
+            .end()
+
          .findByCssSelector(".alfresco-forms-controls-TextBox:nth-child(2) .dijitInputContainer input")
             .getProperty("value")
             .then(function(text) {
                assert.equal(text, "Some Node", "The node name was not set correctly");
             })
-         .end()
+            .end()
+
          .findByCssSelector(".alfresco-forms-controls-TextBox:nth-child(3) .dijitInputContainer input")
             .getProperty("value")
             .then(function(text) {
                assert.equal(text, "With this title", "The node title was not set correctly");
             })
-         .end()
+            .end()
+
          .findByCssSelector(".alfresco-forms-controls-TextArea:nth-child(4) .dijitTextArea")
             .getProperty("value")
             .then(function(text) {
                assert.equal(text, "And this description", "The node title was not set correctly");
-            })
-         .end();
+            });
       },
 
       "Save basic metadata": function() {
          return browser.findByCssSelector("#ALF_BASIC_METADATA_DIALOG .confirmationButton > span")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("tr.mx-row:nth-child(3) .mx-url")
             .getVisibleText()
             .then(function(text) {
@@ -155,7 +162,7 @@ define(["intern!object",
       "Edit basic metadata (nodeRef only)": function() {
          return browser.findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogHidden")
             .end()
-         
+
          .findByCssSelector("#EDIT_BASIC_METADATA_NODEREF_ONLY_label")
             .click()
             .end()
@@ -164,7 +171,7 @@ define(["intern!object",
             .end()
 
          .getLastPublish("ALF_BASIC_METADATA_SUCCESS")
-            .then(function(payload){
+            .then(function(payload) {
                assert.isNotNull(payload, "Did not publish basic metadata success");
             });
       },
@@ -175,16 +182,19 @@ define(["intern!object",
             .then(function(text) {
                assert.equal(text, "PDF.pdf", "The node name was not set correctly");
             })
-         .end()
+            .end()
+
          .findByCssSelector("#ALF_BASIC_METADATA_DIALOG .dijitDialogTitle")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Edit Properties: PDF.pdf", "The dialog title was not set correctly");
             })
-         .end()
+            .end()
+
          .findByCssSelector("#ALF_BASIC_METADATA_DIALOG .cancellationButton > span")
             .click()
-         .end()
+            .end()
+
          .findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogHidden");
       },
 
@@ -201,7 +211,7 @@ define(["intern!object",
             .end()
 
          .getLastPublish("ALF_UPLOAD_REQUEST")
-            .then(function(payload){
+            .then(function(payload) {
                assert.isNotNull(payload, "Did not publish upload request");
             });
       },
