@@ -719,12 +719,11 @@ define(["dojo/_base/declare",
                payload.dialogReference.destroyRecursive();
             }
 
-            // Mixin any additional payload information...
-            payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
-            lang.mixin(data, {
-               alfPublishScope: payload.formSubmissionScope || ""
-            });
-
+            // Mixin in any additional payload information...
+            if (payload.formSubmissionPayloadMixin)
+            {
+               lang.mixin(data, payload.formSubmissionPayloadMixin);
+            }
             // Using JQuery here in order to support deep merging of dot-notation properties...
             $.extend(true, data, formData);
 
