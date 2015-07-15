@@ -60,6 +60,15 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/forms/controls/DateTextBox",
+                           id: "EMPTY_DATE_VALUE",
+                           config: {
+                              name: "emptyDate",
+                              value: "",
+                              label: "Empty date"
+                           }
+                        },
+                        {
+                           name: "alfresco/forms/controls/DateTextBox",
                            id: "NULL_DATE_VALUE",
                            config: {
                               name: "nullDate",

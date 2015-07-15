@@ -54,21 +54,24 @@ define(["alfresco/forms/controls/BaseFormControl",
       cssRequirements: [{cssFile:"./css/DateTextBox.css"}],
 
       /**
+       * Run after properties mixed into instance
+       *
+       * @instance
+       */
+      postMixInProperties: function(){
+         if(!this.value || (typeof this.value === "string" && lang.trim(this.value).length === 0)) {
+            this.value = null; // Falsy values and empty strings should be treated as nulls, i.e. no value (see AKU-430)
+         }
+         this.inherited(arguments); // Must 'clean' the empty strings before calling this
+      },
+
+      /**
        * Get the configuration for the wrapped widget
        * 
        * @instance
        * @returns {object} The configuration for the form control
        */
       getWidgetConfig: function alfresco_forms_controls_DateTextBox__getWidgetConfig() {
-         var value = null;
-         if (this.value instanceof Date)
-         {
-            value = this.value;
-         }
-         else if (lang.isString(this.value))
-         {
-            value = stamp.fromISOString(this.value, { selector: "date" });
-         }
          return {
             id : this.id + "_CONTROL",
             name: this.name,
