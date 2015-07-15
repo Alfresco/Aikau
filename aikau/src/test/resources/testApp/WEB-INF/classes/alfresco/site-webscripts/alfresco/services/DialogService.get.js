@@ -46,6 +46,33 @@ model.jsonModel = {
       },
       {
          name: "alfresco/buttons/AlfButton",
+         id: "CREATE_FORM_DIALOG_CUSTOM_SCOPE",
+         config: {
+            label: "Create Form Dialog (with custom scoping)",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "SCOPED_FORM",
+               dialogTitle: "Scoped Form Dialog",
+               formSubmissionTopic: "CUSTOM_FORM_TOPIC",
+               formSubmissionGlobal: false,
+               formSubmissionToParent: false,
+               formSubmissionScope: "CUSTOM_FORM_SCOPE_",
+               widgets: [
+                  {
+                     id: "SCOPED_FORM_TEXTBOX",
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        value: "This is some sample text"
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
          id: "CREATE_FORM_DIALOG",
          config: {
             label: "Create Basic Form Dialog",

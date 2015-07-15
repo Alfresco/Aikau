@@ -399,8 +399,9 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload to publish on the supplied topic
        * @param {boolean} [global] Indicates that the pub/sub scope should not be applied
        * @param {boolean} [parentScope] Indicates that the pub/sub scope inherited from the parent should be applied
+       * @param {String} [customScope] An optional scope to use for this topic-publish
        */
-      alfPublish: function alfresco_core_Core__alfPublish(topics, payload, global, parentScope) {
+      alfPublish: function alfresco_core_Core__alfPublish(topics, payload, global, parentScope, customScope) {
 
          // Allow an array of topics so we can publish multiple ones.
          if (!lang.isArray(topics))
@@ -418,7 +419,7 @@ define(["dojo/_base/declare",
             payload.alfCallerName = callerName;
 
             var scopedTopic = topic;
-            if (global !== false && global === true)
+            if (global === true)
             {
                // No action required - use global scope
                payload.alfPublishScope = "";
@@ -430,8 +431,8 @@ define(["dojo/_base/declare",
             }
             else
             {
-               scopedTopic = this.pubSubScope + topic;
-               payload.alfPublishScope = this.pubSubScope;
+               scopedTopic = (customScope || this.pubSubScope) + topic;
+               payload.alfPublishScope = (customScope || this.pubSubScope);
             }
             payload.alfTopic = scopedTopic;
 

@@ -632,7 +632,10 @@ define(["dojo/_base/declare",
                         publishTopic: this._formConfirmationTopic,
                         publishPayload: {
                            formSubmissionTopic: config.formSubmissionTopic,
-                           formSubmissionPayloadMixin: config.formSubmissionPayloadMixin
+                           formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
+                           formSubmissionGlobal: config.formSubmissionGlobal,
+                           formSubmissionToParent: config.formSubmissionToParent,
+                           formSubmissionScope: config.formSubmissionScope
                         }
                      }
                   },
@@ -660,7 +663,10 @@ define(["dojo/_base/declare",
                   publishTopic: this._formConfirmationRepeatTopic,
                   publishPayload: {
                      formSubmissionTopic: config.formSubmissionTopic,
-                     formSubmissionPayloadMixin: config.formSubmissionPayloadMixin
+                     formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
+                     formSubmissionGlobal: config.formSubmissionGlobal,
+                     formSubmissionToParent: config.formSubmissionToParent,
+                     formSubmissionScope: config.formSubmissionScope
                   }
                }
             });
@@ -713,16 +719,21 @@ define(["dojo/_base/declare",
                payload.dialogReference.destroyRecursive();
             }
 
-            // Mixin in any additional payload information...
-            if (payload.formSubmissionPayloadMixin)
-            {
-               lang.mixin(data, payload.formSubmissionPayloadMixin);
-            }
+            // Mixin any additional payload information...
+            payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
+            lang.mixin(data, {
+               alfPublishScope: payload.formSubmissionScope || ""
+            });
+
             // Using JQuery here in order to support deep merging of dot-notation properties...
             $.extend(true, data, formData);
 
             // Publish the topic requested for complete...
-            this.alfPublish(payload.formSubmissionTopic, data, true);
+            var topic = payload.formSubmissionTopic,
+               globalScope = payload.hasOwnProperty("formSubmissionGlobal") ? !!payload.formSubmissionGlobal : true,
+               toParent = payload.hasOwnProperty("formSubmissionToParent") ? !!payload.formSubmissionToParent : false,
+               customScope = payload.formSubmissionScope || undefined;
+            this.alfPublish(topic, data, globalScope, toParent, customScope);
          }
          else
          {
