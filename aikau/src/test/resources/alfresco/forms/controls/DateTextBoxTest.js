@@ -57,6 +57,7 @@ define(["intern!object",
             .getLastPublish("INVALID_DATES_FORM_SUBMIT")
             .then(function(payload) {
                assert.propertyVal(payload, "lettersDate", null, "Invalid starting date-value (arbitrary letters) was not published with null value");
+               assert.propertyVal(payload, "emptyDate", null, "Invalid starting date-value (empty) was not published with null value");
                assert.propertyVal(payload, "nullDate", null, "Invalid starting date-value (null) was not published with null value");
                assert.propertyVal(payload, "undefinedDate", null, "Invalid starting date-value (undefined) was not published with null value");
             });
