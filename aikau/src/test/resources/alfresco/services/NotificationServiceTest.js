@@ -55,15 +55,13 @@ define(["intern!object",
             });
       },
 
-      "Notification hides after displaying": function() {
-         return browser.setFindTimeout(5000)
-            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification__message");
-      },
-
       "Topic publishes after notification hidden": function() {
-         return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_NOTIFICATION_DESTROYED", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Post-notification topic not published");
+         return browser.setFindTimeout(5000)
+            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification__message")
+
+         .getLastPublish("ALF_NOTIFICATION_DESTROYED")
+            .then(function(payload) {
+               assert.isNotNull(payload, "Post-notification topic not published");
             });
       },
 
