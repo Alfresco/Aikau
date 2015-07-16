@@ -21,10 +21,10 @@
  * @author Martin Doyle
  */
 define(["intern!object",
-        "intern/chai!expect", 
-        "intern/chai!assert", 
-        "require", 
-        "alfresco/TestCommon"], 
+        "intern/chai!expect",
+        "intern/chai!assert",
+        "require",
+        "alfresco/TestCommon"],
         function(registerSuite, expect, assert, require, TestCommon) {
 
    var browser;
