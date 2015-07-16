@@ -369,16 +369,46 @@ define(["intern!object",
             .then(function() {
                return browser.findById("LAUNCH_OUTER_DIALOG_BUTTON")
                   .click()
-               .end()
+                  .end()
 
                .findById("LAUNCH_INNER_DIALOG_BUTTON")
                   .click()
-               .end()
+                  .end()
 
                .getLastPublish("DISPLAYED_INNER_DIALOG")
                   .then(function(payload) {
                      assert.isNotNull(payload, "Inner dialog not displayed");
-                  });
+                  })
+                  .end()
+
+               .findByCssSelector("#INNER_DIALOG .dijitDialogCloseIcon")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#INNER_DIALOG.dialogHidden")
+                  .end()
+
+               .findByCssSelector("#OUTER_DIALOG .dijitDialogCloseIcon")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#OUTER_DIALOG.dialogHidden");
+            });
+      },
+
+      "Can publish form with custom scope information": function() {
+         return browser.findByCssSelector(".alfresco-buttons-AlfButton[widgetid=\"CREATE_FORM_DIALOG_CUSTOM_SCOPE\"] .dijitButtonNode")
+            .click()
+            .end()
+
+         .findByCssSelector("#SCOPED_FORM.dialogDisplayed .confirmationButton .dijitButtonNode")
+            .click()
+            .end()
+
+         .getLastPublish("CUSTOM_FORM_SCOPE_CUSTOM_FORM_TOPIC", true)
+            .then(function(payload){
+               assert.isNotNull(payload, "Did not publish correctly scoped topic");
+               assert.propertyVal(payload, "text", "This is some sample text", "Did not publish correct form value to scoped topic");
             });
       },
 

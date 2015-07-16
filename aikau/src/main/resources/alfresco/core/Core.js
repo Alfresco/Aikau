@@ -399,8 +399,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload to publish on the supplied topic
        * @param {boolean} [global] Indicates that the pub/sub scope should not be applied
        * @param {boolean} [parentScope] Indicates that the pub/sub scope inherited from the parent should be applied
+       * @param {String} [customScope] A custom scope to use for this publish (will only be used if both global
+       *                               and parentScope are falsy)
        */
-      alfPublish: function alfresco_core_Core__alfPublish(topics, payload, global, parentScope) {
+      alfPublish: function alfresco_core_Core__alfPublish(topics, payload, global, parentScope, customScope) {
 
          // Allow an array of topics so we can publish multiple ones.
          if (!lang.isArray(topics))
@@ -417,22 +419,22 @@ define(["dojo/_base/declare",
             }
             payload.alfCallerName = callerName;
 
-            var scopedTopic = topic;
-            if (global !== false && global === true)
-            {
-               // No action required - use global scope
-               payload.alfPublishScope = "";
+            // Calculate the scope to be used and thus the scoped topic
+            var publishScope = "",
+               scopedTopic;
+            if (global === true) {
+               // No action required
+            } else if (parentScope === true) {
+               publishScope = this.parentPubSubScope;
+            } else if (customScope) {
+               publishScope = customScope;
+            } else {
+               publishScope = this.pubSubScope;
             }
-            else if (parentScope === true)
-            {
-               scopedTopic = this.parentPubSubScope + topic;
-               payload.alfPublishScope = this.parentPubSubScope;
-            }
-            else
-            {
-               scopedTopic = this.pubSubScope + topic;
-               payload.alfPublishScope = this.pubSubScope;
-            }
+            scopedTopic = publishScope + topic;
+
+            // Update the payload
+            payload.alfPublishScope = publishScope;
             payload.alfTopic = scopedTopic;
 
             // Publish...

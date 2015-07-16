@@ -632,7 +632,9 @@ define(["dojo/_base/declare",
                         publishTopic: this._formConfirmationTopic,
                         publishPayload: {
                            formSubmissionTopic: config.formSubmissionTopic,
-                           formSubmissionPayloadMixin: config.formSubmissionPayloadMixin
+                           formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
+                           formSubmissionGlobal: config.formSubmissionGlobal,
+                           formSubmissionScope: config.formSubmissionScope
                         }
                      }
                   },
@@ -660,7 +662,9 @@ define(["dojo/_base/declare",
                   publishTopic: this._formConfirmationRepeatTopic,
                   publishPayload: {
                      formSubmissionTopic: config.formSubmissionTopic,
-                     formSubmissionPayloadMixin: config.formSubmissionPayloadMixin
+                     formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
+                     formSubmissionGlobal: config.formSubmissionGlobal,
+                     formSubmissionScope: config.formSubmissionScope
                   }
                }
             });
@@ -722,7 +726,11 @@ define(["dojo/_base/declare",
             $.extend(true, data, formData);
 
             // Publish the topic requested for complete...
-            this.alfPublish(payload.formSubmissionTopic, data, true);
+            var topic = payload.formSubmissionTopic,
+               globalScope = payload.hasOwnProperty("formSubmissionGlobal") ? !!payload.formSubmissionGlobal : true,
+               toParent = false,
+               customScope = payload.formSubmissionScope || undefined;
+            this.alfPublish(topic, data, globalScope, toParent, customScope);
          }
          else
          {
