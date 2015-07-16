@@ -55,7 +55,6 @@ model.jsonModel = {
                dialogTitle: "Scoped Form Dialog",
                formSubmissionTopic: "CUSTOM_FORM_TOPIC",
                formSubmissionGlobal: false,
-               formSubmissionToParent: false,
                formSubmissionScope: "CUSTOM_FORM_SCOPE_",
                widgets: [
                   {

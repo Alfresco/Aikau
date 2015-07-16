@@ -634,7 +634,6 @@ define(["dojo/_base/declare",
                            formSubmissionTopic: config.formSubmissionTopic,
                            formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
                            formSubmissionGlobal: config.formSubmissionGlobal,
-                           formSubmissionToParent: config.formSubmissionToParent,
                            formSubmissionScope: config.formSubmissionScope
                         }
                      }
@@ -665,7 +664,6 @@ define(["dojo/_base/declare",
                      formSubmissionTopic: config.formSubmissionTopic,
                      formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
                      formSubmissionGlobal: config.formSubmissionGlobal,
-                     formSubmissionToParent: config.formSubmissionToParent,
                      formSubmissionScope: config.formSubmissionScope
                   }
                }
@@ -730,7 +728,7 @@ define(["dojo/_base/declare",
             // Publish the topic requested for complete...
             var topic = payload.formSubmissionTopic,
                globalScope = payload.hasOwnProperty("formSubmissionGlobal") ? !!payload.formSubmissionGlobal : true,
-               toParent = payload.hasOwnProperty("formSubmissionToParent") ? !!payload.formSubmissionToParent : false,
+               toParent = false,
                customScope = payload.formSubmissionScope || undefined;
             this.alfPublish(topic, data, globalScope, toParent, customScope);
          }
