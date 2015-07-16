@@ -1,3 +1,5 @@
+/*globals Alfresco,Spinner*/
+// TODO Strip these external dependencies
 /**
  * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
@@ -709,8 +711,7 @@ define(["dojo/_base/declare",
          this.alfLog("log","Using PDFJS.disableRange=" + PDFJS.disableRange + " PDFJS.disableAutoFetch:" + PDFJS.disableAutoFetch);
          this.alfLog("log","Loading PDF file from " + fileurl);
 
-         PDFJS.getDocument(params).then
-         (
+         PDFJS.getDocument(params).then(
             lang.hitch(this, this._onGetDocumentSuccess),
             lang.hitch(this, this._onGetDocumentFailure)
          );

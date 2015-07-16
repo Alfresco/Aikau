@@ -931,7 +931,7 @@ define(["dojo/_base/declare",
             {
                this.processRulesConfig(attribute, config.rules);
             }
-            else if (typeof config.rules !== "undefined")
+            else
             {
                // Debug output when instantiation data is incorrect. Only log when some data is defined but isn't an object.
                // There's no point in logging messages for unsupplied data - just incorrectly supplied data.
@@ -1106,7 +1106,7 @@ define(["dojo/_base/declare",
 
          // If both values aren't null then compare the .toString() output, if one of them is null
          // then it doesn't really matter whether or not we get the string output for the value or not
-         if (currentValue != null && targetValue.value != null)
+         if (currentValue && targetValue.value)
          {
             return currentValue.toString() === targetValue.value.toString();
          }
@@ -1129,6 +1129,8 @@ define(["dojo/_base/declare",
        *  @param {object} callbacks
        */
       _processCallbacksConfig: function alfresco_forms_controls_BaseFormControl___processCallbacksConfig(attribute, callbacks) {
+         /*jshint loopfunc:true*/
+         // TODO Should refactor this to both avoid the loop functions and also reduce duplication
          var _this = this;
          for (var key in callbacks) {
             if (typeof callbacks[key] === "function")

@@ -66,7 +66,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        */
-      createFormControl: function alfresco_forms_controls_FilteringSelect__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_FilteringSelect__createFormControl(/*jshint unused:false*/ config, domNode) {
          var serviceStore = this.createServiceStore();
          var filteringSelect = new FilteringSelect({
             id: this.id + "_CONTROL",
@@ -75,7 +75,7 @@ define(["alfresco/forms/controls/BaseFormControl",
             store: serviceStore,
             searchAttr: serviceStore.queryAttribute,
             labelAttribute: serviceStore.labelAttribute,
-            queryExpr: "${0}",
+            queryExpr: "${0}"
          });
          this.addIcon(filteringSelect);
          this.showOptionsBasedOnValue(filteringSelect);
