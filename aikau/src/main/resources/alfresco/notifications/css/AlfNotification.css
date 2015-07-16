@@ -5,7 +5,7 @@
    position: fixed;
    right: 0;
    top: 52.5%;
-   transition: opacity .2s ease-out, top .2s ease-out;
+   transition: all .2s ease-out;
    z-index: 9999; /* This isn't ideal, but searching all z-indexes is even worse (better solution possible?) */
    &__container {
       background: #666;
@@ -13,10 +13,22 @@
       box-shadow: @standard-box-shadow;
       box-sizing: border-box;
       margin: 0 auto;
-      padding: 20px;
+      padding: 20px 30px 20px 20px;
       position: relative;
       top: -50%;
       width: 400px;
+   }
+   &__close {
+      color: #aaa;
+      cursor: pointer;
+      font-size: 25px;
+      position: absolute;
+      right: 10px;
+      top: 0;
+      transition: all .1s ease-out;
+      &:hover {
+         color: #fff;
+      }
    }
    &__message {
       color: #fff;

@@ -128,8 +128,20 @@ define(["alfresco/core/Core",
           * @private
           */
          _hide: function alfresco_notifications_AlfNotification___hide() {
-            domClass.remove(this.domNode, "alfresco-notifications-AlfNotification--visible");
-            setTimeout(lang.hitch(this, this.destroy), this.destroyAfterHideMs);
+            if(this.domNode && this.domNode.parentNode === document.body) {
+               domClass.remove(this.domNode, "alfresco-notifications-AlfNotification--visible");
+               setTimeout(lang.hitch(this, this.destroy), this.destroyAfterHideMs);
+            }
+         },
+
+         /**
+          * Handle clicks on the close button
+          *
+          * @instance
+          * @param {Object} evt Dojo-normalised event object
+          */
+         _onCloseClick: function alfresco_notifications_AlfNotification___onCloseClick(/*jshint unused:false*/ evt) {
+            this._hide();
          },
 
          /**

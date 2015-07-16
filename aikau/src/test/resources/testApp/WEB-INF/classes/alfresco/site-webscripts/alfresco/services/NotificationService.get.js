@@ -81,7 +81,24 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "500px"
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "NOTIFICATION_BUTTON_SCROLLED",
+         config: {
+            label: "Display notification (use when scrolled)",
+            publishTopic: "ALF_DISPLAY_NOTIFICATION",
+            publishPayload: {
+               message: "This is another test notification message."
+            }
+         }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       },
       {
          name: "aikauTesting/TestCoverageResults"
