@@ -120,7 +120,7 @@ define(["alfresco/forms/controls/BaseFormControl",
             // See AKU-341 for details of why we handle commas and spaces...
             var value = this.wrappedWidget.textbox.value.replace(",","").replace(" ","");
             var parsedValue = parseFloat(value);
-            var isValid = !isNaN(parsedValue) || (lang.trim(value) === "" && this.permitEmpty);
+            var isValid = !isNaN(parsedValue) || (this.permitEmpty && lang.trim(value) === "");
             this.reportValidationResult(validationConfig, isValid);
          }
          catch(e)
