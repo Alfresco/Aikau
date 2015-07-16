@@ -14,8 +14,33 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "RESET_VALUES",
+         config: {
+            label: "Reset control values",
+            publishTopic: "FORM_VALUE_TOPIC",
+            publishGlobal: true,
+            publishPayload: {
+               one: "",
+               two: 5,
+               three: 0,
+               four: 1,
+               five: 3,
+               six: 1001,
+               seven: ""
+            }
+         }
+      },
+      {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "20px"
+         }
+      },
+      {
          name: "alfresco/forms/Form",
          config: {
+            setValueTopic: "FORM_VALUE_TOPIC",
             okButtonPublishTopic: "FORM_POST",
             widgets: [
                {
@@ -83,10 +108,22 @@ model.jsonModel = {
                   name: "alfresco/forms/controls/NumberSpinner", 
                   config: {
                      fieldId: "NS6",
-                     name: "five",
+                     name: "six",
                      label: "Handle commas",
                      description: "This is a number spinner initialised to a value over a 1000",
                      value: 1001
+                  }
+               },
+               {
+                  id: "NS7",
+                  name: "alfresco/forms/controls/NumberSpinner", 
+                  config: {
+                     fieldId: "NS7",
+                     name: "seven",
+                     label: "Empty value",
+                     description: "This is a number spinner initialised to an empty string",
+                     value: "",
+                     permitEmpty: true
                   }
                }
             ]

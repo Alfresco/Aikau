@@ -160,6 +160,46 @@ define(["intern!object",
             });
       },
 
+      "Empty values are only permitted when permitEmpty specified": function(){
+         return browser.findByCssSelector("#NS1 .dijitInputContainer input")
+            .clearValue()
+            .end()
+
+         .findAllByCssSelector("#NS1 .validation-error")
+            .then(function(elements){
+               assert.lengthOf(elements, 1, "Standard number spinner should not permit empty values");
+            })
+            .end()
+
+         .findByCssSelector("#NS7 .dijitInputContainer input")
+            .clearValue()
+            .end()
+
+         .findAllByCssSelector("#NS7 .validation-error")
+            .then(function(elements){
+               assert.lengthOf(elements, 0, "'permitEmpty' number spinner should allow empty values");
+            })
+      },
+
+      "Empty value submits null value": function(){
+         return browser.findByCssSelector(".alfresco-buttons-AlfButton[widgetid=\"RESET_VALUES\"] .dijitButtonNode")
+            .click()
+            .end()
+
+         .findByCssSelector("#NS1 .dijitInputContainer input")
+            .type("0")
+            .end()
+
+         .findByCssSelector(".confirmationButton .dijitButtonNode")
+            .click()
+            .end()
+
+         .getLastPublish("FORM_POST")
+            .then(function(payload){
+               assert.propertyVal(payload, "seven", null, "Did not publish null value for empty number spinner");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

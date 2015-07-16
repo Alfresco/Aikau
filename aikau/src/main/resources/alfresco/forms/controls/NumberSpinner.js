@@ -46,7 +46,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       min: null,
 
@@ -55,9 +55,20 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       max: null,
+
+      /**
+       * By default, this control can only be valid when it contains a numerical value. If this configuration
+       * property is set to true, then it will be possible to submit a form without any value in this control,
+       * at which point its value will be submitted as null.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      permitEmpty: false,
 
       /**
        * Returns the configuration for the widget ensuring that it is valid, in that
@@ -109,7 +120,7 @@ define(["alfresco/forms/controls/BaseFormControl",
             // See AKU-341 for details of why we handle commas and spaces...
             var value = this.wrappedWidget.textbox.value.replace(",","").replace(" ","");
             var parsedValue = parseFloat(value);
-            var isValid = !isNaN(parsedValue);
+            var isValid = !isNaN(parsedValue) || (this.permitEmpty && lang.trim(value) === "");
             this.reportValidationResult(validationConfig, isValid);
          }
          catch(e)
