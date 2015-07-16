@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
          this.lastScroll = 0;
          var self = this;
          // TODO: Replace with Dojo equivilant...
-         this.viewer.addEventListener('scroll', function()
+         this.viewer.addEventListener("scroll", function()
          {
             self.lastScroll = Date.now();
          }, false);
@@ -175,7 +175,7 @@ define(["dojo/_base/declare",
        */
       alignRows : function alfresco_preview_PdfJs_DocumentView__alignRows() {
          var rowPos = -1, rowWidth = 0, largestRow = 0, scrollY = $(document).scrollTop();
-         if (this.pageLayout == "multi")
+         if (this.pageLayout === "multi")
          {
             domStyle.set(this.viewer, "padding-left", "0px");
             for (var i = 0; i < this.pages.length; i++)
@@ -184,9 +184,9 @@ define(["dojo/_base/declare",
                    container = page.container,
                    containerBounds = container.getBoundingClientRect(),
                    vpos = containerBounds.top + scrollY - page.parent.viewerRegion.t,
-                   marginLeft = parseInt(domStyle.get(container, "margin-left"));
+                   marginLeft = parseInt(domStyle.get(container, "margin-left"), 10);
                // If multi-page mode is on, we need to add custom extra margin to the LHS of the 1st item in the row to make it centred
-               if (vpos != rowPos)
+               if (vpos !== rowPos)
                {
                   rowWidth = marginLeft; // Rather than start from zero assume equal right padding on last row item
                }
@@ -276,7 +276,7 @@ define(["dojo/_base/declare",
        * @param value {float} numerical scale value
        */
       setScale : function alfresco_preview_PdfJs_DocumentView__setScale(value) {
-         if (value == this.currentScale)
+         if (value === this.currentScale)
          {
             return;
          }
@@ -298,6 +298,7 @@ define(["dojo/_base/declare",
        * @return {float} Numerical scale value
        */
       parseScale : function alfresco_preview_PdfJs_DocumentView__parseScale(value) {
+         /*jshint maxcomplexity:false,maxstatements:false*/
          var scale = parseFloat(value);
          if (scale)
          {
@@ -309,10 +310,10 @@ define(["dojo/_base/declare",
          {
             var currentPage = this.pages[0],
                 container = currentPage.container,
-                hmargin = parseInt(domStyle.get(container, "margin-left")) + parseInt(domStyle.get(container, "margin-right")),
-                vmargin = parseInt(domStyle.get(container, "margin-top")),
-                contentWidth = parseInt(currentPage.content.pageInfo.view[2]),
-                contentHeight = parseInt(currentPage.content.pageInfo.view[3]),
+                hmargin = parseInt(domStyle.get(container, "margin-left"), 10) + parseInt(domStyle.get(container, "margin-right"), 10),
+                vmargin = parseInt(domStyle.get(container, "margin-top"), 10),
+                contentWidth = parseInt(currentPage.content.pageInfo.view[2], 10),
+                contentHeight = parseInt(currentPage.content.pageInfo.view[3], 10),
                 rotation = currentPage.content.pageInfo.rotate,
                 clientWidth = this.fullscreen ? window.screen.width : this.viewer.clientWidth - 1, // allow an extra pixel in width otherwise 2-up view wraps
                 clientHeight = this.fullscreen ? window.screen.height : this.viewer.clientHeight;
@@ -329,39 +330,28 @@ define(["dojo/_base/declare",
             switch (value)
             {
                case PdfJsConstants.ZOOM_LEVEL_PAGE_WIDTH:
-               {
                   pageWidthScale = (clientWidth - hmargin * 2) / contentWidth;
                   scale = pageWidthScale;
                   break;
-               }
                case PdfJsConstants.ZOOM_LEVEL_TWO_PAGE_WIDTH:
-               {
                   pageWidthScale = (clientWidth - hmargin * 3) / contentWidth;
                   scale = pageWidthScale / 2;
                   break;
-               }
                case PdfJsConstants.ZOOM_LEVEL_PAGE_HEIGHT:
-               {
                   pageHeightScale = (clientHeight - vmargin * 2) / contentHeight;
                   scale = pageHeightScale;
                   break;
-               }
                case PdfJsConstants.ZOOM_LEVEL_PAGE_FIT:
-               {
                   pageWidthScale = (clientWidth - hmargin*2) / contentWidth;
                   pageHeightScale = (clientHeight - vmargin*2) / contentHeight;
                   scale = Math.min(pageWidthScale, pageHeightScale);
                   break;
-               }
                case PdfJsConstants.ZOOM_LEVEL_TWO_PAGE_FIT:
-               {
                   pageWidthScale = (clientWidth - hmargin*3) / contentWidth;
                   pageHeightScale = (clientHeight - vmargin*2) / contentHeight;
                   scale = Math.min(pageWidthScale / 2, pageHeightScale);
                   break;
-               }
                case PdfJsConstants.ZOOM_LEVEL_AUTO:
-               {
                   var tpf = this.parseScale(PdfJsConstants.ZOOM_LEVEL_TWO_PAGE_FIT),
                       opf = this.parseScale(PdfJsConstants.ZOOM_LEVEL_PAGE_FIT),
                       opw = this.parseScale(PdfJsConstants.ZOOM_LEVEL_PAGE_WIDTH),
@@ -395,11 +385,8 @@ define(["dojo/_base/declare",
                      scale = Math.min(scale, maxScale);
                   }
                   break;
-               }
                default:
-               {
                   throw "Unrecognised zoom level '" + value + "'";
-               }
             }
          }
          else
@@ -423,7 +410,7 @@ define(["dojo/_base/declare",
          {
             var page = this.pages[i],
                 vpos = page.getVPos();
-            if (vpos + parseInt(page.container.style.height) / 2 > 0)
+            if (vpos + parseInt(page.container.style.height, 10) / 2 > 0)
             {
                return i + 1;
             }
@@ -473,7 +460,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       removeScrollListener: function alfresco_preview_PdfJs_DocumentView__addScrollListener() {
-         if (this.viewerScrollEventListener != null)
+         if (this.viewerScrollEventListener)
          {
             this.viewerScrollEventListener.remove();
          }
@@ -488,9 +475,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {event} evt The scroll event object.
        */
-      onScrollEvent: function alfresco_preview_PdfJs_DocumentView__onScrollEvent(evt) {
+      onScrollEvent: function alfresco_preview_PdfJs_DocumentView__onScrollEvent(/*jshint unused:false*/ evt) {
          // this.renderOnScrollZero++;
-         if (this.scrollEventTimeout != null)
+         if (this.scrollEventTimeout)
          {
             clearTimeout(this.scrollEventTimeout);
          }
@@ -505,7 +492,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      onScroll: function alfresco_preview_PdfJs_DocumentView__onScroll(evt) {
+      onScroll: function alfresco_preview_PdfJs_DocumentView__onScroll(/*jshint unused:false*/ evt) {
          // Render visible pages
          this.renderVisiblePages();
          this.alfPublish(PdfJsConstants.VIEWER_SCROLL_TOPIC, {});

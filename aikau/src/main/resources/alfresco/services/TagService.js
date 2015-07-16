@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
          };
 
          // Update the options with a query if provided...
-         if (payload.query != null)
+         if (payload.query)
          {
             options.searchTerm = payload.query;
          }
@@ -113,22 +113,20 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onTagQuery: function alfresco_services_TagService__onTagQuery(payload) {
-         if (payload == null ||
-             typeof payload.callback !== "function" ||
-             payload.callbackScope == null)
+         if (!payload || typeof payload.callback !== "function" || !payload.callbackScope)
         {
            this.alfLog("warn", "A request was made for site tag data, but one or more of the following attributes was not provided: 'callback', 'callbackScope':", payload);
         }
         else
         {
-           var maxTags = (payload.maxTags != null) ? payload.maxTags : 100;
+           var maxTags = payload.maxTags || 100;
            var d = new Date().getTime();
            var url = null;
-           if (payload.siteId != null && payload.containerId != null)
+           if (payload.siteId && payload.containerId)
            {
               url = AlfConstants.PROXY_URI + "api/tagscopes/site/" + payload.siteId + "/" + payload.containerId + "/tags?d=" + d + "&topN=" + maxTags;
            }
-           else if (payload.rootNode != null)
+           else if (payload.rootNode)
            {
               url = AlfConstants.PROXY_URI + "collaboration/tagQuery?d=" + d + "&m=" + maxTags + "&s=count&n=" + encodeURIComponent(payload.rootNode);
            }
@@ -137,7 +135,7 @@ define(["dojo/_base/declare",
               this.alfLog("warn", "It is not possible to retrieve tags without a 'siteId' and 'containerId' or a 'rootNode' attribute provided in payload", this);
            }
            
-           if (url != null)
+           if (url)
            {
               var config = {
                  url: url,
@@ -159,7 +157,7 @@ define(["dojo/_base/declare",
        */
       createTag: function alfresco_services_TagService__createTag(payload) {
          var tagName = lang.getObject("tagName", false, payload);
-         if (tagName != null && lang.trim(tagName) !== "")
+         if (tagName && lang.trim(tagName))
          {
             var config = {
                url: AlfConstants.PROXY_URI + "api/tag/workspace/SpacesStore",
@@ -175,6 +173,6 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "A request was made to create a tag but no 'tagName' attribute was provided", this, payload);
          }
-      },
+      }
    });
 });

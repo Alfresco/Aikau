@@ -36,10 +36,9 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
-        "dojo/dom-class",
-        "dojo/on"],
+        "dojo/dom-class"],
         function(declare, Twister, _OnDijitClickMixin, _AlfDocumentListTopicMixin, template,
-                 AlfDocumentFilter, lang, array, domConstruct, domClass, on) {
+                 AlfDocumentFilter, lang, array, domConstruct, domClass) {
    return declare([Twister, _OnDijitClickMixin, _AlfDocumentListTopicMixin], {
 
       /**
@@ -82,12 +81,12 @@ define(["dojo/_base/declare",
        */
       postMixInProperties: function alfresco_documentlibrary_AlfDocumentFilters__postMixInProperties() {
          this.inherited(arguments);
-         if (this.showMoreLabel == null)
+         if (!this.showMoreLabel)
          {
             this.showMoreLabel = "showMore.label";
          }
          this.showMoreLabel = this.message(this.showMoreLabel);
-         if (this.showLessLabel == null)
+         if (!this.showLessLabel)
          {
             this.showLessLabel = "showLess.label";
          }
@@ -103,7 +102,7 @@ define(["dojo/_base/declare",
        */
       allWidgetsProcessed: function alfresco_documentlibrary_AlfDocumentFilters__allWidgetsProcessed(widgets) {
          array.forEach(widgets, lang.hitch(this, this.addFilter));
-         if (this.moreFiltersList != null)
+         if (this.moreFiltersList)
          {
             domClass.remove(this.showMoreNode, "hidden");
          }
@@ -116,7 +115,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to be added
        * @param {integer} insertIndex The index to add the widget at
        */
-      addFilter: function alfresco_documentlibrary_AlfDocumentFilters__addFilter(widget, insertIndex) {
+      addFilter: function alfresco_documentlibrary_AlfDocumentFilters__addFilter(widget, /*jshint unused:false*/insertIndex) {
          if (widget.isInstanceOf(AlfDocumentFilter))
          {
             widget.placeAt(this.contentNode);
@@ -142,7 +141,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       addMoreFilter: function alfresco_documentlibrary_AlfDocumentFilters__addMoreFilter(widget) {
-         if (this.moreFiltersList == null)
+         if (!this.moreFiltersList)
          {
             this.moreFiltersList = [];
          }
@@ -154,11 +153,11 @@ define(["dojo/_base/declare",
       /**
        * @instance
        */
-      onShowMoreClick: function alfresco_documentlibrary_AlfDocumentFilters__onShowMoreClick(evt) {
+      onShowMoreClick: function alfresco_documentlibrary_AlfDocumentFilters__onShowMoreClick() {
          domClass.add(this.showMoreNode, "hidden");
          domClass.remove(this.showLessNode, "hidden");
 
-         array.forEach(this.moreFiltersList, function(widget, index) {
+         array.forEach(this.moreFiltersList, function(widget) {
             domClass.remove(widget.domNode, "hidden");
          }, this);
       },
@@ -167,12 +166,12 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-       onShowLessClick: function alfresco_documentlibrary_AlfDocumentFilters__onShowMoreClick(evt) {
+       onShowLessClick: function alfresco_documentlibrary_AlfDocumentFilters__onShowMoreClick() {
          domClass.remove(this.showMoreNode, "hidden");
          domClass.add(this.showLessNode, "hidden");
-         array.forEach(this.moreFiltersList, function(widget, index) {
+         array.forEach(this.moreFiltersList, function(widget) {
             domClass.add(widget.domNode, "hidden");
          }, this);
-      },
+      }
    });
 });

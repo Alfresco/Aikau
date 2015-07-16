@@ -181,8 +181,8 @@ define(["dojo/_base/declare",
             });
          }
          
-         evt.preventDefault();
-         evt.stopPropagation();
+         evt && evt.preventDefault();
+         evt && evt.stopPropagation();
       },
 
       /**
@@ -847,15 +847,12 @@ define(["dojo/_base/declare",
             // Ensure left/right arrow key events are handled only by this component
             case 37:
             case 39:
-            {
-               evt.stopPropagation();
+               evt && evt.stopPropagation();
                break;
-            }
             
             // Up Arrow press
             case 38:
-            {
-               evt.stopPropagation();
+               evt && evt.stopPropagation();
                if (this._supportsLocalStorage())
                {
                   searches = JSON.parse(localStorage.getItem("ALF_SEARCHBOX_HISTORY"));
@@ -874,12 +871,10 @@ define(["dojo/_base/declare",
                   }
                }
                break;
-            }
             
             // Down Arrow press
             case 40:
-            {
-               evt.stopPropagation();
+               evt && evt.stopPropagation();
                if (this._supportsLocalStorage())
                {
                   searches = JSON.parse(localStorage.getItem("ALF_SEARCHBOX_HISTORY"));
@@ -898,7 +893,6 @@ define(["dojo/_base/declare",
                   }
                }
                break;
-            }
          }
       },
 
@@ -913,7 +907,6 @@ define(["dojo/_base/declare",
          {
             // Enter key press
             case 13:
-            {
                if (terms.length !== 0 && this.suppressRedirect !== true)
                {
                   this.onSaveLastUserSearch();
@@ -928,11 +921,9 @@ define(["dojo/_base/declare",
                   });
                }
                break;
-            }
             
             // Other key press
             default:
-            {
                if (this.liveSearch)
                {
                   if (terms.length >= this._minimumSearchLength && terms !== this.lastSearchText)
@@ -972,7 +963,6 @@ define(["dojo/_base/declare",
                {
                   this.clearResults();
                }
-            }
          }
       },
       

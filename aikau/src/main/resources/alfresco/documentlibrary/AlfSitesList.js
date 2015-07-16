@@ -26,11 +26,8 @@
 define(["dojo/_base/declare",
         "alfresco/documentlibrary/AlfDocumentList", 
         "alfresco/core/PathUtils",
-        "dojo/_base/array",
-        "dojo/_base/lang",
-        "dojo/dom-construct",
-        "dojo/dom-class"], 
-        function(declare, AlfDocumentList, PathUtils, array, lang, domConstruct, domClass) {
+        "dojo/_base/array"], 
+        function(declare, AlfDocumentList, PathUtils, array) {
    
    return declare([AlfDocumentList], {
       
@@ -83,7 +80,7 @@ define(["dojo/_base/declare",
             responseTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST"
          };
 
-         if (this.site != null)
+         if (this.site)
          {
             documentPayload.site = this.site;
          }
@@ -140,7 +137,7 @@ define(["dojo/_base/declare",
 
          // Re-render the current view with the new data...
          var view = this.viewMap[this._currentlySelectedView];
-         if (view != null)
+         if (view)
          {
             this.showRenderingMessage();
             view.setData(this._currentData);
@@ -150,6 +147,6 @@ define(["dojo/_base/declare",
             // Force a resize of the sidebar container to take the new height of the view into account...
             this.alfPublish("ALF_RESIZE_SIDEBAR", {});
          }
-      },
+      }
    });
 });

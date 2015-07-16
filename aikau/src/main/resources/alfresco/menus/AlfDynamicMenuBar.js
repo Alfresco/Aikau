@@ -27,9 +27,8 @@
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBar",
         "dojo/_base/lang",
-        "dojo/_base/array",
-        "alfresco/menus/AlfMenuBarItem"], 
-        function(declare, AlfMenuBar, lang, array, AlfMenuBarItem) {
+        "dojo/_base/array"], 
+        function(declare, AlfMenuBar, lang, array) {
    
    return declare([AlfMenuBar], {
       
@@ -51,7 +50,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload received on the updateTopic
        */
       processUpdates: function alfresco_menus_AlfDynamicMenuBar__processUpdates(payload) {
-         if (payload == null && payload.add == null && payload.remove == null)
+         if (!payload || (!payload.add && !payload.remove))
          {
             this.alfLog("warn", "A request was made to update a dynamic menu bar but not enough information was provided", payload);
          }
@@ -75,7 +74,7 @@ define(["dojo/_base/declare",
        * @param {object} update The update to process
        * @param {integer} index The index of the update
        */
-      addUpdate: function alfresco_menus_AlfDynamicMenuBar__processUpdate(update, index) {
+      addUpdate: function alfresco_menus_AlfDynamicMenuBar__processUpdate(update, /*jshint unused:false*/ index) {
          this._menuBar.addChild(update, "first");
       },
       
@@ -84,7 +83,7 @@ define(["dojo/_base/declare",
        * @param {object} update The update to process
        * @param {integer} index The index of the update
        */
-      removeUpdate: function alfresco_menus_AlfDynamicMenuBar__removeUpdates(update, index) {
+      removeUpdate: function alfresco_menus_AlfDynamicMenuBar__removeUpdates(update, /*jshint unused:false*/ index) {
          this._menuBar.removeChild(update);
       }
    });

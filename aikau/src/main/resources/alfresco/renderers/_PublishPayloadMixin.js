@@ -154,21 +154,16 @@ define(["dojo/_base/declare",
          switch (payloadType || "CONFIGURED")
          {
             case "CONFIGURED":
-            {
                // No payload type has been configured, or has been set to the default of "CONFIGURED" - just use the payload as is
                generatedPayload = configuredPayload;
 
                break;
-            }
             case "CURRENT_ITEM":
-            {
                // Use the current item as the payload...
                generatedPayload = currentItem;
 
                break;
-            }
             case "PROCESS":
-            {
                // Clone the configured payload so as not to "pollute" the statically defined value...
                generatedPayload = lang.clone(configuredPayload);
 
@@ -176,9 +171,7 @@ define(["dojo/_base/declare",
                this.processObject(publishPayloadModifiers, generatedPayload);
 
                break;
-            }
             case "BUILD":
-            {
                // Clone the configured payload so as not to "pollute" the statically defined value...
                generatedPayload = lang.clone(configuredPayload);
 
@@ -186,7 +179,6 @@ define(["dojo/_base/declare",
                generatedPayload = this.buildPayload(generatedPayload, currentItem, receivedPayload);
 
                break;
-            }
          }
 
          // Mixin the current item into the payload if required...
