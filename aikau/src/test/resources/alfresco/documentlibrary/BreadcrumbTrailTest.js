@@ -180,34 +180,31 @@ define(["intern!object",
             .click()
             .end()
 
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_NAVIGATE_TO_PAGE", "publish", "last"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Navigation publication not found");
-            });
-      },
-
-      "Check hash breadcrumb navigation payload": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "path=/different"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Navigation payload not correct");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload){
+               assert.isNotNull(payload, "Navigation publication not found");
+               assert.propertyVal(payload, "url", "path=/different", "Navigation payload URL incorrect");
             });
       },
 
       "Check hash final breadcrumb navigation payload": function() {
          return browser.findByCssSelector("#CHANGE_NODEREF_label")
             .click()
-         .end()
+            .end()
+
          // NOTE: It's not expected that changing the root node alone will re-render the breadcrumb trail,
          //       the path will be subsequently updated as well (the path uses the base nodeRef)...
          .findByCssSelector("#SET_HASH_label")
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(3) > .breadcrumb")
             .click()
             .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "folder-details?nodeRef=some://fake/nodeRef"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Navigation payload not correct");
+
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload){
+               assert.propertyVal(payload, "url", "folder-details?nodeRef=some://fake/nodeRef", "Navigation payload URL incorrect");
             });
       },
 
