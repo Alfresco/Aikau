@@ -31,10 +31,11 @@
 define(["dojo/_base/declare",
         "alfresco/lists/AlfList", 
         "alfresco/documentlibrary/_AlfHashMixin",
+        "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/hash",
         "dojo/io-query"], 
-        function(declare, AlfList, _AlfHashMixin, lang, hash, ioQuery) {
+        function(declare, AlfList, _AlfHashMixin, array, lang, hash, ioQuery) {
    
    return declare([AlfList, _AlfHashMixin], {
       
@@ -273,6 +274,30 @@ define(["dojo/_base/declare",
             this.alfPublish("ALF_BRING_ITEM_INTO_VIEW", {
                item: currHash.currentItem
             });
+         }
+      },
+
+      /**
+       * Handle filters being updated
+       *
+       * @instance
+       * @override
+       */
+      onFiltersUpdated: function() {
+         if (this.useHash) {
+            var hashObj = this.getHashObj();
+            array.forEach(this.dataFilters, function(filter){
+               var filterName = filter.name,
+                  filterValue = "" + filter.value;
+               if(lang.trim(filterValue)) {
+                  hashObj[filterName] = filterValue;
+               } else {
+                  delete hashObj[filterName];
+               }
+            }, this);
+            this.setHashObj(hashObj);
+         } else {
+            this.loadData();
          }
       }
    });
