@@ -212,7 +212,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      updateLocallyStoredHash: function alfresco_lists_AlfHashList__onHashChanged(/*jshint unused:false*/payload) {
+      updateLocallyStoredHash: function alfresco_lists_AlfHashList__updateLocallyStoredHash(/*jshint unused:false*/payload) {
          // Save the hash to local storage if required...
          if(this.useLocalStorageHashFallback === true && 
             ("localStorage" in window && window.localStorage !== null))
