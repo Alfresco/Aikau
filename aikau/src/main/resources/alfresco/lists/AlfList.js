@@ -346,23 +346,30 @@ define(["dojo/_base/declare",
                }
             }
 
-            if (this._filterTimeoutHandle)
-            {
-               clearTimeout(this._filterTimeoutHandle);
-            }
-            var _this = this;
-            this._filterTimeoutHandle = setTimeout(function() {
-               if (_this.requestInProgress)
+            // Setup a new timeout (clearing the old one, just in case)
+            clearTimeout(this._filterTimeoutHandle);
+            this._filterTimeoutHandle = setTimeout(lang.hitch(this, function() {
+               if (this.requestInProgress)
                {
-                  _this.pendingLoadRequest = true;
+                  this.pendingLoadRequest = true;
                }
                else
                {
-                  _this.clearViews();
-                  _this.loadData();
+                  this.clearViews();
+                  this.onFiltersUpdated();
                }
-            }, this._filterDelay);
+            }), this._filterDelay);
          }
+      },
+
+      /**
+       * Handle filters being updated
+       *
+       * @instance
+       * @overrideable
+       */
+      onFiltersUpdated: function(){
+         this.loadData();
       },
 
       /**
