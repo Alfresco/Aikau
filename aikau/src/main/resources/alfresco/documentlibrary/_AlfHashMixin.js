@@ -71,8 +71,9 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfFilterMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/hash",
-        "dojo/_base/lang"], 
-        function(declare, AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin, hash, lang) {
+        "dojo/_base/lang",
+        "dojo/io-query"], 
+        function(declare, AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin, hash, lang, ioQuery) {
    
    return declare([AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin], {
 
@@ -257,6 +258,29 @@ define(["dojo/_base/declare",
             }
          }
          return true;
+      },
+
+      /**
+       * Get the current hash value as an object
+       *
+       * @instance
+       * @returns {Object} The hash value as an object
+       */
+      getHashObj: function alfresco_documentlibrary_AlfHashMixin__getHashObj() {
+         var currHash = hash(),
+            hashObj = ioQuery.queryToObject(currHash);
+         return hashObj;
+      },
+
+      /**
+       * Set the current hash value from an object
+       *
+       * @instance
+       * @param {Object} hashObj The new hash object
+       */
+      setHashObj: function alfresco_documentlibrary_AlfHashMixin__setHashObj(hashObj) {
+         var newHash = ioQuery.objectToQuery(hashObj);
+         hash(newHash);
       }
    });
 });
