@@ -65,6 +65,19 @@ define(["intern!object",
             });
       },
 
+      "Can close notification early": function() {
+         return browser.findByCssSelector("#NOTIFICATION_BUTTON_LARGE")
+            .clearLog()
+            .click()
+            .end()
+
+         .findByCssSelector(".alfresco-notifications-AlfNotification__close")
+            .click()
+            .end()
+
+         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification__message");
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
