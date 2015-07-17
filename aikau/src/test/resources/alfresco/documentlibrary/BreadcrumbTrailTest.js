@@ -175,7 +175,7 @@ define(["intern!object",
             });
       },
 
-      "Check hash breadcrumb navigation request publish": function() {
+      "Check hash breadcrumb navigation request publishes": function() {
          return browser.findByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(2) > .breadcrumb")
             .click()
             .end()
