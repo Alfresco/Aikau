@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        * to [onHashChange]{@link module:alfresco/documentlibrary/_AlfHashMixin#onHashChange}.
        * @instance
        */
-      constructor: function() {
+      constructor: function alfresco_documentlibrary_AlfHashMixin__constructor() {
          this.alfSubscribe("/dojo/hashchange", lang.hitch(this, "onHashChange"));
       },
       
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} hashString An optional string to use as the hash. If not provided the current hash will be
        */
-      initialiseFilter: function(hashString) {
+      initialiseFilter: function alfresco_documentlibrary_AlfHashMixin__intialiseFilter(hashString) {
          if (!hashString)
          {
             this.onHashChange(hash());
