@@ -11,7 +11,8 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/ErrorReporter",
+      "alfresco/services/DialogService"
    ],
    widgets: [
       {
@@ -388,6 +389,16 @@ model.jsonModel = {
                      validationConfig: {
                         regExObj: null
                      }
+                  }
+               },
+               {
+                  id: "FORM_FIELD_WITH_HELP",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     name: "control2",
+                     label: "Form field with help",
+                     value: "Text2",
+                     inlineHelp: "Once upon a time there was, a little white bull.\n\nVery sad because he was, a little white bull."
                   }
                }
             ]
