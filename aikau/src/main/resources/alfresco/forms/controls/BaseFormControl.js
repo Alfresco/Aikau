@@ -210,6 +210,16 @@ define(["dojo/_base/declare",
       description: "",
 
       /**
+       * Inline help for the field. If this is not empty it will cause a help icon to show which, when clicked, will 
+       * launch a dialog containing the additional help content.
+       * 
+       * @instance
+       * @type {string}
+       * @default ""
+       */
+      inlineHelp: "",
+
+      /**
        * The value to submit as the name for the data captured by this field when the form is submitted.
        *
        * @instance
@@ -1169,13 +1179,40 @@ define(["dojo/_base/declare",
       validationInProgressImg: "ajax_anim.gif",
 
       /**
-       * The alt-text label to use for the validation in progress indicator
-       *
+       * The alt-text label to use for the validation in progress indicator.
+       * 
        * @instance
        * @type {string}
        * @default "validation.inprogress.alttext"
        */
       validationInProgressAltText: "validation.inprogress.alttext",
+
+      /**
+       * The local image to use for the inline help indicator.
+       * 
+       * @instance
+       * @type {string}
+       * @default "help.png"
+       */
+      inlineHelpImg: "help.png",
+
+      /**
+       * The alt-text label to use for the inline help indicator.
+       * 
+       * @instance
+       * @type {string}
+       * @default "inlinehelp.alttext"
+       */
+      inlineHelpAltText: "inlinehelp.alttext",
+
+      /**
+       * The width of the inline help dialog.
+       * 
+       * @instance
+       * @type {number}
+       * @default 300
+       */
+      inlineHelpWidth: 400,
 
       /**
        * Processes the image source for indicating validation is in progress and its alt-text label.
@@ -1193,6 +1230,12 @@ define(["dojo/_base/declare",
             this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationInProgressImg;
          }
          this.validationInProgressAltText = this.message(this.validationInProgressAltText);
+
+         if (!this.inlineHelpImgSrc)
+         {
+            this.inlineHelpImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.inlineHelpImg;
+         }
+         this.inlineHelpAltText = this.message(this.inlineHelpAltText) + " " + this.message(this.label);
       },
 
       /**
@@ -1220,6 +1263,11 @@ define(["dojo/_base/declare",
          if (this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);
+         }
+
+         if (this.inlineHelp)
+         {
+            domClass.remove(this._inlineHelpIndicator, "hidden");
          }
 
          this.wrappedWidget = this.createFormControl(this.initialConfig);
@@ -1927,6 +1975,31 @@ define(["dojo/_base/declare",
          if (this.publishValue && typeof this.publishValue === "function")
          {
             this.validate();
+         }
+      },
+
+      /**
+       * This function is attached to the click event of the inline help icon and will display a dialog containing 
+       * inline help when called.
+       * 
+       * @instance
+       */
+      showInlineHelp: function alfresco_forms_controls_BaseFormControl__showInlineHelp() {
+         if (this.inlineHelp)
+         {
+            this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+               dialogId: "BASE_FORM_CONTROL_INLINE_HELP",
+               dialogTitle: this.message(this.label),
+               dialogWidth: this.inlineHelpWidth + "px",
+               widgetsContent: [
+                  {
+                     name: "dijit/layout/ContentPane",
+                     config: {
+                        content: this.message(this.inlineHelp).replace(/\n/g, "<br />")
+                     }
+                  }
+               ]
+            }, true);
          }
       }
    });

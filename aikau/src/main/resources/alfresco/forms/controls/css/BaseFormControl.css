@@ -90,6 +90,18 @@
    display: none;
 }
 
+.alfresco-forms-controls-BaseFormControl > .title-row > img.inlineHelp {
+   width: 16px;
+   height: 16px;
+   margin: 2px 0;
+   vertical-align: top;
+   cursor: pointer;
+}
+
+.alfresco-forms-controls-BaseFormControl > .title-row > img.inlineHelp.hidden {
+   display: none;
+}
+
 .alfresco-forms-controls-BaseFormControl > .title-row > .validation-error {
    background: url("./images/error-16.png");
    display: inline-block;
