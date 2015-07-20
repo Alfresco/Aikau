@@ -248,6 +248,16 @@ define(["alfresco/core/ObjectTypeUtils",
          },
 
          /**
+          * Clear the filter
+          *
+          * @instance
+          */
+         _clearFilter: function alfresco_logging_DebugLog___applyFilter() {
+            this.filter.value = "";
+            this._applyFilter();
+         },
+
+         /**
           * Given a variable, make it safe for being JSON.stringified. This means avoiding
           * circular references and respecting maximum sibling quantity and maximum depth.
           *
