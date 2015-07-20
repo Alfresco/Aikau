@@ -34,8 +34,9 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/hash",
-        "dojo/io-query"], 
-        function(declare, AlfList, _AlfHashMixin, array, lang, hash, ioQuery) {
+        "dojo/io-query",
+        "alfresco/util/hashUtils"], 
+        function(declare, AlfList, _AlfHashMixin, array, lang, hash, ioQuery, hashUtils) {
    
    return declare([AlfList, _AlfHashMixin], {
       
@@ -285,17 +286,11 @@ define(["dojo/_base/declare",
        */
       onFiltersUpdated: function() {
          if (this.useHash) {
-            var hashObj = this.getHashObj();
-            array.forEach(this.dataFilters, function(filter){
-               var filterName = filter.name,
-                  filterValue = "" + filter.value;
-               if(lang.trim(filterValue)) {
-                  hashObj[filterName] = filterValue;
-               } else {
-                  delete hashObj[filterName];
-               }
-            }, this);
-            this.setHashObj(hashObj);
+            var filterValues = {};
+            array.forEach(this.dataFilters, function(dataFilter){
+               filterValues[dataFilter.name] = dataFilter.value;
+            });
+            hashUtils.updateHash(filterValues);
          } else {
             this.loadData();
          }
