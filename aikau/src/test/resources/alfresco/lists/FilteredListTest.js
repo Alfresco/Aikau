@@ -24,23 +24,23 @@ define(["intern!object",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(registerSuite, assert, require, TestCommon, keys) {
 
    var browser;
    registerSuite({
       name: "FilteredList Tests",
-      
+
       setup: function() {
          browser = this.remote;
          return TestCommon.loadTestWebScript(this.remote, "/FilteredList", "FilteredList Tests").end();
       },
-      
+
       beforeEach: function() {
          browser.end();
       },
-      
-      "Check that results are loaded initially": function () {
+
+      "Check that results are loaded initially": function() {
          return browser.findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
                assert.lengthOf(elements, 6, "The wrong number of results were displayed");
@@ -49,56 +49,69 @@ define(["intern!object",
 
       "Type a filter": function() {
          return browser.findByCssSelector("#TEXTBOX .dijitInputContainer input")
+            .clearLog()
             .type("one")
-         .end()
+            .end()
+
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalRecords", "1"))
-         .end()
+         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
+            .end()
+
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
-         .then(function(elements) {
-            assert.lengthOf(elements, 1, "Only 1 result should be displayed for filter 'one'");
-         });
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Only 1 result should be displayed for filter 'one'");
+            });
       },
 
       "Delete a couple of characters": function() {
          return browser.findByCssSelector("#TEXTBOX .dijitInputContainer input")
+            .clearLog()
             .type(keys.BACKSPACE)
             .type(keys.BACKSPACE)
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalRecords", "3"))
-         .end()
+            .end()
+
+         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
+            .end()
+
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
-         .then(function(elements) {
-            assert.lengthOf(elements, 3, "3 results should be displayed for filter 'o'");
-         });
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "3 results should be displayed for filter 'o'");
+            });
       },
 
       "Select a filter from drop down": function() {
          return browser.findByCssSelector("#COMPOSITE_DROPDOWN .dijitArrowButtonInner")
+            .clearLog()
             .click()
-         .end()
+            .end()
+
          .findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL_popup1")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalRecords", "4"))
-         .end()
+            .end()
+
+         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
+            .end()
+
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
-         .then(function(elements) {
-            assert.lengthOf(elements, 4, "4 results should be displayed for description 'moo'");
-         });
+            .then(function(elements) {
+               assert.lengthOf(elements, 4, "4 results should be displayed for description 'moo'");
+            });
       },
 
       "Apply a 2nd filter": function() {
          return browser.findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
+            .clearLog()
             .type("t")
-         .end()
+            .end()
+
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_DOCUMENTS_LOADED", "totalRecords", "2"))
-         .end()
+         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
+            .end()
+
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
-         .then(function(elements) {
-            assert.lengthOf(elements, 2, "Only 2 result should be displayed for combined filter");
-         });
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "Only 2 result should be displayed for combined filter");
+            });
       },
 
       "Post Coverage Results": function() {
