@@ -97,83 +97,83 @@ define(["dojo/_base/declare",
          domClass.remove(this.filtersNode, "share-hidden");
       },
 
-      // /**
-      //  * We need to make sure any filters in the hash are populated into the dataFilters property
-      //  * 
-      //  * @instance
-      //  * @override
-      //  * @param {object} payload The publication topic
-      //  */
-      // onHashChange: function alfresco_documentlibrary_AlfHashMixin__onHashChange( /*jshint unused:false*/ payload) {
+      /**
+       * We need to make sure any filters in the hash are populated into the dataFilters property
+       * 
+       * @instance
+       * @override
+       * @param {object} payload The publication topic
+       */
+      onHashChange: function alfresco_documentlibrary_AlfHashMixin__onHashChange( /*jshint unused:false*/ payload) {
 
-      //    // Only do this when we are mirroring the filters in the hash
-      //    if (this.mapHashVarsToPayload) {
+         // Only do this when we are mirroring the filters in the hash
+         if (this.mapHashVarsToPayload) {
 
-      //       // Initialise the data-filters to be all of the filters we have specified, without values
-      //       this.dataFilters = array.map(this._widgetFilterNames, function(filterName) {
-      //          return {
-      //             name: filterName
-      //          };
-      //       });
+            // Initialise the data-filters to be all of the filters we have specified, without values
+            this.dataFilters = array.map(this._widgetFilters, function(filterWidget) {
+               return {
+                  name: filterWidget.name
+               };
+            });
 
-      //       // Filter to only include items currently in the hash and update values
-      //       var currHash = hashUtils.getHash();
-      //       this.dataFilters = array.filter(this.dataFilters, function(dataFilter) {
-      //          dataFilter.value = currHash[dataFilter.name];
-      //          return !!dataFilter.value;
-      //       }, this);
+            // Filter to only include items currently in the hash and update values
+            var currHash = hashUtils.getHash();
+            this.dataFilters = array.filter(this.dataFilters, function(dataFilter) {
+               dataFilter.value = currHash[dataFilter.name];
+               return !!dataFilter.value;
+            }, this);
 
-      //       // Update the filter fields
-      //       this._updateFilterFieldsFromHash();
-      //    }
+            // Update the filter fields
+            this._updateFilterFieldsFromHash();
+         }
 
-      //    // Call inherited
-      //    this.inherited(arguments);
-      // },
+         // Call inherited
+         this.inherited(arguments);
+      },
 
-      // /**
-      //  * Widget has started
-      //  *
-      //  * @instance
-      //  * @override
-      //  */
-      // startup: function alfresco_lists_AlfFilteredList__startup() {
-      //    this.inherited(arguments);
-      //    this._storeFilterWidgets();
-      //    this._updateFilterFieldsFromHash();
-      // },
+      /**
+       * Widget has started
+       *
+       * @instance
+       * @override
+       */
+      startup: function alfresco_lists_AlfFilteredList__startup() {
+         this.inherited(arguments);
+         this._storeFilterWidgets();
+         this._updateFilterFieldsFromHash();
+      },
 
-      // /**
-      //  * Build a collection of filter widgets as a property on this instance
-      //  *
-      //  * @instance
-      //  */
-      // _storeFilterWidgets: function alfresco_lists_AlfFilteredList___storeFilterWidgets() {
-      //    var childWidgets = registry.findWidgets(this.domNode);
-      //    this._widgetFilters = {};
-      //    array.forEach(this.widgetsForFilters, function(filterDef) {
-      //       var filterName = filterDef.config.name;
-      //       this._widgetFilters[filterName] = array.filter(childWidgets, function(childWidget) {
-      //          return childWidget.name === filterName;
-      //       })[0];
-      //    }, this);
-      // },
+      /**
+       * Build a collection of filter widgets as a property on this instance
+       *
+       * @instance
+       */
+      _storeFilterWidgets: function alfresco_lists_AlfFilteredList___storeFilterWidgets() {
+         var childWidgets = registry.findWidgets(this.domNode);
+         this._widgetFilters = {};
+         array.forEach(this.widgetsForFilters, function(filterDef) {
+            var filterName = filterDef.config.name;
+            this._widgetFilters[filterName] = array.filter(childWidgets, function(childWidget) {
+               return childWidget.name === filterName;
+            })[0];
+         }, this);
+      },
 
-      // /**
-      //  * Update the filter form fields using the filter values in the hash
-      //  *
-      //  * @instance
-      //  */
-      // _updateFilterFieldsFromHash: function alfresco_lists_AlfFilteredList___updateFilterFieldsFromHash() {
-      //    var currHash = hashUtils.getHash();
-      //    for (var widgetName in this._widgetFilters) {
-      //       if (this._widgetFilters.hasOwnProperty(widgetName)) {
-      //          var widget = this._widgetFilters[widgetName],
-      //             filterValue = currHash[widgetName];
-      //          widget.setValue(filterValue);
-      //       }
-      //    }
-      // },
+      /**
+       * Update the filter form fields using the filter values in the hash
+       *
+       * @instance
+       */
+      _updateFilterFieldsFromHash: function alfresco_lists_AlfFilteredList___updateFilterFieldsFromHash() {
+         var currHash = hashUtils.getHash();
+         for (var widgetName in this._widgetFilters) {
+            if (this._widgetFilters.hasOwnProperty(widgetName)) {
+               var widget = this._widgetFilters[widgetName],
+                  filterValue = currHash[widgetName];
+               widget.setValue(filterValue);
+            }
+         }
+      },
 
       /**
        * Setups up the [filteringTopics]{@link module:alfresco/lists/AlfList#filteringTopics} for the encapsulated
