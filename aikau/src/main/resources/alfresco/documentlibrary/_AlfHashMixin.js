@@ -258,29 +258,6 @@ define(["dojo/_base/declare",
             }
          }
          return true;
-      },
-
-      /**
-       * Get the current hash value as an object
-       *
-       * @instance
-       * @returns {Object} The hash value as an object
-       */
-      getHashObj: function alfresco_documentlibrary_AlfHashMixin__getHashObj() {
-         var currHash = hash(),
-            hashObj = ioQuery.queryToObject(currHash);
-         return hashObj;
-      },
-
-      /**
-       * Set the current hash value from an object
-       *
-       * @instance
-       * @param {Object} hashObj The new hash object
-       */
-      setHashObj: function alfresco_documentlibrary_AlfHashMixin__setHashObj(hashObj) {
-         var newHash = ioQuery.objectToQuery(hashObj);
-         hash(newHash);
       }
    });
 });

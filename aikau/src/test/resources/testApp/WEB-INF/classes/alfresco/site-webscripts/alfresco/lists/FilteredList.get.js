@@ -87,6 +87,7 @@ model.jsonModel = {
                            name: "alfresco/lists/AlfFilteredList",
                            config: {
                               pubSubScope: "COMPOSITE_",
+                              useHash: true,
                               filteringTopics: ["_valueChangeOf_FILTER"],
                               widgetsForFilters: [
                                  {
