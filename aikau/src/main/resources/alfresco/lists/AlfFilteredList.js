@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} targetNode The node to hide the children of
        */
-      hideChildren: function alfresco_lists_AlfList__hideChildren(/*jshint unused:false*/targetNode) {
+      hideChildren: function alfresco_lists_AlfFilteredList__hideChildren(/*jshint unused:false*/targetNode) {
          this.inherited(arguments);
          domClass.remove(this.filtersNode, "share-hidden");
       },
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        * @override
        * @param {object} payload The publication topic
        */
-      onHashChange: function alfresco_documentlibrary_AlfHashMixin__onHashChange( /*jshint unused:false*/ payload) {
+      onHashChange: function alfresco_lists_AlfFilteredList__onHashChange( /*jshint unused:false*/ payload) {
 
          // Only do this when we are mirroring the filters in the hash
          if (this.mapHashVarsToPayload) {
