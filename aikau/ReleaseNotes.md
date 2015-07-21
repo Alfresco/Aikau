@@ -1,4 +1,4 @@
-Aikau 1.0.26 Release Notes
+Aikau 1.0.27 Release Notes
 ==========================
 
 New deprecations: 
@@ -40,8 +40,17 @@ Previous deprecations:
 * alfresco/forms/controls/DojoSelect                             (use: alfresco/forms/controls/Select)
 * alfresco/forms/controls/DojoTextarea                           (use: alfresco/forms/controls/TextArea)
 
-Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number> ):
+Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>):
 ----------------
+
+1.0.27:
+* [AKU-420](https://issues.alfresco.com/jira/browse/AKU-420)       - `currentPageSize` being reset by [`AlfSortablePaginatedList`](src/main/resources/alfresco/lists/AlfSortablePaginatedList.js) in `postMixInProperties()` because of hardcoded preference name (fixed by making configurable property)
+* [AKU-423](https://issues.alfresco.com/jira/browse/AKU-423)       - `formSubmissionGlobal` and `formSubmissionScope` properties added to [`DialogService`](src/main/resources/alfresco/services/DialogService.js) `publishPayload` config property, to give greater control over resultant dialog-form submission
+* [AKU-425](https://issues.alfresco.com/jira/browse/AKU-425)       - Resolve all Blocker and Critical issues on Sonar raised by the SQALE plugin
+* [AKU-430](https://issues.alfresco.com/jira/browse/AKU-430)       - [`DateTextBox`](src/main/resources/alfresco/forms/controls/DateTextBox.js) does not handle empty values very well (converts it to "epoch" date, i.e. 1/1/1970)
+* [AKU-431](https://issues.alfresco.com/jira/browse/AKU-431)       - [`NumberSpinner`](src/main/resources/alfresco/forms/controls/NumberSpinner.js) cannot be submitted with empty value (fixed by adding optional `permitEmpty` property)
+* [AKU-436](https://issues.alfresco.com/jira/browse/AKU-436)       - [`NotificationService`](src/main/resources/alfresco/services/NotificationService.js) notifications could be scrolled or even appear off screen (fixed) and also added new close button for manual closing of long-lasting notifications
+
 1.0.26:
 * [AKU-18](https://issues.alfresco.com/jira/browse/AKU-18)         - Update [`DebugLog`](src/main/resources/alfresco/logging/DebugLog.js) to make it more useful for testing
 * [AKU-267](https://issues.alfresco.com/jira/browse/AKU-267)       - Add a mechanism to allow a "Create Another" pattern for dialogs
