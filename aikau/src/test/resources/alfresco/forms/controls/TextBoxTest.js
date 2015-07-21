@@ -354,6 +354,18 @@ define(["intern!object",
             .isDisplayed();
       },
 
+      "Check textbox with help is displayed": function() {
+         return browser.findByCssSelector("#FORM_FIELD_WITH_HELP img.inlineHelp")
+            .then(
+               function() {
+                  // No action;
+               }, 
+               function() {
+                  assert(false, "Textbox with help is not displayed");
+               }
+            );
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
