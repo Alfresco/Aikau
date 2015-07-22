@@ -252,7 +252,7 @@ define(["alfresco/core/ObjectTypeUtils",
           *
           * @instance
           */
-         _clearFilter: function alfresco_logging_DebugLog___applyFilter() {
+         _clearFilter: function alfresco_logging_DebugLog___clearFilter() {
             this.filter.value = "";
             this._applyFilter();
          },
