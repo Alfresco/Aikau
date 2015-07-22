@@ -1,3 +1,4 @@
+/*globals Alfresco*/
 /**
  * Copyright (C) 2005-2013 Alfresco Software Limited.
  *

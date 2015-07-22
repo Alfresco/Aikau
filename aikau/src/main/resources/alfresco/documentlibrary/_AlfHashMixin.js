@@ -71,9 +71,8 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfFilterMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/hash",
-        "dojo/_base/lang",
-        "dojo/io-query"], 
-        function(declare, AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin, hash, lang, ioQuery) {
+        "dojo/_base/lang"], 
+        function(declare, AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin, hash, lang) {
    
    return declare([AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin], {
 
