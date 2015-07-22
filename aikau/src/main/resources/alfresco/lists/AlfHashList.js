@@ -196,15 +196,18 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          if (this.mapHashVarsToPayload)
          {
-            var hashString = hash();
-            var currHash = ioQuery.queryToObject(hashString);
-            for(var i=0; i < this.hashVarsForUpdate.length; i++)
-            {
-               if(this.hashVarsForUpdate[i] in currHash)
-               {
-                  payload[this.hashVarsForUpdate[i]] = currHash[this.hashVarsForUpdate[i]];
+            var currHash = hashUtils.getHash();
+            array.forEach(this.hashVarsForUpdate, function(hashName, index){
+               var hashValue;
+               if(currHash.hasOwnProperty(hashName)) {
+                  hashValue = currHash[hashName];
+                  if(hashValue !== null && typeof hashValue !== "undefined") {
+                     payload[hashName] = hashValue;
+                  } else {
+                     delete payload[hashName];
                }
             }
+            }, this);
          }
       },
 
@@ -284,11 +287,20 @@ define(["dojo/_base/declare",
        * @instance
        * @override
        */
-      onFiltersUpdated: function() {
+      onFiltersUpdated: function alfresco_lists_AlfHashList__onFiltersUpdated() {
          if (this.useHash) {
             var filterValues = {};
             array.forEach(this.dataFilters, function(dataFilter){
-               filterValues[dataFilter.name] = dataFilter.value;
+               var filterValue = dataFilter.value;
+               if(filterValue !== null && typeof filterValue !== "undefined") {
+                  if(typeof filterValue === "string") {
+                     filterValue = lang.trim(filterValue);
+                     if(!filterValue.length) {
+                        filterValue = null; // Remove empty strings from hash
+                     }
+                  }
+               }
+               filterValues[dataFilter.name] = filterValue;
             });
             hashUtils.updateHash(filterValues);
          } else {

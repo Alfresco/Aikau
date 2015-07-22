@@ -123,8 +123,11 @@ define(["dojo/_base/declare",
                return !!dataFilter.value;
             });
 
-            // Update the filter fields
+            // Update the filter fields and reload the data
+            if (this._readyToLoad) {
             this._updateFilterFieldsFromHash();
+               this.loadData();
+            }
          }
 
          // Call inherited
@@ -166,13 +169,14 @@ define(["dojo/_base/declare",
        */
       _updateFilterFieldsFromHash: function alfresco_lists_AlfFilteredList___updateFilterFieldsFromHash() {
          var currHash = hashUtils.getHash();
-         for (var widgetName in this._filterWidgets) {
-            if (this._filterWidgets.hasOwnProperty(widgetName)) {
+         array.forEach(Object.keys(this._filterWidgets), function(widgetName){
                var widget = this._filterWidgets[widgetName],
                   filterValue = currHash[widgetName];
-               widget.setValue(filterValue);
-            }
+            if(typeof filterValue === "undefined") {
+               filterValue = null;
          }
+            widget.setValue(filterValue);
+         }, this);
       },
 
       /**
