@@ -201,8 +201,9 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The widget filters
+       * The filter widgets
        *
+       * @instance
        * @type {Object[]}
        */
       _filterWidgets: null,
