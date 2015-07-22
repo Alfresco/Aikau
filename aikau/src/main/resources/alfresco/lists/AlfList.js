@@ -368,6 +368,7 @@ define(["dojo/_base/declare",
        * @overrideable
        */
       onFiltersUpdated: function(){
+         this.clearViews();
          this.loadData();
       },
 

@@ -304,6 +304,7 @@ define(["dojo/_base/declare",
             });
             hashUtils.updateHash(filterValues);
          } else {
+            this.clearViews();
             this.loadData();
          }
       }
