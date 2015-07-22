@@ -355,7 +355,6 @@ define(["dojo/_base/declare",
                }
                else
                {
-                  this.clearViews();
                   this.onFiltersUpdated();
                }
             }), this._filterDelay);

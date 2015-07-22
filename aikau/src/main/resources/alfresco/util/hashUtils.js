@@ -40,36 +40,39 @@ define(["dojo/_base/lang",
       },
 
       // See API below
-      setHash: function alfresco_util_hashUtils__getHash(hashObj, replace) {
+      setHash: function alfresco_util_hashUtils__setHash(hashObj, replace) {
          var newHash = ioQuery.objectToQuery(hashObj);
          hash(newHash, replace);
       },
 
       // See API below
-      updateHash: function alfresco_util_hashUtils__getHash(newValues, replace, force) {
-         var hashObj = this.getHash(),
+      updateHash: function alfresco_util_hashUtils__updateHash(newValues, replace, force) {
+         var currHash = this.getHash(),
+            newHash = lang.mixin({}, currHash),
             hashName,
             newHashValue,
-            oldHashValue,
+            currHashValue,
             hashChanged;
          for (hashName in newValues) {
             if (newValues.hasOwnProperty(hashName)) {
                newHashValue = newValues[hashName];
-               oldHashValue = hashObj[hashName];
-               if ((typeof newHashValue === "undefined" || newHashValue === null) && hashObj.hasOwnProperty(hashName)) {
-                  delete hashObj[hashName];
+               currHashValue = currHash[hashName];
+               if (typeof newHashValue === "undefined" || newHashValue === null) {
+                  delete newHash[hashName];
+                  if (currHash.hasOwnProperty(hashName)) {
                   hashChanged = true;
+                  }
                } else {
                   newHashValue = "" + newHashValue;
-                  if (newHashValue !== oldHashValue) {
-                     hashObj[hashName] = encodeURIComponent(newHashValue);
+                  if (newHashValue !== currHashValue) {
+                     newHash[hashName] = encodeURIComponent(newHashValue);
                      hashChanged = true;
                   }
                }
             }
          }
          if (hashChanged || force) {
-            this.setHash(hashObj, replace);
+            this.setHash(newHash, replace);
          }
       }
    };
