@@ -114,6 +114,35 @@ define(["intern!object",
             });
       },
 
+      "Hash reflects current filter values": function() {
+         return browser.getCurrentUrl()
+            .then(function(url) {
+               var hash = url.split("#")[1],
+                  hashParts = (hash && hash.split("&")) || [],
+                  hashObj = {};
+               hashParts.forEach(function(hashPart) {
+                  var nameValuePair = hashPart.split("=");
+                  hashObj[nameValuePair[0]] = nameValuePair[1];
+               });
+               assert.propertyVal(hashObj, "description", "moo", "Invalid value in hash");
+               assert.propertyVal(hashObj, "name", "t", "Invalid value in hash");
+            });
+      },
+
+      "Changing hash value updates filter": function() {
+         var updatedUrl = TestCommon.testWebScriptURL("/FilteredList#description=moo");
+         return browser.findByCssSelector("body")
+            .clearLog()
+            .get(updatedUrl)
+            .getLastPublish("COMPOSITE_ALF_DOCLIST_REQUEST_FINISHED")
+            .end()
+
+         .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
+            .then(function(elements) {
+               assert.lengthOf(elements, 4, "Incorrect results displayed for intended filter");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
