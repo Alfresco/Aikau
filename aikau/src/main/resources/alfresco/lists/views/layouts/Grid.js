@@ -21,7 +21,7 @@
  * Use this widget to render a grid. Every widget rendered within it will be added so that if a row
  * contains the number of widgets defined by [columns]{@link module:alfresco/lists/views/layouts/Grid#columns]
  * a new row will be started for the next processed widget.
- * 
+ *
  * @module alfresco/lists/views/layouts/Grid
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -31,7 +31,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "alfresco/core/ResizeMixin",
         "dijit/_KeyNavContainer",
@@ -46,32 +46,32 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/query",
         "dojo/dom-style",
-        "dijit/registry"], 
-        function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, template, _MultiItemRendererMixin, 
+        "dijit/registry"],
+        function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, template, _MultiItemRendererMixin,
                  AlfCore, _LayoutMixin, keys, lang, array, domConstruct, domGeom, query, domStyle, registry) {
 
    return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, _MultiItemRendererMixin, AlfCore, _LayoutMixin], {
-      
+
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/Grid.css"}]
        */
       cssRequirements: [{cssFile:"./css/Grid.css"}],
-      
+
       /**
        * The HTML template to use for the widget.
-       * 
+       *
        * @instance
        * @type {String}
        */
       templateString: template,
-      
+
       /**
        * This is the number of columns in the grid.
-       * 
+       *
        * @instance
        * @type {number}
        * @default 4
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
-       * 
+       *
        * @instance postCreate
        */
       postCreate: function alfresco_lists_views_layouts_Grid__postCreate() {
@@ -98,12 +98,12 @@ define(["dojo/_base/declare",
          // Update the grid as the window changes...
          this.alfSetupResizeSubscriptions(this.resizeCells, this);
       },
-      
+
       /**
        * Overrides the [superclass implementation]{@link module:alfresco/lists/views/AlfListView#setupKeyboardNavigation}
        * to move to the next/previous item using the left and right cursor keys and the up/down keys to access the cell directly
        * above or below.
-       * 
+       *
        * @instance
        */
       setupKeyboardNavigation: function alfresco_lists_views_layouts_Grid__setupKeyboardNavigation() {
@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
          {
             target = allChildren[childCount-1];
          }
-         this.focusChild(target); 
+         this.focusChild(target);
       },
 
       /**
@@ -166,14 +166,14 @@ define(["dojo/_base/declare",
          {
             target = allChildren[0];
          }
-         this.focusChild(target); 
+         this.focusChild(target);
       },
 
       /**
        * Gives focus to the cell immediately above the currently focused cell. If the focused cell is on the
        * first row then it will select the cell in the same column on the last column (and if there isn't a cell
        * in the same column on the last row then the last item is selected).
-       *  
+       *
        * @instance
        */
       focusOnCellAbove: function alfresco_lists_views_layouts_Grid__focusOnCellAbove() {
@@ -203,11 +203,11 @@ define(["dojo/_base/declare",
          }
          this.focusChild(target);
       },
-      
+
       /**
        * Gives focus to the cell immediately below the currently focused cell. If the currently focused
-       * cell is on the last row then the cell in the same column on the first row is selected. 
-       * 
+       * cell is on the last row then the cell in the same column on the first row is selected.
+       *
        * @instance
        */
       focusOnCellBelow: function alfresco_lists_views_layouts_Grid__focusOnCellBelow() {
@@ -226,12 +226,12 @@ define(["dojo/_base/declare",
          }
          this.focusChild(target);
       },
-      
+
       /**
        * Gets the content box of the containing DOM node of the grid and then iterates over all the cells in the grid calling
-       * the [resizeCell]{@link module:alfresco/lists/views/layouts/Grid#resizeCell] function for each with the desired width. 
+       * the [resizeCell]{@link module:alfresco/lists/views/layouts/Grid#resizeCell] function for each with the desired width.
        * The width to set is the available width divided by the number of columns to display.
-       * 
+       *
        * @instance resizeCells
        */
       resizeCells: function alfresco_lists_views_layouts_Grid__resizeCells() {
@@ -244,10 +244,10 @@ define(["dojo/_base/declare",
             query("tr > td", node).forEach(lang.hitch(this, "resizeCell", marginBox, widthToSet));
          }
       },
-      
+
       /**
        * Sets the width of an individual cell.
-       * 
+       *
        * @instance resizeCell
        * @param {Object} containerNodeMarginBox The margin box for the container nodes parent
        * @param {number} widthToSet The widget for the cell (in pixels)
@@ -257,19 +257,22 @@ define(["dojo/_base/declare",
       resizeCell: function alfresco_lists_views_layouts_Grid__resizeCell(containerNodeMarginBox, widthToSet, node, /*jshint unused:false*/ index) {
          domStyle.set(node, {"width": widthToSet});
          var dimensions = {
-            w: widthToSet,
-            h: null
-         };
-         array.forEach(node.children, lang.hitch(this, "resizeWidget", dimensions));
+               w: widthToSet,
+               h: null
+            },
+            widgetsToResize = query("[widgetId]", node); // Resize all contained widgets, not just immediate children.
+
+         array.forEach(widgetsToResize, lang.hitch(this, "resizeWidget", dimensions));
       },
-      
+
       /**
        * This function will check to see if there is a widget associated with the DOM node provided as an argument and if that
        * widget has a resize function it will call it with the supplied dimensions.
-       * 
+       *
        * @instance
+       * @param {object} dimensions The object containing the width and height for the widget.
        * @param {object} widgetNode The DOM node that possibly has a widget associated. Use registry to check
-       * @param {integer} index The index of the node
+       * @param {number} index The index of the node
        */
       resizeWidget: function alfresco_lists_views_layouts_Grid__resizeWidget(dimensions, widgetNode, /*jshint unused:false*/ index) {
          var widget = registry.byNode(widgetNode);
@@ -278,11 +281,11 @@ define(["dojo/_base/declare",
             widget.resize(dimensions);
          }
       },
-      
+
       /**
        * Overridden to add an additional TD elements for each cell in the grid. It will also create a new TR element if
        * the end of the current row has been reached.
-       * 
+       *
        * @instance
        * @param {object} widget The widget definition to create the DOM node for
        * @param {element} rootNode The DOM node to create the new DOM node as a child of
@@ -301,7 +304,7 @@ define(["dojo/_base/declare",
             var lastNode = rootNode.children[rootNode.children.length-1];
             nodeToAdd = domConstruct.create("TD", {}, lastNode);
          }
-         
+
          // Add a new cell...
          return domConstruct.create("DIV", {}, nodeToAdd);
       },
@@ -330,7 +333,7 @@ define(["dojo/_base/declare",
        * When set to true this will show a link for requesting more data (if available). This should be used when
        * the grid is rendering data in an infinite scroll view. It is required because when the grid cells are small
        * the data may not be sufficient to allow the scrolling events to occur that will request more data.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default false
@@ -339,7 +342,7 @@ define(["dojo/_base/declare",
 
       /**
        * The label to use for the next link. This defaults to null, so MUST be set for the next link to be displayed.
-       * 
+       *
        * @instance
        * @type {string}
        * @default null
@@ -348,7 +351,7 @@ define(["dojo/_base/declare",
 
       /**
        * The topic to publish when the next link is clicked.
-       * 
+       *
        * @instance
        * @type {string}
        * @default null
@@ -357,12 +360,12 @@ define(["dojo/_base/declare",
 
       /**
        * Overrides the [inherited function]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#allItemsRendered}
-       * to create a link for retrieving more data when 
-       * 
+       * to create a link for retrieving more data when
+       *
        * @instance
        */
       allItemsRendered: function alfresco_lists_views_layouts_Grid__allItemsRendered() {
-         if(this.showNextLink && 
+         if(this.showNextLink &&
             ((this.totalRecords > (this.startIndex + this.currentPageSize)) ||
             (this.currentData.totalRecords < this.currentData.numberFound)))
          {
