@@ -197,7 +197,7 @@ define(["dojo/_base/declare",
          if (this.mapHashVarsToPayload)
          {
             var currHash = hashUtils.getHash();
-            array.forEach(this.hashVarsForUpdate, function(hashName, index){
+            array.forEach(this.hashVarsForUpdate, function(hashName){
                var hashValue;
                if(currHash.hasOwnProperty(hashName)) {
                   hashValue = currHash[hashName];
