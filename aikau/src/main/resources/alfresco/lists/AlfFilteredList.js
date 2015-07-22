@@ -110,9 +110,9 @@ define(["dojo/_base/declare",
          if (this.mapHashVarsToPayload) {
 
             // Initialise the data-filters to be all of the filters we have specified, without values
-            this.dataFilters = array.map(this._widgetFilters, function(filterWidget) {
+            this.dataFilters = array.map(Object.keys(this._filterWidgets), function(filterName){
                return {
-                  name: filterWidget.name
+                  name: filterName
                };
             });
 
@@ -121,7 +121,7 @@ define(["dojo/_base/declare",
             this.dataFilters = array.filter(this.dataFilters, function(dataFilter) {
                dataFilter.value = currHash[dataFilter.name];
                return !!dataFilter.value;
-            }, this);
+            });
 
             // Update the filter fields
             this._updateFilterFieldsFromHash();
@@ -150,10 +150,10 @@ define(["dojo/_base/declare",
        */
       _storeFilterWidgets: function alfresco_lists_AlfFilteredList___storeFilterWidgets() {
          var childWidgets = registry.findWidgets(this.domNode);
-         this._widgetFilters = {};
+         this._filterWidgets = {};
          array.forEach(this.widgetsForFilters, function(filterDef) {
             var filterName = filterDef.config.name;
-            this._widgetFilters[filterName] = array.filter(childWidgets, function(childWidget) {
+            this._filterWidgets[filterName] = array.filter(childWidgets, function(childWidget) {
                return childWidget.name === filterName;
             })[0];
          }, this);
@@ -166,9 +166,9 @@ define(["dojo/_base/declare",
        */
       _updateFilterFieldsFromHash: function alfresco_lists_AlfFilteredList___updateFilterFieldsFromHash() {
          var currHash = hashUtils.getHash();
-         for (var widgetName in this._widgetFilters) {
-            if (this._widgetFilters.hasOwnProperty(widgetName)) {
-               var widget = this._widgetFilters[widgetName],
+         for (var widgetName in this._filterWidgets) {
+            if (this._filterWidgets.hasOwnProperty(widgetName)) {
+               var widget = this._filterWidgets[widgetName],
                   filterValue = currHash[widgetName];
                widget.setValue(filterValue);
             }
@@ -201,7 +201,7 @@ define(["dojo/_base/declare",
        *
        * @type {Object[]}
        */
-      _widgetFilters: null,
+      _filterWidgets: null,
 
       /**
        * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
