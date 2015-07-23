@@ -504,6 +504,11 @@ define(["dojo/_base/declare",
                // Construct the form widgets and then construct the dialog using that configuration...
                var formValue = config.formValue ? config.formValue: {};
                var formConfig = this.createFormConfig(config.widgets, formValue);
+               var showValidationErrorsImmediately = true;
+               if (config.showValidationErrorsImmediately === false)
+               {
+                  formConfig.config.showValidationErrorsImmediately = false;
+               }
                var dialogConfig = this.createDialogConfig(config, formConfig);
                var dialog = new AlfDialog(dialogConfig);
                this.mapRequestedIdToDialog(payload, dialog);
