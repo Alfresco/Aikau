@@ -129,6 +129,7 @@ define(["alfresco/core/ObjectTypeUtils",
           */
          constructor: function() {
             this._entries = [];
+            this.topicsToIgnore = [];
          },
 
          /**
@@ -150,6 +151,11 @@ define(["alfresco/core/ObjectTypeUtils",
           * @param {object} logData The details of the publication
           */
          updateLog: function alfresco_logging_DebugLog__updateLog(logData) {
+
+            // Ensure we're not ignoring this topic
+            if (array.indexOf(this.topicsToIgnore, logData.topic) !== -1) {
+               return;
+            }
 
             // Create data variables
             var hasData = !!logData.data,

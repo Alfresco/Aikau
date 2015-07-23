@@ -45,8 +45,7 @@ model.jsonModel = {
             loadDataSubscriptionTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST"
          }
       },
-      "alfresco/services/NavigationService",
-      "aikauTesting/mockservices/PreferenceService"
+      "alfresco/services/NavigationService"
    ],
    widgets: [
       {
