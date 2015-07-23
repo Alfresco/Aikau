@@ -22,19 +22,33 @@
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/core/NotificationUtils
+ * @mixes module:alfresco/services/_UserServiceTopicMixin
+@mixes module:alfresco/services/_PreferenceServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreXhr",
         "alfresco/core/NotificationUtils",
+        "alfresco/services/_UserServiceTopicMixin",
+        "alfresco/services/_PreferenceServiceTopicMixin",
         "dojo/request/xhr",
         "dojo/json",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, AlfCore, AlfXhr, NotificationUtils, xhr, JSON, lang, AlfConstants) {
+        function(declare, AlfCore, AlfXhr, NotificationUtils, 
+              _UserServiceTopicMixin, _PreferenceServiceTopicMixin, xhr, JSON, lang, AlfConstants) {
    
-   return declare([AlfCore, AlfXhr, NotificationUtils], {
+   return declare([AlfCore, AlfXhr, NotificationUtils, _UserServiceTopicMixin, _PreferenceServiceTopicMixin], {
+      
+      /**
+       * This is the dot-notation preferences property address for the user's default page
+       *
+       * @instance
+       * @type {string}
+       * @default "org.alfresco.share.user.defaultPage"
+       */
+      PREF_KEY_USER_DEFAULT_PAGE: "org.alfresco.share.user.defaultPage",
       
       /**
        * An array of the i18n files to use with this widget.
@@ -53,7 +67,10 @@ define(["dojo/_base/declare",
        */
       constructor: function alf_services_UserService__constructor(args) {
          lang.mixin(this, args);
-         this.alfSubscribe("ALF_UPDATE_USER_STATUS", lang.hitch(this, "updateUserStatus"));
+         this.alfSubscribe(this.updateUserStatusTopic, lang.hitch(this, "updateUserStatus"));
+         this.alfSubscribe(this.setUserDefaultPageTopic, lang.hitch(this, this.onSetUserDefaultPage));
+         this.alfSubscribe(this.setUserDefaultPageSuccessTopic, lang.hitch(this, this.onSetUserDefaultPageSuccess));
+         this.alfSubscribe(this.setUserDefaultPageFailureTopic, lang.hitch(this, this.onSetUserDefaultPageFailure));
       },
       
       /**
@@ -97,7 +114,7 @@ define(["dojo/_base/declare",
          // Display a success message...
          this.displayMessage(this.message("message.status.success"));
 
-         this.alfPublish("ALF_USER_STATUS_UPDATED", {
+         this.alfPublish(this.updateUserStatusSuccessTopic, {
             userStatus: originalRequestConfig.data.status,
             userStatusTime: response.userStatusTime.iso8601
          });
@@ -120,7 +137,46 @@ define(["dojo/_base/declare",
          // Display a failure message...
          this.displayMessage(this.message("message.status.failure"));
          
-         this.alfPublish("ALF_USER_STATUS_UPDATE_FAILURE", response);
+         this.alfPublish(this.updateUserStatusFailureTopic, response);
+      },
+      
+      /**
+       * Sets the user's default page.
+       * 
+       * @instance
+       * @param {object} payload
+       */
+      onSetUserDefaultPage: function alfresco_services_PreferenceService__onSetUserDefaultPage(payload) {
+         if (payload && payload.defaultPage)
+         {
+            this.alfPublish(this.setPreferenceTopic,{
+               preference: this.PREF_KEY_USER_DEFAULT_PAGE,
+               value: payload.defaultPage,
+               alfResponseTopic: this.setUserDefaultPageTopic
+            });
+         }
+      },
+      
+      /**
+       * Displays a message indicating successful save of user's default page.
+       * 
+       * @instance
+       * @listens setUserDefaultPageTopicSuccess
+       */
+      onSetUserDefaultPageSuccess: function share_services_UserDefaultPageService__onSetUserDefaultPageSuccess() {
+         // Display a success message...
+         this.displayMessage(this.message("message.defaultPage.success"));
+      },
+      
+      /**
+       * Displays a message indicating failure to save of user's default page.
+       * 
+       * @instance
+       * @listens setUserDefaultPageTopicFailure
+       */
+      onSetUserDefaultPageFailure: function share_services_UserDefaultPageService__onSetUserDefaultPageFailure() {
+         // Display a failure message...
+         this.displayMessage(this.message("message.defaultPage.failure"));
       }
    });
 });

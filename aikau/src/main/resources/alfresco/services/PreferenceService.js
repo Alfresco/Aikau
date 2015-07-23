@@ -163,8 +163,13 @@ define(["dojo/_base/declare",
             // Set the remote preference...
             var preferenceObj = {};
             lang.setObject(payload.preference, payload.value, preferenceObj);
+            var responseTopic = payload.alfTopic;
+            if (payload.alfResponseTopic)
+            {
+               responseTopic = payload.alfResponseTopic;
+            }
             this.serviceXhr({url : url,
-                             alfTopic: payload.alfTopic,
+                             alfTopic: responseTopic,
                              data: preferenceObj,
                              method: "POST"});
 
