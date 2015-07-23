@@ -23,7 +23,7 @@
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/core/NotificationUtils
  * @mixes module:alfresco/services/_UserServiceTopicMixin
-@mixes module:alfresco/services/_PreferenceServiceTopicMixin
+ * @mixes module:alfresco/services/_PreferenceServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
