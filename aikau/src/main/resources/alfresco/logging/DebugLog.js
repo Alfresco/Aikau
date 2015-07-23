@@ -264,7 +264,13 @@ define(["alfresco/core/ObjectTypeUtils",
                var safeValue = {};
 
                // Deal with data appropriately
-               if (!unsafe || typeof unsafe !== "object") {
+               if (typeof unsafe === "function") {
+
+                  // Ignore functions
+                  var functionName = unsafe.name && unsafe.name + "()";
+                  safeValue = "[" + (functionName || "function") + "]";
+
+               } else if (!unsafe || typeof unsafe !== "object") {
 
                   // Falsy values and non-objects are already safe
                   safeValue = unsafe;
