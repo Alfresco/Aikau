@@ -87,6 +87,7 @@ model.jsonModel = {
                            name: "alfresco/lists/AlfFilteredList",
                            config: {
                               pubSubScope: "COMPOSITE_",
+                              useHash: true,
                               filteringTopics: ["_valueChangeOf_FILTER"],
                               widgetsForFilters: [
                                  {
@@ -183,7 +184,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

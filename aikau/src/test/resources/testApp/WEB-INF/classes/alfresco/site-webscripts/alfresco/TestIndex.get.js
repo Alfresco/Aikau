@@ -23,24 +23,7 @@ model.jsonModel = {
             description: "This page provides links to all the Aikau unit test pages.",
             widgets: [
                {
-                  id: "TEXTBOX",
-                  name: "alfresco/forms/controls/TextBox",
-                  config: {
-                     fieldId: "FILTER",
-                     name: "filter",
-                     placeHolder: "Filter by name",
-                     label: "Filter results",
-                     description: "Enter a value that the name must contain"
-                  }
-               },
-               {
-                 name: "alfresco/lists/Paginator",
-                 config: {
-                   documentsPerPage: 25
-                 }
-               },
-               {
-                  name: "alfresco/lists/AlfSortablePaginatedList",
+                  name: "alfresco/lists/AlfFilteredList",
                   config: {
                      useHash: true,
                      hashVarsForUpdate: [
@@ -54,6 +37,26 @@ model.jsonModel = {
                        urlType: "SHARE"
                      },
                      itemsProperty: "unitTestPages",
+                     widgetsForFilters: [
+                        {
+                           id: "TEXTBOX",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              fieldId: "FILTER",
+                              name: "filter",
+                              placeHolder: "Filter by name",
+                              label: "Filter results",
+                              description: "Enter a value that the name must contain"
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/Paginator",
+                           config: {
+                              documentsPerPage: 10,
+                              pageSizes: [10, 25, 50, 100]
+                           }
+                        }
+                     ],
                      widgets: [
                         {
                            name: "alfresco/lists/views/AlfListView",

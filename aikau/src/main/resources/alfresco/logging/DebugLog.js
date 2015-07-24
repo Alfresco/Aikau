@@ -242,9 +242,19 @@ define(["alfresco/core/ObjectTypeUtils",
          _applyFilter: function alfresco_logging_DebugLog___applyFilter() {
             var filterValue = this.filter.value;
             array.forEach(this._entries, function(entry) {
-               var matchesTopic = entry.topic.toLowerCase().indexOf(filterValue) !== -1;
+               var matchesTopic = entry.topic.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1;
                domClass[matchesTopic ? "remove" : "add"](entry.node, this.rootClass + "__log__entry--hidden");
             }, this);
+         },
+
+         /**
+          * Clear the filter
+          *
+          * @instance
+          */
+         _clearFilter: function alfresco_logging_DebugLog___clearFilter() {
+            this.filter.value = "";
+            this._applyFilter();
          },
 
          /**

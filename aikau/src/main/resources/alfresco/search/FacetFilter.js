@@ -37,10 +37,10 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/on",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/io-query",
         "alfresco/core/ArrayUtils"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template,  AlfCore, lang, array, domConstruct, domClass, on, hash, ioQuery, arrayUtils) {
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template,  AlfCore, lang, array, domConstruct, domClass, on, hashUtils, ioQuery, arrayUtils) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
       
@@ -258,7 +258,7 @@ define(["dojo/_base/declare",
       _updateHash: function alfresco_search_FacetFilter___updateHash(fullFilter, mode) {
 
          // Get the existing hash and extract the individual facetFilters into an array
-         var aHash = ioQuery.queryToObject(hash()),
+         var aHash = hashUtils.getHash(),
              facetFilters = ((aHash.facetFilters) ? aHash.facetFilters : ""),
              facetFiltersArr = (facetFilters === "") ? [] : facetFilters.split(",");
 

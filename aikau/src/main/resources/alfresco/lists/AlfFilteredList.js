@@ -29,8 +29,10 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
-        "dojo/dom-class"], 
-        function(declare, AlfSortablePaginatedList, ObjectProcessingMixin, lang, array, domConstruct, domClass) {
+        "dojo/dom-class",
+        "dijit/registry",
+        "alfresco/util/hashUtils"], 
+        function(declare, AlfSortablePaginatedList, ObjectProcessingMixin, lang, array, domConstruct, domClass, registry, hashUtils) {
    
    return declare([AlfSortablePaginatedList, ObjectProcessingMixin], {
       
@@ -53,6 +55,18 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfFilteredList.css"}],
 
       /**
+       * Called after properties mixed into instance
+       *
+       * @instance
+       */
+      postMixInProperties: function alfresco_lists_AlfFilteredList__postMixInProperties() {
+         this.inherited(arguments);
+         if (this.useHash) {
+            this.mapHashVarsToPayload = true;
+         }
+      },
+
+      /**
        * @instance
        */
       postCreate: function alfresco_lists_AlfFilteredList__postCreate() {
@@ -66,7 +80,7 @@ define(["dojo/_base/declare",
             this.processWidgets(filtersModel, this.filtersNode);
 
             // Setup the filtering topics based on the filter widgets configured...
-            array.forEach(this.widgetsForFilters, lang.hitch(this, this.setupFilteringTopics, this.filteringTopics));
+            array.forEach(this.widgetsForFilters, this.setupFilteringTopics, this);
          }
          this.inherited(arguments);
       },
@@ -78,9 +92,93 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} targetNode The node to hide the children of
        */
-      hideChildren: function alfresco_lists_AlfList__hideChildren(/*jshint unused:false*/targetNode) {
+      hideChildren: function alfresco_lists_AlfFilteredList__hideChildren(/*jshint unused:false*/targetNode) {
          this.inherited(arguments);
          domClass.remove(this.filtersNode, "share-hidden");
+      },
+
+      /**
+       * We need to make sure any filters in the hash are populated into the dataFilters property
+       * 
+       * @instance
+       * @override
+       * @param {object} payload The publication topic
+       */
+      onHashChange: function alfresco_lists_AlfFilteredList__onHashChange( /*jshint unused:false*/ payload) {
+
+         // Only do this when we are mirroring the filters in the hash
+         if (this.mapHashVarsToPayload) {
+
+            // Initialise the data-filters to be all of the filters we have specified, without values
+            this.dataFilters = array.map(Object.keys(this._filterWidgets), function(filterName) {
+               return {
+                  name: filterName
+               };
+            });
+
+            // Filter to only include items currently in the hash and update values
+            var currHash = hashUtils.getHash();
+            this.dataFilters = array.filter(this.dataFilters, function(dataFilter) {
+               dataFilter.value = currHash[dataFilter.name];
+               return !!dataFilter.value;
+            });
+
+            // Update the filter fields and reload the data
+            if (this._readyToLoad) {
+               this._updateFilterFieldsFromHash();
+               this.loadData();
+            } else {
+               this.alfLog("info", "Hash change not updating filter as ready-to-load check failed");
+            }
+         }
+
+         // Call inherited
+         this.inherited(arguments);
+      },
+
+      /**
+       * Widget has started
+       *
+       * @instance
+       * @override
+       */
+      startup: function alfresco_lists_AlfFilteredList__startup() {
+         this.inherited(arguments);
+         this._storeFilterWidgets();
+         this._updateFilterFieldsFromHash();
+      },
+
+      /**
+       * Build a collection of filter widgets as a property on this instance
+       *
+       * @instance
+       */
+      _storeFilterWidgets: function alfresco_lists_AlfFilteredList___storeFilterWidgets() {
+         var childWidgets = registry.findWidgets(this.domNode);
+         this._filterWidgets = {};
+         array.forEach(this.widgetsForFilters, function(filterDef) {
+            var filterName = filterDef.config.name;
+            this._filterWidgets[filterName] = array.filter(childWidgets, function(childWidget) {
+               return childWidget.name === filterName;
+            })[0];
+         }, this);
+      },
+
+      /**
+       * Update the filter form fields using the filter values in the hash
+       *
+       * @instance
+       */
+      _updateFilterFieldsFromHash: function alfresco_lists_AlfFilteredList___updateFilterFieldsFromHash() {
+         var currHash = hashUtils.getHash();
+         array.forEach(Object.keys(this._filterWidgets), function(widgetName) {
+            var widget = this._filterWidgets[widgetName],
+               filterValue = currHash[widgetName];
+            if (typeof filterValue === "undefined") {
+               filterValue = null;
+            }
+            widget.setValue && widget.setValue(filterValue);
+         }, this);
       },
 
       /**
@@ -88,19 +186,29 @@ define(["dojo/_base/declare",
        * [list]{@link module:alfresco/lists/AlfSortablePaginatedList}.
        *
        * @instance
-       * @param {type} filteringTopics The array that each topic will be added to
        * @param {object} filter The widget to find a topic from (expected to be a form control)
        */
-      setupFilteringTopics: function alfresco_lists_AlfFilteredList__setupFilteringTopics(filteringTopics, filter) {
+      setupFilteringTopics: function alfresco_lists_AlfFilteredList__setupFilteringTopics(filter) {
          if (filter && filter.config && filter.config.fieldId)
          {
-            filteringTopics.push("_valueChangeOf_" + filter.config.fieldId);
+            this.filteringTopics.push("_valueChangeOf_" + filter.config.fieldId);
+            if (this.mapHashVarsToPayload) {
+               this.hashVarsForUpdate.push(filter.config.name);
+            }
          }
          else
          {
             this.alfLog("warn", "A configured filter control did not have a fieldId attribute configured", filter, this);
          }
       },
+
+      /**
+       * The filter widgets
+       *
+       * @instance
+       * @type {Object[]}
+       */
+      _filterWidgets: null,
 
       /**
        * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden

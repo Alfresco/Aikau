@@ -63,9 +63,9 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-style",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/io-query"],
-        function(declare, AlfMenuItem, lang, event, domConstruct, domClass, domStyle, hash, ioQuery) {
+        function(declare, AlfMenuItem, lang, event, domConstruct, domClass, domStyle, hashUtils, ioQuery) {
 
    return declare([AlfMenuItem], {
 
@@ -155,7 +155,7 @@ define(["dojo/_base/declare",
 
          if (this.hashName)
          {
-            var currHash = ioQuery.queryToObject(hash());
+            var currHash = hashUtils.getHash();
             this.checked = currHash[this.hashName] && currHash[this.hashName] === this.value;
          }
 

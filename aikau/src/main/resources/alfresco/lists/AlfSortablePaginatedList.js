@@ -33,9 +33,9 @@ define(["dojo/_base/declare",
         "alfresco/lists/AlfHashList",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "dojo/_base/lang",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/io-query"],
-        function(declare, AlfHashList, _PreferenceServiceTopicMixin, lang, hash, ioQuery) {
+        function(declare, AlfHashList, _PreferenceServiceTopicMixin, lang, hashUtils, ioQuery) {
 
    return declare([AlfHashList, _PreferenceServiceTopicMixin], {
 
@@ -224,7 +224,7 @@ define(["dojo/_base/declare",
             {
                if (this.useHash === true)
                {
-                  var currHash = ioQuery.queryToObject(hash());
+                  var currHash = hashUtils.getHash();
                   if (this.sortField !== null)
                   {
                      currHash.sortField = this.sortField;
@@ -263,7 +263,7 @@ define(["dojo/_base/declare",
             {
                if (this.useHash === true)
                {
-                  var currHash = ioQuery.queryToObject(hash());
+                  var currHash = hashUtils.getHash();
                   if (this.sortField !== null)
                   {
                      currHash.sortField = this.sortField;
@@ -296,7 +296,7 @@ define(["dojo/_base/declare",
             {
                if (this.useHash === true)
                {
-                  var currHash = ioQuery.queryToObject(hash());
+                  var currHash = hashUtils.getHash();
                   if (payload.value)
                   {
                      currHash.currentPage = payload.value;
@@ -380,7 +380,7 @@ define(["dojo/_base/declare",
                }
                if (this.useHash === true)
                {
-                  var currHash = ioQuery.queryToObject(hash());
+                  var currHash = hashUtils.getHash();
                   currHash.currentPage = this.currentPage;
                   currHash.currentPageSize = this.currentPageSize;
                   this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
