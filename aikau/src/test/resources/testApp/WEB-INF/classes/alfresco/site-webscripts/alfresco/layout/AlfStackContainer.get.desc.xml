@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfStackContainer Test</shortname>
+  <description>This WebScript defines the AlfStackContainer page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfStackContainer</url>
+</webscript>
