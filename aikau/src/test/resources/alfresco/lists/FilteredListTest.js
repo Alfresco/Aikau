@@ -130,16 +130,32 @@ define(["intern!object",
       },
 
       "Changing hash value updates filter": function() {
-         var updatedUrl = TestCommon.testWebScriptURL("/FilteredList#description=moo");
+         var updatedUrl = TestCommon.testWebScriptURL("/FilteredList#description=woof");
          return browser.findByCssSelector("body")
             .clearLog()
             .get(updatedUrl)
             .getLastPublish("COMPOSITE_ALF_DOCLIST_REQUEST_FINISHED")
             .end()
 
-         .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
-            .then(function(elements) {
-               assert.lengthOf(elements, 4, "Incorrect results displayed for intended filter");
+         .findByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row:first-child")
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "five woof", "Incorrect results displayed for intended filter");
+            })
+            .end()
+
+         .findByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row:nth-child(2)")
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "six woof", "Incorrect results displayed for intended filter");
+            });
+      },
+
+      "Filter field reflects applied filter": function() {
+         return browser.findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL + input")
+            .getAttribute("value")
+            .then(function(value) {
+               assert.equal(value, "woof", "Incorrect filter field value");
             });
       },
 

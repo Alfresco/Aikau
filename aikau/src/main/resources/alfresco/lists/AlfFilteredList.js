@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
          if (this.mapHashVarsToPayload) {
 
             // Initialise the data-filters to be all of the filters we have specified, without values
-            this.dataFilters = array.map(Object.keys(this._filterWidgets), function(filterName){
+            this.dataFilters = array.map(Object.keys(this._filterWidgets), function(filterName) {
                return {
                   name: filterName
                };
@@ -125,8 +125,10 @@ define(["dojo/_base/declare",
 
             // Update the filter fields and reload the data
             if (this._readyToLoad) {
-            this._updateFilterFieldsFromHash();
+               this._updateFilterFieldsFromHash();
                this.loadData();
+            } else {
+               this.alfLog("info", "Hash change not updating filter as ready-to-load check failed");
             }
          }
 
@@ -169,13 +171,13 @@ define(["dojo/_base/declare",
        */
       _updateFilterFieldsFromHash: function alfresco_lists_AlfFilteredList___updateFilterFieldsFromHash() {
          var currHash = hashUtils.getHash();
-         array.forEach(Object.keys(this._filterWidgets), function(widgetName){
-               var widget = this._filterWidgets[widgetName],
-                  filterValue = currHash[widgetName];
-            if(typeof filterValue === "undefined") {
+         array.forEach(Object.keys(this._filterWidgets), function(widgetName) {
+            var widget = this._filterWidgets[widgetName],
+               filterValue = currHash[widgetName];
+            if (typeof filterValue === "undefined") {
                filterValue = null;
-         }
-            widget.setValue(filterValue);
+            }
+            widget.setValue && widget.setValue(filterValue);
          }, this);
       },
 
@@ -190,7 +192,7 @@ define(["dojo/_base/declare",
          if (filter && filter.config && filter.config.fieldId)
          {
             this.filteringTopics.push("_valueChangeOf_" + filter.config.fieldId);
-            if(this.mapHashVarsToPayload) {
+            if (this.mapHashVarsToPayload) {
                this.hashVarsForUpdate.push(filter.config.name);
             }
          }
