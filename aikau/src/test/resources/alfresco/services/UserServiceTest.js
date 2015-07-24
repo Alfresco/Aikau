@@ -137,36 +137,36 @@ define(["intern!object",
    });
    
    registerSuite({
-      name: "User Service Default Page Test",
+      name: "User Service Home Page Test",
 
       setup: function() {
          browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/UserServiceDefaultPage", "User Service Default Page Test").end();
+         return TestCommon.loadTestWebScript(this.remote, "/UserServiceHomePage", "User Service Home Page Test").end();
       },
 
       beforeEach: function() {
          browser.end();
       },
       
-      "Check setting the default page": function() {
-         return browser.findByCssSelector("#HEADER_USER_SET_DEFAULT_PAGE_label")
+      "Check setting the home page": function() {
+         return browser.findByCssSelector("#HEADER_USER_SET_HOME_PAGE_label")
             .click()
          .end()
-         .getLastPublish("ALF_SET_USER_DEFAULT_PAGE")
+         .getLastPublish("ALF_SET_USER_HOME_PAGE")
             .then(function(payload) {
-               assert.isNotNull(payload, "Set user default page not published");
+               assert.isNotNull(payload, "Set user home page not published");
             })
          .getLastPublish("ALF_PREFERENCE_SET")
             .then(function(payload) {
-               assert.isNotNull(payload, "Set user default page preference not published");
+               assert.isNotNull(payload, "Set user home page preference not published");
                if (payload) {
-                  assert.propertyVal(payload, "preference", "org.alfresco.share.user.defaultPage", "The user default page preference key was incorrect");
-                  assert.propertyVal(payload, "value", "NewDefaultPage", "The user default page value was incorrect");
+                  assert.propertyVal(payload, "preference", "org.alfresco.share.user.homePage", "The user home page preference key was incorrect");
+                  assert.propertyVal(payload, "value", "NewHomePage", "The user home page value was incorrect");
                }
             })
-         .getLastPublish("ALF_SET_USER_DEFAULT_PAGE_SUCCESS")
+         .getLastPublish("ALF_SET_USER_HOME_PAGE_SUCCESS")
             .then(function(payload) {
-               assert.isNotNull(payload, "Set user default page success not published");
+               assert.isNotNull(payload, "Set user home page success not published");
             });
       },
 
