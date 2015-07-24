@@ -70,9 +70,9 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/documentlibrary/_AlfFilterMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/_base/lang"], 
-        function(declare, AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin, hash, lang) {
+        function(declare, AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin, hashUtils, lang) {
    
    return declare([AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin], {
 
@@ -94,15 +94,8 @@ define(["dojo/_base/declare",
        * @param {string} hashString An optional string to use as the hash. If not provided the current hash will be
        */
       initialiseFilter: function alfresco_documentlibrary_AlfHashMixin__intialiseFilter(hashString) {
-         if (!hashString)
-         {
-            this.onHashChange(hash());
-         }
-         else
-         {
-            hash(hashString);
-            this.onHashChange(hash());
-         }
+         hashString && hashUtils.setHashString(hashString);
+         this.onHashChange(hashUtils.getHashString());
       },
       
       /**

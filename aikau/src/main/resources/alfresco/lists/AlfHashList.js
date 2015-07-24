@@ -33,10 +33,10 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfHashMixin",
         "dojo/_base/array",
         "dojo/_base/lang",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/io-query",
         "alfresco/util/hashUtils"], 
-        function(declare, AlfList, _AlfHashMixin, array, lang, hash, ioQuery, hashUtils) {
+        function(declare, AlfList, _AlfHashMixin, array, lang, hashUtils, ioQuery, hashUtils) {
    
    return declare([AlfList, _AlfHashMixin], {
       
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
             // be required on the same page and they can't all feed off the hash to drive the location.
             this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onHashChanged));
 
-            var hashString = hash();
+            var hashString = hashUtils.getHashString();
             if (hashString === "" && 
                 this.useLocalStorageHashFallback === true && 
                 ("localStorage" in window && window.localStorage !== null))
@@ -137,7 +137,7 @@ define(["dojo/_base/declare",
                      ("localStorage" in window && window.localStorage !== null))
             {
                // Store the initial hash...
-               localStorage.setItem(this.useLocalStorageHashFallbackKey, hash());
+               localStorage.setItem(this.useLocalStorageHashFallbackKey, hashUtils.getHashString());
             }
 
             var currHash = ioQuery.queryToObject(hashString);
@@ -222,7 +222,7 @@ define(["dojo/_base/declare",
          if(this.useLocalStorageHashFallback === true && 
             ("localStorage" in window && window.localStorage !== null))
          {
-            localStorage.setItem(this.useLocalStorageHashFallbackKey, hash());
+            localStorage.setItem(this.useLocalStorageHashFallbackKey, hashUtils.getHashString());
          }
       },
 
@@ -271,8 +271,7 @@ define(["dojo/_base/declare",
        */
       onDataLoadSuccess: function alfresco_lists_AlfHashList__onDataLoadSuccess(/*jshint unused:false*/ payload) {
          this.inherited(arguments);
-         var hashString = hash();
-         var currHash = ioQuery.queryToObject(hashString);
+         var currHash = hashUtils.getHash();
          if (currHash.currentItem)
          {
             this.alfPublish("ALF_BRING_ITEM_INTO_VIEW", {

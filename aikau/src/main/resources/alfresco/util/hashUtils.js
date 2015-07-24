@@ -34,15 +34,25 @@ define(["dojo/_base/lang",
 
       // See API below
       getHash: function alfresco_util_hashUtils__getHash() {
-         var currHash = hash(),
-            hashObj = ioQuery.queryToObject(currHash);
+         var hashString = this.getHashString(),
+            hashObj = ioQuery.queryToObject(hashString);
          return hashObj;
       },
 
       // See API below
+      getHashString: function alfresco_util_hashUtils__getHashString() {
+         return hash();
+      },
+
+      // See API below
       setHash: function alfresco_util_hashUtils__setHash(hashObj, replace) {
-         var newHash = ioQuery.objectToQuery(hashObj);
-         hash(newHash, replace);
+         var hashString = ioQuery.objectToQuery(hashObj);
+         this.setHashString(hashString, replace);
+      },
+
+      // See API below
+      setHashString: function alfresco_util_hashUtils__setHashString(hashString, replace) {
+         hash(hashString, replace);
       },
 
       // See API below
@@ -93,6 +103,14 @@ define(["dojo/_base/lang",
       getHash: lang.hitch(util, util.getHash),
 
       /**
+       * Get the current hash value as a string
+       *
+       * @instance
+       * @returns {string} The hash value as a string
+       */
+      getHashString: lang.hitch(util, util.getHashString),
+
+      /**
        * Set the current hash value from an object
        *
        * @instance
@@ -101,6 +119,16 @@ define(["dojo/_base/lang",
        *                            (i.e. do not add to the history)
        */
       setHash: lang.hitch(util, util.setHash),
+
+      /**
+       * Set the current hash value from a string
+       *
+       * @instance
+       * @param {string} hashString The new hash string
+       * @param {boolean} [replace] Replace the current hash, rather than changing
+       *                            (i.e. do not add to the history)
+       */
+      setHashString: lang.hitch(util, util.setHashString),
 
       /**
        * Update the current hash (by default, this will not do the update if the
