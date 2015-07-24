@@ -34,9 +34,8 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "alfresco/util/hashUtils",
-        "dojo/io-query",
-        "alfresco/util/hashUtils"], 
-        function(declare, AlfList, _AlfHashMixin, array, lang, hashUtils, ioQuery, hashUtils) {
+        "dojo/io-query"], 
+        function(declare, AlfList, _AlfHashMixin, array, lang, hashUtils, ioQuery) {
    
    return declare([AlfList, _AlfHashMixin], {
       
