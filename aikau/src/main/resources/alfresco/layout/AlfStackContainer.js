@@ -201,10 +201,9 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array",
-        "dojo/hash",
-        "dojo/io-query"], 
+        "alfresco/util/hashUtils"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, _AlfHashMixin, 
-                  StackContainer, ContentPane, domConstruct, lang, array, hash, ioQuery) {
+                  StackContainer, ContentPane, domConstruct, lang, array, hashUtils) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _AlfHashMixin], {
       
@@ -221,7 +220,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       stackContainerWidget: null,
 
@@ -230,7 +229,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "100%"
+       * @default
        */
       height: "100%",
 
@@ -239,7 +238,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "100%"
+       * @default
        */
       width: "100%",
 
@@ -248,7 +247,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {Boolean}
-       * @default false
+       * @default
        */
       doLayout: false,
 
@@ -264,7 +263,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       paneSelectionTopic: null,
 
@@ -273,7 +272,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       paneAdditionTopic: null,
 
@@ -282,7 +281,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       paneDeletionTopic: null,
 
@@ -291,7 +290,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       paneSelectionHashVar: null,
       
@@ -300,7 +299,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        * @private
        */
       _defaultPaneTitle: null,
@@ -315,7 +314,7 @@ define(["dojo/_base/declare",
             style: "height: " + this.height + "; width: " + this.width + ";",
             doLayout: this.doLayout
          }, this.containerNode);
-         this.stackContainerWidget.watch("selectedChildWidget", lang.hitch(this, "_paneChanged"));
+         this.stackContainerWidget.watch("selectedChildWidget", lang.hitch(this, this._paneChanged));
 
          // Setup child widgets and startup()
          if (this.widgets)
@@ -340,29 +339,29 @@ define(["dojo/_base/declare",
             }
 
             // Now add panes for each widget...
-            array.forEach(this.widgets, lang.hitch(this, "addWidget"));
+            array.forEach(this.widgets, lang.hitch(this, this.addWidget));
          }
          this.stackContainerWidget.startup();
 
          // Subscribe to some optional topics
-         if (this.paneSelectionTopic != null)
+         if (this.paneSelectionTopic)
          {
-            this.alfSubscribe(this.paneSelectionTopic, lang.hitch(this, "paneSelect"));
+            this.alfSubscribe(this.paneSelectionTopic, lang.hitch(this, this.paneSelect));
          }
-         if (this.paneAdditionTopic != null)
+         if (this.paneAdditionTopic)
          {
-            this.alfSubscribe(this.paneAdditionTopic, lang.hitch(this, "paneAdd"));
+            this.alfSubscribe(this.paneAdditionTopic, lang.hitch(this, this.paneAdd));
          }
-         if (this.paneDeletionTopic != null)
+         if (this.paneDeletionTopic)
          {
-            this.alfSubscribe(this.paneDeletionTopic, lang.hitch(this, "paneDelete"));
+            this.alfSubscribe(this.paneDeletionTopic, lang.hitch(this, this.paneDelete));
          }
-         if (this.paneSelectionHashVar != null)
+         if (this.paneSelectionHashVar)
          {
             this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onHashChanged));
 
             // Initialise the view by invoking onHashChanged, as though the browser had done so
-            this.onHashChanged(ioQuery.queryToObject(hash()));
+            this.onHashChanged(hashUtils.getHash());
          }
       },
 
@@ -371,7 +370,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} widget The widget to add
-       * @param {integer} index The index of the required pane position
+       * @param {integer} [index] The index of the required pane position
        */
       addWidget: function alfresco_layout_AlfStackContainer__addWidget(widget, index) {
 
@@ -382,22 +381,22 @@ define(["dojo/_base/declare",
          // Add content to the ContentPane
          if(widget.content && typeof widget.content === "string")
          {
-            cp.set('content', widget.content);
+            cp.set("content", widget.content);
          }
 
          // Add a title to the ContentPane
          if(widget.title && typeof widget.title === "string")
          {
-            cp.set('title', this.message(widget.title));
+            cp.set("title", this.message(widget.title));
          }
 
          // Should the ContentPane be selected?
          if(widget.selected && typeof widget.selected === "boolean")
          {
-            cp.set('selected', widget.selected);
-            if(cp.get('title') != null)
+            cp.set("selected", widget.selected);
+            if(cp.get("title") !== null)
             {
-               this._defaultPaneTitle = cp.get('title');
+               this._defaultPaneTitle = cp.get("title");
             }
          }
 
@@ -423,7 +422,7 @@ define(["dojo/_base/declare",
          }
 
          // If we have an index add the ContentPane at a particular position otherwise just add it
-         this.stackContainerWidget.addChild(cp, (typeof index !== 'undefined' ? index : null));
+         this.stackContainerWidget.addChild(cp, (typeof index !== "undefined" ? index : null));
       },
 
       /**
@@ -452,14 +451,14 @@ define(["dojo/_base/declare",
                break;
             }
          }
-         if(forDeletion != null)
+         if(forDeletion !== null)
          {
             this._delayedProcessingWidgets.splice(forDeletion, 1);
          }
       },
 
       /**
-       * This function selects a pane based upon parameter 'payload.index' or 'payload.id' or 'payload.title'.
+       * This function selects a pane based upon parameter "payload.index" or "payload.id" or "payload.title".
        * 
        * @instance
        * @param {object} payload Details of the pane to select
@@ -467,11 +466,11 @@ define(["dojo/_base/declare",
       paneSelect: function alfresco_layout_AlfStackContainer__paneSelect(payload) {
          var sc = this.stackContainerWidget,
              panes = sc.getChildren();
-         if(payload && typeof payload.index === 'number' && panes[payload.index])
+         if(payload && typeof payload.index === "number" && panes[payload.index])
          {
             sc.selectChild(panes[payload.index]);
          }
-         else if(payload && (typeof payload.id === 'string' || typeof payload.title === 'string'))
+         else if(payload && (typeof payload.id === "string" || typeof payload.title === "string"))
          {
             for(var i = 0; i < panes.length; i++) // panes does not support forEach
             {
@@ -502,7 +501,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function deletes a pane based upon parameter 'payload.index' or 'payload.id' or 'payload.title'.
+       * This function deletes a pane based upon parameter "payload.index" or "payload.id" or "payload.title".
        * 
        * @instance
        * @param {object} payload Details of the pane to delete
@@ -510,11 +509,11 @@ define(["dojo/_base/declare",
       paneDelete: function alfresco_layout_AlfStackContainer__paneDelete(payload) {
          var sc = this.stackContainerWidget,
              panes = sc.getChildren();
-         if(payload && typeof payload.index === 'number' && panes[payload.index])
+         if(payload && typeof payload.index === "number" && panes[payload.index])
          {
             sc.removeChild(panes[payload.index]);
          }
-         else if(payload && (typeof payload.id === 'string' || typeof payload.title === 'string'))
+         else if(payload && (typeof payload.id === "string" || typeof payload.title === "string"))
          {
             for(var i = 0; i < panes.length; i++) // panes does not support forEach
             {
