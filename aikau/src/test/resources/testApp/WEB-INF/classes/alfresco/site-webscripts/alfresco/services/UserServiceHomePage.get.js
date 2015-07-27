@@ -16,13 +16,13 @@ model.jsonModel = {
    ],
    widgets:[
       {
-         id: "HEADER_USER_SET_DEFAULT_PAGE",
+         id: "HEADER_USER_SET_HOME_PAGE",
          name: "alfresco/buttons/AlfButton",
          config: {
-            label: "Set Default Page",
-            publishTopic: "ALF_SET_USER_DEFAULT_PAGE",
+            label: "Set Home Page",
+            publishTopic: "ALF_SET_USER_HOME_PAGE",
             publishPayload: {
-               defaultPage: "NewDefaultPage"
+               homePage: "NewHomePage"
             }
          }
       },
