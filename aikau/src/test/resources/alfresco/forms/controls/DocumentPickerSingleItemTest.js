@@ -43,9 +43,21 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    return browser.end().alfPostCoverageResults(browser);
-      // },
+      "Initial set-value is correctly submitted": function(){
+         return browser.findByCssSelector("#FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("PUBLISH_FORM")
+            .then(function(payload){
+               assert.deepPropertyVal(payload, "document[0]", "workspace://SpacesStore/8285e568-3782-4839-9f53-bf0b6aaacb3c", "Did not publish preset value");
+            })
+            .end()
+
+         .findByCssSelector("#DOCUMENT_PICKER .cancelButton .dijitButtonNode")
+            .click();
+      },
 
       "Test picker dialog can be displayed": function () {
          return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
