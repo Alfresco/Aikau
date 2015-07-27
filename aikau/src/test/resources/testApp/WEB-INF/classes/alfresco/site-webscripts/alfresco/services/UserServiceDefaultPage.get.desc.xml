@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>UserServiceDefaultPage Test</shortname>
-  <description>This WebScript defines the UserServiceDefaultPage test</description>
-  <family>aikau-unit-tests</family>
-  <url>/UserServiceDefaultPage</url>
-</webscript>

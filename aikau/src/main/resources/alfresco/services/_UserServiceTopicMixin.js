@@ -55,30 +55,30 @@ define(["dojo/_base/declare"],
       updateUserStatusFailureTopic: "ALF_USER_STATUS_UPDATE_FAILURE",
       
       /**
-       * This topic is used to set the default page for the user
+       * This topic is used to set the home page for the user
        * 
        * @instance
        * @type {string}
-       * @default "ALF_SET_USER_DEFAULT_PAGE"
+       * @default "ALF_SET_USER_HOME_PAGE"
        */
-      setUserDefaultPageTopic: "ALF_SET_USER_DEFAULT_PAGE",
+      setUserHomePageTopic: "ALF_SET_USER_HOME_PAGE",
       
       /**
-       * This topic is used to indicate that the user's default page was saved successfully.
+       * This topic is used to indicate that the user's home page was saved successfully.
        * 
        * @instance
        * @type {string}
-       * @default "ALF_SET_USER_DEFAULT_PAGE_SUCCESS"
+       * @default "ALF_SET_USER_HOME_PAGE_SUCCESS"
        */
-      setUserDefaultPageSuccessTopic: "ALF_SET_USER_DEFAULT_PAGE_SUCCESS",
+      setUserHomePageSuccessTopic: "ALF_SET_USER_HOME_PAGE_SUCCESS",
       
       /**
-       * This topic is used to indicate that the user's default page could not be saved.
+       * This topic is used to indicate that the user's home page could not be saved.
        * 
        * @instance
        * @type {string}
-       * @default "ALF_SET_USER_DEFAULT_PAGE_FAILURE"
+       * @default "ALF_SET_USER_HOME_PAGE_FAILURE"
        */
-      setUserDefaultPageFailureTopic: "ALF_SET_USER_DEFAULT_PAGE_FAILURE"
+      setUserHomePageFailureTopic: "ALF_SET_USER_HOME_PAGE_FAILURE"
    });
 });
