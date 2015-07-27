@@ -23,12 +23,11 @@
  * @author Richard Smith
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        function (registerSuite, assert, require, TestCommon, keys) {
 
    var browser;
    registerSuite({
@@ -56,8 +55,8 @@ define(["intern!object",
       "Check the correct number of panes is present": function() {
          return browser.findAllByCssSelector("div.dijitStackContainer > div.dijitStackContainerChildWrapper")
             .then(
-               function (panels) {
-                  expect(panels.length).to.equal(5, "There are not 5 panes");
+               function (panes) {
+                  assert.lengthOf(panes, 5, "Incorrect number of initial panes");
                }
             );
       },
@@ -75,8 +74,8 @@ define(["intern!object",
       "Check the correct number of hidden panes is present (4)": function() {
          return browser.findAllByCssSelector("div.dijitStackContainer > div.dijitStackContainerChildWrapper.dijitHidden")
             .then(
-               function (panels) {
-                  expect(panels.length).to.equal(4, "There are not 4 hidden panes");
+               function (panes) {
+                  assert.lengthOf(panes, 4, "Incorrect number of hidden panes");
                }
             );
       },
@@ -86,8 +85,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 3rd pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 3rd pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 3rd pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 3rd pane should not be hidden");
                });
       },
 
@@ -114,8 +113,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 3rd pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 3rd pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 3rd pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 3rd pane should not be hidden");
                });
       },
 
@@ -128,8 +127,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 1st pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 1st pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 1st pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 1st pane should not be hidden");
                });
       },
 
@@ -138,8 +137,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitHidden", "The 3rd pane should be hidden");
-                  expect(currClasses).to.not.contain("dijitVisible", "The 3rd pane should not be visible");
+                  assert.include(currClasses, "dijitHidden", "The 3rd pane should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 3rd pane should not be visible");
                });
       },
 
@@ -152,8 +151,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 2nd pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 2nd pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 2nd pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 2nd pane should not be hidden");
                });
       },
 
@@ -162,8 +161,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitHidden", "The 1st pane should be hidden");
-                  expect(currClasses).to.not.contain("dijitVisible", "The 1st pane should not be visible");
+                  assert.include(currClasses, "dijitHidden", "The 1st pane should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 1st pane should not be visible");
                });
       },
 
@@ -176,8 +175,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 3rd pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 3rd pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 3rd pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 3rd pane should not be hidden");
                });
       },
 
@@ -186,8 +185,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitHidden", "The 2nd pane should be hidden");
-                  expect(currClasses).to.not.contain("dijitVisible", "The 2nd pane should not be visible");
+                  assert.include(currClasses, "dijitHidden", "The 2nd pane should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 2nd pane should not be visible");
                });
       },
 
@@ -201,8 +200,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 4th pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 4th pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 4th pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 4th pane should not be hidden");
                });
       },
 
@@ -211,8 +210,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitHidden", "The 3rd pane should be hidden");
-                  expect(currClasses).to.not.contain("dijitVisible", "The 3rd pane should not be visible");
+                  assert.include(currClasses, "dijitHidden", "The 3rd pane should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 3rd pane should not be visible");
                });
       },
 
@@ -225,8 +224,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 5th pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 5th pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 5th pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 5th pane should not be hidden");
                });
       },
 
@@ -235,8 +234,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitHidden", "The 4th pane should be hidden");
-                  expect(currClasses).to.not.contain("dijitVisible", "The 4th pane should not be visible");
+                  assert.include(currClasses, "dijitHidden", "The 4th pane should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 4th pane should not be visible");
                });
       },
 
@@ -249,8 +248,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 1st pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 1st pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 1st pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 1st pane should not be hidden");
                });
       },
 
@@ -259,8 +258,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitHidden", "The 5th pane should be hidden");
-                  expect(currClasses).to.not.contain("dijitVisible", "The 5th pane should not be visible");
+                  assert.include(currClasses, "dijitHidden", "The 5th pane should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 5th pane should not be visible");
                });
       },
 
@@ -273,8 +272,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 2nd pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 2nd pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 2nd pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 2nd pane should not be hidden");
                });
       },
 
@@ -283,8 +282,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitHidden", "The 1st pane should be hidden");
-                  expect(currClasses).to.not.contain("dijitVisible", "The 1st pane should not be visible");
+                  assert.include(currClasses, "dijitHidden", "The 1st pane should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 1st pane should not be visible");
                });
       },
 
@@ -297,8 +296,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 1st pane should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 1st pane should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 1st pane should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 1st pane should not be hidden");
                });
       },
 
@@ -307,8 +306,8 @@ define(["intern!object",
             .getAttribute("class")
             .then(
                function(currClasses) {
-                  expect(currClasses).to.contain("dijitHidden", "The 2nd pane should be hidden");
-                  expect(currClasses).to.not.contain("dijitVisible", "The 2nd pane should not be visible");
+                  assert.include(currClasses, "dijitHidden", "The 2nd pane should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 2nd pane should not be visible");
                });
       },
 
@@ -316,11 +315,10 @@ define(["intern!object",
          return browser.findAllByCssSelector("div.dijitStackContainer > div.dijitStackContainerChildWrapper")
             .then(
                function (panes) {
-                  expect(panes.length).to.equal(5, "There are not 5 panes");
+                  assert.lengthOf(panes, 5, "Incorrect number of initial panes");
                }
             );
       },
-
 
       "Check the correct number of panes is present after deleting pane 5": function() {
          return browser.findById("DELETE_PANE_1")
@@ -330,7 +328,7 @@ define(["intern!object",
          .findAllByCssSelector("div.dijitStackContainer > div.dijitStackContainerChildWrapper")
             .then(
                function (panes) {
-                  expect(panes.length).to.equal(4, "There are not 4 panes");
+                  assert.lengthOf(panes, 4, "Incorrect number of panes after deletion");
                }
             );
       },
@@ -343,7 +341,7 @@ define(["intern!object",
          .findAllByCssSelector("div.dijitStackContainer > div.dijitStackContainerChildWrapper")
             .then(
                function (panes) {
-                  expect(panes.length).to.equal(3, "There are not 3 panes");
+                  assert.lengthOf(panes, 3, "Incorrect number of panes after second deletion");
                }
             );
       },
@@ -356,7 +354,7 @@ define(["intern!object",
          .findAllByCssSelector("div.dijitStackContainer > div.dijitStackContainerChildWrapper")
             .then(
                function (panes) {
-                  expect(panes.length).to.equal(2, "There are not 2 panes");
+                  assert.lengthOf(panes, 2, "Incorrect number of panes after third deletion");
                }
             );
       },
@@ -383,7 +381,7 @@ define(["intern!object",
          return browser.findAllByCssSelector("div.dijitStackContainer > div.dijitStackContainerChildWrapper")
             .then(
                function (panes) {
-                  expect(panes.length).to.equal(5, "There are not 5 panes");
+                  assert.lengthOf(panes, 5, "Incorrect number of initial panes");
                }
             );
       },
@@ -395,7 +393,7 @@ define(["intern!object",
          .findAllByCssSelector("div.dijitStackContainer > div.dijitStackContainerChildWrapper")
             .then(
                function (panes) {
-                  expect(panes.length).to.equal(6, "There are not 6 panes");
+                  assert.lengthOf(panes, 6, "Incorrect number of panes after addition");
                }
             );
       },
@@ -415,4 +413,4 @@ define(["intern!object",
          TestCommon.alfPostCoverageResults(this, browser);
       }
    });
-});
+}); 

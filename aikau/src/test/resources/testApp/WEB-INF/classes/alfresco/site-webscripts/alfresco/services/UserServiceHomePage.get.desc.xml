@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>UserServiceHomePage Test</shortname>
+  <description>This WebScript defines the UserServiceHomePage test</description>
+  <family>aikau-unit-tests</family>
+  <url>/UserServiceHomePage</url>
+</webscript>

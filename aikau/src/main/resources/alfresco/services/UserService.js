@@ -42,13 +42,13 @@ define(["dojo/_base/declare",
    return declare([AlfCore, AlfXhr, NotificationUtils, _UserServiceTopicMixin, _PreferenceServiceTopicMixin], {
       
       /**
-       * This is the dot-notation preferences property address for the user's default page
+       * This is the dot-notation preferences property address for the user's home page
        *
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.user.defaultPage"
+       * @default "org.alfresco.share.user.homePage"
        */
-      PREF_KEY_USER_DEFAULT_PAGE: "org.alfresco.share.user.defaultPage",
+      PREF_KEY_USER_HOME_PAGE: "org.alfresco.share.user.homePage",
       
       /**
        * An array of the i18n files to use with this widget.
@@ -68,9 +68,9 @@ define(["dojo/_base/declare",
       constructor: function alf_services_UserService__constructor(args) {
          lang.mixin(this, args);
          this.alfSubscribe(this.updateUserStatusTopic, lang.hitch(this, "updateUserStatus"));
-         this.alfSubscribe(this.setUserDefaultPageTopic, lang.hitch(this, this.onSetUserDefaultPage));
-         this.alfSubscribe(this.setUserDefaultPageSuccessTopic, lang.hitch(this, this.onSetUserDefaultPageSuccess));
-         this.alfSubscribe(this.setUserDefaultPageFailureTopic, lang.hitch(this, this.onSetUserDefaultPageFailure));
+         this.alfSubscribe(this.setUserHomePageTopic, lang.hitch(this, this.onSetUserHomePage));
+         this.alfSubscribe(this.setUserHomePageSuccessTopic, lang.hitch(this, this.onSetUserHomePageSuccess));
+         this.alfSubscribe(this.setUserHomePageFailureTopic, lang.hitch(this, this.onSetUserHomePageFailure));
       },
       
       /**
@@ -141,42 +141,42 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Sets the user's default page.
+       * Sets the user's home page.
        * 
        * @instance
        * @param {object} payload
        */
-      onSetUserDefaultPage: function alfresco_services_PreferenceService__onSetUserDefaultPage(payload) {
-         if (payload && payload.defaultPage)
+      onSetUserHomePage: function alfresco_services_UserService__onSetUserHomePage(payload) {
+         if (payload && payload.homePage)
          {
             this.alfPublish(this.setPreferenceTopic,{
-               preference: this.PREF_KEY_USER_DEFAULT_PAGE,
-               value: payload.defaultPage,
-               alfResponseTopic: this.setUserDefaultPageTopic
+               preference: this.PREF_KEY_USER_HOME_PAGE,
+               value: payload.homePage,
+               alfResponseTopic: this.setUserHomePageTopic
             });
          }
       },
       
       /**
-       * Displays a message indicating successful save of user's default page.
+       * Displays a message indicating successful save of user's home page.
        * 
        * @instance
-       * @listens setUserDefaultPageTopicSuccess
+       * @listens setUserHomePageTopicSuccess
        */
-      onSetUserDefaultPageSuccess: function share_services_UserDefaultPageService__onSetUserDefaultPageSuccess() {
+      onSetUserHomePageSuccess: function share_services_UserService__onSetUserHomePageSuccess() {
          // Display a success message...
-         this.displayMessage(this.message("message.defaultPage.success"));
+         this.displayMessage(this.message("message.homePage.success"));
       },
       
       /**
-       * Displays a message indicating failure to save of user's default page.
+       * Displays a message indicating failure to save of user's home page.
        * 
        * @instance
-       * @listens setUserDefaultPageTopicFailure
+       * @listens setUserHomePageTopicFailure
        */
-      onSetUserDefaultPageFailure: function share_services_UserDefaultPageService__onSetUserDefaultPageFailure() {
+      onSetUserHomePageFailure: function share_services_UserService__onSetUserHomePageFailure() {
          // Display a failure message...
-         this.displayMessage(this.message("message.defaultPage.failure"));
+         this.displayMessage(this.message("message.homePage.failure"));
       }
    });
 });

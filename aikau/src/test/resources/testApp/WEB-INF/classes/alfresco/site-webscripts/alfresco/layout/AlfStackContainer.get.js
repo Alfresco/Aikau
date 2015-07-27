@@ -319,6 +319,9 @@ model.jsonModel = {
                }
             ]
          }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
