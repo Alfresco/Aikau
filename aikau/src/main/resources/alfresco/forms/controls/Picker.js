@@ -61,6 +61,29 @@ define(["alfresco/forms/controls/BaseFormControl",
       itemKey: "name",
 
       /**
+       * Whether to use the currentItem as the initial value of the picker
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      useCurrentItemAsValue: false,
+
+      /**
+       * Run after widget and all children created
+       *
+       * @instance
+       * @override
+       */
+      startup: function alfresco_forms_controls_Picker__startup() {
+         this.inherited(arguments);
+         if (this.useCurrentItemAsValue && this.currentItem) {
+            var newValue = this.currentItem instanceof Array ? this.currentItem : [this.currentItem];
+            this.setValue(newValue);
+         }
+      },
+
+      /**
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_Picker__getWidgetConfig() {
@@ -155,7 +178,8 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {object} value
        */
       setValue: function alfresco_forms_controls_Picker__setValue(value) {
-         this.setModelPickerWidgetValue(value);
+         var pickedItemsWidget = this.getPickedItemsWidget();
+         pickedItemsWidget && pickedItemsWidget.setPickedItems(value);
       },
 
       /**
