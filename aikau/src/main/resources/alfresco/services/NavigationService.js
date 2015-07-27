@@ -29,12 +29,12 @@
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/services/_NavigationServiceTopicMixin",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "service/constants/Default"],
-        function(declare, AlfCore, _NavigationServiceTopicMixin, hash, array, lang, domConstruct, AlfConstants) {
+        function(declare, AlfCore, _NavigationServiceTopicMixin, hashUtils, array, lang, domConstruct, AlfConstants) {
 
    return declare([AlfCore, _NavigationServiceTopicMixin], {
 
@@ -150,7 +150,7 @@ define(["dojo/_base/declare",
                // Determine the location of the URL...
                if (data.type === this.hashPath)
                {
-                  hash(url);
+                  hashUtils.setHashString(url);
                }
                else if (!data.target || data.target === this.currentTarget)
                {

@@ -31,10 +31,11 @@
 define(["dojo/_base/declare",
         "alfresco/lists/AlfList", 
         "alfresco/documentlibrary/_AlfHashMixin",
+        "dojo/_base/array",
         "dojo/_base/lang",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/io-query"], 
-        function(declare, AlfList, _AlfHashMixin, lang, hash, ioQuery) {
+        function(declare, AlfList, _AlfHashMixin, array, lang, hashUtils, ioQuery) {
    
    return declare([AlfList, _AlfHashMixin], {
       
@@ -120,7 +121,7 @@ define(["dojo/_base/declare",
             // be required on the same page and they can't all feed off the hash to drive the location.
             this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onHashChanged));
 
-            var hashString = hash();
+            var hashString = hashUtils.getHashString();
             if (hashString === "" && 
                 this.useLocalStorageHashFallback === true && 
                 ("localStorage" in window && window.localStorage !== null))
@@ -135,7 +136,7 @@ define(["dojo/_base/declare",
                      ("localStorage" in window && window.localStorage !== null))
             {
                // Store the initial hash...
-               localStorage.setItem(this.useLocalStorageHashFallbackKey, hash());
+               localStorage.setItem(this.useLocalStorageHashFallbackKey, hashUtils.getHashString());
             }
 
             var currHash = ioQuery.queryToObject(hashString);
@@ -194,15 +195,18 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          if (this.mapHashVarsToPayload)
          {
-            var hashString = hash();
-            var currHash = ioQuery.queryToObject(hashString);
-            for(var i=0; i < this.hashVarsForUpdate.length; i++)
-            {
-               if(this.hashVarsForUpdate[i] in currHash)
-               {
-                  payload[this.hashVarsForUpdate[i]] = currHash[this.hashVarsForUpdate[i]];
+            var currHash = hashUtils.getHash();
+            array.forEach(this.hashVarsForUpdate, function(hashName){
+               var hashValue;
+               if(currHash.hasOwnProperty(hashName)) {
+                  hashValue = currHash[hashName];
+                  if(hashValue !== null && typeof hashValue !== "undefined") {
+                     payload[hashName] = hashValue;
+                  } else {
+                     delete payload[hashName];
                }
             }
+            }, this);
          }
       },
 
@@ -212,12 +216,12 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      updateLocallyStoredHash: function alfresco_lists_AlfHashList__onHashChanged(/*jshint unused:false*/payload) {
+      updateLocallyStoredHash: function alfresco_lists_AlfHashList__updateLocallyStoredHash(/*jshint unused:false*/payload) {
          // Save the hash to local storage if required...
          if(this.useLocalStorageHashFallback === true && 
             ("localStorage" in window && window.localStorage !== null))
          {
-            localStorage.setItem(this.useLocalStorageHashFallbackKey, hash());
+            localStorage.setItem(this.useLocalStorageHashFallbackKey, hashUtils.getHashString());
          }
       },
 
@@ -266,13 +270,40 @@ define(["dojo/_base/declare",
        */
       onDataLoadSuccess: function alfresco_lists_AlfHashList__onDataLoadSuccess(/*jshint unused:false*/ payload) {
          this.inherited(arguments);
-         var hashString = hash();
-         var currHash = ioQuery.queryToObject(hashString);
+         var currHash = hashUtils.getHash();
          if (currHash.currentItem)
          {
             this.alfPublish("ALF_BRING_ITEM_INTO_VIEW", {
                item: currHash.currentItem
             });
+         }
+      },
+
+      /**
+       * Handle filters being updated
+       *
+       * @instance
+       * @override
+       */
+      onFiltersUpdated: function alfresco_lists_AlfHashList__onFiltersUpdated() {
+         if (this.useHash) {
+            var filterValues = {};
+            array.forEach(this.dataFilters, function(dataFilter){
+               var filterValue = dataFilter.value;
+               if(filterValue !== null && typeof filterValue !== "undefined") {
+                  if(typeof filterValue === "string") {
+                     filterValue = lang.trim(filterValue);
+                     if(!filterValue.length) {
+                        filterValue = null; // Remove empty strings from hash
+                     }
+                  }
+               }
+               filterValues[dataFilter.name] = filterValue;
+            });
+            hashUtils.updateHash(filterValues);
+         } else {
+            this.clearViews();
+            this.loadData();
          }
       }
    });

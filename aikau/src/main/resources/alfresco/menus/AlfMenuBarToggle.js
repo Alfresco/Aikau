@@ -66,9 +66,9 @@ define(["dojo/_base/declare",
         "dojo/dom-class",
         "dojo/dom-attr",
         "dojo/_base/lang",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/io-query"], 
-        function(declare, AlfMenuBarItem, _AlfDocumentListTopicMixin, domConstruct, domClass, domAttr, lang, hash, ioQuery) {
+        function(declare, AlfMenuBarItem, _AlfDocumentListTopicMixin, domConstruct, domClass, domAttr, lang, hashUtils, ioQuery) {
    
    
    return declare([AlfMenuBarItem, _AlfDocumentListTopicMixin], {
@@ -224,7 +224,7 @@ define(["dojo/_base/declare",
 
          if (this.hashName)
          {
-            var currHash = ioQuery.queryToObject(hash());
+            var currHash = hashUtils.getHash();
             this.checked = (currHash[this.hashName] && currHash[this.hashName] === "true");
             this.alfSubscribe(this.filterChangeTopic, lang.hitch(this, "setState"));
          }

@@ -61,8 +61,8 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/io-query",
-        "dojo/hash"], 
-        function(declare, AlfButton, _AlfHashMixin, array, lang, ioQuery, hash) {
+        "alfresco/util/hashUtils"], 
+        function(declare, AlfButton, _AlfHashMixin, array, lang, ioQuery, hashUtils) {
    
    return declare([AlfButton, _AlfHashMixin], {
 
@@ -120,8 +120,7 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          if (this.useHash)
          {
-            var hashString = hash();
-            var currHash = ioQuery.queryToObject(hashString);
+            var currHash = hashUtils.getHash();
             if (this.hashDataMapping)
             {
                this.mapData(this.hashDataMapping, currHash);

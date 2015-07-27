@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfHashMixin",
         "dojo/text!./templates/Form.html",
         "dojo/io-query",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
         "dojo/_base/array",
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "dojo/dom-construct"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, _AlfHashMixin, template, 
-                 ioQuery, hash, lang, AlfButton, array, registry, Deferred, domConstruct) {
+                 ioQuery, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin], {
       
@@ -650,7 +650,7 @@ define(["dojo/_base/declare",
          var updatedHash = {};
          this.payloadContainsUpdateableVar(payload, true, updatedHash);
 
-         var currHash =  ioQuery.queryToObject(hash());
+         var currHash = hashUtils.getHash();
          lang.mixin(currHash, updatedHash);
          var hashString = ioQuery.objectToQuery(currHash);
 
@@ -778,7 +778,7 @@ define(["dojo/_base/declare",
             // Called only when processing the form controls, not when there are additional buttons...
             if (this.useHash)
             {
-               var currHash = ioQuery.queryToObject(hash());
+               var currHash = hashUtils.getHash();
                var updatedFormValue = {};
                this.doHashVarUpdate(currHash, true, updatedFormValue);
                this.setValue(updatedFormValue);

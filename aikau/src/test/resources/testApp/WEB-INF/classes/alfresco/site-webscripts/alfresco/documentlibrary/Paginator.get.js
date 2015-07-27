@@ -21,9 +21,6 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "aikauTesting/mockservices/PreferenceServiceMockXhr"
-      },
-      {
          name: "alfresco/layout/HorizontalWidgets",
          config: {
             widgets: [
@@ -184,6 +181,7 @@ model.jsonModel = {
                                     name: "alfresco/documentlibrary/AlfDocumentList",
                                     config: {
                                        useHash: false,
+                                       pageSizePreferenceName: "test.pagesize.name",
                                        currentPageSize: 10,
                                        hashVarsForUpdate: [
                                           "path",
@@ -308,6 +306,7 @@ model.jsonModel = {
                                     name: "alfresco/documentlibrary/AlfDocumentList",
                                     config: {
                                        useHash: true,
+                                       pageSizePreferenceName: "test.pagesize.name",
                                        currentPageSize: 10,
                                        hashVarsForUpdate: [
                                           "path",
@@ -357,11 +356,13 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog",
+         name: "aikauTesting/mockservices/PreferenceServiceMockXhr"
+      },
+      {
+         name: "alfresco/logging/DebugLog",
          config: {
             topicsToIgnore: [
-               "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
-               "ALF_DOCLIST_DOCUMENTS_LOADED"
+               "ALF_WIDGET_PROCESSING_COMPLETE"
             ]
          }
       }

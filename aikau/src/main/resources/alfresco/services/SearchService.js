@@ -33,9 +33,8 @@ define(["dojo/_base/declare",
         "alfresco/core/PathUtils",
         "alfresco/core/NodeUtils",
         "dojo/_base/lang",
-        "dojo/json",
-        "dojo/hash"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, dojoJson, hash) {
+        "dojo/json"],
+        function(declare, AlfCore, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, dojoJson) {
    
    return declare([AlfCore, CoreXhr, PathUtils], {
       
