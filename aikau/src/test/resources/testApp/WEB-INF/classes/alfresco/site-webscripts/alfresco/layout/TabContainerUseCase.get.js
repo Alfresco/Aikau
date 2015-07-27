@@ -67,12 +67,37 @@ model.jsonModel = {
                                                                   publishPayload: {
                                                                      widgets: [
                                                                         {
-                                                                           name: "alfresco/html/Label",
+                                                                           name: "alfresco/layout/VerticalWidgets",
                                                                            title: "{name}",
                                                                            closable: true,
                                                                            selected: true,
                                                                            config: {
-                                                                              label: "{name}"
+                                                                              widgets: [
+                                                                                 {
+                                                                                    name: "alfresco/html/Label",
+                                                                                    config: {
+                                                                                       label: "{name}"
+                                                                                    }
+                                                                                 },
+                                                                                 {
+                                                                                    id: "SELECT_FOR_{name}",
+                                                                                    name: "alfresco/forms/controls/Select",
+                                                                                    config: {
+                                                                                       fieldId: "SELECT",
+                                                                                       name: "select",
+                                                                                       label: "Select...",
+                                                                                       value: "{name}",
+                                                                                       description: "An example select form control",
+                                                                                       optionsConfig: {
+                                                                                          fixed: [
+                                                                                             {label: "One", value: "One"},
+                                                                                             {label: "Two", value: "Two"},
+                                                                                             {label: "Three", value: "Three"}
+                                                                                          ]
+                                                                                       }
+                                                                                    }
+                                                                                 }
+                                                                              ]
                                                                            }
                                                                         }
                                                                      ]

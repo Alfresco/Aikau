@@ -103,6 +103,48 @@ model.jsonModel = {
                                     config: {
                                        logoClasses: "alfresco-logo-only"
                                     }
+                                 },
+                                 {
+                                    id: "FormControl1",
+                                    name: "alfresco/forms/controls/Select",
+                                    title: "DP Form Control",
+                                    // tabId: "FORM_CONTROL_TAB_1",
+                                    delayProcessing: true,
+                                    config: {
+                                       fieldId: "SELECT",
+                                       name: "select",
+                                       label: "Select...",
+                                       value: "One",
+                                       description: "An example select form control",
+                                       optionsConfig: {
+                                          fixed: [
+                                             {label: "One", value: "One"},
+                                             {label: "Two", value: "Two"},
+                                             {label: "Three", value: "Three"}
+                                          ]
+                                       }
+                                    }
+                                 },
+                                 {
+                                    id: "FormControl2",
+                                    name: "alfresco/forms/controls/Select",
+                                    tabId: "FORM_CONTROL_TAB_2",
+                                    title: "Non-DP Form Control",
+                                    delayProcessing: false,
+                                    config: {
+                                       fieldId: "SELECT",
+                                       name: "select",
+                                       label: "Select...",
+                                       value: "One",
+                                       description: "An example select form control",
+                                       optionsConfig: {
+                                          fixed: [
+                                             {label: "One", value: "One"},
+                                             {label: "Two", value: "Two"},
+                                             {label: "Three", value: "Three"}
+                                          ]
+                                       }
+                                    }
                                  }
                               ]
                            }

@@ -57,7 +57,7 @@ define(["intern!object",
          return browser.findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
             .then(
                function (tabs) {
-                  expect(tabs.length).to.equal(9, "There are not 9 tabs");
+                  expect(tabs.length).to.equal(11, "There are not 11 tabs");
                }
             );
       },
@@ -66,7 +66,7 @@ define(["intern!object",
          return browser.findAllByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper")
             .then(
                function (panels) {
-                  expect(panels.length).to.equal(9, "There are not 9 panels");
+                  expect(panels.length).to.equal(11, "There are not 11 panels");
                }
             );
       },
@@ -85,7 +85,7 @@ define(["intern!object",
          return browser.findAllByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper.dijitHidden")
             .then(
                function (panels) {
-                  expect(panels.length).to.equal(8, "There are not 8 panels");
+                  expect(panels.length).to.equal(10, "There are not 10 panels");
                }
             );
       },
@@ -501,7 +501,7 @@ define(["intern!object",
          return browser.findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
             .then(
                function (tabs) {
-                  expect(tabs.length).to.equal(9, "There are not 9 tabs");
+                  expect(tabs.length).to.equal(11, "There are not 11 tabs");
                }
             );
       },
@@ -514,7 +514,7 @@ define(["intern!object",
          .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
             .then(
                function (tabs) {
-                  expect(tabs.length).to.equal(8, "There are not 8 tabs");
+                  expect(tabs.length).to.equal(10, "There are not 10 tabs");
                }
             );
       },
@@ -527,7 +527,7 @@ define(["intern!object",
          .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
             .then(
                function (tabs) {
-                  expect(tabs.length).to.equal(7, "There are not 7 tabs");
+                  expect(tabs.length).to.equal(9, "There are not 9 tabs");
                }
             );
       },
@@ -540,10 +540,33 @@ define(["intern!object",
          .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
             .then(
                function (tabs) {
-                  expect(tabs.length).to.equal(6, "There are not 6 tabs");
+                  expect(tabs.length).to.equal(8, "There are not 8 tabs");
                }
             );
       },
+
+      "Check that delayed processing form control is displayed correctly": function() {
+         return browser.findById("dijit_layout_TabContainer_0_tablist_dijit_layout_ContentPane_9")
+            .click()
+         .end()
+         .findByCssSelector("#FormControl1 .label")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Select...", "The form control was not displayed correctly");
+            });
+      },
+
+       "Check that non-delayed processing form control is displayed correctly": function() {
+         return browser.findById("dijit_layout_TabContainer_0_tablist_dijit_layout_ContentPane_10")
+            .click()
+         .end()
+         .findByCssSelector("#FormControl2 .label")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Select...", "The form control was not displayed correctly");
+            });
+      },
+
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
@@ -594,6 +617,14 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "One", "The new tab content was rendered correctly");
+            });
+      },
+
+      "Check that the form control in the new panel has rendered correctly": function() {
+         return browser.findByCssSelector("#SELECT_FOR_One .label")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Select...", "The form control was not displayed correctly");
             });
       },
 
