@@ -375,6 +375,7 @@ define(["dojo/_base/declare",
 
             // Add the widget to the ContentPane
             cp.addChild(w);
+            this._tabWidgetProcessingComplete();
          }
          // Otherwise record the widget for processing later on
          else
@@ -417,6 +418,8 @@ define(["dojo/_base/declare",
 
                // Add the widget to the ContentPane
                newTab.addChild(w);
+               this._tabWidgetProcessingComplete();
+
                forDeletion = i;
                break;
             }
@@ -455,6 +458,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "Attempt made to select a TabController tab with an inapproriate payload", this);
          }
+         this._tabWidgetProcessingComplete();
       },
 
       /**
@@ -498,6 +502,7 @@ define(["dojo/_base/declare",
          {
             array.forEach(payload.widgets, lang.hitch(this, this.addWidget));
          }
+         this._tabWidgetProcessingComplete();
       },
 
       /**
@@ -528,6 +533,16 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "Attempt made to remove a TabController tab with an inapproriate payload", this);
          }
+      },
+
+      /**
+       * It is necessary to publish a topic to ensure that all widgets know that processing is complete,
+       * this is particularly important for form controls to ensure that they are properly rendered.
+       *
+       * @instance
+       */
+      _tabWidgetProcessingComplete: function alfresco_layout_AlfTabContainer___tabWidgetProcessingComplete() {
+         this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
       }
    });
 });
