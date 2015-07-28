@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,9 +29,8 @@
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/on",
-        "dojo/_base/lang",
-        "dijit/popup"], 
-        function(declare, AlfCore, on, lang, popup) {
+        "dojo/_base/lang"], 
+        function(declare, AlfCore, on, lang) {
    
    return declare([AlfCore], {
 
@@ -55,10 +54,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the selected files.
        */
       onUserAcess: function alfresco_documentlibrary__AlfCreateContentPermissionsMixin__onUserAcess(payload) {
-         if (payload && payload.userAccess && typeof this.permission == "string")
+         if (payload && payload.userAccess && typeof this.permission === "string")
          {
             // Disable the menu bar popup if the user doesn't have permission to create content...
-            this.set('disabled', !this.hasPermission(this.permission, payload.userAccess));
+            this.set("disabled", !this.hasPermission(this.permission, payload.userAccess));
          }
       },
       
@@ -70,6 +69,7 @@ define(["dojo/_base/declare",
        * @param {object} userAccess The user access data
        */
       hasPermission: function alfresco_documentlibrary__AlfCreateContentPermissionsMixin__hasPermission(permissionString, userAccess) {
+         // jshint maxcomplexity:false
          // Initially assume that the user has permission...
          var hasPermission = true,
              widgetPermissions, orPermissions, permissionTokens, permission, orMatch, shallMatch;
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
                {
                   permissionTokens = orPermissions[j].split(":");
                   permission = permissionTokens[0];
-                  shallMatch = permissionTokens.length == 2 ? permissionTokens[1] == "true" : true;
+                  shallMatch = permissionTokens.length === 2 ? permissionTokens[1] === "true" : true;
                   if ((userAccess[permission] && shallMatch) || (!userAccess[permission] && !shallMatch))
                   {
                      orMatch = true;
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
             {
                permissionTokens = widgetPermissions[i].split(":");
                permission = permissionTokens[0];
-               shallMatch = permissionTokens.length == 2 ? permissionTokens[1] == "true" : true;
+               shallMatch = permissionTokens.length === 2 ? permissionTokens[1] === "true" : true;
                if ((userAccess[permission] && !shallMatch) || (!userAccess[permission] && shallMatch))
                {
                   hasPermission = false;
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
        */
       onFilterChange: function alfresco_documentlibrary__AlfCreateContentPermissionsMixin__onFilterChange(payload) {
          var path = lang.getObject("path", false, payload);
-         this.set('disabled', (path == null));
-      } 
+         this.set("disabled", !path);
+      }
    });
 });

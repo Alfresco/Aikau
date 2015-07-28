@@ -20,15 +20,15 @@
 /**
  * <p>This module handles form control validation and was written with the intention of being mixed into the
  * [BaseFormControl module]{@link module:alfresco/forms/controls/BaseFormControl}. It provides the ability
- * handle more complex validation, including asynchronous validation. This means that it is possible for 
+ * handle more complex validation, including asynchronous validation. This means that it is possible for
  * a form to request remote data (e.g. to check whether or not a suggested identifier has already been used).</p>
- * <p>The validators that are currently provided include checking that the length of a form field value is 
+ * <p>The validators that are currently provided include checking that the length of a form field value is
  * neither too long or too short, that it matches a specific Regular Expression pattern and whether or not the
  * value is unique. Each validator should be configured with an explicit error message (if no error message is
  * provided then the invalid indicator will be displayed with no message).</p>
  * <p>Multiple validators can be chained together and if more than one validator reports that they are in error
  * then their respective error messages will be displayed in sequence.</p>
- * 
+ *
  * @example <caption>Example using all validators:</caption>
  * validationConfig: [
  *   {
@@ -57,6 +57,11 @@
  *     errorMessage: "Already used",
  *     itemsProperty: "items",
  *     publishTopic: "GET_VALUES"
+ *   },
+ *   {
+ *     validation: "validationTopic",
+ *     validationTopic: "ALF_VALIDATE_WHITESPACE_TOPIC",
+ *     errorMessage: "No initial or trailing whitespace"
  *   }
  * ]
  *
@@ -69,19 +74,19 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-class",
-        "alfresco/core/ObjectTypeUtils"], 
+        "alfresco/core/ObjectTypeUtils"],
         function(declare, AlfCore, lang, array, domClass, ObjectTypeUtils) {
-   
+
    return declare([AlfCore], {
-      
+
       /**
        * An array of the i18n files to use with this widget.
-       * 
+       *
        * @instance
        * @type {Array}
        */
       i18nRequirements: [{i18nFile: "./i18n/FormControlValidationMixin.properties"}],
-      
+
       /**
        * Indicates whether or not validation is currently in-progress or not
        *
@@ -95,7 +100,7 @@ define(["dojo/_base/declare",
        * Keeps track of all the validators that are currently processing. This array is added to
        * by [processValidationArrayElement]{@link module:alfresco/forms/controls/FormControlValidationMixin#processValidationArrayElement}
        * and removed from during [validationComplete]{@link module:alfresco/forms/controls/FormControlValidationMixin#validationComplete}
-       * 
+       *
        * @instance
        * @type {object}
        * @default null
@@ -103,9 +108,9 @@ define(["dojo/_base/declare",
       _validatorsInProgress: null,
 
       /**
-       * Keeps track of the current validation state. Is updated by each call back to 
+       * Keeps track of the current validation state. Is updated by each call back to
        * [validationComplete]{@link module:alfresco/forms/controls/FormControlValidationMixin#validationComplete}
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default true
@@ -113,8 +118,8 @@ define(["dojo/_base/declare",
       _validationInProgressState: true,
 
       /**
-       * This is used to build up the overall validation message. 
-       * 
+       * This is used to build up the overall validation message.
+       *
        * @instance
        * @type {string}
        * @default null
@@ -190,7 +195,7 @@ define(["dojo/_base/declare",
        * @param {array} validationErrors An array to populate with validation errors.
        * @param {object} validationConfig The current element to process
        * @param {number} index The index of the element in the array
-       * @returns {boolean} True if validation is passed and false otherwise 
+       * @returns {boolean} True if validation is passed and false otherwise
        */
       processValidationArrayElement: function alfresco_forms_controls_BaseFormControl__processValidationArrayElement(validationErrors, validationConfig, index) {
          var validationType = lang.getObject("validation", false, validationConfig);
@@ -199,7 +204,7 @@ define(["dojo/_base/declare",
             if (typeof this[validationType] === "function")
             {
                // Add the current validator to the those currently in-flight and
-               // using the index as a key. This index is also added to the 
+               // using the index as a key. This index is also added to the
                this._validatorsInProgress[index] = validationConfig;
                validationConfig.index = index;
             }
@@ -216,7 +221,7 @@ define(["dojo/_base/declare",
 
       /**
        * Counts the validators that are currently in progress.
-       * 
+       *
        * @instance
        * @returns {number} The number of validators still in progress
        */
@@ -261,7 +266,7 @@ define(["dojo/_base/declare",
                   }
                   this._validationErrorMessage += this.message(validationConfig.errorMessage);
                }
-               
+
                // Update the validation message...
                this.showValidationFailure();
                this._validationMessage.innerHTML = this._validationErrorMessage;
@@ -275,7 +280,7 @@ define(["dojo/_base/declare",
 
             // Count the remaining validators...
             var count = this.countValidatorsInProgress();
-            
+
             // If all are complete then update validation status
             if (count === 0)
             {
@@ -327,7 +332,7 @@ define(["dojo/_base/declare",
             this.startValidation();
          }
       },
-      
+
       /**
        * This validator checks the current form field value against the configured regex pattern.
        *
@@ -355,7 +360,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This validator ensures that the form value is a number that falls within a range. It is acceptable to 
+       * This validator ensures that the form value is a number that falls within a range. It is acceptable to
        * only provide the min or max of the range.
        *
        * @instance
@@ -429,7 +434,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This validator checks that the value of the form control with a "fieldId" attribute matching the 
+       * This validator checks that the value of the form control with a "fieldId" attribute matching the
        * configured "targetId" attribute in the validation configuration matches the current value of this
        * form control.
        *
@@ -443,7 +448,7 @@ define(["dojo/_base/declare",
             // Only subscribe to changes once...
             if (!this._validateMatchSubscriptionHandle)
             {
-               this._validateMatchSubscriptionHandle = this.alfSubscribe("_valueChangeOf_" + targetId, lang.hitch(this, this._validateMatchTargetValueChanged, validationConfig)); 
+               this._validateMatchSubscriptionHandle = this.alfSubscribe("_valueChangeOf_" + targetId, lang.hitch(this, this._validateMatchTargetValueChanged, validationConfig));
             }
             this.reportValidationResult(validationConfig, (this.getValue() === this._validateMatchTargetValue));
          }
@@ -491,7 +496,7 @@ define(["dojo/_base/declare",
        * Stores the validator configuration for validating uniqueness so that it doesn't need to be included
        * in the payload from the called service. It is set in [validateUnique]{@link module:alfresco/forms/controls/FormControlValidationMixin#validateUnique}
        * and reset to null in [onValidationUniqueResponse]{@link module:alfresco/forms/controls/FormControlValidationMixin#onValidationUniqueResponse}.
-       * 
+       *
        * @instance
        * @type {object}
        * @default null
@@ -504,7 +509,7 @@ define(["dojo/_base/declare",
        * a 'publishPayload' attribute to go with it. Optionally an 'itemsProperty' attribute can be configured
        * that will identify the attribute in the returned payload that will contain the array of items to
        * iterate through looking for a value that matches the currently entered value.
-       * 
+       *
        * @instance
        * @param {object} config The configuration for this validation
        */
@@ -519,7 +524,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This is the callback function that is called as a result of using the 
+       * This is the callback function that is called as a result of using the
        * [validateUnique]{@link module:alfresco/forms/controls/FormControlValidationMixin#validateUnique} validator.
        *
        * @instance
@@ -540,7 +545,7 @@ define(["dojo/_base/declare",
             var itemsProperty = lang.getObject("itemsProperty", false, validationConfig);
             if (!itemsProperty)
             {
-               itemsProperty = "items"; 
+               itemsProperty = "items";
             }
             // Get the current form field value to compare with each item...
             var value = this.getValue();
@@ -563,6 +568,70 @@ define(["dojo/_base/declare",
 
          // Report back with the validation result...
          this.reportValidationResult(validationConfig, !notUnique);
+      },
+
+      /**
+       * Call a topic to validate the value of a form control.
+       * That topic will receive the value in payload.value & should publish a response on payload.alfResponseTopic
+       * The response payload should contain an "isValid" boolean property.
+       *
+       * @param validationConfig
+       */
+      validationTopic: function(validationConfig)
+      {
+         if (!validationConfig || !validationConfig.validationTopic)
+         {
+            this.alfLog("warn", "ValidationTopic missing required fields: " + validationConfig);
+            // Default to return true
+            this.reportValidationResult(validationConfig, true);
+            return;
+         }
+
+         // Save a reference so we can get the config later
+         this._validationTopicConfig = validationConfig;
+
+         var payload = {
+               validationConfig: validationConfig,
+               value: this.getValue(),
+               field: this,
+               alfResponseTopic: validationConfig.alfResponseTopic || this.generateUuid()
+            },
+            publishGlobal = true,
+            publishScope = null;
+
+         if (validationConfig.validationTopicScope)
+         {
+            publishGlobal = false;
+            publishScope = validationConfig.validationTopicScope;
+         }
+
+         this._validationTopicHandles = this.alfSubscribe(payload.alfResponseTopic, lang.hitch(this, this.onValidationTopicResponse), true);
+
+         this.alfPublish(validationConfig.validationTopic, payload, publishGlobal, false, publishScope);
+
+      },
+
+      /**
+       * The response called by the topic specified in validationTopic. Recieves the isValid state and updates the form.
+       *
+       * @instance
+       * @param payload
+       */
+      onValidationTopicResponse: function(payload)
+      {
+         this.alfUnsubscribeSaveHandles([this._validationTopicHandles]);
+
+         if (!payload) {
+            this.alfLog("warn", "ValidationTopic missing payload");
+         }
+
+         var isValid = !!payload.isValid,
+            validationConfig = this._validationTopicConfig;
+
+         this._validationTopicConfig = null;
+
+         // Report back with the validation result...
+         this.reportValidationResult(validationConfig, isValid);
       }
    });
 });

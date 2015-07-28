@@ -1,12 +1,12 @@
-Aikau 1.0.27 Release Notes
-==========================
+Aikau 1.0.28 Release Notes
+===
 
 New deprecations: 
------------------
+---
 None
 
 Previous deprecations:
----------------------
+---
 * alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 * alfresco/core/UrlUtils.js                                      (use alfresco/util/urlUtils or alfresco/core/UrlUtilsMixin)
@@ -40,8 +40,14 @@ Previous deprecations:
 * alfresco/forms/controls/DojoSelect                             (use: alfresco/forms/controls/Select)
 * alfresco/forms/controls/DojoTextarea                           (use: alfresco/forms/controls/TextArea)
 
-Resolved issues (see https://issues.alfresco.com/jira/browse/<issue-number>):
-----------------
+Resolved issues:
+---
+
+1.0.28:
+* [AKU-415](https://issues.alfresco.com/jira/browse/AKU-415)       - Add hash support to [`AlfFilteredList`](src/main/resources/alfresco/lists/AlfFilteredList.js)
+* [AKU-437](https://issues.alfresco.com/jira/browse/AKU-437)       - It is now possible to initialise a [`Picker`](src/main/resources/alfresco/forms/controls/Picker.js) with the `currentItem` as its value, by specifying `useCurrentItemAsValue: true` in the Picker config
+* [AKU-451](https://issues.alfresco.com/jira/browse/AKU-451)       - Ensure form controls can be displayed (events are now setup correctly) on tabs
+* [AKU-459](https://issues.alfresco.com/jira/browse/AKU-459)       - Ability to set user home page preference (`org.alfresco.share.user.homePage`) via a publish to the [`UserService`](src/main/resources/alfresco/services/UserService.js) on the topic `ALF_SET_USER_HOME_PAGE`
 
 1.0.27:
 * [AKU-420](https://issues.alfresco.com/jira/browse/AKU-420)       - `currentPageSize` being reset by [`AlfSortablePaginatedList`](src/main/resources/alfresco/lists/AlfSortablePaginatedList.js) in `postMixInProperties()` because of hardcoded preference name (fixed by making configurable property)

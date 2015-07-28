@@ -31,12 +31,13 @@
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarItem",
+        "alfresco/documentlibrary/_AlfCreateContentMenuItemMixin",
         "alfresco/documentlibrary/_AlfCreateContentPermissionsMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang"], 
-        function(declare, AlfMenuBarItem, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, lang) {
+        function(declare, AlfMenuBarItem, _AlfCreateContentMenuItemMixin, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, lang) {
    
-   return declare([AlfMenuBarItem, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin], {
+   return declare([AlfMenuBarItem, _AlfCreateContentMenuItemMixin, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin], {
       
       /**
        * Extends the [superclass function]{@link module:alfresco/menus/AlfMenuBarItem#postCreate} to subscribe to
@@ -49,6 +50,7 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_documentlibrary_AlfCreateContentMenuBarItem__postCreate() {
          this.alfSubscribe(this.userAccessChangeTopic, lang.hitch(this, this.onUserAcess));
          this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onFilterChange));
+         this.alfSubscribe(this.metadataChangeTopic, lang.hitch(this, this.onCurrentNodeChange));
          this.inherited(arguments);
       }
    });

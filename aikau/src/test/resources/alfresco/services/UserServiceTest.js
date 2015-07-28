@@ -25,9 +25,10 @@
  */
 define(["intern!object",
         "intern/chai!expect",
+        "intern/chai!assert",
         "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        function (registerSuite, expect, assert, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -128,6 +129,45 @@ define(["intern!object",
                expect(text).to.equal("Last updated: over 4 years ago", "The 'last updated' should read 'Last updated: over 4 years ago' to finish");
             })
          .end();
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+   
+   registerSuite({
+      name: "User Service Home Page Test",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/UserServiceHomePage", "User Service Home Page Test").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+      
+      "Check setting the home page": function() {
+         return browser.findByCssSelector("#HEADER_USER_SET_HOME_PAGE_label")
+            .click()
+         .end()
+         .getLastPublish("ALF_SET_USER_HOME_PAGE")
+            .then(function(payload) {
+               assert.isNotNull(payload, "Set user home page not published");
+            })
+         .getLastPublish("ALF_PREFERENCE_SET")
+            .then(function(payload) {
+               assert.isNotNull(payload, "Set user home page preference not published");
+               if (payload) {
+                  assert.propertyVal(payload, "preference", "org.alfresco.share.user.homePage", "The user home page preference key was incorrect");
+                  assert.propertyVal(payload, "value", "NewHomePage", "The user home page value was incorrect");
+               }
+            })
+         .getLastPublish("ALF_SET_USER_HOME_PAGE_SUCCESS")
+            .then(function(payload) {
+               assert.isNotNull(payload, "Set user home page success not published");
+            });
       },
 
       "Post Coverage Results": function() {

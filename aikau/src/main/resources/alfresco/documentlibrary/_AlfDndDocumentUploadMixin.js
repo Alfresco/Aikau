@@ -402,6 +402,7 @@ define(["dojo/_base/declare",
                this.removeDndHighlight();
                var config = this.getUploadConfig();
                var defaultConfig = {
+                  destination: this._currentNode.nodeRef,
                   siteId: null,
                   containerId: null,
                   uploadDirectory: null,

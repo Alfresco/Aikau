@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfHashMixin",
         "dojo/text!./templates/Form.html",
         "dojo/io-query",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
         "dojo/_base/array",
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "dojo/dom-construct"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, _AlfHashMixin, template, 
-                 ioQuery, hash, lang, AlfButton, array, registry, Deferred, domConstruct) {
+                 ioQuery, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin], {
       
@@ -642,15 +642,13 @@ define(["dojo/_base/declare",
       setHashFragment: function alfresco_forms_Form__setHashFragment(payload) {
          // Make sure to remove the alfTopic from the payload (this will always be assigned on publications
          // but is not actually part of the form data)...
-         delete payload.alfTopic;
-         delete payload.alfPublishScope;
-         delete payload.alfCallerName;
+         this.alfDeleteFrameworkAttributes(payload);
          
          // Make sure that only the controls with names listed in hashVarsForUpdate are set on the URL hash...
          var updatedHash = {};
          this.payloadContainsUpdateableVar(payload, true, updatedHash);
 
-         var currHash =  ioQuery.queryToObject(hash());
+         var currHash = hashUtils.getHash();
          lang.mixin(currHash, updatedHash);
          var hashString = ioQuery.objectToQuery(currHash);
 
@@ -778,7 +776,7 @@ define(["dojo/_base/declare",
             // Called only when processing the form controls, not when there are additional buttons...
             if (this.useHash)
             {
-               var currHash = ioQuery.queryToObject(hash());
+               var currHash = hashUtils.getHash();
                var updatedFormValue = {};
                this.doHashVarUpdate(currHash, true, updatedFormValue);
                this.setValue(updatedFormValue);

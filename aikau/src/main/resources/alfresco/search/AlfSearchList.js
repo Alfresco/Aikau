@@ -29,11 +29,11 @@ define(["dojo/_base/declare",
         "alfresco/lists/AlfSortablePaginatedList",
         "dojo/_base/array",
         "dojo/_base/lang",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/io-query",
         "alfresco/core/ArrayUtils",
         "alfresco/search/AlfSearchListView"],
-        function(declare, AlfSortablePaginatedList, array, lang, hash, ioQuery, arrayUtils) {
+        function(declare, AlfSortablePaginatedList, array, lang, hashUtils, ioQuery, arrayUtils) {
 
    return declare([AlfSortablePaginatedList], {
 
@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
                // the hash will not trigger the changeFilter function....
                // If the current hash includes a term from the resetHashTerms array, we need to clear those terms before
                // setting a search term (even if it is the same), in this case updating the hash will trigger the search...
-               var currHash = ioQuery.queryToObject(hash());
+               var currHash = hashUtils.getHash();
                if (this._cleanResettableHashTerms(currHash))
                {
                   currHash.searchTerm = this.searchTerm;
@@ -193,7 +193,7 @@ define(["dojo/_base/declare",
          {
             // The requested search term is new, so updating the hash will result in a new search...
             this.searchTerm = searchTerm;
-            var currHash = ioQuery.queryToObject(hash());
+            var currHash = hashUtils.getHash();
             this._cleanResettableHashTerms(currHash);
             currHash.searchTerm = this.searchTerm;
             this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
@@ -246,7 +246,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            var currHash = ioQuery.queryToObject(hash());
+            var currHash = hashUtils.getHash();
             this.selectedScope = scope;
             currHash.scope = scope;
             if (scope === "repo" || scope === "all_sites")
@@ -380,7 +380,7 @@ define(["dojo/_base/declare",
        */
       updateFilterHash: function alfresco_search_AlfSearchList__updateFilterHash(fullFilter, mode) {
          // Get the existing hash and extract the individual facetFilters into an array
-         var aHash = ioQuery.queryToObject(hash()),
+         var aHash = hashUtils.getHash(),
              facetFilters = aHash.facetFilters ? aHash.facetFilters : "",
              facetFiltersArr = facetFilters === "" ? [] : facetFilters.split(",");
 
@@ -524,8 +524,7 @@ define(["dojo/_base/declare",
 
                if (this.query)
                {
-                  delete this.query.alfTopic;
-                  delete this.query.alfPublishScope;
+                  this.alfDeleteFrameworkAttributes(this.query);
 
                   if(typeof this.query === "string")
                   {

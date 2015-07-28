@@ -70,9 +70,9 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/documentlibrary/_AlfFilterMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/_base/lang"], 
-        function(declare, AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin, hash, lang) {
+        function(declare, AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin, hashUtils, lang) {
    
    return declare([AlfCore, _AlfFilterMixin, _AlfDocumentListTopicMixin], {
 
@@ -81,7 +81,7 @@ define(["dojo/_base/declare",
        * to [onHashChange]{@link module:alfresco/documentlibrary/_AlfHashMixin#onHashChange}.
        * @instance
        */
-      constructor: function() {
+      constructor: function alfresco_documentlibrary_AlfHashMixin__constructor() {
          this.alfSubscribe("/dojo/hashchange", lang.hitch(this, "onHashChange"));
       },
       
@@ -93,16 +93,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} hashString An optional string to use as the hash. If not provided the current hash will be
        */
-      initialiseFilter: function(hashString) {
-         if (!hashString)
-         {
-            this.onHashChange(hash());
-         }
-         else
-         {
-            hash(hashString);
-            this.onHashChange(hash());
-         }
+      initialiseFilter: function alfresco_documentlibrary_AlfHashMixin__intialiseFilter(hashString) {
+         hashString && hashUtils.setHashString(hashString);
+         this.onHashChange(hashUtils.getHashString());
       },
       
       /**
@@ -112,7 +105,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The publication topic. This object needs to contain the attribute 'filter' for
        * anything to happen.
        */
-      onHashChange: function alfresco_documentlibrary__AlfHashMixin__onHashChange(payload) {
+      onHashChange: function alfresco_documentlibrary_AlfHashMixin__onHashChange(payload) {
          var filterObj = this.processFilter(payload);
          this.alfLog("log", "Publishing decoded filter", filterObj);
          this.alfPublish(this.hashChangeTopic, filterObj);
@@ -128,7 +121,7 @@ define(["dojo/_base/declare",
        * @return {boolean}
        * @private
        */
-      doHashVarUpdate: function alfresco_documentlibrary__AlfHashMixin__doHashVarUpdate(payload, updateInstanceValues, updateObject) {
+      doHashVarUpdate: function alfresco_documentlibrary_AlfHashMixin__doHashVarUpdate(payload, updateInstanceValues, updateObject) {
          return this.payloadContainsUpdateableVar(payload, updateInstanceValues, updateObject) && 
                 this.payloadContainsRequiredUpdateableVars(payload) && 
                 this.payloadContainsEqualUpdateableVars(payload);
@@ -147,7 +140,7 @@ define(["dojo/_base/declare",
        * @param {boolean} updateInstanceValues Indicates whether or not the list instance should be updated with the payload values
        * @return {boolean}
        */
-      payloadContainsUpdateableVar: function alfresco_documentlibrary__AlfHashMixin__payloadContainsUpdateableVar(payload, updateInstanceValues, updateObject) {
+      payloadContainsUpdateableVar: function alfresco_documentlibrary_AlfHashMixin__payloadContainsUpdateableVar(payload, updateInstanceValues, updateObject) {
          // jshint maxcomplexity:false
          var containsUpdateableVar = false;
 
@@ -208,7 +201,7 @@ define(["dojo/_base/declare",
        * @return {boolean}
        * @private
        */
-      payloadContainsRequiredUpdateableVars: function alfresco_documentlibrary__AlfHashMixin__payloadContainsRequiredUpdateableVars(payload) {
+      payloadContainsRequiredUpdateableVars: function alfresco_documentlibrary_AlfHashMixin__payloadContainsRequiredUpdateableVars(payload) {
          // No hashVarsForUpdateRequired - return true
          if(!this.hashVarsForUpdateRequired || this.hashVarsForUpdateRequired.length === 0)
          {
@@ -240,7 +233,7 @@ define(["dojo/_base/declare",
        * @return {boolean}
        * @private
        */
-      payloadContainsEqualUpdateableVars: function alfresco_documentlibrary__AlfHashMixin__payloadContainsEqualUpdateableVars(payload) {
+      payloadContainsEqualUpdateableVars: function alfresco_documentlibrary_AlfHashMixin__payloadContainsEqualUpdateableVars(payload) {
          // No hashVarsForUpdateMustEqual - return true
          if(!this.hashVarsForUpdateMustEqual || this.hashVarsForUpdateMustEqual.length === 0)
          {

@@ -42,7 +42,8 @@ define(["intern!object",
       },
 
       "Test page selector drop-down label intialization": function() {
-         return browser.findByCssSelector(TestCommon.topicSelector("ALF_WIDGETS_READY", "publish", "any"))
+         return browser.findByCssSelector("body") // Need a session to start checking for a publish
+            .getLastPublish("ALF_WIDGETS_READY")
             .end()
 
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
@@ -53,10 +54,7 @@ define(["intern!object",
       },
 
       "Test custom configured page selector drop-down label intialization": function() {
-         return browser.findByCssSelector(TestCommon.topicSelector("ALF_WIDGETS_READY", "publish", "any"))
-            .end()
-
-         .findByCssSelector("#CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_SELECTOR_text")
+         return browser.findByCssSelector("#CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_SELECTOR_text")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "1-10 of 243", "Page selector menu label didn't initialize correctly for custom pagination");

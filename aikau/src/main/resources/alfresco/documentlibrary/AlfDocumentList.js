@@ -28,9 +28,9 @@ define(["dojo/_base/declare",
         "alfresco/core/JsNode",
         "dojo/_base/array",
         "dojo/_base/lang",
-        "dojo/hash",
+        "alfresco/util/hashUtils",
         "dojo/io-query"],
-        function(declare, AlfSortablePaginatedList, JsNode, array, lang, hash, ioQuery) {
+        function(declare, AlfSortablePaginatedList, JsNode, array, lang, hashUtils, ioQuery) {
 
    return declare([AlfSortablePaginatedList], {
 
@@ -147,7 +147,7 @@ define(["dojo/_base/declare",
 
             if (this.useHash === true)
             {
-               var currHash = ioQuery.queryToObject(hash());
+               var currHash = hashUtils.getHash();
                currHash.path = payload.path;
                currHash.currentPage = 1;
                delete currHash.filter;
@@ -188,7 +188,7 @@ define(["dojo/_base/declare",
 
             if (this.useHash === true)
             {
-               var currHash = ioQuery.queryToObject(hash());
+               var currHash = hashUtils.getHash();
                currHash.category = payload.path;
                currHash.currentPage = 1;
                delete currHash.filter;
@@ -229,7 +229,7 @@ define(["dojo/_base/declare",
 
             if (this.useHash === true)
             {
-               var currHash = ioQuery.queryToObject(hash());
+               var currHash = hashUtils.getHash();
                currHash.filter = payload.value;
                currHash.currentPage = 1;
                delete currHash.category;
@@ -270,7 +270,7 @@ define(["dojo/_base/declare",
 
             if (this.useHash === true)
             {
-               var currHash = ioQuery.queryToObject(hash());
+               var currHash = hashUtils.getHash();
                currHash.tag = payload.value;
                currHash.currentPage = 1;
                delete currHash.category;
@@ -492,7 +492,7 @@ define(["dojo/_base/declare",
          {
             this.alfPublish(this.metadataChangeTopic, {
                node: response.metadata
-            }, true);
+            });
 
             // Publish the details of the permissions for the current user. This will
             // only be available when the a specific node is shown rather than a set

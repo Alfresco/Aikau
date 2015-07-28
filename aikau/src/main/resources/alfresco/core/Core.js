@@ -1,3 +1,4 @@
+/*globals Alfresco*/
 /**
  * Copyright (C) 2005-2013 Alfresco Software Limited.
  *
@@ -389,6 +390,21 @@ define(["dojo/_base/declare",
       alfSubscriptions: null,
 
       /**
+       * Deletes any automatically added publish attributes from the supplied object. These are attributes that
+       * will have been added to the object by the [alfPublish]{@link module:alfresco/core/Core#alfPublish} function.
+       * 
+       * @instance
+       * @param {object} object The object to remove the attributes from.
+       */
+      alfDeleteFrameworkAttributes: function alfresco_core_Core__alfDeleteFrameworkAttributes(object) {
+         delete object.alfResponseTopic;
+         delete object.alfTopic;
+         delete object.alfPublishScope;
+         delete object.alfOriginScope;
+         delete object.alfCallerName;
+      },
+
+      /**
        * This function wraps the standard Dojo publish function. It should always be used rather than
        * calling the Dojo implementation directly to allow us to make changes to the implementation or
        * to introduce additional features (such as scoping) or updates to the payload.
@@ -403,7 +419,6 @@ define(["dojo/_base/declare",
        *                               and parentScope are falsy)
        */
       alfPublish: function alfresco_core_Core__alfPublish(topics, payload, global, parentScope, customScope) {
-
          // Allow an array of topics so we can publish multiple ones.
          if (!lang.isArray(topics))
          {
@@ -436,6 +451,7 @@ define(["dojo/_base/declare",
             // Update the payload
             payload.alfPublishScope = publishScope;
             payload.alfTopic = scopedTopic;
+            payload.alfOriginScope = this.pubSubScope;
 
             // Publish...
             PubQueue.getSingleton().publish(scopedTopic, payload, this);
