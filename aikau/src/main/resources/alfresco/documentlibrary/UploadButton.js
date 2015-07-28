@@ -28,9 +28,8 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/documentlibrary/AlfCreateContentMenuBarItem",
-        "dojo/_base/lang"], 
-        function(declare, AlfCreateContentMenuBarItem, lang) {
+        "alfresco/documentlibrary/AlfCreateContentMenuBarItem"], 
+        function(declare, AlfCreateContentMenuBarItem) {
 
    return declare([AlfCreateContentMenuBarItem], {
       
@@ -73,26 +72,6 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_documentlibrary_UploadButton__postCreate() {
          this.inherited(arguments);
-         this.alfSubscribe(this.metadataChangeTopic, lang.hitch(this, this.onCurrentNodeChange));
-      },
-
-      /**
-       * This handles publications on the 
-       * [metadataChangeTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#metadataChangeTopic}
-       * topic to set the location of the current folder 
-       * 
-       * @instance
-       * @param {object} payload 
-       */
-      onCurrentNodeChange: function alfresco_documentlibrary_UploadButton__onCurrentNodeChange(payload) {
-         if (payload && payload.node)
-         {
-            this.currentNode = payload.node;
-         }
-         else
-         {
-            this.alfLog("error", "A request was made to update the current NodeRef, but no 'node' property was provided in the payload: ", payload);
-         }
       },
 
       /**

@@ -144,9 +144,7 @@ define(["dojo/_base/declare",
       clonePayload: function alfresco_services_CrudService__clonePayload(payload) {
          var data = lang.clone(payload);
          delete data.url;
-         delete data.alfResponseTopic;
-         delete data.alfTopic;
-         delete data.alfPublishScope;
+         this.alfDeleteFrameworkAttributes(data);
          return data;
       },
 

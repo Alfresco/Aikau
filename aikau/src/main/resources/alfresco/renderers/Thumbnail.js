@@ -393,6 +393,7 @@ define(["dojo/_base/declare",
          {
             this.addUploadDragAndDrop(this.imgNode);
             this.addNodeDropTarget(this.imgNode);
+            this._currentNode = this.currentItem.node;
          }
       },
 

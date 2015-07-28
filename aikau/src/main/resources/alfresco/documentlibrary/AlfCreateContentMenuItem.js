@@ -31,12 +31,13 @@
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfFilteringMenuItem",
+        "alfresco/documentlibrary/_AlfCreateContentMenuItemMixin",
         "alfresco/documentlibrary/_AlfCreateContentPermissionsMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang"], 
-        function(declare, AlfFilteringMenuItem, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, lang) {
+        function(declare, AlfFilteringMenuItem, _AlfCreateContentMenuItemMixin, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, lang) {
    
-   return declare([AlfFilteringMenuItem, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin], {
+   return declare([AlfFilteringMenuItem, _AlfCreateContentMenuItemMixin, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin], {
 
       /**
        * Set the i18n scope so that labels are picked up from the wrapped toolbar message scope.
@@ -56,6 +57,7 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_documentlibrary_AlfCreateContentMenuBarPopup__postCreate() {
          this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onFilterChange));
          this.alfSubscribe(this.userAccessChangeTopic, lang.hitch(this, this.onUserAcess));
+         this.alfSubscribe(this.metadataChangeTopic, lang.hitch(this, this.onCurrentNodeChange));
          this.inherited(arguments);
       },
    

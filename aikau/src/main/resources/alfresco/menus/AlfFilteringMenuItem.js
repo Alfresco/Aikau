@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -44,9 +44,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfMenuItem__postCreate() {
-         if (this.filterTopic != null)
+         if (this.filterTopic)
          {
-            this.alfSubscribe(this.filterTopic, lang.hitch(this, "filter"));
+            this.alfSubscribe(this.filterTopic, lang.hitch(this, this.filter));
          }
          this.inherited(arguments);
       },
