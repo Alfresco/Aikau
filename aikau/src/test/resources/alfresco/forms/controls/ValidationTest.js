@@ -18,13 +18,13 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
+        "alfresco/TestCommon"],
         function (registerSuite, assert, require, TestCommon) {
 
    var browser;
@@ -43,7 +43,7 @@ define(["intern!object",
       // teardown: function() {
       //    browser.end();
       // },
-      
+
      "Check that the form is initially invalid": function () {
          return browser.findAllByCssSelector(".confirmationButton.dijitDisabled")
             .then(function(elements) {
@@ -58,7 +58,7 @@ define(["intern!object",
                assert(text === "Too short, Letters only", "The initial error message is incorrect: " + text);
             });
       },
-       
+
       "Check the initial error messages (2)": function() {
          return browser.findByCssSelector("#TEST_CONTROL_INVERT .validation-message")
             .getVisibleText()
@@ -227,6 +227,28 @@ define(["intern!object",
          .end()
          .findAllByCssSelector(".confirmationButton.dijitDisabled")
             .then(function(elements) {
+               assert(elements.length === 0, "The forms confirmation button should be enabled");
+            });
+      },
+
+      "Test validationTopic returns a failure": function() {
+         return browser.findByCssSelector("#TOPIC_VALIDATION .dijitInputContainer input")
+            .clearValue()
+            .type("#fail")
+            .end()
+            .findAllByCssSelector(".confirmationButton.dijitDisabled")
+            .then(function (elements) {
+               assert(elements.length === 1, "The forms confirmation button should be disabled");
+            });
+      },
+
+      "Test validationTopic returns success": function () {
+         return browser.findByCssSelector("#TOPIC_VALIDATION .dijitInputContainer input")
+            .clearValue()
+            .type("success")
+            .end()
+            .findAllByCssSelector(".confirmationButton.dijitDisabled")
+            .then(function (elements) {
                assert(elements.length === 0, "The forms confirmation button should be enabled");
             });
       },
