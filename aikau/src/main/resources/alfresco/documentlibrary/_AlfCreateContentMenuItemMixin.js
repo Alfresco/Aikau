@@ -18,7 +18,10 @@
  */
 
 /**
- * 
+ * This mixin module is used by both the [AlfCreateContentMenuBarItem]{@link module:alfresco/documentlibrary/AlfCreateContentMenuBarItem}
+ * and [AlfCreateContentMenuItem]{@link module:alfresco/documentlibrary/AlfCreateContentMenuItem} and provides the basic payload
+ * configuration for requesting dialogs to capture user information for creating content. It also provides tracking for the current
+ * Node in which to create content.
  * 
  * @module alfresco/documentlibrary/_AlfCreateContentMenuItemMixin
  * @extends module:alfresco/core/Core
@@ -127,7 +130,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      onClick: function alfresco_documentlibrary__AlfCreateContentPermissionsMixin__onClick(/*jshint unused:false*/ evt) {
+      onClick: function alfresco_documentlibrary__AlfCreateContentMenuItemMixin__onClick(/*jshint unused:false*/ evt) {
          var publishPayload;
          if (!this.publishPayload)
          {
@@ -168,7 +171,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload 
        */
-      onCurrentNodeChange: function alfresco_documentlibrary__AlfCreateContentPermissionsMixin__onCurrentNodeChange(payload) {
+      onCurrentNodeChange: function alfresco_documentlibrary__AlfCreateContentMenuItemMixin__onCurrentNodeChange(payload) {
          if (payload && payload.node)
          {
             this.currentNode = payload.node;

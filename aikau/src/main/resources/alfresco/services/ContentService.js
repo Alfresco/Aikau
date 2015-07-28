@@ -438,7 +438,6 @@ define(["dojo/_base/declare",
       onFileUploadComplete: function alfresco_services_ContentService__onFileUploadComplete(payload) {
          this.alfLog("log", "Upload complete");
          this.alfUnsubscribeSaveHandles([this._uploadSubHandle]);
-         this.alfPublish(this.reloadDataTopic, {});
          var responseScope = payload.alfResponseScope || "";
          this.alfPublish(responseScope + this.reloadDataTopic, {}, true);
       },

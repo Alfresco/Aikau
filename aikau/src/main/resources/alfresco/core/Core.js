@@ -401,6 +401,7 @@ define(["dojo/_base/declare",
          delete object.alfTopic;
          delete object.alfPublishScope;
          delete object.alfOriginScope;
+         delete object.alfCallerName;
       },
 
       /**

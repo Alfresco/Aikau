@@ -43,11 +43,8 @@ define(["dojo/_base/declare",
        * Ensures that the supplied menu item label is translated.
        * @instance
        */
-      postCreate: function alfresco_menus_AlfMenuItem__postCreate() {
-         if (this.filterTopic)
-         {
-            this.alfSubscribe(this.filterTopic, lang.hitch(this, this.filter));
-         }
+      postCreate: function alfresco_menus_AlfFilteringMenuItem____postCreate() {
+         this.filterTopic && this.alfSubscribe(this.filterTopic, lang.hitch(this, this.filter));
          this.inherited(arguments);
       },
       
