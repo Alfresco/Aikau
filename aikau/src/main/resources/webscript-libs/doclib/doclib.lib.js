@@ -189,50 +189,38 @@ function generateCreateContentMenuItem(menuItemLabel, dialogTitle, iconClass, mo
       config: {
          label: menuItemLabel,
          iconClass: iconClass,
-         publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
-         publishPayloadType: "PROCESS",
-         publishPayloadModifiers: ["processCurrentItemTokens"],
-         publishPayload: {
-            contentWidth: "550px",
-            dialogTitle: dialogTitle,
-            dialogConfirmationButtonTitle: "Create",
-            dialogCancellationButtonTitle: "Cancel",
-            formSubmissionTopic: "ALF_CREATE_CONTENT_REQUEST",
-            formSubmissionPayloadMixin: {
-               type: modelType,
-               prop_mimetype: mimeType || ""
-            },
-            fixedWidth: true,
-            widgets: [
-               {
-                  name: "alfresco/forms/controls/TextBox",
-                  config: {
-                     label: msg.get("create.content.name.label"),
-                     name: "prop_cm_name",
-                     value: "",
-                     requirementConfig: {
-                        initialValue: true
-                     }
-                  }
-               },
-               {
-                  name: "alfresco/forms/controls/TextBox",
-                  config: {
-                     label: msg.get("create.content.title.label"),
-                     name: "prop_cm_title",
-                     value: ""
-                  }
-               },
-               {
-                  name: "alfresco/forms/controls/TextArea",
-                  config: {
-                     label: msg.get("create.content.description.label"),
-                     name: "prop_cm_description",
-                     value: ""
+         dialogTitle: dialogTitle,
+         contentType: modelType,
+         mimeType: mimeType,
+         widgets: [
+            {
+               name: "alfresco/forms/controls/TextBox",
+               config: {
+                  label: msg.get("create.content.name.label"),
+                  name: "prop_cm_name",
+                  value: "",
+                  requirementConfig: {
+                     initialValue: true
                   }
                }
-            ]
-         }
+            },
+            {
+               name: "alfresco/forms/controls/TextBox",
+               config: {
+                  label: msg.get("create.content.title.label"),
+                  name: "prop_cm_title",
+                  value: ""
+               }
+            },
+            {
+               name: "alfresco/forms/controls/TextArea",
+               config: {
+                  label: msg.get("create.content.description.label"),
+                  name: "prop_cm_description",
+                  value: ""
+               }
+            }
+         ]
       }
    };
    // If a content widget name has been specified then define the additional widget
@@ -257,11 +245,11 @@ function generateCreateContentMenuItem(menuItemLabel, dialogTitle, iconClass, mo
             }
          }
       }
-      menuItem.config.publishPayload.widgets.push(contentWidget);
+      menuItem.config.widgets.push(contentWidget);
    }
 
    // Add in any additional widgets requested...
-   menuItem.config.publishPayload.widgets.concat(additionalWidgets || []);
+   menuItem.config.widgets.concat(additionalWidgets || []);
    return menuItem;
 }
 
@@ -1231,8 +1219,6 @@ function getDocLib(options) {
          ]
       }
    };
-   if (options.pubSubScope) {
-      docLibModel.pubSubScope = options.pubSubScope;
-   }
+   
    return docLibModel;
 }

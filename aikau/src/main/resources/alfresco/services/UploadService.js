@@ -232,6 +232,7 @@ define(["dojo/_base/declare",
             // Store a response topic to publish on when the upload is complete...
             // This allows for scoped responses to be processed without pollution...
             this.currentResponseTopic = payload.alfResponseTopic;
+            this.currentResponseScope = payload.alfResponseScope;
 
             this.filesToUpload = [];
             this.validateRequestedFiles(payload.files);
@@ -825,6 +826,7 @@ define(["dojo/_base/declare",
          if (this.currentResponseTopic !== null && this.currentResponseTopic !== undefined)
          {
             this.alfPublish(this.currentResponseTopic, {
+               alfResponseScope: this.currentResponseScope
             }, true);
          }
       },

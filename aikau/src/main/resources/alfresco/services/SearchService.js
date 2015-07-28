@@ -160,6 +160,7 @@ define(["dojo/_base/declare",
                {
                   switch(key) {
                      case "alfTopic":
+                     case "alfOriginScope":
                      case "alfResponseTopic":
                      case "alfPublishScope":
                      case "alfCallerName":

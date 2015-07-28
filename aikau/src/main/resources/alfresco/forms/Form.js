@@ -642,9 +642,7 @@ define(["dojo/_base/declare",
       setHashFragment: function alfresco_forms_Form__setHashFragment(payload) {
          // Make sure to remove the alfTopic from the payload (this will always be assigned on publications
          // but is not actually part of the form data)...
-         delete payload.alfTopic;
-         delete payload.alfPublishScope;
-         delete payload.alfCallerName;
+         this.alfDeleteFrameworkAttributes(payload);
          
          // Make sure that only the controls with names listed in hashVarsForUpdate are set on the URL hash...
          var updatedHash = {};
