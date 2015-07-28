@@ -21,7 +21,7 @@ model.jsonModel = {
             widgets: [
                {
                   id: "TEST_CONTROL",
-                  name: "alfresco/forms/controls/DojoValidationTextBox", 
+                  name: "alfresco/forms/controls/DojoValidationTextBox",
                   config: {
                      label: "Three Letters Or More",
                      name: "name",
@@ -53,7 +53,7 @@ model.jsonModel = {
                },
                {
                   id: "TEST_CONTROL_INVERT",
-                  name: "alfresco/forms/controls/DojoValidationTextBox", 
+                  name: "alfresco/forms/controls/DojoValidationTextBox",
                   config: {
                      label: "No illegal characters",
                      name: "name",
@@ -80,7 +80,7 @@ model.jsonModel = {
                },
                {
                   id: "MATCH_TARGET",
-                  name: "alfresco/forms/controls/DojoValidationTextBox", 
+                  name: "alfresco/forms/controls/DojoValidationTextBox",
                   config: {
                      fieldId: "MATCH_TARGET",
                      label: "Field to match against",
@@ -89,7 +89,7 @@ model.jsonModel = {
                },
                {
                   id: "MATCH_SOURCE",
-                  name: "alfresco/forms/controls/DojoValidationTextBox", 
+                  name: "alfresco/forms/controls/DojoValidationTextBox",
                   config: {
                      fieldId: "MATCH_SOURCE",
                      label: "Field to test match",
@@ -99,6 +99,22 @@ model.jsonModel = {
                            validation: "validateMatch",
                            errorMessage: "Value doesn't match",
                            targetId: "MATCH_TARGET"
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "TOPIC_VALIDATION",
+                  name: "alfresco/forms/controls/DojoValidationTextBox",
+                  config: {
+                     fieldId: "TOPIC_VALIDATION",
+                     label: "Validation Topic",
+                     value: "",
+                     validationConfig: [
+                        {
+                           validation: "validationTopic",
+                           validationTopic: "ALF_VALIDATE_TOPIC_TEST",
+                           errorMessage: "Value should not be #fail"
                         }
                      ]
                   }
