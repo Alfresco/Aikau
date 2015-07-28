@@ -398,9 +398,9 @@ define(["dojo/_base/declare",
        */
       alfDeleteFrameworkAttributes: function alfresco_core_Core__alfDeleteFrameworkAttributes(object) {
          delete object.alfResponseTopic;
+         delete object.alfResponseScope;
          delete object.alfTopic;
          delete object.alfPublishScope;
-         delete object.alfOriginScope;
          delete object.alfCallerName;
       },
 
@@ -441,7 +441,7 @@ define(["dojo/_base/declare",
                // No action required
             } else if (parentScope === true) {
                publishScope = this.parentPubSubScope;
-            } else if (customScope) {
+            } else if (typeof customScope !== "undefined") {
                publishScope = customScope;
             } else {
                publishScope = this.pubSubScope;
@@ -451,7 +451,7 @@ define(["dojo/_base/declare",
             // Update the payload
             payload.alfPublishScope = publishScope;
             payload.alfTopic = scopedTopic;
-            payload.alfOriginScope = this.pubSubScope;
+            payload.alfResponseScope = payload.alfResponseScope || payload.responseScope || this.pubSubScope;
 
             // Publish...
             PubQueue.getSingleton().publish(scopedTopic, payload, this);

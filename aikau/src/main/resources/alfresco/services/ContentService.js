@@ -115,7 +115,7 @@ define(["dojo/_base/declare",
        */
       onContentCreationSuccess: function alfresco_services_ContentService__onContentCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
          var responseScope = lang.getObject("data.alfResponseScope", false, originalRequestConfig) || "";
-         this.alfPublish(responseScope + this.reloadDataTopic, {}, true);
+         this.alfPublish(this.reloadDataTopic, {}, false, false, responseScope);
       },
 
       /**
@@ -404,8 +404,7 @@ define(["dojo/_base/declare",
                   overwrite: false,
                   thumbnails: "doclib",
                   username: null
-               },
-               alfResponseScope: payload.alfOriginScope || ""
+               }
             },
             widgets: (updateNodeRef ? lang.clone(this.widgetsForUpdate) : lang.clone(this.widgetsForUpload))
          });
@@ -425,7 +424,6 @@ define(["dojo/_base/declare",
          var responseTopic = this.generateUuid();
          this._uploadSubHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onFileUploadComplete), true);
          payload.alfResponseTopic = responseTopic;
-         payload.alfResponseScope = payload.alfResponseScope;
          this.alfPublish("ALF_UPLOAD_REQUEST", payload);
       },
 
@@ -438,8 +436,7 @@ define(["dojo/_base/declare",
       onFileUploadComplete: function alfresco_services_ContentService__onFileUploadComplete(payload) {
          this.alfLog("log", "Upload complete");
          this.alfUnsubscribeSaveHandles([this._uploadSubHandle]);
-         var responseScope = payload.alfResponseScope || "";
-         this.alfPublish(responseScope + this.reloadDataTopic, {}, true);
+         this.alfPublish(this.reloadDataTopic, {}, false, false, payload.alfResponseScope);
       },
 
       /**

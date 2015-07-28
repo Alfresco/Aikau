@@ -639,7 +639,7 @@ define(["dojo/_base/declare",
                            formSubmissionTopic: config.formSubmissionTopic,
                            formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
                            formSubmissionGlobal: config.formSubmissionGlobal,
-                           formSubmissionScope: config.formSubmissionScope
+                           formSubmissionScope: config.formSubmissionScope || config.alfResponseScope
                         }
                      }
                   },
@@ -669,7 +669,7 @@ define(["dojo/_base/declare",
                      formSubmissionTopic: config.formSubmissionTopic,
                      formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
                      formSubmissionGlobal: config.formSubmissionGlobal,
-                     formSubmissionScope: config.formSubmissionScope
+                     formSubmissionScope: config.formSubmissionScope || config.alfResponseScope
                   }
                }
             });

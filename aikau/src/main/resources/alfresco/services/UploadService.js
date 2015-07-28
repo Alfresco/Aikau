@@ -826,7 +826,7 @@ define(["dojo/_base/declare",
          if (this.currentResponseTopic !== null && this.currentResponseTopic !== undefined)
          {
             this.alfPublish(this.currentResponseTopic, {
-               alfResponseScope: this.currentResponseScope
+               responseScope: this.currentResponseScope
             }, true);
          }
       },
