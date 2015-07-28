@@ -405,6 +405,21 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Publishes to a service. This method calls [alfPublish()]{@link module:alfresco/core/Core#alfPublish}
+       * behind the scenes. Will automatically scope the call to global to that the service will pick it up
+       * successfully (most services subscribe to topics with a global scope).
+       *
+       * @instance
+       * @param {string | string[]} topics The topic(s) on which to publish
+       * @param {Object} payload The payload to publish on the supplied topic
+       * @param {string} [payload.responseScope] The scope to use when any response is published
+       * @param {String} [scope] Use this to scope the publish (only use with scoped services)
+       */
+      alfServicePublish: function alfresco_core_Core__alfServicePublish(topics, payload, scope) {
+         this.alfPublish(topics, payload, !scope, false, scope);
+      },
+
+      /**
        * This function wraps the standard Dojo publish function. It should always be used rather than
        * calling the Dojo implementation directly to allow us to make changes to the implementation or
        * to introduce additional features (such as scoping) or updates to the payload.
@@ -413,6 +428,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {String | Array} topics The topic(s) on which to publish
        * @param {object} payload The payload to publish on the supplied topic
+       * @param {string} [payload.responseScope] The scope to use when any response is published
        * @param {boolean} [global] Indicates that the pub/sub scope should not be applied
        * @param {boolean} [parentScope] Indicates that the pub/sub scope inherited from the parent should be applied
        * @param {String} [customScope] A custom scope to use for this publish (will only be used if both global
