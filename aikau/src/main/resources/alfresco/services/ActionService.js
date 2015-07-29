@@ -136,7 +136,6 @@ define(["dojo/_base/declare",
 
          // Response handlers...
          this.alfSubscribe("ALF_ON_ACTION_EDIT_INLINE_SUCCESS", lang.hitch(this, this.onActionEditInlineSucess));
-         this.alfSubscribe("ALF_DOC_CANCEL_EDIT_SUCCESS", lang.hitch(this, this.onActionCancelEditingSuccess));
       },
 
       /**
@@ -612,9 +611,7 @@ define(["dojo/_base/declare",
          // Sometimes the node might be an array of nodes, can only edit the first...
          if (payload.document)
          {
-            this.alfPublish("ALF_EDIT_BASIC_METADATA_REQUEST", {
-               node: payload.document
-            });
+            this.alfPublish("ALF_EDIT_BASIC_METADATA_REQUEST", payload);
          }
          else
          {
@@ -631,7 +628,7 @@ define(["dojo/_base/declare",
       onActionUploadNewVersion: function alfresco_services_ActionService__onActionUploadNewVersion(payload) {
          // jshint unused:false
          // Call dialog service to open dialog with upload widget in.
-         this.alfPublish("ALF_SHOW_UPLOADER", payload.action);
+         this.alfPublish("ALF_SHOW_UPLOADER", payload);
       },
 
       /**
@@ -641,16 +638,6 @@ define(["dojo/_base/declare",
        */
       onActionCancelEditing: function alfresco_services_ActionService__onActionCancelEditing(payload) {
          this.alfPublish("ALF_DOC_CANCEL_EDITING", payload);
-      },
-
-      /**
-       * Triggered by the document service (via the ALF_DOC_CANCEL_EDITING_SUCCESS topic) when the action is completed.
-       *
-       * @param payload
-       */
-      onActionCancelEditingSuccess: function alfresco_services_ActionService_onActionCancelEditingSuccess(payload) {
-         // jshint unused:false
-         this.alfPublish(this.reloadDataTopic, {});
       },
 
       /**
@@ -784,12 +771,11 @@ define(["dojo/_base/declare",
        * function.
        *
        * @instance
-       * @param {object} payload The event payload
-       * @param {object} document The document edit offline.
+       * @param {object} payload The payload from the original action request
        */
-      onActionEditOffline: function alfresco_services_ActionService__onActionEditOffline(payload, document) {
+      onActionEditOffline: function alfresco_services_ActionService__onActionEditOffline(payload) {
          // Document might be an array.
-         document = (lang.isArray(document))? document[0] : document;
+         var document = (lang.isArray(payload.document))? payload.document[0] : payload.document;
          if (document && document.node && document.node.nodeRef)
          {
             var data = {
@@ -798,6 +784,7 @@ define(["dojo/_base/declare",
             var config = {
                url: AlfConstants.PROXY_URI + "slingshot/doclib/action/checkout/node/" + data.nodeRef.replace("://", "/"),
                method: "POST",
+               responseScope: payload.alfResponseScope,
                data: data,
                successCallback: this.onActionEditOfflineSuccess,
                failureCallback: this.onActionEditOfflineFailure,
@@ -833,7 +820,7 @@ define(["dojo/_base/declare",
                url: AlfConstants.PROXY_URI + response.results[0].downloadUrl,
                type: this.fullPath
             });
-            this.alfPublish(this.reloadDataTopic, {});
+            this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, originalRequestConfig.responseScope);
          }
          else
          {
@@ -858,14 +845,14 @@ define(["dojo/_base/declare",
        * Handles requests to copy the supplied documents to another location.
        *
        * @instance
-       * @param {Array} payload
-       * @param {object} documents The documents edit offline.
+       * @param {object} payload The payload from the original request
        */
-      onActionCopyTo: function alfresco_services_ActionService__onActionCopyTo(payload, documents) {
+      onActionCopyTo: function alfresco_services_ActionService__onActionCopyTo(payload) {
          this.alfPublish("ALF_COPY_OR_MOVE_REQUEST", {
-            documents: documents,
+            documents: payload.documents || [payload.document],
             copy: true,
-            singleItemMode: true
+            singleItemMode: true,
+            responseScope: payload.alfResponseScope
          });
       },
 
@@ -873,16 +860,16 @@ define(["dojo/_base/declare",
        * Handles requests to move the supplied documents to another location.
        *
        * @instance
-       * @param {Array} payload The response from the request
-       * @param {object} documents The document edit offline.
+       * @param {object} payload The payload from the original request
        */
-      onActionMoveTo: function alfresco_services_ActionService__onActionMoveTo(payload, documents) {
+      onActionMoveTo: function alfresco_services_ActionService__onActionMoveTo(payload) {
          this.alfPublish("ALF_COPY_OR_MOVE_REQUEST", {
-            documents: documents,
+            documents: payload.documents || [payload.document],
             copy: false,
             dialogTitle: "services.ActionService.moveTo.title",
             confirmButtonLabel: "services.ActionService.moveTo.ok",
-            singleItemMode: true
+            singleItemMode: true,
+            responseScope: payload.alfResponseScope
          });
       },
 
@@ -915,12 +902,11 @@ define(["dojo/_base/declare",
        * Assign workflow.
        *
        * @instance
-       * @param {object} payload the publishPayload from the action.
-       * @param {object} documents Object literal representing the nodes to be actioned
+       * @param {object} payload The payload from the original request
        */
-      onActionAssignWorkflow: function alfresco_services_ActionService__onActionAssignWorkflow(payload, documents) {
+      onActionAssignWorkflow: function alfresco_services_ActionService__onActionAssignWorkflow(payload) {
          this.alfPublish("ALF_ASSIGN_WORKFLOW", {
-            nodes: documents,
+            nodes: payload.documents,
             currentTarget: this.currentTarget
          });
       },
@@ -929,10 +915,9 @@ define(["dojo/_base/declare",
        * Handles requests to start a folder download.
        *
        * @instance
-       * @param {object} payload The payload form the action trigger
-       * @param {object} folder The folder
+       * @param {object} payload The payload from the original request
        */
-      onActionFolderDownload: function alfresco_services_ActionService__onActionFolderDownload(payload, folder) {
+      onActionFolderDownload: function alfresco_services_ActionService__onActionFolderDownload(payload) {
          this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
             generatePubSubScope: true,
             dialogTitle: this.message("services.ActionService.ActionFolderDownload.title"),
@@ -943,7 +928,7 @@ define(["dojo/_base/declare",
                   config: {
                      requestProgressTopic: "ALF_ARCHIVE_REQUEST",
                      progressFinishedTopic: ["ALF_DOWNLOAD_FILE", "ALF_ARCHIVE_DELETE"],
-                     nodes: folder
+                     nodes: [payload.document]
                   }
                }
             ],
@@ -963,10 +948,11 @@ define(["dojo/_base/declare",
 
       /**
        *
-       * @param {object} item The item to perform the action on
+       * @instance
+       * @param {object} payload The payload from the original request
        */
-      onActionManageAspects: function alfresco_services_ActionService__onActionManageAspects(payload, documents) {
-         this.alfPublish("ALF_MANAGE_ASPECTS_REQUEST", documents[0]);
+      onActionManageAspects: function alfresco_services_ActionService__onActionManageAspects(payload) {
+         this.alfPublish("ALF_MANAGE_ASPECTS_REQUEST", payload.document);
       },
 
       /**
@@ -976,21 +962,22 @@ define(["dojo/_base/declare",
        * [SimpleWorkflowService]{@link module:alfresco/services/actions/SimpleWorkflowService}.
        * 
        * @instance
-       * @param {object} payload This will contain the details of the configured action
-       * @param {object} nodes The nodes to perform the actions on. 
+       * @param {object} payload The payload from the original request
        */
-      onActionSimpleRepoAction: function alfresco_services_ActionService__onActionSimpleRepoAction(payload, nodes) {
-         switch (payload.id) {
+      onActionSimpleRepoAction: function alfresco_services_ActionService__onActionSimpleRepoAction(payload) {
+         switch (payload.action.id) {
             case "document-approve":
                this.alfPublish("ALF_APPROVE_SIMPLE_WORKFLOW", {
-                  items: nodes,
-                  action: payload.action
+                  items: [payload.document],
+                  action: payload.action.params.action,
+                  responseScope: payload.alfResponseScope
                });
                break;
             case "document-reject":
                this.alfPublish("ALF_REJECT_SIMPLE_WORKFLOW", {
-                  items: nodes,
-                  action: payload.action
+                  items: [payload.document],
+                  action: payload.action.params.action,
+                  responseScope: payload.alfResponseScope
                });
                break;
             default:
@@ -1002,8 +989,8 @@ define(["dojo/_base/declare",
        *
        * @param {object} item The item to perform the action on
        */
-      onActionLocate: function alfresco_services_ActionService__onActionLocate(item) {
-         this.alfPublish("ALF_LOCATE_DOCUMENT", { item: item });
+      onActionLocate: function alfresco_services_ActionService__onActionLocate(payload) {
+         this.alfPublish("ALF_LOCATE_DOCUMENT", { item: payload.document });
       }
    });
 });

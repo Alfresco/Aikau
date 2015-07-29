@@ -449,7 +449,6 @@ define(["dojo/_base/declare",
        * Called when the initial request to create the Download Archive Fails.
        *
        * @instance
-       *
        * @param payload
        */
       onRequestArchiveFailure: function alfresco_services_DocumentService__onRequestArchiveFailure(payload) {
@@ -606,6 +605,7 @@ define(["dojo/_base/declare",
       /**
        * Called to trigger an async file download.
        *
+       * @instance
        * @param payload Payload supplied to the event
        */
       onDownloadFile: function alfresco_services_DocumentService__onDownloadFile(payload) {
@@ -634,52 +634,64 @@ define(["dojo/_base/declare",
       /**
        * Called to cancel the editing of a checked out file.
        *
+       * @instance
        * @param {object} payload The payload supplied when the event was triggered.
        */
       onCancelEdit: function alfresco_services_DocumentService__onCancelEdit(payload) {
-         if (!payload.document) 
+         if (payload.documents)
          {
-            this.alfLog("error", "Uable to cancel editing: document missing from payload", payload, this);
+            var nodes = NodeUtils.nodeRefArray(payload.documents);
+            array.forEach(nodes, lang.hitch(this, this.onCancelEditNode, payload));
+         }
+         else if (payload.document)
+         {
+            this.onCancelEditNode(payload, payload.document);
          }
          else
          {
-            var nodes = NodeUtils.nodeRefArray(payload.document);
-            array.forEach(nodes, lang.hitch(this, this.onCancelEditNode));
-            this.onCancelEditNode(payload.document);
+            this.alfLog("error", "Unable to cancel editing: 'documents' or 'document' missing from payload", payload, this);
          }
       },
 
       /**
-       * Call the repo API to cancel the editing.
+       * Call the Alfresco Repository API to cancel the editing the node provided.
        *
-       * @param {String} nodeRef nodeRef to cancel the editing on.
+       * @instance
+       * @param {object} payload The original payload from the request.
+       * @param {string} node The node to cancel the editing on.
        */
-      onCancelEditNode: function alfresco_services_DocumentService__onCancelEditNode(nodeRef) {
-         var nodeRefObj = NodeUtils.processNodeRef(nodeRef);
-         var responseTopic = this.generateUuid();
-         var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onCancelEditNodeSuccess));
+      onCancelEditNode: function alfresco_services_DocumentService__onCancelEditNode(payload, node) {
+         if (node && node.nodeRef)
+         {
+            var nodeRefObj = NodeUtils.processNodeRef(node.nodeRef);
+            var responseTopic = this.generateUuid();
+            var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onCancelEditNodeSuccess));
 
-         this.serviceXhr({
-            alfTopic: responseTopic,
-            subscriptionHandles: subscriptionHandle,
-            url: this.cancelEditAPI + nodeRefObj.uri,
-            method: "POST",
-            data: {}
-         });
+            this.serviceXhr({
+               alfTopic: responseTopic,
+               responseScope: payload.alfResponseScope,
+               subscriptionHandles: subscriptionHandle,
+               url: this.cancelEditAPI + nodeRefObj.uri,
+               method: "POST",
+               data: {}
+            });
+         }
       },
 
       /**
        * Triggered when the cancel edit call succeeds.
        *
-       * @param payload The payload from the event trigger
+       * @instance
+       * @param payload The payload from the request to cancel editing
        */
       onCancelEditNodeSuccess: function alfresco_services_DocumentService__onCancelEditNodeSuccess(payload) {
-         this.alfPublish(this.cancelEditSuccessTopic, payload);
+         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, payload.requestConfig.responseScope);
       },
 
       /**
        * Retrieve the nodeRef for a given node's parent, by requesting the details for that node.
        *
+       * @instance
        * @param payload {Object} The publish event payload.
        */
       onGetParentNodeRef: function alfresco_services_DocumentService__onGetParentNodeRef(payload) {
@@ -700,6 +712,7 @@ define(["dojo/_base/declare",
        * This method processes the response to pull out the parent node, then triggers the originalResponseTopic
        * that was passed into the request to get the parent nodeRef.
        *
+       * @instance
        * @param payload {Object} The publish event payload.
        */
       onGetParentNodeRefSuccess: function alfresco_services_DocumentService__onGetParentNodeRefSuccess(payload) {
