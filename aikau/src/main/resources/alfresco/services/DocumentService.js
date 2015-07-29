@@ -637,12 +637,16 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload supplied when the event was triggered.
        */
       onCancelEdit: function alfresco_services_DocumentService__onCancelEdit(payload) {
-         if (!payload.documents) {
-            this.alfLog("error", "Uable to cancel editing: documents missing from payload.");
+         if (!payload.document) 
+         {
+            this.alfLog("error", "Uable to cancel editing: document missing from payload", payload, this);
          }
-
-         var nodes = NodeUtils.nodeRefArray(payload.documents);
-         array.forEach(nodes, lang.hitch(this, this.onCancelEditNode));
+         else
+         {
+            var nodes = NodeUtils.nodeRefArray(payload.document);
+            array.forEach(nodes, lang.hitch(this, this.onCancelEditNode));
+            this.onCancelEditNode(payload.document);
+         }
       },
 
       /**

@@ -781,7 +781,7 @@ function getSelectedItemsActions(selectedItemsActions) {
                href: (action.href || "").toString(),
                hasAspect: (action.hasAspect || "").toString(),
                notAspect: (action.notAspect || "").toString(),
-               publishTopic: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
+               publishTopic: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
                publishPayload: {
                   action: (action.id || "").toString()
                }

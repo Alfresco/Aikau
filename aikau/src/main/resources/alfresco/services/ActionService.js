@@ -228,7 +228,7 @@ define(["dojo/_base/declare",
             {
                // If the action is an object then it is assumed to contain information for processing
                // via the legacy toolbar.
-               this.processActionObject(payload.action, payload.document);
+               this.processActionObject(payload);
             }
          }
       },
@@ -242,15 +242,20 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Multiple document action request:", payload);
          if (typeof this[payload.action] === "function")
          {
-            var documents = [];
-            for (var nodeRef in this.currentlySelectedDocuments)
+            // NOTE: We want to avoid relying on the service to track currently selected documents, this
+            //       is now handled AlfSelectedItemsMenuBarPopup...
+            if (!payload.documents)
             {
-               if (this.currentlySelectedDocuments.hasOwnProperty(nodeRef))
+               payload.documents = [];
+               for (var nodeRef in this.currentlySelectedDocuments)
                {
-                  documents.push(this.currentlySelectedDocuments[nodeRef]);
+                  if (this.currentlySelectedDocuments.hasOwnProperty(nodeRef))
+                  {
+                     payload.documents.push(this.currentlySelectedDocuments[nodeRef]);
+                  }
                }
             }
-            this[payload.action].call(this, payload, documents);
+            this[payload.action].call(this, payload);
          }
       },
 
@@ -431,11 +436,12 @@ define(["dojo/_base/declare",
        * - template (creates templated content)
        *
        * @instance
-       * @param {object} action An object containing the details of the action to perform
-       * @param {object} document The document to perform the action on (only applicable to actions of type "javascript")
+       * @param {object} payload The original payload requesting the action
        */
-      processActionObject: function alfresco_services_ActionService__processActionObject(action, document) {
+      processActionObject: function alfresco_services_ActionService__processActionObject(payload) {
          /*jshint maxcomplexity:false*/
+         var action = payload.action;
+         var document = payload.document;
          if (action && action.type)
          {
             if (action.type === "pagelink")
@@ -464,7 +470,7 @@ define(["dojo/_base/declare",
             {
                if (action.params["function"])
                {
-                  this.createJavaScriptContent(action, document);
+                  this.createJavaScriptContent(payload);
                }
                else
                {
@@ -569,13 +575,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload published on the requesting topic
-       * @param {object} document The document to perform the action on.
        */
-      createJavaScriptContent: function alfresco_services_ActionService__createJavaScriptContent(payload, document) {
-         if (!document)
+      createJavaScriptContent: function alfresco_services_ActionService__createJavaScriptContent(payload) {
+         if (!payload.document)
          {
+            // NOTE: Ideally we want to be avoid using a contextual _currentNode, we should be providing 
+            //       all the data required by the service in the request, but this remains for legacy support
             var node = lang.clone(this._currentNode.parent);
-            document = {
+            payload.documentdocument = {
                nodeRef: node.nodeRef,
                node: node,
                jsNode: new JsNode(node)
@@ -583,15 +590,15 @@ define(["dojo/_base/declare",
          }
 
          // See if the requested function is provided by this service and if not delegate to the Alfresco.DocLibToolbar widget.
-         var f = this[payload.params["function"]];
+         var f = this[payload.action.params["function"]];
          if (typeof f === "function")
          {
-            // TODO: Should the document really be an Array?
-            f.call(this, payload, [document]);
+            f.call(this, payload);
+            // f.call(this, payload.action, [payload.document]);
          }
          else
          {
-            this.alfLog("warn", "Could not find action handler", this, payload, document);
+            this.alfLog("warn", "Could not find action handler", this, payload);
          }
       },
 
@@ -600,50 +607,39 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The response from the request
-       * @param {object} node The node to get the details for
        */
-      onActionDetails: function alfresco_services_ActionService__onActionDetails(payload, node) {
+      onActionDetails: function alfresco_services_ActionService__onActionDetails(payload) {
          // Sometimes the node might be an array of nodes, can only edit the first...
-         if (ObjectTypeUtils.isArray(node) && node.length > 0)
-         {
-            node = node[0];
-         }
-         if (node)
+         if (payload.document)
          {
             this.alfPublish("ALF_EDIT_BASIC_METADATA_REQUEST", {
-               node: node
+               node: payload.document
             });
          }
          else
          {
-            this.alfLog("warn", "A request was made to edit the properties of a node but no node was provided", payload, node, this);
+            this.alfLog("warn", "A request was made to edit the properties of a node but no node was provided", payload, this);
          }
       },
 
       /**
-       * Handles requests to upload a new version of the supplied document. This function currently
-       * delegates handling of the request to the Alfresco.DocLibToolbar by calling
-       * [callLegacyActionHandler]{@link module:alfresco/services/ActionsService#callLegacyActionHandler}
+       * Handles requests to upload a new version of the supplied document.
        *
        * @instance
-       * @param {object} payload The response from the request
-       * @param {object} document The document to upload a new version for.
+       * @param {object} payload The payload supplied on the original request
        */
-      onActionUploadNewVersion: function alfresco_services_ActionService__onActionUploadNewVersion(payload, document) {
+      onActionUploadNewVersion: function alfresco_services_ActionService__onActionUploadNewVersion(payload) {
          // jshint unused:false
          // Call dialog service to open dialog with upload widget in.
-         this.alfPublish("ALF_SHOW_UPLOADER", payload);
+         this.alfPublish("ALF_SHOW_UPLOADER", payload.action);
       },
 
       /**
        * Cancels Editing for checked out documents.
        *
-       * @param {object} payload The payload supplied to the event
-       * @param {Object[]} documents The documents to cancel editing on.
+       * @param {object} payload The payload supplied on the original request
        */
-      onActionCancelEditing: function alfresco_services_ActionService__onActionCancelEditing(payload, documents) {
-         // Pass trigger to the document service, making sure to include the documents in the call.
-         payload.documents = documents;
+      onActionCancelEditing: function alfresco_services_ActionService__onActionCancelEditing(payload) {
          this.alfPublish("ALF_DOC_CANCEL_EDITING", payload);
       },
 
@@ -689,7 +685,6 @@ define(["dojo/_base/declare",
        * @fires ALF_CREATE_FORM_DIALOG_REQUEST
        */
       onActionEditInlineSucess: function alfresco_services_ActionService__onActionEditInlineSucess(payload) {
-
          if (!lang.exists("response.item.node", payload))
          {
             this.alfLog("warn", "When processing a request to display document properties, the expected 'response.item.node' attribute was not found", payload, this);
@@ -793,10 +788,8 @@ define(["dojo/_base/declare",
        * @param {object} document The document edit offline.
        */
       onActionEditOffline: function alfresco_services_ActionService__onActionEditOffline(payload, document) {
-
          // Document might be an array.
          document = (lang.isArray(document))? document[0] : document;
-
          if (document && document.node && document.node.nodeRef)
          {
             var data = {
@@ -858,7 +851,6 @@ define(["dojo/_base/declare",
        */
       onActionEditOfflineFailure: function alfresco_services_ActionService__onActionEditOfflineSuccess(response, originalRequestConfig) {
          this.alfLog("error", "Edit offline request failure", response, originalRequestConfig);
-
          this.displayMessage(this.message("message.edit-offline.failure", {"0": response.results[0].id}));
       },
 
@@ -898,13 +890,10 @@ define(["dojo/_base/declare",
        * Handles requests to delete the supplied document.
        *
        * @instance
-       * @param {object} payload The response from the request
-       * @param {object} documents The document edit offline.
+       * @param {object} payload The payload from the original request
        */
-      onActionDelete: function alfresco_services_ActionService__onActionDelete(payload, documents) {
-         this.alfPublish("ALF_DELETE_CONTENT_REQUEST", {
-            nodes: documents || [payload.document]
-         });
+      onActionDelete: function alfresco_services_ActionService__onActionDelete(payload) {
+         this.alfPublish("ALF_DELETE_CONTENT_REQUEST", payload);
       },
 
       /**

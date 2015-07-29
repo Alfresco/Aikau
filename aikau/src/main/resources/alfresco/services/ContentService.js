@@ -152,6 +152,7 @@ define(["dojo/_base/declare",
          var responseTopic = this.generateUuid();
          this._actionDeleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onActionDeleteConfirmation), true);
 
+         var nodes = payload.documents || [payload.document];
          this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
             dialogId: "ALF_DELETE_CONTENT_DIALOG",
             dialogTitle: this.message("contentService.delete.dialog.title"),
@@ -161,7 +162,7 @@ define(["dojo/_base/declare",
                   config: {
                      additionalCssClasses: "no-highlight",
                      currentData: {
-                        items: payload.nodes
+                        items: nodes
                      },
                      widgets: [
                         {
@@ -224,7 +225,8 @@ define(["dojo/_base/declare",
                      label: this.message("contentService.delete.confirmation"),
                      publishTopic: responseTopic,
                      publishPayload: {
-                        nodes: payload.nodes
+                        nodes: nodes,
+                        responseScope: payload.alfResponseScope
                      }
                   }
                },
@@ -256,6 +258,7 @@ define(["dojo/_base/declare",
 
          this.serviceXhr({
             alfTopic: responseTopic,
+            responseScope: payload.alfResponseScope,
             subscriptionHandle: subscriptionHandle,
             url: AlfConstants.PROXY_URI + "slingshot/doclib/action/files?alf_method=delete",
             method: "POST",
@@ -280,7 +283,7 @@ define(["dojo/_base/declare",
          this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
             message: this.message("contentService.delete.success.message")
          });
-         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {});
+         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, payload.requestConfig.responseScope);
       },
 
       /**

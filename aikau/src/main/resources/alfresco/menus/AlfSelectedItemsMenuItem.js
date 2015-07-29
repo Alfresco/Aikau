@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -56,9 +56,9 @@ define(["dojo/_base/declare",
        * @param {object} payload A publication payload containing the details of the selected items.
        */
       onItemsSelected: function alfresco_menus_AlfSelectedItemsMenuItem__onItemsSelected(payload) {
-         if (payload.selectedItems != null)
+         if (payload.selectedItems)
          {
-            if (this.publishPayload == null)
+            if (!this.publishPayload)
             {
                this.publishPayload = {};
             }
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onClick: function alfresco_menus_AlfSelectedItemsMenuItem__onClick(evt) {
+      onClick: function alfresco_menus_AlfSelectedItemsMenuItem__onClick(/*jshint unused:false*/ evt) {
          this.inherited(arguments);
          if (this.clearSelectedItemsOnClick === true)
          {
