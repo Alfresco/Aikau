@@ -577,7 +577,7 @@ define(["dojo/_base/declare",
        *
        * @param validationConfig
        */
-      validationTopic: function(validationConfig)
+      validationTopic: function alfresco_forms_controls_FormControlValidationMixin__validationTopic(validationConfig)
       {
          if (!validationConfig || !validationConfig.validationTopic)
          {
@@ -612,12 +612,12 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The response called by the topic specified in validationTopic. Recieves the isValid state and updates the form.
+       * The response called by the topic specified in validationTopic. Receives the isValid state and updates the form.
        *
        * @instance
        * @param payload
        */
-      onValidationTopicResponse: function(payload)
+      onValidationTopicResponse: function alfresco_forms_controls_FormControlValidationMixin__onValidationTopicResponse(payload)
       {
          this.alfUnsubscribeSaveHandles([this._validationTopicHandles]);
 
