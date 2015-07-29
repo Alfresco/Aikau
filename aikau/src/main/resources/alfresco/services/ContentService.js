@@ -406,6 +406,7 @@ define(["dojo/_base/declare",
                   username: null
                }
             },
+            responseScope: payload.alfResponseScope,
             widgets: (updateNodeRef ? lang.clone(this.widgetsForUpdate) : lang.clone(this.widgetsForUpload))
          });
       },
