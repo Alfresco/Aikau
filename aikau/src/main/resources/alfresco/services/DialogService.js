@@ -639,7 +639,8 @@ define(["dojo/_base/declare",
                            formSubmissionTopic: config.formSubmissionTopic,
                            formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
                            formSubmissionGlobal: config.formSubmissionGlobal,
-                           formSubmissionScope: config.formSubmissionScope
+                           formSubmissionScope: config.formSubmissionScope,
+                           responseScope: config.alfResponseScope
                         }
                      }
                   },
@@ -669,7 +670,8 @@ define(["dojo/_base/declare",
                      formSubmissionTopic: config.formSubmissionTopic,
                      formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
                      formSubmissionGlobal: config.formSubmissionGlobal,
-                     formSubmissionScope: config.formSubmissionScope
+                     formSubmissionScope: config.formSubmissionScope,
+                     responseScope: config.alfResponseScope
                   }
                }
             });
@@ -723,10 +725,11 @@ define(["dojo/_base/declare",
             }
 
             // Mixin in any additional payload information...
-            if (payload.formSubmissionPayloadMixin)
-            {
-               lang.mixin(data, payload.formSubmissionPayloadMixin);
-            }
+            payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
+            payload.alfResponseScope && lang.mixin(data, {
+               responseScope: payload.alfResponseScope
+            });
+
             // Using JQuery here in order to support deep merging of dot-notation properties...
             $.extend(true, data, formData);
 
