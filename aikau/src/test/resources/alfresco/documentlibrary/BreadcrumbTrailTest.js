@@ -113,7 +113,7 @@ define(["intern!object",
          return browser.findByCssSelector("#HIDE_PATH_label")
             .click()
             .end()
-         .findByCssSelector("#HASH_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail")
+         .findByCssSelector("#FIXED_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail")
             .isDisplayed()
             .then(function(result) {
                assert(result === false, "The breadcrumb trail wasn't hidden");
@@ -124,7 +124,7 @@ define(["intern!object",
          return browser.findByCssSelector("#SHOW_PATH_label")
             .click()
             .end()
-         .findByCssSelector("#HASH_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail")
+         .findByCssSelector("#FIXED_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail")
             .isDisplayed()
             .then(function(result) {
                assert(result === true, "The breadcrumb trail wasn't displayed");
@@ -135,14 +135,14 @@ define(["intern!object",
          return browser.findByCssSelector("#FILTER_SELECTION_label")
             .click()
             .end()
-         .findAllByCssSelector("#HASH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
+         .findAllByCssSelector("#FIXED_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb")
             .then(function(elements) {
                assert(elements.length === 1, "Setting filter didn't remove breadcrumbs");
             });
       },
 
       "Check that filter is displayed correctly": function() {
-         return browser.findByCssSelector("#HASH_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail > ul > li > a")
+         return browser.findByCssSelector("#FIXED_BREADCRUMBS.alfresco-documentlibrary-AlfBreadcrumbTrail > ul > li > a")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Simulated Filter", "Filter wasn't displayed correctly");

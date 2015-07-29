@@ -236,7 +236,7 @@ define(["dojo/_base/declare",
 
             if (this.useHash === true)
             {
-               this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onPathChanged));
+               this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onPathChanged), true);
             }
             else if (this.pathChangeTopic)
             {
@@ -323,7 +323,8 @@ define(["dojo/_base/declare",
          var path = paths.slice(0, index+1).join("/");
          var config = {
             label: folderName,
-            path: path
+            path: path,
+            publishGlobal: true
          };
          if (index < paths.length -1)
          {

@@ -47,6 +47,7 @@ model.jsonModel = {
          id: "HASH_BREADCRUMBS",
          name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
          config: {
+            pubSubScope: "SCOPED_",
             lastBreadcrumbIsCurrentNode: true,
             useHash: true,
             rootLabel: "HOME",
@@ -136,7 +137,7 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          config: {
             label: "Change Current NodeRef",
-            publishTopic: "ALF_CURRENT_NODEREF_CHANGED",
+            publishTopic: "SCOPED_ALF_CURRENT_NODEREF_CHANGED",
             publishPayload: {
                node: {
                   parent: {
