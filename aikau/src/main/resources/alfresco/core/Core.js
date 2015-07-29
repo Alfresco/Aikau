@@ -467,7 +467,7 @@ define(["dojo/_base/declare",
             // Update the payload
             payload.alfPublishScope = publishScope;
             payload.alfTopic = scopedTopic;
-            payload.alfResponseScope = payload.alfResponseScope || payload.responseScope || this.pubSubScope;
+            payload.alfResponseScope = payload.responseScope || payload.alfResponseScope || this.pubSubScope;
 
             // Publish...
             PubQueue.getSingleton().publish(scopedTopic, payload, this);
