@@ -364,6 +364,19 @@ define(["intern!object",
             });
       },
 
+      "Check tabs in form dialog": function() {
+         return browser.findById("CREATE_FORM_DIALOG_WITH_TABBED_LAYOUT")
+            .click()
+         .end()
+         .findAllByCssSelector("#TABBED_FORM_DIALOG.dialogDisplayed")
+         .end()
+         .findByCssSelector("#TABBED_FORM_DIALOG .dijitTabController")
+            .getSize()
+            .then(function(size) {
+               assert(size.height > 0, "Tabs were not displayed correctly when dialog is initially shown");
+            });
+      },
+
       "Can launch dialog within dialog": function() {
          return closeAllDialogs()
             .then(function() {

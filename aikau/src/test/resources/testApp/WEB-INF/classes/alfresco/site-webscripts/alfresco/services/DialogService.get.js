@@ -240,6 +240,63 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_FORM_DIALOG_WITH_TABBED_LAYOUT",
+         config: {
+            label: "Create Tabbed Layout Form Dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "TABBED_FORM_DIALOG",
+               dialogTitle: "Tabs in forms",
+               formSubmissionTopic: "TABBED_FORM",
+               widgets: [
+                  {
+                     id: "TC1",
+                     name: "alfresco/forms/TabbedControls",
+                     config: {
+                        widgets: [
+                           {
+                              name: "alfresco/forms/ControlColumn",
+                              title: "Tab 1",
+                              config: {
+                                 widgets: [
+                                    {
+                                       id: "TAB1_TB",
+                                       name: "alfresco/forms/controls/TextBox",
+                                       config: {
+                                          fieldId: "TAB1_TB",
+                                          name: "tab1tb",
+                                          label: "Tab 1 TextBox"
+                                       }
+                                    }
+                                 ]
+                              }
+                           },
+                           {
+                              name: "alfresco/forms/ControlColumn",
+                              title: "Tab 2",
+                              config: {
+                                 widgets: [
+                                    {
+                                       id: "TAB2_TB",
+                                       name: "alfresco/forms/controls/TextBox",
+                                       config: {
+                                          fieldId: "TAB2_TB",
+                                          name: "tab2tb",
+                                          label: "Second text box"
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]

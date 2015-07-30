@@ -159,6 +159,7 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @mixes module:alfresco/core/ResizeMixin
  * @author Richard Smith
  * @author Dave Draper
  */
@@ -168,14 +169,16 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/AlfTabContainer.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/ResizeMixin",
         "dijit/layout/TabContainer",
         "dijit/layout/ContentPane",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, TabContainer, ContentPane, domConstruct, lang, array) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, 
+                 TabContainer, ContentPane, domConstruct, lang, array) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin], {
       
       /**
        * An array of the CSS files to use with this widget
@@ -352,6 +355,8 @@ define(["dojo/_base/declare",
          {
             this.alfSubscribe(this.tabDeletionTopic, lang.hitch(this, this.onTabDelete));
          }
+
+         this.alfSetupResizeSubscriptions(this.onResize, this);
       },
 
       /**
@@ -455,6 +460,19 @@ define(["dojo/_base/declare",
          if(forDeletion || forDeletion === 0)
          {
             this._delayedProcessingWidgets.splice(forDeletion, 1);
+         }
+      },
+
+      /**
+       * Resizes the TabContainer on resize events.
+       *
+       * @instance
+       * @param {object} evt The resize event.
+       */
+      onResize: function alfresco_layout_AlfTabContainer__onResize() {
+         if (this.tabContainerWidget && typeof this.tabContainerWidget.resize === "function")
+         {
+            this.tabContainerWidget.resize();
          }
       },
 
