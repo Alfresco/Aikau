@@ -23,6 +23,7 @@
  *
  * @module alfresco/util/urlUtils
  * @author Martin Doyle
+ * @author David Webster
  */
 define(["dojo/_base/lang"],
    function(lang) {
@@ -30,18 +31,40 @@ define(["dojo/_base/lang"],
       // The private container for the functionality and properties of the util
       var util = {
 
-         // See API below
-         addQueryParameter: function alfresco_util_urlUtils__addQueryParameter(url, param, value, encodeValue) {
-            var paramPrefix = url.indexOf("?") === -1 ? "?" : "&",
+         addParameter: function alfresco_util_urlUtils__addParameter(type, url, param, value, encodeValue) {
+            var initialChar;
+
+            switch (type) {
+               case "query":
+                  initialChar = "?";
+                  break;
+               case "hash":
+                  initialChar = "#";
+                  break;
+               default:
+                  this.alfLog("warn", "Attempting to add parameter, but param type unknown: " + arguments);
+            }
+
+            var paramPrefix = url.indexOf(initialChar) === -1 ? initialChar : "&",
                paramToUse = paramPrefix + param,
                valueToUse = encodeValue ? encodeURIComponent(value) : value;
             return url + paramToUse + "=" + valueToUse;
+         },
+
+         // See API below
+         addQueryParameter: function alfresco_util_urlUtils__addQueryParameter(url, param, value, encodeValue) {
+            return this.addParameter("query", url, param, value, encodeValue);
+         },
+
+         // See API below
+         addHashParameter: function alfresco_util_urlUtils__addHashParameter(url, param, value, encodeValue) {
+            return this.addParameter("hash", url, param, value, encodeValue);
          }
       };
 
       /**
        * The public API for this utility class
-       * 
+       *
        * @alias module:alfresco/util/urlUtils
        */
       return {
@@ -58,6 +81,21 @@ define(["dojo/_base/lang"],
           * @param {bool} [encodeValue] Whether to URI-encode the value
           * @returns {string} The updated URL
           */
-         addQueryParameter: lang.hitch(util, util.addQueryParameter)
+         addQueryParameter: lang.hitch(util, util.addQueryParameter),
+
+
+         /**
+          * This function can be used to append the supplied parameter name and value onto the hash of the
+          * supplied URL string which is then returned.
+          *
+          * @instance
+          * @function
+          * @param {string} url The url to update
+          * @param {string} param The name of the hash parameter
+          * @param {string} value The value of the hash parameter
+          * @param {bool} [encodeValue] Whether to URI-encode the value
+          * @returns {string} The updated URL
+          */
+         addHashParameter: lang.hitch(util, util.addHashParameter)
       };
    });
