@@ -309,14 +309,16 @@ define(["intern!object",
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Node 1", "Node wasn't rendered correctly");
-            })
-            .click();
+            });
       },
 
       "Check that create template topic was published correctly": function() {
-         return browser.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("ALF_CREATE_CONTENT", "params", "sourceNodeRef", "workspace://SpacesStore/0e56c7a3-67d0-4a35-b2ce-4c2038897a66"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Create template topic not published correctly");
+         return browser.findByCssSelector("#CREATE_TEMPLATES_dropdown tbody tr:first-child td:nth-child(2)")
+            .click()
+         .end()
+         .getLastPublish("ALF_CREATE_CONTENT")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "action.params.sourceNodeRef", "workspace://SpacesStore/0e56c7a3-67d0-4a35-b2ce-4c2038897a66", "Create template topic not published correctly");
             });
       },
 
@@ -370,15 +372,17 @@ define(["intern!object",
          .findByCssSelector("#ALF_CREATE_FOLDER_TEMPLATE_NODE .confirmationButton > span")
             .click()
          .end()
-         .findByCssSelector(".mx-row:nth-child(3) .mx-payload")
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden")
+         .end()
+         .findByCssSelector(".mx-row:nth-child(4) .mx-payload")
             .getVisibleText()
             .then(function(payload) {
                // NOTE: Checking payload elements individually because order is not guaranteed...
-               assert(payload.indexOf("\"parentNodeRef\":\"some://dummy/node\"") !== -1, "Parent NodeRef incorrect");
-               assert(payload.indexOf("\"sourceNodeRef\":\"workspace://SpacesStore/c90aa137-2c57-4a36-8681-b0b207cbee91\"") !== -1, "Source NodeRef incorrect");
-               assert(payload.indexOf("\"prop_cm_name\":\"Name\"") !== -1, "Name incorrect");
-               assert(payload.indexOf("\"prop_cm_title\":\"Title\"") !== -1, "Title incorrect");
-               assert(payload.indexOf("\"prop_cm_description\":\"Description\"") !== -1, "Description incorrect");
+               assert.include(payload, "\"parentNodeRef\":\"some://dummy/node\"", "Parent NodeRef incorrect");
+               assert.include(payload, "\"sourceNodeRef\":\"workspace://SpacesStore/c90aa137-2c57-4a36-8681-b0b207cbee91\"", "Source NodeRef incorrect");
+               assert.include(payload, "\"prop_cm_name\":\"Name\"", "Name incorrect");
+               assert.include(payload, "\"prop_cm_title\":\"Title\"", "Title incorrect");
+               assert.include(payload, "\"prop_cm_description\":\"Description\"", "Description incorrect");
             });
       },
 

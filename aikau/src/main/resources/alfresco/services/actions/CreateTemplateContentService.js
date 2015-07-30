@@ -108,6 +108,7 @@ define(["dojo/_base/declare",
                subscriptionHandle: subscriptionHandle,
                urlSuffix: "folder-templates"
             },
+            responseScope: payload.alfResponseScope,
             widgets: [
                {
                   id: "FOLDER_TEMPLATE_NAME",
@@ -172,6 +173,11 @@ define(["dojo/_base/declare",
             sourceNodeRef: payload.sourceNodeRef
          };
 
+         // Initialise the override data, the request will fail without it...
+         data.prop_cm_name = "";
+         data.prop_cm_title = "";
+         data.prop_cm_description = "";
+
          // Add in any additional data provided through user overrides...
          if (payload.name)
          {
@@ -190,6 +196,7 @@ define(["dojo/_base/declare",
          this.serviceXhr({url : url,
                           node: payload.sourceNodeRef,
                           data: data,
+                          responseScope: payload.alfResponseScope,
                           method: "POST",
                           successCallback: this.templateContentCreateSuccess,
                           failureCallback: this.templateContentCreateFailure,
@@ -201,7 +208,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      templateContentCreateSuccess: function alfresco_services_ActionService__templateContentCreateSuccess(response, /*jshint unused:false*/ originalRequestConfig) {
+      templateContentCreateSuccess: function alfresco_services_ActionService__templateContentCreateSuccess(response, originalRequestConfig) {
          this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
             message: this.message("create.template.content.success", {
                0: response.name
@@ -212,7 +219,7 @@ define(["dojo/_base/declare",
             parentNodeRef: originalRequestConfig.data.parentNodeRef,
             highlightFile: response.name
          });
-         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {});
+         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, originalRequestConfig.responseScope);
       },
 
       /**
