@@ -55,12 +55,14 @@ define(["dojo/_base/declare",
       
       /**
        * This is the topic that is published by each menu item created within the cascade. It should not
-       * be necessary to reconfigure it.
+       * be reconfigured it as it is automatically generated to be a unique value so that only menu items 
+       * added to this cascading menu will use it.
        *
        * @instance
        * @type {String}
+       * @default null
        */
-      _menuItemToParentTopic: "ALF_CREATE_TEMPLATED_CONTENT",
+      _menuItemToParentTopic: null,
 
       /**
        * Indicates whether the templates have been loaded yet.
