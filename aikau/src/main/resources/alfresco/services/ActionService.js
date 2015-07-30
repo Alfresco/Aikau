@@ -216,7 +216,7 @@ define(["dojo/_base/declare",
                if (typeof this[payload.action] === "function")
                {
                   // Then check the actions provided by this service...
-                  this[payload.action](payload.document);
+                  this[payload.action](payload);
                }
                else
                {
@@ -480,14 +480,14 @@ define(["dojo/_base/declare",
             {
                if (action.params.sourceNodeRef)
                {
-                  var targetNodeRef = action.params.targetNodeRef || lang.getObject("_currentNode.parent.nodeRef", false, this);
                   this.alfPublish("ALF_CREATE_TEMPLATE_CONTENT", {
                      sourceNodeRef: action.params.sourceNodeRef,
-                     targetNodeRef: targetNodeRef,
+                     targetNodeRef: action.params.targetNodeRef,
                      templateType: action.params.templateType || "node",
                      name: action.params.name || "",
                      title: action.params.title || "",
-                     description: action.params.description || ""
+                     description: action.params.description || "",
+                     responseScope: payload.alfResponseScope
                   });
                }
                else
@@ -906,7 +906,7 @@ define(["dojo/_base/declare",
        */
       onActionAssignWorkflow: function alfresco_services_ActionService__onActionAssignWorkflow(payload) {
          this.alfPublish("ALF_ASSIGN_WORKFLOW", {
-            nodes: payload.documents,
+            nodes: payload.documents || [payload.document],
             currentTarget: this.currentTarget
          });
       },
@@ -990,7 +990,9 @@ define(["dojo/_base/declare",
        * @param {object} item The item to perform the action on
        */
       onActionLocate: function alfresco_services_ActionService__onActionLocate(payload) {
-         this.alfPublish("ALF_LOCATE_DOCUMENT", { item: payload.document });
+         this.alfPublish("ALF_LOCATE_DOCUMENT", {
+            node: payload.document
+         });
       }
    });
 });

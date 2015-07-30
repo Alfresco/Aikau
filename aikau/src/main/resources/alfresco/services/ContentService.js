@@ -502,61 +502,72 @@ define(["dojo/_base/declare",
        * @param {object} node The node to display the metadata for
        */
       onEditBasicMetadata: function alfresco_services_ContentService__onEditBasicMetadata(payload) {
-         var node = payload.document.node || payload.response.item.node;
-         var dialogTitle = this.message("contentService.basicMetadata.dialog.title", {
-            0: node.properties["cm:name"]
-         });
+         var node = lang.getObject("document.node", false, payload);
+         if (!node)
+         {
+            node = lang.getObject("response.item.node", false, payload);
+         }
+         if (node)
+         {
+            var dialogTitle = this.message("contentService.basicMetadata.dialog.title", {
+               0: node.properties["cm:name"]
+            });
 
-         this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
-            dialogId: "ALF_BASIC_METADATA_DIALOG",
-            dialogTitle: dialogTitle,
-            dialogConfirmationButtonTitle: "contentService.basicMetadata.confirmation",
-            dialogCancellationButtonTitle: "contentService.basicMetadata.cancellation",
-            formSubmissionTopic: "ALF_UPDATE_CONTENT_REQUEST",
-            responseScope: payload.alfResponseScope,
-            widgets: [
-               {
-                  name: "alfresco/forms/controls/TextBox",
-                  config: {
-                     name: "nodeRef",
-                     value: node.nodeRef,
-                     visibilityConfig: {
-                        initialValue: false
+            this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
+               dialogId: "ALF_BASIC_METADATA_DIALOG",
+               dialogTitle: dialogTitle,
+               dialogConfirmationButtonTitle: "contentService.basicMetadata.confirmation",
+               dialogCancellationButtonTitle: "contentService.basicMetadata.cancellation",
+               formSubmissionTopic: "ALF_UPDATE_CONTENT_REQUEST",
+               responseScope: payload.alfResponseScope,
+               widgets: [
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "nodeRef",
+                        value: node.nodeRef,
+                        visibilityConfig: {
+                           initialValue: false
+                        }
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        label: "contentService.basicMetadata.name.label",
+                        description: "contentService.basicMetadata.name.description",
+                        name: "prop_cm_name",
+                        value: node.properties["cm:name"],
+                        requirementConfig: {
+                           initialValue: true
+                        }
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        label: "contentService.basicMetadata.title.label",
+                        description: "contentService.basicMetadata.title.description",
+                        name: "prop_cm_title",
+                        value: node.properties["cm:title"]
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextArea",
+                     config: {
+                        label: "contentService.basicMetadata.description.label",
+                        description: "contentService.basicMetadata.description.description",
+                        name: "prop_cm_description",
+                        value: node.properties["cm:description"]
                      }
                   }
-               },
-               {
-                  name: "alfresco/forms/controls/TextBox",
-                  config: {
-                     label: "contentService.basicMetadata.name.label",
-                     description: "contentService.basicMetadata.name.description",
-                     name: "prop_cm_name",
-                     value: node.properties["cm:name"],
-                     requirementConfig: {
-                        initialValue: true
-                     }
-                  }
-               },
-               {
-                  name: "alfresco/forms/controls/TextBox",
-                  config: {
-                     label: "contentService.basicMetadata.title.label",
-                     description: "contentService.basicMetadata.title.description",
-                     name: "prop_cm_title",
-                     value: node.properties["cm:title"]
-                  }
-               },
-               {
-                  name: "alfresco/forms/controls/TextArea",
-                  config: {
-                     label: "contentService.basicMetadata.description.label",
-                     description: "contentService.basicMetadata.description.description",
-                     name: "prop_cm_description",
-                     value: node.properties["cm:description"]
-                  }
-               }
-            ]
-         });
+               ]
+            });
+         }
+         else
+         {
+            this.alfLog("warn", "Node data not provided for editing metdata", payload, this);
+         }
       }
    });
 });

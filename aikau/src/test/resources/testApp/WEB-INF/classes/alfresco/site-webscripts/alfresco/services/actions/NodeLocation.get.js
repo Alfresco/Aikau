@@ -76,7 +76,7 @@ model.jsonModel = {
             pubSubScope: "CUSTOM_",
             publishTopic: "ALF_LOCATE_DOCUMENT",
             publishPayload: {
-               item: {
+               node: {
                   location: {
                      path: "/some/random/path",
                      site: {
@@ -97,7 +97,7 @@ model.jsonModel = {
             pubSubScope: "CUSTOM_",
             publishTopic: "ALF_LOCATE_DOCUMENT",
             publishPayload: {
-               item: {
+               node: {
                   location: {
                      path: "/another/random/path"
                   },

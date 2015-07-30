@@ -107,10 +107,10 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onLocateDocumentRequest: function alfresco_services_actions_NodeLocationService__onLocateDocumentRequest(payload) {
-         if (payload && payload.item)
+         if (payload && payload.node)
          {
-            var path = lang.getObject("item.location.path", false, payload);
-            var recordSiteName = lang.getObject("item.location.site.name", false, payload);
+            var path = lang.getObject("node.location.path", false, payload);
+            var recordSiteName = lang.getObject("node.location.site.name", false, payload);
             var useSiteUrl = (recordSiteName && this.siteUrl);
 
             var page = useSiteUrl ? this.siteUrl : this.nonSiteUrl;

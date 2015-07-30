@@ -264,7 +264,7 @@ createContent.splice(0, 0, folder, plainText, html, xml);
 var createContentByTemplateEnabled = true;
 if (docLibXmlConfig["create-content-by-template"] && docLibXmlConfig["create-content-by-template"].value)
 {
-   createContentByTemplateEnabled = docLibXmlConfig["create-content-by-template"].value.toString() === "true" || false;
+   createContentByTemplateEnabled = docLibXmlConfig["create-content-by-template"].value.toString().equals("true") || false;
 }
 if (createContentByTemplateEnabled)
 {
