@@ -1,0 +1,28 @@
+.alfresco-forms-controls-NumberSpinner {
+   .dijitSpinner.dijitSpinnerFocused .dijitArrowButton {
+      background-color: #efefef; /* .claro .dijitSpinner .dijitArrowButton - until we style this ourselves in the future */
+   }
+   
+   .dijitNumberTextBox .dijitButtonNode.dijitSpinnerButtonContainer,
+   .dijitNumberTextBoxHover .dijitButtonNode.dijitSpinnerButtonContainer {
+      border-color: @standard-border-color;
+      transition: none;
+      width: 14px;
+      
+      .dijitUpArrowButton, .dijitDownArrowButton {
+         background-image: none;
+         transition: none;
+         border-color: @standard-button-border-color;
+         > .dijitArrowButtonInner {
+            border: none;
+            margin: 0;
+         }
+      }
+      
+      .dijitUpArrowButton.dijitUpArrowButtonHover, .dijitDownArrowButton.dijitDownArrowButtonHover {
+         background-image: none;
+         border-color: @standard-border-color;
+         background-color: #efefef; /* .claro .dijitSpinner .dijitArrowButton - until we style this ourselves in the future */
+      }
+   }
+}
