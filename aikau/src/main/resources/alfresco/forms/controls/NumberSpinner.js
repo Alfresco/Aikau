@@ -18,6 +18,33 @@
  */
 
 /**
+ * <p>This control is for the entry of numbers, while additionally allowing
+ * "spinning" to adjust the number value (by scrolling or spinner-buttons).</p>
+ *
+ * @example <caption>Minimum configuration</caption>
+ * {
+ *    name: "alfresco/forms/controls/NumberSpinner", 
+ *    config: {
+ *       name: "one"
+ *    }
+ * }
+ *
+ * @example <caption>Full configuration</caption>
+ * {
+ *    name: "alfresco/forms/controls/NumberSpinner", 
+ *    config: {
+ *       name: "two",
+ *       value: 3,
+ *       min: 5,
+ *       max: 10,
+ *       requirementConfig: {
+ *          initialValue: true
+ *       },
+ *       permitEmpty: true,
+ *       permittedDecimalPlaces: 1
+ *    }
+ * },
+ * 
  * @module alfresco/forms/controls/NumberSpinner
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @author Dave Draper
@@ -81,6 +108,34 @@ define(["alfresco/forms/controls/BaseFormControl",
       permitEmpty: false,
 
       /**
+       * How many decimal places are permitted in a valid value for this control
+       *
+       * @type {number}
+       * @default
+       */
+      permittedDecimalPlaces: 0,
+
+      /**
+       * The number of milliseconds after which the decimals are auto-corrected to the
+       * specified number of decimal places to avoid Dojo errors
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      cleanDecimalsDelayMs: 1000,
+
+      /**
+       * Timeout for function that will fix bad decimal values from an input after [a certain
+       * number]{@link module:/alfresco/forms/controls/NumberSpinner#cleanDecimalsDelayMs}
+       * of milliseconds
+       *
+       * @instance
+       * @type {?number}
+       */
+      _cleanDecimalTimeout: null,
+
+      /**
        * Returns the configuration for the widget ensuring that it is valid, in that
        * [min]{@link module:alfresco/forms/controls/NumberSpinner#min} and 
        * [max]{@link module:alfresco/forms/controls/NumberSpinner#max} but both be numerical values and
@@ -113,11 +168,11 @@ define(["alfresco/forms/controls/BaseFormControl",
             constraints: {
                min: this.min,
                max: this.max,
-               places: 0
+               places: this.permittedDecimalPlaces
             }
          };
       },
-      
+
       /**
        * This validator checks that the value provided is a number
        *
@@ -125,18 +180,49 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {object} validationConfig The configuration for this validator
        */
       isNumberValidator: function alfresco_forms_controls_FormControlValidationMixin__isNumberValidator(validationConfig) {
-         try
-         {
-            // See AKU-341 for details of why we handle commas and spaces...
-            var value = this.wrappedWidget.textbox.value.replace(",","").replace(" ","");
-            var parsedValue = parseFloat(value);
-            var isValid = !isNaN(parsedValue) || (this.permitEmpty && lang.trim(value) === "");
-            this.reportValidationResult(validationConfig, isValid);
+         var isValid = false;
+         try {
+            var value = this._removeCommasAndSpaces(this.wrappedWidget.textbox.value),
+               hasTrailingPeriod = /\.$/.test(value),
+               parsedValue = parseFloat(value),
+               isNumber = !hasTrailingPeriod && !isNaN(parsedValue) || (this.permitEmpty && lang.trim(value) === "");
+            isValid = isNumber;
+         } catch (e) {
+            this.alfLog("warn", "Error validating number: ", e);
          }
-         catch(e)
-         {
-            this.reportValidationResult(validationConfig, false);
+         this.reportValidationResult(validationConfig, isValid);
+      },
+
+      /**
+       * This validator checks that the value has no more than the specified number of decimal places
+       *
+       * @instance
+       * @param {object} validationConfig The configuration for this validator
+       */
+      decimalPlacesValidator: function alfresco_forms_controls_FormControlValidationMixin__decimalPlacesValidator(validationConfig) {
+         clearTimeout(this._cleanDecimalTimeout);
+         var isValid = false;
+         try {
+            var value = this._removeCommasAndSpaces(this.wrappedWidget.textbox.value),
+               hasTrailingPeriod = /\.$/.test(value),
+               parsedValue = parseFloat(value),
+               isNumber = !isNaN(parsedValue),
+               decimals = value.indexOf(".") !== -1 && value.split(".")[1];
+            isValid = !decimals || decimals.length <= this.permittedDecimalPlaces;
+
+            // Fix invisible Dojo bugs (but delayed in case they're still typing)
+            // NOTE: See dojo/number#regexp() for where it invisibly fails,
+            //       but essentially it rejects all values that do not match
+            //       the configured permitted number of decimal places
+            if (isValid && !hasTrailingPeriod && this.permittedDecimalPlaces > 0 && decimals.length !== this.permittedDecimalPlaces) {
+               this._cleanDecimalTimeout = setTimeout(lang.hitch(this, function() {
+                  this.setValue(parsedValue);
+               }), this.cleanDecimalsDelayMs);
+            }
+         } catch (e) {
+            this.alfLog("warn", "Error validating number: ", e);
          }
+         this.reportValidationResult(validationConfig, isValid);
       },
 
       /**
@@ -147,14 +233,35 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       configureValidation: function alfresco_forms_controls_NumberSpinner__configureValidation() {
+         /*jshint maxcomplexity:false*/
+
+         // Initialise validationConfig
          if (!this.validationConfig || ObjectTypeUtils.isObject(this.validationConfig))
          {
             this.validationConfig = [];
          }
+
+         // Configure isNumber validation
          this.validationConfig.push({
             validation: "isNumberValidator",
             errorMessage: this.message("formValidation.numerical.error")
          });
+
+         // Setup decimal places validation
+         var decimalPlacesError = "formValidation.numerical.decimalPlaces0.error";
+         if(this.permittedDecimalPlaces === 1) {
+            decimalPlacesError = "formValidation.numerical.decimalPlaces1.error";
+         } else if(this.permittedDecimalPlaces > 1) {
+            decimalPlacesError = "formValidation.numerical.decimalPlacesN.error";
+         }
+         this.validationConfig.push({
+            validation: "decimalPlacesValidator",
+            errorMessage: this.message(decimalPlacesError, {
+               0: this.permittedDecimalPlaces
+            })
+         });
+         
+         // Handle min/max validation
          if (this.min || this.min === 0 || this.max || this.max === 0)
          {
             var errorMessage;
@@ -223,6 +330,19 @@ define(["alfresco/forms/controls/BaseFormControl",
             value = this.max;
          }
          this.inherited(arguments);
+      },
+
+      /**
+       * Remove commas and spaces from a string value, ready for number parsing<br />
+       * <br />
+       * NOTE: See AKU-341 for details of why we handle commas and spaces
+       *
+       * @instance
+       * @param {string} value The value to parse
+       * @returns {string} The cleaned value
+       */
+      _removeCommasAndSpaces: function alfresco_forms_controls_NumberSpinner___removeCommasAndSpaces(value) {
+         return value && value.replace(/,|\s/g, "");
       }
    });
 });
