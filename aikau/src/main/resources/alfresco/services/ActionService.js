@@ -581,7 +581,7 @@ define(["dojo/_base/declare",
             // NOTE: Ideally we want to be avoid using a contextual _currentNode, we should be providing 
             //       all the data required by the service in the request, but this remains for legacy support
             var node = lang.clone(this._currentNode.parent);
-            payload.documentdocument = {
+            payload.document = {
                nodeRef: node.nodeRef,
                node: node,
                jsNode: new JsNode(node)
@@ -775,7 +775,7 @@ define(["dojo/_base/declare",
        */
       onActionEditOffline: function alfresco_services_ActionService__onActionEditOffline(payload) {
          // Document might be an array.
-         var document = (lang.isArray(payload.document))? payload.document[0] : payload.document;
+         var document = (ObjectTypeUtils.isArray(payload.document))? payload.document[0] : payload.document;
          if (document && document.node && document.node.nodeRef)
          {
             var data = {

@@ -327,8 +327,7 @@ define(["dojo/_base/declare",
          if (targetNodeRef)
          {
             payload.action.params.targetNodeRef = this.currentNode.parent.nodeRef;
-            payload.responseScope = this.pubSubScope;
-            this.alfPublish(this.templatePublishTopic, payload, true);
+            this.alfServicePublish(this.templatePublishTopic, payload);
          }
          else
          {

@@ -238,7 +238,7 @@ define(["dojo/_base/declare",
             }
          }
          payload.documents = selectedItems;
-         this.alfPublish("ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST", payload, true);
+         this.alfServicePublish("ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST", payload);
       }
    });
 });
