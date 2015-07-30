@@ -31,6 +31,10 @@
  * [delete]{@link module:alfresco/layout/AlfTabContainer#tabDeletionTopic} tabs then you will need to
  * configure the topics to subscribe to. Subscriptions will be made at the configured 
  * [pubSubScope]{@link module:alfresco/core/Core#pubSubScope} of the widget.</p>
+ * 
+ * <p><b>PLEASE NOTE:</b> It is not possible to use this module to control the layout of controls within a form. If you wish
+ * to create a form containing tabbed controls then you should use the 
+ * [TabbedControls]{@link module:alfresco/forms/TabbedControls} widget</p>
  *
  * @example <caption>Basic configuration (first tab will be selected):</caption>
  * {

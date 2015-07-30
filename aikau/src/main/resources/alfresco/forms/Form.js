@@ -34,6 +34,12 @@
  * [autoSavePublishTopic]{@link module:alfresco/forms/Form#autoSavePublishTopic} is specified, 
  * then the OK and Cancel buttons are automatically hidden.</p>
  *
+ * <p><b>PLEASE NOTE:</b> If you want to layout your form controls in a specific manner (e.g. in a horizontal 
+ * line or within tabs) then you should use dedicated form control layout widgets such as 
+ * [ControlRow]{@link module:alfresco/forms/ControlRow} or
+ * [TabbedControls]{@link module:alfresco/forms/TabbedControls} as the basic layout widgets 
+ * do not provide all the required functionality.</p>
+ * 
  * @example <caption>Example configuration for auto-publishing (including invalid) form:</caption>
  * {
  *    name: "alfresco/forms/Form",
