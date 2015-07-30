@@ -26,11 +26,21 @@ define(["alfresco/forms/controls/BaseFormControl",
         "alfresco/forms/controls/utilities/TextBoxValueChangeMixin",
         "dojo/_base/declare",
         "dojo/_base/lang",
+        "dojo/dom-class",
         "dijit/form/NumberSpinner",
         "alfresco/core/ObjectTypeUtils"], 
-        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, NumberSpinner, ObjectTypeUtils) {
+        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, domClass, NumberSpinner, ObjectTypeUtils) {
    
    return declare([BaseFormControl, TextBoxValueChangeMixin], {
+      
+      /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/NumberSpinner.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/NumberSpinner.css"}],
       
       /**
        * This is the amount the value will be changed when using the "spin" controls
@@ -175,6 +185,13 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       createFormControl: function alfresco_forms_controls_NumberSpinner__createFormControl(config, /*jshint unused:false*/ domNode) {
+         var additionalCssClasses = "";
+         if (this.additionalCssClasses !== null)
+         {
+            additionalCssClasses = this.additionalCssClasses;
+         }
+         domClass.add(this.domNode, "alfresco-forms-controls-NumberSpinner " + additionalCssClasses);
+         
          var ns = new NumberSpinner(config);
          // We'll take care of the validation thanks very much!
          ns.isValid = function() {
