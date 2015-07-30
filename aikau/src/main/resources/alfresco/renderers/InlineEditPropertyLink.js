@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
             // If no topic has been provided then assume this to be a standard document/folder link...
             this.linkPublishPayload = {};
             var publishTopic = this.generateFileFolderLink(this.linkPublishPayload);
-            this.alfPublish(publishTopic, this.linkPublishPayload, publishGlobal, publishToParent);
+            this.alfServicePublish(publishTopic, this.linkPublishPayload);
          }
       }
    });

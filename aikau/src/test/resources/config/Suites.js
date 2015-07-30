@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest"
+      "src/test/resources/alfresco/renderers/InlineEditPropertyLinkTest"
    ],
 
    /**
@@ -217,7 +217,7 @@ define({
       "src/test/resources/alfresco/services/NotificationServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",
       "src/test/resources/alfresco/services/ServiceFilteringTest",
-      "src/test/resources/alfresco/services/SiteServiceTest",
+      // "src/test/resources/alfresco/services/SiteServiceTest", - NO TESTS IN THIS SUITE THAT DO ANYTHING!
       "src/test/resources/alfresco/services/UserServiceTest",
 
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
