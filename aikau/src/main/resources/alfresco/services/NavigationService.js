@@ -129,13 +129,13 @@ define(["dojo/_base/declare",
          var encodeParams = (typeof data.encodeParams !== "undefined")? data.encodeParams : true;
 
          // Add parameters supplied
-         if (lang.isObject(data.queryParams)) {
+         if (data.queryParams && typeof data.queryParams === "object") {
             array.forEach(Object.keys(data.queryParams), function(prop) {
                url = urlUtils.addQueryParameter(url, prop, data.queryParams[prop], encodeParams);
             });
          }
 
-         if (lang.isObject(data.hashParams)) {
+         if (data.hashParams && typeof data.hashParams === "object") {
             array.forEach(Object.keys(data.hashParams), function(prop) {
                url = urlUtils.addHashParameter(url, prop, data.hashParams[prop], encodeParams);
             });
