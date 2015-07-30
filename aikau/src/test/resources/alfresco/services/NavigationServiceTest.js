@@ -124,6 +124,25 @@ define(["intern!object",
          });
       },
 
+      "Post to new page using params": function() {
+         // Clear the current browser log...
+         return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
+            .click()
+            .end()
+            .getCurrentUrl()
+            .then(function (url) {
+               assert.notInclude(url, "page/tp/ws/NavigationService?bar=scndqryprm&foo=qryprm#baz=hshprm", "Not on the expected page (before nav to new page");
+            })
+            .findByCssSelector("#NAV_TO_PAGE_WITH_PARAMS_label")
+            .click()
+            .end()
+            .getCurrentUrl()
+            .then(function (url) {
+               assert.include(url, "page/tp/ws/NavigationService?bar=scndqryprm&foo=qryprm#baz=hshprm", "Not on new page (after nav to new page");
+            })
+            .end();
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
