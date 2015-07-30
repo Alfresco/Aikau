@@ -30,6 +30,10 @@
  * [widgetMarginRight]{@link module:alfresco/layout/HorizontalWidgets#widgetMarginRight} attributes (but you should bear
  * in mind that if using both attributes then the gap between 2 widgets will be the <b>combination</b> of both values).</p>
  * 
+ * <p><b>PLEASE NOTE:</b> It is not possible to use this module to control the layout of controls within a form. If you wish
+ * to create a form containing horizontally aligned controls then you should use the 
+ * [ControlRow]{@link module:alfresco/forms/ControlRow} widget</p>
+ *
  * <p><b>PLEASE NOTE: Resize operations are not currently handled - this will be addressed in the future</b></p>
  * 
  * @example <caption>Sample usage:</caption>

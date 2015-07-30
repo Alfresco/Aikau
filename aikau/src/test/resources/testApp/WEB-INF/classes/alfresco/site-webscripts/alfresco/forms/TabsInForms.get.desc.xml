@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Tabs in Forms</shortname>
+  <description>Demonstrates a form that includes controls in multiple tabs</description>
+  <family>aikau-unit-tests</family>
+  <url>/TabsInForms</url>
+</webscript>

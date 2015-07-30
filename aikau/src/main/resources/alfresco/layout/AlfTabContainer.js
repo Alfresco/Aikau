@@ -31,6 +31,10 @@
  * [delete]{@link module:alfresco/layout/AlfTabContainer#tabDeletionTopic} tabs then you will need to
  * configure the topics to subscribe to. Subscriptions will be made at the configured 
  * [pubSubScope]{@link module:alfresco/core/Core#pubSubScope} of the widget.</p>
+ * 
+ * <p><b>PLEASE NOTE:</b> It is not possible to use this module to control the layout of controls within a form. If you wish
+ * to create a form containing tabbed controls then you should use the 
+ * [TabbedControls]{@link module:alfresco/forms/TabbedControls} widget</p>
  *
  * @example <caption>Basic configuration (first tab will be selected):</caption>
  * {
@@ -270,6 +274,18 @@ define(["dojo/_base/declare",
       tabDeletionTopic: null,
 
       /**
+       * This is the default delayed processing behaviour of tabs. By default a tabs content
+       * will not be created until it is displayed (unless the tab is configured to request
+       * otherwise). However, this can be overridden to switch the default so that all tab
+       * content will be created as soon as the container is created.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      delayProcessingDefault: true,
+
+      /**
        * @instance
        */
       postCreate: function alfresco_layout_AlfTabContainer__postCreate() {
@@ -290,12 +306,24 @@ define(["dojo/_base/declare",
             // we'll ensure that the first tab is both selected and will be immediately rendered
             var tabSelected = false;
             array.forEach(this.widgets, function(widget) {
-               if (widget.delayProcessing !== false && !widget.selected)
+               if ((widget.delayProcessing === true && !widget.selected) || 
+                   widget.delayProcessing === false)
                {
-                  widget.delayProcessing = true;
+                  // No action, use the explicit configuration
+               }
+               else if (widget.delayProcessing === true && widget.selected)
+               {
+                  // Silly configuration, if the tab is to be initially selected, processing can't be delayed...
+                  widget.delayProcessingDefault = false;
+               }
+               else
+               {
+                  // Use the default if no configuration is provided...
+                  widget.delayProcessing = this.delayProcessingDefault;
                }
                tabSelected = tabSelected || widget.selected;
-            });
+            }, this);
+
             if (this.widgets.length && !tabSelected)
             {
                this.widgets[0].selected = true;
