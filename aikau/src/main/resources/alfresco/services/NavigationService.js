@@ -30,11 +30,12 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/services/_NavigationServiceTopicMixin",
         "alfresco/util/hashUtils",
+        "alfresco/util/urlUtils",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "service/constants/Default"],
-        function(declare, AlfCore, _NavigationServiceTopicMixin, hashUtils, array, lang, domConstruct, AlfConstants) {
+        function(declare, AlfCore, _NavigationServiceTopicMixin, hashUtils, urlUtils, array, lang, domConstruct, AlfConstants) {
 
    return declare([AlfCore, _NavigationServiceTopicMixin], {
 
@@ -92,7 +93,7 @@ define(["dojo/_base/declare",
 
       /**
        * Builds a URL from the supplied data object.
-       * 
+       *
        * @instance
        * @param  {object} data The data object form which to construct the URL
        * @return {string} The built URL
@@ -123,6 +124,23 @@ define(["dojo/_base/declare",
          {
             this.alfLog("error", "An unknown URL type of '" + data.type + "' was provided for a navigation request", data, this);
          }
+
+         // Encode Parameters?
+         var encodeParams = (typeof data.encodeParams !== "undefined")? data.encodeParams : true;
+
+         // Add parameters supplied
+         if (lang.isObject(data.queryParams)) {
+            array.forEach(Object.keys(data.queryParams), function(prop) {
+               url = urlUtils.addQueryParameter(url, prop, data.queryParams[prop], encodeParams);
+            });
+         }
+
+         if (lang.isObject(data.hashParams)) {
+            array.forEach(Object.keys(data.hashParams), function(prop) {
+               url = urlUtils.addHashParameter(url, prop, data.hashParams[prop], encodeParams);
+            });
+         }
+
          return url;
       },
 
