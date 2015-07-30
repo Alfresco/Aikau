@@ -36,13 +36,13 @@ define(["dojo/_base/declare",
       
       /**
        * Controls whether or not this widget actively tracks the selected items or passively subscribes
-       * to topics that indicate the items that have been selected. It is passive by default.
+       * to topics that indicate the items that have been selected. It is NOT passive by default.
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
-      passive: true,
+      passive: false,
 
       /**
        * Overrides the default to initialise as disabled.
@@ -104,6 +104,7 @@ define(["dojo/_base/declare",
             this.alfSubscribe(this.documentSelectedTopic, lang.hitch(this, this.onItemSelected));
             this.alfSubscribe(this.documentDeselectedTopic, lang.hitch(this, this.onItemDeselected));
             this.alfSubscribe("ALF_CLEAR_SELECTED_ITEMS", lang.hitch(this, this.onItemSelectionCleared));
+            this.alfSubscribe("ALF_SELECTED_DOCUMENTS_ACTION_REQUEST", lang.hitch(this, this.onSelectedDocumentsAction));
          }
          this.inherited(arguments);
       },
@@ -218,6 +219,26 @@ define(["dojo/_base/declare",
        */
       onFilesSelected: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onFilesSelected(payload) {
          this.set("disabled", (payload && payload.selectedFiles && payload.selectedFiles.length === 0));
+      },
+
+      /**
+       * This function handles requests to perform actions on the currently selected documents. It takes the 
+       * provided payload and updates it with the 
+       *
+       * @instance
+       * @param {object} payload The payload containing the details of the action being requested
+       */
+      onSelectedDocumentsAction: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onSelectedDocumentsAction(payload) {
+         var selectedItems = [];
+         for (var nodeRef in this.currentlySelectedItems)
+         {
+            if (this.currentlySelectedItems.hasOwnProperty(nodeRef))
+            {
+               selectedItems.push(this.currentlySelectedItems[nodeRef]);
+            }
+         }
+         payload.documents = selectedItems;
+         this.alfServicePublish("ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST", payload);
       }
    });
 });

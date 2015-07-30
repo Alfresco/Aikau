@@ -81,7 +81,12 @@ model.jsonModel = {
                                     id: "CREATE_TEMPLATES",
                                     name: "alfresco/documentlibrary/AlfCreateTemplateContentMenu",
                                     config: {
-                                       label: "Create content from node template"
+                                       label: "Create content from node template",
+                                       currentNode: {
+                                          parent: {
+                                             nodeRef: "some://dummy/node"
+                                          }
+                                       }
                                     }
                                  },
                                  {
@@ -91,7 +96,11 @@ model.jsonModel = {
                                        label: "Create content from folder template",
                                        _templatesUrl: "slingshot/doclib/folder-templates",
                                        templateType: "folder",
-                                       targetNodeRef: "some://dummy/node"
+                                       currentNode: {
+                                          parent: {
+                                             nodeRef: "some://dummy/node"
+                                          }
+                                       }
                                     }
                                  }
                               ]
@@ -163,10 +172,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/CreateContentMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

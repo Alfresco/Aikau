@@ -264,7 +264,7 @@ createContent.splice(0, 0, folder, plainText, html, xml);
 var createContentByTemplateEnabled = true;
 if (docLibXmlConfig["create-content-by-template"] && docLibXmlConfig["create-content-by-template"].value)
 {
-   createContentByTemplateEnabled = docLibXmlConfig["create-content-by-template"].value.toString() === "true" || false;
+   createContentByTemplateEnabled = docLibXmlConfig["create-content-by-template"].value.toString().equals("true") || false;
 }
 if (createContentByTemplateEnabled)
 {
@@ -781,7 +781,7 @@ function getSelectedItemsActions(selectedItemsActions) {
                href: (action.href || "").toString(),
                hasAspect: (action.hasAspect || "").toString(),
                notAspect: (action.notAspect || "").toString(),
-               publishTopic: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
+               publishTopic: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
                publishPayload: {
                   action: (action.id || "").toString()
                }

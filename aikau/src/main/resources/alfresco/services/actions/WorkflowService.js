@@ -148,7 +148,7 @@ define(["dojo/_base/declare",
       onApproveSimpleWorkflow: function alfresco_services_actions_WorkflowService__onApproveSimpleWorkflow(payload) {
          if (payload && payload.items)
          {
-            array.forEach(payload.items, lang.hitch(this, this.performAction, "accept-simpleworkflow", this.onApproveSuccess, this.onApproveFailure, payload.action));
+            array.forEach(payload.items, lang.hitch(this, this.performAction, "accept-simpleworkflow", this.onApproveSuccess, this.onApproveFailure, payload));
          }
       },
 
@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
       onRejectSimpleWorkflow: function alfresco_services_actions_WorkflowService__onRejectSimpleWorkflow(payload) {
          if (payload && payload.items)
          {
-            array.forEach(payload.items, lang.hitch(this, this.performAction, "reject-simpleworkflow", this.onRejectSuccess, this.onRejectFailure, payload.action));
+            array.forEach(payload.items, lang.hitch(this, this.performAction, "reject-simpleworkflow", this.onRejectSuccess, this.onRejectFailure, payload));
          }
       },
 
@@ -174,11 +174,12 @@ define(["dojo/_base/declare",
        * @param {object} action Additional action configuration. This can be included to override success and failure messages
        * @param {object} item The item to perform the action on. This is expecte to have a "nodeRef" attribute.
        */
-      performAction: function alfresco_services_actions_WorkflowService__performAction(actionName, successCallback, failureCallback, action, item) {
+      performAction: function alfresco_services_actions_WorkflowService__performAction(actionName, successCallback, failureCallback, payload, item) {
          this.serviceXhr({
             url: AlfConstants.PROXY_URI + "api/actionQueue",
             method: "POST",
-            action: action,
+            action: actionName,
+            responseScope: payload.alfResponseScope,
             data: {
                actionedUponNode: item.nodeRef,
                actionDefinitionName: actionName
@@ -192,24 +193,25 @@ define(["dojo/_base/declare",
        * Called when an approval was completed successfully.
        * 
        * @instance
-       * @param {object} payload
+       * @param {object} response
+       * @param {object} originalRequestConfig The configuration used for the XHR request
        */
-      onApproveSuccess: function alfresco_services_actions_WorkflowService__onApproveSuccess(payload) {
-         var message = lang.getObject("requestConfig.action.successMessage", false, payload);
+      onApproveSuccess: function alfresco_services_actions_WorkflowService__onApproveSuccess(response, originalRequestConfig) {
+         var message = lang.getObject("requestConfig.action.successMessage", false, response);
          this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
             message: this.message(message || this.approveSuccessMessage)
          });
-         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {});
+         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, originalRequestConfig.responseScope);
       },
 
       /**
        * Called when an approval could not be completed.
        * 
        * @instance
-       * @param {object} payload
+       * @param {object} response
        */
-      onApproveFailure: function alfresco_services_actions_WorkflowService__onApproveFailure(payload) {
-         var message = lang.getObject("requestConfig.action.failureMessage", false, payload);
+      onApproveFailure: function alfresco_services_actions_WorkflowService__onApproveFailure(response) {
+         var message = lang.getObject("requestConfig.action.failureMessage", false, response);
          this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
             message: this.message(message || this.approveFailureMessage)
          });
@@ -219,24 +221,25 @@ define(["dojo/_base/declare",
        * Called when a rejection was completed successfully.
        * 
        * @instance
-       * @param {object} payload
+       * @param {object} response
+       * @param {object} originalRequestConfig The configuration used for the XHR request
        */
-      onRejectSuccess: function alfresco_services_actions_WorkflowService__onRejectSuccess(payload) {
-         var message = lang.getObject("requestConfig.action.successMessage", false, payload);
+      onRejectSuccess: function alfresco_services_actions_WorkflowService__onRejectSuccess(response, originalRequestConfig) {
+         var message = lang.getObject("requestConfig.action.successMessage", false, response);
          this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
             message: this.message(message || this.rejectSuccessMessage)
          });
-         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {});
+         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, originalRequestConfig.responseScope);
       },
 
       /**
        * Called when a rejection could not be completed.
        * 
        * @instance
-       * @param {object} payload
+       * @param {object} response
        */
-      onRejectFailure: function alfresco_services_actions_WorkflowService__onRejectFailure(payload) {
-         var message = lang.getObject("requestConfig.action.failureMessage", false, payload);
+      onRejectFailure: function alfresco_services_actions_WorkflowService__onRejectFailure(response) {
+         var message = lang.getObject("requestConfig.action.failureMessage", false, response);
          this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
             message: this.message(message || this.rejectFailureMessage)
          });

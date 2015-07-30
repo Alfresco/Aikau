@@ -102,20 +102,6 @@ define(["dojo/_base/declare",
    var CustomMenuBar = declare([MenuBar, AlfCore], {
       
       /**
-       * Extends the default menu bar capabilities to prevent any popup menus from being opened purely by
-       * hovering over them. See AKU-290.
-       *
-       * @instance
-       * @param {object} item The item hovered over
-       */
-      onItemHover: function alfresco_menus_AlfMenuBar_CustomMenuBar__onItemHover(/*jshint unused:false*/item){
-         if(this.activated){
-            this.activated = false;
-         }
-         this.inherited(arguments);
-      },
-
-      /**
        * This boolean attribute is used as an indicator of whether or not the MenuBar popups should
        * be locked in the open state.
        * 

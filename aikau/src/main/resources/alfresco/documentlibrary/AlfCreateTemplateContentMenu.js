@@ -30,6 +30,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfCascadingMenu",
+        "alfresco/documentlibrary/_AlfCreateContentMenuItemMixin",
         "alfresco/documentlibrary/_AlfCreateContentPermissionsMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/CoreXhr",
@@ -38,10 +39,10 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "service/constants/Default"], 
-        function(declare, AlfCascadingMenu, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, AlfCoreXhr, 
-                 AlfMenuGroup, AlfMenuItem, lang, array, AlfConstants) {
+        function(declare, AlfCascadingMenu, _AlfCreateContentMenuItemMixin, _AlfCreateContentPermissionsMixin, 
+                 _AlfDocumentListTopicMixin, AlfCoreXhr, AlfMenuGroup, AlfMenuItem, lang, array, AlfConstants) {
    
-   return declare([AlfCascadingMenu, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, AlfCoreXhr], {
+   return declare([AlfCascadingMenu, _AlfCreateContentMenuItemMixin, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, AlfCoreXhr], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -52,6 +53,61 @@ define(["dojo/_base/declare",
        */
       i18nRequirements: [{i18nFile: "./i18n/AlfCreateTemplateContentMenu.properties"}],
       
+      /**
+       * This is the topic that is published by each menu item created within the cascade. It should not
+       * be reconfigured it as it is automatically generated to be a unique value so that only menu items 
+       * added to this cascading menu will use it.
+       *
+       * @instance
+       * @type {String}
+       * @default null
+       */
+      _menuItemToParentTopic: null,
+
+      /**
+       * Indicates whether the templates have been loaded yet.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      _templatesAlreadyLoaded: false,
+      
+      /**
+       * A URL to override the default. Primarily provided for the test harness.
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      _templatesUrl: null,
+      
+      /**
+       * The iconClass to use on each template content menu item
+       * 
+       * @instance
+       * @type {string}
+       * @default "alf-textdoc-icon"
+       */
+      templateIconClass: "alf-textdoc-icon",
+      
+      /**
+       * The topic to publish on when requesting to create templated content
+       * 
+       * @instance
+       * @type {string} 
+       * @default "ALF_CREATE_CONTENT"
+       */
+      templatePublishTopic: "ALF_CREATE_CONTENT",
+      
+      /**
+       * The type of template to be created. Either "node" or "folder".
+       *
+       * @instance
+       * @type {string}
+       * @default "node"
+       */
+      templateType: "node",
+
       /**
        * This defines the default widgets to display in the menu which is initially just a loading
        * message which should be replaced when the XHR request returns with some data.
@@ -76,9 +132,16 @@ define(["dojo/_base/declare",
        *  
        * @instance
        */
-      postCreate: function alf_menus_documentlibrary_AlfCreateTemplateContentMenu__postCreate() {
+      postCreate: function alfresco_documentlibrary_AlfCreateTemplateContentMenu__postCreate() {
          this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onFilterChange));
          this.alfSubscribe(this.userAccessChangeTopic, lang.hitch(this, this.onUserAcess));
+         this.alfSubscribe(this.metadataChangeTopic, lang.hitch(this, this.onCurrentNodeChange));
+
+         // Create a unique topic for each menu item in the cascade to publish to in order for the 
+         // current node to be added to the payload...
+         this._menuItemToParentTopic = this.generateUuid();
+         this.alfSubscribe(this._menuItemToParentTopic, lang.hitch(this, this.onCreateTemplatedContent), true);
+         
          this.inherited(arguments);
          if (this.label)
          {
@@ -101,31 +164,13 @@ define(["dojo/_base/declare",
          }
       },
       
-      
-      /**
-       * A URL to override the default. Primarily provided for the test harness.
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      _templatesUrl: null,
-      
-      /**
-       * Indicates whether the templates have been loaded yet.
-       * 
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      _templatesAlreadyLoaded: false,
-      
       /**
        * This function is called when the user clicks on the "Templates" cascading menu item to asynchronously
        * load the available content templates.
        * 
        * @instance
        */
-      loadTemplates: function alf_menus_documentlibrary_AlfCreateTemplateContentMenu__loadTemplates() {
+      loadTemplates: function alfresco_documentlibrary_AlfCreateTemplateContentMenu__loadTemplates() {
          if (this._templatesAlreadyLoaded)
          {
             this.alfLog("log", "Templates already loaded");
@@ -153,7 +198,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      _templatesLoaded: function alf_menus_documentlibrary_AlfCreateTemplateContentMenu___templatesLoaded(response, originalRequestConfig) {
+      _templatesLoaded: function alfresco_documentlibrary_AlfCreateTemplateContentMenu___templatesLoaded(response, /*jshint unused:false*/ originalRequestConfig) {
          this.alfLog("log", "Templates data loaded successfully", response);
          this._templatesAlreadyLoaded = true;
          
@@ -198,7 +243,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      _templatesLoadFailed: function alf_menus_documentlibrary_AlfCreateTemplateContentMenu___templatesLoadFailed(response, originalRequestConfig) {
+      _templatesLoadFailed: function alfresco_documentlibrary_AlfCreateTemplateContentMenu___templatesLoadFailed(response, /*jshint unused:false*/ originalRequestConfig) {
          this.alfLog("error", "Could not load templates menu items", response);
          
          // Remove the loading templates item...
@@ -215,7 +260,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      addNoTemplatesMessageItem: function alf_menus_documentlibrary_AlfCreateTemplateContentMenu__addNoTemplatesMessageItem() {
+      addNoTemplatesMessageItem: function alfresco_documentlibrary_AlfCreateTemplateContentMenu__addNoTemplatesMessageItem() {
          this._templatesMessageItem = new AlfMenuItem({
             label: "no.templates.label"
          });
@@ -230,49 +275,13 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      addTemplatesFailMessageItem: function alf_menus_documentlibrary_AlfCreateTemplateContentMenu__addTemplatesFailMessageItem() {
+      addTemplatesFailMessageItem: function alfresco_documentlibrary_AlfCreateTemplateContentMenu__addTemplatesFailMessageItem() {
          this._templatesMessageItem = new AlfMenuItem({
             label: "templates.load.error"
          });
          this.popup.addChild(this._templatesMessageItem);
       },
       
-      /**
-       * The topic to publish on when requesting to create templated content
-       * 
-       * @instance
-       * @type {string} 
-       * @default "ALF_CREATE_CONTENT"
-       */
-      templatePublishTopic: "ALF_CREATE_CONTENT",
-      
-      /**
-       * The iconClass to use on each template content menu item
-       * 
-       * @instance
-       * @type {string}
-       * @default "alf-textdoc-icon"
-       */
-      templateIconClass: "alf-textdoc-icon",
-      
-      /**
-       * The type of template to be created. Either "node" or "folder".
-       *
-       * @instance
-       * @type {string}
-       * @default "node"
-       */
-      templateType: "node",
-
-      /**
-       * An optional NodeRef in which to create the template.
-       *
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      targetNodeRef: null,
-
       /**
        * Adds an individual menu item.
        * 
@@ -281,25 +290,49 @@ define(["dojo/_base/declare",
        * @param {object} widget The menu item to add
        * @param {integer} index The index to add the menu item at.
        */
-      _addMenuItem: function alf_menus_documentlibrary_AlfCreateTemplateContentMenu___addMenuItem(group, widget, index) {
+      _addMenuItem: function alfresco_documentlibrary_AlfCreateTemplateContentMenu___addMenuItem(group, widget, /*jshint unused:false*/ index) {
          var label = (widget.title !== "") ? widget.title : widget.name;
          var item = new AlfMenuItem({
             label: label,
             iconClass: this.templateIconClass,
-            publishTopic: this.templatePublishTopic,
+            publishTopic: this._menuItemToParentTopic,
             publishPayload: {
-               type: "template",
-               params: {
-                  sourceNodeRef: widget.nodeRef,
-                  targetNodeRef: this.targetNodeRef,
-                  templateType: this.templateType,
-                  name: widget.name,
-                  title: widget.title,
-                  description: widget.description
+               action: {
+                  type: "template",
+                  params: {
+                     sourceNodeRef: widget.nodeRef,
+                     targetNodeRef: null,
+                     templateType: this.templateType,
+                     name: widget.name,
+                     title: widget.title,
+                     description: widget.description
+                  }
                }
-            }
+            },
+            publishGlobal: true
+
          });
          group.addChild(item);
+      },
+
+      /**
+       * Adds the current node in which to create the templated content to the received payload and then publishes
+       * on to the [ActionService]{@link module:alfresco/services/ActionService} to create the templated content.
+       *
+       * @instance
+       * @param {object} payload The payload relating to the template to create.
+       */
+      onCreateTemplatedContent: function alfresco_documentlibrary_AlfCreateTemplateContentMenu__onCreateTemplatedContent(payload) {
+         var targetNodeRef = lang.getObject("currentNode.parent.nodeRef", false, this);
+         if (targetNodeRef)
+         {
+            payload.action.params.targetNodeRef = this.currentNode.parent.nodeRef;
+            this.alfServicePublish(this.templatePublishTopic, payload);
+         }
+         else
+         {
+            this.alfLog("warn", "No current node has been provided in which to create templated content", payload, this);
+         }
       }
    });
 });
