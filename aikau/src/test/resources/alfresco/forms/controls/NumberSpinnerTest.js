@@ -18,14 +18,14 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(registerSuite, assert, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -64,8 +64,8 @@ define(["intern!object",
          return browser.findByCssSelector("#NS2 .dijitInputContainer input")
             .clearValue()
             .type("4")
-         .end()
-         .findByCssSelector("#NS2 span.validation-message")
+            .end()
+            .findByCssSelector("#NS2 span.validation-message")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "Validation error message should be displayed");
@@ -80,8 +80,8 @@ define(["intern!object",
          return browser.findByCssSelector("#NS2 .dijitInputContainer input")
             .clearValue()
             .type("11")
-         .end()
-         .findByCssSelector("#NS2 span.validation-message")
+            .end()
+            .findByCssSelector("#NS2 span.validation-message")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "Validation error message should be displayed");
@@ -96,8 +96,8 @@ define(["intern!object",
          return browser.findByCssSelector("#NS2 .dijitInputContainer input")
             .clearValue()
             .type("7")
-         .end()
-         .findByCssSelector("#NS2 span.validation-message")
+            .end()
+            .findByCssSelector("#NS2 span.validation-message")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "Validation error message should have been removed");
@@ -108,8 +108,8 @@ define(["intern!object",
          return browser.findByCssSelector("#NS4 .dijitInputContainer input")
             .clearValue()
             .type("0")
-         .end()
-         .findByCssSelector("#NS4 span.validation-message")
+            .end()
+            .findByCssSelector("#NS4 span.validation-message")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "Validation error message should be displayed");
@@ -124,8 +124,8 @@ define(["intern!object",
          return browser.findByCssSelector("#NS5 .dijitInputContainer input")
             .clearValue()
             .type("8")
-         .end()
-         .findByCssSelector("#NS5 span.validation-message")
+            .end()
+            .findByCssSelector("#NS5 span.validation-message")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "Validation error message should be displayed");
@@ -140,8 +140,8 @@ define(["intern!object",
          return browser.findByCssSelector("#NS1 .dijitInputContainer input")
             .clearValue()
             .type("a")
-         .end()
-         .findByCssSelector("#NS1 span.validation-message")
+            .end()
+            .findByCssSelector("#NS1 span.validation-message")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "Validation error message should be displayed");
@@ -160,13 +160,13 @@ define(["intern!object",
             });
       },
 
-      "Empty values are only permitted when permitEmpty specified": function(){
+      "Empty values are only permitted when permitEmpty specified": function() {
          return browser.findByCssSelector("#NS1 .dijitInputContainer input")
             .clearValue()
             .end()
 
          .findAllByCssSelector("#NS1 .validation-error")
-            .then(function(elements){
+            .then(function(elements) {
                assert.lengthOf(elements, 1, "Standard number spinner should not permit empty values");
             })
             .end()
@@ -176,12 +176,12 @@ define(["intern!object",
             .end()
 
          .findAllByCssSelector("#NS7 .validation-error")
-            .then(function(elements){
+            .then(function(elements) {
                assert.lengthOf(elements, 0, "'permitEmpty' number spinner should allow empty values");
             })
       },
 
-      "Empty value submits null value": function(){
+      "Empty value submits null value": function() {
          return browser.findByCssSelector(".alfresco-buttons-AlfButton[widgetid=\"RESET_VALUES\"] .dijitButtonNode")
             .click()
             .end()
@@ -195,10 +195,115 @@ define(["intern!object",
             .end()
 
          .getLastPublish("FORM_POST")
-            .then(function(payload){
+            .then(function(payload) {
                assert.propertyVal(payload, "seven", null, "Did not publish null value for empty number spinner");
             });
       },
+
+      "Trailing decimal point is always invalid": function() {
+         return browser.findByCssSelector("#NS1 .dijitInputContainer input")
+            .clearValue()
+            .type("5.")
+            .end()
+
+         .findByCssSelector("#NS1 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Validation error message should be displayed");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Enter a number", "Validation error message not set correctly");
+            })
+            .end()
+
+         .findByCssSelector("#NS8 .dijitInputContainer input")
+            .clearValue()
+            .type("5.")
+            .end()
+
+         .findByCssSelector("#NS8 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Validation error message should be displayed");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Enter a number", "Validation error message not set correctly");
+            });
+      },
+
+      "Decimal point is only valid when configured properly": function() {
+         return browser.findByCssSelector("#NS1 .dijitInputContainer input")
+            .clearValue()
+            .type("5.5")
+            .end()
+
+         .findByCssSelector("#NS1 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Validation error message should be displayed");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Number should be whole number", "Validation error message not set correctly");
+            })
+            .end()
+
+         .findByCssSelector("#NS8 .dijitInputContainer input")
+            .clearValue()
+            .type("5.5")
+            .end()
+
+         .findByCssSelector("#NS8 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Validation error message should be displayed");
+            })
+            .end()
+
+         .findByCssSelector("#NS8 .dijitInputContainer input")
+            .type("6")
+            .end()
+
+         .findByCssSelector("#NS8 span.validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Validation error message should be displayed");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Number should use no more than 1 decimal place", "Validation error message not set correctly");
+            });
+      },
+
+      // Make sure this is always the final test, and update accordingly
+      "All values publish correctly": function() {
+         return browser.findByCssSelector(".alfresco-buttons-AlfButton[widgetid=\"RESET_VALUES\"] .dijitButtonNode")
+            .click()
+            .end()
+
+         .findByCssSelector("#NS1 .dijitInputContainer input")
+            .type("0")
+            .end()
+
+         .findByCssSelector(".confirmationButton .dijitButtonNode")
+            .click()
+            .end()
+
+         .getLastPublish("FORM_POST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "one", 0, "Invalid published value for control with ID \"NS1\"");
+               assert.propertyVal(payload, "two", 5, "Invalid published value for control with ID \"NS2\"");
+               assert.propertyVal(payload, "three", 0, "Invalid published value for control with ID \"NS3\"");
+               assert.propertyVal(payload, "four", 1, "Invalid published value for control with ID \"NS4\"");
+               assert.propertyVal(payload, "five", 3, "Invalid published value for control with ID \"NS5\"");
+               assert.propertyVal(payload, "six", 1001, "Invalid published value for control with ID \"NS6\"");
+               assert.propertyVal(payload, "seven", null, "Invalid published value for control with ID \"NS7\"");
+               assert.propertyVal(payload, "eight", 5.5, "Invalid published value for control with ID \"NS8\"");
+            });
+      },
+      // Make sure this is always the final test, and update accordingly
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
