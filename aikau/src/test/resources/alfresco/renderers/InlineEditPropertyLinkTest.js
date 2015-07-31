@@ -316,7 +316,7 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE", true)
+            .getLastPublish("SCOPED_ALF_NAVIGATE_TO_PAGE", true)
                .then(function(payload) {
                   assert.isNotNull(payload, "'Test item (no topic, scoped)' did not publish correct topic");
                   assert.propertyVal(payload, "alfResponseScope", "SCOPED_", "'Test item (no topic, scoped)' generated incorrect alfResponseScope");
