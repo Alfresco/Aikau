@@ -178,6 +178,20 @@
          white-space: nowrap;
       }
    }
+   &--disabled {
+      background: #efefef;
+      .alfresco-forms-controls-MultiSelect {
+         &__choice {
+            background: #ddd linear-gradient(to bottom, #eee, #ddd);
+            &__content {
+               color: #999;
+            }
+            &__close-button {
+               display: none;
+            }
+         }
+      }
+   }
 }
 
 .alfresco-dialog-AlfDialog.dijitDialog {
