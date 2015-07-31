@@ -82,6 +82,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
+       * @default
        */
       additionalDocumentAndFolderActions: null,
 
@@ -93,6 +94,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
+       * @default
        */
       additionalOtherNodeActions: null,
 
@@ -104,7 +106,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       documentAndFolderActions: null,
 
@@ -113,7 +115,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       enableContextMenu: false,
 
@@ -126,7 +128,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       otherNodeActions: null,
 
@@ -146,7 +148,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       widgetsAbove: null,
 
@@ -156,7 +158,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       widgetsBelow: null,
 
