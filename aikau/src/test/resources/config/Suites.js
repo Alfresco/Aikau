@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/renderers/InlineEditPropertyLinkTest"
+      "src/test/resources/alfresco/forms/controls/DateTextBoxTest"
    ],
 
    /**
@@ -99,6 +99,7 @@ define({
       "src/test/resources/alfresco/forms/FormValidationTest",
       "src/test/resources/alfresco/forms/HashFormTest",
       "src/test/resources/alfresco/forms/SingleTextFieldFormTest",
+      "src/test/resources/alfresco/forms/TabsInFormsTest",
 
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",

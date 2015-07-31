@@ -28,7 +28,8 @@ model.jsonModel = {
                            config: {
                               name: "validDate1",
                               value: "2012-12-12",
-                              label: "Valid date #1"
+                              label: "Valid date",
+                              description: "Preset with the value \"2012-12-12\""
                            }
                         },
                         {
@@ -37,7 +38,11 @@ model.jsonModel = {
                            config: {
                               name: "validDate2",
                               value: "2015-07-07",
-                              label: "Valid date #2"
+                              label: "Valid date (mandatory)",
+                              description: "Preset with the value \"2015-07-07\"",
+                              requirementConfig: {
+                                 initialValue: true
+                              }
                            }
                         }
                      ]
@@ -55,7 +60,11 @@ model.jsonModel = {
                            config: {
                               name: "lettersDate",
                               value: "letters",
-                              label: "Letters date"
+                              label: "Letters date (mandatory)",
+                              description: "Preset with the value \"letters\"",
+                              requirementConfig: {
+                                 initialValue: true
+                              }
                            }
                         },
                         {
@@ -64,7 +73,8 @@ model.jsonModel = {
                            config: {
                               name: "emptyDate",
                               value: "",
-                              label: "Empty date"
+                              label: "Empty date",
+                              description: "Preset with the value \"\""
                            }
                         },
                         {
@@ -73,7 +83,8 @@ model.jsonModel = {
                            config: {
                               name: "nullDate",
                               value: null,
-                              label: "Null date"
+                              label: "Null date",
+                              description: "Preset with the value null"
                            }
                         },
                         {
@@ -82,7 +93,8 @@ model.jsonModel = {
                            config: {
                               name: "undefinedDate",
                               value: undefined,
-                              label: "Undefined date"
+                              label: "Undefined date",
+                              description: "Preset with the value undefined"
                            }
                         }
                      ]

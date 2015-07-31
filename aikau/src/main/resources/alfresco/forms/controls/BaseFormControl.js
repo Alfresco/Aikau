@@ -380,7 +380,7 @@ define(["dojo/_base/declare",
       visibilityConfig: null,
 
       /**
-       * Defines the visibility behaviour of the widget. It is possible for the widget to dynamically be required
+       * Defines the requirement behaviour of the widget. It is possible for the widget to dynamically be required
        * to have a value provided based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/BaseFormControl#processConfig}
        * for the structure to use when configuring the rules</p>
        *
@@ -391,7 +391,7 @@ define(["dojo/_base/declare",
       requirementConfig: null,
 
       /**
-       * Defines the visibility behaviour of the widget. It is possible for the widget to dynamically be disabled
+       * Defines the disablement behaviour of the widget. It is possible for the widget to dynamically be disabled
        * or enabled based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/BaseFormControl#processConfig}
        * for the structure to use when configuring the rules</p>
        *

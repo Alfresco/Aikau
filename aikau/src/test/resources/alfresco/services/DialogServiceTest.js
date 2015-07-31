@@ -364,6 +364,41 @@ define(["intern!object",
             });
       },
 
+      "Check tabs in form dialog": function() {
+         return browser.findById("CREATE_FORM_DIALOG_WITH_TABBED_LAYOUT")
+            .click()
+         .end()
+         .findAllByCssSelector("#TABBED_FORM_DIALOG.dialogDisplayed")
+         .end()
+         .findByCssSelector("#TABBED_FORM_DIALOG .dijitTabController")
+            .getSize()
+            .then(function(size) {
+               assert(size.height > 0, "Tabs were not displayed correctly when dialog is initially shown");
+            });
+      },
+
+      "Ensure that all tabbed form values are included in published value": function() {
+         return browser.findByCssSelector("#TAB1_TB .dijitInputContainer input")
+            .type("one")
+         .end()
+         .findByCssSelector("#TABBED_FORM_DIALOG .dijitTab:nth-child(2) .tabLabel")
+            .click()
+         .end()
+         .findByCssSelector("#TAB2_TB .dijitInputContainer input")
+            .type("two")
+         .end()
+         .findByCssSelector("#TABBED_FORM_DIALOG .alfresco-buttons-AlfButton.confirmationButton > span")
+            .click()
+         .end()
+         .findAllByCssSelector("#TABBED_FORM_DIALOG.dialogHidden")
+         .end()
+         .getLastPublish("TABBED_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "tab1tb", "one", "Published form data incorrect (tab1tb)"); 
+               assert.propertyVal(payload, "tab2tb", "two", "Published form data incorrect (tab2tb)");
+            });
+      },
+
       "Can launch dialog within dialog": function() {
          return closeAllDialogs()
             .then(function() {

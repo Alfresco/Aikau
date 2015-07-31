@@ -81,6 +81,8 @@ define(["dojo/_base/declare",
        * @callable
        * @instance
        * @param {string} p_messageId The id of the message to be displayed.
+       * @param {...Object} [messageArgs] A single object with integer keys or multiple objects, either of
+       *                                  which can be used to mix into a message string
        * @returns {string} A localized form of the supplied message
        */
       message: function alfresco_core_Core__message(p_messageId) {
