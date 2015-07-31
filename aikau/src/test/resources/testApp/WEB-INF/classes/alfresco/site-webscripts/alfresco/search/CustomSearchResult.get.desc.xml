@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Customized Search Results</shortname>
+  <description>Demonstrates customization of the standard search result renderer</description>
+  <family>aikau-unit-tests</family>
+  <url>/CustomSearchResult</url>
+</webscript>
