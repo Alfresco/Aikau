@@ -225,6 +225,14 @@ define([
          _choices: null,
 
          /**
+          * Whether the control is disabled
+          *
+          * @instance
+          * @type {boolean}
+          */
+         _disabled: false,
+
+         /**
           * The currently focused result item
           *
           * @instance
@@ -379,12 +387,28 @@ define([
           */
          postCreate: function alfresco_forms_controls_MultiSelect__postCreate() {
             this.inherited(arguments);
+            this._setupDisabling();
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
             if (!this.choiceCanWrap) {
                domClass.add(this.domNode, this.rootClass + "--choices-nowrap");
             }
             this._preventWidgetDropdownDisconnects();
             this.value = [];
+         },
+
+         /**
+          * Get the specified property
+          *
+          * @instance
+          * @param {string} propName The name of the property to retrieve
+          */
+         get: function alfresco_forms_controls_MultiSelect__get(propName) {
+            switch (propName) {
+               case "value":
+                  return this.getValue();
+               case "disabled":
+                  return this.isDisabled();
+            }
          },
 
          /**
@@ -395,6 +419,46 @@ define([
           */
          getValue: function alfresco_forms_controls_MultiSelect__getValue() {
             return this.value;
+         },
+
+         /**
+          * Whether the control is disabled
+          *
+          * @instance
+          * @returns {Boolean} If disabled then true
+          */
+         isDisabled: function alfresco_forms_controls_MultiSelect__isDisabled() {
+            return this._disabled;
+         },
+
+         /**
+          * Set the specified property
+          *
+          * @instance
+          * @param {string} propName The name of the property to update
+          * @param {*} propValue The new value
+          */
+         set: function alfresco_forms_controls_MultiSelect__set(propName, propValue) {
+            switch (propName) {
+               case "value":
+                  this.setValue(propValue);
+                  break;
+               case "disabled":
+                  this.setDisabled(propValue);
+                  break;
+            }
+         },
+
+         /**
+          * Set whether the control is disabled
+          *
+          * @instance
+          * @param {boolean} newValueParam True to disable, false to enable
+          */
+         setDisabled: function alfresco_forms_controls_MultiSelect__setDisabled(newValueParam) {
+            this._disabled = !!newValueParam;
+            this.searchBox.disabled = this._disabled;
+            domClass[this._disabled ? "add" : "remove"](this.domNode, this.rootClass + "--disabled");
          },
 
          /**
@@ -1052,8 +1116,7 @@ define([
           * @instance
           * @param {object} evt Dojo-normalised event object
           */
-         _onSearchKeyup: function alfresco_forms_controls_MultiSelect___onSearchKeyup(evt) {
-            /*jshint unused:false*/
+         _onSearchKeyup: function alfresco_forms_controls_MultiSelect___onSearchKeyup(/*jshint unused:false*/ evt) {
             if (this._suppressKeyUp) {
                this._suppressKeyUp = false;
             } else {
@@ -1188,6 +1251,36 @@ define([
             }
             this._selectedChoice = choiceToSelect;
             this.searchBox.focus();
+         },
+
+         /**
+          * Consolidate the disabled-state changes into a single method, rather than peppering
+          * the code with lots of little snippets.
+          *
+          * @instance
+          */
+         _setupDisabling: function alfresco_forms_controls_MultiSelect___setupDisabling() {
+            var methodsToDisable = ["_onChoiceClick",
+               "_onChoiceCloseClick",
+               "_onControlClick",
+               "_onFocus",
+               "_onResultMousedown",
+               "_onResultMouseover",
+               "_onSearchChange",
+               "_onSearchKeypress",
+               "_onSearchKeyup",
+               "_onSearchUpdate"];
+            array.forEach(methodsToDisable, function(methodName){
+               var oldMethodName = "_OLD" + methodName;
+               this[oldMethodName] = this[methodName];
+               this[methodName] = lang.hitch(this, function() {
+                  if(this._disabled) {
+                     return;
+                  } else {
+                     return this[oldMethodName].apply(this, arguments);
+                  }
+               });
+            }, this);
          },
 
          /**
@@ -1346,8 +1439,7 @@ define([
                itemNode.setAttribute("title", labelObj.full);
 
                // Recreate the label
-               var labelFrag = this._createHighlightedResultLabel(labelObj.result),
-                  tempLabelHolder = domConstruct.create("span");
+               var labelFrag = this._createHighlightedResultLabel(labelObj.result);
                domConstruct.empty(itemNode);
                itemNode.appendChild(labelFrag);
 
