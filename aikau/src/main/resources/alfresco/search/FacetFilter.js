@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -147,9 +147,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_search_FacetFilter__postMixInProperties() {
-         if (this.label != null && this.facet != null && this.filter != null && this.hits != null)
+         if (this.label && this.facet && this.filter && this.hits)
          {
-            this.label = this.encodeHTML(this.message(this.label));
+            this.label = this.message(this.label);
 
             // Localize the alt-text for the applied filter message...
             this.appliedFilterAltText = this.message(this.appliedFilterAltText, {0: this.label});
@@ -187,7 +187,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      onToggleFilter: function alfresco_search_FacetFilter__onToggleFilter(evt) {
+      onToggleFilter: function alfresco_search_FacetFilter__onToggleFilter(/*jshint unused:false*/ evt) {
          if (this.applied)
          {
             this.onClearFilter();
@@ -231,9 +231,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onClearFilter: function alfresco_search_FacetFilter__onClearFilter() {
-         
          var fullFilter = this.facet + "|" + this.filter;
-
          if(this.useHash)
          {
             this._updateHash(fullFilter, "remove");
@@ -256,7 +254,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       _updateHash: function alfresco_search_FacetFilter___updateHash(fullFilter, mode) {
-
          // Get the existing hash and extract the individual facetFilters into an array
          var aHash = ioQuery.queryToObject(hash()),
              facetFilters = ((aHash.facetFilters) ? aHash.facetFilters : ""),
@@ -288,6 +285,5 @@ define(["dojo/_base/declare",
             type: "HASH"
          }, true);
       }
-
    });
 });
