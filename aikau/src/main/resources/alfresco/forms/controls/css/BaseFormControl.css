@@ -177,16 +177,3 @@
 .alfresco-forms-controls-BaseFormControl div.control .dijitFocused {
    border-color: @focused-border-color;
 }
-
-/* AKU-455 Fix validation display errors */
-/*.alfresco-forms-controls-BaseFormControl {
-   .dijitSelectError,
-   .dijitSelectError .dijitButtonContents,
-   .dijitTextBoxError,
-   .dijitTextBoxError .dijitButtonNode {
-      border-color: #d3d3d3;
-   }
-   .dijitValidationContainer {
-      display: none;
-   }
-}*/
