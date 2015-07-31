@@ -242,9 +242,6 @@ model.jsonModel = {
       },
       {
          name: "alfresco/logging/DebugLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

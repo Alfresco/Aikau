@@ -25,7 +25,7 @@
  * provide a completely custom rendering.
  *
  * @module alfresco/search/AlfSearchResult
- * @extends "alfresco/lists/views/layouts/Row"
+ * @extends alfresco/lists/views/layouts/Row
  * @author Dave Draper
  * @author David Webster
  */
@@ -49,6 +49,15 @@ define(["dojo/_base/declare",
    return declare([Row], {
 
       /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/AlfSearchResult.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/AlfSearchResult.properties"}],
+
+      /**
        * An array of the CSS files to use with this widget.
        *
        * @instance
@@ -66,6 +75,40 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * This allows additional action filters to be added (as opposed to defining a new array of 
+       * action filters in the 
+       * [documentAndFolderActions]{@link module:alfresco/search/AlfSearchResult#documentAndFolderActions}
+       * attribute.) Any actions defined in this attribute will be added to the original filtered list.
+       *
+       * @instance
+       * @type {string}
+       */
+      additionalDocumentAndFolderActions: null,
+
+      /**
+       * This allows additional action filters to be added (as opposed to defining a new array of 
+       * action filters in the 
+       * [documentAndFolderActions]{@link module:alfresco/search/AlfSearchResult#otherNodeActions}
+       * attribute.) Any actions defined in this attribute will be added to the original filtered list.
+       *
+       * @instance
+       * @type {string}
+       */
+      additionalOtherNodeActions: null,
+
+      /**
+       * This can be configured to override the default filter for the actions that are applicable to 
+       * folder and document nodes. Actions need to be filtered as Aikau does not currently support all
+       * of the actions that can be configured in Alfresco Share. However, if custom actions are provided
+       * by an extension or further filtering is required then they can be configured using this attribute.
+       *
+       * @instance
+       * @type {string[]}
+       * @default null
+       */
+      documentAndFolderActions: null,
+
+      /**
        * Indicates whether or not to enable the context menu to show the actions with a right-click.
        *
        * @instance
@@ -75,6 +118,49 @@ define(["dojo/_base/declare",
       enableContextMenu: false,
 
       /**
+       * This can be configured to override the default filter for the actions that are applicable to 
+       * all nodes that are neither folders nor documents. Actions need to be filtered as Aikau does not 
+       * currently support all of the actions that can be configured in Alfresco Share. However, if custom 
+       * actions are provided by an extension or further filtering is required then they can be configured 
+       * using this attribute.
+       *
+       * @instance
+       * @type {string[]}
+       * @default null
+       */
+      otherNodeActions: null,
+
+      /**
+       * Indicates whether or not a [MoreInfo]{@link module:alfresco/renderers/MoreInfo} widget should
+       * be rendered with the search result.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showMoreInfo: true,
+
+      /**
+       * This can be configured to be an array of renderer widgets to place above the central column
+       * of result properties. It should be a standard widget model array.
+       *
+       * @instance
+       * @type {object[]}
+       * @default null
+       */
+      widgetsAbove: null,
+
+      /**
+       * This can be configured to be an array of renderer widgets to place below the central column
+       * of result properties. It should be a standard widget model array.
+       *
+       * @instance
+       * @type {object[]}
+       * @default null
+       */
+      widgetsBelow: null,
+
+      /**
        * Creates the renderers to display for a search result and adds them into the template. Renderers
        * will only be created if there is data for them. This is done to further improve the performance
        * of the search rendering.
@@ -82,111 +168,101 @@ define(["dojo/_base/declare",
        * @instance postCreate
        */
       postCreate: function alfresco_search_AlfSearchResult__postCreate() {
-         // jshint nonew:false, maxstatements:false, maxcomplexity:false
+         this.generateActionFilters();
+         this.createThumbnailRenderer();
+         this.createWidgetsAbove();
+         this.createDisplayNameRenderer();
+         this.createTitleRenderer();
+         this.createMoreInfoRenderer();
+         this.createDateRenderer();
+         this.createDescriptionRenderer();
+         this.createSiteRenderer();
+         this.createPathRenderer();
+         this.createSizeRenderer();
+         this.createWidgetsBelow();
+         this.createActionsRenderer();
+         this.createContextActionsWidget();
+      },
 
-         // Define the filter for document and folder actions, this filter is initially
-         // based on what actions are currently supported by the Aikau action service
-         // rather than the actions that the user has permission to carry out on the node.
-         var documentAndFolderActions = [
-            "document-download",
-            "document-view-content",
-            "document-view-details",
-            "folder-view-details",
-            "document-edit-metadata",
-            "document-inline-edit",
-            "document-manage-granular-permissions",
-            "document-manage-repo-permissions",
-            "document-view-original",
-            "document-view-working-copy",
-            "folder-manage-rules",
-            "document-view-googlemaps",
-            "document-view-in-source-repository",
-            "document-view-in-cloud",
-            "document-delete",
-            "document-edit-offline",
-            "folder-download",
-            "document-copy-to",
-            "document-move-to",
-            "document-locate",
-            "document-assign-workflow",
-            "document-cancel-editing",
-            "document-approve",
-            "document-reject",
-            "document-manage-aspects"
-
-//            TODO: Needs to use forms runtime or equiv.
-//            "document-edit-properties",
-//
-//            TODO: Not implemented yet.
-//            "document-upload-new-version",
-//            "folder-view-details"
-//            
-//            "document-cloud-sync"
-//            "document-cloud-unsync"
-//            "document-view-in-cloud"
-//            "document-request-sync"
-//            "document-edit-online"
-//            "document-checkout-to-googledocs"
-//            "document-checkin-from-googledocs"
-//            "document-assign-workflow"
-//            "document-cancel-editing-unlock"
-
-         ];
-
-         // For actions other than folders and documents we want to further restrict what are displayed
-         // at the moment this is restricted purely to deletion.
-         var otherNodeActions = [
-            "document-delete"
-         ];
-
-         new SearchThumbnail({
+      /**
+       * This function is called to create an [XhrActions widget]{@link module:alfresco/renderers/XhrActions}. 
+       * It can be overridden to replace the default widget with a reconfigured version.
+       * 
+       * @instance
+       */
+      createActionsRenderer: function alfresco_search_AlfSearchResult__createActionsRenderer() {
+         // jshint nonew:false
+         new XhrActions({
+            onlyShowOnHover: true,
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
-            showDocumentPreview: true,
-            publishTopic: "ALF_NAVIGATE_TO_PAGE"
-         }, this.thumbnailNode);
+            filterActions: true,
+            allowedActions: (this.currentItem.type === "document" || this.currentItem.type === "folder") ? this.documentAndFolderActions : this.otherNodeActions
+         }, this.actionsNode);
+      },
 
-         new SearchResultPropertyLink({
-            currentItem: this.currentItem,
-            pubSubScope: this.pubSubScope,
-            propertyToRender: "displayName",
-            renderSize: "large"
-         }, this.nameNode);
-
-         if (!this.currentItem.title)
+      /**
+       * This function is called to create an [XhrContextActions widget]{@link module:alfresco/renderers/XhrContextActions}. 
+       * It can be overridden to replace the default widget with a reconfigured version. This function is only called when
+       * [enableContextMenu]{@link module:alfresco/search/AlfSearchResult#enableContextMenu} is configured to be true.
+       * 
+       * @instance
+       */
+      createContextActionsWidget: function alfresco_search_AlfSearchResult__createContextActionsWidget() {
+         if (this.enableContextMenu)
          {
-            domClass.add(this.titleNode, "hidden");
+            try
+            {
+               // jshint nonew:false
+               new XhrContextActions({
+                  targetNodeIds: [this.domNode],
+                  currentItem: this.currentItem,
+                  pubSubScope: this.pubSubScope,
+                  filterActions: true,
+                  allowedActions: (this.currentItem.type === "document" || this.currentItem.type === "folder") ? this.documentAndFolderActions : this.otherNodeActions
+               });
+            }
+            catch (e)
+            {
+               this.alfLog("error", "An error occurred creating context menu", e);
+            }
+         }
+      },
+
+      /**
+       * This function is called to create a [Property widget]{@link module:alfresco/renderers/Property}
+       * to render the the description of the result. It can be overridden to replace the default widget 
+       * with a reconfigured version. 
+       * 
+       * @instance
+       */
+      createDescriptionRenderer: function alfresco_search_AlfSearchResult__createDescriptionRenderer() {
+         // Render a description if available...
+         if (this.currentItem.description === null || this.currentItem.description === "")
+         {
+            domClass.add(this.descriptionRow, "hidden");
          }
          else
          {
+            // jshint nonew:false
             new Property({
                currentItem: this.currentItem,
                pubSubScope: this.pubSubScope,
-               propertyToRender: "title",
-               renderSize: "small",
-               renderedValuePrefix: "(",
-               renderedValueSuffix: ")"
-            }, this.titleNode);
+               propertyToRender: "description",
+               renderSize: "small"
+            }, this.descriptionNode);
          }
+      },
 
-         var moreInfoConfig = {
-            currentItem: this.currentItem,
-            pubSubScope: this.pubSubScope,
-            xhrRequired: true,
-            filterActions: true,
-            darkIcon: true
-         };
-         if (this.currentItem.type === "document" || this.currentItem.type === "folder")
-         {
-            // Leave default actions...
-         }
-         else
-         {
-            // Replace with just the delete action...
-            moreInfoConfig.allowedActionsString = "[\"document-delete\"]";
-         }
-         new MoreInfo(moreInfoConfig, this.moreInfoNode);
-
+      /**
+       * This function is called to create a [DateLink widget]{@link module:alfresco/renderers/DateLink}
+       * to render the the date that the result was created or last modified. It can be overridden to 
+       * replace the default widget with a reconfigured version. 
+       * 
+       * @instance
+       */
+      createDateRenderer: function alfresco_search_AlfSearchResult__createDateRenderer() {
+         // jshint nonew:false
          new DateLink({
             renderedValueClass: "alfresco-renderers-Property pointer",
             renderSize: "small",
@@ -204,49 +280,67 @@ define(["dojo/_base/declare",
                type: "PAGE_RELATIVE"
             }
          }, this.dateNode);
+      },
 
-         if (this.currentItem.description === null || this.currentItem.description === "")
+      /**
+       * This function is called to create a 
+       * [SearchResultPropertyLink]{@link module:alfresco/renderers/SearchResultPropertyLink} widget
+       * to render the the displayName of the result. It can be overridden to replace the default widget 
+       * with a reconfigured version. 
+       * 
+       * @instance
+       */
+      createDisplayNameRenderer: function alfresco_search_AlfSearchResult__createDisplayNameRenderer() {
+         // jshint nonew:false
+         new SearchResultPropertyLink({
+            currentItem: this.currentItem,
+            pubSubScope: this.pubSubScope,
+            propertyToRender: "displayName",
+            renderSize: "large"
+         }, this.nameNode);
+      },
+
+      /**
+       * This function is called to create a [MoreInfo widget]{@link module:alfresco/renderers/MoreInfo}
+       * that can be used to retrieve the full metadata for the result and display it in a dialog. 
+       * It can be overridden to replace the default widget with a reconfigured version. It will only
+       * be rendered if [showMoreInfo]{@link module:alfresco/search/AlfSearchResult#showMoreInfo} is 
+       * configured to be true.
+       * 
+       * @instance
+       */
+      createMoreInfoRenderer: function alfresco_search_AlfSearchResult__createMoreInfoRenderer() {
+         if (this.showMoreInfo === true)
          {
-            domClass.add(this.descriptionRow, "hidden");
-         }
-         else
-         {
-            new Property({
+            var moreInfoConfig = {
                currentItem: this.currentItem,
                pubSubScope: this.pubSubScope,
-               propertyToRender: "description",
-               renderSize: "small"
-            }, this.descriptionNode);
+               xhrRequired: true,
+               filterActions: true,
+               darkIcon: true
+            };
+            if (this.currentItem.type === "document" || this.currentItem.type === "folder")
+            {
+               // Leave default actions...
+            }
+            else
+            {
+               // Replace with just the delete action...
+               moreInfoConfig.allowedActionsString = "[\"document-delete\"]";
+            }
+            // jshint nonew:false
+            new MoreInfo(moreInfoConfig, this.moreInfoNode);
          }
+      },
 
-         var site = lang.getObject("site.title", false, this.currentItem),
-             repo = true;
-
-         if (!site)
-         {
-            domClass.add(this.siteRow, "hidden");
-         }
-         else
-         {
-            repo = false;
-            new PropertyLink({
-               renderedValueClass: "alfresco-renderers-Property pointer",
-               renderSize: "small",
-               pubSubScope: this.pubSubScope,
-               currentItem: this.currentItem,
-               propertyToRender: "site.title",
-               label: this.message("faceted-search.doc-lib.value-prefix.site"),
-               publishTopic: "ALF_NAVIGATE_TO_PAGE",
-               useCurrentItemAsPayload: false,
-               publishPayloadType: "PROCESS",
-               publishPayloadModifiers: ["processCurrentItemTokens"],
-               publishPayload: {
-                  url: "site/{site.shortName}/dashboard",
-                  type: "PAGE_RELATIVE"
-               }
-            }, this.siteNode);
-         }
-
+      /**
+       * This function is called to create a [PropertyLink widget]{@link module:alfresco/renderers/PropertyLink}
+       * to render the the path to the result. It can be overridden to replace the default widget with a reconfigured 
+       * version. 
+       * 
+       * @instance
+       */
+      createPathRenderer: function alfresco_search_AlfSearchResult__createPathRenderer() {
          if (!this.currentItem.path)
          {
             domClass.add(this.pathRow, "hidden");
@@ -254,10 +348,12 @@ define(["dojo/_base/declare",
          else
          {
             // Create processed path as pathLink on this.currentItem
+            var repo = lang.getObject("site.title", false, this.currentItem) || true;
             this.currentItem.pathLink = repo ?
                encodeURIComponent("/" + this.currentItem.path.split("/").slice(2).join("/")) :
                encodeURIComponent("/" + this.currentItem.path);
 
+            // jshint nonew:false
             new PropertyLink({
                renderedValueClass: "alfresco-renderers-Property pointer",
                pubSubScope : this.pubSubScope,
@@ -275,14 +371,60 @@ define(["dojo/_base/declare",
                }
             }, this.pathNode);
          }
+      },
 
+      /**
+       * This function is called to create a [PropertyLink widget]{@link module:alfresco/renderers/PropertyLink}
+       * to render the name of the site in which the result can be found (if applicable). It can be overridden to 
+       * replace the default widget with a reconfigured version. 
+       * 
+       * @instance
+       */
+      createSiteRenderer: function alfresco_search_AlfSearchResult__createSiteRenderer() {
+         // Check to see if the result exists within a site and create a renderer to display the site
+         // title if appropriate...
+         var site = lang.getObject("site.title", false, this.currentItem);
+         if (!site)
+         {
+            domClass.add(this.siteRow, "hidden");
+         }
+         else
+         {
+            // jshint nonew:false
+            new PropertyLink({
+               renderedValueClass: "alfresco-renderers-Property pointer",
+               renderSize: "small",
+               pubSubScope: this.pubSubScope,
+               currentItem: this.currentItem,
+               propertyToRender: "site.title",
+               label: this.message("faceted-search.doc-lib.value-prefix.site"),
+               publishTopic: "ALF_NAVIGATE_TO_PAGE",
+               useCurrentItemAsPayload: false,
+               publishPayloadType: "PROCESS",
+               publishPayloadModifiers: ["processCurrentItemTokens"],
+               publishPayload: {
+                  url: "site/{site.shortName}/dashboard",
+                  type: "PAGE_RELATIVE"
+               }
+            }, this.siteNode);
+         }
+      },
+
+      /**
+       * This function is called to create a [Size widget]{@link module:alfresco/renderers/Size}. 
+       * It can be overridden to replace the default widget with a reconfigured version. 
+       * 
+       * @instance
+       */
+      createSizeRenderer: function alfresco_search_AlfSearchResult__createSizeRenderer() {
          // We only show the size if it's not empty and at least one byte
-         if (!this.currentItem.size)
+         if (!this.currentItem.size || this.currentItem.size < 0)
          {
             domClass.add(this.sizeRow, "hidden");
          }
          else
          {
+            // jshint nonew:false
             new Size({
                currentItem : this.currentItem,
                pubSubScope : this.pubSubScope,
@@ -291,31 +433,160 @@ define(["dojo/_base/declare",
                sizeProperty : "size"
             }, this.sizeNode);
          }
+      },
 
-         new XhrActions({
-            onlyShowOnHover: true,
+      /**
+       * This function is called to create a [SearchThumbnail widget]{@link module:alfresco/renderers/SearchThumbnail}. 
+       * It can be overridden to replace the default widget with a reconfigured version. 
+       * 
+       * @instance
+       */
+      createThumbnailRenderer: function alfresco_search_AlfSearchResult__createThumbnailRenderer() {
+         // jshint nonew:false
+         new SearchThumbnail({
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
-            filterActions: true,
-            allowedActions: (this.currentItem.type === "document" || this.currentItem.type === "folder") ? documentAndFolderActions : otherNodeActions
-         }, this.actionsNode);
+            showDocumentPreview: true,
+            publishTopic: "ALF_NAVIGATE_TO_PAGE"
+         }, this.thumbnailNode);
+      },
 
-         if (this.enableContextMenu)
+      /**
+       * Creates any additional widgets defined through configuration directly above the main column
+       * of result properties.
+       *
+       * @instance
+       */
+      createWidgetsAbove: function alfresco_search_AlfSearchResult__createWidgetsAbove() {
+         if (this.widgetsAbove)
          {
-            try
-            {
-               new XhrContextActions({
-                  targetNodeIds: [this.domNode],
-                  currentItem: this.currentItem,
-                  pubSubScope: this.pubSubScope,
-                  filterActions: true,
-                  allowedActions: (this.currentItem.type === "document" || this.currentItem.type === "folder") ? documentAndFolderActions : otherNodeActions
-               });
-            }
-            catch (e)
-            {
-               this.alfLog("error", "An error occurred creating context menu", e);
-            }
+            this.processWidgets(this.widgetsAbove, this.aboveNode);
+         }
+         else
+         {
+            domClass.add(this.aboveNode, "hidden");
+         }
+      },
+
+      /**
+       * Creates any additional widgets defined through configuration directly above the main column
+       * of result properties.
+       *
+       * @instance
+       */
+      createWidgetsBelow: function alfresco_search_AlfSearchResult__createWidgetsBelow() {
+         if (this.widgetsBelow)
+         {
+            this.processWidgets(this.widgetsBelow, this.belowNode);
+         }
+         else
+         {
+            domClass.add(this.belowNode, "hidden");
+         }
+      },
+
+      /**
+       * This function is called to create a [Property widget]{@link module:alfresco/renderers/Property}
+       * to render the title of the result (if it has one). It can be overridden to replace the default 
+       * widget with a reconfigured version. 
+       * 
+       * @instance
+       */
+      createTitleRenderer: function alfresco_search_AlfSearchResult__createTitleRenderer() {
+         // jshint nonew:false
+         if (!this.currentItem.title)
+         {
+            domClass.add(this.titleNode, "hidden");
+         }
+         else
+         {
+            new Property({
+               currentItem: this.currentItem,
+               pubSubScope: this.pubSubScope,
+               propertyToRender: "title",
+               renderSize: "small",
+               renderedValuePrefix: "(",
+               renderedValueSuffix: ")"
+            }, this.titleNode);
+         }
+      },
+
+      /**
+       * This function is used to generate the action filters that are used for filtering the actions to
+       * show for documents and folders and for any other type of node.
+       * 
+       * @instance
+       */
+      generateActionFilters: function alfresco_search_AlfSearchResult__generateActionFilters() {
+         // Define the filter for document and folder actions, this filter is initially
+         // based on what actions are currently supported by the Aikau action service
+         // rather than the actions that the user has permission to carry out on the node.
+         if (!this.documentAndFolderActions)
+         {
+            this.documentAndFolderActions = [
+               "document-download",
+               "document-view-content",
+               "document-view-details",
+               "folder-view-details",
+               "document-edit-metadata",
+               "document-inline-edit",
+               "document-manage-granular-permissions",
+               "document-manage-repo-permissions",
+               "document-view-original",
+               "document-view-working-copy",
+               "folder-manage-rules",
+               "document-view-googlemaps",
+               "document-view-in-source-repository",
+               "document-view-in-cloud",
+               "document-delete",
+               "document-edit-offline",
+               "folder-download",
+               "document-copy-to",
+               "document-move-to",
+               "document-locate",
+               "document-assign-workflow",
+               "document-cancel-editing",
+               "document-approve",
+               "document-reject",
+               "document-manage-aspects"
+   //            TODO: Needs to use forms runtime or equiv.
+   //            "document-edit-properties",
+   //
+   //            TODO: Not implemented yet.
+   //            "document-upload-new-version",
+   //            "folder-view-details"
+   //            
+   //            "document-cloud-sync"
+   //            "document-cloud-unsync"
+   //            "document-view-in-cloud"
+   //            "document-request-sync"
+   //            "document-edit-online"
+   //            "document-checkout-to-googledocs"
+   //            "document-checkin-from-googledocs"
+   //            "document-assign-workflow"
+   //            "document-cancel-editing-unlock"
+            ];
+         }
+
+         // Append any additional actions for documents and folders...
+         if (this.additionalDocumentAndFolderActions)
+         {
+            this.documentAndFolderActions = this.documentAndFolderActions.concat(this.additionalDocumentAndFolderActions);
+         }
+
+         // For actions other than folders and documents we want to further restrict what are displayed
+         // at the moment this is restricted purely to deletion.
+         if (!this.otherNodeActions)
+         {
+            this.otherNodeActions = [
+               "document-delete"
+            ];
+         }
+
+         // Append any additional actions for other types of node...
+         if (this.additionalOtherNodeActions)
+         {
+            this.otherNodeActions = this.otherNodeActions.concat(this.additionalOtherNodeActions);
          }
       }
    });
