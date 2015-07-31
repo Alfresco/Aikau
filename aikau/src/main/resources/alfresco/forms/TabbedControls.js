@@ -99,60 +99,18 @@ define(["alfresco/layout/AlfTabContainer",
       delayProcessingDefault: false,
 
       /**
-       * This is used to track the form controls that exist within the tabs.
-       *
-       * @instance
-       * @type {object[]}
-       * @default null
-       */
-      _tabbedFormControls: null,
-
-      /**
        * Overrides the [mixed in function]{@link module:alfresco/forms/LayoutMixin#getFormLayoutChildren}
-       * to get the [current array of form controls]{@link module:alfresco/forms/TabbedControls#_tabbedFormControls}.
+       * to get the current array of form controls.
        *
        * @instance
        * @return {object[]} An array of the form controls to iterate over.
        */
       getFormLayoutChildren: function alfresco_forms_LayoutMixin__getFormLayoutChildren() {
-         if (!this._tabbedFormControls)
-         {
-            this._tabbedFormControls = [];
-            array.forEach(this.tabContainerWidget.getChildren(), lang.hitch(this, function(contentPane) {
-               this._tabbedFormControls = this._tabbedFormControls.concat(contentPane.getChildren());
-            }));
-         }
-         return this._tabbedFormControls;
-      },
-
-      /**
-       * This extends the [inherited function]{@link module:alfresco/layout/AlfTabContainer#onTabAdd} to
-       * update the list of the currently available form controls.
-       * 
-       * @instance
-       * @param {object} payload Details of the tab to delete
-       */
-      onTabAdd: function alfresco_layout_AlfTabContainer__onTabAdd(/*jshint unused:false*/ payload) {
-         this.inherited(arguments);
-
-         // Reset the current array and then recreate it...
-         this._tabbedFormControls = null;
-         this.getFormLayoutChildren();
-      },
-
-      /**
-       * This extends the [inherited function]{@link module:alfresco/layout/AlfTabContainer#onTabDelete} to
-       * update the list of the currently available form controls.
-       * 
-       * @instance
-       * @param {object} payload Details of the tab to delete
-       */
-      onTabDelete: function alfresco_layout_AlfTabContainer__onTabDelete(/*jshint unused:false*/ payload) {
-         this.inherited(arguments);
-
-         // Reset the current array and then recreate it...
-         this._tabbedFormControls = null;
-         this.getFormLayoutChildren();
+         var _tabbedFormControls = [];
+         array.forEach(this.tabContainerWidget.getChildren(), lang.hitch(this, function(contentPane) {
+            _tabbedFormControls = _tabbedFormControls.concat(contentPane.getChildren());
+         }));
+         return _tabbedFormControls;
       }
    });
 });
