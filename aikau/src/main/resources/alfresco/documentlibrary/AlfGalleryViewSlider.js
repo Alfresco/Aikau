@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
          this.set("value", this.getSliderValueFromColumns(this.columns));
          this.alfPublish(this.getPreferenceTopic, {
             preference: "org.alfresco.share.documentList.galleryColumns",
-            callback: this.setColumns,
+            callback: this.onColumnPreferences,
             callbackScope: this
          });
       },
@@ -105,10 +105,23 @@ define(["dojo/_base/declare",
       columns: 4,
 
       /**
+       * This is called when column user preferences are provided. 
+       * 
        * @instance
        * @param {number} value The number of columns to set.
        */
-      setColumns: function(value) {
+      onColumnPreferences: function alfresco_documentlibrary_AlfGalleryViewSlider__onColumnPreferences(value) {
+         this.setColumns(value);
+         this.alfPublish("ALF_DOCLIST_SET_GALLERY_COLUMNS", {
+            value: value
+         });
+      },
+
+      /**
+       * @instance
+       * @param {number} value The number of columns to set.
+       */
+      setColumns: function alfresco_documentlibrary_AlfGalleryViewSlider__setColumns(value) {
          if (!value || isNaN(value))
          {
             value = 4;
