@@ -72,11 +72,42 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @returns {object} The configuration for the form control
        */
       getWidgetConfig: function alfresco_forms_controls_DateTextBox__getWidgetConfig() {
+         this.configureValidation();
          return {
             id : this.id + "_CONTROL",
             name: this.name,
             options: (this.options !== null) ? this.options : []
          };
+      },
+
+      /**
+       * This function is used to set or update the validationConfig
+       * 
+       * @instance
+       */
+      configureValidation: function alfresco_forms_controls_DateTextBox__configureValidation() {
+         if (!this.validationConfig || ObjectTypeUtils.isObject(this.validationConfig)) {
+            this.validationConfig = [];
+         }
+         this.validationConfig.push({
+            validation: "customValidator",
+            errorMessage: this.message("formValidation.date.error")
+         });
+      },
+
+      /**
+       * Ensure value is a date
+       *
+       * @instance
+       * @param {object} validationConfig The configuration for this validator
+       */
+      customValidator: function alfresco_forms_controls_DateTextBox__customValidator(validationConfig){
+         var currentValue = this.getValue(),
+            isValid = typeof currentValue === "string";
+         if(!isValid && !this._required) {
+            isValid = this.wrappedWidget.get("displayedValue") === "";
+         }
+         this.reportValidationResult(validationConfig, isValid);
       },
 
       /**
@@ -98,7 +129,12 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       createFormControl: function alfresco_forms_controls_DateTextBox__createFormControl(config) {
          domClass.add(this.domNode, "alfresco-forms-controls-DateTextBox");
-         return new DateTextBox(config);
+         var dateTextBox = new DateTextBox(config);
+         dateTextBox.validate = lang.hitch(this, function(){
+            setTimeout(lang.hitch(this, this.validate), 0);
+            return true;
+         });
+         return dateTextBox;
       }
    });
 });
