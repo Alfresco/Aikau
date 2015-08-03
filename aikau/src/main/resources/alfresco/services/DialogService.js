@@ -787,8 +787,10 @@ define(["dojo/_base/declare",
        * @instance
        */
       _handleEscape: function alfresco_services_DialogService___handleEscape() {
-         var lastOpenedDialog = this._activeDialogs[this._activeDialogs.length - 1];
-         lastOpenedDialog.hide();
+         if (this._activeDialogs.length) {
+            var lastOpenedDialog = this._activeDialogs[this._activeDialogs.length - 1];
+            lastOpenedDialog.hide();
+         }
       }
    });
 });
