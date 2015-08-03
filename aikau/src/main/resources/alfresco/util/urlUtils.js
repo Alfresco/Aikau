@@ -25,40 +25,64 @@
  * @author Martin Doyle
  * @author David Webster
  */
-define(["dojo/_base/lang"],
-   function(lang) {
+define(["dojo/_base/lang",
+      "dojo/io-query"],
+   function(lang, ioQuery) {
 
       // The private container for the functionality and properties of the util
       var util = {
 
-         addParameter: function alfresco_util_urlUtils__addParameter(type, url, param, value, encodeValue) {
-            var initialChar;
+         /**
+          * Convert a URL string into a URL Object
+          *
+          * @param url {string}
+          * @returns {object}
+          */
+         parseUrl: function alfresco_util_urlUtils__parseUrl(url) {
+            var a = document.createElement("a"),
+               _sanitizedPathname = function (pathname) {
+                  // pathname MUST include leading slash (IE<9: this code is for you).
+                  var prepend = (pathname.substring(0, 1) === "/") ? "" : "/";
+                  return prepend + pathname;
+               };
 
-            switch (type) {
-               case "query":
-                  initialChar = "?";
-                  break;
-               case "hash":
-                  initialChar = "#";
-                  break;
-               default:
-                  this.alfLog("warn", "Attempting to add parameter, but param type unknown: " + arguments);
-            }
+            a.href = url;
 
-            var paramPrefix = url.indexOf(initialChar) === -1 ? initialChar : "&",
-               paramToUse = paramPrefix + param,
-               valueToUse = encodeValue ? encodeURIComponent(value) : value;
-            return url + paramToUse + "=" + valueToUse;
+            return {
+               protocol: a.protocol, // includes trailing colon.
+               hostname: a.hostname,
+               port: a.port,
+               host: a.host, // host = hostname:port
+               pathname: _sanitizedPathname(a.pathname), // includes leading slash
+               queryParams: ioQuery.queryToObject(a.search.slice(1)), // remove ? before parsing
+               hashParams: ioQuery.queryToObject(a.hash.slice(1)), // remove # before parsing
+               toString: function () {
+                  var search = ioQuery.objectToQuery(this.queryParams),
+                     hash = ioQuery.objectToQuery(this.hashParams);
+                  search = (search) ? "?" + search : search;
+                  hash = (hash) ? "#" + hash : hash;
+
+                  return this.protocol + "//" + this.host + this.pathname + search + hash;
+               }
+            };
          },
 
          // See API below
          addQueryParameter: function alfresco_util_urlUtils__addQueryParameter(url, param, value, encodeValue) {
-            return this.addParameter("query", url, param, value, encodeValue);
+            var urlObj = this.parseUrl(url);
+
+            urlObj.queryParams[param] = (encodeValue)? encodeURIComponent(value) : value;
+
+            return urlObj.toString();
          },
 
          // See API below
          addHashParameter: function alfresco_util_urlUtils__addHashParameter(url, param, value, encodeValue) {
-            return this.addParameter("hash", url, param, value, encodeValue);
+            var urlObj = this.parseUrl(url);
+
+            urlObj.hashParams[param] = (encodeValue) ? encodeURIComponent(value) : value;
+
+            return urlObj.toString();
          }
       };
 
@@ -68,6 +92,16 @@ define(["dojo/_base/lang"],
        * @alias module:alfresco/util/urlUtils
        */
       return {
+
+         /**
+          * Convert the supplied URL string into a URL object
+          *
+          * @instance
+          * @function
+          * @param {string} url The URL to parse
+          * @returns {object} The URL object
+          */
+         parseUrl: lang.hitch(util,  util.parseUrl),
 
          /**
           * This function can be used to append the supplied query parameter name and value onto the
