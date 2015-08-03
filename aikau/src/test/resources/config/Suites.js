@@ -227,7 +227,8 @@ define({
 
       "src/test/resources/alfresco/upload/UploadTest",
 
-      "src/test/resources/alfresco/util/functionUtilsTest"
+      "src/test/resources/alfresco/util/functionUtilsTest",
+      "src/test/resources/alfresco/util/urlUtilsTest"
    ],
 
    /**
