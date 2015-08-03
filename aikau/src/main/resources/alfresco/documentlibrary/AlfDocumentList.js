@@ -62,6 +62,19 @@ define(["dojo/_base/declare",
       showFolders: true,
 
       /**
+       * This indicates whether or not [clicking on a folder]{@link module:alfresco/documentlibrary/AlfDocumentList#onFolderClick} 
+       * will perform a globally scoped publication. This is true by default as the as the default
+       * [topic for folder clicks]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#pathChangeTopic} is
+       * expected to be subscribed to by the [NavigationService]{@link module:alfresco/services/NavigationService} which
+       * will typically be subscribing globally.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      folderClickPublishGlobal: true,
+
+      /**
        * Indicates whether or not documents should be shown in the document library.
        *
        * @instance
@@ -340,7 +353,7 @@ define(["dojo/_base/declare",
             this.currentFilter = this.processFilter(payload.url);
             if (!this.useHash && this.currentFilter.path)
             {
-               this.alfPublish(this.pathChangeTopic, this.currentFilter);
+               this.alfPublish(this.pathChangeTopic, this.currentFilter, this.folderClickPublishGlobal);
             }
          }
          else
