@@ -48,93 +48,81 @@ define(["intern!object",
             });
       },
 
-      "Check that 'PAGE_RELATIVE' is set as the type": function() {
+      "Check that navigation payload": function() {
          return browser.pressKeys(keys.TAB)
          .pressKeys(keys.RETURN)
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "PAGE_RELATIVE"))
-            .then(function(elements) {
-               assert(elements.length === 1, "'PAGE_RELATIVE' was not set as the navigation type");
-            });
-      },
-
-      "Check that 'CURRENT' is set as the target": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "target", "CURRENT"))
-            .then(function(elements) {
-               assert(elements.length === 1, "'PAGE_RELATIVE' was not set as the navigation target");
-            });
-      },
-
-      "Check that url is correct for site document": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "site/site1/document-details?nodeRef=workspace://SpacesStore/some-fake-uuid"))
-            .then(function(elements) {
-               assert(elements.length === 1, "site document search result URL was incorrect");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "type", "PAGE_RELATIVE", "Incorreect type");
+               assert.propertyVal(payload, "target", "CURRENT", "Incorrect target");
+               assert.propertyVal(payload, "url", "site/site1/document-details?nodeRef=workspace://SpacesStore/some-fake-uuid", "Incorrect URL");
             });
       },
 
       "Check that url is correct for site folder": function() {
          return browser.pressKeys(keys.TAB)
          .pressKeys(keys.RETURN)
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "site/site1/documentlibrary?path=/folder1/folder2/folder3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "site folder search result URL was incorrect");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "site/site1/documentlibrary?path=%2Ffolder1%2Ffolder2%2Ffolder3", "Site folder search result URL was incorrect");
             });
       },
 
       "Check that details url is correct for repo document": function() {
          return browser.pressKeys(keys.TAB)
          .pressKeys(keys.RETURN)
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "document-details?nodeRef=workspace://SpacesStore/some-fake-uuid"))
-            .then(function(elements) {
-               assert(elements.length === 1, "repo document search result URL was incorrect");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "document-details?nodeRef=workspace://SpacesStore/some-fake-uuid", "Repository document search result URL was incorrect");
             });
       },
 
       "Check that path url is correct for repo document": function() {
          return browser.pressKeys(keys.TAB)
          .pressKeys(keys.RETURN)
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "repository?path=/folder2/folder3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "repo document search result URL was incorrect");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "repository?path=%2Ffolder2%2Ffolder3", "Repository folder search result URL was incorrect");
             });
       },
 
       "Check that details url is correct for site document": function() {
          return browser.findByCssSelector("#SITE_DOC_LINK span.inner a")
             .click()
-            .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "site/site1/document-details?nodeRef=workspace://SpacesStore/some-fake-uuid"))
-            .then(function(elements) {
-               assert(elements.length === 1, "site document search result URL was incorrect");
+         .end()
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "site/site1/document-details?nodeRef=workspace://SpacesStore/some-fake-uuid", "Site document search result URL was incorrect");
             });
       },
 
       "Check that path url is correct for site folder": function() {
          return browser.findByCssSelector("#SITE_FOLDER_LINK span.inner a")
             .click()
-            .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "site/site1/documentlibrary?path=/folder1/folder2/folder3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "site folder search result URL was incorrect");
+         .end()
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "site/site1/documentlibrary?path=%2Ffolder1%2Ffolder2%2Ffolder3", "Site folder search result URL was incorrect");
             });
       },
 
       "Check that details url is correct for repo document (2)": function() {
          return browser.findByCssSelector("#REPO_DOC_LINK span.inner a")
             .click()
-            .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "document-details?nodeRef=workspace://SpacesStore/some-fake-uuid"))
-            .then(function(elements) {
-               assert(elements.length === 1, "repo document search result URL was incorrect");
+         .end()
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "document-details?nodeRef=workspace://SpacesStore/some-fake-uuid", "Repository document search result URL was incorrect");
             });
       },
 
       "Check that path url is correct for repo document (2)": function() {
          return browser.findByCssSelector("#REPO_FOLDER_LINK span.inner a")
             .click()
-            .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "repository?path=/folder2/folder3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "repo document search result URL was incorrect");
+         .end()
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "repository?path=%2Ffolder2%2Ffolder3", "Repository folder search result URL was incorrect");
             });
       },
 
