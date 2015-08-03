@@ -36,10 +36,14 @@
    font-weight: normal;
 }
 
+.alfresco-dialog-AlfDialog .dialog-body, .alfresco-dialog-AlfDialog .footer {
+   box-sizing: border-box;
+}
+
 .alfresco-dialog-AlfDialog .dialog-body {
    padding: 12px;
    overflow: auto;
-   height: ~"calc(100% - 50px)";
+   height: ~"calc(100% - 40px)";
    margin-bottom: 40px;
    min-width: 560px;
 }
