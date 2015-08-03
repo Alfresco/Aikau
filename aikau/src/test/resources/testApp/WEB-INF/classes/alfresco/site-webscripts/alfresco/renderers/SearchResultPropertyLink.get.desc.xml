@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>SearchResultPropertyLink Test</shortname>
-  <description>This WebScript defines the SearchResultPropertyLink page test</description>
+  <shortname>SearchResultPropertyLink</shortname>
+  <description>This page is for test purposes and shows a selection of different search result links</description>
   <family>aikau-unit-tests</family>
   <url>/SearchResultPropertyLink</url>
 </webscript>
