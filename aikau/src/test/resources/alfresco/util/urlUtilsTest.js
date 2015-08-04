@@ -49,15 +49,32 @@ define([
                         urlObj = urlUtils.parseUrl(url),
                         urlHash = urlUtils.addHashParameter(url, "newParam", "four"),
                         urlParam = urlUtils.addQueryParameter(urlHash, "newQParam", "five"),
-                        testUrl = urlObj.toString();
+                        testUrl = urlObj.toString(),
+                        relativeUrl = "example/path/",
+                        relativeUrlHash = "example/path/#hash",
+                        relativeUrlQuery = "example/path/?query=param",
+                        relativeUrlTest = urlUtils.addQueryParameter(relativeUrl,  "qpm", "qwerty"),
+                        relativeUrlHashTest = urlUtils.addQueryParameter(relativeUrlHash,  "qpm", "qwerty"),
+                        relativeUrlQueryTest = urlUtils.addHashParameter(
+                           urlUtils.addQueryParameter(relativeUrlQuery, "newQuery", "u%@p", true),
+                           "hash", "already%20encoded", false),
+                        relativeUrlQueryTest2 = urlUtils.addHashParameter(
+                           urlUtils.addQueryParameter(relativeUrlQuery, "newQuery", "u%@p", true),
+                           "hash", "already%20encoded");
 
-                     setTimeout(function() {
+
+                        setTimeout(function() {
                         callback({
                            url: url,
                            urlObj: urlObj,
                            urlHash: urlHash,
                            urlParam: urlParam,
-                           testUrl: testUrl
+                           testUrl: testUrl,
+                           relativeUrl: relativeUrl,
+                           relativeUrlTest: relativeUrlTest,
+                           relativeUrlHashTest: relativeUrlHashTest,
+                           relativeUrlQueryTest: relativeUrlQueryTest,
+                           relativeUrlQueryTest2: relativeUrlQueryTest2
                         });
                      }, 1000);
                   });
@@ -80,6 +97,13 @@ define([
 
                   assert.equal(urlHash, "http://localhost:8080/alfresco/example?foo=one&bar=two#baz=three&newParam=four");
                   assert.equal(urlParam, "http://localhost:8080/alfresco/example?foo=one&bar=two&newQParam=five#baz=three&newParam=four");
+
+                  // Relative URLs:
+                  assert.equal(results.relativeUrlTest, "example/path/?qpm=qwerty");
+                  assert.equal(results.relativeUrlHashTest, "example/path/?qpm=qwerty#hash");
+                  assert.equal(results.relativeUrlQueryTest, "example/path/?query=param&newQuery=u%25%40p#hash=already%20encoded");
+
+                  assert.equal(results.relativeUrlQueryTest, results.relativeUrlQueryTest2);
 
                });
          }
