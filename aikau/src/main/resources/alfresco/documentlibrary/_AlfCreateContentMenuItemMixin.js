@@ -144,8 +144,7 @@ define(["dojo/_base/declare",
                formSubmissionPayloadMixin: {
                   type: this.contentType,
                   prop_mimetype: this.mimeType || "",
-                  currentNode: this.currentNode,
-                  alfResponseScope: this.pubSubScope
+                  currentNode: this.currentNode
                },
                fixedWidth: true,
                widgets: this.widgets

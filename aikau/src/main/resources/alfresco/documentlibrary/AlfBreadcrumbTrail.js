@@ -161,6 +161,27 @@ define(["dojo/_base/declare",
       lastBreadcrumbPublishPayload: null,
 
       /**
+       * Indicates whether or not the clicking on the last breadcrumb publishes on the gloabl scope. This 
+       * defaults to true because it is expected that the last breadcrumb will be a page navigation and
+       * therefore need to publish to a globally subscribing 
+       * [NavigationService]{@link module:alfresco/services/NavigationServce}.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      lastBreadcrumbPublishGlobal: true,
+
+      /**
+       * Indicates whether or not the clicking on the last breadcrumb publishes on the parent scope
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      lastBreadcrumbPublishToParent: false,
+
+      /**
        * This is the type of payload that is published when the final breadcrumb in the trail is clicked. 
        * By default it will use the 
        * [lastBreadcrumbPublishPayload]{@link module:alfresco/documentlibrary/AlfBreadCrumbTrail#lastBreadcrumbPublishPayload} 
@@ -236,6 +257,9 @@ define(["dojo/_base/declare",
 
             if (this.useHash === true)
             {
+               // Subscribe using the widgets own scope (don't assume global) because the topic published
+               // will in practice be published at a share scope (i.e. when used in the context of a 
+               // scoped Document Library the hash change publication will be scoped, not global)...
                this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onPathChanged));
             }
             else if (this.pathChangeTopic)
@@ -270,6 +294,12 @@ define(["dojo/_base/declare",
          if (payload && payload.node)
          {
             this.currentNode = payload.node;
+
+            // It's necessary to re-render the breadcrumb trail after the current node changes because on initial
+            // page load the current node update will occur after the breadcrumb has been rendered for the first time...
+            // Currently this can result in the breadcrumb rendering twice, but at least it will be accurate (only 
+            // remove this line when verifying initial page loading results)...
+            this.renderPathBreadcrumbTrail();
          }
          else
          {
@@ -335,6 +365,7 @@ define(["dojo/_base/declare",
                   type: "HASH",
                   target: "CURRENT"
                };
+               config.publishGlobal = true;
             }
             else
             {
@@ -348,6 +379,8 @@ define(["dojo/_base/declare",
          {
             config.publishTopic = this.lastBreadcrumbPublishTopic;
             config.publishPayload = this.generatePayload(this.lastBreadcrumbPublishPayload, this.currentItem, null, this.lastBreadcrumbPublishPayloadType, this.lastBreadcrumbPublishPayloadItemMixin, this.lastBreadcrumbPublishPayloadModifiers);
+            config.publishGlobal = this.lastBreadcrumbPublishGlobal;
+            config.publishToParent = this.lastBreadcrumbPublishToParent;
          }
          this.renderBreadcrumb(config);
       },

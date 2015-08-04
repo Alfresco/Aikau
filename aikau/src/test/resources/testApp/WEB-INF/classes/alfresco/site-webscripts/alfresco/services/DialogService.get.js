@@ -240,6 +240,216 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_FORM_DIALOG_WITH_TABBED_LAYOUT",
+         config: {
+            label: "Create Tabbed Layout Form Dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "TABBED_FORM_DIALOG",
+               dialogTitle: "Tabs in forms",
+               formSubmissionTopic: "TABBED_FORM",
+               widgets: [
+                  {
+                     id: "TC1",
+                     name: "alfresco/forms/TabbedControls",
+                     config: {
+                        widgets: [
+                           {
+                              name: "alfresco/forms/ControlColumn",
+                              title: "Tab 1",
+                              config: {
+                                 widgets: [
+                                    {
+                                       id: "TAB1_TB",
+                                       name: "alfresco/forms/controls/TextBox",
+                                       config: {
+                                          fieldId: "TAB1_TB",
+                                          name: "tab1tb",
+                                          label: "Tab 1 TextBox"
+                                       }
+                                    }
+                                 ]
+                              }
+                           },
+                           {
+                              name: "alfresco/forms/ControlColumn",
+                              title: "Tab 2",
+                              config: {
+                                 widgets: [
+                                    {
+                                       id: "TAB2_TB",
+                                       name: "alfresco/forms/controls/TextBox",
+                                       config: {
+                                          fieldId: "TAB2_TB",
+                                          name: "tab2tb",
+                                          label: "Second text box"
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_LONG_DIALOG",
+         config: {
+            label: "Launch long dialog",
+            publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+            publishPayload: {
+               dialogTitle: "Long dialog",
+               widgetsContent: [
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        level: 2,
+                        label: "This is a heading"
+                     }
+                  },
+                  {
+                     name: "alfresco/html/Spacer",
+                     config: {
+                        height: "50px"
+                     }
+                  }
+               ],
+               widgetsButtons: [
+                  {
+                     name: "alfresco/buttons/AlfButton",
+                     config: {
+                        label: "OK",
+                        additionalCssClasses: "cancellationButton",
+                        publishTopic: "LONG_DIALOG_CLOSED"
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]

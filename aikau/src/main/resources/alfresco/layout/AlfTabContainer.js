@@ -31,6 +31,10 @@
  * [delete]{@link module:alfresco/layout/AlfTabContainer#tabDeletionTopic} tabs then you will need to
  * configure the topics to subscribe to. Subscriptions will be made at the configured 
  * [pubSubScope]{@link module:alfresco/core/Core#pubSubScope} of the widget.</p>
+ * 
+ * <p><b>PLEASE NOTE:</b> It is not possible to use this module to control the layout of controls within a form. If you wish
+ * to create a form containing tabbed controls then you should use the 
+ * [TabbedControls]{@link module:alfresco/forms/TabbedControls} widget</p>
  *
  * @example <caption>Basic configuration (first tab will be selected):</caption>
  * {
@@ -155,6 +159,7 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @mixes module:alfresco/core/ResizeMixin
  * @author Richard Smith
  * @author Dave Draper
  */
@@ -164,14 +169,16 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/AlfTabContainer.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/ResizeMixin",
         "dijit/layout/TabContainer",
         "dijit/layout/ContentPane",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, TabContainer, ContentPane, domConstruct, lang, array) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, 
+                 TabContainer, ContentPane, domConstruct, lang, array) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin], {
       
       /**
        * An array of the CSS files to use with this widget
@@ -270,6 +277,18 @@ define(["dojo/_base/declare",
       tabDeletionTopic: null,
 
       /**
+       * This is the default delayed processing behaviour of tabs. By default a tabs content
+       * will not be created until it is displayed (unless the tab is configured to request
+       * otherwise). However, this can be overridden to switch the default so that all tab
+       * content will be created as soon as the container is created.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      delayProcessingDefault: true,
+
+      /**
        * @instance
        */
       postCreate: function alfresco_layout_AlfTabContainer__postCreate() {
@@ -290,12 +309,24 @@ define(["dojo/_base/declare",
             // we'll ensure that the first tab is both selected and will be immediately rendered
             var tabSelected = false;
             array.forEach(this.widgets, function(widget) {
-               if (widget.delayProcessing !== false && !widget.selected)
+               if ((widget.delayProcessing === true && !widget.selected) || 
+                   widget.delayProcessing === false)
                {
-                  widget.delayProcessing = true;
+                  // No action, use the explicit configuration
+               }
+               else if (widget.delayProcessing === true && widget.selected)
+               {
+                  // Silly configuration, if the tab is to be initially selected, processing can't be delayed...
+                  widget.delayProcessingDefault = false;
+               }
+               else
+               {
+                  // Use the default if no configuration is provided...
+                  widget.delayProcessing = this.delayProcessingDefault;
                }
                tabSelected = tabSelected || widget.selected;
-            });
+            }, this);
+
             if (this.widgets.length && !tabSelected)
             {
                this.widgets[0].selected = true;
@@ -324,6 +355,8 @@ define(["dojo/_base/declare",
          {
             this.alfSubscribe(this.tabDeletionTopic, lang.hitch(this, this.onTabDelete));
          }
+
+         this.alfSetupResizeSubscriptions(this.onResize, this);
       },
 
       /**
@@ -427,6 +460,19 @@ define(["dojo/_base/declare",
          if(forDeletion || forDeletion === 0)
          {
             this._delayedProcessingWidgets.splice(forDeletion, 1);
+         }
+      },
+
+      /**
+       * Resizes the TabContainer on resize events.
+       *
+       * @instance
+       * @param {object} evt The resize event.
+       */
+      onResize: function alfresco_layout_AlfTabContainer__onResize() {
+         if (this.tabContainerWidget && typeof this.tabContainerWidget.resize === "function")
+         {
+            this.tabContainerWidget.resize();
          }
       },
 

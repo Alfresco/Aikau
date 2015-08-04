@@ -21,6 +21,7 @@ model.jsonModel = {
                   {
                      nodeRef: "dummy://nodeRef/1",
                      type: "folder",
+                     name: "test1 & test2",
                      displayName: "Normal result",
                      title: "Normal result title",
                      modifiedBy: "Barry Smith",
@@ -242,9 +243,6 @@ model.jsonModel = {
       },
       {
          name: "alfresco/logging/DebugLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

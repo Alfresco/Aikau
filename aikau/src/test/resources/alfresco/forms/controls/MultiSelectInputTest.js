@@ -73,13 +73,13 @@ define([
          //    focused element: none
          //    
          "Controls are fully loaded": function() {
-            return browser.findAllByCssSelector("#MULTISELECT_1_CONTROL.alfresco-forms-controls-MultiSelect--loaded")
+            return browser.findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect--loaded")
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "First MultiSelect control not fully loaded");
                })
                .end()
 
-            .findAllByCssSelector("#MULTISELECT_2_CONTROL.alfresco-forms-controls-MultiSelect--loaded")
+            .findAllByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect--loaded")
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Second MultiSelect control not fully loaded");
                });
@@ -101,20 +101,20 @@ define([
          //    focused element: none
          //    
          "Preset values are rendered by control": function() {
-            return browser.findAllByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice")
+            return browser.findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice")
                .then(function(elements) {
                   assert.lengthOf(elements, 2, "Did not render two preset values for control");
                })
                .end()
 
-            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "tag1", "Did not display first tag label correctly");
                })
                .end()
 
-            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__content")
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__content")
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "tag11", "Did not display second tag label correctly");
@@ -137,7 +137,7 @@ define([
          //    *focused element: Control 2
          //    
          "Clicking on control no longer loses responses to a second query": function() {
-            return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__search-box")
                .click()
                .end()
 
@@ -195,7 +195,7 @@ define([
                .pressKeys(keys.ESCAPE)
                .end()
 
-            .findAllByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice")
+            .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice")
                .then(function(elements) {
                   assert.lengthOf(elements, 2, "Added already-selected choice to control");
                });
@@ -226,13 +226,13 @@ define([
                .click()
                .end()
 
-            .findAllByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice")
+            .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice")
                .then(function(elements) {
                   assert.lengthOf(elements, 3, "Did not add new choice to control");
                })
                .end()
 
-            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(3) .alfresco-forms-controls-MultiSelect__choice__content")
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(3) .alfresco-forms-controls-MultiSelect__choice__content")
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "tag2", "Did not add selected tag at end of choices");
@@ -255,7 +255,7 @@ define([
          //    focused element: Control 1
          //    
          "Typing into search box filters results": function() {
-            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
                .type("tag2")
                .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
                .end()
@@ -282,7 +282,7 @@ define([
          //    focused element: Control 1
          //    
          "Typing into search box filters results for strings in middle of name": function() {
-            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
                .clearValue()
                .type("12")
                .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(2)")
@@ -310,7 +310,7 @@ define([
          //    focused element: Control 1
          //    
          "Search box correctly filters on special reg exp chars": function() {
-            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
                .clearValue()
                .type("(a")
                .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
@@ -322,7 +322,7 @@ define([
                })
                .end()
 
-            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
                .clearValue();
          },
 
@@ -342,12 +342,12 @@ define([
          //    focused element: Control 1
          //    
          "Clicking cross on a chosen item removes it": function() {
-            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__close-button")
+            return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__close-button")
                .click()
-               .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(3)")
+               .waitForDeletedByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(3)")
                .end()
 
-            .findAllByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice")
+            .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice")
                .then(function(elements) {
                   assert.lengthOf(elements, 2, "Did not remove choice");
                });
@@ -401,19 +401,19 @@ define([
          //    *focused element: Control 1
          //    
          "Keyboard can navigate and select items in dropdown": function() {
-            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
                .type("new")
                .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(7)")
                .pressKeys([keys.ARROW_DOWN, keys.ARROW_DOWN, keys.ARROW_UP, keys.ENTER])
                .end()
 
-            .findAllByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice")
+            .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice")
                .then(function(elements) {
                   assert.lengthOf(elements, 3, "Did not add new choice to control");
                })
                .end()
 
-            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(3) .alfresco-forms-controls-MultiSelect__choice__content")
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(3) .alfresco-forms-controls-MultiSelect__choice__content")
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "newtag13(a)", "Did not add selected tag at end of choices");
@@ -436,7 +436,7 @@ define([
          //    *focused element: Focus helper
          //    
          "Selecting item with keyboard does not persist previous search": function() {
-            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
                .pressKeys(keys.ARROW_DOWN)
                .end()
             .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(7)")
@@ -467,19 +467,19 @@ define([
          //    *focused element: Control 1
          //    
          "Deleting all items disables confirmation button": function() {
-            return browser.findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
+            return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
                .click()
-               .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(3)")
+               .waitForDeletedByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(3)")
                .end()
 
-            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
                .click()
-               .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(2)")
+               .waitForDeletedByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(2)")
                .end()
 
-            .findByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__close-button")
                .click()
-               .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1)")
+               .waitForDeletedByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(1)")
                .end()
 
             .findAllByCssSelector("#FORM1 .confirmationButton.dijitDisabled")
@@ -504,7 +504,7 @@ define([
          //    focused element: Control 1
          //    
          "Custom label format is used for choices": function() {
-            return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
+            return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "Those that belong to the emperor", "Did not display custom label format (type=choice) for choice");
@@ -531,7 +531,7 @@ define([
          //    *focused element: Control 2
          //    
          "Custom label format is used for results": function() {
-            return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__search-box")
                .type("the")
                .waitForDeletedByCssSelector("#MULTISELECT_2_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(7)")
                .end()
@@ -563,7 +563,7 @@ define([
          //    focused element: Control 2
          //    
          "Choices do not exceed max width": function() {
-            return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
+            return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
                .getSize()
                .then(function(size) {
                   assert(size.width < 151, "Choice was not restricted to under 150px as requested");
@@ -586,25 +586,25 @@ define([
          //    focused element: Control 2
          //    
          "Arrow key selects choice and backspace key deletes selected choice only": function() {
-            return browser.findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__search-box")
                .pressKeys(keys.ESCAPE)
                .sleep(100)
                .pressKeys(keys.ARROW_LEFT)
                .end()
 
-            .findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice--selected .alfresco-forms-controls-MultiSelect__choice__content")
+            .findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__choice--selected .alfresco-forms-controls-MultiSelect__choice__content")
                .getVisibleText()
                .then(function(visibleText) {
                   assert.equal(visibleText, "Innumerable ones", "Did not select correct choice");
                })
                .end()
 
-            .findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__search-box")
+            .findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__search-box")
                .pressKeys(keys.BACKSPACE)
-               .waitForDeletedByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice:nth-child(2)")
+               .waitForDeletedByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__choice:nth-child(2)")
                .end()
 
-            .findByCssSelector("#MULTISELECT_2_CONTROL .alfresco-forms-controls-MultiSelect__choice .alfresco-forms-controls-MultiSelect__choice__content")
+            .findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__choice .alfresco-forms-controls-MultiSelect__choice__content")
                .getVisibleText()
                .then(function(visibleText) {
                   assert.equal(visibleText, "Those that belong to the emperor", "Did not delete correct choice");
@@ -672,6 +672,25 @@ define([
                      assert.deepPropertyVal(payload, "tags[0].value", "workspace://SpacesStore/84a27335-6008-4ddc-8a27-724225bbed3d", "Failed to submit tag2 value from dialog");
                   }
                });
+         },
+
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    choices: None
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    focused element: Create dialog button
+         //    
+         "Third control is disabled": function() {
+            return browser.findByCssSelector("#FORM3 .alfresco-forms-controls-MultiSelect--disabled");
          },
 
          "Post Coverage Results": function() {

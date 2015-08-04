@@ -48,12 +48,15 @@ define(["intern!object",
             return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
                .getVisibleText()
                .then(function(text) {
-                  assert.equal(text, "Test", "Value not rendered correctly");
+                  assert.equal(text, "Test item (topic, no scope)", "Value not rendered correctly");
                });
          },
 
          "Edit widget not initially created": function() {
-            return browser.findAllByCssSelector("#INLINE_EDIT_ITEM_0 > .editWidgetNode > *")
+            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 [data-dojo-attach-point=\"formWidgetNode\"]") // Make sure placeholder is present
+               .end()
+
+            .findAllByCssSelector("#INLINE_EDIT_ITEM_0 .alfresco-forms-Form")
                .then(function(elements) {
                   assert.lengthOf(elements, 0, "Edit widget node should be empty until needed");
                });
@@ -125,10 +128,7 @@ define(["intern!object",
                .click()
                .end()
 
-            .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
-               .then(null, function() {
-                  assert(false, "Clicking edit icon did not create the validation text box");
-               });
+            .findByCssSelector("#INLINE_EDIT_ITEM_0 .alfresco-forms-Form");
          },
 
          "Read property is hidden when editing": function() {
@@ -171,9 +171,9 @@ define(["intern!object",
                .click()
                .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("TEST_PROPERTY_LINK_CLICK", "publish", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Property link topic not published on click");
+            .getLastPublish("TEST_PROPERTY_LINK_CLICK")
+               .then(function(payload) {
+                  assert.isNotNull(payload, "Property link topic not published on click");
                });
          },
 
@@ -243,21 +243,12 @@ define(["intern!object",
                .click()
                .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATE", "publish", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Property update not requested");
-               })
-               .end()
-
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "name", "New"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "New value didn't publish correctly");
-               })
-               .end()
-
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "hiddenData", "hidden_update"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Hidden value didn't get included");
+            .getLastPublish("ALF_CRUD_UPDATE", true)
+               .then(function(payload) {
+                  assert.isNotNull(payload, "Property update not requested");
+                  assert.propertyVal(payload, "name", "New", "New value didn't publish correctly");
+                  assert.propertyVal(payload, "hiddenData", "hidden_update", "Hidden value didn't get included");
+                  assert.propertyVal(payload, "alfResponseScope", "", "Unscoped property link generated alfResponseScope");
                });
          },
 
@@ -271,6 +262,64 @@ define(["intern!object",
             .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "New", "Read-only value not updated correctly");
+               });
+         },
+
+         "Scoped property link update has response scoped": function() {
+            return browser.findByCssSelector("#LIST_TOPIC_SCOPED .editIcon")
+               .click()
+               .end()
+
+            .findByCssSelector("#LIST_TOPIC_SCOPED .alfresco-forms-controls-TextBox:first-child .dijitInputContainer input")
+               .type("New2")
+               .end()
+
+            .findByCssSelector("#LIST_TOPIC_SCOPED .save")
+               .clearLog()
+               .click()
+               .end()
+
+            .getLastPublish("ALF_CRUD_UPDATE", true)
+               .then(function(payload) {
+                  assert.isNotNull(payload, "Property update not requested");
+                  assert.propertyVal(payload, "alfResponseScope", "SCOPED_", "Scoped property link generated incorrect alfResponseScope");
+               });
+         },
+
+         "Property links publish correct payloads": function() {
+            return browser.findByCssSelector("#LIST_TOPIC_NOSCOPE .alfresco-renderers-InlineEditProperty .alfresco-renderers-Property")
+               .clearLog()
+               .click()
+               .end()
+
+            .getLastPublish("TEST_PROPERTY_LINK_CLICK", true)
+               .then(function(payload) {
+                  assert.isNotNull(payload, "'Test item (topic, no scope)' did not publish correct topic");
+                  assert.propertyVal(payload, "alfResponseScope", "", "'Test item (topic, no scope)' generated incorrect alfResponseScope");
+               })
+               .end()
+
+            .findByCssSelector("#LIST_TOPIC_SCOPED .alfresco-renderers-InlineEditProperty .alfresco-renderers-Property")
+               .clearLog()
+               .click()
+               .end()
+
+            .getLastPublish("SCOPED_TEST_PROPERTY_LINK_CLICK", true)
+               .then(function(payload) {
+                  assert.isNotNull(payload, "'Test item (topic, scoped)' did not publish correct topic");
+                  assert.propertyVal(payload, "alfResponseScope", "SCOPED_", "'Test item (topic, scoped)' generated incorrect alfResponseScope");
+               })
+               .end()
+
+            .findByCssSelector("#LIST_NOTOPIC_SCOPED .alfresco-renderers-InlineEditProperty .alfresco-renderers-Property")
+               .clearLog()
+               .click()
+               .end()
+
+            .getLastPublish("SCOPED_ALF_NAVIGATE_TO_PAGE", true)
+               .then(function(payload) {
+                  assert.isNotNull(payload, "'Test item (no topic, scoped)' did not publish correct topic");
+                  assert.propertyVal(payload, "alfResponseScope", "SCOPED_", "'Test item (no topic, scoped)' generated incorrect alfResponseScope");
                });
          },
 

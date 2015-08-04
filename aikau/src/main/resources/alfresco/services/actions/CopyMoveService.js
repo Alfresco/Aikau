@@ -119,7 +119,8 @@ define(["dojo/_base/declare",
             nodes = NodeUtils.nodeRefArray(documents),
             publishPayload = {
                nodes: nodes,
-               documents: documents
+               documents: documents,
+               responseScope: payload.alfResponseScope
             };
 
          var fileName = (nodes.length === 1)? documents[0].fileName : this.message("services.ActionService.copyMoveTo.multipleFiles");
@@ -186,7 +187,7 @@ define(["dojo/_base/declare",
          else
          {
             var nodeRefs = NodeUtils.nodeRefArray(documents);
-            array.forEach(locations, lang.hitch(this, this.performAction, nodeRefs, urlPrefix, copy));
+            array.forEach(locations, lang.hitch(this, this.performAction, nodeRefs, urlPrefix, copy, payload.alfResponseScope));
          }
       },
 
@@ -199,7 +200,7 @@ define(["dojo/_base/declare",
        * @param {boolean} copy A boolean indicating if this is a copy action or not
        * @param {array} location  The location to move or copy the documents to
        */
-      performAction: function alfresco_services_actions_CopyMoveService__performAction(nodeRefs, urlPrefix, copy, location) {
+      performAction: function alfresco_services_actions_CopyMoveService__performAction(nodeRefs, urlPrefix, copy, responseScope, location) {
          var responseTopic = this.generateUuid();
          var successSubscription = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onActionSuccess), true);
          var failureSubscription = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onActionFailure), true);
@@ -207,6 +208,7 @@ define(["dojo/_base/declare",
             alfTopic: responseTopic,
             subscriptionHandles: [successSubscription,failureSubscription],
             copy: copy,
+            responseScope: responseScope,
             url: AlfConstants.PROXY_URI + urlPrefix + location.nodeRef.replace("://", "/"),
             method: "POST",
             data: {
@@ -259,7 +261,7 @@ define(["dojo/_base/declare",
                message: message
             });
          }
-         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {});
+         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, payload.requestConfig.responseScope);
       },
 
       /**

@@ -64,6 +64,7 @@ define(["dojo/_base/declare",
                });
                newNotification.startup();
                newNotification.display().then(lang.hitch(this, function() {
+                  this.alfPublish(this.TOPIC_NOTIFICATION_CLOSED, {}, true);
                   if (payload.publishTopic) {
                      this.alfPublish(payload.publishTopic, payload.publishPayload || {}, payload.publishGlobal, payload.publishToParent);
                   }

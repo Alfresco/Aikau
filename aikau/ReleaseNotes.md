@@ -1,4 +1,4 @@
-Aikau 1.0.28 Release Notes
+Aikau 1.0.29 Release Notes
 ===
 
 New deprecations: 
@@ -42,6 +42,25 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.29:
+* [AKU-405](https://issues.alfresco.com/jira/browse/AKU-405)       - Added alfresco/forms/TabbedControls
+* [AKU-421](https://issues.alfresco.com/jira/browse/AKU-421)       - Updates to alfresco/renderers/InlineEditPropertyLink publications
+* [AKU-422](https://issues.alfresco.com/jira/browse/AKU-422)       - Fixed alfresco/documentlibrary/AlfBreadcrumbTrail scoping issues
+* [AKU-424](https://issues.alfresco.com/jira/browse/AKU-428)       - Ensure gallery views render correct column count initially
+* [AKU-447](https://issues.alfresco.com/jira/browse/AKU-447)       - Updates to action handling to support multiple scoped Document Library instances
+* [AKU-448](https://issues.alfresco.com/jira/browse/AKU-448)       - Long dialog layout tweaks
+* [AKU-449](https://issues.alfresco.com/jira/browse/AKU-449)       - Updated ESC key handling for dialogs
+* [AKU-450](https://issues.alfresco.com/jira/browse/AKU-450)       - Updated alfresco/search/AlfSearchResult to make it more configurable/extendable
+* [AKU-453](https://issues.alfresco.com/jira/browse/AKU-453)       - Encode search result folder name characters for navigation purposes
+* [AKU-455](https://issues.alfresco.com/jira/browse/AKU-455)       - Hide Dojo error display in alfresco/forms/controls/NumberSpinner
+* [AKU-456](https://issues.alfresco.com/jira/browse/AKU-456)       - Allow menu bar popups to open on hover
+* [AKU-457](https://issues.alfresco.com/jira/browse/AKU-457)       - Decimal place support in alfresco/forms/controls/NumberSpinner
+* [AKU-458](https://issues.alfresco.com/jira/browse/AKU-458)       - Support read only mode for alfresco/forms/controls/MultiSelectInput
+* [AKU-466](https://issues.alfresco.com/jira/browse/AKU-466)       - Ensure alfresco/layout/AlfTabContainer will render in dialogs
+* [AKU-479](https://issues.alfresco.com/jira/browse/AKU-479)       - Support accented characters in facet filters
+* [AKU-480](https://issues.alfresco.com/jira/browse/AKU-480)       - Further updates to alfresco/renderers/InlineEditPropertyLink publications
+* [AKU-487](https://issues.alfresco.com/jira/browse/AKU-487)       - Further alfresco/documentlibrary/AlfBreadcrumbTrail updates
+* [AKU-462](https://issues.alfresco.com/jira/browse/AKU-462)       - General Document Library tweaks
 
 1.0.28:
 * [AKU-415](https://issues.alfresco.com/jira/browse/AKU-415)       - Add hash support to [`AlfFilteredList`](src/main/resources/alfresco/lists/AlfFilteredList.js)

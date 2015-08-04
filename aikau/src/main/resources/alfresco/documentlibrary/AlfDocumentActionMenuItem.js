@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -79,6 +79,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload published on the filter topic 
        */
       filter: function alfresco_menus_AlfDocumentActionMenuItem__filter(payload) {
+         // jshint maxcomplexity:false
          this.alfLog("log", "Filtering request received: ", payload);
          
          // Defaulting to show
@@ -86,7 +87,7 @@ define(["dojo/_base/declare",
              i, ii;
          if (payload && payload.userAccess && payload.commonAspects && payload.allAspects)
          {
-            if (this.permission != "")
+            if (this.permission)
             {
                var actionPermissions = this.permission.split(",");
                for (i = 0, ii = actionPermissions.length; i < ii; i++)
@@ -102,12 +103,12 @@ define(["dojo/_base/declare",
             
             // Check required aspects.
             // Disable if any node DOES NOT have ALL required aspects
-            if (this.hasAspect != "")
+            if (this.hasAspect)
             {
                var hasAspects = this.hasAspect.split(",");
                for (i = 0, ii = hasAspects.length; i < ii; i++)
                {
-                  if (array.indexOf(payload.commonAspects, hasAspects[i]) == -1)
+                  if (array.indexOf(payload.commonAspects, hasAspects[i]) === -1)
                   {
                      hide = true;
                      break;
@@ -117,12 +118,12 @@ define(["dojo/_base/declare",
             
             // Check forbidden aspects.
             // Disable if any node DOES have ANY forbidden aspect
-            if (this.notAspect != "")
+            if (this.notAspect)
             {
                var notAspects = this.notAspect.split(",");
                for (i = 0, ii = notAspects.length; i < ii; i++)
                {
-                  if (array.indexOf(payload.allAspects, notAspects[i]) != -1)
+                  if (array.indexOf(payload.allAspects, notAspects[i]) !== -1)
                   {
                      hide = true;
                      break;

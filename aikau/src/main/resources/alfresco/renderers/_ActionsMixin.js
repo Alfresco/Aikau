@@ -264,6 +264,14 @@ define(["dojo/_base/declare",
 
             var id = action.id ? (this.id + "_" + action.id) : null;
             var payload = (action.publishPayload) ? action.publishPayload : {document: this.currentItem, action: action};
+            payload = this.generatePayload(payload, this.currentItem, null, action.publishPayloadType, action.publishPayloadItemMixin, action.publishPayloadModifiers);
+
+            // It's expected that an Actions renderere will be used inside a row of Document List view, and that
+            // the row will typically have its own scope. However, we know that some actions will require that the
+            // list is refreshed (e.g. when items are deleted, moved or copied) in which case the responseScope
+            // should be addressed at the list (i.e. the parent scope) not this renderer...
+            payload.responseScope = this.parentPubSubScope;
+
             var menuItem = new AlfMenuItem({
                id: id,
                label: action.label,
@@ -272,9 +280,9 @@ define(["dojo/_base/declare",
                pubSubScope: this.pubSubScope,
                parentPubSubScope: this.parentPubSubScope,
                publishTopic: action.publishTopic || this.singleDocumentActionTopic,
-               publishPayload: this.generatePayload(payload, this.currentItem, null, action.publishPayloadType, action.publishPayloadItemMixin, action.publishPayloadModifiers),
-               publishGlobal: this.publishGlobal,
-               publishToParent: this.publishToParent
+               publishPayload: payload,
+               publishGlobal: true,
+               publishToParent: false
             });
             this.actionsGroup.addChild(menuItem);
          }

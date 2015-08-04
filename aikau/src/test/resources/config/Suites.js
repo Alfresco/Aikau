@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest"
+      "src/test/resources/alfresco/forms/controls/DateTextBoxTest"
    ],
 
    /**
@@ -99,6 +99,7 @@ define({
       "src/test/resources/alfresco/forms/FormValidationTest",
       "src/test/resources/alfresco/forms/HashFormTest",
       "src/test/resources/alfresco/forms/SingleTextFieldFormTest",
+      "src/test/resources/alfresco/forms/TabsInFormsTest",
 
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",
@@ -206,6 +207,7 @@ define({
       "src/test/resources/alfresco/renderers/actions/UploadNewVersionActionTest",
 
       "src/test/resources/alfresco/search/AlfSearchResultTest",
+      "src/test/resources/alfresco/search/CustomSearchResultTest",
       "src/test/resources/alfresco/search/FacetFiltersTest",
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
@@ -217,7 +219,7 @@ define({
       "src/test/resources/alfresco/services/NotificationServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",
       "src/test/resources/alfresco/services/ServiceFilteringTest",
-      "src/test/resources/alfresco/services/SiteServiceTest",
+      // "src/test/resources/alfresco/services/SiteServiceTest", - NO TESTS IN THIS SUITE THAT DO ANYTHING!
       "src/test/resources/alfresco/services/UserServiceTest",
 
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
