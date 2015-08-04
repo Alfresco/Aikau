@@ -1,4 +1,4 @@
-Aikau 1.0.28 Release Notes
+Aikau 1.0.29 Release Notes
 ===
 
 New deprecations: 
@@ -42,6 +42,18 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.29:
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       - 
 
 1.0.28:
 * [AKU-415](https://issues.alfresco.com/jira/browse/AKU-415)       - Add hash support to [`AlfFilteredList`](src/main/resources/alfresco/lists/AlfFilteredList.js)
