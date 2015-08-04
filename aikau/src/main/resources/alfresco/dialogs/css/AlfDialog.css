@@ -124,3 +124,7 @@
    width: 360px;
    border-radius: 3px;
 }
+
+.dialog-body .control .dijitTextArea {
+   width: 356px;
+}
