@@ -77,14 +77,7 @@ define(["dojo/_base/lang",
             var returnUrl,
                safeValue = (encodeValue) ? encodeURIComponent(value) : value;
 
-            if (this._isAbsolute(url)) {
-               var urlObj = this.parseUrl(url);
-
-               urlObj.queryParams[param] = (encodeValue) ? encodeURIComponent(value) : value;
-
-               returnUrl = urlObj.toString();
-            }
-            else if (url.indexOf("#") !== -1) {
+            if (url.indexOf("#") !== -1) {
                var urlParts = url.split("#");
 
                if(url.indexOf("?") !== -1) {
@@ -110,13 +103,7 @@ define(["dojo/_base/lang",
             var returnUrl,
                safeValue = (encodeValue) ? encodeURIComponent(value) : value;
 
-            if (this._isAbsolute(url)) {
-               var urlObj = this.parseUrl(url);
-
-               urlObj.hashParams[param] = safeValue;
-               returnUrl = urlObj.toString();
-            }
-            else if (url.indexOf("#") !== -1) {
+            if (url.indexOf("#") !== -1) {
                returnUrl = url + "&" + param + "=" + safeValue;
 
             }
@@ -125,16 +112,6 @@ define(["dojo/_base/lang",
             }
 
             return returnUrl;
-         },
-
-         /**
-          * Is the URL an absolute one?
-          *
-          * @param url
-          * @returns {boolean}
-          */
-         _isAbsolute: function alfresco_util_urlUtils__isAbsolute(url) {
-            return (url.indexOf("http") === 0);
          }
       };
 
