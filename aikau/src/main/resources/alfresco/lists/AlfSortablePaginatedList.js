@@ -240,7 +240,7 @@ define(["dojo/_base/declare",
                }
                else
                {
-                  this.loadData();
+                  this.onReloadData();
                }
             }
          }
@@ -279,7 +279,7 @@ define(["dojo/_base/declare",
                }
                else
                {
-                  this.loadData();
+                  this.onReloadData();
                }
             }
          }

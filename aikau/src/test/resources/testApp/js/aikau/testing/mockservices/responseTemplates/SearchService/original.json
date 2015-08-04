@@ -1,0 +1,33 @@
+{
+   "totalRecords": 0,
+   "totalRecordsUpper": -1,
+   "startIndex": 0,
+   "numberFound": 0,
+   "facets":
+   {
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}created":
+      [
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}creator":
+      [
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modified":
+      [
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modifier":
+      [
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.mimetype":
+      [
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.size":
+      [
+      ]
+   },
+   "items":
+   [
+   ],
+   "spellcheck":
+   {
+   }
+}

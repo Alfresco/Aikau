@@ -147,16 +147,30 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfCheckableMenuItem__postCreate() {
-
          if (!this.publishPayload)
          {
             this.publishPayload = {};
          }
 
+         // If configured to use a hashName and that hashName is on the 
          if (this.hashName)
          {
             var currHash = hashUtils.getHash();
-            this.checked = currHash[this.hashName] && currHash[this.hashName] === this.value;
+            if (currHash[this.hashName])
+            {
+               // If the hashName is present in the URL hash, set the checked state based on the URL...
+               this.checked = currHash[this.hashName] === this.value;
+            }
+            else if (this.checked)
+            {
+               // ...but if the hashName is NOT present in the URL hash, but the menu item has been 
+               // configured to be checked then update the URL hash...
+               currHash[this.hashName] = this.value;
+               this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+                  url: ioQuery.objectToQuery(currHash),
+                  type: "HASH"
+               }, true);
+            }
          }
 
          this.alfLog("log", "Create checkable cell");
