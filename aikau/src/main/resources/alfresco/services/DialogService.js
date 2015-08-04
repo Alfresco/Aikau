@@ -164,9 +164,11 @@ define(["dojo/_base/declare",
         "alfresco/dialogs/AlfDialog",
         "alfresco/forms/Form",
         "dojo/_base/array",
+        "dojo/on",
+        "dojo/keys",
         "jquery",
         "dojo/aspect"],
-        function(declare, AlfCore, lang, AlfDialog, AlfForm, array, $, aspect) {
+        function(declare, AlfCore, lang, AlfDialog, AlfForm, array, on, keys, $, aspect) {
 
    return declare([AlfCore], {
 
@@ -264,6 +266,15 @@ define(["dojo/_base/declare",
       widgets: null,
 
       /**
+       * The stack of active dialogs
+       *
+       * @instance
+       * @static
+       * @type {Object[]}
+       */
+      _activeDialogs: [],
+
+      /**
        * Create a new 'publishTopic' for the action and generates a new 'pubSubScope' and then sets
        * up subscriptions for handling show dialog and cancel dialog requests.
        *
@@ -285,6 +296,14 @@ define(["dojo/_base/declare",
          // can have multiple dialogs with different IDs...
          this.idToDialogMap = {};
          this.idToHandleMap = {};
+
+         // We need to make sure the escape key closes our last-opened dialog, so we must listen
+         // at the body level
+         on(document.body, "keydown", lang.hitch(this, function(evt) {
+            if (evt && evt.keyCode === keys.ESCAPE) {
+               this._handleEscape();
+            }
+         }));
       },
 
       /**
@@ -427,7 +446,7 @@ define(["dojo/_base/declare",
             array.forEach(payload.publishOnShow, lang.hitch(this, this.publishOnShow));
          }
          this.mapRequestedIdToDialog(payload, dialog);
-         dialog.show();
+         this._showDialog(dialog);
 
          if (payload.hideTopic)
          {
@@ -512,7 +531,7 @@ define(["dojo/_base/declare",
                var dialogConfig = this.createDialogConfig(config, formConfig);
                var dialog = new AlfDialog(dialogConfig);
                this.mapRequestedIdToDialog(payload, dialog);
-               dialog.show();
+               this._showDialog(dialog);
 
                if (config.dialogCloseTopic)
                {
@@ -743,6 +762,34 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("error", "The format of the dialog content was not as expected, the 'formSubmissionTopic' will not be published", payload, this);
+         }
+      },
+
+      /**
+       * Show the supplied dialog (also used for adding hooks to the show/hide methods)
+       *
+       * @instance
+       * @param {Object} dialog The dialog to show
+       */
+      _showDialog: function alfresco_services_DialogService___showDialog(dialog) {
+         this._activeDialogs.push(dialog);
+         dialog.show();
+         aspect.after(dialog, "onHide", lang.hitch(this, function() {
+            this._activeDialogs = array.filter(this._activeDialogs, function(activeDialog) {
+               return activeDialog !== dialog;
+            });
+         }));
+      },
+
+      /**
+       * Handle escape key being pressed at the body level
+       *
+       * @instance
+       */
+      _handleEscape: function alfresco_services_DialogService___handleEscape() {
+         if (this._activeDialogs.length) {
+            var lastOpenedDialog = this._activeDialogs[this._activeDialogs.length - 1];
+            lastOpenedDialog.hide();
          }
       }
    });
