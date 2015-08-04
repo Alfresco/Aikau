@@ -39,6 +39,11 @@ define(["dojo/_base/lang",
           * @returns {object}
           */
          parseUrl: function alfresco_util_urlUtils__parseUrl(url) {
+            if (!url.indexOf("://"))
+            {
+               this.alfLog("warn", "Attempting to parse a relative URL. This will return an absolute URL");
+            }
+
             var a = document.createElement("a"),
                _sanitizedPathname = function (pathname) {
                   // pathname MUST include leading slash (IE<9: this code is for you).
@@ -69,20 +74,67 @@ define(["dojo/_base/lang",
 
          // See API below
          addQueryParameter: function alfresco_util_urlUtils__addQueryParameter(url, param, value, encodeValue) {
-            var urlObj = this.parseUrl(url);
+            var returnUrl,
+               safeValue = (encodeValue) ? encodeURIComponent(value) : value;
 
-            urlObj.queryParams[param] = (encodeValue)? encodeURIComponent(value) : value;
+            if (this._isAbsolute(url)) {
+               var urlObj = this.parseUrl(url);
 
-            return urlObj.toString();
+               urlObj.queryParams[param] = (encodeValue) ? encodeURIComponent(value) : value;
+
+               returnUrl = urlObj.toString();
+            }
+            else if (url.indexOf("#") !== -1) {
+               var urlParts = url.split("#");
+
+               if(url.indexOf("?") !== -1) {
+                  returnUrl = urlParts[0] + "&" + param + "=" + safeValue + "#" + urlParts[1];
+               }
+               else {
+                  returnUrl = urlParts[0] + "?" + param + "=" + safeValue + "#" + urlParts[1];
+               }
+
+            }
+            else if (url.indexOf("?") !== -1) {
+               returnUrl = url + "&" + param + "=" + safeValue;
+            }
+            else {
+                  returnUrl = url + "?" + param + "=" + safeValue;
+            }
+
+            return returnUrl;
          },
 
          // See API below
          addHashParameter: function alfresco_util_urlUtils__addHashParameter(url, param, value, encodeValue) {
-            var urlObj = this.parseUrl(url);
+            var returnUrl,
+               safeValue = (encodeValue) ? encodeURIComponent(value) : value;
 
-            urlObj.hashParams[param] = (encodeValue) ? encodeURIComponent(value) : value;
+            if (this._isAbsolute(url)) {
+               var urlObj = this.parseUrl(url);
 
-            return urlObj.toString();
+               urlObj.hashParams[param] = safeValue;
+               returnUrl = urlObj.toString();
+            }
+            else if (url.indexOf("#") !== -1) {
+               returnUrl = url + "&" + param + "=" + safeValue;
+
+            }
+            else {
+               returnUrl = url + "#" + param + "=" + safeValue;
+            }
+
+            return returnUrl;
+         },
+
+         /**
+          * Is the URL an absolute one?
+          *
+          * @param url
+          * @returns {boolean}
+          */
+         _isAbsolute: function alfresco_util_urlUtils__isAbsolute(url) {
+            return (url.indexOf("http") === 0);
          }
       };
 
