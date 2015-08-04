@@ -17,16 +17,19 @@ var pageServices = [
 var docLibServices = getDocumentLibraryServices();
 var services = alfAddUniqueServices(pageServices, docLibServices);
 
+var docLib = getDocLib({
+   siteId: "site1", 
+   containerId: "documentlibrary", 
+   rootNode: null, 
+   rootLabel: "Documents",
+   getUserPreferences: false
+});
+docLib.config.pubSubScope = "SCOPED_";
+
 model.jsonModel = {
    services: services,
    widgets: [
-      getDocLib({
-         siteId: "site1", 
-         containerId: "documentlibrary", 
-         rootNode: null, 
-         rootLabel: "Documents",
-         getUserPreferences: false
-      }),
+      docLib,
       {
          name: "aikauTesting/mockservices/FullDocLibMockXhr"
       },
