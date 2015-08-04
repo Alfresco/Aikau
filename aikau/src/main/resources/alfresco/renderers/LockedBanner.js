@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -26,8 +26,9 @@
 define(["dojo/_base/declare",
         "alfresco/renderers/Banner",
         "alfresco/core/UrlUtilsMixin",
-        "service/constants/Default"], 
-        function(declare, Banner, UrlUtilsMixin, AlfConstants) {
+        "service/constants/Default",
+        "dojo/_base/lang"], 
+        function(declare, Banner, UrlUtilsMixin, AlfConstants, lang) {
 
    return declare([Banner, UrlUtilsMixin], {
       
@@ -46,24 +47,26 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Banner__postMixInProperties() {
-         
-         var properties = this.currentItem.jsNode.properties,
-             bannerUser = properties.lockOwner || properties.workingCopyOwner,
-             bannerLink = this.generateUserLink(this, bannerUser),
-             nodeTypePrefix = "details.banner.";
-         if (this.currentItem.isContainer)
+         var properties = lang.getObject("node.properties", false, this.currentItem);
+         if (properties)
          {
-            nodeTypePrefix += "folder."
-         }
+            var bannerUser = properties.lockOwner || properties.workingCopyOwner,
+                bannerLink = this.generateUserLink(this, bannerUser),
+                nodeTypePrefix = "details.banner.";
+            if (this.currentItem.isContainer)
+            {
+               nodeTypePrefix += "folder.";
+            }
 
-         // Working Copy handling...
-         if (this.currentItem.workingCopy && bannerUser.userName === AlfConstants.USERNAME)
-         {
-            this.bannerMessage = this.message(nodeTypePrefix + (this.currentItem.workingCopy.isWorkingCopy ? "editing" : "lock-owner"));
-         }
-         else if (this.currentItem.workingCopy)
-         {
-            this.bannerMessage = this.message(nodeTypePrefix + "locked", bannerLink);
+            // Working Copy handling...
+            if (this.currentItem.workingCopy && bannerUser.userName === AlfConstants.USERNAME)
+            {
+               this.bannerMessage = this.message(nodeTypePrefix + (this.currentItem.workingCopy.isWorkingCopy ? "editing" : "lock-owner"));
+            }
+            else if (this.currentItem.workingCopy)
+            {
+               this.bannerMessage = this.message(nodeTypePrefix + "locked", bannerLink);
+            }
          }
       }
    });
