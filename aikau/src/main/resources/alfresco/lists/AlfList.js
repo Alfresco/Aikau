@@ -367,11 +367,11 @@ define(["dojo/_base/declare",
        * @instance
        * @overrideable
        */
-      onFiltersUpdated: function(){
+      onFiltersUpdated: function alfresco_lists_AlfList__onFiltersUpdated() {
          this.clearViews();
          this.loadData();
       },
-
+      
       /**
        * This indicates that the instance should wait for all widgets on the page to finish rendering before
        * making any attempt to load data. If this is set to true then loading can begin as soon as this instance
