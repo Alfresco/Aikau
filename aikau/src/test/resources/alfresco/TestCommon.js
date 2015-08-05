@@ -187,14 +187,14 @@ define(["intern/dojo/node!fs",
             return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
                .click();
          };
-         command.session.getLastPublish = function(topicName, isGlobal) {
+         command.session.getLastPublish = function(topicName, isGlobal, waitPeriod) {
             return this.getLogEntries({
                type: "PUBLISH",
                topic: topicName,
                pos: "last"
-            }, null, isGlobal);
+            }, isGlobal, waitPeriod);
          };
-         command.session.getLogEntries = function(filter, waitPeriod, isGlobal) {
+         command.session.getLogEntries = function(filter, isGlobal, waitPeriod) {
 
             // Normalise arguments
             filter = filter || {};

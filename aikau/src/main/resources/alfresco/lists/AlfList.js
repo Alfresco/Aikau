@@ -281,9 +281,9 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {number}
-       * @default 250
+       * @default
        */
-      _filterDelay: 250,
+      _filterDelay: 1000,
 
       /**
        * An array of the topics to subscribe to that when published provide data that the indicates how the
