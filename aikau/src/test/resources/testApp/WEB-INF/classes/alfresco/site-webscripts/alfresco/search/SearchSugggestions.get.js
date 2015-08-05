@@ -93,6 +93,7 @@ model.jsonModel = {
          name: "alfresco/search/AlfSearchList",
          config: {
             waitForPageWidgets: true,
+            useHash: true,
             loadDataPublishTopic: "SEARCH_RESULTS",
             widgets: [
                {
@@ -222,10 +223,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

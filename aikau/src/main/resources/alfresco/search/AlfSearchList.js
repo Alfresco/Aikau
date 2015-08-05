@@ -56,36 +56,53 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfSearchList.css"}],
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/lists/AlfSortablePaginatedList#setupSubscriptions}
-       * to subscribe to search specific topics.
+       * The facet fields to include in searches. This is updated by the onIncludeFacetRequest function.
        *
        * @instance
+       * @type {string}
+       * @default ""
        */
-      setupSubscriptions: function alfresco_search_AlfSearchList__setupSubscriptions() {
-         this.inherited(arguments);
-         this.alfSubscribe("ALF_SET_SEARCH_TERM", lang.hitch(this, this.onSearchTermRequest));
-         this.alfSubscribe("ALF_INCLUDE_FACET", lang.hitch(this, this.onIncludeFacetRequest));
-         this.alfSubscribe("ALF_APPLY_FACET_FILTER", lang.hitch(this, this.onApplyFacetFilter));
-         this.alfSubscribe("ALF_REMOVE_FACET_FILTER", lang.hitch(this, this.onRemoveFacetFilter));
-         this.alfSubscribe("ALF_SEARCHLIST_SCOPE_SELECTION", lang.hitch(this, this.onScopeSelection));
-         this.alfSubscribe("ALF_ADVANCED_SEARCH", lang.hitch(this, this.onAdvancedSearch));
-         this.alfSubscribe(this.reloadDataTopic, lang.hitch(this, this.reloadData));
-      },
+      facetFields: "",
 
       /**
-       * Overrides the [inherited function]{@link module:alfresco/lists/AlfList#setDisplayMessages}
-       * to set search specific messages.
+       * The filters of facets that should be applied to search queries. This can either be configured
+       * when the widget is created or can be set via the browser hash fragment.
        *
        * @instance
+       * @type {object}
+       * @default null
        */
-      setDisplayMessages: function alfresco_search_AlfSearchList__setDisplayMessages() {
-         this.noViewSelectedMessage = this.message("searchlist.no.view.message");
-         this.noDataMessage = this.message("searchlist.no.data.message");
-         this.fetchingDataMessage = this.message("searchlist.loading.data.message");
-         this.renderingViewMessage = this.message("searchlist.rendering.data.message");
-         this.fetchingMoreDataMessage = this.message("searchlist.loading.data.message");
-         this.dataFailureMessage = this.message("searchlist.data.failure.message");
-      },
+      facetFilters: null,
+
+      /**
+       * This indicates whether or not to hide or display the included facets details when
+       * results are loaded. This is initialised to true, but will be changed to false if
+       * any facets are requested to be included in the page.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      hideFacets: true,
+
+      /**
+       * The current term to search on
+       *
+       * @instance
+       * @type {string}
+       * @default ""
+       */
+      searchTerm: "",
+
+      /**
+       * The initially selected scope. This should either be "repo", "all_sites" or the shortname of a
+       * specific site.
+       *
+       * @instance
+       * @type {string}
+       * @default "repo"
+       */
+      selectedScope: "repo",
 
       /**
        * Include spell checking in search requests.
@@ -97,7 +114,17 @@ define(["dojo/_base/declare",
       spellcheck: true,
 
       /**
+       * The vars and terms showing on the url hash that should be reset for a new search.
+       *
+       * @instance
+       * @type {string[]}
+       * @default ["facetFilters", "query"]
+       */
+      _resetVars: ["facetFilters", "query"],
+
+      /**
        * Extends the [inherited function]{@link module:alfresco/lists/AlfSortablePaginatedList#postMixInProperties}
+       * 
        * @instance
        */
       postMixInProperties: function alfresco_search_AlfSearchList__postMixInProperties() {
@@ -123,19 +150,42 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The payload of the publication requesting the reload
        */
-      reloadData: function alfresco_search_AlfSearchList__reloadData() {
+      onReloadData: function alfresco_search_AlfSearchList__onReloadData() {
          this.resetResultsList();
          this.loadData();
       },
 
       /**
-       * The current term to search on
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfSortablePaginatedList#setupSubscriptions}
+       * to subscribe to search specific topics.
        *
        * @instance
-       * @type {string}
-       * @default ""
        */
-      searchTerm: "",
+      setupSubscriptions: function alfresco_search_AlfSearchList__setupSubscriptions() {
+         this.inherited(arguments);
+         this.alfSubscribe("ALF_SET_SEARCH_TERM", lang.hitch(this, this.onSearchTermRequest));
+         this.alfSubscribe("ALF_INCLUDE_FACET", lang.hitch(this, this.onIncludeFacetRequest));
+         this.alfSubscribe("ALF_APPLY_FACET_FILTER", lang.hitch(this, this.onApplyFacetFilter));
+         this.alfSubscribe("ALF_REMOVE_FACET_FILTER", lang.hitch(this, this.onRemoveFacetFilter));
+         this.alfSubscribe("ALF_SEARCHLIST_SCOPE_SELECTION", lang.hitch(this, this.onScopeSelection));
+         this.alfSubscribe("ALF_ADVANCED_SEARCH", lang.hitch(this, this.onAdvancedSearch));
+         this.alfSubscribe(this.reloadDataTopic, lang.hitch(this, this.onReloadData));
+      },
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/lists/AlfList#setDisplayMessages}
+       * to set search specific messages.
+       *
+       * @instance
+       */
+      setDisplayMessages: function alfresco_search_AlfSearchList__setDisplayMessages() {
+         this.noViewSelectedMessage = this.message("searchlist.no.view.message");
+         this.noDataMessage = this.message("searchlist.no.data.message");
+         this.fetchingDataMessage = this.message("searchlist.loading.data.message");
+         this.renderingViewMessage = this.message("searchlist.rendering.data.message");
+         this.fetchingMoreDataMessage = this.message("searchlist.loading.data.message");
+         this.dataFailureMessage = this.message("searchlist.data.failure.message");
+      },
 
       /**
        * Updates the current search term. Note that this is not currently sufficient for setting complete
@@ -147,6 +197,8 @@ define(["dojo/_base/declare",
        */
       onSearchTermRequest: function alfresco_search_AlfSearchList__onSearchTermRequest(payload) {
          this.alfLog("log", "Setting search term", payload, this);
+
+         var currHash;
          var searchTerm = lang.getObject("searchTerm", false, payload);
          if (searchTerm === null || searchTerm === undefined)
          {
@@ -168,22 +220,31 @@ define(["dojo/_base/declare",
                   this._suspendSpellCheck = true;
                }
 
-               // If a request is NOT in progress then we need to manually request a new search, because re-setting
-               // the hash will not trigger the changeFilter function....
-               // If the current hash includes a term from the resetHashTerms array, we need to clear those terms before
-               // setting a search term (even if it is the same), in this case updating the hash will trigger the search...
-               var currHash = hashUtils.getHash();
-               if (this._cleanResettableHashTerms(currHash))
+               if (this.useHash === true)
                {
-                  currHash.searchTerm = this.searchTerm;
-                  this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-                     url: ioQuery.objectToQuery(currHash),
-                     type: "HASH"
-                  }, true);
+                  // If a request is NOT in progress then we need to manually request a new search, because re-setting
+                  // the hash will not trigger the changeFilter function....
+                  // If the current hash includes a term from the resetHashTerms array, we need to clear those terms before
+                  // setting a search term (even if it is the same), in this case updating the hash will trigger the search...
+                  currHash = hashUtils.getHash();
+                  if (this._cleanResettableHashTerms(currHash))
+                  {
+                     currHash.searchTerm = this.searchTerm;
+                     this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+                        url: ioQuery.objectToQuery(currHash),
+                        type: "HASH"
+                     }, true);
+                  }
+                  else
+                  {
+                     // The current hash has no resettable terms so we need to trigger a manual search...
+                     this.resetResultsList();
+                     this.loadData();
+                  }
                }
                else
                {
-                  // The current hash has no resettable terms so we need to trigger a manual search...
+                  // When not using URL hashes, just apply the new search...
                   this.resetResultsList();
                   this.loadData();
                }
@@ -193,13 +254,21 @@ define(["dojo/_base/declare",
          {
             // The requested search term is new, so updating the hash will result in a new search...
             this.searchTerm = searchTerm;
-            var currHash = hashUtils.getHash();
-            this._cleanResettableHashTerms(currHash);
-            currHash.searchTerm = this.searchTerm;
-            this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-               url: ioQuery.objectToQuery(currHash),
-               type: "HASH"
-            }, true);
+            if (this.useHash === true)
+            {
+               currHash = hashUtils.getHash();
+               this._cleanResettableHashTerms(currHash);
+               currHash.searchTerm = this.searchTerm;
+               this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+                  url: ioQuery.objectToQuery(currHash),
+                  type: "HASH"
+               }, true);
+            }
+            else
+            {
+               this.resetResultsList();
+               this.loadData();
+            }
          }
       },
 
@@ -216,16 +285,6 @@ define(["dojo/_base/declare",
          this.query = payload;
          this.loadData();
       },
-
-      /**
-       * The initially selected scope. This should either be "repo", "all_sites" or the shortname of a
-       * specific site.
-       *
-       * @instance
-       * @type {string}
-       * @default "repo"
-       */
-      selectedScope: "repo",
 
       /**
        *
@@ -246,9 +305,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            var currHash = hashUtils.getHash();
             this.selectedScope = scope;
-            currHash.scope = scope;
             if (scope === "repo" || scope === "all_sites")
             {
                this.siteId = "";
@@ -258,33 +315,24 @@ define(["dojo/_base/declare",
                this.siteId = scope;
             }
 
-            // Update the hash to trigger a search...
-            this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-               url: ioQuery.objectToQuery(currHash),
-               type: "HASH"
-            }, true);
+            if (this.useHash === true)
+            {
+               var currHash = hashUtils.getHash();
+               currHash.scope = scope;
+            
+               // Update the hash to trigger a search...
+               this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+                  url: ioQuery.objectToQuery(currHash),
+                  type: "HASH"
+               }, true);
+            }
+            else
+            {
+               this.resetResultsList();
+               this.loadData();
+            }
          }
       },
-
-      /**
-       * The facet fields to include in searches. This is updated by the onIncludeFacetRequest function.
-       *
-       * @instance
-       * @type {string}
-       * @default ""
-       */
-      facetFields: "",
-
-      /**
-       * This indicates whether or not to hide or display the included facets details when
-       * results are loaded. This is initialised to true, but will be changed to false if
-       * any facets are requested to be included in the page.
-       *
-       * @instance
-       * @type {boolean}
-       * @default true
-       */
-      hideFacets: true,
 
       /**
        *
@@ -326,16 +374,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The filters of facets that should be applied to search queries. This can either be configured
-       * when the widget is created or can be set via the browser hash fragment.
-       *
-       * @instance
-       * @type {object}
-       * @default null
-       */
-      facetFilters: null,
-
-      /**
        * This function is called as a result of publishing on the "ALF_APPLY_FACET_FILTER" topic. It will
        * update the current [filters]{@link module:alfresco/search/AlfSearchList#facetFilters}
        * object with a new entry for the request filter.
@@ -353,7 +391,15 @@ define(["dojo/_base/declare",
          else
          {
             this.facetFilters[filter] = true;
-            this.updateFilterHash(filter, "add");
+            if (this.useHash === true)
+            {
+               this.updateFilterHash(filter, "add");
+            }
+            else
+            {
+               this.resetResultsList();
+               this.loadData();
+            }
          }
       },
 
@@ -368,7 +414,15 @@ define(["dojo/_base/declare",
       onRemoveFacetFilter: function alfresco_search_AlfSearchList__onRemoveFacetFilter(payload) {
          this.alfLog("log", "Removing facet filter", payload, this);
          delete this.facetFilters[payload.filter];
-         this.updateFilterHash(payload.filter, "remove");
+         if (this.useHash === true)
+         {
+            this.updateFilterHash(payload.filter, "remove");
+         }
+         else
+         {
+            this.resetResultsList();
+            this.loadData();
+         }
       },
 
       /**
@@ -465,7 +519,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       loadData: function alfresco_search_AlfSearchList__loadData() {
-         // jshint maxcomplexity:false
+         // jshint maxcomplexity:false,maxstatements:false
+         var key;
          if (this.requestInProgress)
          {
             // TODO: Inform user that request is in progress?
@@ -483,16 +538,16 @@ define(["dojo/_base/declare",
 
             // InfiniteScroll uses pagination under the covers.
             var startIndex = (this.currentPage - 1) * this.currentPageSize;
-
             if (!this.useInfiniteScroll ||
                 !this.currentData ||
+                this.currentData.numberFound === -1 || // Indicate no results found on previous search
                 this.currentData.numberFound >= startIndex)
             {
                this.alfPublish(this.requestInProgressTopic, {});
                this.showLoadingMessage();
 
                var filters = "";
-               for (var key in this.facetFilters)
+               for (key in this.facetFilters)
                {
                   if (this.facetFilters.hasOwnProperty(key))
                   {
@@ -503,8 +558,17 @@ define(["dojo/_base/declare",
 
                // Make sure the repo param is set appropriately...
                // The repo instance variable trumps everything else...
-               var siteId = (this.scope === "repo" || this.scope === "all_sites") ? "" : this.scope;
-
+               var siteId = this.siteId;
+               var scope = this.selectedScope;
+               if (this.useHash === true)
+               {
+                  // Unfortunately we made the error of using "scope" on the URL hash and
+                  // "selectedScope" as the widget attribute. This means that we have to special
+                  // case useHash being set to true to use the appropriate value for the mode being used...
+                  siteId = (this.scope === "repo" || this.scope === "all_sites") ? "" : this.scope;
+                  scope = this.scope;
+               }
+               
                this.currentRequestId = this.generateUuid();
                var searchPayload = {
                   term: this.searchTerm,
@@ -514,7 +578,7 @@ define(["dojo/_base/declare",
                   sortField: this.sortField,
                   site: siteId,
                   rootNode: this.rootNode,
-                  repo: this.scope === "repo",
+                  repo: scope === "repo",
                   requestId: this.currentRequestId,
                   pageSize: this.currentPageSize,
                   maxResults: 0,
@@ -531,7 +595,7 @@ define(["dojo/_base/declare",
                      this.query = JSON.parse(this.query);
                   }
 
-                  for (var key in this.query)
+                  for (key in this.query)
                   {
                      if (this.query.hasOwnProperty(key))
                      {
@@ -696,15 +760,6 @@ define(["dojo/_base/declare",
          this.hideChildren(this.domNode);
          this.clearViews();
       },
-
-      /**
-       * The vars and terms showing on the url hash that should be reset for a new search.
-       *
-       * @instance
-       * @type {string[]}
-       * @default ["facetFilters", "query"]
-       */
-      _resetVars: ["facetFilters", "query"],
 
       /**
        * Clean resettable variables based on resetVars array.

@@ -1,0 +1,161 @@
+{
+   "totalRecords": 3,
+   "totalRecordsUpper": -1,
+   "startIndex": 0,
+   "numberFound": 3,
+   "facets":
+   {
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}created":
+      [
+         {
+         "label": "faceted-search.date.one-month.label",
+         "value": "NOW\/DAY-1MONTH\"..\"NOW\/DAY+1DAY",
+         "hits": 2,
+         "index": 2
+         },
+         {
+         "label": "faceted-search.date.one-week.label",
+         "value": "NOW\/DAY-7DAYS\"..\"NOW\/DAY+1DAY",
+         "hits": 2,
+         "index": 1
+         },
+         {
+         "label": "faceted-search.date.one-year.label",
+         "value": "NOW\/DAY-1YEAR\"..\"NOW\/DAY+1DAY",
+         "hits": 3,
+         "index": 4
+         },
+         {
+         "label": "faceted-search.date.six-months.label",
+         "value": "NOW\/DAY-6MONTHS\"..\"NOW\/DAY+1DAY",
+         "hits": 3,
+         "index": 3
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}creator":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 3,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modified":
+      [
+         {
+         "label": "faceted-search.date.one-month.label",
+         "value": "NOW\/DAY-1MONTH\"..\"NOW\/DAY+1DAY",
+         "hits": 2,
+         "index": 2
+         },
+         {
+         "label": "faceted-search.date.one-year.label",
+         "value": "NOW\/DAY-1YEAR\"..\"NOW\/DAY+1DAY",
+         "hits": 3,
+         "index": 4
+         },
+         {
+         "label": "faceted-search.date.six-months.label",
+         "value": "NOW\/DAY-6MONTHS\"..\"NOW\/DAY+1DAY",
+         "hits": 3,
+         "index": 3
+         },
+         {
+         "label": "faceted-search.date.one-week.label",
+         "value": "NOW\/DAY-7DAYS\"..\"NOW\/DAY+1DAY",
+         "hits": 2,
+         "index": 1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modifier":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 3,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.mimetype":
+      [
+         {
+         "label": "Plain Text",
+         "value": "text\/plain",
+         "hits": 1,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.size":
+      [
+         {
+         "label": "faceted-search.size.1-16MB.label",
+         "value": "1048576\"..\"16777216",
+         "hits": 1,
+         "index": 3
+         }
+      ]
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/9e1bc0f4-23d9-4283-9312-fb5cc323d828",
+         "type": "folder",
+         "name": "Template",
+         "displayName": "Template",
+         "title": "bob",
+         "description": "moo",
+         "modifiedOn": "2015-07-30T08:56:19.666+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": -1,
+         "mimetype": "application\/octet-stream",
+         "path": "\/Company Home\/Shared\/folder1",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/b325a97b-23c9-49f4-9ee8-d2fafcf4c36a",
+         "type": "folder",
+         "name": "bob@bob",
+         "displayName": "bob@bob",
+         "description": "",
+         "modifiedOn": "2015-06-25T15:25:08.269+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": -1,
+         "mimetype": "application\/octet-stream",
+         "path": "\/Company Home\/User Homes",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/644a2c13-93d1-4472-8c6d-137c7b9a2aef",
+         "type": "document",
+         "name": "home.get.html.ftl",
+         "displayName": "home.get.html.ftl",
+         "description": "",
+         "modifiedOn": "2015-07-30T10:54:59.153+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 1633309,
+         "mimetype": "text\/plain",
+         "path": "\/Company Home\/Shared",
+         "lastThumbnailModification":
+         [
+          "doclib:1438250102288"
+          ,
+          "imgpreview:1438705092869"
+          
+         ],
+         "tags": []
+      }
+   ]
+}

@@ -209,6 +209,7 @@ define({
       "src/test/resources/alfresco/search/AlfSearchResultTest",
       "src/test/resources/alfresco/search/CustomSearchResultTest",
       "src/test/resources/alfresco/search/FacetFiltersTest",
+      "src/test/resources/alfresco/search/NoHashSearchingTest",
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
       "src/test/resources/alfresco/services/ActionServiceTest",
