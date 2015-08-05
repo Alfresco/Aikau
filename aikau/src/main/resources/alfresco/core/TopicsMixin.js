@@ -42,6 +42,16 @@ define(["dojo/_base/declare"],
           * @type {string}
           * @default
           */
-         TOPIC_NOTIFICATION_CLOSED: "ALF_NOTIFICATION_CLOSED"
+         TOPIC_NOTIFICATION_CLOSED: "ALF_NOTIFICATION_CLOSED",
+
+         /**
+          * This topic is published when the page has finished loading. It should also be published
+          * when dynamically creating widgets after the page has finished loading.
+          *
+          * @instance
+          * @type {string}
+          * @default
+          */
+         TOPIC_PAGE_WIDGETS_READY: "ALF_WIDGETS_READY"
       });
    });

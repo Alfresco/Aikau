@@ -160,6 +160,7 @@
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @mixes module:alfresco/core/ResizeMixin
+ * @mixes module:alfresco/core/TopicsMixin
  * @author Richard Smith
  * @author Dave Draper
  */
@@ -170,15 +171,16 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/ResizeMixin",
+        "alfresco/core/TopicsMixin",
         "dijit/layout/TabContainer",
         "dijit/layout/ContentPane",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, 
-                 TabContainer, ContentPane, domConstruct, lang, array) {
+                 TopicsMixin, TabContainer, ContentPane, domConstruct, lang, array) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin, TopicsMixin], {
       
       /**
        * An array of the CSS files to use with this widget
@@ -461,6 +463,7 @@ define(["dojo/_base/declare",
          {
             this._delayedProcessingWidgets.splice(forDeletion, 1);
          }
+         this.alfPublish(this.TOPIC_PAGE_WIDGETS_READY, {}, true);
       },
 
       /**

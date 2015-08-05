@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,6 +24,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/TopicsMixin
  * @example <caption>Sample configuration</caption>
  * {
  *    name: "alfresco/accessibility/AccessibilityMenu",
@@ -51,16 +52,18 @@
  define(["dojo/_base/declare",
          "dijit/_WidgetBase", 
          "dijit/_TemplatedMixin",
+         "alfresco/core/Core",
+         "alfresco/core/TopicsMixin",
          "dojo/text!./templates/AccessibilityMenu.html",
          "dojo/_base/lang",
-         "alfresco/core/Core",
+         "dojo/_base/array",
          "dojo/dom",
          "dojo/dom-construct",
          "dojo/on",
          "dojo/dom-attr"], 
-         function(declare, _WidgetBase, _TemplatedMixin, template, lang, AlfCore, dom, domConstruct, on, domAttr) {
+         function(declare, _WidgetBase, _TemplatedMixin, AlfCore, TopicsMixin, template, lang, array, dom, domConstruct, on, domAttr) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
+   return declare([_WidgetBase, _TemplatedMixin, TopicsMixin, AlfCore], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -126,7 +129,6 @@
        * @instance
        */
       postCreate: function alfresco_accessibility_AccessibilityMenu__postCreate() {
-
          // Inject access key header
          domConstruct.create("p", {
             innerHTML: this.titleMsg ? this.titleMsg : this.message(this.titleMsgKey)
@@ -136,14 +138,13 @@
          var ul = domConstruct.create("ul", null, this.accessKeys, "last");
 
          // Then iterate menu items creating li and a tags accordingly
-         for (var i=0, item; item = this.menu[i]; i++)
-         {
+         array.forEach(this.menu, function(item) {
             this.writeMenuItem(ul, item);
-         }
-
+         }, this);
+         
          // Subscribe generateTargets and addEvents to ALF_WIDGETS_READY
-         this.alfSubscribe("ALF_WIDGETS_READY", lang.hitch(this, "generateTargets"));
-         this.alfSubscribe("ALF_WIDGETS_READY", lang.hitch(this, "addEvents"));
+         this.alfSubscribe(this.TOPIC_PAGE_WIDGETS_READY, lang.hitch(this, this.generateTargets));
+         this.alfSubscribe(this.TOPIC_PAGE_WIDGETS_READY, lang.hitch(this, this.addEvents));
 
       },
 
@@ -154,7 +155,6 @@
        * @param {object} item The object containing details for the menu item
        */
       writeMenuItem: function alfresco_accessibility_AccessibilityMenu__writeMenuItem(list, item) {
-
          // If the menu item has at least a msg or msgKey
          if(item.msg || item.msgKey){
          
@@ -193,10 +193,8 @@
        * @listens ALF_WIDGETS_READY
        */
       generateTargets: function alfresco_accessibility_AccessibilityMenu__generateTargets() {
-
          // Iterate target items creating anchors accordingly
-         for (var i=0, item; item = this.targets[i]; i++)
-         {
+         array.forEach(this.targets, function(item) {
             if(dom.byId(item.domid))
             {
                var pos = item.after ? "after" : "before";
@@ -211,7 +209,7 @@
             {
                this.alfLog("error", "Dom element '" + item.domid + "', specified as location for accessibility anchor, does not exist", this);
             }
-         }  
+         }, this);
       },
 
       /**
@@ -222,14 +220,13 @@
        * @listens ALF_WIDGETS_READY
        */
       addEvents: function alfresco_accessibility_AccessibilityMenu__addEvents() {
-         
          // Iterate over the _createdLinks and attach click events to them
          for(var i=0; i < this._createdLinks.length; i++)
          {
             var item = this._createdLinks[i];
-            if(item.href.indexOf("#") != -1)
+            if(item.href.indexOf("#") !== -1)
             {
-               var target = dom.byId(item.href.split('#')[1]);
+               var target = dom.byId(item.href.split("#")[1]);
                if(target)
                {
                   on(item, "click", function(){

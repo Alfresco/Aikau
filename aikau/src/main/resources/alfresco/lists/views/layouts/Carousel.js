@@ -30,6 +30,7 @@
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/ResizeMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/core/TopicsMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -39,6 +40,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/ResizeMixin",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
+        "alfresco/core/TopicsMixin",
         "dojo/text!./templates/Carousel.html",
         "dojo/_base/lang",
         "dojo/_base/array",
@@ -47,10 +49,10 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom-geometry",
         "dojo/window"],
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, ResizeMixin, _MultiItemRendererMixin, template,
-                 lang, array, domClass, domConstruct, domStyle, domGeom, win) {
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, ResizeMixin, _MultiItemRendererMixin, 
+                 TopicsMixin, template, lang, array, domClass, domConstruct, domStyle, domGeom, win) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ResizeMixin, _MultiItemRendererMixin, AlfCore], {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ResizeMixin, _MultiItemRendererMixin, AlfCore, TopicsMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -102,7 +104,7 @@ define(["dojo/_base/declare",
          }
 
          // Subscibe to the page widgets ready topic to ensure that sizing occurs...
-         this.alfSubscribe("ALF_WIDGETS_READY", lang.hitch(this, this.resize), true);
+         this.alfSubscribe(this.TOPIC_PAGE_WIDGETS_READY, lang.hitch(this, this.resize), true);
 
          // Handle resize events...
          this.alfSetupResizeSubscriptions(this.resize, this);
