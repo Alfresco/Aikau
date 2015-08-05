@@ -221,7 +221,7 @@ define(["dojo/_base/declare",
                   pubSubScope: this.pubSubScope
                });
 
-               if (filtersToAdd && filtersToAdd <= 0 && !applied)
+               if ((filtersToAdd || filtersToAdd === 0) && filtersToAdd <= 0 && !applied)
                {
                   this.addMoreFilter(filterWidget);
                }
