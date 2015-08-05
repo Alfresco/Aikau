@@ -1,20 +1,23 @@
 .alfresco-buttons-AlfButton {
-   background-color: @standard-button-background-color;
-   background-image: none;
+   background: @standard-button-background;
    border: @standard-button-border;
-   border-radius: 0;
+   border-radius: @standard-button-border-radius;
    font-size: @standard-button-font-size;
-   margin: 0;
-   margin-right: @standard-column-width;
-   span {
-      line-height: @standard-button-font-size + 2;
-      &.dijitIcon.alf-white-search-icon {
-         background-image: url("./images/20x20-search-icon-white.png");
-         background-repeat: no-repeat;
-         height: 20px;
-         text-align: center;
-         width: 24px;
-      }
+   font-weight: @standard-button-font-weight;
+   margin: @standard-button-margin;
+   padding: @standard-button-padding;
+   .alf-white-search-icon {
+      background-image: url("./images/20x20-search-icon-white.png");
+      background-repeat: no-repeat;
+      height: 20px;
+      text-align: center;
+      width: 24px;
+   }
+   .dijitButtonContents, .dijitButtonText {
+      line-height: @standard-button-line-height;
+   }
+   .dijitButtonText {
+      padding: 0;
    }
    .dijitReset.dijitInline.dijitButtonNode {
       background: none repeat scroll 0 0;
@@ -22,30 +25,59 @@
       border-radius: 0;
       box-shadow: none;
       color: @standard-button-font-color;
-      padding: 3px 10px;
+      padding: 0;
    }
    &.dijitButtonFocused, &.dijitButtonHover {
-      border: @standard-button-focus-border;
+      background: @standard-button-background-focus;
+      border: @standard-button-border-focus;
+      .dijitReset.dijitInline.dijitButtonNode {
+         color: @standard-button-font-color-focus;
+      }
+   }
+   &.dijitButtonActive {
+      background: @standard-button-background-active;
+      border: @standard-button-border-active;
+      .dijitReset.dijitInline.dijitButtonNode {
+         color: @standard-button-font-color-active;
+      }
+   }
+   &.dijitButtonDisabled {
+      background: @standard-button-background-disabled;
+      border: @standard-button-border-disabled;
+      .dijitReset.dijitInline.dijitButtonNode {
+         color: @standard-button-font-color-disabled;
+      }
+      .alf-white-search-icon {
+         opacity: .5;
+      }
    }
    &.call-to-action {
-      background-color: @call-to-action-button-background-color;
+      background: @call-to-action-button-background;
       border: @call-to-action-button-border;
+      padding: @call-to-action-button-padding;
       .dijitReset.dijitInline.dijitButtonNode {
          color: @call-to-action-button-font-color;
       }
       &.dijitButtonFocused, &.dijitButtonHover {
-         border: @call-to-action-button-focus-border;
+         background: @call-to-action-button-background-focus;
+         border: @call-to-action-button-border-focus;
+         .dijitReset.dijitInline.dijitButtonNode {
+            color: @call-to-action-button-font-color-focus;
+         }
       }
-   }
-   &.dijitButtonDisabled {
-      .dijitReset.dijitInline.dijitButtonNode {
-         color: rgba(red(@standard-button-font-color), green(@standard-button-font-color), blue(@standard-button-font-color), .4);
+      &.dijitButtonActive {
+         background: @call-to-action-button-background-active;
+         border: @call-to-action-button-border-active;
+         .dijitReset.dijitInline.dijitButtonNode {
+            color: @call-to-action-button-font-color-active;
+         }
       }
-      &.call-to-action .dijitReset.dijitInline.dijitButtonNode {
-         color: rgba(red(@call-to-action-button-font-color), green(@call-to-action-button-font-color), blue(@call-to-action-button-font-color), .4);
-      }
-      span.dijitIcon.alf-white-search-icon {
-         opacity: .4;
+      &.dijitButtonDisabled {
+         background: @call-to-action-button-background-disabled;
+         border: @call-to-action-button-border-disabled;
+         .dijitReset.dijitInline.dijitButtonNode {
+            color: @call-to-action-button-font-color-disabled;
+         }
       }
    }
 }

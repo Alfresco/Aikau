@@ -31,94 +31,6 @@
 @primary-title-color: #fff;
 @primary-theme-color: #eee;
 
-// Layout settings...
-// This is used to control the overall layout of the page. Line-heights will be a multiple of
-// this value based on the font-size
-@standard-line-height: 10px;
-@standard-column-width: 15px;
-// This is used when the columns need some breathing space.
-@standard-column-spacing: 5px;
-// Used for e.g. the facets on the search page.
-@sidebar-component-width: 320px;
-// Used for dialog label width area
-@dialog-label-section: 160px;
-@dialog-control-section: 530px;
-
-// Font Colours
-@general-font-color: #333;
-@emphasized-font-color: #000;
-@de-emphasized-font-color: #999;
-@highlighted-font-color: #fff;
-
-// Borders...
-// These have been initially added for form controls...
-@standard-border-width: 1px;
-@standard-border-style: solid;
-@standard-border-color: #d3d3d3;
-@standard-border: @standard-border-width @standard-border-style @standard-border-color;
-@standard-border-radius: 6px;
-@hover-border-color: #d3d3d3;
-@focused-border-color: #8dc63f;
-
-// Buttons
-// The standard button is what is normally seen...
-@standard-button-border-color: #ccc;
-@standard-button-background-color: #fff;
-@standard-button-border: 1px solid @standard-button-border-color;
-@standard-button-focus-border: 1px solid @standard-button-border-color;
-@standard-button-font-color: @general-font-color;
-@standard-button-font-size: @normal-font-size;
-
-// "Call-to-action" buttons should be darker with larger text to capture the users attention
-@call-to-action-button-background-color: #8dc63f;
-@call-to-action-button-border: 1px solid #8dc63f;
-@call-to-action-button-focus-border: 1px solid #5eae41;
-@call-to-action-button-font-color: #fff;
-@call-to-action-button-font-size: @large-font-size;
-
-// Shadows
-@standard-box-shadow: .33px 2px 8px rgba(0, 0, 0, .3);
-@inset-box-shadow: 1px 1px 3px @standard-button-border-color inset;
-
-// Dashlets
-@dashlet-background: @primary-background-color;
-@dashlet-border: @standard-border;
-@dashlet-border-radius: @standard-border-radius @standard-border-radius 0 0; // This gives rounding at the top of the dashlet only
-@dashlet-title-background: @alternate-background-color;
-@dashlet-title-border-bottom: @standard-border;
-@dashlet-title-border-radius: @standard-border-radius @standard-border-radius 0 0; // This gives rounding at the top of the dashlet only
-@dashlet-title-color: @alternate-font-color;
-@dashlet-toolbar-background: transparent;
-@dashlet-toolbar-border-bottom: @standard-border;
-@dashlet-body-background: @primary-background-color;
-@dashlet-body-border-radius: 0; // This gives rounding at the top of the dashlet only
-
-// Notifications
-@notification-background: #666;
-@notification-foreground: @highlighted-font-color;
-@notification-foreground-dimmed: @de-emphasized-font-color;
-@notification-width: 400px;
-@notification-border-radius: 0 0 5px 5px;
-
-// Lists
-@list-header-border-color: #e5e5e5;
-@list-header-background-color: #f5f5f5;
-@list-background-color: #fff;
-@list-hover-color: #eee;
-@list-focus-color: #ddd;
-@list-zebra-color-odd: #fff;
-@list-zebra-color-even: #f8f8f8;
-@list-border-color: #e5e5e5;
-@list-dnd-hover-outline: 2px solid #0082ca;
-
-// Tabs
-@tab-border: @standard-button-border;
-@tab-color: #d8d8d8;
-@tab-background: @tab-color none;
-@tab-color-active: #fff;
-@tab-border-radius: 2px 2px 0 0;
-@tab-opacity-disabled: .5;
-
 // Font Sizes
 @page-title-font-size: 26px;
 @title-font-size: 20px;
@@ -158,6 +70,129 @@
    color: @de-emphasized-font-color;
    font-family: @standard-font;
 }
+
+// Layout settings...
+// This is used to control the overall layout of the page. Line-heights will be a multiple of
+// this value based on the font-size
+@standard-line-height: 10px;
+@standard-column-width: 15px;
+// This is used when the columns need some breathing space.
+@standard-column-spacing: 5px;
+// Used for e.g. the facets on the search page.
+@sidebar-component-width: 320px;
+// Used for dialog label width area
+@dialog-label-section: 160px;
+@dialog-control-section: 530px;
+
+// Font Colours
+@general-font-color: #333;
+@emphasized-font-color: #000;
+@de-emphasized-font-color: #999;
+@highlighted-font-color: #fff;
+
+// Borders...
+// These have been initially added for form controls...
+@standard-border-width: 1px;
+@standard-border-style: solid;
+@standard-border-color: #d3d3d3;
+@standard-border: @standard-border-width @standard-border-style @standard-border-color;
+@standard-border-radius: 6px;
+@hover-border-color: #d3d3d3;
+@focused-border-color: #8dc63f;
+
+// Button (colours)
+@button-color-background: #fff;
+@button-color-default: #0082c8;
+@button-color-hover: #006ca6;
+@button-color-active: #005684;
+@button-color-disabled: #b8b8b8;
+
+// The standard button is what is normally seen
+@standard-button-background: @button-color-background;
+@standard-button-background-focus: @button-color-background;
+@standard-button-background-active: @button-color-background;
+@standard-button-background-disabled: @button-color-background;
+@standard-button-border-width: 1px;
+@standard-button-border-style: solid;
+@standard-button-border: @standard-button-border-width @standard-button-border-style @button-color-default;
+@standard-button-border-focus: @standard-button-border-width @standard-button-border-style @button-color-hover;
+@standard-button-border-active: @standard-button-border-width @standard-button-border-style @button-color-active;
+@standard-button-border-disabled: @standard-button-border-width @standard-button-border-style @button-color-disabled;
+@standard-button-border-radius: 2px;
+@standard-button-font-color: @button-color-default;
+@standard-button-font-color-focus: @button-color-hover;
+@standard-button-font-color-active: @button-color-active;
+@standard-button-font-color-disabled: @button-color-disabled;
+@standard-button-font-size: @normal-font-size;
+@standard-button-font-weight: bold;
+@standard-button-line-height: @standard-button-font-size * 1.5;
+// 30px used here, as it's the visible height of a search field in Chrome
+@standard-button-padding-vertical: (30px - (@standard-button-border-width * 2) - @standard-button-line-height) / 2;
+@standard-button-padding-horizontal: @standard-button-font-size;
+@standard-button-padding: @standard-button-padding-vertical @standard-button-padding-horizontal;
+@standard-button-margin: 0 @standard-column-width 0 0;
+
+// "Call-to-action" buttons capture the users attention
+@call-to-action-button-background: @button-color-default;
+@call-to-action-button-background-focus: @button-color-hover;
+@call-to-action-button-background-active: @button-color-active;
+@call-to-action-button-background-disabled: @button-color-disabled;
+@call-to-action-button-border-width: 0;
+@call-to-action-button-border-style: solid;
+@call-to-action-button-border: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-default;
+@call-to-action-button-border-focus: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-hover;
+@call-to-action-button-border-active: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-active;
+@call-to-action-button-border-disabled: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-disabled;
+@call-to-action-button-font-color: @button-color-background;
+@call-to-action-button-font-color-focus: @button-color-background;
+@call-to-action-button-font-color-active: @button-color-background;
+@call-to-action-button-font-color-disabled: fade(@button-color-background, 50%);
+@call-to-action-button-padding-vertical: (30px - (@call-to-action-button-border-width * 2) - @standard-button-line-height) / 2;
+@call-to-action-button-padding-horizontal: @standard-button-font-size;
+@call-to-action-button-padding: @call-to-action-button-padding-vertical @call-to-action-button-padding-horizontal;
+
+// Shadows
+@standard-box-shadow: .33px 2px 8px rgba(0, 0, 0, .3);
+@inset-box-shadow: 1px 1px 3px #ccc inset;
+
+// Dashlets
+@dashlet-background: @primary-background-color;
+@dashlet-border: @standard-border;
+@dashlet-border-radius: @standard-border-radius @standard-border-radius 0 0; // This gives rounding at the top of the dashlet only
+@dashlet-title-background: @alternate-background-color;
+@dashlet-title-border-bottom: @standard-border;
+@dashlet-title-border-radius: @standard-border-radius @standard-border-radius 0 0; // This gives rounding at the top of the dashlet only
+@dashlet-title-color: @alternate-font-color;
+@dashlet-toolbar-background: transparent;
+@dashlet-toolbar-border-bottom: @standard-border;
+@dashlet-body-background: @primary-background-color;
+@dashlet-body-border-radius: 0; // This gives rounding at the top of the dashlet only
+
+// Notifications
+@notification-background: #666;
+@notification-foreground: @highlighted-font-color;
+@notification-foreground-dimmed: @de-emphasized-font-color;
+@notification-width: 400px;
+@notification-border-radius: 0 0 5px 5px;
+
+// Lists
+@list-header-border-color: #e5e5e5;
+@list-header-background-color: #f5f5f5;
+@list-background-color: #fff;
+@list-hover-color: #eee;
+@list-focus-color: #ddd;
+@list-zebra-color-odd: #fff;
+@list-zebra-color-even: #f8f8f8;
+@list-border-color: #e5e5e5;
+@list-dnd-hover-outline: 2px solid #0082ca;
+
+// Tabs
+@tab-border: @standard-button-border;
+@tab-color: #d8d8d8;
+@tab-background: @tab-color none;
+@tab-color-active: #fff;
+@tab-border-radius: 2px 2px 0 0;
+@tab-opacity-disabled: .5;
 
 // Breadcrumbs
 @breadcrumb-font-color: @general-font-color;
