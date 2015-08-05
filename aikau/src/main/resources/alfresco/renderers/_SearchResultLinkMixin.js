@@ -57,12 +57,12 @@ define(["alfresco/core/TemporalUtils",
                name = lang.getObject("name", false, this.currentItem);
                if (site)
                {
-                  payload.url = "site/" + site + "/documentlibrary?path=" + path + "/" + name;
+                  payload.url = "site/" + site + "/documentlibrary?path=" + encodeURIComponent(path) + "%2F" + encodeURIComponent(name);
                }
                else if (path)
                {
                   path = "/" + path.split("/").slice(2).join("/");
-                  payload.url = "repository?path=" + path + "/" + name;
+                  payload.url = "repository?path=" + encodeURIComponent(path) + "%2F" + encodeURIComponent(name);
                }
                break;
 

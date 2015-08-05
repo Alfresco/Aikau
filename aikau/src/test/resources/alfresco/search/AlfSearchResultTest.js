@@ -71,11 +71,22 @@ define(["intern!object",
          "Event result opens correct date in calendar": function() {
             return browser.findByCssSelector(".alfresco-search-AlfSearchResult:last-child .nameAndTitleCell .alfresco-renderers-PropertyLink > .inner")
                .click()
-               .end()
+            .end()
 
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload) {
                   assert.deepPropertyVal(payload, "url", "site/eventResult/calendar?date=2015-04-01", "Did not navigate to correct page");
+               });
+         },
+
+         "Click on folder link container ampersand": function() {
+            return browser.findByCssSelector(".alfresco-search-AlfSearchResult:first-child .nameAndTitleCell .alfresco-renderers-PropertyLink > .inner")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "url", "site/normalResult/documentlibrary?path=%2Fone%2Ftwo%2Fthree%2Ffour%2Ftest1%20%26%20test2", "Special characters were not encoded");
                });
          },
 

@@ -207,6 +207,7 @@ define({
       "src/test/resources/alfresco/renderers/actions/UploadNewVersionActionTest",
 
       "src/test/resources/alfresco/search/AlfSearchResultTest",
+      "src/test/resources/alfresco/search/CustomSearchResultTest",
       "src/test/resources/alfresco/search/FacetFiltersTest",
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
@@ -228,7 +229,8 @@ define({
 
       "src/test/resources/alfresco/upload/UploadTest",
 
-      "src/test/resources/alfresco/util/functionUtilsTest"
+      "src/test/resources/alfresco/util/functionUtilsTest",
+      "src/test/resources/alfresco/util/urlUtilsTest"
    ],
 
    /**

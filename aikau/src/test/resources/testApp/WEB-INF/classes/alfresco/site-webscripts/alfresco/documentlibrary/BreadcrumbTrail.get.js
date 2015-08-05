@@ -155,7 +155,8 @@ model.jsonModel = {
             publishTopic: "ALF_HASH_CHANGED",
             publishPayload: {
                path: "/different/path"
-            }
+            },
+            pubSubScope: "SCOPED_"
          }
       },
       {

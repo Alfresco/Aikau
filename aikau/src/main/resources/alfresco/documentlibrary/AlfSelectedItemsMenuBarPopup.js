@@ -81,9 +81,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "nodeRef"
+       * @default
        */
-      itemKeyProperty: "nodeRef",
+      itemKeyProperty: "node.nodeRef",
 
       /**
        * Extends the [superclass function]{@link module:alfresco/menus/AlfMenuBarPopup#postCreate} to subscribe to

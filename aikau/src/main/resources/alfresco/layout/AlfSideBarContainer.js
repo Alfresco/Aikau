@@ -93,19 +93,33 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
-       * Indicates whether or not to show the sidebar when initially rendered.
+       * It is possible to optionally provide an array of events that the widget should
+       * subscribe to that trigger resize events. This has initially been added to address the problem that occurred when the
+       * alfresco/wrapped/DocumentList widget would resize itself after the initial sizing causing the sidebar to render incorrectly.
+       * By allowing custom events to be subscribed to it is possible to work around issues such as these.
+       * 
        * @instance
-       * @type {boolean} 
+       * @type {array} 
+       * @default null
        */
-      showSidebar: true,
+      customResizeTopics: null,
       
       /**
-       * The minimum width (in pixels) for the sidebar
+       * This property allows the height of the sidebar to accommodate a "sticky" footer. The height is otherwise calculated as
+       * the height of the view port minus the top position of the side bar (unless either side bar or main content are larger).
+       * By setting this property it is possible to also deduct the height of a sticky footer. 
+       * 
        * @instance
-       * @type {number} 
-       * @default 150
+       * @type {integer} 
+       * @default 0
        */
-      minSidebarWidth: 150,
+      footerHeight: 0,
+      
+      /**
+       * @instance
+       * @type {integer}
+       */
+      hiddenSidebarWidth: null,
       
       /**
        * The initial width (in pixels) of the sidebar
@@ -124,15 +138,16 @@ define(["dojo/_base/declare",
       lastSidebarWidth: null,
       
       /**
-       * The YAHOO.util.Resize control
+       * The minimum width (in pixels) for the sidebar
        * @instance
-       * @type {object}
-       * @default null 
+       * @type {number} 
+       * @default 150
        */
-      resizer: null,
+      minSidebarWidth: 150,
       
       /**
-       * This will be set to the resize drag handle created by the YUI Resize widget
+       * This will be set to the resize drag handle
+       * 
        * @instance
        * @type {element}
        * @default null 
@@ -140,35 +155,32 @@ define(["dojo/_base/declare",
       resizeHandlerNode: null,
       
       /**
-       * This property allows the height of the sidebar to accommodate a "sticky" footer. The height is otherwise calculated as
-       * the height of the view port minus the top position of the side bar (unless either side bar or main content are larger).
-       * By setting this property it is possible to also deduct the height of a sticky footer. 
-       * 
+       * Indicates whether or not to show the sidebar when initially rendered.
        * @instance
-       * @type {integer} 
-       * @default 0
+       * @type {boolean} 
        */
-      footerHeight: 0,
+      showSidebar: true,
       
       /**
-       * It is possible to optionally provide an array of events that the widget should
-       * subscribe to that trigger resize events. This has initially been added to address the problem that occurred when the
-       * alfresco/wrapped/DocumentList widget would resize itself after the initial sizing causing the sidebar to render incorrectly.
-       * By allowing custom events to be subscribed to it is possible to work around issues such as these.
+       * This is the dot-notation property to use in the user preferences object to retrieve and persist
+       * the preferred width of the sidebar.
        * 
-       * @instance
-       * @type {array} 
-       * @default null
-       */
-      customResizeTopics: null,
-      
-      /**
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.sidebarWidth"
+       * @default 
+       */
+      showSidebarPreferenceId: "org.alfresco.share.documentList.showSidebar",
+      
+      /**
+       * This is the dot-notation property to use in the user preferences object to retrieve and persist
+       * the preferred width of the sidebar.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
        */
       sidebarWidthPreferenceId: "org.alfresco.share.sideBarWidth",
-      
+
       /**
        * Makes a request to get the users sidebar width preference.
        * 
@@ -204,7 +216,7 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_layout_AlfSideBarContainer__postCreate() {
          if (this.widgets)
          {
-            array.forEach(this.widgets, lang.hitch(this, "addWidget"));
+            array.forEach(this.widgets, lang.hitch(this, this.addWidget));
          }
          
          // Set up the resizer that allows the sidebar to be dynamically made larger or smaller...
@@ -228,19 +240,18 @@ define(["dojo/_base/declare",
          on(this.resizeHandlerButtonNode, "click", lang.hitch(this, this.onResizeHandlerClick));
          
          // We need to subscribe after the resize widget has been created...
-         this.alfSubscribe("ALF_DOCLIST_SHOW_SIDEBAR", lang.hitch(this, "showEventListener"));
+         this.alfSubscribe("ALF_DOCLIST_SHOW_SIDEBAR", lang.hitch(this, this.showEventListener));
 
          // Subscribe to all the configured custom resize topics...
          if (this.customResizeTopics && this.customResizeTopics.length)
          {
-            var _this = this;
             array.forEach(this.customResizeTopics, function(topic) {
-               _this.alfSubscribe(topic, lang.hitch(_this, "resizeHandler"));
-            });
+               this.alfSubscribe(topic, lang.hitch(this, this.resizeHandler));
+            }, this);
          }
          
          // Keep track of the overall browser window changing in size...
-         on(window, "resize", lang.hitch(this, "resizeHandler"));
+         on(window, "resize", lang.hitch(this, this.resizeHandler));
          
          // Perform the initial rendering...
          this.lastSidebarWidth = this.initialSidebarWidth;
@@ -315,7 +326,7 @@ define(["dojo/_base/declare",
          this.alfPublish(this.setPreferenceTopic, {
             preference: this.sidebarWidthPreferenceId,
             value: this.lastSidebarWidth
-         });
+         }, true);
          this.hiddenSidebarWidth = this.lastSidebarWidth;
       },
       
@@ -342,6 +353,10 @@ define(["dojo/_base/declare",
          if (payload)
          {
             this.render(payload.selected);
+            this.alfPublish(this.setPreferenceTopic, {
+               preference: this.showSidebarPreferenceId,
+               value: payload.selected
+            }, true);
          }
       },
       
@@ -362,12 +377,6 @@ define(["dojo/_base/declare",
             });
          }
       },
-      
-      /**
-       * @instance
-       * @type {integer}
-       */
-      hiddenSidebarWidth: null,
       
       /**
        * Renders the sidebar container (basically controls whether or not the side bar is displayed or not).

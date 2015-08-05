@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_documentlibrary_views_AlfGalleryView__postCreate() {
          this.inherited(arguments);
-         this.alfSubscribe("ALF_DOCLIST_SET_GALLERY_COLUMNS", lang.hitch(this, "updateColumns"));
+         this.alfSubscribe("ALF_DOCLIST_SET_GALLERY_COLUMNS", lang.hitch(this, this.updateColumns));
       },
 
       /**
@@ -97,18 +97,19 @@ define(["dojo/_base/declare",
        */
       updateColumns: function alfresco_documentlibrary_views_AlfGalleryView__updateColumns(payload) {
          var newNumCols = payload && !isNaN(payload.value) && payload.value;
-         if (this.docListRenderer && newNumCols && newNumCols !== this.columns)
+         if (newNumCols && newNumCols !== this.columns)
          {
-            this.alfLog("log", "Update column count to: ", payload.value);
             this.columns = payload.value;
-
-            // In the case of infinite scroll, we need to ensure that we reset the count for rendering
-            // data so that all the items are re-rendered and sized appropriately...
-            if (lang.exists("docListRenderer.currentData.previousItemCount"), this)
+            if (this.docListRenderer)
             {
-               this.docListRenderer.currentData.previousItemCount = 0;
+               // In the case of infinite scroll, we need to ensure that we reset the count for rendering
+               // data so that all the items are re-rendered and sized appropriately...
+               if (lang.exists("docListRenderer.currentData.previousItemCount"), this)
+               {
+                  this.docListRenderer.currentData.previousItemCount = 0;
+               }
+               this.renderView(false);
             }
-            this.renderView(false);
          }
       },
       
@@ -136,10 +137,31 @@ define(["dojo/_base/declare",
        */
       renderView: function alfresco_documentlibrary_views_AlfGalleryView__renderView(preserveCurrentData) {
          // jshint unused:false
-         this.inherited(arguments);
-         if (this.docListRenderer)
+         if (this._renderingView)
          {
-            this.docListRenderer.resizeCells();
+            // If currently rendering a view, then indicate that a request to re-render is pending...
+            this._pendingViewRendering = true;
+         }
+         else
+         {
+            this.alfLog("log", "Rendering view for " + this.columns + " columns");
+            
+            // Set a flag to indicate that view rendering has started (so that we don't re-start rendering 
+            // before the current render completes)...
+            this._renderingView = true;
+            this.inherited(arguments);
+            if (this.docListRenderer)
+            {
+               this.docListRenderer.resizeCells();
+            }
+            this._renderingView = false;
+
+            // Once the current render has finished, check to see if there is pending render request to fulfil...
+            if (this._pendingViewRendering)
+            {
+               this._pendingViewRendering = false;
+               this.renderView(preserveCurrentData);
+            }
          }
       },
       

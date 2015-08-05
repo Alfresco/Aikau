@@ -75,7 +75,6 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.setPreferenceTopic, lang.hitch(this, this.setPreference));
          this.alfSubscribe(this.showFoldersTopic, lang.hitch(this, this.onShowFolders));
          this.alfSubscribe(this.showPathTopic, lang.hitch(this, this.onShowPath));
-         this.alfSubscribe(this.showSidebarTopic, lang.hitch(this, this.onShowSidebar));
          this.alfSubscribe(this.viewSelectionTopic, lang.hitch(this, this.onViewSelection));
          this.alfSubscribe(this.addFavouriteDocumentTopic, lang.hitch(this, this.onAddFavouriteDocument));
          this.alfSubscribe(this.removeFavouriteDocumentTopic, lang.hitch(this, this.onRemoveFavouriteDocument));
@@ -297,22 +296,6 @@ define(["dojo/_base/declare",
             this.setPreference({
                preference: "org.alfresco.share.documentList.hideNavBar",
                value: !payload.selected
-            });
-         } 
-      },
-      
-      /**
-       * Updates the current users preference for viewing the sidebar next with the Document List
-       * 
-       * @instance
-       * @param {object} payload 
-       */
-      onShowSidebar: function alfresco_services_PreferenceService__onShowSidebar(payload) {
-         if (payload && (payload.selected || payload.selected === false))
-         {
-            this.setPreference({
-               preference: "org.alfresco.share.documentList.showSidebar",
-               value: payload.selected
             });
          } 
       },
