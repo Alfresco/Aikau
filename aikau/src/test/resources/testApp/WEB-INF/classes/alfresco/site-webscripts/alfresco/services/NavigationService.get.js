@@ -83,6 +83,26 @@ model.jsonModel = {
          }
       },
       {
+         id: "NAV_TO_PAGE_WITH_PARAMS",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Navigate with query and hash params",
+            publishTopic: "ALF_NAVIGATE_TO_PAGE",
+            publishPayload: {
+               url: "tp/ws/NavigationService",
+               type: "PAGE_RELATIVE",
+               target: "CURRENT",
+               queryParams: {
+                  foo: "qryprm",
+                  bar: "scndqryprm"
+               },
+               hashParams: {
+                  baz: "hshprm"
+               }
+            }
+         }
+      },
+      {
          id: "BACK_TO_ORIGINAL_URL",
          name: "alfresco/buttons/AlfButton",
          config: {
