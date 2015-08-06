@@ -177,9 +177,9 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, 
-                 Topics, TabContainer, ContentPane, domConstruct, lang, array) {
+                 topics, TabContainer, ContentPane, domConstruct, lang, array) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin, topics], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin], {
       
       /**
        * An array of the CSS files to use with this widget
