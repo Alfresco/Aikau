@@ -23,12 +23,11 @@
  *
  * @module alfresco/core/Page
  * @extends module:alfresco/core/ProcessWidgets
- * @mixes module:alfresco/core/TopicsMixin
  * @author Dave Draper
  * @author Martin Doyle
  */
 define(["alfresco/core/ProcessWidgets",
-        "alfresco/core/TopicsMixin",
+        "alfresco/core/Topics",
         "service/constants/Default",
         "dojo/string",
         "dojo/_base/declare",
@@ -41,10 +40,10 @@ define(["alfresco/core/ProcessWidgets",
         "jquery", // NOTE: Need to include JQuery at root page to prevent XHR require request for first module that uses it
         "jqueryui", // NOTE: Need to include JQuery UI at root page to prevent XHR require request for first module that uses it
         "alfresco/core/shims"],
-        function(ProcessWidgets, TopicsMixin, AlfConstants, string, declare, domConstruct, array,
+        function(ProcessWidgets, Topics, AlfConstants, string, declare, domConstruct, array,
                  lang, domClass, win, PubQueue, jquery, jqueryui, shims) {
 
-   return declare([ProcessWidgets, TopicsMixin], {
+   return declare([ProcessWidgets], {
 
       /**
        * This is the base class for the page
@@ -321,17 +320,16 @@ define(["alfresco/core/ProcessWidgets",
 
          if (this.publishOnReady)
          {
-            array.forEach(this.publishOnReady, lang.hitch(this, "onReadyPublish"));
+            array.forEach(this.publishOnReady, lang.hitch(this, this.onReadyPublish));
          }
 
          // Release all publications that have been queued awaiting all the widgets to have finished being
          // created...
          PubQueue.getSingleton().release();
-         this.alfPublish(this.TOPIC_PAGE_WIDGETS_READY, {});
+         this.alfPublish(Topics.PAGE_WIDGETS_READY, {});
 
          // Add a class to indicate that the page is ready. This is primarily for testing purposes.
          domClass.add(this.domNode, "allWidgetsProcessed");
-
          domClass.add(win.body(), "aikau-reveal");
       }
    });

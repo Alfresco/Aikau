@@ -25,8 +25,9 @@
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/_base/lang",
-        "alfresco/notifications/AlfNotification"],
-        function(declare, AlfCore, lang, AlfNotification) {
+        "alfresco/notifications/AlfNotification",
+        "alfresco/core/Topics"],
+        function(declare, AlfCore, lang, AlfNotification, Topics) {
 
       return declare([AlfCore], {
 
@@ -39,6 +40,34 @@ define(["dojo/_base/declare",
          i18nRequirements: [{i18nFile: "./i18n/NotificationService.properties"}],
 
          /**
+          * This is the topic that is subscribed to for handling requests to close a displayed
+          * notification.
+          *
+          * @instance
+          * @type {string}
+          * @default [Topics.NOTIFICATION_CLOSED]{@link module:alfresco/core/Topics#NOTIFICATION_CLOSED}
+          */
+         closeNotificationTopic: Topics.NOTIFICATION_CLOSED,
+
+         /**
+          * This is the topic that is subscribed to for handling requests to display a notification.
+          *
+          * @instance
+          * @type {string}
+          * @default [Topics.DISPLAY_NOTIFICATION]{@link module:alfresco/core/Topics#DISPLAY_NOTIFICATION}
+          */
+         displayNotificationTopic: Topics.DISPLAY_NOTIFICATION,
+
+         /**
+          * This is the topic that is subscribed to for handling requests to display a prompt.
+          *
+          * @instance
+          * @type {string}
+          * @default [Topics.DISPLAY_PROMPT]{@link module:alfresco/core/Topics#DISPLAY_PROMPT}
+          */
+         displayPromptTopic: Topics.DISPLAY_PROMPT,
+
+         /**
           * Sets up the subscriptions for the NotificationService
           *
           * @instance
@@ -46,8 +75,8 @@ define(["dojo/_base/declare",
           */
          constructor: function alfresco_services_NotificationService__constructor(args) {
             lang.mixin(this, args);
-            this.alfSubscribe("ALF_DISPLAY_NOTIFICATION", lang.hitch(this, this.onDisplayNotification));
-            this.alfSubscribe("ALF_DISPLAY_PROMPT", lang.hitch(this, this.onDisplayPrompt));
+            this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));
+            this.alfSubscribe(this.displayPromptTopic, lang.hitch(this, this.onDisplayPrompt));
          },
 
          /**
@@ -64,7 +93,7 @@ define(["dojo/_base/declare",
                });
                newNotification.startup();
                newNotification.display().then(lang.hitch(this, function() {
-                  this.alfPublish(this.TOPIC_NOTIFICATION_CLOSED, {}, true);
+                  this.alfPublish(this.closeNotificationTopic, {}, true);
                   if (payload.publishTopic) {
                      this.alfPublish(payload.publishTopic, payload.publishPayload || {}, payload.publishGlobal, payload.publishToParent);
                   }

@@ -24,7 +24,6 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/TopicsMixin
  * @example <caption>Sample configuration</caption>
  * {
  *    name: "alfresco/accessibility/AccessibilityMenu",
@@ -53,7 +52,7 @@
          "dijit/_WidgetBase", 
          "dijit/_TemplatedMixin",
          "alfresco/core/Core",
-         "alfresco/core/TopicsMixin",
+         "alfresco/core/Topics",
          "dojo/text!./templates/AccessibilityMenu.html",
          "dojo/_base/lang",
          "dojo/_base/array",
@@ -61,9 +60,9 @@
          "dojo/dom-construct",
          "dojo/on",
          "dojo/dom-attr"], 
-         function(declare, _WidgetBase, _TemplatedMixin, AlfCore, TopicsMixin, template, lang, array, dom, domConstruct, on, domAttr) {
+         function(declare, _WidgetBase, _TemplatedMixin, AlfCore, Topics, template, lang, array, dom, domConstruct, on, domAttr) {
    
-   return declare([_WidgetBase, _TemplatedMixin, TopicsMixin, AlfCore], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -143,9 +142,8 @@
          }, this);
          
          // Subscribe generateTargets and addEvents to ALF_WIDGETS_READY
-         this.alfSubscribe(this.TOPIC_PAGE_WIDGETS_READY, lang.hitch(this, this.generateTargets));
-         this.alfSubscribe(this.TOPIC_PAGE_WIDGETS_READY, lang.hitch(this, this.addEvents));
-
+         this.alfSubscribe(Topics.PAGE_WIDGETS_READY, lang.hitch(this, this.generateTargets));
+         this.alfSubscribe(Topics.PAGE_WIDGETS_READY, lang.hitch(this, this.addEvents));
       },
 
       /**

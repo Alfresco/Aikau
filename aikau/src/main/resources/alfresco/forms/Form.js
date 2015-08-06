@@ -89,7 +89,6 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
- * @mixes module:alfresco/core/TopicsMixin
  * @mixes module:alfresco/documentlibrary/_AlfHashMixin
  * @pageSafe
  * @author Dave Draper
@@ -100,7 +99,7 @@ define(["dojo/_base/declare",
         "dijit/form/Form",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/TopicsMixin",
+        "alfresco/core/Topics",
         "alfresco/documentlibrary/_AlfHashMixin",
         "dojo/text!./templates/Form.html",
         "dojo/io-query",
@@ -111,10 +110,10 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "dojo/Deferred",
         "dojo/dom-construct"], 
-        function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, TopicsMixin, _AlfHashMixin, template, 
+        function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, Topics, _AlfHashMixin, template, 
                  ioQuery, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct) {
    
-   return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, TopicsMixin, _AlfHashMixin], {
+   return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -279,7 +278,7 @@ define(["dojo/_base/declare",
          // are queued up until this occurs.
          if (this.waitForPageWidgets === true)
          {
-            this.pageWidgetsReadySubcription = this.alfSubscribe(this.TOPIC_PAGE_WIDGETS_READY, lang.hitch(this, function() {
+            this.pageWidgetsReadySubcription = this.alfSubscribe(Topics.PAGE_WIDGETS_READY, lang.hitch(this, function() {
                this.alfUnsubscribe(this.pageWidgetsReadySubcription);
                this._readyToAutoSave = true;
             }), true);
