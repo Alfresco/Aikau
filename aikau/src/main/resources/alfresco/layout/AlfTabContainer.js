@@ -462,7 +462,7 @@ define(["dojo/_base/declare",
          {
             this._delayedProcessingWidgets.splice(forDeletion, 1);
          }
-         this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
+         this.alfPublish(Topics.PAGE_WIDGETS_READY, {}, true);
       },
 
       /**
