@@ -39,7 +39,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/ResizeMixin",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
-        "alfresco/core/Topics",
+        "alfresco/core/topics",
         "dojo/text!./templates/Carousel.html",
         "dojo/_base/lang",
         "dojo/_base/array",
@@ -103,7 +103,7 @@ define(["dojo/_base/declare",
          }
 
          // Subscibe to the page widgets ready topic to ensure that sizing occurs...
-         this.alfSubscribe(Topics.PAGE_WIDGETS_READY, lang.hitch(this, this.resize), true);
+         this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.resize), true);
 
          // Handle resize events...
          this.alfSetupResizeSubscriptions(this.resize, this);

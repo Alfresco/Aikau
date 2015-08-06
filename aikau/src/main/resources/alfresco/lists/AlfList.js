@@ -35,7 +35,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/AlfList.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/Topics",
+        "alfresco/core/topics",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/DynamicWidgetProcessingTopics",
         "alfresco/lists/views/AlfListView",
@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/dom-class"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, Topics, _AlfDocumentListTopicMixin,
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, _AlfDocumentListTopicMixin,
                  DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, array, lang, domConstruct, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, DynamicWidgetProcessingTopics], {
@@ -464,7 +464,7 @@ define(["dojo/_base/declare",
          {
             // Create a subscription to listen out for all widgets on the page being reported
             // as ready (then we can start loading data)...
-            this.pageWidgetsReadySubcription = this.alfSubscribe(Topics.PAGE_WIDGETS_READY, lang.hitch(this, this.onPageWidgetsReady), true);
+            this.pageWidgetsReadySubcription = this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.onPageWidgetsReady), true);
          }
          else
          {

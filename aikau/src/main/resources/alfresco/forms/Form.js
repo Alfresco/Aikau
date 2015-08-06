@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
         "dijit/form/Form",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/Topics",
+        "alfresco/core/topics",
         "alfresco/documentlibrary/_AlfHashMixin",
         "dojo/text!./templates/Form.html",
         "dojo/io-query",
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "dojo/Deferred",
         "dojo/dom-construct"], 
-        function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, Topics, _AlfHashMixin, template, 
+        function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, topics, _AlfHashMixin, template, 
                  ioQuery, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin], {
@@ -278,7 +278,7 @@ define(["dojo/_base/declare",
          // are queued up until this occurs.
          if (this.waitForPageWidgets === true)
          {
-            this.pageWidgetsReadySubcription = this.alfSubscribe(Topics.PAGE_WIDGETS_READY, lang.hitch(this, function() {
+            this.pageWidgetsReadySubcription = this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, function() {
                this.alfUnsubscribe(this.pageWidgetsReadySubcription);
                this._readyToAutoSave = true;
             }), true);

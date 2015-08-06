@@ -22,7 +22,7 @@
  * for publications or subscriptions should add this module as a dependency and then use a topic listed
  * as the default. This then allows configuration overrides as necessary.</p>
  * 
- * @module alfresco/core/Topics
+ * @module alfresco/core/topics
  * @author Martin Doyle
  * @author Dave Draper
  */

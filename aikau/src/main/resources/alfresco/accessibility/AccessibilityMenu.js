@@ -52,7 +52,7 @@
          "dijit/_WidgetBase", 
          "dijit/_TemplatedMixin",
          "alfresco/core/Core",
-         "alfresco/core/Topics",
+         "alfresco/core/topics",
          "dojo/text!./templates/AccessibilityMenu.html",
          "dojo/_base/lang",
          "dojo/_base/array",
@@ -60,7 +60,7 @@
          "dojo/dom-construct",
          "dojo/on",
          "dojo/dom-attr"], 
-         function(declare, _WidgetBase, _TemplatedMixin, AlfCore, Topics, template, lang, array, dom, domConstruct, on, domAttr) {
+         function(declare, _WidgetBase, _TemplatedMixin, AlfCore, topics, template, lang, array, dom, domConstruct, on, domAttr) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -142,8 +142,8 @@
          }, this);
          
          // Subscribe generateTargets and addEvents to ALF_WIDGETS_READY
-         this.alfSubscribe(Topics.PAGE_WIDGETS_READY, lang.hitch(this, this.generateTargets));
-         this.alfSubscribe(Topics.PAGE_WIDGETS_READY, lang.hitch(this, this.addEvents));
+         this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.generateTargets));
+         this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.addEvents));
       },
 
       /**

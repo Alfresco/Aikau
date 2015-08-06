@@ -170,7 +170,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/ResizeMixin",
-        "alfresco/core/Topics",
+        "alfresco/core/topics",
         "dijit/layout/TabContainer",
         "dijit/layout/ContentPane",
         "dojo/dom-construct",
@@ -179,7 +179,7 @@ define(["dojo/_base/declare",
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, 
                  Topics, TabContainer, ContentPane, domConstruct, lang, array) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin, Topics], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin, topics], {
       
       /**
        * An array of the CSS files to use with this widget
@@ -462,7 +462,7 @@ define(["dojo/_base/declare",
          {
             this._delayedProcessingWidgets.splice(forDeletion, 1);
          }
-         this.alfPublish(Topics.PAGE_WIDGETS_READY, {}, true);
+         this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
       },
 
       /**

@@ -27,7 +27,7 @@
  * @author Martin Doyle
  */
 define(["alfresco/core/ProcessWidgets",
-        "alfresco/core/Topics",
+        "alfresco/core/topics",
         "service/constants/Default",
         "dojo/string",
         "dojo/_base/declare",
@@ -40,7 +40,7 @@ define(["alfresco/core/ProcessWidgets",
         "jquery", // NOTE: Need to include JQuery at root page to prevent XHR require request for first module that uses it
         "jqueryui", // NOTE: Need to include JQuery UI at root page to prevent XHR require request for first module that uses it
         "alfresco/core/shims"],
-        function(ProcessWidgets, Topics, AlfConstants, string, declare, domConstruct, array,
+        function(ProcessWidgets, topics, AlfConstants, string, declare, domConstruct, array,
                  lang, domClass, win, PubQueue, jquery, jqueryui, shims) {
 
    return declare([ProcessWidgets], {
@@ -326,7 +326,7 @@ define(["alfresco/core/ProcessWidgets",
          // Release all publications that have been queued awaiting all the widgets to have finished being
          // created...
          PubQueue.getSingleton().release();
-         this.alfPublish(Topics.PAGE_WIDGETS_READY, {});
+         this.alfPublish(topics.PAGE_WIDGETS_READY, {});
 
          // Add a class to indicate that the page is ready. This is primarily for testing purposes.
          domClass.add(this.domNode, "allWidgetsProcessed");

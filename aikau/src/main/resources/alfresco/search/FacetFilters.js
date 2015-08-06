@@ -20,19 +20,19 @@
 /**
  * @module alfresco/search/FacetFilters
  * @extends alfresco/documentlibrary/AlfDocumentFilters
- * @mixes module:alfresco/core/Topics
+ * @mixes module:alfresco/core/topics
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/documentlibrary/AlfDocumentFilters",
-        "alfresco/core/Topics",
+        "alfresco/core/topics",
         "alfresco/search/FacetFilter",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-class",
         "dojo/on",
         "dijit/registry"], 
-        function(declare, AlfDocumentFilters, Topics, FacetFilter, lang, array, domClass, on, registry) {
+        function(declare, AlfDocumentFilters, topics, FacetFilter, lang, array, domClass, on, registry) {
 
    return declare([AlfDocumentFilters], {
       
@@ -113,7 +113,7 @@ define(["dojo/_base/declare",
          //              are blocked until page loading completes anyway. However, this code has been
          //              left as is until such time that we can be sure we want to just call
          //              publishFacets as soon as the widget is created (see AKU-477)
-         this.alfSubscribe(Topics.PAGE_WIDGETS_READY, lang.hitch(this, this.publishFacets), true);
+         this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.publishFacets), true);
       },
 
       /**

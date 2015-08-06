@@ -26,8 +26,8 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/_base/lang",
         "alfresco/notifications/AlfNotification",
-        "alfresco/core/Topics"],
-        function(declare, AlfCore, lang, AlfNotification, Topics) {
+        "alfresco/core/topics"],
+        function(declare, AlfCore, lang, AlfNotification, topics) {
 
       return declare([AlfCore], {
 
@@ -45,27 +45,27 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {string}
-          * @default [Topics.NOTIFICATION_CLOSED]{@link module:alfresco/core/Topics#NOTIFICATION_CLOSED}
+          * @default [topics.NOTIFICATION_CLOSED]{@link module:alfresco/core/topics#NOTIFICATION_CLOSED}
           */
-         closeNotificationTopic: Topics.NOTIFICATION_CLOSED,
+         closeNotificationTopic: topics.NOTIFICATION_CLOSED,
 
          /**
           * This is the topic that is subscribed to for handling requests to display a notification.
           *
           * @instance
           * @type {string}
-          * @default [Topics.DISPLAY_NOTIFICATION]{@link module:alfresco/core/Topics#DISPLAY_NOTIFICATION}
+          * @default [topics.DISPLAY_NOTIFICATION]{@link module:alfresco/core/topics#DISPLAY_NOTIFICATION}
           */
-         displayNotificationTopic: Topics.DISPLAY_NOTIFICATION,
+         displayNotificationTopic: topics.DISPLAY_NOTIFICATION,
 
          /**
           * This is the topic that is subscribed to for handling requests to display a prompt.
           *
           * @instance
           * @type {string}
-          * @default [Topics.DISPLAY_PROMPT]{@link module:alfresco/core/Topics#DISPLAY_PROMPT}
+          * @default [topics.DISPLAY_PROMPT]{@link module:alfresco/core/topics#DISPLAY_PROMPT}
           */
-         displayPromptTopic: Topics.DISPLAY_PROMPT,
+         displayPromptTopic: topics.DISPLAY_PROMPT,
 
          /**
           * Sets up the subscriptions for the NotificationService
