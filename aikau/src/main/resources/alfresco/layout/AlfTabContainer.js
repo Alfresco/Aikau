@@ -170,13 +170,14 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/ResizeMixin",
+        "alfresco/core/topics",
         "dijit/layout/TabContainer",
         "dijit/layout/ContentPane",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, 
-                 TabContainer, ContentPane, domConstruct, lang, array) {
+                 topics, TabContainer, ContentPane, domConstruct, lang, array) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin], {
       
@@ -461,6 +462,7 @@ define(["dojo/_base/declare",
          {
             this._delayedProcessingWidgets.splice(forDeletion, 1);
          }
+         this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
       },
 
       /**

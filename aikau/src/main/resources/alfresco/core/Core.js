@@ -36,11 +36,10 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojox/uuid/generateRandomUuid", 
         "dojox/html/entities", 
-        "dojo/Deferred",
-        "alfresco/core/TopicsMixin"], 
-        function(declare, CoreData, PubSubLog, AlfConstants, pubSub, PubQueue, array, lang, uuid, htmlEntities, Deferred, TopicsMixin) {
+        "dojo/Deferred"], 
+        function(declare, CoreData, PubSubLog, AlfConstants, pubSub, PubQueue, array, lang, uuid, htmlEntities, Deferred) {
 
-   return declare([TopicsMixin], {
+   return declare(null, {
 
       /**
        * An array of the CSS files to use with this widget.

@@ -24,13 +24,14 @@
  */
 define(["dojo/_base/declare",
         "alfresco/documentlibrary/AlfDocumentFilters",
+        "alfresco/core/topics",
         "alfresco/search/FacetFilter",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-class",
         "dojo/on",
         "dijit/registry"], 
-        function(declare, AlfDocumentFilters, FacetFilter, lang, array, domClass, on, registry) {
+        function(declare, AlfDocumentFilters, topics, FacetFilter, lang, array, domClass, on, registry) {
 
    return declare([AlfDocumentFilters], {
       
@@ -107,9 +108,11 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_search_FacetFilters__postCreate() {
          this.inherited(arguments);
 
-         // TODO: Commented out and published because it's being developed against QuaddsWidgets...
-         this.alfSubscribe("ALF_WIDGETS_READY", lang.hitch(this, this.publishFacets), true);
-         // this.publishFacets();
+         // PLEASE NOTE: It's possible that this subscription is no longer required, since publications
+         //              are blocked until page loading completes anyway. However, this code has been
+         //              left as is until such time that we can be sure we want to just call
+         //              publishFacets as soon as the widget is created (see AKU-477)
+         this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.publishFacets), true);
       },
 
       /**

@@ -178,10 +178,41 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         id: "TAB_CONTAINER",
+         name: "alfresco/layout/AlfTabContainer",
+         config: {
+            widgets: [
+               {
+                  title: "Tab 1",
+                  name: "alfresco/html/Label",
+                  config: {
+                     label: "Nothing to see here, try the next tab"
+                  }
+               },
+               {
+                  title: "Tab 2",
+                  name: "alfresco/layout/VerticalWidgets",
+                  config: {
+                     widgets: [
+                        {
+                           id: "FACET3",
+                           name: "alfresco/search/FacetFilters",
+                           config: {
+                              label: "Facet 3 (useHash=false)",
+                              facetQName: "FACET2QNAME",
+                              sortBy: "ASCENDING",
+                              maxFilters: 5,
+                              useHash: false
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
