@@ -114,6 +114,17 @@ define(["dojo/_base/declare",
       spellcheck: true,
 
       /**
+       * Overrides the [inherited default]{@link module:alfresco/lists/AlfHashList#updateInstanceValues}
+       * to ensure that instance values should be updated from the hash. This only appliees when
+       * [useHash]{@link module:alfresco/lists/AlfHashList#useHash} is configured to be true.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      updateInstanceValues: true,
+
+      /**
        * The vars and terms showing on the url hash that should be reset for a new search.
        *
        * @instance

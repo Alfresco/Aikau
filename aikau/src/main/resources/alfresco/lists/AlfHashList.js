@@ -130,6 +130,9 @@ define(["dojo/_base/declare",
                var locallyStoredHash = localStorage.getItem(this.useLocalStorageHashFallbackKey);
                hashString = (locallyStoredHash !== null) ? locallyStoredHash : "";
                this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.updateLocallyStoredHash));
+               
+               // Set the hash from the local storage
+               hashUtils.setHashString(hashString);
             }
             else if (hashString !== "" && 
                      this.useLocalStorageHashFallback === true && 
@@ -137,28 +140,19 @@ define(["dojo/_base/declare",
             {
                // Store the initial hash...
                localStorage.setItem(this.useLocalStorageHashFallbackKey, hashUtils.getHashString());
-            }
 
-            var currHash = ioQuery.queryToObject(hashString);
-            if(!this.doHashVarUpdate(currHash))
-            {
-               if (this.currentFilter)
+               var currHash = ioQuery.queryToObject(hashString);
+               if(this.doHashVarUpdate(currHash, this.updateInstanceValues))
+               {
+                  this.loadData();
+               }
+               else if (this.currentFilter)
                {
                   this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
                      url: ioQuery.objectToQuery(this.currentFilter),
                      type: "HASH"
                   }, true);
                }
-               else
-               {
-                  this.loadData();
-               }
-            }
-            else
-            {
-               // When using hashes (e.g. a URL fragment in the browser address bar) then we need to 
-               // actually get the initial filter and use it to generate the first data set...
-               this.initialiseFilter(hashString); // Function provided by the _AlfHashMixin
             }
          }
          else
