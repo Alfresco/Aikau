@@ -116,26 +116,6 @@ define(["alfresco/forms/controls/BaseFormControl",
       permittedDecimalPlaces: 0,
 
       /**
-       * The number of milliseconds after which the decimals are auto-corrected to the
-       * specified number of decimal places to avoid Dojo errors
-       *
-       * @instance
-       * @type {number}
-       * @default
-       */
-      cleanDecimalsDelayMs: 1000,
-
-      /**
-       * Timeout for function that will fix bad decimal values from an input after [a certain
-       * number]{@link module:/alfresco/forms/controls/NumberSpinner#cleanDecimalsDelayMs}
-       * of milliseconds
-       *
-       * @instance
-       * @type {?number}
-       */
-      _cleanDecimalTimeout: null,
-
-      /**
        * Returns the configuration for the widget ensuring that it is valid, in that
        * [min]{@link module:alfresco/forms/controls/NumberSpinner#min} and 
        * [max]{@link module:alfresco/forms/controls/NumberSpinner#max} but both be numerical values and
@@ -183,10 +163,8 @@ define(["alfresco/forms/controls/BaseFormControl",
          var isValid = false;
          try {
             var value = this._removeCommasAndSpaces(this.wrappedWidget.textbox.value),
-               hasTrailingPeriod = /\.$/.test(value),
-               parsedValue = parseFloat(value),
-               isNumber = !hasTrailingPeriod && !isNaN(parsedValue) || (this.permitEmpty && lang.trim(value) === "");
-            isValid = isNumber;
+               isNumber = this._valueIsNumber(value);
+            isValid = isNumber || (this.permitEmpty && value === "");
          } catch (e) {
             this.alfLog("warn", "Error validating number: ", e);
          }
@@ -200,27 +178,14 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {object} validationConfig The configuration for this validator
        */
       decimalPlacesValidator: function alfresco_forms_controls_FormControlValidationMixin__decimalPlacesValidator(validationConfig) {
-         clearTimeout(this._cleanDecimalTimeout);
          var isValid = false;
          try {
             var value = this._removeCommasAndSpaces(this.wrappedWidget.textbox.value),
-               hasTrailingPeriod = /\.$/.test(value),
-               parsedValue = parseFloat(value),
-               isNumber = !isNaN(parsedValue),
-               decimals = value.indexOf(".") !== -1 && value.split(".")[1];
-            isValid = !decimals || decimals.length <= this.permittedDecimalPlaces;
-
-            // Fix invisible Dojo bugs (but delayed in case they're still typing)
-            // NOTE: See dojo/number#regexp() for where it invisibly fails,
-            //       but essentially it rejects all values that do not match
-            //       the configured permitted number of decimal places
-            if (isValid && !hasTrailingPeriod && this.permittedDecimalPlaces > 0 && decimals.length !== this.permittedDecimalPlaces) {
-               this._cleanDecimalTimeout = setTimeout(lang.hitch(this, function() {
-                  this.setValue(parsedValue);
-               }), this.cleanDecimalsDelayMs);
-            }
+               isNumber = this._valueIsNumber(value);
+               numDecimals = value.indexOf(".") === -1 ? 0 : value.split(".")[1].length;
+            isValid = !isNumber || numDecimals === this.permittedDecimalPlaces;
          } catch (e) {
-            this.alfLog("warn", "Error validating number: ", e);
+            this.alfLog("warn", "Error validating number of decimal places: ", e);
          }
          this.reportValidationResult(validationConfig, isValid);
       },
@@ -343,6 +308,19 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       _removeCommasAndSpaces: function alfresco_forms_controls_NumberSpinner___removeCommasAndSpaces(value) {
          return value && value.replace(/,|\s/g, "");
+      },
+
+      /**
+       * Determine whether the supplied value string is a number.
+       *
+       * @instance
+       * @param {string} value The value to check (should already be trimmed)
+       * @returns {boolean} true if the value is a number
+       */
+      _valueIsNumber: function alfresco_forms_controls_NumberSpinner___valueIsNumber(value) {
+         var isValidNumber = /^-?\d+(\.\d+)?$/.test(value),
+            parsedValue = parseFloat(value);
+         return isValidNumber && !isNaN(parsedValue);
       }
    });
 });
