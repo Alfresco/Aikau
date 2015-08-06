@@ -122,29 +122,20 @@ define(["dojo/_base/declare",
             this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onHashChanged));
 
             var hashString = hashUtils.getHashString();
-            if (hashString === "" && 
-                this.useLocalStorageHashFallback === true && 
-                ("localStorage" in window && window.localStorage !== null))
+            if (hashString === "")
             {
-               // No hash has been provided, check local storage for last hash...
-               var locallyStoredHash = localStorage.getItem(this.useLocalStorageHashFallbackKey);
-               hashString = (locallyStoredHash !== null) ? locallyStoredHash : "";
-               this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.updateLocallyStoredHash));
-               
-               // Set the hash from the local storage
-               hashUtils.setHashString(hashString);
-            }
-            else if (hashString !== "" && 
-                     this.useLocalStorageHashFallback === true && 
-                     ("localStorage" in window && window.localStorage !== null))
-            {
-               // Store the initial hash...
-               localStorage.setItem(this.useLocalStorageHashFallbackKey, hashUtils.getHashString());
-
-               var currHash = ioQuery.queryToObject(hashString);
-               if(this.doHashVarUpdate(currHash, this.updateInstanceValues))
+               if (this.useLocalStorageHashFallback === true && 
+                   ("localStorage" in window && window.localStorage !== null))
                {
-                  this.loadData();
+                  // No hash has been provided, check local storage for last hash...
+                  var locallyStoredHash = localStorage.getItem(this.useLocalStorageHashFallbackKey);
+                  hashString = (locallyStoredHash !== null) ? locallyStoredHash : "";
+                  this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.updateLocallyStoredHash));
+               }
+
+               if (hashString)
+               {
+                  hashUtils.setHashString(hashString);
                }
                else if (this.currentFilter)
                {
@@ -153,6 +144,24 @@ define(["dojo/_base/declare",
                      type: "HASH"
                   }, true);
                }
+               else
+               {
+                  this.loadData();
+               }
+            }
+            else 
+            {
+               if (this.useLocalStorageHashFallback === true && 
+                   ("localStorage" in window && window.localStorage !== null))
+               {
+                  // Store the initial hash...
+                  localStorage.setItem(this.useLocalStorageHashFallbackKey, hashString);
+               }
+
+               var currHash = ioQuery.queryToObject(hashString);
+               this.doHashVarUpdate(currHash, this.updateInstanceValues);
+               this._updateCoreHashVars(currHash);
+               this.loadData();
             }
          }
          else
