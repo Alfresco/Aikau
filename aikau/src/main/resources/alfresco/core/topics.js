@@ -18,7 +18,7 @@
  */
 
 /**
- * <p>This mopdule is intended to contain ALL topics used by the Aikau framework. Widgets that require topics
+ * <p>This module is intended to contain ALL topics used by the Aikau framework. Widgets that require topics
  * for publications or subscriptions should add this module as a dependency and then use a topic listed
  * as the default. This then allows configuration overrides as necessary.</p>
  * 

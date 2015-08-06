@@ -20,7 +20,6 @@
 /**
  * @module alfresco/search/FacetFilters
  * @extends alfresco/documentlibrary/AlfDocumentFilters
- * @mixes module:alfresco/core/topics
  * @author Dave Draper
  */
 define(["dojo/_base/declare",

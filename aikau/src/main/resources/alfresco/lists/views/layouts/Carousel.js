@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/window"],
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, ResizeMixin, _MultiItemRendererMixin, 
-                 Topics, template, lang, array, domClass, domConstruct, domStyle, domGeom, win) {
+                 topics, template, lang, array, domClass, domConstruct, domStyle, domGeom, win) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ResizeMixin, _MultiItemRendererMixin, AlfCore], {
 
