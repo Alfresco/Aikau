@@ -48,7 +48,7 @@ define(["./config/Suites"],
 
       // Configuration options for the module loader; any AMD configuration options supported by the Dojo loader can be
       // used here
-      loader: {
+      loaderOptions: {
          // Packages that should be registered with the loader in each testing environment
          // Note: the config package is specifically for virtual machine (vm)
          packages: [
@@ -69,11 +69,11 @@ define(["./config/Suites"],
 
       // An array of code coverage reporters to invoke
       reporters: [
-         // "console"
-         // "runner"
+         // "Console"
+         // "Runner"
          // "reporters/TestSummary"
          "reporters/AikauReporter"
-         // "pretty"
+         // "Pretty"
       ]
 
    };
