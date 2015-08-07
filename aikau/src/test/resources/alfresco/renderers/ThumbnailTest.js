@@ -75,7 +75,7 @@ define(["intern!object",
       },
 
       "Lightbox preview": function() {
-         return browser.findAllByCssSelector("#TASKS1 .alfresco-renderers-Thumbnail img")
+         return browser.findByCssSelector("#TASKS1 .alfresco-renderers-Thumbnail .inner img")
             .click()
          .end()
          .sleep(1000) // Give the lightbox a chance to populate

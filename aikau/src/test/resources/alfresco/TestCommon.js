@@ -27,11 +27,11 @@
 define(["intern/dojo/node!fs",
         "intern/dojo/node!http",
         "intern/dojo/node!os",
+        "intern",
         "config/Config",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
-        "intern/lib/args",
         "intern/chai!assert"],
-        function(fs, http, os, Config, pollUntil, args, assert) {
+        function(fs, http, os, intern, Config, pollUntil, assert) {
    return {
 
       /**
@@ -58,7 +58,7 @@ define(["intern/dojo/node!fs",
        * @param {object} browser The browser object to work on
        */
       alfPostCoverageResults: function(test, browser) {
-         if(args.doCoverage === "true")
+         if(intern.args.doCoverage === "true")
          {
             var dfd = test.async(90000);
             var js = "var coverageData = {" +

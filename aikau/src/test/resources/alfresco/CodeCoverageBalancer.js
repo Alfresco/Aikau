@@ -24,10 +24,10 @@
  */
 define(["intern!object",
         "intern/chai!assert",
+        "intern",
         "require",
-        "alfresco/TestCommon",
-        "intern/lib/args"], 
-        function (registerSuite, assert, require, TestCommon, args) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, intern, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -43,7 +43,7 @@ define(["intern!object",
       },
 
       "Balance": function () {
-         if(args.doCoverage === "true")
+         if(intern.args.doCoverage === "true")
          {
             return browser.findByCssSelector("#LABEL")
                .getVisibleText()
