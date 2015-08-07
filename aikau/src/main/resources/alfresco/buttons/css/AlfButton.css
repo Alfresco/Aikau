@@ -2,10 +2,14 @@
    background: @standard-button-background;
    border: @standard-button-border;
    border-radius: @standard-button-border-radius;
+   box-sizing: border-box;
    font-size: @standard-button-font-size;
    font-weight: @standard-button-font-weight;
    margin: @standard-button-margin;
    padding: @standard-button-padding;
+   * {
+      box-sizing: inherit;
+   }
    .alf-white-search-icon {
       background-image: url("./images/20x20-search-icon-white.png");
       background-repeat: no-repeat;
@@ -54,7 +58,14 @@
    &.call-to-action {
       background: @call-to-action-button-background;
       border: @call-to-action-button-border;
+      border-radius: @call-to-action-button-border-radius;
+      font-size: @call-to-action-button-font-size;
+      font-weight: @call-to-action-button-font-weight;
+      margin: @call-to-action-button-margin;
       padding: @call-to-action-button-padding;
+      .dijitButtonContents, .dijitButtonText {
+         line-height: @call-to-action-button-line-height;
+      }
       .dijitReset.dijitInline.dijitButtonNode {
          color: @call-to-action-button-font-color;
       }

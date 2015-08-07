@@ -108,48 +108,52 @@
 @button-color-disabled: #b8b8b8;
 
 // The standard button is what is normally seen
-@standard-button-background: @button-color-background;
-@standard-button-background-focus: @button-color-background;
-@standard-button-background-active: @button-color-background;
-@standard-button-background-disabled: @button-color-background;
+@standard-button-background: #fff;
+@standard-button-background-focus: #fff;
+@standard-button-background-active: #fff;
+@standard-button-background-disabled: #fff;
 @standard-button-border-width: 1px;
 @standard-button-border-style: solid;
-@standard-button-border: @standard-button-border-width @standard-button-border-style @button-color-default;
-@standard-button-border-focus: @standard-button-border-width @standard-button-border-style @button-color-hover;
-@standard-button-border-active: @standard-button-border-width @standard-button-border-style @button-color-active;
-@standard-button-border-disabled: @standard-button-border-width @standard-button-border-style @button-color-disabled;
-@standard-button-border-radius: 2px;
-@standard-button-font-color: @button-color-default;
-@standard-button-font-color-focus: @button-color-hover;
-@standard-button-font-color-active: @button-color-active;
-@standard-button-font-color-disabled: @button-color-disabled;
+@standard-button-border: @standard-button-border-width @standard-button-border-style #ccc;
+@standard-button-border-focus: @standard-button-border-width @standard-button-border-style #ccc;
+@standard-button-border-active: @standard-button-border-width @standard-button-border-style #ccc;
+@standard-button-border-disabled: @standard-button-border-width @standard-button-border-style #ccc;
+@standard-button-border-radius: 0;
+@standard-button-font-color: @general-font-color;
+@standard-button-font-color-focus: @general-font-color;
+@standard-button-font-color-active: @general-font-color;
+@standard-button-font-color-disabled: fade(@general-font-color, 40%);
 @standard-button-font-size: @normal-font-size;
-@standard-button-font-weight: bold;
+@standard-button-font-weight: normal;
 @standard-button-line-height: @standard-button-font-size * 1.5;
-// 30px used here, as it's the visible height of a search field in Chrome
-@standard-button-padding-vertical: (30px - (@standard-button-border-width * 2) - @standard-button-line-height) / 2;
+@standard-button-padding-vertical: 0;
 @standard-button-padding-horizontal: @standard-button-font-size;
 @standard-button-padding: @standard-button-padding-vertical @standard-button-padding-horizontal;
 @standard-button-margin: 0 @standard-column-width 0 0;
 
 // "Call-to-action" buttons capture the users attention
-@call-to-action-button-background: @button-color-default;
-@call-to-action-button-background-focus: @button-color-hover;
-@call-to-action-button-background-active: @button-color-active;
-@call-to-action-button-background-disabled: @button-color-disabled;
-@call-to-action-button-border-width: 0;
+@call-to-action-button-background: #8dc63f;
+@call-to-action-button-background-focus: #8dc63f;
+@call-to-action-button-background-active: #8dc63f;
+@call-to-action-button-background-disabled: #8dc63f;
+@call-to-action-button-border-width: 1px;
 @call-to-action-button-border-style: solid;
-@call-to-action-button-border: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-default;
-@call-to-action-button-border-focus: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-hover;
-@call-to-action-button-border-active: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-active;
-@call-to-action-button-border-disabled: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-disabled;
-@call-to-action-button-font-color: @button-color-background;
-@call-to-action-button-font-color-focus: @button-color-background;
-@call-to-action-button-font-color-active: @button-color-background;
-@call-to-action-button-font-color-disabled: fade(@button-color-background, 50%);
+@call-to-action-button-border: @call-to-action-button-border-width @call-to-action-button-border-style #8dc63f;
+@call-to-action-button-border-focus: @call-to-action-button-border-width @call-to-action-button-border-style #5eae41;
+@call-to-action-button-border-active: @call-to-action-button-border-width @call-to-action-button-border-style #5eae41;
+@call-to-action-button-border-disabled: @call-to-action-button-border-width @call-to-action-button-border-style #8dc63f;
+@call-to-action-button-border-radius: 0;
+@call-to-action-button-font-color: #fff;
+@call-to-action-button-font-color-focus: #fff;
+@call-to-action-button-font-color-active: #fff;
+@call-to-action-button-font-color-disabled: fade(#fff, 40%);
+@call-to-action-button-font-size: @large-font-size;
+@call-to-action-button-font-weight: normal;
+@call-to-action-button-line-height: @call-to-action-button-font-size * 1.5;
 @call-to-action-button-padding-vertical: (30px - (@call-to-action-button-border-width * 2) - @standard-button-line-height) / 2;
 @call-to-action-button-padding-horizontal: @standard-button-font-size;
 @call-to-action-button-padding: @call-to-action-button-padding-vertical @call-to-action-button-padding-horizontal;
+@call-to-action-button-margin: 0 @standard-column-width 0 0;
 
 // Shadows
 @standard-box-shadow: .33px 2px 8px rgba(0, 0, 0, .3);

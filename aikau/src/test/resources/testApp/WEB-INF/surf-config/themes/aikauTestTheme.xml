@@ -50,13 +50,18 @@
          @call-to-action-button-border-focus: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-hover;
          @call-to-action-button-border-active: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-active;
          @call-to-action-button-border-disabled: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-disabled;
+         @call-to-action-button-border-radius: 2px;
          @call-to-action-button-font-color: @button-color-background;
          @call-to-action-button-font-color-focus: @button-color-background;
          @call-to-action-button-font-color-active: @button-color-background;
          @call-to-action-button-font-color-disabled: fade(@button-color-background, 50%);
+         @call-to-action-button-font-size: @normal-font-size;
+         @call-to-action-button-font-weight: bold;
+         @call-to-action-button-line-height: @call-to-action-button-font-size * 1.5;
          @call-to-action-button-padding-vertical: (30px - (@call-to-action-button-border-width * 2) - @standard-button-line-height) / 2;
          @call-to-action-button-padding-horizontal: @standard-button-font-size;
          @call-to-action-button-padding: @call-to-action-button-padding-vertical @call-to-action-button-padding-horizontal;
+         @call-to-action-button-margin: 0 @standard-column-width 0 0;
       </less-variables>
    </css-tokens>
 </theme>
