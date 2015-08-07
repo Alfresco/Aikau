@@ -133,6 +133,26 @@ define(["intern!object",
             });
       },
 
+      "Make third text field valid and then remove focus and verify that error indicator is not displayed": function() {
+         return browser.findByCssSelector("#TB5 .dijitInputContainer input")
+            .clearValue()
+            .type("abcde")
+         .end()
+         .findByCssSelector("#TB3 .dijitInputContainer input")
+            .click()
+         .end()
+         .findAllByCssSelector("#TB5 .validation-error")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The error icon should NOT have been displayed (TB5)");
+            })
+         .end()
+         .findByCssSelector("#TB5 .validation-message")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The error message should NOT have been displayed (TB5)");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
