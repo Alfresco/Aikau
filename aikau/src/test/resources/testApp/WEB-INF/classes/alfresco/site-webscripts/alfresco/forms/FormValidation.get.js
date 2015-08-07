@@ -64,6 +64,27 @@ model.jsonModel = {
                                  errorMessage: "Value must be a number"
                               }
                            }
+                        },
+                        {
+                           id: "TB5",
+                           name: "alfresco/forms/controls/DojoValidationTextBox",
+                           config: {
+                              fieldId: "FIELD5",
+                              label: "Field 5",
+                              name: "field5",
+                              description: "Needs to be 3 characters or more",
+                              value: "a",
+                              requirementConfig: {
+                                 initialValue: true
+                              },
+                              validationConfig: [
+                                 {
+                                    validation: "minLength",
+                                    length: 3,
+                                    errorMessage: "Too short"
+                                 }
+                              ]
+                           }
                         }
                      ]
                   }
