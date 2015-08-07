@@ -455,13 +455,20 @@ define(["dojo/_base/declare",
             // Calculate the scope to be used and thus the scoped topic
             var publishScope = "",
                scopedTopic;
-            if (global === true) {
+            if (global === true) 
+            {
                // No action required
-            } else if (parentScope === true) {
+            } 
+            else if (parentScope === true) 
+            {
                publishScope = this.parentPubSubScope;
-            } else if (typeof customScope !== "undefined") {
+            } 
+            else if (typeof customScope !== "undefined") 
+            {
                publishScope = customScope;
-            } else {
+            } 
+            else 
+            {
                publishScope = this.pubSubScope;
             }
             scopedTopic = publishScope + topic;
@@ -469,7 +476,20 @@ define(["dojo/_base/declare",
             // Update the payload
             payload.alfPublishScope = publishScope;
             payload.alfTopic = scopedTopic;
-            payload.alfResponseScope = payload.responseScope || payload.alfResponseScope || this.pubSubScope;
+
+            // Note that we need to take special attention to falsy behaviour of the global scope
+            // as the empty string is a valid scope. If defined as either the reponseScope or the
+            // alfResponseScope then it should be used...
+            var alfResponseScope  = this.pubSubScope;
+            if (payload.responseScope || payload.responseScope === "")
+            {
+               alfResponseScope = payload.responseScope;
+            }
+            else if (payload.alfResponseScope || payload.alfResponseScope === "")
+            {
+               alfResponseScope = payload.alfResponseScope;
+            }
+            payload.alfResponseScope = alfResponseScope;
 
             // Publish...
             PubQueue.getSingleton().publish(scopedTopic, payload, this);
