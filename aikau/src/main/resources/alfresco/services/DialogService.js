@@ -743,22 +743,11 @@ define(["dojo/_base/declare",
             }
 
             // Mixin in any additional payload information...
-            // Use the alfResponseScope from the current payload if a responseScope isn't available,
-            // but values in the formSubmissionPayloadMixin should trump both...
-            // i.e. We might set an initial responseScope form the current payload, but if one has been
-            //      defined in the formSubmissionPayloadMixin then that's the one to use...
-            if (payload.responseScope || payload.responseScope === "")
-            {
-               lang.mixin(data, {
-                  responseScope: payload.responseScope
-               });
-            }
-            else if (payload.alfResponseScope || payload.alfResponseScope === "")
-            {
-               lang.mixin(data, {
-                  responseScope: payload.alfResponseScope
-               });
-            }
+            // An alfResponseScope should always have been set on a payload so it can be set as the
+            // responseScope, but a responseScope in the formSubmissionPayloadMixin will override it
+            lang.mixin(data, {
+               responseScope: payload.alfResponseScope
+            });
             payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
 
             // Using JQuery here in order to support deep merging of dot-notation properties...
