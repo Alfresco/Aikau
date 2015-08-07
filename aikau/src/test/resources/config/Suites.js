@@ -54,6 +54,7 @@ define({
       "src/test/resources/alfresco/core/NotificationUtilsTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
+      "src/test/resources/alfresco/core/ResponseScopeTest",
       "src/test/resources/alfresco/core/TemporalUtilsTest",
       "src/test/resources/alfresco/core/VisibilityConfigTest",
       "src/test/resources/alfresco/core/WidgetCreationTest",

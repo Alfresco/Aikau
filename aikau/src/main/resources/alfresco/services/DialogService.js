@@ -523,7 +523,6 @@ define(["dojo/_base/declare",
                // Construct the form widgets and then construct the dialog using that configuration...
                var formValue = config.formValue ? config.formValue: {};
                var formConfig = this.createFormConfig(config.widgets, formValue);
-               var showValidationErrorsImmediately = true;
                if (config.showValidationErrorsImmediately === false)
                {
                   formConfig.config.showValidationErrorsImmediately = false;
@@ -744,19 +743,26 @@ define(["dojo/_base/declare",
             }
 
             // Mixin in any additional payload information...
-            payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
-            payload.alfResponseScope && lang.mixin(data, {
+            // An alfResponseScope should always have been set on a payload so it can be set as the
+            // responseScope, but a responseScope in the formSubmissionPayloadMixin will override it
+            lang.mixin(data, {
                responseScope: payload.alfResponseScope
             });
+            payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
 
             // Using JQuery here in order to support deep merging of dot-notation properties...
             $.extend(true, data, formData);
 
             // Publish the topic requested for complete...
+            var customScope;
+            if (payload.formSubmissionScope || payload.formSubmissionScope === "") 
+            {
+               customScope = payload.formSubmissionScope;
+            }
+            
             var topic = payload.formSubmissionTopic,
                globalScope = payload.hasOwnProperty("formSubmissionGlobal") ? !!payload.formSubmissionGlobal : true,
-               toParent = false,
-               customScope = payload.formSubmissionScope || undefined;
+               toParent = false;
             this.alfPublish(topic, data, globalScope, toParent, customScope);
          }
          else

@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the content to create
        */
-      onCreateContent: function alfresco_services_ContentService__onCreateFolder(payload) {
+      onCreateContent: function alfresco_services_ContentService__onCreateContent(payload) {
          var parentNodeRef = lang.getObject("currentNode.parent.nodeRef", false, payload);
          if (!parentNodeRef)
          {
