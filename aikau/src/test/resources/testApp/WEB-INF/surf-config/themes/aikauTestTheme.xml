@@ -13,43 +13,7 @@
          @header-menubar-font-color: pink;
          @header-dropdown-menu-font-color: purple;
 
-         @standard-button-background: @button-color-background;
-         @standard-button-background-focus: @button-color-background;
-         @standard-button-background-active: @button-color-background;
-         @standard-button-background-disabled: @button-color-background;
-         @standard-button-border: @standard-button-border-width @standard-button-border-style @button-color-default;
-         @standard-button-border-focus: @standard-button-border-width @standard-button-border-style @button-color-hover;
-         @standard-button-border-active: @standard-button-border-width @standard-button-border-style @button-color-active;
-         @standard-button-border-disabled: @standard-button-border-width @standard-button-border-style @button-color-disabled;
-         @standard-button-border-radius: 2px;
-         @standard-button-font-color: @button-color-default;
-         @standard-button-font-color-focus: @button-color-hover;
-         @standard-button-font-color-active: @button-color-active;
-         @standard-button-font-color-disabled: @button-color-disabled;
-         @standard-button-font-weight: bold;
-         @standard-button-height: 28px;
-         @standard-button-padding-vertical: (@standard-button-height - (@standard-button-border-width * 2) - @standard-button-line-height) / 2;
-         @standard-button-padding: @standard-button-padding-vertical @standard-button-padding-horizontal;
-         @call-to-action-button-background: @button-color-default;
-         @call-to-action-button-background-focus: @button-color-hover;
-         @call-to-action-button-background-active: @button-color-active;
-         @call-to-action-button-background-disabled: @button-color-disabled;
-         @call-to-action-button-border-width: 0;
-         @call-to-action-button-border-style: solid;
-         @call-to-action-button-border: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-default;
-         @call-to-action-button-border-focus: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-hover;
-         @call-to-action-button-border-active: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-active;
-         @call-to-action-button-border-disabled: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-disabled;
-         @call-to-action-button-border-radius: @standard-button-border-radius;
-         @call-to-action-button-font-color: @button-color-background;
-         @call-to-action-button-font-color-focus: @button-color-background;
-         @call-to-action-button-font-color-active: @button-color-background;
-         @call-to-action-button-font-color-disabled: fade(@button-color-background, 50%);
-         @call-to-action-button-font-weight: @standard-button-font-weight;
-         @call-to-action-button-height: @standard-button-height;
-         @call-to-action-button-padding-vertical: (@call-to-action-button-height - (@call-to-action-button-border-width * 2) - @call-to-action-button-line-height) / 2;
-         @call-to-action-button-padding-horizontal: @standard-button-padding-horizontal;
-         @call-to-action-button-padding: @call-to-action-button-padding-vertical @call-to-action-button-padding-horizontal;
+         @use-legacy-buttons: false;
       </less-variables>
    </css-tokens>
 </theme>

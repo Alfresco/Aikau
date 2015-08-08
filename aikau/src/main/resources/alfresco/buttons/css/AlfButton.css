@@ -6,6 +6,8 @@
    font-size: 0;
    margin: @standard-button-margin;
    padding: @standard-button-padding;
+
+   .buttonMixin(@use-legacy-buttons);
    * {
       box-sizing: inherit;
    }
