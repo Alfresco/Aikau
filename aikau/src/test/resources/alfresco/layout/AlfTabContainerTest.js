@@ -659,7 +659,7 @@ define(["intern!object",
             .getSize()
                .then(function(size) {
                   var target = height - 46;
-                  assert(size.height > (target - 5) && size.height < (target + 5), "The sidebar height (" + size.height + ") was not within a margin of error of the expected height (" + target + ")");
+                  assert.closeTo(size.height, target, 5, "Sidebar height incorrect");
                });
       },
 
