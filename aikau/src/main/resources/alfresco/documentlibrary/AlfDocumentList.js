@@ -100,6 +100,17 @@ define(["dojo/_base/declare",
       parentNavTopic: "ALF_DOCLIST_PARENT_NAV",
 
       /**
+       * Overrides the [inherited default]{@link module:alfresco/lists/AlfHashList#updateInstanceValues}
+       * to ensure that instance values should be updated from the hash. This only appliees when
+       * [useHash]{@link module:alfresco/lists/AlfHashList#useHash} is configured to be true.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      updateInstanceValues: true,
+
+      /**
        * Extends the [inherited function]{@link module:alfresco/lists/AlfSortablePaginatedListt#postMixInProperties}
        * to set a default filter to be a root path.
        *

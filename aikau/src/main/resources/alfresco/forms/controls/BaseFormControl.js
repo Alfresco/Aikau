@@ -1905,6 +1905,7 @@ define(["dojo/_base/declare",
       hideValidationFailure: function alfresco_forms_controls_BaseFormControl__hideValidationFailure() {
          domClass.remove(this._validationIndicator, "validation-error");
          domClass.remove(this._validationMessage, "display");
+         this._pendingValidationFailureDisplay = false;
       },
 
       /**

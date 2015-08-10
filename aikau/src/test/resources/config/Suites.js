@@ -54,6 +54,7 @@ define({
       "src/test/resources/alfresco/core/NotificationUtilsTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
+      "src/test/resources/alfresco/core/ResponseScopeTest",
       "src/test/resources/alfresco/core/TemporalUtilsTest",
       "src/test/resources/alfresco/core/VisibilityConfigTest",
       "src/test/resources/alfresco/core/WidgetCreationTest",
@@ -143,6 +144,7 @@ define({
       "src/test/resources/alfresco/lists/AlfSortablePaginatedListTest",
       "src/test/resources/alfresco/lists/FilteredListTest",
       "src/test/resources/alfresco/lists/InfiniteScrollTest",
+      "src/test/resources/alfresco/lists/LocalStorageFallbackTest",
       "src/test/resources/alfresco/lists/views/AlfListViewTest",
       "src/test/resources/alfresco/lists/views/HtmlListViewTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
@@ -209,6 +211,7 @@ define({
       "src/test/resources/alfresco/search/AlfSearchResultTest",
       "src/test/resources/alfresco/search/CustomSearchResultTest",
       "src/test/resources/alfresco/search/FacetFiltersTest",
+      "src/test/resources/alfresco/search/NoHashSearchingTest",
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
       "src/test/resources/alfresco/services/ActionServiceTest",

@@ -35,6 +35,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/AlfList.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/topics",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/DynamicWidgetProcessingTopics",
         "alfresco/lists/views/AlfListView",
@@ -43,7 +44,7 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/dom-class"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin,
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, _AlfDocumentListTopicMixin,
                  DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, array, lang, domConstruct, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, DynamicWidgetProcessingTopics], {
@@ -281,9 +282,9 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {number}
-       * @default 250
+       * @default
        */
-      _filterDelay: 250,
+      _filterDelay: 1000,
 
       /**
        * An array of the topics to subscribe to that when published provide data that the indicates how the
@@ -367,11 +368,11 @@ define(["dojo/_base/declare",
        * @instance
        * @overrideable
        */
-      onFiltersUpdated: function(){
+      onFiltersUpdated: function alfresco_lists_AlfList__onFiltersUpdated() {
          this.clearViews();
          this.loadData();
       },
-
+      
       /**
        * This indicates that the instance should wait for all widgets on the page to finish rendering before
        * making any attempt to load data. If this is set to true then loading can begin as soon as this instance
@@ -463,7 +464,7 @@ define(["dojo/_base/declare",
          {
             // Create a subscription to listen out for all widgets on the page being reported
             // as ready (then we can start loading data)...
-            this.pageWidgetsReadySubcription = this.alfSubscribe("ALF_WIDGETS_READY", lang.hitch(this, "onPageWidgetsReady"), true);
+            this.pageWidgetsReadySubcription = this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.onPageWidgetsReady), true);
          }
          else
          {

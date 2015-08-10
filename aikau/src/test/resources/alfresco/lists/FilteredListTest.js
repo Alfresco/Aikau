@@ -54,7 +54,7 @@ define(["intern!object",
             .end()
 
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
-         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
             .end()
 
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
@@ -70,7 +70,7 @@ define(["intern!object",
             .type(keys.BACKSPACE)
             .end()
 
-         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
             .end()
 
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
@@ -89,7 +89,7 @@ define(["intern!object",
             .click()
             .end()
 
-         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
             .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
@@ -105,7 +105,7 @@ define(["intern!object",
             .end()
 
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
-         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
             .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")

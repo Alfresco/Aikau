@@ -273,7 +273,7 @@ define(["intern!object",
             })
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "Number should use no more than 1 decimal place", "Validation error message not set correctly");
+               assert.equal(text, "Number should use exactly 1 decimal place", "Validation error message not set correctly");
             });
       },
 

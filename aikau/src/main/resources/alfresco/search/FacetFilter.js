@@ -70,14 +70,32 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
-       * Indicates that the filter should be hidden. This will be set to "true" if any required data is missing
-       * 
+       * Indicate whether or not the filter is currently applied
+       *
        * @instance
        * @type {boolean}
        * @default false
        */
-      hide: false,
+      applied: false,
       
+      /**
+       * The alt-text to use for the image that indicates that a filter has been applied
+       *
+       * @instance
+       * @type {string} 
+       * @default
+       */
+      appliedFilterAltText: "facet.filter.applied.alt-text",
+
+      /**
+       * The path to use as the source for the image that indicates that a filter has been applied
+       *
+       * @instance
+       * @type {string}
+       * @default "12x12-selected-icon.png"
+       */
+      appliedFilterImageSrc: "12x12-selected-icon.png",
+
       /**
        * The facet qname
        *
@@ -106,32 +124,14 @@ define(["dojo/_base/declare",
       filterData: "",
 
       /**
-       * Indicate whether or not the filter is currently applied
-       *
+       * Indicates that the filter should be hidden. This will be set to "true" if any required data is missing
+       * 
        * @instance
        * @type {boolean}
        * @default false
        */
-      applied: false,
+      hide: false,
       
-      /**
-       * The path to use as the source for the image that indicates that a filter has been applied
-       *
-       * @instance
-       * @type {string}
-       * @default "12x12-selected-icon.png"
-       */
-      appliedFilterImageSrc: "12x12-selected-icon.png",
-
-      /**
-       * The alt-text to use for the image that indicates that a filter has been applied
-       *
-       * @instance
-       * @type {string} 
-       * @default
-       */
-      appliedFilterAltText: "facet.filter.applied.alt-text",
-
       /**
        * When this is set to true the current URL hash fragment will be used to initialise the facet selection
        * and when the facet is selected the hash fragment will be updated with the facet selection.
@@ -205,9 +205,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onApplyFilter: function alfresco_search_FacetFilter__onApplyFilter() {
-
          var fullFilter = this.facet + "|" + this.filter;
-
          if(this.useHash)
          {
             this._updateHash(fullFilter, "add");

@@ -33,9 +33,8 @@ define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarPopup",
         "alfresco/documentlibrary/_AlfCreateContentPermissionsMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "dojo/_base/lang",
-        "dojo/dom-class"], 
-        function(declare, AlfMenuBarPopup, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, lang, domClass) {
+        "dojo/_base/lang"], 
+        function(declare, AlfMenuBarPopup, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin, lang) {
    
    return declare([AlfMenuBarPopup, _AlfCreateContentPermissionsMixin, _AlfDocumentListTopicMixin], {
       

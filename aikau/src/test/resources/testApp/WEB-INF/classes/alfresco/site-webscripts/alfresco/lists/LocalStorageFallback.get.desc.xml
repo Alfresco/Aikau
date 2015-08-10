@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Local Storage fallback for lists</shortname>
+  <description>A test page for verifying the local storage fallback behaviour</description>
+  <family>aikau-unit-tests</family>
+  <url>/ListLocalStorageFallback</url>
+</webscript>

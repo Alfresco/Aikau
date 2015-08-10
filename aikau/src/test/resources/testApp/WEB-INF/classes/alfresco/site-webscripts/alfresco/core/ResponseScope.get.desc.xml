@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Response Scope Test Page</shortname>
+  <description>Used for verifying that response scopes are correctly processed in payloads.</description>
+  <family>aikau-unit-tests</family>
+  <url>/ResponseScope</url>
+</webscript>

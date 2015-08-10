@@ -1,64 +1,102 @@
 .alfresco-buttons-AlfButton {
-   background-image: none;
-   background-color: @standard-button-background-color; 
+   background: @standard-button-background;
    border: @standard-button-border;
-   margin: 0;
-   margin-right: @standard-column-width;
-   border-radius: 0;
-   font-size: @standard-button-font-size;
-}
+   border-radius: @standard-button-border-radius;
+   box-sizing: border-box;
+   font-size: 0;
+   margin: @standard-button-margin;
+   padding: @standard-button-padding;
 
-/* Set tge line-height of all spans in the button to be 2px greater than the standard font size */
-.alfresco-buttons-AlfButton span {
-   line-height: @standard-button-font-size + 2;
-}
-
-/* Convert the HEX color to RGBA so that an opacity can be set on the font color */
-.alfresco-buttons-AlfButton.dijitButtonDisabled .dijitReset.dijitInline.dijitButtonNode{
-   color: rgba(red(@standard-button-font-color), green(@standard-button-font-color), blue(@standard-button-font-color), 0.4);
-}
-
-.alfresco-buttons-AlfButton.dijitButtonFocused,
-.alfresco-buttons-AlfButton.dijitButtonHover {
-   border: @standard-button-focus-border;
-}
-
-.alfresco-buttons-AlfButton.call-to-action {
-   background-color: @call-to-action-button-background-color; 
-   border: @call-to-action-button-border;
-   /*font-size: @call-to-action-button-font-size;*/
-}
-
-.alfresco-buttons-AlfButton.call-to-action.dijitButtonFocused,
-.alfresco-buttons-AlfButton.call-to-action.dijitButtonHover {
-   border: @call-to-action-button-focus-border;
-}
-
-.alfresco-buttons-AlfButton .dijitReset.dijitInline.dijitButtonNode {
-   background: none repeat scroll 0 0;
-   border: none;
-   border-radius: 0;
-   box-shadow: none;
-   padding: 3px 10px;
-   color: @standard-button-font-color;
-}
-
-.alfresco-buttons-AlfButton.call-to-action .dijitReset.dijitInline.dijitButtonNode {
-   color: @call-to-action-button-font-color;
-}
-
-.alfresco-buttons-AlfButton.call-to-action.dijitButtonDisabled .dijitReset.dijitInline.dijitButtonNode{
-   color: rgba(red(@call-to-action-button-font-color), green(@call-to-action-button-font-color), blue(@call-to-action-button-font-color), 0.4);
-}
-
-.alfresco-buttons-AlfButton span.dijitIcon.alf-white-search-icon {
-   background-image: url("./images/20x20-search-icon-white.png");
-   background-repeat: no-repeat;
-   height: 20px;
-   text-align: center;
-   width: 24px;
-}
-
-.alfresco-buttons-AlfButton.dijitButtonDisabled span.dijitIcon.alf-white-search-icon {
-   opacity: 0.4;
+   .buttonMixin(@use-legacy-buttons);
+   * {
+      box-sizing: inherit;
+   }
+   .alf-white-search-icon {
+      background-image: url("./images/20x20-search-icon-white.png");
+      background-repeat: no-repeat;
+      height: 20px;
+      text-align: center;
+      width: 24px;
+   }
+   .dijitButtonContents, .dijitButtonText {
+      line-height: @standard-button-line-height;
+   }
+   .dijitButtonText {
+      font-family: @standard-button-font-family;
+      font-size: @standard-button-font-size;
+      font-weight: @standard-button-font-weight;
+      padding: 0;
+   }
+   .dijitReset.dijitInline.dijitButtonNode {
+      background: none repeat scroll 0 0;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      color: @standard-button-font-color;
+      padding: 0;
+   }
+   &.dijitButtonFocused, &.dijitButtonHover {
+      background: @standard-button-background-focus;
+      border: @standard-button-border-focus;
+      .dijitReset.dijitInline.dijitButtonNode {
+         color: @standard-button-font-color-focus;
+      }
+   }
+   &.dijitButtonActive {
+      background: @standard-button-background-active;
+      border: @standard-button-border-active;
+      .dijitReset.dijitInline.dijitButtonNode {
+         color: @standard-button-font-color-active;
+      }
+   }
+   &.dijitButtonDisabled {
+      background: @standard-button-background-disabled;
+      border: @standard-button-border-disabled;
+      .dijitReset.dijitInline.dijitButtonNode {
+         color: @standard-button-font-color-disabled;
+      }
+      .alf-white-search-icon {
+         opacity: .5;
+      }
+   }
+   &.call-to-action {
+      background: @call-to-action-button-background;
+      border: @call-to-action-button-border;
+      border-radius: @call-to-action-button-border-radius;
+      margin: @call-to-action-button-margin;
+      padding: @call-to-action-button-padding;
+      .dijitButtonContents, .dijitButtonText {
+         line-height: @call-to-action-button-line-height;
+      }
+      .dijitButtonText {
+         font-family: @call-to-action-button-font-family;
+         font-size: @call-to-action-button-font-size;
+         font-weight: @call-to-action-button-font-weight;
+         padding: 0;
+      }
+      .dijitReset.dijitInline.dijitButtonNode {
+         color: @call-to-action-button-font-color;
+      }
+      &.dijitButtonFocused, &.dijitButtonHover {
+         background: @call-to-action-button-background-focus;
+         border: @call-to-action-button-border-focus;
+         .dijitReset.dijitInline.dijitButtonNode {
+            color: @call-to-action-button-font-color-focus;
+         }
+      }
+      &.dijitButtonActive {
+         background: @call-to-action-button-background-active;
+         border: @call-to-action-button-border-active;
+         .dijitReset.dijitInline.dijitButtonNode {
+            color: @call-to-action-button-font-color-active;
+         }
+      }
+      &.dijitButtonDisabled {
+         background: @call-to-action-button-background-disabled;
+         border: @call-to-action-button-border-disabled;
+         .dijitReset.dijitInline.dijitButtonNode {
+            color: @call-to-action-button-font-color-disabled;
+         }
+      }
+   }
 }
