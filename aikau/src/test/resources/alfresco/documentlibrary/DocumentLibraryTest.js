@@ -83,6 +83,23 @@ define(["intern!object",
          });
    };
 
+   var switchToFilter = function(pubSubScope) {
+      return browser.findByCssSelector(".alfresco-documentlibrary-AlfDocumentFilter:last-child span")
+         .clearLog()
+         .click()
+      .end()
+      .getLastPublish(pubSubScope + "ALF_CURRENT_NODEREF_CHANGED")
+         .then(function(payload) {
+            assert.isNotNull(payload, "The current Node data should have been published");
+         })
+      .end()
+      .findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
+         .getVisibleText()
+         .then(function(text) {
+            assert.equal(text, "My Favorite Documents and Folders", "The filter description was not retained");
+         });
+   };
+
    // NOTE: For some as yet undetermined reason the first time we attempt to load the Document Library test page 
    //       with clear dependency caches it will fail. Therefore we register a dummy test suite that absorbs this
    //       failure so that subsequent tests can pass.
@@ -138,6 +155,12 @@ define(["intern!object",
          });
       },
 
+      "Switch to favourites filter": function() {
+         return browser.then(function() {
+            return switchToFilter("SCOPED_");
+         });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
@@ -182,6 +205,12 @@ define(["intern!object",
       "Use the breadcrumb trail to return to the root": function() {
          return browser.then(function() {
             return returnToRoot();
+         });
+      },
+
+      "Switch to favourites filter": function() {
+         return browser.then(function() {
+            return switchToFilter("");
          });
       },
 
