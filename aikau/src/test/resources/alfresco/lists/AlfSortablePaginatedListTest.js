@@ -160,7 +160,7 @@ define(["intern!object",
          .findByCssSelector("#SIMULATE_FILTER_label")
             .click()
          .end()
-         .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED")
+         .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
             .then(function(payload) {
                assert.isNotNull(payload, "More results not loaded");
             })

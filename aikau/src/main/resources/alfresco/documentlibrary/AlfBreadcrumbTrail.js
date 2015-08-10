@@ -87,32 +87,16 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
-       * Indicates whether or not to hide the breadcrumb trail when first instantiated.
-       * @instance 
-       * @type{boolean}
-       * @default false
-       */
-      hide: false,
-      
-      /**
-       * The label for the root of the breadcrumb trail.
+       * An array of fixed breadcrumbs to render. Each breadcrumb needs to have a "label" attribute and can
+       * also optionally include "publishTopic" and "publishPayload" attributes if clicking on the breadcrumb
+       * should have an action.
        * 
        * @instance
-       * @type {string}
-       * @default "root.label"
+       * @type {object[]}
+       * @default null
        */
-      rootLabel: "root.label",
+      breadcrumbs: null,
 
-      /**
-       * Indicates whether or not to display a root label for the breadcrumb trail.
-       * This label will effectively represent "/"
-       * 
-       * @instance
-       * @type {boolean} 
-       * @default true
-       */
-      showRootLabel: true,
-         
       /**
        * A path to use as a breadcrumb trail. This is a simple alternative to defining invidual breadcrumbs
        * but gives less flexibility over what clicking on the breadcrumbs do.
@@ -124,15 +108,13 @@ define(["dojo/_base/declare",
       currentPath: "/",
 
       /**
-       * Indicates whether the browser URL hash will be used to provide the breadcrumb trail. If this is
-       * set to true then the breadcrumb trail will be re-rendered as the hash changes.
-       *
-       * @instance
-       * @type {boolean}
+       * Indicates whether or not to hide the breadcrumb trail when first instantiated.
+       * @instance 
+       * @type{boolean}
        * @default false
        */
-      useHash: false,
-
+      hide: false,
+      
       /**
        * This indicates that the final breadcrumb in the trail  is 
        * 
@@ -218,15 +200,46 @@ define(["dojo/_base/declare",
       lastBreadcrumbPublishPayloadModifiers: null,
 
       /**
-       * An array of fixed breadcrumbs to render. Each breadcrumb needs to have a "label" attribute and can
-       * also optionally include "publishTopic" and "publishPayload" attributes if clicking on the breadcrumb
-       * should have an action.
+       * The label for the root of the breadcrumb trail.
        * 
        * @instance
-       * @type {object[]}
-       * @default null
+       * @type {string}
+       * @default "root.label"
        */
-      breadcrumbs: null,
+      rootLabel: "root.label",
+
+      /**
+       * Indicates whether or not to display a root label for the breadcrumb trail.
+       * This label will effectively represent "/"
+       * 
+       * @instance
+       * @type {boolean} 
+       * @default true
+       */
+      showRootLabel: true,
+         
+      /**
+       * Indicates whether the browser URL hash will be used to provide the breadcrumb trail. If this is
+       * set to true then the breadcrumb trail will be re-rendered as the hash changes.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      useHash: false,
+
+      /**
+       * This boolean flag is used to indicate whether or not a filter is being displayed rather than
+       * a breadcrumb trail. This should not be configured or changed as it is used to maintain the
+       * internal state of the widget. It is necessary to keep track of whether or not a filter is 
+       * displayed to determine what actions to take when the 
+       * [current node changes]{@link module:alfresco/documentlibrary/AlfBreadcrumbTrail#onCurrentNodeChange}.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      _filterDisplayed: false,
 
       /**
        * Implements the Dojo widget lifecycle function to subscribe to the relevant topics that
@@ -294,12 +307,14 @@ define(["dojo/_base/declare",
          if (payload && payload.node)
          {
             this.currentNode = payload.node;
-
-            // It's necessary to re-render the breadcrumb trail after the current node changes because on initial
-            // page load the current node update will occur after the breadcrumb has been rendered for the first time...
-            // Currently this can result in the breadcrumb rendering twice, but at least it will be accurate (only 
-            // remove this line when verifying initial page loading results)...
-            this.renderPathBreadcrumbTrail();
+            if (this._filterDisplayed === false)
+            {
+               // It's necessary to re-render the breadcrumb trail after the current node changes because on initial
+               // page load the current node update will occur after the breadcrumb has been rendered for the first time...
+               // Currently this can result in the breadcrumb rendering twice, but at least it will be accurate (only 
+               // remove this line when verifying initial page loading results)...
+               this.renderPathBreadcrumbTrail();
+            }
          }
          else
          {
@@ -320,6 +335,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Detected path change", payload);
          if (payload && payload.path)
          {
+            this._filterDisplayed = false;
             this.currentPath = payload.path;
             this.renderPathBreadcrumbTrail();
          }
@@ -468,6 +484,7 @@ define(["dojo/_base/declare",
          if (payload && payload.description)
          {
             domConstruct.empty(this.containerNode);
+            this._filterDisplayed = true;
             this.renderBreadcrumb({
                label: payload.description
             });

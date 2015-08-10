@@ -25,8 +25,9 @@
 define(["dojo/_base/declare",
         "aikauTesting/MockXhr",
         "dojo/text!./responseTemplates/FullDocLib/documents.json",
-        "dojo/text!./responseTemplates/FullDocLib/tree.json"], 
-        function(declare, MockXhr, documents, tree) {
+        "dojo/text!./responseTemplates/FullDocLib/tree.json",
+        "dojo/text!./responseTemplates/FullDocLib/favourites_filter.json"], 
+        function(declare, MockXhr, documents, tree, favourites) {
    
    return declare([MockXhr], {
 
@@ -50,6 +51,12 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      tree]);
+
+            this.server.respondWith("GET",
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/doclist\/all\/site\/site1\/documentlibrary\?filter=favourites(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     favourites]);
 
             // aikau/proxy/alfresco/slingshot/doclib/treenode/site/site1/documentlibrary/?perms=false&children=false&max=-1
             // http://localhost:8081/share/proxy/alfresco/slingshot/doclib/treenode/site/site1/documentLibrary?perms=false&children=true&max=-1

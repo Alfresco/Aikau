@@ -78,7 +78,7 @@
       min-width: 360px;
       max-width: 500px;
       background-color: @list-background-color;
-      border: @standard-button-border;
+      border: @standard-form-border;
       box-shadow: 0.33px 0px 8px rgba(0, 0, 0, 0.3);
       color: @general-font-color;
       margin-top: 3px;

@@ -1,0 +1,2225 @@
+{
+   "totalRecords": 8,
+   "startIndex": 0,
+   "metadata": {
+      "repositoryId": "e9723b04-9b22-4d18-a19d-db36fa5d58e8",
+      "container": "workspace:\/\/SpacesStore\/e51ae817-e667-4096-809a-f54005e40c88",
+      "custom": {
+         "vtiServer": null,
+         "aos": {
+            "baseUrl": "http:\/\/dave-Latitude-E6530:8080\/alfresco\/aos"
+         }
+      },
+      "onlineEditing": false,
+      "itemCounts": {
+         "folders": 2,
+         "documents": 6
+      },
+      "workingCopyLabel": " (Working Copy)",
+      "parent": {
+         "permissions": {
+            "user": {},
+            "roles": []
+         }
+      }
+   },
+   "items": [{
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:ownable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized", "cm:generalclassifiable", "fm:discussable", "fm:commentsRollup", "cm:likesRatingSchemeRollups", "cm:rateable"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/8bb36efb-c26d-4d2b-9199-ab6922f53c28",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Jul 28 16:42:18 BST 2015",
+               "iso8601": "2015-07-28T15:42:18.173Z"
+            },
+            "cm:taggable": [{
+               "name": "tag1",
+               "nodeRef": "workspace:\/\/SpacesStore\/6cae9386-cc63-4dc4-93e6-54130d3a96f5"
+            }, {
+               "name": "tag2",
+               "nodeRef": "workspace:\/\/SpacesStore\/60300a18-beeb-42b4-a4e7-647a9a5ace3d"
+            }],
+            "sys:node-uuid": null,
+            "cm:likesRatingSchemeCount": "1",
+            "cm:name": "Agency Documents",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "fm:commentCount": "0",
+            "sys:node-dbid": null,
+            "cm:description": "Some agency related docs",
+            "cm:creator": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "cm:created": {
+               "value": "Tue Feb 15 20:47:03 GMT 2011",
+               "iso8601": "2011-02-15T20:47:03.951Z"
+            },
+            "cm:title": "Some title",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null,
+            "cm:likesRatingSchemeTotal": "1.0"
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/8f2105b4-daaf-4874-9e8a-2152569d109b",
+         "properties": {
+            "cm:modified": {
+               "value": "Fri Jul 10 16:12:09 BST 2015",
+               "iso8601": "2015-07-10T15:12:09.740Z"
+            },
+            "sys:node-uuid": null,
+            "cm:name": "documentLibrary",
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-protocol": null,
+            "cm:tagScopeSummary": ["tag1=2", "tag2=1"],
+            "sys:node-dbid": null,
+            "cm:description": "Document Library",
+            "cm:creator": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "st:componentId": "documentLibrary",
+            "cm:created": {
+               "value": "Tue Feb 15 20:16:28 GMT 2011",
+               "iso8601": "2011-02-15T20:16:28.292Z"
+            },
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:tagScopeCache": "contentUrl=store:\/\/2015\/7\/10\/16\/12\/e58f3605-d311-4c0d-abe2-ba4047092951.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=1518",
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/swsdp\/documentLibrary\/Agency%20Documents",
+      "isFavourite": true,
+      "likes": {
+         "isLiked": true,
+         "totalLikes": 1
+      },
+      "location": {
+         "repositoryId": "e9723b04-9b22-4d18-a19d-db36fa5d58e8",
+         "path": "\/Sites\/swsdp\/documentLibrary",
+         "repoPath": "\/Sites\/swsdp\/documentLibrary",
+         "file": "Agency Documents",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/8bb36efb-c26d-4d2b-9199-ab6922f53c28",
+      "fileName": "Agency Documents",
+      "displayName": "Agency Documents",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "folder-edit-properties",
+         "type": "javascript",
+         "label": "actions.folder.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "110"
+      }, {
+         "id": "document-locate",
+         "icon": "document-locate",
+         "type": "javascript",
+         "label": "actions.folder.locate",
+         "params": {
+            "function": "onActionLocate"
+         },
+         "index": "140"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }, {
+         "id": "document-move-to",
+         "icon": "folder-move-to",
+         "type": "javascript",
+         "label": "actions.folder.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "160"
+      }, {
+         "id": "folder-manage-rules",
+         "icon": "folder-manage-rules",
+         "type": "pagelink",
+         "label": "actions.folder.rules",
+         "params": {
+            "page": "folder-rules?nodeRef={node.nodeRef}"
+         },
+         "index": "170"
+      }, {
+         "id": "document-delete",
+         "icon": "folder-delete",
+         "type": "javascript",
+         "label": "actions.folder.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "180"
+      }, {
+         "id": "document-manage-repo-permissions",
+         "icon": "folder-manage-permissions",
+         "type": "link",
+         "label": "actions.folder.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "200"
+      }, {
+         "id": "document-manage-aspects",
+         "icon": "document-manage-aspects",
+         "type": "javascript",
+         "label": "actions.folder.manage-aspects",
+         "params": {
+            "function": "onActionManageAspects"
+         },
+         "index": "210"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "40",
+            "template": "{categories}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:ownable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/b1a98357-4f7a-470d-bf4c-327501158689",
+         "properties": {
+            "cm:modified": {
+               "value": "Fri Jul 10 16:14:20 BST 2015",
+               "iso8601": "2015-07-10T15:14:20.144Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "This folder holds new logo files for the web site",
+            "cm:creator": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Feb 15 21:05:49 GMT 2011",
+               "iso8601": "2011-02-15T21:05:49.308Z"
+            },
+            "cm:name": "Logo Files",
+            "cm:title": "Project logo files",
+            "sys:store-protocol": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:ownable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized", "cm:generalclassifiable", "fm:discussable", "fm:commentsRollup", "cm:likesRatingSchemeRollups", "cm:rateable"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/8bb36efb-c26d-4d2b-9199-ab6922f53c28",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Jul 28 16:42:18 BST 2015",
+               "iso8601": "2015-07-28T15:42:18.173Z"
+            },
+            "cm:taggable": [{
+               "name": "tag1",
+               "nodeRef": "workspace:\/\/SpacesStore\/6cae9386-cc63-4dc4-93e6-54130d3a96f5"
+            }, {
+               "name": "tag2",
+               "nodeRef": "workspace:\/\/SpacesStore\/60300a18-beeb-42b4-a4e7-647a9a5ace3d"
+            }],
+            "sys:node-uuid": null,
+            "cm:likesRatingSchemeCount": "1",
+            "cm:name": "Agency Documents",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "fm:commentCount": "0",
+            "sys:node-dbid": null,
+            "cm:description": "Some agency related docs",
+            "cm:creator": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "cm:created": {
+               "value": "Tue Feb 15 20:47:03 GMT 2011",
+               "iso8601": "2011-02-15T20:47:03.951Z"
+            },
+            "cm:title": "Some title",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null,
+            "cm:likesRatingSchemeTotal": "1.0"
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/swsdp\/documentLibrary\/Agency%20Documents\/Logo%20Files",
+      "isFavourite": true,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "e9723b04-9b22-4d18-a19d-db36fa5d58e8",
+         "path": "\/Sites\/swsdp\/documentLibrary\/Agency Documents",
+         "repoPath": "\/Sites\/swsdp\/documentLibrary\/Agency Documents",
+         "file": "Logo Files",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/b1a98357-4f7a-470d-bf4c-327501158689",
+      "fileName": "Logo Files",
+      "displayName": "Logo Files",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "folder-edit-properties",
+         "type": "javascript",
+         "label": "actions.folder.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "110"
+      }, {
+         "id": "document-locate",
+         "icon": "document-locate",
+         "type": "javascript",
+         "label": "actions.folder.locate",
+         "params": {
+            "function": "onActionLocate"
+         },
+         "index": "140"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }, {
+         "id": "document-move-to",
+         "icon": "folder-move-to",
+         "type": "javascript",
+         "label": "actions.folder.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "160"
+      }, {
+         "id": "folder-manage-rules",
+         "icon": "folder-manage-rules",
+         "type": "pagelink",
+         "label": "actions.folder.rules",
+         "params": {
+            "page": "folder-rules?nodeRef={node.nodeRef}"
+         },
+         "index": "170"
+      }, {
+         "id": "document-delete",
+         "icon": "folder-delete",
+         "type": "javascript",
+         "label": "actions.folder.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "180"
+      }, {
+         "id": "document-manage-repo-permissions",
+         "icon": "folder-manage-permissions",
+         "type": "link",
+         "label": "actions.folder.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "200"
+      }, {
+         "id": "document-manage-aspects",
+         "icon": "document-manage-aspects",
+         "type": "javascript",
+         "label": "actions.folder.manage-aspects",
+         "params": {
+            "function": "onActionManageAspects"
+         },
+         "index": "210"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["sys:referenceable", "exif:exif", "cm:titled", "sys:localized", "fm:discussable", "cm:likesRatingSchemeRollups", "cm:auditable", "cm:ownable", "rn:renditioned", "cm:author", "cm:taggable", "cm:generalclassifiable", "fm:commentsRollup", "cm:rateable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Fri Jul 10 16:11:48 BST 2015",
+               "iso8601": "2015-07-10T15:11:48.279Z"
+            },
+            "sys:node-uuid": null,
+            "exif:pixelXDimension": "1000",
+            "cm:likesRatingSchemeCount": "1",
+            "exif:exposureTime": "0.008",
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "fm:commentCount": "2",
+            "sys:node-dbid": null,
+            "exif:fNumber": "3.0",
+            "cm:creator": {
+               "lastName": "Beecher",
+               "userName": "abeecher",
+               "displayName": "Alice Beecher",
+               "firstName": "Alice"
+            },
+            "exif:software": "Adobe Photoshop CS5 Macintosh",
+            "exif:model": "HP PhotoSmart C850 (V05.27)",
+            "cm:title": "grass title",
+            "exif:yResolution": "72.0",
+            "exif:isoSpeedRatings": "100",
+            "exif:orientation": "1",
+            "cm:likesRatingSchemeTotal": "1.0",
+            "sys:store-identifier": null,
+            "exif:pixelYDimension": "754",
+            "exif:resolutionUnit": "Inch",
+            "cm:taggable": [{
+               "name": "tag1",
+               "nodeRef": "workspace:\/\/SpacesStore\/6cae9386-cc63-4dc4-93e6-54130d3a96f5"
+            }],
+            "cm:categories": [{
+               "name": "English",
+               "path": "\/Languages",
+               "nodeRef": "workspace:\/\/SpacesStore\/9246a4a9-5e04-4d87-b6a8-12990f4d83c8"
+            }],
+            "cm:content": null,
+            "cm:name": "Grass",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "exif:dateTimeOriginal": {
+               "value": "Tue Dec 30 15:17:00 GMT 2003",
+               "iso8601": "2003-12-30T15:17:00.000Z"
+            },
+            "exif:xResolution": "72.0",
+            "cm:description": "Picture of grass",
+            "exif:manufacturer": "Hewlett-Packard",
+            "cm:created": {
+               "value": "Thu Mar 03 10:34:52 GMT 2011",
+               "iso8601": "2011-03-03T10:34:52.139Z"
+            },
+            "exif:flash": "true",
+            "cm:author": "",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "exif:focalLength": "23.42"
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 145863,
+         "mimetypeDisplayName": "JPEG Image",
+         "mimetype": "image\/jpeg",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/80a94ac8-3ece-47ad-864e-5d939424c47c",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/80a94ac8-3ece-47ad-864e-5d939424c47c\/Grass"
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:ownable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/880a0f47-31b1-4101-b20b-4d325e54e8b1",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jul 09 11:23:33 BST 2015",
+               "iso8601": "2015-07-09T10:23:33.561Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "This folder holds new web site images",
+            "cm:creator": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Feb 15 21:04:41 GMT 2011",
+               "iso8601": "2011-02-15T21:04:41.894Z"
+            },
+            "cm:name": "Images",
+            "cm:title": "Project images",
+            "sys:store-protocol": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/swsdp\/documentLibrary\/Agency%20Documents\/Images\/Grass",
+      "isFavourite": true,
+      "likes": {
+         "isLiked": true,
+         "totalLikes": 1
+      },
+      "location": {
+         "repositoryId": "e9723b04-9b22-4d18-a19d-db36fa5d58e8",
+         "path": "\/Sites\/swsdp\/documentLibrary\/Agency Documents\/Images",
+         "repoPath": "\/Sites\/swsdp\/documentLibrary\/Agency Documents\/Images",
+         "file": "Grass",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/80a94ac8-3ece-47ad-864e-5d939424c47c",
+      "fileName": "Grass",
+      "displayName": "Grass",
+      "actionGroupId": "document-browse",
+      "actions": [{
+         "id": "document-download",
+         "icon": "document-download",
+         "type": "link",
+         "label": "actions.document.download",
+         "params": {
+            "href": "{downloadUrl}",
+            "target": "_blank"
+         },
+         "index": "100"
+      }, {
+         "id": "document-view-content",
+         "icon": "document-view-content",
+         "type": "link",
+         "label": "actions.document.view",
+         "params": {
+            "href": "{viewUrl}"
+         },
+         "index": "110"
+      }, {
+         "id": "document-locate",
+         "icon": "document-locate",
+         "type": "javascript",
+         "label": "actions.document.locate",
+         "params": {
+            "function": "onActionLocate"
+         },
+         "index": "120"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "document-edit-properties",
+         "type": "javascript",
+         "label": "actions.document.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "130"
+      }, {
+         "id": "document-upload-new-version",
+         "icon": "document-upload-new-version",
+         "type": "javascript",
+         "label": "actions.document.upload-new-version",
+         "params": {
+            "function": "onActionUploadNewVersion"
+         },
+         "index": "140"
+      }, {
+         "id": "document-edit-offline",
+         "icon": "document-edit-offline",
+         "type": "javascript",
+         "label": "actions.document.edit-offline",
+         "params": {
+            "function": "onActionEditOffline"
+         },
+         "index": "210"
+      }, {
+         "id": "document-copy-to",
+         "icon": "document-copy-to",
+         "type": "javascript",
+         "label": "actions.document.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "250"
+      }, {
+         "id": "document-move-to",
+         "icon": "document-move-to",
+         "type": "javascript",
+         "label": "actions.document.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "260"
+      }, {
+         "id": "document-delete",
+         "icon": "document-delete",
+         "type": "javascript",
+         "label": "actions.document.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "270"
+      }, {
+         "id": "document-assign-workflow",
+         "icon": "document-assign-workflow",
+         "type": "javascript",
+         "label": "actions.document.assign-workflow",
+         "params": {
+            "function": "onActionAssignWorkflow"
+         },
+         "index": "280"
+      }, {
+         "id": "document-manage-repo-permissions",
+         "icon": "document-manage-permissions",
+         "type": "link",
+         "label": "actions.document.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "298"
+      }],
+      "indicators": [{
+         "id": "exif",
+         "index": "40",
+         "icon": "exif-16.png",
+         "label": "status.exif"
+      }],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "40",
+            "template": "{categories}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:thumbnailModification", "cm:ownable", "sys:referenceable", "exif:exif", "cm:titled", "rn:renditioned", "cm:author", "sys:localized", "cm:generalclassifiable", "cm:likesRatingSchemeRollups", "cm:rateable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jul 09 11:43:31 BST 2015",
+               "iso8601": "2015-07-09T10:43:31.168Z"
+            },
+            "exif:pixelYDimension": "217",
+            "cm:content": null,
+            "sys:node-uuid": null,
+            "cm:likesRatingSchemeCount": "1",
+            "exif:pixelXDimension": "793",
+            "cm:name": "header.png",
+            "cm:lastThumbnailModification": ["imgpreview:1434981501924"],
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:node-dbid": null,
+            "cm:creator": {
+               "lastName": "Beecher",
+               "userName": "abeecher",
+               "displayName": "Alice Beecher",
+               "firstName": "Alice"
+            },
+            "cm:created": {
+               "value": "Thu Mar 03 10:34:53 GMT 2011",
+               "iso8601": "2011-03-03T10:34:53.551Z"
+            },
+            "cm:title": "header.png",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null,
+            "cm:likesRatingSchemeTotal": "1.0"
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 146544,
+         "mimetypeDisplayName": "PNG Image",
+         "mimetype": "image\/png",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/052539b7-872d-46cc-a7f1-1e0757ed4a5b",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/052539b7-872d-46cc-a7f1-1e0757ed4a5b\/header.png"
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:ownable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/880a0f47-31b1-4101-b20b-4d325e54e8b1",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jul 09 11:23:33 BST 2015",
+               "iso8601": "2015-07-09T10:23:33.561Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "This folder holds new web site images",
+            "cm:creator": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Feb 15 21:04:41 GMT 2011",
+               "iso8601": "2011-02-15T21:04:41.894Z"
+            },
+            "cm:name": "Images",
+            "cm:title": "Project images",
+            "sys:store-protocol": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/swsdp\/documentLibrary\/Agency%20Documents\/Images\/header.png",
+      "isFavourite": true,
+      "likes": {
+         "isLiked": true,
+         "totalLikes": 1
+      },
+      "location": {
+         "repositoryId": "e9723b04-9b22-4d18-a19d-db36fa5d58e8",
+         "path": "\/Sites\/swsdp\/documentLibrary\/Agency Documents\/Images",
+         "repoPath": "\/Sites\/swsdp\/documentLibrary\/Agency Documents\/Images",
+         "file": "header.png",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/052539b7-872d-46cc-a7f1-1e0757ed4a5b",
+      "fileName": "header.png",
+      "displayName": "header.png",
+      "actionGroupId": "document-browse",
+      "actions": [{
+         "id": "document-download",
+         "icon": "document-download",
+         "type": "link",
+         "label": "actions.document.download",
+         "params": {
+            "href": "{downloadUrl}",
+            "target": "_blank"
+         },
+         "index": "100"
+      }, {
+         "id": "document-view-content",
+         "icon": "document-view-content",
+         "type": "link",
+         "label": "actions.document.view",
+         "params": {
+            "href": "{viewUrl}"
+         },
+         "index": "110"
+      }, {
+         "id": "document-locate",
+         "icon": "document-locate",
+         "type": "javascript",
+         "label": "actions.document.locate",
+         "params": {
+            "function": "onActionLocate"
+         },
+         "index": "120"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "document-edit-properties",
+         "type": "javascript",
+         "label": "actions.document.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "130"
+      }, {
+         "id": "document-upload-new-version",
+         "icon": "document-upload-new-version",
+         "type": "javascript",
+         "label": "actions.document.upload-new-version",
+         "params": {
+            "function": "onActionUploadNewVersion"
+         },
+         "index": "140"
+      }, {
+         "id": "document-edit-offline",
+         "icon": "document-edit-offline",
+         "type": "javascript",
+         "label": "actions.document.edit-offline",
+         "params": {
+            "function": "onActionEditOffline"
+         },
+         "index": "210"
+      }, {
+         "id": "document-copy-to",
+         "icon": "document-copy-to",
+         "type": "javascript",
+         "label": "actions.document.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "250"
+      }, {
+         "id": "document-move-to",
+         "icon": "document-move-to",
+         "type": "javascript",
+         "label": "actions.document.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "260"
+      }, {
+         "id": "document-delete",
+         "icon": "document-delete",
+         "type": "javascript",
+         "label": "actions.document.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "270"
+      }, {
+         "id": "document-assign-workflow",
+         "icon": "document-assign-workflow",
+         "type": "javascript",
+         "label": "actions.document.assign-workflow",
+         "params": {
+            "function": "onActionAssignWorkflow"
+         },
+         "index": "280"
+      }, {
+         "id": "document-manage-repo-permissions",
+         "icon": "document-manage-permissions",
+         "type": "link",
+         "label": "actions.document.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "298"
+      }],
+      "indicators": [{
+         "id": "exif",
+         "index": "40",
+         "icon": "exif-16.png",
+         "label": "status.exif"
+      }],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "40",
+            "template": "{categories}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:thumbnailModification", "cm:ownable", "sys:referenceable", "exif:exif", "cm:titled", "rn:renditioned", "cm:author", "sys:localized", "cm:versionable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jul 09 11:23:33 BST 2015",
+               "iso8601": "2015-07-09T10:23:33.404Z"
+            },
+            "sys:node-uuid": null,
+            "exif:pixelXDimension": "2448",
+            "exif:exposureTime": "0.003484320557491289",
+            "cm:lastThumbnailModification": ["doclib:1436437414565", "imgpreview:1436437416089"],
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:node-dbid": null,
+            "exif:fNumber": "2.4",
+            "cm:creator": {
+               "lastName": "Beecher",
+               "userName": "abeecher",
+               "displayName": "Alice Beecher",
+               "firstName": "Alice"
+            },
+            "exif:software": "8.3",
+            "exif:model": "iPhone 5",
+            "cm:title": "money.JPG",
+            "exif:yResolution": "72.0",
+            "exif:isoSpeedRatings": "50",
+            "exif:orientation": "1",
+            "sys:store-identifier": null,
+            "exif:pixelYDimension": "3264",
+            "exif:resolutionUnit": "Inch",
+            "cm:content": null,
+            "cm:name": "money.JPG",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "exif:dateTimeOriginal": {
+               "value": "Sat Jul 04 18:11:38 BST 2015",
+               "iso8601": "2015-07-04T17:11:38.000Z"
+            },
+            "exif:xResolution": "72.0",
+            "cm:autoVersion": "true",
+            "cm:initialVersion": "true",
+            "exif:manufacturer": "Apple",
+            "cm:created": {
+               "value": "Thu Mar 03 10:34:52 GMT 2011",
+               "iso8601": "2011-03-03T10:34:52.620Z"
+            },
+            "exif:flash": "false",
+            "cm:versionLabel": "1.1",
+            "cm:autoVersionOnUpdateProps": "false",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "exif:focalLength": "4.12"
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 1277560,
+         "mimetypeDisplayName": "JPEG Image",
+         "mimetype": "image\/jpeg",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/267839b2-f466-42c5-9a35-cb3e41281bb9",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/267839b2-f466-42c5-9a35-cb3e41281bb9\/money.JPG"
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:ownable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/880a0f47-31b1-4101-b20b-4d325e54e8b1",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jul 09 11:23:33 BST 2015",
+               "iso8601": "2015-07-09T10:23:33.561Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "This folder holds new web site images",
+            "cm:creator": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Feb 15 21:04:41 GMT 2011",
+               "iso8601": "2011-02-15T21:04:41.894Z"
+            },
+            "cm:name": "Images",
+            "cm:title": "Project images",
+            "sys:store-protocol": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.1",
+      "webdavUrl": "\/webdav\/Sites\/swsdp\/documentLibrary\/Agency%20Documents\/Images\/money.JPG",
+      "isFavourite": true,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "e9723b04-9b22-4d18-a19d-db36fa5d58e8",
+         "path": "\/Sites\/swsdp\/documentLibrary\/Agency Documents\/Images",
+         "repoPath": "\/Sites\/swsdp\/documentLibrary\/Agency Documents\/Images",
+         "file": "money.JPG",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/267839b2-f466-42c5-9a35-cb3e41281bb9",
+      "fileName": "money.JPG",
+      "displayName": "money.JPG",
+      "actionGroupId": "document-browse",
+      "actions": [{
+         "id": "document-download",
+         "icon": "document-download",
+         "type": "link",
+         "label": "actions.document.download",
+         "params": {
+            "href": "{downloadUrl}",
+            "target": "_blank"
+         },
+         "index": "100"
+      }, {
+         "id": "document-view-content",
+         "icon": "document-view-content",
+         "type": "link",
+         "label": "actions.document.view",
+         "params": {
+            "href": "{viewUrl}"
+         },
+         "index": "110"
+      }, {
+         "id": "document-locate",
+         "icon": "document-locate",
+         "type": "javascript",
+         "label": "actions.document.locate",
+         "params": {
+            "function": "onActionLocate"
+         },
+         "index": "120"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "document-edit-properties",
+         "type": "javascript",
+         "label": "actions.document.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "130"
+      }, {
+         "id": "document-upload-new-version",
+         "icon": "document-upload-new-version",
+         "type": "javascript",
+         "label": "actions.document.upload-new-version",
+         "params": {
+            "function": "onActionUploadNewVersion"
+         },
+         "index": "140"
+      }, {
+         "id": "document-edit-offline",
+         "icon": "document-edit-offline",
+         "type": "javascript",
+         "label": "actions.document.edit-offline",
+         "params": {
+            "function": "onActionEditOffline"
+         },
+         "index": "210"
+      }, {
+         "id": "document-copy-to",
+         "icon": "document-copy-to",
+         "type": "javascript",
+         "label": "actions.document.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "250"
+      }, {
+         "id": "document-move-to",
+         "icon": "document-move-to",
+         "type": "javascript",
+         "label": "actions.document.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "260"
+      }, {
+         "id": "document-delete",
+         "icon": "document-delete",
+         "type": "javascript",
+         "label": "actions.document.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "270"
+      }, {
+         "id": "document-assign-workflow",
+         "icon": "document-assign-workflow",
+         "type": "javascript",
+         "label": "actions.document.assign-workflow",
+         "params": {
+            "function": "onActionAssignWorkflow"
+         },
+         "index": "280"
+      }, {
+         "id": "document-manage-repo-permissions",
+         "icon": "document-manage-permissions",
+         "type": "link",
+         "label": "actions.document.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "298"
+      }],
+      "indicators": [{
+         "id": "exif",
+         "index": "40",
+         "icon": "exif-16.png",
+         "label": "status.exif"
+      }],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["sys:referenceable", "cm:titled", "sys:localized", "fm:discussable", "cm:likesRatingSchemeRollups", "cm:auditable", "cm:thumbnailModification", "cm:ownable", "qshare:shared", "rn:renditioned", "cm:author", "cm:generalclassifiable", "fm:commentsRollup", "cm:rateable", "cm:versionable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jul 09 08:52:57 BST 2015",
+               "iso8601": "2015-07-09T07:52:57.054Z"
+            },
+            "cm:content": null,
+            "qshare:sharedBy": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:node-uuid": null,
+            "cm:likesRatingSchemeCount": "0",
+            "qshare:sharedId": "v8pxRNzvQuyCFbFVtZArjg",
+            "cm:name": "Project Contract.pdf",
+            "cm:lastThumbnailModification": ["imgpreview:1434981504075"],
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:autoVersion": "true",
+            "fm:commentCount": "1",
+            "sys:node-dbid": null,
+            "cm:initialVersion": "true",
+            "cm:description": "Contract for the Green Energy project",
+            "cm:creator": {
+               "lastName": "Beecher",
+               "userName": "abeecher",
+               "displayName": "Alice Beecher",
+               "firstName": "Alice"
+            },
+            "cm:created": {
+               "value": "Tue Feb 15 21:26:54 GMT 2011",
+               "iso8601": "2011-02-15T21:26:54.600Z"
+            },
+            "cm:versionLabel": "1.1",
+            "cm:title": "Project Contract for Green Enery",
+            "cm:author": "Alice Beecher",
+            "cm:autoVersionOnUpdateProps": "false",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null,
+            "cm:likesRatingSchemeTotal": "0.0"
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 381778,
+         "mimetypeDisplayName": "Adobe PDF Document",
+         "mimetype": "application\/pdf",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\/Project%20Contract.pdf"
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:ownable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/e0856836-ed5e-4eee-b8e5-bd7e8fb9384c",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 15 21:01:29 GMT 2011",
+               "iso8601": "2011-02-15T21:01:29.482Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "This folder holds the agency contracts",
+            "cm:creator": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Feb 15 21:01:29 GMT 2011",
+               "iso8601": "2011-02-15T21:01:29.482Z"
+            },
+            "cm:name": "Contracts",
+            "cm:title": "Project contracts",
+            "sys:store-protocol": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.1",
+      "webdavUrl": "\/webdav\/Sites\/swsdp\/documentLibrary\/Agency%20Documents\/Contracts\/Project%20Contract.pdf",
+      "isFavourite": true,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "e9723b04-9b22-4d18-a19d-db36fa5d58e8",
+         "path": "\/Sites\/swsdp\/documentLibrary\/Agency Documents\/Contracts",
+         "repoPath": "\/Sites\/swsdp\/documentLibrary\/Agency Documents\/Contracts",
+         "file": "Project Contract.pdf",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+      "fileName": "Project Contract.pdf",
+      "displayName": "Project Contract.pdf",
+      "actionGroupId": "document-browse",
+      "actions": [{
+         "id": "document-download",
+         "icon": "document-download",
+         "type": "link",
+         "label": "actions.document.download",
+         "params": {
+            "href": "{downloadUrl}",
+            "target": "_blank"
+         },
+         "index": "100"
+      }, {
+         "id": "document-view-content",
+         "icon": "document-view-content",
+         "type": "link",
+         "label": "actions.document.view",
+         "params": {
+            "href": "{viewUrl}"
+         },
+         "index": "110"
+      }, {
+         "id": "document-locate",
+         "icon": "document-locate",
+         "type": "javascript",
+         "label": "actions.document.locate",
+         "params": {
+            "function": "onActionLocate"
+         },
+         "index": "120"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "document-edit-properties",
+         "type": "javascript",
+         "label": "actions.document.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "130"
+      }, {
+         "id": "document-upload-new-version",
+         "icon": "document-upload-new-version",
+         "type": "javascript",
+         "label": "actions.document.upload-new-version",
+         "params": {
+            "function": "onActionUploadNewVersion"
+         },
+         "index": "140"
+      }, {
+         "id": "document-edit-offline",
+         "icon": "document-edit-offline",
+         "type": "javascript",
+         "label": "actions.document.edit-offline",
+         "params": {
+            "function": "onActionEditOffline"
+         },
+         "index": "210"
+      }, {
+         "id": "document-copy-to",
+         "icon": "document-copy-to",
+         "type": "javascript",
+         "label": "actions.document.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "250"
+      }, {
+         "id": "document-move-to",
+         "icon": "document-move-to",
+         "type": "javascript",
+         "label": "actions.document.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "260"
+      }, {
+         "id": "document-delete",
+         "icon": "document-delete",
+         "type": "javascript",
+         "label": "actions.document.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "270"
+      }, {
+         "id": "document-assign-workflow",
+         "icon": "document-assign-workflow",
+         "type": "javascript",
+         "label": "actions.document.assign-workflow",
+         "params": {
+            "function": "onActionAssignWorkflow"
+         },
+         "index": "280"
+      }, {
+         "id": "document-manage-repo-permissions",
+         "icon": "document-manage-permissions",
+         "type": "link",
+         "label": "actions.document.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "298"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "40",
+            "template": "{categories}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:thumbnailModification", "sys:referenceable", "cm:titled", "rn:renditioned", "cm:author", "sys:localized", "cm:versionable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jul 09 11:31:49 BST 2015",
+               "iso8601": "2015-07-09T10:31:49.931Z"
+            },
+            "cm:content": null,
+            "sys:node-uuid": null,
+            "cm:name": "Tasks for share customization notes.txt",
+            "cm:lastThumbnailModification": ["pdf:1436437910050", "doclib:1436437911666", "imgpreview:1438338080759"],
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:autoVersion": "true",
+            "sys:node-dbid": null,
+            "cm:initialVersion": "true",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:created": {
+               "value": "Mon Jun 29 15:15:57 BST 2015",
+               "iso8601": "2015-06-29T14:15:57.749Z"
+            },
+            "cm:versionLabel": "1.1",
+            "cm:autoVersionOnUpdateProps": "false",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 32994,
+         "mimetypeDisplayName": "Plain Text",
+         "mimetype": "text\/plain",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/790e4f7e-2272-433c-8ac9-59e3cdecbf70",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/790e4f7e-2272-433c-8ac9-59e3cdecbf70\/Tasks%20for%20share%20customization%20notes.txt"
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;DIRECT", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site1_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_site1_SiteManager;SiteManager;DIRECT", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;DIRECT", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;DIRECT", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/45db1b60-8b04-45d3-944a-559e8bef66ab",
+         "properties": {
+            "cm:modified": {
+               "value": "Fri Jul 31 18:29:14 BST 2015",
+               "iso8601": "2015-07-31T17:29:14.551Z"
+            },
+            "sys:node-uuid": null,
+            "cm:name": "documentLibrary",
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-protocol": null,
+            "cm:tagScopeSummary": ["tag1=1", "tag2=1"],
+            "sys:node-dbid": null,
+            "cm:description": "Document Library",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "st:componentId": "documentLibrary",
+            "cm:created": {
+               "value": "Mon Jun 15 09:18:34 BST 2015",
+               "iso8601": "2015-06-15T08:18:34.839Z"
+            },
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:tagScopeCache": "contentUrl=store:\/\/2015\/7\/8\/16\/22\/8654114c-99f0-4bdb-bac8-f76bca1e4d39.bin|mimetype=text\/plain|size=13|encoding=UTF-8|locale=en_GB_|id=1285",
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.1",
+      "webdavUrl": "\/webdav\/Sites\/site1\/documentLibrary\/Tasks%20for%20share%20customization%20notes.txt",
+      "isFavourite": true,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "e9723b04-9b22-4d18-a19d-db36fa5d58e8",
+         "path": "\/Sites\/site1\/documentLibrary",
+         "repoPath": "\/Sites\/site1\/documentLibrary",
+         "file": "Tasks for share customization notes.txt",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/790e4f7e-2272-433c-8ac9-59e3cdecbf70",
+      "fileName": "Tasks for share customization notes.txt",
+      "displayName": "Tasks for share customization notes.txt",
+      "actionGroupId": "document-browse",
+      "actions": [{
+         "id": "document-download",
+         "icon": "document-download",
+         "type": "link",
+         "label": "actions.document.download",
+         "params": {
+            "href": "{downloadUrl}",
+            "target": "_blank"
+         },
+         "index": "100"
+      }, {
+         "id": "document-view-content",
+         "icon": "document-view-content",
+         "type": "link",
+         "label": "actions.document.view",
+         "params": {
+            "href": "{viewUrl}"
+         },
+         "index": "110"
+      }, {
+         "id": "document-locate",
+         "icon": "document-locate",
+         "type": "javascript",
+         "label": "actions.document.locate",
+         "params": {
+            "function": "onActionLocate"
+         },
+         "index": "120"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "document-edit-properties",
+         "type": "javascript",
+         "label": "actions.document.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "130"
+      }, {
+         "id": "document-upload-new-version",
+         "icon": "document-upload-new-version",
+         "type": "javascript",
+         "label": "actions.document.upload-new-version",
+         "params": {
+            "function": "onActionUploadNewVersion"
+         },
+         "index": "140"
+      }, {
+         "id": "document-inline-edit",
+         "icon": "document-inline-edit",
+         "type": "pagelink",
+         "label": "actions.document.inline-edit",
+         "params": {
+            "page": "inline-edit?nodeRef={node.nodeRef}"
+         },
+         "index": "190"
+      }, {
+         "id": "document-edit-offline",
+         "icon": "document-edit-offline",
+         "type": "javascript",
+         "label": "actions.document.edit-offline",
+         "params": {
+            "function": "onActionEditOffline"
+         },
+         "index": "210"
+      }, {
+         "id": "document-copy-to",
+         "icon": "document-copy-to",
+         "type": "javascript",
+         "label": "actions.document.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "250"
+      }, {
+         "id": "document-move-to",
+         "icon": "document-move-to",
+         "type": "javascript",
+         "label": "actions.document.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "260"
+      }, {
+         "id": "document-delete",
+         "icon": "document-delete",
+         "type": "javascript",
+         "label": "actions.document.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "270"
+      }, {
+         "id": "document-assign-workflow",
+         "icon": "document-assign-workflow",
+         "type": "javascript",
+         "label": "actions.document.assign-workflow",
+         "params": {
+            "function": "onActionAssignWorkflow"
+         },
+         "index": "280"
+      }, {
+         "id": "document-manage-repo-permissions",
+         "icon": "document-manage-permissions",
+         "type": "link",
+         "label": "actions.document.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "298"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "sys:localized", "cm:versionable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Wed Jul 08 17:44:45 BST 2015",
+               "iso8601": "2015-07-08T16:44:45.382Z"
+            },
+            "cm:content": null,
+            "sys:node-uuid": null,
+            "cm:name": "Updated name",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:autoVersion": "true",
+            "sys:node-dbid": null,
+            "cm:initialVersion": "true",
+            "cm:description": "Some description",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:created": {
+               "value": "Wed Jul 08 17:26:52 BST 2015",
+               "iso8601": "2015-07-08T16:26:52.664Z"
+            },
+            "cm:versionLabel": "1.1",
+            "cm:title": "a title",
+            "cm:autoVersionOnUpdateProps": "false",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 206,
+         "mimetypeDisplayName": "JSON",
+         "mimetype": "application\/json",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/728d51d6-6561-45a1-b875-85006440b31f",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/728d51d6-6561-45a1-b875-85006440b31f\/Updated%20name"
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:ownable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized", "cm:generalclassifiable", "fm:discussable", "fm:commentsRollup", "cm:likesRatingSchemeRollups", "cm:rateable"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_swsdp_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_swsdp_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/8bb36efb-c26d-4d2b-9199-ab6922f53c28",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Jul 28 16:42:18 BST 2015",
+               "iso8601": "2015-07-28T15:42:18.173Z"
+            },
+            "cm:taggable": [{
+               "name": "tag1",
+               "nodeRef": "workspace:\/\/SpacesStore\/6cae9386-cc63-4dc4-93e6-54130d3a96f5"
+            }, {
+               "name": "tag2",
+               "nodeRef": "workspace:\/\/SpacesStore\/60300a18-beeb-42b4-a4e7-647a9a5ace3d"
+            }],
+            "sys:node-uuid": null,
+            "cm:likesRatingSchemeCount": "1",
+            "cm:name": "Agency Documents",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "fm:commentCount": "0",
+            "sys:node-dbid": null,
+            "cm:description": "Some agency related docs",
+            "cm:creator": {
+               "lastName": "Jackson",
+               "userName": "mjackson",
+               "displayName": "Mike Jackson",
+               "firstName": "Mike"
+            },
+            "cm:created": {
+               "value": "Tue Feb 15 20:47:03 GMT 2011",
+               "iso8601": "2011-02-15T20:47:03.951Z"
+            },
+            "cm:title": "Some title",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null,
+            "cm:likesRatingSchemeTotal": "1.0"
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.1",
+      "webdavUrl": "\/webdav\/Sites\/swsdp\/documentLibrary\/Agency%20Documents\/Updated%20name",
+      "isFavourite": true,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "e9723b04-9b22-4d18-a19d-db36fa5d58e8",
+         "path": "\/Sites\/swsdp\/documentLibrary\/Agency Documents",
+         "repoPath": "\/Sites\/swsdp\/documentLibrary\/Agency Documents",
+         "file": "Updated name",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/728d51d6-6561-45a1-b875-85006440b31f",
+      "fileName": "Updated name",
+      "displayName": "Updated name",
+      "actionGroupId": "document-browse",
+      "actions": [{
+         "id": "document-download",
+         "icon": "document-download",
+         "type": "link",
+         "label": "actions.document.download",
+         "params": {
+            "href": "{downloadUrl}",
+            "target": "_blank"
+         },
+         "index": "100"
+      }, {
+         "id": "document-view-content",
+         "icon": "document-view-content",
+         "type": "link",
+         "label": "actions.document.view",
+         "params": {
+            "href": "{viewUrl}"
+         },
+         "index": "110"
+      }, {
+         "id": "document-locate",
+         "icon": "document-locate",
+         "type": "javascript",
+         "label": "actions.document.locate",
+         "params": {
+            "function": "onActionLocate"
+         },
+         "index": "120"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "document-edit-properties",
+         "type": "javascript",
+         "label": "actions.document.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "130"
+      }, {
+         "id": "document-upload-new-version",
+         "icon": "document-upload-new-version",
+         "type": "javascript",
+         "label": "actions.document.upload-new-version",
+         "params": {
+            "function": "onActionUploadNewVersion"
+         },
+         "index": "140"
+      }, {
+         "id": "document-edit-offline",
+         "icon": "document-edit-offline",
+         "type": "javascript",
+         "label": "actions.document.edit-offline",
+         "params": {
+            "function": "onActionEditOffline"
+         },
+         "index": "210"
+      }, {
+         "id": "document-copy-to",
+         "icon": "document-copy-to",
+         "type": "javascript",
+         "label": "actions.document.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "250"
+      }, {
+         "id": "document-move-to",
+         "icon": "document-move-to",
+         "type": "javascript",
+         "label": "actions.document.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "260"
+      }, {
+         "id": "document-delete",
+         "icon": "document-delete",
+         "type": "javascript",
+         "label": "actions.document.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "270"
+      }, {
+         "id": "document-assign-workflow",
+         "icon": "document-assign-workflow",
+         "type": "javascript",
+         "label": "actions.document.assign-workflow",
+         "params": {
+            "function": "onActionAssignWorkflow"
+         },
+         "index": "280"
+      }, {
+         "id": "document-manage-repo-permissions",
+         "icon": "document-manage-permissions",
+         "type": "link",
+         "label": "actions.document.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "298"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }]
+}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,22 +18,20 @@
  */
 
 /**
- * This should be used to wrap a set of [AlfDocumentFilters]{@link module:alfresco/documentlibrary/AlfDocumentFilter} 
- * in order to achieve the "twisty" and correct look and feel as expected in a document library.
- * 
  * @module alfresco/search/FacetFilters
  * @extends alfresco/documentlibrary/AlfDocumentFilters
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/documentlibrary/AlfDocumentFilters",
+        "alfresco/core/topics",
         "alfresco/search/FacetFilter",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-class",
         "dojo/on",
         "dijit/registry"], 
-        function(declare, AlfDocumentFilters, FacetFilter, lang, array, domClass, on, registry) {
+        function(declare, AlfDocumentFilters, topics, FacetFilter, lang, array, domClass, on, registry) {
 
    return declare([AlfDocumentFilters], {
       
@@ -110,9 +108,11 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_search_FacetFilters__postCreate() {
          this.inherited(arguments);
 
-         // TODO: Commented out and published because it's being developed against QuaddsWidgets...
-         this.alfSubscribe("ALF_WIDGETS_READY", lang.hitch(this, "publishFacets"), true);
-         // this.publishFacets();
+         // PLEASE NOTE: It's possible that this subscription is no longer required, since publications
+         //              are blocked until page loading completes anyway. However, this code has been
+         //              left as is until such time that we can be sure we want to just call
+         //              publishFacets as soon as the widget is created (see AKU-477)
+         this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.publishFacets), true);
       },
 
       /**
@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       publishFacets: function alfresco_search_FacetFilters__publishFacets() {
-         if (this.facetQName != null && this.facetQName !== "")
+         if (this.facetQName)
          {
             // Publish the details of the facet for the SearchService to log for inclusion in search requests
             this.alfPublish("ALF_INCLUDE_FACET", {
@@ -141,7 +141,7 @@ define(["dojo/_base/declare",
             }, true);
 
             // Subscribe to facet property results to add facet properties...
-            this.alfSubscribe("ALF_FACET_RESULTS_" + this.facetQName, lang.hitch(this, "processFacetFilters"));
+            this.alfSubscribe("ALF_FACET_RESULTS_" + this.facetQName, lang.hitch(this, this.processFacetFilters));
          }
          else
          {
@@ -166,13 +166,13 @@ define(["dojo/_base/declare",
 
          // Remove all previous filters...
          var widgets = registry.findWidgets(this.contentNode);
-         array.forEach(widgets, function(widget, i) {
+         array.forEach(widgets, function(widget) {
             widget.destroy();
          });
 
          // Put all the active filters into a list...
          var activeFilters = [];
-         if (payload.activeFilters != null)
+         if (payload.activeFilters)
          {
             activeFilters = payload.activeFilters.split(",");
          }
@@ -181,14 +181,16 @@ define(["dojo/_base/declare",
          var filters = [];
          for (var key in payload.facetResults)
          {
-            var currFilter = payload.facetResults[key];
-            filters.push({
-               label: currFilter.label,
-               value: currFilter.value,
-               hits: currFilter.hits,
-               index: currFilter.index
-            });
-            
+            if (payload.facetResults.hasOwnProperty(key))
+            {
+               var currFilter = payload.facetResults[key];
+               filters.push({
+                  label: currFilter.label,
+                  value: currFilter.value,
+                  hits: currFilter.hits,
+                  index: currFilter.index
+               });
+            }
          }
 
          // Sort the filters...
@@ -199,17 +201,16 @@ define(["dojo/_base/declare",
          var filtersToAdd = this.maxFilters;
 
          // Create widgets for each filter...
-         array.forEach(filters, function(filter, index) {
-
-            if (this.minFilterValueLength != null && filter.value.length < this.minFilterValueLength)
+         array.forEach(filters, function(filter) {
+            if (this.minFilterValueLength && filter.value.length < this.minFilterValueLength)
             {
                // Don't add filters that have a value shorter than the minimum specified length
             }
-            else if (this.hitThreshold == null || this.hitThreshold <= filter.hits)
+            else if (!this.hitThreshold || this.hitThreshold <= filter.hits)
             {
                // Check to see if this is an active filter...
-               var applied = array.some(activeFilters, function(activeFilter, index) {
-                  return activeFilter == this.facetQName.replace(/\.__.u/g, "").replace(/\.__/g, "") + "|" + filter.value;
+               var applied = array.some(activeFilters, function(activeFilter) {
+                  return activeFilter === this.facetQName.replace(/\.__.u/g, "").replace(/\.__/g, "") + "|" + filter.value;
                }, this);
 
                // Keeping adding (visible) filters until we've hit the maximum number...
@@ -223,7 +224,7 @@ define(["dojo/_base/declare",
                   pubSubScope: this.pubSubScope
                });
 
-               if (filtersToAdd != null && filtersToAdd <= 0 && !applied)
+               if ((filtersToAdd || filtersToAdd === 0) && filtersToAdd <= 0 && !applied)
                {
                   this.addMoreFilter(filterWidget);
                }
@@ -231,12 +232,15 @@ define(["dojo/_base/declare",
                filterWidget.placeAt(this.showMoreNode, "before");
 
                // Decrement the filter count...
-               if (filtersToAdd != null) filtersToAdd--;
+               if (filtersToAdd) 
+               {
+                  filtersToAdd--;
+               }
             }
 
          }, this);
 
-         if (this.moreFiltersList != null)
+         if (this.moreFiltersList)
          {
             domClass.remove(this.showMoreNode, "hidden");
          }
@@ -258,9 +262,9 @@ define(["dojo/_base/declare",
        * @param {object} filter The filter to test
        * @param {number} index The index of the filter
        */
-      filterFacetFilters: function alfresco_search_FacetFilters__filterFacetFilters(filter, index) {
-         return ((this.hitThreshold == null || this.hitThreshold <= filter.hits) &&
-                 (this.minFilterValueLength == null || filter.value.length >= this.minFilterValueLength));
+      filterFacetFilters: function alfresco_search_FacetFilters__filterFacetFilters(filter, /*jshint unused:false*/ index) {
+         return ((!this.hitThreshold || this.hitThreshold <= filter.hits) &&
+                 (!this.minFilterValueLength || filter.value.length >= this.minFilterValueLength));
       },
 
       /**
@@ -271,7 +275,7 @@ define(["dojo/_base/declare",
        * @returns {array} The sorted filters
        */
       sortFacetFilters: function alfresco_search_FacetFilters__sortFacetFilters(filters) {
-         if (this.sortBy == null || lang.trim(this.sortBy) === "ALPHABETICALLY")
+         if (!this.sortBy || lang.trim(this.sortBy) === "ALPHABETICALLY")
          {
             return filters.sort(this._alphaSort);
          }
@@ -306,11 +310,18 @@ define(["dojo/_base/declare",
        * @returns {number} -1, 0 or 1 according to standard array sorting conventions
        */
       _alphaSort: function alfresco_search_FacetFilters___alphaSort(a,b) {
+         var result = 0;
          var alc = a.label.toLowerCase();
          var blc = b.label.toLowerCase();
-         if(alc < blc) return -1;
-         if(alc > blc) return 1;
-         return 0;
+         if(alc < blc)
+         {
+            result = -1;
+         }
+         if(alc > blc)
+         {
+            result = 1;
+         }
+         return result;
       },
 
       /**
@@ -322,11 +333,18 @@ define(["dojo/_base/declare",
        * @returns {number} -1, 0 or 1 according to standard array sorting conventions
        */
       _reverseAlphaSort: function alfresco_search_FacetFilters___reverseAlphaSort(a, b) {
+         var result = 0;
          var alc = a.label.toLowerCase();
          var blc = b.label.toLowerCase();
-         if(alc > blc) return -1;
-         if(alc < blc) return 1;
-         return 0;
+         if(alc > blc)
+         {
+            result = -1;
+         }
+         if(alc < blc)
+         {
+            result = 1;
+         }
+         return result;
       },
 
       /**
@@ -364,7 +382,7 @@ define(["dojo/_base/declare",
        * @returns {number} -1, 0 or 1 according to standard array sorting conventions
        */
       _indexSort: function alfresco_search_FacetFilter___indexSort(a, b) {
-         if (a.index != null && b.index != null)
+         if ((a.index || a.index === 0) && (b.index || b.index === 0))
          {
             return a.index - b.index;
          }

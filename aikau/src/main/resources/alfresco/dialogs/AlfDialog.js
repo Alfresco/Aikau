@@ -44,6 +44,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/ResizeMixin",
+        "alfresco/core/topics",
         "dijit/_FocusMixin",
         "dojo/_base/lang",
         "dojo/sniff",
@@ -57,7 +58,7 @@ define(["dojo/_base/declare",
         "dojo/on",
         "jquery",
         "alfresco/layout/SimplePanel"], 
-        function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin, lang, sniff, array,
+        function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, topics, _FocusMixin, lang, sniff, array,
                  domConstruct, domClass, domStyle, domGeom, html, aspect, on, $) {
    
    return declare([Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin], {
@@ -332,6 +333,9 @@ define(["dojo/_base/declare",
          domClass.remove(this.domNode, "dialogHidden");
          domClass.add(this.domNode, "dialogDisplayed");
          // TODO: We could optionally reveal the dialog after resizing to prevent any resizing jumping?
+         
+         // Publish the widgets ready
+         this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
       },
 
       /**

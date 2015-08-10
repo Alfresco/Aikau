@@ -123,13 +123,8 @@ define(["dojo/_base/declare",
                return !!dataFilter.value;
             });
 
-            // Update the filter fields and reload the data
-            if (this._readyToLoad) {
-               this._updateFilterFieldsFromHash();
-               this.loadData();
-            } else {
-               this.alfLog("info", "Hash change not updating filter as ready-to-load check failed");
-            }
+            // Update the filter fields
+            this._updateFilterFieldsFromHash();
          }
 
          // Call inherited

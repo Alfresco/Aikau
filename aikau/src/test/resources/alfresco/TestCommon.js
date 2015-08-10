@@ -27,11 +27,11 @@
 define(["intern/dojo/node!fs",
         "intern/dojo/node!http",
         "intern/dojo/node!os",
+        "intern",
         "config/Config",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
-        "intern/lib/args",
         "intern/chai!assert"],
-        function(fs, http, os, Config, pollUntil, args, assert) {
+        function(fs, http, os, intern, Config, pollUntil, assert) {
    return {
 
       /**
@@ -58,7 +58,7 @@ define(["intern/dojo/node!fs",
        * @param {object} browser The browser object to work on
        */
       alfPostCoverageResults: function(test, browser) {
-         if(args.doCoverage === "true")
+         if(intern.args.doCoverage === "true")
          {
             var dfd = test.async(90000);
             var js = "var coverageData = {" +
@@ -187,14 +187,14 @@ define(["intern/dojo/node!fs",
             return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
                .click();
          };
-         command.session.getLastPublish = function(topicName, isGlobal) {
+         command.session.getLastPublish = function(topicName, isGlobal, waitPeriod) {
             return this.getLogEntries({
                type: "PUBLISH",
                topic: topicName,
                pos: "last"
-            }, null, isGlobal);
+            }, isGlobal, waitPeriod);
          };
-         command.session.getLogEntries = function(filter, waitPeriod, isGlobal) {
+         command.session.getLogEntries = function(filter, isGlobal, waitPeriod) {
 
             // Normalise arguments
             filter = filter || {};

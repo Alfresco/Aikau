@@ -1,0 +1,335 @@
+{
+   "totalRecords": 10,
+   "totalRecordsUpper": -1,
+   "startIndex": 0,
+   "numberFound": 10,
+   "facets":
+   {
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}created":
+      [
+         {
+         "label": "faceted-search.date.one-month.label",
+         "value": "NOW\/DAY-1MONTH\"..\"NOW\/DAY+1DAY",
+         "hits": 7,
+         "index": 2
+         },
+         {
+         "label": "faceted-search.date.one-week.label",
+         "value": "NOW\/DAY-7DAYS\"..\"NOW\/DAY+1DAY",
+         "hits": 5,
+         "index": 1
+         },
+         {
+         "label": "faceted-search.date.one-year.label",
+         "value": "NOW\/DAY-1YEAR\"..\"NOW\/DAY+1DAY",
+         "hits": 10,
+         "index": 4
+         },
+         {
+         "label": "faceted-search.date.six-months.label",
+         "value": "NOW\/DAY-6MONTHS\"..\"NOW\/DAY+1DAY",
+         "hits": 10,
+         "index": 3
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}creator":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 10,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modified":
+      [
+         {
+         "label": "faceted-search.date.one-month.label",
+         "value": "NOW\/DAY-1MONTH\"..\"NOW\/DAY+1DAY",
+         "hits": 7,
+         "index": 2
+         },
+         {
+         "label": "faceted-search.date.one-year.label",
+         "value": "NOW\/DAY-1YEAR\"..\"NOW\/DAY+1DAY",
+         "hits": 10,
+         "index": 4
+         },
+         {
+         "label": "faceted-search.date.six-months.label",
+         "value": "NOW\/DAY-6MONTHS\"..\"NOW\/DAY+1DAY",
+         "hits": 10,
+         "index": 3
+         },
+         {
+         "label": "faceted-search.date.one-week.label",
+         "value": "NOW\/DAY-7DAYS\"..\"NOW\/DAY+1DAY",
+         "hits": 5,
+         "index": 1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}modifier":
+      [
+         {
+         "label": "Administrator",
+         "value": "admin",
+         "hits": 10,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.mimetype":
+      [
+         {
+         "label": "JavaScript",
+         "value": "application\/x-javascript",
+         "hits": 5,
+         "index": -1
+         },
+         {
+         "label": "Plain Text",
+         "value": "text\/plain",
+         "hits": 4,
+         "index": -1
+         },
+         {
+         "label": "XML",
+         "value": "text\/xml",
+         "hits": 1,
+         "index": -1
+         }
+      ],
+      "@{http:\/\/www.alfresco.org\/model\/content\/1.0}content.size":
+      [
+         {
+         "label": "faceted-search.size.10-100KB.label",
+         "value": "10240\"..\"102400",
+         "hits": 2,
+         "index": 1
+         },
+         {
+         "label": "faceted-search.size.0-10KB.label",
+         "value": "0\"..\"10240",
+         "hits": 7,
+         "index": 0
+         },
+         {
+         "label": "faceted-search.size.1-16MB.label",
+         "value": "1048576\"..\"16777216",
+         "hits": 1,
+         "index": 3
+         }
+      ]
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/9f37ca25-2574-4973-a7c6-ed92081bdc10",
+         "type": "document",
+         "name": "home.get.desc.xml",
+         "displayName": "home.get.desc.xml",
+         "description": "",
+         "modifiedOn": "2015-07-28T17:05:33.728+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 111,
+         "mimetype": "text\/xml",
+         "path": "\/Company Home\/folder1",
+         "lastThumbnailModification":
+         [
+          "doclib:1438099536076"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/9000dea9-89d9-474b-b3c4-293bfa9097a3",
+         "type": "document",
+         "name": "home.get-1.js",
+         "displayName": "home.get-1.js",
+         "description": "",
+         "modifiedOn": "2015-07-29T16:35:53.259+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 11367,
+         "mimetype": "application\/x-javascript",
+         "path": "\/Company Home\/Shared\/folder1",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/6e7d9cab-e6c1-4dfe-9362-a635a6a5af22",
+         "type": "document",
+         "name": "home.get-2.js",
+         "displayName": "home.get-2.js",
+         "description": "",
+         "modifiedOn": "2015-07-29T16:40:26.332+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 11367,
+         "mimetype": "application\/x-javascript",
+         "path": "\/Company Home\/Shared\/folder1",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/21b70b47-b235-4687-b78d-89c64e8daf09",
+         "type": "document",
+         "name": "UseCase1.get.js",
+         "displayName": "UseCase1.get.js",
+         "description": "",
+         "modifiedOn": "2015-06-29T10:20:51.372+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 4477,
+         "mimetype": "application\/x-javascript",
+         "path": "\/Company Home\/User Homes\/chris",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/879ea085-fa8c-41f1-a35f-24c28836c49a",
+         "type": "document",
+         "name": "UseCase1.get.js",
+         "displayName": "UseCase1.get.js",
+         "description": "",
+         "modifiedOn": "2015-06-29T15:15:57.422+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 4477,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "site1",
+            "title": "Site1"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/84d2b839-032b-40b9-89c3-c0e23001c527",
+         "type": "document",
+         "name": "tmp.js",
+         "displayName": "tmp.js",
+         "description": "",
+         "modifiedOn": "2015-06-29T15:15:57.519+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 4665,
+         "mimetype": "application\/x-javascript",
+         "site":
+         {
+            "shortName": "site1",
+            "title": "Site1"
+         },
+         "container": "documentLibrary",
+         "path": "",
+         "lastThumbnailModification":
+         [
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/9512f54b-4af6-4303-b821-3ccece108920",
+         "type": "document",
+         "name": "home.get.html.ftl",
+         "displayName": "home.get.html.ftl",
+         "description": "",
+         "modifiedOn": "2015-07-28T17:05:05.584+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 34,
+         "mimetype": "text\/plain",
+         "path": "\/Company Home\/folder1",
+         "lastThumbnailModification":
+         [
+          "doclib:1438099521681"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/1a868fd0-7e9c-4404-b258-b57e555c39a4",
+         "type": "document",
+         "name": "home.get.html.ftl",
+         "displayName": "home.get.html.ftl",
+         "description": "",
+         "modifiedOn": "2015-07-29T16:39:55.708+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 34,
+         "mimetype": "text\/plain",
+         "path": "\/Company Home\/Shared\/folder2\/Folder 3",
+         "lastThumbnailModification":
+         [
+          "doclib:1438184408005"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/4fea4acf-6ee7-4a71-9eb5-f21048f7673e",
+         "type": "document",
+         "name": "home.get.html.ftl",
+         "displayName": "home.get.html.ftl",
+         "description": "",
+         "modifiedOn": "2015-07-29T15:56:02.930+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 34,
+         "mimetype": "text\/plain",
+         "path": "\/Company Home\/Shared\/folder1",
+         "lastThumbnailModification":
+         [
+          "doclib:1438181766772"
+          
+         ],
+         "tags": []
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/644a2c13-93d1-4472-8c6d-137c7b9a2aef",
+         "type": "document",
+         "name": "home.get.html.ftl",
+         "displayName": "home.get.html.ftl",
+         "description": "",
+         "modifiedOn": "2015-07-30T10:54:59.153+01:00",
+         "modifiedByUser": "admin",
+         "modifiedBy": "Administrator ",
+         "fromDate": "",
+         "size": 1633309,
+         "mimetype": "text\/plain",
+         "path": "\/Company Home\/Shared",
+         "lastThumbnailModification":
+         [
+          "doclib:1438250102288"
+          ,
+          "imgpreview:1438705092869"
+          
+         ],
+         "tags": []
+      }
+   ],
+   "spellcheck":
+   {
+         "searchRequest": "hame",
+         "searchedFor": "home"
+   }
+}

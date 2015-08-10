@@ -1,4 +1,4 @@
-Aikau 1.0.29 Release Notes
+Aikau 1.0.30 Release Notes
 ===
 
 New deprecations: 
@@ -42,6 +42,22 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.30:
+* [AKU-452](https://issues.alfresco.com/jira/browse/AKU-452)       - Button re-styling and LESS updates
+* [AKU-472](https://issues.alfresco.com/jira/browse/AKU-472)       - Support search without URL hashing
+* [AKU-475](https://issues.alfresco.com/jira/browse/AKU-475)       - AlfCheckableMenuItem hashName fix
+* [AKU-476](https://issues.alfresco.com/jira/browse/AKU-476)       - Improved local storage fallbacks in lists
+* [AKU-477](https://issues.alfresco.com/jira/browse/AKU-477)       - Publish ALF_PAGE_WIGETS_READY when dynamically creating widgets
+* [AKU-488](https://issues.alfresco.com/jira/browse/AKU-488)       - Ensure AlfSearchList honours selectedScope configuration
+* [AKU-489](https://issues.alfresco.com/jira/browse/AKU-489)       - Improved initial height calculations for AlfSideBarContainer and AlfTabContainer
+* [AKU-490](https://issues.alfresco.com/jira/browse/AKU-490)       - Ensure pending form validation errors are cleared on valid data entry
+* [AKU-491](https://issues.alfresco.com/jira/browse/AKU-491)       - Ensure NumberSpinner can accept empty value
+* [AKU-493](https://issues.alfresco.com/jira/browse/AKU-493)       - Prevent duplicates in MultiSelectInput
+* [AKU-495](https://issues.alfresco.com/jira/browse/AKU-495)       - Fixed filter display in AlfBreadcrumbTrail
+* [AKU-496](https://issues.alfresco.com/jira/browse/AKU-496)       - All documents filter message update
+* [AKU-497](https://issues.alfresco.com/jira/browse/AKU-497)       - Fixed list paging with hash enabled
+* [AKU-500](https://issues.alfresco.com/jira/browse/AKU-500)       - Fixed alfResponseScope issues with global scope logic processing
+
 1.0.29:
 * [AKU-405](https://issues.alfresco.com/jira/browse/AKU-405)       - Added alfresco/forms/TabbedControls
 * [AKU-421](https://issues.alfresco.com/jira/browse/AKU-421)       - Updates to alfresco/renderers/InlineEditPropertyLink publications

@@ -122,27 +122,22 @@ define(["dojo/_base/declare",
             this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onHashChanged));
 
             var hashString = hashUtils.getHashString();
-            if (hashString === "" && 
-                this.useLocalStorageHashFallback === true && 
-                ("localStorage" in window && window.localStorage !== null))
+            if (hashString === "")
             {
-               // No hash has been provided, check local storage for last hash...
-               var locallyStoredHash = localStorage.getItem(this.useLocalStorageHashFallbackKey);
-               hashString = (locallyStoredHash !== null) ? locallyStoredHash : "";
-               this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.updateLocallyStoredHash));
-            }
-            else if (hashString !== "" && 
-                     this.useLocalStorageHashFallback === true && 
-                     ("localStorage" in window && window.localStorage !== null))
-            {
-               // Store the initial hash...
-               localStorage.setItem(this.useLocalStorageHashFallbackKey, hashUtils.getHashString());
-            }
+               if (this.useLocalStorageHashFallback === true && 
+                   ("localStorage" in window && window.localStorage !== null))
+               {
+                  // No hash has been provided, check local storage for last hash...
+                  var locallyStoredHash = localStorage.getItem(this.useLocalStorageHashFallbackKey);
+                  hashString = (locallyStoredHash !== null) ? locallyStoredHash : "";
+                  this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.updateLocallyStoredHash));
+               }
 
-            var currHash = ioQuery.queryToObject(hashString);
-            if(!this.doHashVarUpdate(currHash))
-            {
-               if (this.currentFilter)
+               if (hashString)
+               {
+                  hashUtils.setHashString(hashString);
+               }
+               else if (this.currentFilter)
                {
                   this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
                      url: ioQuery.objectToQuery(this.currentFilter),
@@ -154,11 +149,19 @@ define(["dojo/_base/declare",
                   this.loadData();
                }
             }
-            else
+            else 
             {
-               // When using hashes (e.g. a URL fragment in the browser address bar) then we need to 
-               // actually get the initial filter and use it to generate the first data set...
-               this.initialiseFilter(hashString); // Function provided by the _AlfHashMixin
+               if (this.useLocalStorageHashFallback === true && 
+                   ("localStorage" in window && window.localStorage !== null))
+               {
+                  // Store the initial hash...
+                  localStorage.setItem(this.useLocalStorageHashFallbackKey, hashString);
+               }
+
+               var currHash = ioQuery.queryToObject(hashString);
+               this.doHashVarUpdate(currHash, this.updateInstanceValues);
+               this._updateCoreHashVars(currHash);
+               this.loadData();
             }
          }
          else

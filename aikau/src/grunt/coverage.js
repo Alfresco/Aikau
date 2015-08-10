@@ -73,6 +73,7 @@ module.exports = function(grunt) {
 
    // Generate a coverage report using a vagrant initialised VM
    // The VM is run up by the task
+   grunt.registerTask("coverage", ["vm-coverage-report"]);
    grunt.registerTask("vm-coverage-report", "A task for collecting code coverage reports using a vagrant VM", function() {
       grunt.task.run("shell:stopTestApp");
       grunt.option("force", true);

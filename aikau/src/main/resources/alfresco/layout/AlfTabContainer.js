@@ -170,13 +170,15 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/ResizeMixin",
+        "alfresco/core/topics",
         "dijit/layout/TabContainer",
         "dijit/layout/ContentPane",
         "dojo/dom-construct",
+        "dojo/dom-class",
         "dojo/_base/lang",
         "dojo/_base/array"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, 
-                 TabContainer, ContentPane, domConstruct, lang, array) {
+                 topics, TabContainer, ContentPane, domConstruct, domClass, lang, array) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin], {
       
@@ -357,6 +359,7 @@ define(["dojo/_base/declare",
          }
 
          this.alfSetupResizeSubscriptions(this.onResize, this);
+         this.alfPublishResizeEvent(this.domNode);
       },
 
       /**
@@ -367,8 +370,13 @@ define(["dojo/_base/declare",
        * @param {integer} index The index of the required tab position
        */
       addWidget: function alfresco_layout_AlfTabContainer__addWidget(widget, /*jshint unused:false*/ index) {
-         var domNode = domConstruct.create("div", {}),
-             cp = new ContentPane();
+         // NOTE: It's important that the DOM structure of the tab is created and added to the page before 
+         //       creating each child widget in order that the child widget has access to the initial dimensions
+         //       of the tab (e.g. for an AlfSideBarContainer to calculate it's height appropriately)...
+         var domNode = domConstruct.create("div", {});
+         var cp = new ContentPane();
+         domClass.add(cp.domNode, "alfresco-layout-AlfTabContainer__OuterTab");
+         this.tabContainerWidget.addChild(cp, widget.tabIndex);
 
          // Add content to the ContentPane
          if(widget.content && typeof widget.content === "string")
@@ -403,11 +411,10 @@ define(["dojo/_base/declare",
          // If not delayed processing, create the widget and add to the panel
          if(!widget.delayProcessing)
          {
-            var widgetNode = this.createWidgetDomNode(widget, domNode);
+            var widgetNode = this.createWidgetDomNode(widget, cp.domNode);
             var w = this.createWidget(widget, widgetNode);
 
             // Add the widget to the ContentPane
-            cp.addChild(w);
             this._tabWidgetProcessingComplete();
          }
          // Otherwise record the widget for processing later on
@@ -423,7 +430,6 @@ define(["dojo/_base/declare",
          }
 
          // If we have an index add the ContentPane at a particular position otherwise just add it
-         this.tabContainerWidget.addChild(cp, widget.tabIndex);
          if (widget.selected === true)
          {
             this.tabContainerWidget.selectChild(cp);
@@ -461,6 +467,7 @@ define(["dojo/_base/declare",
          {
             this._delayedProcessingWidgets.splice(forDeletion, 1);
          }
+         this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
       },
 
       /**

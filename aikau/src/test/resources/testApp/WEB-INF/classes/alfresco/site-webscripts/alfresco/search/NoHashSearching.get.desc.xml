@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Searching without URL hashing</shortname>
+  <description>This page demonstrates the search related widgets configured to not use the URL hash</description>
+  <family>aikau-unit-tests</family>
+  <url>/NoHashSearching</url>
+</webscript>

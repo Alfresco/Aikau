@@ -66,26 +66,6 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
-       * This is the label to use to prefix the term that was searched for instead of the originally
-       * requested term.
-       * 
-       * @instance
-       * @type {string}
-       * @default "alternativesearch.searchedFor"
-       */
-      searchedForLabel: "alternativesearch.searchedFor",
-
-      /**
-       * This is the label to use to prefix the term that was originally requested instead of the
-       * search that was actually carried out.
-       * 
-       * @instance
-       * @type {string}
-       * @default "alternativesearch.searchInsteadFor"
-       */
-      searchInsteadForLabel: "alternativesearch.searchInsteadFor",
-
-      /**
        * This should be set to the term that was actually searched for.
        *
        * @instance
@@ -95,34 +75,14 @@ define(["dojo/_base/declare",
       searchedFor: null,
 
       /**
-       * This should be set to the term that was originally requested
-       *
+       * This is the label to use to prefix the term that was searched for instead of the originally
+       * requested term.
+       * 
        * @instance
        * @type {string}
-       * @default null
+       * @default "alternativesearch.searchedFor"
        */
-      searchRequest: null,
-
-      /**
-       * This is the topic that will be subscribed to for receiving alternative search data. It defaults
-       * to the topic used by the [AlfSearchList]{@link alfresco/search/AlfSearchList} widget.
-       *
-       * @instance
-       * @type {string}
-       * @default "ALF_SPELL_CHECK_SEARCH_TERM"
-       */
-      subscriptionTopic: "ALF_SPELL_CHECK_SEARCH_TERM",
-
-      /**
-       * Iterates over the suggestions.
-       *
-       * @instance
-       */
-      postMixInProperties: function alfresco_search_AlternativeSearchLabel__postMixInProperties() {
-         this.searchedForLabel = this.message(this.searchedForLabel);
-         this.searchInsteadForLabel = this.message(this.searchInsteadForLabel);
-         this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.onAlternativeSearch));
-      },
+      searchedForLabel: "alternativesearch.searchedFor",
 
       /**
        * This is the attribute key to use for retrieving the term that was actually searched for in the
@@ -136,6 +96,25 @@ define(["dojo/_base/declare",
       searchedForKey: "searchedFor",
 
       /**
+       * This is the label to use to prefix the term that was originally requested instead of the
+       * search that was actually carried out.
+       * 
+       * @instance
+       * @type {string}
+       * @default "alternativesearch.searchInsteadFor"
+       */
+      searchInsteadForLabel: "alternativesearch.searchInsteadFor",
+
+      /**
+       * This should be set to the term that was originally requested
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      searchRequest: null,
+
+      /**
        * This is the attribute key to use for retrieving the term that was originally requested for in the
        * payload provided to the [onAlternativeSearch]{@link alfresco/search/AlternativeSearchLabel#onAlternativeSearch}
        * function. It defaults to the key provided by the [AlfSearchList]{@link alfresco/search/AlfSearchList}.
@@ -145,6 +124,38 @@ define(["dojo/_base/declare",
        * @default "searchRequest"
        */
       searchRequestKey: "searchRequest",
+
+      /**
+       * This is the topic that will be subscribed to for receiving alternative search data. It defaults
+       * to the topic used by the [AlfSearchList]{@link alfresco/search/AlfSearchList} widget.
+       *
+       * @instance
+       * @type {string}
+       * @default "ALF_SPELL_CHECK_SEARCH_TERM"
+       */
+      subscriptionTopic: "ALF_SPELL_CHECK_SEARCH_TERM",
+
+      /**
+       * Indicates whether or not to use the browser URL hash for setting search terms. This should be set with the
+       * same value as the [AlfSearchList]{@link module:alfresco/search/AlfSearchList} because if the list is not
+       * responding to hash changes then setting an alternative search term on the hash will not trigger a search.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      useHash: true,
+
+      /**
+       * Iterates over the suggestions.
+       *
+       * @instance
+       */
+      postMixInProperties: function alfresco_search_AlternativeSearchLabel__postMixInProperties() {
+         this.searchedForLabel = this.message(this.searchedForLabel);
+         this.searchInsteadForLabel = this.message(this.searchInsteadForLabel);
+         this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.onAlternativeSearch));
+      },
 
       /**
        * This function handles alternative search data being provided. E.g. it is called when a search has been carried out
@@ -177,11 +188,21 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onSearchFor: function alfresco_search_AlternativeSearchLabel__onSearchFor(evt) {
-         this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-            type: "HASH",
-            url: "searchTerm=" + this.searchedFor
-         }, true);
+      onSearchFor: function alfresco_search_AlternativeSearchLabel__onSearchFor(/*jshint unused:false*/ evt) {
+         if (this.useHash === true)
+         {
+            this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
+               type: "HASH",
+               url: "searchTerm=" + this.searchedFor
+            }, true);
+         }
+         else
+         {
+            this.alfPublish("ALF_SET_SEARCH_TERM", {
+               type: "HASH",
+               searchTerm: this.searchedFor
+            }, true);
+         }
       },
 
       /**
@@ -190,11 +211,13 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onSearchInsteadFor: function alfresco_search_AlternativeSearchLabel__onSearchInsteadFor(evt) {
-          this.alfPublish("ALF_SET_SEARCH_TERM", {
-            type: "HASH",
-            searchTerm: this.searchRequest,
-            spellcheck: false
+      onSearchInsteadFor: function alfresco_search_AlternativeSearchLabel__onSearchInsteadFor(/*jshint unused:false*/ evt) {
+         // NOTE: We ALWAYS want to send "search instead for" requests directly as a search term regardless of whether
+         //       or not useHash is set to true. This is because when an alternative search is performed, the original
+         //       search term is displayed on the hash, therefore updating the hash will not trigger the search.
+         this.alfPublish("ALF_SET_SEARCH_TERM", {
+           searchTerm: this.searchRequest,
+           spellcheck: false
          }, true);
       }
    });

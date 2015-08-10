@@ -12,6 +12,8 @@
          @header-focus-font-color: red;
          @header-menubar-font-color: pink;
          @header-dropdown-menu-font-color: purple;
+
+         @use-legacy-buttons: false;
       </less-variables>
    </css-tokens>
 </theme>
