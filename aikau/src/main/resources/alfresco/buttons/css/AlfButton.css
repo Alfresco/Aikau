@@ -22,6 +22,7 @@
       line-height: @standard-button-line-height;
    }
    .dijitButtonText {
+      font-family: @standard-button-font-family;
       font-size: @standard-button-font-size;
       font-weight: @standard-button-font-weight;
       padding: 0;
@@ -68,6 +69,7 @@
          line-height: @call-to-action-button-line-height;
       }
       .dijitButtonText {
+         font-family: @call-to-action-button-font-family;
          font-size: @call-to-action-button-font-size;
          font-weight: @call-to-action-button-font-weight;
          padding: 0;

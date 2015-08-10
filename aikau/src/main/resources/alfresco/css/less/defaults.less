@@ -107,7 +107,7 @@
 @button-color-active: #005684;
 @button-color-disabled: #b8b8b8;
 @legacy-button-color: #ccc;
-@legacy-button-color-text: #000;
+@legacy-button-color-text: @general-font-color;
 @legacy-action-button-color: #8dc63f;
 
 // The standard button is what is normally seen
@@ -126,6 +126,7 @@
 @standard-button-font-color-focus: @button-color-hover;
 @standard-button-font-color-active: @button-color-active;
 @standard-button-font-color-disabled: @button-color-disabled;
+@standard-button-font-family: @bold-font;
 @standard-button-font-size: @normal-font-size;
 @standard-button-font-weight: bold;
 @standard-button-height: 28px;
@@ -151,6 +152,7 @@
 @call-to-action-button-font-color-focus: @button-color-background;
 @call-to-action-button-font-color-active: @button-color-background;
 @call-to-action-button-font-color-disabled: fade(@button-color-background, 50%);
+@call-to-action-button-font-family: @standard-button-font-family;
 @call-to-action-button-font-size: @standard-button-font-size;
 @call-to-action-button-font-weight: @standard-button-font-weight;
 @call-to-action-button-height: @standard-button-height;
@@ -171,6 +173,8 @@
    @standard-button-font-color-focus: @legacy-button-color-text;
    @standard-button-font-color-active: @legacy-button-color-text;
    @standard-button-font-color-disabled: fade(@legacy-button-color-text, 40%);
+   @standard-button-font-family: @standard-font;
+   @standard-button-font-weight: normal;
    @call-to-action-button-background: @legacy-action-button-color;
    @call-to-action-button-background-focus: @legacy-action-button-color;
    @call-to-action-button-background-active: @legacy-action-button-color;
