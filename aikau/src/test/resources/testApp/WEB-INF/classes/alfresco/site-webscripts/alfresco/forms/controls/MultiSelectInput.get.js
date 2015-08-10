@@ -1,5 +1,6 @@
-var hrStyle = "border: 1px solid #eee; width: 300px; margin: 25px 15px;";
-
+var hrStyle = "border: 1px solid #eee; width: 300px; margin: 25px 15px;",
+   tagsValue = ["workspace://SpacesStore/06bd4708-8998-47be-a4ea-0f418bc7bb38", "workspace://SpacesStore/d37d7dfa-8410-46be-af6a-5d5880ca478e"];
+   
 model.jsonModel = {
    services: [
       {
@@ -54,6 +55,17 @@ model.jsonModel = {
       },
       {
          name: "alfresco/buttons/AlfButton",
+         id: "SET_TAGS_VALUE_BUTTON",
+         config: {
+            label: "Set tags value",
+            publishTopic: "SET_FORM1_VALUE",
+            publishPayload: {
+               tags: tagsValue
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
          id: "FOCUS_HELPER_BUTTON",
          config: {
             label: "Focus helper"
@@ -75,9 +87,10 @@ model.jsonModel = {
                   config: {
                      okButtonPublishTopic: "FORM_POST",
                      pubSubScope: "FORM1_",
+                     setValueTopic: "SET_FORM1_VALUE",
                      scopeFormControls: false,
                      value: {
-                        tags: ["workspace://SpacesStore/06bd4708-8998-47be-a4ea-0f418bc7bb38", "workspace://SpacesStore/d37d7dfa-8410-46be-af6a-5d5880ca478e"]
+                        tags: tagsValue
                      },
                      widgets: [
                         {
@@ -147,7 +160,7 @@ model.jsonModel = {
                      pubSubScope: "FORM1_",
                      scopeFormControls: false,
                      value: {
-                        tags: ["workspace://SpacesStore/06bd4708-8998-47be-a4ea-0f418bc7bb38", "workspace://SpacesStore/d37d7dfa-8410-46be-af6a-5d5880ca478e"]
+                        tags: tagsValue
                      },
                      widgets: [
                         {
