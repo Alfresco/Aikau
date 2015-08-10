@@ -695,6 +695,74 @@ define([
 
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
+         },
+
+         // STATE AFTER THIS TEST
+         // 
+         // Control 1
+         //    *choices: "tag1", "tag11"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Control 2
+         //    choices: "Those that belong to the emperor"
+         //    searchbox: ""
+         //    results dropdown: hidden
+         //    
+         // Misc
+         //    *focused element: Set tags value button
+         //    
+         "Setting a value replaces not appends": function() {
+            return browser.findById("SET_TAGS_VALUE_BUTTON")
+               .click()
+               .end()
+
+            .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 2, "Did not render two values for control");
+               })
+               .end()
+
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "tag1", "Did not display first tag label correctly");
+               })
+               .end()
+
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "tag11", "Did not display second tag label correctly");
+               })
+               .end()
+
+            .findById("SET_TAGS_VALUE_BUTTON")
+               .click()
+               .end()
+
+            .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 2, "Does not still render two values for control");
+               })
+               .end()
+
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(1) .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "tag1", "Did not display first tag label correctly");
+               })
+               .end()
+
+            .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "tag11", "Did not display second tag label correctly");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
          }
       });
    }

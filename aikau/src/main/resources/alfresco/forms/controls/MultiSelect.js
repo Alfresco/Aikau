@@ -478,6 +478,9 @@ define([
                newValuesArray = (newValueParam && [newValueParam]) || [];
             }
 
+            // Clear existing values
+            array.forEach(this._choices, this._removeChoice, this);
+
             // Create an items array
             var chosenItems = array.map(newValuesArray, function(nextNewValue) {
 
@@ -938,33 +941,9 @@ define([
           * @param    {object} evt Dojo-normalised event object
           */
          _onChoiceCloseClick: function alfresco_forms_controls_MultiSelect___onChoiceCloseClick(choiceToRemove, evt) {
-
-            // Update the choices collection
-            this._choices = array.filter(this._choices, function(nextChoice) {
-               return nextChoice.value !== choiceToRemove.value;
-            });
-            if (this._selectedChoice === choiceToRemove) {
-               this._selectedChoice = null;
-            }
-
-            // Synchronise the control's value with the choices collection
-            var updatedValue = array.map(this._choices, function(nextChoice) {
-               return nextChoice.item;
-            }, this);
-            this._changeAttrValue("value", updatedValue);
-
-            // Remove the node and its listeners
-            domConstruct.destroy(choiceToRemove.domNode);
-            choiceToRemove.selectListener.remove();
-            choiceToRemove.closeListener.remove();
-
-            // Stop the click doing anything else
+            this._removeChoice(choiceToRemove);
             evt.preventDefault();
             evt.stopPropagation();
-
-            // Update the results (i.e. adjust the items' chosen states)
-            this._updateResultsDropdown();
-            this._hideResultsDropdown();
          },
 
          /**
@@ -1176,6 +1155,39 @@ define([
                   this.own(on(nextParent, "scroll", lang.hitch(this, this._hideResultsDropdown)));
                }
             }
+         },
+
+         /**
+          * Remove a specific choice value
+          *
+          * @instance
+          * @param    {object} choiceToRemove The choice object to remove
+          * @param    {object} evt Dojo-normalised event object
+          */
+         _removeChoice: function alfresco_forms_controls_MultiSelect___removeChoice(choiceToRemove) {
+
+            // Update the choices collection
+            this._choices = array.filter(this._choices, function(nextChoice) {
+               return nextChoice.value !== choiceToRemove.value;
+            });
+            if (this._selectedChoice === choiceToRemove) {
+               this._selectedChoice = null;
+            }
+
+            // Synchronise the control's value with the choices collection
+            var updatedValue = array.map(this._choices, function(nextChoice) {
+               return nextChoice.item;
+            }, this);
+            this._changeAttrValue("value", updatedValue);
+
+            // Remove the node and its listeners
+            domConstruct.destroy(choiceToRemove.domNode);
+            choiceToRemove.selectListener.remove();
+            choiceToRemove.closeListener.remove();
+
+            // Update the results (i.e. adjust the items' chosen states)
+            this._updateResultsDropdown();
+            this._hideResultsDropdown();
          },
 
          /**
