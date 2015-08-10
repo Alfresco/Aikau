@@ -632,4 +632,39 @@ define(["intern!object",
          TestCommon.alfPostCoverageResults(this, browser);
       }
    });
+
+   registerSuite({
+      name: "Tab Container Tests (height calculations)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/MixedLayoutHeights", "Tab Container Tests (height calculations)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      // See AKU-489 - we want to check that a sidebar inside a tab is not bigger than the window. In fact
+      // it's height should be the body height, minus the offset (approx 36px) and the configured footer (10px)
+      "Check inner sidebar height": function() {
+         var height;
+         return browser.findByCssSelector("body")
+            .getSize()
+            .then(function(size) {
+               height = size.height;
+            })
+         .end()
+         .findById("SIDEBAR")
+            .getSize()
+               .then(function(size) {
+                  var target = height - 46;
+                  assert.closeTo(size.height, target, 5, "Sidebar height incorrect");
+               });
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
 });
