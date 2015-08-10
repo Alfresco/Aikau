@@ -96,6 +96,8 @@
 @standard-border-style: solid;
 @standard-border-color: #d3d3d3;
 @standard-border: @standard-border-width @standard-border-style @standard-border-color;
+@standard-form-border-color: #ccc;
+@standard-form-border: @standard-border-width @standard-border-style @standard-form-border-color;
 @standard-border-radius: 6px;
 @hover-border-color: #d3d3d3;
 @focused-border-color: #8dc63f;
@@ -128,7 +130,7 @@
 @standard-button-font-color-disabled: @button-color-disabled;
 @standard-button-font-family: @bold-font;
 @standard-button-font-size: @normal-font-size;
-@standard-button-font-weight: bold;
+@standard-button-font-weight: normal;
 @standard-button-height: 28px;
 @standard-button-line-height: @standard-button-font-size * 1.2;
 @standard-button-padding-vertical: (@standard-button-height - (@standard-button-border-width * 2) - @standard-button-line-height) / 2;
@@ -174,7 +176,6 @@
    @standard-button-font-color-active: @legacy-button-color-text;
    @standard-button-font-color-disabled: fade(@legacy-button-color-text, 40%);
    @standard-button-font-family: @standard-font;
-   @standard-button-font-weight: normal;
    @call-to-action-button-background: @legacy-action-button-color;
    @call-to-action-button-background-focus: @legacy-action-button-color;
    @call-to-action-button-background-active: @legacy-action-button-color;
@@ -217,7 +218,7 @@
 @list-dnd-hover-outline: 2px solid #0082ca;
 
 // Tabs
-@tab-border: @standard-button-border;
+@tab-border: @standard-form-border;
 @tab-color: #d8d8d8;
 @tab-background: @tab-color none;
 @tab-color-active: #fff;
