@@ -3,7 +3,7 @@
    -webkit-border-radius: 3px;
    -khtml-border-radius: 3px;
    border-radius: 3px;
-   background-color: @standard-button-background-color;
+   background-color: @primary-background-color;
 }
 
 .alfresco-forms-controls-BaseFormControl > .control-row > .control > table > tr{

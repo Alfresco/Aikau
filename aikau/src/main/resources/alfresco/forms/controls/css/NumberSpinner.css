@@ -12,7 +12,7 @@
       .dijitUpArrowButton, .dijitDownArrowButton {
          background-image: none;
          transition: none;
-         border-color: @standard-button-border-color;
+         border-color: @standard-form-border-color;
          > .dijitArrowButtonInner {
             border: none;
             margin: 0;
