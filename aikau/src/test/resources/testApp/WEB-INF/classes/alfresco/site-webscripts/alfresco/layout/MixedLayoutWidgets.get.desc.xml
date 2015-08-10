@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Mixed layout widgets</shortname>
+  <description>Shows a compination of nested layout widgets. Used for testing initial heights are correctly set.</description>
+  <family>aikau-unit-tests</family>
+  <url>/MixedLayoutHeights</url>
+</webscript>

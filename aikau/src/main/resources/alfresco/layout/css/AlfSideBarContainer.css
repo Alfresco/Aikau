@@ -9,6 +9,7 @@
    display: inline-block;
    vertical-align: top;
    background: none;
+   border: none;
 }
 
 .alfresco-layout-AlfSideBarContainer > .container > ui-widget-content {
@@ -22,7 +23,7 @@
 .alfresco-layout-AlfSideBarContainer .resize-handle {
    background-color: #ffffff;
    width: 9px;
-   right: -1px;
+   right: 0;
    border-right: @standard-border;
    border-left: @standard-border;
 }
