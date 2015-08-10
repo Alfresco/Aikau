@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Buttons test page</shortname>
+  <description>Test page that demonstrates the different styles of buttons</description>
+  <family>aikau-unit-tests</family>
+  <url>/Buttons</url>
+</webscript>
