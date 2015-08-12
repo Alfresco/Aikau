@@ -21,15 +21,16 @@
  * @module aikauTesting/mockservices/FilteredListMockService
  * @extends module:alfresco/core/Core
  * @author Dave Draper
+ * @author Martin Doyle
  */
-define(["dojo/_base/declare",
-        "alfresco/core/Core",
-        "dojo/_base/lang",
-        "dojo/_base/array"],
-        function(declare, AlfCore, lang, array) {
-   
+define(["alfresco/core/Core", 
+        "dojo/_base/array", 
+        "dojo/_base/declare", 
+        "dojo/_base/lang"], 
+        function(AlfCore, array, declare, lang) {
+
    return declare([AlfCore], {
-      
+
       data: [
          {
             name: "one",
@@ -52,45 +53,68 @@ define(["dojo/_base/declare",
             description: "woof"
          },
          {
+            name: "five and a half",
+            description: "woof"
+         },
+         {
             name: "six",
+            description: "woof"
+         },
+         {
+            name: "six and a half",
             description: "woof"
          }
       ],
 
       /**
-       *
+       * Constructor
        * 
        * @instance 
-       * @param {array} args The constructor arguments.
        */
-      constructor: function alfresco_testing_mockservices_FilteredListMockService__constructor(args) {
-         lang.mixin(this, args);
+      constructor: function alfresco_testing_mockservices_FilteredListMockService__constructor() {
          this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST", lang.hitch(this, this.onRetrieveDocumentsRequest));
       },
 
       /**
+       * Handle document retrieval requests
+       * 
        * @instance
        */
       onRetrieveDocumentsRequest: function alfresco_testing_mockservices_FilteredListMockService__onRetrieveDocumentsRequest(payload) {
-         var data = lang.clone(this.data);
-         if (payload && payload.dataFilters)
-         {
-            array.forEach(payload.dataFilters, function(filter) {
-               if (filter.name)
-               {
-                  data = array.filter(data, function(item) {
-                     var x = lang.getObject(filter.name, false, item);
-                     return (x && x.indexOf(filter.value) !== -1);
-                  }, this);
-               }
-            }, this);
+
+         // Setup variables
+         var data = this.data,
+            hasFilters = payload.dataFilters && payload.dataFilters.length,
+            pageNum = payload.page || 1,
+            pageSize = payload.pageSize || 0,
+            startIndex = (pageNum - 1) * pageSize,
+            endIndex = startIndex + pageSize,
+            totalRecords,
+            responseTopic;
+
+         // Apply filters
+         hasFilters && array.forEach(payload.dataFilters, function(filter) {
+            if (filter.name) {
+               data = array.filter(data, function(item) {
+                  var itemName = lang.getObject(filter.name, false, item);
+                  return (itemName && itemName.indexOf(filter.value) !== -1);
+               }, this);
+            }
+         }, this);
+         totalRecords = data.length;
+
+         // Apply pagination
+         if (endIndex) {
+            data = data.slice(startIndex, Math.min(endIndex, data.length));
          }
 
-         var alfTopic = payload.alfResponseTopic ? (payload.alfResponseTopic + "_SUCCESS") : "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS";
-         this.alfPublish(alfTopic, {
-            totalRecords: data.length,
-            startIndex: 0,
-            items: data
+         // Create and publish response
+         this.alfPublish(payload.alfResponseTopic + "_SUCCESS", {
+            response: {
+               totalRecords: totalRecords,
+               startIndex: startIndex,
+               items: data
+            }
          });
       }
    });

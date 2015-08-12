@@ -668,6 +668,14 @@ define(["dojo/_base/declare",
          this.pageMarker = registry.byId(this.id + "_PAGE_MARKER");
          this.resultsPerPageGroup = registry.byId(this.id + "_RESULTS_PER_PAGE_SELECTOR");
 
+         // Decorate the paginator elements with appropriate classes
+         var paginatorClass = "alfresco-lists-Paginator";
+         this.pageSelector && domClass.add(this.pageSelector.domNode, paginatorClass + "__page-selector");
+         domClass.add(this.pageBack.domNode, paginatorClass + "__page-back");
+         domClass.add(this.pageForward.domNode, paginatorClass + "__page-forward");
+         domClass.add(this.pageMarker.domNode, paginatorClass + "__page-marker");
+         domClass.add(this.resultsPerPageGroup.domNode, paginatorClass + "__results-per-page");
+
          // Check to see if any document data was provided before widget instantiation completed and
          // if so process it with the now available widgets...
          if (this.__deferredLoadedDocumentData)
