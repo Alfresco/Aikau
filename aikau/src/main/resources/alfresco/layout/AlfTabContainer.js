@@ -336,7 +336,7 @@ define(["dojo/_base/declare",
             }
 
             // Now add tabs for each widget...
-            array.forEach(this.widgets, lang.hitch(this, "addWidget"));
+            array.forEach(this.widgets, lang.hitch(this, this.addWidget));
          }
          this.tabContainerWidget.startup();
 
@@ -422,7 +422,7 @@ define(["dojo/_base/declare",
          {
             this._delayedProcessingWidgets.push(
                {
-                  "domNode": domNode,
+                  "domNode": cp.domNode,
                   "contentPane": cp,
                   "widget": widget
                }

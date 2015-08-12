@@ -15,6 +15,7 @@ model.jsonModel = {
       {
          name: "alfresco/layout/AlfSideBarContainer",
          config: {
+            footerHeight: 10,
             widgets: [
                {
                   name: "alfresco/layout/HorizontalWidgets",
@@ -77,12 +78,12 @@ model.jsonModel = {
                         }
                      ]
                   }
+               },
+               {
+                  name: "alfresco/logging/DebugLog"
                }
             ]
          }
-      },
-      {
-         name: "alfresco/logging/SubscriptionLog"
       }
    ]
 };

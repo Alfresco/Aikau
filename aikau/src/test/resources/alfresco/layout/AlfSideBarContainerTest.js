@@ -42,13 +42,10 @@ define(["intern!object",
       },
 
      "Test preferences requested": function () {
-         return browser.findByCssSelector(TestCommon.pubDataCssSelector("ALF_PREFERENCE_GET", "preference", "org.alfresco.share.sideBarWidth"))
-            .then(
-               function() {
-                  // No action - preferences request found
-               },
-               function() {
-                  assert(false, "User preferences were not requested");
+         return browser.findByCssSelector(".resize-handle") // Need to find something before getting logged publish data
+            .getLastPublish("ALF_PREFERENCE_GET")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "preference", "org.alfresco.share.sideBarWidth", "User preferences were not requested");
                });
       },
 
@@ -136,6 +133,46 @@ define(["intern!object",
                assert(width === "350px", "The sidebar wasn't shown via publication");
             })
          .end();
+      },
+
+      "Increase window size and check sidebar height": function() {
+         var bodyHeight;
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar") // Need to find something before clearing logs!
+            .end()
+            .clearLog() // Clear the logs otherwise they'll force the size of the window
+            .setWindowSize(null, 1024, 968)
+            .findByCssSelector("body")
+               .getSize()
+               .then(function(size) {
+                  // We need the body size, not the window size because the window size includes all the OS chrome
+                  bodyHeight = size.height;
+               })
+            .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+               .getSize()
+               .then(function(size) {
+                  // Substracting the padding from the height!
+                  assert.closeTo(size.height, (bodyHeight - 20), 5, "The sidebar height didn't increase with the window size");
+               });
+      },
+
+      "Decrease window size and check sidebar height": function() {
+         var bodyHeight;
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar") // Need to find something before clearing logs!
+            .end()
+            .clearLog() // Clear the logs otherwise they'll force the size of the window
+            .setWindowSize(null, 1024, 568)
+            .findByCssSelector("body")
+               .getSize()
+               .then(function(size) {
+                  // We need the body size, not the window size because the window size includes all the OS chrome
+                  bodyHeight = size.height;
+               })
+            .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+               .getSize()
+               .then(function(size) {
+                  // Substracting the padding from the height!
+                  assert.closeTo(size.height, (bodyHeight - 20), 5, "The sidebar height didn't decrease with the window size");
+               });
       },
 
       "Post Coverage Results": function() {

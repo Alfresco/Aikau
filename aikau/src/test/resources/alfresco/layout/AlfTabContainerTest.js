@@ -649,7 +649,10 @@ define(["intern!object",
       // it's height should be the body height, minus the offset (approx 36px) and the configured footer (10px)
       "Check inner sidebar height": function() {
          var height;
-         return browser.findByCssSelector("body")
+         return browser.findByCssSelector(".dijitTabInner:nth-child(2) .tabLabel")
+            .click()
+         .end()
+         .findByCssSelector("body")
             .getSize()
             .then(function(size) {
                height = size.height;
@@ -661,6 +664,18 @@ define(["intern!object",
                   var target = height - 46;
                   assert.closeTo(size.height, target, 5, "Sidebar height incorrect");
                });
+      },
+
+      // See AKU-506 - make sure that widgets waiting for page readiness (in this case a list) get informed that
+      // they can do their stuff (in this case, load data)
+      "Check that list data is loaded": function() {
+         return browser.findByCssSelector(".dijitTabInner:nth-child(3) .tabLabel")
+            .click()
+         .end()
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS")
+            .then(function(payload) {
+               assert.isNotNull(payload, "List data was not requested on tab load");
+            });
       },
 
       "Post Coverage Results": function() {

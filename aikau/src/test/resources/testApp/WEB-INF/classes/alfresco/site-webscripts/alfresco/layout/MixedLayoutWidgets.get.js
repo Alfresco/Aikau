@@ -23,6 +23,11 @@ model.jsonModel = {
          config: {
             widgets: [
                {
+                  id: "LOGO1",
+                  name: "alfresco/logo/Logo",
+                  title: "Logo"
+               },
+               {
                   id: "SIDEBAR",
                   title: "Sidebar",
                   name: "alfresco/layout/AlfSideBarContainer",
@@ -30,7 +35,7 @@ model.jsonModel = {
                      footerHeight: 10,
                      widgets: [
                         {
-                           id: "LOGO",
+                           id: "LOGO2",
                            name: "alfresco/logo/Logo",
                            align: "sidebar"
                         },
@@ -39,7 +44,8 @@ model.jsonModel = {
                            name: "alfresco/documentlibrary/AlfDocumentList",
                            align: "main",
                            config: {
-                              useHash: true,
+                              useHash: false,
+                              currentPageSize: 10,
                               widgets: [
                                  {
                                     name: "alfresco/lists/views/AlfListView",
