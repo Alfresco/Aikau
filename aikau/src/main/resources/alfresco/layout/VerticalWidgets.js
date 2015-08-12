@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -94,16 +94,17 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       allWidgetsProcessed: function alfresco_layout_VerticalWidgets__allWidgetsProcessed(widgets) {
-         if (this.widgetMarginTop != null || this.widgetMarginBottom != null)
+         if (this.widgetMarginTop || this.widgetMarginTop === 0 || 
+             this.widgetMarginBottom || this.widgetMarginBottom === 0)
          {
-            array.forEach(widgets, function(widget, i) {
-               if(this.widgetMarginTop != null)
+            array.forEach(widgets, function(widget) {
+               if(this.widgetMarginTop || this.widgetMarginTop === 0)
                {
                   domStyle.set(widget.domNode, {
                      "marginTop": this.widgetMarginTop + "px"
                   });
                }
-               if(this.widgetMarginBottom != null)
+               if(this.widgetMarginBottom || this.widgetMarginBottom === 0)
                {
                   domStyle.set(widget.domNode, {
                      "marginBottom": this.widgetMarginBottom + "px"
