@@ -55,7 +55,7 @@ define(["dojo/_base/declare",
        * @param {object} object The parent to retrieve the children for
        * @param {object} options The options for the query (these are currently ignored)
        */
-      getChildren: function alfresco_navigation_TreeStore__getChildren(object, options) {
+      getChildren: function alfresco_navigation_TreeStore__getChildren(object, /*jshint unused:false*/ options) {
          var deferred = new Deferred();
          var config = {
             url: this.target + object.path,
@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the item in the original array
        * @returns {boolean} true if the item should be kept
        */
-      filterChildren: function alfresco_navigation_TreeStore__filterChildren(item, index) {
+      filterChildren: function alfresco_navigation_TreeStore__filterChildren(item, /*jshint unused:false*/ index) {
          var include = array.some(this.filterPaths, function(filter) {
             var matches = true;
             try
@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
        * @param {object} child The child object to update
        * @param {number} index The index of the child
        */
-      updateChild: function alfresco_navigation_TreeStore__updateChild(parent, child, index) {
+      updateChild: function alfresco_navigation_TreeStore__updateChild(parent, child, /*jshint unused:false*/ index) {
          child.id = child.nodeRef;
          child.value = child.name;
          child.path = parent.path + child.name + "/";

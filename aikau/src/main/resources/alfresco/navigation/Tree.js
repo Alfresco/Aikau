@@ -33,6 +33,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Tree.html",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/core/Core",
+        "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/services/_NavigationServiceTopicMixin",
@@ -42,7 +43,7 @@ define(["dojo/_base/declare",
         "alfresco/navigation/TreeStore",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree"], 
-        function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, AlfConstants, _AlfDocumentListTopicMixin, 
+        function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, topics, AlfConstants, _AlfDocumentListTopicMixin, 
                  _NavigationServiceTopicMixin, domConstruct, lang, array, TreeStore, ObjectStoreModel, Tree) {
    
    return declare([_Widget, _Templated, _PublishPayloadMixin, AlfCore, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin], {
@@ -244,13 +245,13 @@ define(["dojo/_base/declare",
       /**
        * This is the topic that is published when a node on the tree is clicked. The data applied
        * to the filter is the the value of the node clicked. By default it is expected that the
-       * tree represents a location so the default id is "ALF_DOCUMENTLIST_PATH_CHANGED". 
+       * tree represents a path so is set to the [path changed topic]{@link module:alfresco/core/topics#PATH_CHANGED}.
        * 
        * @instance
        * @type {string}
-       * @default "ALF_DOCUMENTLIST_PATH_CHANGED"
+       * @default [topics.PATH_CHANGED]{@link module:alfresco/core/topics#PATH_CHANGED}
        */
-      publishTopic: "ALF_DOCUMENTLIST_PATH_CHANGED",
+      publishTopic: topics.PATH_CHANGED,
 
       /**
        * By default the payload type will the the current item. This will automatically be set

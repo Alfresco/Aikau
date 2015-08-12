@@ -26,11 +26,12 @@
 define(["dojo/_base/declare",
         "alfresco/lists/AlfSortablePaginatedList",
         "alfresco/core/JsNode",
+        "alfresco/core/topics",
         "dojo/_base/array",
         "dojo/_base/lang",
         "alfresco/util/hashUtils",
         "dojo/io-query"],
-        function(declare, AlfSortablePaginatedList, JsNode, array, lang, hashUtils, ioQuery) {
+        function(declare, AlfSortablePaginatedList, JsNode, topics, array, lang, hashUtils, ioQuery) {
 
    return declare([AlfSortablePaginatedList], {
 
@@ -147,7 +148,7 @@ define(["dojo/_base/declare",
        */
       setupSubscriptions: function alfrescdo_documentlibrary_AlfDocumentList__setupSubscriptions() {
          this.inherited(arguments);
-         this.alfSubscribe("ALF_DOCUMENTLIST_PATH_CHANGED", lang.hitch(this, this.onPathChanged));
+         this.alfSubscribe(topics.PATH_CHANGED, lang.hitch(this, this.onPathChanged));
          this.alfSubscribe("ALF_DOCUMENTLIST_CATEGORY_CHANGED", lang.hitch(this, this.onCategoryChanged));
          this.alfSubscribe("ALF_DOCUMENTLIST_TAG_CHANGED", lang.hitch(this, this.onTagChanged));
          this.alfSubscribe(this.filterSelectionTopic, lang.hitch(this, this.onFilterChanged));
