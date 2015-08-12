@@ -199,18 +199,13 @@ define(["dojo/_base/declare",
             }
 
             var sort = "";
-            if (payload.sortField && payload.sortField === "null")
+            if (payload.sortField === "null" || payload.sortField === "Relevance" || payload.sortField === "")
             {
                // No action required - leave as the empty string which is relevance - no direction can be applied
             }
-            else if (payload.sortField === "Relevance")
-            {
-               sort = "";
-            }
             else
             {
-               sort = ((payload.sortField) ? payload.sortField : this.sort) + "|" + 
-                      ((payload.sortAscending) ? payload.sortAscending : this.sortAscending);
+               sort = (payload.sortField || this.sort) + "|" + (payload.sortAscending || this.sortAscending);
             }
 
             var defaultFacetFields = "{http://www.alfresco.org/model/content/1.0}content.mimetype,{http://www.alfresco.org/model/content/1.0}modifier.__,{http://www.alfresco.org/model/content/1.0}creator.__,{http://www.alfresco.org/model/content/1.0}description.__";
