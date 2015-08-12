@@ -157,11 +157,11 @@ define(["dojo/_base/declare",
        */
       getTargetUrl: function alfresco_navigation_Tree__getTargetUrl() {
          var url = null;
-         if (this.siteId !== null && this.containerId !== null)
+         if (this.siteId && this.containerId)
          {
             url = AlfConstants.PROXY_URI + "slingshot/doclib/treenode/site/" + this.siteId + "/documentlibrary";
          }
-         else if (this.rootNode !== null)
+         else if (this.rootNode)
          {
             url = AlfConstants.PROXY_URI + "slingshot/doclib/treenode/node/alfresco/company/home";
          }
@@ -187,11 +187,11 @@ define(["dojo/_base/declare",
             children: "false",
             max: "-1"
          };
-         if (this.siteId !== null && this.containerId !== null)
+         if (this.siteId && this.containerId)
          {
             // No changes to the default query
          }
-         else if (this.rootNode !== null)
+         else if (this.rootNode)
          {
             query.max = "500";
             query.libraryRoot = this.rootNode;
