@@ -193,9 +193,17 @@ define(["dojo/_base/declare",
          // Localize the labels and alt-text...
          this.saveLabel = this.message(this.saveLabel);
          this.cancelLabel = this.message(this.cancelLabel);
-         this.editAltText = this.message(this.editAltText, {
-            0: this.renderedValue
-         });
+
+         if (this.renderedValue)
+         {
+            this.editAltText = this.message(this.editAltText, {
+               0: this.renderedValue
+            });
+         }
+         else
+         {
+            this.editAltText = this.message("inline-edit.edit.altTextNoValue");
+         }
       },
 
       /**
