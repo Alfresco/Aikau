@@ -61,7 +61,13 @@ module.exports = function(grunt) {
    });
    grunt.event.on("intern.fail", function(data) {
       notify({
-         title: "Unit Test Failed",
+         title: "Unit test(s) failed",
+         message: data
+      });
+   });
+   grunt.event.on("intern.pass", function(data) {
+      notify({
+         title: "Unit test(s) passed successfully",
          message: data
       });
    });
