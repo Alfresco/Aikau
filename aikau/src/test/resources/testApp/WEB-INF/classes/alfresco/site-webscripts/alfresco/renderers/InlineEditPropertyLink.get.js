@@ -11,6 +11,7 @@ var propertyLinkWidgets = [
                            id: "INLINE_EDIT",
                            name: "alfresco/renderers/InlineEditPropertyLink",
                            config: {
+                              permissionProperty: null,
                               propertyToRender: "name",
                               linkPublishTopic: "TEST_PROPERTY_LINK_CLICK",
                               linkPublishPayload: {},
@@ -51,6 +52,7 @@ var propertyLinkWidgets = [
                            id: "INLINE_EDIT",
                            name: "alfresco/renderers/InlineEditPropertyLink",
                            config: {
+                              permissionProperty: null,
                               propertyToRender: "name",
                               publishTopic: "ALF_CRUD_UPDATE",
                               publishPayloadType: "PROCESS",

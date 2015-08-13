@@ -24,10 +24,9 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "intern/chai!expect",
         "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, assert, expect, require, TestCommon) {
+        function (registerSuite, assert, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -45,21 +44,21 @@ define(["intern!object",
      "Check there are the expected number of tag controls successfully rendered": function () {
          return browser.findAllByCssSelector("span.alfresco-renderers-InlineEditProperty.alfresco-renderers-Property")
             .then(function (tagcontrols){
-               expect(tagcontrols).to.have.length(4, "Test #1a - There should be 4 tag controls successfully rendered");
+               assert.lengthOf(tagcontrols, 4, "There should be 4 tag controls successfully rendered");
             });
       },
 
       "Check there are the expected number of readonlytags successfully rendered": function() {
          return browser.findAllByCssSelector("#TAGS_4 span.alfresco-renderers-ReadOnlyTag")
             .then(function (readonlytags){
-               expect(readonlytags).to.have.length(3, "Test #1b - There should be 3 readonlytags successfully rendered");
+               assert.lengthOf(readonlytags, 3, "There should be 3 readonlytags successfully rendered");
             });
       },
 
       "Check there are no edittags shown": function() {
          return browser.findAllByCssSelector("#TAGS_4 span.alfresco-renderers-EditTag")
             .then(function (edittags){
-               expect(edittags).to.have.length(0, "Test #1c - There should be 0 edittags shown");
+               assert.lengthOf(edittags, 0, "There should be 0 edittags shown");
             });
       },
 
@@ -67,26 +66,11 @@ define(["intern!object",
          return browser.findByCssSelector("#TAGS_4 span.alfresco-renderers-ReadOnlyTag:first-of-type a")
             .click()
          .end()
-         .then(
-            function(){},
-            function(){assert(false, "Test #1d - The link did not publish on 'ALF_NAVIGATE_TO_PAGE' after mouse clicks");}
-         );
-      },
-
-      "Check the link click published the payload as expected (HASH)": function() {
-         return browser.findByCssSelector(TestCommon.pubDataCssSelector("ALF_NAVIGATE_TO_PAGE", "type", "HASH"))
-            .then(
-               function(){},
-               function(){assert(false, "Test #1e - The link did not publish the payload with 'type' as 'HASH'");}
-            );
-      },
-
-      "Check the link click published the payload as expected (URL)": function() {
-         return browser.findByCssSelector(TestCommon.pubDataCssSelector("ALF_NAVIGATE_TO_PAGE", "url", "tag=Test1"))
-            .then(
-               function(){},
-               function(){assert(false, "Test #1f - The link did not publish the payload with 'url' as 'tag=Test1'");}
-            );
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "type", "HASH", "The link did not publish the payload with 'type' as 'HASH'");
+               assert.propertyVal(payload, "url", "tag=Test1", "The link did not publish the payload with 'url' as 'tag=Test1'");
+            });
       },
 
       "Check there are 3 edit tags now shown": function() {
@@ -96,7 +80,7 @@ define(["intern!object",
 
          .findAllByCssSelector("#TAGS_4 span.alfresco-renderers-EditTag")
             .then(function (edittags){
-               expect(edittags).to.have.length(3, "Test #1g - There should be 3 edittags now shown");
+               assert.lengthOf(edittags, 3, "There should be 3 edittags now shown");
             });
       },
 
@@ -104,7 +88,7 @@ define(["intern!object",
          return browser.findByCssSelector("#TAGS_4 span.alfresco-renderers-EditTag:first-of-type")
             .getVisibleText()
             .then(function (edittagtext){
-               expect(edittagtext).to.contain("Test1", "Test #1h - Edit tag 1 should read 'Test1'");
+               assert.include(edittagtext, "Test1", "Edit tag 1 should read 'Test1'");
             });
       },
 
@@ -115,7 +99,7 @@ define(["intern!object",
 
          .findAllByCssSelector("#TAGS_4 span.alfresco-renderers-EditTag")
             .then(function (edittags){
-               expect(edittags).to.have.length(2, "Test #1i - There should be 2 edittags now shown");
+               assert.lengthOf(edittags, 2, "There should be 2 edittags now shown");
             });
       },
 
@@ -123,7 +107,7 @@ define(["intern!object",
          return browser.findByCssSelector("#TAGS_4 span.alfresco-renderers-EditTag:first-of-type")
             .getVisibleText()
             .then(function (edittagtext){
-               expect(edittagtext).to.contain("Test2", "Test #1j - Edit tag 1 should now read 'Test2'");
+               assert.include(edittagtext, "Test2", "Edit tag 1 should now read 'Test2'");
             })
          .end()
 
