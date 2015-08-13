@@ -46,7 +46,6 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/on",
         "dojo/dom-class",
-        "dojo/dom-style",
         "dojo/html",
         "dojo/dom-attr",
         "dojo/keys",
@@ -57,7 +56,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/DojoValidationTextBox",
         "alfresco/forms/controls/HiddenValue"], 
         function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin,
-                 template, lang, array, on, domClass, domStyle, html, domAttr, keys, event, query) {
+                 template, lang, array, on, domClass, html, domAttr, keys, event, query) {
 
    return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin], {
       
@@ -274,7 +273,7 @@ define(["dojo/_base/declare",
             var hasEditPermission = lang.getObject(this.permissionProperty, false, this.currentItem);
             if (!hasEditPermission)
             {
-               domStyle.set(this.editIconNode, "display", "none");
+               domClass.add(this.editIconNode, "disabled");
                this._disableEdit = true;
             }
          }
