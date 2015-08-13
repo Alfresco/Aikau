@@ -23,99 +23,57 @@
  * @author Dave Draper
  * @author Martin Doyle
  */
-define(["alfresco/core/Core", 
-        "dojo/_base/array", 
-        "dojo/_base/declare", 
-        "dojo/_base/lang"], 
-        function(AlfCore, array, declare, lang) {
+define([
+      "alfresco/core/Core",
+      "alfresco/core/CoreXhr",
+      "dojo/_base/array",
+      "dojo/_base/declare",
+      "dojo/_base/lang",
+      "dojo/io-query",
+      "service/constants/Default"
+   ],
+   function(AlfCore, CoreXhr, array, declare, lang, ioQuery, AlfConstants) {
 
-   return declare([AlfCore], {
+      return declare([AlfCore, CoreXhr], {
 
-      data: [
-         {
-            name: "one",
-            description: "moo"
+         /**
+          * Constructor
+          * 
+          * @instance 
+          */
+         constructor: function alfresco_testing_mockservices_FilteredListMockService__constructor() {
+            this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST", lang.hitch(this, this.onRetrieveDocumentsRequest));
          },
-         {
-            name: "two",
-            description: "moo"
-         },
-         {
-            name: "three",
-            description: "moo"
-         },
-         {
-            name: "four",
-            description: "moo"
-         },
-         {
-            name: "five",
-            description: "woof"
-         },
-         {
-            name: "five and a half",
-            description: "woof"
-         },
-         {
-            name: "six",
-            description: "woof"
-         },
-         {
-            name: "six and a half",
-            description: "woof"
-         }
-      ],
 
-      /**
-       * Constructor
-       * 
-       * @instance 
-       */
-      constructor: function alfresco_testing_mockservices_FilteredListMockService__constructor() {
-         this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST", lang.hitch(this, this.onRetrieveDocumentsRequest));
-      },
+         /**
+          * Handle document retrieval requests
+          * 
+          * @instance
+          */
+         onRetrieveDocumentsRequest: function alfresco_testing_mockservices_FilteredListMockService__onRetrieveDocumentsRequest(payload) {
 
-      /**
-       * Handle document retrieval requests
-       * 
-       * @instance
-       */
-      onRetrieveDocumentsRequest: function alfresco_testing_mockservices_FilteredListMockService__onRetrieveDocumentsRequest(payload) {
-
-         // Setup variables
-         var data = this.data,
-            hasFilters = payload.dataFilters && payload.dataFilters.length,
-            pageNum = payload.page || 1,
-            pageSize = payload.pageSize || 0,
-            startIndex = (pageNum - 1) * pageSize,
-            endIndex = startIndex + pageSize,
-            totalRecords,
-            responseTopic;
-
-         // Apply filters
-         hasFilters && array.forEach(payload.dataFilters, function(filter) {
-            if (filter.name) {
-               data = array.filter(data, function(item) {
-                  var itemName = lang.getObject(filter.name, false, item);
-                  return (itemName && itemName.indexOf(filter.value) !== -1);
-               }, this);
-            }
-         }, this);
-         totalRecords = data.length;
-
-         // Apply pagination
-         if (endIndex) {
-            data = data.slice(startIndex, Math.min(endIndex, data.length));
-         }
-
-         // Create and publish response
-         this.alfPublish(payload.alfResponseTopic + "_SUCCESS", {
-            response: {
-               totalRecords: totalRecords,
+            // Setup the request parameters object
+            var filterKeys = (payload.dataFilters && Object.keys(payload.dataFilters)) || [],
+               filters = filterKeys.map(function(filterKey) {
+                  var filter = payload.dataFilters[filterKey];
+                  return filter.name + "|" + filter.value;
+               }).join(),
+               pageNum = payload.page || 1,
+               pageSize = payload.pageSize || 0,
+               startIndex = (pageNum - 1) * pageSize;
+            var requestParams = {
+               filters: filters,
                startIndex: startIndex,
-               items: data
-            }
-         });
-      }
+               pageSize: pageSize
+            };
+
+            // Make an XHR
+            this.serviceXhr({
+               alfTopic: payload.alfResponseTopic,
+               url: AlfConstants.URL_SERVICECONTEXT + "mockdata/filteredlist?" + ioQuery.objectToQuery(requestParams),
+               method: "GET",
+               callbackScope: this
+            });
+         }
+      });
    });
-});

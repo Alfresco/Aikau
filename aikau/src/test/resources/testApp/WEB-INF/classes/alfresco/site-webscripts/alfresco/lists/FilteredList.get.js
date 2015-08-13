@@ -192,6 +192,9 @@ model.jsonModel = {
          }
       },
       {
+         name: "aikauTesting/mockservices/FilteredListMockXhr"
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]
