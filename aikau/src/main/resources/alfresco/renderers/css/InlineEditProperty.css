@@ -31,6 +31,9 @@
       opacity: 0;
       transition: opacity .2s ease-out;
       width: 16px;
+      &.disabled {
+         display: none;
+      }
    }
    .action {
       color: @general-font-color;

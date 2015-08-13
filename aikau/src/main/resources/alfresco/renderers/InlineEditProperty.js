@@ -86,23 +86,6 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
-       * The is the name of the parameter that will be used to persist changes to the property
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      postParam: null,
-      
-       /**
-       * This is the message or message key that will be used for save link text.
-       *
-       * @instance
-       * @type {string}
-       * @default "inline-edit.save.label"
-       */
-      saveLabel: "inline-edit.save.label",
-
-       /**
        * This is the message or message key that will be used for the cancel link text.
        *
        * @instance
@@ -137,6 +120,75 @@ define(["dojo/_base/declare",
       editOnClickRenderedValue: true,
 
       /**
+       * References the widget used for editing. Created by calling the 
+       * [getFormWidget]{@link module:alfresco/renderers/InlineEditProperty#getFormWidget}
+       * for the first time.
+       * 
+       * @instance
+       * @type {object}
+       * @default null
+       */
+      formWidget: null,
+
+      /**
+       * <p>In certain circimstances it may be necessary to submit additional data along with that
+       * provided by the main edit control. This configuration property should take the form:</p>
+       * <p><pre>hiddenDataRules: [
+       *   {
+       *     name: "customProperties",
+       *     rulePassValue: "hiddenData",
+       *     ruleFailValue: "",
+       *     is: ["includeHiddenData"]
+       *   }
+       * ]</pre></p>
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      hiddenDataRules: null,
+
+      /**
+       * The is the name of the parameter that will be used to persist changes to the property
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      postParam: null,
+      
+      /**
+       * The value configured will be used to look up a property for the item being rendered to 
+       * determine whether or not to render the edit controls. The default value maps to the
+       * write permissions typically found in the data returned for a Node in the Alfresco
+       * repository. If this is configured to be null then the edit controls will always
+       * be rendered.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      permissionProperty: "node.permissions.user.Write",
+
+      /**
+       * Indicates whether or not the currentItem should be updated following a successful
+       * save event.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      refreshCurrentItem: false,
+
+      /**
+       * This is the message or message key that will be used for save link text.
+       *
+       * @instance
+       * @type {string}
+       * @default "inline-edit.save.label"
+       */
+      saveLabel: "inline-edit.save.label",
+
+       /**
        * The topic to publish when a property edit should be persisted. For convenience it is assumed that document
        * or folder properties are being edited so this function is called whenever a 'publishTopic' attribute
        * has not been set. The defaults are to publish on the "ALF_CRUD_CREATE" topic which will publish a payload
@@ -207,33 +259,25 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * References the widget used for editing. Created by calling the 
-       * [getFormWidget]{@link module:alfresco/renderers/InlineEditProperty#getFormWidget}
-       * for the first time.
-       * 
-       * @instance
-       * @type {object}
-       * @default null
-       */
-      formWidget: null,
-
-      /**
-       * <p>In certain circimstances it may be necessary to submit additional data along with that
-       * provided by the main edit control. This configuration property should take the form:</p>
-       * <p><pre>hiddenDataRules: [
-       *   {
-       *     name: "customProperties",
-       *     rulePassValue: "hiddenData",
-       *     ruleFailValue: "",
-       *     is: ["includeHiddenData"]
-       *   }
-       * ]</pre></p>
+       * Extends the [inherited function]{@link module:alfresco/renderers/Property#postCreate} to
+       * check the [permissionProperty]{@link module:alfresco/renderers/InlineEditProperty#permissionProperty}
+       * to determine whether or not the current user actually has permission to edit the current item. If
+       * the user does not have permission then then edit controls will be hidden (and keyboard shortcuts suppressed).
        *
        * @instance
-       * @type {array}
-       * @default null
        */
-      hiddenDataRules: null,
+      postCreate: function alfresco_renderers_InlineEditProperty__postCreate() {
+         this.inherited(arguments);
+         if (this.permissionProperty)
+         {
+            var hasEditPermission = lang.getObject(this.permissionProperty, false, this.currentItem);
+            if (!hasEditPermission)
+            {
+               domClass.add(this.editIconNode, "disabled");
+               this._disableEdit = true;
+            }
+         }
+      },
 
       /**
        * Gets the form widget that will be rendered as the edit field. By default this will 
@@ -374,15 +418,18 @@ define(["dojo/_base/declare",
        * @instance
        */
       onEditClick: function alfresco_renderers_InlineEditProperty__onEditClick(evt) {
-         this.suppressContainerKeyboardNavigation(true);
-         var formWidget = this.getFormWidget();
-         var o = {};
-         lang.setObject(this.postParam, this.originalRenderedValue, o);
-         formWidget.setValue(o);
-         domClass.toggle(this.renderedValueNode, "hidden");
-         domClass.toggle(this.editNode, "hidden");
-         formWidget.focus(); // Focus on the input node so typing can occur straight away
-         evt && event.stop(evt);
+         if (!this._disableEdit)
+         {
+            this.suppressContainerKeyboardNavigation(true);
+            var formWidget = this.getFormWidget();
+            var o = {};
+            lang.setObject(this.postParam, this.originalRenderedValue, o);
+            formWidget.setValue(o);
+            domClass.toggle(this.renderedValueNode, "hidden");
+            domClass.toggle(this.editNode, "hidden");
+            formWidget.focus(); // Focus on the input node so typing can occur straight away
+            evt && event.stop(evt);
+         }
       },
       
       /**
@@ -412,16 +459,6 @@ define(["dojo/_base/declare",
       updateSaveData: function alfresco_renderers_InlineEditProperty__getSaveData(payload) {
          lang.mixin(payload, this.getFormWidget().getValue());
       },
-
-      /**
-       * Indicates whether or not the currentItem should be updated following a successful
-       * save event.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      refreshCurrentItem: false,
 
       /**
        * Called following successful save attempts. This will update the read-only display using the requested save
