@@ -146,9 +146,6 @@ define(["alfresco/lists/views/layouts/Row",
             }
          }, {
             _attachPoint: "title",
-            // _render: function(item) {
-            //    return item.node.properties["cm:title"];
-            // },
             id: "DETAILED_VIEW_TITLE",
             name: "alfresco/renderers/InlineEditProperty",
             config: {
