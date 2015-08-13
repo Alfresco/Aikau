@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfFilteredList (use case 1)</shortname>
+  <description>This test page implements an AlfFilteredList to address a specific use case with PublishingDropDown menus that create dialogs</description>
+  <family>aikau-unit-tests</family>
+  <url>/FilteredListUseCase1</url>
+</webscript>
