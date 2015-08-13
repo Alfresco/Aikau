@@ -87,32 +87,15 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/Paginator.properties"}],
       
       /**
-       * The number of documents to show per page.
-       * 
+       * Indicates whether the paginator should be displayed in "compact" mode where only
+       * the back and forward buttons are displayed.
+       *
        * @instance
-       * @type {number}
-       * @default 25
+       * @type {boolean}
+       * @default false
        */
-      documentsPerPage: 25,
-      
-      /**
-       * Used to keep track of the total number of documents in the current data set
-       * 
-       * @instance
-       * @type {number} 
-       * @default null
-       */
-      totalRecords: null,
-      
-      /**
-       * Used to keep track of the total number of pages in the current data set
-       * 
-       * @instance
-       * @type {number} 
-       * @default null
-       */
-      totalPages: null,
-      
+      compactMode: false,
+
       /**
        * Used to keep track of the current page number in the current data set
        * 
@@ -122,6 +105,47 @@ define(["dojo/_base/declare",
        */
       currentPage: null,
       
+      /**
+       * The number of documents to show per page.
+       * 
+       * @instance
+       * @type {number}
+       * @default 25
+       */
+      documentsPerPage: 25,
+      
+      /**
+       * This indicates whether or not the pagination controls should be hidden whilst data is being
+       * loaded.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      hideWhenLoading: false,
+
+      /**
+       * This is the topic that is expected to be published when data requests are made. This is only
+       * used when [hideWhenLoading]{@link module:alfresc/lists/Paginator#hideWhenLoading} is configured
+       * to be true and is used to set up visibility configuration so that the pagination controls
+       * can be hidden on data load requests.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       */
+      loadDataPublishTopic: null,
+
+      /**
+       * This is the scope that data requests are expected to be published on. It is the empty string by
+       * default as this is equivilent to the global scope. This is only used when 
+       * [hideWhenLoading]{@link module:alfresc/lists/Paginator#hideWhenLoading} is configured to be true.
+       *
+       * @instance
+       * @type {string}
+       */
+      loadDataPublishScope: "",
+
       /**
        * @instance
        * @type {string}
@@ -137,6 +161,95 @@ define(["dojo/_base/declare",
       pageForwardTopic: "ALF_PAGE_FORWARD",
 
       /**
+       * This will be initialised to be a select menu for the current page.
+       * 
+       * @instance
+       * @type {object}
+       * @default null 
+       */
+      pageSelector: null,
+      
+      /**
+       * This will be the group into which page selection item can be added.
+       * 
+       * @instance
+       * @type {object}
+       * @default null
+       */
+      pageSelectorGroup: null,
+      
+      /**
+       * This can be used to configure an array of page sizes that should be displayed in the paginator.
+       * If left as the default of null then an array will automatically created containing page sizes of
+       * 25, 50, 75 and 100. The array should be a simple list of numbers.
+       * 
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      pageSizes: null,
+
+      /**
+       * The property in the response that indicates the starting index of overall data to request.
+       *
+       * @instance
+       * @type {string}
+       * @default "startIndex"
+       */
+      startIndexProperty: "startIndex",
+
+      /**
+       * Used to keep track of the total number of pages in the current data set
+       * 
+       * @instance
+       * @type {number} 
+       * @default null
+       */
+      totalPages: null,
+      
+      /**
+       * Used to keep track of the total number of documents in the current data set
+       * 
+       * @instance
+       * @type {number} 
+       * @default null
+       */
+      totalRecords: null,
+      
+      /**
+       * The property in the response that indicates the total number of results available.
+       *
+       * @instance
+       * @type {string}
+       * @default "totalRecords"
+       */
+      totalResultsProperty: "totalRecords",
+
+      /**
+       * Since this widget is an implementation of an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} it is 
+       * perfectly reasonable to add additional menu widgets (such as [menu items]{@link module:alfresco/menus/AlfMenuBarItem}
+       * or [drop-down menus]{@link module:alfresco/menus/AlfMenuBarPopup}) after the main pagination controls. This
+       * can be configured to be an array of such menu widgets to be displayed.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      widgetsAfter: null,
+
+      /**
+       * Since this widget is an implementation of an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} it is 
+       * perfectly reasonable to add additional menu widgets (such as [menu items]{@link module:alfresco/menus/AlfMenuBarItem}
+       * or [drop-down menus]{@link module:alfresco/menus/AlfMenuBarPopup}) before the main pagination controls. This
+       * can be configured to be an array of such menu widgets to be displayed.
+       *
+       * @instance
+       * @type {array}
+       * @default null
+       */
+      widgetsBefore: null,
+
+      /**
        * @instance
        * @listens documentsLoadedTopic
        * @listens docsPerpageSelectionTopic
@@ -149,6 +262,32 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.pageBackTopic, lang.hitch(this, this.onPageBack));
          this.alfSubscribe(this.pageForwardTopic, lang.hitch(this, this.onPageForward));
          this.alfSubscribe(this.documentLoadFailedTopic, lang.hitch(this, this.hideControls));
+
+         if (this.hideWhenLoading === true && !this.visibilityConfig && !this.invisibilityConfig)
+         {
+            var loadRequestTopic = this.loadDataPublishScope + this.loadDataPublishTopic;
+            var loadResponseTopic = loadRequestTopic + "_SUCCESS";
+            this.visibilityConfig = {
+               rules: [
+                  {
+                     topic: loadResponseTopic,
+                     attribute: "alfTopic",
+                     is: [loadResponseTopic],
+                     strict: false
+                  }
+               ]
+            };
+            this.invisibilityConfig = {
+               rules: [
+                  {
+                     topic: loadRequestTopic,
+                     attribute: "alfTopic",
+                     is: [loadRequestTopic],
+                     strict: false
+                  }
+               ]
+            };
+         }
 
          // We're setting up a promise here primarily to ensure that any attempt to work with the
          // controls (e.g. if data fails to be loaded and we want to hide the controls) will wait
@@ -246,24 +385,6 @@ define(["dojo/_base/declare",
             }
          }));
       },
-
-      /**
-       * The property in the response that indicates the starting index of overall data to request.
-       *
-       * @instance
-       * @type {string}
-       * @default "startIndex"
-       */
-      startIndexProperty: "startIndex",
-
-      /**
-       * The property in the response that indicates the total number of results available.
-       *
-       * @instance
-       * @type {string}
-       * @default "totalRecords"
-       */
-      totalResultsProperty: "totalRecords",
 
       /**
        * This function processes the loaded document data to set the appropriate data in the paginator
@@ -390,45 +511,6 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * This will be initialised to be a select menu for the current page.
-       * 
-       * @instance
-       * @type {object}
-       * @default null 
-       */
-      pageSelector: null,
-      
-      /**
-       * This will be the group into which page selection item can be added.
-       * 
-       * @instance
-       * @type {object}
-       * @default null
-       */
-      pageSelectorGroup: null,
-      
-      /**
-       * Indicates whether the paginator should be displayed in "compact" mode where only
-       * the back and forward buttons are displayed.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      compactMode: false,
-
-      /**
-       * This can be used to configure an array of page sizes that should be displayed in the paginator.
-       * If left as the default of null then an array will automatically created containing page sizes of
-       * 25, 50, 75 and 100. The array should be a simple list of numbers.
-       * 
-       * @instance
-       * @type {array}
-       * @default null
-       */
-      pageSizes: null,
-
-      /**
        * This function is called to create a new [AlfCheckableMenuItem]{@link module:alfresco/menus/AlfCheckableMenuItem}
        * for each page size configured in the [pageSizes array]{@link module:alfresco/lists/Paginator#pageSizes}.
        * 
@@ -467,30 +549,6 @@ define(["dojo/_base/declare",
             return requestedPageSize.toString() === pageSize.toString();
          }, this);
       },
-
-      /**
-       * Since this widget is an implementation of an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} it is 
-       * perfectly reasonable to add additional menu widgets (such as [menu items]{@link module:alfresco/menus/AlfMenuBarItem}
-       * or [drop-down menus]{@link module:alfresco/menus/AlfMenuBarPopup}) before the main pagination controls. This
-       * can be configured to be an array of such menu widgets to be displayed.
-       *
-       * @instance
-       * @type {array}
-       * @default null
-       */
-      widgetsBefore: null,
-
-      /**
-       * Since this widget is an implementation of an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} it is 
-       * perfectly reasonable to add additional menu widgets (such as [menu items]{@link module:alfresco/menus/AlfMenuBarItem}
-       * or [drop-down menus]{@link module:alfresco/menus/AlfMenuBarPopup}) after the main pagination controls. This
-       * can be configured to be an array of such menu widgets to be displayed.
-       *
-       * @instance
-       * @type {array}
-       * @default null
-       */
-      widgetsAfter: null,
 
       /**
        * <p>Calls the [createPageSizeMenuItem function]{@link module:alfresco/lists/Paginator#createPageSizeMenuItem} 

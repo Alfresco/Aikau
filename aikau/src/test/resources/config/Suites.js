@@ -146,6 +146,7 @@ define({
       "src/test/resources/alfresco/lists/FilteredListUseCaseTest",
       "src/test/resources/alfresco/lists/InfiniteScrollTest",
       "src/test/resources/alfresco/lists/LocalStorageFallbackTest",
+      "src/test/resources/alfresco/lists/PaginatorVisibilityTest",
       "src/test/resources/alfresco/lists/views/AlfListViewTest",
       "src/test/resources/alfresco/lists/views/HtmlListViewTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
