@@ -87,6 +87,12 @@ define(["dojo/_base/declare",
       currentItem: null,
       
       /**
+       * [focusHighlighting description]
+       * @type {Boolean}
+       */
+      focusHighlighting: false,
+
+      /**
        * A setter for [currentData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentData}
        * @instance
        * @param {Object} data The data to set
@@ -324,6 +330,10 @@ define(["dojo/_base/declare",
        */
       rootWidgetProcessing: function alfresco_lists_views_layout___MultiItemRendererMixin__rootWidgetProcessing(widget, /*jshint unused:false*/ index) {
          domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin--item");
+         if (widget.focusHighlighting === true)
+         {
+            domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin--item__focusHighlighting");
+         }
          if (!this.rootWidgetSubscriptions)
          {
             this.rootWidgetSubscriptions = [];
