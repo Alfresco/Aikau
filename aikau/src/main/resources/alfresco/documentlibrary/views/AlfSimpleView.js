@@ -128,15 +128,11 @@ define(["dojo/_base/declare",
                                                 config: {
                                                    propertyToRender: "node.properties.cm:title",
                                                    postParam: "prop_cm_title",
+                                                   renderSize: "small",
                                                    renderedValuePrefix: "(",
                                                    renderedValueSuffix: ")",
-                                                   renderFilter: [
-                                                      {
-                                                         property: "node.properties.cm:title",
-                                                         values: [""],
-                                                         negate: true
-                                                      }
-                                                   ]
+                                                   warnIfNotAvailable: true,
+                                                   warnIfNotAvailableMessage: "no.title.message"
                                                 }
                                              }
                                           ]

@@ -91,6 +91,44 @@ define(["dojo/_base/declare",
       currentItem: null,
 
       /**
+       * Indicates whether or not the property should be de-emphasized. This will result in a lighter colour
+       * being used.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      deemphasized: false,
+
+      /**
+       * The label for the property. Won't be shown if left as null.
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      label: null,
+
+      /**
+       * Specifies a maximum width for the content of the renderer, and will overflow with an ellipsis if necessary
+       *
+       * @instance
+       * @type {string}
+       * @default null
+       */
+      maxWidth: null,
+
+      /**
+       * Indicates that this should only be displayed when the item (note: NOT the renderer) is
+       * hovered over.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      onlyShowOnHover: false,
+
+      /**
        * This should be set to the name of the property to render (e.g. "cm:name"). The property is expected
        * to be in the properties map for the item being rendered.
        *
@@ -114,96 +152,81 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-renderers-Property"
+       * @default
        */
       renderedValueClass: "alfresco-renderers-Property",
 
       /**
        * A label to go before the rendered value
+       * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       renderedValuePrefix: "",
 
       /**
        * A label to go after the rendered value
+       * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       renderedValueSuffix: "",
-
-      /**
-       * Indicates whether or not to hide the property if is not available or not set
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      warnIfNotAvailable: false,
-
-      /**
-       * This can be either small, medium or large.
-       * @instance
-       * @type {string}
-       * @default "medium"
-       */
-      renderSize: "medium",
-
-      /**
-       * This indicates whether or not the requestes property can be found for the current item
-       *
-       * @instance
-       * @type {boolean}
-       * @default true
-       */
-      renderPropertyNotFound: true,
-
-      /**
-       * Indicates that this should only be displayed when the item (note: NOT the renderer) is
-       * hovered over.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      onlyShowOnHover: false,
-
-      /**
-       * The label for the property. Won't be shown if left as null.
-       *
-       * @instance
-       * @type {string}
-       * @default null
-       */
-      label: null,
 
       /**
        * Indicates whether or not the property will be rendered on a new line.
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       renderOnNewLine: false,
 
       /**
-       * Indicates whether or not the property should be de-emphasized. This will result in a lighter colour
-       * being used.
+       * This indicates whether or not the requestes property can be found for the current item
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
-      deemphasized: false,
+      renderPropertyNotFound: true,
 
       /**
-       * Specifies a maximum width for the content of the renderer, and will overflow with an ellipsis if necessary
+       * This can be either small, medium or large.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      renderSize: "medium",
+
+      /**
+       * Indicates whether or not a message should be displayed in place of the 
+       * [propertyToRender]{@link module:alfresco/renderers/Property#propertyToRender} when it is not available.
+       * This defaults to false but if configured to be true then the 
+       * [warnIfNotAvailableMessage]{@link module:alfresco/renderers/Property#warnIfNotAvailableMessage}
+       * will be displayed.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      warnIfNotAvailable: false,
+
+      /**
+       * This is the message that will be displayed in place of the property value if that value does not
+       * exist. The message will only be displayed if 
+       * [warnIfNotAvailable]{@link module:alfresco/renderers/Property#warnIfNotAvailable} is not configured
+       * to be true. If this is left as the default value then an attempt will be made to set an appropriate
+       * message but will ultimately fallback to referencing the configured 
+       * [propertyToRender]{@link module:alfresco/renderers/Property#propertyToRender} value.
        *
        * @instance
        * @type {string}
+       * @default null
        */
-      maxWidth: null,
+      warnIfNotAvailableMessage: null,
 
       /**
        * The positions where a tooltip can appear over a truncated value
@@ -244,7 +267,7 @@ define(["dojo/_base/declare",
             if (this.warnIfNotAvailable) {
                // Get appropriate message
                // Check message based on propertyToRender otherwise default to sensible alternative
-               var warningKey = this.warnIfNoteAvailableMessage,
+               var warningKey = this.warnIfNotAvailableMessage,
                   warningMessage = "";
                if (!warningKey) {
                   warningKey = "no." + this.propertyToRender + ".message";

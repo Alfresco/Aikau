@@ -146,16 +146,19 @@ define(["alfresco/lists/views/layouts/Row",
             }
          }, {
             _attachPoint: "title",
-            _render: function(item) {
-               return item.node.properties["cm:title"];
-            },
+            // _render: function(item) {
+            //    return item.node.properties["cm:title"];
+            // },
             id: "DETAILED_VIEW_TITLE",
             name: "alfresco/renderers/InlineEditProperty",
             config: {
                propertyToRender: "node.properties.cm:title",
                postParam: "prop_cm_title",
+               renderSize: "small",
                renderedValuePrefix: "(",
-               renderedValueSuffix: ")"
+               renderedValueSuffix: ")",
+               warnIfNotAvailable: true,
+               warnIfNotAvailableMessage: "no.title.message"
             }
          }, {
             _attachPoint: "version",
@@ -186,7 +189,7 @@ define(["alfresco/lists/views/layouts/Row",
                propertyToRender: "node.properties.cm:description",
                postParam: "prop_cm_description",
                warnIfNotAvailable: true,
-               warnIfNoteAvailableMessage: "no.description.message"
+               warnIfNotAvailableMessage: "no.description.message"
             }
          }, {
             _attachPoint: "tags",
@@ -199,7 +202,7 @@ define(["alfresco/lists/views/layouts/Row",
                propertyToRender: "node.properties.cm:taggable",
                postParam: "prop_cm_taggable",
                warnIfNotAvailable: true,
-               warnIfNoteAvailableMessage: "no.tags.message"
+               warnIfNotAvailableMessage: "no.tags.message"
             }
          }, {
             _attachPoint: "category",
