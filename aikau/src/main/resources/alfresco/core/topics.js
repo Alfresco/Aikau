@@ -67,6 +67,18 @@ define([],function() {
        * @type {string}
        * @default
        */
-      PAGE_WIDGETS_READY: "ALF_WIDGETS_READY"
+      PAGE_WIDGETS_READY: "ALF_WIDGETS_READY",
+
+      /**
+       * This topic is published when a path changed. It is typically used in Document Libraries
+       * to communicate navigation through a folder hierarchy to both request data and to keep
+       * navigation widgets synchronized (e.g. [Document Lists]{@link module:alfresco/documentlibrary/AlfDocumentList}
+       * and [Path Trees]{@link module:alfresco/navigation/PathTree}).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      PATH_CHANGED: "ALF_DOCUMENTLIST_PATH_CHANGED"
    };
 });

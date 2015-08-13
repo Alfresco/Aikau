@@ -25,3 +25,7 @@
 .alfresco-layout-AlfTabContainer .dijitTabContainerTop-container {
    border: none;
 }
+
+.alfresco-layout-AlfTabContainer .alfresco-layout-AlfTabContainer__OuterTab {
+  padding: 0;
+}

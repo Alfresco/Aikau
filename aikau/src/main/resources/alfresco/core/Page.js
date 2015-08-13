@@ -23,10 +23,12 @@
  *
  * @module alfresco/core/Page
  * @extends module:alfresco/core/ProcessWidgets
+ * @mixes module:alfresco/core/ResizeMixin
  * @author Dave Draper
  * @author Martin Doyle
  */
 define(["alfresco/core/ProcessWidgets",
+        "alfresco/core/ResizeMixin",
         "alfresco/core/topics",
         "service/constants/Default",
         "dojo/string",
@@ -40,10 +42,10 @@ define(["alfresco/core/ProcessWidgets",
         "jquery", // NOTE: Need to include JQuery at root page to prevent XHR require request for first module that uses it
         "jqueryui", // NOTE: Need to include JQuery UI at root page to prevent XHR require request for first module that uses it
         "alfresco/core/shims"],
-        function(ProcessWidgets, topics, AlfConstants, string, declare, domConstruct, array,
+        function(ProcessWidgets, ResizeMixin, topics, AlfConstants, string, declare, domConstruct, array,
                  lang, domClass, win, PubQueue, jquery, jqueryui, shims) {
 
-   return declare([ProcessWidgets], {
+   return declare([ProcessWidgets, ResizeMixin], {
 
       /**
        * This is the base class for the page
@@ -327,6 +329,12 @@ define(["alfresco/core/ProcessWidgets",
          // created...
          PubQueue.getSingleton().release();
          this.alfPublish(topics.PAGE_WIDGETS_READY, {});
+
+         // Once everything has completed loading we want to publish a resize event to give all of the widgets
+         // a chance to set their dimensions correctly. This is somewhat using a sledgehammer to crack a nut but
+         // is a simple and effective means of ensuring the correct layout on page load. In particular this was
+         // prompted by issues with the AlfTabContainer in Chrome not handling client height correctly (see AKU-506)
+         this.alfPublishResizeEvent(this.domNode);
 
          // Add a class to indicate that the page is ready. This is primarily for testing purposes.
          domClass.add(this.domNode, "allWidgetsProcessed");

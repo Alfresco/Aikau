@@ -577,7 +577,7 @@ function getDocLibTree(options) {
                   siteId: options.siteId,
                   containerId: options.containerId,
                   rootNode: options.rootNode,
-                  rootLabel: options.rootLabel
+                  rootLabel: options.rootLabel || "documentlibrary.root.label"
                }
             }
          ]
@@ -1198,7 +1198,7 @@ function getDocLib(options) {
                         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
                         config: {
                            hide: options.docLibPrefrences.hideBreadcrumbTrail,
-                           rootLabel: options.rootLabel,
+                           rootLabel: options.rootLabel || "root.label",
                            lastBreadcrumbIsCurrentNode: true,
                            useHash: (options.useHash !== false),
                            pathChangeTopic: "ALF_DOCUMENTLIST_PATH_CHANGED",

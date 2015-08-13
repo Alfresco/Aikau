@@ -464,7 +464,16 @@ define(["dojo/_base/declare",
          {
             // Create a subscription to listen out for all widgets on the page being reported
             // as ready (then we can start loading data)...
-            this.pageWidgetsReadySubcription = this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.onPageWidgetsReady), true);
+            if (this.pageWidgetsReadySubcription)
+            {
+               // A subscription already exists, this can occur when an inheriting list module
+               // calls processWidgets more than once (which will result in allWidgetsProcessed
+               // being called more than once). We want to avoid multiple subscriptions - see AKU-508
+            }
+            else
+            {
+               this.pageWidgetsReadySubcription = this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.onPageWidgetsReady), true);
+            }
          }
          else
          {

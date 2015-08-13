@@ -25,8 +25,9 @@
  * @module alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */
-define(["dojo/_base/declare"], 
-        function(declare) {
+define(["dojo/_base/declare",
+        "alfresco/core/topics"], 
+        function(declare, topics) {
    
    return declare(null, {
 
@@ -333,8 +334,8 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_DOCUMENTLIST_PATH_CHANGED"
+       * @default [topics.PATH_CHANGED]{@link module:alfresco/core/topics#PATH_CHANGED}
        */
-      pathChangeTopic: "ALF_DOCUMENTLIST_PATH_CHANGED"
+      pathChangeTopic: topics.PATH_CHANGED
    });
 });

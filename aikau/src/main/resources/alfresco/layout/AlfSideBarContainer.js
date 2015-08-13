@@ -251,7 +251,7 @@ define(["dojo/_base/declare",
          }
          
          // Keep track of the overall browser window changing in size...
-         on(window, "resize", lang.hitch(this, this.resizeHandler));
+         this.alfSetupResizeSubscriptions(this.resizeHandler, this);
          
          // Perform the initial rendering...
          this.lastSidebarWidth = this.initialSidebarWidth;
@@ -295,12 +295,18 @@ define(["dojo/_base/declare",
          }
          
          // Get the position of the DOM node and the available view port height...
-         var box = domGeom.getMarginBox(this.containerNode);
          var winBox = win.getBox();
-         var availableHeight = winBox.h - box.t - this.footerHeight;
+
+         // We're using JQuery here to get the offset as it has proved more reliable than either the Dojo margin box
+         // or native browser offsetTop options...
+         var offset = $(this.domNode).offset().top;
+         var availableHeight = winBox.h - offset - this.footerHeight;
          
          // Get the height of the content...
-         var sidebarContentHeight = this.calculateHeight(this.sidebarNode, 0, this.sidebarNode.children.length - 1);
+         // NOTE: When we get the sizebar height we want to ignore the first child element as this will be the resizer
+         //       bar and will always be the previously set height, if we include this then we skew the results and
+         //       the container height can never shrink (see AKU-506)
+         var sidebarContentHeight = this.calculateHeight(this.sidebarNode, 1, this.sidebarNode.children.length - 1);
          var mainContentHeight = this.calculateHeight(this.mainNode, 0, this.mainNode.children.length);
          
          // Work out the max height for the side bar...

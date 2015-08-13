@@ -80,7 +80,7 @@ define(["intern!object",
          return browser.findByCssSelector("td.mx-url")
             .getVisibleText()
             .then(function(text) {
-               assert(decodeURIComponent(text).indexOf("&query={") === -1, "unexpected query found")
+               assert(decodeURIComponent(text).indexOf("&query={") === -1, "unexpected query found");
             });
       },
 

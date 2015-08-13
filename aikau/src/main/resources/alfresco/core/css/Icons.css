@@ -76,6 +76,27 @@
       width: 20px;
    }
 
+   &.alf-user-dashboard-icon {
+      background-image: url("../../css/images/user-dashboard.png");
+      background-repeat: no-repeat;
+      height: 20px;
+      width: 20px;
+   }
+
+   &.alf-user-set-homepage-dashboard-icon {
+      background-image: url("../../css/images/user-set-homepage-dashboard.png");
+      background-repeat: no-repeat;
+      height: 20px;
+      width: 20px;
+   }
+
+   &.alf-user-set-homepage-current-icon {
+      background-image: url("../../css/images/user-set-homepage-current.png");
+      background-repeat: no-repeat;
+      height: 20px;
+      width: 20px;
+   }
+
    &.alf-user-logout-icon {
       background-image: url("../../css/images/user-logout.png");
       background-repeat: no-repeat;
