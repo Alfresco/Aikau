@@ -233,17 +233,22 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} payload
+       * @returns {bool} true if data was loaded as a result of the hash-change
        */
       onHashChanged: function alfresco_lists_AlfHashList__onHashChanged(payload) {
          // Process the hash...
-         if(this.doHashVarUpdate(payload, this.updateInstanceValues))
+         var dataLoaded = false,
+            filtersRemoved = !this.dataFilters.length && this.currentData.filters.length;
+         if(this.doHashVarUpdate(payload, this.updateInstanceValues) || filtersRemoved)
          {
             this._updateCoreHashVars(payload);
             if (this._readyToLoad)
             {
                this.loadData();
+               dataLoaded = true;
             }
          }
+         return dataLoaded;
       },
 
       /**
