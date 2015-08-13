@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       viewMap: null,
 
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       viewControlsMap: null,
 
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        * Is there currently a request in progress?
        *
        * @instance
-       * @default false
+       * @default
        * @type {Boolean}
        */
       requestInProgress: false,
@@ -118,7 +118,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       useInfiniteScroll: false,
 
@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_RETRIEVE_DOCUMENTS_REQUEST"
+       * @default
        */
       loadDataPublishTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
 
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       loadDataPublishPayload: null,
 
@@ -275,7 +275,6 @@ define(["dojo/_base/declare",
             array.forEach(this.filteringTopics, function(topic) {
                this.alfSubscribe(topic, lang.hitch(this, this.onFilterRequest));
             }, this);
-            
          }
       },
 
@@ -292,7 +291,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       filteringTopics: null,
 
@@ -303,7 +302,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       dataFilters: null,
 
@@ -381,7 +380,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       waitForPageWidgets: true,
 
@@ -394,7 +393,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _readyToLoad: false,
 
@@ -427,7 +426,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.documentList.viewRendererName"
+       * @default
        */
       viewPreferenceProperty: "org.alfresco.share.documentList.viewRendererName",
 
@@ -576,7 +575,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "DOCLIB_TOOLBAR"
+       * @default
        */
       additionalControlsTarget: "DOCLIB_TOOLBAR",
 
@@ -586,7 +585,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       additionalViewControlVisibilityConfig: null,
 
@@ -646,7 +645,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _currentlySelectedView: null,
 
@@ -655,7 +654,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentData: null,
 
@@ -892,7 +891,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "items"
+       * @default
        */
       itemsProperty: "items",
 
@@ -903,7 +902,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "metadata"
+       * @default
        */
       metadataProperty: "metadata",
 
@@ -912,7 +911,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "startIndex"
+       * @default
        */
       startIndexProperty: "startIndex",
 
@@ -921,7 +920,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "startIndex"
+       * @default
        */
       totalResultsProperty: "totalRecords",
 
