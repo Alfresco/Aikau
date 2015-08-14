@@ -61,10 +61,7 @@ define(["alfresco/TestCommon",
             .pressKeys(keys.ARROW_DOWN)
             .end()
 
-         .getLastPublish("BELOW_ALF_EVENTS_SCROLL")
-            .then(function(payload) {
-               assert.isNotNull(payload, "List scroll event not registered");
-            })
+         .getLastPublish("BELOW_ALF_EVENTS_SCROLL", "List scroll event not registered")
             .end()
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_1 tr")
@@ -95,10 +92,7 @@ define(["alfresco/TestCommon",
             .pressKeys(keys.ARROW_DOWN)
             .end()
 
-         .getLastPublish("ABOVE_ALF_EVENTS_SCROLL")
-            .then(function(payload) {
-               assert.isNotNull(payload, "List scroll event not registered");
-            })
+         .getLastPublish("ABOVE_ALF_EVENTS_SCROLL", "List scroll event not registered")
             .end()
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_2 tr")

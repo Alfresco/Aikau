@@ -672,10 +672,7 @@ define(["intern!object",
          return browser.findByCssSelector(".dijitTabInner:nth-child(3) .tabLabel")
             .click()
          .end()
-         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS")
-            .then(function(payload) {
-               assert.isNotNull(payload, "List data was not requested on tab load");
-            });
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "List data was not requested on tab load");
       },
 
       "Post Coverage Results": function() {

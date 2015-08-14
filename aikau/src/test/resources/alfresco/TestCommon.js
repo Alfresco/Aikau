@@ -27,11 +27,13 @@
 define(["intern/dojo/node!fs",
         "intern/dojo/node!http",
         "intern/dojo/node!os",
+        "intern/dojo/lang",
         "intern",
         "config/Config",
+        "intern/dojo/Promise",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/chai!assert"],
-        function(fs, http, os, intern, Config, pollUntil, assert) {
+        function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert) {
    return {
 
       /**
@@ -167,7 +169,7 @@ define(["intern/dojo/node!fs",
             return newBrowser; 
          };
          command.session.screenieIndex = 0;
-         command.session.screenie = function() {
+         command.session.screenie = function(description) {
             var safeBrowserName = browser.environmentType.browserName.replace(/\W+/g, "_")
                .split("_")
                .map(function(namePart) {
@@ -176,40 +178,109 @@ define(["intern/dojo/node!fs",
                      .toLowerCase() : namePart.toUpperCase();
                })
                .join("_"),
-               screenshotName = safeBrowserName + "-" + testName + "-" + command.session.screenieIndex++ +".png",
-               screenshotPath = "src/test/screenshots/" + screenshotName;
-            return browser.takeScreenshot()
+               screenshotName = safeBrowserName + "-" + testName + "-" + command.session.screenieIndex++ + ".png",
+               screenshotPath = "src/test/screenshots/" + screenshotName,
+               infoId = "TestCommon__webpage-info",
+               dfd = new Promise.Deferred();
+            browser.executeAsync(function(id, desc, asyncComplete) {
+                  var oldInfo = document.getElementById(id);
+                  oldInfo && document.body.removeChild(oldInfo);
+                  var urlDisplay = document.createElement("DIV");
+                  urlDisplay.id = id;
+                  urlDisplay.style.background = "#666";
+                  urlDisplay.style.borderRadius = "0 0 0 5px";
+                  urlDisplay.style.color = "#fff";
+                  urlDisplay.style.fontFamily = "Open Sans Bold, sans-serif";
+                  urlDisplay.style.fontSize = "12px";
+                  urlDisplay.style.lineHeight = "18px";
+                  urlDisplay.style.opacity = ".9";
+                  urlDisplay.style.padding = "10px";
+                  urlDisplay.style.position = "fixed";
+                  urlDisplay.style.right = "0";
+                  urlDisplay.style.top = "0";
+                  urlDisplay.appendChild(document.createTextNode("Time: " + (new Date()).toISOString()));
+                  urlDisplay.appendChild(document.createElement("BR"));
+                  urlDisplay.appendChild(document.createTextNode("URL: " + location.href));
+                  if (desc) {
+                     urlDisplay.appendChild(document.createElement("BR"));
+                     urlDisplay.appendChild(document.createTextNode("Description: \"" + desc + "\""));
+                  }
+                  document.body.appendChild(urlDisplay);
+                  setTimeout(asyncComplete, 0);
+               }, [infoId, description])
+               .takeScreenshot()
                .then(function(screenshot) {
-                  fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary");
+                  fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary", function(err) {
+                     if (err) {
+                        dfd.reject(err);
+                     } else {
+                        dfd.resolve();
+                     }
+                  });
                });
+            return dfd.promise;
          };
          command.session.clearLog = function() {
             return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
                .click();
          };
-         command.session.getLastPublish = function(topicName, isGlobal, waitPeriod) {
+         command.session.getLastPublish = function(topicName) {
+            var isGlobal,
+               messageIfError,
+               queryTimeout;
+            Array.prototype.slice.call(arguments, 1).forEach(function(arg, index) {
+               if (typeof arg === "boolean") {
+                  isGlobal = arg;
+               } else if (typeof arg === "number") {
+                  queryTimeout = arg;
+               } else {
+                  messageIfError = arg;
+               }
+            });
             return this.getLogEntries({
                type: "PUBLISH",
                topic: topicName,
                pos: "last"
-            }, isGlobal, waitPeriod);
+            }, isGlobal, messageIfError, queryTimeout);
          };
-         command.session.getLogEntries = function(filter, isGlobal, waitPeriod) {
+         command.session.getAllPublishes = function(topicName) {
+            var isGlobal,
+               messageIfError,
+               queryTimeout;
+            Array.prototype.slice.call(arguments, 1).forEach(function(arg) {
+               if (typeof arg === "boolean") {
+                  isGlobal = arg;
+               } else if (typeof arg === "number") {
+                  queryTimeout = arg;
+               } else {
+                  messageIfError = arg;
+               }
+            });
+            return this.getLogEntries({
+               type: "PUBLISH",
+               topic: topicName,
+               pos: "all"
+            }, isGlobal, messageIfError, queryTimeout);
+         };
+         command.session.getLogEntries = function(filter, isGlobal, messageIfError, queryTimeout) {
 
-            // Normalise arguments
-            filter = filter || {};
-            waitPeriod = waitPeriod || 500;
+            // Normalise arguments to single object
+            var opts = lang.mixin({
+               pos: "all",
+               isGlobal: !!isGlobal,
+               queryTimeout: queryTimeout || 500
+            }, filter || {});
 
             // Build the selector
             var selectorBits = [".alfresco_logging_DebugLog__log__entry"];
-            filter.type && selectorBits.push("[data-aikau-log-type=\"" + filter.type + "\"]"); // Type is "..."
-            if(isGlobal) {
-               filter.topic && selectorBits.push("[data-aikau-log-topic=\"" + filter.topic + "\"]"); // Topic is "..."
+            opts.type && selectorBits.push("[data-aikau-log-type=\"" + opts.type + "\"]"); // Type is "..."
+            if (opts.isGlobal) {
+               opts.topic && selectorBits.push("[data-aikau-log-topic=\"" + opts.topic + "\"]"); // Topic is "..."
             } else {
-               filter.topic && selectorBits.push("[data-aikau-log-topic$=\"" + filter.topic + "\"]"); // Topic ends with "..."
+               opts.topic && selectorBits.push("[data-aikau-log-topic$=\"" + opts.topic + "\"]"); // Topic ends with "..."
             }
-            filter.object && selectorBits.push("[data-aikau-log-object=\"" + filter.object + "\"]"); // Object is "..."
-            if (filter.debug) {
+            opts.object && selectorBits.push("[data-aikau-log-object=\"" + opts.object + "\"]"); // Object is "..."
+            if (opts.debug) {
                console.log("Log entry selector: \"" + selectorBits.join("") + "\"");
             }
 
@@ -221,30 +292,60 @@ define(["intern/dojo/node!fs",
                .then(function(timeout) {
                   existingTimeout = timeout;
                })
-               .setExecuteAsyncTimeout(waitPeriod + 500)
-               .executeAsync(function(entriesSelector, pos, waitPeriod, callback) {
-                  setTimeout(function() {
-                     var dataObjs = [],
-                        entries = document.querySelectorAll(entriesSelector),
-                        entry,
-                        dataAttr;
-                     for (var i = 0, j = entries.length; i < j; i++) {
-                        entry = entries[i];
-                        dataAttr = entry.getAttribute("data-aikau-log-data");
-                        dataObjs.push(JSON.parse(dataAttr));
+               .setExecuteAsyncTimeout(opts.queryTimeout + 500)
+               .executeAsync(function(entriesSelector, timeout, asyncComplete) {
+
+                  // Store the start-time and start the interval
+                  var before = Date.now(),
+                     intervalPointer = setInterval(function() {
+
+                        // Perform the search and grab the payloads
+                        var entries = document.querySelectorAll(entriesSelector),
+                           dataObjs = Array.prototype.map.call(entries, function(entry) {
+                              return JSON.parse(entry.getAttribute("data-aikau-log-data"));
+                           });
+
+                        // Finish if we have data or if timeout exceeded
+                        if (dataObjs.length || (Date.now() - before > timeout)) {
+                           clearInterval(intervalPointer);
+                           asyncComplete(dataObjs);
+                        }
+
+                     }, 50);
+
+               }, [selectorBits.join(""), opts.queryTimeout])
+               .then(function(entries) {
+
+                  // Return value depends upon "pos" attribute
+                  if (entries.length || opts.pos === "all") {
+
+                     // Entries found, or empty collection acceptable
+                     var returnValue = entries;
+                     if (opts.pos === "first") {
+                        returnValue = entries.pop();
+                     } else if (opts.pos === "last") {
+                        returnValue = entries.shift();
                      }
-                     if (pos === "first") {
-                        callback(dataObjs.pop());
-                     } else if (pos === "last") {
-                        callback(dataObjs.shift());
-                     } else {
-                        callback(dataObjs);
-                     }
-                  }, waitPeriod);
-               }, [selectorBits.join(""), filter.pos, waitPeriod])
+                     return returnValue;
+
+                  } else {
+
+                     // Construct the error message
+                     var customMessage = messageIfError ? messageIfError + ": " : "",
+                        entryType = opts.type || "PUBorSUB",
+                        topic = opts.isGlobal ? opts.topic : "*" + opts.topic,
+                        errorMessage = "Unable to find a " + entryType + " of " + topic + " (timeout=" + opts.queryTimeout + "ms)";
+
+                     // Throw the error
+                     throw new Error(customMessage + errorMessage);
+                  }
+               })
                .then(function(entries) {
                   browser.setExecuteAsyncTimeout(existingTimeout);
                   return entries;
+               }, function(error) {
+                  browser.setExecuteAsyncTimeout(existingTimeout);
+                  throw error;
                });
          };
 

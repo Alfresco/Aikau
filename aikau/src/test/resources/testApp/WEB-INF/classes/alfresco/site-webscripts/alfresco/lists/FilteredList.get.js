@@ -9,6 +9,7 @@ model.jsonModel = {
             }
          }
       },
+      "alfresco/services/NavigationService",
       "aikauTesting/mockservices/FilteredListMockService"
    ],
    widgets: [
@@ -127,6 +128,13 @@ model.jsonModel = {
                                           valueAttribute: "value"
                                        }
                                     }
+                                 },
+                                 {
+                                    name: "alfresco/lists/Paginator",
+                                    config: {
+                                       documentsPerPage: 5,
+                                       pageSizes: [5, 10, 15]
+                                    }
                                  }
                               ],
                               widgets: [
@@ -182,6 +190,9 @@ model.jsonModel = {
                }
             ]
          }
+      },
+      {
+         name: "aikauTesting/mockservices/FilteredListMockXhr"
       },
       {
          name: "alfresco/logging/DebugLog"

@@ -106,9 +106,9 @@ define(["intern!object",
             .click()
             .end()
 
-         .getLastPublish("LINK_CLICKED")
-            .then(function(payload) {
-               assert.isNull(payload, "Payload published incorrectly when clicking info link");
+         .getAllPublishes("LINK_CLICKED")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Payload published incorrectly when clicking info link");
             });
       },
       
