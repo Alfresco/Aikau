@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Search in secondary tab</shortname>
+  <description>This page shows the alfresco/layout/AlfTabContainer where an alfresco/search/AlfSearchList is included on a tab that is not immediately visible.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfTabContainerUseCase2</url>
+</webscript>
