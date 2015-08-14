@@ -238,7 +238,8 @@ define(["dojo/_base/declare",
       onHashChanged: function alfresco_lists_AlfHashList__onHashChanged(payload) {
          // Process the hash...
          var dataLoaded = false,
-            filtersRemoved = !this.dataFilters.length && this.currentData.filters.length;
+            numCurrentFilters = lang.getObject("currentData.filters.length", false, this),
+            filtersRemoved = !this.dataFilters.length && numCurrentFilters;
          if(this.doHashVarUpdate(payload, this.updateInstanceValues) || filtersRemoved)
          {
             this._updateCoreHashVars(payload);

@@ -982,7 +982,7 @@ define(["dojo/_base/declare",
 
             if (foundItems)
             {
-               this.currentData.filters = this._extractFilters(payload.requestConfig);
+               this.currentData.filters = payload.requestConfig && this._extractFilters(payload.requestConfig);
                this.processLoadedData(payload.response || this.currentData);
                this.renderView();
             }
