@@ -46,7 +46,7 @@
    }
 }
 
-.alfresco-lists-views-layout-_MultiItemRendererMixin--item {
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item {
    .alfresco-renderers-Property.hover-only > span.inner {
       visibility: hidden;
    }

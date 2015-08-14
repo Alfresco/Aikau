@@ -38,7 +38,7 @@ var createList = function(id, label, loadTopic) {
          }]
       }
    };
-}
+};
 
 model.jsonModel = {
    services: [{
@@ -48,7 +48,7 @@ model.jsonModel = {
                enabled: true,
                all: true
             }
-         },
+         }
       },
       "aikauTesting/mockservices/AlfListViewMockService"
    ],
