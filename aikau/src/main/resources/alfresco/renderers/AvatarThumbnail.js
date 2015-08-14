@@ -108,6 +108,8 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_renderers_AvatarThumbnail__postMixInProperties() {
          if (!this.thumbnailUrlTemplate)
          {
+            // See AKU-509 - make sure that the user name is encoded to ensure that the image can be loaded...
+            this.currentItem[this.userNameProperty] = encodeURIComponent(this.currentItem[this.userNameProperty]);
             this.thumbnailUrlTemplate = "slingshot/profile/avatar/{" + this.userNameProperty + "}/thumbnail/avatar";
          }
          this.inherited(arguments);

@@ -17,7 +17,7 @@ model.jsonModel = {
          id: "ADMIN_THUMBNAIL",
          config: {
             currentItem: {
-               userName: "admin"
+               userName: "silly%userid"
             }
          }
       },

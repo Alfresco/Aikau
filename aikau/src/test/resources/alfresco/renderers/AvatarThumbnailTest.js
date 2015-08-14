@@ -21,45 +21,43 @@
  * @author Dave Draper
  */
 define(["intern!object",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon",
-      "intern/dojo/node!leadfoot/keys"
-   ],
-   function(registerSuite, assert, require, TestCommon, keys) {
+        "intern/chai!assert",
+        "require",
+        "alfresco/TestCommon"],
+        function(registerSuite, assert, require, TestCommon) {
 
-      var browser;
-      registerSuite({
-         name: "Avatar Thumbnail Tests",
+   var browser;
+   registerSuite({
+      name: "Avatar Thumbnail Tests",
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AvatarThumbnail", "Avatar Thumbnail Tests").end();
-         },
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AvatarThumbnail", "Avatar Thumbnail Tests").end();
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      beforeEach: function() {
+         browser.end();
+      },
 
-         "Image src is correct": function() {
-            return browser.findByCssSelector("#ADMIN_THUMBNAIL .inner img")
-               .getAttribute("src")
-               .then(function(src) {
-                  assert.match(src, /\/aikau\/proxy\/alfresco\/slingshot\/profile\/avatar\/admin\/thumbnail\/avatar/, "Avatar thumbnail src incorrect");
-               });
-         },
+      "Image src is correct": function() {
+         return browser.findByCssSelector("#ADMIN_THUMBNAIL .inner img")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.match(src, /\/aikau\/proxy\/alfresco\/slingshot\/profile\/avatar\/silly%25userid\/thumbnail\/avatar/, "Avatar thumbnail src incorrect");
+            });
+      },
 
-         "Publishes topic when clicked": function() {
-            return browser.findByCssSelector("#GUEST_THUMBNAIL .inner")
-               .click()
-               .getLastPublish("ALF_DISPLAY_NOTIFICATION", true, "Did not publish correct topic when clicked")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "message", "You clicked on the guest thumbnail", "Did not publish correct payload");
-               });
-         },
+      "Publishes topic when clicked": function() {
+         return browser.findByCssSelector("#GUEST_THUMBNAIL .inner")
+            .click()
+            .getLastPublish("ALF_DISPLAY_NOTIFICATION", true, "Did not publish correct topic when clicked")
+            .then(function(payload) {
+               assert.propertyVal(payload, "message", "You clicked on the guest thumbnail", "Did not publish correct payload");
+            });
+      },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      });
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
    });
+});
