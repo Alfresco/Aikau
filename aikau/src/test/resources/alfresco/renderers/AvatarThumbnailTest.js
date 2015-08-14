@@ -50,7 +50,7 @@ define(["intern!object",
       "Publishes topic when clicked": function() {
          return browser.findByCssSelector("#GUEST_THUMBNAIL .inner")
             .click()
-            .getLastPublish("ALF_DISPLAY_NOTIFICATION", "Did not publish correct topic when clicked")
+            .getLastPublish("ALF_DISPLAY_NOTIFICATION", true, "Did not publish correct topic when clicked")
             .then(function(payload) {
                assert.propertyVal(payload, "message", "You clicked on the guest thumbnail", "Did not publish correct payload");
             });
