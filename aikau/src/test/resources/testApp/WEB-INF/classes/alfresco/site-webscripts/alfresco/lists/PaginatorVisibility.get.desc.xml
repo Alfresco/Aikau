@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Paginator Visibility</shortname>
+  <description>A test page checking that the alfresco/lists/Paginator can be configured to be hidden when data is loading and displayed when data is provided.</description>
+  <family>aikau-unit-tests</family>
+  <url>/PaginatorVisibility</url>
+</webscript>
