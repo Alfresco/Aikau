@@ -238,6 +238,15 @@ define(["dojo/_base/declare",
       dataFailureMessage: "alflist.data.failure.message",
 
       /**
+       * The constructor
+       *
+       * @instance
+       */
+      constructor: function alfresco_lists_AlfList__constructor(){
+         this.dataFilters = [];
+      },
+
+      /**
        * This function should be overridden as necessary to change the messages displayed for various states
        * of the list, e.g.
        * <ul><li>When no view is configured</li>
@@ -316,35 +325,22 @@ define(["dojo/_base/declare",
       onFilterRequest: function alfresco_lists_AlfList__onFilterRequest(payload) {
          if (payload && payload.name)
          {
-            if (!this.dataFilters)
-            {
-               // No filters yet, just add this one as the first
-               this.dataFilters = [
-                  {
-                     name: payload.name,
-                     value: payload.value
-                  }
-               ];
-            }
-            else
-            {
-               // Look to see if there is an existing filter that needs to be updated
-               var existingFilter = array.some(this.dataFilters, function(filter) {
-                  var match = filter.name === payload.name;
-                  if (match)
-                  {
-                     filter.value = payload.value;
-                  }
-                  return match;
-               });
-               // If there wasn't an existing filter then add the payload as a new one...
-               if (!existingFilter)
+            // Look to see if there is an existing filter that needs to be updated
+            var existingFilter = array.some(this.dataFilters, function(filter) {
+               var match = filter.name === payload.name;
+               if (match)
                {
-                  this.dataFilters.push({
-                     name: payload.name,
-                     value: payload.value
-                  });
+                  filter.value = payload.value;
                }
+               return match;
+            });
+            // If there wasn't an existing filter then add the payload as a new one...
+            if (!existingFilter)
+            {
+               this.dataFilters.push({
+                  name: payload.name,
+                  value: payload.value
+               });
             }
 
             // Setup a new timeout (clearing the old one, just in case)
