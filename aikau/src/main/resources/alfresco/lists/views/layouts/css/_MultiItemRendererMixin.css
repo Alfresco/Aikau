@@ -2,7 +2,7 @@
    background-color: @list-hover-color;
 }
 
-.alfresco-lists-views-layout-_MultiItemRendererMixin__item__focusHighlighting:focus {
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item--focusHighlighting:focus {
    background-color: @list-focus-color;
 }
 

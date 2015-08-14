@@ -320,7 +320,7 @@ define(["dojo/_base/declare",
       rootWidgetSubscriptions: null,
       
       /**
-       * Adds the "alfresco-lists-views-layout-_MultiItemRendererMixin--item" class to the root DOM node
+       * Adds the "alfresco-lists-views-layout-_MultiItemRendererMixin__item" class to the root DOM node
        * of the widget and additionally subscribes to item selection publications so that additional CSS classes
        * can be added when an item is selected (so that they can be visually indicate selection).
        * 
@@ -329,10 +329,10 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the widget
        */
       rootWidgetProcessing: function alfresco_lists_views_layout___MultiItemRendererMixin__rootWidgetProcessing(widget, /*jshint unused:false*/ index) {
-         domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin--item");
+         domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin__item");
          if (widget.focusHighlighting === true)
          {
-            domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin--item__focusHighlighting");
+            domClass.add(widget.domNode, "alfresco-lists-views-layout-_MultiItemRendererMixin__item--focusHighlighting");
          }
          if (!this.rootWidgetSubscriptions)
          {
