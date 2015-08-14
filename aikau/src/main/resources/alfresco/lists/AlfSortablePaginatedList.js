@@ -425,7 +425,7 @@ define(["dojo/_base/declare",
          //       totalRecords, startIndex and currentPageSize values...
          if(this.useInfiniteScroll && 
             ((this.totalRecords > (this.startIndex + this.currentPageSize)) ||
-            (this.currentData.totalRecords < this.currentData.numberFound)))
+            (this.currentData && (this.currentData.totalRecords < this.currentData.numberFound))))
          {
             this.currentPage++;
             this.loadData();

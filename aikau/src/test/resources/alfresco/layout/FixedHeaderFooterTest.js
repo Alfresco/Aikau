@@ -120,7 +120,6 @@ define(["intern!object",
       "Check auto resizing": function() {
          var windowHeight;
          return browser.setWindowSize(null, 1024, 300)
-            .sleep(100) // Wait for resize debounce
             .findByCssSelector("body")
             .getSize()
             .then(function(size) {
