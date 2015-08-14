@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number} 
-       * @default null
+       * @default
        */
       currentPage: null,
       
@@ -165,7 +165,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null 
+       * @default
        */
       pageSelector: null,
       
@@ -174,7 +174,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       pageSelectorGroup: null,
       
@@ -185,7 +185,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       pageSizes: null,
 
@@ -203,7 +203,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number} 
-       * @default null
+       * @default
        */
       totalPages: null,
       
@@ -212,7 +212,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number} 
-       * @default null
+       * @default
        */
       totalRecords: null,
       
@@ -233,7 +233,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgetsAfter: null,
 
@@ -245,7 +245,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgetsBefore: null,
 
