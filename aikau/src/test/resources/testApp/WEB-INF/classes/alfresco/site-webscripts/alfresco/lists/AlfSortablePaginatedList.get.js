@@ -157,7 +157,7 @@ model.jsonModel = {
                         {
                            name: "alfresco/layout/FixedHeaderFooter",
                            config: {
-                              height: "200px",
+                              height: 200,
                               widgetsForHeader: [
                                  {
                                     id: "SIMULATE_PATH_CHANGE",
