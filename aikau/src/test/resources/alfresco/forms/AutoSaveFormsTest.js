@@ -68,7 +68,7 @@ define(["intern!object",
          .end()
          .getAllPublishes("AUTOSAVE_FORM2")
             .then(function(payloads) {
-               assert.lengthOf(payload, 0, "There should be no auto save when the page loads");
+               assert.lengthOf(payloads, 0, "There should be no auto save when the page loads");
             });
       },
 
