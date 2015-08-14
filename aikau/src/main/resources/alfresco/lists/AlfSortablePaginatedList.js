@@ -163,7 +163,7 @@ define(["dojo/_base/declare",
        * that when a new filter is set the page is reset to the first page.
        *
        * @instance
-       * @overridea
+       * @override
        */
       onFiltersUpdated: function alfresco_lists_AlfList__onFiltersUpdated() {
          this.onPageChange({
