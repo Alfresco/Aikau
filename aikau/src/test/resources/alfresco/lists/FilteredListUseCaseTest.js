@@ -51,10 +51,10 @@ define(["intern!object",
          .end()
          .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed")
          .end()
-         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS")
-            .then(function(payload) {
-               assert.isNull(payload, "A request to load data should not have been made when the dialog opens");
-            });
+         .getAllPublishes("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS")
+         .then(function(payloads) {
+            assert.lengthOf(payloads, 0, "A request to load data should not have been made when the dialog opens");
+         });
       },
 
       "Post Coverage Results": function() {

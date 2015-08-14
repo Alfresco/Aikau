@@ -75,10 +75,7 @@ define(["intern!object",
       "Test publication on dialog show": function() {
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog")
          .end()
-         .getLastPublish("DISPLAYED_FD1").findAllByCssSelector(TestCommon.topicSelector("DISPLAYED_FD1", "publish", "any"))
-            .then(function(payload) {
-               assert.isNotNull(payload, "Could not find topic published when displayed dialog");
-            });
+         .getLastPublish("DISPLAYED_FD1", "Could not find topic published when displayed dialog");
       },
 
       "Test recreating dialog with no ID": function() {
@@ -410,11 +407,7 @@ define(["intern!object",
                   .click()
                   .end()
 
-               .getLastPublish("DISPLAYED_INNER_DIALOG")
-                  .then(function(payload) {
-                     assert.isNotNull(payload, "Inner dialog not displayed");
-                  })
-                  .end()
+               .getLastPublish("DISPLAYED_INNER_DIALOG", "Inner dialog not displayed")
 
                .findByCssSelector("#INNER_DIALOG .dijitDialogCloseIcon")
                   .click()
@@ -440,9 +433,8 @@ define(["intern!object",
             .click()
             .end()
 
-         .getLastPublish("CUSTOM_FORM_SCOPE_CUSTOM_FORM_TOPIC", true)
+         .getLastPublish("CUSTOM_FORM_SCOPE_CUSTOM_FORM_TOPIC", true, "Did not publish correctly scoped topic")
             .then(function(payload){
-               assert.isNotNull(payload, "Did not publish correctly scoped topic");
                assert.propertyVal(payload, "text", "This is some sample text", "Did not publish correct form value to scoped topic");
             });
       },

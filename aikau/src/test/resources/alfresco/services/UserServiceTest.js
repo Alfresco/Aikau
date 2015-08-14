@@ -152,22 +152,13 @@ define(["intern!object",
          return browser.findByCssSelector("#HEADER_USER_SET_HOME_PAGE_label")
             .click()
          .end()
-         .getLastPublish("ALF_SET_USER_HOME_PAGE")
+         .getLastPublish("ALF_SET_USER_HOME_PAGE", "Set user home page not published")
+         .getLastPublish("ALF_PREFERENCE_SET", "Set user home page preference not published")
             .then(function(payload) {
-               assert.isNotNull(payload, "Set user home page not published");
+               assert.propertyVal(payload, "preference", "org.alfresco.share.user.homePage", "The user home page preference key was incorrect");
+               assert.propertyVal(payload, "value", "NewHomePage", "The user home page value was incorrect");
             })
-         .getLastPublish("ALF_PREFERENCE_SET")
-            .then(function(payload) {
-               assert.isNotNull(payload, "Set user home page preference not published");
-               if (payload) {
-                  assert.propertyVal(payload, "preference", "org.alfresco.share.user.homePage", "The user home page preference key was incorrect");
-                  assert.propertyVal(payload, "value", "NewHomePage", "The user home page value was incorrect");
-               }
-            })
-         .getLastPublish("ALF_SET_USER_HOME_PAGE_SUCCESS")
-            .then(function(payload) {
-               assert.isNotNull(payload, "Set user home page success not published");
-            });
+         .getLastPublish("ALF_SET_USER_HOME_PAGE_SUCCESS", "Set user home page success not published");
       },
 
       "Post Coverage Results": function() {
