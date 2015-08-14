@@ -1,8 +1,8 @@
-.alfresco-lists-views-layout-_MultiItemRendererMixin--item:hover .alfresco-renderers-Actions.hover-only > div,
-.alfresco-lists-views-layout-_MultiItemRendererMixin--item .alfresco-renderers-Actions.hover-only > div.dijitSelected {
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item:hover .alfresco-renderers-Actions.hover-only > div,
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item .alfresco-renderers-Actions.hover-only > div.dijitSelected {
    visibility: visible;
 }
 
-.alfresco-lists-views-layout-_MultiItemRendererMixin--item .alfresco-renderers-Actions.hover-only > div {
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item .alfresco-renderers-Actions.hover-only > div {
    visibility: hidden;
 }

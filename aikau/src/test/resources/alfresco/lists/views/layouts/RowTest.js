@@ -59,7 +59,7 @@ define(["intern!object",
          return browser.findById("CELL1_ITEM_0")
             .click()
          .end()
-         .findAllByCssSelector(".alfresco-lists-views-layout-_MultiItemRendererMixin--item__focusHighlighting")
+         .findAllByCssSelector(".alfresco-lists-views-layout-_MultiItemRendererMixin__item__focusHighlighting")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The row did not have the focus class");
             });
