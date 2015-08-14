@@ -265,19 +265,21 @@ define(["intern!object",
          return browser.findByCssSelector("#GOLDEN_REPEATING_INPUT .dijitInputContainer input")
             .clearValue()
             .type("another")
-         .end()
+            .end()
 
          .findById("CUSTOM_REPEAT_BUTTON_ID")
             .click()
-         .end()
+            .end()
 
-         .getLastPublish("POST_FORM_DIALOG")
+         .waitForDeletedByClassName(".dialogDisplayed")
+            .getLastPublish("POST_FORM_DIALOG")
             .then(function(payload) {
-               assert.propertyVal(payload, "text","another", "Textbox value was not posted");
+               assert.propertyVal(payload, "text", "another", "Textbox value was not posted");
             })
 
          .findAllByCssSelector("#CUSTOM_DIALOG.dialogDisplayed")
-         .end()
+            .end()
+
          .findByCssSelector("#GOLDEN_REPEATING_INPUT .dijitInputContainer input")
             .getProperty("value")
             .then(function(resultText) {
@@ -295,6 +297,7 @@ define(["intern!object",
             .click()
          .end()
 
+         .waitForDeletedByClassName(".dialogDisplayed")
          .getLastPublish("POST_FORM_DIALOG")
             .then(function(payload) {
                assert.propertyVal(payload, "text","encore", "Textbox value was not posted");
@@ -320,19 +323,21 @@ define(["intern!object",
          return browser.findByCssSelector("#ERROR_REPEATING_INPUT .dijitInputContainer input")
             .clearValue()
             .type("more")
-         .end()
+            .end()
 
          .findById("ERROR_REPEATING_OK_AND_REPEAT")
             .click()
-         .end()
-            
-         .getLastPublish("POST_FORM_DIALOG")
+            .end()
+
+         .waitForDeletedByClassName(".dialogDisplayed")
+            .getLastPublish("POST_FORM_DIALOG")
             .then(function(payload) {
                assert.propertyVal(payload, "text", "more", "Textbox value was not posted");
             })
 
          .findAllByCssSelector("#ERROR_REPEATING.dialogDisplayed")
-         .end()
+            .end()
+            
          .findByCssSelector("#ERROR_REPEATING_INPUT .dijitInputContainer input")
             .getProperty("value")
             .then(function(resultText) {
