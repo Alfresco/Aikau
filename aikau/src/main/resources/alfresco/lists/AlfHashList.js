@@ -184,6 +184,7 @@ define(["dojo/_base/declare",
             else
             {
                // No action required, wait for either a reload request or data to be published
+               this.alfLog("log", "This list configured to not load data immediately", this);
             }
          }
       },
