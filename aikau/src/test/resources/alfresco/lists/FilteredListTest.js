@@ -18,12 +18,15 @@
  */
 
 /**
+ * Test the filtered list widget
+ * 
  * @author Dave Draper
+ * @author Martin Doyle
  */
-define(["alfresco/TestCommon",
-        "intern/chai!assert",
-        "intern/dojo/node!leadfoot/keys",
-        "intern!object"],
+define(["alfresco/TestCommon", 
+        "intern/chai!assert", 
+        "intern/dojo/node!leadfoot/keys", 
+        "intern!object"], 
         function(TestCommon, assert, keys, registerSuite) {
 
    var browser;
@@ -66,7 +69,7 @@ define(["alfresco/TestCommon",
             .end()
 
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
-         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
             .end()
 
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
@@ -82,7 +85,7 @@ define(["alfresco/TestCommon",
             .type(keys.BACKSPACE)
             .end()
 
-         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
             .end()
 
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
@@ -91,7 +94,7 @@ define(["alfresco/TestCommon",
             });
       },
 
-      "Select a filter from drop down": function() {
+      "Select a filter from drop down (useHash=true)": function() {
          return browser.findByCssSelector("#COMPOSITE_DROPDOWN .dijitArrowButtonInner")
             .clearLog()
             .click()
@@ -101,7 +104,7 @@ define(["alfresco/TestCommon",
             .click()
             .end()
 
-         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
             .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
@@ -110,14 +113,14 @@ define(["alfresco/TestCommon",
             });
       },
 
-      "Apply a 2nd filter": function() {
+      "Apply a 2nd filter (useHash=true)": function() {
          return browser.findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
             .clearLog()
             .type("t")
             .end()
 
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
-         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
             .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
@@ -126,7 +129,7 @@ define(["alfresco/TestCommon",
             });
       },
 
-      "Hash reflects current filter values": function() {
+      "Hash reflects current filter values (useHash=true)": function() {
          return browser.getCurrentUrl()
             .then(function(url) {
                var hash = url.split("#")[1],
@@ -141,7 +144,7 @@ define(["alfresco/TestCommon",
             });
       },
 
-      "Changing hash value updates filter": function() {
+      "Changing hash value updates filter (useHash=true)": function() {
          var updatedUrl = TestCommon.testWebScriptURL("/FilteredList#description=woof");
          return browser.findByCssSelector("body")
             .clearLog()
@@ -152,13 +155,13 @@ define(["alfresco/TestCommon",
          .findByCssSelector("#COMPOSITE .alfresco-lists-views-AlfListView table")
             .getVisibleText()
             .then(function(visibleText) {
-               var text = visibleText.split("\n").join(),
-                  expectedText = "five woof,five and a half woof,six woof,six and a half woof";
+               var text = visibleText.split("\n").join("|"),
+                  expectedText = "five woof|five and a half woof|six woof|six and a half woof";
                assert.equal(text, expectedText, "Incorrect results displayed for intended filter");
             });
       },
 
-      "Filter field reflects applied filter": function() {
+      "Filter field reflects applied filter (useHash=true)": function() {
          return browser.findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL + input")
             .getProperty("value")
             .then(function(value) {
@@ -166,16 +169,23 @@ define(["alfresco/TestCommon",
             });
       },
 
-      "Deleting filter field value removes filter": function() {
-         return browser.findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL")
+      "Deleting filter field value removes filter (useHash=true)": function() {
+         var updatedUrl = TestCommon.testWebScriptURL("/FilteredList#name=one");
+         return browser.findByCssSelector("body")
             .clearLog()
-            .clearValue()
+            .get(updatedUrl)
             .end()
 
-         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
-            .then(function(payload) {
-               assert.isNotNull(payload, "Clearing filter field did not reload list");
-            })
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Didn't reload list after hash change")
+            .end()
+
+         .findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
+            .clearLog()
+            .clearValue()
+            .pressKeys(keys.TAB)
+            .end()
+
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500, "Didn't reload list after filter removal")
             .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
@@ -184,16 +194,12 @@ define(["alfresco/TestCommon",
             });
       },
 
-      "Going to next page displays second page of results": function() {
+      "Going to next page displays second page of results (useHash=true)": function() {
          return browser.findByCssSelector("#COMPOSITE .alfresco-lists-Paginator__page-forward")
             .click()
             .end()
 
-         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
-            .then(function(payload) {
-               assert.isNotNull(payload, "Going to next page did not reload list");
-            })
-            .end()
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500, "Going to next page did not reload list")
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
@@ -201,14 +207,13 @@ define(["alfresco/TestCommon",
             });
       },
 
-      "Filter values with spaces in should not be URL escaped": function() {
-         return browser
-            .findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
+      "Filter values with spaces in should not be URL escaped (useHash=true)": function() {
+         return browser.findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
             .clearLog()
             .type("five and")
             .end()
 
-         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
             .end()
 
          .findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputInner")
@@ -220,18 +225,18 @@ define(["alfresco/TestCommon",
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
-               assert.lengthOf(elements, 1, "One result should be displayed for chosen filter");
+               assert.lengthOf(elements, 1, "One result should be displayed for filter 'five and'");
             })
             .end()
 
          .findByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Cell:nth-child(2) .alfresco-renderers-Property .value")
             .getVisibleText()
             .then(function(visibleText) {
-               assert.equal(visibleText, "five and a half", "Incorrect result displayed for filter");
+               assert.equal(visibleText, "five and a half", "Incorrect result displayed for filter 'five and'");
             });
       },
 
-      "Navigating to another page and then back will re-apply filter": function() {
+      "Navigating to another page and then back will re-apply filter (useHash=true)": function() {
          var anotherPageUrl = TestCommon.testWebScriptURL("/Index"),
             returnUrl = TestCommon.testWebScriptURL("/FilteredList#description=woof");
          return browser.findByCssSelector("body")
@@ -243,9 +248,9 @@ define(["alfresco/TestCommon",
          .findByCssSelector("#COMPOSITE .alfresco-lists-views-AlfListView table")
             .getVisibleText()
             .then(function(visibleText) {
-               var text = visibleText.split("\n").join(),
-                  expectedText = "five woof,five and a half woof,six woof,six and a half woof";
-               assert.equal(text, expectedText, "Incorrect results displayed for intended filter");
+               var text = visibleText.split("\n").join("|"),
+                  expectedText = "five woof|five and a half woof|six woof|six and a half woof";
+               assert.equal(text, expectedText, "Incorrect results displayed for filter 'woof'");
             });
       },
 
