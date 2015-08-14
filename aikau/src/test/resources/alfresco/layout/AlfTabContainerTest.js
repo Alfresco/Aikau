@@ -634,6 +634,42 @@ define(["intern!object",
    });
 
    registerSuite({
+      name: "Tab Container Tests (example use case 2)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/AlfTabContainerUseCase2", "Tab Container Tests (example use case 2)").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "Select second tab and check search is not in progress": function() {
+         return browser.findByCssSelector(".dijitTabInner:nth-child(2) .tabLabel")
+            .click()
+         .end()
+         .findById("SEARCH_LIST")
+         .end()
+         .getAllPublishes("ALF_SEARCH_REQUEST")
+            .then(function(payloads){
+               assert.lengthOf(payloads, 0, "Search request should not have been made");
+            });
+      },
+
+      "Click a button to trigger a reload and check reload request occurs": function() {
+         return browser.findById("RELOAD_BUTTON_label")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST", "Search request did not occur");
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   registerSuite({
       name: "Tab Container Tests (height calculations)",
 
       setup: function() {

@@ -144,6 +144,17 @@ define(["dojo/_base/declare",
       loadDataPublishPayload: null,
 
       /**
+       * Indicates whether or not a request for data should be loaded as soon as the widget is created.
+       * This will have no effect when [currentData]{@link module:alfresco/listsl/AlfList#currentData}
+       * is configured.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      loadDataImmediately: true,
+
+      /**
        * Subscribe the document list topics.
        *
        * @instance
@@ -411,9 +422,13 @@ define(["dojo/_base/declare",
             this.processLoadedData(this.currentData);
             this.renderView();
          }
-         else
+         else if (this.loadDataImmediately)
          {
             this.loadData();
+         }
+         else
+         {
+            // No action required, wait for either a reload request or data to be published
          }
       },
 
