@@ -54,7 +54,27 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Tags.css"}]
        */
       cssRequirements: [{cssFile:"./css/Tags.css"}],
-      
+
+      /**
+       * Override [default configuration]{@link module:alfresco/renderers/Property#warnIfNotAvailable} to 
+       * display a message when no tags have been configured.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      warnIfNotAvailable: true,
+
+      /**
+       * Override [default configuration]{@link module:alfresco/renderers/Property#warnIfNotAvailableMessage} to 
+       * to set a tag specific warning message.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      warnIfNotAvailableMessage: "no.tags.message",
+
       /**
        * Overrides the [inherited function]{@link module:alfresco/renderers/Property#getRenderedProperty} to convert the tags
        * value into visual tokens.
