@@ -25,8 +25,9 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"], 
+        function (registerSuite, assert, require, TestCommon, keys) {
 
    var browser;
    registerSuite({
@@ -115,6 +116,75 @@ define(["intern!object",
          .findByCssSelector("#TAGS_4 span.action:nth-of-type(2)")
             .click()
          .end();
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   });
+
+   registerSuite({
+      name: "Tags Tests (inline creation and save)",
+
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/Tags", "Tags Tests").end();
+      },
+
+      beforeEach: function() {
+         browser.end();
+      },
+
+      "There should be no read only tags initially": function() {
+         return browser.findAllByCssSelector("#TAGS_3 .alfresco-renderers-ReadOnlyTag")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "There should be no tags initially");
+            });
+      },
+
+      "Navigate to a node with no tags and edit it": function() {
+         // Tab to the third Tags renderer and use the keyboard shortcut to edit it...
+         // An immediate request for existing tags should be made
+         return browser.pressKeys([keys.TAB])
+            .pressKeys([keys.TAB])
+            .pressKeys([keys.TAB])
+            .pressKeys([keys.CONTROL, "e"])
+            .pressKeys(keys.NULL)
+            .end()
+            .getLastPublish("ALF_RETRIEVE_CURRENT_TAGS", "No request made for existing tag data");
+      },
+
+      "Type a new tag name and hit enter to create it": function() {
+         return browser.pressKeys("tag1")
+            .pressKeys(keys.ENTER)
+            .findByCssSelector(".mx-row:last-child .mx-payload")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "{\"name\":\"tag1\"}", "Request to create new tag not made");
+               });
+      },
+
+      "New tag should be displayed": function() {
+         return browser.findAllByCssSelector("#TAGS_3 .alfresco-renderers-EditTag")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Should be displaying the tag just created");
+            });
+      },
+
+      "Hit return to save the node with the new tag": function() {
+         return browser.pressKeys([keys.ENTER])
+            .findByCssSelector(".mx-row:last-child .mx-url")
+               .getVisibleText()
+               .then(function(url) {
+                  assert.include(url, "proxy/alfresco/api/node/workspace/SpacesStore/d91128af-3b99-4710-95b6-a858eb090418/formprocessor", "A request was not made to save the node");
+               });
+      },
+
+      "The updated tag should be displayed in read-only mode": function() {
+         return browser.findAllByCssSelector("#TAGS_3 .alfresco-renderers-ReadOnlyTag")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Should be displaying the tag just created");
+            });
       },
 
       "Post Coverage Results": function() {
