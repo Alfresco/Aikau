@@ -25,16 +25,13 @@
  * widget models.</p>
  * <p>The overall [height]{@link module:alfresco/layout/FixedHeaderFooter#height} of the widget can be explicitly 
  * set but can also be left (or set) to the default value of "auto" which will make the widget take up all the available
- * space in the client window below it. It is also possible to 
- * [configure]{@link module:alfresco/layout/FixedHeaderFooter#recalculateAutoHeightOnResize} the widget so that it will
- * automatically reset the height as the window changes in size.</p>
+ * space in the client window below it.</p>
  *
  * @example <caption>Example configuration:</caption>
  * {
  *    name: "alfresco/layout/FixedHeaderFooter",
  *    config: {
  *       height: "auto",
- *       recalculateAutoHeightOnResize: true,
  *       widgetsForHeader: [
  *          {
  *             name: "alfresco/menus/AlfMenuBar",
@@ -160,13 +157,13 @@ define(["alfresco/core/ProcessWidgets",
       /**
        * If this is configured to be true the the height of the widget will be reset as the browser window is resized.
        * This will only occur  when [height]{@link module:alfresco/layout/FixedHeaderFooter#height} is set to "auto" 
-       * (which is also the default). The default value for this is false.
+       * (which is also the default).
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
-      recalculateAutoHeightOnResize: false,
+      recalculateAutoHeightOnResize: true,
 
       /**
        * The HTML template to use for the widget.
@@ -177,54 +174,41 @@ define(["alfresco/core/ProcessWidgets",
       templateString: template,
 
       /**
-       * How many ms to wait after the last publish before triggering a resize check
-       *
-       * @instance
-       * @type {number}
-       * @default 500
-       */
-      _publishDebounceMs: 500,
-
-      /**
-       * The timeout pointer that's set/cleared during the publish debouncing
-       *
-       * @instance
-       * @type {object}
-       * @default null
-       */
-      _publishDebounceTimeout: null,
-
-      /**
        * Run after widget has been created
        *
        * @instance
        */
       postCreate: function alfresco_layout_FixedHeaderFooter__postCreate() {
          // We need to potentially resize sometimes ... use these triggers
-         this.alfSetupResizeSubscriptions(this._triggerResizeCheck, this);
-         aspect.after(topic, "publish", lang.hitch(this, function(originalReturnValue) {
-            this._triggerResizeCheck();
-            return originalReturnValue;
-         }));
-
+         this.alfSetupResizeSubscriptions(this.onResize, this);
          this.setHeight();
 
          // Add in the widgets
-         this._doProcessWidgets([{
-            widgets: this.widgetsForHeader,
-            node: this.header
-         }, {
-            widgets: this.widgets,
-            node: this.content
-         }, {
-            widgets: this.widgetsForFooter,
-            node: this.footer
-         }]);
+         this._doProcessWidgets([
+            {
+               widgets: this.widgetsForHeader,
+               node: this.header
+            }, 
+            {
+               widgets: this.widgets,
+               node: this.content
+            }, 
+            {
+               widgets: this.widgetsForFooter,
+               node: this.footer
+            }
+         ]);
 
          // Do the resize
-         this._resize();
+         this.onResize();
+         this.alfPublishResizeEvent(this.domNode);
       },
 
+      /**
+       * Calculates and sets the height of the widget.
+       * 
+       * @instance
+       */
       setHeight: function alfresco_layout_FixedHeaderFooter__setHeight() {
          // When no height is specified (the only way to do this would be to configure in 
          // null or 0) or the height is left as the default we'll try and set a sensible
@@ -246,6 +230,12 @@ define(["alfresco/core/ProcessWidgets",
          }
          else
          {
+            // See AKU-483 - if the configured height is a number, assume it to be pixels...
+            if (!isNaN(this.height))
+            {
+               this.height = this.height + "px";
+            }
+
             // Set the height of the dom node
             domStyle.set(this.domNode, {
                height: this.height
@@ -263,9 +253,12 @@ define(["alfresco/core/ProcessWidgets",
          array.forEach(widgetInfos, function(widgetInfo) {
             var widgets = widgetInfo.widgets,
                node = widgetInfo.node;
-            if (widgets && widgets.length) {
+            if (widgets && widgets.length) 
+            {
                this.processWidgets(widgets, node);
-            } else {
+            } 
+            else 
+            {
                domClass.add(node, "hidden");
             }
          }, this);
@@ -277,8 +270,8 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        */
-      _resize: function alfresco_layout_FixedHeaderFooter___resize() {
-         if (this.recalculateAutoHeightOnResize === true)
+      onResize: function alfresco_layout_FixedHeaderFooter__onResize() {
+         if (this.height === "auto" && this.recalculateAutoHeightOnResize === true)
          {
             this.height = this.setHeight();
          }
@@ -290,17 +283,6 @@ define(["alfresco/core/ProcessWidgets",
             top: headerHeight + "px",
             height: (widgetHeight - headerHeight - footerHeight) + "px"
          });
-      },
-
-      /**
-       * This function is called when a resize check is required, but debounces
-       * the actual call for browser performance reasons.
-       *
-       * @instance
-       */
-      _triggerResizeCheck: function alfresco_layout_FixedHeaderFooter___triggerResizeCheck() {
-         clearTimeout(this._publishDebounceTimeout);
-         this._publishDebounceTimeout = setTimeout(lang.hitch(this, this._resize), this._publishDebounceMs);
       }
    });
 });

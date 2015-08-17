@@ -180,9 +180,8 @@ define(["intern!object",
             .click()
             .end()
 
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Navigation publication not found")
             .then(function(payload){
-               assert.isNotNull(payload, "Navigation publication not found");
                assert.propertyVal(payload, "url", "path=/different", "Navigation payload URL incorrect");
             });
       },

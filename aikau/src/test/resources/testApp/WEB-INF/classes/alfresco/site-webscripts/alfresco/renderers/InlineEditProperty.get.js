@@ -21,7 +21,27 @@ model.jsonModel = {
                items: [
                   {
                      name: "Test",
-                     option: "1"
+                     option: "1",
+                     node: {
+                        nodeRef: "dummy://node/1",
+                        permissions: {
+                           user: {
+                              Write: true
+                           }
+                        }
+                     }
+                  },
+                  {
+                     name: "Test 2",
+                     option: "2",
+                     node: {
+                        nodeRef: "dummy://node/2",
+                        permissions: {
+                           user: {
+                              Write: false
+                           }
+                        }
+                     }
                   }
                ]
             },

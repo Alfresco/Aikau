@@ -21,77 +21,59 @@
  * @module aikauTesting/mockservices/FilteredListMockService
  * @extends module:alfresco/core/Core
  * @author Dave Draper
+ * @author Martin Doyle
  */
-define(["dojo/_base/declare",
-        "alfresco/core/Core",
-        "dojo/_base/lang",
-        "dojo/_base/array"],
-        function(declare, AlfCore, lang, array) {
-   
-   return declare([AlfCore], {
-      
-      data: [
-         {
-            name: "one",
-            description: "moo"
+define([
+      "alfresco/core/Core",
+      "alfresco/core/CoreXhr",
+      "dojo/_base/array",
+      "dojo/_base/declare",
+      "dojo/_base/lang",
+      "dojo/io-query",
+      "service/constants/Default"
+   ],
+   function(AlfCore, CoreXhr, array, declare, lang, ioQuery, AlfConstants) {
+
+      return declare([AlfCore, CoreXhr], {
+
+         /**
+          * Constructor
+          * 
+          * @instance 
+          */
+         constructor: function alfresco_testing_mockservices_FilteredListMockService__constructor() {
+            this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST", lang.hitch(this, this.onRetrieveDocumentsRequest));
          },
-         {
-            name: "two",
-            description: "moo"
-         },
-         {
-            name: "three",
-            description: "moo"
-         },
-         {
-            name: "four",
-            description: "moo"
-         },
-         {
-            name: "five",
-            description: "woof"
-         },
-         {
-            name: "six",
-            description: "woof"
+
+         /**
+          * Handle document retrieval requests
+          * 
+          * @instance
+          */
+         onRetrieveDocumentsRequest: function alfresco_testing_mockservices_FilteredListMockService__onRetrieveDocumentsRequest(payload) {
+
+            // Setup the request parameters object
+            var filterKeys = (payload.dataFilters && Object.keys(payload.dataFilters)) || [],
+               filters = filterKeys.map(function(filterKey) {
+                  var filter = payload.dataFilters[filterKey];
+                  return filter.name + "|" + filter.value;
+               }).join(),
+               pageNum = payload.page || 1,
+               pageSize = payload.pageSize || 0,
+               startIndex = (pageNum - 1) * pageSize;
+            var requestParams = {
+               filters: filters,
+               startIndex: startIndex,
+               pageSize: pageSize
+            };
+
+            // Make an XHR
+            this.serviceXhr({
+               alfTopic: payload.alfResponseTopic,
+               url: AlfConstants.URL_SERVICECONTEXT + "mockdata/filteredlist?" + ioQuery.objectToQuery(requestParams),
+               method: "GET",
+               callbackScope: this
+            });
          }
-      ],
-
-      /**
-       *
-       * 
-       * @instance 
-       * @param {array} args The constructor arguments.
-       */
-      constructor: function alfresco_testing_mockservices_FilteredListMockService__constructor(args) {
-         lang.mixin(this, args);
-         this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST", lang.hitch(this, this.onRetrieveDocumentsRequest));
-      },
-
-      /**
-       * @instance
-       */
-      onRetrieveDocumentsRequest: function alfresco_testing_mockservices_FilteredListMockService__onRetrieveDocumentsRequest(payload) {
-         var data = lang.clone(this.data);
-         if (payload && payload.dataFilters)
-         {
-            array.forEach(payload.dataFilters, function(filter) {
-               if (filter.name)
-               {
-                  data = array.filter(data, function(item) {
-                     var x = lang.getObject(filter.name, false, item);
-                     return (x && x.indexOf(filter.value) !== -1);
-                  }, this);
-               }
-            }, this);
-         }
-
-         var alfTopic = payload.alfResponseTopic ? (payload.alfResponseTopic + "_SUCCESS") : "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS";
-         this.alfPublish(alfTopic, {
-            totalRecords: data.length,
-            startIndex: 0,
-            items: data
-         });
-      }
+      });
    });
-});

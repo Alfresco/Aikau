@@ -47,13 +47,10 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLastPublish("ALF_SELECTED_FILES_CHANGED")
+            .getLastPublish("ALF_SELECTED_FILES_CHANGED", "Selected files change not published")
                .then(function(payload) {
-                  assert.isNotNull(payload, "Selected files change not published");
-                  if (payload) {
-                     assert.lengthOf(payload.selectedFiles, 1, "Should have one node selected");
-                     assert.deepPropertyVal(payload, "selectedFiles[0].node.nodeRef", "workspace://SpacesStore/b0037179-f105-4858-9d8f-44bfb0f67d8a", "Incorrect node selected");
-                  }
+                  assert.lengthOf(payload.selectedFiles, 1, "Should have one node selected");
+                  assert.deepPropertyVal(payload, "selectedFiles[0].node.nodeRef", "workspace://SpacesStore/b0037179-f105-4858-9d8f-44bfb0f67d8a", "Incorrect node selected");
                });
          },
 
@@ -62,12 +59,9 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLastPublish("ALF_SELECTED_FILES_CHANGED")
+            .getLastPublish("ALF_SELECTED_FILES_CHANGED", "Selected files change not published")
                .then(function(payload) {
-                  assert.isNotNull(payload, "Selected files change not published");
-                  if (payload) {
-                     assert.lengthOf(payload.selectedFiles, 0, "Should not have a current selected node");
-                  }
+                  assert.lengthOf(payload.selectedFiles, 0, "Should not have a current selected node");
                });
          },
 

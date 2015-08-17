@@ -78,10 +78,7 @@ define(["intern!object",
          return browser.findByCssSelector("#TREE2 .dijitTreeIsRoot > div.dijitTreeNodeContainer div.dijitTreeRow .dijitTreeLabel")
             .click()
          .end()
-         .getLastPublish("ALF_ITEM_SELECTED")
-            .then(function(payload) {
-               assert.isNotNull(payload, "The topic published by clicking on TREE2 nodes is not requested custom topic");
-            });
+         .getLastPublish("ALF_ITEM_SELECTED", "The topic published by clicking on TREE2 nodes is not requested custom topic");
       },
   
       "Test that TREE1 has NOT filtered site containers": function() {

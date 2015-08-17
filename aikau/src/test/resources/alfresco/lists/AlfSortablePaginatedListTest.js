@@ -38,10 +38,7 @@ define(["intern!object",
       .execute(function() {
          document.querySelector("#INFINITE_SCROLL_AREA_WITH_DOCLIST .alfresco-layout-FixedHeaderFooter__content").scrollTop += 50;
       })
-      .getLastPublish("DOCUMENT_LIST_ALF_EVENTS_SCROLL")
-         .then(function(payload) {
-            assert.isNotNull(payload, "Document list scroll event not registered");
-         })
+      .getLastPublish("DOCUMENT_LIST_ALF_EVENTS_SCROLL", "Document list scroll event not registered")
       .end()
       .findAllByCssSelector("#DOCUMENT_LIST tr")
          .then(function(elements) {
@@ -54,10 +51,7 @@ define(["intern!object",
       .findByCssSelector(buttonId)
          .click()
       .end()
-      .getLastPublish("DOCUMENT_LIST_ALF_DOCLIST_REQUEST_FINISHED")
-         .then(function(payload) {
-            assert.isNotNull(payload, "More results not loaded");
-         })
+      .getLastPublish("DOCUMENT_LIST_ALF_DOCLIST_REQUEST_FINISHED", "More results not loaded")
       .end()
       .findAllByCssSelector("#DOCUMENT_LIST tr")
          .then(function(elements) {
@@ -141,10 +135,7 @@ define(["intern!object",
          return browser.execute(function() {
                document.querySelector("#INFINITE_SCROLL_AREA .alfresco-layout-FixedHeaderFooter__content").scrollTop += 50;
             })
-         .getLastPublish("INFINITE_SCROLL_AREA_ALF_EVENTS_SCROLL")
-            .then(function(payload) {
-               assert.isNotNull(payload, "List scroll event not registered");
-            })
+         .getLastPublish("INFINITE_SCROLL_AREA_ALF_EVENTS_SCROLL", "List scroll event not registered")
          .end()
          .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
             .then(function(elements) {
@@ -160,10 +151,7 @@ define(["intern!object",
          .findByCssSelector("#SIMULATE_FILTER_label")
             .click()
          .end()
-         .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED", false, 1500)
-            .then(function(payload) {
-               assert.isNotNull(payload, "More results not loaded");
-            })
+         .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED", 1500, "More results not loaded")
          .end()
          .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
             .then(function(elements) {
@@ -178,10 +166,7 @@ define(["intern!object",
          .findByCssSelector("#SIMULATE_RELOAD_label")
             .click()
          .end()
-         .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED")
-            .then(function(payload) {
-               assert.isNotNull(payload, "More results not loaded");
-            })
+         .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED", "More results not loaded")
          .end()
          .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
             .then(function(elements) {

@@ -160,19 +160,49 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Update the filter form fields using the filter values in the hash
+       * Update the filter form fields using the filter values in the hash, and update the
+       * [dataFilters property]{@link module:alfresco/lists/AlfList#dataFilters} at the same time.
        *
        * @instance
        */
       _updateFilterFieldsFromHash: function alfresco_lists_AlfFilteredList___updateFilterFieldsFromHash() {
+
+         // Get the hash
          var currHash = hashUtils.getHash();
+
+         // Run through all of the filter widgets
          array.forEach(Object.keys(this._filterWidgets), function(widgetName) {
+
+            // Get the widget and the filter value, normalising non-values to null
             var widget = this._filterWidgets[widgetName],
                filterValue = currHash[widgetName];
             if (typeof filterValue === "undefined") {
                filterValue = null;
             }
+
+            // Update the dataFilters
+            if (filterValue === null) {
+               this.dataFilters = array.filter(this.dataFilters, function(filter) {
+                  return filter.name !== widgetName;
+               });
+            } else {
+               var filterFound = array.some(this.dataFilters, function(filter) {
+                  if (filter.name === widgetName) {
+                     filter.value = filterValue;
+                     return true;
+                  }
+               });
+               if (!filterFound) {
+                  this.dataFilters.push({
+                     name: widgetName,
+                     value: filterValue
+                  });
+               }
+            }
+
+            // Set the widget value
             widget.setValue && widget.setValue(filterValue);
+
          }, this);
       },
 

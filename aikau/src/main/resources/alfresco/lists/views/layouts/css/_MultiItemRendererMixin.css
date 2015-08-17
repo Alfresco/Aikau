@@ -1,16 +1,16 @@
-.alfresco-lists-views-layout-_MultiItemRendererMixin--item:hover {
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item:hover {
    background-color: @list-hover-color;
 }
 
-.alfresco-lists-views-layout-_MultiItemRendererMixin--item:focus {
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item--focusHighlighting:focus {
    background-color: @list-focus-color;
 }
 
-.alfresco-lists-views-layout-_MultiItemRendererMixin--item.alfresco-lists-views-layouts-Row {
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item.alfresco-lists-views-layouts-Row {
    /* border-top: 15px solid transparent; */
 }
 
-.alfresco-lists-views-layout-_MultiItemRendererMixin--item.selected {
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item.selected {
    outline: 4px solid #4F94C9;
    outline-offset: -1px;
 }

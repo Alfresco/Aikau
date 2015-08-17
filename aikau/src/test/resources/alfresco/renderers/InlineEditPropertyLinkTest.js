@@ -171,10 +171,7 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLastPublish("TEST_PROPERTY_LINK_CLICK")
-               .then(function(payload) {
-                  assert.isNotNull(payload, "Property link topic not published on click");
-               });
+            .getLastPublish("TEST_PROPERTY_LINK_CLICK", "Property link topic not published on click");
          },
 
          "Clicking on property does not start editing": function() {
@@ -243,9 +240,8 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLastPublish("ALF_CRUD_UPDATE", true)
+            .getLastPublish("ALF_CRUD_UPDATE", true, "Property update not requested")
                .then(function(payload) {
-                  assert.isNotNull(payload, "Property update not requested");
                   assert.propertyVal(payload, "name", "New", "New value didn't publish correctly");
                   assert.propertyVal(payload, "hiddenData", "hidden_update", "Hidden value didn't get included");
                   assert.propertyVal(payload, "alfResponseScope", "", "Unscoped property link generated alfResponseScope");
@@ -279,9 +275,8 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLastPublish("ALF_CRUD_UPDATE", true)
+            .getLastPublish("ALF_CRUD_UPDATE", true, "Property update not requested")
                .then(function(payload) {
-                  assert.isNotNull(payload, "Property update not requested");
                   assert.propertyVal(payload, "alfResponseScope", "SCOPED_", "Scoped property link generated incorrect alfResponseScope");
                });
          },
@@ -292,9 +287,8 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLastPublish("TEST_PROPERTY_LINK_CLICK", true)
+            .getLastPublish("TEST_PROPERTY_LINK_CLICK", true, "'Test item (topic, no scope)' did not publish correct topic")
                .then(function(payload) {
-                  assert.isNotNull(payload, "'Test item (topic, no scope)' did not publish correct topic");
                   assert.propertyVal(payload, "alfResponseScope", "", "'Test item (topic, no scope)' generated incorrect alfResponseScope");
                })
                .end()
@@ -304,9 +298,8 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLastPublish("SCOPED_TEST_PROPERTY_LINK_CLICK", true)
+            .getLastPublish("SCOPED_TEST_PROPERTY_LINK_CLICK", true, "'Test item (topic, scoped)' did not publish correct topic")
                .then(function(payload) {
-                  assert.isNotNull(payload, "'Test item (topic, scoped)' did not publish correct topic");
                   assert.propertyVal(payload, "alfResponseScope", "SCOPED_", "'Test item (topic, scoped)' generated incorrect alfResponseScope");
                })
                .end()
@@ -316,9 +309,8 @@ define(["intern!object",
                .click()
                .end()
 
-            .getLastPublish("SCOPED_ALF_NAVIGATE_TO_PAGE", true)
+            .getLastPublish("SCOPED_ALF_NAVIGATE_TO_PAGE", true, "'Test item (no topic, scoped)' did not publish correct topic")
                .then(function(payload) {
-                  assert.isNotNull(payload, "'Test item (no topic, scoped)' did not publish correct topic");
                   assert.propertyVal(payload, "alfResponseScope", "SCOPED_", "'Test item (no topic, scoped)' generated incorrect alfResponseScope");
                });
          },

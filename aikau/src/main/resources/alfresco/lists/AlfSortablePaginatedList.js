@@ -159,19 +159,16 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#onFilterRequest} to ensure
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#onFiltersUpdated} to ensure
        * that when a new filter is set the page is reset to the first page.
        *
        * @instance
-       * @param {object} payload The filter payload
+       * @override
        */
-      onFilterRequest: function alfresco_lists_AlfSortablePaginatedList__onFilterRequest(/*jshint unused:false*/ payload) {
-         if (payload && payload.name)
-         {
-            this.onPageChange({
-               value: 1
-            });
-         }
+      onFiltersUpdated: function alfresco_lists_AlfList__onFiltersUpdated() {
+         this.onPageChange({
+            value: 1
+         });
          this.inherited(arguments);
       },
 
@@ -425,7 +422,7 @@ define(["dojo/_base/declare",
          //       totalRecords, startIndex and currentPageSize values...
          if(this.useInfiniteScroll && 
             ((this.totalRecords > (this.startIndex + this.currentPageSize)) ||
-            (this.currentData.totalRecords < this.currentData.numberFound)))
+            (this.currentData && (this.currentData.totalRecords < this.currentData.numberFound))))
          {
             this.currentPage++;
             this.loadData();

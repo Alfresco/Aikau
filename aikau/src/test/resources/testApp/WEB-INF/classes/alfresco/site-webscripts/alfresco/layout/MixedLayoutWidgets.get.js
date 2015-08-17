@@ -40,30 +40,46 @@ model.jsonModel = {
                            align: "sidebar"
                         },
                         {
-                           id: "LIST",
-                           name: "alfresco/documentlibrary/AlfDocumentList",
-                           align: "main",
+                           id: "FIXED_HEADER_FOOTER",
+                           name: "alfresco/layout/FixedHeaderFooter",
                            config: {
-                              useHash: false,
-                              currentPageSize: 10,
+                              height: "auto",
+                              recalculateAutoHeightOnResize: true,
+                              widgetsForFooter: [
+                                 {
+                                    id: "LOGO3",
+                                    name: "alfresco/logo/Logo"
+                                 }
+                              ],
                               widgets: [
                                  {
-                                    name: "alfresco/lists/views/AlfListView",
+                                    id: "LIST",
+                                    name: "alfresco/documentlibrary/AlfDocumentList",
+                                    align: "main",
                                     config: {
-                                       itemKey: "index",
+                                       useHash: false,
+                                       currentPageSize: 10,
                                        widgets: [
                                           {
-                                             name: "alfresco/lists/views/layouts/Row",
+                                             name: "alfresco/lists/views/AlfListView",
                                              config: {
+                                                itemKey: "index",
                                                 widgets: [
                                                    {
-                                                      name: "alfresco/lists/views/layouts/Cell",
+                                                      name: "alfresco/lists/views/layouts/Row",
                                                       config: {
                                                          widgets: [
                                                             {
-                                                               name: "alfresco/renderers/Property",
+                                                               name: "alfresco/lists/views/layouts/Cell",
                                                                config: {
-                                                                  propertyToRender: "index"
+                                                                  widgets: [
+                                                                     {
+                                                                        name: "alfresco/renderers/Property",
+                                                                        config: {
+                                                                           propertyToRender: "index"
+                                                                        }
+                                                                     }
+                                                                  ]
                                                                }
                                                             }
                                                          ]

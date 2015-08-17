@@ -43,10 +43,7 @@ define(["intern!object",
 
       "When there is no hash only topic is published": function() {
          return browser.findById("LIST").end()
-            .getLastPublish("LOAD")
-               .then(function(payload) {
-                  assert.isNotNull(payload, "The list should have requested data");
-               });
+            .getLastPublish("LOAD", "The list should have requested data");
       },
 
       "Post Coverage Results": function() {
@@ -72,10 +69,7 @@ define(["intern!object",
 
       "Data should have been requested": function() {
          return browser.findById("LIST").end()
-            .getLastPublish("LOAD")
-               .then(function(payload) {
-                  assert.isNotNull(payload, "The list should have requested data");
-               });
+            .getLastPublish("LOAD", "The list should have requested data");
       },
 
       "When there is no hash, the current filter is set as the hash": function() {

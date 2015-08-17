@@ -72,6 +72,7 @@ define(["intern!object",
          .click()
       .end()
       .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+      .end()
       .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem")
          .then(function(elements) {
             assert.lengthOf(elements, 3, "The data wasn't reloaded");
@@ -88,10 +89,7 @@ define(["intern!object",
          .clearLog()
          .click()
       .end()
-      .getLastPublish(pubSubScope + "ALF_CURRENT_NODEREF_CHANGED")
-         .then(function(payload) {
-            assert.isNotNull(payload, "The current Node data should have been published");
-         })
+      .getLastPublish(pubSubScope + "ALF_CURRENT_NODEREF_CHANGED", "The current Node data should have been published")
       .end()
       .findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
          .getVisibleText()

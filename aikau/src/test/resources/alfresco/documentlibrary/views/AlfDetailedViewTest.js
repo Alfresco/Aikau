@@ -92,13 +92,7 @@ define(["intern!object",
       "Title appears when specified": function() {
          return browser.findAllByCssSelector(".detail-item__title")
             .then(function(elements) {
-               assert.lengthOf(elements, 2, "Incorrect number of title widgets created");
-            })
-            .end()
-
-         .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .detail-item__title, .alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(4) .detail-item__title")
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "Title widgets were not created for correct items");
+               assert.lengthOf(elements, 4, "Incorrect number of title widgets created");
             });
       },
 

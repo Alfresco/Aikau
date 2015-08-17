@@ -45,10 +45,7 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
          .then(function(payload) {
-            assert.isNotNull(payload, "Navigation publication not found");
-            if (payload) {
-               assert.equal(payload.url, "/aikau/page/site/site1/documentlibrary#path=%2Fsome%2Frandom%2Fpath", "Unexpected location");
-            }
+            assert.equal(payload.url, "/aikau/page/site/site1/documentlibrary#path=%2Fsome%2Frandom%2Fpath", "Unexpected location");
          });
       },
 
@@ -58,10 +55,7 @@ define(["intern!object",
          .end()
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
          .then(function(payload) {
-            assert.isNotNull(payload, "Navigation publication not found");
-            if (payload) {
-               assert.equal(payload.url, "/aikau/page/repository#path=%2Fanother%2Frandom%2Fpath", "Unexpected location");
-            }
+            assert.equal(payload.url, "/aikau/page/repository#path=%2Fanother%2Frandom%2Fpath", "Unexpected location");
          });
       },
 
@@ -71,10 +65,7 @@ define(["intern!object",
          .end()
          .getLastPublish("CUSTOM_ALF_NAVIGATE_TO_PAGE")
          .then(function(payload) {
-            assert.isNotNull(payload, "Navigation publication not found");
-            if (payload) {
-               assert.equal(payload.url, "/aikau/page/site/site1/dp/ws/document-libarary#path=%2Fsome%2Frandom%2Fpath", "Unexpected location");
-            }
+            assert.equal(payload.url, "/aikau/page/site/site1/dp/ws/document-libarary#path=%2Fsome%2Frandom%2Fpath", "Unexpected location");
          });
       },
 
@@ -84,10 +75,7 @@ define(["intern!object",
          .end()
          .getLastPublish("CUSTOM_ALF_NAVIGATE_TO_PAGE")
          .then(function(payload) {
-            assert.isNotNull(payload, "Navigation publication not found");
-            if (payload) {
-               assert.equal(payload.url, "/aikau/page/dp/ws/repo#path=%2Fanother%2Frandom%2Fpath", "Unexpected location");
-            }
+            assert.equal(payload.url, "/aikau/page/dp/ws/repo#path=%2Fanother%2Frandom%2Fpath", "Unexpected location");
          });
       },
 

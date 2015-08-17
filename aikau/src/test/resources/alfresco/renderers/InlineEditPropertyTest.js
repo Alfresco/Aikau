@@ -297,6 +297,28 @@ define(["intern!object",
             });
       },
 
+      "Check edit disabled when user has no write permissions": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_1 .inlineEditValue")
+            .moveMouseTo()
+         .end()
+         .findByCssSelector("#INLINE_EDIT_ITEM_1 .editIcon")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The edit icon should not be displayed for items without write permission");
+            });
+      },
+
+      "Check keyboard shortcut edit disabled when user has no write permissions": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_1 .inlineEditValue")
+            .click()
+            .pressKeys([keys.CONTROL, "e"])
+            .pressKeys(keys.NULL)
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Keyboard shortcut should not have worked for item without write permission");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
