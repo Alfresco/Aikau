@@ -155,6 +155,6 @@
 .alfresco-share .alfresco-header-SearchBox-menu .alfresco-menus-AlfMenuBar .dijitMenuBar .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     height: 16px;
     margin-top: 0;
-    margin-left: -2px;
+    margin-left: 1px;
     padding-right: 2px;
 }
