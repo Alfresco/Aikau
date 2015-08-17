@@ -21,7 +21,7 @@
  * This service is intended to be used for performing searches. It was written specifically to
  * service requests that can be rendered by the [AlfSearchList]{@link module:alfresco/search/AlfSearchList}
  * widget.
- * 
+ *
  * @module alfresco/services/SearchService
  * @extends module:alfresco/core/Core
  * @author Dave Draper
@@ -35,11 +35,11 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/json"],
         function(declare, AlfCore, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, dojoJson) {
-   
+
    return declare([AlfCore, CoreXhr, PathUtils], {
-      
+
       /**
-       * 
+       *
        * @instance
        * @param {array} args Constructor arguments
        */
@@ -51,9 +51,18 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * The URL to call to fetch auto suggest results
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      autoSuggestAPI: AlfConstants.PROXY_URI + "slingshot/auto-suggest",
+
+      /**
        * This is the default number of items to return as a single page of result data. This value will be used if
        * a specific value isn't supplied in a search request.
-       * 
+       *
        * @instance
        * @type {number}
        * @default 25
@@ -61,8 +70,8 @@ define(["dojo/_base/declare",
       pageSize: 25,
 
       /**
-       * This is the default query to use if one isn't supplied in a search request. 
-       * 
+       * This is the default query to use if one isn't supplied in a search request.
+       *
        * @instance
        * @type {string}
        * @default ""
@@ -90,8 +99,21 @@ define(["dojo/_base/declare",
       rootNode: "alfresco://company/home",
 
       /**
+       * The URL to send a search request to
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      searchAPI: AlfConstants.PROXY_URI + "slingshot/search/",
+
+      /**
+       * The URL to send the
+       */
+
+      /**
        * This is the default site to use. This value will be used if a specific value isn't supplied in the search request.
-       * 
+       *
        * @instance
        * @type {string}
        * @default ""
@@ -100,7 +122,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is the default sort to use. This value will be used if a specific value isn't supplied in the search request.
-       * 
+       *
        * @instance
        * @type {string}
        * @default ""
@@ -109,7 +131,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is the default sort direction to use. This value will be used if a specific value isn't supplied in the search request.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default true
@@ -119,7 +141,7 @@ define(["dojo/_base/declare",
       /**
        * This is the default page index to use for multiple pages of search results. This value will be used if
        * a specific value isn't supplied in a search request.
-       * 
+       *
        * @instance
        * @type {number}
        * @default 0
@@ -128,7 +150,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is the default tag to use. This value will be used if a specific value isn't supplied in the search request.
-       * 
+       *
        * @instance
        * @type {string}
        * @default ""
@@ -150,7 +172,7 @@ define(["dojo/_base/declare",
          {
             // Check to see whether or not a success topic has been provided...
             var alfTopic = (payload.alfResponseTopic) ? payload.alfResponseTopic : "ALF_SEARCH_REQUEST";
-            var url = AlfConstants.PROXY_URI + "slingshot/search/";
+            var url = this.searchAPI;
 
             // Use any unexpected attributes as a query attribute...
             var query = this.query;
@@ -245,7 +267,7 @@ define(["dojo/_base/declare",
        */
       onAutoSuggest: function alfresco_services_SearchService__onAutoSuggest(payload) {
          // Create the root URL...
-         var url = AlfConstants.PROXY_URI + "slingshot/auto-suggest";
+         var url = this.autoSuggestAPI;
          var options = {
             t: ""
          };
