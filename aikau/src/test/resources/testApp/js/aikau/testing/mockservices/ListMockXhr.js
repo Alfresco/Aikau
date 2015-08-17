@@ -18,9 +18,9 @@
  */
 
 /**
- * Sets up a mock server for FilteredList testing
+ * Sets up a mock server for List testing
  * 
- * @module aikauTesting/mockservices/FilteredListMockXhr
+ * @module aikauTesting/mockservices/ListMockXhr
  * @author Martin Doyle
  */
 define([
@@ -70,9 +70,9 @@ define([
           *
           * @instance
           */
-         setupServer: function alfresco_testing_mockservices_FilteredListMockXhr__setupServer() {
+         setupServer: function alfresco_testing_mockservices_ListMockXhr__setupServer() {
             try {
-               this.server.respondWith(/.+filteredlist\?(.+)/, lang.hitch(this, this.respond));
+               this.server.respondWith(/.+\/list(?:\??(.+))?/, lang.hitch(this, this.respond));
                this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
             } catch (e) {
                this.alfLog("error", "The following error occurred setting up the mock server", e);
@@ -86,11 +86,12 @@ define([
           * @param {Object} request The request object
           * @param {string} queryString The query string from the request URL
           */
-         respond: function alfresco_testing_mockservices_FilteredListMockXhr__respond(request, queryString) {
+         respond: function alfresco_testing_mockservices_ListMockXhr__respond(request, queryString) {
 
             // Analyse the query
-            var queryObj = ioQuery.queryToObject(queryString),
-               filters = queryObj.filters.split(",").map(function(filter) {
+            var queryObj = ioQuery.queryToObject(queryString || ""),
+               filtersParam = queryObj.filters || "",
+               filters = filtersParam.split(",").map(function(filter) {
                   var parts = filter.split("|");
                   return {
                      name: parts[0],
