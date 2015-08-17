@@ -85,7 +85,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "aikauTesting/mockservices/ComboBoxMockXhr"
+         name: "aikauTesting/mockservices/TaggingMockXhr"
       },
       {
          name: "alfresco/logging/DebugLog"

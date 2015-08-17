@@ -1,8 +1,13 @@
 /* Accessibility Menu */
 .hiddenAccessible,
-.accessibilityMenu p,
-.accessibilityMenu a
-{
-   position: static;
-   left: auto;
+.alfresco-accessibility-AccessibilityMenu,
+.alfresco-accessibility-AccessibilityMenu__header {
+   position: inherit;
+   height: auto;
+   left: 0;
+}
+
+.alfresco-accessibility-AccessibilityMenu__access-key-item__link {
+   position: inherit;
+   left: 0;
 }

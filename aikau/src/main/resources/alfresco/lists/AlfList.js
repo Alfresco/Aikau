@@ -1129,7 +1129,7 @@ define(["dojo/_base/declare",
          if (requestConfig.url) {
             var paramString = requestConfig.url.split("?")[1],
                paramObj = (paramString && ioQuery.queryToObject(paramString)) || {},
-               filterStrings = (paramObj.filters || "").split(",");
+               filterStrings = paramObj.filters ? paramObj.filters.split(",") : [];
             filters = array.map(filterStrings, function(filter) {
                var filterParts = filter.split("|");
                return {

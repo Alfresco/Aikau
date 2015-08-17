@@ -264,12 +264,12 @@ define(["dojo/_base/declare",
        * @param {object} e The key press event
        */
       onValueEntryKeyPress: function alfresco_renderers_Tags__onValueEntryKeyPress(e) {
-         if(e.charOrCode === keys.ESCAPE)
+         if(e.charOrCode === keys.ESCAPE || e.keyCode === keys.ESCAPE)
          {
             event.stop(e);
             this.onCancel();
          }
-         else if(e.charOrCode === keys.ENTER)
+         else if(e.charOrCode === keys.ENTER || e.keyCode === keys.ENTER)
          {
             event.stop(e);
             var formValue = this.getFormWidget().getValue();
@@ -286,15 +286,6 @@ define(["dojo/_base/declare",
                this.onSave();
             }
          }
-         // else if (e.charOrCode == keys.PAGE_DOWN ||
-         //          e.charOrCode ==  keys.DOWN_ARROW ||
-         //          e.charOrCode == keys.PAGE_UP ||
-         //          e.charOrCode ==  keys.UP_ARROW)
-         // {
-         //    // Prevent up/down keys from bubbling. This is done to ensure that the 
-         //    // focus doesn't shift to the previous or next item in the view.
-         //    event.stop(e);
-         // }
       },
       
       /**
@@ -338,7 +329,7 @@ define(["dojo/_base/declare",
       onTagCreated: function alfresco_renderers_Tags__onTagCreated(payload) {
          this.alfUnsubscribeSaveHandles([this._createTagHandle]);
          this.createEditTag("name", "nodeRef", payload.response);
-         if (payload.originalRequestConfig.saveTagsAfterCreate === true)
+         if (payload.originalRequestConfig && payload.originalRequestConfig.saveTagsAfterCreate === true)
          {
             this.onSave();
          }

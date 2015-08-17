@@ -18,7 +18,7 @@
  */
 
 /**
- * @module aikauTesting/mockservices/FilteredListMockService
+ * @module aikauTesting/mockservices/ListMockService
  * @extends module:alfresco/core/Core
  * @author Dave Draper
  * @author Martin Doyle
@@ -41,7 +41,7 @@ define([
           * 
           * @instance 
           */
-         constructor: function alfresco_testing_mockservices_FilteredListMockService__constructor() {
+         constructor: function alfresco_testing_mockservices_ListMockService__constructor() {
             this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST", lang.hitch(this, this.onRetrieveDocumentsRequest));
          },
 
@@ -50,7 +50,7 @@ define([
           * 
           * @instance
           */
-         onRetrieveDocumentsRequest: function alfresco_testing_mockservices_FilteredListMockService__onRetrieveDocumentsRequest(payload) {
+         onRetrieveDocumentsRequest: function alfresco_testing_mockservices_ListMockService__onRetrieveDocumentsRequest(payload) {
 
             // Setup the request parameters object
             var filterKeys = (payload.dataFilters && Object.keys(payload.dataFilters)) || [],
@@ -61,16 +61,27 @@ define([
                pageNum = payload.page || 1,
                pageSize = payload.pageSize || 0,
                startIndex = (pageNum - 1) * pageSize;
-            var requestParams = {
-               filters: filters,
-               startIndex: startIndex,
-               pageSize: pageSize
-            };
+
+            // Setup request params
+            var requestParams = {};
+            if (startIndex) {
+               requestParams.startIndex = startIndex;
+            }
+            if (pageSize) {
+               requestParams.pageSize = pageSize;
+            }
+            if (filters) {
+               requestParams.filters = filters;
+            }
 
             // Make an XHR
+            var serviceUrl = AlfConstants.URL_SERVICECONTEXT + "mockdata/list";
+            if (Object.keys(requestParams).length) {
+               serviceUrl += "?" + ioQuery.objectToQuery(requestParams);
+            }
             this.serviceXhr({
                alfTopic: payload.alfResponseTopic,
-               url: AlfConstants.URL_SERVICECONTEXT + "mockdata/filteredlist?" + ioQuery.objectToQuery(requestParams),
+               url: serviceUrl,
                method: "GET",
                callbackScope: this
             });

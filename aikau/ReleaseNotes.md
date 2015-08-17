@@ -1,4 +1,4 @@
-Aikau 1.0.30 Release Notes
+Aikau 1.0.31 Release Notes
 ===
 
 New deprecations: 
@@ -42,6 +42,25 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.31:
+* [AKU-290](https://issues.alfresco.com/jira/browse/AKU-290)       - Added configurable support for alfresco/lists/Paginator to hide when list data is requested
+* [AKU-483](https://issues.alfresco.com/jira/browse/AKU-483)       - Update alfresco/layout/FixedHeaderFooter to assume numeric height is intended to be pixels
+* [AKU-492](https://issues.alfresco.com/jira/browse/AKU-492)       - Improved undefined variable handling by widgets used by doclib.lib.js
+* [AKU-494](https://issues.alfresco.com/jira/browse/AKU-494)       - Updated alfresco/navigation/PathTree to support useHash configuration
+* [AKU-498](https://issues.alfresco.com/jira/browse/AKU-498)       - Added support to enable list item focus highlighting
+* [AKU-499](https://issues.alfresco.com/jira/browse/AKU-499)       - Correction of search icon placement in alfresco/header/SearchBox
+* [AKU-502](https://issues.alfresco.com/jira/browse/AKU-502)       - Improved alt text for alfresco/renderers/InlineEditProperty with missing propertyToRender
+* [AKU-503](https://issues.alfresco.com/jira/browse/AKU-503)       - Updated default views and alfresco/renderers/MoreInfo to have a consistent approach to inline editing title and description
+* [AKU-504](https://issues.alfresco.com/jira/browse/AKU-504)       - Ensure cross-browser tag creation via keyboard in alfresco/renderers/Tags
+* [AKU-505](https://issues.alfresco.com/jira/browse/AKU-505)       - Ensure browser back button re-applies filters for alfresco/lists/AlfFilteredList
+* [AKU-506](https://issues.alfresco.com/jira/browse/AKU-506)       - Improved resizing behaviour in alfresco/layout/AlfSideBarContainer, alfresco/layout/AlfTabContainer and alfresco/layout/FixedHeaderFooter
+* [AKU-507](https://issues.alfresco.com/jira/browse/AKU-507)       - Resolved alfresco/lists/AlfFilteredList regressions
+* [AKU-508](https://issues.alfresco.com/jira/browse/AKU-508)       - Ensure that lists don't reload when dialogs are displayed
+* [AKU-509](https://issues.alfresco.com/jira/browse/AKU-509)       - Ensure alfresco/renderers/AvatarThumbnail uses correct URL for user names containing %
+* [AKU-510](https://issues.alfresco.com/jira/browse/AKU-510)       - Ensure alfresco/accessibility/AccessibilityMenu focues on items accessed via skip links
+* [AKU-520](https://issues.alfresco.com/jira/browse/AKU-520)       - Accessibilitt contrast correction on button colours
+* [AKU-522](https://issues.alfresco.com/jira/browse/AKU-522)       - Added configuration option to prevent lists automatically requesting data when created
+
 1.0.30:
 * [AKU-452](https://issues.alfresco.com/jira/browse/AKU-452)       - Button re-styling and LESS updates
 * [AKU-472](https://issues.alfresco.com/jira/browse/AKU-472)       - Support search without URL hashing

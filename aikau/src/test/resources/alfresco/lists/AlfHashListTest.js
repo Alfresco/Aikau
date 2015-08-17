@@ -18,93 +18,121 @@
  */
 
 /**
+ * HashList test
+ * 
  * @author Dave Draper
+ * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["alfresco/TestCommon",
+        "intern/chai!assert", 
+        "intern!object"], 
+        function(TestCommon, assert, registerSuite) {
 
    var browser;
    registerSuite({
       name: "AlfHashList Tests",
-      
+
       setup: function() {
          browser = this.remote;
          return TestCommon.loadTestWebScript(this.remote, "/AlfHashList#var1=initial", "AlfHashList Tests").end();
       },
-      
+
       beforeEach: function() {
          browser.end();
       },
-      
+
       "Test initial load request": function() {
-         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_RETRIEVE_DOCUMENTS_REQUEST", "var1", "initial"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Found the initial data request");
-            });
+         return browser.findByCssSelector("body") // Need to start session
+            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST");
       },
 
       "Check that default view payload is published correctly": function() {
-         return browser.findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCLIST_SELECT_VIEW", "selected", "true"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "The default view was published incorrectly");
+         return browser.findByCssSelector("body") // Need to start session
+            .getLastPublish("ALF_DOCLIST_SELECT_VIEW")
+            .then(function(payload) {
+               assert.propertyVal(payload, "selected", true, "The default view was published incorrectly");
             });
       },
 
       "Set hash var that won't trigger reload - type 1": function() {
-         return browser.findByCssSelector("#SET_HASH1_label")
+         return browser.findByCssSelector("#SET_HASH1")
+            .clearLog()
             .click()
-         .end()
-         // Check that the hash change topic is last, not a request to load data...
-         .findByCssSelector(TestCommon.topicSelector("ALF_HASH_CHANGED", "publish", "last"))
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_HASH_CHANGED", "var3", "test3"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "The hash was not updated correctly");
+            .end()
+
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+
+         .getLastPublish("ALF_HASH_CHANGED")
+            .then(function(payload) {
+               assert.notProperty(payload, "var1", "The hash was not updated correctly");
+               assert.notProperty(payload, "var2", "The hash was not updated correctly");
+               assert.propertyVal(payload, "var3", "test3", "The hash was not updated correctly");
+            })
+
+         .getAllPublishes("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Should not publish document request");
             });
       },
 
       "Set hash var that won't trigger reload - type 2": function() {
-         return browser.findByCssSelector("#SET_HASH2_label")
+         return browser.findByCssSelector("#SET_HASH2")
+            .clearLog()
             .click()
-         .end()
-         // Check that the hash change topic is last, not a request to load data...
-         .findByCssSelector(TestCommon.topicSelector("ALF_HASH_CHANGED", "publish", "last"))
-         .end();
+            .end()
+
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+
+         .getLastPublish("ALF_HASH_CHANGED")
+            .then(function(payload) {
+               assert.propertyVal(payload, "var1", "test1", "The hash was not updated correctly");
+               assert.notProperty(payload, "var2", "The hash was not updated correctly");
+               assert.propertyVal(payload, "var3", "test3", "The hash was not updated correctly");
+            })
+
+         .getAllPublishes("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Should not publish document request");
+            });
       },
 
       "Set hash var that won't trigger reload - type 3": function() {
-         return browser.findByCssSelector("#SET_HASH3_label")
+         return browser.findByCssSelector("#SET_HASH3")
+            .clearLog()
             .click()
-         .end()
-         // Check that the hash change topic is last, not a request to load data...
-         .findByCssSelector(TestCommon.topicSelector("ALF_HASH_CHANGED", "publish", "last"))
-         .end();
+            .end()
+
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+
+         .getLastPublish("ALF_HASH_CHANGED")
+            .then(function(payload) {
+               assert.propertyVal(payload, "var1", "test1", "The hash was not updated correctly");
+               assert.propertyVal(payload, "var2", "test2", "The hash was not updated correctly");
+               assert.propertyVal(payload, "var3", "pickle", "The hash was not updated correctly");
+            })
+
+         .getAllPublishes("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Should not publish document request");
+            });
       },
 
       "Set hash var that will trigger reload": function() {
-         return browser.findByCssSelector("#SET_HASH4_label")
+         return browser.findByCssSelector("#SET_HASH4")
+            .clearLog()
             .click()
-         .end()
-         .findByCssSelector(TestCommon.topicSelector("ALF_RETRIEVE_DOCUMENTS_REQUEST", "publish", "last"))
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_RETRIEVE_DOCUMENTS_REQUEST", "var1", "test1"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "The request did not include the mapped hash data for 'var1'");
+            .end()
+
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+
+         .getLastPublish("ALF_HASH_CHANGED")
+            .then(function(payload) {
+               assert.propertyVal(payload, "var1", "test1", "The hash was not updated correctly");
+               assert.propertyVal(payload, "var2", "test2", "The hash was not updated correctly");
+               assert.propertyVal(payload, "var3", "test3", "The hash was not updated correctly");
             })
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_RETRIEVE_DOCUMENTS_REQUEST", "var2", "test2"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "The request did not include the mapped hash data for 'var2'");
-            })
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_RETRIEVE_DOCUMENTS_REQUEST", "var3", "test3"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 0, "The request should not have included hash data for 'var3'");
-            })
-         .end();
+
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST");
       },
 
       "Post Coverage Results": function() {
