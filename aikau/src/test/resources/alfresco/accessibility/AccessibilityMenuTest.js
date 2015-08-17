@@ -21,11 +21,11 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
+        "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, require, TestCommon, keys) {
+        function (registerSuite, assert, require, TestCommon, keys) {
 
    var browser;
    registerSuite({
@@ -40,77 +40,54 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-      "Find the menu element": function () {
-         // Find the menu element
-         return browser.findById("AccessibilityMenu")
-            .then(function (el) {
-               expect(el).to.be.an("object", "The Accessibility Menu could not be found");
-            });
-      },
-
       "Find the heading text": function() {
          // Find the heading text
-         return browser.findByCssSelector("#AccessibilityMenu > p")
+         return browser.findByCssSelector(".alfresco-accessibility-AccessibilityMenu__header")
             .getVisibleText()
             .then(function(headingText) {
-               expect(headingText).to.equal("Access key links:", "The heading text is wrong");
+               assert.equal(headingText, "Access key links:", "The heading text is wrong");
             });
       },
 
       "Find the menu items": function() {
          // Find the menu items
-         return browser.findAllByCssSelector("#AccessibilityMenu > ul > li")
+         return browser.findAllByCssSelector(".alfresco-accessibility-AccessibilityMenu__access-key-item")
             .then(function (menuitems) {
-               expect(menuitems).to.have.length(8, "The Accessibility Menu does not contain 8 <li> items");
+               assert.lengthOf(menuitems, 11, "The Accessibility Menu does not contain 11 access key items");
             });
       },
 
-      "Find the first target": function() {
-         // Find the first target
-         return browser.findByCssSelector("a#accesskey-skip")
-            .then(function (el) {
-               expect(el).to.be.an("object", "The accesskey-skip target is missing");
-            });
+      "Test tab to skip to textbox (may not work on OS/X)": function() {
+         return browser.pressKeys(keys.TAB)
+            .pressKeys(keys.TAB)
+            .pressKeys(keys.TAB)
+            .pressKeys(keys.ENTER)
+            .pressKeys("H") // NOTE: need to use pressKeys and not type here
+            .getLastPublish("_valueChangeOf_textbox", "Text box was not focused");
       },
 
-      "Find the second target": function() {
-         // Find the second target
-         return browser.findById("accesskey-foot")
-            .then(function (el) {
-               expect(el).to.be.an("object", "The accesskey-foot target is missing");
-            });
-      },
-
-      "Find the first menu link - which links the first target": function() {
-         // Find the first menu link - which links the first target
-         return browser.findByCssSelector("#AccessibilityMenu > ul > li:nth-of-type(1) > a ")
-            .then(function (el) {
-               expect(el).to.be.an("object", "The first link is missing");
-            });
-      },
-
-      "Test access keys": function() {
+      "Test button access key (may not work on OS/X)": function() {
          // Hit the browser with a sequence of different accesskey combinations and the letter 's' for a nav skip
-         return browser.pressKeys([keys.SHIFT, "s"])
-            .pressKeys([keys.SHIFT])
-            .pressKeys([keys.ALT, keys.SHIFT, "s"])
-            .pressKeys([keys.ALT, keys.SHIFT])
-//       Can't do this because of a conflict in FF on Windows that calls up a dialogue
-//         .pressKeys([keys["Control"], keys["Command"], "s"])
-//         .pressKeys([keys["Control"], keys["Command"]])
-            .getCurrentUrl()
-            .then(function (page) {
-               // Only check the test if this isn't a Mac because of key combo conflicts.
-               if(browser.environmentType.platform !== "MAC") {
-                  expect(page).to.contain("#accesskey-skip", "Accesskey target not linked to");
-               }
-               else {
-               }
-            });
+         return browser.pressKeys([keys.ALT, "b"])
+            .pressKeys([keys.ALT]) // Release SHIFT (Chrome)
+            .pressKeys([keys.ALT, keys.SHIFT, "b"])
+            .pressKeys([keys.ALT, keys.SHIFT]) // Release ALT + SHIFT (Firefox)
+
+            // The button should now have focus - hit enter to use it...
+            .pressKeys(keys.ENTER)
+            .getLastPublish("BUTTON_FOCUS_SUCCESS", "Button was not focused");
+      },
+
+      "Test menu access key (may not work on OS/X)": function() {
+         // Hit the browser with a sequence of different accesskey combinations and the letter 's' for a nav skip
+         return browser.pressKeys([keys.ALT, "m"])
+            .pressKeys([keys.ALT]) // Release SHIFT (Chrome)
+            .pressKeys([keys.ALT, keys.SHIFT, "m"])
+            .pressKeys([keys.ALT, keys.SHIFT]) // Release ALT + SHIFT (Firefox)
+
+            // The button should now have focus - hit enter to use it...
+            .pressKeys(keys.ENTER)
+            .getLastPublish("MENU_FOCUS_SUCCESS", "Button was not focused");
       },
 
       "Post Coverage Results": function() {

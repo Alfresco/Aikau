@@ -59,8 +59,8 @@
          "dojo/dom",
          "dojo/dom-construct",
          "dojo/on",
-         "dojo/dom-attr"], 
-         function(declare, _WidgetBase, _TemplatedMixin, AlfCore, topics, template, lang, array, dom, domConstruct, on, domAttr) {
+         "dijit/registry"], 
+         function(declare, _WidgetBase, _TemplatedMixin, AlfCore, topics, template, lang, array, dom, domConstruct, on, registry) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -130,11 +130,14 @@
       postCreate: function alfresco_accessibility_AccessibilityMenu__postCreate() {
          // Inject access key header
          domConstruct.create("p", {
+            className: "alfresco-accessibility-AccessibilityMenu__header",
             innerHTML: this.titleMsg ? this.titleMsg : this.message(this.titleMsgKey)
          }, this.accessKeys, "first");
 
          // Create unordered list for access key items - injected at the end of the accessKeys object
-         var ul = domConstruct.create("ul", null, this.accessKeys, "last");
+         var ul = domConstruct.create("ul", {
+            className: "alfresco-accessibility-AccessibilityMenu__access-key-list"
+         }, this.accessKeys);
 
          // Then iterate menu items creating li and a tags accordingly
          array.forEach(this.menu, function(item) {
@@ -160,11 +163,14 @@
             if(list)
             {
                // Create the list item
-               var li = domConstruct.create("li", null, list, "last");
+               var li = domConstruct.create("li", {
+                  className: "alfresco-accessibility-AccessibilityMenu__access-key-item"
+               }, list, "last");
    
                // Insert an a tag into the list item
                this._createdLinks.push(
                   domConstruct.create("a", {
+                     className: "alfresco-accessibility-AccessibilityMenu__access-key-item__link",
                      href: item.url,
                      accessKey: item.key,
                      innerHTML: item.msg ? item.msg : this.message(item.msgKey)
@@ -197,6 +203,7 @@
             {
                var pos = item.after ? "after" : "before";
                domConstruct.create("a", {
+                  className: "alfresco-accessibility-AccessibilityMenu__access-key-item__link",
                   id: item.targetid,
                   innerHTML: " "
                }, item.domid, pos);
@@ -214,6 +221,7 @@
        * This function iterates over the generated menu links. If they contain a '#' value and the target item (by id) can 
        * be found then the link is given an onClick that sets and then unsets the tabindex of the target to take it out of 
        * regular page flow, and then focuses it.
+       * 
        * @instance
        * @listens ALF_WIDGETS_READY
        */
@@ -227,16 +235,34 @@
                var target = dom.byId(item.href.split("#")[1]);
                if(target)
                {
-                  on(item, "click", function(){
-                     domAttr.set(target, "tabindex", -1);
-                     on(item, "blur, focusout", function(){
-                        domAttr.remove(target, "tabindex");
-                     });
-                     target.focus();
-                  });
+                  on(item, "click", lang.hitch(this, this.onLinkClick, item, target));
                }
             }
          }
+      },
+
+      /**
+       * This function iterates over the generated menu links. If they contain a '#' value and the target item (by id) can 
+       * be found then the link is given an onClick that sets and then unsets the tabindex of the target to take it out of 
+       * regular page flow, and then focuses it.
+       * 
+       * @instance
+       * @param {object} item The clicked item
+       * @param {object} target The target configured for the clicked item
+       * @param {event} evt The click event
+       */
+      onLinkClick: function alfresco_accessibility_AccessibilityMenu__onLinkClick(item, target, evt) {
+         var widget = registry.getEnclosingWidget(target);
+         if (widget && typeof widget.focus === "function")
+         {
+            widget.focus();
+         }
+         else
+         {
+            target.focus();
+         }
+         evt.stopPropagation();
+         evt.preventDefault();
       }
    });
 });
