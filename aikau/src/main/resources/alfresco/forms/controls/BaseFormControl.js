@@ -775,6 +775,18 @@ define(["dojo/_base/declare",
       _pubSubOptionsHandle: null,
 
       /**
+       * Delegates focus calls to the wrapped widget.
+       * 
+       * @instance
+       */
+      focus: function alfresco_forms_controls_BaseFormControl__focus() {
+         if (this.wrappedWidget && typeof this.wrappedWidget.focus === "function")
+         {
+            this.wrappedWidget.focus();
+         }
+      },
+
+      /**
        * Sets up a new subscription for options changes and then publishes a request to get those options.
        *
        * @instance
