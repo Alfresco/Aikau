@@ -58,8 +58,10 @@ Resolved issues:
 * [AKU-508](https://issues.alfresco.com/jira/browse/AKU-508)       - Ensure that lists don't reload when dialogs are displayed
 * [AKU-509](https://issues.alfresco.com/jira/browse/AKU-509)       - Ensure alfresco/renderers/AvatarThumbnail uses correct URL for user names containing %
 * [AKU-510](https://issues.alfresco.com/jira/browse/AKU-510)       - Ensure alfresco/accessibility/AccessibilityMenu focues on items accessed via skip links
+* [AKU-514](https://issues.alfresco.com/jira/browse/AKU-514)       - Updates to alfresco/layout/AlfSideBarContainer layout to prevent resizer overlapping content
 * [AKU-520](https://issues.alfresco.com/jira/browse/AKU-520)       - Accessibilitt contrast correction on button colours
 * [AKU-522](https://issues.alfresco.com/jira/browse/AKU-522)       - Added configuration option to prevent lists automatically requesting data when created
+* [AKU-527](https://issues.alfresco.com/jira/browse/AKU-527)       - Update to make alfresco/services/SearchService APIs configurable
 
 1.0.30:
 * [AKU-452](https://issues.alfresco.com/jira/browse/AKU-452)       - Button re-styling and LESS updates
