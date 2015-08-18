@@ -135,6 +135,29 @@ define(["alfresco/TestCommon",
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST");
       },
 
+      "Navigating to another page and then back will re-apply hash": function() {
+         var anotherPageUrl = TestCommon.testWebScriptURL("/Index"),
+            returnUrl = TestCommon.testWebScriptURL("/AlfHashList#var1=test1&var2=test2&var3=test3");
+         return browser.findByCssSelector("body")
+            .clearLog()
+            .end()
+
+         .get(anotherPageUrl)
+            .findByCssSelector("body")
+            .end()
+
+         .get(returnUrl)
+            .findByCssSelector("body")
+            .end()
+
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "var1", "test1", "Hash not read and used correctly");
+               assert.propertyVal(payload, "var2", "test2", "Hash not read and used correctly");
+               assert.notProperty(payload, "var3", "Hash not read and used correctly");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
