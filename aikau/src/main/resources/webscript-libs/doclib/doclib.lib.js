@@ -577,7 +577,8 @@ function getDocLibTree(options) {
                   siteId: options.siteId,
                   containerId: options.containerId,
                   rootNode: options.rootNode,
-                  rootLabel: options.rootLabel || "documentlibrary.root.label"
+                  rootLabel: options.rootLabel || "documentlibrary.root.label",
+                  useHash: (options.useHash !== false)
                }
             }
          ]
