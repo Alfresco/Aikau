@@ -28,8 +28,10 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function(registerSuite, expect, assert, require, TestCommon, keys) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Basic Header Widgets Tests",
 
       setup: function() {
@@ -224,9 +226,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Add Favourites Tests",
 
       setup: function() {
@@ -264,9 +270,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Remove Favourites Tests",
 
       setup: function() {
@@ -304,9 +314,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Title Tests",
 
       setup: function() {
@@ -362,9 +376,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Set Title Tests",
 
       setup: function() {
@@ -394,5 +412,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

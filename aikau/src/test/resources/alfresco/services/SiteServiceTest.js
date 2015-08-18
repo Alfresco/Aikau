@@ -27,8 +27,10 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Site Service Tests (Site details)",
 
       setup: function() {
@@ -74,9 +76,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Site Service Tests (Favourite and recent sites)",
 
       setup: function() {
@@ -167,9 +173,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Site Service Tests (Site memberships)",
 
       setup: function() {
@@ -387,9 +397,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Site Service Tests (Update and delete site)",
 
       setup: function() {
@@ -434,5 +448,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

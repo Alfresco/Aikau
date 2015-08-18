@@ -28,8 +28,10 @@ define(["intern!object",
        function(registerSuite, assert, TestCommon) {
 
    /* global document*/
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "FixedHeaderFooter tests",
 
       setup: function() {
@@ -88,55 +90,60 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
-   });
+   };
+});
 
-   registerSuite({
-      name: "FixedHeaderFooter tests (auto height calculations)",
+   registerSuite(function(){
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AutoHeightFixedHeaderFooter", "FixedHeaderFooter tests (auto height calculations)").end();
-      },
+      return {
+         name: "FixedHeaderFooter tests (auto height calculations)",
 
-      beforeEach: function() {
-         browser.end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/AutoHeightFixedHeaderFooter", "FixedHeaderFooter tests (auto height calculations)").end();
+         },
 
-      "Check height is calculated": function() {
-         var windowHeight;
-         return browser.findByCssSelector("body")
-            .getSize()
-            .then(function(size) {
-               windowHeight = size.height;
-            })
-         .end()
-         .findByCssSelector("#HEADER_FOOTER")
-            .getSize()
-            .then(function(size) {
-               // PLEASE NOTE: 20 pixels deducted for test page padding
-               assert.equal(size.height, windowHeight - 20, "Height not calculated correctly");
-            });
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Check auto resizing": function() {
-         var windowHeight;
-         return browser.setWindowSize(null, 1024, 300)
-            .findByCssSelector("body")
-            .getSize()
-            .then(function(size) {
-               windowHeight = size.height;
-            })
-         .end()
-         .findByCssSelector("#HEADER_FOOTER")
-            .getSize()
-            .then(function(size) {
-               // PLEASE NOTE: 20 pixels deducted for test page padding
-               assert.equal(size.height, windowHeight - 20, "Height not calculated correctly");
-            });
-      },
+         "Check height is calculated": function() {
+            var windowHeight;
+            return browser.findByCssSelector("body")
+               .getSize()
+               .then(function(size) {
+                  windowHeight = size.height;
+               })
+            .end()
+            .findByCssSelector("#HEADER_FOOTER")
+               .getSize()
+               .then(function(size) {
+                  // PLEASE NOTE: 20 pixels deducted for test page padding
+                  assert.equal(size.height, windowHeight - 20, "Height not calculated correctly");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
+         "Check auto resizing": function() {
+            var windowHeight;
+            return browser.setWindowSize(null, 1024, 300)
+               .findByCssSelector("body")
+               .getSize()
+               .then(function(size) {
+                  windowHeight = size.height;
+               })
+            .end()
+            .findByCssSelector("#HEADER_FOOTER")
+               .getSize()
+               .then(function(size) {
+                  // PLEASE NOTE: 20 pixels deducted for test page padding
+                  assert.equal(size.height, windowHeight - 20, "Height not calculated correctly");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

@@ -27,9 +27,10 @@ define(["intern!object",
    ],
    function(registerSuite, assert, require, TestCommon) {
 
-      var browser;
+registerSuite(function(){
+   var browser;
 
-      registerSuite({
+   return {
 
          name: "Service Filtering Tests",
 
@@ -93,5 +94,6 @@ define(["intern!object",
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    });

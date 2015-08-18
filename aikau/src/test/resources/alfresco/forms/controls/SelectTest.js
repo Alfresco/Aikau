@@ -39,8 +39,10 @@ define(["intern!object",
    // Get specific menu option:
    //    #FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Select Menu Tests",
 
       setup: function() {
@@ -285,5 +287,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

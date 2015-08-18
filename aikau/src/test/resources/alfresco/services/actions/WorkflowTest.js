@@ -25,114 +25,125 @@ define(["intern!object",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon"],
-        function(registerSuite, assert, require, TestCommon) {
+           function(registerSuite, assert, require, TestCommon) {
 
-   var browser;
-   registerSuite({
-      name: "Assign Workflow Test",
+   registerSuite(function(){
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions", "Assign Workflow Test").end();
-      },
+      return {
+         name: "Assign Workflow Test",
 
-      beforeEach: function() {
-         browser.end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions", "Assign Workflow Test").end();
+         },
 
-      "Assign a workflow": function() {
-         return browser.findByCssSelector("#ASSIGN_label")
-            .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "url", "/aikau/page/dp/ws/start-workflow"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Workflow not assigned");
-            })
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "type", "FULL_PATH"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Workflow URL type incorrect");
-            });
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
+         "Assign a workflow": function() {
+            return browser.findByCssSelector("#ASSIGN_label")
+               .click()
+            .end()
+            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "url", "/aikau/page/dp/ws/start-workflow"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Workflow not assigned");
+               })
+            .end()
+            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "type", "FULL_PATH"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Workflow URL type incorrect");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
-   registerSuite({
-      name: "Simple Workflow Actions Tests (Successes)",
+   registerSuite(function(){
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions?responseCode=200", "Simple Workflow Actions Tests").end();
-      },
+      return {
+         name: "Simple Workflow Actions Tests (Successes)",
 
-      beforeEach: function() {
-         browser.end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions?responseCode=200", "Simple Workflow Actions Tests").end();
+         },
 
-      "Approve a workflow": function() {
-         return browser.findByCssSelector("#APPROVE_SUCCESS_label")
-            .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "File marked as approved"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Simple approval success notification not found");
-            });
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Reject a workflow": function() {
-         return browser.findByCssSelector("#REJECT_SUCCESS_label")
-            .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "File marked as rejected"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Simple rejection success notification not found");
-            });
-      },
+         "Approve a workflow": function() {
+            return browser.findByCssSelector("#APPROVE_SUCCESS_label")
+               .click()
+            .end()
+            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "File marked as approved"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Simple approval success notification not found");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
+         "Reject a workflow": function() {
+            return browser.findByCssSelector("#REJECT_SUCCESS_label")
+               .click()
+            .end()
+            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "File marked as rejected"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Simple rejection success notification not found");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
-   registerSuite({
-      name: "Simple Workflow Actions Tests (Failures)",
+   registerSuite(function(){
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions?responseCode=500", "Simple Workflow Actions Tests").end();
-      },
+      return {
+         name: "Simple Workflow Actions Tests (Failures)",
 
-      beforeEach: function() {
-         browser.end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions?responseCode=500", "Simple Workflow Actions Tests").end();
+         },
 
-      "Approve a workflow": function() {
-         return browser.findByCssSelector("#APPROVE_FAILURE_label")
-            .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action couldn't be completed."))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Simple approval failure notification not found");
-            });
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Reject a workflow": function() {
-         return browser.findByCssSelector("#REJECT_FAILURE_label")
-            .click()
-         .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_RELOAD_DATA", "publish", "last"))
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action couldn't be completed."))
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "Simple rejection failure notification not found");
-            });
-      },
+         "Approve a workflow": function() {
+            return browser.findByCssSelector("#APPROVE_FAILURE_label")
+               .click()
+            .end()
+            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action couldn't be completed."))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Simple approval failure notification not found");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
+         "Reject a workflow": function() {
+            return browser.findByCssSelector("#REJECT_FAILURE_label")
+               .click()
+            .end()
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_RELOAD_DATA", "publish", "last"))
+            .end()
+            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action couldn't be completed."))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 2, "Simple rejection failure notification not found");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

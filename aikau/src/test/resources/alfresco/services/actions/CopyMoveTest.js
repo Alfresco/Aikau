@@ -27,8 +27,10 @@ define(["intern!object",
         "alfresco/TestCommon"],
         function(registerSuite, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Copy/Move tests",
 
       setup: function() {
@@ -149,9 +151,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Copy/Move tests (overrides and failures)",
 
       setup: function() {
@@ -208,5 +214,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

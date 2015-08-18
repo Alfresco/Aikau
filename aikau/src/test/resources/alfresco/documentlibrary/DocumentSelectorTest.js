@@ -48,8 +48,10 @@ define(["intern!object",
       return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector.unchecked";
    };
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Document Selector Tests",
 
       setup: function() {
@@ -173,5 +175,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

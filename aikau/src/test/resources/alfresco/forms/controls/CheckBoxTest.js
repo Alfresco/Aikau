@@ -29,8 +29,10 @@ define(["intern!object",
    ],
    function(registerSuite, assert, require, TestCommon, keys) {
 
-      var browser;
-      registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
          name: "CheckBox Tests",
 
          setup: function() {
@@ -100,5 +102,6 @@ define(["intern!object",
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    });

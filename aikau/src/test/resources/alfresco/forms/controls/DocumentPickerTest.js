@@ -36,9 +36,10 @@ define(["intern!object",
    // TODO: Click on a folder to get sub-results
    // TODO: Check singleItemMode works.
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "Document Picker Test",
 
       setup: function() {
@@ -214,5 +215,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

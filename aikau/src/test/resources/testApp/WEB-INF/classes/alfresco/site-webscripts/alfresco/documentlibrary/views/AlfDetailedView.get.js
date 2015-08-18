@@ -1,5 +1,6 @@
 model.jsonModel = {
-   services: [{
+   services: [
+      {
          name: "alfresco/services/LoggingService",
          config: {
             loggingPreferences: {
@@ -14,21 +15,27 @@ model.jsonModel = {
       "alfresco/services/DocumentService",
       "alfresco/services/ErrorReporter"
    ],
-   widgets: [{
-      id: "DOCLIST",
-      name: "alfresco/documentlibrary/AlfDocumentList",
-      widthPx: 600,
-      config: {
-         waitForPageWidgets: false,
-         useHash: true,
-         widgets: [{
-            id: "DETAILED_VIEW",
-            name: "alfresco/documentlibrary/views/AlfDetailedView"
-         }]
+   widgets: [
+      {
+         id: "DOCLIST",
+         name: "alfresco/documentlibrary/AlfDocumentList",
+         widthPx: 600,
+         config: {
+            waitForPageWidgets: false,
+            useHash: true,
+            widgets: [
+               {
+                  id: "DETAILED_VIEW",
+                  name: "alfresco/documentlibrary/views/AlfDetailedView"
+               }
+            ]
+         }
+      },
+      {
+         name: "aikauTesting/mockservices/DocumentLibraryDetailedViewMockXhr"
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
-   }, {
-      name: "aikauTesting/mockservices/DocumentLibraryDetailedViewMockXhr"
-   }, {
-      name: "alfresco/logging/SubscriptionLog"
-   }]
+   ]
 };

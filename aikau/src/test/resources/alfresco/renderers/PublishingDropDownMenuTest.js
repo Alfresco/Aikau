@@ -28,9 +28,11 @@ define(["intern!object",
    ],
    function(registerSuite, assert, require, TestCommon, keys) {
 
-      var browser;
-      registerSuite({
-         name: "PublishingDropDownMenu Tests",
+registerSuite(function(){
+   var browser;
+
+   return {
+      name: "PublishingDropDownMenu Tests",
 
          setup: function() {
             browser = this.remote;
@@ -346,8 +348,9 @@ define(["intern!object",
                .end();
          },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      });
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   };
    });
+});

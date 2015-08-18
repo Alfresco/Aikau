@@ -28,9 +28,10 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"],
         function(registerSuite, assert, require, TestCommon, Config, keys) {
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "Search Box Tests (Repo Context)",
 
       setup: function() {
@@ -135,9 +136,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Search Box Tests (Site Context)",
 
       setup: function() {
@@ -220,9 +225,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Search Box Tests (Configuration options)",
 
       setup: function() {
@@ -333,9 +342,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Search Box Tests (Custom publication)",
 
       setup: function() {
@@ -365,5 +378,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

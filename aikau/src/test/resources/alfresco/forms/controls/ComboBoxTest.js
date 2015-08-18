@@ -29,8 +29,10 @@ define(["alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
         function(TestCommon, registerSuite, assert, keys) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "ComboBox Tests (mouse)",
 
       setup: function() {
@@ -137,9 +139,13 @@ define(["alfresco/TestCommon",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "ComboBox Tests (keyboard)",
 
       setup: function() {
@@ -176,5 +182,6 @@ define(["alfresco/TestCommon",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

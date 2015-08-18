@@ -30,8 +30,10 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Boolean Tests",
 
       setup: function() {
@@ -225,5 +227,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

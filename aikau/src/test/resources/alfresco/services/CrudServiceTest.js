@@ -27,8 +27,7 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/helpers/pollUntil"],
         function(registerSuite, assert, require, TestCommon, pollUntil) {
 
-   var browser;
-   function closeAllDialogs() {
+   function closeAllDialogs(browser) {
       return browser.end()
          .findAllByCssSelector(".dijitDialogCloseIcon")
          .then(function(closeButtons) {
@@ -47,7 +46,10 @@ define(["intern!object",
          }, 5000));
    }
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "CrudService",
 
       setup: function() {
@@ -94,7 +96,7 @@ define(["intern!object",
       },
 
       "Valid UPDATE call succeeds": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("UPDATE_SUCCESS_BUTTON")
                   .click()
@@ -130,7 +132,7 @@ define(["intern!object",
       },
 
       "Valid CREATE call succeeds": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("CREATE_SUCCESS_BUTTON")
                   .click()
@@ -166,7 +168,7 @@ define(["intern!object",
       },
 
       "GET ALL success": function () {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("GET_ALL_DEFAULT_CACHE_BUTTON")
                   .click()
@@ -204,5 +206,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

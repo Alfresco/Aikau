@@ -28,8 +28,10 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "AlfVerticalMenuBar Tests",
 
       setup: function() {
@@ -46,5 +48,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

@@ -1,3 +1,5 @@
+/*globals process*/
+
 // Learn more about configuring this file at <https://github.com/theintern/intern/wiki/Configuring-Intern>.
 // These default settings work OK for most people. The options that *must* be changed below are the
 // packages, suites, excludeInstrumentation, and (if you want functional tests) functionalSuites.
@@ -16,13 +18,22 @@ define(["./config/Suites"],
          }
       });
 
+      // Define "constants"
+      var PROJECT_NAME = "Aikau",
+         SESSION_NAME = "[AKU] BrowserStack Tests @ " + (new Date()).toISOString(),
+         MAC = "OS X",
+         MAC_VERSION = "Yosemite",
+         WINDOWS = "Windows",
+         WINDOWS_VERSION = "7",
+         BS_DEBUG = false;
+
       return {
 
          // The port on which the instrumenting proxy will listen
          proxyPort: 9000,
 
          // A fully qualified URL to the Intern proxy
-         proxyUrl: "http://192.168.56.1:9000/",
+         proxyUrl: "http://localhost:9000/",
 
          // Default desired capabilities for all environments. Individual capabilities can be overridden by any of the
          // specified browser environments in the `environments` array below as well. See
@@ -31,7 +42,7 @@ define(["./config/Suites"],
          // Note that the `build` capability will be filled in with the current commit ID from the Travis CI environment
          // automatically
          capabilities: {
-            "selenium-version": "2.44.0"
+            "selenium-version": "2.45.0"
          },
 
          // Browsers to run integration testing against. Note that version numbers must be strings if used with Sauce
@@ -41,9 +52,33 @@ define(["./config/Suites"],
             browserName: "Chrome",
             chromeOptions: {
                excludeSwitches: ["ignore-certificate-errors"]
-            }
+            },
+            os: MAC,
+            os_version: MAC_VERSION,
+            platform: MAC,
+            platformVersion: MAC_VERSION,
+            project: PROJECT_NAME,
+            name: SESSION_NAME,
+            "browserstack.debug": BS_DEBUG
          }, {
-            browserName: "Firefox"
+            browserName: "Firefox",
+            os: MAC,
+            os_version: MAC_VERSION,
+            platform: MAC,
+            platformVersion: MAC_VERSION,
+            project: PROJECT_NAME,
+            name: SESSION_NAME,
+            "browserstack.debug": BS_DEBUG
+         }, {
+            browserName: "Internet Explorer",
+            version: ["11", "10", "9"],
+            os: WINDOWS,
+            os_version: WINDOWS_VERSION,
+            platform: WINDOWS,
+            platformVersion: WINDOWS_VERSION,
+            project: PROJECT_NAME,
+            name: SESSION_NAME,
+            "browserstack.debug": BS_DEBUG
          }],
 
          // Maximum number of simultaneous integration tests that should be executed on the remote WebDriver service
@@ -57,13 +92,7 @@ define(["./config/Suites"],
          },
 
          // Dig Dug tunnel handler
-         tunnel: "NullTunnel",
-
-         // Dig Dug tunnel options
-         tunnelOptions: {
-            hostname: "192.168.56.4",
-            port: 4444
-         },
+         tunnel: "BrowserStackTunnel",
 
          // Configuration options for the module loader; any AMD configuration options supported by the Dojo loader can be
          // used here
