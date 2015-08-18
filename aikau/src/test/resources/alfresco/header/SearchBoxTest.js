@@ -95,9 +95,9 @@ define(["intern!object",
          return browser.findByCssSelector(".alf-livesearch-item a")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_NAVIGATE_TO_PAGE", "url", "/aikau/page/site/swsdp/document-details?nodeRef=workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Did not find expected navigation publication request");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "/aikau/page/site/swsdp/document-details?nodeRef=workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
             });
       },
 
@@ -105,10 +105,9 @@ define(["intern!object",
          return browser.findByCssSelector(".alf-livesearch-item > span > a:nth-child(1)")
             .click()
          .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "url"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, Config.urls.unitTestAppBaseUrl + "/aikau/page/site/swsdp/documentlibrary", "Wrong URL");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", Config.urls.unitTestAppBaseUrl + "/aikau/page/site/swsdp/documentlibrary", "Wrong URL");
             });
       },
 
@@ -116,10 +115,9 @@ define(["intern!object",
          return browser.findByCssSelector(".alf-livesearch-item > span > a:nth-child(2)")
             .click()
          .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "url"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, Config.urls.unitTestAppBaseUrl + "/aikau/page/user/admin/profile", "Wrong URL");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", Config.urls.unitTestAppBaseUrl + "/aikau/page/user/admin/profile", "Wrong URL");
             });
       },
 
@@ -128,9 +126,9 @@ define(["intern!object",
             .click()
             .pressKeys(keys.RETURN)
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_NAVIGATE_TO_PAGE", "url", "dp/ws/faceted-search#searchTerm=pdf&scope=repo&sortField=Relevance"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Did not find expected navigation publication request (check the search scope!)");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "dp/ws/faceted-search#searchTerm=pdf&scope=repo&sortField=Relevance", "Did not find expected navigation publication request (check the search scope!)");
             });
       },
 
@@ -191,9 +189,9 @@ define(["intern!object",
             .click()
             .pressKeys(keys.RETURN)
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_NAVIGATE_TO_PAGE", "url", "site/site1/dp/ws/faceted-search#searchTerm=site&scope=site1&sortField=Relevance"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Did not find expected navigation publication request (check the search scope contains site!)");
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "site/site1/dp/ws/faceted-search#searchTerm=site&scope=site1&sortField=Relevance");
             });
       },
 
@@ -246,14 +244,14 @@ define(["intern!object",
 
       "Check search results redirect can be suppressed": function() {
          return browser.findByCssSelector("#SB2 input.alfresco-header-SearchBox-text")
+            .clearLog()
             .type("site")
             .pressKeys(keys.RETURN)
          .end()
-         .sleep(500)
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_WIDGET_PROCESSING_COMPLETE", "publish", "last"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "The search request was not suppressed");
-            });
+         .getAllPublishes("ALF_NAVIGATE_TO_PAGE")
+         .then(function(payloads) {
+            assert.lengthOf(payloads, 0, "The search request was not suppressed");
+         });
       },
 
       "Check that document titles can be overridden": function() {
@@ -326,9 +324,9 @@ define(["intern!object",
                .type("data")
                .pressKeys(keys.RETURN)
             .end()
-            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_NAVIGATE_TO_PAGE", "url", "dp/ws/faceted-search#searchTerm=data%20secret%20squirrels&scope=repo&sortField=Relevance"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Did not find expected navigation publication request (check the search scope contains site!)");
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "url", "dp/ws/faceted-search#searchTerm=(data)%20secret%20squirrels&scope=repo&sortField=Relevance");
                });
       },
 
@@ -358,9 +356,9 @@ define(["intern!object",
          .findByCssSelector(".alf-livesearch-item a")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("CUSTOM_TOPIC", "name", "WebSiteReview.mp4"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Custom publication not made for result click");
+         .getLastPublish("CUSTOM_TOPIC")
+            .then(function(payload) {
+               assert.propertyVal(payload, "name", "WebSiteReview.mp4", "Custom publication not made for result click");
             });
       },
 
