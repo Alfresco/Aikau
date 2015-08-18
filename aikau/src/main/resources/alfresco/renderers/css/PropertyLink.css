@@ -1,3 +1,5 @@
 .alfresco-renderers-PropertyLink > span.inner {
    cursor: pointer;
+   text-decoration: @link-text-decoration;
+   color: @link-font-color;
 }

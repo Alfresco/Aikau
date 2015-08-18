@@ -20,6 +20,6 @@
 }
 
 .alfresco-preview-PdfJs-Outline .outlineItem>a {
-   text-decoration: none;
-   color: black;
+   text-decoration: @link-text-decoration;
+   color: @link-font-color;
 }

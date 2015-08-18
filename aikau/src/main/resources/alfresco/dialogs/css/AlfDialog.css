@@ -25,7 +25,7 @@
  */
 .alfresco-dialog-AlfDialog.dijitDialog a {
    color: @general-font-color;
-   text-decoration: none;
+   text-decoration: @link-text-decoration;
 }
 
 /*

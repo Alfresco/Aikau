@@ -12,8 +12,8 @@
    height: 23px;
 
    a {
-      color: @emphasized-font-color;
-      text-decoration: none;
+      color: @link-emphasized-font-color;
+      text-decoration: @link-text-decoration;
    }
 
    .dijit.dijitReset.dijitInline.dijitDropDownButton {

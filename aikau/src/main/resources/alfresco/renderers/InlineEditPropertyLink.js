@@ -31,10 +31,20 @@ define(["dojo/_base/declare",
         "dijit/a11yclick",
         "dojo/_base/lang",
         "dojo/on",
-        "dojo/_base/event"],
-        function(declare, InlineEditProperty, _ItemLinkMixin, a11yclick, lang, on, event) {
+        "dojo/_base/event",
+        "dojo/dom-class"],
+        function(declare, InlineEditProperty, _ItemLinkMixin, a11yclick, lang, on, event, domClass) {
 
    return declare([InlineEditProperty, _ItemLinkMixin], {
+      
+      /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/InlineEditPropertyLink.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/InlineEditPropertyLink.css"}],
       
       /**
        * Whether the widget should be put into edit mode when rendered value is clicked.
@@ -52,6 +62,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_InlineEditPropertyLink__postCreate() {
          this.inherited(arguments);
+         domClass.add(this.domNode, "alfresco-renderers-InlineEditPropertyLink");
          this.own(on(this.renderedValueNode, a11yclick, lang.hitch(this, this.onLinkClick)));
       },
 

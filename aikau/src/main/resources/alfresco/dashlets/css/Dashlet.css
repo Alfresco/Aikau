@@ -117,11 +117,12 @@
       position: relative;
       a {
          cursor: pointer;
+         color: @link-font-color;
          &:link, &:visited, &:active {
-            text-decoration: none;
+            text-decoration: @link-text-decoration;
          }
          &:hover {
-            text-decoration: underline;
+            text-decoration: @link-text-decoration-hover;
          }
       }
       h3 {
