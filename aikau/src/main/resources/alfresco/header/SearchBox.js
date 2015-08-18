@@ -760,6 +760,25 @@ define(["dojo/_base/declare",
       defaultSearchScope: "repo",
 
       /**
+       * This function is used to construct the search terms that are passed to a search service. The
+       * terms provided by the user (e.g. the text that the user has typed) is parenthesized and concatonated
+       * with any [hiddenSearchTerms]{@link module:alfresco/header/SearchBox#hiddenSearchTerms} so that the scope
+       * of the user search request is not lost.
+       * 
+       * @instance
+       * @since 1.0.31
+       * @overrideable
+       */
+      generateSearchTerm: function alfresco_header_SearchBox__generateSearchTerm(terms) {
+         var searchTerm = terms;
+         if (this.hiddenSearchTerms)
+         {
+            searchTerm = encodeURIComponent("(" + terms + ") " + this.hiddenSearchTerms);
+         }
+         return searchTerm;
+      },
+
+      /**
        * This function is called from the [onSearchBoxKeyUp function]{@link module:alfresco/header/SearchBox#onSearchBoxKeyUp}
        * when the enter key is pressed and will generate a link to either the faceted search page or the old search page
        * based on the value of [linkToFacetedSearch]{@link module:alfresco/header/SearchBox#linkToFacetedSearch}. This function
@@ -775,17 +794,17 @@ define(["dojo/_base/declare",
          if (this.searchResultsPage)
          {
             // Generate custom search page link...
-            url = this.searchResultsPage + "#searchTerm=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&scope=" + scope + "&sortField=Relevance";
+            url = this.searchResultsPage + "#searchTerm=" + this.generateSearchTerm(terms) + "&scope=" + scope + "&sortField=Relevance";
          }
          else if (this.linkToFacetedSearch === true)
          {
             // Generate faceted search page link...
-            url = "dp/ws/faceted-search#searchTerm=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&scope=" + scope + "&sortField=Relevance";
+            url = "dp/ws/faceted-search#searchTerm=" + this.generateSearchTerm(terms) + "&scope=" + scope + "&sortField=Relevance";
          }
          else
          {
             // Generate old search page link...
-            url = "search?t=" + encodeURIComponent(terms + this.hiddenSearchTerms) + (this.allsites ? "&a=true&r=false" : "&a=false&r=true");
+            url = "search?t=" + this.generateSearchTerm(terms) + (this.allsites ? "&a=true&r=false" : "&a=false&r=true");
          }
          if (this.site)
          {
@@ -974,7 +993,7 @@ define(["dojo/_base/declare",
       liveSearchDocuments: function alfresco_header_SearchBox__liveSearchDocuments(terms, startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-docs?t=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
+               url: AlfConstants.PROXY_URI + "slingshot/live-search-docs?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
                method: "GET",
                successCallback: function(response) {
                   if (startIndex === 0)
@@ -1068,7 +1087,7 @@ define(["dojo/_base/declare",
       liveSearchSites: function alfresco_header_SearchBox__liveSearchSites(terms, /*jshint unused:false*/ startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-sites?t=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&maxResults=" + this._resultPageSize,
+               url: AlfConstants.PROXY_URI + "slingshot/live-search-sites?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
                method: "GET",
                successCallback: function(response) {
                   this._LiveSearch.containerNodeSites.innerHTML = "";
@@ -1115,7 +1134,7 @@ define(["dojo/_base/declare",
       liveSearchPeople: function alfresco_header_SearchBox__liveSearchPeople(terms, /*jshint unused:false*/ startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-people?t=" + encodeURIComponent(terms + this.hiddenSearchTerms) + "&maxResults=" + this._resultPageSize,
+               url: AlfConstants.PROXY_URI + "slingshot/live-search-people?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
                method: "GET",
                successCallback: function(response) {
                   this._LiveSearch.containerNodePeople.innerHTML = "";
