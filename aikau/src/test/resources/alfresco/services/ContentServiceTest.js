@@ -170,10 +170,7 @@ define(["intern!object",
          .findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogDisplayed") // Wait for dialog
             .end()
 
-         .getLastPublish("ALF_BASIC_METADATA_SUCCESS")
-            .then(function(payload) {
-               assert.isNotNull(payload, "Did not publish basic metadata success");
-            });
+         .getLastPublish("ALF_BASIC_METADATA_SUCCESS", "Did not publish basic metadata success");
       },
 
       "Check retrieved node data": function() {
@@ -210,10 +207,7 @@ define(["intern!object",
             .click()
             .end()
 
-         .getLastPublish("ALF_UPLOAD_REQUEST")
-            .then(function(payload) {
-               assert.isNotNull(payload, "Did not publish upload request");
-            });
+         .getLastPublish("ALF_UPLOAD_REQUEST", "Did not publish upload request");
       },
 
       "Post Coverage Results": function() {

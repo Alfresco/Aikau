@@ -59,10 +59,7 @@ define(["intern!object",
          return browser.setFindTimeout(5000)
             .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification__message")
 
-         .getLastPublish("ALF_NOTIFICATION_DESTROYED")
-            .then(function(payload) {
-               assert.isNotNull(payload, "Post-notification topic not published");
-            });
+         .getLastPublish("ALF_NOTIFICATION_DESTROYED", "Post-notification topic not published");
       },
 
       "Can close notification early": function() {

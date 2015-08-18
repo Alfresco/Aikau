@@ -60,7 +60,7 @@ define(["intern!object",
       },
 
       "Edit icon initially invisible": function() {
-         return browser.findByCssSelector(".alfresco-testing-SubscriptionLog")
+         return browser.findByCssSelector(".alfresco_logging_DebugLog__header")
             .moveMouseTo()
          .end()
          .sleep(250) // Make sure the mouse isn't over the row!
@@ -227,27 +227,16 @@ define(["intern!object",
          return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .dijitInputContainer input")
             .clearValue()
             .type("New")
-            .end()
+         .end()
 
          .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.save")
             .click()
-            .end()
+         .end()
 
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATE", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Property update not requested");
-            })
-            .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "name", "New"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "New value didn't publish correctly");
-            })
-            .end()
-
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("any", "hiddenData", "hidden_update"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Hidden value didn't get included");
+         .getLastPublish("ALF_CRUD_UPDATE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "name", "New", "New value didn't publish correctly");
+               assert.propertyVal(payload, "hiddenData", "hidden_update", "Hidden value didn't get included");
             });
       },
 
@@ -300,9 +289,38 @@ define(["intern!object",
             });
       },
 
+      "Check rendered alt text when no value available": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_ITEM_0 .editIcon")
+            .getAttribute("alt")
+            .then(function(alt) {
+               assert.equal(alt, "Click to edit", "Alt text for missing value incorrect");
+            });
+      },
+
+      "Check edit disabled when user has no write permissions": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_1 .inlineEditValue")
+            .moveMouseTo()
+         .end()
+         .findByCssSelector("#INLINE_EDIT_ITEM_1 .editIcon")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The edit icon should not be displayed for items without write permission");
+            });
+      },
+
+      "Check keyboard shortcut edit disabled when user has no write permissions": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_ITEM_1 .inlineEditValue")
+            .click()
+            .pressKeys([keys.CONTROL, "e"])
+            .pressKeys(keys.NULL)
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Keyboard shortcut should not have worked for item without write permission");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
-
    });
 });

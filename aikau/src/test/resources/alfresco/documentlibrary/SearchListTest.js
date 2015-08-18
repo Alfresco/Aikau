@@ -52,9 +52,9 @@ define(["intern!object",
          // The initial AlfSearchList doesn't perform an initial search when "useHash" is set to true (which
          // for this test it is).
          // Check that no request to search exists...
-         .getLastPublish("ALF_SEARCH_REQUEST")
-         .then(function(payload) {
-            assert.isNull(payload, "Search request made unexpectedly");
+         .getAllPublishes("ALF_SEARCH_REQUEST")
+         .then(function(payloads) {
+            assert.lengthOf(payloads, 0, "Search request made unexpectedly");
          });
       },
       
@@ -63,9 +63,9 @@ define(["intern!object",
          return browser.findByCssSelector("#SET_SEARCH_TERM_1")
             .click()
          .end()
-         .getLastPublish("ALF_SEARCH_REQUEST")
-         .then(function(payload) {
-            assert.isNull(payload, "Search request made unexpectedly");
+         .getAllPublishes("ALF_SEARCH_REQUEST")
+         .then(function(payloads) {
+            assert.lengthOf(payloads, 0, "Search request made unexpectedly");
          });
       },
       
@@ -88,9 +88,9 @@ define(["intern!object",
             .clearLog()
             .click()
          .end()
-         .getLastPublish("ALF_SEARCH_REQUEST")
-         .then(function(payload) {
-            assert.isNull(payload, "Another search request made before previous response returned");
+         .getAllPublishes("ALF_SEARCH_REQUEST")
+         .then(function(payloads) {
+            assert.lengthOf(payloads, 0, "Another search request made before previous response returned");
          });
       },
 
@@ -164,9 +164,9 @@ define(["intern!object",
          .findByCssSelector("#SET_SCOPE_0")
             .click()
          .end()
-         .getLastPublish("ALF_SEARCH_REQUEST")
-         .then(function(payload) {
-            assert.isNull(payload, "Setting a null scope issued a search request");
+         .getAllPublishes("ALF_SEARCH_REQUEST")
+         .then(function(payloads) {
+            assert.lengthOf(payloads, 0, "Setting a null scope issued a search request");
          });
       },
 
@@ -174,9 +174,9 @@ define(["intern!object",
          return browser.findByCssSelector("#SET_SCOPE_1")
             .click()
          .end()
-         .getLastPublish("ALF_SEARCH_REQUEST")
-         .then(function(payload) {
-            assert.isNull(payload, "Setting the same scope issued a search request.");
+         .getAllPublishes("ALF_SEARCH_REQUEST")
+         .then(function(payloads) {
+            assert.lengthOf(payloads, 0, "Setting the same scope issued a search request");
          });
       },
 
@@ -264,9 +264,9 @@ define(["intern!object",
          .findByCssSelector("#APPLY_FACET_FILTER_0")
             .click()
          .end()
-         .getLastPublish("ALF_SEARCH_REQUEST")
-         .then(function(payload) {
-            assert.isNull(payload, "Bad facet filter triggered search");
+         .getAllPublishes("ALF_SEARCH_REQUEST")
+         .then(function(payloads) {
+            assert.lengthOf(payloads, 0, "Bad facet filter triggered search");
          });
       },
 

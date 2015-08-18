@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -54,7 +54,27 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Tags.css"}]
        */
       cssRequirements: [{cssFile:"./css/Tags.css"}],
-      
+
+      /**
+       * Override [default configuration]{@link module:alfresco/renderers/Property#warnIfNotAvailable} to 
+       * display a message when no tags have been configured.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      warnIfNotAvailable: true,
+
+      /**
+       * Override [default configuration]{@link module:alfresco/renderers/Property#warnIfNotAvailableMessage} to 
+       * to set a tag specific warning message.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      warnIfNotAvailableMessage: "no.tags.message",
+
       /**
        * Overrides the [inherited function]{@link module:alfresco/renderers/Property#getRenderedProperty} to convert the tags
        * value into visual tokens.
@@ -101,8 +121,8 @@ define(["dojo/_base/declare",
        * @param {object} tagData The tag data to render
        * @param {number} index The index of the tag in the overall array
        */
-      createReadOnlyTag: function alfresco_renderers_Tags__createReadOnlyTag(nameAttribute, valueAttribute, tagData, index) {
-         if (tagData == null || tagData[nameAttribute] == null)
+      createReadOnlyTag: function alfresco_renderers_Tags__createReadOnlyTag(nameAttribute, valueAttribute, tagData, /*jshint unused:false*/ index) {
+         if (!tagData || !tagData[nameAttribute])
          {
             this.alfLog("warn", "No '" + nameAttribute + "' attribute for tag", this, tagData);
          }
@@ -147,7 +167,7 @@ define(["dojo/_base/declare",
        * @param {object} tagWidget The tag widget to place.
        * @param {number} index The index of the tag
        */
-      placeReadOnlyTag: function alfresco_renderers_Tags__placeReadOnlyTag(tagWidget, index) {
+      placeReadOnlyTag: function alfresco_renderers_Tags__placeReadOnlyTag(tagWidget, /*jshint unused:false*/ index) {
          tagWidget.placeAt(this.renderedValueNode);
       },
       
@@ -185,7 +205,7 @@ define(["dojo/_base/declare",
        */
       onEditClick: function alfresco_renderers_Tags__onEditClick() {
          this.inherited(arguments);
-         if (this.editTagsNode != null)
+         if (this.editTagsNode)
          {
             var oldEditTags = registry.findWidgets(this.editTagsNode);
             array.forEach(oldEditTags, lang.hitch(this, this.destroyTag));
@@ -206,7 +226,7 @@ define(["dojo/_base/declare",
        * @param {object} tagData The read-only tag widget to create a corresponding edit tag for.
        * @param {number} index The index of the tag in the overall array
        */
-      createEditTag: function alfresco_renderers_Tags__createEditTag(nameAttribute, valueAttribute, tagData, index) {
+      createEditTag: function alfresco_renderers_Tags__createEditTag(nameAttribute, valueAttribute, tagData, /*jshint unused:false*/ index) {
          var tagWidget = new EditTag({
             tagName: tagData[nameAttribute],
             tagValue: tagData[valueAttribute]
@@ -223,12 +243,12 @@ define(["dojo/_base/declare",
        */
       onRemoveEditTag: function alfresco_renderers_Tags__onRemoveEditTag(evt) {
          var tagWidget = registry.byNode(evt.target);
-         if (tagWidget != null)
+         if (tagWidget)
          {
             // Filter out the deleted tag from the list of current tags, this is done to ensure
             // that we persist the correct tags on save and redraw the correct tags on readonly mode...
             var tagName = tagWidget.tagName;
-            this.currentTags = array.filter(this.currentTags, function(currTag, index) {
+            this.currentTags = array.filter(this.currentTags, function(currTag) {
                return currTag.tagName !== tagName;
             });
             tagWidget.destroy();
@@ -244,12 +264,12 @@ define(["dojo/_base/declare",
        * @param {object} e The key press event
        */
       onValueEntryKeyPress: function alfresco_renderers_Tags__onValueEntryKeyPress(e) {
-         if(e.charOrCode == keys.ESCAPE)
+         if(e.charOrCode === keys.ESCAPE || e.keyCode === keys.ESCAPE)
          {
             event.stop(e);
             this.onCancel();
          }
-         else if(e.charOrCode == keys.ENTER)
+         else if(e.charOrCode === keys.ENTER || e.keyCode === keys.ENTER)
          {
             event.stop(e);
             var formValue = this.getFormWidget().getValue();
@@ -266,15 +286,6 @@ define(["dojo/_base/declare",
                this.onSave();
             }
          }
-         // else if (e.charOrCode == keys.PAGE_DOWN ||
-         //          e.charOrCode ==  keys.DOWN_ARROW ||
-         //          e.charOrCode == keys.PAGE_UP ||
-         //          e.charOrCode ==  keys.UP_ARROW)
-         // {
-         //    // Prevent up/down keys from bubbling. This is done to ensure that the 
-         //    // focus doesn't shift to the previous or next item in the view.
-         //    event.stop(e);
-         // }
       },
       
       /**
@@ -288,7 +299,7 @@ define(["dojo/_base/declare",
        * @param {boolean} saveTagsAfterCreate Indicates whether or not to save all tags on successful creation.
        * @return {object} The created tag details
        */
-      createTag: function alfresco_renderers_Tags__createTag(tagName, saveTagsAfterCreate) {
+      createTag: function alfresco_renderers_Tags__createTag(tagName, /*jshint unused:false*/ saveTagsAfterCreate) {
 
          var tagUsed = array.some(this.currentTags, function(currentTag, index) {
             return currentTag.tagName === tagName;
@@ -318,7 +329,7 @@ define(["dojo/_base/declare",
       onTagCreated: function alfresco_renderers_Tags__onTagCreated(payload) {
          this.alfUnsubscribeSaveHandles([this._createTagHandle]);
          this.createEditTag("name", "nodeRef", payload.response);
-         if (payload.originalRequestConfig.saveTagsAfterCreate === true)
+         if (payload.originalRequestConfig && payload.originalRequestConfig.saveTagsAfterCreate === true)
          {
             this.onSave();
          }
@@ -376,7 +387,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The success payload
        */
-      onSaveSuccess: function alfresco_renderers_Tags__onSaveSuccess(payload) {
+      onSaveSuccess: function alfresco_renderers_Tags__onSaveSuccess(/*jshint unused:false*/ payload) {
          this.alfUnsubscribeSaveHandles([this._saveSuccessHandle, this._saveFailureHandle]);
 
          this.alfLog("log", "Property '" + this.propertyToRender + "' successfully updated for node: ", this.currentItem);

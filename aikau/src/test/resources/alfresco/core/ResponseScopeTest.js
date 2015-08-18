@@ -50,7 +50,8 @@ define(["intern!object",
       },
 
       "pubSubScope used as alfResponseScope when responseScope and alfResponseScope aren't set (scoped)": function() {
-         return browser.findById("B2_label")
+         return browser.waitForDeletedByClassName("dialogDisplayed")
+            .findById("B2_label")
             .click()
          .end()
          .getLastPublish("SCOPE_B2")
@@ -60,7 +61,8 @@ define(["intern!object",
       },
 
       "resposeScope used as alfResponseScope when included in payload (global)": function() {
-         return browser.findById("B3_label")
+         return browser.waitForDeletedByClassName("dialogDisplayed")
+            .findById("B3_label")
             .click()
          .end()
          .getLastPublish("B3")
@@ -70,7 +72,8 @@ define(["intern!object",
       },
 
       "resposeScope used as alfResponseScope when included in payload (scoped)": function() {
-         return browser.findById("B4_label")
+         return browser.waitForDeletedByClassName("dialogDisplayed")
+            .findById("B4_label")
             .click()
          .end()
          .getLastPublish("SCOPE_B4")
@@ -80,7 +83,8 @@ define(["intern!object",
       },
 
       "alfResponseScope used as alfResponseScope when included in payload (global)": function() {
-         return browser.findById("B5_label")
+         return browser.waitForDeletedByClassName("dialogDisplayed")
+            .findById("B5_label")
             .click()
          .end()
          .getLastPublish("B5")
@@ -90,7 +94,8 @@ define(["intern!object",
       },
 
       "alfResponseScope used as alfResponseScope when included in payload (scoped)": function() {
-         return browser.findById("B6_label")
+         return browser.waitForDeletedByClassName("dialogDisplayed")
+            .findById("B6_label")
             .click()
          .end()
          .getLastPublish("SCOPE_B6")
@@ -100,7 +105,8 @@ define(["intern!object",
       },
 
       "Dialog with no responseScope uses global scope as alfResponseScope": function() {
-         return browser.findById("B7_label")
+         return browser.waitForDeletedByClassName("dialogDisplayed")
+            .findById("B7_label")
             .click()
          .end()
          .findAllByCssSelector("#B7_DIALOG.dialogDisplayed")
@@ -115,7 +121,8 @@ define(["intern!object",
       },
 
       "Dialog with responseScope used as alfResponseScope": function() {
-         return browser.findById("B8_label")
+         return browser.waitForDeletedByClassName("dialogDisplayed")
+            .findById("B8_label")
             .click()
          .end()
          .findAllByCssSelector("#B8_DIALOG.dialogDisplayed")
@@ -130,7 +137,8 @@ define(["intern!object",
       },
 
       "Dialog with responseScope in used as alfResponseScope": function() {
-         return browser.findById("B9_label")
+         return browser.waitForDeletedByClassName("dialogDisplayed")
+            .findById("B9_label")
             .click()
          .end()
          .findAllByCssSelector("#B9_DIALOG.dialogDisplayed")

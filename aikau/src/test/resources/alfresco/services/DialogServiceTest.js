@@ -75,10 +75,7 @@ define(["intern!object",
       "Test publication on dialog show": function() {
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog")
          .end()
-         .getLastPublish("DISPLAYED_FD1").findAllByCssSelector(TestCommon.topicSelector("DISPLAYED_FD1", "publish", "any"))
-            .then(function(payload) {
-               assert.isNotNull(payload, "Could not find topic published when displayed dialog");
-            });
+         .getLastPublish("DISPLAYED_FD1", "Could not find topic published when displayed dialog");
       },
 
       "Test recreating dialog with no ID": function() {
@@ -268,19 +265,21 @@ define(["intern!object",
          return browser.findByCssSelector("#GOLDEN_REPEATING_INPUT .dijitInputContainer input")
             .clearValue()
             .type("another")
-         .end()
+            .end()
 
          .findById("CUSTOM_REPEAT_BUTTON_ID")
             .click()
-         .end()
+            .end()
 
-         .getLastPublish("POST_FORM_DIALOG")
+         .waitForDeletedByClassName(".dialogDisplayed")
+            .getLastPublish("POST_FORM_DIALOG")
             .then(function(payload) {
-               assert.propertyVal(payload, "text","another", "Textbox value was not posted");
+               assert.propertyVal(payload, "text", "another", "Textbox value was not posted");
             })
 
          .findAllByCssSelector("#CUSTOM_DIALOG.dialogDisplayed")
-         .end()
+            .end()
+
          .findByCssSelector("#GOLDEN_REPEATING_INPUT .dijitInputContainer input")
             .getProperty("value")
             .then(function(resultText) {
@@ -298,6 +297,7 @@ define(["intern!object",
             .click()
          .end()
 
+         .waitForDeletedByClassName(".dialogDisplayed")
          .getLastPublish("POST_FORM_DIALOG")
             .then(function(payload) {
                assert.propertyVal(payload, "text","encore", "Textbox value was not posted");
@@ -323,19 +323,21 @@ define(["intern!object",
          return browser.findByCssSelector("#ERROR_REPEATING_INPUT .dijitInputContainer input")
             .clearValue()
             .type("more")
-         .end()
+            .end()
 
          .findById("ERROR_REPEATING_OK_AND_REPEAT")
             .click()
-         .end()
-            
-         .getLastPublish("POST_FORM_DIALOG")
+            .end()
+
+         .waitForDeletedByClassName(".dialogDisplayed")
+            .getLastPublish("POST_FORM_DIALOG")
             .then(function(payload) {
                assert.propertyVal(payload, "text", "more", "Textbox value was not posted");
             })
 
          .findAllByCssSelector("#ERROR_REPEATING.dialogDisplayed")
-         .end()
+            .end()
+            
          .findByCssSelector("#ERROR_REPEATING_INPUT .dijitInputContainer input")
             .getProperty("value")
             .then(function(resultText) {
@@ -410,11 +412,7 @@ define(["intern!object",
                   .click()
                   .end()
 
-               .getLastPublish("DISPLAYED_INNER_DIALOG")
-                  .then(function(payload) {
-                     assert.isNotNull(payload, "Inner dialog not displayed");
-                  })
-                  .end()
+               .getLastPublish("DISPLAYED_INNER_DIALOG", "Inner dialog not displayed")
 
                .findByCssSelector("#INNER_DIALOG .dijitDialogCloseIcon")
                   .click()
@@ -440,9 +438,8 @@ define(["intern!object",
             .click()
             .end()
 
-         .getLastPublish("CUSTOM_FORM_SCOPE_CUSTOM_FORM_TOPIC", true)
+         .getLastPublish("CUSTOM_FORM_SCOPE_CUSTOM_FORM_TOPIC", true, "Did not publish correctly scoped topic")
             .then(function(payload){
-               assert.isNotNull(payload, "Did not publish correctly scoped topic");
                assert.propertyVal(payload, "text", "This is some sample text", "Did not publish correct form value to scoped topic");
             });
       },

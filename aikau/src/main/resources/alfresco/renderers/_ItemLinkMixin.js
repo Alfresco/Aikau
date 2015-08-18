@@ -27,9 +27,10 @@
 define(["dojo/_base/declare",
         "service/constants/Default",
         "alfresco/core/UrlUtilsMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/event"], 
-        function(declare, AlfConstants, UrlUtilsMixin, lang, event) {
+        function(declare, AlfConstants, UrlUtilsMixin, topics, lang, event) {
    
    return declare([UrlUtilsMixin], {
 
@@ -93,7 +94,7 @@ define(["dojo/_base/declare",
                   if (item.node.isContainer)
                   {
                      this.updateFolderLinkPublication(publishPayload);
-                     topic = "ALF_DOCUMENTLIST_PATH_CHANGED";
+                     topic = topics.PATH_CHANGED;
                   }
                   else
                   {
@@ -106,7 +107,7 @@ define(["dojo/_base/declare",
                   if (item.node.isContainer)
                   {
                      this.updateFolderLinkPublication(publishPayload);
-                     topic = "ALF_DOCUMENTLIST_PATH_CHANGED";
+                     topic = topics.PATH_CHANGED;
                   }
                   else
                   {

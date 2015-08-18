@@ -333,10 +333,6 @@ define(["dojo/_base/declare",
                                              noRefresh: false,
                                              successMessage: "moreInfo.inlineEdit.update.success"
                                           },
-                                          renderFilter: [{
-                                             property: "node.permissions.user.Write",
-                                             values: [true]
-                                          }],
                                           requirementConfig: {
                                              initialValue: true
                                           },
@@ -352,37 +348,15 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
-                                       name: "alfresco/renderers/Property",
-                                       config: {
-                                          propertyToRender: "node.properties.cm:name",
-                                          renderFilter: [{
-                                             property: "node.permissions.user.Write",
-                                             values: [false]
-                                          }]
-                                       }
-                                    },
-                                    {
                                        name: "alfresco/renderers/InlineEditProperty",
                                        config: {
                                           propertyToRender: "node.properties.cm:title",
                                           postParam: "prop_cm_title",
                                           renderSize: "small",
                                           warnIfNotAvailable: true,
-                                          warnIfNoteAvailableMessage: "no.title.message",
+                                          warnIfNotAvailableMessage: "no.title.message",
                                           renderedValuePrefix: "(",
                                           renderedValueSuffix: ")",
-                                          renderFilterMethod: "ALL",
-                                          renderFilter: [
-                                             {
-                                                property: "node.properties.cm:title",
-                                                values: [""],
-                                                negate: true
-                                             },
-                                             {
-                                                property: "node.permissions.user.Write",
-                                                values: [true]
-                                             }
-                                          ],
                                           publishTopic: "ALF_CRUD_CREATE",
                                           publishPayloadType: "PROCESS",
                                           publishPayloadModifiers: ["processCurrentItemTokens"],
@@ -392,27 +366,6 @@ define(["dojo/_base/declare",
                                              noRefresh: false,
                                              successMessage: "moreInfo.inlineEdit.update.success"
                                           }
-                                       }
-                                    },
-                                    {
-                                       name: "alfresco/renderers/Property",
-                                       config: {
-                                          propertyToRender: "node.properties.cm:title",
-                                          renderSize: "small",
-                                          warnIfNotAvailable: true,
-                                          warnIfNoteAvailableMessage: "no.title.message",
-                                          renderFilterMethod: "ALL",
-                                          renderFilter: [
-                                             {
-                                                property: "node.properties.cm:title",
-                                                values: [""],
-                                                negate: true
-                                             },
-                                             {
-                                                property: "node.permissions.user.Write",
-                                                values: [false]
-                                             }
-                                          ]
                                        }
                                     },
                                     {
@@ -481,7 +434,7 @@ define(["dojo/_base/declare",
                                           renderSize: "small",
                                           postParam: "prop_cm_description",
                                           warnIfNotAvailable: true,
-                                          warnIfNoteAvailableMessage: "no.description.message",
+                                          warnIfNotAvailableMessage: "no.description.message",
                                           publishTopic: "ALF_CRUD_CREATE",
                                           publishPayloadType: "PROCESS",
                                           publishPayloadModifiers: ["processCurrentItemTokens"],
@@ -489,38 +442,7 @@ define(["dojo/_base/declare",
                                           publishPayload: {
                                              url: "api/node/{jsNode.nodeRef.uri}/formprocessor",
                                              noRefresh: false
-                                          },
-                                          renderFilter: [
-                                             {
-                                                property: "node.properties.cm:description",
-                                                values: [""],
-                                                negate: true
-                                             },
-                                             {
-                                                property: "node.permissions.user.Write",
-                                                values: [true]
-                                             }
-                                          ]
-                                       }
-                                    },
-                                    {
-                                       name: "alfresco/renderers/Property",
-                                       config: {
-                                          propertyToRender: "node.properties.cm:description",
-                                          renderSize: "small",
-                                          warnIfNotAvailable: true,
-                                          warnIfNoteAvailableMessage: "no.description.message",
-                                          renderFilter: [
-                                             {
-                                                property: "node.properties.cm:description",
-                                                values: [""],
-                                                negate: true
-                                             },
-                                             {
-                                                property: "node.permissions.user.Write",
-                                                values: [false]
-                                             }
-                                          ]
+                                          }
                                        }
                                     }
                                  ]

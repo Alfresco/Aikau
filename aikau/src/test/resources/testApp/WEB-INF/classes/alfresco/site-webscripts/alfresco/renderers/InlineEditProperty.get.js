@@ -21,7 +21,27 @@ model.jsonModel = {
                items: [
                   {
                      name: "Test",
-                     option: "1"
+                     option: "1",
+                     node: {
+                        nodeRef: "dummy://node/1",
+                        permissions: {
+                           user: {
+                              Write: true
+                           }
+                        }
+                     }
+                  },
+                  {
+                     name: "Test 2",
+                     option: "2",
+                     node: {
+                        nodeRef: "dummy://node/2",
+                        permissions: {
+                           user: {
+                              Write: false
+                           }
+                        }
+                     }
                   }
                ]
             },
@@ -78,6 +98,29 @@ model.jsonModel = {
                                           ]
                                        }
                                     }
+                                 },
+                                 {
+                                    id: "INLINE_EDIT_NO_VALUE",
+                                    name: "alfresco/renderers/InlineEditProperty",
+                                    config: {
+                                       propertyToRender: "title",
+                                       publishTopic: "ALF_CRUD_UPDATE",
+                                       publishPayloadType: "PROCESS",
+                                       publishPayloadModifiers: ["processCurrentItemTokens"],
+                                       publishPayloadItemMixin: true,
+                                       publishPayload: {
+                                          url: "api/solr/facet-config/{name}"
+                                       },
+                                       hiddenDataRules: [
+                                          {
+                                             name: "hiddenData",
+                                             rulePassValue: "hidden_update",
+                                             ruleFailValue: "",
+                                             is: ["New"]
+                                          }
+                                       ],
+                                       renderOnNewLine: true
+                                    }
                                  }
                               ]
                            }
@@ -90,10 +133,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

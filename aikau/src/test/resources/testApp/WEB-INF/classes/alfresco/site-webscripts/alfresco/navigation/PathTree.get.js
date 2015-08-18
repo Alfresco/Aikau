@@ -25,6 +25,37 @@ model.jsonModel = {
                      widgetMarginRight: 10,
                      widgets: [
                         {
+                           name: "alfresco/layout/VerticalWidgets",
+                           widthPx: "100",
+                           config: {
+                              widgetMarginBottom: 10,
+                              widgets: [
+                                 {
+                                    id: "SET_HASH",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Set hash",
+                                       publishTopic: "ALF_HASH_CHANGED",
+                                       publishPayload: {
+                                          path: "/documentLibrary/Budget Files/Invoices/"
+                                       }
+                                    }
+                                 },
+                                 {
+                                    id: "SET_PATH",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Set path",
+                                       publishTopic: "ALF_DOCUMENTLIST_PATH_CHANGED",
+                                       publishPayload: {
+                                          path: "/documentLibrary/Budget Files/Invoices/"
+                                       }
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
                            name: "alfresco/layout/ClassicWindow",
                            config: {
                               title: "Showing Root",
@@ -50,6 +81,7 @@ model.jsonModel = {
                                     name: "alfresco/navigation/PathTree",
                                     config: {
                                        showRoot: false,
+                                       useHash: false,
                                        filterPaths: ["^/documentLibrary/(.*)$"],
                                        rootNode: "workspace://SpacesStore/b4cff62a-664d-4d45-9302-98723eac1319",
                                        publishTopic: "ALF_ITEM_SELECTED",
@@ -71,10 +103,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/PathTreeMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

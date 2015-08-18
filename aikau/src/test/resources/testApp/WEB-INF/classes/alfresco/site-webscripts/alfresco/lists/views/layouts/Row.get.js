@@ -28,6 +28,7 @@ model.jsonModel = {
                {
                   name: "alfresco/lists/views/layouts/Row",
                   config: {
+                     focusHighlighting: true,
                      additionalCssClasses: "extra",
                      widgets: [
                         {
@@ -87,10 +88,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

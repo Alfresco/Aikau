@@ -122,9 +122,10 @@ define(["dojo/_base/declare",
        * @private
        */
       doHashVarUpdate: function alfresco_documentlibrary_AlfHashMixin__doHashVarUpdate(payload, updateInstanceValues, updateObject) {
-         return this.payloadContainsUpdateableVar(payload, updateInstanceValues, updateObject) && 
-                this.payloadContainsRequiredUpdateableVars(payload) && 
-                this.payloadContainsEqualUpdateableVars(payload);
+         var payloadContainsUpdateableVar = this.payloadContainsUpdateableVar(payload, updateInstanceValues, updateObject),
+            payloadContainsRequiredUpdateableVars = this.payloadContainsRequiredUpdateableVars(payload),
+            payloadContainsEqualUpdateableVars = this.payloadContainsEqualUpdateableVars(payload);
+         return payloadContainsUpdateableVar && payloadContainsRequiredUpdateableVars && payloadContainsEqualUpdateableVars;
       },
 
       /**

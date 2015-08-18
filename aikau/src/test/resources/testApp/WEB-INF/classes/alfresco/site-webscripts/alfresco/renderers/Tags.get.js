@@ -16,13 +16,17 @@ model.jsonModel = {
    widgets:[
       {
          id: "TAGS_1",
-         name: "alfresco/renderers/Tags"
+         name: "alfresco/renderers/Tags",
+         config: {
+            permissionProperty: null
+         }
       },
       {
          id: "TAGS_2",
          name: "alfresco/renderers/Tags",
          config: {
-            propertyToRender: "node.properties.cm:taggable"
+            propertyToRender: "node.properties.cm:taggable",
+            permissionProperty: null
          }
       },
       {
@@ -36,6 +40,11 @@ model.jsonModel = {
                   name: "TAGS_3",
                   properties: {
                      "cm:taggable": {}
+                  },
+                  permissions: {
+                     user: {
+                        Write: true
+                     }
                   }
                }
             }
@@ -65,19 +74,21 @@ model.jsonModel = {
                            name: "Test3"
                         }
                      ]
+                  },
+                  permissions: {
+                     user: {
+                        Write: true
+                     }
                   }
                }
             }
          }
       },
       {
-         name: "aikauTesting/mockservices/ComboBoxMockXhr"
+         name: "aikauTesting/mockservices/TaggingMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

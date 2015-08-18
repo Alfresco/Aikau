@@ -138,9 +138,9 @@ define(["intern!object",
          return browser.findById("CLEAR_AUTOSAVE_1")
             .click()
             .clearLog()
-            .getLastPublish("AUTOSAVE_FORM_1")
-            .then(function(payload) {
-               assert.isNull(payload, "Published form when invalid");
+            .getAllPublishes("AUTOSAVE_FORM_1")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Published form when invalid");
             });
       },
 

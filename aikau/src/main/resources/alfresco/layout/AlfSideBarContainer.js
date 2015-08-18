@@ -303,7 +303,10 @@ define(["dojo/_base/declare",
          var availableHeight = winBox.h - offset - this.footerHeight;
          
          // Get the height of the content...
-         var sidebarContentHeight = this.calculateHeight(this.sidebarNode, 0, this.sidebarNode.children.length - 1);
+         // NOTE: When we get the sizebar height we want to ignore the first child element as this will be the resizer
+         //       bar and will always be the previously set height, if we include this then we skew the results and
+         //       the container height can never shrink (see AKU-506)
+         var sidebarContentHeight = this.calculateHeight(this.sidebarNode, 1, this.sidebarNode.children.length - 1);
          var mainContentHeight = this.calculateHeight(this.mainNode, 0, this.mainNode.children.length);
          
          // Work out the max height for the side bar...
@@ -311,7 +314,7 @@ define(["dojo/_base/declare",
          var h = (c > availableHeight) ? c : availableHeight;
 
          domStyle.set(this.sidebarNode, "height", h + "px");
-         domStyle.set(this.mainNode, "width", (size - w - 6) + "px");
+         domStyle.set(this.mainNode, "width", (size - w - 16) + "px");
          
          // Fire a custom event to let contained objects know that the node has been resized.
          this.alfPublishResizeEvent(this.mainNode);
@@ -403,6 +406,10 @@ define(["dojo/_base/declare",
             $(this.sidebarNode).resizable("enable"); // Unlock the resizer when the sidebar is not shown...
             var width = (this.hiddenSidebarWidth) ? this.hiddenSidebarWidth : this.initialSidebarWidth;
             domStyle.set(this.sidebarNode, "width", width + "px");
+
+            // Add some right padding so that the resize bar doesn't appear over the content, this is
+            // particular important with regards to scrollbars that might be present (see AKU-514)
+            domStyle.set(this.sidebarNode, "padding-right", "10px");
             this.lastSidebarWidth = width;
             this.resizeHandler();
             if (this.resizeHandlerButtonNode)
@@ -415,6 +422,10 @@ define(["dojo/_base/declare",
          {
             // Hide the sidebar...
             domStyle.set(this.sidebarNode, "width", "9px");
+
+            // Remove the right-padding to ensure that the resize bar snaps cleanly to the outer edge of
+            // the container
+            domStyle.set(this.sidebarNode, "padding-right", "0");
             this.lastSidebarWidth = 9;
             this.resizeHandler();
             $(this.sidebarNode).resizable("disable"); // Lock the resizer when the sidebar is not shown...

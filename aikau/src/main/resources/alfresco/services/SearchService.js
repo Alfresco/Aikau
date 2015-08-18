@@ -21,7 +21,7 @@
  * This service is intended to be used for performing searches. It was written specifically to
  * service requests that can be rendered by the [AlfSearchList]{@link module:alfresco/search/AlfSearchList}
  * widget.
- * 
+ *
  * @module alfresco/services/SearchService
  * @extends module:alfresco/core/Core
  * @author Dave Draper
@@ -35,11 +35,11 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/json"],
         function(declare, AlfCore, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, dojoJson) {
-   
+
    return declare([AlfCore, CoreXhr, PathUtils], {
-      
+
       /**
-       * 
+       *
        * @instance
        * @param {array} args Constructor arguments
        */
@@ -51,9 +51,18 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * The URL to call to fetch auto suggest results
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      autoSuggestAPI: AlfConstants.PROXY_URI + "slingshot/auto-suggest",
+
+      /**
        * This is the default number of items to return as a single page of result data. This value will be used if
        * a specific value isn't supplied in a search request.
-       * 
+       *
        * @instance
        * @type {number}
        * @default 25
@@ -61,8 +70,8 @@ define(["dojo/_base/declare",
       pageSize: 25,
 
       /**
-       * This is the default query to use if one isn't supplied in a search request. 
-       * 
+       * This is the default query to use if one isn't supplied in a search request.
+       *
        * @instance
        * @type {string}
        * @default ""
@@ -90,8 +99,21 @@ define(["dojo/_base/declare",
       rootNode: "alfresco://company/home",
 
       /**
+       * The URL to send a search request to
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      searchAPI: AlfConstants.PROXY_URI + "slingshot/search/",
+
+      /**
+       * The URL to send the
+       */
+
+      /**
        * This is the default site to use. This value will be used if a specific value isn't supplied in the search request.
-       * 
+       *
        * @instance
        * @type {string}
        * @default ""
@@ -100,7 +122,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is the default sort to use. This value will be used if a specific value isn't supplied in the search request.
-       * 
+       *
        * @instance
        * @type {string}
        * @default ""
@@ -109,7 +131,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is the default sort direction to use. This value will be used if a specific value isn't supplied in the search request.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default true
@@ -119,7 +141,7 @@ define(["dojo/_base/declare",
       /**
        * This is the default page index to use for multiple pages of search results. This value will be used if
        * a specific value isn't supplied in a search request.
-       * 
+       *
        * @instance
        * @type {number}
        * @default 0
@@ -128,7 +150,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is the default tag to use. This value will be used if a specific value isn't supplied in the search request.
-       * 
+       *
        * @instance
        * @type {string}
        * @default ""
@@ -141,51 +163,54 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload defining the document to retrieve the details for.
        */
       onSearchRequest: function alfresco_services_SearchService__onSearchRequest(payload) {
-         if (payload == null || payload.term == null)
+         // jshint maxlen:300, maxcomplexity:false
+         if (!payload || !payload.term)
          {
             this.alfLog("warn", "A request was made to perform a search but no 'term' attribute was provided", payload, this);
          }
          else
          {
             // Check to see whether or not a success topic has been provided...
-            var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : "ALF_SEARCH_REQUEST";
-            var url = AlfConstants.PROXY_URI + "slingshot/search/";
+            var alfTopic = (payload.alfResponseTopic) ? payload.alfResponseTopic : "ALF_SEARCH_REQUEST";
+            var url = this.searchAPI;
 
             // Use any unexpected attributes as a query attribute...
             var query = this.query;
-            if (payload.query == null)
+            if (!payload.query)
             {
                var queryAttributes = {};
                for (var key in payload)
                {
-                  switch(key) {
-                     case "alfTopic":
-                     case "alfResponseScope":
-                     case "alfResponseTopic":
-                     case "alfPublishScope":
-                     case "alfCallerName":
-                     case "term":
-                     case "tag":
-                     case "startIndex":
-                     case "sort":
-                     case "site":
-                     case "rootNode":
-                     case "repo":
-                     case "pageSize":
-                     case "maxResults":
-                     case "facetFields":
-                     case "filters":
-                     case "sortAscending":
-                     case "sortField":
-                     case "requestId":
-                     case "spellcheck":
-                        break;
-                     default:
-                        queryAttributes[key] = payload[key];
+                  if (payload.hasOwnProperty(key)) {
+                     switch(key) {
+                        case "alfTopic":
+                        case "alfResponseScope":
+                        case "alfResponseTopic":
+                        case "alfPublishScope":
+                        case "alfCallerName":
+                        case "term":
+                        case "tag":
+                        case "startIndex":
+                        case "sort":
+                        case "site":
+                        case "rootNode":
+                        case "repo":
+                        case "pageSize":
+                        case "maxResults":
+                        case "facetFields":
+                        case "filters":
+                        case "sortAscending":
+                        case "sortField":
+                        case "requestId":
+                        case "spellcheck":
+                           break;
+                        default:
+                           queryAttributes[key] = payload[key];
+                     }
                   }
                }
                query = dojoJson.stringify(queryAttributes);
-               if (query == "{}")
+               if (query === "{}")
                {
                   query = "";
                }
@@ -196,35 +221,31 @@ define(["dojo/_base/declare",
             }
 
             var sort = "";
-            if (payload.sortField != null && (payload.sortField === "null" || payload.sortField === ""))
+            if (payload.sortField === "null" || payload.sortField === "Relevance" || payload.sortField === "")
             {
                // No action required - leave as the empty string which is relevance - no direction can be applied
             }
-            else if (payload.sortField === "Relevance")
-            {
-               sort = "";
-            }
             else
             {
-               sort = ((payload.sortField != null) ? payload.sortField : this.sort) + "|" + 
-                      ((payload.sortAscending != null) ? payload.sortAscending : this.sortAscending);
+               sort = (payload.sortField || this.sort) + "|" + (payload.sortAscending || this.sortAscending);
             }
 
+            var defaultFacetFields = "{http://www.alfresco.org/model/content/1.0}content.mimetype,{http://www.alfresco.org/model/content/1.0}modifier.__,{http://www.alfresco.org/model/content/1.0}creator.__,{http://www.alfresco.org/model/content/1.0}description.__";
             var data = {
-               facetFields: (payload.facetFields != null) ? payload.facetFields : "{http://www.alfresco.org/model/content/1.0}content.mimetype,{http://www.alfresco.org/model/content/1.0}modifier.__,{http://www.alfresco.org/model/content/1.0}creator.__,{http://www.alfresco.org/model/content/1.0}description.__",
-               filters: (payload.filters != null) ? payload.filters : "",
+               facetFields: payload.facetFields || defaultFacetFields,
+               filters: payload.filters || "",
                term: payload.term,
-               tag: (payload.tag != null) ? payload.tag : this.tag,
-               startIndex: (payload.startIndex != null) ? payload.startIndex : this.startIndex,
+               tag: payload.tag || this.tag,
+               startIndex: (payload.startIndex || payload.startIndex === 0) ? payload.startIndex : this.startIndex,
                sort: sort,
-               site: (payload.site != null) ? payload.site : this.site,
-               rootNode: (payload.rootNode != null) ? payload.rootNode : this.rootNode,
-               repo: (payload.repo != null) ? payload.repo : this.repo,
+               site: payload.site || this.site,
+               rootNode: payload.rootNode || this.rootNode,
+               repo: payload.repo || this.repo,
                query: query,
-               pageSize: (payload.pageSize != null) ? payload.pageSize : this.pageSize,
-               maxResults: (payload.maxResults != null) ? payload.maxResults : 0,
+               pageSize: payload.pageSize || this.pageSize, // It makes no sense for page size to ever be 0
+               maxResults: payload.maxResults || 0,
                noCache: new Date().getTime(),
-               spellcheck: (payload.spellcheck != null) ? payload.spellcheck: false
+               spellcheck: payload.spellcheck || false
             };
             var config = {
                requestId: payload.requestId,
@@ -246,11 +267,11 @@ define(["dojo/_base/declare",
        */
       onAutoSuggest: function alfresco_services_SearchService__onAutoSuggest(payload) {
          // Create the root URL...
-         var url = AlfConstants.PROXY_URI + "slingshot/auto-suggest";
+         var url = this.autoSuggestAPI;
          var options = {
             t: ""
          };
-         if (payload.query != null)
+         if (payload.query)
          {
             options.t = payload.query;
          }

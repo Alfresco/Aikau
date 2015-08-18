@@ -23,6 +23,11 @@ model.jsonModel = {
          config: {
             widgets: [
                {
+                  id: "LOGO1",
+                  name: "alfresco/logo/Logo",
+                  title: "Logo"
+               },
+               {
                   id: "SIDEBAR",
                   title: "Sidebar",
                   name: "alfresco/layout/AlfSideBarContainer",
@@ -30,34 +35,51 @@ model.jsonModel = {
                      footerHeight: 10,
                      widgets: [
                         {
-                           id: "LOGO",
+                           id: "LOGO2",
                            name: "alfresco/logo/Logo",
                            align: "sidebar"
                         },
                         {
-                           id: "LIST",
-                           name: "alfresco/documentlibrary/AlfDocumentList",
-                           align: "main",
+                           id: "FIXED_HEADER_FOOTER",
+                           name: "alfresco/layout/FixedHeaderFooter",
                            config: {
-                              useHash: true,
+                              height: "auto",
+                              recalculateAutoHeightOnResize: true,
+                              widgetsForFooter: [
+                                 {
+                                    id: "LOGO3",
+                                    name: "alfresco/logo/Logo"
+                                 }
+                              ],
                               widgets: [
                                  {
-                                    name: "alfresco/lists/views/AlfListView",
+                                    id: "LIST",
+                                    name: "alfresco/documentlibrary/AlfDocumentList",
+                                    align: "main",
                                     config: {
-                                       itemKey: "index",
+                                       useHash: false,
+                                       currentPageSize: 10,
                                        widgets: [
                                           {
-                                             name: "alfresco/lists/views/layouts/Row",
+                                             name: "alfresco/lists/views/AlfListView",
                                              config: {
+                                                itemKey: "index",
                                                 widgets: [
                                                    {
-                                                      name: "alfresco/lists/views/layouts/Cell",
+                                                      name: "alfresco/lists/views/layouts/Row",
                                                       config: {
                                                          widgets: [
                                                             {
-                                                               name: "alfresco/renderers/Property",
+                                                               name: "alfresco/lists/views/layouts/Cell",
                                                                config: {
-                                                                  propertyToRender: "index"
+                                                                  widgets: [
+                                                                     {
+                                                                        name: "alfresco/renderers/Property",
+                                                                        config: {
+                                                                           propertyToRender: "index"
+                                                                        }
+                                                                     }
+                                                                  ]
                                                                }
                                                             }
                                                          ]

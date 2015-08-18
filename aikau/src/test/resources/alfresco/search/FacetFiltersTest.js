@@ -211,10 +211,7 @@ define(["intern!object",
             })
          .end()
 
-         .getLastPublish("ALF_APPLY_FACET_FILTER")
-            .then(function(payload) {
-               assert.isNotNull(payload, "The facet did not publish on 'ALF_APPLY_FACET_FILTER'");
-            });
+         .getLastPublish("ALF_APPLY_FACET_FILTER");
       },
 
       "Facet menu item should de-select when clicked again": function() {
@@ -229,10 +226,7 @@ define(["intern!object",
             })
          .end()
 
-         .getLastPublish("ALF_REMOVE_FACET_FILTER")
-            .then(function(payload) {
-               assert.isNotNull(payload, "The facet did not publish on 'ALF_REMOVE_FACET_FILTER'");
-            });
+         .getLastPublish("ALF_REMOVE_FACET_FILTER");
       },
 
       "Post Coverage Results": function() {
@@ -320,10 +314,7 @@ define(["intern!object",
             })
          .end()
 
-         .getLastPublish("ALF_APPLY_FACET_FILTER")
-            .then(function(payload) {
-               assert.isNotNull(payload, "The facet did not publish on 'ALF_APPLY_FACET_FILTER'");
-            });
+         .getLastPublish("ALF_APPLY_FACET_FILTER");
       },
       
       "Facet menu item should de-select when clicked again using the keyboard": function() {
@@ -338,10 +329,7 @@ define(["intern!object",
             })
          .end()
 
-         .getLastPublish("ALF_REMOVE_FACET_FILTER")
-            .then(function(payload) {
-               assert.isNotNull(payload, "The facet did not publish on 'ALF_REMOVE_FACET_FILTER'");
-            });
+         .getLastPublish("ALF_REMOVE_FACET_FILTER");
       },
       
       "Post Coverage Results": function() {
@@ -458,10 +446,7 @@ define(["intern!object",
             .clearLog()
             .click()
          .end()
-         .getLastPublish("ALF_INCLUDE_FACET")
-         .then(function(payload) {
-            assert.isNotNull(payload, "There was no include facets publication");
-         });
+         .getLastPublish("ALF_INCLUDE_FACET");
       },
 
       "Post Coverage Results": function() {

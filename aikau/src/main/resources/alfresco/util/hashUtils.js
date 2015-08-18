@@ -24,10 +24,11 @@
  * @module alfresco/util/hashUtils
  * @author Martin Doyle
  */
-define(["dojo/_base/lang",
+define(["dojo/_base/array",
+        "dojo/_base/lang",
         "dojo/hash",
         "dojo/io-query"],
-        function(lang, hash, ioQuery) {
+        function(array, lang, hash, ioQuery) {
 
    // The private container for the functionality and properties of the util
    var util = {
@@ -36,6 +37,9 @@ define(["dojo/_base/lang",
       getHash: function alfresco_util_hashUtils__getHash() {
          var hashString = this.getHashString(),
             hashObj = ioQuery.queryToObject(hashString);
+         array.forEach(Object.keys(hashObj), function(hashKey) {
+            hashObj[hashKey] = decodeURIComponent(hashObj[hashKey]);
+         });
          return hashObj;
       },
 
@@ -46,7 +50,11 @@ define(["dojo/_base/lang",
 
       // See API below
       setHash: function alfresco_util_hashUtils__setHash(hashObj, replace) {
-         var hashString = ioQuery.objectToQuery(hashObj);
+         var hashObjToUse = lang.clone(hashObj);
+         array.forEach(Object.keys(hashObjToUse), function(hashKey) {
+            hashObjToUse[hashKey] = encodeURIComponent(hashObjToUse[hashKey]);
+         });
+         var hashString = ioQuery.objectToQuery(hashObjToUse);
          this.setHashString(hashString, replace);
       },
 
@@ -75,7 +83,7 @@ define(["dojo/_base/lang",
                } else {
                   newHashValue = "" + newHashValue;
                   if (newHashValue !== currHashValue) {
-                     newHash[hashName] = encodeURIComponent(newHashValue);
+                     newHash[hashName] = newHashValue;
                      hashChanged = true;
                   }
                }
@@ -95,7 +103,7 @@ define(["dojo/_base/lang",
    return {
 
       /**
-       * Get the current hash value as an object
+       * Get the current hash value as an object. All values will be URI decoded.
        *
        * @instance
        * @returns {Object} The hash value as an object
@@ -103,7 +111,7 @@ define(["dojo/_base/lang",
       getHash: lang.hitch(util, util.getHash),
 
       /**
-       * Get the current hash value as a string
+       * Get the current hash value as a string. All values will be URI decoded.
        *
        * @instance
        * @returns {string} The hash value as a string
@@ -111,7 +119,7 @@ define(["dojo/_base/lang",
       getHashString: lang.hitch(util, util.getHashString),
 
       /**
-       * Set the current hash value from an object
+       * Set the current hash value from an object. All values will be URI encoded.
        *
        * @instance
        * @param {Object} hashObj The new hash object
@@ -121,7 +129,7 @@ define(["dojo/_base/lang",
       setHash: lang.hitch(util, util.setHash),
 
       /**
-       * Set the current hash value from a string
+       * Set the current hash value from a string. All values will be URI encoded.
        *
        * @instance
        * @param {string} hashString The new hash string
@@ -133,7 +141,7 @@ define(["dojo/_base/lang",
       /**
        * Update the current hash (by default, this will not do the update if the
        * values are unchanged). To remove a value from the hash, pass through null
-       * or undefined.
+       * or undefined. All values will be URI encoded.
        *
        * @instance
        * @param {Object} newValues The new hash values with hash names as keys and

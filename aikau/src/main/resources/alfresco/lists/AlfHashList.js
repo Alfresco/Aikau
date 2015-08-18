@@ -58,16 +58,6 @@ define(["dojo/_base/declare",
       hashVarsForUpdate: [],
 
       /**
-       * Indicates whether or not changing URL hash parameters should be set as instance variables
-       * on the list.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      updateInstanceValues: false,
-
-      /**
        * Indicates whether or not the [hashVarsForUpdate]{@link module:alfresco/lists/AlfHashList#hashVarsForUpdate}
        * that are present in the current hash should be mapped directly into the 
        * [loadDataPublishPayload]{@link module:alfresco/lists/AlfList#loadDataPublishPayload}.
@@ -77,6 +67,16 @@ define(["dojo/_base/declare",
        * @default false
        */
       mapHashVarsToPayload: false,
+
+      /**
+       * Indicates whether or not changing URL hash parameters should be set as instance variables
+       * on the list.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      updateInstanceValues: false,
 
       /**
        * Determines whether or not a locally stored hash value should be maintained and re-used in the event of 
@@ -177,9 +177,14 @@ define(["dojo/_base/declare",
                this.processLoadedData(this.currentData);
                this.renderView();
             }
-            else
+            else if (this.loadDataImmediately)
             {
                this.loadData();
+            }
+            else
+            {
+               // No action required, wait for either a reload request or data to be published
+               this.alfLog("log", "This list configured to not load data immediately", this);
             }
          }
       },
@@ -233,17 +238,23 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} payload
+       * @returns {bool} true if data was loaded as a result of the hash-change
        */
       onHashChanged: function alfresco_lists_AlfHashList__onHashChanged(payload) {
          // Process the hash...
-         if(this.doHashVarUpdate(payload, this.updateInstanceValues))
+         var dataLoaded = false,
+            numCurrentFilters = lang.getObject("currentData.filters.length", false, this),
+            filtersRemoved = !this.dataFilters.length && numCurrentFilters;
+         if(this.doHashVarUpdate(payload, this.updateInstanceValues) || filtersRemoved)
          {
             this._updateCoreHashVars(payload);
             if (this._readyToLoad)
             {
                this.loadData();
+               dataLoaded = true;
             }
          }
+         return dataLoaded;
       },
 
       /**

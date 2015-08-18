@@ -36,6 +36,19 @@ define(["dojo/_base/declare",
    return declare([Tree, _AlfDocumentListTopicMixin], {
       
       /**
+       * This determines whether or not to subcribe to the 
+       * [hash change topic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#hashChangeTopic}
+       * or the [path change topic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#pathChangeTopic}.
+       * Although the path tree doesn't make changes to the browser URL hash, it can be driven from them to that
+       * it expands tree nodes to reflect the path attribute set as a hash parameter.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      useHash: true,
+
+      /**
        * Extends the inherited function to subscribe to the [hashChangeTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#hashChangeTopic}
        * topic passing the [onFilterChange function]{@link module:alfresco/navigation/PathTree#onFilterChange} as the callback handler.
        * 
@@ -43,7 +56,14 @@ define(["dojo/_base/declare",
        */
       postMixInProperties: function alfresco_navigation_PathTree__postMixInProperties() {
          this.inherited(arguments);
-         this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, "onFilterChange"));
+         if (this.useHash === true)
+         {
+            this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onFilterChange));
+         }
+         else
+         {
+            this.alfSubscribe(this.pathChangeTopic, lang.hitch(this, this.onFilterChange));
+         }
       },
       
       /**
@@ -97,7 +117,9 @@ define(["dojo/_base/declare",
             var childNodes = node.getChildren(),
                 pathElement = pathElements.shift(),
                 filteredNodes = array.filter(childNodes, function(item) {
-               return item.item.name === pathElement;
+               // NOTE: Compare the value, not the name as the name can be switched (e.g. documentLibrary 
+               //       becomes Document Library, see "updateChild" function in TreeStore).
+               return item.item.value === pathElement;
             });
             if (filteredNodes.length === 1)
             {

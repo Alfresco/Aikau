@@ -42,10 +42,10 @@ define(["intern!object",
       "Check autosave doesn't occur on page load": function() {
          return browser.findByCssSelector("#AUTOSAVE_FORM")
          .end()
-         .getLastPublish("AUTOSAVE_FORM")
-            .then(function(payload) {
-               assert.isNull(payload, "There should be no auto save when the page loads");
-            });
+         .getAllPublishes("AUTOSAVE_FORM")
+         .then(function(payloads) {
+            assert.lengthOf(payloads, 0, "There should be no auto save when the page loads");
+         });
       },
 
       "Check that autosave works on control update": function() {
@@ -66,9 +66,9 @@ define(["intern!object",
          // Wait for dialog to open...
          .findAllByCssSelector("#DIALOG1.dialogDisplayed")
          .end()
-         .getLastPublish("AUTOSAVE_FORM2")
-            .then(function(payload) {
-               assert.isNull(payload, "There should be no auto save when the page loads");
+         .getAllPublishes("AUTOSAVE_FORM2")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "There should be no auto save when the page loads");
             });
       },
 

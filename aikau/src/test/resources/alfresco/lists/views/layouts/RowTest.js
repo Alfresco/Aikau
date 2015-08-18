@@ -54,6 +54,17 @@ define(["intern!object",
             });
       },
 
+      "Check focus hightlighing": function() {
+         // See AKU-498 - There are two rows, but only one of them should highlight when focused
+         return browser.findById("CELL1_ITEM_0")
+            .click()
+         .end()
+         .findAllByCssSelector(".alfresco-lists-views-layout-_MultiItemRendererMixin__item--focusHighlighting")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "The row did not have the focus class");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

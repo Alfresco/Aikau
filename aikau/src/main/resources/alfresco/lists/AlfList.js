@@ -43,9 +43,10 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
-        "dojo/dom-class"],
+        "dojo/dom-class",
+        "dojo/io-query"],
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, _AlfDocumentListTopicMixin,
-                 DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, array, lang, domConstruct, domClass) {
+                 DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, array, lang, domConstruct, domClass, ioQuery) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, DynamicWidgetProcessingTopics], {
 
@@ -79,7 +80,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       viewMap: null,
 
@@ -90,7 +91,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       viewControlsMap: null,
 
@@ -108,7 +109,7 @@ define(["dojo/_base/declare",
        * Is there currently a request in progress?
        *
        * @instance
-       * @default false
+       * @default
        * @type {Boolean}
        */
       requestInProgress: false,
@@ -118,7 +119,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       useInfiniteScroll: false,
 
@@ -128,7 +129,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_RETRIEVE_DOCUMENTS_REQUEST"
+       * @default
        */
       loadDataPublishTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
 
@@ -138,9 +139,20 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       loadDataPublishPayload: null,
+
+      /**
+       * Indicates whether or not a request for data should be loaded as soon as the widget is created.
+       * This will have no effect when [currentData]{@link module:alfresco/listsl/AlfList#currentData}
+       * is configured.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      loadDataImmediately: true,
 
       /**
        * Subscribe the document list topics.
@@ -237,6 +249,15 @@ define(["dojo/_base/declare",
       dataFailureMessage: "alflist.data.failure.message",
 
       /**
+       * The constructor
+       *
+       * @instance
+       */
+      constructor: function alfresco_lists_AlfList__constructor(){
+         this.dataFilters = [];
+      },
+
+      /**
        * This function should be overridden as necessary to change the messages displayed for various states
        * of the list, e.g.
        * <ul><li>When no view is configured</li>
@@ -275,7 +296,6 @@ define(["dojo/_base/declare",
             array.forEach(this.filteringTopics, function(topic) {
                this.alfSubscribe(topic, lang.hitch(this, this.onFilterRequest));
             }, this);
-            
          }
       },
 
@@ -292,7 +312,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       filteringTopics: null,
 
@@ -303,7 +323,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       dataFilters: null,
 
@@ -316,35 +336,22 @@ define(["dojo/_base/declare",
       onFilterRequest: function alfresco_lists_AlfList__onFilterRequest(payload) {
          if (payload && payload.name)
          {
-            if (!this.dataFilters)
-            {
-               // No filters yet, just add this one as the first
-               this.dataFilters = [
-                  {
-                     name: payload.name,
-                     value: payload.value
-                  }
-               ];
-            }
-            else
-            {
-               // Look to see if there is an existing filter that needs to be updated
-               var existingFilter = array.some(this.dataFilters, function(filter) {
-                  var match = filter.name === payload.name;
-                  if (match)
-                  {
-                     filter.value = payload.value;
-                  }
-                  return match;
-               });
-               // If there wasn't an existing filter then add the payload as a new one...
-               if (!existingFilter)
+            // Look to see if there is an existing filter that needs to be updated
+            var existingFilter = array.some(this.dataFilters, function(filter) {
+               var match = filter.name === payload.name;
+               if (match)
                {
-                  this.dataFilters.push({
-                     name: payload.name,
-                     value: payload.value
-                  });
+                  filter.value = payload.value;
                }
+               return match;
+            });
+            // If there wasn't an existing filter then add the payload as a new one...
+            if (!existingFilter)
+            {
+               this.dataFilters.push({
+                  name: payload.name,
+                  value: payload.value
+               });
             }
 
             // Setup a new timeout (clearing the old one, just in case)
@@ -372,7 +379,7 @@ define(["dojo/_base/declare",
          this.clearViews();
          this.loadData();
       },
-      
+
       /**
        * This indicates that the instance should wait for all widgets on the page to finish rendering before
        * making any attempt to load data. If this is set to true then loading can begin as soon as this instance
@@ -381,7 +388,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       waitForPageWidgets: true,
 
@@ -394,7 +401,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _readyToLoad: false,
 
@@ -415,9 +422,14 @@ define(["dojo/_base/declare",
             this.processLoadedData(this.currentData);
             this.renderView();
          }
-         else
+         else if (this.loadDataImmediately)
          {
             this.loadData();
+         }
+         else
+         {
+            // No action required, wait for either a reload request or data to be published
+            this.alfLog("log", "This list configured to not load data immediately", this);
          }
       },
 
@@ -427,7 +439,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.documentList.viewRendererName"
+       * @default
        */
       viewPreferenceProperty: "org.alfresco.share.documentList.viewRendererName",
 
@@ -464,7 +476,16 @@ define(["dojo/_base/declare",
          {
             // Create a subscription to listen out for all widgets on the page being reported
             // as ready (then we can start loading data)...
-            this.pageWidgetsReadySubcription = this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.onPageWidgetsReady), true);
+            if (this.pageWidgetsReadySubcription)
+            {
+               // A subscription already exists, this can occur when an inheriting list module
+               // calls processWidgets more than once (which will result in allWidgetsProcessed
+               // being called more than once). We want to avoid multiple subscriptions - see AKU-508
+            }
+            else
+            {
+               this.pageWidgetsReadySubcription = this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, this.onPageWidgetsReady), true);
+            }
          }
          else
          {
@@ -567,7 +588,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "DOCLIB_TOOLBAR"
+       * @default
        */
       additionalControlsTarget: "DOCLIB_TOOLBAR",
 
@@ -577,7 +598,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       additionalViewControlVisibilityConfig: null,
 
@@ -637,7 +658,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _currentlySelectedView: null,
 
@@ -646,7 +667,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentData: null,
 
@@ -702,7 +723,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Iterates over all the views and calls their 
+       * Iterates over all the views and calls their
        * [clearOldView]{@link module:alfresco/lists/views/AlfListView#clearOldView} function.
        *
        * @instance
@@ -810,7 +831,7 @@ define(["dojo/_base/declare",
       /**
        * Handles requests to reload the current list data by clearing all the previous data and then calling
        * [loadData]{@link module:alfresco/lists/AlfList#loadData}.
-       * 
+       *
        * @instance
        */
       onReloadData: function alfresco_lists_AlfList__onReloadData() {
@@ -883,7 +904,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "items"
+       * @default
        */
       itemsProperty: "items",
 
@@ -894,7 +915,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "metadata"
+       * @default
        */
       metadataProperty: "metadata",
 
@@ -903,7 +924,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "startIndex"
+       * @default
        */
       startIndexProperty: "startIndex",
 
@@ -912,7 +933,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "startIndex"
+       * @default
        */
       totalResultsProperty: "totalRecords",
 
@@ -925,7 +946,7 @@ define(["dojo/_base/declare",
        */
       onDataLoadSuccess: function alfresco_lists_AlfList__onDataLoadSuccess(payload) {
          // There is a pending load request, this will typically be the case when a new filter has been
-         // applied before the last request has returned. By requesting another data load the latest 
+         // applied before the last request has returned. By requesting another data load the latest
          // filters will be requested...
          if (this.pendingLoadRequest === true)
          {
@@ -977,14 +998,8 @@ define(["dojo/_base/declare",
 
             if (foundItems)
             {
-               if (payload.response) 
-               {
-                  this.processLoadedData(payload.response);
-               }
-               else
-               {
-                  this.processLoadedData(this.currentData);
-               }
+               this.currentData.filters = payload.requestConfig && this._extractFilters(payload.requestConfig);
+               this.processLoadedData(payload.response || this.currentData);
                this.renderView();
             }
 
@@ -1100,6 +1115,30 @@ define(["dojo/_base/declare",
        */
       onRequestFinished: function alfresco_lists_AlfList__onRequestFinished() {
          this.requestInProgress = false;
+      },
+
+      /**
+       * Extract the filter objects from the supplied successful requestConfig
+       *
+       * @instance
+       * @param {Object} requestConfig The request config from a successful request
+       * @returns {Object[]} The filters in the request (empty if none found)
+       */
+      _extractFilters: function alfresco_lists_AlfList___extractFilters(requestConfig) {
+         var filters = [];
+         if (requestConfig.url) {
+            var paramString = requestConfig.url.split("?")[1],
+               paramObj = (paramString && ioQuery.queryToObject(paramString)) || {},
+               filterStrings = paramObj.filters ? paramObj.filters.split(",") : [];
+            filters = array.map(filterStrings, function(filter) {
+               var filterParts = filter.split("|");
+               return {
+                  name: filterParts[0],
+                  value: filterParts[1]
+               };
+            });
+         }
+         return filters;
       }
    });
 });

@@ -190,7 +190,9 @@ define(["dojo/_base/declare",
                               name: "alfresco/renderers/InlineEditProperty",
                               config: {
                                  propertyToRender: "node.properties.cm:title",
-                                 postParam: "prop_cm_title"
+                                 postParam: "prop_cm_title",
+                                 warnIfNotAvailable: true,
+                                 warnIfNotAvailableMessage: "no.title.message"
                               }
                            }
                         ]
@@ -205,7 +207,9 @@ define(["dojo/_base/declare",
                               name: "alfresco/renderers/InlineEditProperty",
                               config: {
                                  propertyToRender: "node.properties.cm:description",
-                                 postParam: "prop_cm_description"
+                                 postParam: "prop_cm_description",
+                                 warnIfNotAvailable: true,
+                                 warnIfNotAvailableMessage: "no.description.message"
                               }
                            }
                         ]

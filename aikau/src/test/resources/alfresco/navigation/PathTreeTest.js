@@ -64,31 +64,21 @@ define(["intern!object",
             });
       },
      
-      "Test that clicking on TREE1 publishes default topic": function() {
+      "Test that clicking on TREE1 publishes path": function() {
          return browser.findByCssSelector("#TREE1 .dijitTreeIsRoot > div.dijitTreeRow .dijitTreeLabel")
             .click()
          .end()
-         .findByCssSelector(TestCommon.topicSelector("ALF_DOCUMENTLIST_PATH_CHANGED", "publish", "last"))
-            .then(null, function() {
-               assert(false, "The topic published by clicking on TREE1 nodes is not the default publishTopic");
+         .getLastPublish("ALF_DOCUMENTLIST_PATH_CHANGED")
+            .then(function(payload) {
+               assert.propertyVal(payload, "path", "/", "Clicking on the root of TREE1 did not publish the expected path");
             });
       },
    
-      "Test that clicking on TREE1 publishes path": function() {
-         return browser.findByCssSelector(TestCommon.pubSubDataCssSelector("last", "path", "/"))
-            .then(null, function() {
-               assert(false, "Clicking on the root of TREE1 did not publish the expected path");
-            });
-      },
-  
       "Test that clicking on TREE2 publishes custom topic": function() {
          return browser.findByCssSelector("#TREE2 .dijitTreeIsRoot > div.dijitTreeNodeContainer div.dijitTreeRow .dijitTreeLabel")
             .click()
          .end()
-         .findByCssSelector(TestCommon.topicSelector("ALF_ITEM_SELECTED", "publish", "last"))
-            .then(null, function() {
-               assert(false, "The topic published by clicking on TREE1 nodes is not requested custom topic");
-            });
+         .getLastPublish("ALF_ITEM_SELECTED", "The topic published by clicking on TREE2 nodes is not requested custom topic");
       },
   
       "Test that TREE1 has NOT filtered site containers": function() {
@@ -134,9 +124,34 @@ define(["intern!object",
          return browser.findByCssSelector("#TREE2 .dijitTreeIsRoot > div.dijitTreeNodeContainer div.dijitTreeNodeContainer > div:first-child div.dijitTreeRow .dijitTreeLabel")
             .click()
          .end()
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "path", "/documentLibrary/Agency Files/"))
-            .then(null, function() {
-               assert(false, "Clicking on a child node of TREE2 did not publish the expected path");
+         .getLastPublish("ALF_ITEM_SELECTED")
+            .then(function(payload) {
+               assert.propertyVal(payload, "path", "/documentLibrary/Agency Files/", "Clicking on a child node of TREE2 did not publish the expected path");
+            });
+      },
+
+      "Publish hash change": function() {
+         return browser.findById("SET_HASH_label")
+            .click()
+         .end()
+         .findAllByCssSelector("#TREE1 .dijitTreeNode .dijitTreeNode .dijitTreeNode .dijitTreeNode")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Setting the hash did not expand the first tree");
+            })
+         .end()
+         .findAllByCssSelector("#TREE2 .dijitTreeNode .dijitTreeNode .dijitTreeNode .dijitTreeNode")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Setting the hash should not have expanded the second tree");
+            });
+      },
+
+      "Publish path change": function() {
+         return browser.findById("SET_PATH_label")
+            .click()
+         .end()
+         .findAllByCssSelector("#TREE2 .dijitTreeNode .dijitTreeNode .dijitTreeNode .dijitTreeNode")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Setting the path did not expand the second tree");
             });
       },
 
