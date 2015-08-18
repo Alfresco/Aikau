@@ -84,9 +84,10 @@ define(["intern!object",
 
       "Test Initial Widths": function () {
          return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
-            .getComputedStyle("width")
-            .then(function(width) {
-               assert(width === "350px", "The sidebar width wasn't initialised correctly");
+            .getSize()
+            .then(function(size) {
+               // NOTE: The width has to take the 10px right padding into account
+               assert.equal(size.width, 360, "The sidebar width wasn't initialised correctly");
             });
       },
 
@@ -95,9 +96,9 @@ define(["intern!object",
             .click()
          .end()
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
-            .getComputedStyle("width")
-            .then(function(width) {
-               assert(width === "9px", "The sidebar wasn't hidden via the bar control");
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.width, 9, "The sidebar wasn't hidden via the bar control");
             });
       },
 
@@ -106,9 +107,10 @@ define(["intern!object",
             .click()
          .end()
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
-            .getComputedStyle("width")
-            .then(function(width) {
-               assert(width === "350px", "The sidebar wasn't shown via the bar control");
+            .getSize()
+            .then(function(size) {
+               // NOTE: The width has to take the 10px right padding into account
+               assert.equal(size.width, 360, "The sidebar wasn't shown via the bar control");
             });
       },
 
@@ -117,9 +119,9 @@ define(["intern!object",
             .click()
          .end()
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
-            .getComputedStyle("width")
-            .then(function(width) {
-               assert(width === "9px", "The sidebar wasn't hidden via publication");
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.width, 9, "The sidebar wasn't hidden via publication");
             });
       },
 
@@ -128,9 +130,10 @@ define(["intern!object",
             .click()
          .end()
          .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
-            .getComputedStyle("width")
-            .then(function(width) {
-               assert(width === "350px", "The sidebar wasn't shown via publication");
+            .getSize()
+            .then(function(size) {
+               // NOTE: The width has to take the 10px right padding into account
+               assert.equal(size.width, 360, "The sidebar wasn't shown via publication");
             })
          .end();
       },
