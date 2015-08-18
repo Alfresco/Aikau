@@ -241,8 +241,14 @@ define(["alfresco/TestCommon",
             returnUrl = TestCommon.testWebScriptURL("/FilteredList#description=woof");
          return browser.findByCssSelector("body")
             .clearLog()
-            .get(anotherPageUrl)
-            .get(returnUrl)
+            .end()
+
+         .get(anotherPageUrl)
+            .findByCssSelector("body")
+            .end()
+
+         .get(returnUrl)
+            .findByCssSelector("body")
             .end()
 
          .findByCssSelector("#COMPOSITE .alfresco-lists-views-AlfListView table")
