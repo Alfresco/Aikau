@@ -121,7 +121,7 @@
          &__highlighted-label {
             font-family: @bold-font;
             font-weight: 700;
-            color: @link-font-color
+            color: @link-font-color;
             text-decoration: @link-text-decoration;
          }
          &:first-child {
