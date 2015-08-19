@@ -15,8 +15,8 @@
 
          @use-legacy-buttons: false;
 
-         @link-font-color: blue;
-         @link-emphasized-font-color: blue;
+         @link-font-color: @button-color-default;
+         @link-emphasized-font-color: @button-color-default;
          @link-text-decoration: underline;
       </less-variables>
    </css-tokens>
