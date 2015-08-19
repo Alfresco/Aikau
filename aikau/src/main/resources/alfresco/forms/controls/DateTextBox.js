@@ -33,6 +33,7 @@
  * 
  * @module alfresco/forms/controls/DateTextBox
  * @extends module:alfresco/forms/controls/BaseFormControl
+ * @mixes module:alfresco/forms/controls/utilities/TextBoxValueChangeMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
