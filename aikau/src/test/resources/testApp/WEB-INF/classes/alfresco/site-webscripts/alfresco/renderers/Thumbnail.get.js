@@ -88,12 +88,12 @@ model.jsonModel = {
                                                    {
                                                       name: "alfresco/renderers/Thumbnail",
                                                       config: {
+                                                         pubSubScope: "CUSTOM_SCOPE_",
                                                          renditionName: "imgpreview",
                                                          width: "200px",
                                                          publishTopic: "CUSTOM_CLICK_TOPIC",
                                                          publishPayloadType: "CURRENT_ITEM",
-                                                         publishPayload: {},
-                                                         publishGlobal: true
+                                                         publishPayload: {}
                                                       }
                                                    }
                                                 ]
@@ -277,7 +277,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/ThumbnailsMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

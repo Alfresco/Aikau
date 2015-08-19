@@ -465,8 +465,8 @@ define(["dojo/_base/declare",
          }
          else
          {
-            var publishGlobal = this.publishGlobal !== false;
-            var publishToParent = this.publishToParent !== false;
+            var publishGlobal = this.publishGlobal || false;
+            var publishToParent = this.publishToParent || false;
             this.alfPublish(this.publishTopic, this.publishPayload, publishGlobal, publishToParent);
          }
       },
