@@ -64,6 +64,7 @@ define(["intern!object",
             .findByCssSelector("#POST_TO_CURRENT_PAGE_label")
                .click()
             .end()
+            .sleep(1000)
             .findAllByCssSelector("#POSTED")
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Navigation POST didn't occur");
@@ -83,6 +84,7 @@ define(["intern!object",
          .findByCssSelector("#BACK_TO_ORIGINAL_URL_label")
             .click()
          .end()
+         .sleep(1000)
          // Wait for page load
          .getLastPublish("ALF_WIDGET_PROCESSING_COMPLETE")
          .findAllByCssSelector("#NOTHING_POSTED")
@@ -104,6 +106,7 @@ define(["intern!object",
          .findByCssSelector("#POST_TO_NEW_PAGE_label")
             .click()
          .end()
+         .sleep(1000) // Wait for the page to open
          .getAllWindowHandles()
          .then(function(handles) {
             assert.lengthOf(handles, 2, "A new page wasn't opened");
@@ -136,6 +139,7 @@ define(["intern!object",
             .findByCssSelector("#NAV_TO_PAGE_WITH_PARAMS_label")
             .click()
             .end()
+            .sleep(1000) // Wait for the page to open
             .getCurrentUrl()
             .then(function (url) {
                assert.include(url, "page/tp/ws/NavigationService?bar=scndqryprm&foo=qryprm#baz=hshprm", "Not on new page (after nav to new page");
