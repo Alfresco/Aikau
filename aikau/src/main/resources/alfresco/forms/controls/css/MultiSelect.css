@@ -121,8 +121,8 @@
          &__highlighted-label {
             font-family: @bold-font;
             font-weight: 700;
-            color: @link-font-color;
-            text-decoration: @link-text-decoration;
+            color: @general-font-color;
+            text-decoration: underline;
          }
          &:first-child {
             border-top-color: @standard-border-color;
