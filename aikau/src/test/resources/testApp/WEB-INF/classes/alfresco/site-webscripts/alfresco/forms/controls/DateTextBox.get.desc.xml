@@ -1,5 +1,6 @@
 <webscript>
   <shortname>DateTextBox Test</shortname>
+  <description>This shows various configured instances of the alfresco/forms/controls/DateTextBox.</description>
   <family>aikau-unit-tests</family>
   <url>/DateTextBox</url>
 </webscript>

@@ -25,8 +25,9 @@
 define(["intern!object",
         "intern/chai!assert", 
         "require", 
-        "alfresco/TestCommon"], 
-        function(registerSuite, assert, require, TestCommon) {
+        "alfresco/TestCommon", 
+        "intern/dojo/node!leadfoot/keys"], 
+        function(registerSuite, assert, require, TestCommon, keys) {
 
    var browser;
    registerSuite({
@@ -117,6 +118,39 @@ define(["intern!object",
             .getVisibleText()
             .then(function(visibleText) {
                assert.equal(visibleText, "Enter a valid date", "Did not display correct error text");
+            });
+      },
+
+      "Check that rule declaring textbox is not required initially": function() {
+         return browser.findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The requirement indicator should not have been initially displayed");
+            });
+      },
+
+      "Type a date to verify rules processing occurs on keyboard entry": function() {
+         return browser.findById("RULES_CHECKER_CONTROL")
+            .click()
+            .type("05/05/1946")
+         .end()
+         .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The requirement indicator should be displayed on date entry via keyboard");
+            });
+      },
+
+      "Clear the date to check that the textbox stops being required": function() {
+         return browser.findById("RULES_CHECKER_CONTROL")
+            .clearValue() // Clear the value, makes it less to delete via backspace...
+            .type("1")    // ...add a single character to be deleted with backspace...
+            .pressKeys(keys.BACKSPACE) // ...and delete
+         .end()
+         .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The requirement indicator should be hidden when the date field is cleared");
             });
       },
 
