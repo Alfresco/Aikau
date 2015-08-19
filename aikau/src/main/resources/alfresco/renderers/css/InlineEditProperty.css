@@ -8,7 +8,6 @@
       }
    }
    .inlineEditValue {
-      cursor: pointer;
       line-height: 20px;
       &.hidden ~ .editIcon {
          display: none;

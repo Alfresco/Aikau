@@ -6,9 +6,9 @@
       font-weight: normal;
       margin-top: 19px;
       > .text {
-         color: @general-font-color !important;
-         font-family: Open Sans Condensed, Arial, sans-serif;
-         text-decoration: none;
+         color: @link-font-color !important;
+         font-family: @condensed-font;
+         text-decoration: @link-text-decoration;
          &.has-max-width {
             overflow: hidden;
             text-overflow: ellipsis;
