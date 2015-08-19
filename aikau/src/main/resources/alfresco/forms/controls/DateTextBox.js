@@ -35,14 +35,16 @@
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @author Dave Draper
  */
-define(["alfresco/forms/controls/BaseFormControl",
-        "dojo/_base/declare",
+define(["dojo/_base/declare",
+        "alfresco/forms/controls/BaseFormControl",
+        "alfresco/forms/controls/utilities/TextBoxValueChangeMixin",
         "dojo/_base/lang",
         "dojo/date/stamp",
         "dijit/form/DateTextBox",
-        "dojo/dom-class"],
-        function(BaseFormControl, declare, lang, stamp, DateTextBox, domClass) {
-   return declare([BaseFormControl], {
+        "dojo/dom-class",
+        "alfresco/core/ObjectTypeUtils"],
+        function(declare, BaseFormControl, TextBoxValueChangeMixin, lang, stamp, DateTextBox, domClass, ObjectTypeUtils) {
+   return declare([BaseFormControl, TextBoxValueChangeMixin], {
 
       /**
        * An array of the CSS files to use with this widget.

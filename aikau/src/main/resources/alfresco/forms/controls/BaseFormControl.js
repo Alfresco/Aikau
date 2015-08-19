@@ -1128,7 +1128,7 @@ define(["dojo/_base/declare",
 
          // If both values aren't null then compare the .toString() output, if one of them is null
          // then it doesn't really matter whether or not we get the string output for the value or not
-         if (currentValue && targetValue.value)
+         if (currentValue && targetValue && targetValue.value)
          {
             return currentValue.toString() === targetValue.value.toString();
          }
