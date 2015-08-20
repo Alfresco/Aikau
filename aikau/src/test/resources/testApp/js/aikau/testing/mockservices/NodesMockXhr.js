@@ -84,7 +84,7 @@ define([
           * @instance
           * @type {RegExp}
           */
-         _nodeRegex: new RegExp(".+/service/components/node/workspace/SpacesStore/((?:-?\\w{4,12}){5}).*"),
+         _nodeRegex: new RegExp(".+/service/components/documentlibrary/data/node/workspace/SpacesStore/((?:-?\\w{4,12}){5}).*"),
 
          /**
           * This sets up the fake server with all the responses it should provide.
@@ -192,12 +192,32 @@ define([
           * @param {Object} request The request object
           * @param {string} nodeGuid The GUID of the node's nodeRef
           */
-         respondToNodeRequest: function alfresco_testing_mockservices_NodesMockXhr__respondToNodeRequest(request, /*jshint unused:false*/ nodeGuid) {
+         respondToNodeRequest: function alfresco_testing_mockservices_NodesMockXhr__respondToNodeRequest(request, nodeGuid) {
+
+            // Get the seed item
+            var seedItems = seedData.items.filter(function(item) {
+                  return item.nodeRef.indexOf(nodeGuid) !== -1;
+               }),
+               chosenItem;
+            if (seedItems.length === 0) {
+               throw new Error("No item found with specified GUID (" + nodeGuid + ")");
+            } else if (seedItems.length > 1) {
+               throw new Error("Found multiple items with specified GUID (" + nodeGuid + ")");
+            } else {
+               chosenItem = seedItems[0];
+            }
+
+            // Populate the data
+            var templateJson = JSON.stringify(seedData.nodeTemplate, null, 2),
+               itemJson = templateJson.replace(/\{([a-zA-Z0-9.]+)\}/g, function(match, propertyPath) {
+                  return lang.getObject(propertyPath, false, chosenItem);
+               }),
+               item = JSON.parse(itemJson);
 
             // Send the response
-            request.respond(501, {
+            request.respond(200, {
                "Content-Type": "application/json;charset=UTF-8"
-            }, "Not yet implemented");
+            }, JSON.stringify(item));
          }
       });
    });
