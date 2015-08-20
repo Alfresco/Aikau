@@ -21,6 +21,7 @@ model.jsonModel = {
          name: "alfresco/layout/FixedHeaderFooter",
          id: "HEADER_FOOTER",
          config: {
+            height: "auto",
             autoHeightPaddingAllowance: 10,
             recalculateAutoHeightOnResize: true,
             widgetsForHeader: [

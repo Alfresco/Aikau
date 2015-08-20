@@ -27,6 +27,7 @@ define(["intern!object",
         "alfresco/TestCommon"],
        function(registerSuite, assert, TestCommon) {
 
+   /* global document*/
    var browser;
    registerSuite({
       name: "FixedHeaderFooter tests",
