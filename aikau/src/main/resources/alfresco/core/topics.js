@@ -90,6 +90,23 @@ define([],function() {
        * @type {string}
        * @default
        */
-      UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE"
+      UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE",
+
+      /**
+       * <p>This topic is used to indicate that a navigable collection has been scrolled to
+       * "near" its bottom. Since its creation, this topic's meaning has extended to go beyond
+       * just scrolling (sometimes it's clicking arrows) and to not necessarily being the
+       * bottom (sometimes it's a horizontal navigation), however in order to preserve backward
+       * compatibility, this has been left unchanged.</p>
+       * 
+       * <p><em>NOTE: In future this is very likely to be deprecated and eventually removed,
+       * so be sure to use the constant (not its value) and to watch out for deprecated
+       * references in your codebase.</em></p>
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM"
    };
 });
