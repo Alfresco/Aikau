@@ -1,0 +1,1414 @@
+{
+   "totalRecords": 7,
+   "startIndex": 0,
+   "metadata": {
+      "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+      "container": "workspace:\/\/SpacesStore\/66586106-9081-4e49-8571-32d81b0d8b97",
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "rule:rules", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/cf682052-afa6-4811-9cff-1ce24bd07bb4",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 17 10:51:58 GMT 2015",
+               "iso8601": "2015-02-17T10:51:58.402Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "cdixon",
+               "displayName": "cdixon",
+               "firstName": "cdixon"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Jan 25 18:15:48 GMT 2011",
+               "iso8601": "2011-01-25T18:15:48.936Z"
+            },
+            "cm:name": "Policies",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Priscott",
+               "userName": "apriscott",
+               "displayName": "Alex Priscott",
+               "firstName": "Alex"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "custom": {
+         "vtiServer": null,
+         "aos": {
+            "baseUrl": "https:\/\/ts.alfresco.com\/alfresco\/aos"
+         },
+         "googledocs": {
+            "enabled": true,
+            "importFormats": {
+               "application/vnd.openxmlformats-officedocument.presentationml.presentation": "presentation",
+               "application/vnd.ms-powerpoint": "presentation",
+               "text/tab-separated-values": "spreadsheet",
+               "application/vnd.sun.xml.writer": "document",
+               "application/vnd.ms-excel": "spreadsheet",
+               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "spreadsheet",
+               "application/rtf": "document",
+               "application/msword": "document",
+               "application/vnd.oasis.opendocument.text": "document",
+               "text/plain": "document",
+               "text/csv": "spreadsheet",
+               "application/x-vnd.oasis.opendocument.spreadsheet": "spreadsheet",
+               "application/vnd.oasis.opendocument.spreadsheet": "spreadsheet",
+               "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "document"
+            }
+         }
+      },
+      "onlineEditing": false,
+      "itemCounts": {
+         "folders": 5,
+         "documents": 2
+      },
+      "workingCopyLabel": " (Working Copy)"
+   },
+   "items": [{
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/0cb95c98-6de4-497c-8d9a-5a9631020acf",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Mar 24 15:01:27 GMT 2015",
+               "iso8601": "2015-03-24T15:01:27.118Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "",
+            "cm:creator": {
+               "userName": "bmcalister",
+               "isDeleted": true
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Thu Sep 06 10:26:49 BST 2012",
+               "iso8601": "2012-09-06T09:26:49.198Z"
+            },
+            "cm:name": "Australia policies",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Rain-wiffin",
+               "userName": "prainwiffin",
+               "displayName": "Patti Rain-wiffin",
+               "firstName": "Patti"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/hr\/documentLibrary\/Policies\/Australia%20policies",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+         "site": {
+            "name": "hr",
+            "title": "Human Resources",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/Policies",
+         "repoPath": "\/Sites\/hr\/documentLibrary\/Policies",
+         "file": "Australia policies",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "rule:rules", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/cf682052-afa6-4811-9cff-1ce24bd07bb4",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 17 10:51:58 GMT 2015",
+               "iso8601": "2015-02-17T10:51:58.402Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "cdixon",
+               "displayName": "cdixon",
+               "firstName": "cdixon"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Jan 25 18:15:48 GMT 2011",
+               "iso8601": "2011-01-25T18:15:48.936Z"
+            },
+            "cm:name": "Policies",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Priscott",
+               "userName": "apriscott",
+               "displayName": "Alex Priscott",
+               "firstName": "Alex"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/0cb95c98-6de4-497c-8d9a-5a9631020acf",
+      "fileName": "Australia policies",
+      "displayName": "Australia policies",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/a6705124-4fae-47be-b068-24742cb113eb",
+         "properties": {
+            "cm:modified": {
+               "value": "Fri Apr 04 16:17:21 BST 2014",
+               "iso8601": "2014-04-04T15:17:21.255Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "Rain-wiffin",
+               "userName": "prainwiffin",
+               "displayName": "Patti Rain-wiffin",
+               "firstName": "Patti"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Sat Oct 13 17:04:16 BST 2012",
+               "iso8601": "2012-10-13T16:04:16.211Z"
+            },
+            "cm:name": "Corporate",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Rain-wiffin",
+               "userName": "prainwiffin",
+               "displayName": "Patti Rain-wiffin",
+               "firstName": "Patti"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/hr\/documentLibrary\/Policies\/Corporate",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+         "site": {
+            "name": "hr",
+            "title": "Human Resources",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/Policies",
+         "repoPath": "\/Sites\/hr\/documentLibrary\/Policies",
+         "file": "Corporate",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "rule:rules", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/cf682052-afa6-4811-9cff-1ce24bd07bb4",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 17 10:51:58 GMT 2015",
+               "iso8601": "2015-02-17T10:51:58.402Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "cdixon",
+               "displayName": "cdixon",
+               "firstName": "cdixon"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Jan 25 18:15:48 GMT 2011",
+               "iso8601": "2011-01-25T18:15:48.936Z"
+            },
+            "cm:name": "Policies",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Priscott",
+               "userName": "apriscott",
+               "displayName": "Alex Priscott",
+               "firstName": "Alex"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/a6705124-4fae-47be-b068-24742cb113eb",
+      "fileName": "Corporate",
+      "displayName": "Corporate",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/7743857a-8e72-411b-bf01-7e8d0490b2c8",
+         "properties": {
+            "cm:modified": {
+               "value": "Mon Feb 18 10:21:33 GMT 2013",
+               "iso8601": "2013-02-18T10:21:33.087Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "",
+            "cm:creator": {
+               "userName": "bmcalister",
+               "isDeleted": true
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Wed Sep 05 15:49:12 BST 2012",
+               "iso8601": "2012-09-05T14:49:12.331Z"
+            },
+            "cm:name": "Costa Rica",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "userName": "bmcalister",
+               "isDeleted": true
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/hr\/documentLibrary\/Policies\/Costa%20Rica",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+         "site": {
+            "name": "hr",
+            "title": "Human Resources",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/Policies",
+         "repoPath": "\/Sites\/hr\/documentLibrary\/Policies",
+         "file": "Costa Rica",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "rule:rules", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/cf682052-afa6-4811-9cff-1ce24bd07bb4",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 17 10:51:58 GMT 2015",
+               "iso8601": "2015-02-17T10:51:58.402Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "cdixon",
+               "displayName": "cdixon",
+               "firstName": "cdixon"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Jan 25 18:15:48 GMT 2011",
+               "iso8601": "2011-01-25T18:15:48.936Z"
+            },
+            "cm:name": "Policies",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Priscott",
+               "userName": "apriscott",
+               "displayName": "Alex Priscott",
+               "firstName": "Alex"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/7743857a-8e72-411b-bf01-7e8d0490b2c8",
+      "fileName": "Costa Rica",
+      "displayName": "Costa Rica",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_alfresco_IN;Consumer;DIRECT", "ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/73ca3b8d-506f-44c5-a836-bf0f31df40a3",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 14 13:31:18 GMT 2012",
+               "iso8601": "2012-02-14T13:31:18.836Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "userName": "bmcalister",
+               "isDeleted": true
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Thu Oct 13 11:06:40 BST 2011",
+               "iso8601": "2011-10-13T10:06:40.427Z"
+            },
+            "cm:name": "India",
+            "cm:title": "India HR Policies",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Priscott",
+               "userName": "apriscott",
+               "displayName": "Alex Priscott",
+               "firstName": "Alex"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/hr\/documentLibrary\/Policies\/India",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+         "site": {
+            "name": "hr",
+            "title": "Human Resources",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/Policies",
+         "repoPath": "\/Sites\/hr\/documentLibrary\/Policies",
+         "file": "India",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "rule:rules", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/cf682052-afa6-4811-9cff-1ce24bd07bb4",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 17 10:51:58 GMT 2015",
+               "iso8601": "2015-02-17T10:51:58.402Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "cdixon",
+               "displayName": "cdixon",
+               "firstName": "cdixon"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Jan 25 18:15:48 GMT 2011",
+               "iso8601": "2011-01-25T18:15:48.936Z"
+            },
+            "cm:name": "Policies",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Priscott",
+               "userName": "apriscott",
+               "displayName": "Alex Priscott",
+               "firstName": "Alex"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/73ca3b8d-506f-44c5-a836-bf0f31df40a3",
+      "fileName": "India",
+      "displayName": "India",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "user": {},
+            "roles": []
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/3ac42e01-a138-439f-8dce-f52a6c702d9a",
+         "properties": {
+            "cm:modified": {
+               "value": "Mon Aug 17 08:56:08 BST 2015",
+               "iso8601": "2015-08-17T07:56:08.361Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "cdixon",
+               "displayName": "cdixon",
+               "firstName": "cdixon"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Jan 25 18:16:07 GMT 2011",
+               "iso8601": "2011-01-25T18:16:07.599Z"
+            },
+            "cm:name": "UK",
+            "cm:title": "UK HR Policies",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Rain-wiffin",
+               "userName": "prainwiffin",
+               "displayName": "Patti Rain-wiffin",
+               "firstName": "Patti"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/hr\/documentLibrary\/Policies\/UK",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+         "site": {
+            "name": "hr",
+            "title": "Human Resources",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/Policies",
+         "repoPath": "\/Sites\/hr\/documentLibrary\/Policies",
+         "file": "UK",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "rule:rules", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/cf682052-afa6-4811-9cff-1ce24bd07bb4",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 17 10:51:58 GMT 2015",
+               "iso8601": "2015-02-17T10:51:58.402Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "cdixon",
+               "displayName": "cdixon",
+               "firstName": "cdixon"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Jan 25 18:15:48 GMT 2011",
+               "iso8601": "2011-01-25T18:15:48.936Z"
+            },
+            "cm:name": "Policies",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Priscott",
+               "userName": "apriscott",
+               "displayName": "Alex Priscott",
+               "firstName": "Alex"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/3ac42e01-a138-439f-8dce-f52a6c702d9a",
+      "fileName": "UK",
+      "displayName": "UK",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "cm:author", "rn:renditioned", "sys:localized"],
+         "properties": {
+            "cm:modified": {
+               "value": "Fri Jul 19 14:22:46 BST 2013",
+               "iso8601": "2013-07-19T13:22:46.500Z"
+            },
+            "sys:node-dbid": null,
+            "cm:content": null,
+            "cm:creator": {
+               "userName": "bmcalister",
+               "isDeleted": true
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Fri Jul 19 14:22:46 BST 2013",
+               "iso8601": "2013-07-19T13:22:46.500Z"
+            },
+            "cm:name": "Background Check Policy Rev4.pdf",
+            "cm:title": "Microsoft Word - Background Check Policy Rev4.docx",
+            "cm:author": "Patti Rain-Wiffin",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "userName": "bmcalister",
+               "isDeleted": true
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 155005,
+         "mimetypeDisplayName": "Adobe PDF Document",
+         "mimetype": "application\/pdf",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/c25ef2b8-ca49-4a00-935f-845b0d217d90",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/c25ef2b8-ca49-4a00-935f-845b0d217d90\/Background%20Check%20Policy%20Rev4.pdf"
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/hr\/documentLibrary\/Policies\/Background%20Check%20Policy%20Rev4.pdf",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+         "site": {
+            "name": "hr",
+            "title": "Human Resources",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/Policies",
+         "repoPath": "\/Sites\/hr\/documentLibrary\/Policies",
+         "file": "Background Check Policy Rev4.pdf",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "rule:rules", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/cf682052-afa6-4811-9cff-1ce24bd07bb4",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 17 10:51:58 GMT 2015",
+               "iso8601": "2015-02-17T10:51:58.402Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "cdixon",
+               "displayName": "cdixon",
+               "firstName": "cdixon"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Jan 25 18:15:48 GMT 2011",
+               "iso8601": "2011-01-25T18:15:48.936Z"
+            },
+            "cm:name": "Policies",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Priscott",
+               "userName": "apriscott",
+               "displayName": "Alex Priscott",
+               "firstName": "Alex"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/c25ef2b8-ca49-4a00-935f-845b0d217d90",
+      "fileName": "Background Check Policy Rev4.pdf",
+      "displayName": "Background Check Policy Rev4.pdf",
+      "actionGroupId": "document-browse",
+      "actions": [{
+         "id": "document-download",
+         "icon": "document-download",
+         "type": "link",
+         "label": "actions.document.download",
+         "params": {
+            "href": "{downloadUrl}",
+            "target": "_blank"
+         },
+         "index": "100"
+      }, {
+         "id": "document-view-content",
+         "icon": "document-view-content",
+         "type": "link",
+         "label": "actions.document.view",
+         "params": {
+            "href": "{viewUrl}"
+         },
+         "index": "110"
+      }, {
+         "id": "wps.doclib.action.emailAslink",
+         "icon": "..\/..\/wps\/mail-details\/images\/msg",
+         "type": "javascript",
+         "label": "emails.action.aslink",
+         "params": {
+            "function": "onActionWpsEmailAsLink"
+         },
+         "index": "195"
+      }, {
+         "id": "document-copy-to",
+         "icon": "document-copy-to",
+         "type": "javascript",
+         "label": "actions.document.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "250"
+      }, {
+         "id": "document-assign-workflow",
+         "icon": "document-assign-workflow",
+         "type": "javascript",
+         "label": "actions.document.assign-workflow",
+         "params": {
+            "function": "onActionAssignWorkflow"
+         },
+         "index": "280"
+      }, {
+         "id": "document-publish",
+         "icon": "document-publish",
+         "type": "javascript",
+         "label": "actions.document.publish",
+         "params": {
+            "function": "onActionPublish"
+         },
+         "index": "300"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }, {
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:thumbnailModification", "sys:referenceable", "cm:titled", "cm:author", "rn:renditioned", "sys:localized", "cm:versionable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jan 29 21:44:51 GMT 2015",
+               "iso8601": "2015-01-29T21:44:51.943Z"
+            },
+            "cm:content": null,
+            "sys:node-uuid": null,
+            "cm:name": "Code of Business Ethics and Conduct Policy.pdf",
+            "cm:lastThumbnailModification": ["doclib:1422567895988", "imgpreview:1424816991546"],
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:autoVersion": "true",
+            "sys:node-dbid": null,
+            "cm:initialVersion": "true",
+            "cm:creator": {
+               "lastName": "Nguyen",
+               "userName": "lnguyen",
+               "displayName": "Lambert Nguyen",
+               "firstName": "Lambert"
+            },
+            "cm:created": {
+               "value": "Thu Jan 29 21:44:51 GMT 2015",
+               "iso8601": "2015-01-29T21:44:51.943Z"
+            },
+            "cm:versionLabel": "1.0",
+            "cm:title": "Microsoft Word - Code of Business Ethics and Conduct Policy.doc",
+            "cm:author": "Patti Rain-Wiffin",
+            "cm:autoVersionOnUpdateProps": "false",
+            "cm:modifier": {
+               "lastName": "Nguyen",
+               "userName": "lnguyen",
+               "displayName": "Lambert Nguyen",
+               "firstName": "Lambert"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 208979,
+         "mimetypeDisplayName": "Adobe PDF Document",
+         "mimetype": "application\/pdf",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/0e26abb6-a423-4354-a814-0d176e09691d",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/0e26abb6-a423-4354-a814-0d176e09691d\/Code%20of%20Business%20Ethics%20and%20Conduct%20Policy.pdf"
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/hr\/documentLibrary\/Policies\/Code%20of%20Business%20Ethics%20and%20Conduct%20Policy.pdf",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+         "site": {
+            "name": "hr",
+            "title": "Human Resources",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/Policies",
+         "repoPath": "\/Sites\/hr\/documentLibrary\/Policies",
+         "file": "Code of Business Ethics and Conduct Policy.pdf",
+         "parent": {}
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "rule:rules", "cm:titled", "cm:taggable", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_site_hr_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_hr_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_hr_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_hr_SiteConsumer;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": false,
+               "CancelCheckOut": false,
+               "CreateChildren": false,
+               "Write": false,
+               "Delete": false,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/cf682052-afa6-4811-9cff-1ce24bd07bb4",
+         "properties": {
+            "cm:modified": {
+               "value": "Tue Feb 17 10:51:58 GMT 2015",
+               "iso8601": "2015-02-17T10:51:58.402Z"
+            },
+            "sys:node-dbid": null,
+            "cm:taggable": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "cdixon",
+               "displayName": "cdixon",
+               "firstName": "cdixon"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Tue Jan 25 18:15:48 GMT 2011",
+               "iso8601": "2011-01-25T18:15:48.936Z"
+            },
+            "cm:name": "Policies",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "Priscott",
+               "userName": "apriscott",
+               "displayName": "Alex Priscott",
+               "firstName": "Alex"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/0e26abb6-a423-4354-a814-0d176e09691d",
+      "fileName": "Code of Business Ethics and Conduct Policy.pdf",
+      "displayName": "Code of Business Ethics and Conduct Policy.pdf",
+      "actionGroupId": "document-browse",
+      "actions": [{
+         "id": "document-download",
+         "icon": "document-download",
+         "type": "link",
+         "label": "actions.document.download",
+         "params": {
+            "href": "{downloadUrl}",
+            "target": "_blank"
+         },
+         "index": "100"
+      }, {
+         "id": "document-view-content",
+         "icon": "document-view-content",
+         "type": "link",
+         "label": "actions.document.view",
+         "params": {
+            "href": "{viewUrl}"
+         },
+         "index": "110"
+      }, {
+         "id": "wps.doclib.action.emailAslink",
+         "icon": "..\/..\/wps\/mail-details\/images\/msg",
+         "type": "javascript",
+         "label": "emails.action.aslink",
+         "params": {
+            "function": "onActionWpsEmailAsLink"
+         },
+         "index": "195"
+      }, {
+         "id": "document-copy-to",
+         "icon": "document-copy-to",
+         "type": "javascript",
+         "label": "actions.document.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "250"
+      }, {
+         "id": "document-assign-workflow",
+         "icon": "document-assign-workflow",
+         "type": "javascript",
+         "label": "actions.document.assign-workflow",
+         "params": {
+            "function": "onActionAssignWorkflow"
+         },
+         "index": "280"
+      }, {
+         "id": "document-publish",
+         "icon": "document-publish",
+         "type": "javascript",
+         "label": "actions.document.publish",
+         "params": {
+            "function": "onActionPublish"
+         },
+         "index": "300"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }]
+}
