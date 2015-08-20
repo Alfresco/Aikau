@@ -11,22 +11,21 @@
       font-weight: 700;
    }
    &__clear-button, &__filter-button {
-      background: linear-gradient(to bottom, #fafafa, #eee);
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      color: #666;
+      background: transparent;
+      border: @standard-button-border;
+      border-radius: @standard-button-border-radius;
+      color: @standard-button-font-color;
       cursor: pointer;
       padding: 0 10px;
       position: relative;
-      &:hover, &:active {
-         color: #333;
+      &:hover, &:focus {
+         color: @standard-button-font-color-focus;
+         outline: 0;
       }
       &:active {
+         color: @standard-button-font-color-active;
          left: 1px;
          top: 1px;
-      }
-      &:focus {
-         outline: 0;
       }
    }
    &__clear-button {
@@ -68,7 +67,7 @@
       color: #a00;
       cursor: pointer;
       margin-left: 2px;
-      opacity: .5;
+      opacity: .2;
       padding: 0 10px;
       position: relative;
       transition: all .2s ease-out;
@@ -81,9 +80,7 @@
       margin-left: 50px;
    }
    &__filter {
-      border: 1px solid #aaa;
-      border-radius: 3px;
-      box-shadow: inset 1px 1px 2px rgba(0,0,0,.2);
+      border: 1px solid #bbb;
       margin-left: 50px;
       padding-left: 6px;
       width: 150px;
@@ -102,6 +99,7 @@
          justify-content: space-between;
          margin: 0;
          padding: 5px 0;
+         position: relative;
          &:last-child {
             border-bottom: 1px solid #ccc;
          }
@@ -149,8 +147,14 @@
                white-space: nowrap;
             }
             &__full {
-               color: #00c;
+               background: #fafafa;
+               border: 1px solid #999;
+               box-shadow: inset 2px 2px 5px rgba(0,0,0,.3);
+               color: #000;
+               cursor: text;
                display: block;
+               margin: 10px 10px 5px 0;
+               padding: 9px 10px 7px;
                white-space: pre-wrap;
             }
             &--collapsed {
