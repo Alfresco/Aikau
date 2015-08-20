@@ -21,11 +21,10 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, require, TestCommon) {
 
    var browser;
    registerSuite({
@@ -40,52 +39,70 @@ define(["intern!object",
          browser.end();
       },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-     "Check warning": function () {
-         return browser.findByCssSelector("#WARNINGS1 > div.warnings > div.info > span:last-child")
+      "Check warning": function () {
+         return browser.findByCssSelector("#WARNINGS1 .alfresco-header-Warning__info > span:last-child")
             .getVisibleText()
             .then(function (result1) {
-               expect(result1).to.equal("WARNING", "Warning not displayed");
+               assert.equal(result1, "WARNING", "Warning not displayed");
             });
       },
 
       "Check error": function() {
-         return browser.findByCssSelector("#WARNINGS2 > div.warnings > div.info > span:last-child")
+         return browser.findByCssSelector("#WARNINGS2 .alfresco-header-Warning__info > span:last-child")
             .getVisibleText()
             .then(function (result1) {
-               expect(result1).to.equal("ERROR", "Error not displayed");
+               assert.equal(result1, "ERROR", "Error not displayed");
             });
       },
 
       "Check readonly message": function() {
-         return browser.findByCssSelector("#LICENSEWARNING_READONLY > div.warnings > div.info > span:last-child")
+         return browser.findByCssSelector("#LICENSEWARNING_READONLY .alfresco-header-Warning__info > span:last-child")
             .getVisibleText()
             .then(function (result1) {
-               expect(result1).to.equal("Alfresco is running in READ ONLY mode. Please consult your System Administrator to resolve this.", "Test 1c - Readonly error not displayed");
+               assert.equal(result1, "Alfresco is running in READ ONLY mode. Please consult your System Administrator to resolve this.", "Test 1c - Readonly error not displayed");
             });
       },
 
       "Test that admins see low severity warnings": function() {
-         return browser.findAllByCssSelector("#LICENSEWARNING_DISPLAY_TO_ADMIN > div.warnings > div.info")
+         return browser.findAllByCssSelector("#LICENSEWARNING_DISPLAY_TO_ADMIN .alfresco-header-Warning__info")
             .then(function (adminWarnings) {
-               expect(adminWarnings).to.have.length(3, "Admins should see low severity warnings");
+               assert.lengthOf(adminWarnings, 3, "Admins should see low severity warnings");
             });
       },
 
       "Test that non-admin users don't see low severity warnings": function() {
-         return browser.findAllByCssSelector("#LICENSEWARNING_HIDE_FROM_USER > div.warnings > div.info")
+         return browser.findAllByCssSelector("#LICENSEWARNING_HIDE_FROM_USER .alfresco-header-Warning__info")
             .then(function (nonAdminWarnings) {
-               expect(nonAdminWarnings).to.have.length(0, "Low severity warnings should be hidden from non-admins");
+               assert.lengthOf(nonAdminWarnings, 0, "Low severity warnings should be hidden from non-admins");
             });
       },
 
       "Test that non-admin users see high severity warnings": function() {
-         return browser.findAllByCssSelector("#LICENSEWARNING_DISPLAY_TO_USER > div.warnings > div.info")
+         return browser.findAllByCssSelector("#LICENSEWARNING_DISPLAY_TO_USER .alfresco-header-Warning__info")
             .then(function (nonAdminWarnings) {
-               expect(nonAdminWarnings).to.have.length(3, "High severity warnings should be displayed to non-admins");
+                assert.lengthOf(nonAdminWarnings, 3, "High severity warnings should be displayed to non-admins");
+            });
+      },
+
+      "Hide warning": function() {
+         return browser.findById("HIDE_WARNING_label")
+            .click()
+         .end()
+         .findById("WARNINGS1")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The warning should have been hidden");
+            });
+      },
+
+      "Show warning": function() {
+         return browser.findById("SHOW_WARNING_label")
+            .click()
+         .end()
+         .findById("WARNINGS1")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The warning should have been revealed");
             });
       },
 

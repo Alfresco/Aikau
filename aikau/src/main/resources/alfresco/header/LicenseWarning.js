@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,11 +27,10 @@
  */
 define(["dojo/_base/declare",
         "alfresco/header/Warning", 
-        "dojo/dom-style",
+        "dojo/dom-class",
         "dojo/_base/array",
-        "dojo/_base/lang",
-        "dojo/dom-construct"], 
-        function(declare, Warning, domStyle, array, lang, domConstruct) {
+        "dojo/_base/lang"], 
+        function(declare, Warning, domClass, array, lang) {
    
    return declare([Warning], {
       /**
@@ -62,36 +61,37 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_header_LicenseWarning__postCreate() {
-         if (this.usage == null)
+         domClass.add(this.domNode, "alfresco-header-Warning--hidden");
+         if (!this.usage)
          {
             // If there are no usage instructions then no action is required...
          }
          else
          {
             // Always show a warning if Alfresco is in read only mode...
-            if (this.usage.readOnly == true)
+            if (this.usage.readOnly === true)
             {
                // Always show an error when the system is in readonly mode...
                this.addError(this.message("readonly.warning"));
-               domStyle.set(this.domNode, "display", "block");
+               domClass.remove(this.domNode, "alfresco-header-Warning--hidden");
             }
 
-            if (((this.usage.warnings && this.usage.warnings.length != 0) || 
-                 (this.usage.errors && this.usage.errors.length != 0)) && 
-                (this.userIsAdmin == true || this.usage.level >= 2))
+            if (((this.usage.warnings && this.usage.warnings.length !== 0) || 
+                 (this.usage.errors && this.usage.errors.length !== 0)) && 
+                (this.userIsAdmin === true || this.usage.level >= 2))
             {
                // If warnings or errors are present, display them to the Admin or user
                // Admin sees messages if WARN_ADMIN, WARN_ALL, LOCKED_DOWN
                // Users see messages if WARN_ALL, LOCKED_DOWN
-               if (this.usage.warnings != null)
+               if (this.usage.warnings)
                {
-                  array.forEach(this.usage.warnings, lang.hitch(this, "addWarning"));
+                  array.forEach(this.usage.warnings, lang.hitch(this, this.addWarning));
                }
-               if (this.usage.warnings != null)
+               if (this.usage.warnings)
                {
-                  array.forEach(this.usage.errors, lang.hitch(this, "addError"));
+                  array.forEach(this.usage.errors, lang.hitch(this, this.addError));
                }
-               domStyle.set(this.domNode, "display", "block");
+               domClass.remove(this.domNode, "alfresco-header-Warning--hidden");
             }
          }
       }
