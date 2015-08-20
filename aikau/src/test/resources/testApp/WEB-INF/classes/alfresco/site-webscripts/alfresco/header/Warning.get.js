@@ -19,7 +19,8 @@ model.jsonModel = {
             warnings: [
                {
                   message: "WARNING",
-                  level: 1
+                  level: 1,
+                  subscriptionTopic: "WARNING_VISIBILITY"
                }
             ]
          }
@@ -85,10 +86,29 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         id: "HIDE_WARNING",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Hide first warning",
+            publishTopic: "WARNING_VISIBILITY",
+            publishPayload: {
+               value: false
+            }
+         }
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         id: "SHOW_WARNING",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Show first warning",
+            publishTopic: "WARNING_VISIBILITY",
+            publishPayload: {
+               value: true
+            }
+         }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

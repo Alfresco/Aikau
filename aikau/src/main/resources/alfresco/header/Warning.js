@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,7 +19,44 @@
 
 /**
  * This is a generic banner warning that can be used to display warning and error messages
- * to the user.
+ * to the user. The banner can contain multiple warning messages with different levels. The 
+ * level of the warning indicates the image that will be used. It is also possible to configure
+ * each warning to have a subscription topic that can be used to control dynamically control
+ * the visibility of the warning. The payload published on the subscription topic should contain
+ * a boolean attribute called "value" that indicates whether or not the warning should be displayed
+ * or hidden.
+ *
+ * @example <caption>Basic single warning</caption>
+ * {
+ *   name: "alfresco/header/Warning",
+ *   config: {
+ *     warnings: [
+ *       {
+ *         message: "You have been warned",
+ *         level: 1
+ *       }
+ *     ]
+ *   }
+ * }
+ *
+ * @example <caption>Multiple warnings with subscription topics</caption>
+ * {
+ *   name: "alfresco/header/Warning",
+ *   config: {
+ *     warnings: [
+ *       {
+ *         message: "First warning",
+ *         level: 1,
+ *         subscriptionTopic: "WARNING_1_VISIBILITY"
+ *       },
+ *       {
+ *         message: "Second warning",
+ *         level: 1,
+ *         subscriptionTopic: "WARNING_2_VISIBILITY"
+ *       }
+ *     ]
+ *   }
+ * }
  * 
  * @module alfresco/header/Warning
  * @extends external:dijit/_WidgetBase
@@ -32,11 +69,11 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Warning.html",
         "alfresco/core/Core",
-        "dojo/dom-style",
+        "dojo/dom-class",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, domStyle, array, lang, domConstruct) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, domClass, array, lang, domConstruct) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -67,15 +104,29 @@ define(["dojo/_base/declare",
       warnings: null,
 
       /**
+       * This attribute is used to track the visibility status of all the warnings that are configured
+       * with a subscriptionTopic attribute. When all warnings are hidden then the overall widget will
+       * also be hidden.
+       *
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.32
+       */
+      _dynamicWarnings: null,
+
+      /**
        * @instance
        */
       postCreate: function alfresco_header_Warning__postCreate() {
+         domClass.add(this.domNode, "alfresco-header-Warning--hidden");
          if (this.warnings)
          {
+            this._dynamicWarnings = {};
             array.forEach(this.warnings, lang.hitch(this, this.addMessage));
             if (this.warnings.length > 0)
             {
-               domStyle.set(this.domNode, "display", "block");
+               domClass.remove(this.domNode, "alfresco-header-Warning--hidden");
             }
          }
       },
@@ -88,16 +139,28 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the message
        * @param {number} level The severity of the message
        */
-      addMessage: function alfresco_header_Warning__addMessage(item, index) {
+      addMessage: function alfresco_header_Warning__addMessage(item, /*jshint unused:false*/ index) {
          var outer = domConstruct.create("div", {
-            "class": "info"
+            "class": "alfresco-header-Warning__info"
          }, this.warningsNode);
          domConstruct.create("span", {
-            "class": "level" + item.level
+            "class": "alfresco-header-Warning__image alfresco-header-Warning__level" + item.level
          }, outer);
          domConstruct.create("span", {
             innerHTML: item.message
          }, outer);
+
+         if (item.subscriptionTopic)
+         {
+            this.alfSubscribe(item.subscriptionTopic, lang.hitch(this, this.updateVisibility, outer, item.subscriptionTopic));
+            this._dynamicWarnings[item.subscriptionTopic] = false;
+         }
+         else
+         {
+            // At least one warning does not have a subscription topic, this means that the overall
+            // warning block should always be displayed...
+            this._forceDisplay = true;
+         }
       },
       
       /**
@@ -128,6 +191,48 @@ define(["dojo/_base/declare",
             index: index,
             level: 3
          });
+      },
+
+      /**
+       * If a warning is configured with a subscriptionTopic attribute then this function will be
+       * called each time that topic is published and will update the visibility of that warning 
+       * according to the payload provided. If all of the warnings are hidden then the overall
+       * widget will also be hidden.
+       *
+       * @instance
+       * @param {element} warningNode This is the DOM element for the warning being updated
+       * @param {string} subscriptionTopic This is the topic subscribed to for the warning being updated.
+       * @param {object} payload This is the payload published on the subscriptionTopic. It is expected to
+       * contain a "value" attribute
+       * @since 1.0.32
+       */
+      updateVisibility: function alfresco_header_Warning__updateVisibility(warningNode, subscriptionTopic, payload) {
+         this._dynamicWarnings[subscriptionTopic] = payload.value;
+         if (payload.value)
+         {
+            domClass.remove(warningNode, "alfresco-header-Warning__info--hidden");
+         }
+         else
+         {
+            domClass.add(warningNode, "alfresco-header-Warning__info--hidden");
+         }
+
+         var visibleDynamicWarnings = false;
+         for (var key in this._dynamicWarnings)
+         {
+            if (this._dynamicWarnings.hasOwnProperty(key))
+            {
+               visibleDynamicWarnings = visibleDynamicWarnings || this._dynamicWarnings[key];
+            }
+         }
+         if (visibleDynamicWarnings || this._forceDisplay)
+         {
+            domClass.remove(this.domNode, "alfresco-header-Warning--hidden");
+         }
+         else
+         {
+            domClass.add(this.domNode, "alfresco-header-Warning--hidden");
+         }
       }
    });
 });

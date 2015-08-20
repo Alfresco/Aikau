@@ -522,7 +522,7 @@ define(["dojo/_base/declare",
 
                // Construct the form widgets and then construct the dialog using that configuration...
                var formValue = config.formValue ? config.formValue: {};
-               var formConfig = this.createFormConfig(config.widgets, formValue);
+               var formConfig = this.createFormConfig(config, formValue);
                if (config.showValidationErrorsImmediately === false)
                {
                   formConfig.config.showValidationErrorsImmediately = false;
@@ -706,14 +706,16 @@ define(["dojo/_base/declare",
        * @param {object} formValue The initial value to set in the form.
        * @returns {object} The configuration for the form to add to the dialog
        */
-      createFormConfig: function alfresco_services_DialogService__createFormConfig(widgets, formValue) {
+      createFormConfig: function alfresco_services_DialogService__createFormConfig(config, formValue) {
          var formConfig = {
             name: "alfresco/forms/Form",
             config: {
                additionalCssClasses: "root-dialog-form",
                displayButtons: false,
-               widgets: widgets,
-               value: formValue
+               widgets: config.widgets,
+               value: formValue,
+               warnings: config.warnings,
+               warningsPosition: config.warningsPosition
             }
          };
          return formConfig;
