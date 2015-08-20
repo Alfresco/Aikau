@@ -48,7 +48,7 @@ define(["alfresco/core/ObjectTypeUtils",
       "dojo/on",
       "dojo/text!./templates/DebugLog.html"
    ],
-   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template) {
+   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template, ZeroClipboard) {
       /*jshint devel:true*/
 
       return declare([SubscriptionLog], {
@@ -159,7 +159,7 @@ define(["alfresco/core/ObjectTypeUtils",
 
             // Create data variables
             var hasData = !!logData.data,
-               safeData = this._createSafeData(logData.data),
+               safeData = this._sanitiseData(logData.data),
                simpleData = JSON.stringify(safeData),
                formattedData = JSON.stringify(safeData, null, 2);
 
@@ -168,7 +168,8 @@ define(["alfresco/core/ObjectTypeUtils",
                source,
                entryNode,
                infoNode,
-               dataNode;
+               dataNode,
+               copyToClipboardNode;
 
             // Create the new entry
             entryNode = domConstruct.create("li", {
@@ -207,8 +208,10 @@ define(["alfresco/core/ObjectTypeUtils",
                }, infoNode);
             }
 
-            // Add the data if we have it
+            // Do we have some data
             if (hasData) {
+
+               // Add the data nodes
                dataNode = domConstruct.create("span", {
                   className: this.rootClass + "__log__entry__data " + this.rootClass + "__log__entry__data--collapsed",
                   innerHTML: "Payload"
@@ -219,10 +222,10 @@ define(["alfresco/core/ObjectTypeUtils",
                domConstruct.create("span", {
                   className: this.rootClass + "__log__entry__data__full"
                }, dataNode).appendChild(document.createTextNode(formattedData));
-               on(entryNode, "click", lang.hitch(this, function() {
-                  this._toggleCollapsed(dataNode);
-               }));
             }
+
+            // Add click-handler
+            on(entryNode, "click", lang.hitch(this, this._onEntryClick, dataNode));
 
             // Add the entry to the collection of nodes
             this._entries.push({
@@ -230,31 +233,69 @@ define(["alfresco/core/ObjectTypeUtils",
                topic: logData.topic || ""
             });
 
-            // Re-apply the filter
-            this._applyFilter();
+            // Re-apply the filters
+            this._applyIncludeFilter();
+            this._applyExcludeFilter();
          },
 
          /**
-          * Update the filter
+          * Update the exclude filter
           *
           * @instance
           */
-         _applyFilter: function alfresco_logging_DebugLog___applyFilter() {
-            var filterValue = this.filter.value;
+         _applyExcludeFilter: function alfresco_logging_DebugLog___applyExcludeFilter() {
+            this._applyFilter(this.excludeFilter, this.excludeFilterRegex, false);
+         },
+
+         /**
+          * Update the supplied filter
+          *
+          * @instance
+          */
+         _applyFilter: function alfresco_logging_DebugLog___applyFilter(filter, regexControl, include) {
+            var filterValue = filter.value,
+               useRegex = regexControl.checked,
+               matchRegex = new RegExp(filterValue, "i");
             array.forEach(this._entries, function(entry) {
-               var matchesTopic = entry.topic.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1;
-               domClass[matchesTopic ? "remove" : "add"](entry.node, this.rootClass + "__log__entry--hidden");
+               var matchesTopic=false,
+               displayEntry = false;
+               if (useRegex) {
+                  matchesTopic = matchRegex.test(entry.topic);
+               } else {
+                  matchesTopic = entry.topic.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1;
+               }
+               displayEntry = !filterValue || (include ? matchesTopic : !matchesTopic);
+               domClass[displayEntry ? "remove" : "add"](entry.node, this.rootClass + "__log__entry--hidden");
             }, this);
          },
 
          /**
-          * Clear the filter
+          * Update the include filter
           *
           * @instance
           */
-         _clearFilter: function alfresco_logging_DebugLog___clearFilter() {
-            this.filter.value = "";
-            this._applyFilter();
+         _applyIncludeFilter: function alfresco_logging_DebugLog___applyIncludeFilter() {
+            this._applyFilter(this.includeFilter, this.includeFilterRegex, true);
+         },
+
+         /**
+          * Clear the exclude filter
+          *
+          * @instance
+          */
+         _clearExcludeFilter: function alfresco_logging_DebugLog___clearExcludeFilter() {
+            this.excludeFilter.value = "";
+            this._applyExcludeFilter();
+         },
+
+         /**
+          * Clear the include filter
+          *
+          * @instance
+          */
+         _clearIncludeFilter: function alfresco_logging_DebugLog___clearIncludeFilter() {
+            this.includeFilter.value = "";
+            this._applyIncludeFilter();
          },
 
          /**
@@ -265,7 +306,7 @@ define(["alfresco/core/ObjectTypeUtils",
           * @param   {object} data The data to make safe
           * @returns {object} The safe data (or the original data, if it was falsy)
           */
-         _createSafeData: function alfresco_logging_DebugLog___createSafeData(data) {
+         _sanitiseData: function alfresco_logging_DebugLog___sanitiseData(data) {
 
             // Setup variables
             var maxChildren = this.payloadConfig.maxChildren,
@@ -394,13 +435,19 @@ define(["alfresco/core/ObjectTypeUtils",
          },
 
          /**
-          * Toggle the collapsed state of a data item
+          * Handle clicks on the log entry
           *
           * @instance
-          * @param    {object} dataNode The node to toggle
+          * @param {Object} dataNode The dataNode, if present
+          * @param {Object} evt Dojo-normalised event object
           */
-         _toggleCollapsed: function alfresco_logging_DebugLog___toggleCollapsed(dataNode) {
-            domClass.toggle(dataNode, this.rootClass + "__log__entry__data--collapsed");
+         _onEntryClick: function alfresco_logging_DebugLog___onEntryClick(dataNode, evt) {
+            var collapsedClass = this.rootClass + "__log__entry__data--collapsed",
+               expandedDataClass = this.rootClass + "__log__entry__data__full",
+               clickedOnExpandedData = domClass.contains(evt.target, expandedDataClass);
+            if (!clickedOnExpandedData) {
+               domClass.toggle(dataNode, collapsedClass);
+            }
          }
       });
    });
