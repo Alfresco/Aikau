@@ -38,7 +38,7 @@ define(["dojo/_base/declare",
        */
       constructor: function alfresco_services_BaseService__constructor(args) {
          declare.safeMixin(this, args);
-         if (ServiceRegistry.getSingleton().register(args.alfServiceName, args.pubSubScope))
+         if (ServiceRegistry.getSingleton().register(this.alfServiceName, this.pubSubScope))
          {
             this.registerSubscriptions();
          }
