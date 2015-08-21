@@ -25,7 +25,7 @@
 .alfresco-lists-views-layouts-Carousel > div.items > div.frame > ol {
    padding: 0;
    position: relative;
-   transition: left 1s ease 0.1s; /* NOTE THAT YUICOMPRESSOR STRIPS UNITS FROM 0 VALUES, BUT FIREFOX IGNORES TRANSITION RULES WITHOUT UNITS ON 0 VALUES!! */
+   transition: left 0.5s cubic-bezier(0, 1, 0.75, 1.01);
 }
 
 .alfresco-lists-views-layouts-Carousel > div.items > div.frame > ol > li {
