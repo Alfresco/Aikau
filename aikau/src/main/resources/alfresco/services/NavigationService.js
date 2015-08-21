@@ -30,14 +30,13 @@ define(["dojo/_base/declare",
         "module",
         "alfresco/services/BaseService",
         "alfresco/services/_NavigationServiceTopicMixin",
-        "alfresco/services/ServiceRegistry",
         "alfresco/util/hashUtils",
         "alfresco/util/urlUtils",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "service/constants/Default"],
-        function(declare, module, BaseService, _NavigationServiceTopicMixin, ServiceRegistry, hashUtils, urlUtils, array, lang, domConstruct, AlfConstants) {
+        function(declare, module, BaseService, _NavigationServiceTopicMixin, hashUtils, urlUtils, array, lang, domConstruct, AlfConstants) {
 
    return declare([BaseService, _NavigationServiceTopicMixin], {
 

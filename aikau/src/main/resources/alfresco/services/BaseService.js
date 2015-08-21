@@ -18,15 +18,24 @@
  */
 
 /**
+ * This module should be extended by all Aikau services as it provides a clean way of ensuring that
+ * if a duplicate of the same service is created (configured to use the same pubSubScope) that it's 
+ * subscriptions will not be created. This is achieved by the extending service module defining all
+ * it's subscription creation code in the 
+ * [registerSubscriptions]{@link module:alfresco/services/BaseService#registerSubscriptions} that is
+ * only called if an instance of that service does not already exist. Descendant services should override
+ * the [registerSubscriptions]{@link module:alfresco/services/BaseService#registerSubscriptions} and 
+ * avoid definining their own constructor function.
+ * 
  * @module alfresco/services/BaseService
  * @extends module:alfresco/core/Core
  * @author Dave Draper
  * @since 1.0.32
  */
 define(["dojo/_base/declare",
-        "alfresco/services/ServiceRegistry",
+        "alfresco/services/serviceRegistry",
         "alfresco/core/Core"],
-        function(declare, ServiceRegistry, AlfCore) {
+        function(declare, serviceRegistry, AlfCore) {
    
    return declare([AlfCore], {
       
@@ -38,7 +47,7 @@ define(["dojo/_base/declare",
        */
       constructor: function alfresco_services_BaseService__constructor(args) {
          declare.safeMixin(this, args);
-         if (ServiceRegistry.getSingleton().register(this.alfServiceName, this.pubSubScope))
+         if (serviceRegistry.register(this.alfServiceName, this.pubSubScope))
          {
             this.registerSubscriptions();
          }
