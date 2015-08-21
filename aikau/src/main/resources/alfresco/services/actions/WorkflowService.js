@@ -108,7 +108,6 @@ define(["dojo/_base/declare",
        * @param {array} args Constructor arguments
        */
       registerSubscriptions: function alfresco_services_actions_WorkflowService__registerSubscriptions() {
-         declare.safeMixin(this, args);
          this.alfSubscribe("ALF_APPROVE_SIMPLE_WORKFLOW", lang.hitch(this, this.onApproveSimpleWorkflow));
          this.alfSubscribe("ALF_REJECT_SIMPLE_WORKFLOW", lang.hitch(this, this.onRejectSimpleWorkflow));
          this.alfSubscribe("ALF_ASSIGN_WORKFLOW", lang.hitch(this, this.onAssignWorkflow));
