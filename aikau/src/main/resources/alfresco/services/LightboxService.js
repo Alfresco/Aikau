@@ -24,8 +24,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
-        "dojo/_base/lang",
-        ""],
+        "dojo/_base/lang"],
         function(declare, BaseService, lang) {
    
    return declare([BaseService], {
