@@ -17,6 +17,10 @@
    float: left;
    cursor: pointer;
    height: 20px;
+   &:hover {
+      colour: @link-font-color-hover;
+      text-decoration: @link-text-decoration-hover;
+   }
 }
 
 .alfresco-documentlibrary-AlfBreadcrumb a:after { 

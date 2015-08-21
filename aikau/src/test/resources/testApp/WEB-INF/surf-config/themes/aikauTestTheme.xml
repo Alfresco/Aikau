@@ -17,7 +17,9 @@
 
          @link-font-color: @button-color-default;
          @link-emphasized-font-color: @button-color-default;
-         @link-text-decoration: underline;
+         @link-text-decoration-hover: underline;
+         @link-title-font-color-hover: @button-color-default;
+         @link-title-text-decoration-hover: underline;
       </less-variables>
    </css-tokens>
 </theme>

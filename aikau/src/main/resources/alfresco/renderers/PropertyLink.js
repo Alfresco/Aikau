@@ -22,7 +22,7 @@
  * 
  * @module alfresco/renderers/PropertyLink
  * @extends alfresco/renderers/Property
- * @mixes external:dojo/_OnDijitClickMixin
+ * @mixes external:dijit/_OnDijitClickMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  * @author Richard Smith

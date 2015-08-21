@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>Title Test</shortname>
+  <shortname>Title</shortname>
+  <description>This shows various configurations of the alfresco/header/Title widget</description>
   <family>aikau-unit-tests</family>
   <url>/Title</url>
 </webscript>

@@ -43,6 +43,10 @@
       color: @link-font-color;
       cursor: pointer;
       text-decoration: @link-text-decoration;
+      &:hover {
+         colour: @link-font-color-hover;
+         text-decoration: @link-text-decoration-hover;
+      }
    }
 }
 

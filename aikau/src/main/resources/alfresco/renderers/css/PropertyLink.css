@@ -2,4 +2,8 @@
    cursor: pointer;
    text-decoration: @link-text-decoration;
    color: @link-font-color;
+   &:hover {
+      colour: @link-font-color-hover;
+      text-decoration: @link-text-decoration-hover;
+   }
 }
