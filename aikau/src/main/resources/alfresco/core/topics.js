@@ -79,6 +79,17 @@ define([],function() {
        * @type {string}
        * @default
        */
-      PATH_CHANGED: "ALF_DOCUMENTLIST_PATH_CHANGED"
+      PATH_CHANGED: "ALF_DOCUMENTLIST_PATH_CHANGED",
+
+      /**
+       * This topic can be used to publish a request to change the title of a page. It is subscribed to by the
+       * [Title widget]{@link module:alfresco/header/Title} and published by the 
+       * [SetTitle widget]{@link module:alfresco/header/SetTitle}
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE"
    };
 });
