@@ -14,6 +14,10 @@
    a {
       color: @link-emphasized-font-color;
       text-decoration: @link-text-decoration;
+      &:hover {
+         colour: @link-emphasized-font-color;
+         text-decoration: @link-text-decoration-hover;
+      }
    }
 
    .dijit.dijitReset.dijitInline.dijitDropDownButton {

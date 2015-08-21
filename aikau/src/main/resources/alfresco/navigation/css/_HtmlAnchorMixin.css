@@ -1,4 +1,7 @@
 .alfresco-share a.alfresco-navigation-_HtmlAnchorMixin {
    color: inherit;
    text-decoration: @link-text-decoration;
+   &:hover {
+      text-decoration: @link-text-decoration-hover;
+   }
 }
