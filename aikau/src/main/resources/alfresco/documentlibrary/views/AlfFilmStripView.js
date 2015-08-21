@@ -139,6 +139,7 @@ define(["dojo/_base/declare",
          //       TODO: Possible memory leak to investigate here, because the call to empy the node *is* required.
          domConstruct.empty(this.previewNode);
          this.contentCarousel = new DocumentCarousel({
+            id: this.id + "_PREVIEWS",
             widgets: lang.clone(this.widgetsForContent),
             currentData: this.currentData,
             pubSubScope: this.pubSubScope,

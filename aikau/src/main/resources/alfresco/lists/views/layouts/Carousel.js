@@ -71,6 +71,16 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * Used to indicate more data is required, as we're at the end of the current data
+       * 
+       * @event loadMoreDataTopic
+       * @instance
+       * @type {string}
+       * @default [topics.SCROLL_NEAR_BOTTOM]{@link module:alfresco/core/topics#SCROLL_NEAR_BOTTOM}
+       */
+      loadMoreDataTopic: topics.SCROLL_NEAR_BOTTOM,
+
+      /**
        * Sets up image source files, etc.
        *
        * @instance postCreate
@@ -294,6 +304,7 @@ define(["dojo/_base/declare",
        * the render function on each to ensure they display themselves correctly
        *
        * @instance
+       * @fires loadMoreDataTopic
        */
       renderDisplayedItems: function alfresco_lists_views_layouts_Carousel__renderDisplayedItems() {
          for (var i=this.firstDisplayedIndex; i<=this.lastDisplayedIndex; i++)
@@ -315,6 +326,10 @@ define(["dojo/_base/declare",
          domStyle.set(this.prevNode, "visibility", (this.firstDisplayedIndex == 0) ? "hidden": "visible");
          domStyle.set(this.nextNode, "visibility", (this.firstDisplayedIndex <= itemsCount-1 && this.lastDisplayedIndex >= itemsCount-1) ? "hidden": "visible");
 
+         var lastItemVisible = this.lastDisplayedIndex > itemsCount;
+         if(lastItemVisible) {
+            this.alfPublish(this.loadMoreDataTopic);
+         }
       },
 
       /**

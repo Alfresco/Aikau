@@ -51,6 +51,8 @@ model.jsonModel = {
                            widthPx: 600,
                            config: {
                               waitForPageWidgets: false,
+                              useInfiniteScroll: true,
+                              currentPageSize: 5,
                               useHash: true,
                               widgets: [
                                  {
@@ -67,7 +69,10 @@ model.jsonModel = {
          }
       },
       {
-         name: "aikauTesting/mockservices/DocumentLibraryMockXhr"
+         name: "aikauTesting/mockservices/NodesMockXhr",
+         config: {
+            totalItems: 11
+         }
       },
       {
          name: "alfresco/logging/DebugLog"
