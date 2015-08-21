@@ -114,7 +114,9 @@ define([
             // Analyse the query and extract separate variables
             var queryObj = ioQuery.queryToObject(queryString || ""),
                filtersParam = queryObj.filters,
-               pathParts = (path && path.substr(1).split("/")) || [],
+               decodedPath = decodeURIComponent(path),
+               pathParts = (decodedPath && decodedPath.substr(1).split("/")) || [],
+               locationPath = "/" + pathParts.join("/"),
                folderDepth = pathParts.length;
 
             // Determine how many folders to include
@@ -136,8 +138,10 @@ define([
                   templateJson = JSON.stringify(template, null, 2),
                   itemJson = templateJson.replace(/\{([a-zA-Z0-9.]+)\}/g, function(match, propertyPath) {
                      return lang.getObject(propertyPath, false, item);
-                  });
-               return JSON.parse(itemJson);
+                  }),
+                  realItem = JSON.parse(itemJson);
+               lang.setObject("location.path", locationPath, realItem);
+               return realItem;
             });
 
             // Apply the filters

@@ -3,7 +3,7 @@ define({
    // The template for a folder
    folderTemplate: {
       node: {
-         nodeRef: "{nodeRef}",
+         nodeRef: "workspace:\/\/SpacesStore\/{guid}",
          properties: {
             "cm:modified": {
                iso8601: "{modified}"
@@ -29,7 +29,12 @@ define({
          isContainer: true
       },
       version: "1.0",
-      nodeRef: "{nodeRef}",
+      location: {
+         repositoryId: "{guid}",
+         path: null,
+         file: "{title}"
+      },
+      nodeRef: "workspace:\/\/SpacesStore\/{guid}",
       fileName: "{title}",
       displayName: "{title}"
    },
@@ -37,7 +42,7 @@ define({
    // The template for a node
    nodeTemplate: {
       node: {
-         nodeRef: "{nodeRef}",
+         nodeRef: "workspace:\/\/SpacesStore\/{guid}",
          properties: {
             "cm:modified": {
                iso8601: "{modified}"
@@ -67,7 +72,7 @@ define({
          isContainer: false
       },
       version: "1.0",
-      nodeRef: "{nodeRef}",
+      nodeRef: "workspace:\/\/SpacesStore\/{guid}",
       fileName: "{title}.pdf",
       displayName: "{title}.pdf"
    },
@@ -75,7 +80,7 @@ define({
    // The items to use as seed data for the above templates
    items: [{
       title: "Monthly HES Summary Data",
-      nodeRef: "workspace:\/\/SpacesStore\/0ca6baf8-599b-4b72-9e22-6e761fac54cb",
+      guid: "0ca6baf8-599b-4b72-9e22-6e761fac54cb",
       creator: {
          forename: "Phyllis",
          surname: "Black",
@@ -90,7 +95,7 @@ define({
       modified: "2015-02-08T07:37:29.000Z"
    }, {
       title: "Telford and Wrekin Council",
-      nodeRef: "workspace:\/\/SpacesStore\/b7ccaf97-b3ec-4481-b119-934337e3a0ec",
+      guid: "b7ccaf97-b3ec-4481-b119-934337e3a0ec",
       creator: {
          forename: "Jane",
          surname: "Stewart",
@@ -105,7 +110,7 @@ define({
       modified: "2015-06-15T03:11:37.000Z"
    }, {
       title: "HCA Statistical data return",
-      nodeRef: "workspace:\/\/SpacesStore\/a01a9e15-d6bc-4868-bbba-cdbba5f19064",
+      guid: "a01a9e15-d6bc-4868-bbba-cdbba5f19064",
       creator: {
          forename: "Amanda",
          surname: "Greene",
@@ -120,7 +125,7 @@ define({
       modified: "2015-07-03T04:16:07.000Z"
    }, {
       title: "Central TLB",
-      nodeRef: "workspace:\/\/SpacesStore\/d040aa05-ad54-495f-bf4e-3266b96391e9",
+      guid: "d040aa05-ad54-495f-bf4e-3266b96391e9",
       creator: {
          forename: "Raymond",
          surname: "Warren",
@@ -135,7 +140,7 @@ define({
       modified: "2015-08-05T04:15:34.000Z"
    }, {
       title: "Fraud",
-      nodeRef: "workspace:\/\/SpacesStore\/ee0461e1-daa0-4efc-a142-3f709452fa0b",
+      guid: "ee0461e1-daa0-4efc-a142-3f709452fa0b",
       creator: {
          forename: "Angela",
          surname: "Lawrence",
@@ -150,7 +155,7 @@ define({
       modified: "2014-08-25T05:28:16.000Z"
    }, {
       title: "Latest CSV dump",
-      nodeRef: "workspace:\/\/SpacesStore\/778279fa-2aa7-4e45-a2f7-edf89ad39780",
+      guid: "778279fa-2aa7-4e45-a2f7-edf89ad39780",
       creator: {
          forename: "Kenneth",
          surname: "Gardner",
@@ -165,7 +170,7 @@ define({
       modified: "2015-03-10T08:51:33.000Z"
    }, {
       title: "April return",
-      nodeRef: "workspace:\/\/SpacesStore\/25dad0af-c378-4a42-9636-711180631821",
+      guid: "25dad0af-c378-4a42-9636-711180631821",
       creator: {
          forename: "Timothy",
          surname: "Bishop",
@@ -180,7 +185,7 @@ define({
       modified: "2015-05-15T07:21:53.000Z"
    }, {
       title: "Temporary event notices",
-      nodeRef: "workspace:\/\/SpacesStore\/a8d2eb8b-dba3-438b-b24b-69a25be698ba",
+      guid: "a8d2eb8b-dba3-438b-b24b-69a25be698ba",
       creator: {
          forename: "Lisa",
          surname: "Wood",
@@ -195,7 +200,7 @@ define({
       modified: "2014-11-06T05:02:12.000Z"
    }, {
       title: "Staff in post",
-      nodeRef: "workspace:\/\/SpacesStore\/346ea659-f095-4f17-9574-c3ef574a903d",
+      guid: "346ea659-f095-4f17-9574-c3ef574a903d",
       creator: {
          forename: "Helen",
          surname: "Castillo",
@@ -210,7 +215,7 @@ define({
       modified: "2015-07-22T06:02:13.000Z"
    }, {
       title: "Offences against the person",
-      nodeRef: "workspace:\/\/SpacesStore\/3e41127d-5df3-4f79-b6a1-ac257d3354d4",
+      guid: "3e41127d-5df3-4f79-b6a1-ac257d3354d4",
       creator: {
          forename: "Adam",
          surname: "Roberts",
@@ -225,7 +230,7 @@ define({
       modified: "2015-08-01T10:22:03.000Z"
    }, {
       title: "Schema Definition",
-      nodeRef: "workspace:\/\/SpacesStore\/7a48da0a-f85d-427a-ac4a-91ff2eff3816",
+      guid: "7a48da0a-f85d-427a-ac4a-91ff2eff3816",
       creator: {
          forename: "Juan",
          surname: "Fields",
@@ -240,7 +245,7 @@ define({
       modified: "2015-07-13T03:29:14.000Z"
    }, {
       title: "RCOG HMB website",
-      nodeRef: "workspace:\/\/SpacesStore\/a03a4d2e-f06c-4d11-8585-fa39e8afe5b8",
+      guid: "a03a4d2e-f06c-4d11-8585-fa39e8afe5b8",
       creator: {
          forename: "Kathleen",
          surname: "Alexander",
@@ -255,7 +260,7 @@ define({
       modified: "2015-06-03T18:42:22.000Z"
    }, {
       title: "Qualification Type Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/0a0d6195-d379-4f98-b61e-7dbabcbbefb2",
+      guid: "0a0d6195-d379-4f98-b61e-7dbabcbbefb2",
       creator: {
          forename: "Dorothy",
          surname: "Williams",
@@ -270,7 +275,7 @@ define({
       modified: "2015-01-08T18:05:59.000Z"
    }, {
       title: "Advertising hoarding sites",
-      nodeRef: "workspace:\/\/SpacesStore\/aa6f1d05-f948-4e27-81db-610c19dcb9ee",
+      guid: "aa6f1d05-f948-4e27-81db-610c19dcb9ee",
       creator: {
          forename: "Carol",
          surname: "Austin",
@@ -285,7 +290,7 @@ define({
       modified: "2015-03-22T08:46:09.000Z"
    }, {
       title: "Car Park Data",
-      nodeRef: "workspace:\/\/SpacesStore\/27fc5199-3afb-43b5-916b-8690bee9a081",
+      guid: "27fc5199-3afb-43b5-916b-8690bee9a081",
       creator: {
          forename: "Justin",
          surname: "Howard",
@@ -300,7 +305,7 @@ define({
       modified: "2015-04-02T00:50:22.000Z"
    }, {
       title: "October QDS data",
-      nodeRef: "workspace:\/\/SpacesStore\/a91bf94c-a9fe-4f19-98f5-b1d4fdbc9089",
+      guid: "a91bf94c-a9fe-4f19-98f5-b1d4fdbc9089",
       creator: {
          forename: "Jonathan",
          surname: "Phillips",
@@ -315,7 +320,7 @@ define({
       modified: "2015-02-11T14:28:47.000Z"
    }, {
       title: "SCS pay",
-      nodeRef: "workspace:\/\/SpacesStore\/01d84074-72ad-419f-b1a7-cff702408d6d",
+      guid: "01d84074-72ad-419f-b1a7-cff702408d6d",
       creator: {
          forename: "Teresa",
          surname: "Gibson",
@@ -330,7 +335,7 @@ define({
       modified: "2015-05-10T18:53:05.000Z"
    }, {
       title: "Amber Valley",
-      nodeRef: "workspace:\/\/SpacesStore\/9b424add-28d2-4fba-a45c-b54d2a032f5f",
+      guid: "9b424add-28d2-4fba-a45c-b54d2a032f5f",
       creator: {
          forename: "Steven",
          surname: "Brown",
@@ -345,7 +350,7 @@ define({
       modified: "2015-04-16T17:47:57.000Z"
    }, {
       title: "Extraction Tool",
-      nodeRef: "workspace:\/\/SpacesStore\/5f6e7d80-6d1c-49ef-8be5-0fab2a9c3991",
+      guid: "5f6e7d80-6d1c-49ef-8be5-0fab2a9c3991",
       creator: {
          forename: "Sara",
          surname: "Johnston",
@@ -360,7 +365,7 @@ define({
       modified: "2014-10-25T15:04:48.000Z"
    }, {
       title: "Excluded Qualifications",
-      nodeRef: "workspace:\/\/SpacesStore\/d33d34c0-92e5-4160-bf1f-d20146f4d6d9",
+      guid: "d33d34c0-92e5-4160-bf1f-d20146f4d6d9",
       creator: {
          forename: "Karen",
          surname: "Anderson",
@@ -375,7 +380,7 @@ define({
       modified: "2014-12-02T23:44:04.000Z"
    }, {
       title: "Cycle area list",
-      nodeRef: "workspace:\/\/SpacesStore\/97516800-9a18-4017-b1fb-1defee586eb9",
+      guid: "97516800-9a18-4017-b1fb-1defee586eb9",
       creator: {
          forename: "Philip",
          surname: "Mendoza",
@@ -390,7 +395,7 @@ define({
       modified: "2015-06-16T18:17:32.000Z"
    }, {
       title: "Blaby Community Grants",
-      nodeRef: "workspace:\/\/SpacesStore\/cc36eee3-130d-46bb-b3c0-ff1377637b95",
+      guid: "cc36eee3-130d-46bb-b3c0-ff1377637b95",
       creator: {
          forename: "Daniel",
          surname: "Dunn",
@@ -405,7 +410,7 @@ define({
       modified: "2015-02-20T06:18:57.000Z"
    }, {
       title: "Expenditure and Unit Costs",
-      nodeRef: "workspace:\/\/SpacesStore\/b856559c-7c94-4994-be35-51f27e9f43c6",
+      guid: "b856559c-7c94-4994-be35-51f27e9f43c6",
       creator: {
          forename: "Wanda",
          surname: "Oliver",
@@ -420,7 +425,7 @@ define({
       modified: "2014-08-27T20:04:02.000Z"
    }, {
       title: "Harrow Public Toilets",
-      nodeRef: "workspace:\/\/SpacesStore\/bd1566a9-add6-4e85-addd-8c12468dffe8",
+      guid: "bd1566a9-add6-4e85-addd-8c12468dffe8",
       creator: {
          forename: "Joe",
          surname: "Gibson",
@@ -435,7 +440,7 @@ define({
       modified: "2014-09-30T16:32:40.000Z"
    }, {
       title: "Visa nationals unsuccessful applicants",
-      nodeRef: "workspace:\/\/SpacesStore\/4b14964d-812e-4a4b-829a-f30afb61fc20",
+      guid: "4b14964d-812e-4a4b-829a-f30afb61fc20",
       creator: {
          forename: "Thomas",
          surname: "Richardson",
@@ -450,7 +455,7 @@ define({
       modified: "2014-09-10T18:14:14.000Z"
    }, {
       title: "DECC Live energy data",
-      nodeRef: "workspace:\/\/SpacesStore\/8d53b689-db7c-412e-9316-505b5b8069a4",
+      guid: "8d53b689-db7c-412e-9316-505b5b8069a4",
       creator: {
          forename: "James",
          surname: "Lee",
@@ -465,7 +470,7 @@ define({
       modified: "2014-12-15T14:33:38.000Z"
    }, {
       title: "Disaggregated Social Care Indicators",
-      nodeRef: "workspace:\/\/SpacesStore\/aa55c00f-adec-4a36-ab1a-b119d351b9af",
+      guid: "aa55c00f-adec-4a36-ab1a-b119d351b9af",
       creator: {
          forename: "Johnny",
          surname: "James",
@@ -480,7 +485,7 @@ define({
       modified: "2015-06-30T06:43:57.000Z"
    }, {
       title: "Administration Budgets",
-      nodeRef: "workspace:\/\/SpacesStore\/037c19eb-0552-4132-8f40-842f6a6d56bb",
+      guid: "037c19eb-0552-4132-8f40-842f6a6d56bb",
       creator: {
          forename: "Louis",
          surname: "Franklin",
@@ -495,7 +500,7 @@ define({
       modified: "2015-07-30T13:45:54.000Z"
    }, {
       title: "Object Sitter",
-      nodeRef: "workspace:\/\/SpacesStore\/d6be809b-346e-4ba0-833e-2eececdccbb6",
+      guid: "d6be809b-346e-4ba0-833e-2eececdccbb6",
       creator: {
          forename: "Shawn",
          surname: "Henry",
@@ -510,7 +515,7 @@ define({
       modified: "2014-12-29T02:36:36.000Z"
    }, {
       title: "Purchase Orders",
-      nodeRef: "workspace:\/\/SpacesStore\/2064395f-588c-4c64-b3ce-50eb5720c056",
+      guid: "2064395f-588c-4c64-b3ce-50eb5720c056",
       creator: {
          forename: "Richard",
          surname: "Martinez",
@@ -525,7 +530,7 @@ define({
       modified: "2014-11-18T22:04:37.000Z"
    }, {
       title: "Abeyance and Dispersal GPs",
-      nodeRef: "workspace:\/\/SpacesStore\/37833b97-cd8c-4edc-b6b9-40a8a84a0282",
+      guid: "37833b97-cd8c-4edc-b6b9-40a8a84a0282",
       creator: {
          forename: "Wayne",
          surname: "Mendoza",
@@ -540,7 +545,7 @@ define({
       modified: "2014-12-23T04:54:04.000Z"
    }, {
       title: "Junior staff",
-      nodeRef: "workspace:\/\/SpacesStore\/86f7cdc4-2818-4658-b139-7e6783d9dccf",
+      guid: "86f7cdc4-2818-4658-b139-7e6783d9dccf",
       creator: {
          forename: "Gerald",
          surname: "Smith",
@@ -555,7 +560,7 @@ define({
       modified: "2015-03-09T08:32:56.000Z"
    }, {
       title: "Meetings with external media",
-      nodeRef: "workspace:\/\/SpacesStore\/8694d47a-76f8-4c42-912e-f8b64c4cb2c1",
+      guid: "8694d47a-76f8-4c42-912e-f8b64c4cb2c1",
       creator: {
          forename: "Catherine",
          surname: "Carter",
@@ -570,7 +575,7 @@ define({
       modified: "2015-08-18T01:18:48.000Z"
    }, {
       title: "Leavers by gender",
-      nodeRef: "workspace:\/\/SpacesStore\/e04b7e86-50bc-435a-82d5-f3672c746254",
+      guid: "e04b7e86-50bc-435a-82d5-f3672c746254",
       creator: {
          forename: "Michael",
          surname: "Crawford",
@@ -585,7 +590,7 @@ define({
       modified: "2014-09-26T03:26:39.000Z"
    }, {
       title: "Dataset interest",
-      nodeRef: "workspace:\/\/SpacesStore\/f964017d-9fb5-4284-8834-95381a3ec8a4",
+      guid: "f964017d-9fb5-4284-8834-95381a3ec8a4",
       creator: {
          forename: "Marie",
          surname: "Romero",
@@ -600,7 +605,7 @@ define({
       modified: "2015-06-01T04:45:35.000Z"
    }, {
       title: "Forest of Dean",
-      nodeRef: "workspace:\/\/SpacesStore\/bc462e0b-0fbf-4f49-8bee-a39c249d3c00",
+      guid: "bc462e0b-0fbf-4f49-8bee-a39c249d3c00",
       creator: {
          forename: "Evelyn",
          surname: "Porter",
@@ -615,7 +620,7 @@ define({
       modified: "2014-12-21T02:12:33.000Z"
    }, {
       title: "Raw Data",
-      nodeRef: "workspace:\/\/SpacesStore\/daa9763c-4a60-4f5e-a151-364c77892c3b",
+      guid: "daa9763c-4a60-4f5e-a151-364c77892c3b",
       creator: {
          forename: "Jason",
          surname: "Fuller",
@@ -630,7 +635,7 @@ define({
       modified: "2015-05-18T04:34:58.000Z"
    }, {
       title: "Transport Statistics OldhamMain Report",
-      nodeRef: "workspace:\/\/SpacesStore\/54e737d4-1f0c-40d5-8e08-a3d2c042d026",
+      guid: "54e737d4-1f0c-40d5-8e08-a3d2c042d026",
       creator: {
          forename: "Ruth",
          surname: "Cook",
@@ -645,7 +650,7 @@ define({
       modified: "2014-11-29T02:46:58.000Z"
    }, {
       title: "Property routes",
-      nodeRef: "workspace:\/\/SpacesStore\/88e083d4-5f97-4a43-8f91-c438c8a2b987",
+      guid: "88e083d4-5f97-4a43-8f91-c438c8a2b987",
       creator: {
          forename: "Timothy",
          surname: "Perkins",
@@ -660,7 +665,7 @@ define({
       modified: "2014-10-30T01:30:40.000Z"
    }, {
       title: "CMR SCO data",
-      nodeRef: "workspace:\/\/SpacesStore\/700080b6-15b7-4c43-beb7-e81f5c412160",
+      guid: "700080b6-15b7-4c43-beb7-e81f5c412160",
       creator: {
          forename: "Doris",
          surname: "Lopez",
@@ -675,7 +680,7 @@ define({
       modified: "2014-10-25T13:06:36.000Z"
    }, {
       title: "Car Parks User Guide",
-      nodeRef: "workspace:\/\/SpacesStore\/a3ce70b7-af6e-49fb-b279-2363d2921bb9",
+      guid: "a3ce70b7-af6e-49fb-b279-2363d2921bb9",
       creator: {
          forename: "Chris",
          surname: "Cunningham",
@@ -690,7 +695,7 @@ define({
       modified: "2014-12-08T15:42:40.000Z"
    }, {
       title: "RCP website",
-      nodeRef: "workspace:\/\/SpacesStore\/dce11585-9f81-4f5a-826d-3454a72c18f4",
+      guid: "dce11585-9f81-4f5a-826d-3454a72c18f4",
       creator: {
          forename: "Steve",
          surname: "Wells",
@@ -705,7 +710,7 @@ define({
       modified: "2015-04-12T07:42:02.000Z"
    }, {
       title: "Pay Group and Structure",
-      nodeRef: "workspace:\/\/SpacesStore\/9e1250a0-e562-4b4a-a8dc-7657b6082bf7",
+      guid: "9e1250a0-e562-4b4a-a8dc-7657b6082bf7",
       creator: {
          forename: "Martha",
          surname: "Gordon",
@@ -720,7 +725,7 @@ define({
       modified: "2014-10-24T17:28:30.000Z"
    }, {
       title: "South Kesteven",
-      nodeRef: "workspace:\/\/SpacesStore\/ce613fa0-e22c-42ed-9077-93fa3f3471a8",
+      guid: "ce613fa0-e22c-42ed-9077-93fa3f3471a8",
       creator: {
          forename: "Evelyn",
          surname: "Lee",
@@ -735,7 +740,7 @@ define({
       modified: "2015-07-08T07:13:19.000Z"
    }, {
       title: "Roadside survey data guide",
-      nodeRef: "workspace:\/\/SpacesStore\/9840a64e-36af-438b-a3be-7effbac59574",
+      guid: "9840a64e-36af-438b-a3be-7effbac59574",
       creator: {
          forename: "Kathryn",
          surname: "Alvarez",
@@ -750,7 +755,7 @@ define({
       modified: "2015-03-25T15:37:52.000Z"
    }, {
       title: "Drugs offences",
-      nodeRef: "workspace:\/\/SpacesStore\/52bfe6a0-e3c7-43cb-83bf-e6561072aa7c",
+      guid: "52bfe6a0-e3c7-43cb-83bf-e6561072aa7c",
       creator: {
          forename: "Chris",
          surname: "Kelly",
@@ -765,7 +770,7 @@ define({
       modified: "2015-04-16T02:51:45.000Z"
    }, {
       title: "Council use of renewable energy",
-      nodeRef: "workspace:\/\/SpacesStore\/b13f1819-f71e-474c-ad63-46f3e82317f9",
+      guid: "b13f1819-f71e-474c-ad63-46f3e82317f9",
       creator: {
          forename: "Nicole",
          surname: "Gardner",
@@ -780,7 +785,7 @@ define({
       modified: "2014-09-28T17:22:10.000Z"
    }, {
       title: "Organogram visualisation",
-      nodeRef: "workspace:\/\/SpacesStore\/b8563900-94e9-4ca2-baf3-e60a7e9d2361",
+      guid: "b8563900-94e9-4ca2-baf3-e60a7e9d2361",
       creator: {
          forename: "Willie",
          surname: "Mcdonald",
@@ -795,7 +800,7 @@ define({
       modified: "2015-02-25T20:28:23.000Z"
    }, {
       title: "Blaenau Gwent",
-      nodeRef: "workspace:\/\/SpacesStore\/88e4b932-f3be-4429-b767-acb105ffef21",
+      guid: "88e4b932-f3be-4429-b767-acb105ffef21",
       creator: {
          forename: "David",
          surname: "Murray",
@@ -810,7 +815,7 @@ define({
       modified: "2015-03-18T04:06:40.000Z"
    }, {
       title: "Lottery Grants advanced search",
-      nodeRef: "workspace:\/\/SpacesStore\/5f49bd1e-56ad-48d7-915c-dd6439361a25",
+      guid: "5f49bd1e-56ad-48d7-915c-dd6439361a25",
       creator: {
          forename: "Sandra",
          surname: "Schmidt",
@@ -825,7 +830,7 @@ define({
       modified: "2015-05-13T22:37:49.000Z"
    }, {
       title: "Car Park webpage",
-      nodeRef: "workspace:\/\/SpacesStore\/40ac97d9-8882-4d94-b873-6fa9e6b628ab",
+      guid: "40ac97d9-8882-4d94-b873-6fa9e6b628ab",
       creator: {
          forename: "Stephen",
          surname: "Wilson",
@@ -840,7 +845,7 @@ define({
       modified: "2015-05-31T14:13:27.000Z"
    }, {
       title: "North East Lincolnshire",
-      nodeRef: "workspace:\/\/SpacesStore\/98a35eef-497f-41cc-929c-58dd9d5adfed",
+      guid: "98a35eef-497f-41cc-929c-58dd9d5adfed",
       creator: {
          forename: "Brian",
          surname: "Brown",
@@ -855,7 +860,7 @@ define({
       modified: "2015-07-23T06:52:11.000Z"
    }, {
       title: "Link coordinates",
-      nodeRef: "workspace:\/\/SpacesStore\/52458ce6-0af8-4e43-b72b-615896a34ca9",
+      guid: "52458ce6-0af8-4e43-b72b-615896a34ca9",
       creator: {
          forename: "Kathleen",
          surname: "Cooper",
@@ -870,7 +875,7 @@ define({
       modified: "2014-11-13T22:00:40.000Z"
    }, {
       title: "External applicants by religion",
-      nodeRef: "workspace:\/\/SpacesStore\/3252d773-a5e5-4227-b48e-971cf2f086b8",
+      guid: "3252d773-a5e5-4227-b48e-971cf2f086b8",
       creator: {
          forename: "Annie",
          surname: "Daniels",
@@ -885,7 +890,7 @@ define({
       modified: "2015-06-08T04:25:07.000Z"
    }, {
       title: "Bus Stops in York",
-      nodeRef: "workspace:\/\/SpacesStore\/b84ee9a5-64db-4f7c-aee2-63b3d38d0ac5",
+      guid: "b84ee9a5-64db-4f7c-aee2-63b3d38d0ac5",
       creator: {
          forename: "Jessica",
          surname: "Holmes",
@@ -900,7 +905,7 @@ define({
       modified: "2015-02-28T09:10:00.000Z"
    }, {
       title: "Tameside main report",
-      nodeRef: "workspace:\/\/SpacesStore\/a52d40e4-78d3-4529-ad0a-3535f91f4dee",
+      guid: "a52d40e4-78d3-4529-ad0a-3535f91f4dee",
       creator: {
          forename: "Lisa",
          surname: "Hunter",
@@ -915,7 +920,7 @@ define({
       modified: "2015-04-01T00:00:27.000Z"
    }, {
       title: "Staff in post by gender",
-      nodeRef: "workspace:\/\/SpacesStore\/16c3db13-a628-48a7-abdd-7113170c783d",
+      guid: "16c3db13-a628-48a7-abdd-7113170c783d",
       creator: {
          forename: "Steven",
          surname: "Griffin",
@@ -930,7 +935,7 @@ define({
       modified: "2014-10-16T16:06:19.000Z"
    }, {
       title: "NHS Continuing Healthcare Activity",
-      nodeRef: "workspace:\/\/SpacesStore\/1f946afd-0e8b-4f12-9e81-3f85580a86c7",
+      guid: "1f946afd-0e8b-4f12-9e81-3f85580a86c7",
       creator: {
          forename: "Matthew",
          surname: "Gordon",
@@ -945,7 +950,7 @@ define({
       modified: "2015-01-02T04:32:32.000Z"
    }, {
       title: "Sevenoaks District Polling District Boundaries",
-      nodeRef: "workspace:\/\/SpacesStore\/b936035e-e525-49fe-99af-dbeb841f4fc0",
+      guid: "b936035e-e525-49fe-99af-dbeb841f4fc0",
       creator: {
          forename: "Sara",
          surname: "Morrison",
@@ -960,7 +965,7 @@ define({
       modified: "2015-07-18T10:05:19.000Z"
    }, {
       title: "Public perceptions of crime",
-      nodeRef: "workspace:\/\/SpacesStore\/8a096e37-913f-4efc-867e-d25d17f1ca97",
+      guid: "8a096e37-913f-4efc-867e-d25d17f1ca97",
       creator: {
          forename: "Mark",
          surname: "Garza",
@@ -975,7 +980,7 @@ define({
       modified: "2015-01-16T03:29:38.000Z"
    }, {
       title: "Senior roles",
-      nodeRef: "workspace:\/\/SpacesStore\/baa667bd-51be-497e-9197-f89ff390b50e",
+      guid: "baa667bd-51be-497e-9197-f89ff390b50e",
       creator: {
          forename: "Keith",
          surname: "Henderson",
@@ -990,7 +995,7 @@ define({
       modified: "2014-10-06T06:45:54.000Z"
    }, {
       title: "Statement of parliamentary Supply",
-      nodeRef: "workspace:\/\/SpacesStore\/7905ac7e-d2e8-4306-b5fb-6c5e2b133e82",
+      guid: "7905ac7e-d2e8-4306-b5fb-6c5e2b133e82",
       creator: {
          forename: "Stephen",
          surname: "Ortiz",
@@ -1005,7 +1010,7 @@ define({
       modified: "2014-09-16T01:03:32.000Z"
    }, {
       title: "Local Guidance",
-      nodeRef: "workspace:\/\/SpacesStore\/7aa77221-5a76-4fb7-b54c-f3276ab2ea53",
+      guid: "7aa77221-5a76-4fb7-b54c-f3276ab2ea53",
       creator: {
          forename: "Betty",
          surname: "Dixon",
@@ -1020,7 +1025,7 @@ define({
       modified: "2014-10-19T17:28:58.000Z"
    }, {
       title: "Revaluation Reserve",
-      nodeRef: "workspace:\/\/SpacesStore\/6b6f8009-c976-445e-964e-8ae5ed1c27d4",
+      guid: "6b6f8009-c976-445e-964e-8ae5ed1c27d4",
       creator: {
          forename: "Ann",
          surname: "Richardson",
@@ -1035,7 +1040,7 @@ define({
       modified: "2015-05-04T22:18:50.000Z"
    }, {
       title: "Transaction Linked Data API",
-      nodeRef: "workspace:\/\/SpacesStore\/d66058f5-f8a2-4fc8-b59c-43298bef42a7",
+      guid: "d66058f5-f8a2-4fc8-b59c-43298bef42a7",
       creator: {
          forename: "Anna",
          surname: "Oliver",
@@ -1050,7 +1055,7 @@ define({
       modified: "2015-06-24T02:54:38.000Z"
    }, {
       title: "British Retail Consortium Calendar",
-      nodeRef: "workspace:\/\/SpacesStore\/923b80da-4e6a-425a-9f98-e478fdf2a95d",
+      guid: "923b80da-4e6a-425a-9f98-e478fdf2a95d",
       creator: {
          forename: "Rebecca",
          surname: "Marshall",
@@ -1065,7 +1070,7 @@ define({
       modified: "2014-12-15T05:51:06.000Z"
    }, {
       title: "SSNAP Clinical Audit Webpage",
-      nodeRef: "workspace:\/\/SpacesStore\/a827b513-ff2d-413d-9773-d8078fb6aca9",
+      guid: "a827b513-ff2d-413d-9773-d8078fb6aca9",
       creator: {
          forename: "Carl",
          surname: "Chavez",
@@ -1080,7 +1085,7 @@ define({
       modified: "2015-02-18T02:20:34.000Z"
    }, {
       title: "HSCIC Prescribing",
-      nodeRef: "workspace:\/\/SpacesStore\/516c4c9a-6931-4837-898d-7392a4b0eaa5",
+      guid: "516c4c9a-6931-4837-898d-7392a4b0eaa5",
       creator: {
          forename: "Jessica",
          surname: "Nichols",
@@ -1095,7 +1100,7 @@ define({
       modified: "2015-05-08T02:33:05.000Z"
    }, {
       title: "QOF Exception Report",
-      nodeRef: "workspace:\/\/SpacesStore\/e503d8bf-4b64-4788-a6ff-1222ec96dca5",
+      guid: "e503d8bf-4b64-4788-a6ff-1222ec96dca5",
       creator: {
          forename: "Eric",
          surname: "Fowler",
@@ -1110,7 +1115,7 @@ define({
       modified: "2014-12-29T00:06:49.000Z"
    }, {
       title: "Premises Licences West Norfolk",
-      nodeRef: "workspace:\/\/SpacesStore\/dac8db6d-b9fc-4cf6-ae6b-f9a7a593a6a6",
+      guid: "dac8db6d-b9fc-4cf6-ae6b-f9a7a593a6a6",
       creator: {
          forename: "Wayne",
          surname: "Reid",
@@ -1125,7 +1130,7 @@ define({
       modified: "2014-09-11T06:52:45.000Z"
    }, {
       title: "NFDC Planning",
-      nodeRef: "workspace:\/\/SpacesStore\/b7e9ec08-7c4e-4a75-a542-49e35c7da83a",
+      guid: "b7e9ec08-7c4e-4a75-a542-49e35c7da83a",
       creator: {
          forename: "Larry",
          surname: "Thompson",
@@ -1140,7 +1145,7 @@ define({
       modified: "2014-12-18T04:49:12.000Z"
    }, {
       title: "Treatment Centres",
-      nodeRef: "workspace:\/\/SpacesStore\/7dd2d525-7031-4bc0-a3dd-93d55072b045",
+      guid: "7dd2d525-7031-4bc0-a3dd-93d55072b045",
       creator: {
          forename: "Susan",
          surname: "Howell",
@@ -1155,7 +1160,7 @@ define({
       modified: "2014-11-01T18:24:43.000Z"
    }, {
       title: "CTLB Senior staff dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/03b30b13-042f-438b-ac2a-c676c0032774",
+      guid: "03b30b13-042f-438b-ac2a-c676c0032774",
       creator: {
          forename: "Gerald",
          surname: "Burns",
@@ -1170,7 +1175,7 @@ define({
       modified: "2014-10-04T08:13:04.000Z"
    }, {
       title: "Senior staff pay",
-      nodeRef: "workspace:\/\/SpacesStore\/5691475b-c32a-4dca-a255-acd9cf320576",
+      guid: "5691475b-c32a-4dca-a255-acd9cf320576",
       creator: {
          forename: "Carolyn",
          surname: "Hunt",
@@ -1185,7 +1190,7 @@ define({
       modified: "2015-07-02T18:21:25.000Z"
    }, {
       title: "The National Pain Audit Organisational Data File",
-      nodeRef: "workspace:\/\/SpacesStore\/48829bb1-0c41-40c2-abe1-c910c346dbe5",
+      guid: "48829bb1-0c41-40c2-abe1-c910c346dbe5",
       creator: {
          forename: "Alan",
          surname: "Hernandez",
@@ -1200,7 +1205,7 @@ define({
       modified: "2014-11-20T10:16:00.000Z"
    }, {
       title: "Number of applications in England and Wales divided by local authority district",
-      nodeRef: "workspace:\/\/SpacesStore\/0994da40-3822-43a2-8a58-b262080b2952",
+      guid: "0994da40-3822-43a2-8a58-b262080b2952",
       creator: {
          forename: "Ashley",
          surname: "Nelson",
@@ -1215,7 +1220,7 @@ define({
       modified: "2015-07-23T18:07:01.000Z"
    }, {
       title: "Care Trusts and Sites",
-      nodeRef: "workspace:\/\/SpacesStore\/1193bc2c-3da5-439b-877b-350b9ac7b4a2",
+      guid: "1193bc2c-3da5-439b-877b-350b9ac7b4a2",
       creator: {
          forename: "Ernest",
          surname: "Gutierrez",
@@ -1230,7 +1235,7 @@ define({
       modified: "2015-03-02T15:51:56.000Z"
    }, {
       title: "Thames Valley",
-      nodeRef: "workspace:\/\/SpacesStore\/ae611eab-320f-45b2-b4ff-4f8bec9bd334",
+      guid: "ae611eab-320f-45b2-b4ff-4f8bec9bd334",
       creator: {
          forename: "Andrew",
          surname: "Ford",
@@ -1245,7 +1250,7 @@ define({
       modified: "2015-08-06T09:59:23.000Z"
    }, {
       title: "Stockport Property Addresses",
-      nodeRef: "workspace:\/\/SpacesStore\/677a4ab2-d276-4bfb-b115-1306550a2e18",
+      guid: "677a4ab2-d276-4bfb-b115-1306550a2e18",
       creator: {
          forename: "Kelly",
          surname: "Ellis",
@@ -1260,7 +1265,7 @@ define({
       modified: "2014-12-22T10:35:48.000Z"
    }, {
       title: "CMR NI post data",
-      nodeRef: "workspace:\/\/SpacesStore\/784ce961-c789-4dd7-af06-3b56e48eaa46",
+      guid: "784ce961-c789-4dd7-af06-3b56e48eaa46",
       creator: {
          forename: "Timothy",
          surname: "Mendoza",
@@ -1275,7 +1280,7 @@ define({
       modified: "2015-02-10T17:51:28.000Z"
    }, {
       title: "Calderdale Schools",
-      nodeRef: "workspace:\/\/SpacesStore\/ea265c69-b457-41ba-a66f-22da519ea071",
+      guid: "ea265c69-b457-41ba-a66f-22da519ea071",
       creator: {
          forename: "Brenda",
          surname: "Ramirez",
@@ -1290,7 +1295,7 @@ define({
       modified: "2014-12-01T22:42:48.000Z"
    }, {
       title: "DSG Senior Staff Data",
-      nodeRef: "workspace:\/\/SpacesStore\/448e4a94-2a68-44cf-8b84-c883a54b261f",
+      guid: "448e4a94-2a68-44cf-8b84-c883a54b261f",
       creator: {
          forename: "Dennis",
          surname: "Ramos",
@@ -1305,7 +1310,7 @@ define({
       modified: "2014-12-11T14:27:04.000Z"
    }, {
       title: "Methodology Changes",
-      nodeRef: "workspace:\/\/SpacesStore\/92291252-46b6-4f5f-9318-a05092e08dc6",
+      guid: "92291252-46b6-4f5f-9318-a05092e08dc6",
       creator: {
          forename: "Benjamin",
          surname: "James",
@@ -1320,7 +1325,7 @@ define({
       modified: "2015-07-18T09:06:06.000Z"
    }, {
       title: "Neath Port Talbot",
-      nodeRef: "workspace:\/\/SpacesStore\/d6290ee1-95ed-413c-9742-c544a59459a8",
+      guid: "d6290ee1-95ed-413c-9742-c544a59459a8",
       creator: {
          forename: "Betty",
          surname: "Daniels",
@@ -1335,7 +1340,7 @@ define({
       modified: "2014-10-16T06:11:26.000Z"
    }, {
       title: "Polling Stations",
-      nodeRef: "workspace:\/\/SpacesStore\/934fe069-7a9c-4e57-8efe-b04436ff9be8",
+      guid: "934fe069-7a9c-4e57-8efe-b04436ff9be8",
       creator: {
          forename: "Carl",
          surname: "Patterson",
@@ -1350,7 +1355,7 @@ define({
       modified: "2015-04-23T01:57:38.000Z"
    }, {
       title: "Defra Greening Government commitments",
-      nodeRef: "workspace:\/\/SpacesStore\/7a307aed-4bb3-4787-8c1a-2b9afbadfc2a",
+      guid: "7a307aed-4bb3-4787-8c1a-2b9afbadfc2a",
       creator: {
          forename: "Brian",
          surname: "Williamson",
@@ -1365,7 +1370,7 @@ define({
       modified: "2015-03-03T08:12:37.000Z"
    }, {
       title: "DBS list of current Registered and Umbrella Bodies",
-      nodeRef: "workspace:\/\/SpacesStore\/8a9e3187-3a95-4029-a396-554ee531364e",
+      guid: "8a9e3187-3a95-4029-a396-554ee531364e",
       creator: {
          forename: "Jose",
          surname: "Kennedy",
@@ -1380,7 +1385,7 @@ define({
       modified: "2015-01-11T12:11:50.000Z"
    }, {
       title: "CIM Supporting Information",
-      nodeRef: "workspace:\/\/SpacesStore\/eb540f6b-ec81-4591-88f0-e299f128f1b3",
+      guid: "eb540f6b-ec81-4591-88f0-e299f128f1b3",
       creator: {
          forename: "Mary",
          surname: "Henry",
@@ -1395,7 +1400,7 @@ define({
       modified: "2015-03-12T05:59:52.000Z"
    }, {
       title: "MOD live energy data",
-      nodeRef: "workspace:\/\/SpacesStore\/dd3262e6-bc98-4dc9-a4c1-2bdc2b4b18b6",
+      guid: "dd3262e6-bc98-4dc9-a4c1-2bdc2b4b18b6",
       creator: {
          forename: "Paul",
          surname: "Thompson",
@@ -1410,7 +1415,7 @@ define({
       modified: "2014-11-09T11:15:42.000Z"
    }, {
       title: "Conservation Area guidelines",
-      nodeRef: "workspace:\/\/SpacesStore\/8b9bcd48-78a1-46b3-81d0-8103160a71f1",
+      guid: "8b9bcd48-78a1-46b3-81d0-8103160a71f1",
       creator: {
          forename: "Richard",
          surname: "Moreno",
@@ -1425,7 +1430,7 @@ define({
       modified: "2015-05-19T04:08:19.000Z"
    }, {
       title: "Gender Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/cc32a239-f081-4393-90c7-a83ed6e1b6eb",
+      guid: "cc32a239-f081-4393-90c7-a83ed6e1b6eb",
       creator: {
          forename: "Andrew",
          surname: "Gibson",
@@ -1440,7 +1445,7 @@ define({
       modified: "2014-09-24T04:55:12.000Z"
    }, {
       title: "Articles of Constitution",
-      nodeRef: "workspace:\/\/SpacesStore\/3a0c90f5-c2b6-4556-833b-a623eee8a141",
+      guid: "3a0c90f5-c2b6-4556-833b-a623eee8a141",
       creator: {
          forename: "Janet",
          surname: "Kelly",
@@ -1455,7 +1460,7 @@ define({
       modified: "2014-10-11T07:02:38.000Z"
    }, {
       title: "Weymouth and Portland",
-      nodeRef: "workspace:\/\/SpacesStore\/eaaee935-6a1b-4bca-8696-d62ef683555b",
+      guid: "eaaee935-6a1b-4bca-8696-d62ef683555b",
       creator: {
          forename: "Bruce",
          surname: "Reid",
@@ -1470,7 +1475,7 @@ define({
       modified: "2015-05-27T18:30:17.000Z"
    }, {
       title: "Public Data Group Survey",
-      nodeRef: "workspace:\/\/SpacesStore\/e6a4ad2f-c9a9-46b9-a010-0696b35e54b1",
+      guid: "e6a4ad2f-c9a9-46b9-a010-0696b35e54b1",
       creator: {
          forename: "Pamela",
          surname: "Simpson",
@@ -1485,7 +1490,7 @@ define({
       modified: "2015-04-24T12:28:21.000Z"
    }, {
       title: "Staffordshire Moorlands",
-      nodeRef: "workspace:\/\/SpacesStore\/949f5586-4d36-4141-a4a0-1d03e9cab0b0",
+      guid: "949f5586-4d36-4141-a4a0-1d03e9cab0b0",
       creator: {
          forename: "Ralph",
          surname: "Knight",
@@ -1500,7 +1505,7 @@ define({
       modified: "2014-11-16T11:10:16.000Z"
    }, {
       title: "Additional Tables",
-      nodeRef: "workspace:\/\/SpacesStore\/6a0c4d3b-b58e-4f3f-a776-b841d16e02c6",
+      guid: "6a0c4d3b-b58e-4f3f-a776-b841d16e02c6",
       creator: {
          forename: "Beverly",
          surname: "Kim",
@@ -1515,7 +1520,7 @@ define({
       modified: "2015-02-24T22:28:44.000Z"
    }, {
       title: "BNB Serials RDF",
-      nodeRef: "workspace:\/\/SpacesStore\/e762063a-7df9-4a6b-999c-e6a25da05887",
+      guid: "e762063a-7df9-4a6b-999c-e6a25da05887",
       creator: {
          forename: "Rachel",
          surname: "Jenkins",
@@ -1530,7 +1535,7 @@ define({
       modified: "2014-08-28T20:58:25.000Z"
    }, {
       title: "Landing page",
-      nodeRef: "workspace:\/\/SpacesStore\/32a78de2-a5b4-4529-95e3-9c7f5673217a",
+      guid: "32a78de2-a5b4-4529-95e3-9c7f5673217a",
       creator: {
          forename: "Tammy",
          surname: "Brown",
@@ -1545,7 +1550,7 @@ define({
       modified: "2014-10-25T01:06:36.000Z"
    }, {
       title: "Title Page",
-      nodeRef: "workspace:\/\/SpacesStore\/d53f3cde-831d-4218-a5d2-549b18376f32",
+      guid: "d53f3cde-831d-4218-a5d2-549b18376f32",
       creator: {
          forename: "Randy",
          surname: "Butler",
@@ -1560,7 +1565,7 @@ define({
       modified: "2015-07-11T00:24:08.000Z"
    }, {
       title: "Internal appointments by sexual orientation",
-      nodeRef: "workspace:\/\/SpacesStore\/e3b20373-150c-473e-b237-99202008a4c6",
+      guid: "e3b20373-150c-473e-b237-99202008a4c6",
       creator: {
          forename: "Keith",
          surname: "Alvarez",
@@ -1575,7 +1580,7 @@ define({
       modified: "2015-07-09T06:17:36.000Z"
    }, {
       title: "Internal applicants by ethnicity",
-      nodeRef: "workspace:\/\/SpacesStore\/1545d7d9-e338-4364-a45d-9ce7dfa2c3f2",
+      guid: "1545d7d9-e338-4364-a45d-9ce7dfa2c3f2",
       creator: {
          forename: "Donald",
          surname: "Marshall",
@@ -1590,7 +1595,7 @@ define({
       modified: "2015-03-31T09:31:39.000Z"
    }, {
       title: "MHMDS Summary Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/ebd3261e-aab8-4921-a1b5-caa921369c24",
+      guid: "ebd3261e-aab8-4921-a1b5-caa921369c24",
       creator: {
          forename: "Theresa",
          surname: "Snyder",
@@ -1605,7 +1610,7 @@ define({
       modified: "2014-08-28T14:05:55.000Z"
    }, {
       title: "West Devon",
-      nodeRef: "workspace:\/\/SpacesStore\/c0c7ac7f-e438-4839-9c04-6f53b3157b2c",
+      guid: "c0c7ac7f-e438-4839-9c04-6f53b3157b2c",
       creator: {
          forename: "Stephen",
          surname: "Wallace",
@@ -1620,7 +1625,7 @@ define({
       modified: "2015-06-28T00:19:28.000Z"
    }, {
       title: "Senior staff posts",
-      nodeRef: "workspace:\/\/SpacesStore\/63d68d1f-8f05-42d4-83c9-4d841abc5360",
+      guid: "63d68d1f-8f05-42d4-83c9-4d841abc5360",
       creator: {
          forename: "Fred",
          surname: "Hayes",
@@ -1635,7 +1640,7 @@ define({
       modified: "2015-06-10T12:14:39.000Z"
    }, {
       title: "Tables on Planning Applications",
-      nodeRef: "workspace:\/\/SpacesStore\/777381b0-d5b5-4ba0-bdac-aa4fddf9037d",
+      guid: "777381b0-d5b5-4ba0-bdac-aa4fddf9037d",
       creator: {
          forename: "Jeremy",
          surname: "Wagner",
@@ -1650,7 +1655,7 @@ define({
       modified: "2015-02-22T18:34:13.000Z"
    }, {
       title: "MVDC Organisation Structure",
-      nodeRef: "workspace:\/\/SpacesStore\/38787ecf-5617-4ddb-ab40-f668a9f427f9",
+      guid: "38787ecf-5617-4ddb-ab40-f668a9f427f9",
       creator: {
          forename: "Ashley",
          surname: "Robertson",
@@ -1665,7 +1670,7 @@ define({
       modified: "2015-05-30T01:34:53.000Z"
    }, {
       title: "National Coach Services Data",
-      nodeRef: "workspace:\/\/SpacesStore\/b3656dfa-296e-4758-9bb0-90068a14c337",
+      guid: "b3656dfa-296e-4758-9bb0-90068a14c337",
       creator: {
          forename: "Gregory",
          surname: "Franklin",
@@ -1680,7 +1685,7 @@ define({
       modified: "2015-04-06T05:53:31.000Z"
    }, {
       title: "Live Tables",
-      nodeRef: "workspace:\/\/SpacesStore\/57092646-09fe-4890-b75c-94b3d2fa88af",
+      guid: "57092646-09fe-4890-b75c-94b3d2fa88af",
       creator: {
          forename: "Ashley",
          surname: "Ray",
@@ -1695,7 +1700,7 @@ define({
       modified: "2015-07-31T11:21:09.000Z"
    }, {
       title: "Destination lookup tables",
-      nodeRef: "workspace:\/\/SpacesStore\/7fd5358b-53a6-4f83-b7e5-e244d9a79c00",
+      guid: "7fd5358b-53a6-4f83-b7e5-e244d9a79c00",
       creator: {
          forename: "Susan",
          surname: "Johnston",
@@ -1710,7 +1715,7 @@ define({
       modified: "2015-08-12T23:24:42.000Z"
    }, {
       title: "Main NJR website",
-      nodeRef: "workspace:\/\/SpacesStore\/06b5e3be-cd79-4f77-9fac-444010d00054",
+      guid: "06b5e3be-cd79-4f77-9fac-444010d00054",
       creator: {
          forename: "Patrick",
          surname: "Warren",
@@ -1725,7 +1730,7 @@ define({
       modified: "2015-03-20T17:30:24.000Z"
    }, {
       title: "High Peak",
-      nodeRef: "workspace:\/\/SpacesStore\/9c4c45eb-7298-450c-9621-fada6b2ebcf4",
+      guid: "9c4c45eb-7298-450c-9621-fada6b2ebcf4",
       creator: {
          forename: "Eric",
          surname: "Campbell",
@@ -1740,7 +1745,7 @@ define({
       modified: "2014-10-09T06:45:25.000Z"
    }, {
       title: "MINAP webpages",
-      nodeRef: "workspace:\/\/SpacesStore\/b5489440-66eb-4fe6-8c59-e6b6f4be6ee8",
+      guid: "b5489440-66eb-4fe6-8c59-e6b6f4be6ee8",
       creator: {
          forename: "Fred",
          surname: "Porter",
@@ -1755,7 +1760,7 @@ define({
       modified: "2015-04-09T17:11:32.000Z"
    }, {
       title: "Stockport Transport Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/80ff88a7-8028-40ca-b2d7-6ecb34b56690",
+      guid: "80ff88a7-8028-40ca-b2d7-6ecb34b56690",
       creator: {
          forename: "Stephen",
          surname: "Andrews",
@@ -1770,7 +1775,7 @@ define({
       modified: "2015-03-12T13:26:13.000Z"
    }, {
       title: "Headcount FTE",
-      nodeRef: "workspace:\/\/SpacesStore\/a3d0c594-d72e-40a0-b3f0-dd4c46a04df3",
+      guid: "a3d0c594-d72e-40a0-b3f0-dd4c46a04df3",
       creator: {
          forename: "Tammy",
          surname: "Duncan",
@@ -1785,7 +1790,7 @@ define({
       modified: "2015-01-09T20:09:17.000Z"
    }, {
       title: "Stockport main report",
-      nodeRef: "workspace:\/\/SpacesStore\/2740ecac-3901-41f3-8179-48e737a16071",
+      guid: "2740ecac-3901-41f3-8179-48e737a16071",
       creator: {
          forename: "Linda",
          surname: "Reid",
@@ -1800,7 +1805,7 @@ define({
       modified: "2015-05-03T15:07:57.000Z"
    }, {
       title: "Resource feed",
-      nodeRef: "workspace:\/\/SpacesStore\/844c48cb-5a27-4dc6-b8cc-2ccbaa4fafa7",
+      guid: "844c48cb-5a27-4dc6-b8cc-2ccbaa4fafa7",
       creator: {
          forename: "Alan",
          surname: "Castillo",
@@ -1815,7 +1820,7 @@ define({
       modified: "2015-06-02T10:37:49.000Z"
    }, {
       title: "Bicycle theft",
-      nodeRef: "workspace:\/\/SpacesStore\/80811dc3-5b36-4e95-ab46-4c6fcbd85ba5",
+      guid: "80811dc3-5b36-4e95-ab46-4c6fcbd85ba5",
       creator: {
          forename: "Raymond",
          surname: "Little",
@@ -1830,7 +1835,7 @@ define({
       modified: "2014-12-03T08:28:10.000Z"
    }, {
       title: "CCG Prescribing Data",
-      nodeRef: "workspace:\/\/SpacesStore\/547e6d6c-acb1-46cc-b932-5efbd555f484",
+      guid: "547e6d6c-acb1-46cc-b932-5efbd555f484",
       creator: {
          forename: "Jeremy",
          surname: "Wood",
@@ -1845,7 +1850,7 @@ define({
       modified: "2015-04-01T06:08:51.000Z"
    }, {
       title: "Links to spend spreadsheets",
-      nodeRef: "workspace:\/\/SpacesStore\/374f3ee6-6402-4a6f-b81b-1e01f65d9bc8",
+      guid: "374f3ee6-6402-4a6f-b81b-1e01f65d9bc8",
       creator: {
          forename: "Adam",
          surname: "Lewis",
@@ -1860,7 +1865,7 @@ define({
       modified: "2015-05-15T11:03:41.000Z"
    }, {
       title: "CRB check performance figures",
-      nodeRef: "workspace:\/\/SpacesStore\/6b10f8a4-5ddf-4e87-90dc-80f413366a49",
+      guid: "6b10f8a4-5ddf-4e87-90dc-80f413366a49",
       creator: {
          forename: "Jeremy",
          surname: "Bailey",
@@ -1875,7 +1880,7 @@ define({
       modified: "2015-04-25T22:52:31.000Z"
    }, {
       title: "Listed Buildings Metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/b8ed6f57-7298-401a-8a80-702caebf925b",
+      guid: "b8ed6f57-7298-401a-8a80-702caebf925b",
       creator: {
          forename: "Jacqueline",
          surname: "King",
@@ -1890,7 +1895,7 @@ define({
       modified: "2015-01-27T22:18:44.000Z"
    }, {
       title: "Clinical Commissioning Group Sites",
-      nodeRef: "workspace:\/\/SpacesStore\/e0a147d2-81f0-415b-8f80-c2b58bdcb4ca",
+      guid: "e0a147d2-81f0-415b-8f80-c2b58bdcb4ca",
       creator: {
          forename: "Diana",
          surname: "Murphy",
@@ -1905,7 +1910,7 @@ define({
       modified: "2014-09-22T02:34:35.000Z"
    }, {
       title: "Purbeck Heritage Coast",
-      nodeRef: "workspace:\/\/SpacesStore\/26f20d19-8225-44d2-b5ec-1e8ab1e83c04",
+      guid: "26f20d19-8225-44d2-b5ec-1e8ab1e83c04",
       creator: {
          forename: "Diana",
          surname: "Mason",
@@ -1920,7 +1925,7 @@ define({
       modified: "2014-11-27T14:25:20.000Z"
    }, {
       title: "House Building Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/1748dbfb-3312-42db-a7d5-2e54cf603dbb",
+      guid: "1748dbfb-3312-42db-a7d5-2e54cf603dbb",
       creator: {
          forename: "Julie",
          surname: "Henderson",
@@ -1935,7 +1940,7 @@ define({
       modified: "2015-07-05T22:14:33.000Z"
    }, {
       title: "Parking Account Metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/a60c63e0-e931-42f4-ab30-e8415b3b48cd",
+      guid: "a60c63e0-e931-42f4-ab30-e8415b3b48cd",
       creator: {
          forename: "Sean",
          surname: "Rivera",
@@ -1950,7 +1955,7 @@ define({
       modified: "2015-08-01T16:42:38.000Z"
    }, {
       title: "Air Command",
-      nodeRef: "workspace:\/\/SpacesStore\/806bf926-14a4-4c11-8c7e-800419722303",
+      guid: "806bf926-14a4-4c11-8c7e-800419722303",
       creator: {
          forename: "Sandra",
          surname: "Greene",
@@ -1965,7 +1970,7 @@ define({
       modified: "2015-06-22T14:21:45.000Z"
    }, {
       title: "UK Visas and Immigration",
-      nodeRef: "workspace:\/\/SpacesStore\/0650d0dc-3f0b-40dc-9db3-c09f4d8e8f3e",
+      guid: "0650d0dc-3f0b-40dc-9db3-c09f4d8e8f3e",
       creator: {
          forename: "Laura",
          surname: "Carter",
@@ -1980,7 +1985,7 @@ define({
       modified: "2015-05-21T02:19:49.000Z"
    }, {
       title: "Published quarterly",
-      nodeRef: "workspace:\/\/SpacesStore\/105a1a3e-9872-44d6-b566-6c196f0626fc",
+      guid: "105a1a3e-9872-44d6-b566-6c196f0626fc",
       creator: {
          forename: "Tina",
          surname: "Nguyen",
@@ -1995,7 +2000,7 @@ define({
       modified: "2014-12-31T09:19:00.000Z"
    }, {
       title: "Food Hygiene Ratings",
-      nodeRef: "workspace:\/\/SpacesStore\/37443421-0879-434f-bcfd-601c9cea4b3f",
+      guid: "37443421-0879-434f-bcfd-601c9cea4b3f",
       creator: {
          forename: "Wanda",
          surname: "Reyes",
@@ -2010,7 +2015,7 @@ define({
       modified: "2015-07-08T18:42:42.000Z"
    }, {
       title: "Venture data",
-      nodeRef: "workspace:\/\/SpacesStore\/3ff922cf-541c-44db-8f2b-33730de2c4b5",
+      guid: "3ff922cf-541c-44db-8f2b-33730de2c4b5",
       creator: {
          forename: "Amy",
          surname: "Fuller",
@@ -2025,7 +2030,7 @@ define({
       modified: "2015-04-21T23:10:18.000Z"
    }, {
       title: "Delegates for training by age",
-      nodeRef: "workspace:\/\/SpacesStore\/a216c4de-3633-4cd1-8ba1-f6997c1f0a14",
+      guid: "a216c4de-3633-4cd1-8ba1-f6997c1f0a14",
       creator: {
          forename: "Carlos",
          surname: "Hicks",
@@ -2040,7 +2045,7 @@ define({
       modified: "2014-09-30T23:49:14.000Z"
    }, {
       title: "Gritter locations",
-      nodeRef: "workspace:\/\/SpacesStore\/8a1a14b9-c6b9-465d-b5af-1f8f3bd58c24",
+      guid: "8a1a14b9-c6b9-465d-b5af-1f8f3bd58c24",
       creator: {
          forename: "Steven",
          surname: "Roberts",
@@ -2055,7 +2060,7 @@ define({
       modified: "2015-04-03T02:36:15.000Z"
    }, {
       title: "DBS barring list data",
-      nodeRef: "workspace:\/\/SpacesStore\/2baa11c8-27b1-4c69-bbba-fbba9bc79041",
+      guid: "2baa11c8-27b1-4c69-bbba-fbba9bc79041",
       creator: {
          forename: "Steve",
          surname: "Rose",
@@ -2070,7 +2075,7 @@ define({
       modified: "2015-06-21T16:55:54.000Z"
    }, {
       title: "Local Authority Land",
-      nodeRef: "workspace:\/\/SpacesStore\/75dcef5c-0fd0-412c-8db4-290f1e11e24c",
+      guid: "75dcef5c-0fd0-412c-8db4-290f1e11e24c",
       creator: {
          forename: "Jean",
          surname: "Medina",
@@ -2085,7 +2090,7 @@ define({
       modified: "2015-01-04T14:10:00.000Z"
    }, {
       title: "Business Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/3de72415-fd1f-41be-88ad-bcb642144dea",
+      guid: "3de72415-fd1f-41be-88ad-bcb642144dea",
       creator: {
          forename: "Randy",
          surname: "James",
@@ -2100,7 +2105,7 @@ define({
       modified: "2014-08-26T22:01:33.000Z"
    }, {
       title: "Fords in Devon XML",
-      nodeRef: "workspace:\/\/SpacesStore\/bb76b6cf-848b-4a71-9162-9580698981a7",
+      guid: "bb76b6cf-848b-4a71-9162-9580698981a7",
       creator: {
          forename: "Kimberly",
          surname: "Gonzalez",
@@ -2115,7 +2120,7 @@ define({
       modified: "2014-12-05T06:55:10.000Z"
    }, {
       title: "NHS IC Staff Data",
-      nodeRef: "workspace:\/\/SpacesStore\/292765b5-8860-4cf5-ad63-3c53246a1dfc",
+      guid: "292765b5-8860-4cf5-ad63-3c53246a1dfc",
       creator: {
          forename: "Russell",
          surname: "Wood",
@@ -2130,7 +2135,7 @@ define({
       modified: "2015-04-21T22:30:39.000Z"
    }, {
       title: "CMR WAL data",
-      nodeRef: "workspace:\/\/SpacesStore\/e7878116-2ad7-499a-bd9e-e07c499fe2f2",
+      guid: "e7878116-2ad7-499a-bd9e-e07c499fe2f2",
       creator: {
          forename: "Jeffrey",
          surname: "Andrews",
@@ -2145,7 +2150,7 @@ define({
       modified: "2014-10-23T01:50:45.000Z"
    }, {
       title: "Executive management comittee",
-      nodeRef: "workspace:\/\/SpacesStore\/bd0f8872-f6e3-4fb7-9eb3-b77ceada63de",
+      guid: "bd0f8872-f6e3-4fb7-9eb3-b77ceada63de",
       creator: {
          forename: "Steven",
          surname: "Harvey",
@@ -2160,7 +2165,7 @@ define({
       modified: "2015-04-23T15:09:38.000Z"
    }, {
       title: "Monthly Amendment files",
-      nodeRef: "workspace:\/\/SpacesStore\/e9bf7c96-5bc7-4e0d-94e4-9033421f6b82",
+      guid: "e9bf7c96-5bc7-4e0d-94e4-9033421f6b82",
       creator: {
          forename: "Anthony",
          surname: "Fowler",
@@ -2175,7 +2180,7 @@ define({
       modified: "2015-06-07T13:26:24.000Z"
    }, {
       title: "Hull City",
-      nodeRef: "workspace:\/\/SpacesStore\/27298e51-e2dd-4d94-8bcd-d2b932ae6012",
+      guid: "27298e51-e2dd-4d94-8bcd-d2b932ae6012",
       creator: {
          forename: "Marilyn",
          surname: "Price",
@@ -2190,7 +2195,7 @@ define({
       modified: "2015-06-14T06:38:15.000Z"
    }, {
       title: "South West",
-      nodeRef: "workspace:\/\/SpacesStore\/e102b4fe-7540-4a59-a2f9-1ea68ca8662d",
+      guid: "e102b4fe-7540-4a59-a2f9-1ea68ca8662d",
       creator: {
          forename: "Stephen",
          surname: "Watkins",
@@ -2205,7 +2210,7 @@ define({
       modified: "2014-09-01T22:41:50.000Z"
    }, {
       title: "CMR WAL TV data",
-      nodeRef: "workspace:\/\/SpacesStore\/bf289302-d670-4fd1-bf6d-b6165613fa02",
+      guid: "bf289302-d670-4fd1-bf6d-b6165613fa02",
       creator: {
          forename: "Antonio",
          surname: "Reynolds",
@@ -2220,7 +2225,7 @@ define({
       modified: "2014-10-19T08:34:48.000Z"
    }, {
       title: "Chart of Accounts xls",
-      nodeRef: "workspace:\/\/SpacesStore\/982f3db8-39d7-4049-9f60-fc2577e810c5",
+      guid: "982f3db8-39d7-4049-9f60-fc2577e810c5",
       creator: {
          forename: "Tammy",
          surname: "Ramirez",
@@ -2235,7 +2240,7 @@ define({
       modified: "2015-02-22T03:20:53.000Z"
    }, {
       title: "Recycling Centre Locations",
-      nodeRef: "workspace:\/\/SpacesStore\/c9c2ea38-563f-4925-a456-ae19ac40bff7",
+      guid: "c9c2ea38-563f-4925-a456-ae19ac40bff7",
       creator: {
          forename: "Terry",
          surname: "Patterson",
@@ -2250,7 +2255,7 @@ define({
       modified: "2015-01-30T00:43:22.000Z"
    }, {
       title: "Adult Participation and Achievements",
-      nodeRef: "workspace:\/\/SpacesStore\/b522fb2f-93d3-499c-b175-1b894b8da17c",
+      guid: "b522fb2f-93d3-499c-b175-1b894b8da17c",
       creator: {
          forename: "Ernest",
          surname: "Tucker",
@@ -2265,7 +2270,7 @@ define({
       modified: "2014-09-28T05:28:20.000Z"
    }, {
       title: "Scrap Metal Dealers",
-      nodeRef: "workspace:\/\/SpacesStore\/41ae20b9-439a-4a4a-9eb3-c985ae28a389",
+      guid: "41ae20b9-439a-4a4a-9eb3-c985ae28a389",
       creator: {
          forename: "Teresa",
          surname: "Frazier",
@@ -2280,7 +2285,7 @@ define({
       modified: "2015-08-03T17:30:09.000Z"
    }, {
       title: "Tree PreservationsOorders",
-      nodeRef: "workspace:\/\/SpacesStore\/31d88b23-63b5-4310-ba8a-70cef67af004",
+      guid: "31d88b23-63b5-4310-ba8a-70cef67af004",
       creator: {
          forename: "Phillip",
          surname: "Baker",
@@ -2295,7 +2300,7 @@ define({
       modified: "2015-07-18T11:33:16.000Z"
    }, {
       title: "Sources of RBWM Income",
-      nodeRef: "workspace:\/\/SpacesStore\/80624a74-2792-41e7-835d-6bd702f189c9",
+      guid: "80624a74-2792-41e7-835d-6bd702f189c9",
       creator: {
          forename: "Justin",
          surname: "Mills",
@@ -2310,7 +2315,7 @@ define({
       modified: "2015-06-07T18:55:53.000Z"
    }, {
       title: "Rochdale Transport Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/66924c07-d19d-4a0a-b9ce-ecca98393755",
+      guid: "66924c07-d19d-4a0a-b9ce-ecca98393755",
       creator: {
          forename: "Gregory",
          surname: "West",
@@ -2325,7 +2330,7 @@ define({
       modified: "2015-03-25T16:36:58.000Z"
    }, {
       title: "August Data",
-      nodeRef: "workspace:\/\/SpacesStore\/501d07b1-14de-442b-8b38-2b6e0d6e3a76",
+      guid: "501d07b1-14de-442b-8b38-2b6e0d6e3a76",
       creator: {
          forename: "Arthur",
          surname: "Baker",
@@ -2340,7 +2345,7 @@ define({
       modified: "2015-01-02T05:46:24.000Z"
    }, {
       title: "Internal applicants by religion",
-      nodeRef: "workspace:\/\/SpacesStore\/fc243b22-c2b2-497b-b8c4-ab839c4a7a3f",
+      guid: "fc243b22-c2b2-497b-b8c4-ab839c4a7a3f",
       creator: {
          forename: "Raymond",
          surname: "Woods",
@@ -2355,7 +2360,7 @@ define({
       modified: "2014-08-21T08:38:24.000Z"
    }, {
       title: "South Northamptonshire",
-      nodeRef: "workspace:\/\/SpacesStore\/91bfcd35-288f-469d-9915-56cadd99ab89",
+      guid: "91bfcd35-288f-469d-9915-56cadd99ab89",
       creator: {
          forename: "Andrew",
          surname: "Foster",
@@ -2370,7 +2375,7 @@ define({
       modified: "2014-12-02T12:42:13.000Z"
    }, {
       title: "Policy and Strategy Register",
-      nodeRef: "workspace:\/\/SpacesStore\/a42b5dfb-464e-44cc-901f-98b31c374a27",
+      guid: "a42b5dfb-464e-44cc-901f-98b31c374a27",
       creator: {
          forename: "Philip",
          surname: "Hansen",
@@ -2385,7 +2390,7 @@ define({
       modified: "2015-05-31T14:19:13.000Z"
    }, {
       title: "Report home page",
-      nodeRef: "workspace:\/\/SpacesStore\/787ddc1d-730b-4a7a-a9dd-b61ff876ed78",
+      guid: "787ddc1d-730b-4a7a-a9dd-b61ff876ed78",
       creator: {
          forename: "Albert",
          surname: "Vasquez",
@@ -2400,7 +2405,7 @@ define({
       modified: "2014-11-07T03:06:40.000Z"
    }, {
       title: "Prescribing by Dentists",
-      nodeRef: "workspace:\/\/SpacesStore\/51265c3e-4f0e-4f50-9f87-5ffa2c9553cb",
+      guid: "51265c3e-4f0e-4f50-9f87-5ffa2c9553cb",
       creator: {
          forename: "Ryan",
          surname: "Bradley",
@@ -2415,7 +2420,7 @@ define({
       modified: "2015-03-29T19:07:09.000Z"
    }, {
       title: "Promoting high performance working",
-      nodeRef: "workspace:\/\/SpacesStore\/d968f03a-c197-41c8-8b8c-208142af0f2a",
+      guid: "d968f03a-c197-41c8-8b8c-208142af0f2a",
       creator: {
          forename: "Patricia",
          surname: "Ferguson",
@@ -2430,7 +2435,7 @@ define({
       modified: "2015-07-30T19:52:16.000Z"
    }, {
       title: "Service user questionnaire",
-      nodeRef: "workspace:\/\/SpacesStore\/f6425b5d-5079-44ef-a9a2-011cdcb1be1c",
+      guid: "f6425b5d-5079-44ef-a9a2-011cdcb1be1c",
       creator: {
          forename: "Daniel",
          surname: "Jones",
@@ -2445,7 +2450,7 @@ define({
       modified: "2015-08-16T16:39:23.000Z"
    }, {
       title: "Methodological changes",
-      nodeRef: "workspace:\/\/SpacesStore\/29405657-d40b-4371-9307-4a1b232a2ecc",
+      guid: "29405657-d40b-4371-9307-4a1b232a2ecc",
       creator: {
          forename: "Betty",
          surname: "Tucker",
@@ -2460,7 +2465,7 @@ define({
       modified: "2014-09-28T06:40:01.000Z"
    }, {
       title: "HQIP Website",
-      nodeRef: "workspace:\/\/SpacesStore\/d9889b71-4364-4bdf-a505-930fbcbb3c7b",
+      guid: "d9889b71-4364-4bdf-a505-930fbcbb3c7b",
       creator: {
          forename: "Sean",
          surname: "Fox",
@@ -2475,7 +2480,7 @@ define({
       modified: "2014-12-14T15:22:15.000Z"
    }, {
       title: "Northumberland Councillors",
-      nodeRef: "workspace:\/\/SpacesStore\/b37ed4ca-7cbd-41d5-ba89-9eef36aed5ba",
+      guid: "b37ed4ca-7cbd-41d5-ba89-9eef36aed5ba",
       creator: {
          forename: "Gary",
          surname: "Watson",
@@ -2490,7 +2495,7 @@ define({
       modified: "2014-11-29T10:00:35.000Z"
    }, {
       title: "MVDC Pay Multiple",
-      nodeRef: "workspace:\/\/SpacesStore\/6328e6f1-f363-4f8d-b241-310b46971a1b",
+      guid: "6328e6f1-f363-4f8d-b241-310b46971a1b",
       creator: {
          forename: "Steven",
          surname: "Fox",
@@ -2505,7 +2510,7 @@ define({
       modified: "2014-11-06T10:59:14.000Z"
    }, {
       title: "Dog Bins in York",
-      nodeRef: "workspace:\/\/SpacesStore\/169e56c0-d18a-4602-a643-d2c395366e07",
+      guid: "169e56c0-d18a-4602-a643-d2c395366e07",
       creator: {
          forename: "Sharon",
          surname: "Hunt",
@@ -2520,7 +2525,7 @@ define({
       modified: "2014-11-25T07:21:11.000Z"
    }, {
       title: "Revised January data",
-      nodeRef: "workspace:\/\/SpacesStore\/4882aac2-0fae-45eb-b0f3-bf6d45a6e9c9",
+      guid: "4882aac2-0fae-45eb-b0f3-bf6d45a6e9c9",
       creator: {
          forename: "Sara",
          surname: "Shaw",
@@ -2535,7 +2540,7 @@ define({
       modified: "2015-01-27T21:35:27.000Z"
    }, {
       title: "Count of Senior Salaries",
-      nodeRef: "workspace:\/\/SpacesStore\/be09f649-4c6f-4ca3-aec7-3f4924b0db1c",
+      guid: "be09f649-4c6f-4ca3-aec7-3f4924b0db1c",
       creator: {
          forename: "Janet",
          surname: "Jacobs",
@@ -2550,7 +2555,7 @@ define({
       modified: "2014-11-05T19:56:54.000Z"
    }, {
       title: "West Lothian",
-      nodeRef: "workspace:\/\/SpacesStore\/f11f40d6-9dcf-4935-8d1d-4513f2524e3d",
+      guid: "f11f40d6-9dcf-4935-8d1d-4513f2524e3d",
       creator: {
          forename: "Teresa",
          surname: "Stewart",
@@ -2565,7 +2570,7 @@ define({
       modified: "2014-11-02T07:12:57.000Z"
    }, {
       title: "Bus Route map data",
-      nodeRef: "workspace:\/\/SpacesStore\/8388d92f-1fc6-45ff-a90c-5da6157d8685",
+      guid: "8388d92f-1fc6-45ff-a90c-5da6157d8685",
       creator: {
          forename: "Kelly",
          surname: "Young",
@@ -2580,7 +2585,7 @@ define({
       modified: "2015-05-05T10:44:20.000Z"
    }, {
       title: "RBKC Parking Bay data",
-      nodeRef: "workspace:\/\/SpacesStore\/be9a82ca-43ba-4a31-9998-e06e74a5a3b8",
+      guid: "be9a82ca-43ba-4a31-9998-e06e74a5a3b8",
       creator: {
          forename: "Jonathan",
          surname: "Peterson",
@@ -2595,7 +2600,7 @@ define({
       modified: "2015-05-11T09:04:08.000Z"
    }, {
       title: "Junior staff numbers and payscales",
-      nodeRef: "workspace:\/\/SpacesStore\/6f3deb20-23c6-41b0-b1ce-e3cc2ecd1731",
+      guid: "6f3deb20-23c6-41b0-b1ce-e3cc2ecd1731",
       creator: {
          forename: "Cynthia",
          surname: "Lawson",
@@ -2610,7 +2615,7 @@ define({
       modified: "2014-11-01T07:10:40.000Z"
    }, {
       title: "Premise Licences",
-      nodeRef: "workspace:\/\/SpacesStore\/a31ed3e2-a9c0-49be-b222-51e9fd2e4fd7",
+      guid: "a31ed3e2-a9c0-49be-b222-51e9fd2e4fd7",
       creator: {
          forename: "Brenda",
          surname: "Gardner",
@@ -2625,7 +2630,7 @@ define({
       modified: "2015-02-14T06:51:50.000Z"
    }, {
       title: "Compulsory Purchase Orders",
-      nodeRef: "workspace:\/\/SpacesStore\/20de2ab0-da16-4a9c-92e6-0abc568f11f3",
+      guid: "20de2ab0-da16-4a9c-92e6-0abc568f11f3",
       creator: {
          forename: "Paula",
          surname: "Hamilton",
@@ -2640,7 +2645,7 @@ define({
       modified: "2015-06-27T00:46:50.000Z"
    }, {
       title: "Senior staff salary data",
-      nodeRef: "workspace:\/\/SpacesStore\/5673010f-e9f3-4971-9834-863a62418ee4",
+      guid: "5673010f-e9f3-4971-9834-863a62418ee4",
       creator: {
          forename: "Jessica",
          surname: "Spencer",
@@ -2655,7 +2660,7 @@ define({
       modified: "2015-02-26T05:05:53.000Z"
    }, {
       title: "Example data point",
-      nodeRef: "workspace:\/\/SpacesStore\/4eafda69-ad8e-409f-bada-1978c1870620",
+      guid: "4eafda69-ad8e-409f-bada-1978c1870620",
       creator: {
          forename: "Heather",
          surname: "Williams",
@@ -2670,7 +2675,7 @@ define({
       modified: "2014-09-20T16:50:20.000Z"
    }, {
       title: "Culverts in Devon XML",
-      nodeRef: "workspace:\/\/SpacesStore\/3d1ee02f-cb82-4eb5-9d1f-a1a0f0d03e4c",
+      guid: "3d1ee02f-cb82-4eb5-9d1f-a1a0f0d03e4c",
       creator: {
          forename: "Teresa",
          surname: "Rodriguez",
@@ -2685,7 +2690,7 @@ define({
       modified: "2014-11-04T00:05:26.000Z"
    }, {
       title: "GP registered patients",
-      nodeRef: "workspace:\/\/SpacesStore\/7d3306d6-2e18-4c6f-adb4-a00f4eee98f9",
+      guid: "7d3306d6-2e18-4c6f-adb4-a00f4eee98f9",
       creator: {
          forename: "Paula",
          surname: "Mason",
@@ -2700,7 +2705,7 @@ define({
       modified: "2014-12-06T18:52:19.000Z"
    }, {
       title: "East Dorset",
-      nodeRef: "workspace:\/\/SpacesStore\/e147d06d-810d-4406-9f0d-3e468b22a6d0",
+      guid: "e147d06d-810d-4406-9f0d-3e468b22a6d0",
       creator: {
          forename: "Beverly",
          surname: "Long",
@@ -2715,7 +2720,7 @@ define({
       modified: "2015-08-11T14:58:50.000Z"
    }, {
       title: "Customer Feedback and Complaints",
-      nodeRef: "workspace:\/\/SpacesStore\/bb2b0498-676d-4687-91eb-6b0a00816b17",
+      guid: "bb2b0498-676d-4687-91eb-6b0a00816b17",
       creator: {
          forename: "David",
          surname: "Butler",
@@ -2730,7 +2735,7 @@ define({
       modified: "2015-08-05T20:37:38.000Z"
    }, {
       title: "COMAH Sites",
-      nodeRef: "workspace:\/\/SpacesStore\/6083692f-2617-457a-916a-46afba9e218c",
+      guid: "6083692f-2617-457a-916a-46afba9e218c",
       creator: {
          forename: "Ann",
          surname: "Foster",
@@ -2745,7 +2750,7 @@ define({
       modified: "2015-06-03T11:40:14.000Z"
    }, {
       title: "Azure API",
-      nodeRef: "workspace:\/\/SpacesStore\/e3db630a-eda0-4679-be9a-98728b6d4f87",
+      guid: "e3db630a-eda0-4679-be9a-98728b6d4f87",
       creator: {
          forename: "Linda",
          surname: "Thomas",
@@ -2760,7 +2765,7 @@ define({
       modified: "2014-12-31T17:18:44.000Z"
    }, {
       title: "Capital Employed by CPS",
-      nodeRef: "workspace:\/\/SpacesStore\/35b9c78d-2a9b-4e65-aac4-46471648207a",
+      guid: "35b9c78d-2a9b-4e65-aac4-46471648207a",
       creator: {
          forename: "Ann",
          surname: "Greene",
@@ -2775,7 +2780,7 @@ define({
       modified: "2014-11-30T03:49:33.000Z"
    }, {
       title: "Operator licence holders Wales",
-      nodeRef: "workspace:\/\/SpacesStore\/2027d8e9-44b1-40bf-8d8c-441c034ee1f8",
+      guid: "2027d8e9-44b1-40bf-8d8c-441c034ee1f8",
       creator: {
          forename: "Benjamin",
          surname: "Gibson",
@@ -2790,7 +2795,7 @@ define({
       modified: "2015-07-20T08:05:34.000Z"
    }, {
       title: "Social Incubator North website",
-      nodeRef: "workspace:\/\/SpacesStore\/8ddb608a-d06b-4a28-a8ae-6aff4a572a7c",
+      guid: "8ddb608a-d06b-4a28-a8ae-6aff4a572a7c",
       creator: {
          forename: "Martha",
          surname: "Peterson",
@@ -2805,7 +2810,7 @@ define({
       modified: "2014-12-07T19:14:53.000Z"
    }, {
       title: "Homelessness Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/aaa568ee-a95f-4eac-8ccf-1d460cc42a62",
+      guid: "aaa568ee-a95f-4eac-8ccf-1d460cc42a62",
       creator: {
          forename: "Doris",
          surname: "Porter",
@@ -2820,7 +2825,7 @@ define({
       modified: "2014-12-17T01:28:58.000Z"
    }, {
       title: "Settlement Boundaries",
-      nodeRef: "workspace:\/\/SpacesStore\/684f4f91-6867-4294-bf48-7f77825d0f69",
+      guid: "684f4f91-6867-4294-bf48-7f77825d0f69",
       creator: {
          forename: "Nancy",
          surname: "Hawkins",
@@ -2835,7 +2840,7 @@ define({
       modified: "2015-02-06T09:18:09.000Z"
    }, {
       title: "NPCA Organisational audit surveys",
-      nodeRef: "workspace:\/\/SpacesStore\/4575be66-2a3c-4794-afc2-6f483076fdd0",
+      guid: "4575be66-2a3c-4794-afc2-6f483076fdd0",
       creator: {
          forename: "Julie",
          surname: "Griffin",
@@ -2850,7 +2855,7 @@ define({
       modified: "2014-09-16T08:38:48.000Z"
    }, {
       title: "Road traffic accidents",
-      nodeRef: "workspace:\/\/SpacesStore\/d42c4d13-65da-4832-b7ed-4ba3a5292779",
+      guid: "d42c4d13-65da-4832-b7ed-4ba3a5292779",
       creator: {
          forename: "Rose",
          surname: "Frazier",
@@ -2865,7 +2870,7 @@ define({
       modified: "2015-05-19T02:21:18.000Z"
    }, {
       title: "Expenditure Information",
-      nodeRef: "workspace:\/\/SpacesStore\/e851ff25-4b7a-4619-aabb-0189dceaeb43",
+      guid: "e851ff25-4b7a-4619-aabb-0189dceaeb43",
       creator: {
          forename: "Bruce",
          surname: "Jenkins",
@@ -2880,7 +2885,7 @@ define({
       modified: "2015-03-15T21:48:37.000Z"
    }, {
       title: "Pharmacy dispensaries",
-      nodeRef: "workspace:\/\/SpacesStore\/52c4cdef-bd7b-417b-aa33-8304d5410b64",
+      guid: "52c4cdef-bd7b-417b-aa33-8304d5410b64",
       creator: {
          forename: "Aaron",
          surname: "Richardson",
@@ -2895,7 +2900,7 @@ define({
       modified: "2015-03-07T12:46:15.000Z"
    }, {
       title: "Adult establishment licences",
-      nodeRef: "workspace:\/\/SpacesStore\/1f61f626-75a3-4448-9d24-63b5cd808f23",
+      guid: "1f61f626-75a3-4448-9d24-63b5cd808f23",
       creator: {
          forename: "Jennifer",
          surname: "Mason",
@@ -2910,7 +2915,7 @@ define({
       modified: "2015-08-13T23:47:09.000Z"
    }, {
       title: "Archived GP practices",
-      nodeRef: "workspace:\/\/SpacesStore\/1472df5a-5770-48ee-bef2-01281bb7613d",
+      guid: "1472df5a-5770-48ee-bef2-01281bb7613d",
       creator: {
          forename: "Ryan",
          surname: "Mason",
@@ -2925,7 +2930,7 @@ define({
       modified: "2015-06-18T21:46:37.000Z"
    }, {
       title: "Financial instruments",
-      nodeRef: "workspace:\/\/SpacesStore\/854bf4cf-2341-49fe-ad53-334efe66bd6b",
+      guid: "854bf4cf-2341-49fe-ad53-334efe66bd6b",
       creator: {
          forename: "Willie",
          surname: "Williamson",
@@ -2940,7 +2945,7 @@ define({
       modified: "2014-08-22T00:26:23.000Z"
    }, {
       title: "Metadata tables",
-      nodeRef: "workspace:\/\/SpacesStore\/3a3def34-707b-4c24-9589-5c7c7f261df8",
+      guid: "3a3def34-707b-4c24-9589-5c7c7f261df8",
       creator: {
          forename: "Janet",
          surname: "Evans",
@@ -2955,7 +2960,7 @@ define({
       modified: "2015-06-12T18:40:25.000Z"
    }, {
       title: "The National Pain Audit Data Description File",
-      nodeRef: "workspace:\/\/SpacesStore\/de511aa7-bb1a-4425-be3e-a4d4193d02dd",
+      guid: "de511aa7-bb1a-4425-be3e-a4d4193d02dd",
       creator: {
          forename: "Victor",
          surname: "Ramos",
@@ -2970,7 +2975,7 @@ define({
       modified: "2015-05-15T05:41:29.000Z"
    }, {
       title: "Contract Register Metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/69235107-f1ea-4fb9-94f4-32aec8a83895",
+      guid: "69235107-f1ea-4fb9-94f4-32aec8a83895",
       creator: {
          forename: "Jonathan",
          surname: "Reynolds",
@@ -2985,7 +2990,7 @@ define({
       modified: "2015-02-25T17:55:08.000Z"
    }, {
       title: "Council housing stock",
-      nodeRef: "workspace:\/\/SpacesStore\/5c6cb82a-6dd0-400b-b6d3-5f39aed81a8f",
+      guid: "5c6cb82a-6dd0-400b-b6d3-5f39aed81a8f",
       creator: {
          forename: "Bonnie",
          surname: "Gonzalez",
@@ -3000,7 +3005,7 @@ define({
       modified: "2014-09-26T00:02:03.000Z"
    }, {
       title: "Medical and Dental Staff",
-      nodeRef: "workspace:\/\/SpacesStore\/d5a992f2-b2ff-4316-8738-33f093b1af89",
+      guid: "d5a992f2-b2ff-4316-8738-33f093b1af89",
       creator: {
          forename: "Cynthia",
          surname: "Cox",
@@ -3015,7 +3020,7 @@ define({
       modified: "2015-03-20T22:41:33.000Z"
    }, {
       title: "CTIL mobile csv dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/8cfe954c-856d-46e1-8924-cfab1ab00666",
+      guid: "8cfe954c-856d-46e1-8924-cfab1ab00666",
       creator: {
          forename: "Aaron",
          surname: "Howard",
@@ -3030,7 +3035,7 @@ define({
       modified: "2015-02-03T09:18:22.000Z"
    }, {
       title: "Private Controlled Drug Prescribers",
-      nodeRef: "workspace:\/\/SpacesStore\/7b847708-b576-4223-bcfa-5ded5cfc7742",
+      guid: "7b847708-b576-4223-bcfa-5ded5cfc7742",
       creator: {
          forename: "Linda",
          surname: "Burke",
@@ -3045,7 +3050,7 @@ define({
       modified: "2014-09-07T00:16:50.000Z"
    }, {
       title: "PLACE data",
-      nodeRef: "workspace:\/\/SpacesStore\/930ac858-863d-42b0-b0aa-a2191a275eb9",
+      guid: "930ac858-863d-42b0-b0aa-a2191a275eb9",
       creator: {
          forename: "Timothy",
          surname: "Snyder",
@@ -3060,7 +3065,7 @@ define({
       modified: "2015-03-24T07:16:06.000Z"
    }, {
       title: "External appointments by gender",
-      nodeRef: "workspace:\/\/SpacesStore\/4e22c392-6e12-41c2-aa01-500b88ac17d6",
+      guid: "4e22c392-6e12-41c2-aa01-500b88ac17d6",
       creator: {
          forename: "Laura",
          surname: "Lane",
@@ -3075,7 +3080,7 @@ define({
       modified: "2015-04-22T08:43:27.000Z"
    }, {
       title: "Default Organisation Codes",
-      nodeRef: "workspace:\/\/SpacesStore\/38bf40c9-6595-4108-84ce-0ff2178b5407",
+      guid: "38bf40c9-6595-4108-84ce-0ff2178b5407",
       creator: {
          forename: "Frank",
          surname: "Reed",
@@ -3090,7 +3095,7 @@ define({
       modified: "2014-10-13T12:20:19.000Z"
    }, {
       title: "Performance data",
-      nodeRef: "workspace:\/\/SpacesStore\/16965973-d160-4f2c-9047-c507b1418944",
+      guid: "16965973-d160-4f2c-9047-c507b1418944",
       creator: {
          forename: "Carl",
          surname: "Hicks",
@@ -3105,7 +3110,7 @@ define({
       modified: "2014-09-14T06:21:44.000Z"
    }, {
       title: "SCS salaries",
-      nodeRef: "workspace:\/\/SpacesStore\/656b482b-42e3-4713-8113-ac32765117e7",
+      guid: "656b482b-42e3-4713-8113-ac32765117e7",
       creator: {
          forename: "John",
          surname: "Fowler",
@@ -3120,7 +3125,7 @@ define({
       modified: "2015-03-18T20:15:38.000Z"
    }, {
       title: "St Albans City",
-      nodeRef: "workspace:\/\/SpacesStore\/7cac02c5-8454-457b-9a92-1653d12721e8",
+      guid: "7cac02c5-8454-457b-9a92-1653d12721e8",
       creator: {
          forename: "Eric",
          surname: "Thomas",
@@ -3135,7 +3140,7 @@ define({
       modified: "2015-07-15T22:42:45.000Z"
    }, {
       title: "Quality of estuaries",
-      nodeRef: "workspace:\/\/SpacesStore\/edbe0e78-e625-4a6c-a3c1-56e649ef844e",
+      guid: "edbe0e78-e625-4a6c-a3c1-56e649ef844e",
       creator: {
          forename: "Alice",
          surname: "Parker",
@@ -3150,7 +3155,7 @@ define({
       modified: "2014-09-28T22:50:13.000Z"
    }, {
       title: "Isle of Wight",
-      nodeRef: "workspace:\/\/SpacesStore\/78dcbb37-a307-48f5-ab9f-f9c79a6d3f2d",
+      guid: "78dcbb37-a307-48f5-ab9f-f9c79a6d3f2d",
       creator: {
          forename: "Karen",
          surname: "Flores",
@@ -3165,7 +3170,7 @@ define({
       modified: "2015-05-15T23:47:39.000Z"
    }, {
       title: "Offroad Cycle Routes KML",
-      nodeRef: "workspace:\/\/SpacesStore\/dde12286-b002-419a-aae0-99037cc9893d",
+      guid: "dde12286-b002-419a-aae0-99037cc9893d",
       creator: {
          forename: "Arthur",
          surname: "James",
@@ -3180,7 +3185,7 @@ define({
       modified: "2015-08-03T10:36:07.000Z"
    }, {
       title: "Disciplinary cases by religion",
-      nodeRef: "workspace:\/\/SpacesStore\/ccb10d14-1990-4e9e-916a-7f0f2f913aee",
+      guid: "ccb10d14-1990-4e9e-916a-7f0f2f913aee",
       creator: {
          forename: "Dorothy",
          surname: "Collins",
@@ -3195,7 +3200,7 @@ define({
       modified: "2015-06-16T06:45:06.000Z"
    }, {
       title: "SSNAP Data Transparency webpage",
-      nodeRef: "workspace:\/\/SpacesStore\/8660afd7-0bb3-4092-8acf-d842f7978d99",
+      guid: "8660afd7-0bb3-4092-8acf-d842f7978d99",
       creator: {
          forename: "Timothy",
          surname: "Coleman",
@@ -3210,7 +3215,7 @@ define({
       modified: "2015-01-22T13:11:19.000Z"
    }, {
       title: "Public Conveniences Milton Keynes",
-      nodeRef: "workspace:\/\/SpacesStore\/b4afb441-ab2e-44c6-a17e-8b3d713a9e80",
+      guid: "b4afb441-ab2e-44c6-a17e-8b3d713a9e80",
       creator: {
          forename: "Charles",
          surname: "Diaz",
@@ -3225,7 +3230,7 @@ define({
       modified: "2015-01-19T20:23:37.000Z"
    }, {
       title: "Link to licence register",
-      nodeRef: "workspace:\/\/SpacesStore\/96e36865-51c1-42c3-a102-2b0390a6b2b4",
+      guid: "96e36865-51c1-42c3-a102-2b0390a6b2b4",
       creator: {
          forename: "Joseph",
          surname: "Gonzalez",
@@ -3240,7 +3245,7 @@ define({
       modified: "2014-12-11T23:12:29.000Z"
    }, {
       title: "Digital Radio Reports",
-      nodeRef: "workspace:\/\/SpacesStore\/7c88a17f-a9c5-4ad3-9ef5-ab1cfd04c371",
+      guid: "7c88a17f-a9c5-4ad3-9ef5-ab1cfd04c371",
       creator: {
          forename: "Christopher",
          surname: "Johnson",
@@ -3255,7 +3260,7 @@ define({
       modified: "2015-08-10T21:30:28.000Z"
    }, {
       title: "Current Tenanted Housing Stock",
-      nodeRef: "workspace:\/\/SpacesStore\/ea1a514c-d5a3-4358-a461-b17768ac11b3",
+      guid: "ea1a514c-d5a3-4358-a461-b17768ac11b3",
       creator: {
          forename: "Barbara",
          surname: "Vasquez",
@@ -3270,7 +3275,7 @@ define({
       modified: "2015-07-17T16:27:26.000Z"
    }, {
       title: "Google Analytics website",
-      nodeRef: "workspace:\/\/SpacesStore\/3d798559-a056-4385-bff9-1d67347e7f20",
+      guid: "3d798559-a056-4385-bff9-1d67347e7f20",
       creator: {
          forename: "Jesse",
          surname: "Fernandez",
@@ -3285,7 +3290,7 @@ define({
       modified: "2015-01-05T19:49:20.000Z"
    }, {
       title: "Junior staff posts",
-      nodeRef: "workspace:\/\/SpacesStore\/367f5d15-4012-46e1-9703-4b092270ecb5",
+      guid: "367f5d15-4012-46e1-9703-4b092270ecb5",
       creator: {
          forename: "Cheryl",
          surname: "Watson",
@@ -3300,7 +3305,7 @@ define({
       modified: "2014-10-25T09:51:16.000Z"
    }, {
       title: "Guidance  on Format",
-      nodeRef: "workspace:\/\/SpacesStore\/9b1157a9-141b-47cb-9585-2c71cc0f83aa",
+      guid: "9b1157a9-141b-47cb-9585-2c71cc0f83aa",
       creator: {
          forename: "Deborah",
          surname: "Schmidt",
@@ -3315,7 +3320,7 @@ define({
       modified: "2015-07-27T01:05:04.000Z"
    }, {
       title: "Health Visitors",
-      nodeRef: "workspace:\/\/SpacesStore\/1c106e89-21dc-4272-ba2d-0ed9afc3215d",
+      guid: "1c106e89-21dc-4272-ba2d-0ed9afc3215d",
       creator: {
          forename: "Antonio",
          surname: "Spencer",
@@ -3330,7 +3335,7 @@ define({
       modified: "2014-11-12T11:34:32.000Z"
    }, {
       title: "NHS Sickness Absence Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/61862a97-5e69-4a4c-900d-3e0d1011cea1",
+      guid: "61862a97-5e69-4a4c-900d-3e0d1011cea1",
       creator: {
          forename: "Helen",
          surname: "Matthews",
@@ -3345,7 +3350,7 @@ define({
       modified: "2015-05-08T10:11:12.000Z"
    }, {
       title: "NNAP Project website",
-      nodeRef: "workspace:\/\/SpacesStore\/7003e5ec-aea6-4468-94f5-d5589dc79eda",
+      guid: "7003e5ec-aea6-4468-94f5-d5589dc79eda",
       creator: {
          forename: "Nicole",
          surname: "Gonzalez",
@@ -3360,7 +3365,7 @@ define({
       modified: "2015-03-26T17:51:04.000Z"
    }, {
       title: "Pollution Incidents Sumary",
-      nodeRef: "workspace:\/\/SpacesStore\/abb06e2e-801f-43de-9cf6-b722eb327ba1",
+      guid: "abb06e2e-801f-43de-9cf6-b722eb327ba1",
       creator: {
          forename: "Barbara",
          surname: "Ruiz",
@@ -3375,7 +3380,7 @@ define({
       modified: "2015-07-07T18:06:16.000Z"
    }, {
       title: "Council Property Portfolio",
-      nodeRef: "workspace:\/\/SpacesStore\/77acc9a8-b9d6-45df-aa07-55074871b812",
+      guid: "77acc9a8-b9d6-45df-aa07-55074871b812",
       creator: {
          forename: "Joshua",
          surname: "Stephens",
@@ -3390,7 +3395,7 @@ define({
       modified: "2015-05-09T16:52:14.000Z"
    }, {
       title: "Comparative satisfaction data",
-      nodeRef: "workspace:\/\/SpacesStore\/0a9d4b82-520e-466b-a36a-b1f17f36e403",
+      guid: "0a9d4b82-520e-466b-a36a-b1f17f36e403",
       creator: {
          forename: "Carol",
          surname: "Lee",
@@ -3405,7 +3410,7 @@ define({
       modified: "2015-08-12T15:47:10.000Z"
    }, {
       title: "Contracts Finder",
-      nodeRef: "workspace:\/\/SpacesStore\/ba8c2d24-2c5a-4555-8361-7c9713730507",
+      guid: "ba8c2d24-2c5a-4555-8361-7c9713730507",
       creator: {
          forename: "Dennis",
          surname: "Gibson",
@@ -3420,7 +3425,7 @@ define({
       modified: "2015-06-09T06:45:19.000Z"
    }, {
       title: "Headline Percentiles",
-      nodeRef: "workspace:\/\/SpacesStore\/63db6473-5d7c-4151-b398-2b22afc3f5f7",
+      guid: "63db6473-5d7c-4151-b398-2b22afc3f5f7",
       creator: {
          forename: "Donald",
          surname: "Freeman",
@@ -3435,7 +3440,7 @@ define({
       modified: "2014-11-24T08:43:45.000Z"
    }, {
       title: "Planning Applications Schema",
-      nodeRef: "workspace:\/\/SpacesStore\/f0c924aa-e206-4ca7-9bd1-c68f2a24b9a8",
+      guid: "f0c924aa-e206-4ca7-9bd1-c68f2a24b9a8",
       creator: {
          forename: "Douglas",
          surname: "Wells",
@@ -3450,7 +3455,7 @@ define({
       modified: "2015-03-22T14:54:34.000Z"
    }, {
       title: "Staff of Social Services",
-      nodeRef: "workspace:\/\/SpacesStore\/84c02331-48e9-4a29-8793-8bcf2d4ccd6e",
+      guid: "84c02331-48e9-4a29-8793-8bcf2d4ccd6e",
       creator: {
          forename: "Walter",
          surname: "Stevens",
@@ -3465,7 +3470,7 @@ define({
       modified: "2014-08-28T19:37:13.000Z"
    }, {
       title: "Archived Info",
-      nodeRef: "workspace:\/\/SpacesStore\/f34b66c8-f0b9-44b6-b51a-d2d6a81c5261",
+      guid: "f34b66c8-f0b9-44b6-b51a-d2d6a81c5261",
       creator: {
          forename: "Phillip",
          surname: "Hayes",
@@ -3480,7 +3485,7 @@ define({
       modified: "2015-05-29T07:39:37.000Z"
    }, {
       title: "Public Health Funerals",
-      nodeRef: "workspace:\/\/SpacesStore\/e4901b56-af19-4851-af8e-661aee986089",
+      guid: "e4901b56-af19-4851-af8e-661aee986089",
       creator: {
          forename: "Patricia",
          surname: "Howell",
@@ -3495,7 +3500,7 @@ define({
       modified: "2015-05-01T06:44:32.000Z"
    }, {
       title: "North Yorkshire",
-      nodeRef: "workspace:\/\/SpacesStore\/34850722-f724-4c8d-a663-3d9e44913107",
+      guid: "34850722-f724-4c8d-a663-3d9e44913107",
       creator: {
          forename: "Martha",
          surname: "Little",
@@ -3510,7 +3515,7 @@ define({
       modified: "2015-01-19T05:56:37.000Z"
    }, {
       title: "Freshwater and Marine Biological Surveys England",
-      nodeRef: "workspace:\/\/SpacesStore\/d7960f86-115b-4a4d-9f35-9a8c503668cf",
+      guid: "d7960f86-115b-4a4d-9f35-9a8c503668cf",
       creator: {
          forename: "Debra",
          surname: "Olson",
@@ -3525,7 +3530,7 @@ define({
       modified: "2015-03-29T06:04:21.000Z"
    }, {
       title: "CSV metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/ef73da33-8d36-44e3-b6ff-a757a34bc360",
+      guid: "ef73da33-8d36-44e3-b6ff-a757a34bc360",
       creator: {
          forename: "Frank",
          surname: "Spencer",
@@ -3540,7 +3545,7 @@ define({
       modified: "2014-08-23T13:49:29.000Z"
    }, {
       title: "Senior staff datasets",
-      nodeRef: "workspace:\/\/SpacesStore\/1146d013-fee3-4b0e-8efb-ae51bc7ed5e1",
+      guid: "1146d013-fee3-4b0e-8efb-ae51bc7ed5e1",
       creator: {
          forename: "Virginia",
          surname: "Lane",
@@ -3555,7 +3560,7 @@ define({
       modified: "2015-03-24T20:12:53.000Z"
    }, {
       title: "Glossary of terms used",
-      nodeRef: "workspace:\/\/SpacesStore\/f71b733e-21a7-4f40-b24f-0804894f6879",
+      guid: "f71b733e-21a7-4f40-b24f-0804894f6879",
       creator: {
          forename: "Billy",
          surname: "Richards",
@@ -3570,7 +3575,7 @@ define({
       modified: "2015-04-06T23:47:11.000Z"
    }, {
       title: "Data Dictonary",
-      nodeRef: "workspace:\/\/SpacesStore\/b01b3961-ac3c-480a-b5a0-b5eb8ccbfc93",
+      guid: "b01b3961-ac3c-480a-b5a0-b5eb8ccbfc93",
       creator: {
          forename: "Edward",
          surname: "Mitchell",
@@ -3585,7 +3590,7 @@ define({
       modified: "2015-03-12T15:19:45.000Z"
    }, {
       title: "Bracknell Forest",
-      nodeRef: "workspace:\/\/SpacesStore\/b0ab6026-5c7f-4ac7-8006-781a02e5cc0e",
+      guid: "b0ab6026-5c7f-4ac7-8006-781a02e5cc0e",
       creator: {
          forename: "Bonnie",
          surname: "James",
@@ -3600,7 +3605,7 @@ define({
       modified: "2015-02-20T03:02:17.000Z"
    }, {
       title: "Election results",
-      nodeRef: "workspace:\/\/SpacesStore\/9ea6aa68-36ea-4168-b4d8-8d374a0e3f27",
+      guid: "9ea6aa68-36ea-4168-b4d8-8d374a0e3f27",
       creator: {
          forename: "Julia",
          surname: "Ramos",
@@ -3615,7 +3620,7 @@ define({
       modified: "2015-07-23T18:49:28.000Z"
    }, {
       title: "Plymouth Public Toilets",
-      nodeRef: "workspace:\/\/SpacesStore\/c2cc2c97-c365-4403-bdbf-2fe784dd1835",
+      guid: "c2cc2c97-c365-4403-bdbf-2fe784dd1835",
       creator: {
          forename: "James",
          surname: "Reyes",
@@ -3630,7 +3635,7 @@ define({
       modified: "2014-09-23T01:01:22.000Z"
    }, {
       title: "Deprivation of Liberty Safeguards",
-      nodeRef: "workspace:\/\/SpacesStore\/dbb58370-efb2-46fa-8447-e0b990243400",
+      guid: "dbb58370-efb2-46fa-8447-e0b990243400",
       creator: {
          forename: "Diana",
          surname: "Harris",
@@ -3645,7 +3650,7 @@ define({
       modified: "2015-02-09T18:57:16.000Z"
    }, {
       title: "ArcGIS Service Directory",
-      nodeRef: "workspace:\/\/SpacesStore\/94eabe9c-7656-41cc-9e6e-cc4d9a3ca8ae",
+      guid: "94eabe9c-7656-41cc-9e6e-cc4d9a3ca8ae",
       creator: {
          forename: "Jerry",
          surname: "Hansen",
@@ -3660,7 +3665,7 @@ define({
       modified: "2014-11-03T20:00:44.000Z"
    }, {
       title: "Public perceptions",
-      nodeRef: "workspace:\/\/SpacesStore\/4c035fb5-a460-4d78-82e4-381a96a69978",
+      guid: "4c035fb5-a460-4d78-82e4-381a96a69978",
       creator: {
          forename: "Tina",
          surname: "Olson",
@@ -3675,7 +3680,7 @@ define({
       modified: "2015-07-25T16:11:26.000Z"
    }, {
       title: "Car Leasehold",
-      nodeRef: "workspace:\/\/SpacesStore\/6e519de0-5579-4462-85fd-18eb74401b4e",
+      guid: "6e519de0-5579-4462-85fd-18eb74401b4e",
       creator: {
          forename: "Ryan",
          surname: "Lawrence",
@@ -3690,7 +3695,7 @@ define({
       modified: "2014-12-14T10:09:44.000Z"
    }, {
       title: "DBS upheld and not upheld dispute volumes",
-      nodeRef: "workspace:\/\/SpacesStore\/bb5a1ce3-b55a-4845-9e45-94ce99b4b936",
+      guid: "bb5a1ce3-b55a-4845-9e45-94ce99b4b936",
       creator: {
          forename: "Joshua",
          surname: "Turner",
@@ -3705,7 +3710,7 @@ define({
       modified: "2014-09-22T20:51:10.000Z"
    }, {
       title: "Ethnicity Percentiles",
-      nodeRef: "workspace:\/\/SpacesStore\/862e6aa7-dbc1-4e94-9a9d-f069dba3ac61",
+      guid: "862e6aa7-dbc1-4e94-9a9d-f069dba3ac61",
       creator: {
          forename: "Lois",
          surname: "Wright",
@@ -3720,7 +3725,7 @@ define({
       modified: "2015-06-06T13:51:57.000Z"
    }, {
       title: "Northamtonshire Butterfly Records",
-      nodeRef: "workspace:\/\/SpacesStore\/b9433330-cfc4-4844-b744-d889356e3523",
+      guid: "b9433330-cfc4-4844-b744-d889356e3523",
       creator: {
          forename: "Gary",
          surname: "Perry",
@@ -3735,7 +3740,7 @@ define({
       modified: "2014-11-27T06:37:06.000Z"
    }, {
       title: "Appointments by religion",
-      nodeRef: "workspace:\/\/SpacesStore\/fc446092-615b-4a23-a18d-31ffb3187a04",
+      guid: "fc446092-615b-4a23-a18d-31ffb3187a04",
       creator: {
          forename: "Nancy",
          surname: "Weaver",
@@ -3750,7 +3755,7 @@ define({
       modified: "2014-11-11T16:32:20.000Z"
    }, {
       title: "Statement of financial position",
-      nodeRef: "workspace:\/\/SpacesStore\/2b75230c-4401-4196-afcb-9e7f39712290",
+      guid: "2b75230c-4401-4196-afcb-9e7f39712290",
       creator: {
          forename: "Martin",
          surname: "Phillips",
@@ -3765,7 +3770,7 @@ define({
       modified: "2014-09-17T16:18:30.000Z"
    }, {
       title: "Mid Devon",
-      nodeRef: "workspace:\/\/SpacesStore\/fe6be7a8-f34b-4cd9-bcbf-7a8e6557c07e",
+      guid: "fe6be7a8-f34b-4cd9-bcbf-7a8e6557c07e",
       creator: {
          forename: "Joseph",
          surname: "Davis",
@@ -3780,7 +3785,7 @@ define({
       modified: "2015-04-11T16:13:07.000Z"
    }, {
       title: "Web Page",
-      nodeRef: "workspace:\/\/SpacesStore\/2b90f761-3fc1-4f68-9833-b7ff3bffed6c",
+      guid: "2b90f761-3fc1-4f68-9833-b7ff3bffed6c",
       creator: {
          forename: "William",
          surname: "Sanchez",
@@ -3795,7 +3800,7 @@ define({
       modified: "2014-09-24T18:23:56.000Z"
    }, {
       title: "Pay multiples",
-      nodeRef: "workspace:\/\/SpacesStore\/42f1f4b3-5b0d-4bdc-844a-ebf400d9d15c",
+      guid: "42f1f4b3-5b0d-4bdc-844a-ebf400d9d15c",
       creator: {
          forename: "Lois",
          surname: "Stone",
@@ -3810,7 +3815,7 @@ define({
       modified: "2015-05-24T03:57:13.000Z"
    }, {
       title: "Spring Index",
-      nodeRef: "workspace:\/\/SpacesStore\/356252de-f4e4-44f4-ae75-2e4ae7c2e37a",
+      guid: "356252de-f4e4-44f4-ae75-2e4ae7c2e37a",
       creator: {
          forename: "Ruby",
          surname: "Schmidt",
@@ -3825,7 +3830,7 @@ define({
       modified: "2014-12-23T15:58:32.000Z"
    }, {
       title: "Leicester City",
-      nodeRef: "workspace:\/\/SpacesStore\/c52e7e32-4f92-4e74-a4d7-0f3ebfbf702b",
+      guid: "c52e7e32-4f92-4e74-a4d7-0f3ebfbf702b",
       creator: {
          forename: "Arthur",
          surname: "Thomas",
@@ -3840,7 +3845,7 @@ define({
       modified: "2014-09-28T10:27:11.000Z"
    }, {
       title: "External appointments by age",
-      nodeRef: "workspace:\/\/SpacesStore\/9fd4b5ee-b35a-4647-80c0-e72591813524",
+      guid: "9fd4b5ee-b35a-4647-80c0-e72591813524",
       creator: {
          forename: "Stephanie",
          surname: "Grant",
@@ -3855,7 +3860,7 @@ define({
       modified: "2014-08-23T18:45:22.000Z"
    }, {
       title: "Data Definitions",
-      nodeRef: "workspace:\/\/SpacesStore\/654398fd-1173-465a-b1fe-c657bfa10e9f",
+      guid: "654398fd-1173-465a-b1fe-c657bfa10e9f",
       creator: {
          forename: "Heather",
          surname: "Riley",
@@ -3870,7 +3875,7 @@ define({
       modified: "2014-09-12T08:20:09.000Z"
    }, {
       title: "NHS IC Senior Staff Data",
-      nodeRef: "workspace:\/\/SpacesStore\/235a1c4d-b922-469d-9495-0208aeeea690",
+      guid: "235a1c4d-b922-469d-9495-0208aeeea690",
       creator: {
          forename: "Diana",
          surname: "Cooper",
@@ -3885,7 +3890,7 @@ define({
       modified: "2015-02-20T01:00:39.000Z"
    }, {
       title: "CycleNetXChange Background",
-      nodeRef: "workspace:\/\/SpacesStore\/1e232d73-0613-46a2-8f6d-c9536dcd4a00",
+      guid: "1e232d73-0613-46a2-8f6d-c9536dcd4a00",
       creator: {
          forename: "Aaron",
          surname: "Ramos",
@@ -3900,7 +3905,7 @@ define({
       modified: "2014-11-19T10:49:56.000Z"
    }, {
       title: "Lottery Grants search",
-      nodeRef: "workspace:\/\/SpacesStore\/692e4b48-3a6c-4aae-8c96-d97feaa052ff",
+      guid: "692e4b48-3a6c-4aae-8c96-d97feaa052ff",
       creator: {
          forename: "Clarence",
          surname: "Arnold",
@@ -3915,7 +3920,7 @@ define({
       modified: "2015-05-31T10:44:53.000Z"
    }, {
       title: "Highway Schemes",
-      nodeRef: "workspace:\/\/SpacesStore\/39db1237-d521-4702-a8e6-cac4ea85b184",
+      guid: "39db1237-d521-4702-a8e6-cac4ea85b184",
       creator: {
          forename: "Harold",
          surname: "Carr",
@@ -3930,7 +3935,7 @@ define({
       modified: "2015-07-24T09:24:03.000Z"
    }, {
       title: "National crime recording standard",
-      nodeRef: "workspace:\/\/SpacesStore\/bb7160ea-f82d-4b26-b399-d53a5b186706",
+      guid: "bb7160ea-f82d-4b26-b399-d53a5b186706",
       creator: {
          forename: "Frances",
          surname: "Taylor",
@@ -3945,7 +3950,7 @@ define({
       modified: "2014-10-07T10:34:21.000Z"
    }, {
       title: "NHS Occupation Codes",
-      nodeRef: "workspace:\/\/SpacesStore\/7611aa32-4148-4781-bb4d-3344470ac222",
+      guid: "7611aa32-4148-4781-bb4d-3344470ac222",
       creator: {
          forename: "Eric",
          surname: "Alvarez",
@@ -3960,7 +3965,7 @@ define({
       modified: "2014-10-11T23:44:01.000Z"
    }, {
       title: "National Archives Onsite Satisfaction",
-      nodeRef: "workspace:\/\/SpacesStore\/9759dbb3-6901-488b-8abb-18b1679a1877",
+      guid: "9759dbb3-6901-488b-8abb-18b1679a1877",
       creator: {
          forename: "Eugene",
          surname: "Welch",
@@ -3975,7 +3980,7 @@ define({
       modified: "2015-03-12T09:03:39.000Z"
    }, {
       title: "The National Pain Audit Data File",
-      nodeRef: "workspace:\/\/SpacesStore\/fc421ac6-9ed6-41ea-a864-7e812ef6a534",
+      guid: "fc421ac6-9ed6-41ea-a864-7e812ef6a534",
       creator: {
          forename: "Martha",
          surname: "Mills",
@@ -3990,7 +3995,7 @@ define({
       modified: "2015-07-25T13:58:38.000Z"
    }, {
       title: "Traveline National Dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/1ee1d994-b188-4746-8080-ba2359151087",
+      guid: "1ee1d994-b188-4746-8080-ba2359151087",
       creator: {
          forename: "Lisa",
          surname: "Burton",
@@ -4005,7 +4010,7 @@ define({
       modified: "2015-02-02T18:00:12.000Z"
    }, {
       title: "Navy Junior Staff dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/7d29e4d4-a31a-444a-b47c-3d0a6fe9b4a0",
+      guid: "7d29e4d4-a31a-444a-b47c-3d0a6fe9b4a0",
       creator: {
          forename: "Helen",
          surname: "Ramos",
@@ -4020,7 +4025,7 @@ define({
       modified: "2015-03-21T04:09:32.000Z"
    }, {
       title: "Senior Manager Salaries",
-      nodeRef: "workspace:\/\/SpacesStore\/ae6b2296-47b2-44b4-ad13-17a8c5069920",
+      guid: "ae6b2296-47b2-44b4-ad13-17a8c5069920",
       creator: {
          forename: "Stephen",
          surname: "Burke",
@@ -4035,7 +4040,7 @@ define({
       modified: "2015-01-16T16:22:20.000Z"
    }, {
       title: "Waltham Forest",
-      nodeRef: "workspace:\/\/SpacesStore\/ebfabfd6-3c8b-4d0f-91d1-3636e6271fee",
+      guid: "ebfabfd6-3c8b-4d0f-91d1-3636e6271fee",
       creator: {
          forename: "Arthur",
          surname: "Fields",
@@ -4050,7 +4055,7 @@ define({
       modified: "2015-04-18T15:20:13.000Z"
    }, {
       title: "Links to the data",
-      nodeRef: "workspace:\/\/SpacesStore\/0a8265ca-fb8b-49d6-8b81-954d5ac97ac7",
+      guid: "0a8265ca-fb8b-49d6-8b81-954d5ac97ac7",
       creator: {
          forename: "Johnny",
          surname: "Rodriguez",
@@ -4065,7 +4070,7 @@ define({
       modified: "2015-07-18T22:07:33.000Z"
    }, {
       title: "Cycle Hub map data",
-      nodeRef: "workspace:\/\/SpacesStore\/5c854c23-3c5b-4bd0-8d5a-edb6c19eba97",
+      guid: "5c854c23-3c5b-4bd0-8d5a-edb6c19eba97",
       creator: {
          forename: "Kimberly",
          surname: "Howard",
@@ -4080,7 +4085,7 @@ define({
       modified: "2014-08-30T11:29:29.000Z"
    }, {
       title: "Schedule of meeting dates",
-      nodeRef: "workspace:\/\/SpacesStore\/68522747-26ea-487f-bdcb-2871cf6b78e9",
+      guid: "68522747-26ea-487f-bdcb-2871cf6b78e9",
       creator: {
          forename: "Tammy",
          surname: "Tucker",
@@ -4095,7 +4100,7 @@ define({
       modified: "2015-06-29T13:00:32.000Z"
    }, {
       title: "Non visa nationals",
-      nodeRef: "workspace:\/\/SpacesStore\/035456cd-e744-4c2a-94d7-771de0a8818b",
+      guid: "035456cd-e744-4c2a-94d7-771de0a8818b",
       creator: {
          forename: "Louis",
          surname: "Simpson",
@@ -4110,7 +4115,7 @@ define({
       modified: "2015-02-09T19:27:22.000Z"
    }, {
       title: "Local Authority Housing Data",
-      nodeRef: "workspace:\/\/SpacesStore\/79b60dc1-20d5-4f24-98c6-d06d3abb0a05",
+      guid: "79b60dc1-20d5-4f24-98c6-d06d3abb0a05",
       creator: {
          forename: "Rose",
          surname: "Edwards",
@@ -4125,7 +4130,7 @@ define({
       modified: "2015-01-09T04:07:59.000Z"
    }, {
       title: "Appointments by sexual orientation",
-      nodeRef: "workspace:\/\/SpacesStore\/9080efd6-57be-46bc-813a-577c7df4f353",
+      guid: "9080efd6-57be-46bc-813a-577c7df4f353",
       creator: {
          forename: "Shirley",
          surname: "Peters",
@@ -4140,7 +4145,7 @@ define({
       modified: "2015-06-22T11:47:05.000Z"
    }, {
       title: "Information Systems output specification",
-      nodeRef: "workspace:\/\/SpacesStore\/6efb70bc-3b1c-4d73-a77d-9c85f8cd971f",
+      guid: "6efb70bc-3b1c-4d73-a77d-9c85f8cd971f",
       creator: {
          forename: "Jacqueline",
          surname: "Black",
@@ -4155,7 +4160,7 @@ define({
       modified: "2015-07-16T20:01:19.000Z"
    }, {
       title: "Rain gauge rainfall data",
-      nodeRef: "workspace:\/\/SpacesStore\/c685d4e5-baa0-4e21-9dff-9f17395290e3",
+      guid: "c685d4e5-baa0-4e21-9dff-9f17395290e3",
       creator: {
          forename: "Carlos",
          surname: "Nichols",
@@ -4170,7 +4175,7 @@ define({
       modified: "2015-07-10T13:30:05.000Z"
    }, {
       title: "Chief of Joint Operations",
-      nodeRef: "workspace:\/\/SpacesStore\/0a857cfb-393d-4d77-afd8-508aa9493681",
+      guid: "0a857cfb-393d-4d77-afd8-508aa9493681",
       creator: {
          forename: "Carl",
          surname: "Howard",
@@ -4185,7 +4190,7 @@ define({
       modified: "2015-02-09T17:44:04.000Z"
    }, {
       title: "Epping Forest",
-      nodeRef: "workspace:\/\/SpacesStore\/a23a334f-2b02-4075-ba05-5cb36d6471f7",
+      guid: "a23a334f-2b02-4075-ba05-5cb36d6471f7",
       creator: {
          forename: "Anna",
          surname: "Weaver",
@@ -4200,7 +4205,7 @@ define({
       modified: "2015-07-05T18:54:26.000Z"
    }, {
       title: "Adapting Your Home",
-      nodeRef: "workspace:\/\/SpacesStore\/be06608b-8397-4758-94b7-79970ef273df",
+      guid: "be06608b-8397-4758-94b7-79970ef273df",
       creator: {
          forename: "Samuel",
          surname: "Sanders",
@@ -4215,7 +4220,7 @@ define({
       modified: "2015-02-12T12:17:35.000Z"
    }, {
       title: "Expenditure information",
-      nodeRef: "workspace:\/\/SpacesStore\/ae97087a-6c7c-4b9a-916c-e5bb2835208a",
+      guid: "ae97087a-6c7c-4b9a-916c-e5bb2835208a",
       creator: {
          forename: "Alice",
          surname: "Richards",
@@ -4230,7 +4235,7 @@ define({
       modified: "2015-08-08T02:21:16.000Z"
    }, {
       title: "NHS Immunisation Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/12a4ba6d-1571-4c73-a8cb-28099c1b4d10",
+      guid: "12a4ba6d-1571-4c73-a8cb-28099c1b4d10",
       creator: {
          forename: "Jane",
          surname: "Hart",
@@ -4245,7 +4250,7 @@ define({
       modified: "2015-07-15T04:31:08.000Z"
    }, {
       title: "Social worker",
-      nodeRef: "workspace:\/\/SpacesStore\/c99ede97-cdcf-4090-af17-aa75f3ff933d",
+      guid: "c99ede97-cdcf-4090-af17-aa75f3ff933d",
       creator: {
          forename: "Michael",
          surname: "Reynolds",
@@ -4260,7 +4265,7 @@ define({
       modified: "2014-10-05T23:43:43.000Z"
    }, {
       title: "CMR WAL radio data",
-      nodeRef: "workspace:\/\/SpacesStore\/41fb7b05-5d1b-4e84-818e-39b4edce1cc5",
+      guid: "41fb7b05-5d1b-4e84-818e-39b4edce1cc5",
       creator: {
          forename: "Victor",
          surname: "Collins",
@@ -4275,7 +4280,7 @@ define({
       modified: "2014-12-01T00:44:52.000Z"
    }, {
       title: "Junior roles",
-      nodeRef: "workspace:\/\/SpacesStore\/2c897ea3-c8df-4a21-a5a9-cce36c157312",
+      guid: "2c897ea3-c8df-4a21-a5a9-cce36c157312",
       creator: {
          forename: "Kimberly",
          surname: "Franklin",
@@ -4290,7 +4295,7 @@ define({
       modified: "2015-05-23T08:09:47.000Z"
    }, {
       title: "Disciplinary cases by gender",
-      nodeRef: "workspace:\/\/SpacesStore\/245f5c74-bd5d-48a9-96be-356fb1ac1583",
+      guid: "245f5c74-bd5d-48a9-96be-356fb1ac1583",
       creator: {
          forename: "Kevin",
          surname: "Roberts",
@@ -4305,7 +4310,7 @@ define({
       modified: "2014-09-29T05:56:57.000Z"
    }, {
       title: "Meeting with external organisations",
-      nodeRef: "workspace:\/\/SpacesStore\/5a1f713a-4b22-4702-b52a-72df2561b29c",
+      guid: "5a1f713a-4b22-4702-b52a-72df2561b29c",
       creator: {
          forename: "Diane",
          surname: "Gonzales",
@@ -4320,7 +4325,7 @@ define({
       modified: "2014-08-27T19:05:25.000Z"
    }, {
       title: "November return",
-      nodeRef: "workspace:\/\/SpacesStore\/6f20aaba-304d-4e5b-a553-e143123d9799",
+      guid: "6f20aaba-304d-4e5b-a553-e143123d9799",
       creator: {
          forename: "Charles",
          surname: "Hudson",
@@ -4335,7 +4340,7 @@ define({
       modified: "2015-03-05T03:49:00.000Z"
    }, {
       title: "Live Tables on Housebuilding",
-      nodeRef: "workspace:\/\/SpacesStore\/56c548ba-d162-4938-995c-0c4e722d3225",
+      guid: "56c548ba-d162-4938-995c-0c4e722d3225",
       creator: {
          forename: "Kevin",
          surname: "Hudson",
@@ -4350,7 +4355,7 @@ define({
       modified: "2014-12-12T04:23:13.000Z"
    }, {
       title: "External appointments by ethnicity",
-      nodeRef: "workspace:\/\/SpacesStore\/041140b6-1a52-4a59-8f86-2efe96b0942a",
+      guid: "041140b6-1a52-4a59-8f86-2efe96b0942a",
       creator: {
          forename: "Cynthia",
          surname: "Sims",
@@ -4365,7 +4370,7 @@ define({
       modified: "2015-05-13T09:45:38.000Z"
    }, {
       title: "User guide",
-      nodeRef: "workspace:\/\/SpacesStore\/18909452-f047-41e2-80f0-6905c56655d8",
+      guid: "18909452-f047-41e2-80f0-6905c56655d8",
       creator: {
          forename: "Kelly",
          surname: "Hunter",
@@ -4380,7 +4385,7 @@ define({
       modified: "2015-05-31T13:49:41.000Z"
    }, {
       title: "Dynamic Maps",
-      nodeRef: "workspace:\/\/SpacesStore\/45924d13-3d2a-45b6-84a8-c01a9f00498d",
+      guid: "45924d13-3d2a-45b6-84a8-c01a9f00498d",
       creator: {
          forename: "Gerald",
          surname: "Sullivan",
@@ -4395,7 +4400,7 @@ define({
       modified: "2015-07-30T14:10:03.000Z"
    }, {
       title: "List of projects",
-      nodeRef: "workspace:\/\/SpacesStore\/7f82f917-8c09-4b69-8b38-611487b80e40",
+      guid: "7f82f917-8c09-4b69-8b38-611487b80e40",
       creator: {
          forename: "Louis",
          surname: "Wilson",
@@ -4410,7 +4415,7 @@ define({
       modified: "2015-05-23T21:01:42.000Z"
    }, {
       title: "Companies House Find Information",
-      nodeRef: "workspace:\/\/SpacesStore\/48a214bc-1a45-498e-8696-41abbf5aa4e9",
+      guid: "48a214bc-1a45-498e-8696-41abbf5aa4e9",
       creator: {
          forename: "Douglas",
          surname: "Bailey",
@@ -4425,7 +4430,7 @@ define({
       modified: "2015-05-01T23:39:50.000Z"
    }, {
       title: "Green Belt",
-      nodeRef: "workspace:\/\/SpacesStore\/e246e3df-0e39-4e6c-8345-dce83c99d685",
+      guid: "e246e3df-0e39-4e6c-8345-dce83c99d685",
       creator: {
          forename: "Joan",
          surname: "Lane",
@@ -4440,7 +4445,7 @@ define({
       modified: "2014-10-20T05:07:33.000Z"
    }, {
       title: "National Archives Online Satisfaction",
-      nodeRef: "workspace:\/\/SpacesStore\/8217ca64-5995-4ca6-8dc2-b5eebc7d8a39",
+      guid: "8217ca64-5995-4ca6-8dc2-b5eebc7d8a39",
       creator: {
          forename: "Carlos",
          surname: "Morrison",
@@ -4455,7 +4460,7 @@ define({
       modified: "2014-10-21T21:59:47.000Z"
    }, {
       title: "SLDC Car Park webpage",
-      nodeRef: "workspace:\/\/SpacesStore\/d8a77d54-6026-444a-b15c-831117adcdce",
+      guid: "d8a77d54-6026-444a-b15c-831117adcdce",
       creator: {
          forename: "Richard",
          surname: "White",
@@ -4470,7 +4475,7 @@ define({
       modified: "2014-11-27T02:02:53.000Z"
    }, {
       title: "Internal appointments by age",
-      nodeRef: "workspace:\/\/SpacesStore\/fc4bc7ee-799d-40d8-b8c2-75ada28f7ccb",
+      guid: "fc4bc7ee-799d-40d8-b8c2-75ada28f7ccb",
       creator: {
          forename: "Stephen",
          surname: "Mason",
@@ -4485,7 +4490,7 @@ define({
       modified: "2015-01-17T23:04:16.000Z"
    }, {
       title: "Further information",
-      nodeRef: "workspace:\/\/SpacesStore\/1bea5adf-37a8-4c5c-83b6-fb6f5f772f6b",
+      guid: "1bea5adf-37a8-4c5c-83b6-fb6f5f772f6b",
       creator: {
          forename: "Julie",
          surname: "Rogers",
@@ -4500,7 +4505,7 @@ define({
       modified: "2015-04-12T19:22:03.000Z"
    }, {
       title: "Overall Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/2299c296-7b95-4332-8deb-b80e53532f48",
+      guid: "2299c296-7b95-4332-8deb-b80e53532f48",
       creator: {
          forename: "Steve",
          surname: "Stephens",
@@ -4515,7 +4520,7 @@ define({
       modified: "2015-07-31T11:08:38.000Z"
    }, {
       title: "ICT Spend",
-      nodeRef: "workspace:\/\/SpacesStore\/c43a8f09-a170-4b3d-92b9-5f3c87309835",
+      guid: "c43a8f09-a170-4b3d-92b9-5f3c87309835",
       creator: {
          forename: "Patricia",
          surname: "Carpenter",
@@ -4530,7 +4535,7 @@ define({
       modified: "2014-10-06T10:49:17.000Z"
    }, {
       title: "Internal applicants by sexual orientation",
-      nodeRef: "workspace:\/\/SpacesStore\/ae5aae87-89d1-4be5-9410-08bdcd4e9b0c",
+      guid: "ae5aae87-89d1-4be5-9410-08bdcd4e9b0c",
       creator: {
          forename: "Katherine",
          surname: "Watson",
@@ -4545,7 +4550,7 @@ define({
       modified: "2015-05-27T16:45:44.000Z"
    }, {
       title: "GM Accident Data",
-      nodeRef: "workspace:\/\/SpacesStore\/3d181135-cfaa-4621-8f53-7e3c8908ad8a",
+      guid: "3d181135-cfaa-4621-8f53-7e3c8908ad8a",
       creator: {
          forename: "Wanda",
          surname: "Payne",
@@ -4560,7 +4565,7 @@ define({
       modified: "2015-01-20T15:40:49.000Z"
    }, {
       title: "Crime data portal",
-      nodeRef: "workspace:\/\/SpacesStore\/cf805923-2a51-4c55-9c49-65ded6b04a8e",
+      guid: "cf805923-2a51-4c55-9c49-65ded6b04a8e",
       creator: {
          forename: "Diana",
          surname: "Stephens",
@@ -4575,7 +4580,7 @@ define({
       modified: "2015-06-26T04:04:26.000Z"
    }, {
       title: "Doing Business With Us",
-      nodeRef: "workspace:\/\/SpacesStore\/e1653aa2-3c54-4dc8-8e52-f87be60ce0ff",
+      guid: "e1653aa2-3c54-4dc8-8e52-f87be60ce0ff",
       creator: {
          forename: "Debra",
          surname: "Peters",
@@ -4590,7 +4595,7 @@ define({
       modified: "2015-02-07T01:15:06.000Z"
    }, {
       title: "Organisation Footnotes",
-      nodeRef: "workspace:\/\/SpacesStore\/e6c025cb-0e45-4c1a-b7f6-1da5d7c3bf29",
+      guid: "e6c025cb-0e45-4c1a-b7f6-1da5d7c3bf29",
       creator: {
          forename: "Christina",
          surname: "Washington",
@@ -4605,7 +4610,7 @@ define({
       modified: "2014-08-21T19:52:25.000Z"
    }, {
       title: "User satisfaction data",
-      nodeRef: "workspace:\/\/SpacesStore\/41f7c8f0-8f6f-4546-b40e-c4a6ca27123a",
+      guid: "41f7c8f0-8f6f-4546-b40e-c4a6ca27123a",
       creator: {
          forename: "Kathy",
          surname: "Moreno",
@@ -4620,7 +4625,7 @@ define({
       modified: "2015-08-15T08:14:52.000Z"
    }, {
       title: "West Lindsey",
-      nodeRef: "workspace:\/\/SpacesStore\/9186e15e-77a9-40e3-876b-bcaedb72fb0d",
+      guid: "9186e15e-77a9-40e3-876b-bcaedb72fb0d",
       creator: {
          forename: "Robin",
          surname: "Reyes",
@@ -4635,7 +4640,7 @@ define({
       modified: "2015-06-13T23:07:33.000Z"
    }, {
       title: "Procurement webpage",
-      nodeRef: "workspace:\/\/SpacesStore\/353f70af-2635-42de-ae1f-fe1fb410ab09",
+      guid: "353f70af-2635-42de-ae1f-fe1fb410ab09",
       creator: {
          forename: "Joseph",
          surname: "Oliver",
@@ -4650,7 +4655,7 @@ define({
       modified: "2014-08-22T06:15:19.000Z"
    }, {
       title: "Vehicle theft",
-      nodeRef: "workspace:\/\/SpacesStore\/4e26b35a-12ff-41b3-8a33-094e80a7df7e",
+      guid: "4e26b35a-12ff-41b3-8a33-094e80a7df7e",
       creator: {
          forename: "Brian",
          surname: "Reynolds",
@@ -4665,7 +4670,7 @@ define({
       modified: "2015-08-10T23:53:10.000Z"
    }, {
       title: "Guide to Home Office statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/8907bb1b-0f00-47e4-b854-208696086424",
+      guid: "8907bb1b-0f00-47e4-b854-208696086424",
       creator: {
          forename: "Marilyn",
          surname: "Shaw",
@@ -4680,7 +4685,7 @@ define({
       modified: "2014-12-18T04:51:37.000Z"
    }, {
       title: "Single data list",
-      nodeRef: "workspace:\/\/SpacesStore\/0ba4e914-fb39-4e55-99f6-f2316c1cdca0",
+      guid: "0ba4e914-fb39-4e55-99f6-f2316c1cdca0",
       creator: {
          forename: "Lori",
          surname: "Simmons",
@@ -4695,7 +4700,7 @@ define({
       modified: "2014-10-19T08:59:31.000Z"
    }, {
       title: "Defence Equipment Support Junior staff dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/70730650-bf91-480f-b733-00818a735bfe",
+      guid: "70730650-bf91-480f-b733-00818a735bfe",
       creator: {
          forename: "Tina",
          surname: "Cruz",
@@ -4710,7 +4715,7 @@ define({
       modified: "2015-06-12T11:41:49.000Z"
    }, {
       title: "Notes for datasets",
-      nodeRef: "workspace:\/\/SpacesStore\/127cd11a-c08e-4f04-a458-6a9d900d27cd",
+      guid: "127cd11a-c08e-4f04-a458-6a9d900d27cd",
       creator: {
          forename: "George",
          surname: "Moreno",
@@ -4725,7 +4730,7 @@ define({
       modified: "2014-12-07T10:10:58.000Z"
    }, {
       title: "NPDA data field description",
-      nodeRef: "workspace:\/\/SpacesStore\/128a8977-b20c-4123-bfae-66df158f4bc7",
+      guid: "128a8977-b20c-4123-bfae-66df158f4bc7",
       creator: {
          forename: "Harry",
          surname: "Jackson",
@@ -4740,7 +4745,7 @@ define({
       modified: "2015-04-12T04:25:12.000Z"
    }, {
       title: "Further Information",
-      nodeRef: "workspace:\/\/SpacesStore\/cf1d80eb-fc6b-4c7b-9dbf-fceea3dee8f5",
+      guid: "cf1d80eb-fc6b-4c7b-9dbf-fceea3dee8f5",
       creator: {
          forename: "Lois",
          surname: "Daniels",
@@ -4755,7 +4760,7 @@ define({
       modified: "2014-09-14T11:14:54.000Z"
    }, {
       title: "Pest control",
-      nodeRef: "workspace:\/\/SpacesStore\/3a137c50-5788-4292-bc19-0cad9a3f7bc4",
+      guid: "3a137c50-5788-4292-bc19-0cad9a3f7bc4",
       creator: {
          forename: "Johnny",
          surname: "Snyder",
@@ -4770,7 +4775,7 @@ define({
       modified: "2015-06-01T00:09:45.000Z"
    }, {
       title: "Metadata Records",
-      nodeRef: "workspace:\/\/SpacesStore\/b3d86b2c-6561-4e12-bbd6-6b3eee10ba72",
+      guid: "b3d86b2c-6561-4e12-bbd6-6b3eee10ba72",
       creator: {
          forename: "Kelly",
          surname: "Stewart",
@@ -4785,7 +4790,7 @@ define({
       modified: "2015-07-29T18:29:37.000Z"
    }, {
       title: "North Somerset",
-      nodeRef: "workspace:\/\/SpacesStore\/4c94e3e0-c5b4-4fce-8602-12ab0f7bf2f5",
+      guid: "4c94e3e0-c5b4-4fce-8602-12ab0f7bf2f5",
       creator: {
          forename: "Joyce",
          surname: "Torres",
@@ -4800,7 +4805,7 @@ define({
       modified: "2015-08-03T22:15:01.000Z"
    }, {
       title: "SPARQL end point",
-      nodeRef: "workspace:\/\/SpacesStore\/0ca16123-c486-495a-ae44-d19821972ca3",
+      guid: "0ca16123-c486-495a-ae44-d19821972ca3",
       creator: {
          forename: "Steve",
          surname: "Palmer",
@@ -4815,7 +4820,7 @@ define({
       modified: "2014-12-05T18:16:08.000Z"
    }, {
       title: "Glossary Document",
-      nodeRef: "workspace:\/\/SpacesStore\/2cd9201c-ffd5-46d4-adda-a05a278d7504",
+      guid: "2cd9201c-ffd5-46d4-adda-a05a278d7504",
       creator: {
          forename: "Christine",
          surname: "Cunningham",
@@ -4830,7 +4835,7 @@ define({
       modified: "2014-09-24T07:14:45.000Z"
    }, {
       title: "Information for patients webpage",
-      nodeRef: "workspace:\/\/SpacesStore\/21102026-55c6-487c-bb17-665505455978",
+      guid: "21102026-55c6-487c-bb17-665505455978",
       creator: {
          forename: "Carl",
          surname: "Greene",
@@ -4845,7 +4850,7 @@ define({
       modified: "2015-06-01T13:05:24.000Z"
    }, {
       title: "FOI and EIR Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/25a87029-ee7c-4ab8-82ca-cc123ff87ccd",
+      guid: "25a87029-ee7c-4ab8-82ca-cc123ff87ccd",
       creator: {
          forename: "Anne",
          surname: "Perkins",
@@ -4860,7 +4865,7 @@ define({
       modified: "2015-06-14T12:59:39.000Z"
    }, {
       title: "Parking income and expenditure",
-      nodeRef: "workspace:\/\/SpacesStore\/63da24d9-7d92-4e76-890f-29e1365bb933",
+      guid: "63da24d9-7d92-4e76-890f-29e1365bb933",
       creator: {
          forename: "Ralph",
          surname: "Kelley",
@@ -4875,7 +4880,7 @@ define({
       modified: "2015-03-04T09:35:27.000Z"
    }, {
       title: "Met Office Download service",
-      nodeRef: "workspace:\/\/SpacesStore\/1f48902c-059b-4df1-8323-e8bdfc9ad243",
+      guid: "1f48902c-059b-4df1-8323-e8bdfc9ad243",
       creator: {
          forename: "William",
          surname: "Hunter",
@@ -4890,7 +4895,7 @@ define({
       modified: "2014-11-11T19:55:33.000Z"
    }, {
       title: "Open Data Public Toilets",
-      nodeRef: "workspace:\/\/SpacesStore\/a7fc398d-cca3-4fa9-895d-7934dd909e8d",
+      guid: "a7fc398d-cca3-4fa9-895d-7934dd909e8d",
       creator: {
          forename: "Steve",
          surname: "Martinez",
@@ -4905,7 +4910,7 @@ define({
       modified: "2014-09-10T10:05:44.000Z"
    }, {
       title: "Senior staff salary",
-      nodeRef: "workspace:\/\/SpacesStore\/48b2e48d-33c9-401f-a3fd-54fc945c8340",
+      guid: "48b2e48d-33c9-401f-a3fd-54fc945c8340",
       creator: {
          forename: "Sara",
          surname: "Jenkins",
@@ -4920,7 +4925,7 @@ define({
       modified: "2015-01-08T06:29:34.000Z"
    }, {
       title: "General Fund",
-      nodeRef: "workspace:\/\/SpacesStore\/6db16f82-0b88-4177-ada8-cdec7c0fe1b0",
+      guid: "6db16f82-0b88-4177-ada8-cdec7c0fe1b0",
       creator: {
          forename: "Harry",
          surname: "Harvey",
@@ -4935,7 +4940,7 @@ define({
       modified: "2014-12-28T19:46:59.000Z"
    }, {
       title: "Outcomes open data notes",
-      nodeRef: "workspace:\/\/SpacesStore\/bd8513ee-1684-4557-aa46-b7ae8279e6a5",
+      guid: "bd8513ee-1684-4557-aa46-b7ae8279e6a5",
       creator: {
          forename: "John",
          surname: "Hanson",
@@ -4950,7 +4955,7 @@ define({
       modified: "2014-11-19T22:45:50.000Z"
    }, {
       title: "Questions by Year Group",
-      nodeRef: "workspace:\/\/SpacesStore\/0c247b69-b429-49ba-968c-91899610b308",
+      guid: "0c247b69-b429-49ba-968c-91899610b308",
       creator: {
          forename: "Sara",
          surname: "Murphy",
@@ -4965,7 +4970,7 @@ define({
       modified: "2015-07-02T08:18:43.000Z"
    }, {
       title: "External appointments by disability",
-      nodeRef: "workspace:\/\/SpacesStore\/b74fca7d-7488-491b-ae55-090b96a2ec88",
+      guid: "b74fca7d-7488-491b-ae55-090b96a2ec88",
       creator: {
          forename: "Andrew",
          surname: "Burke",
@@ -4980,7 +4985,7 @@ define({
       modified: "2014-12-14T23:22:53.000Z"
    }, {
       title: "Bury Main Report",
-      nodeRef: "workspace:\/\/SpacesStore\/f3d91be4-db74-4c3e-8e07-467be8bfb8f1",
+      guid: "f3d91be4-db74-4c3e-8e07-467be8bfb8f1",
       creator: {
          forename: "Cynthia",
          surname: "Andrews",
@@ -4995,7 +5000,7 @@ define({
       modified: "2015-05-15T09:06:17.000Z"
    }, {
       title: "Property crime",
-      nodeRef: "workspace:\/\/SpacesStore\/64b72093-e8de-4bb6-9ad0-52791cdb28b8",
+      guid: "64b72093-e8de-4bb6-9ad0-52791cdb28b8",
       creator: {
          forename: "Martha",
          surname: "Cole",
@@ -5010,7 +5015,7 @@ define({
       modified: "2015-06-01T14:38:11.000Z"
    }, {
       title: "ASAP data file",
-      nodeRef: "workspace:\/\/SpacesStore\/6e62ab39-5ad7-4e80-abec-e7e9511aba28",
+      guid: "6e62ab39-5ad7-4e80-abec-e7e9511aba28",
       creator: {
          forename: "Sandra",
          surname: "Adams",
@@ -5025,7 +5030,7 @@ define({
       modified: "2014-12-11T16:25:43.000Z"
    }, {
       title: "North West Leicestershire",
-      nodeRef: "workspace:\/\/SpacesStore\/c44cc4e9-4c14-4cf5-a8b4-b98010fe0fae",
+      guid: "c44cc4e9-4c14-4cf5-a8b4-b98010fe0fae",
       creator: {
          forename: "Steven",
          surname: "Jordan",
@@ -5040,7 +5045,7 @@ define({
       modified: "2015-03-17T10:59:09.000Z"
    }, {
       title: "Live Tables on Homlessness",
-      nodeRef: "workspace:\/\/SpacesStore\/fea5d35b-ef88-4705-8467-8f114af94dcd",
+      guid: "fea5d35b-ef88-4705-8467-8f114af94dcd",
       creator: {
          forename: "Carl",
          surname: "Bowman",
@@ -5055,7 +5060,7 @@ define({
       modified: "2015-05-12T18:58:09.000Z"
    }, {
       title: "Hospitality",
-      nodeRef: "workspace:\/\/SpacesStore\/54f87267-4f27-4f1b-b3ff-4f52134bac2d",
+      guid: "54f87267-4f27-4f1b-b3ff-4f52134bac2d",
       creator: {
          forename: "Helen",
          surname: "White",
@@ -5070,7 +5075,7 @@ define({
       modified: "2015-01-13T09:28:13.000Z"
    }, {
       title: "Notable Species",
-      nodeRef: "workspace:\/\/SpacesStore\/1adfc438-5ed7-4707-90ca-f3d3156855e9",
+      guid: "1adfc438-5ed7-4707-90ca-f3d3156855e9",
       creator: {
          forename: "Lisa",
          surname: "Jones",
@@ -5085,7 +5090,7 @@ define({
       modified: "2015-01-30T20:27:54.000Z"
    }, {
       title: "Car Parks data schema",
-      nodeRef: "workspace:\/\/SpacesStore\/3c35f373-86a5-479c-8578-d86ad5236462",
+      guid: "3c35f373-86a5-479c-8578-d86ad5236462",
       creator: {
          forename: "Jeremy",
          surname: "Brown",
@@ -5100,7 +5105,7 @@ define({
       modified: "2015-03-30T14:55:35.000Z"
    }, {
       title: "Senior Officals hospitality",
-      nodeRef: "workspace:\/\/SpacesStore\/aad19d44-fb17-46ae-8358-848b07f56eb5",
+      guid: "aad19d44-fb17-46ae-8358-848b07f56eb5",
       creator: {
          forename: "Cynthia",
          surname: "Marshall",
@@ -5115,7 +5120,7 @@ define({
       modified: "2014-09-13T12:01:36.000Z"
    }, {
       title: "Asset recovery data",
-      nodeRef: "workspace:\/\/SpacesStore\/3fede33f-db84-42bb-8d3e-540744dc24e9",
+      guid: "3fede33f-db84-42bb-8d3e-540744dc24e9",
       creator: {
          forename: "Kathleen",
          surname: "Day",
@@ -5130,7 +5135,7 @@ define({
       modified: "2014-10-13T09:22:58.000Z"
    }, {
       title: "Trust Website",
-      nodeRef: "workspace:\/\/SpacesStore\/ee835f80-6a3f-42e1-845c-5a4e18f67c4d",
+      guid: "ee835f80-6a3f-42e1-845c-5a4e18f67c4d",
       creator: {
          forename: "Paula",
          surname: "Riley",
@@ -5145,7 +5150,7 @@ define({
       modified: "2014-10-31T19:56:13.000Z"
    }, {
       title: "Bus Stopping Points",
-      nodeRef: "workspace:\/\/SpacesStore\/b1092366-fe14-42e7-9ee5-35fcc0611571",
+      guid: "b1092366-fe14-42e7-9ee5-35fcc0611571",
       creator: {
          forename: "Henry",
          surname: "Hanson",
@@ -5160,7 +5165,7 @@ define({
       modified: "2015-08-18T08:40:59.000Z"
    }, {
       title: "Empty Residential Properties",
-      nodeRef: "workspace:\/\/SpacesStore\/b921fedc-15e2-491d-8ed1-868dcc3565e5",
+      guid: "b921fedc-15e2-491d-8ed1-868dcc3565e5",
       creator: {
          forename: "Anthony",
          surname: "Simmons",
@@ -5175,7 +5180,7 @@ define({
       modified: "2014-08-29T08:47:16.000Z"
    }, {
       title: "Look up tables",
-      nodeRef: "workspace:\/\/SpacesStore\/df47aa8b-8479-4eca-9833-187a46335b90",
+      guid: "df47aa8b-8479-4eca-9833-187a46335b90",
       creator: {
          forename: "Edward",
          surname: "Henry",
@@ -5190,7 +5195,7 @@ define({
       modified: "2015-07-11T05:37:48.000Z"
    }, {
       title: "Brighton and Hove",
-      nodeRef: "workspace:\/\/SpacesStore\/468fb907-eac7-4de7-a4c2-d0957a7f1d93",
+      guid: "468fb907-eac7-4de7-a4c2-d0957a7f1d93",
       creator: {
          forename: "Brian",
          surname: "Nelson",
@@ -5205,7 +5210,7 @@ define({
       modified: "2015-04-07T01:24:45.000Z"
    }, {
       title: "Impact on NHS resources",
-      nodeRef: "workspace:\/\/SpacesStore\/9ba67eb1-b577-402e-8b71-c809dc18ed68",
+      guid: "9ba67eb1-b577-402e-8b71-c809dc18ed68",
       creator: {
          forename: "Fred",
          surname: "Porter",
@@ -5220,7 +5225,7 @@ define({
       modified: "2015-06-27T13:06:06.000Z"
    }, {
       title: "Major Qualification Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/ee9d4284-3ad5-4769-9d56-a26af2cb53d1",
+      guid: "ee9d4284-3ad5-4769-9d56-a26af2cb53d1",
       creator: {
          forename: "Wanda",
          surname: "Jackson",
@@ -5235,7 +5240,7 @@ define({
       modified: "2015-06-16T01:16:59.000Z"
    }, {
       title: "Map viewer",
-      nodeRef: "workspace:\/\/SpacesStore\/c7b67511-9a1e-4228-8568-5c5681871253",
+      guid: "c7b67511-9a1e-4228-8568-5c5681871253",
       creator: {
          forename: "Elizabeth",
          surname: "Richards",
@@ -5250,7 +5255,7 @@ define({
       modified: "2014-10-05T06:45:33.000Z"
    }, {
       title: "CMR NI telecoms data",
-      nodeRef: "workspace:\/\/SpacesStore\/cdfe3ae5-7eff-451d-aaa8-a983d686569e",
+      guid: "cdfe3ae5-7eff-451d-aaa8-a983d686569e",
       creator: {
          forename: "Todd",
          surname: "Castillo",
@@ -5265,7 +5270,7 @@ define({
       modified: "2014-09-10T04:50:58.000Z"
    }, {
       title: "Harlow",
-      nodeRef: "workspace:\/\/SpacesStore\/4c13ba6f-a398-4a37-85e0-77d8694caa4d",
+      guid: "4c13ba6f-a398-4a37-85e0-77d8694caa4d",
       creator: {
          forename: "Deborah",
          surname: "Watkins",
@@ -5280,7 +5285,7 @@ define({
       modified: "2014-08-27T17:25:56.000Z"
    }, {
       title: "The Single Data List",
-      nodeRef: "workspace:\/\/SpacesStore\/b4a271a2-1d78-4fe8-8203-4a69599b40cb",
+      guid: "b4a271a2-1d78-4fe8-8203-4a69599b40cb",
       creator: {
          forename: "Joan",
          surname: "Bennett",
@@ -5295,7 +5300,7 @@ define({
       modified: "2014-09-26T14:34:48.000Z"
    }, {
       title: "Malvern Hills",
-      nodeRef: "workspace:\/\/SpacesStore\/8032d150-f7b3-443e-8913-3432604c3e7e",
+      guid: "8032d150-f7b3-443e-8913-3432604c3e7e",
       creator: {
          forename: "Irene",
          surname: "Henry",
@@ -5310,7 +5315,7 @@ define({
       modified: "2015-06-11T16:30:13.000Z"
    }, {
       title: "Public Health Funerals",
-      nodeRef: "workspace:\/\/SpacesStore\/d18b5a6e-d7f0-4fa1-85c1-5457a37186ff",
+      guid: "d18b5a6e-d7f0-4fa1-85c1-5457a37186ff",
       creator: {
          forename: "Emily",
          surname: "Gonzalez",
@@ -5325,7 +5330,7 @@ define({
       modified: "2014-09-13T04:56:22.000Z"
    }, {
       title: "Internal appointments by ethnicity",
-      nodeRef: "workspace:\/\/SpacesStore\/7d7775ac-0ee7-4434-a6a6-ca6ed89aa30e",
+      guid: "7d7775ac-0ee7-4434-a6a6-ca6ed89aa30e",
       creator: {
          forename: "Betty",
          surname: "Baker",
@@ -5340,7 +5345,7 @@ define({
       modified: "2014-12-16T10:05:15.000Z"
    }, {
       title: "June return",
-      nodeRef: "workspace:\/\/SpacesStore\/77cc1785-7854-4772-868a-424149dec9cd",
+      guid: "77cc1785-7854-4772-868a-424149dec9cd",
       creator: {
          forename: "Shirley",
          surname: "Adams",
@@ -5355,7 +5360,7 @@ define({
       modified: "2014-10-30T19:58:28.000Z"
    }, {
       title: "Hospitality received by special advisers",
-      nodeRef: "workspace:\/\/SpacesStore\/99564c35-6895-479f-a18d-9296e6902f3f",
+      guid: "99564c35-6895-479f-a18d-9296e6902f3f",
       creator: {
          forename: "Ronald",
          surname: "Allen",
@@ -5370,7 +5375,7 @@ define({
       modified: "2015-04-20T01:59:46.000Z"
    }, {
       title: "Bury Transport Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/52756c58-e36b-4552-bbcf-22b5176a5659",
+      guid: "52756c58-e36b-4552-bbcf-22b5176a5659",
       creator: {
          forename: "Sandra",
          surname: "Rose",
@@ -5385,7 +5390,7 @@ define({
       modified: "2015-06-16T02:47:00.000Z"
    }, {
       title: "North East Derbyshire",
-      nodeRef: "workspace:\/\/SpacesStore\/afe9f0e4-46a8-4a4d-979e-a31c3596f1b8",
+      guid: "afe9f0e4-46a8-4a4d-979e-a31c3596f1b8",
       creator: {
          forename: "Jose",
          surname: "Reyes",
@@ -5400,7 +5405,7 @@ define({
       modified: "2014-09-24T17:21:16.000Z"
    }, {
       title: "ODA British Council",
-      nodeRef: "workspace:\/\/SpacesStore\/35b48774-2caa-4d7c-8475-dc5cc6f46b79",
+      guid: "35b48774-2caa-4d7c-8475-dc5cc6f46b79",
       creator: {
          forename: "Jacqueline",
          surname: "Bishop",
@@ -5415,7 +5420,7 @@ define({
       modified: "2015-01-15T12:32:52.000Z"
    }, {
       title: "Electoral divisions map",
-      nodeRef: "workspace:\/\/SpacesStore\/acb7c7a8-d98c-4531-8af4-0ea956e99e26",
+      guid: "acb7c7a8-d98c-4531-8af4-0ea956e99e26",
       creator: {
          forename: "Amanda",
          surname: "Webb",
@@ -5430,7 +5435,7 @@ define({
       modified: "2014-12-06T21:19:24.000Z"
    }, {
       title: "HM Treasury Gas use",
-      nodeRef: "workspace:\/\/SpacesStore\/4c390166-4f89-47f8-b7f1-d3d78512854f",
+      guid: "4c390166-4f89-47f8-b7f1-d3d78512854f",
       creator: {
          forename: "Peter",
          surname: "Coleman",
@@ -5445,7 +5450,7 @@ define({
       modified: "2015-06-07T22:49:04.000Z"
    }, {
       title: "Housebuilding Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/8ec76aea-e1d8-4040-a60b-8db9ee3075b6",
+      guid: "8ec76aea-e1d8-4040-a60b-8db9ee3075b6",
       creator: {
          forename: "Harold",
          surname: "Richardson",
@@ -5460,7 +5465,7 @@ define({
       modified: "2015-02-14T15:20:16.000Z"
    }, {
       title: "Housing Stock Summary",
-      nodeRef: "workspace:\/\/SpacesStore\/5670c406-1458-4635-87d5-f5107eb7e06e",
+      guid: "5670c406-1458-4635-87d5-f5107eb7e06e",
       creator: {
          forename: "Shirley",
          surname: "Berry",
@@ -5475,7 +5480,7 @@ define({
       modified: "2015-02-08T07:18:26.000Z"
    }, {
       title: "Oldham Transport Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/3163819d-d5c9-4f85-8654-ffa644567088",
+      guid: "3163819d-d5c9-4f85-8654-ffa644567088",
       creator: {
          forename: "Gloria",
          surname: "Clark",
@@ -5490,7 +5495,7 @@ define({
       modified: "2014-10-10T05:28:13.000Z"
    }, {
       title: "External applicants by age",
-      nodeRef: "workspace:\/\/SpacesStore\/f96444a7-a18d-45f3-8be3-4c42c421ecbf",
+      guid: "f96444a7-a18d-45f3-8be3-4c42c421ecbf",
       creator: {
          forename: "Eugene",
          surname: "Grant",
@@ -5505,7 +5510,7 @@ define({
       modified: "2015-06-27T18:51:25.000Z"
    }, {
       title: "Business plan indicators",
-      nodeRef: "workspace:\/\/SpacesStore\/ac72b45e-8592-4da0-b8c6-86fd141fe44f",
+      guid: "ac72b45e-8592-4da0-b8c6-86fd141fe44f",
       creator: {
          forename: "Frances",
          surname: "Sanchez",
@@ -5520,7 +5525,7 @@ define({
       modified: "2014-10-03T11:36:02.000Z"
    }, {
       title: "Adult trend tables",
-      nodeRef: "workspace:\/\/SpacesStore\/43fdaebe-d678-4d5a-8fc7-a13fda0e5ce1",
+      guid: "43fdaebe-d678-4d5a-8fc7-a13fda0e5ce1",
       creator: {
          forename: "Lillian",
          surname: "Alexander",
@@ -5535,7 +5540,7 @@ define({
       modified: "2015-08-16T15:10:20.000Z"
    }, {
       title: "Tower Hamlets",
-      nodeRef: "workspace:\/\/SpacesStore\/44fe8a31-d406-45c0-bb20-967f706b4f44",
+      guid: "44fe8a31-d406-45c0-bb20-967f706b4f44",
       creator: {
          forename: "Lillian",
          surname: "Kelley",
@@ -5550,7 +5555,7 @@ define({
       modified: "2014-12-06T19:56:21.000Z"
    }, {
       title: "Transparency data at HEFCE",
-      nodeRef: "workspace:\/\/SpacesStore\/a0a69260-c6d7-4c4c-bab3-b291de922329",
+      guid: "a0a69260-c6d7-4c4c-bab3-b291de922329",
       creator: {
          forename: "Elizabeth",
          surname: "Perez",
@@ -5565,7 +5570,7 @@ define({
       modified: "2015-08-11T14:26:29.000Z"
    }, {
       title: "Hospital Consultants in England",
-      nodeRef: "workspace:\/\/SpacesStore\/4f294ed8-a68d-4ad0-82a1-3157ff4facd2",
+      guid: "4f294ed8-a68d-4ad0-82a1-3157ff4facd2",
       creator: {
          forename: "Donna",
          surname: "Parker",
@@ -5580,7 +5585,7 @@ define({
       modified: "2014-10-29T12:56:06.000Z"
    }, {
       title: "Procurement Contracts",
-      nodeRef: "workspace:\/\/SpacesStore\/2cc3467d-832e-43d7-91e9-9f3dc9c3fdf1",
+      guid: "2cc3467d-832e-43d7-91e9-9f3dc9c3fdf1",
       creator: {
          forename: "Debra",
          surname: "Burke",
@@ -5595,7 +5600,7 @@ define({
       modified: "2014-12-05T07:35:16.000Z"
    }, {
       title: "Community centres",
-      nodeRef: "workspace:\/\/SpacesStore\/f7c3b6d0-6b0c-45ee-9cba-c8ad9b04cde5",
+      guid: "f7c3b6d0-6b0c-45ee-9cba-c8ad9b04cde5",
       creator: {
          forename: "Ruth",
          surname: "Reyes",
@@ -5610,7 +5615,7 @@ define({
       modified: "2014-10-06T14:06:01.000Z"
    }, {
       title: "Hampshire Long Distance Routes",
-      nodeRef: "workspace:\/\/SpacesStore\/2caf2cf6-e707-477c-b977-44e1207737d7",
+      guid: "2caf2cf6-e707-477c-b977-44e1207737d7",
       creator: {
          forename: "Wayne",
          surname: "Martinez",
@@ -5625,7 +5630,7 @@ define({
       modified: "2015-08-17T18:03:32.000Z"
    }, {
       title: "Procurement Transparency",
-      nodeRef: "workspace:\/\/SpacesStore\/fdcc0050-6e4a-43cd-8f23-5878b13608f1",
+      guid: "fdcc0050-6e4a-43cd-8f23-5878b13608f1",
       creator: {
          forename: "Lillian",
          surname: "Thompson",
@@ -5640,7 +5645,7 @@ define({
       modified: "2014-11-10T11:27:34.000Z"
    }, {
       title: "HSCIC Social Care",
-      nodeRef: "workspace:\/\/SpacesStore\/8bd18079-2936-46f6-9dd1-818aea73af59",
+      guid: "8bd18079-2936-46f6-9dd1-818aea73af59",
       creator: {
          forename: "Janice",
          surname: "Black",
@@ -5655,7 +5660,7 @@ define({
       modified: "2015-01-22T21:00:27.000Z"
    }, {
       title: "Community Directory homepage",
-      nodeRef: "workspace:\/\/SpacesStore\/bcbf17cf-ef54-405f-9db6-6be79f4b1b9b",
+      guid: "bcbf17cf-ef54-405f-9db6-6be79f4b1b9b",
       creator: {
          forename: "Matthew",
          surname: "Vasquez",
@@ -5670,7 +5675,7 @@ define({
       modified: "2015-04-18T06:55:52.000Z"
    }, {
       title: "Pharmacy headquarters",
-      nodeRef: "workspace:\/\/SpacesStore\/b2e7362a-2cc6-4257-9630-656fb3dbb0da",
+      guid: "b2e7362a-2cc6-4257-9630-656fb3dbb0da",
       creator: {
          forename: "Diane",
          surname: "Davis",
@@ -5685,7 +5690,7 @@ define({
       modified: "2015-04-19T22:24:26.000Z"
    }, {
       title: "Public health funeral data",
-      nodeRef: "workspace:\/\/SpacesStore\/9e9bd8e8-e626-4d7f-bf77-8337c9597dab",
+      guid: "9e9bd8e8-e626-4d7f-bf77-8337c9597dab",
       creator: {
          forename: "Maria",
          surname: "George",
@@ -5700,7 +5705,7 @@ define({
       modified: "2015-02-11T23:02:41.000Z"
    }, {
       title: "GPC Country Identifier Codes",
-      nodeRef: "workspace:\/\/SpacesStore\/5f012e13-03a3-46d9-bb4e-21471186ff1f",
+      guid: "5f012e13-03a3-46d9-bb4e-21471186ff1f",
       creator: {
          forename: "Robert",
          surname: "Mccoy",
@@ -5715,7 +5720,7 @@ define({
       modified: "2014-10-13T10:21:02.000Z"
    }, {
       title: "Estates service delivery plan",
-      nodeRef: "workspace:\/\/SpacesStore\/bb062451-edc8-4897-8c1f-9966143ce824",
+      guid: "bb062451-edc8-4897-8c1f-9966143ce824",
       creator: {
          forename: "Kelly",
          surname: "Dixon",
@@ -5730,7 +5735,7 @@ define({
       modified: "2015-07-29T02:08:20.000Z"
    }, {
       title: "Illustrative FTC template",
-      nodeRef: "workspace:\/\/SpacesStore\/e1e876ee-1db3-4c0d-959e-30335198d917",
+      guid: "e1e876ee-1db3-4c0d-959e-30335198d917",
       creator: {
          forename: "Ralph",
          surname: "Perry",
@@ -5745,7 +5750,7 @@ define({
       modified: "2014-10-18T12:19:58.000Z"
    }, {
       title: "SSNAP Homepage",
-      nodeRef: "workspace:\/\/SpacesStore\/52310c38-7c44-4a80-b1cd-5bd628edd769",
+      guid: "52310c38-7c44-4a80-b1cd-5bd628edd769",
       creator: {
          forename: "Ruth",
          surname: "Gonzalez",
@@ -5760,7 +5765,7 @@ define({
       modified: "2015-02-16T19:14:16.000Z"
    }, {
       title: "Planning Application Schema",
-      nodeRef: "workspace:\/\/SpacesStore\/c4a2d1c9-80ed-4ced-b251-0bb14c7200d0",
+      guid: "c4a2d1c9-80ed-4ced-b251-0bb14c7200d0",
       creator: {
          forename: "George",
          surname: "Jacobs",
@@ -5775,7 +5780,7 @@ define({
       modified: "2014-08-31T01:41:10.000Z"
    }, {
       title: "Police force area",
-      nodeRef: "workspace:\/\/SpacesStore\/64f77e4b-455e-4980-b2fa-1b07393c20bf",
+      guid: "64f77e4b-455e-4980-b2fa-1b07393c20bf",
       creator: {
          forename: "Carlos",
          surname: "Moreno",
@@ -5790,7 +5795,7 @@ define({
       modified: "2015-04-04T21:26:10.000Z"
    }, {
       title: "Translation Costs",
-      nodeRef: "workspace:\/\/SpacesStore\/4a7da3d4-30a8-4f70-b02c-ff6ed14c538c",
+      guid: "4a7da3d4-30a8-4f70-b02c-ff6ed14c538c",
       creator: {
          forename: "Denise",
          surname: "Oliver",
@@ -5805,7 +5810,7 @@ define({
       modified: "2014-09-25T18:01:00.000Z"
    }, {
       title: "Rhondda Cynon Taf",
-      nodeRef: "workspace:\/\/SpacesStore\/cd5a079d-75f6-42f8-a60d-c8488e828f41",
+      guid: "cd5a079d-75f6-42f8-a60d-c8488e828f41",
       creator: {
          forename: "Albert",
          surname: "Ramirez",
@@ -5820,7 +5825,7 @@ define({
       modified: "2015-02-07T19:22:26.000Z"
    }, {
       title: "Capital and other commitments",
-      nodeRef: "workspace:\/\/SpacesStore\/6ec0c8ed-227b-4f6b-ae26-1e69def854c4",
+      guid: "6ec0c8ed-227b-4f6b-ae26-1e69def854c4",
       creator: {
          forename: "Christopher",
          surname: "Coleman",
@@ -5835,7 +5840,7 @@ define({
       modified: "2015-05-27T02:24:30.000Z"
    }, {
       title: "File description",
-      nodeRef: "workspace:\/\/SpacesStore\/3de50169-6c6c-47a4-8a81-a84b433be009",
+      guid: "3de50169-6c6c-47a4-8a81-a84b433be009",
       creator: {
          forename: "Raymond",
          surname: "Cooper",
@@ -5850,7 +5855,7 @@ define({
       modified: "2015-01-27T01:06:34.000Z"
    }, {
       title: "Appointments by disability",
-      nodeRef: "workspace:\/\/SpacesStore\/a43d7bda-8403-40e7-ba3d-2a56c2f55d50",
+      guid: "a43d7bda-8403-40e7-ba3d-2a56c2f55d50",
       creator: {
          forename: "Harry",
          surname: "Nguyen",
@@ -5865,7 +5870,7 @@ define({
       modified: "2015-06-22T01:12:20.000Z"
    }, {
       title: "UK Blue Flag Beaches",
-      nodeRef: "workspace:\/\/SpacesStore\/9dec3e02-bb77-4c23-ba4f-3f5d9e1c560e",
+      guid: "9dec3e02-bb77-4c23-ba4f-3f5d9e1c560e",
       creator: {
          forename: "Diane",
          surname: "Young",
@@ -5880,7 +5885,7 @@ define({
       modified: "2014-08-23T23:23:23.000Z"
    }, {
       title: "Shetland Islands",
-      nodeRef: "workspace:\/\/SpacesStore\/83c4ce48-dfdd-42ab-9ea4-8d7779e1bb48",
+      guid: "83c4ce48-dfdd-42ab-9ea4-8d7779e1bb48",
       creator: {
          forename: "Kathleen",
          surname: "Gibson",
@@ -5895,7 +5900,7 @@ define({
       modified: "2015-05-28T09:27:34.000Z"
    }, {
       title: "Conservation Area Metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/9be5c189-8c0f-482f-b3dd-0dc658e50ac0",
+      guid: "9be5c189-8c0f-482f-b3dd-0dc658e50ac0",
       creator: {
          forename: "Bonnie",
          surname: "Jordan",
@@ -5910,7 +5915,7 @@ define({
       modified: "2015-06-10T01:29:06.000Z"
    }, {
       title: "National Lung Cancer Audit",
-      nodeRef: "workspace:\/\/SpacesStore\/88e6556d-1a14-448b-a9ad-baafd647ae1c",
+      guid: "88e6556d-1a14-448b-a9ad-baafd647ae1c",
       creator: {
          forename: "Stephen",
          surname: "Moreno",
@@ -5925,7 +5930,7 @@ define({
       modified: "2014-09-17T20:40:06.000Z"
    }, {
       title: "South Staffordshire",
-      nodeRef: "workspace:\/\/SpacesStore\/7bf799f4-5393-4337-9754-26ebca745da4",
+      guid: "7bf799f4-5393-4337-9754-26ebca745da4",
       creator: {
          forename: "Edward",
          surname: "Martinez",
@@ -5940,7 +5945,7 @@ define({
       modified: "2015-01-05T19:22:37.000Z"
    }, {
       title: "Immigration and asylum appeals",
-      nodeRef: "workspace:\/\/SpacesStore\/aaa06c53-2704-4ef0-a808-9cfb381e0e73",
+      guid: "aaa06c53-2704-4ef0-a808-9cfb381e0e73",
       creator: {
          forename: "David",
          surname: "Smith",
@@ -5955,7 +5960,7 @@ define({
       modified: "2014-10-02T21:47:53.000Z"
    }, {
       title: "National Greenspace Map WMS",
-      nodeRef: "workspace:\/\/SpacesStore\/0959500b-5511-42a2-956e-0ce350b596d7",
+      guid: "0959500b-5511-42a2-956e-0ce350b596d7",
       creator: {
          forename: "Victor",
          surname: "Sullivan",
@@ -5970,7 +5975,7 @@ define({
       modified: "2015-02-28T19:38:43.000Z"
    }, {
       title: "Organogram Series",
-      nodeRef: "workspace:\/\/SpacesStore\/a5b6f845-8175-43a2-8174-cb98a3997a30",
+      guid: "a5b6f845-8175-43a2-8174-cb98a3997a30",
       creator: {
          forename: "Adam",
          surname: "Graham",
@@ -5985,7 +5990,7 @@ define({
       modified: "2015-05-09T15:36:05.000Z"
    }, {
       title: "Detailed Transition Plan",
-      nodeRef: "workspace:\/\/SpacesStore\/6bf1e911-827f-4aea-b945-e10ac70788b8",
+      guid: "6bf1e911-827f-4aea-b945-e10ac70788b8",
       creator: {
          forename: "Amy",
          surname: "Hansen",
@@ -6000,7 +6005,7 @@ define({
       modified: "2014-11-23T04:20:54.000Z"
    }, {
       title: "Remuneration for board members",
-      nodeRef: "workspace:\/\/SpacesStore\/9d00010a-9d17-4e30-9cd4-1563749abf29",
+      guid: "9d00010a-9d17-4e30-9cd4-1563749abf29",
       creator: {
          forename: "Melissa",
          surname: "Gardner",
@@ -6015,7 +6020,7 @@ define({
       modified: "2014-09-17T16:16:19.000Z"
    }, {
       title: "Meusydd Parcio Zip",
-      nodeRef: "workspace:\/\/SpacesStore\/01fd008e-ba71-4e71-b1fe-9b65f1799e49",
+      guid: "01fd008e-ba71-4e71-b1fe-9b65f1799e49",
       creator: {
          forename: "Nancy",
          surname: "Gonzales",
@@ -6030,7 +6035,7 @@ define({
       modified: "2014-11-25T13:48:01.000Z"
    }, {
       title: "Resource locator",
-      nodeRef: "workspace:\/\/SpacesStore\/3821de4b-3979-42cf-8e54-9c5c60ec4f1b",
+      guid: "3821de4b-3979-42cf-8e54-9c5c60ec4f1b",
       creator: {
          forename: "Raymond",
          surname: "Hawkins",
@@ -6045,7 +6050,7 @@ define({
       modified: "2014-08-30T22:20:49.000Z"
    }, {
       title: "College Accounts cvs",
-      nodeRef: "workspace:\/\/SpacesStore\/32c924aa-6be7-455b-9770-fccf568381c2",
+      guid: "32c924aa-6be7-455b-9770-fccf568381c2",
       creator: {
          forename: "Dorothy",
          surname: "Sims",
@@ -6060,7 +6065,7 @@ define({
       modified: "2015-01-06T17:37:37.000Z"
    }, {
       title: "Constitution of Council",
-      nodeRef: "workspace:\/\/SpacesStore\/adb7df3d-ce07-44ea-a94e-a17814ac4e5f",
+      guid: "adb7df3d-ce07-44ea-a94e-a17814ac4e5f",
       creator: {
          forename: "David",
          surname: "Gardner",
@@ -6075,7 +6080,7 @@ define({
       modified: "2015-03-23T13:23:55.000Z"
    }, {
       title: "Organisational Chart",
-      nodeRef: "workspace:\/\/SpacesStore\/f1aaabe7-0fee-4596-966e-9d53d1c4c706",
+      guid: "f1aaabe7-0fee-4596-966e-9d53d1c4c706",
       creator: {
          forename: "Judy",
          surname: "Bishop",
@@ -6090,7 +6095,7 @@ define({
       modified: "2015-04-19T13:46:25.000Z"
    }, {
       title: "Air Quality Management Area",
-      nodeRef: "workspace:\/\/SpacesStore\/6753695e-ab98-4381-859c-e76edc42195a",
+      guid: "6753695e-ab98-4381-859c-e76edc42195a",
       creator: {
          forename: "Aaron",
          surname: "Alvarez",
@@ -6105,7 +6110,7 @@ define({
       modified: "2015-06-27T09:27:06.000Z"
    }, {
       title: "Grievance cases",
-      nodeRef: "workspace:\/\/SpacesStore\/abeb6470-986b-4635-b3ba-ae016fa18f27",
+      guid: "abeb6470-986b-4635-b3ba-ae016fa18f27",
       creator: {
          forename: "Theresa",
          surname: "Turner",
@@ -6120,7 +6125,7 @@ define({
       modified: "2015-01-29T08:11:54.000Z"
    }, {
       title: "Defence Equipment and Support",
-      nodeRef: "workspace:\/\/SpacesStore\/190cfacb-c3aa-4a34-9673-d982fdae5eb1",
+      guid: "190cfacb-c3aa-4a34-9673-d982fdae5eb1",
       creator: {
          forename: "Howard",
          surname: "Berry",
@@ -6135,7 +6140,7 @@ define({
       modified: "2015-03-19T05:34:29.000Z"
    }, {
       title: "PDF publication",
-      nodeRef: "workspace:\/\/SpacesStore\/26bf59fc-a27e-42ae-b09e-95821bc79fbc",
+      guid: "26bf59fc-a27e-42ae-b09e-95821bc79fbc",
       creator: {
          forename: "Mark",
          surname: "Henderson",
@@ -6150,7 +6155,7 @@ define({
       modified: "2014-10-22T11:18:45.000Z"
    }, {
       title: "Channels in Devon JSON",
-      nodeRef: "workspace:\/\/SpacesStore\/64642863-8d7c-4f0a-b43c-1eac0e66c81d",
+      guid: "64642863-8d7c-4f0a-b43c-1eac0e66c81d",
       creator: {
          forename: "Earl",
          surname: "Edwards",
@@ -6165,7 +6170,7 @@ define({
       modified: "2015-02-07T17:09:30.000Z"
    }, {
       title: "RBWM budget monitoring",
-      nodeRef: "workspace:\/\/SpacesStore\/ef0e35bf-915d-42b4-88e9-80931835beb4",
+      guid: "ef0e35bf-915d-42b4-88e9-80931835beb4",
       creator: {
          forename: "Ruby",
          surname: "Perry",
@@ -6180,7 +6185,7 @@ define({
       modified: "2014-09-15T21:21:12.000Z"
    }, {
       title: "Fenland",
-      nodeRef: "workspace:\/\/SpacesStore\/99937ffd-4862-46d4-b5e2-043272a6fc04",
+      guid: "99937ffd-4862-46d4-b5e2-043272a6fc04",
       creator: {
          forename: "Helen",
          surname: "Russell",
@@ -6195,7 +6200,7 @@ define({
       modified: "2015-03-03T20:58:25.000Z"
    }, {
       title: "NHS Workforce Turnover",
-      nodeRef: "workspace:\/\/SpacesStore\/c83d3e66-f505-4805-a52f-6dcc6d5e0a8d",
+      guid: "c83d3e66-f505-4805-a52f-6dcc6d5e0a8d",
       creator: {
          forename: "Albert",
          surname: "Romero",
@@ -6210,7 +6215,7 @@ define({
       modified: "2014-10-12T12:11:02.000Z"
    }, {
       title: "HES Data Dictionary",
-      nodeRef: "workspace:\/\/SpacesStore\/245ee6d6-f3eb-4cee-83a8-2531cf108f4d",
+      guid: "245ee6d6-f3eb-4cee-83a8-2531cf108f4d",
       creator: {
          forename: "Anna",
          surname: "Johnson",
@@ -6225,7 +6230,7 @@ define({
       modified: "2014-11-22T16:55:25.000Z"
    }, {
       title: "Suffolk Coastal",
-      nodeRef: "workspace:\/\/SpacesStore\/69a1d98b-0949-4078-a5be-e2838ef9638f",
+      guid: "69a1d98b-0949-4078-a5be-e2838ef9638f",
       creator: {
          forename: "Dennis",
          surname: "Robinson",
@@ -6240,7 +6245,7 @@ define({
       modified: "2014-11-23T02:58:46.000Z"
    }, {
       title: "Organisational structure",
-      nodeRef: "workspace:\/\/SpacesStore\/cfa044ae-cded-4bfa-85f2-840b67b06660",
+      guid: "cfa044ae-cded-4bfa-85f2-840b67b06660",
       creator: {
          forename: "Andrew",
          surname: "Sullivan",
@@ -6255,7 +6260,7 @@ define({
       modified: "2015-01-09T00:08:35.000Z"
    }, {
       title: "PDF map",
-      nodeRef: "workspace:\/\/SpacesStore\/1c026324-856f-401e-8e08-407ec35eccf9",
+      guid: "1c026324-856f-401e-8e08-407ec35eccf9",
       creator: {
          forename: "Diana",
          surname: "Perry",
@@ -6270,7 +6275,7 @@ define({
       modified: "2014-12-10T22:49:06.000Z"
    }, {
       title: "Minerals Survey",
-      nodeRef: "workspace:\/\/SpacesStore\/5c3d09c8-1d29-4fa4-b9d5-1eaf985d5856",
+      guid: "5c3d09c8-1d29-4fa4-b9d5-1eaf985d5856",
       creator: {
          forename: "Phillip",
          surname: "Freeman",
@@ -6285,7 +6290,7 @@ define({
       modified: "2015-01-31T14:25:24.000Z"
    }, {
       title: "Glasgow City",
-      nodeRef: "workspace:\/\/SpacesStore\/61633087-4cd6-4a75-ac6d-eab1e5d9308c",
+      guid: "61633087-4cd6-4a75-ac6d-eab1e5d9308c",
       creator: {
          forename: "Christopher",
          surname: "Moreno",
@@ -6300,7 +6305,7 @@ define({
       modified: "2014-10-04T05:41:57.000Z"
    }, {
       title: "Freehold Ownership",
-      nodeRef: "workspace:\/\/SpacesStore\/4ebca69f-4165-42f9-977e-06208c65fd59",
+      guid: "4ebca69f-4165-42f9-977e-06208c65fd59",
       creator: {
          forename: "Joan",
          surname: "Chavez",
@@ -6315,7 +6320,7 @@ define({
       modified: "2014-08-21T00:41:52.000Z"
    }, {
       title: "Hypothyroidism data tables",
-      nodeRef: "workspace:\/\/SpacesStore\/ef92d9cb-3ba0-49a5-b1cb-408390d9411e",
+      guid: "ef92d9cb-3ba0-49a5-b1cb-408390d9411e",
       creator: {
          forename: "Julie",
          surname: "Hall",
@@ -6330,7 +6335,7 @@ define({
       modified: "2015-04-22T11:43:50.000Z"
    }, {
       title: "Customer Services contact enquiries",
-      nodeRef: "workspace:\/\/SpacesStore\/59ce665a-28ee-4446-99cc-23d36be33e7c",
+      guid: "59ce665a-28ee-4446-99cc-23d36be33e7c",
       creator: {
          forename: "Carolyn",
          surname: "Stevens",
@@ -6345,7 +6350,7 @@ define({
       modified: "2014-11-06T23:50:06.000Z"
    }, {
       title: "Barking and Dagenham",
-      nodeRef: "workspace:\/\/SpacesStore\/227bcae5-8c9d-4ebd-a966-37d16ac12dab",
+      guid: "227bcae5-8c9d-4ebd-a966-37d16ac12dab",
       creator: {
          forename: "Dorothy",
          surname: "Mcdonald",
@@ -6360,7 +6365,7 @@ define({
       modified: "2014-08-31T09:57:03.000Z"
    }, {
       title: "Gifts received by special advisers",
-      nodeRef: "workspace:\/\/SpacesStore\/97a41e64-1869-44d7-abd9-6ad62039bd8d",
+      guid: "97a41e64-1869-44d7-abd9-6ad62039bd8d",
       creator: {
          forename: "Linda",
          surname: "Phillips",
@@ -6375,7 +6380,7 @@ define({
       modified: "2014-12-20T13:57:30.000Z"
    }, {
       title: "NICOR transparency agenda pages",
-      nodeRef: "workspace:\/\/SpacesStore\/6b0eee1b-a26d-4c20-9599-806cbef5cf49",
+      guid: "6b0eee1b-a26d-4c20-9599-806cbef5cf49",
       creator: {
          forename: "Sandra",
          surname: "Murphy",
@@ -6390,7 +6395,7 @@ define({
       modified: "2015-02-04T17:23:35.000Z"
    }, {
       title: "Calderdale Grants",
-      nodeRef: "workspace:\/\/SpacesStore\/b5febeb5-4cb7-4be2-b9a9-326646d9f046",
+      guid: "b5febeb5-4cb7-4be2-b9a9-326646d9f046",
       creator: {
          forename: "Judy",
          surname: "Ward",
@@ -6405,7 +6410,7 @@ define({
       modified: "2015-04-14T17:13:01.000Z"
    }, {
       title: "National Vascular Registry",
-      nodeRef: "workspace:\/\/SpacesStore\/c2b3b7ce-227a-421b-b22b-af7e0572d80e",
+      guid: "c2b3b7ce-227a-421b-b22b-af7e0572d80e",
       creator: {
          forename: "Joan",
          surname: "Porter",
@@ -6420,7 +6425,7 @@ define({
       modified: "2014-11-24T18:45:18.000Z"
    }, {
       title: "Civil Service People Surveys",
-      nodeRef: "workspace:\/\/SpacesStore\/b4f6b4b1-0662-4121-bf98-80816a53ae9a",
+      guid: "b4f6b4b1-0662-4121-bf98-80816a53ae9a",
       creator: {
          forename: "Ruby",
          surname: "Duncan",
@@ -6435,7 +6440,7 @@ define({
       modified: "2015-03-13T22:37:52.000Z"
    }, {
       title: "CMR SCO telecoms data",
-      nodeRef: "workspace:\/\/SpacesStore\/dc32d9fd-0d44-4511-b5a2-e73c8ace3fa4",
+      guid: "dc32d9fd-0d44-4511-b5a2-e73c8ace3fa4",
       creator: {
          forename: "Jack",
          surname: "Harris",
@@ -6450,7 +6455,7 @@ define({
       modified: "2015-04-03T10:58:35.000Z"
    }, {
       title: "Council tax charges",
-      nodeRef: "workspace:\/\/SpacesStore\/341b876d-da72-4fb5-8cc8-3d1f2edbbc01",
+      guid: "341b876d-da72-4fb5-8cc8-3d1f2edbbc01",
       creator: {
          forename: "Martha",
          surname: "Watson",
@@ -6465,7 +6470,7 @@ define({
       modified: "2015-02-22T00:31:42.000Z"
    }, {
       title: "Statistics on Smoking",
-      nodeRef: "workspace:\/\/SpacesStore\/760ccb3a-7b7c-4f9a-bccd-b6d6a9a705fe",
+      guid: "760ccb3a-7b7c-4f9a-bccd-b6d6a9a705fe",
       creator: {
          forename: "Carolyn",
          surname: "Day",
@@ -6480,7 +6485,7 @@ define({
       modified: "2015-03-17T09:14:53.000Z"
    }, {
       title: "Primary school place allocations",
-      nodeRef: "workspace:\/\/SpacesStore\/d5ba8096-5151-45da-bc2e-f2490bc1092a",
+      guid: "d5ba8096-5151-45da-bc2e-f2490bc1092a",
       creator: {
          forename: "Bobby",
          surname: "King",
@@ -6495,7 +6500,7 @@ define({
       modified: "2015-05-30T19:56:49.000Z"
    }, {
       title: "Senior Employees",
-      nodeRef: "workspace:\/\/SpacesStore\/8e83876f-9fcc-434c-b0ab-d3f1632f1f03",
+      guid: "8e83876f-9fcc-434c-b0ab-d3f1632f1f03",
       creator: {
          forename: "Bobby",
          surname: "White",
@@ -6510,7 +6515,7 @@ define({
       modified: "2014-11-08T10:24:50.000Z"
    }, {
       title: "Defra Biodiversity page",
-      nodeRef: "workspace:\/\/SpacesStore\/bbdc5e3f-41b7-4311-9242-0ca360e7d10f",
+      guid: "bbdc5e3f-41b7-4311-9242-0ca360e7d10f",
       creator: {
          forename: "Pamela",
          surname: "Bailey",
@@ -6525,7 +6530,7 @@ define({
       modified: "2014-12-03T18:30:50.000Z"
    }, {
       title: "June transactions",
-      nodeRef: "workspace:\/\/SpacesStore\/74a6bf5d-91b8-4494-a38e-69b127deb6f3",
+      guid: "74a6bf5d-91b8-4494-a38e-69b127deb6f3",
       creator: {
          forename: "Nicholas",
          surname: "Snyder",
@@ -6540,7 +6545,7 @@ define({
       modified: "2014-10-21T15:20:35.000Z"
    }, {
       title: "Norwich City",
-      nodeRef: "workspace:\/\/SpacesStore\/c09ab5d5-8e4e-46fd-8bdc-eaa1cf1682b8",
+      guid: "c09ab5d5-8e4e-46fd-8bdc-eaa1cf1682b8",
       creator: {
          forename: "Ralph",
          surname: "Hudson",
@@ -6555,7 +6560,7 @@ define({
       modified: "2014-11-13T10:13:14.000Z"
    }, {
       title: "Derby City",
-      nodeRef: "workspace:\/\/SpacesStore\/bae5294b-e9e4-4458-b558-a97d008554db",
+      guid: "bae5294b-e9e4-4458-b558-a97d008554db",
       creator: {
          forename: "Melissa",
          surname: "Arnold",
@@ -6570,7 +6575,7 @@ define({
       modified: "2014-12-24T11:35:04.000Z"
    }, {
       title: "Quarterly Amendment files",
-      nodeRef: "workspace:\/\/SpacesStore\/cca69afc-45f3-4e4e-8b8c-507eab01be6a",
+      guid: "cca69afc-45f3-4e4e-8b8c-507eab01be6a",
       creator: {
          forename: "Billy",
          surname: "Gordon",
@@ -6585,7 +6590,7 @@ define({
       modified: "2014-10-01T21:29:30.000Z"
    }, {
       title: "Oxford City",
-      nodeRef: "workspace:\/\/SpacesStore\/0cc5cfc6-bf94-4b88-9225-6de8510d4d8e",
+      guid: "0cc5cfc6-bf94-4b88-9225-6de8510d4d8e",
       creator: {
          forename: "Dennis",
          surname: "Parker",
@@ -6600,7 +6605,7 @@ define({
       modified: "2015-08-18T12:59:03.000Z"
    }, {
       title: "External applicants by ethnicity",
-      nodeRef: "workspace:\/\/SpacesStore\/a8d13c55-fe0d-4456-a01c-925a2feeeacf",
+      guid: "a8d13c55-fe0d-4456-a01c-925a2feeeacf",
       creator: {
          forename: "Rachel",
          surname: "Gardner",
@@ -6615,7 +6620,7 @@ define({
       modified: "2014-09-28T06:58:46.000Z"
    }, {
       title: "Basingstoke and Deane",
-      nodeRef: "workspace:\/\/SpacesStore\/29e80774-9fb8-43cf-adf8-e435e69bc129",
+      guid: "29e80774-9fb8-43cf-adf8-e435e69bc129",
       creator: {
          forename: "Eric",
          surname: "Harvey",
@@ -6630,7 +6635,7 @@ define({
       modified: "2015-08-07T14:32:02.000Z"
    }, {
       title: "Prosecution data",
-      nodeRef: "workspace:\/\/SpacesStore\/9ae15cfe-ab42-4b7b-af3f-364b261731d0",
+      guid: "9ae15cfe-ab42-4b7b-af3f-364b261731d0",
       creator: {
          forename: "Lawrence",
          surname: "Smith",
@@ -6645,7 +6650,7 @@ define({
       modified: "2015-07-13T22:26:44.000Z"
    }, {
       title: "Tax Arrangements Publication",
-      nodeRef: "workspace:\/\/SpacesStore\/5fd5d046-6426-4b3f-9176-a3c6c441c403",
+      guid: "5fd5d046-6426-4b3f-9176-a3c6c441c403",
       creator: {
          forename: "Raymond",
          surname: "Nelson",
@@ -6660,7 +6665,7 @@ define({
       modified: "2015-02-13T09:09:43.000Z"
    }, {
       title: "Conservation volunteering",
-      nodeRef: "workspace:\/\/SpacesStore\/ba22cc56-5333-43f9-b1b4-6036392f8e66",
+      guid: "ba22cc56-5333-43f9-b1b4-6036392f8e66",
       creator: {
          forename: "Jimmy",
          surname: "Clark",
@@ -6675,7 +6680,7 @@ define({
       modified: "2014-10-08T10:04:08.000Z"
    }, {
       title: "General Dental Practitioners",
-      nodeRef: "workspace:\/\/SpacesStore\/4376a2ee-aa3a-4d70-b78b-05702130739a",
+      guid: "4376a2ee-aa3a-4d70-b78b-05702130739a",
       creator: {
          forename: "Marie",
          surname: "Hart",
@@ -6690,7 +6695,7 @@ define({
       modified: "2015-04-28T23:30:43.000Z"
    }, {
       title: "Resource Location",
-      nodeRef: "workspace:\/\/SpacesStore\/509b4217-0379-4067-812b-3f21e35b1c3d",
+      guid: "509b4217-0379-4067-812b-3f21e35b1c3d",
       creator: {
          forename: "Karen",
          surname: "Graham",
@@ -6705,7 +6710,7 @@ define({
       modified: "2014-11-16T04:54:48.000Z"
    }, {
       title: "Independent Sector Healthcare Providers",
-      nodeRef: "workspace:\/\/SpacesStore\/77e212bb-6ff1-4559-9f1b-46692e1f4f79",
+      guid: "77e212bb-6ff1-4559-9f1b-46692e1f4f79",
       creator: {
          forename: "Nancy",
          surname: "Alexander",
@@ -6720,7 +6725,7 @@ define({
       modified: "2015-04-10T13:23:52.000Z"
    }, {
       title: "Sustainable fisheries",
-      nodeRef: "workspace:\/\/SpacesStore\/2196506b-e0c2-41d9-aae2-7fcab49db51d",
+      guid: "2196506b-e0c2-41d9-aae2-7fcab49db51d",
       creator: {
          forename: "Maria",
          surname: "Smith",
@@ -6735,7 +6740,7 @@ define({
       modified: "2015-08-11T16:07:18.000Z"
    }, {
       title: "Child minders",
-      nodeRef: "workspace:\/\/SpacesStore\/30a71109-248e-475e-8343-e767b7d1808b",
+      guid: "30a71109-248e-475e-8343-e767b7d1808b",
       creator: {
          forename: "Jeffrey",
          surname: "Stephens",
@@ -6750,7 +6755,7 @@ define({
       modified: "2014-12-18T04:33:19.000Z"
    }, {
       title: "Technology Strategy Board Salary",
-      nodeRef: "workspace:\/\/SpacesStore\/0f6642f4-f87a-4575-b002-cd44a7841765",
+      guid: "0f6642f4-f87a-4575-b002-cd44a7841765",
       creator: {
          forename: "Martin",
          surname: "Garrett",
@@ -6765,7 +6770,7 @@ define({
       modified: "2014-09-04T15:01:38.000Z"
    }, {
       title: "Premises Licences",
-      nodeRef: "workspace:\/\/SpacesStore\/cc99e577-e709-483f-a369-0ad6d6ba383a",
+      guid: "cc99e577-e709-483f-a369-0ad6d6ba383a",
       creator: {
          forename: "Tammy",
          surname: "Montgomery",
@@ -6780,7 +6785,7 @@ define({
       modified: "2015-05-31T07:06:59.000Z"
    }, {
       title: "Skips waste",
-      nodeRef: "workspace:\/\/SpacesStore\/b32f0475-3d01-4b7e-ac45-9c848e2fc1a3",
+      guid: "b32f0475-3d01-4b7e-ac45-9c848e2fc1a3",
       creator: {
          forename: "Bonnie",
          surname: "Scott",
@@ -6795,7 +6800,7 @@ define({
       modified: "2015-07-02T03:12:26.000Z"
    }, {
       title: "NHS Staff Survey homepage",
-      nodeRef: "workspace:\/\/SpacesStore\/dafca0b5-fd1b-4ec7-8f35-e0d2fa3175ce",
+      guid: "dafca0b5-fd1b-4ec7-8f35-e0d2fa3175ce",
       creator: {
          forename: "Donald",
          surname: "Kelly",
@@ -6810,7 +6815,7 @@ define({
       modified: "2015-04-28T05:30:59.000Z"
    }, {
       title: "Parking Annual Report",
-      nodeRef: "workspace:\/\/SpacesStore\/8abc8356-fa5a-426d-b2f8-6a7324ad69e6",
+      guid: "8abc8356-fa5a-426d-b2f8-6a7324ad69e6",
       creator: {
          forename: "Stephanie",
          surname: "Burns",
@@ -6825,7 +6830,7 @@ define({
       modified: "2014-12-05T01:20:22.000Z"
    }, {
       title: "Further Local Plan Info",
-      nodeRef: "workspace:\/\/SpacesStore\/8748f276-ca83-480f-9074-1c53fba76990",
+      guid: "8748f276-ca83-480f-9074-1c53fba76990",
       creator: {
          forename: "Roger",
          surname: "Allen",
@@ -6840,7 +6845,7 @@ define({
       modified: "2014-10-24T06:45:55.000Z"
    }, {
       title: "Premises Licences Milton Keynes",
-      nodeRef: "workspace:\/\/SpacesStore\/f638fb60-9ebe-49ae-9bb7-c4c1af546985",
+      guid: "f638fb60-9ebe-49ae-9bb7-c4c1af546985",
       creator: {
          forename: "Joe",
          surname: "Sanders",
@@ -6855,7 +6860,7 @@ define({
       modified: "2015-08-14T23:32:13.000Z"
    }, {
       title: "NHS England Innovation Scorecard",
-      nodeRef: "workspace:\/\/SpacesStore\/ed548a44-eb25-44a3-a942-3a5cc894854b",
+      guid: "ed548a44-eb25-44a3-a942-3a5cc894854b",
       creator: {
          forename: "Melissa",
          surname: "Gonzalez",
@@ -6870,7 +6875,7 @@ define({
       modified: "2015-04-04T10:41:20.000Z"
    }, {
       title: "Local Government Incentive Scheme",
-      nodeRef: "workspace:\/\/SpacesStore\/5c1680b7-db5b-4947-b6c2-ef8316357c71",
+      guid: "5c1680b7-db5b-4947-b6c2-ef8316357c71",
       creator: {
          forename: "Sarah",
          surname: "Larson",
@@ -6885,7 +6890,7 @@ define({
       modified: "2015-02-19T07:58:59.000Z"
    }, {
       title: "Junior staff datasets",
-      nodeRef: "workspace:\/\/SpacesStore\/48509740-d9a5-49be-85e3-0b4c6010a14d",
+      guid: "48509740-d9a5-49be-85e3-0b4c6010a14d",
       creator: {
          forename: "Debra",
          surname: "Reid",
@@ -6900,7 +6905,7 @@ define({
       modified: "2015-03-07T02:28:59.000Z"
    }, {
       title: "Fords in Devon JSON",
-      nodeRef: "workspace:\/\/SpacesStore\/d2bb3801-ccdf-49ff-ad83-a95d4483f6e8",
+      guid: "d2bb3801-ccdf-49ff-ad83-a95d4483f6e8",
       creator: {
          forename: "Phyllis",
          surname: "Fox",
@@ -6915,7 +6920,7 @@ define({
       modified: "2015-04-29T15:11:29.000Z"
    }, {
       title: "Section B",
-      nodeRef: "workspace:\/\/SpacesStore\/ba86a63f-8185-424c-bb31-df319b3fd9cf",
+      guid: "ba86a63f-8185-424c-bb31-df319b3fd9cf",
       creator: {
          forename: "Eric",
          surname: "Gordon",
@@ -6930,7 +6935,7 @@ define({
       modified: "2014-12-13T09:47:50.000Z"
    }, {
       title: "Adapting to austerity report",
-      nodeRef: "workspace:\/\/SpacesStore\/06cedf14-47ff-4bde-9035-f0e72de051a5",
+      guid: "06cedf14-47ff-4bde-9035-f0e72de051a5",
       creator: {
          forename: "George",
          surname: "Carter",
@@ -6945,7 +6950,7 @@ define({
       modified: "2014-08-25T00:40:46.000Z"
    }, {
       title: "Scottish Borders",
-      nodeRef: "workspace:\/\/SpacesStore\/543cb145-78c7-4192-be6b-28d6f6bb8727",
+      guid: "543cb145-78c7-4192-be6b-28d6f6bb8727",
       creator: {
          forename: "Gloria",
          surname: "Cruz",
@@ -6960,7 +6965,7 @@ define({
       modified: "2014-11-09T10:20:38.000Z"
    }, {
       title: "RBWM contracts",
-      nodeRef: "workspace:\/\/SpacesStore\/6ec7bfe7-5dc1-490a-aba0-e78cd4a039a6",
+      guid: "6ec7bfe7-5dc1-490a-aba0-e78cd4a039a6",
       creator: {
          forename: "Sarah",
          surname: "Graham",
@@ -6975,7 +6980,7 @@ define({
       modified: "2015-07-22T14:04:23.000Z"
    }, {
       title: "HMRC Performance",
-      nodeRef: "workspace:\/\/SpacesStore\/88156d73-63b1-43d0-aed9-b88deb233687",
+      guid: "88156d73-63b1-43d0-aed9-b88deb233687",
       creator: {
          forename: "Ralph",
          surname: "Perry",
@@ -6990,7 +6995,7 @@ define({
       modified: "2015-04-06T22:36:04.000Z"
    }, {
       title: "Transparency data",
-      nodeRef: "workspace:\/\/SpacesStore\/7386637e-b696-433f-9a2e-43ea3113bb87",
+      guid: "7386637e-b696-433f-9a2e-43ea3113bb87",
       creator: {
          forename: "Wayne",
          surname: "Arnold",
@@ -7005,7 +7010,7 @@ define({
       modified: "2015-02-15T11:38:59.000Z"
    }, {
       title: "Contract body and schedules",
-      nodeRef: "workspace:\/\/SpacesStore\/c0705dc5-e4ae-42fc-9de6-3eaaea5554c9",
+      guid: "c0705dc5-e4ae-42fc-9de6-3eaaea5554c9",
       creator: {
          forename: "Carol",
          surname: "Cook",
@@ -7020,7 +7025,7 @@ define({
       modified: "2015-05-22T19:59:52.000Z"
    }, {
       title: "Mole Valley",
-      nodeRef: "workspace:\/\/SpacesStore\/a70dbecb-e4de-479c-9a02-e74b7e796546",
+      guid: "a70dbecb-e4de-479c-9a02-e74b7e796546",
       creator: {
          forename: "Marie",
          surname: "Gilbert",
@@ -7035,7 +7040,7 @@ define({
       modified: "2015-02-25T07:03:16.000Z"
    }, {
       title: "SHA level data tables",
-      nodeRef: "workspace:\/\/SpacesStore\/88a85945-e8d9-49a3-b7ad-8bf5a91933c2",
+      guid: "88a85945-e8d9-49a3-b7ad-8bf5a91933c2",
       creator: {
          forename: "Harold",
          surname: "Gray",
@@ -7050,7 +7055,7 @@ define({
       modified: "2014-10-11T12:18:14.000Z"
    }, {
       title: "Nurse Prescribers",
-      nodeRef: "workspace:\/\/SpacesStore\/d880a04c-fd04-4faa-a56a-ce292935445c",
+      guid: "d880a04c-fd04-4faa-a56a-ce292935445c",
       creator: {
          forename: "Katherine",
          surname: "Davis",
@@ -7065,7 +7070,7 @@ define({
       modified: "2015-04-20T15:52:35.000Z"
    }, {
       title: "Poole Premises Licences",
-      nodeRef: "workspace:\/\/SpacesStore\/04b8a057-45d7-441c-86f2-65687a1e1a79",
+      guid: "04b8a057-45d7-441c-86f2-65687a1e1a79",
       creator: {
          forename: "Lois",
          surname: "Diaz",
@@ -7080,7 +7085,7 @@ define({
       modified: "2015-01-27T06:11:11.000Z"
    }, {
       title: "City Connect cycle route",
-      nodeRef: "workspace:\/\/SpacesStore\/30373f96-a4e4-48a4-b5b6-a6ac222b302d",
+      guid: "30373f96-a4e4-48a4-b5b6-a6ac222b302d",
       creator: {
          forename: "Stephen",
          surname: "Simmons",
@@ -7095,7 +7100,7 @@ define({
       modified: "2015-01-23T14:48:20.000Z"
    }, {
       title: "Household Projections",
-      nodeRef: "workspace:\/\/SpacesStore\/7fc99754-160a-45df-bc86-423059f235d8",
+      guid: "7fc99754-160a-45df-bc86-423059f235d8",
       creator: {
          forename: "Amy",
          surname: "Rice",
@@ -7110,7 +7115,7 @@ define({
       modified: "2014-12-11T12:14:45.000Z"
    }, {
       title: "Welsh Local Health Boards",
-      nodeRef: "workspace:\/\/SpacesStore\/379d1270-ba2f-4c2a-b2c1-307bcbc29aab",
+      guid: "379d1270-ba2f-4c2a-b2c1-307bcbc29aab",
       creator: {
          forename: "Dennis",
          surname: "Cole",
@@ -7125,7 +7130,7 @@ define({
       modified: "2014-11-30T06:27:59.000Z"
    }, {
       title: "Appointments by ethnicity",
-      nodeRef: "workspace:\/\/SpacesStore\/a590b0b7-5796-430f-9cef-5d2b5c142218",
+      guid: "a590b0b7-5796-430f-9cef-5d2b5c142218",
       creator: {
          forename: "Robert",
          surname: "Cruz",
@@ -7140,7 +7145,7 @@ define({
       modified: "2015-02-20T02:30:55.000Z"
    }, {
       title: "ASAP data definitions file",
-      nodeRef: "workspace:\/\/SpacesStore\/1822876f-dc45-445f-830d-552d2fd79bb2",
+      guid: "1822876f-dc45-445f-830d-552d2fd79bb2",
       creator: {
          forename: "Frank",
          surname: "Schmidt",
@@ -7155,7 +7160,7 @@ define({
       modified: "2015-05-15T04:39:00.000Z"
    }, {
       title: "Prompt Payment Table",
-      nodeRef: "workspace:\/\/SpacesStore\/d40e1a25-df32-4759-951d-dc0c4ce5537f",
+      guid: "d40e1a25-df32-4759-951d-dc0c4ce5537f",
       creator: {
          forename: "Cheryl",
          surname: "Ramos",
@@ -7170,7 +7175,7 @@ define({
       modified: "2014-10-26T10:23:21.000Z"
    }, {
       title: "Delegates for training by sexual orientation",
-      nodeRef: "workspace:\/\/SpacesStore\/e791086e-5de4-48c0-9baf-b40a5bcb3b81",
+      guid: "e791086e-5de4-48c0-9baf-b40a5bcb3b81",
       creator: {
          forename: "Carlos",
          surname: "Meyer",
@@ -7185,7 +7190,7 @@ define({
       modified: "2015-08-04T13:18:17.000Z"
    }, {
       title: "Adult Social Care Survey",
-      nodeRef: "workspace:\/\/SpacesStore\/e81684af-6cf1-4bce-a545-7af9aa23626c",
+      guid: "e81684af-6cf1-4bce-a545-7af9aa23626c",
       creator: {
          forename: "Harold",
          surname: "Graham",
@@ -7200,7 +7205,7 @@ define({
       modified: "2015-08-11T22:38:23.000Z"
    }, {
       title: "Premises licences CSV",
-      nodeRef: "workspace:\/\/SpacesStore\/6af8216c-5f76-42b7-b114-269f4d056517",
+      guid: "6af8216c-5f76-42b7-b114-269f4d056517",
       creator: {
          forename: "Robin",
          surname: "Fowler",
@@ -7215,7 +7220,7 @@ define({
       modified: "2015-08-02T15:22:01.000Z"
    }, {
       title: "Success Rates by Level",
-      nodeRef: "workspace:\/\/SpacesStore\/624e4b4a-adfe-41b3-a360-b46dea9a82f4",
+      guid: "624e4b4a-adfe-41b3-a360-b46dea9a82f4",
       creator: {
          forename: "Julie",
          surname: "Reid",
@@ -7230,7 +7235,7 @@ define({
       modified: "2015-06-24T05:01:58.000Z"
    }, {
       title: "West Yorkshire",
-      nodeRef: "workspace:\/\/SpacesStore\/5021bffb-8640-4953-8a5f-4b64b390ffec",
+      guid: "5021bffb-8640-4953-8a5f-4b64b390ffec",
       creator: {
          forename: "Gerald",
          surname: "Olson",
@@ -7245,7 +7250,7 @@ define({
       modified: "2014-09-02T23:06:57.000Z"
    }, {
       title: "Historic Urban Districts",
-      nodeRef: "workspace:\/\/SpacesStore\/1839991e-0be9-4239-9a51-60967f4c1ea1",
+      guid: "1839991e-0be9-4239-9a51-60967f4c1ea1",
       creator: {
          forename: "Heather",
          surname: "Cooper",
@@ -7260,7 +7265,7 @@ define({
       modified: "2014-09-25T23:35:10.000Z"
    }, {
       title: "ODA Multilateral Aid",
-      nodeRef: "workspace:\/\/SpacesStore\/281b5a1c-68e2-4bc3-b3f3-1220abd1a0a2",
+      guid: "281b5a1c-68e2-4bc3-b3f3-1220abd1a0a2",
       creator: {
          forename: "James",
          surname: "Gray",
@@ -7275,7 +7280,7 @@ define({
       modified: "2014-09-04T22:36:43.000Z"
    }, {
       title: "Spending tool landing page",
-      nodeRef: "workspace:\/\/SpacesStore\/cbae7b77-73e9-4fef-acb0-06b1febb0fb5",
+      guid: "cbae7b77-73e9-4fef-acb0-06b1febb0fb5",
       creator: {
          forename: "Margaret",
          surname: "Oliver",
@@ -7290,7 +7295,7 @@ define({
       modified: "2015-04-11T02:58:27.000Z"
    }, {
       title: "VoID Descriptions Turtle",
-      nodeRef: "workspace:\/\/SpacesStore\/9f462485-d411-4d47-b901-2a4ffde26a0a",
+      guid: "9f462485-d411-4d47-b901-2a4ffde26a0a",
       creator: {
          forename: "Adam",
          surname: "Wheeler",
@@ -7305,7 +7310,7 @@ define({
       modified: "2015-07-24T14:19:49.000Z"
    }, {
       title: "FE and Skills Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/9cf74abc-b774-4b60-ad15-197fb406660f",
+      guid: "9cf74abc-b774-4b60-ad15-197fb406660f",
       creator: {
          forename: "Samuel",
          surname: "Henry",
@@ -7320,7 +7325,7 @@ define({
       modified: "2014-10-25T00:36:42.000Z"
    }, {
       title: "Channels in Devon XML",
-      nodeRef: "workspace:\/\/SpacesStore\/4140432e-f754-4fe7-8856-4deb6299fa2f",
+      guid: "4140432e-f754-4fe7-8856-4deb6299fa2f",
       creator: {
          forename: "David",
          surname: "Garrett",
@@ -7335,7 +7340,7 @@ define({
       modified: "2015-06-14T17:21:57.000Z"
    }, {
       title: "Deaths Intestate",
-      nodeRef: "workspace:\/\/SpacesStore\/13e5fd8b-c0c9-4273-ac8e-23b0321ef9d5",
+      guid: "13e5fd8b-c0c9-4273-ac8e-23b0321ef9d5",
       creator: {
          forename: "Virginia",
          surname: "Murphy",
@@ -7350,7 +7355,7 @@ define({
       modified: "2015-06-16T12:34:31.000Z"
    }, {
       title: "CMR NI data",
-      nodeRef: "workspace:\/\/SpacesStore\/0911eeca-baaa-42c6-a242-e0d6d09b22d4",
+      guid: "0911eeca-baaa-42c6-a242-e0d6d09b22d4",
       creator: {
          forename: "Alan",
          surname: "Wallace",
@@ -7365,7 +7370,7 @@ define({
       modified: "2015-08-07T09:53:44.000Z"
    }, {
       title: "Culverts in Devon CSV",
-      nodeRef: "workspace:\/\/SpacesStore\/bc2c5af2-3be8-47d4-8e00-1260fe0568f8",
+      guid: "bc2c5af2-3be8-47d4-8e00-1260fe0568f8",
       creator: {
          forename: "Wanda",
          surname: "Harvey",
@@ -7380,7 +7385,7 @@ define({
       modified: "2014-10-26T12:10:07.000Z"
    }, {
       title: "Dundee City",
-      nodeRef: "workspace:\/\/SpacesStore\/3c6f645e-9df5-44e3-81ae-a00c6974481d",
+      guid: "3c6f645e-9df5-44e3-81ae-a00c6974481d",
       creator: {
          forename: "Ruby",
          surname: "Mendoza",
@@ -7395,7 +7400,7 @@ define({
       modified: "2014-11-27T00:42:30.000Z"
    }, {
       title: "Structured Data",
-      nodeRef: "workspace:\/\/SpacesStore\/66d4b494-7cac-437b-a5df-44df8f839686",
+      guid: "66d4b494-7cac-437b-a5df-44df8f839686",
       creator: {
          forename: "Theresa",
          surname: "Vasquez",
@@ -7410,7 +7415,7 @@ define({
       modified: "2015-01-14T17:50:05.000Z"
    }, {
       title: "Internal appointments by gender",
-      nodeRef: "workspace:\/\/SpacesStore\/d4e38090-a978-416e-89b9-7cca392ed856",
+      guid: "d4e38090-a978-416e-89b9-7cca392ed856",
       creator: {
          forename: "Arthur",
          surname: "Larson",
@@ -7425,7 +7430,7 @@ define({
       modified: "2015-03-16T21:36:56.000Z"
    }, {
       title: "East Devon Asset Dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/98551694-7853-45e6-8139-78b31addc6fd",
+      guid: "98551694-7853-45e6-8139-78b31addc6fd",
       creator: {
          forename: "Cheryl",
          surname: "Hall",
@@ -7440,7 +7445,7 @@ define({
       modified: "2015-05-14T17:33:01.000Z"
    }, {
       title: "National Bowel Cancer Audit",
-      nodeRef: "workspace:\/\/SpacesStore\/94a29dfc-4543-41ce-b19e-0eeb3eebc23d",
+      guid: "94a29dfc-4543-41ce-b19e-0eeb3eebc23d",
       creator: {
          forename: "Roy",
          surname: "Ortiz",
@@ -7455,7 +7460,7 @@ define({
       modified: "2014-10-16T05:23:20.000Z"
    }, {
       title: "Council spending",
-      nodeRef: "workspace:\/\/SpacesStore\/751dc19e-25d1-4503-9385-6d2ca02cac2f",
+      guid: "751dc19e-25d1-4503-9385-6d2ca02cac2f",
       creator: {
          forename: "Cynthia",
          surname: "Mills",
@@ -7470,7 +7475,7 @@ define({
       modified: "2014-08-26T15:29:41.000Z"
    }, {
       title: "Junior staff salaries",
-      nodeRef: "workspace:\/\/SpacesStore\/83ef8856-deee-45f3-a013-9f74ef81d195",
+      guid: "83ef8856-deee-45f3-a013-9f74ef81d195",
       creator: {
          forename: "Howard",
          surname: "Harper",
@@ -7485,7 +7490,7 @@ define({
       modified: "2015-05-10T03:43:51.000Z"
    }, {
       title: "DataStore interface",
-      nodeRef: "workspace:\/\/SpacesStore\/8d5dd884-041f-4fd4-83ef-56d051f4ddb1",
+      guid: "8d5dd884-041f-4fd4-83ef-56d051f4ddb1",
       creator: {
          forename: "Katherine",
          surname: "Franklin",
@@ -7500,7 +7505,7 @@ define({
       modified: "2014-08-24T07:03:57.000Z"
    }, {
       title: "DBS filtering guide",
-      nodeRef: "workspace:\/\/SpacesStore\/6009d3c7-49ea-40a6-a0a5-56bd5d89037e",
+      guid: "6009d3c7-49ea-40a6-a0a5-56bd5d89037e",
       creator: {
          forename: "Judith",
          surname: "Gonzalez",
@@ -7515,7 +7520,7 @@ define({
       modified: "2015-05-02T01:31:11.000Z"
    }, {
       title: "Inspire WMS service",
-      nodeRef: "workspace:\/\/SpacesStore\/47c99aed-d610-4901-b527-5f95637bcbd9",
+      guid: "47c99aed-d610-4901-b527-5f95637bcbd9",
       creator: {
          forename: "Kathleen",
          surname: "Sanchez",
@@ -7530,7 +7535,7 @@ define({
       modified: "2015-08-08T22:19:16.000Z"
    }, {
       title: "South Gloucestershire",
-      nodeRef: "workspace:\/\/SpacesStore\/7661817b-b77f-4a87-9688-89b7053179c5",
+      guid: "7661817b-b77f-4a87-9688-89b7053179c5",
       creator: {
          forename: "Justin",
          surname: "King",
@@ -7545,7 +7550,7 @@ define({
       modified: "2015-03-07T08:11:31.000Z"
    }, {
       title: "Premises Licences",
-      nodeRef: "workspace:\/\/SpacesStore\/994f3a80-7a6c-4ad3-ad4b-d2645f4897b0",
+      guid: "994f3a80-7a6c-4ad3-ad4b-d2645f4897b0",
       creator: {
          forename: "Billy",
          surname: "Vasquez",
@@ -7560,7 +7565,7 @@ define({
       modified: "2015-03-20T18:30:26.000Z"
    }, {
       title: "National Passenger Survey website",
-      nodeRef: "workspace:\/\/SpacesStore\/a5d7ad07-4346-412a-b3cd-188a23694ddb",
+      guid: "a5d7ad07-4346-412a-b3cd-188a23694ddb",
       creator: {
          forename: "John",
          surname: "Johnson",
@@ -7575,7 +7580,7 @@ define({
       modified: "2015-06-13T11:58:37.000Z"
    }, {
       title: "Invoice payment information",
-      nodeRef: "workspace:\/\/SpacesStore\/c08bab81-e67c-43f9-a19d-494fb0f65eae",
+      guid: "c08bab81-e67c-43f9-a19d-494fb0f65eae",
       creator: {
          forename: "Johnny",
          surname: "Thompson",
@@ -7590,7 +7595,7 @@ define({
       modified: "2014-08-22T10:26:21.000Z"
    }, {
       title: "Additional information",
-      nodeRef: "workspace:\/\/SpacesStore\/5493fe14-d516-46bd-8923-eaae22257bba",
+      guid: "5493fe14-d516-46bd-8923-eaae22257bba",
       creator: {
          forename: "Albert",
          surname: "Rodriguez",
@@ -7605,7 +7610,7 @@ define({
       modified: "2014-09-23T22:56:01.000Z"
    }, {
       title: "North Hertfordshire",
-      nodeRef: "workspace:\/\/SpacesStore\/051a32c1-26da-4186-a09a-a72eb198e72c",
+      guid: "051a32c1-26da-4186-a09a-a72eb198e72c",
       creator: {
          forename: "Susan",
          surname: "Gonzalez",
@@ -7620,7 +7625,7 @@ define({
       modified: "2015-04-12T14:29:18.000Z"
    }, {
       title: "HSCIC dementia information",
-      nodeRef: "workspace:\/\/SpacesStore\/34d56c23-530f-4e70-9951-cf478dee26ec",
+      guid: "34d56c23-530f-4e70-9951-cf478dee26ec",
       creator: {
          forename: "Kathy",
          surname: "Spencer",
@@ -7635,7 +7640,7 @@ define({
       modified: "2014-10-28T00:46:30.000Z"
    }, {
       title: "Local sites web page",
-      nodeRef: "workspace:\/\/SpacesStore\/28a28ef5-456c-48cf-8232-126f73f6ae22",
+      guid: "28a28ef5-456c-48cf-8232-126f73f6ae22",
       creator: {
          forename: "Kelly",
          surname: "Payne",
@@ -7650,7 +7655,7 @@ define({
       modified: "2014-11-06T20:40:48.000Z"
    }, {
       title: "Important Hedges",
-      nodeRef: "workspace:\/\/SpacesStore\/73acd857-cc3e-48e5-927f-fd4562bbc471",
+      guid: "73acd857-cc3e-48e5-927f-fd4562bbc471",
       creator: {
          forename: "Michael",
          surname: "Cruz",
@@ -7665,7 +7670,7 @@ define({
       modified: "2015-01-11T12:19:47.000Z"
    }, {
       title: "Download instructions",
-      nodeRef: "workspace:\/\/SpacesStore\/01602514-c8f7-4a0b-ab67-a1202d09f136",
+      guid: "01602514-c8f7-4a0b-ab67-a1202d09f136",
       creator: {
          forename: "Timothy",
          surname: "Richardson",
@@ -7680,7 +7685,7 @@ define({
       modified: "2015-06-03T23:45:42.000Z"
    }, {
       title: "Contract Finder",
-      nodeRef: "workspace:\/\/SpacesStore\/5f930180-14b8-4c71-a6c5-376351946e1d",
+      guid: "5f930180-14b8-4c71-a6c5-376351946e1d",
       creator: {
          forename: "Diane",
          surname: "Gomez",
@@ -7695,7 +7700,7 @@ define({
       modified: "2014-11-03T19:18:50.000Z"
    }, {
       title: "Workforce data",
-      nodeRef: "workspace:\/\/SpacesStore\/618ea706-8505-42c4-9626-14e130988759",
+      guid: "618ea706-8505-42c4-9626-14e130988759",
       creator: {
          forename: "Nicholas",
          surname: "Carter",
@@ -7710,7 +7715,7 @@ define({
       modified: "2015-06-23T21:43:16.000Z"
    }, {
       title: "SLDC Constitution",
-      nodeRef: "workspace:\/\/SpacesStore\/697ef3d0-4646-44eb-994c-3dcd8e573047",
+      guid: "697ef3d0-4646-44eb-994c-3dcd8e573047",
       creator: {
          forename: "Juan",
          surname: "Elliott",
@@ -7725,7 +7730,7 @@ define({
       modified: "2015-04-15T06:03:13.000Z"
    }, {
       title: "Tree Preservations Orders",
-      nodeRef: "workspace:\/\/SpacesStore\/6f2e0af3-9726-4207-864f-854fd6d7afc9",
+      guid: "6f2e0af3-9726-4207-864f-854fd6d7afc9",
       creator: {
          forename: "Antonio",
          surname: "Kennedy",
@@ -7740,7 +7745,7 @@ define({
       modified: "2015-03-29T10:33:57.000Z"
    }, {
       title: "Bids to empty council houses",
-      nodeRef: "workspace:\/\/SpacesStore\/a15048b8-171d-4e12-b4c4-ff66c9fa3eb6",
+      guid: "a15048b8-171d-4e12-b4c4-ff66c9fa3eb6",
       creator: {
          forename: "Scott",
          surname: "Castillo",
@@ -7755,7 +7760,7 @@ define({
       modified: "2015-06-12T08:07:32.000Z"
    }, {
       title: "Council Information on designation",
-      nodeRef: "workspace:\/\/SpacesStore\/79cf07e9-d508-49c1-a9ae-07178102d778",
+      guid: "79cf07e9-d508-49c1-a9ae-07178102d778",
       creator: {
          forename: "Rebecca",
          surname: "Taylor",
@@ -7770,7 +7775,7 @@ define({
       modified: "2015-02-25T20:01:48.000Z"
    }, {
       title: "Press release",
-      nodeRef: "workspace:\/\/SpacesStore\/47cb6319-7aa2-489b-a1b0-c64ea85a616c",
+      guid: "47cb6319-7aa2-489b-a1b0-c64ea85a616c",
       creator: {
          forename: "Wanda",
          surname: "Dunn",
@@ -7785,7 +7790,7 @@ define({
       modified: "2015-06-11T18:53:03.000Z"
    }, {
       title: "Gambling permits",
-      nodeRef: "workspace:\/\/SpacesStore\/456217c6-7c08-4b99-b5f7-fe7ac86a0ad9",
+      guid: "456217c6-7c08-4b99-b5f7-fe7ac86a0ad9",
       creator: {
          forename: "Marilyn",
          surname: "Johnston",
@@ -7800,7 +7805,7 @@ define({
       modified: "2014-09-10T09:49:49.000Z"
    }, {
       title: "Abeyance and Dispersal GP",
-      nodeRef: "workspace:\/\/SpacesStore\/feb0ea7b-89ab-42ff-a422-987ff29db140",
+      guid: "feb0ea7b-89ab-42ff-a422-987ff29db140",
       creator: {
          forename: "Jack",
          surname: "Garrett",
@@ -7815,7 +7820,7 @@ define({
       modified: "2015-02-23T16:51:37.000Z"
    }, {
       title: "Knife crime data",
-      nodeRef: "workspace:\/\/SpacesStore\/3b6cfb05-bd87-4a85-b69b-ca17b5922a1c",
+      guid: "3b6cfb05-bd87-4a85-b69b-ca17b5922a1c",
       creator: {
          forename: "Louis",
          surname: "Rose",
@@ -7830,7 +7835,7 @@ define({
       modified: "2015-02-17T07:24:15.000Z"
    }, {
       title: "Blaby Election Information",
-      nodeRef: "workspace:\/\/SpacesStore\/6799d5bf-5454-4c60-adce-25530bd2f08f",
+      guid: "6799d5bf-5454-4c60-adce-25530bd2f08f",
       creator: {
          forename: "Deborah",
          surname: "Morris",
@@ -7845,7 +7850,7 @@ define({
       modified: "2015-03-24T19:40:35.000Z"
    }, {
       title: "Planning Applications metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/e7148020-0c30-43bd-9f0e-2604abe5a684",
+      guid: "e7148020-0c30-43bd-9f0e-2604abe5a684",
       creator: {
          forename: "Julie",
          surname: "Rogers",
@@ -7860,7 +7865,7 @@ define({
       modified: "2015-04-29T03:20:46.000Z"
    }, {
       title: "Premise Licenses",
-      nodeRef: "workspace:\/\/SpacesStore\/59349c03-c9e3-4547-b85b-e2bb34ea526a",
+      guid: "59349c03-c9e3-4547-b85b-e2bb34ea526a",
       creator: {
          forename: "Jeremy",
          surname: "Oliver",
@@ -7875,7 +7880,7 @@ define({
       modified: "2015-01-21T20:46:59.000Z"
    }, {
       title: "Archived GPs",
-      nodeRef: "workspace:\/\/SpacesStore\/8f36933a-c433-455f-b7d6-cf265590e26e",
+      guid: "8f36933a-c433-455f-b7d6-cf265590e26e",
       creator: {
          forename: "Frank",
          surname: "Howell",
@@ -7890,7 +7895,7 @@ define({
       modified: "2014-09-10T17:17:50.000Z"
    }, {
       title: "Other Quarterly Planning Decisions",
-      nodeRef: "workspace:\/\/SpacesStore\/0fb87d98-3b52-4aae-bf58-0fd74cb3548a",
+      guid: "0fb87d98-3b52-4aae-bf58-0fd74cb3548a",
       creator: {
          forename: "Ann",
          surname: "Jacobs",
@@ -7905,7 +7910,7 @@ define({
       modified: "2015-05-29T09:41:47.000Z"
    }, {
       title: "Number of applications in England and Wales divided by region",
-      nodeRef: "workspace:\/\/SpacesStore\/c3e7ce0d-eb7e-4c42-8501-51c97cbddcd7",
+      guid: "c3e7ce0d-eb7e-4c42-8501-51c97cbddcd7",
       creator: {
          forename: "Janice",
          surname: "Hart",
@@ -7920,7 +7925,7 @@ define({
       modified: "2015-04-23T18:03:57.000Z"
    }, {
       title: "Schema guidance",
-      nodeRef: "workspace:\/\/SpacesStore\/4df8ba8e-52e6-43b2-884c-ea1ce7d50eeb",
+      guid: "4df8ba8e-52e6-43b2-884c-ea1ce7d50eeb",
       creator: {
          forename: "Raymond",
          surname: "Carroll",
@@ -7935,7 +7940,7 @@ define({
       modified: "2015-06-13T18:14:12.000Z"
    }, {
       title: "Newry and Mourne",
-      nodeRef: "workspace:\/\/SpacesStore\/b1b9d106-8075-43f7-80de-c3528f60179b",
+      guid: "b1b9d106-8075-43f7-80de-c3528f60179b",
       creator: {
          forename: "Jerry",
          surname: "Watkins",
@@ -7950,7 +7955,7 @@ define({
       modified: "2015-03-30T19:17:12.000Z"
    }, {
       title: "Data file",
-      nodeRef: "workspace:\/\/SpacesStore\/9e03106a-898a-4540-9f79-2ec03829d561",
+      guid: "9e03106a-898a-4540-9f79-2ec03829d561",
       creator: {
          forename: "Scott",
          surname: "Williamson",
@@ -7965,7 +7970,7 @@ define({
       modified: "2015-08-14T01:46:25.000Z"
    }, {
       title: "SHMI Support and Guidance",
-      nodeRef: "workspace:\/\/SpacesStore\/524a64dc-ae7b-4695-a56f-a63c954814b4",
+      guid: "524a64dc-ae7b-4695-a56f-a63c954814b4",
       creator: {
          forename: "Amanda",
          surname: "Thompson",
@@ -7980,7 +7985,7 @@ define({
       modified: "2014-10-21T18:35:49.000Z"
    }, {
       title: "Customer service performance",
-      nodeRef: "workspace:\/\/SpacesStore\/5d29d6ec-e139-4eec-9b05-3b5eb92381f6",
+      guid: "5d29d6ec-e139-4eec-9b05-3b5eb92381f6",
       creator: {
          forename: "Robin",
          surname: "Williamson",
@@ -7995,7 +8000,7 @@ define({
       modified: "2015-04-01T05:21:33.000Z"
    }, {
       title: "Statistics on Drug Misuse",
-      nodeRef: "workspace:\/\/SpacesStore\/fc6f81ec-b8b0-4abc-a82a-f3f6d893566c",
+      guid: "fc6f81ec-b8b0-4abc-a82a-f3f6d893566c",
       creator: {
          forename: "Judith",
          surname: "Martin",
@@ -8010,7 +8015,7 @@ define({
       modified: "2015-05-28T02:17:28.000Z"
    }, {
       title: "South Buckinghamshire",
-      nodeRef: "workspace:\/\/SpacesStore\/fa80c223-ccaf-4776-b8fa-2caf81ba2bcd",
+      guid: "fa80c223-ccaf-4776-b8fa-2caf81ba2bcd",
       creator: {
          forename: "Maria",
          surname: "Garcia",
@@ -8025,7 +8030,7 @@ define({
       modified: "2015-01-31T07:29:33.000Z"
    }, {
       title: "GP Practice Vacancies",
-      nodeRef: "workspace:\/\/SpacesStore\/5471e5d5-c565-4c17-a5d9-1a271fbf48fd",
+      guid: "5471e5d5-c565-4c17-a5d9-1a271fbf48fd",
       creator: {
          forename: "Debra",
          surname: "Rogers",
@@ -8040,7 +8045,7 @@ define({
       modified: "2014-11-24T23:47:00.000Z"
    }, {
       title: "Smoke Control Area",
-      nodeRef: "workspace:\/\/SpacesStore\/fae430b4-124b-4cee-b475-49853c8e22c5",
+      guid: "fae430b4-124b-4cee-b475-49853c8e22c5",
       creator: {
          forename: "Frank",
          surname: "Moreno",
@@ -8055,7 +8060,7 @@ define({
       modified: "2014-09-21T13:08:14.000Z"
    }, {
       title: "East Riding of Yorkshire",
-      nodeRef: "workspace:\/\/SpacesStore\/1759b1c4-145e-4d14-9ac8-4b003a63e511",
+      guid: "1759b1c4-145e-4d14-9ac8-4b003a63e511",
       creator: {
          forename: "Lawrence",
          surname: "Nichols",
@@ -8070,7 +8075,7 @@ define({
       modified: "2014-10-03T14:18:53.000Z"
    }, {
       title: "Data coding information",
-      nodeRef: "workspace:\/\/SpacesStore\/7f07285e-9c96-4dbc-89ff-9e03219bac12",
+      guid: "7f07285e-9c96-4dbc-89ff-9e03219bac12",
       creator: {
          forename: "Marilyn",
          surname: "Montgomery",
@@ -8085,7 +8090,7 @@ define({
       modified: "2014-10-07T04:47:21.000Z"
    }, {
       title: "UKCESS Wales Local Data Toolkit",
-      nodeRef: "workspace:\/\/SpacesStore\/99c95ce2-093b-4e38-b84e-b2dce588a77c",
+      guid: "99c95ce2-093b-4e38-b84e-b2dce588a77c",
       creator: {
          forename: "Cynthia",
          surname: "Allen",
@@ -8100,7 +8105,7 @@ define({
       modified: "2015-05-28T22:53:12.000Z"
    }, {
       title: "Business rates web page",
-      nodeRef: "workspace:\/\/SpacesStore\/ed8b0f51-6cb1-41be-a6f6-decdfcf10749",
+      guid: "ed8b0f51-6cb1-41be-a6f6-decdfcf10749",
       creator: {
          forename: "Jose",
          surname: "Hart",
@@ -8115,7 +8120,7 @@ define({
       modified: "2014-12-28T19:21:44.000Z"
    }, {
       title: "LGA Transparency Guidance",
-      nodeRef: "workspace:\/\/SpacesStore\/e2cd05e9-5345-476c-9811-df574ff58902",
+      guid: "e2cd05e9-5345-476c-9811-df574ff58902",
       creator: {
          forename: "Maria",
          surname: "Elliott",
@@ -8130,7 +8135,7 @@ define({
       modified: "2015-03-21T05:27:38.000Z"
    }, {
       title: "Degree of improvement in door to balloon time delays by performance",
-      nodeRef: "workspace:\/\/SpacesStore\/9443ff35-3dcd-461e-8526-505e2922ff45",
+      guid: "9443ff35-3dcd-461e-8526-505e2922ff45",
       creator: {
          forename: "Margaret",
          surname: "Gomez",
@@ -8145,7 +8150,7 @@ define({
       modified: "2015-05-03T16:56:10.000Z"
    }, {
       title: "HMOs Section G",
-      nodeRef: "workspace:\/\/SpacesStore\/ccfc1714-15d8-4798-bc64-a06c348b0f31",
+      guid: "ccfc1714-15d8-4798-bc64-a06c348b0f31",
       creator: {
          forename: "Billy",
          surname: "Cunningham",
@@ -8160,7 +8165,7 @@ define({
       modified: "2015-03-13T11:15:46.000Z"
    }, {
       title: "North Dorset",
-      nodeRef: "workspace:\/\/SpacesStore\/eff2e752-8b68-4acf-9f0c-2db49028916d",
+      guid: "eff2e752-8b68-4acf-9f0c-2db49028916d",
       creator: {
          forename: "Fred",
          surname: "Lynch",
@@ -8175,7 +8180,7 @@ define({
       modified: "2015-04-02T21:26:26.000Z"
    }, {
       title: "HQIP website",
-      nodeRef: "workspace:\/\/SpacesStore\/d9f0755c-1adf-4511-bceb-9d9b32fb1f3e",
+      guid: "d9f0755c-1adf-4511-bceb-9d9b32fb1f3e",
       creator: {
          forename: "Ralph",
          surname: "Carpenter",
@@ -8190,7 +8195,7 @@ define({
       modified: "2015-01-22T04:20:18.000Z"
    }, {
       title: "Hospitality and Gift register",
-      nodeRef: "workspace:\/\/SpacesStore\/23b80b7c-e909-463b-8aae-c63dc3ef07fe",
+      guid: "23b80b7c-e909-463b-8aae-c63dc3ef07fe",
       creator: {
          forename: "Sara",
          surname: "Crawford",
@@ -8205,7 +8210,7 @@ define({
       modified: "2015-07-27T00:38:24.000Z"
    }, {
       title: "Public health funeral data",
-      nodeRef: "workspace:\/\/SpacesStore\/26325311-8656-4c5a-b1b3-190999375c8d",
+      guid: "26325311-8656-4c5a-b1b3-190999375c8d",
       creator: {
          forename: "Paula",
          surname: "Robertson",
@@ -8220,7 +8225,7 @@ define({
       modified: "2014-09-27T19:26:12.000Z"
    }, {
       title: "OGC Compliant WMS Service",
-      nodeRef: "workspace:\/\/SpacesStore\/740cc6c6-e966-45e2-bc8e-4a287598e913",
+      guid: "740cc6c6-e966-45e2-bc8e-4a287598e913",
       creator: {
          forename: "Howard",
          surname: "Kennedy",
@@ -8235,7 +8240,7 @@ define({
       modified: "2014-10-26T11:39:46.000Z"
    }, {
       title: "Nottingham City",
-      nodeRef: "workspace:\/\/SpacesStore\/b671c533-ff00-44d2-afde-9a7078288d7b",
+      guid: "b671c533-ff00-44d2-afde-9a7078288d7b",
       creator: {
          forename: "Rachel",
          surname: "Pierce",
@@ -8250,7 +8255,7 @@ define({
       modified: "2015-02-18T04:31:10.000Z"
    }, {
       title: "Text data tables",
-      nodeRef: "workspace:\/\/SpacesStore\/7af868d9-d16c-4a0c-abe1-0ed2d9560c4c",
+      guid: "7af868d9-d16c-4a0c-abe1-0ed2d9560c4c",
       creator: {
          forename: "Craig",
          surname: "Daniels",
@@ -8265,7 +8270,7 @@ define({
       modified: "2014-11-22T10:10:50.000Z"
    }, {
       title: "Section E",
-      nodeRef: "workspace:\/\/SpacesStore\/98ea8a72-4aab-481f-ba4d-da69136ad1de",
+      guid: "98ea8a72-4aab-481f-ba4d-da69136ad1de",
       creator: {
          forename: "Justin",
          surname: "Romero",
@@ -8280,7 +8285,7 @@ define({
       modified: "2014-11-09T21:19:09.000Z"
    }, {
       title: "Payments to Suppliers",
-      nodeRef: "workspace:\/\/SpacesStore\/440b51ba-e8a1-4a15-97c2-e6c11ad013a5",
+      guid: "440b51ba-e8a1-4a15-97c2-e6c11ad013a5",
       creator: {
          forename: "Dorothy",
          surname: "West",
@@ -8295,7 +8300,7 @@ define({
       modified: "2014-11-09T18:54:25.000Z"
    }, {
       title: "Dwelling Stock",
-      nodeRef: "workspace:\/\/SpacesStore\/5f709828-892a-44a3-9401-147c91fe53f5",
+      guid: "5f709828-892a-44a3-9401-147c91fe53f5",
       creator: {
          forename: "Lori",
          surname: "Torres",
@@ -8310,7 +8315,7 @@ define({
       modified: "2015-05-28T07:16:30.000Z"
    }, {
       title: "Senior Staff",
-      nodeRef: "workspace:\/\/SpacesStore\/b5e6e3f4-64c2-403e-96f2-281297fa6728",
+      guid: "b5e6e3f4-64c2-403e-96f2-281297fa6728",
       creator: {
          forename: "James",
          surname: "Franklin",
@@ -8325,7 +8330,7 @@ define({
       modified: "2014-08-30T18:02:00.000Z"
    }, {
       title: "Junior staff salary data",
-      nodeRef: "workspace:\/\/SpacesStore\/622ca646-805b-4b55-b79c-859accebc397",
+      guid: "622ca646-805b-4b55-b79c-859accebc397",
       creator: {
          forename: "Ann",
          surname: "Andrews",
@@ -8340,7 +8345,7 @@ define({
       modified: "2015-01-13T12:18:41.000Z"
    }, {
       title: "Local Plan Information",
-      nodeRef: "workspace:\/\/SpacesStore\/9d5eaa1e-2813-4458-a10c-3f739c4502c2",
+      guid: "9d5eaa1e-2813-4458-a10c-3f739c4502c2",
       creator: {
          forename: "Lori",
          surname: "Rose",
@@ -8355,7 +8360,7 @@ define({
       modified: "2015-03-06T07:56:50.000Z"
    }, {
       title: "Boundaries in KML format",
-      nodeRef: "workspace:\/\/SpacesStore\/baf77562-a6ce-4919-a0f2-2ffd6da3d818",
+      guid: "baf77562-a6ce-4919-a0f2-2ffd6da3d818",
       creator: {
          forename: "Albert",
          surname: "Murray",
@@ -8370,7 +8375,7 @@ define({
       modified: "2015-02-11T13:40:28.000Z"
    }, {
       title: "HSCIC Lifestyles",
-      nodeRef: "workspace:\/\/SpacesStore\/c6b1108d-3b57-4537-8a13-df063ee39c92",
+      guid: "c6b1108d-3b57-4537-8a13-df063ee39c92",
       creator: {
          forename: "Virginia",
          surname: "Williams",
@@ -8385,7 +8390,7 @@ define({
       modified: "2014-10-10T18:09:25.000Z"
    }, {
       title: "Planning Applications",
-      nodeRef: "workspace:\/\/SpacesStore\/115f976d-e451-4ba1-953a-570dd27f74e1",
+      guid: "115f976d-e451-4ba1-953a-570dd27f74e1",
       creator: {
          forename: "Kathy",
          surname: "Wagner",
@@ -8400,7 +8405,7 @@ define({
       modified: "2015-01-15T12:10:55.000Z"
    }, {
       title: "New Forest",
-      nodeRef: "workspace:\/\/SpacesStore\/39a8f468-1a25-4355-95c4-9ff2ca87b93b",
+      guid: "39a8f468-1a25-4355-95c4-9ff2ca87b93b",
       creator: {
          forename: "Donna",
          surname: "Wright",
@@ -8415,7 +8420,7 @@ define({
       modified: "2014-11-17T23:00:33.000Z"
    }, {
       title: "Clinical domain data tables",
-      nodeRef: "workspace:\/\/SpacesStore\/2a674db5-de3d-46a5-86c4-ea44dcab8967",
+      guid: "2a674db5-de3d-46a5-86c4-ea44dcab8967",
       creator: {
          forename: "Gloria",
          surname: "Peterson",
@@ -8430,7 +8435,7 @@ define({
       modified: "2014-10-26T18:27:59.000Z"
    }, {
       title: "Organisation Chart",
-      nodeRef: "workspace:\/\/SpacesStore\/a0c5b3cd-c2b6-444b-ade5-d8feb408046a",
+      guid: "a0c5b3cd-c2b6-444b-ade5-d8feb408046a",
       creator: {
          forename: "Mildred",
          surname: "Knight",
@@ -8445,7 +8450,7 @@ define({
       modified: "2015-01-25T10:52:09.000Z"
    }, {
       title: "Frequently asked questions",
-      nodeRef: "workspace:\/\/SpacesStore\/d19df1d8-0614-435c-b50a-b975027cc09b",
+      guid: "d19df1d8-0614-435c-b50a-b975027cc09b",
       creator: {
          forename: "Deborah",
          surname: "Snyder",
@@ -8460,7 +8465,7 @@ define({
       modified: "2014-11-22T07:00:44.000Z"
    }, {
       title: "Contingent liabilities",
-      nodeRef: "workspace:\/\/SpacesStore\/0a9cf82e-50dc-47b1-92d8-a476cae83d54",
+      guid: "0a9cf82e-50dc-47b1-92d8-a476cae83d54",
       creator: {
          forename: "Randy",
          surname: "Arnold",
@@ -8475,7 +8480,7 @@ define({
       modified: "2014-09-16T05:15:55.000Z"
    }, {
       title: "Regional Benefit Expenditure",
-      nodeRef: "workspace:\/\/SpacesStore\/f2aef7a9-433b-4672-ba27-b25e4f4a0051",
+      guid: "f2aef7a9-433b-4672-ba27-b25e4f4a0051",
       creator: {
          forename: "Kelly",
          surname: "Simpson",
@@ -8490,7 +8495,7 @@ define({
       modified: "2014-10-07T23:10:25.000Z"
    }, {
       title: "Bulletin tables",
-      nodeRef: "workspace:\/\/SpacesStore\/1e574140-14b0-421c-a37a-d27a9d0f4158",
+      guid: "1e574140-14b0-421c-a37a-d27a9d0f4158",
       creator: {
          forename: "Tina",
          surname: "Simmons",
@@ -8505,7 +8510,7 @@ define({
       modified: "2014-09-26T18:19:19.000Z"
    }, {
       title: "IAPT Data Quality Report",
-      nodeRef: "workspace:\/\/SpacesStore\/ed2069de-d2d1-4d23-9de2-08b772843504",
+      guid: "ed2069de-d2d1-4d23-9de2-08b772843504",
       creator: {
          forename: "Michael",
          surname: "Gonzalez",
@@ -8520,7 +8525,7 @@ define({
       modified: "2014-11-29T11:57:41.000Z"
    }, {
       title: "Public Toilets in Manchester",
-      nodeRef: "workspace:\/\/SpacesStore\/bb88c531-a857-4dd0-9d08-e2247ccf8140",
+      guid: "bb88c531-a857-4dd0-9d08-e2247ccf8140",
       creator: {
          forename: "Marilyn",
          surname: "Jacobs",
@@ -8535,7 +8540,7 @@ define({
       modified: "2015-01-11T06:05:33.000Z"
    }, {
       title: "Burglary",
-      nodeRef: "workspace:\/\/SpacesStore\/fb5501bb-28c5-469d-95f5-7a4d8260416c",
+      guid: "fb5501bb-28c5-469d-95f5-7a4d8260416c",
       creator: {
          forename: "Henry",
          surname: "Chapman",
@@ -8550,7 +8555,7 @@ define({
       modified: "2014-09-21T01:28:31.000Z"
    }, {
       title: "Information asset register",
-      nodeRef: "workspace:\/\/SpacesStore\/09bafd3c-18c6-496d-bdc1-52b0bf71c1dc",
+      guid: "09bafd3c-18c6-496d-bdc1-52b0bf71c1dc",
       creator: {
          forename: "Teresa",
          surname: "Greene",
@@ -8565,7 +8570,7 @@ define({
       modified: "2015-05-27T21:51:31.000Z"
    }, {
       title: "Outdoor sports faciltiies",
-      nodeRef: "workspace:\/\/SpacesStore\/ba11ee94-dcee-42b3-a6f6-ff558395ad83",
+      guid: "ba11ee94-dcee-42b3-a6f6-ff558395ad83",
       creator: {
          forename: "Bobby",
          surname: "Rose",
@@ -8580,7 +8585,7 @@ define({
       modified: "2014-10-18T00:18:58.000Z"
    }, {
       title: "Children trend tables",
-      nodeRef: "workspace:\/\/SpacesStore\/3d95363b-9aa2-46e9-b587-e1ceb7fd2682",
+      guid: "3d95363b-9aa2-46e9-b587-e1ceb7fd2682",
       creator: {
          forename: "Ryan",
          surname: "Thompson",
@@ -8595,7 +8600,7 @@ define({
       modified: "2015-05-17T23:00:59.000Z"
    }, {
       title: "DfE website",
-      nodeRef: "workspace:\/\/SpacesStore\/fc228910-b57e-48eb-8d51-23aedcf06512",
+      guid: "fc228910-b57e-48eb-8d51-23aedcf06512",
       creator: {
          forename: "Beverly",
          surname: "Palmer",
@@ -8610,7 +8615,7 @@ define({
       modified: "2015-05-20T06:29:39.000Z"
    }, {
       title: "Remuneration report",
-      nodeRef: "workspace:\/\/SpacesStore\/89508b06-149e-4016-8e40-dc977f064414",
+      guid: "89508b06-149e-4016-8e40-dc977f064414",
       creator: {
          forename: "Catherine",
          surname: "Edwards",
@@ -8625,7 +8630,7 @@ define({
       modified: "2014-10-26T14:47:52.000Z"
    }, {
       title: "Gender Percentiles",
-      nodeRef: "workspace:\/\/SpacesStore\/10a72baf-6f3e-4f6b-9bb9-3188deb7870e",
+      guid: "10a72baf-6f3e-4f6b-9bb9-3188deb7870e",
       creator: {
          forename: "Clarence",
          surname: "Turner",
@@ -8640,7 +8645,7 @@ define({
       modified: "2015-02-24T11:14:20.000Z"
    }, {
       title: "Defence Estates",
-      nodeRef: "workspace:\/\/SpacesStore\/a65d3240-6dbd-418e-8bba-ff1643c86bce",
+      guid: "a65d3240-6dbd-418e-8bba-ff1643c86bce",
       creator: {
          forename: "Roy",
          surname: "Hernandez",
@@ -8655,7 +8660,7 @@ define({
       modified: "2015-06-27T14:34:08.000Z"
    }, {
       title: "Canmore Web Map Service",
-      nodeRef: "workspace:\/\/SpacesStore\/6896ada4-7f0f-4474-ac69-2755de3df6cb",
+      guid: "6896ada4-7f0f-4474-ac69-2755de3df6cb",
       creator: {
          forename: "Jane",
          surname: "Jordan",
@@ -8670,7 +8675,7 @@ define({
       modified: "2015-08-01T11:58:15.000Z"
    }, {
       title: "PCT level data tables",
-      nodeRef: "workspace:\/\/SpacesStore\/540892c1-67d7-4b78-bedf-681b260e3b80",
+      guid: "540892c1-67d7-4b78-bedf-681b260e3b80",
       creator: {
          forename: "Lawrence",
          surname: "Chavez",
@@ -8685,7 +8690,7 @@ define({
       modified: "2015-02-23T19:19:57.000Z"
    }, {
       title: "Household theft",
-      nodeRef: "workspace:\/\/SpacesStore\/ebe4acb3-877c-4e77-9333-3d5371c2ca10",
+      guid: "ebe4acb3-877c-4e77-9333-3d5371c2ca10",
       creator: {
          forename: "John",
          surname: "Jenkins",
@@ -8700,7 +8705,7 @@ define({
       modified: "2015-01-08T01:17:32.000Z"
    }, {
       title: "Secondary School catchment areas",
-      nodeRef: "workspace:\/\/SpacesStore\/cb504618-99b8-43cb-a4d0-235402e41402",
+      guid: "cb504618-99b8-43cb-a4d0-235402e41402",
       creator: {
          forename: "Wanda",
          surname: "Payne",
@@ -8715,7 +8720,7 @@ define({
       modified: "2015-08-13T11:13:02.000Z"
    }, {
       title: "Prior Period Adjustments",
-      nodeRef: "workspace:\/\/SpacesStore\/ed4fbcc4-e7e6-49cd-92d3-fa172067d050",
+      guid: "ed4fbcc4-e7e6-49cd-92d3-fa172067d050",
       creator: {
          forename: "Kimberly",
          surname: "Hamilton",
@@ -8730,7 +8735,7 @@ define({
       modified: "2015-08-16T09:56:10.000Z"
    }, {
       title: "Historic contaminated land",
-      nodeRef: "workspace:\/\/SpacesStore\/7539f5f3-a871-449d-aedf-5ef1e3f831f9",
+      guid: "7539f5f3-a871-449d-aedf-5ef1e3f831f9",
       creator: {
          forename: "Ann",
          surname: "Lawson",
@@ -8745,7 +8750,7 @@ define({
       modified: "2015-03-20T21:04:24.000Z"
    }, {
       title: "Emissions of Carbon monoxide",
-      nodeRef: "workspace:\/\/SpacesStore\/f8e4388e-aa6d-4190-b033-bc8a7341127f",
+      guid: "f8e4388e-aa6d-4190-b033-bc8a7341127f",
       creator: {
          forename: "Dorothy",
          surname: "Garcia",
@@ -8760,7 +8765,7 @@ define({
       modified: "2015-02-16T22:12:06.000Z"
    }, {
       title: "Inspire Maps for Norfolk",
-      nodeRef: "workspace:\/\/SpacesStore\/323589af-c1ff-44ec-b2ba-f717eda168d4",
+      guid: "323589af-c1ff-44ec-b2ba-f717eda168d4",
       creator: {
          forename: "Lois",
          surname: "Griffin",
@@ -8775,7 +8780,7 @@ define({
       modified: "2015-05-14T14:07:43.000Z"
    }, {
       title: "KML Format",
-      nodeRef: "workspace:\/\/SpacesStore\/a34ba318-c7b3-4400-9127-bb2e5a70e2d6",
+      guid: "a34ba318-c7b3-4400-9127-bb2e5a70e2d6",
       creator: {
          forename: "Ruby",
          surname: "Torres",
@@ -8790,7 +8795,7 @@ define({
       modified: "2014-09-18T01:12:51.000Z"
    }, {
       title: "Description of field headers",
-      nodeRef: "workspace:\/\/SpacesStore\/d5889055-2946-4b0d-bb66-12a38e9bfc37",
+      guid: "d5889055-2946-4b0d-bb66-12a38e9bfc37",
       creator: {
          forename: "Jerry",
          surname: "Bishop",
@@ -8805,7 +8810,7 @@ define({
       modified: "2015-05-21T00:26:36.000Z"
    }, {
       title: "Cooling tower locations",
-      nodeRef: "workspace:\/\/SpacesStore\/3f6fe803-d3a1-47e7-8124-64a62064eb9b",
+      guid: "3f6fe803-d3a1-47e7-8124-64a62064eb9b",
       creator: {
          forename: "Roy",
          surname: "Mcdonald",
@@ -8820,7 +8825,7 @@ define({
       modified: "2015-01-28T13:48:37.000Z"
    }, {
       title: "Revised July QDS data",
-      nodeRef: "workspace:\/\/SpacesStore\/c1d9ec61-424f-40d9-ae3b-3e52fc9758f9",
+      guid: "c1d9ec61-424f-40d9-ae3b-3e52fc9758f9",
       creator: {
          forename: "Arthur",
          surname: "Bailey",
@@ -8835,7 +8840,7 @@ define({
       modified: "2014-12-21T05:59:53.000Z"
    }, {
       title: "Primary Schools",
-      nodeRef: "workspace:\/\/SpacesStore\/94b3e63b-f689-421f-8038-51f804b8d4ca",
+      guid: "94b3e63b-f689-421f-8038-51f804b8d4ca",
       creator: {
          forename: "Larry",
          surname: "Parker",
@@ -8850,7 +8855,7 @@ define({
       modified: "2014-09-16T19:56:51.000Z"
    }, {
       title: "Organisation Metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/dab57927-23d2-4e59-ab07-26e940bc9a32",
+      guid: "dab57927-23d2-4e59-ab07-26e940bc9a32",
       creator: {
          forename: "Ernest",
          surname: "Castillo",
@@ -8865,7 +8870,7 @@ define({
       modified: "2014-12-21T11:51:42.000Z"
    }, {
       title: "National Diabetes Audit",
-      nodeRef: "workspace:\/\/SpacesStore\/724d4551-2fbc-4738-ab6b-22f1108bba00",
+      guid: "724d4551-2fbc-4738-ab6b-22f1108bba00",
       creator: {
          forename: "Diane",
          surname: "Allen",
@@ -8880,7 +8885,7 @@ define({
       modified: "2015-05-27T14:42:09.000Z"
    }, {
       title: "Transparency Information",
-      nodeRef: "workspace:\/\/SpacesStore\/58385d3a-4e20-4247-8c5a-66de8841a8d9",
+      guid: "58385d3a-4e20-4247-8c5a-66de8841a8d9",
       creator: {
          forename: "Sharon",
          surname: "Stevens",
@@ -8895,7 +8900,7 @@ define({
       modified: "2015-06-29T13:27:08.000Z"
    }, {
       title: "Change notice",
-      nodeRef: "workspace:\/\/SpacesStore\/bdd03fc3-7192-4d02-bcac-1a4fd494b008",
+      guid: "bdd03fc3-7192-4d02-bcac-1a4fd494b008",
       creator: {
          forename: "Joan",
          surname: "Snyder",
@@ -8910,7 +8915,7 @@ define({
       modified: "2014-08-26T09:52:05.000Z"
    }, {
       title: "ODS Release Schedule",
-      nodeRef: "workspace:\/\/SpacesStore\/740af7fd-70c6-4304-99d1-fba836e624d8",
+      guid: "740af7fd-70c6-4304-99d1-fba836e624d8",
       creator: {
          forename: "Harold",
          surname: "Myers",
@@ -8925,7 +8930,7 @@ define({
       modified: "2015-02-07T04:43:58.000Z"
    }, {
       title: "Fatal casualty data",
-      nodeRef: "workspace:\/\/SpacesStore\/0057ddad-6283-49bf-a94f-41f4a1d5fb09",
+      guid: "0057ddad-6283-49bf-a94f-41f4a1d5fb09",
       creator: {
          forename: "Marie",
          surname: "Shaw",
@@ -8940,7 +8945,7 @@ define({
       modified: "2015-02-13T16:08:48.000Z"
    }, {
       title: "Meetings",
-      nodeRef: "workspace:\/\/SpacesStore\/941b3499-8afc-4e7d-b37a-8e3fb0884320",
+      guid: "941b3499-8afc-4e7d-b37a-8e3fb0884320",
       creator: {
          forename: "Louise",
          surname: "Kennedy",
@@ -8955,7 +8960,7 @@ define({
       modified: "2014-10-03T10:11:55.000Z"
    }, {
       title: "Council Contracts",
-      nodeRef: "workspace:\/\/SpacesStore\/cc4a97b3-1499-48f4-9d64-4485e86a062f",
+      guid: "cc4a97b3-1499-48f4-9d64-4485e86a062f",
       creator: {
          forename: "Christine",
          surname: "Wallace",
@@ -8970,7 +8975,7 @@ define({
       modified: "2015-05-07T20:24:34.000Z"
    }, {
       title: "Hospital Prescribing",
-      nodeRef: "workspace:\/\/SpacesStore\/1e93ce43-1a08-4c3e-9678-edd339dcfb83",
+      guid: "1e93ce43-1a08-4c3e-9678-edd339dcfb83",
       creator: {
          forename: "Laura",
          surname: "Torres",
@@ -8985,7 +8990,7 @@ define({
       modified: "2014-09-24T14:01:19.000Z"
    }, {
       title: "South Cambridgeshire",
-      nodeRef: "workspace:\/\/SpacesStore\/af523369-af3a-4d02-a702-779db985d5c0",
+      guid: "af523369-af3a-4d02-a702-779db985d5c0",
       creator: {
          forename: "Angela",
          surname: "Chapman",
@@ -9000,7 +9005,7 @@ define({
       modified: "2015-07-31T02:31:54.000Z"
    }, {
       title: "ODA Summary",
-      nodeRef: "workspace:\/\/SpacesStore\/2d4180b5-c95a-478c-bdac-9e44a681dfc1",
+      guid: "2d4180b5-c95a-478c-bdac-9e44a681dfc1",
       creator: {
          forename: "Mary",
          surname: "Reynolds",
@@ -9015,7 +9020,7 @@ define({
       modified: "2015-06-25T14:53:40.000Z"
    }, {
       title: "North Warwickshire",
-      nodeRef: "workspace:\/\/SpacesStore\/5079e4db-d86c-49b9-8e04-317c00582033",
+      guid: "5079e4db-d86c-49b9-8e04-317c00582033",
       creator: {
          forename: "Wayne",
          surname: "Ruiz",
@@ -9030,7 +9035,7 @@ define({
       modified: "2014-08-21T13:05:42.000Z"
    }, {
       title: "Council Grants",
-      nodeRef: "workspace:\/\/SpacesStore\/863cdff8-ab2e-4d8e-b5b6-9e05fd7d5499",
+      guid: "863cdff8-ab2e-4d8e-b5b6-9e05fd7d5499",
       creator: {
          forename: "Ruth",
          surname: "Montgomery",
@@ -9045,7 +9050,7 @@ define({
       modified: "2014-10-13T14:44:03.000Z"
    }, {
       title: "School admission appeals",
-      nodeRef: "workspace:\/\/SpacesStore\/66a24814-6cee-4b77-a756-cabdddbdc3b0",
+      guid: "66a24814-6cee-4b77-a756-cabdddbdc3b0",
       creator: {
          forename: "Lisa",
          surname: "Rose",
@@ -9060,7 +9065,7 @@ define({
       modified: "2014-09-17T05:37:33.000Z"
    }, {
       title: "National Archives Staff Engagement",
-      nodeRef: "workspace:\/\/SpacesStore\/d5999703-d791-4a30-9b23-bac715c3d10b",
+      guid: "d5999703-d791-4a30-9b23-bac715c3d10b",
       creator: {
          forename: "Terry",
          surname: "Sanchez",
@@ -9075,7 +9080,7 @@ define({
       modified: "2015-06-05T20:50:01.000Z"
    }, {
       title: "Staff in Post",
-      nodeRef: "workspace:\/\/SpacesStore\/0516a1aa-795e-4689-bf60-5297148f6063",
+      guid: "0516a1aa-795e-4689-bf60-5297148f6063",
       creator: {
          forename: "Michelle",
          surname: "Morgan",
@@ -9090,7 +9095,7 @@ define({
       modified: "2014-10-28T18:35:05.000Z"
    }, {
       title: "Manchester Transport Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/bb025977-8985-4070-a449-30cab7af199a",
+      guid: "bb025977-8985-4070-a449-30cab7af199a",
       creator: {
          forename: "Chris",
          surname: "Fowler",
@@ -9105,7 +9110,7 @@ define({
       modified: "2015-03-19T12:58:18.000Z"
    }, {
       title: "Public toilets",
-      nodeRef: "workspace:\/\/SpacesStore\/480439df-d3b9-400c-894a-d7d27f224265",
+      guid: "480439df-d3b9-400c-894a-d7d27f224265",
       creator: {
          forename: "Larry",
          surname: "Richardson",
@@ -9120,7 +9125,7 @@ define({
       modified: "2014-11-02T15:01:14.000Z"
    }, {
       title: "Navy Command",
-      nodeRef: "workspace:\/\/SpacesStore\/78bd9d7b-064a-4980-81d3-f37a1838d1b5",
+      guid: "78bd9d7b-064a-4980-81d3-f37a1838d1b5",
       creator: {
          forename: "Roy",
          surname: "Rose",
@@ -9135,7 +9140,7 @@ define({
       modified: "2015-07-30T19:32:28.000Z"
    }, {
       title: "Telecoms Data Updates",
-      nodeRef: "workspace:\/\/SpacesStore\/0ade5735-0c3a-4a22-a021-73f022d1635a",
+      guid: "0ade5735-0c3a-4a22-a021-73f022d1635a",
       creator: {
          forename: "Ryan",
          surname: "Stanley",
@@ -9150,7 +9155,7 @@ define({
       modified: "2014-11-01T12:20:04.000Z"
    }, {
       title: "CDR Data Footnotes",
-      nodeRef: "workspace:\/\/SpacesStore\/16e461cd-4341-4dac-a5c8-64e0a7001db0",
+      guid: "16e461cd-4341-4dac-a5c8-64e0a7001db0",
       creator: {
          forename: "Nancy",
          surname: "Lynch",
@@ -9165,7 +9170,7 @@ define({
       modified: "2015-04-27T05:16:25.000Z"
    }, {
       title: "Derbyshire Dales",
-      nodeRef: "workspace:\/\/SpacesStore\/91adbe15-ce94-4d25-9c4c-591b7193160a",
+      guid: "91adbe15-ce94-4d25-9c4c-591b7193160a",
       creator: {
          forename: "James",
          surname: "Parker",
@@ -9180,7 +9185,7 @@ define({
       modified: "2015-02-06T09:17:26.000Z"
    }, {
       title: "Air Quality Monitoring",
-      nodeRef: "workspace:\/\/SpacesStore\/1356df63-7e5b-45f8-a9c8-f84589161398",
+      guid: "1356df63-7e5b-45f8-a9c8-f84589161398",
       creator: {
          forename: "Debra",
          surname: "Welch",
@@ -9195,7 +9200,7 @@ define({
       modified: "2014-11-03T08:27:06.000Z"
    }, {
       title: "Air Quality Management Areas",
-      nodeRef: "workspace:\/\/SpacesStore\/7a9a3010-396f-448d-847c-d73833e1295d",
+      guid: "7a9a3010-396f-448d-847c-d73833e1295d",
       creator: {
          forename: "Justin",
          surname: "Armstrong",
@@ -9210,7 +9215,7 @@ define({
       modified: "2015-04-20T11:51:24.000Z"
    }, {
       title: "PCB Quarterly Data",
-      nodeRef: "workspace:\/\/SpacesStore\/f73e3b68-8782-4400-be2a-ae09d85ff040",
+      guid: "f73e3b68-8782-4400-be2a-ae09d85ff040",
       creator: {
          forename: "Louis",
          surname: "Lane",
@@ -9225,7 +9230,7 @@ define({
       modified: "2015-03-13T21:06:35.000Z"
    }, {
       title: "Transport Direct Supplementary Data",
-      nodeRef: "workspace:\/\/SpacesStore\/6ac756e0-b57a-483e-9417-2ed434c3b4b4",
+      guid: "6ac756e0-b57a-483e-9417-2ed434c3b4b4",
       creator: {
          forename: "Louise",
          surname: "Ramirez",
@@ -9240,7 +9245,7 @@ define({
       modified: "2015-04-24T17:34:26.000Z"
    }, {
       title: "Commissioning Support Units",
-      nodeRef: "workspace:\/\/SpacesStore\/6225c23a-329a-4881-ae43-219536f0eaa1",
+      guid: "6225c23a-329a-4881-ae43-219536f0eaa1",
       creator: {
          forename: "Stephen",
          surname: "Wheeler",
@@ -9255,7 +9260,7 @@ define({
       modified: "2014-11-13T15:06:03.000Z"
    }, {
       title: "School By Language",
-      nodeRef: "workspace:\/\/SpacesStore\/d280cccf-43d1-490a-871a-61f9944bbae3",
+      guid: "d280cccf-43d1-490a-871a-61f9944bbae3",
       creator: {
          forename: "Jerry",
          surname: "Graham",
@@ -9270,7 +9275,7 @@ define({
       modified: "2014-10-23T15:33:54.000Z"
    }, {
       title: "Organisation level data",
-      nodeRef: "workspace:\/\/SpacesStore\/ff4d0d96-8b44-429c-9698-6c953f95ec34",
+      guid: "ff4d0d96-8b44-429c-9698-6c953f95ec34",
       creator: {
          forename: "Nancy",
          surname: "Hughes",
@@ -9285,7 +9290,7 @@ define({
       modified: "2014-09-09T14:12:57.000Z"
    }, {
       title: "Open Data Planning Applications",
-      nodeRef: "workspace:\/\/SpacesStore\/c7d2ab2f-bb1e-40fd-875a-e177a41ecb97",
+      guid: "c7d2ab2f-bb1e-40fd-875a-e177a41ecb97",
       creator: {
          forename: "Chris",
          surname: "Foster",
@@ -9300,7 +9305,7 @@ define({
       modified: "2015-05-05T23:41:14.000Z"
    }, {
       title: "UDA by PCT",
-      nodeRef: "workspace:\/\/SpacesStore\/7af7f27e-60d1-40dd-9269-597d11b05a1e",
+      guid: "7af7f27e-60d1-40dd-9269-597d11b05a1e",
       creator: {
          forename: "Anne",
          surname: "Lopez",
@@ -9315,7 +9320,7 @@ define({
       modified: "2014-08-22T03:50:50.000Z"
    }, {
       title: "Statistical short story",
-      nodeRef: "workspace:\/\/SpacesStore\/0f38f215-bb3d-4cc9-a756-94ded54f0ca6",
+      guid: "0f38f215-bb3d-4cc9-a756-94ded54f0ca6",
       creator: {
          forename: "Sharon",
          surname: "Frazier",
@@ -9330,7 +9335,7 @@ define({
       modified: "2014-10-03T10:02:07.000Z"
    }, {
       title: "Internal applicants by gender",
-      nodeRef: "workspace:\/\/SpacesStore\/45b83b34-3742-4d64-b561-4196cc8f89c6",
+      guid: "45b83b34-3742-4d64-b561-4196cc8f89c6",
       creator: {
          forename: "Jerry",
          surname: "Burton",
@@ -9345,7 +9350,7 @@ define({
       modified: "2015-01-28T04:40:50.000Z"
    }, {
       title: "PLR Data Template",
-      nodeRef: "workspace:\/\/SpacesStore\/f4f3b4b2-9d67-4520-990d-859d1757663e",
+      guid: "f4f3b4b2-9d67-4520-990d-859d1757663e",
       creator: {
          forename: "Bonnie",
          surname: "Bradley",
@@ -9360,7 +9365,7 @@ define({
       modified: "2015-06-11T06:58:36.000Z"
    }, {
       title: "Adult Critical Care Data",
-      nodeRef: "workspace:\/\/SpacesStore\/03c5b9e3-c1c6-44c3-a4c3-21dff82e3adc",
+      guid: "03c5b9e3-c1c6-44c3-a4c3-21dff82e3adc",
       creator: {
          forename: "Stephen",
          surname: "Ramos",
@@ -9375,7 +9380,7 @@ define({
       modified: "2015-01-10T05:27:00.000Z"
    }, {
       title: "Mobile library stops",
-      nodeRef: "workspace:\/\/SpacesStore\/07b32025-4d96-4cd6-addb-3ac1d4285f13",
+      guid: "07b32025-4d96-4cd6-addb-3ac1d4285f13",
       creator: {
          forename: "Lisa",
          surname: "Perry",
@@ -9390,7 +9395,7 @@ define({
       modified: "2014-12-02T12:41:19.000Z"
    }, {
       title: "Pesticides in groundwater samples",
-      nodeRef: "workspace:\/\/SpacesStore\/cf4199a3-b2c2-4f50-b582-92478666a192",
+      guid: "cf4199a3-b2c2-4f50-b582-92478666a192",
       creator: {
          forename: "Nicole",
          surname: "Arnold",
@@ -9405,7 +9410,7 @@ define({
       modified: "2015-06-22T08:46:01.000Z"
    }, {
       title: "Internal appointments by disability",
-      nodeRef: "workspace:\/\/SpacesStore\/087b3978-0a73-4bb8-88d2-a1b37ba66783",
+      guid: "087b3978-0a73-4bb8-88d2-a1b37ba66783",
       creator: {
          forename: "Julia",
          surname: "Peterson",
@@ -9420,7 +9425,7 @@ define({
       modified: "2015-03-29T17:12:10.000Z"
    }, {
       title: "Open Data Institute Licence",
-      nodeRef: "workspace:\/\/SpacesStore\/b2ad2084-f2ae-4e3f-bb5b-e6b335c29966",
+      guid: "b2ad2084-f2ae-4e3f-bb5b-e6b335c29966",
       creator: {
          forename: "Linda",
          surname: "Welch",
@@ -9435,7 +9440,7 @@ define({
       modified: "2014-09-13T15:46:10.000Z"
    }, {
       title: "Cambridge Planning Applications",
-      nodeRef: "workspace:\/\/SpacesStore\/3809f641-2ee5-4169-bc30-802e710c2308",
+      guid: "3809f641-2ee5-4169-bc30-802e710c2308",
       creator: {
          forename: "Benjamin",
          surname: "Robinson",
@@ -9450,7 +9455,7 @@ define({
       modified: "2015-01-09T01:03:53.000Z"
    }, {
       title: "Avon and Somerset",
-      nodeRef: "workspace:\/\/SpacesStore\/33cb89e3-ce3b-4b7b-8d4e-0cae8b27e714",
+      guid: "33cb89e3-ce3b-4b7b-8d4e-0cae8b27e714",
       creator: {
          forename: "Janet",
          surname: "Russell",
@@ -9465,7 +9470,7 @@ define({
       modified: "2015-07-01T11:43:09.000Z"
    }, {
       title: "Publication scheme",
-      nodeRef: "workspace:\/\/SpacesStore\/b3d77b51-371d-4e45-a4c2-95aea4954753",
+      guid: "b3d77b51-371d-4e45-a4c2-95aea4954753",
       creator: {
          forename: "Kelly",
          surname: "Edwards",
@@ -9480,7 +9485,7 @@ define({
       modified: "2014-10-22T14:40:19.000Z"
    }, {
       title: "Licensing statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/6748bf51-b2a5-49d6-9880-db939b969ce5",
+      guid: "6748bf51-b2a5-49d6-9880-db939b969ce5",
       creator: {
          forename: "Jason",
          surname: "Kelly",
@@ -9495,7 +9500,7 @@ define({
       modified: "2014-12-18T09:55:46.000Z"
    }, {
       title: "Tonbridge and Malling",
-      nodeRef: "workspace:\/\/SpacesStore\/1ea6d393-7511-4c34-83b5-7bc7987a4cf4",
+      guid: "1ea6d393-7511-4c34-83b5-7bc7987a4cf4",
       creator: {
          forename: "Kathryn",
          surname: "Bailey",
@@ -9510,7 +9515,7 @@ define({
       modified: "2014-08-26T12:13:25.000Z"
    }, {
       title: "Wyre Forest",
-      nodeRef: "workspace:\/\/SpacesStore\/34d05cbd-57b7-4922-98b4-312ded19f11a",
+      guid: "34d05cbd-57b7-4922-98b4-312ded19f11a",
       creator: {
          forename: "John",
          surname: "Weaver",
@@ -9525,7 +9530,7 @@ define({
       modified: "2015-06-17T07:55:49.000Z"
    }, {
       title: "Ninth PICANet Annual Report Tables and Figures pdf",
-      nodeRef: "workspace:\/\/SpacesStore\/2fca58bc-7150-4178-8b1e-46dc78f27683",
+      guid: "2fca58bc-7150-4178-8b1e-46dc78f27683",
       creator: {
          forename: "Bobby",
          surname: "Allen",
@@ -9540,7 +9545,7 @@ define({
       modified: "2015-04-29T16:21:16.000Z"
    }, {
       title: "Additional Data",
-      nodeRef: "workspace:\/\/SpacesStore\/fd1d4e70-b87e-4175-b436-4f0ed3399986",
+      guid: "fd1d4e70-b87e-4175-b436-4f0ed3399986",
       creator: {
          forename: "Karen",
          surname: "Burns",
@@ -9555,7 +9560,7 @@ define({
       modified: "2015-06-09T06:53:58.000Z"
    }, {
       title: "Summary tables",
-      nodeRef: "workspace:\/\/SpacesStore\/b209c6f9-df33-4cc7-af59-3c19b315c9f2",
+      guid: "b209c6f9-df33-4cc7-af59-3c19b315c9f2",
       creator: {
          forename: "Kimberly",
          surname: "Parker",
@@ -9570,7 +9575,7 @@ define({
       modified: "2015-05-13T12:41:07.000Z"
    }, {
       title: "Mineral Safeguarding Zones",
-      nodeRef: "workspace:\/\/SpacesStore\/c345eed6-315c-477d-9f30-e5f7c1a9d3b4",
+      guid: "c345eed6-315c-477d-9f30-e5f7c1a9d3b4",
       creator: {
          forename: "Roger",
          surname: "Carter",
@@ -9585,7 +9590,7 @@ define({
       modified: "2015-02-16T13:21:37.000Z"
    }, {
       title: "All Participation and Achievements",
-      nodeRef: "workspace:\/\/SpacesStore\/1d38d1ac-6b84-460a-a414-d54fbc2ff880",
+      guid: "1d38d1ac-6b84-460a-a414-d54fbc2ff880",
       creator: {
          forename: "Larry",
          surname: "Williamson",
@@ -9600,7 +9605,7 @@ define({
       modified: "2015-04-02T16:10:11.000Z"
    }, {
       title: "Internal applicants by gender",
-      nodeRef: "workspace:\/\/SpacesStore\/9c07b4e5-5f38-44ea-8a0b-2c4e3f16fb48",
+      guid: "9c07b4e5-5f38-44ea-8a0b-2c4e3f16fb48",
       creator: {
          forename: "Walter",
          surname: "Griffin",
@@ -9615,7 +9620,7 @@ define({
       modified: "2015-07-25T02:49:32.000Z"
    }, {
       title: "Penalty Charge Notices Issued",
-      nodeRef: "workspace:\/\/SpacesStore\/d0614775-0ec8-445f-9e04-660646c910cc",
+      guid: "d0614775-0ec8-445f-9e04-660646c910cc",
       creator: {
          forename: "Betty",
          surname: "Romero",
@@ -9630,7 +9635,7 @@ define({
       modified: "2015-01-16T13:11:56.000Z"
    }, {
       title: "Holding document",
-      nodeRef: "workspace:\/\/SpacesStore\/fb142a8f-3ce2-457d-ba3f-bca4cff3cf80",
+      guid: "fb142a8f-3ce2-457d-ba3f-bca4cff3cf80",
       creator: {
          forename: "Marilyn",
          surname: "Smith",
@@ -9645,7 +9650,7 @@ define({
       modified: "2015-02-10T01:14:07.000Z"
    }, {
       title: "HSCIC Workforce data",
-      nodeRef: "workspace:\/\/SpacesStore\/562f1ef5-57e8-4b40-978f-24362264d820",
+      guid: "562f1ef5-57e8-4b40-978f-24362264d820",
       creator: {
          forename: "Gloria",
          surname: "Hart",
@@ -9660,7 +9665,7 @@ define({
       modified: "2015-08-06T12:13:06.000Z"
    }, {
       title: "HQIP NCAPOP Page",
-      nodeRef: "workspace:\/\/SpacesStore\/bde8880a-82ca-4215-948d-be5c66158f0d",
+      guid: "bde8880a-82ca-4215-948d-be5c66158f0d",
       creator: {
          forename: "Robert",
          surname: "Murphy",
@@ -9675,7 +9680,7 @@ define({
       modified: "2015-03-26T01:17:55.000Z"
    }, {
       title: "NPDA Data field description",
-      nodeRef: "workspace:\/\/SpacesStore\/9df1d411-79aa-4f41-b575-b55ca8a98526",
+      guid: "9df1d411-79aa-4f41-b575-b55ca8a98526",
       creator: {
          forename: "Stephanie",
          surname: "Mills",
@@ -9690,7 +9695,7 @@ define({
       modified: "2014-11-06T19:29:01.000Z"
    }, {
       title: "Public toilets schema guidance",
-      nodeRef: "workspace:\/\/SpacesStore\/b9e4c785-4c35-4c98-9235-a12cc5d9b2fc",
+      guid: "b9e4c785-4c35-4c98-9235-a12cc5d9b2fc",
       creator: {
          forename: "Annie",
          surname: "Hunter",
@@ -9705,7 +9710,7 @@ define({
       modified: "2015-01-06T11:05:37.000Z"
    }, {
       title: "Leavers by religion",
-      nodeRef: "workspace:\/\/SpacesStore\/6e555360-9958-4105-a2d4-bc7eff4ccb65",
+      guid: "6e555360-9958-4105-a2d4-bc7eff4ccb65",
       creator: {
          forename: "Eric",
          surname: "Hicks",
@@ -9720,7 +9725,7 @@ define({
       modified: "2015-05-01T00:13:18.000Z"
    }, {
       title: "West Lancashire",
-      nodeRef: "workspace:\/\/SpacesStore\/8c81041b-d9c6-40bc-a4d9-e6eabfd7d1af",
+      guid: "8c81041b-d9c6-40bc-a4d9-e6eabfd7d1af",
       creator: {
          forename: "Marie",
          surname: "Cruz",
@@ -9735,7 +9740,7 @@ define({
       modified: "2014-11-05T15:07:31.000Z"
    }, {
       title: "Free School Meals",
-      nodeRef: "workspace:\/\/SpacesStore\/7e6991a0-1017-45b6-a19e-f4eeff3fc8af",
+      guid: "7e6991a0-1017-45b6-a19e-f4eeff3fc8af",
       creator: {
          forename: "Juan",
          surname: "Miller",
@@ -9750,7 +9755,7 @@ define({
       modified: "2014-10-06T07:43:05.000Z"
    }, {
       title: "Tariff index",
-      nodeRef: "workspace:\/\/SpacesStore\/3197e471-f530-41b9-8e7b-ef218eb62683",
+      guid: "3197e471-f530-41b9-8e7b-ef218eb62683",
       creator: {
          forename: "Karen",
          surname: "Clark",
@@ -9765,7 +9770,7 @@ define({
       modified: "2014-10-15T14:47:45.000Z"
    }, {
       title: "Empty homes",
-      nodeRef: "workspace:\/\/SpacesStore\/52a6ceef-4667-4ff6-b9df-a8a68c07bcbd",
+      guid: "52a6ceef-4667-4ff6-b9df-a8a68c07bcbd",
       creator: {
          forename: "Tina",
          surname: "Ramirez",
@@ -9780,7 +9785,7 @@ define({
       modified: "2015-08-07T02:49:08.000Z"
    }, {
       title: "Flood warnings",
-      nodeRef: "workspace:\/\/SpacesStore\/4f00297a-dffa-47b9-a6a0-f750af70cfad",
+      guid: "4f00297a-dffa-47b9-a6a0-f750af70cfad",
       creator: {
          forename: "Roy",
          surname: "Mccoy",
@@ -9795,7 +9800,7 @@ define({
       modified: "2015-01-13T18:39:34.000Z"
    }, {
       title: "Internal applicants by disability",
-      nodeRef: "workspace:\/\/SpacesStore\/fe2bb52f-6eaf-43a9-893d-a4c66e47bc44",
+      guid: "fe2bb52f-6eaf-43a9-893d-a4c66e47bc44",
       creator: {
          forename: "Virginia",
          surname: "Dean",
@@ -9810,7 +9815,7 @@ define({
       modified: "2014-09-23T18:16:20.000Z"
    }, {
       title: "Appendix tables",
-      nodeRef: "workspace:\/\/SpacesStore\/8fc7e031-8d02-47d3-b661-4839626a1094",
+      guid: "8fc7e031-8d02-47d3-b661-4839626a1094",
       creator: {
          forename: "Pamela",
          surname: "Peters",
@@ -9825,7 +9830,7 @@ define({
       modified: "2014-09-06T17:41:18.000Z"
    }, {
       title: "Fraud investigations",
-      nodeRef: "workspace:\/\/SpacesStore\/61851905-ab8f-4e6b-87e8-6c1dd8bfb903",
+      guid: "61851905-ab8f-4e6b-87e8-6c1dd8bfb903",
       creator: {
          forename: "Jason",
          surname: "Brooks",
@@ -9840,7 +9845,7 @@ define({
       modified: "2015-05-11T11:15:49.000Z"
    }, {
       title: "Remuneration report February",
-      nodeRef: "workspace:\/\/SpacesStore\/033e88c9-3e2d-43c9-a9c5-36da898dcf8c",
+      guid: "033e88c9-3e2d-43c9-a9c5-36da898dcf8c",
       creator: {
          forename: "Katherine",
          surname: "Lynch",
@@ -9855,7 +9860,7 @@ define({
       modified: "2014-11-25T22:26:12.000Z"
    }, {
       title: "Cycle shops map data",
-      nodeRef: "workspace:\/\/SpacesStore\/9ce623f3-4d3b-4fab-97c4-10b66b99883a",
+      guid: "9ce623f3-4d3b-4fab-97c4-10b66b99883a",
       creator: {
          forename: "Margaret",
          surname: "Gardner",
@@ -9870,7 +9875,7 @@ define({
       modified: "2015-01-18T07:15:38.000Z"
    }, {
       title: "East Northamptonshire",
-      nodeRef: "workspace:\/\/SpacesStore\/3d473f5e-330a-48db-ad76-8f86714dd8d8",
+      guid: "3d473f5e-330a-48db-ad76-8f86714dd8d8",
       creator: {
          forename: "Willie",
          surname: "Anderson",
@@ -9885,7 +9890,7 @@ define({
       modified: "2014-10-21T04:07:46.000Z"
    }, {
       title: "Discretionary housing payments",
-      nodeRef: "workspace:\/\/SpacesStore\/79254cba-47ae-46fb-a886-3951be669fee",
+      guid: "79254cba-47ae-46fb-a886-3951be669fee",
       creator: {
          forename: "Julia",
          surname: "Ford",
@@ -9900,7 +9905,7 @@ define({
       modified: "2014-12-03T17:07:43.000Z"
    }, {
       title: "Type of estbalishment",
-      nodeRef: "workspace:\/\/SpacesStore\/558a0126-4bca-48e8-8875-538d23ad804e",
+      guid: "558a0126-4bca-48e8-8875-538d23ad804e",
       creator: {
          forename: "Amanda",
          surname: "Taylor",
@@ -9915,7 +9920,7 @@ define({
       modified: "2015-07-31T04:59:00.000Z"
    }, {
       title: "Open Spaces",
-      nodeRef: "workspace:\/\/SpacesStore\/5c41af2d-579b-47e4-83a5-c47fc6a3d1e4",
+      guid: "5c41af2d-579b-47e4-83a5-c47fc6a3d1e4",
       creator: {
          forename: "Matthew",
          surname: "Lynch",
@@ -9930,7 +9935,7 @@ define({
       modified: "2015-08-18T07:02:07.000Z"
    }, {
       title: "Cycle locker map data",
-      nodeRef: "workspace:\/\/SpacesStore\/e513109e-fb30-4be0-8b65-811fc3aef74c",
+      guid: "e513109e-fb30-4be0-8b65-811fc3aef74c",
       creator: {
          forename: "Judith",
          surname: "Garrett",
@@ -9945,7 +9950,7 @@ define({
       modified: "2014-11-04T02:55:18.000Z"
    }, {
       title: "Contracts Register",
-      nodeRef: "workspace:\/\/SpacesStore\/988234a3-aadc-4c77-8c3b-d9c287c26144",
+      guid: "988234a3-aadc-4c77-8c3b-d9c287c26144",
       creator: {
          forename: "Aaron",
          surname: "Rodriguez",
@@ -9960,7 +9965,7 @@ define({
       modified: "2014-12-19T09:58:41.000Z"
    }, {
       title: "Mineral Consultation Areas",
-      nodeRef: "workspace:\/\/SpacesStore\/fa3d3d15-c51c-4911-a791-a44430398be6",
+      guid: "fa3d3d15-c51c-4911-a791-a44430398be6",
       creator: {
          forename: "Sean",
          surname: "Bell",
@@ -9975,7 +9980,7 @@ define({
       modified: "2014-09-11T20:40:02.000Z"
    }, {
       title: "English Indices of Deprivation",
-      nodeRef: "workspace:\/\/SpacesStore\/a7f7d9bc-a166-4765-aacf-c16928f0dd38",
+      guid: "a7f7d9bc-a166-4765-aacf-c16928f0dd38",
       creator: {
          forename: "Mary",
          surname: "Bailey",
@@ -9990,7 +9995,7 @@ define({
       modified: "2015-04-01T14:00:23.000Z"
    }, {
       title: "Senior Officials hospitality",
-      nodeRef: "workspace:\/\/SpacesStore\/55fa4e71-44d3-4c3e-a4d9-ca354313969c",
+      guid: "55fa4e71-44d3-4c3e-a4d9-ca354313969c",
       creator: {
          forename: "Timothy",
          surname: "Lawson",
@@ -10005,7 +10010,7 @@ define({
       modified: "2015-05-28T03:18:21.000Z"
    }, {
       title: "Open Space",
-      nodeRef: "workspace:\/\/SpacesStore\/34fc9363-885c-470a-9ec9-7992f56510e5",
+      guid: "34fc9363-885c-470a-9ec9-7992f56510e5",
       creator: {
          forename: "Melissa",
          surname: "Carr",
@@ -10020,7 +10025,7 @@ define({
       modified: "2015-06-26T22:08:42.000Z"
    }, {
       title: "Qualification Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/0ca901df-5b0f-4c8f-b836-49ddd5b9b993",
+      guid: "0ca901df-5b0f-4c8f-b836-49ddd5b9b993",
       creator: {
          forename: "William",
          surname: "Wallace",
@@ -10035,7 +10040,7 @@ define({
       modified: "2014-08-24T15:55:13.000Z"
    }, {
       title: "Town and Village Greens",
-      nodeRef: "workspace:\/\/SpacesStore\/7960eb02-f2ce-4008-a13e-f88169740eb4",
+      guid: "7960eb02-f2ce-4008-a13e-f88169740eb4",
       creator: {
          forename: "Gary",
          surname: "Hayes",
@@ -10050,7 +10055,7 @@ define({
       modified: "2014-08-28T08:07:44.000Z"
    }, {
       title: "Fraud Strategy",
-      nodeRef: "workspace:\/\/SpacesStore\/e5904955-8b3b-4a0d-a0e9-d9ea8165392d",
+      guid: "e5904955-8b3b-4a0d-a0e9-d9ea8165392d",
       creator: {
          forename: "Julia",
          surname: "Freeman",
@@ -10065,7 +10070,7 @@ define({
       modified: "2014-09-21T08:26:35.000Z"
    }, {
       title: "Frozen animals",
-      nodeRef: "workspace:\/\/SpacesStore\/b115cc3e-47b0-4884-9258-8daa5999ce97",
+      guid: "b115cc3e-47b0-4884-9258-8daa5999ce97",
       creator: {
          forename: "Patricia",
          surname: "Allen",
@@ -10080,7 +10085,7 @@ define({
       modified: "2015-02-27T03:37:13.000Z"
    }, {
       title: "Rochdale main report",
-      nodeRef: "workspace:\/\/SpacesStore\/babbcb98-0f7f-4f6d-a03f-4d85ba661bb9",
+      guid: "babbcb98-0f7f-4f6d-a03f-4d85ba661bb9",
       creator: {
          forename: "Mary",
          surname: "Rice",
@@ -10095,7 +10100,7 @@ define({
       modified: "2015-04-12T06:31:10.000Z"
    }, {
       title: "Town Centre Classification",
-      nodeRef: "workspace:\/\/SpacesStore\/1eb472b2-b206-401a-b747-fd86869ee400",
+      guid: "1eb472b2-b206-401a-b747-fd86869ee400",
       creator: {
          forename: "Nicholas",
          surname: "Fowler",
@@ -10110,7 +10115,7 @@ define({
       modified: "2015-08-13T23:01:54.000Z"
    }, {
       title: "Headline Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/7c51185c-03d3-4794-af1a-494240f82bb6",
+      guid: "7c51185c-03d3-4794-af1a-494240f82bb6",
       creator: {
          forename: "Carl",
          surname: "Riley",
@@ -10125,7 +10130,7 @@ define({
       modified: "2015-06-03T00:41:59.000Z"
    }, {
       title: "Addicts index data",
-      nodeRef: "workspace:\/\/SpacesStore\/1293a01a-11e4-4bfa-b2f5-86aaadf71f3e",
+      guid: "1293a01a-11e4-4bfa-b2f5-86aaadf71f3e",
       creator: {
          forename: "Mildred",
          surname: "Ford",
@@ -10140,7 +10145,7 @@ define({
       modified: "2015-01-07T05:25:51.000Z"
    }, {
       title: "Grievance cases by gender",
-      nodeRef: "workspace:\/\/SpacesStore\/3bec9e74-3c16-406a-ab70-77b107f45c00",
+      guid: "3bec9e74-3c16-406a-ab70-77b107f45c00",
       creator: {
          forename: "Charles",
          surname: "Lee",
@@ -10155,7 +10160,7 @@ define({
       modified: "2015-05-14T11:22:31.000Z"
    }, {
       title: "Grants to Voluntary Sector",
-      nodeRef: "workspace:\/\/SpacesStore\/cf78f6b9-8120-47a3-9e07-316f23767d3a",
+      guid: "cf78f6b9-8120-47a3-9e07-316f23767d3a",
       creator: {
          forename: "Donald",
          surname: "Schmidt",
@@ -10170,7 +10175,7 @@ define({
       modified: "2015-06-24T19:19:31.000Z"
    }, {
       title: "Public Access",
-      nodeRef: "workspace:\/\/SpacesStore\/72ab6a7a-be9d-4a18-af65-baca3d55b6b8",
+      guid: "72ab6a7a-be9d-4a18-af65-baca3d55b6b8",
       creator: {
          forename: "Andrew",
          surname: "Evans",
@@ -10185,7 +10190,7 @@ define({
       modified: "2015-06-30T05:58:24.000Z"
    }, {
       title: "National Success Rate Tables",
-      nodeRef: "workspace:\/\/SpacesStore\/73e12dd5-047e-464b-8075-52222125aeb0",
+      guid: "73e12dd5-047e-464b-8075-52222125aeb0",
       creator: {
          forename: "Louise",
          surname: "Sanders",
@@ -10200,7 +10205,7 @@ define({
       modified: "2015-01-16T13:39:37.000Z"
    }, {
       title: "Senior Salaries Metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/bcc47868-4f7c-4d3d-ada3-32f7239d7267",
+      guid: "bcc47868-4f7c-4d3d-ada3-32f7239d7267",
       creator: {
          forename: "Judy",
          surname: "Stephens",
@@ -10215,7 +10220,7 @@ define({
       modified: "2015-01-11T21:47:44.000Z"
    }, {
       title: "NJR Website",
-      nodeRef: "workspace:\/\/SpacesStore\/ea773a4b-1672-48ed-b63b-8936aea6e676",
+      guid: "ea773a4b-1672-48ed-b63b-8936aea6e676",
       creator: {
          forename: "Kelly",
          surname: "Lynch",
@@ -10230,7 +10235,7 @@ define({
       modified: "2014-12-08T05:12:27.000Z"
    }, {
       title: "DECC Electricity use",
-      nodeRef: "workspace:\/\/SpacesStore\/b6a5937f-c2c0-4401-8dc8-5073df5690cf",
+      guid: "b6a5937f-c2c0-4401-8dc8-5073df5690cf",
       creator: {
          forename: "Howard",
          surname: "Peters",
@@ -10245,7 +10250,7 @@ define({
       modified: "2015-07-05T06:59:52.000Z"
    }, {
       title: "List of courts",
-      nodeRef: "workspace:\/\/SpacesStore\/d3dc3084-c132-43fa-a0ba-0b865a29ef30",
+      guid: "d3dc3084-c132-43fa-a0ba-0b865a29ef30",
       creator: {
          forename: "Ryan",
          surname: "Burton",
@@ -10260,7 +10265,7 @@ define({
       modified: "2015-01-03T05:14:23.000Z"
    }, {
       title: "Cannock Chase",
-      nodeRef: "workspace:\/\/SpacesStore\/4e6e7d48-cffd-43af-80e5-d90892ecb0df",
+      guid: "4e6e7d48-cffd-43af-80e5-d90892ecb0df",
       creator: {
          forename: "Kathryn",
          surname: "Moore",
@@ -10275,7 +10280,7 @@ define({
       modified: "2015-07-30T13:24:52.000Z"
    }, {
       title: "Schools Surplus",
-      nodeRef: "workspace:\/\/SpacesStore\/ca26f2fc-6b17-479f-a9a8-61c3a3b5e483",
+      guid: "ca26f2fc-6b17-479f-a9a8-61c3a3b5e483",
       creator: {
          forename: "Kevin",
          surname: "Sullivan",
@@ -10290,7 +10295,7 @@ define({
       modified: "2015-06-05T07:34:23.000Z"
    }, {
       title: "Junior Staff Data",
-      nodeRef: "workspace:\/\/SpacesStore\/c118891f-a14c-4b66-93e0-69992b5d8cbd",
+      guid: "c118891f-a14c-4b66-93e0-69992b5d8cbd",
       creator: {
          forename: "Billy",
          surname: "Cruz",
@@ -10305,7 +10310,7 @@ define({
       modified: "2015-01-02T13:22:49.000Z"
    }, {
       title: "Play areas",
-      nodeRef: "workspace:\/\/SpacesStore\/09fce4e7-78b2-4f75-ab30-5bb77c36a259",
+      guid: "09fce4e7-78b2-4f75-ab30-5bb77c36a259",
       creator: {
          forename: "Katherine",
          surname: "Carpenter",
@@ -10320,7 +10325,7 @@ define({
       modified: "2014-12-27T00:06:26.000Z"
    }, {
       title: "Terms of reference",
-      nodeRef: "workspace:\/\/SpacesStore\/abc738b2-5bcb-4d08-ac55-4416625086ed",
+      guid: "abc738b2-5bcb-4d08-ac55-4416625086ed",
       creator: {
          forename: "Johnny",
          surname: "Watson",
@@ -10335,7 +10340,7 @@ define({
       modified: "2015-03-19T16:17:21.000Z"
    }, {
       title: "Historical energy data",
-      nodeRef: "workspace:\/\/SpacesStore\/05ff0973-f99f-4ad2-a57e-bfeac67a3647",
+      guid: "05ff0973-f99f-4ad2-a57e-bfeac67a3647",
       creator: {
          forename: "Kelly",
          surname: "Fox",
@@ -10350,7 +10355,7 @@ define({
       modified: "2015-01-31T15:58:02.000Z"
    }, {
       title: "PCI activity per centre",
-      nodeRef: "workspace:\/\/SpacesStore\/b6b6e573-6fe2-45aa-bdbc-26203d6ff4c6",
+      guid: "b6b6e573-6fe2-45aa-bdbc-26203d6ff4c6",
       creator: {
          forename: "Mildred",
          surname: "Mccoy",
@@ -10365,7 +10370,7 @@ define({
       modified: "2014-11-10T10:22:15.000Z"
    }, {
       title: "Bolton Transport Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/f998d7db-3c03-4992-897f-f52c7191f04b",
+      guid: "f998d7db-3c03-4992-897f-f52c7191f04b",
       creator: {
          forename: "Alice",
          surname: "Ford",
@@ -10380,7 +10385,7 @@ define({
       modified: "2014-11-19T07:25:29.000Z"
    }, {
       title: "Premises Licenses",
-      nodeRef: "workspace:\/\/SpacesStore\/e4766996-7ba9-4092-b0ac-cdcaf7e085a7",
+      guid: "e4766996-7ba9-4092-b0ac-cdcaf7e085a7",
       creator: {
          forename: "Bruce",
          surname: "Hawkins",
@@ -10395,7 +10400,7 @@ define({
       modified: "2015-05-24T19:30:57.000Z"
    }, {
       title: "Senior Officials business expenses",
-      nodeRef: "workspace:\/\/SpacesStore\/2f4a9763-cdad-4853-b366-8d7db97965f2",
+      guid: "2f4a9763-cdad-4853-b366-8d7db97965f2",
       creator: {
          forename: "Julie",
          surname: "Hudson",
@@ -10410,7 +10415,7 @@ define({
       modified: "2015-06-25T17:17:53.000Z"
    }, {
       title: "Home page",
-      nodeRef: "workspace:\/\/SpacesStore\/b1f7e43c-adc9-48d4-8468-880f1846e568",
+      guid: "b1f7e43c-adc9-48d4-8468-880f1846e568",
       creator: {
          forename: "Angela",
          surname: "Carr",
@@ -10425,7 +10430,7 @@ define({
       modified: "2014-10-31T06:01:56.000Z"
    }, {
       title: "May Annex data",
-      nodeRef: "workspace:\/\/SpacesStore\/0e5d51f1-8b8c-40c0-bcbd-b0579c441cb1",
+      guid: "0e5d51f1-8b8c-40c0-bcbd-b0579c441cb1",
       creator: {
          forename: "Debra",
          surname: "Kelley",
@@ -10440,7 +10445,7 @@ define({
       modified: "2015-08-13T08:25:02.000Z"
    }, {
       title: "Senior staff salaries",
-      nodeRef: "workspace:\/\/SpacesStore\/5d2ac3d8-dcf6-4032-975e-ae5bad109b59",
+      guid: "5d2ac3d8-dcf6-4032-975e-ae5bad109b59",
       creator: {
          forename: "Walter",
          surname: "Lawrence",
@@ -10455,7 +10460,7 @@ define({
       modified: "2015-07-30T15:25:13.000Z"
    }, {
       title: "Archive of data",
-      nodeRef: "workspace:\/\/SpacesStore\/21e282f3-61e9-447f-bbc5-1d4853d6d9cd",
+      guid: "21e282f3-61e9-447f-bbc5-1d4853d6d9cd",
       creator: {
          forename: "Alan",
          surname: "Peters",
@@ -10470,7 +10475,7 @@ define({
       modified: "2015-05-23T03:00:30.000Z"
    }, {
       title: "Expenditure Infomation",
-      nodeRef: "workspace:\/\/SpacesStore\/b934781a-b366-4083-939a-b5b4705b9822",
+      guid: "b934781a-b366-4083-939a-b5b4705b9822",
       creator: {
          forename: "Catherine",
          surname: "Bryant",
@@ -10485,7 +10490,7 @@ define({
       modified: "2014-12-29T21:39:47.000Z"
    }, {
       title: "Institution Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/27d59ca4-244c-48f1-9a6e-864d653cf10d",
+      guid: "27d59ca4-244c-48f1-9a6e-864d653cf10d",
       creator: {
          forename: "Annie",
          surname: "Harvey",
@@ -10500,7 +10505,7 @@ define({
       modified: "2014-09-10T07:37:32.000Z"
    }, {
       title: "Statistical First Release Tables",
-      nodeRef: "workspace:\/\/SpacesStore\/8edcdbf0-b729-456c-b2d1-b1c345a52cad",
+      guid: "8edcdbf0-b729-456c-b2d1-b1c345a52cad",
       creator: {
          forename: "Patricia",
          surname: "Sims",
@@ -10515,7 +10520,7 @@ define({
       modified: "2014-11-10T17:51:34.000Z"
    }, {
       title: "Survey of Adult Carers",
-      nodeRef: "workspace:\/\/SpacesStore\/34c3b35f-181e-4493-9d19-79f283d6d06f",
+      guid: "34c3b35f-181e-4493-9d19-79f283d6d06f",
       creator: {
          forename: "Roy",
          surname: "Lewis",
@@ -10530,7 +10535,7 @@ define({
       modified: "2014-12-20T17:50:45.000Z"
    }, {
       title: "Statistics at HCA",
-      nodeRef: "workspace:\/\/SpacesStore\/c1f2a2cc-0280-4d45-a942-bf3ac0e9ae83",
+      guid: "c1f2a2cc-0280-4d45-a942-bf3ac0e9ae83",
       creator: {
          forename: "Barbara",
          surname: "Meyer",
@@ -10545,7 +10550,7 @@ define({
       modified: "2014-12-01T10:12:40.000Z"
    }, {
       title: "Monthly Summary Data",
-      nodeRef: "workspace:\/\/SpacesStore\/bcecef45-7bf9-471c-b4a1-1fb97ce8af53",
+      guid: "bcecef45-7bf9-471c-b4a1-1fb97ce8af53",
       creator: {
          forename: "Jacqueline",
          surname: "Dunn",
@@ -10560,7 +10565,7 @@ define({
       modified: "2014-10-02T11:43:36.000Z"
    }, {
       title: "Disciplinary cases by disability",
-      nodeRef: "workspace:\/\/SpacesStore\/e197ad1a-c4f4-43de-85f0-96fba6f59d5a",
+      guid: "e197ad1a-c4f4-43de-85f0-96fba6f59d5a",
       creator: {
          forename: "Kelly",
          surname: "Phillips",
@@ -10575,7 +10580,7 @@ define({
       modified: "2014-11-28T17:56:32.000Z"
    }, {
       title: "House Price Data",
-      nodeRef: "workspace:\/\/SpacesStore\/79e906c7-ba01-4027-b1a1-c325b7245f2d",
+      guid: "79e906c7-ba01-4027-b1a1-c325b7245f2d",
       creator: {
          forename: "Frank",
          surname: "Spencer",
@@ -10590,7 +10595,7 @@ define({
       modified: "2015-05-01T18:14:41.000Z"
    }, {
       title: "Blaby Business Rates Information",
-      nodeRef: "workspace:\/\/SpacesStore\/dc33ddbc-bd4b-4361-9afb-a44ab0a392d0",
+      guid: "dc33ddbc-bd4b-4361-9afb-a44ab0a392d0",
       creator: {
          forename: "Susan",
          surname: "Gray",
@@ -10605,7 +10610,7 @@ define({
       modified: "2015-07-31T15:56:53.000Z"
    }, {
       title: "Mid Suffolk",
-      nodeRef: "workspace:\/\/SpacesStore\/7a4f8f10-03af-406b-bf53-73b2ca059ed2",
+      guid: "7a4f8f10-03af-406b-bf53-73b2ca059ed2",
       creator: {
          forename: "Katherine",
          surname: "Owens",
@@ -10620,7 +10625,7 @@ define({
       modified: "2015-04-18T05:17:34.000Z"
    }, {
       title: "Planning Application Register",
-      nodeRef: "workspace:\/\/SpacesStore\/4aafde5a-1e6c-482e-9f54-77b4f0e6aeca",
+      guid: "4aafde5a-1e6c-482e-9f54-77b4f0e6aeca",
       creator: {
          forename: "Julia",
          surname: "Adams",
@@ -10635,7 +10640,7 @@ define({
       modified: "2014-09-23T19:57:00.000Z"
    }, {
       title: "Schools in England",
-      nodeRef: "workspace:\/\/SpacesStore\/75c08921-8f14-4ece-a027-a856149b46dc",
+      guid: "75c08921-8f14-4ece-a027-a856149b46dc",
       creator: {
          forename: "Jean",
          surname: "Mendoza",
@@ -10650,7 +10655,7 @@ define({
       modified: "2015-07-05T03:28:09.000Z"
    }, {
       title: "Government Grants Register",
-      nodeRef: "workspace:\/\/SpacesStore\/e3af89d0-b893-4721-9fd6-b7042458c4d7",
+      guid: "e3af89d0-b893-4721-9fd6-b7042458c4d7",
       creator: {
          forename: "Brenda",
          surname: "Sanchez",
@@ -10665,7 +10670,7 @@ define({
       modified: "2015-08-11T21:51:25.000Z"
    }, {
       title: "Hinckley and Bosworth",
-      nodeRef: "workspace:\/\/SpacesStore\/967638d6-8aa7-47d2-b1e4-71869fe02952",
+      guid: "967638d6-8aa7-47d2-b1e4-71869fe02952",
       creator: {
          forename: "Jeremy",
          surname: "Weaver",
@@ -10680,7 +10685,7 @@ define({
       modified: "2015-07-16T11:40:01.000Z"
    }, {
       title: "Senior staff pay",
-      nodeRef: "workspace:\/\/SpacesStore\/b298b869-0f56-4e04-b38b-12f869f06b87",
+      guid: "b298b869-0f56-4e04-b38b-12f869f06b87",
       creator: {
          forename: "Patrick",
          surname: "Bryant",
@@ -10695,7 +10700,7 @@ define({
       modified: "2015-07-31T09:59:24.000Z"
    }, {
       title: "Education terms explanatory information",
-      nodeRef: "workspace:\/\/SpacesStore\/2477a4d9-3f11-4f71-9a9c-c421e32da126",
+      guid: "2477a4d9-3f11-4f71-9a9c-c421e32da126",
       creator: {
          forename: "Debra",
          surname: "Cox",
@@ -10710,7 +10715,7 @@ define({
       modified: "2015-06-15T04:25:37.000Z"
    }, {
       title: "Contract finder",
-      nodeRef: "workspace:\/\/SpacesStore\/53d0ef98-db69-4a09-bfef-2cb729b0dc06",
+      guid: "53d0ef98-db69-4a09-bfef-2cb729b0dc06",
       creator: {
          forename: "Virginia",
          surname: "Warren",
@@ -10725,7 +10730,7 @@ define({
       modified: "2015-03-10T02:22:47.000Z"
    }, {
       title: "Public spending control",
-      nodeRef: "workspace:\/\/SpacesStore\/7e2723d1-f89c-4065-8250-4992c03f9e77",
+      guid: "7e2723d1-f89c-4065-8250-4992c03f9e77",
       creator: {
          forename: "Pamela",
          surname: "Johnston",
@@ -10740,7 +10745,7 @@ define({
       modified: "2015-01-28T21:59:39.000Z"
    }, {
       title: "Epsom and Ewell",
-      nodeRef: "workspace:\/\/SpacesStore\/fec92347-2167-4441-9c81-0676fdff67b1",
+      guid: "fec92347-2167-4441-9c81-0676fdff67b1",
       creator: {
          forename: "Ruby",
          surname: "Mccoy",
@@ -10755,7 +10760,7 @@ define({
       modified: "2015-01-05T02:10:00.000Z"
    }, {
       title: "Criteria for publication",
-      nodeRef: "workspace:\/\/SpacesStore\/19c0e135-2f4f-4fde-ba57-0ef13e46ffde",
+      guid: "19c0e135-2f4f-4fde-ba57-0ef13e46ffde",
       creator: {
          forename: "Karen",
          surname: "Wallace",
@@ -10770,7 +10775,7 @@ define({
       modified: "2014-09-18T01:17:56.000Z"
    }, {
       title: "Junior staff",
-      nodeRef: "workspace:\/\/SpacesStore\/2cd49858-427c-429a-866a-f5c6c6084d8d",
+      guid: "2cd49858-427c-429a-866a-f5c6c6084d8d",
       creator: {
          forename: "Bruce",
          surname: "Smith",
@@ -10785,7 +10790,7 @@ define({
       modified: "2014-08-26T07:18:39.000Z"
    }, {
       title: "Car park parking fines",
-      nodeRef: "workspace:\/\/SpacesStore\/f1cfc2bc-d754-422c-9f48-6addc91cf957",
+      guid: "f1cfc2bc-d754-422c-9f48-6addc91cf957",
       creator: {
          forename: "Joe",
          surname: "Ray",
@@ -10800,7 +10805,7 @@ define({
       modified: "2015-03-06T22:29:34.000Z"
    }, {
       title: "Senior officials hospitality",
-      nodeRef: "workspace:\/\/SpacesStore\/71e0f909-5778-4270-8e32-895b089b5f56",
+      guid: "71e0f909-5778-4270-8e32-895b089b5f56",
       creator: {
          forename: "Pamela",
          surname: "Bell",
@@ -10815,7 +10820,7 @@ define({
       modified: "2015-03-01T08:24:27.000Z"
    }, {
       title: "Prevalence risks",
-      nodeRef: "workspace:\/\/SpacesStore\/32d78a0b-6616-4f04-8ab4-d8c3285b5602",
+      guid: "32d78a0b-6616-4f04-8ab4-d8c3285b5602",
       creator: {
          forename: "Jerry",
          surname: "Peters",
@@ -10830,7 +10835,7 @@ define({
       modified: "2015-04-03T01:04:19.000Z"
    }, {
       title: "St Edmundsbury",
-      nodeRef: "workspace:\/\/SpacesStore\/1e19347a-cf66-4761-ac8e-25386ce0196d",
+      guid: "1e19347a-cf66-4761-ac8e-25386ce0196d",
       creator: {
          forename: "Aaron",
          surname: "Black",
@@ -10845,7 +10850,7 @@ define({
       modified: "2015-07-03T17:09:44.000Z"
    }, {
       title: "Optical Headquarters",
-      nodeRef: "workspace:\/\/SpacesStore\/b51d9ca8-bf63-477a-b9aa-905d71b72db6",
+      guid: "b51d9ca8-bf63-477a-b9aa-905d71b72db6",
       creator: {
          forename: "Donald",
          surname: "Burns",
@@ -10860,7 +10865,7 @@ define({
       modified: "2015-08-11T10:34:47.000Z"
    }, {
       title: "Related resource",
-      nodeRef: "workspace:\/\/SpacesStore\/5a7a608a-fef1-4251-a970-3a69bac32387",
+      guid: "5a7a608a-fef1-4251-a970-3a69bac32387",
       creator: {
          forename: "Keith",
          surname: "Garrett",
@@ -10875,7 +10880,7 @@ define({
       modified: "2014-08-21T12:49:09.000Z"
    }, {
       title: "Collections database",
-      nodeRef: "workspace:\/\/SpacesStore\/307b7b85-b773-4d2e-8c47-f61e4e5a5fb2",
+      guid: "307b7b85-b773-4d2e-8c47-f61e4e5a5fb2",
       creator: {
          forename: "Phyllis",
          surname: "Willis",
@@ -10890,7 +10895,7 @@ define({
       modified: "2014-10-20T02:29:51.000Z"
    }, {
       title: "Rother District Council Supplier Spend",
-      nodeRef: "workspace:\/\/SpacesStore\/cca89a07-9d8b-4ffd-9bae-892526a8c1f0",
+      guid: "cca89a07-9d8b-4ffd-9bae-892526a8c1f0",
       creator: {
          forename: "Brian",
          surname: "Howell",
@@ -10905,7 +10910,7 @@ define({
       modified: "2015-07-03T08:32:25.000Z"
    }, {
       title: "Ethnicity Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/3d6e6ee9-f910-4639-858d-b114824c229b",
+      guid: "3d6e6ee9-f910-4639-858d-b114824c229b",
       creator: {
          forename: "Earl",
          surname: "Palmer",
@@ -10920,7 +10925,7 @@ define({
       modified: "2014-10-15T18:26:51.000Z"
    }, {
       title: "Key performance indicators",
-      nodeRef: "workspace:\/\/SpacesStore\/0aa46dc1-80c7-435d-baf1-4f3604338bb9",
+      guid: "0aa46dc1-80c7-435d-baf1-4f3604338bb9",
       creator: {
          forename: "Amy",
          surname: "Bowman",
@@ -10935,7 +10940,7 @@ define({
       modified: "2015-05-27T18:03:19.000Z"
    }, {
       title: "CORE supporting tables",
-      nodeRef: "workspace:\/\/SpacesStore\/48c8cd1b-8fb8-40b6-b5a4-c08a2ccaaad3",
+      guid: "48c8cd1b-8fb8-40b6-b5a4-c08a2ccaaad3",
       creator: {
          forename: "Matthew",
          surname: "Johnson",
@@ -10950,7 +10955,7 @@ define({
       modified: "2014-12-18T06:53:42.000Z"
    }, {
       title: "Museums events",
-      nodeRef: "workspace:\/\/SpacesStore\/6274930b-f3dc-4e03-a0a6-9dc1639e2eab",
+      guid: "6274930b-f3dc-4e03-a0a6-9dc1639e2eab",
       creator: {
          forename: "Walter",
          surname: "Rose",
@@ -10965,7 +10970,7 @@ define({
       modified: "2015-07-03T10:34:29.000Z"
    }, {
       title: "Dataset counts as CSV",
-      nodeRef: "workspace:\/\/SpacesStore\/d5b2f38f-a210-455b-9ab3-03cf6f8d8271",
+      guid: "d5b2f38f-a210-455b-9ab3-03cf6f8d8271",
       creator: {
          forename: "Ryan",
          surname: "Cole",
@@ -10980,7 +10985,7 @@ define({
       modified: "2014-10-18T15:37:00.000Z"
    }, {
       title: "Vacant Dwellings",
-      nodeRef: "workspace:\/\/SpacesStore\/b25e8875-fb99-4dcc-8f5e-d86def37e42c",
+      guid: "b25e8875-fb99-4dcc-8f5e-d86def37e42c",
       creator: {
          forename: "Henry",
          surname: "Martin",
@@ -10995,7 +11000,7 @@ define({
       modified: "2015-04-18T02:32:25.000Z"
    }, {
       title: "Planning applications",
-      nodeRef: "workspace:\/\/SpacesStore\/d241007d-994c-454c-a01f-455ed897958b",
+      guid: "d241007d-994c-454c-a01f-455ed897958b",
       creator: {
          forename: "Susan",
          surname: "Harris",
@@ -11010,7 +11015,7 @@ define({
       modified: "2015-02-16T04:41:46.000Z"
    }, {
       title: "IDOX Applications Environment Details",
-      nodeRef: "workspace:\/\/SpacesStore\/dba565cb-5e47-46c1-bc15-059598309b1a",
+      guid: "dba565cb-5e47-46c1-bc15-059598309b1a",
       creator: {
          forename: "Catherine",
          surname: "Fuller",
@@ -11025,7 +11030,7 @@ define({
       modified: "2014-12-09T12:02:33.000Z"
    }, {
       title: "Bolton Main Report",
-      nodeRef: "workspace:\/\/SpacesStore\/7ce6a625-de42-4cd1-8b42-5e73687ff225",
+      guid: "7ce6a625-de42-4cd1-8b42-5e73687ff225",
       creator: {
          forename: "William",
          surname: "Jenkins",
@@ -11040,7 +11045,7 @@ define({
       modified: "2015-01-03T19:25:40.000Z"
    }, {
       title: "South Ayrshire",
-      nodeRef: "workspace:\/\/SpacesStore\/0b6b6bbd-6e64-4c18-91a2-1687752352c7",
+      guid: "0b6b6bbd-6e64-4c18-91a2-1687752352c7",
       creator: {
          forename: "Craig",
          surname: "Henderson",
@@ -11055,7 +11060,7 @@ define({
       modified: "2014-12-10T20:47:18.000Z"
    }, {
       title: "Age Length Level Percentiles",
-      nodeRef: "workspace:\/\/SpacesStore\/e0142e3d-b6cc-418c-96d5-bff0575a0751",
+      guid: "e0142e3d-b6cc-418c-96d5-bff0575a0751",
       creator: {
          forename: "Nicholas",
          surname: "Hunt",
@@ -11070,7 +11075,7 @@ define({
       modified: "2015-02-20T05:38:43.000Z"
    }, {
       title: "Online Visualisation Tool",
-      nodeRef: "workspace:\/\/SpacesStore\/bb97a104-9807-4537-91e1-5f103b33b816",
+      guid: "bb97a104-9807-4537-91e1-5f103b33b816",
       creator: {
          forename: "Kathleen",
          surname: "Cunningham",
@@ -11085,7 +11090,7 @@ define({
       modified: "2015-04-28T14:34:19.000Z"
    }, {
       title: "South Tyneside",
-      nodeRef: "workspace:\/\/SpacesStore\/2762df66-1c19-4cd0-861b-1666d37bd46c",
+      guid: "2762df66-1c19-4cd0-861b-1666d37bd46c",
       creator: {
          forename: "Albert",
          surname: "Reid",
@@ -11100,7 +11105,7 @@ define({
       modified: "2015-08-17T13:11:23.000Z"
    }, {
       title: "Explore the ASCOF data",
-      nodeRef: "workspace:\/\/SpacesStore\/4a1343df-83d3-4b4d-9662-ace3d55da683",
+      guid: "4a1343df-83d3-4b4d-9662-ace3d55da683",
       creator: {
          forename: "Janice",
          surname: "Burton",
@@ -11115,7 +11120,7 @@ define({
       modified: "2015-07-26T11:20:57.000Z"
    }, {
       title: "Course directory API",
-      nodeRef: "workspace:\/\/SpacesStore\/2b888ce5-f2af-4b1c-886a-b7d1554c881e",
+      guid: "2b888ce5-f2af-4b1c-886a-b7d1554c881e",
       creator: {
          forename: "Brian",
          surname: "Henry",
@@ -11130,7 +11135,7 @@ define({
       modified: "2014-09-06T14:00:25.000Z"
    }, {
       title: "Other Qualification Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/63fe07d4-d186-4f03-b18b-a28a48ba68c2",
+      guid: "63fe07d4-d186-4f03-b18b-a28a48ba68c2",
       creator: {
          forename: "Aaron",
          surname: "Hart",
@@ -11145,7 +11150,7 @@ define({
       modified: "2015-04-06T12:34:19.000Z"
    }, {
       title: "North Devon",
-      nodeRef: "workspace:\/\/SpacesStore\/e3f42f42-0f64-49c9-b6cf-c565fc8856b0",
+      guid: "e3f42f42-0f64-49c9-b6cf-c565fc8856b0",
       creator: {
          forename: "Wanda",
          surname: "Nguyen",
@@ -11160,7 +11165,7 @@ define({
       modified: "2015-06-18T01:34:26.000Z"
    }, {
       title: "HPI Land Registry",
-      nodeRef: "workspace:\/\/SpacesStore\/75d4e7ef-9665-466f-a4d7-ba309f70d847",
+      guid: "75d4e7ef-9665-466f-a4d7-ba309f70d847",
       creator: {
          forename: "Roy",
          surname: "Richardson",
@@ -11175,7 +11180,7 @@ define({
       modified: "2015-01-05T23:08:09.000Z"
    }, {
       title: "Administrative budgets",
-      nodeRef: "workspace:\/\/SpacesStore\/0f9c84bd-6f55-468b-9f7e-8afdf74eb1f0",
+      guid: "0f9c84bd-6f55-468b-9f7e-8afdf74eb1f0",
       creator: {
          forename: "Carol",
          surname: "Porter",
@@ -11190,7 +11195,7 @@ define({
       modified: "2015-05-09T01:30:02.000Z"
    }, {
       title: "Junior Staff",
-      nodeRef: "workspace:\/\/SpacesStore\/f38d6872-c844-4037-b11a-cda668d1abba",
+      guid: "f38d6872-c844-4037-b11a-cda668d1abba",
       creator: {
          forename: "Susan",
          surname: "Carpenter",
@@ -11205,7 +11210,7 @@ define({
       modified: "2015-07-14T03:17:53.000Z"
    }, {
       title: "General Ophthalmic Workforce Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/db77d3a9-4a60-47f6-9fc4-529df70cc678",
+      guid: "db77d3a9-4a60-47f6-9fc4-529df70cc678",
       creator: {
          forename: "Ann",
          surname: "Dixon",
@@ -11220,7 +11225,7 @@ define({
       modified: "2014-12-14T16:55:45.000Z"
    }, {
       title: "Primary PCI",
-      nodeRef: "workspace:\/\/SpacesStore\/62af923e-38c3-438c-82d1-8db145981806",
+      guid: "62af923e-38c3-438c-82d1-8db145981806",
       creator: {
          forename: "Michelle",
          surname: "Butler",
@@ -11235,7 +11240,7 @@ define({
       modified: "2014-10-23T23:55:31.000Z"
    }, {
       title: "Development envelopes",
-      nodeRef: "workspace:\/\/SpacesStore\/6d915a08-de30-4ff5-8fe9-03f6c3330c71",
+      guid: "6d915a08-de30-4ff5-8fe9-03f6c3330c71",
       creator: {
          forename: "Louise",
          surname: "Wilson",
@@ -11250,7 +11255,7 @@ define({
       modified: "2014-11-05T00:40:02.000Z"
    }, {
       title: "Senior Staff Data",
-      nodeRef: "workspace:\/\/SpacesStore\/b76ece5b-f5c9-4983-8d20-be22e0052915",
+      guid: "b76ece5b-f5c9-4983-8d20-be22e0052915",
       creator: {
          forename: "Charles",
          surname: "Perkins",
@@ -11265,7 +11270,7 @@ define({
       modified: "2014-10-06T08:47:07.000Z"
    }, {
       title: "Third data set",
-      nodeRef: "workspace:\/\/SpacesStore\/4a2c0632-d2dc-4803-b77b-ec06d7a92dca",
+      guid: "4a2c0632-d2dc-4803-b77b-ec06d7a92dca",
       creator: {
          forename: "Joe",
          surname: "Sanchez",
@@ -11280,7 +11285,7 @@ define({
       modified: "2014-09-28T17:56:54.000Z"
    }, {
       title: "RBWM Corporate Strategy",
-      nodeRef: "workspace:\/\/SpacesStore\/893545a7-85d3-4d6d-a35c-3c30f90fd226",
+      guid: "893545a7-85d3-4d6d-a35c-3c30f90fd226",
       creator: {
          forename: "Frances",
          surname: "Morgan",
@@ -11295,7 +11300,7 @@ define({
       modified: "2014-09-01T21:49:19.000Z"
    }, {
       title: "An INSPIRE View Service",
-      nodeRef: "workspace:\/\/SpacesStore\/79b997e4-12c3-4df6-b105-6f121b72eabd",
+      guid: "79b997e4-12c3-4df6-b105-6f121b72eabd",
       creator: {
          forename: "Patrick",
          surname: "Larson",
@@ -11310,7 +11315,7 @@ define({
       modified: "2015-05-21T04:57:22.000Z"
    }, {
       title: "DSG Junior Staff Data",
-      nodeRef: "workspace:\/\/SpacesStore\/53a988a4-eb32-4286-9052-7fe2bed5899d",
+      guid: "53a988a4-eb32-4286-9052-7fe2bed5899d",
       creator: {
          forename: "Russell",
          surname: "Brown",
@@ -11325,7 +11330,7 @@ define({
       modified: "2014-12-14T15:43:13.000Z"
    }, {
       title: "Open data directory",
-      nodeRef: "workspace:\/\/SpacesStore\/fc6aa7a9-b7ad-4aae-944b-56ef8911ed8d",
+      guid: "fc6aa7a9-b7ad-4aae-944b-56ef8911ed8d",
       creator: {
          forename: "Brenda",
          surname: "Chapman",
@@ -11340,7 +11345,7 @@ define({
       modified: "2014-10-13T01:00:28.000Z"
    }, {
       title: "UDA by CCG",
-      nodeRef: "workspace:\/\/SpacesStore\/027e1501-da6d-4a70-ae14-6dd4dd504668",
+      guid: "027e1501-da6d-4a70-ae14-6dd4dd504668",
       creator: {
          forename: "Julie",
          surname: "Bryant",
@@ -11355,7 +11360,7 @@ define({
       modified: "2014-11-22T13:04:54.000Z"
    }, {
       title: "Trade union facility time",
-      nodeRef: "workspace:\/\/SpacesStore\/d60fd853-4a42-4f8a-be70-c1e5fbc80b0e",
+      guid: "d60fd853-4a42-4f8a-be70-c1e5fbc80b0e",
       creator: {
          forename: "Lawrence",
          surname: "Garza",
@@ -11370,7 +11375,7 @@ define({
       modified: "2014-11-21T05:02:50.000Z"
    }, {
       title: "GM Casualty Data",
-      nodeRef: "workspace:\/\/SpacesStore\/d9da8b0f-c577-4473-8c16-fbace7d72ae5",
+      guid: "d9da8b0f-c577-4473-8c16-fbace7d72ae5",
       creator: {
          forename: "Virginia",
          surname: "Snyder",
@@ -11385,7 +11390,7 @@ define({
       modified: "2015-04-01T18:51:56.000Z"
    }, {
       title: "HSCIC Senior Staff Data",
-      nodeRef: "workspace:\/\/SpacesStore\/ba5a16bb-ebab-4a28-9af8-cc505bb45437",
+      guid: "ba5a16bb-ebab-4a28-9af8-cc505bb45437",
       creator: {
          forename: "Joyce",
          surname: "Porter",
@@ -11400,7 +11405,7 @@ define({
       modified: "2015-03-08T08:56:46.000Z"
    }, {
       title: "NDDC Owned Land",
-      nodeRef: "workspace:\/\/SpacesStore\/adae757e-13d2-48f9-bc2a-0a01a5972c16",
+      guid: "adae757e-13d2-48f9-bc2a-0a01a5972c16",
       creator: {
          forename: "Lois",
          surname: "Wood",
@@ -11415,7 +11420,7 @@ define({
       modified: "2014-10-03T02:50:45.000Z"
    }, {
       title: "OSCAR spending data spreadsheet",
-      nodeRef: "workspace:\/\/SpacesStore\/bdc08e53-d5f0-4573-8b55-ec6bb0ff5d3b",
+      guid: "bdc08e53-d5f0-4573-8b55-ec6bb0ff5d3b",
       creator: {
          forename: "Carolyn",
          surname: "Ellis",
@@ -11430,7 +11435,7 @@ define({
       modified: "2015-05-26T04:40:38.000Z"
    }, {
       title: "Metrolink Station Facilities",
-      nodeRef: "workspace:\/\/SpacesStore\/d8e14374-4974-4bd2-9d29-a83914e27dd8",
+      guid: "d8e14374-4974-4bd2-9d29-a83914e27dd8",
       creator: {
          forename: "Peter",
          surname: "Kelly",
@@ -11445,7 +11450,7 @@ define({
       modified: "2015-07-25T22:30:16.000Z"
    }, {
       title: "Departmental Organisational Charts",
-      nodeRef: "workspace:\/\/SpacesStore\/8eaff8f5-d697-4cbb-a1ac-69facc016d35",
+      guid: "8eaff8f5-d697-4cbb-a1ac-69facc016d35",
       creator: {
          forename: "Daniel",
          surname: "Welch",
@@ -11460,7 +11465,7 @@ define({
       modified: "2015-07-14T13:26:36.000Z"
    }, {
       title: "Car Leasehold",
-      nodeRef: "workspace:\/\/SpacesStore\/1e691834-54b7-4522-ba35-5d3f2760a876",
+      guid: "1e691834-54b7-4522-ba35-5d3f2760a876",
       creator: {
          forename: "Peter",
          surname: "Griffin",
@@ -11475,7 +11480,7 @@ define({
       modified: "2015-06-26T12:24:46.000Z"
    }, {
       title: "Research report",
-      nodeRef: "workspace:\/\/SpacesStore\/57f62542-72cf-445c-9100-6a49eafe0af9",
+      guid: "57f62542-72cf-445c-9100-6a49eafe0af9",
       creator: {
          forename: "Albert",
          surname: "Torres",
@@ -11490,7 +11495,7 @@ define({
       modified: "2015-01-06T23:19:08.000Z"
    }, {
       title: "Institution Gender Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/8bebc044-b9a8-4cd6-85ea-c7f659c40784",
+      guid: "8bebc044-b9a8-4cd6-85ea-c7f659c40784",
       creator: {
          forename: "Wayne",
          surname: "Oliver",
@@ -11505,7 +11510,7 @@ define({
       modified: "2014-11-30T15:48:30.000Z"
    }, {
       title: "BNB Home Page",
-      nodeRef: "workspace:\/\/SpacesStore\/f55bc64e-0489-4d29-9a6d-af2c5f0ed3c8",
+      guid: "f55bc64e-0489-4d29-9a6d-af2c5f0ed3c8",
       creator: {
          forename: "Gregory",
          surname: "Green",
@@ -11520,7 +11525,7 @@ define({
       modified: "2015-01-01T11:52:15.000Z"
    }, {
       title: "Trafford Transport Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/1cf3062e-16e9-466e-ad8a-d4073becddff",
+      guid: "1cf3062e-16e9-466e-ad8a-d4073becddff",
       creator: {
          forename: "Todd",
          surname: "Dunn",
@@ -11535,7 +11540,7 @@ define({
       modified: "2015-08-08T19:13:08.000Z"
    }, {
       title: "Disciplinary cases by ethnicity",
-      nodeRef: "workspace:\/\/SpacesStore\/c6a16092-6075-4802-aeea-d4bf7492428a",
+      guid: "c6a16092-6075-4802-aeea-d4bf7492428a",
       creator: {
          forename: "Shawn",
          surname: "Duncan",
@@ -11550,7 +11555,7 @@ define({
       modified: "2015-05-01T03:06:20.000Z"
    }, {
       title: "West Oxfordshire",
-      nodeRef: "workspace:\/\/SpacesStore\/bce56051-418a-442f-9005-f18a277fb156",
+      guid: "bce56051-418a-442f-9005-f18a277fb156",
       creator: {
          forename: "Alan",
          surname: "Garcia",
@@ -11565,7 +11570,7 @@ define({
       modified: "2015-04-26T06:05:55.000Z"
    }, {
       title: "Programme expenditure",
-      nodeRef: "workspace:\/\/SpacesStore\/380ac6a1-c6bc-48aa-b6d8-a6548a3a6fce",
+      guid: "380ac6a1-c6bc-48aa-b6d8-a6548a3a6fce",
       creator: {
          forename: "Jason",
          surname: "Matthews",
@@ -11580,7 +11585,7 @@ define({
       modified: "2014-09-02T22:20:53.000Z"
    }, {
       title: "National Adult Cardiac Surgery Audit",
-      nodeRef: "workspace:\/\/SpacesStore\/7a5a2155-8ae4-4fa4-afff-9186aa177c90",
+      guid: "7a5a2155-8ae4-4fa4-afff-9186aa177c90",
       creator: {
          forename: "Shawn",
          surname: "Cooper",
@@ -11595,7 +11600,7 @@ define({
       modified: "2015-01-18T10:32:46.000Z"
    }, {
       title: "List of Public Toilets",
-      nodeRef: "workspace:\/\/SpacesStore\/5e14706b-d159-4f39-b4bc-9269287fe877",
+      guid: "5e14706b-d159-4f39-b4bc-9269287fe877",
       creator: {
          forename: "Norma",
          surname: "Ruiz",
@@ -11610,7 +11615,7 @@ define({
       modified: "2014-11-24T23:17:21.000Z"
    }, {
       title: "Senior Officials hospitality",
-      nodeRef: "workspace:\/\/SpacesStore\/3813c226-a42c-4036-a2f6-e7f7aaeae875",
+      guid: "3813c226-a42c-4036-a2f6-e7f7aaeae875",
       creator: {
          forename: "Shirley",
          surname: "Cruz",
@@ -11625,7 +11630,7 @@ define({
       modified: "2014-11-02T20:16:31.000Z"
    }, {
       title: "International tax benchmarking study",
-      nodeRef: "workspace:\/\/SpacesStore\/c1d6f150-f5e6-4a8b-aee8-1bf50bbec82d",
+      guid: "c1d6f150-f5e6-4a8b-aee8-1bf50bbec82d",
       creator: {
          forename: "Daniel",
          surname: "Black",
@@ -11640,7 +11645,7 @@ define({
       modified: "2015-06-11T09:38:52.000Z"
    }, {
       title: "EE mobile csv dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/1ffd7618-db11-42e8-9b98-2dc7d2163859",
+      guid: "1ffd7618-db11-42e8-9b98-2dc7d2163859",
       creator: {
          forename: "Kathryn",
          surname: "Hernandez",
@@ -11655,7 +11660,7 @@ define({
       modified: "2014-12-15T10:58:40.000Z"
    }, {
       title: "Planning Applications Milton Keynes",
-      nodeRef: "workspace:\/\/SpacesStore\/8f17db8d-044f-4b05-98ff-3b06ca8f0694",
+      guid: "8f17db8d-044f-4b05-98ff-3b06ca8f0694",
       creator: {
          forename: "Melissa",
          surname: "Oliver",
@@ -11670,7 +11675,7 @@ define({
       modified: "2014-12-29T00:59:13.000Z"
    }, {
       title: "Playing Areas in York",
-      nodeRef: "workspace:\/\/SpacesStore\/bd8994bc-431d-4db4-a9e4-2cd0351e81b3",
+      guid: "bd8994bc-431d-4db4-a9e4-2cd0351e81b3",
       creator: {
          forename: "Emily",
          surname: "Morris",
@@ -11685,7 +11690,7 @@ define({
       modified: "2015-06-19T10:06:37.000Z"
    }, {
       title: "Appointments by gender",
-      nodeRef: "workspace:\/\/SpacesStore\/37d01058-0375-44b7-9606-6e1a8bba2297",
+      guid: "37d01058-0375-44b7-9606-6e1a8bba2297",
       creator: {
          forename: "Henry",
          surname: "Kennedy",
@@ -11700,7 +11705,7 @@ define({
       modified: "2014-11-16T18:49:31.000Z"
    }, {
       title: "Full NJR Website",
-      nodeRef: "workspace:\/\/SpacesStore\/c5ae624f-dea2-4bd9-a027-4cd8cbdefbe2",
+      guid: "c5ae624f-dea2-4bd9-a027-4cd8cbdefbe2",
       creator: {
          forename: "Douglas",
          surname: "Elliott",
@@ -11715,7 +11720,7 @@ define({
       modified: "2015-03-30T15:02:19.000Z"
    }, {
       title: "Glossary of terms",
-      nodeRef: "workspace:\/\/SpacesStore\/1bc6b5b3-cc00-40a4-ae10-255d40c3a819",
+      guid: "1bc6b5b3-cc00-40a4-ae10-255d40c3a819",
       creator: {
          forename: "Peter",
          surname: "Rogers",
@@ -11730,7 +11735,7 @@ define({
       modified: "2014-08-21T06:44:45.000Z"
    }, {
       title: "North Lincolnshire",
-      nodeRef: "workspace:\/\/SpacesStore\/aabecdf3-17a2-488e-974e-28f411d5f175",
+      guid: "aabecdf3-17a2-488e-974e-28f411d5f175",
       creator: {
          forename: "Wayne",
          surname: "Smith",
@@ -11745,7 +11750,7 @@ define({
       modified: "2014-11-02T09:17:27.000Z"
    }, {
       title: "Health sector",
-      nodeRef: "workspace:\/\/SpacesStore\/cff029fa-cf52-4572-838a-03935dbfc720",
+      guid: "cff029fa-cf52-4572-838a-03935dbfc720",
       creator: {
          forename: "Craig",
          surname: "Miller",
@@ -11760,7 +11765,7 @@ define({
       modified: "2014-12-18T05:08:15.000Z"
    }, {
       title: "Historic roadworks",
-      nodeRef: "workspace:\/\/SpacesStore\/cce5a73a-2bd5-4a0b-bb4f-d031dc188840",
+      guid: "cce5a73a-2bd5-4a0b-bb4f-d031dc188840",
       creator: {
          forename: "Roy",
          surname: "Larson",
@@ -11775,7 +11780,7 @@ define({
       modified: "2015-05-12T23:19:18.000Z"
    }, {
       title: "Entire English dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/7f2f0c25-404f-4f82-ae87-a3378234a3d1",
+      guid: "7f2f0c25-404f-4f82-ae87-a3378234a3d1",
       creator: {
          forename: "Andrew",
          surname: "Austin",
@@ -11790,7 +11795,7 @@ define({
       modified: "2014-12-03T04:10:31.000Z"
    }, {
       title: "Object Title",
-      nodeRef: "workspace:\/\/SpacesStore\/01a7b0a7-a343-484b-8c3d-9693ccbb318f",
+      guid: "01a7b0a7-a343-484b-8c3d-9693ccbb318f",
       creator: {
          forename: "Frances",
          surname: "Medina",
@@ -11805,7 +11810,7 @@ define({
       modified: "2015-06-23T22:27:55.000Z"
    }, {
       title: "Parking",
-      nodeRef: "workspace:\/\/SpacesStore\/20454edc-65ad-426a-8499-2ae463bccba8",
+      guid: "20454edc-65ad-426a-8499-2ae463bccba8",
       creator: {
          forename: "Sara",
          surname: "Washington",
@@ -11820,7 +11825,7 @@ define({
       modified: "2015-08-06T23:54:23.000Z"
    }, {
       title: "Schools Northumberland",
-      nodeRef: "workspace:\/\/SpacesStore\/a840a0f6-ea8e-44df-865f-110baf290ea3",
+      guid: "a840a0f6-ea8e-44df-865f-110baf290ea3",
       creator: {
          forename: "Angela",
          surname: "Bishop",
@@ -11835,7 +11840,7 @@ define({
       modified: "2015-03-20T09:06:38.000Z"
    }, {
       title: "Dataset definitions",
-      nodeRef: "workspace:\/\/SpacesStore\/8618b6ab-d578-4329-9776-bee1299b3956",
+      guid: "8618b6ab-d578-4329-9776-bee1299b3956",
       creator: {
          forename: "Rachel",
          surname: "Watson",
@@ -11850,7 +11855,7 @@ define({
       modified: "2015-04-27T18:48:27.000Z"
    }, {
       title: "Link to Contracts Finder",
-      nodeRef: "workspace:\/\/SpacesStore\/6cdc3c42-5548-421f-97ae-91f6f633d2fb",
+      guid: "6cdc3c42-5548-421f-97ae-91f6f633d2fb",
       creator: {
          forename: "Sarah",
          surname: "Rogers",
@@ -11865,7 +11870,7 @@ define({
       modified: "2014-10-08T14:33:19.000Z"
    }, {
       title: "Cambridge City",
-      nodeRef: "workspace:\/\/SpacesStore\/d92291eb-da38-42f4-a30a-a4dc387840d9",
+      guid: "d92291eb-da38-42f4-a30a-a4dc387840d9",
       creator: {
          forename: "Tina",
          surname: "Hicks",
@@ -11880,7 +11885,7 @@ define({
       modified: "2014-11-09T00:28:30.000Z"
    }, {
       title: "Senior staff salaries",
-      nodeRef: "workspace:\/\/SpacesStore\/0554be38-2172-46a6-8372-7bc73d2c1f2a",
+      guid: "0554be38-2172-46a6-8372-7bc73d2c1f2a",
       creator: {
          forename: "Doris",
          surname: "Spencer",
@@ -11895,7 +11900,7 @@ define({
       modified: "2015-04-12T21:39:05.000Z"
    }, {
       title: "Counter Fraud Work",
-      nodeRef: "workspace:\/\/SpacesStore\/4d3cdfdc-e689-42bb-babf-db83ebe326dc",
+      guid: "4d3cdfdc-e689-42bb-babf-db83ebe326dc",
       creator: {
          forename: "Eugene",
          surname: "Anderson",
@@ -11910,7 +11915,7 @@ define({
       modified: "2014-10-08T02:01:16.000Z"
    }, {
       title: "Leavers by sexual orientation",
-      nodeRef: "workspace:\/\/SpacesStore\/f45c4787-b782-435e-877f-18562f63be4e",
+      guid: "f45c4787-b782-435e-877f-18562f63be4e",
       creator: {
          forename: "Keith",
          surname: "Bell",
@@ -11925,7 +11930,7 @@ define({
       modified: "2014-09-03T13:07:00.000Z"
    }, {
       title: "HM Treasury Electricity use",
-      nodeRef: "workspace:\/\/SpacesStore\/d11016df-ffc5-4889-a4aa-ec5e750ed31f",
+      guid: "d11016df-ffc5-4889-a4aa-ec5e750ed31f",
       creator: {
          forename: "Carl",
          surname: "West",
@@ -11940,7 +11945,7 @@ define({
       modified: "2014-08-24T05:33:23.000Z"
    }, {
       title: "Exemption Data",
-      nodeRef: "workspace:\/\/SpacesStore\/3c194954-d3e9-4a9e-b9cf-5ad5cda26e61",
+      guid: "3c194954-d3e9-4a9e-b9cf-5ad5cda26e61",
       creator: {
          forename: "Anne",
          surname: "Medina",
@@ -11955,7 +11960,7 @@ define({
       modified: "2015-02-08T02:26:12.000Z"
    }, {
       title: "East Hampshire",
-      nodeRef: "workspace:\/\/SpacesStore\/a2425539-a7a3-4c87-8dd9-bac3378ac2b0",
+      guid: "a2425539-a7a3-4c87-8dd9-bac3378ac2b0",
       creator: {
          forename: "Craig",
          surname: "Grant",
@@ -11970,7 +11975,7 @@ define({
       modified: "2014-12-25T01:59:03.000Z"
    }, {
       title: "Commissioning Support Unit Sites",
-      nodeRef: "workspace:\/\/SpacesStore\/2759cf56-868c-491f-808d-d7bc82ab4594",
+      guid: "2759cf56-868c-491f-808d-d7bc82ab4594",
       creator: {
          forename: "Denise",
          surname: "Wagner",
@@ -11985,7 +11990,7 @@ define({
       modified: "2014-10-14T12:51:52.000Z"
    }, {
       title: "Ward Boundaries Metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/8e81a934-d70e-41bd-9239-01ea2698c5fb",
+      guid: "8e81a934-d70e-41bd-9239-01ea2698c5fb",
       creator: {
          forename: "Louis",
          surname: "Kelly",
@@ -12000,7 +12005,7 @@ define({
       modified: "2015-03-23T11:58:20.000Z"
    }, {
       title: "Exceptions to Recruitment Controls",
-      nodeRef: "workspace:\/\/SpacesStore\/509b2b32-bbe7-4673-890b-ddb11a978526",
+      guid: "509b2b32-bbe7-4673-890b-ddb11a978526",
       creator: {
          forename: "Sharon",
          surname: "Gomez",
@@ -12015,7 +12020,7 @@ define({
       modified: "2014-11-13T17:41:06.000Z"
    }, {
       title: "Field descriptions",
-      nodeRef: "workspace:\/\/SpacesStore\/f5ad3cc2-35e3-442e-8651-1585973344cd",
+      guid: "f5ad3cc2-35e3-442e-8651-1585973344cd",
       creator: {
          forename: "Sandra",
          surname: "Wright",
@@ -12030,7 +12035,7 @@ define({
       modified: "2014-10-21T13:56:38.000Z"
    }, {
       title: "Lookup up tables for variables",
-      nodeRef: "workspace:\/\/SpacesStore\/877c216f-c33b-4cf1-a50b-f278f8e02eb3",
+      guid: "877c216f-c33b-4cf1-a50b-f278f8e02eb3",
       creator: {
          forename: "Gerald",
          surname: "Stanley",
@@ -12045,7 +12050,7 @@ define({
       modified: "2015-04-19T11:09:21.000Z"
    }, {
       title: "API tips",
-      nodeRef: "workspace:\/\/SpacesStore\/ed994a47-2eb5-49e8-8c4f-7a3190c46c7d",
+      guid: "ed994a47-2eb5-49e8-8c4f-7a3190c46c7d",
       creator: {
          forename: "Benjamin",
          surname: "Hicks",
@@ -12060,7 +12065,7 @@ define({
       modified: "2014-10-29T22:00:23.000Z"
    }, {
       title: "Data National Indicators",
-      nodeRef: "workspace:\/\/SpacesStore\/f706cb03-d4a9-4813-93c0-eebe8cc9e759",
+      guid: "f706cb03-d4a9-4813-93c0-eebe8cc9e759",
       creator: {
          forename: "Russell",
          surname: "Martinez",
@@ -12075,7 +12080,7 @@ define({
       modified: "2014-08-27T20:07:15.000Z"
    }, {
       title: "Greater Manchester",
-      nodeRef: "workspace:\/\/SpacesStore\/f2f2703a-0fd3-4661-9474-2d165aae4c22",
+      guid: "f2f2703a-0fd3-4661-9474-2d165aae4c22",
       creator: {
          forename: "Karen",
          surname: "Ford",
@@ -12090,7 +12095,7 @@ define({
       modified: "2014-11-23T12:41:20.000Z"
    }, {
       title: "First data set",
-      nodeRef: "workspace:\/\/SpacesStore\/5f5e18d8-9283-4ae6-b99d-05cd360e2c07",
+      guid: "5f5e18d8-9283-4ae6-b99d-05cd360e2c07",
       creator: {
          forename: "Karen",
          surname: "Martin",
@@ -12105,7 +12110,7 @@ define({
       modified: "2015-05-03T12:39:02.000Z"
    }, {
       title: "Extent and trend tables",
-      nodeRef: "workspace:\/\/SpacesStore\/fc28e039-29cf-42ac-92bb-3f01aef6417e",
+      guid: "fc28e039-29cf-42ac-92bb-3f01aef6417e",
       creator: {
          forename: "Donald",
          surname: "Wheeler",
@@ -12120,7 +12125,7 @@ define({
       modified: "2015-07-17T21:29:20.000Z"
    }, {
       title: "Parks and gardens Metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/64f3e5b0-688f-4be7-8239-bbd679621bb4",
+      guid: "64f3e5b0-688f-4be7-8239-bbd679621bb4",
       creator: {
          forename: "Annie",
          surname: "Ferguson",
@@ -12135,7 +12140,7 @@ define({
       modified: "2015-02-21T17:27:38.000Z"
    }, {
       title: "April Data",
-      nodeRef: "workspace:\/\/SpacesStore\/64658975-90b0-4154-bc1c-379be4c5606f",
+      guid: "64658975-90b0-4154-bc1c-379be4c5606f",
       creator: {
          forename: "Laura",
          surname: "Little",
@@ -12150,7 +12155,7 @@ define({
       modified: "2014-09-25T06:09:54.000Z"
    }, {
       title: "UK Treaties Dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/bb99cd26-c969-47ff-8065-41b9461f6da0",
+      guid: "bb99cd26-c969-47ff-8065-41b9461f6da0",
       creator: {
          forename: "Bobby",
          surname: "Dunn",
@@ -12165,7 +12170,7 @@ define({
       modified: "2014-08-25T11:21:16.000Z"
    }, {
       title: "Ethnicity information about candidates",
-      nodeRef: "workspace:\/\/SpacesStore\/869a0235-eeb1-4ee7-9eed-762f51293a66",
+      guid: "869a0235-eeb1-4ee7-9eed-762f51293a66",
       creator: {
          forename: "Carolyn",
          surname: "Gordon",
@@ -12180,7 +12185,7 @@ define({
       modified: "2015-05-03T05:36:25.000Z"
    }, {
       title: "Planning Application",
-      nodeRef: "workspace:\/\/SpacesStore\/053c3d4d-0b6e-42fe-ba5f-fa30110b60a5",
+      guid: "053c3d4d-0b6e-42fe-ba5f-fa30110b60a5",
       creator: {
          forename: "Angela",
          surname: "Lee",
@@ -12195,7 +12200,7 @@ define({
       modified: "2015-05-08T01:47:55.000Z"
    }, {
       title: "Contracts Archive website",
-      nodeRef: "workspace:\/\/SpacesStore\/40ec2b0a-b136-4a19-a78c-0dad1bd919f7",
+      guid: "40ec2b0a-b136-4a19-a78c-0dad1bd919f7",
       creator: {
          forename: "Howard",
          surname: "Lane",
@@ -12210,7 +12215,7 @@ define({
       modified: "2014-10-15T19:20:51.000Z"
    }, {
       title: "Car Parks data",
-      nodeRef: "workspace:\/\/SpacesStore\/f50ac2af-c1fa-46cf-bfc0-78be7ed55e0e",
+      guid: "f50ac2af-c1fa-46cf-bfc0-78be7ed55e0e",
       creator: {
          forename: "Eugene",
          surname: "Harper",
@@ -12225,7 +12230,7 @@ define({
       modified: "2014-12-15T11:03:20.000Z"
    }, {
       title: "Tariff data",
-      nodeRef: "workspace:\/\/SpacesStore\/0011271a-e766-4447-899a-bf092a5f583b",
+      guid: "0011271a-e766-4447-899a-bf092a5f583b",
       creator: {
          forename: "Julia",
          surname: "Garza",
@@ -12240,7 +12245,7 @@ define({
       modified: "2015-02-08T13:24:05.000Z"
    }, {
       title: "SHMI Archive",
-      nodeRef: "workspace:\/\/SpacesStore\/c561afaf-da7a-4d71-b807-5350924dea24",
+      guid: "c561afaf-da7a-4d71-b807-5350924dea24",
       creator: {
          forename: "Willie",
          surname: "Olson",
@@ -12255,7 +12260,7 @@ define({
       modified: "2015-06-10T17:08:33.000Z"
    }, {
       title: "CTLB Junior staff dataset",
-      nodeRef: "workspace:\/\/SpacesStore\/023f3058-7a69-45fa-9a71-dcfc6facac5d",
+      guid: "023f3058-7a69-45fa-9a71-dcfc6facac5d",
       creator: {
          forename: "Benjamin",
          surname: "Romero",
@@ -12270,7 +12275,7 @@ define({
       modified: "2014-09-10T03:13:41.000Z"
    }, {
       title: "Flood Warning Areas",
-      nodeRef: "workspace:\/\/SpacesStore\/35a75fba-0593-48d7-b18b-9b1e156d040d",
+      guid: "35a75fba-0593-48d7-b18b-9b1e156d040d",
       creator: {
          forename: "Debra",
          surname: "Mccoy",
@@ -12285,7 +12290,7 @@ define({
       modified: "2014-09-10T15:52:29.000Z"
    }, {
       title: "Linked Open BNB Documentation",
-      nodeRef: "workspace:\/\/SpacesStore\/1330fff5-be3f-4543-a86b-59c9fbccdfad",
+      guid: "1330fff5-be3f-4543-a86b-59c9fbccdfad",
       creator: {
          forename: "Ryan",
          surname: "Greene",
@@ -12300,7 +12305,7 @@ define({
       modified: "2015-05-08T17:02:53.000Z"
    }, {
       title: "Institution Ethnicity Success Rates",
-      nodeRef: "workspace:\/\/SpacesStore\/14d28ec8-5d68-4c04-9900-9f834588772c",
+      guid: "14d28ec8-5d68-4c04-9900-9f834588772c",
       creator: {
          forename: "Matthew",
          surname: "Baker",
@@ -12315,7 +12320,7 @@ define({
       modified: "2015-01-27T08:37:43.000Z"
    }, {
       title: "Spotlight on Spend",
-      nodeRef: "workspace:\/\/SpacesStore\/8e4e0ed6-fc40-4509-8f4c-3c0b92b74ddd",
+      guid: "8e4e0ed6-fc40-4509-8f4c-3c0b92b74ddd",
       creator: {
          forename: "Judy",
          surname: "Murphy",
@@ -12330,7 +12335,7 @@ define({
       modified: "2014-08-25T19:20:26.000Z"
    }, {
       title: "Spending Approvals",
-      nodeRef: "workspace:\/\/SpacesStore\/86ad888a-c5aa-4fe8-a779-ca7113643b85",
+      guid: "86ad888a-c5aa-4fe8-a779-ca7113643b85",
       creator: {
          forename: "Teresa",
          surname: "Henry",
@@ -12345,7 +12350,7 @@ define({
       modified: "2014-09-22T22:45:37.000Z"
    }, {
       title: "Provides information about senior posts",
-      nodeRef: "workspace:\/\/SpacesStore\/853dcf6f-907a-444f-acd4-7ba5da01fd4c",
+      guid: "853dcf6f-907a-444f-acd4-7ba5da01fd4c",
       creator: {
          forename: "Anna",
          surname: "Hall",
@@ -12360,7 +12365,7 @@ define({
       modified: "2015-06-25T06:58:28.000Z"
    }, {
       title: "Explanation of Data Headers",
-      nodeRef: "workspace:\/\/SpacesStore\/3a48e660-48d8-4455-b186-ce19eca8aed3",
+      guid: "3a48e660-48d8-4455-b186-ce19eca8aed3",
       creator: {
          forename: "Lillian",
          surname: "Dunn",
@@ -12375,7 +12380,7 @@ define({
       modified: "2015-07-07T00:49:30.000Z"
    }, {
       title: "Spending Data",
-      nodeRef: "workspace:\/\/SpacesStore\/e4b17f31-9aba-41ba-bde1-be86f47c98aa",
+      guid: "e4b17f31-9aba-41ba-bde1-be86f47c98aa",
       creator: {
          forename: "Lawrence",
          surname: "Miller",
@@ -12390,7 +12395,7 @@ define({
       modified: "2015-06-16T00:12:17.000Z"
    }, {
       title: "Small society lottery registrations",
-      nodeRef: "workspace:\/\/SpacesStore\/7b61118d-b8e4-408a-8a55-fe17fcc9fc7c",
+      guid: "7b61118d-b8e4-408a-8a55-fe17fcc9fc7c",
       creator: {
          forename: "Shirley",
          surname: "Nelson",
@@ -12405,7 +12410,7 @@ define({
       modified: "2015-05-09T22:54:39.000Z"
    }, {
       title: "Senior staff",
-      nodeRef: "workspace:\/\/SpacesStore\/5eb9d0cd-4486-4a03-a21a-0a149413490b",
+      guid: "5eb9d0cd-4486-4a03-a21a-0a149413490b",
       creator: {
          forename: "Cynthia",
          surname: "Dixon",
@@ -12420,7 +12425,7 @@ define({
       modified: "2015-03-21T04:00:40.000Z"
    }, {
       title: "Data description degree of improvement in delays",
-      nodeRef: "workspace:\/\/SpacesStore\/9da1dda4-ba0f-4c54-8bfa-9081cdca3a91",
+      guid: "9da1dda4-ba0f-4c54-8bfa-9081cdca3a91",
       creator: {
          forename: "Andrew",
          surname: "Hicks",
@@ -12435,7 +12440,7 @@ define({
       modified: "2014-09-04T01:00:29.000Z"
    }, {
       title: "TfGM GTFS Files",
-      nodeRef: "workspace:\/\/SpacesStore\/2f864a87-84f2-4bf9-88d0-efb07afa5a3a",
+      guid: "2f864a87-84f2-4bf9-88d0-efb07afa5a3a",
       creator: {
          forename: "Brandon",
          surname: "Bowman",
@@ -12450,7 +12455,7 @@ define({
       modified: "2015-03-21T03:45:49.000Z"
    }, {
       title: "CRB checks and convictions",
-      nodeRef: "workspace:\/\/SpacesStore\/6c0bbc0e-8634-498c-8926-49bedf8a7f6c",
+      guid: "6c0bbc0e-8634-498c-8926-49bedf8a7f6c",
       creator: {
          forename: "Emily",
          surname: "Baker",
@@ -12465,7 +12470,7 @@ define({
       modified: "2015-04-25T14:45:49.000Z"
    }, {
       title: "Violent crime",
-      nodeRef: "workspace:\/\/SpacesStore\/983d7f7f-d03b-4655-b409-a5117f4a02b0",
+      guid: "983d7f7f-d03b-4655-b409-a5117f4a02b0",
       creator: {
          forename: "Kathryn",
          surname: "Fields",
@@ -12480,7 +12485,7 @@ define({
       modified: "2015-04-30T04:39:07.000Z"
    }, {
       title: "Core fields",
-      nodeRef: "workspace:\/\/SpacesStore\/32f0eab5-832a-4c2f-89f5-31edadc1416e",
+      guid: "32f0eab5-832a-4c2f-89f5-31edadc1416e",
       creator: {
          forename: "Andrew",
          surname: "Frazier",
@@ -12495,7 +12500,7 @@ define({
       modified: "2015-01-07T06:08:10.000Z"
    }, {
       title: "Schools Map",
-      nodeRef: "workspace:\/\/SpacesStore\/d9e709b7-677b-4969-b003-d870d19cc964",
+      guid: "d9e709b7-677b-4969-b003-d870d19cc964",
       creator: {
          forename: "Carlos",
          surname: "Ryan",
@@ -12510,7 +12515,7 @@ define({
       modified: "2015-04-07T11:34:25.000Z"
    }, {
       title: "Technical report",
-      nodeRef: "workspace:\/\/SpacesStore\/3668f7f4-df8f-4ece-ae64-8db09dbf92fa",
+      guid: "3668f7f4-df8f-4ece-ae64-8db09dbf92fa",
       creator: {
          forename: "Daniel",
          surname: "Jenkins",
@@ -12525,7 +12530,7 @@ define({
       modified: "2014-11-26T12:58:53.000Z"
    }, {
       title: "Ancient Monuments Metadata",
-      nodeRef: "workspace:\/\/SpacesStore\/1439ef9f-52e0-402a-8ff5-a2e038ce759f",
+      guid: "1439ef9f-52e0-402a-8ff5-a2e038ce759f",
       creator: {
          forename: "Laura",
          surname: "Wagner",
@@ -12540,7 +12545,7 @@ define({
       modified: "2015-05-01T18:27:34.000Z"
    }, {
       title: "Premises licences",
-      nodeRef: "workspace:\/\/SpacesStore\/d0a53a00-3331-4926-952c-060c04669b54",
+      guid: "d0a53a00-3331-4926-952c-060c04669b54",
       creator: {
          forename: "Carl",
          surname: "Warren",
@@ -12555,7 +12560,7 @@ define({
       modified: "2015-02-21T06:29:31.000Z"
    }, {
       title: "Senior staff data",
-      nodeRef: "workspace:\/\/SpacesStore\/acbf9bfa-b6e2-480b-9aa3-c556d649ba91",
+      guid: "acbf9bfa-b6e2-480b-9aa3-c556d649ba91",
       creator: {
          forename: "Sarah",
          surname: "Hawkins",
@@ -12570,7 +12575,7 @@ define({
       modified: "2015-08-08T22:16:54.000Z"
    }, {
       title: "FE Data Library",
-      nodeRef: "workspace:\/\/SpacesStore\/5930484b-e5a8-46d7-ad92-e2349f092619",
+      guid: "5930484b-e5a8-46d7-ad92-e2349f092619",
       creator: {
          forename: "Robin",
          surname: "Gibson",
@@ -12585,7 +12590,7 @@ define({
       modified: "2015-02-26T11:42:48.000Z"
    }, {
       title: "Risk Factor data completeness",
-      nodeRef: "workspace:\/\/SpacesStore\/56b695ce-e6f4-4951-8396-9195417d0f02",
+      guid: "56b695ce-e6f4-4951-8396-9195417d0f02",
       creator: {
          forename: "Rachel",
          surname: "Mcdonald",
@@ -12600,7 +12605,7 @@ define({
       modified: "2014-08-23T00:17:20.000Z"
    }, {
       title: "Metroshuttle Vehicles",
-      nodeRef: "workspace:\/\/SpacesStore\/3208d686-c016-4996-addf-6f1aa0086488",
+      guid: "3208d686-c016-4996-addf-6f1aa0086488",
       creator: {
          forename: "Rachel",
          surname: "Barnes",
@@ -12615,7 +12620,7 @@ define({
       modified: "2015-05-04T17:24:39.000Z"
    }, {
       title: "Plant diversity",
-      nodeRef: "workspace:\/\/SpacesStore\/9bb51c30-3ce0-4adf-8288-0598143b666a",
+      guid: "9bb51c30-3ce0-4adf-8288-0598143b666a",
       creator: {
          forename: "Charles",
          surname: "Fernandez",
@@ -12630,7 +12635,7 @@ define({
       modified: "2015-07-20T03:45:00.000Z"
    }, {
       title: "MPA Annual Report",
-      nodeRef: "workspace:\/\/SpacesStore\/966f0111-4b11-4de2-a4e2-3cf49289cd4c",
+      guid: "966f0111-4b11-4de2-a4e2-3cf49289cd4c",
       creator: {
          forename: "Kelly",
          surname: "Boyd",
@@ -12645,7 +12650,7 @@ define({
       modified: "2015-08-10T05:26:45.000Z"
    }, {
       title: "CSV format",
-      nodeRef: "workspace:\/\/SpacesStore\/69ffac17-81c2-4836-8c4a-1aa0d04dfb09",
+      guid: "69ffac17-81c2-4836-8c4a-1aa0d04dfb09",
       creator: {
          forename: "Ernest",
          surname: "Willis",
@@ -12660,7 +12665,7 @@ define({
       modified: "2015-08-18T16:33:27.000Z"
    }, {
       title: "External appointments by religion",
-      nodeRef: "workspace:\/\/SpacesStore\/e9b570c9-682e-4bbf-87db-4dd88d312462",
+      guid: "e9b570c9-682e-4bbf-87db-4dd88d312462",
       creator: {
          forename: "Gary",
          surname: "Palmer",
@@ -12675,7 +12680,7 @@ define({
       modified: "2014-09-03T17:09:47.000Z"
    }, {
       title: "Bexley",
-      nodeRef: "workspace:\/\/SpacesStore\/90dcb7c1-6f37-4990-b582-d9fb1a171ef5",
+      guid: "90dcb7c1-6f37-4990-b582-d9fb1a171ef5",
       creator: {
          forename: "Anne",
          surname: "Hunt",
@@ -12690,7 +12695,7 @@ define({
       modified: "2015-05-10T09:09:16.000Z"
    }, {
       title: "Procurement service delivery plan",
-      nodeRef: "workspace:\/\/SpacesStore\/228aacfb-58cf-4428-8c65-067a6f5a488b",
+      guid: "228aacfb-58cf-4428-8c65-067a6f5a488b",
       creator: {
          forename: "Aaron",
          surname: "Willis",
@@ -12705,7 +12710,7 @@ define({
       modified: "2015-04-04T08:11:28.000Z"
    }, {
       title: "Derby Maps Website",
-      nodeRef: "workspace:\/\/SpacesStore\/fbf2b517-93b1-4084-b376-f160f9b1e69c",
+      guid: "fbf2b517-93b1-4084-b376-f160f9b1e69c",
       creator: {
          forename: "Patricia",
          surname: "Reed",
@@ -12720,7 +12725,7 @@ define({
       modified: "2014-08-24T16:17:04.000Z"
    }, {
       title: "Referrals to IAPT Services",
-      nodeRef: "workspace:\/\/SpacesStore\/b86a4faf-1564-4206-9370-c7020bf1da6d",
+      guid: "b86a4faf-1564-4206-9370-c7020bf1da6d",
       creator: {
          forename: "Robert",
          surname: "James",
@@ -12735,7 +12740,7 @@ define({
       modified: "2015-07-11T02:07:03.000Z"
    }, {
       title: "Council Spending",
-      nodeRef: "workspace:\/\/SpacesStore\/769ee6bd-72f5-4cfb-b851-8363e9daf9d9",
+      guid: "769ee6bd-72f5-4cfb-b851-8363e9daf9d9",
       creator: {
          forename: "Emily",
          surname: "Rodriguez",
@@ -12750,7 +12755,7 @@ define({
       modified: "2014-12-05T02:31:01.000Z"
    }, {
       title: "Court finder web interface",
-      nodeRef: "workspace:\/\/SpacesStore\/baf788a8-9d54-485b-b183-1a36d43e076c",
+      guid: "baf788a8-9d54-485b-b183-1a36d43e076c",
       creator: {
          forename: "Kathleen",
          surname: "Reynolds",
@@ -12765,7 +12770,7 @@ define({
       modified: "2015-08-09T11:26:19.000Z"
    }, {
       title: "Grit bin locations",
-      nodeRef: "workspace:\/\/SpacesStore\/c631d685-702a-474b-9a94-304b77da03c4",
+      guid: "c631d685-702a-474b-9a94-304b77da03c4",
       creator: {
          forename: "Katherine",
          surname: "Jones",
@@ -12780,7 +12785,7 @@ define({
       modified: "2014-09-22T14:26:14.000Z"
    }, {
       title: "Ramsar Sites",
-      nodeRef: "workspace:\/\/SpacesStore\/3a54a362-552a-401f-9d35-0b894da3b534",
+      guid: "3a54a362-552a-401f-9d35-0b894da3b534",
       creator: {
          forename: "Anna",
          surname: "Sims",
@@ -12795,7 +12800,7 @@ define({
       modified: "2015-02-17T15:35:41.000Z"
    }, {
       title: "West Dunbartonshire",
-      nodeRef: "workspace:\/\/SpacesStore\/86d53b46-2b27-40e6-b756-05fac42111fd",
+      guid: "86d53b46-2b27-40e6-b756-05fac42111fd",
       creator: {
          forename: "Emily",
          surname: "Bowman",
@@ -12810,7 +12815,7 @@ define({
       modified: "2014-10-01T15:17:34.000Z"
    }, {
       title: "North Ayrshire",
-      nodeRef: "workspace:\/\/SpacesStore\/9a4be7c0-6012-42d3-8ebd-7d0396b24deb",
+      guid: "9a4be7c0-6012-42d3-8ebd-7d0396b24deb",
       creator: {
          forename: "Phillip",
          surname: "Hernandez",
@@ -12825,7 +12830,7 @@ define({
       modified: "2015-08-15T10:26:45.000Z"
    }, {
       title: "Nature of burglary",
-      nodeRef: "workspace:\/\/SpacesStore\/c3872da2-3330-4e39-b17c-d9f030aa16c9",
+      guid: "c3872da2-3330-4e39-b17c-d9f030aa16c9",
       creator: {
          forename: "Christopher",
          surname: "Stewart",
@@ -12840,7 +12845,7 @@ define({
       modified: "2015-06-16T11:36:54.000Z"
    }, {
       title: "Services list CSV",
-      nodeRef: "workspace:\/\/SpacesStore\/4beb68c3-af70-403c-9fab-942311cd5d51",
+      guid: "4beb68c3-af70-403c-9fab-942311cd5d51",
       creator: {
          forename: "Julia",
          surname: "Brooks",
@@ -12855,7 +12860,7 @@ define({
       modified: "2014-11-20T15:15:50.000Z"
    }, {
       title: "HQIP NCAPOP website page",
-      nodeRef: "workspace:\/\/SpacesStore\/7d2965f1-5597-4e54-9de7-fe0bbc339169",
+      guid: "7d2965f1-5597-4e54-9de7-fe0bbc339169",
       creator: {
          forename: "Henry",
          surname: "Morris",
@@ -12870,7 +12875,7 @@ define({
       modified: "2014-10-19T15:35:14.000Z"
    }, {
       title: "Trafford main report",
-      nodeRef: "workspace:\/\/SpacesStore\/ed4ac8cd-d9f7-4ed6-9bce-3f0e849d13ef",
+      guid: "ed4ac8cd-d9f7-4ed6-9bce-3f0e849d13ef",
       creator: {
          forename: "Johnny",
          surname: "Hill",
@@ -12885,7 +12890,7 @@ define({
       modified: "2015-07-14T05:24:17.000Z"
    }, {
       title: "January QDS data",
-      nodeRef: "workspace:\/\/SpacesStore\/01b85e33-00ef-402c-81a2-10d92e88e60b",
+      guid: "01b85e33-00ef-402c-81a2-10d92e88e60b",
       creator: {
          forename: "Helen",
          surname: "Gray",
@@ -12900,7 +12905,7 @@ define({
       modified: "2014-08-29T19:57:43.000Z"
    }, {
       title: "Image copyright details",
-      nodeRef: "workspace:\/\/SpacesStore\/d4ea8696-d0f7-48de-a032-6bb13696264f",
+      guid: "d4ea8696-d0f7-48de-a032-6bb13696264f",
       creator: {
          forename: "Linda",
          surname: "Washington",
@@ -12915,7 +12920,7 @@ define({
       modified: "2015-07-01T04:32:43.000Z"
    }, {
       title: "HBC Planning Applications",
-      nodeRef: "workspace:\/\/SpacesStore\/e1f4aa57-cb4b-4a07-84f7-90da0f5dfecc",
+      guid: "e1f4aa57-cb4b-4a07-84f7-90da0f5dfecc",
       creator: {
          forename: "Chris",
          surname: "Hunt",
@@ -12930,7 +12935,7 @@ define({
       modified: "2015-05-22T07:03:52.000Z"
    }, {
       title: "Country level Bilateral results achieved",
-      nodeRef: "workspace:\/\/SpacesStore\/ac32bab7-ccbb-4479-a04f-93f453a95a50",
+      guid: "ac32bab7-ccbb-4479-a04f-93f453a95a50",
       creator: {
          forename: "Amanda",
          surname: "Howell",
@@ -12945,7 +12950,7 @@ define({
       modified: "2014-12-29T14:50:15.000Z"
    }, {
       title: "Bromley",
-      nodeRef: "workspace:\/\/SpacesStore\/9619ca52-7855-4c04-a823-af3159d855b3",
+      guid: "9619ca52-7855-4c04-a823-af3159d855b3",
       creator: {
          forename: "Bonnie",
          surname: "Weaver",
@@ -12960,7 +12965,7 @@ define({
       modified: "2014-09-11T07:56:57.000Z"
    }, {
       title: "Personal licences",
-      nodeRef: "workspace:\/\/SpacesStore\/490cb599-bf65-4616-a0ea-5239fbac21de",
+      guid: "490cb599-bf65-4616-a0ea-5239fbac21de",
       creator: {
          forename: "Peter",
          surname: "Lewis",
@@ -12975,7 +12980,7 @@ define({
       modified: "2015-04-04T10:15:09.000Z"
    }, {
       title: "Zipped XML format",
-      nodeRef: "workspace:\/\/SpacesStore\/e033e500-7a1d-4038-9c8d-39c5b2fc0840",
+      guid: "e033e500-7a1d-4038-9c8d-39c5b2fc0840",
       creator: {
          forename: "Clarence",
          surname: "Shaw",
@@ -12990,7 +12995,7 @@ define({
       modified: "2015-07-23T18:49:00.000Z"
    }, {
       title: "Blaby Parking Information",
-      nodeRef: "workspace:\/\/SpacesStore\/a3c7f811-1a56-4818-9c57-fa9c59f8bbe4",
+      guid: "a3c7f811-1a56-4818-9c57-fa9c59f8bbe4",
       creator: {
          forename: "Christina",
          surname: "Stevens",
@@ -13005,7 +13010,7 @@ define({
       modified: "2015-03-10T19:50:33.000Z"
    }, {
       title: "Senior staff posts inc vacancies",
-      nodeRef: "workspace:\/\/SpacesStore\/9cedc0b0-a2a9-40e8-a110-eba19f9d16a3",
+      guid: "9cedc0b0-a2a9-40e8-a110-eba19f9d16a3",
       creator: {
          forename: "Joseph",
          surname: "Diaz",
@@ -13020,7 +13025,7 @@ define({
       modified: "2014-09-16T20:53:21.000Z"
    }, {
       title: "Gloucester City",
-      nodeRef: "workspace:\/\/SpacesStore\/0d33df4f-04cc-42a6-8741-a9919cd990af",
+      guid: "0d33df4f-04cc-42a6-8741-a9919cd990af",
       creator: {
          forename: "Paula",
          surname: "Ryan",
@@ -13035,7 +13040,7 @@ define({
       modified: "2015-06-06T05:04:08.000Z"
    }, {
       title: "TOMPS Data page",
-      nodeRef: "workspace:\/\/SpacesStore\/a8e5f925-ce7c-4c77-a087-d16fc6c73669",
+      guid: "a8e5f925-ce7c-4c77-a087-d16fc6c73669",
       creator: {
          forename: "Raymond",
          surname: "Riley",
@@ -13050,7 +13055,7 @@ define({
       modified: "2015-07-22T21:36:28.000Z"
    }, {
       title: "East Cambridgeshire",
-      nodeRef: "workspace:\/\/SpacesStore\/aca98049-5f85-43b6-aa6f-6e613480fee8",
+      guid: "aca98049-5f85-43b6-aa6f-6e613480fee8",
       creator: {
          forename: "Sean",
          surname: "Morgan",
@@ -13065,7 +13070,7 @@ define({
       modified: "2015-07-28T02:17:37.000Z"
    }, {
       title: "National Results",
-      nodeRef: "workspace:\/\/SpacesStore\/8fae59e0-f1d6-4cb2-af23-a9120a5e9258",
+      guid: "8fae59e0-f1d6-4cb2-af23-a9120a5e9258",
       creator: {
          forename: "Phyllis",
          surname: "Hicks",
@@ -13080,7 +13085,7 @@ define({
       modified: "2015-03-12T17:14:50.000Z"
    }, {
       title: "Tameside Transport Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/b5abd293-6f77-446d-902a-e2213a2f63c9",
+      guid: "b5abd293-6f77-446d-902a-e2213a2f63c9",
       creator: {
          forename: "Ronald",
          surname: "Gonzalez",
@@ -13095,7 +13100,7 @@ define({
       modified: "2015-07-24T04:26:07.000Z"
    }, {
       title: "NHS IC Junior Staff Data",
-      nodeRef: "workspace:\/\/SpacesStore\/7132da1b-077f-427d-a6c9-b51fed4d1f20",
+      guid: "7132da1b-077f-427d-a6c9-b51fed4d1f20",
       creator: {
          forename: "Ruth",
          surname: "Gordon",
@@ -13110,7 +13115,7 @@ define({
       modified: "2015-03-14T15:36:47.000Z"
    }, {
       title: "MVDC Contracts Register",
-      nodeRef: "workspace:\/\/SpacesStore\/7a62659b-1d64-463b-a4ee-1c45a12b4c07",
+      guid: "7a62659b-1d64-463b-a4ee-1c45a12b4c07",
       creator: {
          forename: "Shirley",
          surname: "Ramirez",
@@ -13125,7 +13130,7 @@ define({
       modified: "2014-08-24T11:30:58.000Z"
    }, {
       title: "Briefing Paper",
-      nodeRef: "workspace:\/\/SpacesStore\/3f9f74d7-ea7e-4f96-82ea-84e95bdda35a",
+      guid: "3f9f74d7-ea7e-4f96-82ea-84e95bdda35a",
       creator: {
          forename: "Denise",
          surname: "Cruz",
@@ -13140,7 +13145,7 @@ define({
       modified: "2015-07-08T18:58:36.000Z"
    }, {
       title: "Pay muliples",
-      nodeRef: "workspace:\/\/SpacesStore\/26826806-3133-46aa-952d-53a70431ccc7",
+      guid: "26826806-3133-46aa-952d-53a70431ccc7",
       creator: {
          forename: "Jennifer",
          surname: "Kelly",
@@ -13155,7 +13160,7 @@ define({
       modified: "2015-02-12T06:55:36.000Z"
    }, {
       title: "Aylesbury Vale",
-      nodeRef: "workspace:\/\/SpacesStore\/429b30eb-2374-4d73-a98b-d2bc65d1927c",
+      guid: "429b30eb-2374-4d73-a98b-d2bc65d1927c",
       creator: {
          forename: "Patrick",
          surname: "Burns",
@@ -13170,7 +13175,7 @@ define({
       modified: "2015-04-18T09:19:39.000Z"
    }, {
       title: "Background Quality Report",
-      nodeRef: "workspace:\/\/SpacesStore\/e6608517-3b27-4df6-9336-7c7a1bfc9f6a",
+      guid: "e6608517-3b27-4df6-9336-7c7a1bfc9f6a",
       creator: {
          forename: "Kimberly",
          surname: "Hicks",
@@ -13185,7 +13190,7 @@ define({
       modified: "2014-12-18T20:27:52.000Z"
    }, {
       title: "Public toilets in Tamworth",
-      nodeRef: "workspace:\/\/SpacesStore\/9bfed39c-0c36-4f62-b2f2-98ed40f9af97",
+      guid: "9bfed39c-0c36-4f62-b2f2-98ed40f9af97",
       creator: {
          forename: "Jessica",
          surname: "Harris",
@@ -13200,7 +13205,7 @@ define({
       modified: "2015-03-07T14:18:00.000Z"
    }, {
       title: "Prescription Cost Analysis",
-      nodeRef: "workspace:\/\/SpacesStore\/745863d4-d4f3-49c2-92a1-8dcad29523c1",
+      guid: "745863d4-d4f3-49c2-92a1-8dcad29523c1",
       creator: {
          forename: "Gloria",
          surname: "Franklin",
@@ -13215,7 +13220,7 @@ define({
       modified: "2014-11-12T19:06:16.000Z"
    }, {
       title: "Full contract and schedules",
-      nodeRef: "workspace:\/\/SpacesStore\/fbccf65e-584c-4c00-b82f-5e0b7ab51680",
+      guid: "fbccf65e-584c-4c00-b82f-5e0b7ab51680",
       creator: {
          forename: "Timothy",
          surname: "Miller",
@@ -13230,7 +13235,7 @@ define({
       modified: "2015-05-26T19:49:03.000Z"
    }, {
       title: "Directgov Article Ratings",
-      nodeRef: "workspace:\/\/SpacesStore\/525e7897-f030-487e-aa73-4f09dec6be08",
+      guid: "525e7897-f030-487e-aa73-4f09dec6be08",
       creator: {
          forename: "Irene",
          surname: "Gomez",
@@ -13245,7 +13250,7 @@ define({
       modified: "2015-06-20T04:05:59.000Z"
    }, {
       title: "UK Read Codes",
-      nodeRef: "workspace:\/\/SpacesStore\/96cf560d-d35e-48e5-b016-ee2f8acfbb2b",
+      guid: "96cf560d-d35e-48e5-b016-ee2f8acfbb2b",
       creator: {
          forename: "Ruby",
          surname: "Simmons",
@@ -13260,7 +13265,7 @@ define({
       modified: "2015-08-08T19:07:45.000Z"
    }, {
       title: "January Annex data",
-      nodeRef: "workspace:\/\/SpacesStore\/d0695f5a-535c-40fe-81a8-11e89e10ed66",
+      guid: "d0695f5a-535c-40fe-81a8-11e89e10ed66",
       creator: {
          forename: "Todd",
          surname: "Banks",
@@ -13275,7 +13280,7 @@ define({
       modified: "2015-07-11T03:21:17.000Z"
    }, {
       title: "Met Office Salaries",
-      nodeRef: "workspace:\/\/SpacesStore\/b6f61e70-c0a2-47cf-b4a9-9e18ed20cae9",
+      guid: "b6f61e70-c0a2-47cf-b4a9-9e18ed20cae9",
       creator: {
          forename: "Teresa",
          surname: "Moreno",
@@ -13290,7 +13295,7 @@ define({
       modified: "2014-09-25T08:33:23.000Z"
    }, {
       title: "Survey results",
-      nodeRef: "workspace:\/\/SpacesStore\/3b8d970a-5320-486b-bea2-aa82dc702712",
+      guid: "3b8d970a-5320-486b-bea2-aa82dc702712",
       creator: {
          forename: "Andrew",
          surname: "Sanchez",
@@ -13305,7 +13310,7 @@ define({
       modified: "2015-04-19T14:04:00.000Z"
    }, {
       title: "Long term museum loans",
-      nodeRef: "workspace:\/\/SpacesStore\/3c713368-ae35-4632-8878-e250227a179d",
+      guid: "3c713368-ae35-4632-8878-e250227a179d",
       creator: {
          forename: "Mildred",
          surname: "Lopez",
@@ -13320,7 +13325,7 @@ define({
       modified: "2015-04-20T22:06:10.000Z"
    }, {
       title: "Land Use Change Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/744850ea-aa43-4e0b-98bf-85cf7c8c5d76",
+      guid: "744850ea-aa43-4e0b-98bf-85cf7c8c5d76",
       creator: {
          forename: "Cheryl",
          surname: "Walker",
@@ -13335,7 +13340,7 @@ define({
       modified: "2015-08-06T09:29:16.000Z"
    }, {
       title: "Cycle Parking",
-      nodeRef: "workspace:\/\/SpacesStore\/0e5b8555-1f03-4d79-8912-66b5358078a9",
+      guid: "0e5b8555-1f03-4d79-8912-66b5358078a9",
       creator: {
          forename: "Sandra",
          surname: "Long",
@@ -13350,7 +13355,7 @@ define({
       modified: "2014-09-03T07:33:44.000Z"
    }, {
       title: "May QDS data",
-      nodeRef: "workspace:\/\/SpacesStore\/b3569420-93a7-46ad-a23f-d40df96f0b75",
+      guid: "b3569420-93a7-46ad-a23f-d40df96f0b75",
       creator: {
          forename: "Nicole",
          surname: "Reed",
@@ -13365,7 +13370,7 @@ define({
       modified: "2015-08-14T15:17:47.000Z"
    }, {
       title: "BPSS home page",
-      nodeRef: "workspace:\/\/SpacesStore\/a1428cb1-d664-4f70-856e-bb3d6ce6f569",
+      guid: "a1428cb1-d664-4f70-856e-bb3d6ce6f569",
       creator: {
          forename: "Christine",
          surname: "Crawford",
@@ -13380,7 +13385,7 @@ define({
       modified: "2014-12-22T23:49:53.000Z"
    }, {
       title: "HSCIC Lifestyles Data",
-      nodeRef: "workspace:\/\/SpacesStore\/8e3bc845-b90d-47cc-a97d-a78ec1bd5905",
+      guid: "8e3bc845-b90d-47cc-a97d-a78ec1bd5905",
       creator: {
          forename: "Beverly",
          surname: "Carter",
@@ -13395,7 +13400,7 @@ define({
       modified: "2015-01-19T16:00:10.000Z"
    }, {
       title: "Isles of Scilly",
-      nodeRef: "workspace:\/\/SpacesStore\/5424a1dc-d7fe-49be-b3e3-bb8965d5ce1e",
+      guid: "5424a1dc-d7fe-49be-b3e3-bb8965d5ce1e",
       creator: {
          forename: "Joe",
          surname: "Sanders",
@@ -13410,7 +13415,7 @@ define({
       modified: "2015-04-20T23:18:02.000Z"
    }, {
       title: "Business Rates web page",
-      nodeRef: "workspace:\/\/SpacesStore\/bf407ab1-3bf6-4d84-9007-737dfd04804c",
+      guid: "bf407ab1-3bf6-4d84-9007-737dfd04804c",
       creator: {
          forename: "Keith",
          surname: "Mills",
@@ -13425,7 +13430,7 @@ define({
       modified: "2015-07-03T02:43:48.000Z"
    }, {
       title: "General election",
-      nodeRef: "workspace:\/\/SpacesStore\/d457a970-5ebd-4243-91a1-dccf2f02bc22",
+      guid: "d457a970-5ebd-4243-91a1-dccf2f02bc22",
       creator: {
          forename: "Angela",
          surname: "Murray",
@@ -13440,7 +13445,7 @@ define({
       modified: "2014-10-14T01:29:23.000Z"
    }, {
       title: "March return",
-      nodeRef: "workspace:\/\/SpacesStore\/0db3dca5-8792-4674-b8b6-5147836c4ecf",
+      guid: "0db3dca5-8792-4674-b8b6-5147836c4ecf",
       creator: {
          forename: "Joshua",
          surname: "Carroll",
@@ -13455,7 +13460,7 @@ define({
       modified: "2014-11-07T21:07:56.000Z"
    }, {
       title: "Wigan Transport Statistics",
-      nodeRef: "workspace:\/\/SpacesStore\/728344e5-28c5-4b93-804a-4208dd58d6d1",
+      guid: "728344e5-28c5-4b93-804a-4208dd58d6d1",
       creator: {
          forename: "Craig",
          surname: "Daniels",
@@ -13470,7 +13475,7 @@ define({
       modified: "2014-11-02T23:24:48.000Z"
    }, {
       title: "Multiple spreadsheets",
-      nodeRef: "workspace:\/\/SpacesStore\/1caed6f1-cd80-4b5d-838e-01966874d847",
+      guid: "1caed6f1-cd80-4b5d-838e-01966874d847",
       creator: {
          forename: "Alice",
          surname: "Morris",
@@ -13485,7 +13490,7 @@ define({
       modified: "2015-04-24T09:10:51.000Z"
    }, {
       title: "User guide",
-      nodeRef: "workspace:\/\/SpacesStore\/12802902-b844-46c2-9e10-b762d337c249",
+      guid: "12802902-b844-46c2-9e10-b762d337c249",
       creator: {
          forename: "Martin",
          surname: "Jordan",
@@ -13500,7 +13505,7 @@ define({
       modified: "2015-05-19T01:32:43.000Z"
    }, {
       title: "Fraud and forgery",
-      nodeRef: "workspace:\/\/SpacesStore\/bf9aceb1-f577-4073-bfa6-8411068a1914",
+      guid: "bf9aceb1-f577-4073-bfa6-8411068a1914",
       creator: {
          forename: "Jack",
          surname: "Harrison",
@@ -13515,7 +13520,7 @@ define({
       modified: "2015-05-28T04:48:19.000Z"
    }, {
       title: "Linked Open BNB Platform",
-      nodeRef: "workspace:\/\/SpacesStore\/50a1b2d1-992d-4f41-94bc-acd4bf41ed4e",
+      guid: "50a1b2d1-992d-4f41-94bc-acd4bf41ed4e",
       creator: {
          forename: "Nicholas",
          surname: "Burns",
@@ -13530,7 +13535,7 @@ define({
       modified: "2015-04-19T15:28:27.000Z"
    }, {
       title: "ODA Summary",
-      nodeRef: "workspace:\/\/SpacesStore\/8be5a3f6-6b00-41c7-974a-f8a33e320fe2",
+      guid: "8be5a3f6-6b00-41c7-974a-f8a33e320fe2",
       creator: {
          forename: "Jean",
          surname: "Morgan",
@@ -13545,7 +13550,7 @@ define({
       modified: "2015-04-19T05:08:05.000Z"
    }, {
       title: "Polling station locations",
-      nodeRef: "workspace:\/\/SpacesStore\/613ea7d4-caef-444b-b3e7-ee26279f5930",
+      guid: "613ea7d4-caef-444b-b3e7-ee26279f5930",
       creator: {
          forename: "Margaret",
          surname: "Peters",
@@ -13560,7 +13565,7 @@ define({
       modified: "2015-07-08T13:18:55.000Z"
    }, {
       title: "Traffic Flow Data",
-      nodeRef: "workspace:\/\/SpacesStore\/620822e6-1a3d-4b42-8a1f-290e4e24609b",
+      guid: "620822e6-1a3d-4b42-8a1f-290e4e24609b",
       creator: {
          forename: "Kelly",
          surname: "Larson",
@@ -13575,7 +13580,7 @@ define({
       modified: "2015-05-04T13:09:07.000Z"
    }, {
       title: "Government construction pipeline",
-      nodeRef: "workspace:\/\/SpacesStore\/13aab9d5-58f9-4c65-a1a0-c0aa24ea04bd",
+      guid: "13aab9d5-58f9-4c65-a1a0-c0aa24ea04bd",
       creator: {
          forename: "Juan",
          surname: "Spencer",
@@ -13590,7 +13595,7 @@ define({
       modified: "2015-05-08T18:06:17.000Z"
    }, {
       title: "West Somerset",
-      nodeRef: "workspace:\/\/SpacesStore\/2ef7ee61-56aa-4251-b483-5972ea479615",
+      guid: "2ef7ee61-56aa-4251-b483-5972ea479615",
       creator: {
          forename: "Kenneth",
          surname: "Perez",
@@ -13605,7 +13610,7 @@ define({
       modified: "2015-01-14T13:51:55.000Z"
    }, {
       title: "Open Data Certificate",
-      nodeRef: "workspace:\/\/SpacesStore\/66b649ef-3997-43cd-9e7c-8395a75d37e6",
+      guid: "66b649ef-3997-43cd-9e7c-8395a75d37e6",
       creator: {
          forename: "Todd",
          surname: "Rodriguez",
@@ -13620,7 +13625,7 @@ define({
       modified: "2015-03-11T16:08:30.000Z"
    }, {
       title: "Methodological Change Document",
-      nodeRef: "workspace:\/\/SpacesStore\/9c1f9f0e-38f6-4187-8740-62805b8fc283",
+      guid: "9c1f9f0e-38f6-4187-8740-62805b8fc283",
       creator: {
          forename: "Johnny",
          surname: "Ruiz",
@@ -13635,7 +13640,7 @@ define({
       modified: "2014-09-11T18:39:36.000Z"
    }, {
       title: "Case record audit tool",
-      nodeRef: "workspace:\/\/SpacesStore\/6b3cb746-aedf-40a2-8983-e47e7577873a",
+      guid: "6b3cb746-aedf-40a2-8983-e47e7577873a",
       creator: {
          forename: "Willie",
          surname: "Dunn",
@@ -13650,7 +13655,7 @@ define({
       modified: "2014-11-28T01:24:49.000Z"
    }, {
       title: "Schools key contacts",
-      nodeRef: "workspace:\/\/SpacesStore\/2e53b906-1ce2-4c91-be03-11ff483a6b03",
+      guid: "2e53b906-1ce2-4c91-be03-11ff483a6b03",
       creator: {
          forename: "Karen",
          surname: "Peterson",
@@ -13665,7 +13670,7 @@ define({
       modified: "2014-10-28T10:24:47.000Z"
    }, {
       title: "Data",
-      nodeRef: "workspace:\/\/SpacesStore\/c6347cbf-8ff3-40fb-86d3-368777e00eb0",
+      guid: "c6347cbf-8ff3-40fb-86d3-368777e00eb0",
       creator: {
          forename: "Teresa",
          surname: "Ferguson",
@@ -13680,7 +13685,7 @@ define({
       modified: "2015-03-23T00:48:07.000Z"
    }, {
       title: "Internal appointments by religion",
-      nodeRef: "workspace:\/\/SpacesStore\/7f4a8d8c-7eab-465c-abdc-17ff9564d0c5",
+      guid: "7f4a8d8c-7eab-465c-abdc-17ff9564d0c5",
       creator: {
          forename: "Todd",
          surname: "Mendoza",
@@ -13695,7 +13700,7 @@ define({
       modified: "2015-03-26T04:30:40.000Z"
    }, {
       title: "WFS service",
-      nodeRef: "workspace:\/\/SpacesStore\/30f3598b-ca1b-4974-8999-ca93b48da2f5",
+      guid: "30f3598b-ca1b-4974-8999-ca93b48da2f5",
       creator: {
          forename: "William",
          surname: "Olson",
@@ -13710,7 +13715,7 @@ define({
       modified: "2014-10-08T04:12:58.000Z"
    }, {
       title: "CMR WAL telecoms data",
-      nodeRef: "workspace:\/\/SpacesStore\/8efd5d33-71a5-4fb9-9eea-8ead49a4ac63",
+      guid: "8efd5d33-71a5-4fb9-9eea-8ead49a4ac63",
       creator: {
          forename: "Amanda",
          surname: "Mendoza",
@@ -13725,7 +13730,7 @@ define({
       modified: "2015-07-13T15:29:32.000Z"
    }, {
       title: "East Lothian",
-      nodeRef: "workspace:\/\/SpacesStore\/3390d737-f3d5-400d-9d0d-ec5d2a5632ed",
+      guid: "3390d737-f3d5-400d-9d0d-ec5d2a5632ed",
       creator: {
          forename: "Louis",
          surname: "Perez",
@@ -13740,7 +13745,7 @@ define({
       modified: "2015-04-15T15:51:41.000Z"
    }, {
       title: "Hillsborough Independent Panel Disclosure",
-      nodeRef: "workspace:\/\/SpacesStore\/99ea167b-504a-44a4-bb5a-da2c64a24d34",
+      guid: "99ea167b-504a-44a4-bb5a-da2c64a24d34",
       creator: {
          forename: "Jesse",
          surname: "Garza",
@@ -13755,7 +13760,7 @@ define({
       modified: "2014-08-22T06:15:54.000Z"
    }, {
       title: "UK CMR internet data",
-      nodeRef: "workspace:\/\/SpacesStore\/6c4988ba-24d7-4c22-b4a9-c6aea356d0da",
+      guid: "6c4988ba-24d7-4c22-b4a9-c6aea356d0da",
       creator: {
          forename: "Beverly",
          surname: "Thomas",
@@ -13770,7 +13775,7 @@ define({
       modified: "2015-04-08T18:12:15.000Z"
    }, {
       title: "Contaminated Land",
-      nodeRef: "workspace:\/\/SpacesStore\/84b8cba9-e68c-4ff0-8a19-4161a30b3763",
+      guid: "84b8cba9-e68c-4ff0-8a19-4161a30b3763",
       creator: {
          forename: "Jeffrey",
          surname: "Lopez",
@@ -13785,7 +13790,7 @@ define({
       modified: "2015-07-28T22:04:40.000Z"
    }, {
       title: "Published Tender Documents",
-      nodeRef: "workspace:\/\/SpacesStore\/4db49051-25ab-4687-a374-395e48c5b109",
+      guid: "4db49051-25ab-4687-a374-395e48c5b109",
       creator: {
          forename: "Kelly",
          surname: "Bell",
@@ -13800,7 +13805,7 @@ define({
       modified: "2014-09-10T23:13:26.000Z"
    }, {
       title: "Vehicle related theft",
-      nodeRef: "workspace:\/\/SpacesStore\/d00816da-2b56-4f78-b40f-81e10ac2a77f",
+      guid: "d00816da-2b56-4f78-b40f-81e10ac2a77f",
       creator: {
          forename: "Teresa",
          surname: "Davis",
@@ -13815,7 +13820,7 @@ define({
       modified: "2015-06-19T14:25:43.000Z"
    }, {
       title: "Leavers by age",
-      nodeRef: "workspace:\/\/SpacesStore\/25f72e03-b273-4de5-9a4a-758577655816",
+      guid: "25f72e03-b273-4de5-9a4a-758577655816",
       creator: {
          forename: "Arthur",
          surname: "Collins",
@@ -13830,7 +13835,7 @@ define({
       modified: "2014-09-28T00:59:29.000Z"
    }, {
       title: "Firework licence holders",
-      nodeRef: "workspace:\/\/SpacesStore\/fd8abfe0-bafa-4496-882a-158ce6353540",
+      guid: "fd8abfe0-bafa-4496-882a-158ce6353540",
       creator: {
          forename: "Catherine",
          surname: "Lawson",
@@ -13845,7 +13850,7 @@ define({
       modified: "2015-05-30T21:01:20.000Z"
    }, {
       title: "Oldham Main Report",
-      nodeRef: "workspace:\/\/SpacesStore\/3fa279b0-a9e0-4a00-8668-c5193bba4439",
+      guid: "3fa279b0-a9e0-4a00-8668-c5193bba4439",
       creator: {
          forename: "Dorothy",
          surname: "Richards",
@@ -13860,7 +13865,7 @@ define({
       modified: "2014-11-03T12:40:03.000Z"
    }, {
       title: "June Data",
-      nodeRef: "workspace:\/\/SpacesStore\/45205cb9-5452-442b-b83d-60509dd0f902",
+      guid: "45205cb9-5452-442b-b83d-60509dd0f902",
       creator: {
          forename: "Gary",
          surname: "Hamilton",
@@ -13875,7 +13880,7 @@ define({
       modified: "2014-11-17T14:25:54.000Z"
    }, {
       title: "Meetings with external media",
-      nodeRef: "workspace:\/\/SpacesStore\/9d956e4b-5914-4fa1-a016-ce6e99188c6c",
+      guid: "9d956e4b-5914-4fa1-a016-ce6e99188c6c",
       creator: {
          forename: "Martha",
          surname: "Brown",
@@ -13890,7 +13895,7 @@ define({
       modified: "2015-05-23T13:54:06.000Z"
    }, {
       title: "Sexual offences",
-      nodeRef: "workspace:\/\/SpacesStore\/8e07e77a-ae83-4c88-99d1-011b16a63090",
+      guid: "8e07e77a-ae83-4c88-99d1-011b16a63090",
       creator: {
          forename: "Heather",
          surname: "Boyd",
@@ -13905,7 +13910,7 @@ define({
       modified: "2014-08-24T23:05:44.000Z"
    }, {
       title: "Police recorded crime data",
-      nodeRef: "workspace:\/\/SpacesStore\/418af017-04c3-46dd-90f7-f142bb974a3d",
+      guid: "418af017-04c3-46dd-90f7-f142bb974a3d",
       creator: {
          forename: "Carl",
          surname: "Martinez",
@@ -13920,7 +13925,7 @@ define({
       modified: "2015-04-13T23:32:44.000Z"
    }, {
       title: "Cambridge Public Toilets",
-      nodeRef: "workspace:\/\/SpacesStore\/792c63f4-f85e-48d3-921a-ed23f42dbed3",
+      guid: "792c63f4-f85e-48d3-921a-ed23f42dbed3",
       creator: {
          forename: "Benjamin",
          surname: "Freeman",
@@ -13935,7 +13940,7 @@ define({
       modified: "2015-05-25T06:11:25.000Z"
    }, {
       title: "HM Treasury",
-      nodeRef: "workspace:\/\/SpacesStore\/58e8d165-a03f-4191-b8a5-8bf21a75754b",
+      guid: "58e8d165-a03f-4191-b8a5-8bf21a75754b",
       creator: {
          forename: "Brandon",
          surname: "Sims",
@@ -13950,7 +13955,7 @@ define({
       modified: "2015-08-13T02:24:31.000Z"
    }, {
       title: "GPC Card Issuer Merchant Category Codes",
-      nodeRef: "workspace:\/\/SpacesStore\/906e2924-0444-4060-8f0d-cca4fc32148b",
+      guid: "906e2924-0444-4060-8f0d-cca4fc32148b",
       creator: {
          forename: "Janice",
          surname: "Perkins",
@@ -13965,7 +13970,7 @@ define({
       modified: "2014-10-14T14:18:30.000Z"
    }, {
       title: "NAM Organogram",
-      nodeRef: "workspace:\/\/SpacesStore\/fef64c58-ef3d-4460-8487-dd61f8e95ba9",
+      guid: "fef64c58-ef3d-4460-8487-dd61f8e95ba9",
       creator: {
          forename: "Steve",
          surname: "Carroll",
@@ -13980,7 +13985,7 @@ define({
       modified: "2015-06-16T15:04:46.000Z"
    }, {
       title: "Archived data from DH",
-      nodeRef: "workspace:\/\/SpacesStore\/04dd0ffd-d623-4327-9372-db8be40a8be4",
+      guid: "04dd0ffd-d623-4327-9372-db8be40a8be4",
       creator: {
          forename: "Marilyn",
          surname: "Taylor",
@@ -13995,7 +14000,7 @@ define({
       modified: "2014-12-27T17:17:30.000Z"
    }, {
       title: "Planning Applications Online",
-      nodeRef: "workspace:\/\/SpacesStore\/3dd54230-2582-4bf6-9dc8-26c782e84540",
+      guid: "3dd54230-2582-4bf6-9dc8-26c782e84540",
       creator: {
          forename: "Kathryn",
          surname: "Banks",
@@ -14010,7 +14015,7 @@ define({
       modified: "2015-05-30T03:59:33.000Z"
    }, {
       title: "Business Rates retention update",
-      nodeRef: "workspace:\/\/SpacesStore\/f842f378-d16f-4c96-8279-f0e1cf0206c2",
+      guid: "f842f378-d16f-4c96-8279-f0e1cf0206c2",
       creator: {
          forename: "Emily",
          surname: "Jenkins",
@@ -14025,7 +14030,7 @@ define({
       modified: "2014-11-16T10:35:38.000Z"
    }, {
       title: "Public Toilet information",
-      nodeRef: "workspace:\/\/SpacesStore\/53259c05-0acc-4e95-8a5e-feee6210c7bf",
+      guid: "53259c05-0acc-4e95-8a5e-feee6210c7bf",
       creator: {
          forename: "Jimmy",
          surname: "Porter",
@@ -14040,7 +14045,7 @@ define({
       modified: "2014-10-08T01:14:31.000Z"
    }, {
       title: "Directory of dumps",
-      nodeRef: "workspace:\/\/SpacesStore\/c17a5743-79d9-4ca1-8ba9-22ce0ce9a43c",
+      guid: "c17a5743-79d9-4ca1-8ba9-22ce0ce9a43c",
       creator: {
          forename: "Robert",
          surname: "Ramirez",
@@ -14055,7 +14060,7 @@ define({
       modified: "2014-09-21T12:42:13.000Z"
    }, {
       title: "Link to data",
-      nodeRef: "workspace:\/\/SpacesStore\/d5cea4ca-2a0c-477a-8be2-a99b9693b258",
+      guid: "d5cea4ca-2a0c-477a-8be2-a99b9693b258",
       creator: {
          forename: "Scott",
          surname: "Bell",
@@ -14070,7 +14075,7 @@ define({
       modified: "2014-08-27T21:36:48.000Z"
    }, {
       title: "Appointments by age",
-      nodeRef: "workspace:\/\/SpacesStore\/54602c9a-847e-4a5a-aebe-73c23f057ad6",
+      guid: "54602c9a-847e-4a5a-aebe-73c23f057ad6",
       creator: {
          forename: "Russell",
          surname: "Nichols",
@@ -14085,7 +14090,7 @@ define({
       modified: "2015-07-30T23:31:48.000Z"
    }, {
       title: "Metadata File",
-      nodeRef: "workspace:\/\/SpacesStore\/4638ce70-8458-4f0d-8482-dcb5b401d2a2",
+      guid: "4638ce70-8458-4f0d-8482-dcb5b401d2a2",
       creator: {
          forename: "Evelyn",
          surname: "Holmes",
@@ -14100,7 +14105,7 @@ define({
       modified: "2014-12-20T06:44:56.000Z"
    }, {
       title: "NAEI emissions data selector",
-      nodeRef: "workspace:\/\/SpacesStore\/a69663a0-84df-4654-9dde-94889fce111d",
+      guid: "a69663a0-84df-4654-9dde-94889fce111d",
       creator: {
          forename: "Henry",
          surname: "Jones",
@@ -14115,7 +14120,7 @@ define({
       modified: "2014-12-16T14:34:29.000Z"
    }, {
       title: "CERT reports home page",
-      nodeRef: "workspace:\/\/SpacesStore\/530b7175-fa06-4967-ad9f-285927a6fb1b",
+      guid: "530b7175-fa06-4967-ad9f-285927a6fb1b",
       creator: {
          forename: "Maria",
          surname: "Stone",
@@ -14130,7 +14135,7 @@ define({
       modified: "2014-09-16T18:15:39.000Z"
    }, {
       title: "North Lanarkshire",
-      nodeRef: "workspace:\/\/SpacesStore\/6e503efa-26a1-4e05-a30a-63163c888629",
+      guid: "6e503efa-26a1-4e05-a30a-63163c888629",
       creator: {
          forename: "Carol",
          surname: "Howard",
@@ -14145,7 +14150,7 @@ define({
       modified: "2014-11-14T04:02:18.000Z"
    }, {
       title: "Credit Card Spend",
-      nodeRef: "workspace:\/\/SpacesStore\/56994ba6-d0ff-4474-9413-4558a94e929c",
+      guid: "56994ba6-d0ff-4474-9413-4558a94e929c",
       creator: {
          forename: "Willie",
          surname: "Fox",
@@ -14160,7 +14165,7 @@ define({
       modified: "2014-11-21T20:30:33.000Z"
    }, {
       title: "SPARQL web form",
-      nodeRef: "workspace:\/\/SpacesStore\/96b0c371-c7a8-4ee5-8c90-62070ab20c4f",
+      guid: "96b0c371-c7a8-4ee5-8c90-62070ab20c4f",
       creator: {
          forename: "Anthony",
          surname: "Alvarez",
@@ -14175,7 +14180,7 @@ define({
       modified: "2015-06-11T12:56:28.000Z"
    }, {
       title: "Indicator Generation Methodology",
-      nodeRef: "workspace:\/\/SpacesStore\/677ca380-1805-4b5d-97af-a54ff9e02948",
+      guid: "677ca380-1805-4b5d-97af-a54ff9e02948",
       creator: {
          forename: "Paul",
          surname: "Thomas",
@@ -14190,7 +14195,7 @@ define({
       modified: "2015-02-02T09:51:01.000Z"
    }, {
       title: "Transition service delivery plan",
-      nodeRef: "workspace:\/\/SpacesStore\/4bc4f4ad-e306-4258-91d7-c4003b3e3ad3",
+      guid: "4bc4f4ad-e306-4258-91d7-c4003b3e3ad3",
       creator: {
          forename: "Willie",
          surname: "Hudson",
@@ -14205,7 +14210,7 @@ define({
       modified: "2015-07-27T19:53:08.000Z"
    }, {
       title: "Chart of Accounts csv",
-      nodeRef: "workspace:\/\/SpacesStore\/fe545f6b-d90e-4d7a-abdd-fdcd6bc323fd",
+      guid: "fe545f6b-d90e-4d7a-abdd-fdcd6bc323fd",
       creator: {
          forename: "George",
          surname: "Perry",
@@ -14220,7 +14225,7 @@ define({
       modified: "2015-04-14T05:36:05.000Z"
    }, {
       title: "Description of data and caveats associated with data",
-      nodeRef: "workspace:\/\/SpacesStore\/5c5faa4e-cc2b-4112-8a0d-a63bd830cc9d",
+      guid: "5c5faa4e-cc2b-4112-8a0d-a63bd830cc9d",
       creator: {
          forename: "Linda",
          surname: "Fernandez",
@@ -14235,7 +14240,7 @@ define({
       modified: "2015-01-17T12:13:06.000Z"
    }, {
       title: "Meusydd Parcio",
-      nodeRef: "workspace:\/\/SpacesStore\/d5498dfd-80e7-4d82-879e-765bf65762a8",
+      guid: "d5498dfd-80e7-4d82-879e-765bf65762a8",
       creator: {
          forename: "Christina",
          surname: "Jones",
@@ -14250,7 +14255,7 @@ define({
       modified: "2015-02-01T08:31:11.000Z"
    }, {
       title: "Senior salary report",
-      nodeRef: "workspace:\/\/SpacesStore\/9644a621-a6e6-4717-91e0-9beced9e705f",
+      guid: "9644a621-a6e6-4717-91e0-9beced9e705f",
       creator: {
          forename: "Jerry",
          surname: "Ortiz",
@@ -14265,7 +14270,7 @@ define({
       modified: "2015-04-19T03:03:37.000Z"
    }, {
       title: "About the Safety Thermometer",
-      nodeRef: "workspace:\/\/SpacesStore\/065464c9-a7c9-4e03-b9dd-73458da0a83b",
+      guid: "065464c9-a7c9-4e03-b9dd-73458da0a83b",
       creator: {
          forename: "Virginia",
          surname: "Richards",
@@ -14280,7 +14285,7 @@ define({
       modified: "2015-04-01T00:39:22.000Z"
    }, {
       title: "Mental Health Bulletin",
-      nodeRef: "workspace:\/\/SpacesStore\/07e483a8-dc76-4ebd-b5e5-4b377778a35a",
+      guid: "07e483a8-dc76-4ebd-b5e5-4b377778a35a",
       creator: {
          forename: "George",
          surname: "Jacobs",
@@ -14295,7 +14300,7 @@ define({
       modified: "2014-11-29T19:08:47.000Z"
    }, {
       title: "Castle Point",
-      nodeRef: "workspace:\/\/SpacesStore\/a761f823-e9b3-4bc7-995f-fe49c942f45e",
+      guid: "a761f823-e9b3-4bc7-995f-fe49c942f45e",
       creator: {
          forename: "Robert",
          surname: "Ortiz",
@@ -14310,7 +14315,7 @@ define({
       modified: "2014-09-16T00:21:43.000Z"
    }, {
       title: "An INSPIRE Download Service",
-      nodeRef: "workspace:\/\/SpacesStore\/819eba31-82b3-4b42-987b-ffff35676c03",
+      guid: "819eba31-82b3-4b42-987b-ffff35676c03",
       creator: {
          forename: "Harry",
          surname: "Matthews",
@@ -14325,7 +14330,7 @@ define({
       modified: "2015-02-01T18:14:31.000Z"
    }, {
       title: "SHMI Funnel Plots",
-      nodeRef: "workspace:\/\/SpacesStore\/b44a4ab5-5020-432e-918e-c63de964f341",
+      guid: "b44a4ab5-5020-432e-918e-c63de964f341",
       creator: {
          forename: "Pamela",
          surname: "Medina",
@@ -14340,7 +14345,7 @@ define({
       modified: "2015-05-28T02:11:13.000Z"
    }, {
       title: "Data on HMB Symptoms",
-      nodeRef: "workspace:\/\/SpacesStore\/3bd72785-d076-41ea-a36f-7b7d9508eca2",
+      guid: "3bd72785-d076-41ea-a36f-7b7d9508eca2",
       creator: {
          forename: "Sean",
          surname: "Watson",
@@ -14355,7 +14360,7 @@ define({
       modified: "2015-01-07T04:35:59.000Z"
    }, {
       title: "Habitat Connectivity",
-      nodeRef: "workspace:\/\/SpacesStore\/8c8023f2-acb5-46ad-b633-b4139d28859e",
+      guid: "8c8023f2-acb5-46ad-b633-b4139d28859e",
       creator: {
          forename: "Jane",
          surname: "Fisher",
@@ -14370,7 +14375,7 @@ define({
       modified: "2014-12-25T23:15:23.000Z"
    }, {
       title: "CCTV policy",
-      nodeRef: "workspace:\/\/SpacesStore\/178712d2-0d2f-464a-8701-2a37f052e7da",
+      guid: "178712d2-0d2f-464a-8701-2a37f052e7da",
       creator: {
          forename: "Emily",
          surname: "Ward",
@@ -14385,7 +14390,7 @@ define({
       modified: "2015-02-20T01:58:28.000Z"
    }, {
       title: "Meetings with external organisations",
-      nodeRef: "workspace:\/\/SpacesStore\/e216fd6e-83f2-45c5-8143-be24d57bcae8",
+      guid: "e216fd6e-83f2-45c5-8143-be24d57bcae8",
       creator: {
          forename: "Wayne",
          surname: "Harrison",
@@ -14400,7 +14405,7 @@ define({
       modified: "2015-04-08T10:10:20.000Z"
    }, {
       title: "Community Infrastructure Levy",
-      nodeRef: "workspace:\/\/SpacesStore\/c30bca3c-7712-4be7-b6da-8866eab8c273",
+      guid: "c30bca3c-7712-4be7-b6da-8866eab8c273",
       creator: {
          forename: "Paula",
          surname: "Hunter",
@@ -14415,7 +14420,7 @@ define({
       modified: "2015-01-06T12:57:20.000Z"
    }, {
       title: "Exeter City",
-      nodeRef: "workspace:\/\/SpacesStore\/8c5d5319-d2da-486b-a387-d208537d40b3",
+      guid: "8c5d5319-d2da-486b-a387-d208537d40b3",
       creator: {
          forename: "Johnny",
          surname: "Ellis",
@@ -14430,7 +14435,7 @@ define({
       modified: "2015-01-15T00:43:34.000Z"
    }, {
       title: "Huntingdonshire",
-      nodeRef: "workspace:\/\/SpacesStore\/30eae8ee-8a5d-467a-a406-fe750e43d74a",
+      guid: "30eae8ee-8a5d-467a-a406-fe750e43d74a",
       creator: {
          forename: "Annie",
          surname: "Peters",
@@ -14445,7 +14450,7 @@ define({
       modified: "2015-02-08T22:43:34.000Z"
    }, {
       title: "Fraud Document",
-      nodeRef: "workspace:\/\/SpacesStore\/8a4bbf09-9afa-420d-b257-cc76d37bc1da",
+      guid: "8a4bbf09-9afa-420d-b257-cc76d37bc1da",
       creator: {
          forename: "Christine",
          surname: "Montgomery",
@@ -14460,7 +14465,7 @@ define({
       modified: "2015-05-03T09:37:27.000Z"
    }, {
       title: "SLDC Open data directory",
-      nodeRef: "workspace:\/\/SpacesStore\/9bab9d5b-71b8-4096-985f-b8ce8de1f1a5",
+      guid: "9bab9d5b-71b8-4096-985f-b8ce8de1f1a5",
       creator: {
          forename: "Randy",
          surname: "Ray",
@@ -14475,7 +14480,7 @@ define({
       modified: "2014-09-23T10:41:20.000Z"
    }, {
       title: "MOD tax arrangements",
-      nodeRef: "workspace:\/\/SpacesStore\/9634032b-aaa1-4657-b33c-df9ab4825380",
+      guid: "9634032b-aaa1-4657-b33c-df9ab4825380",
       creator: {
          forename: "Lisa",
          surname: "Hansen",
@@ -14490,7 +14495,7 @@ define({
       modified: "2015-02-25T05:43:03.000Z"
    }, {
       title: "Superconnected cities broadband",
-      nodeRef: "workspace:\/\/SpacesStore\/22fdad09-83c4-4b67-8fbd-ba7ddcbd1c1f",
+      guid: "22fdad09-83c4-4b67-8fbd-ba7ddcbd1c1f",
       creator: {
          forename: "James",
          surname: "West",
@@ -14505,7 +14510,7 @@ define({
       modified: "2014-10-27T12:05:39.000Z"
    }, {
       title: "Windsor and Maidenhead",
-      nodeRef: "workspace:\/\/SpacesStore\/417b9e92-39a5-4d81-8c36-14c3be293eda",
+      guid: "417b9e92-39a5-4d81-8c36-14c3be293eda",
       creator: {
          forename: "Joan",
          surname: "Wheeler",
@@ -14520,7 +14525,7 @@ define({
       modified: "2015-08-12T17:04:44.000Z"
    }, {
       title: "Historic Flood Map",
-      nodeRef: "workspace:\/\/SpacesStore\/2ea66ddb-7225-4b21-922b-4d3caa703229",
+      guid: "2ea66ddb-7225-4b21-922b-4d3caa703229",
       creator: {
          forename: "Diana",
          surname: "Morrison",
@@ -14535,7 +14540,7 @@ define({
       modified: "2015-07-06T20:19:59.000Z"
    }, {
       title: "Exceptions to Recruitment Controls",
-      nodeRef: "workspace:\/\/SpacesStore\/a6c6d10b-2322-4246-9ac7-3ad902341612",
+      guid: "a6c6d10b-2322-4246-9ac7-3ad902341612",
       creator: {
          forename: "Lawrence",
          surname: "Taylor",
@@ -14550,7 +14555,7 @@ define({
       modified: "2015-02-02T07:20:30.000Z"
    }, {
       title: "UK CMR telecoms data",
-      nodeRef: "workspace:\/\/SpacesStore\/76e97067-779c-4445-9525-ba493ebe2e01",
+      guid: "76e97067-779c-4445-9525-ba493ebe2e01",
       creator: {
          forename: "Michelle",
          surname: "Gibson",
@@ -14565,7 +14570,7 @@ define({
       modified: "2015-07-29T20:24:42.000Z"
    }, {
       title: "Primary School catchment areas",
-      nodeRef: "workspace:\/\/SpacesStore\/0e2b05e6-7e5e-42d7-aa18-a47f5685e8f6",
+      guid: "0e2b05e6-7e5e-42d7-aa18-a47f5685e8f6",
       creator: {
          forename: "Randy",
          surname: "Knight",
@@ -14580,7 +14585,7 @@ define({
       modified: "2015-08-15T00:13:21.000Z"
    }, {
       title: "February return",
-      nodeRef: "workspace:\/\/SpacesStore\/8321722a-ddf1-4ef2-a86d-c0dda311e4a0",
+      guid: "8321722a-ddf1-4ef2-a86d-c0dda311e4a0",
       creator: {
          forename: "Robin",
          surname: "Warren",
@@ -14595,7 +14600,7 @@ define({
       modified: "2014-09-29T13:21:50.000Z"
    }, {
       title: "Manchester Main Report",
-      nodeRef: "workspace:\/\/SpacesStore\/e8f98151-249d-4e90-985f-a1e82b3fc945",
+      guid: "e8f98151-249d-4e90-985f-a1e82b3fc945",
       creator: {
          forename: "Chris",
          surname: "Sullivan",
@@ -14610,7 +14615,7 @@ define({
       modified: "2015-02-17T09:49:21.000Z"
    }, {
       title: "Hub Launchpad website",
-      nodeRef: "workspace:\/\/SpacesStore\/6afb58b4-2899-4e84-8302-c90aef1dcfcf",
+      guid: "6afb58b4-2899-4e84-8302-c90aef1dcfcf",
       creator: {
          forename: "Stephen",
          surname: "Harper",
@@ -14625,7 +14630,7 @@ define({
       modified: "2015-02-06T07:10:19.000Z"
    }, {
       title: "Image license details",
-      nodeRef: "workspace:\/\/SpacesStore\/5a712eae-ef41-4bb7-b420-3ceba1c2d4ac",
+      guid: "5a712eae-ef41-4bb7-b420-3ceba1c2d4ac",
       creator: {
          forename: "Johnny",
          surname: "Austin",
@@ -14640,7 +14645,7 @@ define({
       modified: "2014-11-24T03:38:55.000Z"
    }, {
       title: "East Ayrshire",
-      nodeRef: "workspace:\/\/SpacesStore\/c610046c-15f8-4f6c-be17-ee3469fb454e",
+      guid: "c610046c-15f8-4f6c-be17-ee3469fb454e",
       creator: {
          forename: "Eric",
          surname: "Baker",
@@ -14655,7 +14660,7 @@ define({
       modified: "2015-07-17T14:06:48.000Z"
    }, {
       title: "Property Classifications by Parish",
-      nodeRef: "workspace:\/\/SpacesStore\/ee32a673-72bb-411a-9921-8a30d8650da5",
+      guid: "ee32a673-72bb-411a-9921-8a30d8650da5",
       creator: {
          forename: "Frances",
          surname: "Frazier",
@@ -14670,7 +14675,7 @@ define({
       modified: "2014-08-23T03:57:17.000Z"
    }, {
       title: "Junior staff salary and structure",
-      nodeRef: "workspace:\/\/SpacesStore\/ba7ca4a8-2ca4-42a7-afb1-19a3ce01a07c",
+      guid: "ba7ca4a8-2ca4-42a7-afb1-19a3ce01a07c",
       creator: {
          forename: "Evelyn",
          surname: "Pierce",
@@ -14685,7 +14690,7 @@ define({
       modified: "2015-06-06T15:36:21.000Z"
    }, {
       title: "Derby WMS",
-      nodeRef: "workspace:\/\/SpacesStore\/f1822b3c-bf2b-4a2f-98ba-145364b5078d",
+      guid: "f1822b3c-bf2b-4a2f-98ba-145364b5078d",
       creator: {
          forename: "Clarence",
          surname: "Turner",
@@ -14700,7 +14705,7 @@ define({
       modified: "2015-08-15T02:13:26.000Z"
    }, {
       title: "Sight Tests",
-      nodeRef: "workspace:\/\/SpacesStore\/f884aa7a-af3f-4977-8d68-37c6a8ba06a8",
+      guid: "f884aa7a-af3f-4977-8d68-37c6a8ba06a8",
       creator: {
          forename: "Diane",
          surname: "Fernandez",
@@ -14715,7 +14720,7 @@ define({
       modified: "2014-11-12T16:47:36.000Z"
    }, {
       title: "Community Concern Locations",
-      nodeRef: "workspace:\/\/SpacesStore\/c865e353-6b6b-4d39-b0da-441f78dd263b",
+      guid: "c865e353-6b6b-4d39-b0da-441f78dd263b",
       creator: {
          forename: "Judith",
          surname: "Fowler",
@@ -14730,7 +14735,7 @@ define({
       modified: "2015-03-29T16:20:29.000Z"
    }, {
       title: "Welwyn Hatfield",
-      nodeRef: "workspace:\/\/SpacesStore\/b8c90a0f-c1da-4652-bebd-dab6a711cae3",
+      guid: "b8c90a0f-c1da-4652-bebd-dab6a711cae3",
       creator: {
          forename: "Kimberly",
          surname: "Hayes",
@@ -14745,7 +14750,7 @@ define({
       modified: "2015-01-06T17:06:50.000Z"
    }, {
       title: "CMR WAL context data",
-      nodeRef: "workspace:\/\/SpacesStore\/ba24abf8-b72b-4822-81d8-23f3ae26d017",
+      guid: "ba24abf8-b72b-4822-81d8-23f3ae26d017",
       creator: {
          forename: "Beverly",
          surname: "Oliver",
@@ -14760,7 +14765,7 @@ define({
       modified: "2015-02-14T13:58:14.000Z"
    }, {
       title: "NICOR Transparency Agenda page",
-      nodeRef: "workspace:\/\/SpacesStore\/7905f09c-573d-4cf3-be76-b06a0020e170",
+      guid: "7905f09c-573d-4cf3-be76-b06a0020e170",
       creator: {
          forename: "Paul",
          surname: "Taylor",
@@ -14775,7 +14780,7 @@ define({
       modified: "2015-01-31T04:27:37.000Z"
    }, {
       title: "Statistics on Alcohol",
-      nodeRef: "workspace:\/\/SpacesStore\/44df6780-1f05-4e58-bbcc-43defa0540d1",
+      guid: "44df6780-1f05-4e58-bbcc-43defa0540d1",
       creator: {
          forename: "Jeremy",
          surname: "Robinson",
@@ -14790,7 +14795,7 @@ define({
       modified: "2014-12-16T22:54:36.000Z"
    }, {
       title: "NHS Support Agencies",
-      nodeRef: "workspace:\/\/SpacesStore\/eb1df0d5-266d-4f3f-8d1b-b3433316ac53",
+      guid: "eb1df0d5-266d-4f3f-8d1b-b3433316ac53",
       creator: {
          forename: "Donna",
          surname: "Olson",
@@ -14805,7 +14810,7 @@ define({
       modified: "2015-03-30T04:31:50.000Z"
    }, {
       title: "Abuse of Vulnerable Adults",
-      nodeRef: "workspace:\/\/SpacesStore\/9d09c455-4ddd-4b80-b940-92a0908f209a",
+      guid: "9d09c455-4ddd-4b80-b940-92a0908f209a",
       creator: {
          forename: "Karen",
          surname: "Andrews",
@@ -14820,7 +14825,7 @@ define({
       modified: "2014-10-12T11:21:28.000Z"
    }, {
       title: "MVDC Senior Salaries",
-      nodeRef: "workspace:\/\/SpacesStore\/802f2ae2-b449-4bb3-91bf-f9753368fc29",
+      guid: "802f2ae2-b449-4bb3-91bf-f9753368fc29",
       creator: {
          forename: "Alan",
          surname: "Tucker",
@@ -14835,7 +14840,7 @@ define({
       modified: "2015-05-05T17:18:25.000Z"
    }, {
       title: "Smoke Control Zones",
-      nodeRef: "workspace:\/\/SpacesStore\/79e23e2d-6745-459f-8f19-db0d9a9237cd",
+      guid: "79e23e2d-6745-459f-8f19-db0d9a9237cd",
       creator: {
          forename: "Tammy",
          surname: "Gardner",
@@ -14850,7 +14855,7 @@ define({
       modified: "2015-03-01T01:50:47.000Z"
    }, {
       title: "Salford main report",
-      nodeRef: "workspace:\/\/SpacesStore\/a34aaca5-791f-4af2-9a06-62f54f60f9f2",
+      guid: "a34aaca5-791f-4af2-9a06-62f54f60f9f2",
       creator: {
          forename: "Ralph",
          surname: "Welch",
@@ -14865,7 +14870,7 @@ define({
       modified: "2015-03-05T11:27:17.000Z"
    }, {
       title: "DCSF report",
-      nodeRef: "workspace:\/\/SpacesStore\/d839c565-3d44-4abf-971c-a00cfacd0aaa",
+      guid: "d839c565-3d44-4abf-971c-a00cfacd0aaa",
       creator: {
          forename: "James",
          surname: "Barnes",
@@ -14880,7 +14885,7 @@ define({
       modified: "2014-12-23T15:35:50.000Z"
    }, {
       title: "UK CMR data",
-      nodeRef: "workspace:\/\/SpacesStore\/b9170982-2760-4985-bb7c-55611c8adfe2",
+      guid: "b9170982-2760-4985-bb7c-55611c8adfe2",
       creator: {
          forename: "Evelyn",
          surname: "West",
@@ -14895,7 +14900,7 @@ define({
       modified: "2015-07-10T04:20:54.000Z"
    }, {
       title: "Pubic Conveniences",
-      nodeRef: "workspace:\/\/SpacesStore\/0be23cc0-9d69-478f-aa34-0e7b3798f2a2",
+      guid: "0be23cc0-9d69-478f-aa34-0e7b3798f2a2",
       creator: {
          forename: "Joe",
          surname: "Henderson",
@@ -14910,7 +14915,7 @@ define({
       modified: "2015-06-25T23:47:04.000Z"
    }, {
       title: "Currency and payment data",
-      nodeRef: "workspace:\/\/SpacesStore\/e6bb94bd-3202-4538-8e7e-01c9c01c8656",
+      guid: "e6bb94bd-3202-4538-8e7e-01c9c01c8656",
       creator: {
          forename: "Phyllis",
          surname: "Sullivan",
@@ -14925,7 +14930,7 @@ define({
       modified: "2014-11-07T15:02:47.000Z"
    }, {
       title: "UKCESS Northern Ireland Local Data Toolkit",
-      nodeRef: "workspace:\/\/SpacesStore\/a18b8be6-9f72-4aee-82a3-144b4302c82f",
+      guid: "a18b8be6-9f72-4aee-82a3-144b4302c82f",
       creator: {
          forename: "Deborah",
          surname: "Kelley",
@@ -14940,7 +14945,7 @@ define({
       modified: "2015-05-29T04:53:53.000Z"
    }, {
       title: "Interactive map",
-      nodeRef: "workspace:\/\/SpacesStore\/e477c410-0753-4efb-aaae-0554b03b9858",
+      guid: "e477c410-0753-4efb-aaae-0554b03b9858",
       creator: {
          forename: "Dennis",
          surname: "Hamilton",
@@ -14955,7 +14960,7 @@ define({
       modified: "2014-12-28T08:10:38.000Z"
    }, {
       title: "Link to web page",
-      nodeRef: "workspace:\/\/SpacesStore\/9f306983-c52d-43a7-84da-987edddfa40e",
+      guid: "9f306983-c52d-43a7-84da-987edddfa40e",
       creator: {
          forename: "Kenneth",
          surname: "Murphy",
@@ -14970,7 +14975,7 @@ define({
       modified: "2015-02-20T00:39:54.000Z"
    }, {
       title: "General Dental Practices",
-      nodeRef: "workspace:\/\/SpacesStore\/652eed48-4ade-4e7b-962e-cb8e1a65c524",
+      guid: "652eed48-4ade-4e7b-962e-cb8e1a65c524",
       creator: {
          forename: "Brian",
          surname: "Evans",
@@ -14985,7 +14990,7 @@ define({
       modified: "2015-05-19T22:33:27.000Z"
    }, {
       title: "Orkney Islands",
-      nodeRef: "workspace:\/\/SpacesStore\/2ffa6d80-c104-4517-9ecc-ee4439ff5f38",
+      guid: "2ffa6d80-c104-4517-9ecc-ee4439ff5f38",
       creator: {
          forename: "Anne",
          surname: "Gardner",
@@ -15000,7 +15005,7 @@ define({
       modified: "2014-10-06T16:22:33.000Z"
    }, {
       title: "Products archived",
-      nodeRef: "workspace:\/\/SpacesStore\/6e6a1ede-1c8d-463b-8bf3-2abc7a211c90",
+      guid: "6e6a1ede-1c8d-463b-8bf3-2abc7a211c90",
       creator: {
          forename: "Maria",
          surname: "Mccoy",
@@ -15015,7 +15020,7 @@ define({
       modified: "2014-11-29T13:16:54.000Z"
    }, {
       title: "Grievance cases by religion",
-      nodeRef: "workspace:\/\/SpacesStore\/5ab3d7bd-f84a-4fb9-af33-3d47df3c4ec5",
+      guid: "5ab3d7bd-f84a-4fb9-af33-3d47df3c4ec5",
       creator: {
          forename: "Ronald",
          surname: "Wright",
@@ -15030,7 +15035,7 @@ define({
       modified: "2015-04-15T17:20:50.000Z"
    }, {
       title: "Current General Medical Practitioners",
-      nodeRef: "workspace:\/\/SpacesStore\/c105a1de-cdb5-4c20-824f-d0d87ceee0bd",
+      guid: "c105a1de-cdb5-4c20-824f-d0d87ceee0bd",
       creator: {
          forename: "Russell",
          surname: "Fox",
@@ -15045,7 +15050,7 @@ define({
       modified: "2015-05-09T14:59:37.000Z"
    }, {
       title: "Publication of Tenders",
-      nodeRef: "workspace:\/\/SpacesStore\/25f6f5db-5d00-4020-b873-a21d22302cb3",
+      guid: "25f6f5db-5d00-4020-b873-a21d22302cb3",
       creator: {
          forename: "Janice",
          surname: "Marshall",
@@ -15060,7 +15065,7 @@ define({
       modified: "2014-09-19T15:50:16.000Z"
    }, {
       title: "Notes for API Datasets",
-      nodeRef: "workspace:\/\/SpacesStore\/52337774-842c-4678-ac07-90b46b90d7f6",
+      guid: "52337774-842c-4678-ac07-90b46b90d7f6",
       creator: {
          forename: "Nicole",
          surname: "Bailey",
