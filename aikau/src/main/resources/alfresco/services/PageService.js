@@ -19,13 +19,13 @@
 
 /**
  * @module alfresco/services/PageService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/services/_PageServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/services/_PageServiceTopicMixin",
         "alfresco/core/NotificationUtils",
@@ -34,9 +34,9 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/dom-construct",
         "service/constants/Default"],
-        function(declare, AlfCore, CoreXhr, _PageServiceTopicMixin, NotificationUtils, ObjectTypeUtils, lang, array, domConstruct, AlfConstants) {
+        function(declare, BaseService, CoreXhr, _PageServiceTopicMixin, NotificationUtils, ObjectTypeUtils, lang, array, domConstruct, AlfConstants) {
    
-   return declare([AlfCore, CoreXhr, _PageServiceTopicMixin, NotificationUtils], {
+   return declare([BaseService, CoreXhr, _PageServiceTopicMixin, NotificationUtils], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -53,8 +53,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_PageService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_PageService__registerSubscriptions() {
          this.alfSubscribe("ALF_AVAILABLE_PAGE_DEFINITIONS", lang.hitch(this, "loadPages"));
          this.alfSubscribe(this.createPageTopic, lang.hitch(this, "createPage"));
          this.alfSubscribe(this.updatePageTopic, lang.hitch(this, "updatePage"));

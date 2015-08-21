@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -22,20 +22,20 @@
  * from being publicly accessible.
  *
  * @module alfresco/services/QuickShareService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/services/_QuickShareServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/services/_QuickShareServiceTopicMixin",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, AlfCore, CoreXhr, _QuickShareServiceTopicMixin, lang, AlfConstants) {
+        function(declare, BaseService, CoreXhr, _QuickShareServiceTopicMixin, lang, AlfConstants) {
    
-   return declare([AlfCore, CoreXhr, _QuickShareServiceTopicMixin], {
+   return declare([BaseService, CoreXhr, _QuickShareServiceTopicMixin], {
       
       /**
        * Sets up the subscriptions for the RatingsService
@@ -43,10 +43,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_QuickShareService__constructor(args) {
-         lang.mixin(this, args);
-         this.alfSubscribe(this.addQuickShareTopic, lang.hitch(this, "onAddQuickShare"));
-         this.alfSubscribe(this.removeQuickShareTopic, lang.hitch(this, "onRemoveQuickShare"));
+      registerSubscriptions: function alfresco_services_QuickShareService__registerSubscriptions() {
+         this.alfSubscribe(this.addQuickShareTopic, lang.hitch(this, this.onAddQuickShare));
+         this.alfSubscribe(this.removeQuickShareTopic, lang.hitch(this, this.onRemoveQuickShare));
       },
 
       /**

@@ -23,21 +23,21 @@
  * is configured to be false.
  *
  * @module alfresco/services/CrudService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "alfresco/dialogs/AlfDialog",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/util/urlUtils"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, AlfDialog, lang, array, urlUtils) {
+        function(declare, BaseService, CoreXhr, AlfConstants, AlfDialog, lang, array, urlUtils) {
 
-   return declare([AlfCore, CoreXhr], {
+   return declare([BaseService, CoreXhr], {
 
       /**
        * An array of the i18n files to use with this service.
@@ -54,8 +54,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_CrudService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_CrudService__registerSubscriptions() {
          this.alfSubscribe("ALF_CRUD_GET_ALL", lang.hitch(this, this.onGetAll));
          this.alfSubscribe("ALF_CRUD_GET_ONE", lang.hitch(this, this.onGetOne));
          this.alfSubscribe("ALF_CRUD_CREATE", lang.hitch(this, this.onCreate));

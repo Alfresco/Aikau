@@ -22,12 +22,12 @@
  * of existing nodes on an Alfresco Repository.
  * 
  * @module alfresco/services/UploadService
- * @extends module:alfresco/core/Core
- * @extends module:alfresco/core/CoreXhr
+ * @extends module:alfresco/services/BaseService
+ * @extends module:alfresco/services/BaseServiceXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "dojo/json",
         "dojo/_base/lang",
@@ -36,9 +36,9 @@ define(["dojo/_base/declare",
         "alfresco/dialogs/AlfDialog",
         "alfresco/buttons/AlfButton",
         "service/constants/Default"], 
-        function(declare, AlfCore, CoreXhr, dojoJson, lang, array, on, AlfDialog, AlfButton, AlfConstants) {
+        function(declare, BaseService, CoreXhr, dojoJson, lang, array, on, AlfDialog, AlfButton, AlfConstants) {
    
-   return declare([AlfCore, CoreXhr], {
+   return declare([BaseService, CoreXhr], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -170,8 +170,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      constructor: function alfresco_services_UploadService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_UploadService__registerSubscriptions() {
          this.reset();
          this.alfSubscribe(this._ALF_UPLOAD_TOPIC, lang.hitch(this, this.onUploadRequest));
 

@@ -23,20 +23,20 @@
  * configured to use infinite scrolling for handling pagination.
  * 
  * @module alfresco/services/InfiniteScrollService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @mixes module:alfresco/core/_EventsMixin
  * @author david.webster@alfresco.com
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
         "alfresco/core/_EventsMixin",
         "alfresco/core/DomElementUtils"],
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, lang, _EventsMixin, AlfDomUtils) {
+        function(declare, BaseService, _AlfDocumentListTopicMixin, lang, _EventsMixin, AlfDomUtils) {
 
-   return declare([AlfCore, _AlfDocumentListTopicMixin, _EventsMixin, AlfDomUtils], {
+   return declare([BaseService, _AlfDocumentListTopicMixin, _EventsMixin, AlfDomUtils], {
 
       /**
        * Used to keep track of the current status of the InfiniteScroll
@@ -75,9 +75,7 @@ define(["dojo/_base/declare",
        * @listens requestFinishedTopic
        * @listens eventsScrollTopic
        */
-      constructor: function alfresco_services_InfiniteScrollService__constructor(args) {
-         declare.safeMixin(this, args);
-
+      registerSubscriptions: function alfresco_services_InfiniteScrollService__registerSubscriptions() {
          // Register the events listeners...
          if (this._registerScrollListenerImmediately)
          {

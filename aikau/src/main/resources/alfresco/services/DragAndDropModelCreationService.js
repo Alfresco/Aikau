@@ -23,18 +23,18 @@
  * case in mind however it could potentially be used in other contexts.
  * 
  * @module alfresco/services/DragAndDropModelCreationService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/ObjectTypeUtils",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct"],
-        function(declare, AlfCore, ObjectTypeUtils, lang, array, domConstruct) {
+        function(declare, BaseService, ObjectTypeUtils, lang, array, domConstruct) {
    
-   return declare([AlfCore], {
+   return declare([BaseService], {
       
       /**
        * Sets up the subscriptions for the service
@@ -42,8 +42,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_DragAndDropModelCreationService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_DragAndDropModelCreationService__registerSubscriptions() {
          this.alfSubscribe("ALF_DND_EXPORT_MODEL_LIBRARY_FILES", lang.hitch(this, this.onFormExport));
          this.alfSubscribe("ALF_DND_PREVIEW_FORM_MODELS", lang.hitch(this, this.onFormPreview));
       },

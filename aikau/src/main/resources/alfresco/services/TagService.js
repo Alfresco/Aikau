@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,19 +19,19 @@
 
 /**
  * @module alfresco/services/TagService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/services/_TagServiceTopics",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, AlfCore, AlfXhr, _TagServiceTopics, lang, AlfConstants) {
+        function(declare, BaseService, AlfXhr, _TagServiceTopics, lang, AlfConstants) {
    
-   return declare([AlfCore, AlfXhr], {
+   return declare([BaseService, AlfXhr], {
       
       /**
        * This should be set when the current context is a site.
@@ -66,8 +66,7 @@ define(["dojo/_base/declare",
        * @instance 
        * @param {array} args The constructor arguments.
        */
-      constructor: function alfresco_services_TagService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_TagService__registerSubscriptions() {
          this.alfSubscribe("ALF_RETRIEVE_CURRENT_TAGS", lang.hitch(this, this.onTagListRequest));
          this.alfSubscribe(_TagServiceTopics.tagQueryTopic, lang.hitch(this, this.onTagQuery));
          this.alfSubscribe("ALF_CREATE_TAG", lang.hitch(this, this.createTag));

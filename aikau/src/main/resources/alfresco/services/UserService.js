@@ -19,7 +19,7 @@
 
 /**
  * @module alfresco/services/UserService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/core/NotificationUtils
  * @mixes module:alfresco/services/_UserServiceTopicMixin
@@ -27,7 +27,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/core/NotificationUtils",
         "alfresco/services/_UserServiceTopicMixin",
@@ -36,10 +36,10 @@ define(["dojo/_base/declare",
         "dojo/json",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, AlfCore, AlfXhr, NotificationUtils, 
+        function(declare, BaseService, AlfXhr, NotificationUtils, 
               _UserServiceTopicMixin, _PreferenceServiceTopicMixin, xhr, JSON, lang, AlfConstants) {
    
-   return declare([AlfCore, AlfXhr, NotificationUtils, _UserServiceTopicMixin, _PreferenceServiceTopicMixin], {
+   return declare([BaseService, AlfXhr, NotificationUtils, _UserServiceTopicMixin, _PreferenceServiceTopicMixin], {
       
       /**
        * This is the dot-notation preferences property address for the user's home page
@@ -65,9 +65,8 @@ define(["dojo/_base/declare",
        * @instance 
        * @param {array} args The constructor arguments.
        */
-      constructor: function alf_services_UserService__constructor(args) {
-         lang.mixin(this, args);
-         this.alfSubscribe(this.updateUserStatusTopic, lang.hitch(this, "updateUserStatus"));
+      registerSubscriptions: function alfresco_services_UserService__registerSubscriptions() {
+         this.alfSubscribe(this.updateUserStatusTopic, lang.hitch(this, this.updateUserStatus));
          this.alfSubscribe(this.setUserHomePageTopic, lang.hitch(this, this.onSetUserHomePage));
          this.alfSubscribe(this.setUserHomePageSuccessTopic, lang.hitch(this, this.onSetUserHomePageSuccess));
          this.alfSubscribe(this.setUserHomePageFailureTopic, lang.hitch(this, this.onSetUserHomePageFailure));
@@ -79,9 +78,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} data The payload containing the user status to post.
        */
-      updateUserStatus: function alf_services_UserService__updateUserStatus(data) {
-         var _this = this,
-             url = AlfConstants.URL_SERVICECONTEXT + "components/profile/userstatus";
+      updateUserStatus: function alfresco_services_UserService__updateUserStatus(data) {
+         var url = AlfConstants.URL_SERVICECONTEXT + "components/profile/userstatus";
          this.serviceXhr({url : url,
                           data: data,
                           method: "POST",
@@ -97,7 +95,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      userStatusUpdateSuccess: function alf_services_UserService__userStatusUpdateSuccess(response, originalRequestConfig) {
+      userStatusUpdateSuccess: function alfresco_services_UserService__userStatusUpdateSuccess(response, originalRequestConfig) {
          // NOTE: The current update status API does NOT include the updated status message in the
          //       response. Ideally it would be nice to change this such that it does to ensure
          //       that the users status is correctly reflected. However, we will include the user
@@ -106,9 +104,9 @@ define(["dojo/_base/declare",
          //       writing the only subscriber to this publication is coded to handle status updates
          //       that DO include a status message.
          this.alfLog("log", "User Status Update Success", response);
-         if (typeof response == "string")
+         if (typeof response === "string")
          {
-            var response = JSON.parse(this.cleanupJSONResponse(response));
+            response = JSON.parse(this.cleanupJSONResponse(response));
          }
 
          // Display a success message...
@@ -127,11 +125,11 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      userStatusUpdateFailure: function alf_services_UserService__userStatusUpdateFailure(response, originalRequestConfig) {
+      userStatusUpdateFailure: function alfresco_services_UserService__userStatusUpdateFailure(response, /*jshint unused:false*/ originalRequestConfig) {
          this.alfLog("log", "User Status Update Failure", response);
-         if (typeof response == "string")
+         if (typeof response === "string")
          {
-            var response = JSON.parse(this.cleanupJSONResponse(response));
+            response = JSON.parse(this.cleanupJSONResponse(response));
          }
          
          // Display a failure message...
@@ -163,7 +161,7 @@ define(["dojo/_base/declare",
        * @instance
        * @listens setUserHomePageTopicSuccess
        */
-      onSetUserHomePageSuccess: function share_services_UserService__onSetUserHomePageSuccess() {
+      onSetUserHomePageSuccess: function alfresco_services_UserService__onSetUserHomePageSuccess() {
          // Display a success message...
          this.displayMessage(this.message("message.homePage.success"));
       },
@@ -174,7 +172,7 @@ define(["dojo/_base/declare",
        * @instance
        * @listens setUserHomePageTopicFailure
        */
-      onSetUserHomePageFailure: function share_services_UserService__onSetUserHomePageFailure() {
+      onSetUserHomePageFailure: function alfresco_services_UserService__onSetUserHomePageFailure() {
          // Display a failure message...
          this.displayMessage(this.message("message.homePage.failure"));
       }

@@ -211,6 +211,10 @@ define(["alfresco/core/ProcessWidgets",
             {
                try
                {
+                  // We need to add the dependency name of the service into the constructor arguments
+                  // in order for the BaseService (if extended, which really it should be) to be able
+                  // to use that dependency name to register the service instance (see AKU-531)...
+                  serviceConfig.alfServiceName = dep;
                   var service = new ServiceType(serviceConfig);
                   _this.servicesToDestroy.push(service);
                }

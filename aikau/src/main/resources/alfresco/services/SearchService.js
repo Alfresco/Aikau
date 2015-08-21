@@ -23,28 +23,27 @@
  * widget.
  *
  * @module alfresco/services/SearchService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "alfresco/core/PathUtils",
         "alfresco/core/NodeUtils",
         "dojo/_base/lang",
         "dojo/json"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, dojoJson) {
+        function(declare, BaseService, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, dojoJson) {
 
-   return declare([AlfCore, CoreXhr, PathUtils], {
+   return declare([BaseService, CoreXhr, PathUtils], {
 
       /**
        *
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_SearchService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_SearchService__registerSubscriptions() {
          this.alfSubscribe("ALF_SEARCH_REQUEST", lang.hitch(this, this.onSearchRequest));
          this.alfSubscribe("ALF_STOP_SEARCH_REQUEST", lang.hitch(this, this.onStopRequest));
          this.alfSubscribe("ALF_AUTO_SUGGEST_SEARCH", lang.hitch(this, this.onAutoSuggest));

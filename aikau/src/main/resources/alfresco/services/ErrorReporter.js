@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,17 +19,17 @@
 
 /**
  * @module alfresco/services/ErrorReporter
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "dojo/_base/lang"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, lang) {
+        function(declare, BaseService, CoreXhr, AlfConstants, lang) {
    
-   return declare([AlfCore, CoreXhr], {
+   return declare([BaseService, CoreXhr], {
       
       /**
        * Subscribes to log requests.
@@ -37,9 +37,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args The constructor arguments.
        */
-      constructor: function alfresco_services_ErrorReporterconstructor(args) {
-         lang.mixin(this, args);
-         this.alfSubscribe(this.alfLoggingTopic, lang.hitch(this, "onLogRequest"));
+      registerSubscriptions: function alfresco_services_ErrorReporter__registerSubscriptions() {
+         this.alfSubscribe(this.alfLoggingTopic, lang.hitch(this, this.onLogRequest));
       },
       
       /**
@@ -66,9 +65,9 @@ define(["dojo/_base/declare",
              payload.messageArgs)
          {
             var url = this.errorReportingUrl;
-            if (url == null)
+            if (!url)
             {
-               url = AlfConstants.URL_SERVICECONTEXT + "aikau/error-report"
+               url = AlfConstants.URL_SERVICECONTEXT + "aikau/error-report";
             }
             var config = {
                callerName: (payload.callerName) ? payload.callerName : "unknown-caller",

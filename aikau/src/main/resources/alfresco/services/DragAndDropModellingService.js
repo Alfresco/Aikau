@@ -65,18 +65,18 @@
  * of widgets that can be used to edit the value of that item.</p>
  * 
  * @module alfresco/services/DragAndDropModellingService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/dnd/Constants",
         "alfresco/core/ObjectTypeUtils"],
-        function(declare, AlfCore, lang, array, Constants, ObjectTypeUtils) {
+        function(declare, BaseService, lang, array, Constants, ObjectTypeUtils) {
    
-   return declare([AlfCore], {
+   return declare([BaseService], {
       
       /**
        * Sets up the subscriptions for the service
@@ -84,8 +84,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_DragAndDropModellingService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_DragAndDropModellingService__registerSubscriptions() {
          this.alfSubscribe(Constants.requestWidgetsForDisplayTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForDisplay"));
          this.alfSubscribe(Constants.requestWidgetsForConfigTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForConfig"));
          this.alfSubscribe(Constants.requestWidgetsForNestedConfigTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForNestedConfig"));

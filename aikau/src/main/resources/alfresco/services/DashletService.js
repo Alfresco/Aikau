@@ -22,52 +22,49 @@
  * to store and retrieve the height of the Dashlet.
  *
  * @module alfresco/services/DashletService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/services/_DashletServiceTopicMixin
  * @author Martin Doyle
  */
 
-define([
-      "service/constants/Default",
-      "alfresco/core/Core",
-      "alfresco/core/CoreXhr",
-      "alfresco/services/_DashletServiceTopicMixin",
-      "dojo/_base/declare",
-      "dojo/_base/lang"
-   ],
-   function(AlfConstants, AlfCore, AlfCoreXhr, _DashletServiceTopicMixin, declare, lang) {
+define(["service/constants/Default",
+        "alfresco/services/BaseService",
+        "alfresco/core/CoreXhr",
+        "alfresco/services/_DashletServiceTopicMixin",
+        "dojo/_base/declare",
+        "dojo/_base/lang"],
+        function(AlfConstants, BaseService, AlfCoreXhr, _DashletServiceTopicMixin, declare, lang) {
 
-      return declare([AlfCore, AlfCoreXhr, _DashletServiceTopicMixin], {
+   return declare([BaseService, AlfCoreXhr, _DashletServiceTopicMixin], {
 
-         /**
-          * Constructor
-          *
-          * @instance
-          * @param {Object[]} [args] Constructor arguments
-          */
-         constructor: function alfresco_services_DashletService__constructor(args) {
-            declare.safeMixin(this, args);
-            this.alfSubscribe(this.storeDashletHeightTopic, lang.hitch(this, this.storeDashletHeight), true);
-         },
+      /**
+       * Constructor
+       *
+       * @instance
+       * @param {Object[]} [args] Constructor arguments
+       */
+      registerSubscriptions: function alfresco_services_DashletService__registerSubscriptions() {
+         this.alfSubscribe(this.storeDashletHeightTopic, lang.hitch(this, this.storeDashletHeight), true);
+      },
 
-         /**
-          * Store the height of the specified dashlet
-          *
-          * @instance
-          * @param {Object} payload The payload
-          * @param {string} payload.componentId The component ID of the dashlet
-          * @param {int} payload.height The height of the dashlet to be stored
-          */
-         storeDashletHeight: function alfresco_services_DashletService__storeDashletHeight(payload) {
-            this.serviceXhr({
-               url: AlfConstants.URL_SERVICECONTEXT + "modules/dashlet/config/" + encodeURIComponent(payload.componentId),
-               method: "POST",
-               alfTopic: payload.alfResponseTopic,
-               data: {
-                  height: payload.height
-               }
-            });
-         }
-      });
+      /**
+       * Store the height of the specified dashlet
+       *
+       * @instance
+       * @param {Object} payload The payload
+       * @param {string} payload.componentId The component ID of the dashlet
+       * @param {int} payload.height The height of the dashlet to be stored
+       */
+      storeDashletHeight: function alfresco_services_DashletService__storeDashletHeight(payload) {
+         this.serviceXhr({
+            url: AlfConstants.URL_SERVICECONTEXT + "modules/dashlet/config/" + encodeURIComponent(payload.componentId),
+            method: "POST",
+            alfTopic: payload.alfResponseTopic,
+            data: {
+               height: payload.height
+            }
+         });
+      }
    });
+});

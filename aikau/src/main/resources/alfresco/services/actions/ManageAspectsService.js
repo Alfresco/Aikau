@@ -23,20 +23,20 @@
  * attributes when instantiating this service.
  *
  * @module alfresco/services/actions/ManageAspectsService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/ObjectTypeUtils"],
-        function(declare, AlfCore, AlfCoreXhr, AlfConstants, lang, array, ObjectTypeUtils) {
+        function(declare, BaseService, AlfCoreXhr, AlfConstants, lang, array, ObjectTypeUtils) {
 
-   return declare([AlfCore, AlfCoreXhr], {
+   return declare([BaseService, AlfCoreXhr], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -99,8 +99,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_actions_ManageAspectsService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_actions_ManageAspectsService__registerSubscriptions() {
+         
          this.alfSubscribe("ALF_MANAGE_ASPECTS_REQUEST", lang.hitch(this, this.onManageAspects));
 
          if (!this.availableAspects)

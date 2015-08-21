@@ -19,18 +19,18 @@
 
 /**
  * @module alfresco/services/LogoutService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @author Kevin Roast
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, AlfCore, CoreXhr, lang, AlfConstants) {
+        function(declare, BaseService, CoreXhr, lang, AlfConstants) {
    
-   return declare([AlfCore, CoreXhr], {
+   return declare([BaseService, CoreXhr], {
       
       /**
        * Sets up the subscriptions for the LogoutService
@@ -38,8 +38,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_LogoutService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_LogoutService__registerSubscriptions() {
          this.alfSubscribe("ALF_DOLOGOUT", lang.hitch(this, "doLogout"));
       },
       

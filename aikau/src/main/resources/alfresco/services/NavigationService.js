@@ -21,23 +21,25 @@
  * Handles requests to redirect the browser to display different pages in either current or the new tab.
  *
  * @module alfresco/services/NavigationService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/services/_NavigationServiceTopicMixin
  * @author Dave Draper
  * @author David Webster
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "module",
+        "alfresco/services/BaseService",
         "alfresco/services/_NavigationServiceTopicMixin",
+        "alfresco/services/ServiceRegistry",
         "alfresco/util/hashUtils",
         "alfresco/util/urlUtils",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "service/constants/Default"],
-        function(declare, AlfCore, _NavigationServiceTopicMixin, hashUtils, urlUtils, array, lang, domConstruct, AlfConstants) {
+        function(declare, module, BaseService, _NavigationServiceTopicMixin, ServiceRegistry, hashUtils, urlUtils, array, lang, domConstruct, AlfConstants) {
 
-   return declare([AlfCore, _NavigationServiceTopicMixin], {
+   return declare([BaseService, _NavigationServiceTopicMixin], {
 
       /**
        * It is possible to configure the NavigationService to respond to one or more publications that result in page navigation.
@@ -62,9 +64,7 @@ define(["dojo/_base/declare",
        * @listens reloadPageTopic
        * @listens postToPageTopic
        */
-      constructor: function alfresco_services_NavigationService__constructor(args) {
-         lang.mixin(this, args);
-
+      registerSubscriptions: function alfresco_services_NavigationService__registerSubscriptions() {
          this.alfSubscribe(this.navigateToPageTopic, lang.hitch(this, this.navigateToPage));
          this.alfSubscribe(this.reloadPageTopic, lang.hitch(this, this.reloadPage));
          this.alfSubscribe(this.postToPageTopic, lang.hitch(this, this.postToPage));

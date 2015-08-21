@@ -112,7 +112,7 @@
  * }
  *
  * @module alfresco/services/DialogService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @pageSafe
  * @author Dave Draper
  * @author David Webster
@@ -159,7 +159,7 @@
  */
 
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "dojo/_base/lang",
         "alfresco/dialogs/AlfDialog",
         "alfresco/forms/Form",
@@ -168,9 +168,9 @@ define(["dojo/_base/declare",
         "dojo/keys",
         "jquery",
         "dojo/aspect"],
-        function(declare, AlfCore, lang, AlfDialog, AlfForm, array, on, keys, $, aspect) {
+        function(declare, BaseService, lang, AlfDialog, AlfForm, array, on, keys, $, aspect) {
 
-   return declare([AlfCore], {
+   return declare([BaseService], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -282,9 +282,7 @@ define(["dojo/_base/declare",
        * @listens module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST
        * @listens module:alfresco/services/DialogService~event:ALF_CREATE_DIALOG_REQUEST
        */
-      constructor: function alfresco_services_DialogService__constructor(args) {
-         lang.mixin(this, args);
-
+      registerSubscriptions: function alfresco_services_DialogService__registerSubscriptions() {
          // Generate a new pub/sub scope for the widget (this will intentionally override any other settings
          // to contrain communication...
          this.publishTopic = "ALF_CREATE_FORM_DIALOG_REQUEST";

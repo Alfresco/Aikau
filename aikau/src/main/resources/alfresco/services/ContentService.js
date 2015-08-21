@@ -26,22 +26,22 @@
  * is included on the page.
  * 
  * @module alfresco/services/ContentService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/NodeUtils"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, _AlfDocumentListTopicMixin, lang, array, NodeUtils) {
+        function(declare, BaseService, CoreXhr, AlfConstants, _AlfDocumentListTopicMixin, lang, array, NodeUtils) {
    
-   return declare([AlfCore, CoreXhr, _AlfDocumentListTopicMixin], {
+   return declare([BaseService, CoreXhr, _AlfDocumentListTopicMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -58,8 +58,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_ContentService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_ContentService__registerSubscriptions() {
          this.alfSubscribe(this.metadataChangeTopic, lang.hitch(this, this.handleCurrentNodeChange));
          this.alfSubscribe("ALF_SHOW_UPLOADER", lang.hitch(this, this.showUploader));
          this.alfSubscribe("ALF_CONTENT_SERVICE_UPLOAD_REQUEST_RECEIVED", lang.hitch(this, this.onFileUploadRequest));
@@ -68,7 +67,6 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_DELETE_CONTENT_REQUEST", lang.hitch(this, this.onDeleteContent));
          this.alfSubscribe("ALF_EDIT_BASIC_METADATA_REQUEST", lang.hitch(this, this.onEditBasicMetadataRequest));
          this.alfSubscribe("ALF_BASIC_METADATA_SUCCESS", lang.hitch(this, this.onEditBasicMetadataReceived));
-         
       },
       
       /**

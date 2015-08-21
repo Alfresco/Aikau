@@ -21,20 +21,20 @@
  * This service accepts widget models and asynchronously generates the dependencies for them.
  * 
  * @module alfresco/services/PreviewService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/services/_PreviewServiceTopicMixin
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/services/_PreviewServiceTopicMixin",
         "dojo/request/xhr",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, AlfCore, CoreXhr, _PreviewServiceTopicMixin, xhr, lang, AlfConstants) {
+        function(declare, BaseService, CoreXhr, _PreviewServiceTopicMixin, xhr, lang, AlfConstants) {
    
-   return declare([AlfCore, CoreXhr, _PreviewServiceTopicMixin], {
+   return declare([BaseService, CoreXhr, _PreviewServiceTopicMixin], {
       
       /**
        * Sets up the subscriptions for the PreviewService
@@ -42,9 +42,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_PreviewService__constructor(args) {
-         lang.mixin(this, args);
-         this.alfSubscribe(this.requestDependenciesTopic, lang.hitch(this, "generateDependencies"));
+      registerSubscriptions: function alfresco_services_PreviewService__registerSubscriptions() {
+         this.alfSubscribe(this.requestDependenciesTopic, lang.hitch(this, this.generateDependencies));
       },
       
       /**

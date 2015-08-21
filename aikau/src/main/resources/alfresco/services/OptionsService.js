@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -22,20 +22,20 @@
  * normalization of the data so that it adheres to the structure expected by form controls
  *
  * @module alfresco/services/OptionsService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "dojo/_base/lang",
         "dojo/_base/array",
         "service/constants/Default",
         "alfresco/core/NotificationUtils"],
-        function(declare, AlfCore, AlfXhr, lang, array, AlfConstants, NotificationUtils) {
+        function(declare, BaseService, AlfXhr, lang, array, AlfConstants, NotificationUtils) {
 
-   return declare([AlfCore, AlfXhr, NotificationUtils], {
+   return declare([BaseService, AlfXhr, NotificationUtils], {
 
       /**
        * Sets up the subscriptions for the OptionsService
@@ -43,8 +43,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args The constructor arguments.
        */
-      constructor: function alfresco_services_OptionsService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_OptionsService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_FORM_CONTROL_OPTIONS", lang.hitch(this, this.onOptionsRequest));
       },
 

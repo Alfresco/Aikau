@@ -54,17 +54,17 @@
  * }
  *
  * @module alfresco/services/actions/NodeLocationService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/UrlUtilsMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/UrlUtilsMixin",
         "dojo/_base/lang"],
-        function(declare, AlfCore, UrlUtilsMixin, lang) {
+        function(declare, BaseService, UrlUtilsMixin, lang) {
 
-   return declare([AlfCore, UrlUtilsMixin], {
+   return declare([BaseService, UrlUtilsMixin], {
 
       /**
        * The should be configured to be the URL fragment to be used when linking to nodes that are not located
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} args Constructor arguments
        */
-      constructor: function alfresco_services_actions_NodeLocationService__constructor(args) {
+      registerSubscriptions: function alfresco_services_actions_NodeLocationService__registerSubscriptions() {
          declare.safeMixin(this, args);
          this.alfSubscribe("ALF_LOCATE_DOCUMENT", lang.hitch(this, this.onLocateDocumentRequest));
       },
