@@ -31,8 +31,15 @@ define({
     * @type {string[]}
     */
    // Uncomment and add specific tests as necessary during development!
-   xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/lists/FilteredListTest"
+   baseFunctionalSuites: [
+      // "src/test/resources/alfresco/services/ServiceRegistryTest"
+      // "src/test/resources/alfresco/documentlibrary/PaginationTest",
+      // "src/test/resources/alfresco/layout/TwisterTest",
+      // "src/test/resources/alfresco/lists/FilteredListTest",
+      // "src/test/resources/alfresco/services/UserServiceTest",
+      "src/test/resources/alfresco/services/actions/ManageAspectsTest",
+      // "src/test/resources/alfresco/services/actions/NodeLocationTest",
+      // "src/test/resources/alfresco/services/actions/WorkflowTest"
    ],
 
    /**
@@ -41,7 +48,7 @@ define({
     * @instance
     * @type {string[]}
     */
-   baseFunctionalSuites: [
+   xbaseFunctionalSuites: [
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 
