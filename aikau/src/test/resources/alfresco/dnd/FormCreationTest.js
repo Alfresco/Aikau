@@ -94,15 +94,15 @@ define(["intern!object",
          .end()
          .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .confirmationButton > span")
             .click()
-         .end();
+         .end()
+            .waitForDeletedByCssSelector(".dialogDisplayed");
 
          // TODO: Test something?
       },
 
       "Edit the form": function() {
          // We want to make sure that editing the form won't hide the nested form control...
-         return browser.sleep(pause)
-            .findByCssSelector(".alfresco-dnd-DragAndDropTarget .previewPanel .action.edit img")
+         return browser.findByCssSelector(".alfresco-dnd-DragAndDropTarget .previewPanel .action.edit img")
                .click()
             .end()
             .sleep(1000) // Wait for dialog to render...

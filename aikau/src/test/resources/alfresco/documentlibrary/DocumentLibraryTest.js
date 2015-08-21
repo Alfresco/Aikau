@@ -50,8 +50,10 @@ define(["intern!object",
 
    var clickOnFolderLink = function() {
       return browser.findByCssSelector("#DETAILED_VIEW_NAME_ITEM_0 .alfresco-renderers-Property")
+         .clearLog()
             .click()
          .end()
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
          .findAllByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "The breadcrumb trail was not updated");
