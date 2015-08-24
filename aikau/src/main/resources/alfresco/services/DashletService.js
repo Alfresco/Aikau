@@ -39,10 +39,8 @@ define(["service/constants/Default",
    return declare([BaseService, AlfCoreXhr, _DashletServiceTopicMixin], {
 
       /**
-       * Constructor
-       *
        * @instance
-       * @param {Object[]} [args] Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_DashletService__registerSubscriptions() {
          this.alfSubscribe(this.storeDashletHeightTopic, lang.hitch(this, this.storeDashletHeight), true);

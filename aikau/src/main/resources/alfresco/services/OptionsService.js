@@ -41,7 +41,7 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the OptionsService
        *
        * @instance
-       * @param {array} args The constructor arguments.
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_OptionsService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_FORM_CONTROL_OPTIONS", lang.hitch(this, this.onOptionsRequest));

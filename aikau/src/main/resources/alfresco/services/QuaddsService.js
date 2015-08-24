@@ -39,7 +39,7 @@ define(["dojo/_base/declare",
       /**
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_QuaddsService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_ALL_QUADDS", lang.hitch(this, "onGetAllQuadds"));

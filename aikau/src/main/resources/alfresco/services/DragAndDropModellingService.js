@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the service
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_DragAndDropModellingService__registerSubscriptions() {
          this.alfSubscribe(Constants.requestWidgetsForDisplayTopic, lang.hitch(this, this.onDroppedItemDataRequest, "widgetsForDisplay"));

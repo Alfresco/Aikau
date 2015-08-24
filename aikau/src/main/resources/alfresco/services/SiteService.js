@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the SiteService
        *
        * @instance
-       * @param {array} args The constructor arguments.
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_SITES", lang.hitch(this, this.getSites));

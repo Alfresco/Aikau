@@ -74,6 +74,7 @@ define(["dojo/_base/declare",
        * @listens scrollReturn
        * @listens requestFinishedTopic
        * @listens eventsScrollTopic
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_InfiniteScrollService__registerSubscriptions() {
          // Register the events listeners...

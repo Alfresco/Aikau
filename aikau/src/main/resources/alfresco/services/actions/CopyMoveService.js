@@ -81,10 +81,9 @@ define(["dojo/_base/declare",
        * Sets up the service using the configuration provided. 
        *
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_actions_CopyMoveService__registerSubscriptions() {
-         
          this.alfSubscribe("ALF_COPY_OR_MOVE_REQUEST", lang.hitch(this, this.createCopyMoveDialog));
       },
 

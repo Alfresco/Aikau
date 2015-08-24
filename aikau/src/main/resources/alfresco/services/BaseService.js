@@ -40,7 +40,10 @@ define(["dojo/_base/declare",
    return declare([AlfCore], {
       
       /**
-       * Sets up the subscriptions for the LogoutService
+       * Creates the service and checks to see whether or not another instance configured on the
+       * same pubSubScope has already been registered and if not calls the 
+       * [registerSubscriptions]{@link module:alfresco/services/BaseService#registerSubscriptions}
+       * function (which should be overridden by the extending service).
        * 
        * @instance
        * @param {array} args Constructor arguments

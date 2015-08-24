@@ -90,19 +90,13 @@ define(["dojo/_base/declare",
       itemKey: "id",
 
       /**
-       * Sets up the service using the configuration provided. This will check to see what aspects are available,
-       * addable and removable. If no addble or removable aspects are explicitly configured then it is assumed that
-       * all available aspects are both addable and removable. Only aspects that are configured as being available
-       * will be displayed in the manage aspects picker, only aspects that are addable can be added in the manage
-       * aspects picker and only aspects that are removable can be removed in the manage aspects picker.
+       * Extends the [inherited constructor]{@link module:alfresco/services/BaseService#constructor}
+       * to set up the configured aspects.
        *
        * @instance
-       * @param {array} args Constructor arguments
+       * @param  {object[]} args
        */
-      registerSubscriptions: function alfresco_services_actions_ManageAspectsService__registerSubscriptions() {
-         
-         this.alfSubscribe("ALF_MANAGE_ASPECTS_REQUEST", lang.hitch(this, this.onManageAspects));
-
+      constructor: function alfresco_services_BaseService__constructor(/*jshint unused:false*/ args) {
          if (!this.availableAspects)
          {
             this.availableAspects = [];
@@ -126,6 +120,20 @@ define(["dojo/_base/declare",
          var availableAspects = [];
          array.forEach(this.availableAspects, lang.hitch(this, this.processAspect, availableAspects));
          this.availableAspects = availableAspects;
+      },
+
+      /**
+       * Sets up the service using the configuration provided. This will check to see what aspects are available,
+       * addable and removable. If no addble or removable aspects are explicitly configured then it is assumed that
+       * all available aspects are both addable and removable. Only aspects that are configured as being available
+       * will be displayed in the manage aspects picker, only aspects that are addable can be added in the manage
+       * aspects picker and only aspects that are removable can be removed in the manage aspects picker.
+       *
+       * @instance
+       * @since 1.0.32
+       */
+      registerSubscriptions: function alfresco_services_actions_ManageAspectsService__registerSubscriptions() {
+         this.alfSubscribe("ALF_MANAGE_ASPECTS_REQUEST", lang.hitch(this, this.onManageAspects));
       },
 
       /**

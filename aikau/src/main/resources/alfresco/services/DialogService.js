@@ -275,12 +275,10 @@ define(["dojo/_base/declare",
       _activeDialogs: [],
 
       /**
-       * Create a new 'publishTopic' for the action and generates a new 'pubSubScope' and then sets
-       * up subscriptions for handling show dialog and cancel dialog requests.
-       *
        * @instance
        * @listens module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST
        * @listens module:alfresco/services/DialogService~event:ALF_CREATE_DIALOG_REQUEST
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_DialogService__registerSubscriptions() {
          // Generate a new pub/sub scope for the widget (this will intentionally override any other settings

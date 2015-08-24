@@ -39,9 +39,10 @@ define(["dojo/_base/declare",
    return declare([BaseService, CoreXhr, PathUtils], {
 
       /**
-       *
+       * Sets up the subscriptions for the SearchService.
+       * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_SearchService__registerSubscriptions() {
          this.alfSubscribe("ALF_SEARCH_REQUEST", lang.hitch(this, this.onSearchRequest));

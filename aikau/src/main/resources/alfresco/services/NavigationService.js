@@ -57,11 +57,10 @@ define(["dojo/_base/declare",
        * [reloadPage]{@link module:alfresco/services/NavigationService#reloadPage} function.
        *
        * @instance
-       * @param {array} args Constructor arguments
-       *
        * @listens navigateToPageTopic
        * @listens reloadPageTopic
        * @listens postToPageTopic
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_NavigationService__registerSubscriptions() {
          this.alfSubscribe(this.navigateToPageTopic, lang.hitch(this, this.navigateToPage));

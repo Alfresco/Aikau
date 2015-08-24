@@ -38,10 +38,10 @@ define(["dojo/_base/declare",
    return declare([BaseService, CoreXhr, _QuickShareServiceTopicMixin], {
       
       /**
-       * Sets up the subscriptions for the RatingsService
+       * Sets up the subscriptions for the QuickShareService
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_QuickShareService__registerSubscriptions() {
          this.alfSubscribe(this.addQuickShareTopic, lang.hitch(this, this.onAddQuickShare));

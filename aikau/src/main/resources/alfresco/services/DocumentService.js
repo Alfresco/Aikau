@@ -194,7 +194,7 @@ define(["dojo/_base/declare",
       /**
        *
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_DocumentService__registerSubscriptions() {
          this.alfSubscribe("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", lang.hitch(this, this.onRetrieveSingleDocumentRequest));

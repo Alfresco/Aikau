@@ -35,7 +35,7 @@ define(["dojo/_base/declare",
        * Subscribes to log requests.
        * 
        * @instance
-       * @param {array} args The constructor arguments.
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_ErrorReporter__registerSubscriptions() {
          this.alfSubscribe(this.alfLoggingTopic, lang.hitch(this, this.onLogRequest));

@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the TagService
        * 
        * @instance 
-       * @param {array} args The constructor arguments.
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_TagService__registerSubscriptions() {
          this.alfSubscribe("ALF_RETRIEVE_CURRENT_TAGS", lang.hitch(this, this.onTagListRequest));

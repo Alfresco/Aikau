@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the PageService
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_PageService__registerSubscriptions() {
          this.alfSubscribe("ALF_AVAILABLE_PAGE_DEFINITIONS", lang.hitch(this, "loadPages"));

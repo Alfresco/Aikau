@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the CommentService
        * 
        * @instance 
-       * @param {array} args The constructor arguments.
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_CommentService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_COMMENTS", lang.hitch(this, this.onGetComments));

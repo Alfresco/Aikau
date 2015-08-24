@@ -40,7 +40,7 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the service
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_DragAndDropModelCreationService__registerSubscriptions() {
          this.alfSubscribe("ALF_DND_EXPORT_MODEL_LIBRARY_FILES", lang.hitch(this, this.onFormExport));

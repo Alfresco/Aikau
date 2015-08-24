@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the LogoutService
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_LogoutService__registerSubscriptions() {
          this.alfSubscribe("ALF_DOLOGOUT", lang.hitch(this, "doLogout"));

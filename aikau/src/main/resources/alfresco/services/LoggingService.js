@@ -66,8 +66,6 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the LoggingService
        *
        * @instance
-       * @param {array} args The constructor arguments.
-       *
        * @listens ALF_LOGGING_STATUS_CHANGE
        * @listens ALF_UPDATE_LOGGING_PREFERENCES
        * @listens ALF_SHOW_PUBSUB_LOG
@@ -75,6 +73,7 @@ define(["dojo/_base/declare",
        * @listens ALF_TOGGLE_DEVELOPER_MODE
        *
        * @fires getPreferenceTopic
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_LoggingService__registerSubscriptions() {
          this.alfSubscribe("ALF_LOGGING_STATUS_CHANGE", lang.hitch(this, this.onLoggingStatusChange));

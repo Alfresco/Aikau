@@ -164,11 +164,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The constructor is extended so that we can construct an object containing all the i18n properties to 
-       * be substituted by the template. This is because the template can't call functions to obtain data.
-       * There are potentially better ways of doing this - but it does at least work.
-       * 
        * @instance
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_UploadService__registerSubscriptions() {
          this.reset();

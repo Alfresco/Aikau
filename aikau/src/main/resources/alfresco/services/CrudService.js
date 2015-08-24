@@ -49,10 +49,8 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/CrudService.properties"}],
 
       /**
-       * Constructor
-       *
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_CrudService__registerSubscriptions() {
          this.alfSubscribe("ALF_CRUD_GET_ALL", lang.hitch(this, this.onGetAll));

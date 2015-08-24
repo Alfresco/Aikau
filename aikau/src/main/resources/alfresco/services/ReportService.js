@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the ReportService
        *
        * @instance
-       * @param {array} args The constructor arguments.
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_ReportService__registerSubscriptions() {
          this.alfSubscribe("ALF_RETRIEVE_SITE_CONTENT_REPORT", lang.hitch(this, this.getSiteContentReport));

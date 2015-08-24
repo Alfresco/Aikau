@@ -54,10 +54,9 @@ define(["dojo/_base/declare",
        * aspects picker and only aspects that are removable can be removed in the manage aspects picker.
        *
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_actions_CreateTemplateContentService__registerSubscriptions() {
-         
          this.alfSubscribe("ALF_CREATE_TEMPLATE_CONTENT", lang.hitch(this, this.onCreateTemplateContent));
       },
 

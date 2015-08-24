@@ -31,9 +31,8 @@ define({
     * @type {string[]}
     */
    // Uncomment and add specific tests as necessary during development!
-   baseFunctionalSuites: [
-      // "src/test/resources/alfresco/services/ServiceRegistryTest"
-      "src/test/resources/alfresco/services/actions/ManageAspectsTest"
+   xbaseFunctionalSuites: [
+      "src/test/resources/alfresco/lists/FilteredListTest"
    ],
 
    /**
@@ -42,7 +41,7 @@ define({
     * @instance
     * @type {string[]}
     */
-   xbaseFunctionalSuites: [
+   baseFunctionalSuites: [
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 

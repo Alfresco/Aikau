@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
 
       /**
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_actions_NodeLocationService__registerSubscriptions() {
          this.alfSubscribe("ALF_LOCATE_DOCUMENT", lang.hitch(this, this.onLocateDocumentRequest));
