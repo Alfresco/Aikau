@@ -55,12 +55,21 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_SearchThumbnailMixin__postCreate() {
          this.inherited(arguments);
-         if (!this.publishPayload)
+         if (!this.publishTopic)
          {
-            this.publishPayload = {};
+            // If specific publishTopic has been set then we can assume that the intention is to
+            // provide the standard link result that this mixin provides, however we do want to
+            // allow topic and payload overrides. This if clause has been added in particular for
+            // enabling the SearchGalleryThumbnail (into which this model has been mixed) to be
+            // used within the SearchFilmStripView and allow the click topic/payload to not be
+            // a standard search link
+            if (!this.publishPayload)
+            {
+               this.publishPayload = {};
+            }
+            this.publishPayload = this.generateSearchLinkPayload(this.publishPayload, this.currentItem, null, this.publishPayloadType, this.publishPayloadItemMixin, this.publishPayloadModifiers);
+            this.makeAnchor(this.publishPayload.url, this.publishPayload.type);
          }
-         this.publishPayload = this.generateSearchLinkPayload(this.publishPayload, this.currentItem, null, this.publishPayloadType, this.publishPayloadItemMixin, this.publishPayloadModifiers);
-         this.makeAnchor(this.publishPayload.url, this.publishPayload.type);
       },
 
       /**

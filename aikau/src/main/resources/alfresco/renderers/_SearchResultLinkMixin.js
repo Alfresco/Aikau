@@ -127,9 +127,28 @@ define(["alfresco/core/TemporalUtils",
                   payload.url = "document-details?nodeRef=" + nodeRef;
                }
          }
-
          return payload;
-      }
+      },
 
+      /**
+       * Override to ensure that search result link payloads aren't re-generated.
+       * 
+       * @instance
+       * @since 1.0.32
+       */
+      onNonPreviewAction: function alfresco_renderers__SearchResultLinkMixin__onNonPreviewAction() {
+         var publishGlobal = this.publishGlobal || false;
+         var publishToParent = this.publishToParent || false;
+         if (!this.publishTopic)
+         {
+            this.alfPublish("ALF_NAVIGATE_TO_PAGE", this.publishPayload, publishGlobal, publishToParent);
+         }
+         else if (this.publishPayload)
+         {
+            // If a payload has been provided then use it...
+            this.publishPayload = this.getGeneratedPayload(false, null);
+            this.alfPublish(this.publishTopic, this.publishPayload, publishGlobal, publishToParent);
+         }
+      }
    });
 });
