@@ -19,12 +19,12 @@
 
 /**
  * @module alfresco/services/SiteService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/core/NotificationUtils",
         "alfresco/core/ObjectTypeUtils",
@@ -33,9 +33,9 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
         "service/constants/Default"],
-        function(declare, AlfCore, AlfXhr, NotificationUtils, ObjectTypeUtils, xhr, JSON, lang, AlfButton, AlfConstants) {
+        function(declare, BaseService, AlfXhr, NotificationUtils, ObjectTypeUtils, xhr, JSON, lang, AlfButton, AlfConstants) {
 
-   return declare([AlfCore, AlfXhr, NotificationUtils], {
+   return declare([BaseService, AlfXhr, NotificationUtils], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -49,10 +49,9 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the SiteService
        *
        * @instance
-       * @param {array} args The constructor arguments.
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_SiteService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_SITES", lang.hitch(this, this.getSites));
          this.alfSubscribe("ALF_GET_SITES_ADMIN", lang.hitch(this, this.getAdminSites));
          this.alfSubscribe("ALF_GET_SITE_MEMBERSHIPS", lang.hitch(this, this.getSiteMemberships));

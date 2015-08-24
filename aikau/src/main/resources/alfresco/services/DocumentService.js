@@ -22,12 +22,12 @@
  * retrieved.
  *
  * @module alfresco/services/DocumentService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @author Dave Draper
  * @author David Webster
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "alfresco/core/PathUtils",
@@ -35,9 +35,9 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/_base/array"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, domConstruct, array) {
+        function(declare, BaseService, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, domConstruct, array) {
 
-   return declare([AlfCore, CoreXhr, PathUtils], {
+   return declare([BaseService, CoreXhr, PathUtils], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -194,10 +194,9 @@ define(["dojo/_base/declare",
       /**
        *
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_DocumentService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_DocumentService__registerSubscriptions() {
          this.alfSubscribe("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", lang.hitch(this, this.onRetrieveSingleDocumentRequest));
          this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST", lang.hitch(this, this.onRetrieveDocumentsRequest));
 
@@ -209,9 +208,7 @@ define(["dojo/_base/declare",
 
          //Bind to download topics:
          this.alfSubscribe(this.downloadNodeTopic, lang.hitch(this, this.onDownloadFile));
-
          this.alfSubscribe(this.cancelEditTopic, lang.hitch(this, this.onCancelEdit));
-
          this.alfSubscribe(this.parentNodeRefTopic, lang.hitch(this, this.onGetParentNodeRef));
 
       },

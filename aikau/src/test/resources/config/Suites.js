@@ -225,6 +225,8 @@ define({
       "src/test/resources/alfresco/services/NotificationServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",
       "src/test/resources/alfresco/services/ServiceFilteringTest",
+      "src/test/resources/alfresco/services/ServiceRegistryTest",
+
       // "src/test/resources/alfresco/services/SiteServiceTest", - NO TESTS IN THIS SUITE THAT DO ANYTHING!
       "src/test/resources/alfresco/services/UserServiceTest",
 

@@ -19,23 +19,23 @@
 
 /**
  * @module alfresco/services/LoggingService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/services/_PreferenceServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/_base/window",
         "dijit/registry",
         "alfresco/dialogs/AlfDialog"],
-        function(declare, AlfCore, _PreferenceServiceTopicMixin, lang, domClass, win, registry, AlfDialog) {
+        function(declare, BaseService, _PreferenceServiceTopicMixin, lang, domClass, win, registry, AlfDialog) {
         /*jshint devel:true*/
 
 
-   return declare([AlfCore, _PreferenceServiceTopicMixin], {
+   return declare([BaseService, _PreferenceServiceTopicMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -66,8 +66,6 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the LoggingService
        *
        * @instance
-       * @param {array} args The constructor arguments.
-       *
        * @listens ALF_LOGGING_STATUS_CHANGE
        * @listens ALF_UPDATE_LOGGING_PREFERENCES
        * @listens ALF_SHOW_PUBSUB_LOG
@@ -75,9 +73,9 @@ define(["dojo/_base/declare",
        * @listens ALF_TOGGLE_DEVELOPER_MODE
        *
        * @fires getPreferenceTopic
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_LoggingService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_LoggingService__registerSubscriptions() {
          this.alfSubscribe("ALF_LOGGING_STATUS_CHANGE", lang.hitch(this, this.onLoggingStatusChange));
          this.alfSubscribe("ALF_UPDATE_LOGGING_PREFERENCES", lang.hitch(this, this.onDetailsDialog));
          this.alfSubscribe("ALF_SHOW_PUBSUB_LOG", lang.hitch(this, this.showPubSubLog));

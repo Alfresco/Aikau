@@ -19,116 +19,115 @@
 
 /**
  * @module alfresco/services/NotificationService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "dojo/_base/lang",
         "alfresco/notifications/AlfNotification",
         "alfresco/core/topics"],
-        function(declare, AlfCore, lang, AlfNotification, topics) {
+        function(declare, BaseService, lang, AlfNotification, topics) {
 
-      return declare([AlfCore], {
+   return declare([BaseService], {
 
-         /**
-          * An array of the i18n files to use with this widget.
-          *
-          * @instance
-          * @type {Array}
-          */
-         i18nRequirements: [{i18nFile: "./i18n/NotificationService.properties"}],
+      /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {Array}
+       */
+      i18nRequirements: [{i18nFile: "./i18n/NotificationService.properties"}],
 
-         /**
-          * This is the topic that is subscribed to for handling requests to close a displayed
-          * notification.
-          *
-          * @instance
-          * @type {string}
-          * @default [topics.NOTIFICATION_CLOSED]{@link module:alfresco/core/topics#NOTIFICATION_CLOSED}
-          */
-         closeNotificationTopic: topics.NOTIFICATION_CLOSED,
+      /**
+       * This is the topic that is subscribed to for handling requests to close a displayed
+       * notification.
+       *
+       * @instance
+       * @type {string}
+       * @default [topics.NOTIFICATION_CLOSED]{@link module:alfresco/core/topics#NOTIFICATION_CLOSED}
+       */
+      closeNotificationTopic: topics.NOTIFICATION_CLOSED,
 
-         /**
-          * This is the topic that is subscribed to for handling requests to display a notification.
-          *
-          * @instance
-          * @type {string}
-          * @default [topics.DISPLAY_NOTIFICATION]{@link module:alfresco/core/topics#DISPLAY_NOTIFICATION}
-          */
-         displayNotificationTopic: topics.DISPLAY_NOTIFICATION,
+      /**
+       * This is the topic that is subscribed to for handling requests to display a notification.
+       *
+       * @instance
+       * @type {string}
+       * @default [topics.DISPLAY_NOTIFICATION]{@link module:alfresco/core/topics#DISPLAY_NOTIFICATION}
+       */
+      displayNotificationTopic: topics.DISPLAY_NOTIFICATION,
 
-         /**
-          * This is the topic that is subscribed to for handling requests to display a prompt.
-          *
-          * @instance
-          * @type {string}
-          * @default [topics.DISPLAY_PROMPT]{@link module:alfresco/core/topics#DISPLAY_PROMPT}
-          */
-         displayPromptTopic: topics.DISPLAY_PROMPT,
+      /**
+       * This is the topic that is subscribed to for handling requests to display a prompt.
+       *
+       * @instance
+       * @type {string}
+       * @default [topics.DISPLAY_PROMPT]{@link module:alfresco/core/topics#DISPLAY_PROMPT}
+       */
+      displayPromptTopic: topics.DISPLAY_PROMPT,
 
-         /**
-          * Sets up the subscriptions for the NotificationService
-          *
-          * @instance
-          * @param {array} args Constructor arguments
-          */
-         constructor: function alfresco_services_NotificationService__constructor(args) {
-            lang.mixin(this, args);
-            this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));
-            this.alfSubscribe(this.displayPromptTopic, lang.hitch(this, this.onDisplayPrompt));
-         },
+      /**
+       * Sets up the subscriptions for the NotificationService
+       *
+       * @instance
+       * @since 1.0.32
+       */
+      registerSubscriptions: function alfresco_services_NotificationService__registerSubscriptions() {
+         this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));
+         this.alfSubscribe(this.displayPromptTopic, lang.hitch(this, this.onDisplayPrompt));
+      },
 
-         /**
-          * Displays a notification to the user
-          *
-          * @instance
-          * @param {object} payload The The details of the notification.
-          */
-         onDisplayNotification: function alfresco_services_NotificationService__onDisplayNotification(payload) {
-            var message = lang.getObject("message", false, payload);
-            if (message) {
-               var newNotification = new AlfNotification({
-                  message: payload.message
-               });
-               newNotification.startup();
-               newNotification.display().then(lang.hitch(this, function() {
-                  this.alfPublish(this.closeNotificationTopic, {}, true);
-                  if (payload.publishTopic) {
-                     this.alfPublish(payload.publishTopic, payload.publishPayload || {}, payload.publishGlobal, payload.publishToParent);
-                  }
-               }));
-            } else {
-               this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
-            }
-         },
-
-         /**
-          * Displays a prompt to the user
-          *
-          * @instance
-          * @param {object} payload The The details of the notification.
-          */
-         onDisplayPrompt: function alfresco_services_NotificationService__onDisplayPrompt(payload) {
-            var message = lang.getObject("message", false, payload);
-            if (message) {
-               var title = payload.title || "notification.prompt.title";
-               this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
-                  dialogId: "NOTIFICATION_PROMPT",
-                  dialogTitle: this.message(title),
-                  textContent: message,
-                  widgetsButtons: [
-                     {
-                        name: "alfresco/buttons/AlfButton",
-                        config: {
-                           label: "notification.ok.label"
-                        }
-                     }
-                  ]
-               });
-            } else {
-               this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
-            }
+      /**
+       * Displays a notification to the user
+       *
+       * @instance
+       * @param {object} payload The The details of the notification.
+       */
+      onDisplayNotification: function alfresco_services_NotificationService__onDisplayNotification(payload) {
+         var message = lang.getObject("message", false, payload);
+         if (message) {
+            var newNotification = new AlfNotification({
+               message: payload.message
+            });
+            newNotification.startup();
+            newNotification.display().then(lang.hitch(this, function() {
+               this.alfPublish(this.closeNotificationTopic, {}, true);
+               if (payload.publishTopic) {
+                  this.alfPublish(payload.publishTopic, payload.publishPayload || {}, payload.publishGlobal, payload.publishToParent);
+               }
+            }));
+         } else {
+            this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
          }
-      });
+      },
+
+      /**
+       * Displays a prompt to the user
+       *
+       * @instance
+       * @param {object} payload The The details of the notification.
+       */
+      onDisplayPrompt: function alfresco_services_NotificationService__onDisplayPrompt(payload) {
+         var message = lang.getObject("message", false, payload);
+         if (message) {
+            var title = payload.title || "notification.prompt.title";
+            this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+               dialogId: "NOTIFICATION_PROMPT",
+               dialogTitle: this.message(title),
+               textContent: message,
+               widgetsButtons: [
+                  {
+                     name: "alfresco/buttons/AlfButton",
+                     config: {
+                        label: "notification.ok.label"
+                     }
+                  }
+               ]
+            });
+         } else {
+            this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
+         }
+      }
    });
+});

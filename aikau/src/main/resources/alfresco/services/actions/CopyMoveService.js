@@ -24,20 +24,20 @@
  * so it is imperative that is also included on the page (or an alternative service that handles the same publications).
  *
  * @module alfresco/services/actions/CopyMoveService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/NodeUtils"],
-        function(declare, AlfCore, AlfCoreXhr, AlfConstants, lang, array, NodeUtils) {
+        function(declare, BaseService, AlfCoreXhr, AlfConstants, lang, array, NodeUtils) {
 
-   return declare([AlfCore, AlfCoreXhr], {
+   return declare([BaseService, AlfCoreXhr], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -81,10 +81,9 @@ define(["dojo/_base/declare",
        * Sets up the service using the configuration provided. 
        *
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_actions_CopyMoveService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_actions_CopyMoveService__registerSubscriptions() {
          this.alfSubscribe("ALF_COPY_OR_MOVE_REQUEST", lang.hitch(this, this.createCopyMoveDialog));
       },
 

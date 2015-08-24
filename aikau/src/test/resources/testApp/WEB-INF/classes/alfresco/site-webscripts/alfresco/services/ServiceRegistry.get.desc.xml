@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Service Registry Test Page</shortname>
+  <description>This page is purely for testing that duplicate services cannot be registered at the same scope.</description>
+  <family>aikau-unit-tests</family>
+  <url>/ServiceRegistry</url>
+</webscript>
