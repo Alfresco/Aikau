@@ -56,7 +56,11 @@ define(["dojo/_base/declare",
          }
          else
          {
-            this.alfLog("log", "A service with the module id: '" + module.id + "' has already been registered");
+            this.alfLog("info", "A service with the Module ID: '" + 
+                                 module.id + 
+                                 "' configured to use the pubSubScope '" + 
+                                 this.pubSubScope + 
+                                 "'' has already been registered so this instance will NOT call 'registerSubscriptions'. This is typically nothing to be concerned about");
          }
       },
       
