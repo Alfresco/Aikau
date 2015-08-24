@@ -121,6 +121,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {boolean}
        * @default
+       * @since 1.0.32
        */
       useInfiniteScroll: false,
       

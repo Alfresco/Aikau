@@ -77,6 +77,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default [topics.SCROLL_NEAR_BOTTOM]{@link module:alfresco/core/topics#SCROLL_NEAR_BOTTOM}
+       * @since 1.0.32
        */
       loadMoreDataTopic: topics.SCROLL_NEAR_BOTTOM,
 
@@ -86,6 +87,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {boolean}
        * @default
+       * @since 1.0.32
        */
       useInfiniteScroll: false,
       

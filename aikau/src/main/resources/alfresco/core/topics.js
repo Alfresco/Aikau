@@ -106,6 +106,7 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.32
        */
       SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM"
    };
