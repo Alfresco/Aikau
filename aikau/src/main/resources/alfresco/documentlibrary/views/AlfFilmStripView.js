@@ -146,7 +146,7 @@ define(["dojo/_base/declare",
             parentPubSubScope: this.parentPubSubScope,
             itemSelectionTopics: ["ALF_FILMSTRIP_SELECT_ITEM"]
          });
-         this.contentCarousel.placeAt(this.previewNode, "last");
+         this.contentCarousel.placeAt(this.previewNode);
          this.contentCarousel.resize();
 
          var dlr = new Carousel({
@@ -156,6 +156,7 @@ define(["dojo/_base/declare",
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
             fixedHeight: "112px",
+            useInfiniteScroll: this.useInfiniteScroll,
             itemSelectionTopics: ["ALF_FILMSTRIP_ITEM_CHANGED"]
          });
          return dlr;
@@ -166,11 +167,12 @@ define(["dojo/_base/declare",
        * to destroy the content carousel.
        *
        * @instance
+       * @override
        */
       clearOldView: function alfresco_documentlibrary_views_AlfFilmStripView__clearOldView() {
          if (this.contentCarousel)
          {
-            this.contentCarousel.destroy();
+            this.contentCarousel.destroyRecursive();
          }
          this.inherited(arguments);
       },

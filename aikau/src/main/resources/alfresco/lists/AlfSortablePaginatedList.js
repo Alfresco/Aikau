@@ -389,7 +389,6 @@ define(["dojo/_base/declare",
                {
                   this.loadData();
                }
-               this.loadData();
             }
          }
       },

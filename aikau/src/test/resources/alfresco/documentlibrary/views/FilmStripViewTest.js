@@ -135,14 +135,14 @@ define([
                   assert.isTrue(isDisplayed, "The first item should be displayed");
                })
 
-            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL)
+            .carouselItemIsDisplayed(3, ITEMS_CAROUSEL)
                .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fourth item should be displayed");
+                  assert.isTrue(isDisplayed, "The third item should be displayed");
                })
 
-            .carouselItemIsDisplayed(5, ITEMS_CAROUSEL)
+            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL)
                .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fifth item should not be displayed");
+                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
                });
          },
 
@@ -217,24 +217,24 @@ define([
                })
                .end()
 
+            .carouselItemIsDisplayed(3, ITEMS_CAROUSEL)
+               .then(function(isDisplayed) {
+                  assert.isFalse(isDisplayed, "The third item should not be displayed");
+               })
+
             .carouselItemIsDisplayed(4, ITEMS_CAROUSEL)
                .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
+                  assert.isTrue(isDisplayed, "The fourth item should be displayed");
                })
 
-            .carouselItemIsDisplayed(5, ITEMS_CAROUSEL)
+            .carouselItemIsDisplayed(6, ITEMS_CAROUSEL)
                .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fifth item should be displayed");
+                  assert.isTrue(isDisplayed, "The sixth item should be displayed");
                })
 
-            .carouselItemIsDisplayed(8, ITEMS_CAROUSEL)
+            .carouselItemIsDisplayed(7, ITEMS_CAROUSEL)
                .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The eighth item should be displayed");
-               })
-
-            .carouselItemIsDisplayed(9, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The ninth item should not be displayed");
+                  assert.isFalse(isDisplayed, "The seventh item should not be displayed");
                })
 
             .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
@@ -265,14 +265,14 @@ define([
                   assert.isTrue(isDisplayed, "The first item should be displayed");
                })
 
-            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL)
+            .carouselItemIsDisplayed(3, ITEMS_CAROUSEL)
                .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fourth item should be displayed");
+                  assert.isTrue(isDisplayed, "The third item should be displayed");
                })
 
-            .carouselItemIsDisplayed(5, ITEMS_CAROUSEL)
+            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL)
                .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fifth item should not be displayed");
+                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
                })
 
             .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
@@ -283,25 +283,26 @@ define([
          },
 
          "Clicking on thumbnail updates preview": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(4) .alfresco-renderers-Thumbnail")
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(3) .alfresco-renderers-Thumbnail")
                .clearLog()
                .click()
                .end()
 
             .getLastPublish("ALF_FILMSTRIP_SELECT_ITEM")
                .then(function(payload) {
-                  assert.propertyVal(payload, "index", 3, "Did not select fourth item from thumbnails list");
+                  assert.propertyVal(payload, "index", 2, "Did not select third item from thumbnails list");
                })
 
-            .carouselItemIsDisplayed(4, PREVIEW_CAROUSEL)
+            .carouselItemIsDisplayed(3, PREVIEW_CAROUSEL)
                .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fourth preview item should be displayed");
+                  assert.isTrue(isDisplayed, "The third preview item should be displayed");
                })
          },
 
-         "Navigating to third page loads more items on first occasion only": function() {
+         "Navigating to fourth page loads more items on first occasion only": function() {
             return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
                .clearLog()
+               .click()
                .click()
                .click()
                .end()
@@ -312,7 +313,7 @@ define([
 
             .findAllByCssSelector("#FILMSTRIP_VIEW_ITEMS li")
                .then(function(elements) {
-                  assert.lengthOf(elements, 11, "Did not final item");
+                  assert.lengthOf(elements, 11, "Did not load final item");
                })
                .end()
 

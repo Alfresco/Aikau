@@ -22,6 +22,7 @@ model.jsonModel = {
             widgets: [
                {
                   name: "alfresco/layout/VerticalWidgets",
+                  widthPx: 480,
                   config: {
                      widgets: [
                         {
@@ -66,6 +67,7 @@ model.jsonModel = {
                },
                {
                   name: "alfresco/layout/VerticalWidgets",
+                  widthPx: 480,
                   config: {
                      pubSubScope: "PAGED_",
                      widgets: [
@@ -100,7 +102,7 @@ model.jsonModel = {
                                     name: "alfresco/lists/Paginator",
                                     config: {
                                        useHash: false,
-                                       documentsPerPage: 10,
+                                       documentsPerPage: 5,
                                        pageSizes: [5,10,20]
                                     }
                                  }
@@ -112,7 +114,7 @@ model.jsonModel = {
                            name: "alfresco/documentlibrary/AlfDocumentList",
                            config: {
                               waitForPageWidgets: false,
-                              currentPageSize: 10,
+                              currentPageSize: 5,
                               widgets: [
                                  {
                                     id: "PAGED_FILMSTRIP_VIEW",

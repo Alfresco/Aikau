@@ -81,6 +81,15 @@ define(["dojo/_base/declare",
       loadMoreDataTopic: topics.SCROLL_NEAR_BOTTOM,
 
       /**
+       * Whether the list that's creating this view has infinite scroll turned on
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      useInfiniteScroll: false,
+      
+      /**
        * Sets up image source files, etc.
        *
        * @instance postCreate
@@ -326,9 +335,17 @@ define(["dojo/_base/declare",
          domStyle.set(this.prevNode, "visibility", (this.firstDisplayedIndex == 0) ? "hidden": "visible");
          domStyle.set(this.nextNode, "visibility", (this.firstDisplayedIndex <= itemsCount-1 && this.lastDisplayedIndex >= itemsCount-1) ? "hidden": "visible");
 
-         var lastItemVisible = this.lastDisplayedIndex > itemsCount;
-         if(lastItemVisible) {
-            this.alfPublish(this.loadMoreDataTopic);
+         // Can only enter this condition if we're an items carousel in infinite
+         // scroll mode (because the preview carousel doesn't get told this)
+         if (this.useInfiniteScroll) {
+            var hasMoreItems = this.currentData.totalRecords > itemsCount,
+               numPages = Math.ceil(itemsCount / this.numberOfItemsShown),
+               lastPageStartIndex = (numPages - 1) * this.numberOfItemsShown,
+               lastPageEndIndex = lastPageStartIndex + (this.numberOfItemsShown - 1),
+               onLastPage = (this.lastDisplayedIndex >= lastPageStartIndex) && (this.lastDisplayedIndex <= lastPageEndIndex);
+            if (hasMoreItems && onLastPage) {
+               this.alfPublish(this.loadMoreDataTopic);
+            }
          }
       },
 
