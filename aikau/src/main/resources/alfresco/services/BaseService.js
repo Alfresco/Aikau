@@ -34,8 +34,9 @@
  */
 define(["dojo/_base/declare",
         "alfresco/services/serviceRegistry",
-        "alfresco/core/Core"],
-        function(declare, serviceRegistry, AlfCore) {
+        "alfresco/core/Core",
+        "dojo/_base/lang"],
+        function(declare, serviceRegistry, AlfCore, lang) {
    
    return declare([AlfCore], {
       
@@ -56,11 +57,9 @@ define(["dojo/_base/declare",
          }
          else
          {
-            this.alfLog("info", "A service with the Module ID: '" + 
-                                 this.alfServiceName + 
-                                 "' configured to use the pubSubScope '" + 
-                                 this.pubSubScope + 
-                                 "' has already been registered so this instance will NOT call 'registerSubscriptions'. This is typically nothing to be concerned about");
+            // jshint maxlen:false
+            var message = lang.replace("A service with the Module ID: '{alfServiceName}' configured to use the pubSubScope '{pubSubScope}' has already been registered so this instance will NOT call 'registerSubscriptions'. This is typically nothing to be concerned about", this);
+            this.alfLog("info", message);
          }
       },
       
