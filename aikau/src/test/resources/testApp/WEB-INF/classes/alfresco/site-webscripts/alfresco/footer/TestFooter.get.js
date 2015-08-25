@@ -25,10 +25,7 @@ model.jsonModel = {
                   {
                      widgets: [
                         {
-                           name: "alfresco/logging/SubscriptionLog"
-                        },
-                        {
-                           name: "aikauTesting/TestCoverageResults"
+                           name: "alfresco/logging/DebugLog"
                         }
                      ]
                   }
