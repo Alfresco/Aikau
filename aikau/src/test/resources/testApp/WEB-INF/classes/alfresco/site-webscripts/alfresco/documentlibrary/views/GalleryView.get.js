@@ -95,6 +95,7 @@ model.jsonModel = {
                         {
                            name: "alfresco/documentlibrary/views/AlfGalleryView",
                            config: {
+                              columns: 7,
                               widgets: [
                                  {
                                     name: "alfresco/search/SearchGalleryThumbnail"

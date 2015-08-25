@@ -125,7 +125,8 @@ define(["dojo/_base/declare",
          return [new AlfGalleryViewSlider({
             relatedViewName: this.getViewName(),
             pubSubScope: this.pubSubScope,
-            parentPubSubScope: this.parentPubSubScope
+            parentPubSubScope: this.parentPubSubScope,
+            columns: this.columns
          })];
       },
       
