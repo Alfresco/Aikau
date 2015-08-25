@@ -448,8 +448,7 @@ define(["dojo/_base/declare",
          new SearchThumbnail({
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
-            showDocumentPreview: true,
-            publishTopic: "ALF_NAVIGATE_TO_PAGE"
+            showDocumentPreview: true
          }, this.thumbnailNode);
       },
 

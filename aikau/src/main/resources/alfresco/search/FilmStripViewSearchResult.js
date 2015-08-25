@@ -39,7 +39,7 @@ define(["dojo/_base/declare",
       /**
        * An array of the CSS files to use with this widget.
        * 
-       * @instance cssRequirements {Array}
+       * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/FilmStripViewSearchResult.css"}]
        */
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
        * Defines the widgets to use for non-folder, non-document search results.
        *
        * @instance
-       * @type {array}
+       * @type {object[]}
        */
       widgetsForSearchResults: [
          {

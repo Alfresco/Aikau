@@ -55,9 +55,9 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_SearchThumbnailMixin__postCreate() {
          this.inherited(arguments);
-         if (!this.publishTopic)
+         if (!this.publishTopic || this.publishTopic === "ALF_NAVIGATE_TO_PAGE")
          {
-            // If specific publishTopic has been set then we can assume that the intention is to
+            // If no specific publishTopic has been set then we can assume that the intention is to
             // provide the standard link result that this mixin provides, however we do want to
             // allow topic and payload overrides. This if clause has been added in particular for
             // enabling the SearchGalleryThumbnail (into which this model has been mixed) to be
@@ -126,6 +126,31 @@ define(["dojo/_base/declare",
        */
       getAnchorTargetSelectors: function alfresco_renderers_SearchThumbnailMixin__getAnchorTargetSelectors() {
          return ["span.inner"];
+      },
+
+      /**
+       * Override to ensure that search result link payloads aren't re-generated.
+       * 
+       * @instance
+       * @since 1.0.32
+       */
+      onNonPreviewAction: function alfresco_renderers_SearchThumbnailMixin__onNonPreviewAction() {
+         var publishGlobal = this.publishGlobal || false;
+         var publishToParent = this.publishToParent || false;
+         if (!this.publishTopic || this.publishTopic === "ALF_NAVIGATE_TO_PAGE")
+         {
+            // If no specific publishTopic has been configured then we can assume that the standard search
+            // result linking publication is required. The publishPayload should have already been provided
+            // by the postCreate function...
+            this.alfPublish("ALF_NAVIGATE_TO_PAGE", this.publishPayload, publishGlobal, publishToParent);
+         }
+         else
+         {
+            // If a publishTopic HAS been provided then we can assume this is a custom publication replacing
+            // the standard search result linking behaviour...
+            this.publishPayload = this.getGeneratedPayload(false, null);
+            this.alfPublish(this.publishTopic, this.publishPayload, publishGlobal, publishToParent);
+         }
       }
    });
 });

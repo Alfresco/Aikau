@@ -38,7 +38,7 @@ define(["dojo/_base/declare",
       /**
        * An array of the CSS files to use with this widget.
        * 
-       * @instance cssRequirements {Array}
+       * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/SearchFilmStripView.css"}]
        */
