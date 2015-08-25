@@ -23,14 +23,14 @@
  * adding and removing documents or folders from a the users favourites list.
  * 
  * @module alfresco/services/PreferenceService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/services/_PreferenceServiceTopicMixin
  * @mixes module:alfresco/services/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
@@ -40,10 +40,10 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "dojo/when",
         "jquery"],
-        function(declare, AlfCore, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin, lang, 
+        function(declare, BaseService, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin, lang, 
                  AlfConstants, ArrayUtils, Deferred, when, $) {
    
-   return declare([AlfCore, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin], {
+   return declare([BaseService, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin], {
       
       /**
        * This is the dot-notation preferences property address for favourite documents
@@ -67,10 +67,9 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the PreferenceService
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_PreferenceService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_PreferenceService__registerSubscriptions() {
          this.alfSubscribe(this.getPreferenceTopic, lang.hitch(this, this.getPreference));
          this.alfSubscribe(this.setPreferenceTopic, lang.hitch(this, this.setPreference));
          this.alfSubscribe(this.showFoldersTopic, lang.hitch(this, this.onShowFolders));

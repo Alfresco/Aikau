@@ -17,23 +17,47 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/layout/VerticalWidgets",
+         name: "alfresco/layout/HorizontalWidgets",
          config: {
             widgets: [
                {
-                  id: "MENU_BAR",
-                  name: "alfresco/menus/AlfMenuBar",
+                  name: "alfresco/layout/VerticalWidgets",
+                  widthPx: 480,
                   config: {
                      widgets: [
                         {
-                           id: "POPUP_MENU",
-                           name: "alfresco/menus/AlfMenuBarPopup",
+                           id: "MENU_BAR",
+                           name: "alfresco/menus/AlfMenuBar",
                            config: {
-                              iconClass: "alf-configure-icon",
                               widgets: [
                                  {
-                                    id: "VIEW_SELECTION_GROUP",
-                                    name: "alfresco/documentlibrary/AlfViewSelectionGroup"
+                                    id: "POPUP_MENU",
+                                    name: "alfresco/menus/AlfMenuBarPopup",
+                                    config: {
+                                       iconClass: "alf-configure-icon",
+                                       widgets: [
+                                          {
+                                             id: "VIEW_SELECTION_GROUP",
+                                             name: "alfresco/documentlibrary/AlfViewSelectionGroup"
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           id: "DOCLIST",
+                           name: "alfresco/documentlibrary/AlfDocumentList",
+                           config: {
+                              waitForPageWidgets: false,
+                              useInfiniteScroll: true,
+                              currentPageSize: 5,
+                              useHash: true,
+                              widgets: [
+                                 {
+                                    id: "FILMSTRIP_VIEW",
+                                    name: "alfresco/documentlibrary/views/AlfFilmStripView"
                                  }
                               ]
                            }
@@ -42,19 +66,58 @@ model.jsonModel = {
                   }
                },
                {
-                  name: "alfresco/layout/HorizontalWidgets",
+                  name: "alfresco/layout/VerticalWidgets",
+                  widthPx: 480,
                   config: {
+                     pubSubScope: "PAGED_",
                      widgets: [
                         {
-                           id: "DOCLIST",
-                           name: "alfresco/documentlibrary/AlfDocumentList",
-                           widthPx: 600,
+                           name: "alfresco/layout/HorizontalWidgets",
                            config: {
-                              waitForPageWidgets: false,
-                              useHash: true,
                               widgets: [
                                  {
-                                    id: "FILMSTRIP_VIEW",
+                                    id: "PAGED_MENU_BAR",
+                                    name: "alfresco/menus/AlfMenuBar",
+                                    widthPx: 100,
+                                    config: {
+                                       widgets: [
+                                          {
+                                             id: "POPUP_MENU",
+                                             name: "alfresco/menus/AlfMenuBarPopup",
+                                             config: {
+                                                iconClass: "alf-configure-icon",
+                                                widgets: [
+                                                   {
+                                                      id: "PAGED_VIEW_SELECTION_GROUP",
+                                                      name: "alfresco/documentlibrary/AlfViewSelectionGroup"
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    id: "PAGED_PAGINATOR",
+                                    name: "alfresco/lists/Paginator",
+                                    config: {
+                                       useHash: false,
+                                       documentsPerPage: 5,
+                                       pageSizes: [5,10,20]
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           id: "PAGED_DOCLIST",
+                           name: "alfresco/documentlibrary/AlfDocumentList",
+                           config: {
+                              waitForPageWidgets: false,
+                              currentPageSize: 5,
+                              widgets: [
+                                 {
+                                    id: "PAGED_FILMSTRIP_VIEW",
                                     name: "alfresco/documentlibrary/views/AlfFilmStripView"
                                  }
                               ]
@@ -67,13 +130,13 @@ model.jsonModel = {
          }
       },
       {
-         name: "aikauTesting/mockservices/DocumentLibraryMockXhr"
+         name: "aikauTesting/mockservices/NodesMockXhr",
+         config: {
+            totalItems: 11
+         }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

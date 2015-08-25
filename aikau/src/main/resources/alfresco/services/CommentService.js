@@ -25,19 +25,19 @@
  * delete comment requests, but this service may be updated in the future to handle those operations directly.</p>
  * 
  * @module alfresco/services/CommentService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "dojo/_base/lang",
         "dojo/_base/array",
         "service/constants/Default"],
-        function(declare, AlfCore, CoreXhr, lang, array, AlfConstants) {
+        function(declare, BaseService, CoreXhr, lang, array, AlfConstants) {
    
-   return declare([AlfCore, CoreXhr], {
+   return declare([BaseService, CoreXhr], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -61,10 +61,9 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the CommentService
        * 
        * @instance 
-       * @param {array} args The constructor arguments.
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_CommentService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_CommentService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_COMMENTS", lang.hitch(this, this.onGetComments));
       },
       

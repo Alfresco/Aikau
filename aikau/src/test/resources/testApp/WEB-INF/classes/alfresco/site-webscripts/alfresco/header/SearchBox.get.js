@@ -91,7 +91,7 @@ model.jsonModel = {
             alignment: "left",
             placeholder: "Has hidden search terms",
             showPeopleResults: false,
-            hiddenSearchTerms: " secret squirrels",
+            hiddenSearchTerms: "secret squirrels",
             advancedSearch: false
          }
       },
@@ -99,7 +99,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/SearchBoxMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

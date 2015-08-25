@@ -286,13 +286,13 @@ define(["dojo/_base/declare",
 
       /**
        * Used by infinite scroll to let other widgets know that the bottom of the page has been reached.
-       *
+       * 
        * @event scrollNearBottom
        * @instance
        * @type {string}
-       * @default "ALF_DOCLIST_INSERT_MORE"
+       * @default [topics.SCROLL_NEAR_BOTTOM]{@link module:alfresco/core/topics#SCROLL_NEAR_BOTTOM}
        */
-      scrollNearBottom: "ALF_SCROLL_NEAR_BOTTOM",
+      scrollNearBottom: topics.SCROLL_NEAR_BOTTOM,
 
       /**
        * Used to let infinite scroll know we're finished and it can trigger again.

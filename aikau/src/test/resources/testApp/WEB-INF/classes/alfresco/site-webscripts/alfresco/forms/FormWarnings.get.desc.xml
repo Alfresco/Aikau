@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Form Banners</shortname>
+  <description>This page demonstrates how forms can display banners based on the values of fields in the form.</description>
+  <family>aikau-unit-tests</family>
+  <url>/FormWarnings</url>
+</webscript>

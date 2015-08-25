@@ -114,6 +114,17 @@ define(["dojo/_base/declare",
       spellcheck: true,
 
       /**
+       * Overrides the [default value]{@link module:alfresco/lists/AlfList#totalResultsProperty} to use
+       * the property expected when using the search API.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.32
+       */
+      totalResultsProperty: "numberFound",
+
+      /**
        * Overrides the [inherited default]{@link module:alfresco/lists/AlfHashList#updateInstanceValues}
        * to ensure that instance values should be updated from the hash. This only appliees when
        * [useHash]{@link module:alfresco/lists/AlfHashList#useHash} is configured to be true.
@@ -634,6 +645,7 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig The configuration that was passed to the the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
        */
       onDataLoadSuccess: function alfresco_search_AlfSearchList__onDataLoadSuccess(payload) {
+         /* jshint maxcomplexity:false */
          this.alfLog("log", "Search Results Loaded", payload, this);
 
          var newData = payload.response;
@@ -647,7 +659,7 @@ define(["dojo/_base/declare",
          if (view !== null)
          {
             this.showRenderingMessage();
-
+            this.processLoadedData(payload.response || this.currentData);
             if (this.useInfiniteScroll)
             {
                view.augmentData(newData);

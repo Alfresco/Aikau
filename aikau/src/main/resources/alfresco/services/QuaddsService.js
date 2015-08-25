@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -22,28 +22,26 @@
  * retrieved.
  * 
  * @module alfresco/services/QuaddsService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/json"],
-        function(declare, AlfCore, CoreXhr, AlfConstants, lang, array, dojoJson) {
+        function(declare, BaseService, CoreXhr, AlfConstants, lang, array, dojoJson) {
    
-   return declare([AlfCore, CoreXhr], {
+   return declare([BaseService, CoreXhr], {
       
       /**
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_QuaddsService__constructor(args) {
-         lang.mixin(this, args);
-
+      registerSubscriptions: function alfresco_services_QuaddsService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_ALL_QUADDS", lang.hitch(this, "onGetAllQuadds"));
          this.alfSubscribe("ALF_GET_QUADDS_ITEMS", lang.hitch(this, "onGetQuaddsItems"));
          this.alfSubscribe("ALF_GET_QUADDS_ITEM", lang.hitch(this, "onGetQuaddsItem"));

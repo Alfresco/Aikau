@@ -24,15 +24,14 @@ define(["./config/Suites"],
       // Browsers to run integration testing against. Note that version numbers must be strings if used with Sauce
       // OnDemand. Options that will be permutated are browserName, version, platform, and platformVersion; any other
       // capabilities options specified for an environment will be copied as-is
-      environments: [
-         {
-            browserName: "chrome",
-            chromeOptions: {
-               excludeSwitches: ["ignore-certificate-errors"]
-            }
-         },
-         { browserName: "firefox" }
-      ],
+      environments: [{
+         browserName: "chrome",
+         chromeOptions: {
+            excludeSwitches: ["ignore-certificate-errors"]
+         }
+      }, {
+         browserName: "firefox"
+      }],
 
       // Maximum number of simultaneous integration tests that should be executed on the remote WebDriver service
       maxConcurrency: 1,

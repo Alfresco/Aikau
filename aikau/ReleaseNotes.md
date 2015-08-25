@@ -42,6 +42,16 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.32:
+* [AKU-460](https://issues.alfresco.com/jira/browse/AKU-460)       - Improved handling of hidden terms in alfresco/headers/SearchBox
+* [AKU-515](https://issues.alfresco.com/jira/browse/AKU-515)       - Fixed pubSubScope handling in alfresco/renderers/Thumbnail
+* [AKU-521](https://issues.alfresco.com/jira/browse/AKU-521)       - Improved change event handling in alfresco/forms/controls/DateTextBox
+* [AKU-523](https://issues.alfresco.com/jira/browse/AKU-523)       - Added support for dynamic warning configuration in forms
+* [AKU-526](https://issues.alfresco.com/jira/browse/AKU-526)       - Updated alfresco/documentlibrary/views/AlfFilmStripView to support infinite scrolling mode
+* [AKU-528](https://issues.alfresco.com/jira/browse/AKU-528)       - LESS support for global link colour and decoration
+* [AKU-529](https://issues.alfresco.com/jira/browse/AKU-529)       - Fixed alfresco/layout/FixedHeaderFooter resizing issue
+* [AKU-531](https://issues.alfresco.com/jira/browse/AKU-531)       - Created service registry to prevent duplicate service subscriptions
+
 1.0.31:
 * [AKU-290](https://issues.alfresco.com/jira/browse/AKU-290)       - Added configurable support for alfresco/lists/Paginator to hide when list data is requested
 * [AKU-483](https://issues.alfresco.com/jira/browse/AKU-483)       - Update alfresco/layout/FixedHeaderFooter to assume numeric height is intended to be pixels

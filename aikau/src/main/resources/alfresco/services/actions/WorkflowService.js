@@ -23,14 +23,14 @@
  * other application contexts.
  *
  * @module alfresco/services/actions/WorkflowService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/core/UrlUtilsMixin
  * @mixes module:alfresco/services/_NavigationServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/core/UrlUtilsMixin",
         "alfresco/services/_NavigationServiceTopicMixin",
@@ -38,9 +38,9 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/NodeUtils"],
-        function(declare, AlfCore, AlfCoreXhr, UrlUtilsMixin, _NavigationServiceTopicMixin, AlfConstants, lang, array, NodeUtils) {
+        function(declare, BaseService, AlfCoreXhr, UrlUtilsMixin, _NavigationServiceTopicMixin, AlfConstants, lang, array, NodeUtils) {
 
-   return declare([AlfCore, AlfCoreXhr, UrlUtilsMixin, _NavigationServiceTopicMixin], {
+   return declare([BaseService, AlfCoreXhr, UrlUtilsMixin, _NavigationServiceTopicMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -105,10 +105,9 @@ define(["dojo/_base/declare",
 
       /**
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_actions_WorkflowService__constructor(args) {
-         declare.safeMixin(this, args);
+      registerSubscriptions: function alfresco_services_actions_WorkflowService__registerSubscriptions() {
          this.alfSubscribe("ALF_APPROVE_SIMPLE_WORKFLOW", lang.hitch(this, this.onApproveSimpleWorkflow));
          this.alfSubscribe("ALF_REJECT_SIMPLE_WORKFLOW", lang.hitch(this, this.onRejectSimpleWorkflow));
          this.alfSubscribe("ALF_ASSIGN_WORKFLOW", lang.hitch(this, this.onAssignWorkflow));

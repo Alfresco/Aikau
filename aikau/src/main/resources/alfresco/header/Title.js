@@ -25,22 +25,30 @@
  * 
  * @module alfresco/header/Title
  * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @mixes external:dijit/_TemplatedMixin
+ * @mixes external:dijit/_OnDijitClickMixin
+ * @mixes module:alfresco/navigation/_HtmlAnchorMixin
+ * @mixes module:alfresco/services/_NavigationServiceTopicMixin
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
+        "dijit/_OnDijitClickMixin",
+        "alfresco/navigation/_HtmlAnchorMixin",
+        "alfresco/services/_NavigationServiceTopicMixin",
         "dojo/text!./templates/Title.html",
         "dojo/_base/lang",
         "alfresco/core/Core",
-        "service/constants/Default",
+        "alfresco/core/topics",
         "dojo/dom-class",
-        "dojo/dom-style"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, lang, AlfCore, AlfConstants, domClass, domStyle) {
+        "dojo/dom-style",
+        "dojo/has"], 
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _HtmlAnchorMixin, _NavigationServiceTopicMixin, 
+                 template, lang, AlfCore, topics, domClass, domStyle, has) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _HtmlAnchorMixin, _NavigationServiceTopicMixin, AlfCore], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -59,29 +67,6 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
-       * @instance
-       * @type {string}
-       */
-      label: null,
-      
-      /**
-       * This is the URL to navigate to when the title is clicked.
-       * 
-       * @instance
-       * @type {string}
-       */
-      targetUrl: null,
-      
-      /**
-       * Indicates whether or not the browser window title should be updated
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      setBrowserTitle: false,
-
-      /**
        * This is the prefix to apply before the [label]{@link module:alfresco/header/Title#label} when
        * setting the browser window title. It defaults to a standard Alfresco prefix but should be 
        * overridden if required. The browser title will only be set when [setBrowserTitle]{@link module:alfresco/header/Title#setBrowserTitle}
@@ -89,9 +74,46 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "Alfresco"
+       * @default
        */
       browserTitlePrefix: "Alfresco",
+
+      /**
+       * @instance
+       * @type {string}
+       * @default
+       */
+      label: null,
+      
+      /**
+       * Indicates whether or not the browser window title should be updated
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      setBrowserTitle: false,
+
+      /**
+       * This is the URL to navigate to when the title is clicked.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      targetUrl: null,
+      
+      /**
+       * Indicates how the target URL should be handled. This defaults to "PAGE_RELATIVE" which means that the URL
+       * will be appended to the 'AlfConstants.URL_PAGECONTEXT' Global JavaScript constant. This can be overridden
+       * on instantiation to indicate that another URL type, such as "FULL_PATH" should be used.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.32
+       */
+      targetUrlType: "PAGE_RELATIVE",
 
       /**
        * It's important to perform label encoding before buildRendering occurs (e.g. before postCreate)
@@ -129,9 +151,53 @@ define(["dojo/_base/declare",
          }
          if (this.targetUrl)
          {
-            this.textNode.href = AlfConstants.URL_PAGECONTEXT + this.targetUrl;
+            this.makeAnchor(this.targetUrl, this.targetUrlType);
          }
-         this.alfSubscribe("ALF_UPDATE_PAGE_TITLE", lang.hitch(this, "updatePageTitle"));
+         this.alfSubscribe(topics.UPDATE_PAGE_TITLE, lang.hitch(this, this.updatePageTitle));
+      },
+
+      /**
+       * Returns an array containing the selector that identifies the span to wrap in an anchor.
+       * This overrides the [mixed in function]{@link module:alfresco/navigation/_HtmlAnchorMixin}
+       * that just returns an empty array.
+       *
+       * @instance
+       * @since 1.0.32
+       */
+      getAnchorTargetSelectors: function alfresco_header_Title__getAnchorTargetSelectors() {
+         return [".alfresco-header-Title__text"];
+      },
+
+      /**
+       * Handles click events when a [targetUrl]{@link module:alfresco/header/Title#targetUrl} has
+       * been provided.
+       *
+       * @instance
+       * @param {object} evt The click event
+       * @since 1.0.32
+       */
+      onClick: function alfresco_header_Title__onClick(evt) {
+         var targetUrlLocation = this.targetUrlLocation;
+         if (has("mac") && evt.metaKey)
+         {
+            targetUrlLocation = "NEW";
+         }
+
+         if (this.targetUrl)
+         {
+            // Stop the event (to prevent the browser processing <a> elements
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            // Handle URLs...
+            this.alfPublish("ALF_NAVIGATE_TO_PAGE", { url: this.targetUrl,
+                                                      type: this.targetUrlType,
+                                                      target: targetUrlLocation});
+         }
+         else
+         {
+            this.alfLog("error", "An alfresco/header/Title was clicked but did not define a 'targetUrl' attribute", evt);
+         }
       },
       
       /**

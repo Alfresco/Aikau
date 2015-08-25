@@ -58,9 +58,9 @@ define(["intern!object",
          return browser.findByCssSelector("#DOCLIB_RENDITIONS tr:nth-child(1) .alfresco-renderers-Thumbnail .inner img")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DOCUMENTLIST_PATH_CHANGED", "path", "/Budget Files/Invoices/Folder"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Could not find standard container link publication");
+         .getLastPublish("ALF_DOCUMENTLIST_PATH_CHANGED")
+            .then(function(payload) {
+               assert.propertyVal(payload, "path", "/Budget Files/Invoices/Folder", "Could not find standard container link publication");
             });
       },
 
@@ -68,9 +68,10 @@ define(["intern!object",
          return browser.findByCssSelector("#IMGPREVIEW_RENDITIONS tr:nth-child(2) .alfresco-renderers-Thumbnail .inner img")
             .click()
          .end()
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("CUSTOM_CLICK_TOPIC", "nodeRef", "workspace://SpacesStore/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Could not find custom link click publication");
+
+         .getLastPublish("CUSTOM_SCOPE_CUSTOM_CLICK_TOPIC", "Topic was not published at the correct scope")
+            .then(function(payload) {
+               assert.propertyVal(payload, "nodeRef", "workspace://SpacesStore/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8", "Could not find custom link click publication");
             });
       },
 

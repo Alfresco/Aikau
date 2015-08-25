@@ -34,6 +34,10 @@
  * [autoSavePublishTopic]{@link module:alfresco/forms/Form#autoSavePublishTopic} is specified, 
  * then the OK and Cancel buttons are automatically hidden.</p>
  *
+ * <p>Configuration can be provided to create rules that display one or more [warnings]{@link module:alfresco/forms/Form#warnings}
+ * based on the changing values of fields in the forms. The [position of the warnings]{@link module:alfresco/forms/Form#warningsPosition}
+ * can be configured to either be at "top" or "bottom" of the form.</p>
+ * 
  * <p><b>PLEASE NOTE:</b> If you want to layout your form controls in a specific manner (e.g. in a horizontal 
  * line or within tabs) then you should use dedicated form control layout widgets such as 
  * [ControlRow]{@link module:alfresco/forms/ControlRow} or
@@ -90,6 +94,7 @@
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @mixes module:alfresco/documentlibrary/_AlfHashMixin
+ * @mixes module:alfresco/forms/controls/utilities/RulesEngineMixin
  * @pageSafe
  * @author Dave Draper
  */
@@ -101,8 +106,10 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/topics",
         "alfresco/documentlibrary/_AlfHashMixin",
+        "alfresco/forms/controls/utilities/RulesEngineMixin",
         "dojo/text!./templates/Form.html",
         "dojo/io-query",
+        "alfresco/header/Warning",
         "alfresco/util/hashUtils",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
@@ -110,10 +117,10 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "dojo/Deferred",
         "dojo/dom-construct"], 
-        function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, topics, _AlfHashMixin, template, 
-                 ioQuery, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct) {
+        function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, topics, _AlfHashMixin, RulesEngineMixin, 
+                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct) {
    
-   return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin], {
+   return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin, RulesEngineMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -124,6 +131,15 @@ define(["dojo/_base/declare",
        */
       i18nRequirements: [{i18nFile: "./i18n/Form.properties"}],
       
+      /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/Form.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/Form.css"}],
+
       /**
        * The HTML template to use for the widget.
        * @instance
@@ -268,6 +284,32 @@ define(["dojo/_base/declare",
       waitForPageWidgets: true,
 
       /**
+       * Can be configured to display one or more banners on the form based on the changing value of fields
+       * within the form. The configuration is almost identical to that of the 
+       * [visibilityConfig]{@link module:alfresco/forms/controls/BaseFormControl#visibilityConfig} in form fields
+       * except that a "message" attribute should also be included that will be displayed when the rules 
+       * are evaluated to be true.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.32
+       */
+      warnings: null,
+
+      /**
+       * This is the position that any [warnings]{@link module:alfresco/forms/Form#warnings} will be placed. 
+       * There are two options available which are "top" (the default) and "bottom". Extending widgets may provide
+       * alternative positions.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.32
+       */
+      warningsPosition: "top",
+      
+      /**
        * @instance
        */
       postCreate: function alfresco_forms_Form__postCreate() {
@@ -290,6 +332,9 @@ define(["dojo/_base/declare",
 
          // Setup some arrays for recording the valid and invalid widgets...
          this.invalidFormControls = [];
+         
+         // Create any configured warnings...
+         this.createWarnings();
          
          // If requested in the configuration, the value of a form can be set via a publication,
          // however to avoid generating subscriptions unnecessarily the subscription is only
@@ -334,6 +379,81 @@ define(["dojo/_base/declare",
 
             this.processWidgets(this.widgets, this._form.domNode);
          }
+      },
+
+      /**
+       * This function is called to process any [warning configuration]{@link module:alfresco/forms/Form#warnings} 
+       * and create a [warning widget]{@link module:alfresco/header/Warning} to display those warnings.
+       *
+       * @instance
+       * @since 1.0.32
+       */
+      createWarnings: function alfresco_forms_Form_createWarnings() {
+         var warnings = [];
+         array.forEach(this.warnings, lang.hitch(this, this.processWarnings, warnings));
+         this.createWidget({
+            id: this.id + "_WARNINGS",
+            name: "alfresco/header/Warning",
+            config: {
+               warnings: warnings
+            }
+         }).placeAt((this.warningsPosition === "top" ? this.warningsTopNode : this.warningsBottomNode));
+      },
+
+      /**
+       * Processes an individal warning configuration for the form from the  
+       * [array of warnings]{@link module:alfresco/forms/Form#warnings} that have been configured.
+       * 
+       * @instance
+       * @since 1.0.32
+       * @param {object[]} warnings An array of warnings to push the current warning data into
+       * @param {object} warningConfig The configuration for the warning
+       * @param {number} index The index of the configuration in the complete array of banners
+       */
+      processWarnings: function alfresco_forms_Form__processWarnings(warnings, warningConfig, index) {
+         if (warningConfig.message)
+         {
+            // Define a unique function name for handling rules evaluation for this banner 
+            // (this is going to be passed to the rule config processing as a callback and we're
+            // going to create the function in a moment)... prefixing with "alf" should ensure
+            // that no-one creates a similarly named function...
+            var fName = "alfUpdateBanner" + index;
+
+            // Generate a unique subscription topic, this is then added to the banner configuration
+            // and will be used to publish information on whether or not the banner should be displayed
+            // as rules are evaluated...
+            var subscriptionTopic = this.generateUuid();
+            warningConfig.subscriptionTopic = subscriptionTopic;
+            this[fName] = lang.hitch(this, this.updateWarnings, warningConfig);
+            this.processConfig(fName, warningConfig);
+
+            // Add the specific warning information into the array to be returned (we want to create
+            // a single Warning widget, not lots of them)...
+            warnings.push({
+               subscriptionTopic: subscriptionTopic,
+               message: warningConfig.message,
+               level: 1
+            });
+         }
+         else
+         {
+            this.alfLog("warn", "Warning configuration for the form was missing a 'message' to display in the warning", warningConfig, this);
+         }
+      },
+
+      /**
+       * This function is called whenever warning rules have evaluated to indicate a change in visibility
+       * for a particular warning.
+       * 
+       * @instance
+       * @since 1.0.32
+       * @param {object} warningConfig The configuration for the warning
+       * @param {boolean} status Indicates whether or not the warning should be displayed or not
+       */
+      updateWarnings: function alfresco_forms_Form__updateWarnings(warningConfig, status) {
+         this.alfPublish(warningConfig.subscriptionTopic, {
+            value: status
+         });
       },
 
       /**

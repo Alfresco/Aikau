@@ -86,9 +86,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {boolean} preserveCurrentData
        */
-      renderView: function alfresco_documentlibrary_views_AlfFilmStripView__renderView(preserveCurrentData) {
+      renderView: function alfresco_documentlibrary_views_AlfFilmStripView__renderView(/*jshint unused:false*/ preserveCurrentData) {
          this.inherited(arguments);
-         
          if (this.currentData && this.currentData.items && this.currentData.items.length > 0)
          {
             if (this.contentCarousel)
@@ -139,13 +138,14 @@ define(["dojo/_base/declare",
          //       TODO: Possible memory leak to investigate here, because the call to empy the node *is* required.
          domConstruct.empty(this.previewNode);
          this.contentCarousel = new DocumentCarousel({
+            id: this.id + "_PREVIEWS",
             widgets: lang.clone(this.widgetsForContent),
             currentData: this.currentData,
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
             itemSelectionTopics: ["ALF_FILMSTRIP_SELECT_ITEM"]
          });
-         this.contentCarousel.placeAt(this.previewNode, "last");
+         this.contentCarousel.placeAt(this.previewNode);
          this.contentCarousel.resize();
 
          var dlr = new Carousel({
@@ -155,21 +155,23 @@ define(["dojo/_base/declare",
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
             fixedHeight: "112px",
+            useInfiniteScroll: this.useInfiniteScroll,
             itemSelectionTopics: ["ALF_FILMSTRIP_ITEM_CHANGED"]
          });
          return dlr;
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#clearOldView}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#destroyRenderer}
        * to destroy the content carousel.
        *
        * @instance
+       * @since 1.0.32
        */
-      clearOldView: function alfresco_documentlibrary_views_AlfFilmStripView__clearOldView() {
+      destroyRenderer: function alfresco_documentlibrary_views_AlfFilmStripView__destroyRenderer() {
          if (this.contentCarousel)
          {
-            this.contentCarousel.destroy();
+            this.contentCarousel.destroyRecursive();
          }
          this.inherited(arguments);
       },

@@ -541,6 +541,11 @@ define(["dojo/_base/declare",
             viewName = index;
          }
 
+         // Pass useInfiniteScroll to the view
+         if (this.useInfiniteScroll) {
+            view.useInfiniteScroll = true;
+         }
+
          // Create a new new menu item using the supplied configuration...
          var viewSelectionConfig = view.getViewSelectionConfig();
          viewSelectionConfig.value = viewName;
@@ -1064,6 +1069,8 @@ define(["dojo/_base/declare",
                this.startIndex = tmp;
             }
          }
+         this.currentData.totalRecords = this.totalRecords;
+         this.currentData.startIndex = this.startIndex;
 
          this.alfPublish(this.documentsLoadedTopic, {
             documents: this.currentData.items,

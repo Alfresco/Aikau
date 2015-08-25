@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,16 +19,15 @@
 
 /**
  * @module alfresco/services/LightboxService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @author Kevin Roast
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
-        "dojo/_base/lang",
-        ""],
-        function(declare, AlfCore, lang) {
+        "alfresco/services/BaseService",
+        "dojo/_base/lang"],
+        function(declare, BaseService, lang) {
    
-   return declare([AlfCore], {
+   return declare([BaseService], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -51,10 +50,9 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the LightboxService
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_LightboxService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_LightboxService__registerSubscriptions() {
          this.alfSubscribe("ALF_DISPLAY_LIGHTBOX", lang.hitch(this, this.onDisplayLightbox));
       },
       

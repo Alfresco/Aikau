@@ -8,7 +8,8 @@
    background: @breadcrumb-border-color;
 }
 .alfresco-documentlibrary-AlfBreadcrumb a {
-   text-decoration: none; 
+   color: @link-font-color;
+   text-decoration: @link-text-decoration; 
    padding: 5px 15px 5px 30px;
    background: @breadcrumb-background-color;
    position: relative; 
@@ -16,6 +17,10 @@
    float: left;
    cursor: pointer;
    height: 20px;
+   &:hover {
+      colour: @link-font-color-hover;
+      text-decoration: @link-text-decoration-hover;
+   }
 }
 
 .alfresco-documentlibrary-AlfBreadcrumb a:after { 
