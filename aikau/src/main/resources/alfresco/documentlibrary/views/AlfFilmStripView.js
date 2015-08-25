@@ -166,6 +166,7 @@ define(["dojo/_base/declare",
        * to destroy the content carousel.
        *
        * @instance
+       * @since 1.0.32
        */
       destroyRenderer: function alfresco_documentlibrary_views_AlfFilmStripView__destroyRenderer() {
          if (this.contentCarousel)

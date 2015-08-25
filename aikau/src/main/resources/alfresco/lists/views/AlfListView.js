@@ -428,6 +428,13 @@ define(["dojo/_base/declare",
          this.clearData();
       },
 
+      /**
+       * This should be called when the renderers need to be removed. 
+       * 
+       * @instance
+       * @extendable
+       * @since 1.0.32
+       */
       destroyRenderer: function alfresco_lists_views_AlfListView__destroyRenderer() {
          if (this.docListRenderer)
          {
