@@ -1,0 +1,10 @@
+.alfresco-search-SearchFilmStripView__thumbnail.alfresco-renderers-Thumbnail.gallery img {
+   height: 100px;
+   width: auto;
+}
+
+.alfresco-search-SearchFilmStripView__thumbnail.alfresco-renderers-Thumbnail.gallery span.inner {
+   width: 100%;
+   text-align: center;
+   display: inline-block;
+}

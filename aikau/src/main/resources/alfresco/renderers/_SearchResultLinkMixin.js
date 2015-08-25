@@ -127,9 +127,7 @@ define(["alfresco/core/TemporalUtils",
                   payload.url = "document-details?nodeRef=" + nodeRef;
                }
          }
-
          return payload;
       }
-
    });
 });
