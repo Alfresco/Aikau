@@ -468,7 +468,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The payload object to update
        */
-      updateLoadDataPayload: function alfresco_lists_AlfSortablePaginatedList__updateLoadDataPayload(payload) {
+      updateLoadDataPayload: function alfresco_documentlibrary_AlfDocumentList__updateLoadDataPayload(payload) {
          this.inherited(arguments);
 
          var type = "all";
@@ -507,7 +507,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response The original response.
        */
-      processLoadedData: function alfresco_lists_AlfList__processLoadedData(response) {
+      processLoadedData: function alfresco_documentlibrary_AlfDocumentList__processLoadedData(response) {
          array.forEach(this.currentData, function(item) {
             item.jsNode = new JsNode(item.node);
          }, this);
