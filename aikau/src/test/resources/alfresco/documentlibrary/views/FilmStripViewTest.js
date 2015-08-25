@@ -333,6 +333,21 @@ define([
                });
          },
 
+         "Clicking folder updates hash": function() {
+            // Not yet implemented
+            // Waiting for problems with layout/resizing/reloading of FilmStripView to be resolved
+         },
+
+         "New folder contents loaded": function() {
+            // Not yet implemented
+            // Waiting for problems with layout/resizing/reloading of FilmStripView to be resolved
+         },
+
+         "Going back in browser history returns to previous folder": function() {
+            // Not yet implemented
+            // Waiting for problems with layout/resizing/reloading of FilmStripView to be resolved
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
@@ -611,6 +626,11 @@ define([
                .then(function(isDisplayed) {
                   assert.isTrue(isDisplayed, "The first item should be displayed");
                });
+         },
+
+         "Clicking folder loads new folder": function() {
+            // Not yet implemented
+            // Waiting for problems with layout/resizing/reloading of FilmStripView to be resolved
          },
 
          "Post Coverage Results": function() {
