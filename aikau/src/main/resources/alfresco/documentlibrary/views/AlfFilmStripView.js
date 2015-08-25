@@ -86,9 +86,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {boolean} preserveCurrentData
        */
-      renderView: function alfresco_documentlibrary_views_AlfFilmStripView__renderView(preserveCurrentData) {
+      renderView: function alfresco_documentlibrary_views_AlfFilmStripView__renderView(/*jshint unused:false*/ preserveCurrentData) {
          this.inherited(arguments);
-         
          if (this.currentData && this.currentData.items && this.currentData.items.length > 0)
          {
             if (this.contentCarousel)
@@ -163,13 +162,13 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#clearOldView}
+       * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#destroyRenderer}
        * to destroy the content carousel.
        *
        * @instance
-       * @override
+       * @since 1.0.32
        */
-      clearOldView: function alfresco_documentlibrary_views_AlfFilmStripView__clearOldView() {
+      destroyRenderer: function alfresco_documentlibrary_views_AlfFilmStripView__destroyRenderer() {
          if (this.contentCarousel)
          {
             this.contentCarousel.destroyRecursive();
