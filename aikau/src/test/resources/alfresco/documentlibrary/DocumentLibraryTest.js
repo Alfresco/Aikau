@@ -96,7 +96,7 @@ define(["intern!object",
       .findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
          .getVisibleText()
          .then(function(text) {
-            assert.equal(text, "My Favorite Documents and Folders", "The filter description was not retained");
+            assert.equal(text, "My Favorite Files and Folders", "The filter description was not retained");
          });
    };
 
