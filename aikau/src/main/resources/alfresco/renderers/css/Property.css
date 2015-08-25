@@ -40,9 +40,13 @@
       display: none;
    }
    span.value > a {
-      color: @general-font-color;
+      color: @link-font-color;
       cursor: pointer;
-      text-decoration: none;
+      text-decoration: @link-text-decoration;
+      &:hover {
+         colour: @link-font-color-hover;
+         text-decoration: @link-text-decoration-hover;
+      }
    }
 }
 

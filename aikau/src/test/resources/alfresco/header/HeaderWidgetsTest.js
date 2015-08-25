@@ -50,7 +50,7 @@ define(["intern!object",
       },
 
       "Test title text is correct": function() {
-         return browser.findByCssSelector(".alfresco-header-Title > .text")
+         return browser.findByCssSelector(".alfresco-header-Title__text")
             .getVisibleText()
             .then(function(resultText) {
                assert.equal(resultText, "Test Title", "The title was not set correctly");
@@ -214,7 +214,7 @@ define(["intern!object",
          return browser.findByCssSelector("#SET_TITLE_BUTTON")
             .click()
             .end()
-            .findByCssSelector(".alfresco-header-Title > .text")
+            .findByCssSelector(".alfresco-header-Title__text")
             .getVisibleText()
             .then(function(resultText) {
                assert.equal(resultText, "Updated Title", "The title was not updated");
@@ -328,7 +328,7 @@ define(["intern!object",
 
       "Long title is truncated": function() {
          return browser.execute(function() {
-               var title = document.querySelector(".alfresco-header-Title:nth-child(3) .text");
+               var title = document.querySelector("#LONG .alfresco-header-Title__text");
                return title.clientWidth < title.scrollWidth;
             })
             .then(function(truncated) {
@@ -336,7 +336,7 @@ define(["intern!object",
             })
             .end()
 
-         .findByCssSelector(".alfresco-header-Title:nth-child(3) .text")
+         .findByCssSelector("#LONG .alfresco-header-Title__text")
             .then(function(elem) {
                return elem.getSize();
             })
@@ -346,6 +346,17 @@ define(["intern!object",
             .end()
 
          .screenie(); // For visual verification of ellipsis if required
+      },
+
+      "Test link title": function() {
+         return browser.findByCssSelector("#LINK .alfresco-header-Title__text a")
+            .click()
+         .end()
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "dp/ws/some-other-page");
+               assert.propertyVal(payload, "type", "PAGE_RELATIVE");
+            });
       },
 
       "Post Coverage Results": function() {
@@ -366,7 +377,7 @@ define(["intern!object",
       },
 
       "Test title gets set": function() {
-         return browser.findByCssSelector(".alfresco-header-Title > .text")
+         return browser.findByCssSelector(".alfresco-header-Title__text")
             .getVisibleText()
             .then(function(resultText) {
                assert.equal(resultText, "Updated Title", "The title was not updated");

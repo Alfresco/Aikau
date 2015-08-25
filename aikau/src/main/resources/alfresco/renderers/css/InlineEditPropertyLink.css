@@ -1,0 +1,11 @@
+.alfresco-renderers-InlineEditPropertyLink {
+   .inlineEditValue {
+      cursor: pointer;
+      color: @link-font-color;
+      text-decoration: @link-text-decoration;
+      &:hover {
+         colour: @link-font-color-hover;
+         text-decoration: @link-text-decoration-hover;
+      }
+   }
+}

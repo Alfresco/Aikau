@@ -30,8 +30,9 @@
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
-        "alfresco/core/Core"], 
-        function(declare, _WidgetBase, AlfCore) {
+        "alfresco/core/Core",
+        "alfresco/core/topics"], 
+        function(declare, _WidgetBase, AlfCore, topics) {
    
    /**
     * The purpose of this widget is to allow the page title (controlled by "alfresco/header/Title" to be
@@ -56,7 +57,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_header_SetTitle__postCreate() {
-         this.alfPublish("ALF_UPDATE_PAGE_TITLE", {
+         this.alfPublish(topics.UPDATE_PAGE_TITLE, {
             title: this.message(this.title)
          });
       }

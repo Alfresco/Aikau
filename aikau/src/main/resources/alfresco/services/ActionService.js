@@ -34,7 +34,7 @@
  * Custom actions only supported single files in versions prior to 4.2
  *
  * @module alfresco/services/ActionService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @mixes module:alfresco/services/_NavigationServiceTopicMixin
@@ -44,7 +44,7 @@
  */
 
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
@@ -55,12 +55,12 @@ define(["dojo/_base/declare",
         "alfresco/core/JsNode",
         "alfresco/core/NotificationUtils",
         "dojo/_base/lang"],
-        function(declare, AlfCore, AlfCoreXhr, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtilsMixin,
+        function(declare, BaseService, AlfCoreXhr, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtilsMixin,
                  ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang) {
 
    // TODO: L18N sweep - lots of widgets defined with hard coded labels...
 
-   return declare([AlfCore, AlfCoreXhr, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtilsMixin, NotificationUtils], {
+   return declare([BaseService, AlfCoreXhr, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtilsMixin, NotificationUtils], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -113,11 +113,9 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the Action Service
        *
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_ActionService__constructor(args) {
-         lang.mixin(this, args);
-
+      registerSubscriptions: function alfresco_services_ActionService__registerSubscriptions() {
          // Normal processing...
          this.currentlySelectedDocuments = {};
          this.alfSubscribe(this.documentsLoadedTopic, lang.hitch(this, this.onDocumentsLoaded));

@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/lists/FilteredListTest"
+      "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest"
    ],
 
    /**
@@ -96,6 +96,7 @@ define({
       "src/test/resources/alfresco/forms/ControlRowTest",
       "src/test/resources/alfresco/forms/CrudFormTest",
       "src/test/resources/alfresco/forms/DynamicFormTest",
+      "src/test/resources/alfresco/forms/FormWarningsTest",
       "src/test/resources/alfresco/forms/FormsTest",
       "src/test/resources/alfresco/forms/FormValidationTest",
       "src/test/resources/alfresco/forms/HashFormTest",
@@ -224,6 +225,8 @@ define({
       "src/test/resources/alfresco/services/NotificationServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",
       "src/test/resources/alfresco/services/ServiceFilteringTest",
+      "src/test/resources/alfresco/services/ServiceRegistryTest",
+
       // "src/test/resources/alfresco/services/SiteServiceTest", - NO TESTS IN THIS SUITE THAT DO ANYTHING!
       "src/test/resources/alfresco/services/UserServiceTest",
 

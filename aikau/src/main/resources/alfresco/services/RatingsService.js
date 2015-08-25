@@ -22,29 +22,28 @@
  * to handle requests for liking and unliking nodes.
  *
  * @module alfresco/services/RatingsService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/services/_RatingsServiceTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/services/_RatingsServiceTopicMixin",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, AlfCore, CoreXhr, _RatingsServiceTopicMixin, lang, AlfConstants) {
+        function(declare, BaseService, CoreXhr, _RatingsServiceTopicMixin, lang, AlfConstants) {
    
-   return declare([AlfCore, CoreXhr, _RatingsServiceTopicMixin], {
+   return declare([BaseService, CoreXhr, _RatingsServiceTopicMixin], {
       
       /**
        * Sets up the subscriptions for the RatingsService
        * 
        * @instance
-       * @param {array} args Constructor arguments
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_RatingsService__constructor(args) {
-         lang.mixin(this, args);
+      registerSubscriptions: function alfresco_services_RatingsService__registerSubscriptions() {
          this.alfSubscribe(this.addRatingTopic, lang.hitch(this, this.onAddRating));
          this.alfSubscribe(this.removeRatingTopic, lang.hitch(this, this.onRemoveRating));
       },

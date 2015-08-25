@@ -34,7 +34,7 @@
             margin: 0 auto;
             padding: 20px 25px;
             text-align: center;
-            text-decoration: none;
+            text-decoration: @link-text-decoration;
             font: bold 30px "Arial", "Freesans", sans-serif;
             color: #333;
             background-color: #fff;

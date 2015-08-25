@@ -5,15 +5,24 @@
       font-size: 185%;
       font-weight: normal;
       margin-top: 19px;
-      > .text {
+      
+      .alfresco-header-Title__text {
+         font-family: @condensed-font;
          color: @general-font-color !important;
-         font-family: Open Sans Condensed, Arial, sans-serif;
          text-decoration: none;
          &.has-max-width {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             display: inline-block;
+         }
+
+         > a {
+            /* PLEASE NOTE: Title link behaviour can be configured independently of the other
+                         links because it is considered a special case. Title are significantly
+                         different to be indicative of being a link */
+            color: @link-title-font-color !important;
+            text-decoration: @link-title-text-decoration;
          }
       }
    }

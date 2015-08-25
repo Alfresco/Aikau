@@ -22,7 +22,7 @@
  * 
  * @module alfresco/renderers/PropertyLink
  * @extends alfresco/renderers/Property
- * @mixes external:dojo/_OnDijitClickMixin
+ * @mixes external:dijit/_OnDijitClickMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  * @author Richard Smith
@@ -75,14 +75,14 @@ define(["dojo/_base/declare",
       onLinkClick: function alfresco_renderers_PropertyLink__onLinkClick(evt) {
          event.stop(evt);
          var publishTopic = this.getPublishTopic();
-         if (publishTopic == null || lang.trim(publishTopic) == "")
+         if (!publishTopic || lang.trim(publishTopic) === "")
          {
             this.alfLog("warn", "No publishTopic provided for PropertyLink", this);
          }
          else
          {
-            var publishGlobal = (this.publishGlobal != null) ? this.publishGlobal : false;
-            var publishToParent = (this.publishToParent != null) ? this.publishToParent : false;
+            var publishGlobal = this.publishGlobal || false;
+            var publishToParent = this.publishToParent || false;
             this.alfPublish(publishTopic, this.getPublishPayload(), publishGlobal, publishToParent);
          }
       },
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        * @returns {string} The currentItem being renderered.
        */ 
       getPublishPayload: function alfresco_renderers_PropertyLink__getPublishPayload() {
-         if (this.useCurrentItemAsPayload == true)
+         if (this.useCurrentItemAsPayload === true)
          {
             return this.currentItem;
          }

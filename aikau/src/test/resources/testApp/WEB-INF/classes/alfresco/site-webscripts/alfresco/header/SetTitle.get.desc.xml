@@ -1,5 +1,6 @@
 <webscript>
-  <shortname>Set Title Test</shortname>
+  <shortname>Set Title</shortname>
+  <description>This shows an example of the alfresco/header/SetTitle widget that can be used to set an alfresco/header/Title widget that might be rendered by a different Surf component</description>
   <family>aikau-unit-tests</family>
   <url>/SetTitle</url>
 </webscript>

@@ -39,23 +39,16 @@ define(["intern!object",
       
       setup: function() {
          browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/galleryViewTest", "Gallery View Tests (Resizing)").end();
+         return TestCommon.loadTestWebScript(this.remote, "/GalleryView", "Gallery View Tests (Resizing)").end();
       },
       
       beforeEach: function() {
          browser.end();
       },
       
-      "Test gallery view resize slider exists": function () {
-         // 1. Check that the AlfGalleryViewSlider is visible (this is an additional control published from the gallery view)...
-         return browser.findByCssSelector("#TOOLBAR .alfresco-documentlibrary-AlfGalleryViewSlider")
-            .then(null, function() {
-               assert(false, "The gallery view slider was not found");
-            });
-      },
-      
       "Test gallery view resize slider is displayed": function() {
          return browser.findByCssSelector("#TOOLBAR .alfresco-documentlibrary-AlfGalleryViewSlider")
+            .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
             .isDisplayed()
             .then(function(result) {
                assert(result === true, "The gallery view slider was found but is not displayed");
@@ -63,33 +56,36 @@ define(["intern!object",
       },
       
       "Test initial layout": function() {
-         // 2. Check that the page has been initialised with 4 items per row...
+         // NOTE: That gallery view has been configured to have a non-default number of columns, 7 instead of 4...
+         // Check that the page has been initialised with 7 items per row...
          return browser.findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
-               assert(elements.length === 4, "The view initially displays an unexpected number of items per row, expected 4 but found: " + elements.length);
+               assert.lengthOf(elements, 7, "The view initially displays an unexpected number of items per row");
             });
       },
       
       "Test slider change decreases items per row": function() {
-         // 3. Increment the view size and check that the number of of items per row has decreased to 3....
+         // Increment the view size and check that the number of of items per row has decreased to 4....
          return browser.findByCssSelector("#TOOLBAR .dijitSliderIncrementIconH")
+            .clearLog()
             .click()
+         .end()
+         .getLastPublish("ALF_PREFERENCE_SET", "Preference not set")
          .end()
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
-               assert(elements.length === 3, "The number of items per row was not decreased, expected 3 but found: " + elements.length);
+               assert.lengthOf(elements, 4, "The number of items per row was not decreased");
             });
       },
       
       "Test slider change increases items per row (show 7)": function() {
-            // 4. Decrement the view size and check the number of items per row increases...
+         // Decrement the view size and check the number of items per row increases...
          return browser.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
-            .click()
             .click()
          .end()
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
-               assert(elements.length === 7, "The number of items per row was not increased, expected 7 but found: " + elements.length);
+               assert.lengthOf(elements, 7, "The number of items per row was not increased");
             });
       },
       
@@ -99,12 +95,12 @@ define(["intern!object",
          .end()
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
-               assert(elements.length === 10, "The number of items per row was not increased, expected 10 but found: : " + elements.length);
+               assert.lengthOf(elements, 10, "The number of items per row was not increased");
             });
       },
       
       "Test 'no-items' slider exists": function() {
-         // 5. Check that the 2nd AlfGalleryViewSlider is hidden because there are no items...
+         // Check that the 2nd AlfGalleryViewSlider is hidden because there are no items...
          return browser.findByCssSelector("#TOOLBAR_NO_ITEMS .alfresco-documentlibrary-AlfGalleryViewSlider")
             .then(null, function() {
                assert(false, "The 'no-items' gallery view slider was not found");
@@ -112,7 +108,7 @@ define(["intern!object",
       },
       
       "Test 'no-items' slider is not displayed": function() {
-         // 5. Check that the 2nd AlfGalleryViewSlider is hidden because there are no items...
+         // Check that the 2nd AlfGalleryViewSlider is hidden because there are no items...
          return browser.findByCssSelector("#TOOLBAR_NO_ITEMS .alfresco-documentlibrary-AlfGalleryViewSlider")
             .isDisplayed()
             .then(function(result) {
@@ -131,12 +127,9 @@ define(["intern!object",
       
       setup: function() {
          browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/galleryViewTest", "Gallery View Tests (Keyboard Navigation)")
+         return TestCommon.loadTestWebScript(this.remote, "/GalleryView", "Gallery View Tests (Keyboard Navigation)")
          // Using the slider ensures everything is setup for keyboard navigation
          .findByCssSelector("#TOOLBAR .dijitSliderIncrementIconH")
-            .click()
-         .end()
-         .findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
          .end();
       },
@@ -153,9 +146,9 @@ define(["intern!object",
          .pressKeys(keys.TAB)
          .sleep(alfPause)
          .pressKeys(keys.SPACE)
-         .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED", "value", "displayName", "Folder 1"))
-            .then(function(elements) {
-               assert(elements.length === 1, "The wrong document was selected");
+         .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
             });
       },
 
@@ -188,10 +181,10 @@ define(["intern!object",
             .pressKeys(keys.TAB)
             .sleep(alfPause)
             .pressKeys(keys.SPACE)
-            .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED", "value", "displayName", "Wiki Page"))
-               .then(function(elements) {
-                  assert(elements.length === 1, "The wrong document was selected");
-               });
+            .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "value.displayName", "Wiki Page", "The wrong document was selected");
+            });
       },
       
       "Test left cursor moves to last item on first row (Calendar Event)": function() {
@@ -201,10 +194,10 @@ define(["intern!object",
             .pressKeys(keys.TAB)
             .sleep(alfPause)
             .pressKeys(keys.SPACE)
-            .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED", "value", "displayName", "Calendar Event"))
-               .then(function(elements) {
-                  assert(elements.length === 1, "The wrong document was selected");
-               });
+            .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "value.displayName", "Calendar Event", "The wrong document was selected");
+            });
       },
       
       "Test up cursor loops to bottom (Folder 4)": function() {
@@ -214,10 +207,10 @@ define(["intern!object",
             .pressKeys(keys.TAB)
             .sleep(alfPause)
             .pressKeys(keys.SPACE)
-            .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED", "value", "displayName", "Folder 4"))
-               .then(function(elements) {
-                  assert(elements.length === 1, "The wrong document was selected");
-               });
+            .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "value.displayName", "Folder 4", "The wrong document was selected");
+            });
       },
       
       "Test right cursor on last item loops to first item (Folder 1)": function() {
@@ -228,10 +221,10 @@ define(["intern!object",
             .sleep(alfPause)
             .pressKeys(keys.SPACE)
             .sleep(alfPause)
-            .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_DESELECTED", "value", "displayName", "Folder 1"))
-               .then(function(elements) {
-                  assert(elements.length === 1, "The wrong document was selected");
-               });
+            .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_DESELECTED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
+            });
       },
 
       "Post Coverage Results": function() {

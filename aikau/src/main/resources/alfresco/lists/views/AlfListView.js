@@ -116,6 +116,16 @@ define(["dojo/_base/declare",
       documentSubscriptionTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
 
       /**
+       * Whether the list that's creating this view has infinite scroll turned on
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.32
+       */
+      useInfiniteScroll: false,
+      
+      /**
        * Implements the widget life-cycle method to add drag-and-drop upload capabilities to the root DOM node.
        * This allows files to be dragged and dropped from the operating system directly into the browser
        * and uploaded to the location represented by the document list.
@@ -332,10 +342,7 @@ define(["dojo/_base/declare",
                // then we should destroy the previous renderer...
                if ((preserveCurrentData === false || preserveCurrentData === undefined) && this.docListRenderer)
                {
-                  this.docListRenderer.destroy();
-
-                  // TODO: Concerned about this - it needs further investigation as to why anything is being left behind!
-                  this.docListRenderer = null;
+                  this.destroyRenderer();
                }
 
                // If the renderer is null we need to create one (this typically wouldn't be expected to happen)
@@ -411,13 +418,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       clearOldView: function alfresco_lists_views_AlfListView__clearOldView() {
-         if (this.docListRenderer)
-         {
-            this.docListRenderer.destroy();
-
-            // TODO: Concerned about this - it needs further investigation as to why anything is being left behind!
-            this.docListRenderer = null;
-         }
+         this.destroyRenderer();
          if (this.messageNode)
          {
             domConstruct.destroy(this.messageNode);
@@ -425,6 +426,22 @@ define(["dojo/_base/declare",
          // Remove all table body elements. (preserves headers)
          query("tbody", this.tableNode).forEach(domConstruct.destroy);
          this.clearData();
+      },
+
+      /**
+       * This should be called when the renderers need to be removed. 
+       * 
+       * @instance
+       * @extendable
+       * @since 1.0.32
+       */
+      destroyRenderer: function alfresco_lists_views_AlfListView__destroyRenderer() {
+         if (this.docListRenderer)
+         {
+            this.docListRenderer.destroy();
+            // TODO: Concerned about this - it needs further investigation as to why anything is being left behind!
+            this.docListRenderer = null;
+         }
       },
 
       /**

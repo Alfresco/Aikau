@@ -38,7 +38,7 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/query", 
         "dojo/NodeList-dom"], 
-        function(declare, AlfDocument, ResizeMixin, lang, array, registry, domConstruct, domGeom, domStyle, query, nodeListDom) {
+        function(declare, AlfDocument, ResizeMixin, lang, array, registry, domConstruct, domGeom, domStyle, query, /*jshint unused:false*/ nodeListDom) {
    
    return declare([AlfDocument, ResizeMixin], {
       

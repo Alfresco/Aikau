@@ -20,12 +20,16 @@ model.jsonModel = {
             widgets: [
                {
                   id: "TOOLBAR",
-                  name: "alfresco/documentlibrary/AlfToolbar"
+                  name: "alfresco/documentlibrary/AlfToolbar",
+                  config: {
+                     pubSubScope: "HAS_ITEMS_"
+                  }
                },
                {
                   id: "DOCLIST",
                   name: "alfresco/lists/AlfList",
                   config: {
+                     pubSubScope: "HAS_ITEMS_",
                      useHash: false,
                      additionalControlsTarget: "TOOLBAR",
                      currentData: {
@@ -91,6 +95,49 @@ model.jsonModel = {
                         {
                            name: "alfresco/documentlibrary/views/AlfGalleryView",
                            config: {
+                              columns: 7,
+                              widgets: [
+                                 {
+                                    name: "alfresco/search/SearchGalleryThumbnail"
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "TOOLBAR_NO_ITEMS",
+                  name: "alfresco/documentlibrary/AlfToolbar",
+                  config: {
+                     pubSubScope: "NO_ITEMS_"
+                  }
+               },
+               {
+                  id: "DOCLIST_NO_ITEMS",
+                  name: "alfresco/lists/AlfList",
+                  config: {
+                     pubSubScope: "NO_ITEMS_",
+                     useHash: false,
+                     additionalControlsTarget: "TOOLBAR_NO_ITEMS",
+                     additionalViewControlVisibilityConfig: {
+                        initialValue: true,
+                        rules: [
+                           {
+                              topic: "ALF_DOCLIST_DOCUMENTS_LOADED",
+                              attribute: "totalRecords",
+                              isNot: ["0"]
+                           }
+                        ]
+                     },
+                     currentData: {
+                        items: []
+                     },
+                     widgets: [
+                        {
+                           name: "alfresco/documentlibrary/views/AlfGalleryView",
+                           config: {
+                              pubSubScope: "NO_ITEMS_",
                               widgets: [
                                  {
                                     name: "alfresco/search/SearchGalleryThumbnail"
@@ -105,7 +152,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

@@ -31,8 +31,9 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/AlfGalleryView.html",
         "alfresco/lists/views/layouts/Grid",
         "alfresco/documentlibrary/AlfGalleryViewSlider",
-        "dojo/_base/lang"], 
-        function(declare, AlfDocumentListView, template, Grid, AlfGalleryViewSlider, lang) {
+        "dojo/_base/lang",
+        "alfresco/core/topics"], 
+        function(declare, AlfDocumentListView, template, Grid, AlfGalleryViewSlider, lang, topics) {
    
    return declare([AlfDocumentListView], {
       
@@ -124,7 +125,8 @@ define(["dojo/_base/declare",
          return [new AlfGalleryViewSlider({
             relatedViewName: this.getViewName(),
             pubSubScope: this.pubSubScope,
-            parentPubSubScope: this.parentPubSubScope
+            parentPubSubScope: this.parentPubSubScope,
+            columns: this.columns
          })];
       },
       
@@ -188,11 +190,12 @@ define(["dojo/_base/declare",
       /**
        * The topic to publish when the next link is clicked.
        * 
+       * @event nextLinkPublishTopic
        * @instance
        * @type {string}
-       * @default "ALF_SCROLL_NEAR_BOTTOM"
+       * @default [topics.SCROLL_NEAR_BOTTOM]{@link module:alfresco/core/topics#SCROLL_NEAR_BOTTOM}
        */
-      nextLinkPublishTopic: "ALF_SCROLL_NEAR_BOTTOM",
+      nextLinkPublishTopic: topics.SCROLL_NEAR_BOTTOM,
 
       /**
        * Creates a new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}

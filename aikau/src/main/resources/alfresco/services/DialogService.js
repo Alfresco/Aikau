@@ -112,7 +112,7 @@
  * }
  *
  * @module alfresco/services/DialogService
- * @extends module:alfresco/core/Core
+ * @extends module:alfresco/services/BaseService
  * @pageSafe
  * @author Dave Draper
  * @author David Webster
@@ -159,7 +159,7 @@
  */
 
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/services/BaseService",
         "dojo/_base/lang",
         "alfresco/dialogs/AlfDialog",
         "alfresco/forms/Form",
@@ -168,9 +168,9 @@ define(["dojo/_base/declare",
         "dojo/keys",
         "jquery",
         "dojo/aspect"],
-        function(declare, AlfCore, lang, AlfDialog, AlfForm, array, on, keys, $, aspect) {
+        function(declare, BaseService, lang, AlfDialog, AlfForm, array, on, keys, $, aspect) {
 
-   return declare([AlfCore], {
+   return declare([BaseService], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -275,16 +275,12 @@ define(["dojo/_base/declare",
       _activeDialogs: [],
 
       /**
-       * Create a new 'publishTopic' for the action and generates a new 'pubSubScope' and then sets
-       * up subscriptions for handling show dialog and cancel dialog requests.
-       *
        * @instance
        * @listens module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST
        * @listens module:alfresco/services/DialogService~event:ALF_CREATE_DIALOG_REQUEST
+       * @since 1.0.32
        */
-      constructor: function alfresco_services_DialogService__constructor(args) {
-         lang.mixin(this, args);
-
+      registerSubscriptions: function alfresco_services_DialogService__registerSubscriptions() {
          // Generate a new pub/sub scope for the widget (this will intentionally override any other settings
          // to contrain communication...
          this.publishTopic = "ALF_CREATE_FORM_DIALOG_REQUEST";
@@ -522,7 +518,7 @@ define(["dojo/_base/declare",
 
                // Construct the form widgets and then construct the dialog using that configuration...
                var formValue = config.formValue ? config.formValue: {};
-               var formConfig = this.createFormConfig(config.widgets, formValue);
+               var formConfig = this.createFormConfig(config, formValue);
                if (config.showValidationErrorsImmediately === false)
                {
                   formConfig.config.showValidationErrorsImmediately = false;
@@ -706,14 +702,16 @@ define(["dojo/_base/declare",
        * @param {object} formValue The initial value to set in the form.
        * @returns {object} The configuration for the form to add to the dialog
        */
-      createFormConfig: function alfresco_services_DialogService__createFormConfig(widgets, formValue) {
+      createFormConfig: function alfresco_services_DialogService__createFormConfig(config, formValue) {
          var formConfig = {
             name: "alfresco/forms/Form",
             config: {
                additionalCssClasses: "root-dialog-form",
                displayButtons: false,
-               widgets: widgets,
-               value: formValue
+               widgets: config.widgets,
+               value: formValue,
+               warnings: config.warnings,
+               warningsPosition: config.warningsPosition
             }
          };
          return formConfig;

@@ -71,6 +71,27 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * Used to indicate more data is required, as we're at the end of the current data
+       * 
+       * @event loadMoreDataTopic
+       * @instance
+       * @type {string}
+       * @default [topics.SCROLL_NEAR_BOTTOM]{@link module:alfresco/core/topics#SCROLL_NEAR_BOTTOM}
+       * @since 1.0.32
+       */
+      loadMoreDataTopic: topics.SCROLL_NEAR_BOTTOM,
+
+      /**
+       * Whether the list that's creating this view has infinite scroll turned on
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.32
+       */
+      useInfiniteScroll: false,
+      
+      /**
        * Sets up image source files, etc.
        *
        * @instance postCreate
@@ -135,9 +156,11 @@ define(["dojo/_base/declare",
        */
       resize: function alfresco_lists_views_layouts_Carousel__resize() {
          this.calculateSizes();
-         domStyle.set(this.itemsNode, "width", this.itemsNodeWidth + "px");
-         domStyle.set(this.itemsNode, "height", this.height);
-
+         if (this.itemsNode)
+         {
+            domStyle.set(this.itemsNode, "width", this.itemsNodeWidth + "px");
+            domStyle.set(this.itemsNode, "height", this.height);
+         }
          this.resizeContainer();
 
          // Set the range of displayed items...
@@ -155,7 +178,7 @@ define(["dojo/_base/declare",
        */
       resizeContainer: function alfresco_lists_views_layouts_Carousel__resizeContainer() {
          var itemsCount = lang.getObject("currentData.items.length", false, this);
-         if (itemsCount !== null)
+         if (this.containerNode && itemsCount !== null)
          {
             var totalWidth = (itemsCount * this.itemsNodeWidth) + "px";
             domStyle.set(this.containerNode, "width", totalWidth);
@@ -193,7 +216,7 @@ define(["dojo/_base/declare",
             this.numberOfItemsShown = Math.floor(overallWidth/this.itemWidth);
             this.itemsNodeWidth = this.numberOfItemsShown * this.itemWidth;
 
-            if (this.fixedHeight != null)
+            if (this.fixedHeight)
             {
                // Use the configured height...
                this.height = this.fixedHeight;
@@ -219,7 +242,7 @@ define(["dojo/_base/declare",
        * @param {element} rootNode The DOM element to add them into.
        */
       processWidgets: function alfresco_lists_views_layouts_Carousel__processWidgets(widgets, rootNode) {
-         var nodeToAdd = nodeToAdd = domConstruct.create("li", {}, rootNode);
+         var nodeToAdd = domConstruct.create("li", {}, rootNode);
          this.inherited(arguments, [widgets, nodeToAdd]);
       },
 
@@ -259,7 +282,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onPrevClick: function alfresco_lists_views_layouts_Carousel__onPrevClick(evt) {
+      onPrevClick: function alfresco_lists_views_layouts_Carousel__onPrevClick(/*jshint unused:false*/ evt) {
          if (this.currentLeftPosition > 0)
          {
             this.currentLeftPosition -= this.itemsNodeWidth;
@@ -277,7 +300,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onNextClick: function alfresco_lists_views_layouts_Carousel__onNextClick(evt) {
+      onNextClick: function alfresco_lists_views_layouts_Carousel__onNextClick(/*jshint unused:false*/ evt) {
          this.currentLeftPosition += this.itemsNodeWidth;
 
          // Update the displayed range...
@@ -294,6 +317,7 @@ define(["dojo/_base/declare",
        * the render function on each to ensure they display themselves correctly
        *
        * @instance
+       * @fires loadMoreDataTopic
        */
       renderDisplayedItems: function alfresco_lists_views_layouts_Carousel__renderDisplayedItems() {
          for (var i=this.firstDisplayedIndex; i<=this.lastDisplayedIndex; i++)
@@ -302,19 +326,31 @@ define(["dojo/_base/declare",
             {
                var widgets = this._renderedItemWidgets[i];
                array.forEach(widgets, lang.hitch(this, this.renderDisplayedItem));
-
             }
          }
 
          // Make sure the frame is aligned correctly...
          this.currentLeftPosition = (this.firstDisplayedIndex / this.numberOfItemsShown) * this.itemsNodeWidth;
          var left = "-" + this.currentLeftPosition + "px";
-         domStyle.set(this.containerNode, "left", left);
+         this.containerNode && domStyle.set(this.containerNode, "left", left);
 
          var itemsCount = lang.getObject("currentData.items.length", false, this);
-         domStyle.set(this.prevNode, "visibility", (this.firstDisplayedIndex == 0) ? "hidden": "visible");
-         domStyle.set(this.nextNode, "visibility", (this.firstDisplayedIndex <= itemsCount-1 && this.lastDisplayedIndex >= itemsCount-1) ? "hidden": "visible");
+         this.prevNode && domStyle.set(this.prevNode, "visibility", (this.firstDisplayedIndex === 0) ? "hidden": "visible");
+         this.nextNode && domStyle.set(this.nextNode, "visibility", (this.firstDisplayedIndex <= itemsCount-1 && this.lastDisplayedIndex >= itemsCount-1) ? "hidden": "visible");
 
+         // Can only enter this condition if we're an items carousel in infinite
+         // scroll mode (because the preview carousel doesn't get told this)
+         if (this.useInfiniteScroll) 
+         {
+            var hasMoreItems = this.currentData.totalRecords > itemsCount,
+                numPages = Math.ceil(itemsCount / this.numberOfItemsShown),
+                lastPageStartIndex = (numPages - 1) * this.numberOfItemsShown,
+                lastPageEndIndex = lastPageStartIndex + (this.numberOfItemsShown - 1),
+                onLastPage = (this.lastDisplayedIndex >= lastPageStartIndex) && (this.lastDisplayedIndex <= lastPageEndIndex);
+            if (hasMoreItems && onLastPage) {
+               this.alfPublish(this.loadMoreDataTopic);
+            }
+         }
       },
 
       /**
@@ -324,7 +360,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to render
        * @param {number} index The index of the widget within the array
        */
-      renderDisplayedItem: function alfresco_lists_views_layouts_Carousel__renderDisplayedItem(widget, index) {
+      renderDisplayedItem: function alfresco_lists_views_layouts_Carousel__renderDisplayedItem(widget, /*jshint unused:false*/ index) {
          if (widget && typeof widget.render === "function")
          {
             widget.render();
@@ -338,9 +374,9 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       selectItem: function alfresco_lists_views_layouts_Carousel__item(payload) {
-         if (payload.index != null && !isNaN(parseInt(payload.index)))
+         if ((payload.index || payload.index === 0) && !isNaN(parseInt(payload.index, 10)))
          {
-            var targetIndex = parseInt(payload.index);
+            var targetIndex = parseInt(payload.index, 10);
             if (targetIndex >= this.firstDisplayedIndex && targetIndex <= this.lastDisplayedIndex)
             {
                // The requested item is currently displayed, no action necessary...

@@ -1,44 +1,51 @@
-.alfresco-header-Warning .warnings
-{
-   margin: 0 -10px;
-   padding: 0.5em 0;
-   color: black;
-   text-align: center;
-   background-color: #F4F4F4;
-   font-size: 108%;
-   border-top: 1px solid lightgrey;
-   border-bottom: 1px solid lightgrey;
-}
+.alfresco-header-Warning {
 
-.alfresco-header-Warning .info
-{
-   padding-top: 2px;
-}
+   display: block;
 
-.alfresco-header-Warning .level0
-{
-   background: url("./images/warning-16.png") no-repeat scroll 0 0 transparent;
-   display: inline;
-   padding-left: 20px;
-}
+   &--hidden {
+      display: none;
+   }
 
-.alfresco-header-Warning .level1
-{
-   background: url("./images/warning-16.png") no-repeat scroll 0 0 transparent;
-   display: inline;
-   padding-left: 20px;
-}
+   .alfresco-header-Warning__warnings {
+      margin: 0 -10px;
+      padding: 0.5em 0;
+      color: @warning-font-color;
+      text-align: center;
+      background-color: @warning-background;
+      font-size: @warning-font-size;
+      border-top: @warning-border;
+      border-bottom: @warning-border;
+   }
 
-.alfresco-header-Warning .level2
-{
-   background: url("./images/warning-16.png") no-repeat scroll 0 0 transparent;
-   display: inline;
-   padding-left: 20px;
-}
+   .alfresco-header-Warning__info
+   {
+      padding-top: 2px;
 
-.alfresco-header-Warning .level3
-{
-   background: url("./images/error-16.png") no-repeat scroll 0 0 transparent;
-   display: inline;
-   padding-left: 20px;
+      &--hidden {
+         display: none;
+      }
+
+      .alfresco-header-Warning__image {
+         display: inline;
+         padding-left: 20px;
+      }
+
+      .alfresco-header-Warning {
+         &__level0 {
+            background: url("./images/warning-16.png") no-repeat scroll 0 0 transparent;
+         }
+
+         &__level1 {
+            background: url("./images/warning-16.png") no-repeat scroll 0 0 transparent;
+         }
+
+         &__level2 {
+            background: url("./images/warning-16.png") no-repeat scroll 0 0 transparent;
+         }
+
+         &__level3 {
+            background: url("./images/error-16.png") no-repeat scroll 0 0 transparent;
+         }
+      }
+   }
 }

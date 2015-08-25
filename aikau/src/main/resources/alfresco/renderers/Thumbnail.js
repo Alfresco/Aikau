@@ -450,7 +450,6 @@ define(["dojo/_base/declare",
             // in a document library)...
             this.publishPayload = {};
             this.publishTopic = this.generateFileFolderLink(this.publishPayload);
-            this.publishGlobal = true;
          }
          else if (this.publishPayload)
          {
@@ -465,8 +464,8 @@ define(["dojo/_base/declare",
          }
          else
          {
-            var publishGlobal = this.publishGlobal !== false;
-            var publishToParent = this.publishToParent !== false;
+            var publishGlobal = this.publishGlobal || false;
+            var publishToParent = this.publishToParent || false;
             this.alfPublish(this.publishTopic, this.publishPayload, publishGlobal, publishToParent);
          }
       },

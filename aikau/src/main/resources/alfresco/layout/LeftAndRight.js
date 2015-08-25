@@ -59,23 +59,26 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_layout_LeftAndRight__postCreate() {
-         domClass.add(this.domNode, (this.additionalCssClasses != null ? this.additionalCssClasses : ""));
+         domClass.add(this.domNode, this.additionalCssClasses || "");
          if (this.widgets)
          {
             this._processedWidgets = [];
             
             // Iterate over all the widgets in the configuration object and add them...
             array.forEach(this.widgets, function(entry, i) {
-               var domNode = null;
-               if (entry.align == "right")
+               if (this.filterWidget(entry, i))
                {
-                  domNode = this.createWidgetDomNode(entry, this.rightWidgets, entry.className);
+                  var domNode = null;
+                  if (entry.align === "right")
+                  {
+                     domNode = this.createWidgetDomNode(entry, this.rightWidgets, entry.className);
+                  }
+                  else
+                  {
+                     domNode = this.createWidgetDomNode(entry, this.leftWidgets, entry.className);
+                  }
+                  this.createWidget(entry, domNode, this._registerProcessedWidget, this, i);
                }
-               else
-               {
-                  domNode = this.createWidgetDomNode(entry, this.leftWidgets, entry.className);
-               }
-               this.createWidget(entry, domNode, this._registerProcessedWidget, this, i);
             }, this);
          }
 

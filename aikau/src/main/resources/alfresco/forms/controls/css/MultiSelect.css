@@ -121,6 +121,7 @@
          &__highlighted-label {
             font-family: @bold-font;
             font-weight: 700;
+            color: @general-font-color;
             text-decoration: underline;
          }
          &:first-child {

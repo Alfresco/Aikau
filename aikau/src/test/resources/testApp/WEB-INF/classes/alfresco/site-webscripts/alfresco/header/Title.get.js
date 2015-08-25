@@ -16,26 +16,33 @@ model.jsonModel = {
          config: {
             widgets: [
                {
+                  id: "BASIC",
                   name: "alfresco/header/Title",
                   config: {
                      label: "This is a title"
                   }
                },
                {
+                  id: "LONG",
                   name: "alfresco/header/Title",
                   config: {
                      label: "ThisIsAReallyLongTitleWithoutAnySpacesInIt",
                      maxWidth: "300px"
+                  }
+               },
+               {
+                  id: "LINK",
+                  name: "alfresco/header/Title",
+                  config: {
+                     label: "Link Title",
+                     targetUrl: "dp/ws/some-other-page"
                   }
                }
             ]
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
