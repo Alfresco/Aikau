@@ -73,6 +73,7 @@ define(["alfresco/TestCommon",
       "Scroll to bottom of second dashlet body": function() {
          // Click on the first row to give it focus...
          return browser.findByCssSelector("#INFINITE_SCROLL_LIST_2 tr:nth-child(1) .alfresco-renderers-Property")
+            .clearLog()
             .click()
             .pressKeys(keys.ARROW_DOWN)
             .pressKeys(keys.ARROW_DOWN)
@@ -93,7 +94,8 @@ define(["alfresco/TestCommon",
             .end()
 
          .getLastPublish("ABOVE_ALF_EVENTS_SCROLL", "List scroll event not registered")
-            .end()
+
+         .getLastPublish("ABOVE_ALF_DOCLIST_REQUEST_FINISHED", "More data not loaded")
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_2 tr")
             .then(function(elements) {

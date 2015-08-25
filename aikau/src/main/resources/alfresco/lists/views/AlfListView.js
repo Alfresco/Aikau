@@ -116,6 +116,16 @@ define(["dojo/_base/declare",
       documentSubscriptionTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
 
       /**
+       * Whether the list that's creating this view has infinite scroll turned on
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.32
+       */
+      useInfiniteScroll: false,
+      
+      /**
        * Implements the widget life-cycle method to add drag-and-drop upload capabilities to the root DOM node.
        * This allows files to be dragged and dropped from the operating system directly into the browser
        * and uploaded to the location represented by the document list.
