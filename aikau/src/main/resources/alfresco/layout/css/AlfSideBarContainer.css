@@ -26,7 +26,6 @@
    right: 0;
    border-right: @standard-border;
    border-left: @standard-border;
-   z-index: 10000;
 }
 
 /* Overrides JQuery default behaviour to hide the handle when disabled, but this would

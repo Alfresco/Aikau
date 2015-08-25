@@ -450,7 +450,6 @@ define(["dojo/_base/declare",
             // in a document library)...
             this.publishPayload = {};
             this.publishTopic = this.generateFileFolderLink(this.publishPayload);
-            this.publishGlobal = true;
          }
          else if (this.publishPayload)
          {
