@@ -62,6 +62,7 @@ define([
       "alfresco/core/Core",
       "alfresco/core/ObjectProcessingMixin",
       "alfresco/core/ObjectTypeUtils",
+      "alfresco/util/functionUtils",
       "dijit/_FocusMixin",
       "dijit/_TemplatedMixin",
       "dijit/_WidgetBase",
@@ -78,7 +79,7 @@ define([
       "dojo/when",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(Core, ObjectProcessingMixin, ObjectTypeUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array,
+   function(Core, ObjectProcessingMixin, ObjectTypeUtils, functionUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array,
       declare, lang, Deferred, domConstruct, domGeom, domStyle, domClass, keys, on, when, template) {
 
       return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core, ObjectProcessingMixin], {
@@ -389,6 +390,7 @@ define([
             this.inherited(arguments);
             this._setupDisabling();
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
+            this._setupScrollHandling();
             if (!this.choiceCanWrap) {
                domClass.add(this.domNode, this.rootClass + "--choices-nowrap");
             }
@@ -1292,6 +1294,36 @@ define([
                      return this[oldMethodName].apply(this, arguments);
                   }
                });
+            }, this);
+         },
+
+         /**
+          * Setup listening for scrolls happening which can affect the position of this control
+          * and hence the dropdown
+          *
+          * @instance
+          * @since 1.0.33
+          */
+         _setupScrollHandling: function alfresco_forms_controls_MultiSelect___setupScrollHandling() {
+
+            // Find all ancestor elements that could scroll            
+            var scrollingElems = [window],
+               testElem = this.domNode;
+            while ((testElem = testElem.parentNode) && testElem.tagName !== "BODY") {
+               if (testElem.scrollHeight > testElem.clientHeight) {
+                  scrollingElems.push(scrollingElems);
+               }
+            }
+
+            // Add listener to each one that will call a throttled re-position
+            array.forEach(scrollingElems, function(scrollElem) {
+               this.own(on(scrollElem, "scroll", lang.hitch(this, function() {
+                  functionUtils.throttle({
+                     name: this.id,
+                     func: lang.hitch(this, this._positionDropdown),
+                     timeoutMs: 50
+                  })
+               })))
             }, this);
          },
 
