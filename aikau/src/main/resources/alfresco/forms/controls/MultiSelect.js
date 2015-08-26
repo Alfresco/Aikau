@@ -480,6 +480,23 @@ define([
                newValuesArray = (newValueParam && [newValueParam]) || [];
             }
 
+            // Normalise attrNames 
+            if (!nameAttrName && !labelAttrName && !valueAttrName) {
+               throw new Error("No attribute names available!");
+            } else if (nameAttrName && !labelAttrName && !valueAttrName) {
+               labelAttrName = valueAttrName = nameAttrName;
+            } else if (!nameAttrName && labelAttrName && !valueAttrName) {
+               nameAttrName = valueAttrName = labelAttrName;
+            } else if (!nameAttrName && !labelAttrName && valueAttrName) {
+               nameAttrName = labelAttrName = valueAttrName;
+            } else if (!nameAttrName) {
+               nameAttrName = labelAttrName;
+            } else if (!labelAttrName) {
+               labelAttrName = nameAttrName;
+            } else if (!valueAttrName) {
+               valueAttrName = nameAttrName;
+            }
+
             // Clear existing values
             array.forEach(this._choices, this._removeChoice, this);
 
@@ -1097,7 +1114,7 @@ define([
           * @instance
           * @param {object} evt Dojo-normalised event object
           */
-         _onSearchKeyup: function alfresco_forms_controls_MultiSelect___onSearchKeyup(/*jshint unused:false*/ evt) {
+         _onSearchKeyup: function alfresco_forms_controls_MultiSelect___onSearchKeyup( /*jshint unused:false*/ evt) {
             if (this._suppressKeyUp) {
                this._suppressKeyUp = false;
             } else {
@@ -1274,7 +1291,8 @@ define([
           * @instance
           */
          _setupDisabling: function alfresco_forms_controls_MultiSelect___setupDisabling() {
-            var methodsToDisable = ["_onChoiceClick",
+            var methodsToDisable = [
+               "_onChoiceClick",
                "_onChoiceCloseClick",
                "_onControlClick",
                "_onFocus",
@@ -1283,12 +1301,13 @@ define([
                "_onSearchChange",
                "_onSearchKeypress",
                "_onSearchKeyup",
-               "_onSearchUpdate"];
-            array.forEach(methodsToDisable, function(methodName){
+               "_onSearchUpdate"
+            ];
+            array.forEach(methodsToDisable, function(methodName) {
                var oldMethodName = "_OLD" + methodName;
                this[oldMethodName] = this[methodName];
                this[methodName] = lang.hitch(this, function() {
-                  if(this._disabled) {
+                  if (this._disabled) {
                      return;
                   } else {
                      return this[oldMethodName].apply(this, arguments);
