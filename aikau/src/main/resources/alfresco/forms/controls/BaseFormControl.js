@@ -957,7 +957,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default 300
+       * @default
        */
       inlineHelpWidth: 400,
 
