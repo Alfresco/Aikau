@@ -147,7 +147,7 @@ model.jsonModel = {
                   config: {
                      title: "Widget 3",
                      visibilityConfig: {
-                       initialValue: true,
+                       initialValue: false,
                        rules: [
                          {
                            topic: "WIDGET_3_VISIBILITY",

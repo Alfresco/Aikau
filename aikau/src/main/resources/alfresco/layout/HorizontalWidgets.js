@@ -251,8 +251,8 @@ define(["alfresco/core/ProcessWidgets",
             {
                widgets = array.filter(widgets, function(widget) {
                   var visibleInitialValue = lang.getObject("config.visibilityConfig.initialValue", false, widget);
-                  var invisibleInitialValue = lang.getObject("config.visibilityConfig.initialValue", false, widget);
-                  return visibleInitialValue === false || invisibleInitialValue === true;
+                  var invisibleInitialValue = lang.getObject("config.invisibilityConfig.initialValue", false, widget);
+                  return visibleInitialValue !== false && invisibleInitialValue !== true;
                });
             }
             else

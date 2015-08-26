@@ -32,7 +32,8 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    baseFunctionalSuites: [
-      "src/test/resources/alfresco/layout/BasicLayoutTest"
+      "src/test/resources/alfresco/layout/BasicLayoutTest",
+      "src/test/resources/alfresco/layout/DynamicHorizontalLayoutTest"
    ],
 
    /**
@@ -135,6 +136,7 @@ define({
       "src/test/resources/alfresco/layout/AlfStackContainerTest",
       "src/test/resources/alfresco/layout/AlfTabContainerTest",
       "src/test/resources/alfresco/layout/BasicLayoutTest",
+      "src/test/resources/alfresco/layout/DynamicHorizontalLayoutTest",
       "src/test/resources/alfresco/layout/FixedHeaderFooterTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/StripedContentTest",
