@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST"
+       * @default
        */
       loadDataPublishTopic: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
 

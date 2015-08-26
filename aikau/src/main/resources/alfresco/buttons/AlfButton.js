@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       publishTopic: "",
 
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       additionalCssClasses: "",
 
@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_VALID_CONTROL"
+       * @default
        */
       validTopic: "ALF_VALID_CONTROL",
 
@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_INVALID_CONTROL"
+       * @default
        */
       invalidTopic: "ALF_INVALID_CONTROL",
 

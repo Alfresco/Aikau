@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        * </p>
        *
        * @instance
-       * @default "AUTO"
+       * @default
        */
       heightMode: "AUTO",
 
@@ -127,7 +127,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       nodeRef: "",
 
@@ -136,7 +136,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "0"
+       * @default
        */
       size: "0",
 
@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       name: "",
 
@@ -154,7 +154,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       mimeType: "",
 
@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
        *
        * @isntance
        * @type {string}
-       * @default "api"
+       * @default
        */
       api: "api",
 
@@ -182,7 +182,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco"
+       * @default
        */
       proxy: "alfresco",
 

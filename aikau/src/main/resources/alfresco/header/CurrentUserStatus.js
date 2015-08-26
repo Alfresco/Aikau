@@ -140,7 +140,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "ALF_POST_NEW_USER_STATUS"
+       * @default
        */
       postNewUserStatusTopic: "ALF_POST_NEW_USER_STATUS",
       
@@ -150,7 +150,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "ALF_CANCEL_USER_STATUS_UPDATE"
+       * @default
        */
       cancelUserStatusUpdateTopic: "ALF_CANCEL_USER_STATUS_UPDATE",
       

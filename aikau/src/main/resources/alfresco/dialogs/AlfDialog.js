@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {String}
-       * @default ""
+       * @default
        */
       content: "",
       

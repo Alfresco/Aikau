@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "PROCESS"
+       * @default
        */
       publishPayloadType: "PROCESS",
 

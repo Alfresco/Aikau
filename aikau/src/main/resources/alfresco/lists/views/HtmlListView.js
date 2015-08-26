@@ -66,7 +66,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default  "displayName"
+       * @default
        */
       propertyToRender: "displayName",
 
@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "none"
+       * @default
        */
       listStyleType: "none",
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "li.alfresco-lists-views-HtmlListView--item"
+       * @default
        */
       renderFilterSelectorQuery: "li.alfresco-lists-views-HtmlListView--item"
    });

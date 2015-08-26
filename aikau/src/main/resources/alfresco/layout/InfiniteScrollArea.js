@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "alfresco-layout-InfiniteScrollArea"
+       * @default
        */
       baseClass: "alfresco-layout-InfiniteScrollArea",
 

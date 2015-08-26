@@ -47,7 +47,7 @@ define(["alfresco/core/ProcessWidgets",
        * 
        * @instance
        * @type {string}
-       * @default "alfresco-layout-AbsoluteCenterWidgets"
+       * @default
        */
       baseClass: "alfresco-layout-AbsoluteCenterWidgets",
 

@@ -127,7 +127,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco://company/home"
+       * @default
        */
       repoNodeRef: "alfresco://company/home",
 
@@ -244,7 +244,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "pickedItems"
+       * @default
        */
       name: "pickedItems",
 
@@ -419,7 +419,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "picker.subPickers.label"
+       * @default
        */
       subPickersLabel: "picker.subPickers.label",
 
@@ -428,7 +428,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "picker.pickedItems.label"
+       * @default
        */
       pickedItemsLabel: "picker.pickedItems.label"
    });

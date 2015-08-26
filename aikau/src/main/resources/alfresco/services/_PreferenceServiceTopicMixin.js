@@ -29,14 +29,14 @@ define(["dojo/_base/declare"],
       /**
        * @instance
        * @type {string}
-       * @default "ALF_PREFERENCE_GET"
+       * @default
        */
       getPreferenceTopic: "ALF_PREFERENCE_GET",
       
       /**
        * @instance
        * @type {string}
-       * @default "ALF_PREFERENCE_SET"
+       * @default
        */
       setPreferenceTopic: "ALF_PREFERENCE_SET",
       
@@ -45,7 +45,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE"
+       * @default
        */
       addFavouriteDocumentTopic: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE",
       
@@ -54,7 +54,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE"
+       * @default
        */
       removeFavouriteDocumentTopic: "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE",
       
@@ -63,7 +63,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE_SUCCESS"
+       * @default
        */
       addFavouriteDocumentSuccessTopic: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE_SUCCESS",
       
@@ -72,7 +72,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE_SUCCESS"
+       * @default
        */
       removeFavouriteDocumentSuccessTopic: "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE_SUCCESS",
       
@@ -81,7 +81,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE_FAILURE"
+       * @default
        */
       addFavouriteDocumentFailureTopic: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE_FAILURE",
       
@@ -90,7 +90,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE_FAILURE"
+       * @default
        */
       removeFavouriteDocumentFailureTopic: "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE_FAILURE"
    });

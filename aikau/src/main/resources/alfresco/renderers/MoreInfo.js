@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "displayName"
+       * @default
        */
       propertyToRender: "displayName",
 

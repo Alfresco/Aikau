@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "documentlibrary.view.preference.group"
+       * @default
        */
       label: "documentlibrary.view.preference.group",
 

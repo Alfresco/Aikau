@@ -103,7 +103,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "/"
+       * @default
        */
       currentPath: "/",
 
@@ -171,7 +171,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "CONFIGURED"
+       * @default
        */
       lastBreadcrumbPublishPayloadType: "CONFIGURED",
 
@@ -204,7 +204,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "root.label"
+       * @default
        */
       rootLabel: "root.label",
 

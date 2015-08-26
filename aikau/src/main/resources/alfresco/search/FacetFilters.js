@@ -38,7 +38,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "docListFilterPref"
+       * @default
        */
       filterPrefsName: "docListFilterPref",
       
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALPHABETICALLY"
+       * @default
        */
       sortBy: "ALPHABETICALLY",
 

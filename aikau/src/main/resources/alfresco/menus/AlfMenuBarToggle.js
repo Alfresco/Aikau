@@ -162,7 +162,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "value"
+       * @default
        */
       subscriptionAttribute: "value",
 
@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "true"
+       * @default
        */
       checkedValue: "true",
 

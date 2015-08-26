@@ -89,7 +89,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {string}
-       * @default "ALF_VERTICAL_REVEAL"
+       * @default
        */
       subscriptionTopic: "ALF_VERTICAL_REVEAL",
 

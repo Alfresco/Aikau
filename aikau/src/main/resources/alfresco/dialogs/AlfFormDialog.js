@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       dialogTitle: "",
 
@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "ALF_CREATE_FORM_DIALOG_MIXIN_CONFIRMATION_TOPIC"
+       * @default
        */
       _formConfirmationTopic: "ALF_CREATE_FORM_DIALOG_MIXIN_CONFIRMATION_TOPIC",
 
@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       formSubmissionTopic: "",
 

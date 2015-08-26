@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
        * The class to apply to render some checked indicator
        * @instance
        * @type {string}
-       * @default "alf-selected-icon"
+       * @default
        */
       checkedIconClass: "alf-selected-icon",
 

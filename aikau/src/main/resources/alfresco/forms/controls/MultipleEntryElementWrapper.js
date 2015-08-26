@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.save"
+       * @default
        */
       saveEntryAltText: "multiple-entry.save",
 
@@ -97,7 +97,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "done-16.png"
+       * @default
        */
       saveEntryImage: "done-16.png",
 
@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.cancel"
+       * @default
        */
       cancelEditAltText: "multiple-entry.cancel",
 
@@ -126,7 +126,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "delete-16.png"
+       * @default
        */
       cancelEditImage: "delete-16.png",
 
@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.delete"
+       * @default
        */
       deleteEntryAltText: "multiple-entry.delete",
 
@@ -155,7 +155,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "delete-16.png"
+       * @default
        */
       deleteEntryImage: "delete-16.png",
 

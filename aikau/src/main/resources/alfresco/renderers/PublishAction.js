@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "add-icon-16"
+       * @default
        */
       iconClass: "add-icon-16",
 
@@ -71,7 +71,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       altText: "",
 
@@ -81,7 +81,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_ITEM_SELECTED"
+       * @default
        */
       publishTopic: "ALF_ITEM_SELECTED",
 

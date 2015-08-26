@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "value"
+       * @default
        */
       readDisplayAttribute: "value",
 

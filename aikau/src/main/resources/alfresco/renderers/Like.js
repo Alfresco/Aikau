@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       onLabel: "",
       
@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "like.add.label"
+       * @default
        */
       offLabel: "like.add.label",
       
@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "like.remove.tooltip"
+       * @default
        */
       onTooltip: "like.remove.tooltip",
       
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default "like.add.tooltip"
+       * @default
        */
       offTooltip: "like.add.tooltip",
       
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default "like"
+       * @default
        */
       toggleClass: "like",
       
@@ -141,7 +141,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "likes.isLiked"
+       * @default
        */
       propertyToRender: "likes.isLiked",
 

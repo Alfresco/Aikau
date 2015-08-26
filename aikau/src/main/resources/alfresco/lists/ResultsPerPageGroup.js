@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "DOCUMENTS_PER_PAGE_GROUP"
+       * @default
        */
       groupName: "DOCUMENTS_PER_PAGE_GROUP",
       

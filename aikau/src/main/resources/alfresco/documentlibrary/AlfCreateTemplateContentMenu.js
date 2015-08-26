@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "alf-textdoc-icon"
+       * @default
        */
       templateIconClass: "alf-textdoc-icon",
       
@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default "ALF_CREATE_CONTENT"
+       * @default
        */
       templatePublishTopic: "ALF_CREATE_CONTENT",
       
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "node"
+       * @default
        */
       templateType: "node",
 

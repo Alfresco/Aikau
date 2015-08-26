@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "Alfresco.DocListToolbar"
+       * @default
        */
       i18nScope: "Alfresco.DocListToolbar",
       

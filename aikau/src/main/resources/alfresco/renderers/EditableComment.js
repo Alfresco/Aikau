@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_EDIT_COMMENT"
+       * @default
        */
       subscriptionTopic: "ALF_EDIT_COMMENT",
 
@@ -187,7 +187,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "ALF_CRUD_UPDATE"
+       * @default
        */
       publishTopic: "ALF_CRUD_UPDATE",
 
@@ -208,7 +208,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "PROCESS"
+       * @default
        */
       publishPayloadType: "PROCESS",
 
@@ -253,14 +253,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "content"
+       * @default
        */
       postParam: "content",
 
       /**
        * @instance
        * @type {string}
-       * @default "Save"
+       * @default
        */
       okButtonLabel: "comment.save",
 

@@ -32,21 +32,21 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_REQUEST_DEPENDENCIES"
+       * @default
        */
       requestDependenciesTopic: "ALF_REQUEST_DEPENDENCIES",
       
       /**
        * @instance
        * @type {string}
-       * @default "ALF_REQUEST_DEPENDENCIES_SUCCESS"
+       * @default
        */
       requestDependenciesSuccessTopic: "ALF_REQUEST_DEPENDENCIES_SUCCESS",
       
       /**
        * @instance
        * @type {string}
-       * @default "ALF_REQUEST_DEPENDENCIES_FAILURE"
+       * @default
        */
       requestDependenciesFailureTopic: "ALF_REQUEST_DEPENDENCIES_FAILURE"
    });

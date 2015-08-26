@@ -42,7 +42,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {string}
-          * @default "alfresco.pickers.PickedItems"
+          * @default
           */
          i18nScope: "alfresco.pickers.PickedItems",
 
@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {string}
-          * @default "ALF_PICKER_VALID"
+          * @default
           */
          validTopic: "ALF_PICKER_VALID",
 
@@ -88,7 +88,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {string}
-          * @default "ALF_PICKER_INVALID"
+          * @default
           */
          invalidTopic: "ALF_PICKER_INVALID",
 

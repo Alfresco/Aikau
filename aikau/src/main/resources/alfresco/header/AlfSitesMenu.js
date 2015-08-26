@@ -869,7 +869,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "recent.sites.label"
+       * @default
        */
       recentGroupLabel: "recent.sites.label",
       
@@ -878,7 +878,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "favourite.sites.label"
+       * @default
        */
       favouriteGroupLabel: "favourite.sites.label",
       
@@ -888,84 +888,84 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "useful.sites.label"
+       * @default
        */
       usefulGroupLabel: "useful.sites.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-favourite-site-icon"
+       * @default
        */
       favouriteGroupIconClass: "alf-favourite-site-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "site-finder.label"
+       * @default
        */
       siteFinderLabel: "site-finder.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-site-finder-icon"
+       * @default
        */
       siteFinderIconClass: "alf-site-finder-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "create-site.label"
+       * @default
        */
       createSiteLabel: "create-site.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-create-site-icon"
+       * @default
        */
       createSiteIconClass: "alf-create-site-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "my-sites.label"
+       * @default
        */
       mySitesLabel: "my-sites.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-my-sites-icon"
+       * @default
        */
       mySitesIconClass: "alf-my-sites-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "add-favourite-site.label"
+       * @default
        */
       addFavouriteLabel: "add-favourite-site.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-favourite-site-icon"
+       * @default
        */
       addFavouriteIconClass:  "alf-add-favourite-site-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "remove-favourite-site.label"
+       * @default
        */
       removeFavouriteLabel: "remove-favourite-site.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-remove-favourite-site-icon"
+       * @default
        */
       removeFavouriteIconClass: "alf-remove-favourite-site-icon"
    });

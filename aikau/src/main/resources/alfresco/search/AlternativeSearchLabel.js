@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "alternativesearch.searchedFor"
+       * @default
        */
       searchedForLabel: "alternativesearch.searchedFor",
 
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "searchedFor"
+       * @default
        */
       searchedForKey: "searchedFor",
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "alternativesearch.searchInsteadFor"
+       * @default
        */
       searchInsteadForLabel: "alternativesearch.searchInsteadFor",
 
@@ -121,7 +121,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "searchRequest"
+       * @default
        */
       searchRequestKey: "searchRequest",
 
@@ -131,7 +131,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_SPELL_CHECK_SEARCH_TERM"
+       * @default
        */
       subscriptionTopic: "ALF_SPELL_CHECK_SEARCH_TERM",
 

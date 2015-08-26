@@ -50,7 +50,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {string}
-             * @default "alfresco-charts-ccc-Chart"
+             * @default
              */
             baseClass: "alfresco-charts-ccc-Chart",
 

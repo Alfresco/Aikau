@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_EDITABLE_ROW_EDIT_MODE"
+       * @default
        */
       editModePublishTopic: "ALF_EDITABLE_ROW_EDIT_MODE",
 

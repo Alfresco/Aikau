@@ -131,7 +131,7 @@ define([
           *
           * @instance
           * @type {string}
-          * @default "100%"
+          * @default
           */
          choiceMaxWidth: "100%",
 

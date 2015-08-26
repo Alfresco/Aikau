@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "toggle.on.label"
+       * @default
        */
       onLabel: "toggle.on.label",
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "toggle.off.label"
+       * @default
        */
       offLabel: "toggle.off.label",
       
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "toggle.on.tooltip"
+       * @default
        */
       onTooltip: "toggle.on.tooltip",
       
@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "toggle.off.tooltip"
+       * @default
        */
       offTooltip: "toggle.off.tooltip",
       
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * The CSS class to apply for the on display
        * @instance
        * @type {string} 
-       * @default ""
+       * @default
        */
       toggleClass: "",
       

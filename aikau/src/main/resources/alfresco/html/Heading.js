@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {String}
-       * @default ""
+       * @default
        */
       label: "",
 
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "hiddenAccessible"
+       * @default
        */
       _hiddenAccessibleClass: "hiddenAccessible",
 

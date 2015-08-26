@@ -66,14 +66,14 @@ define(["dojo/_base/declare",
       
       /**
        * @instance {string} configUrl
-       * @default ""
+       * @default
        * @deprecated Not sure that this is required anymore?
        */
       configUrl: "",
       
       /**
        * @instance {string} baseClass
-       * @default "widgets"
+       * @default
        * @deprecated Not sure that this is required anymore?
        */
       baseClass: "widgets",

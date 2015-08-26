@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "ALF_UPLOAD_REQUEST"
+       * @default
        */
       _ALF_UPLOAD_TOPIC: "ALF_UPLOAD_REQUEST",
       

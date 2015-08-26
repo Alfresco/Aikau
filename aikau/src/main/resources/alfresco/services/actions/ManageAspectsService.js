@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "id"
+       * @default
        */
       itemKey: "id",
 

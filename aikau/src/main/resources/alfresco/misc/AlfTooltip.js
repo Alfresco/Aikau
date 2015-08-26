@@ -181,7 +181,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "mouseover"
+       * @default
        */
       triggeringEvent: "mouseover",
 

@@ -41,7 +41,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_NAVIGATE_TO_PAGE"
+       * @default
        */
       linkClickTopic: "ALF_NAVIGATE_TO_PAGE",
 

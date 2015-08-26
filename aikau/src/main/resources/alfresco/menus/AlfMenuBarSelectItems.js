@@ -37,7 +37,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default "alf-noneselected-icon"
+       * @default
        */
       iconClass: "alf-noneselected-icon",
          
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        * The topic that the widget will listen to.
        * @instance
        * @type {string}
-       * @default "ALF_DOCLIST_FILE_SELECTION" 
+       * @default
        */
       notificationTopic: "ALF_DOCLIST_FILE_SELECTION",
 

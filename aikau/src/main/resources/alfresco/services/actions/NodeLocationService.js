@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "repository"
+       * @default
        */
       nonSiteUrl: "repository",
 
@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "documentlibrary"
+       * @default
        */
       siteUrl: "documentlibrary",
 

@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {string}
-             * @default "alfresco-reports-TopSiteContributorReport"
+             * @default
              */
             baseClass: "alfresco-reports-TopSiteContributorReport",
 

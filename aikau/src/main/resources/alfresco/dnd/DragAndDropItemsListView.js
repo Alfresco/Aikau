@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       useItemsOnceComparisonKey: "name",
 
@@ -97,7 +97,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ".alfresco-dnd-DragAndDropItem"
+       * @default
        */
       renderFilterSelectorQuery: ".alfresco-dnd-DragAndDropItem"
    });

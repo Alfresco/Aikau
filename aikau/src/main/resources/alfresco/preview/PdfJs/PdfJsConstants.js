@@ -69,7 +69,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_PDF_LOADED"
+       * @default
        */
       PDF_LOADED_TOPIC: "ALF_PDFJS_PDF_LOADED",
       
@@ -78,7 +78,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_SHOW_SIDEBAR"
+       * @default
        */
       SHOW_SIDEBAR_TOPIC: "ALF_PDFJS_SHOW_SIDEBAR",
       
@@ -87,7 +87,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_ZOOM_SELECTION"
+       * @default
        */
       ZOOM_SET_TOPIC: "ALF_PDFJS_ZOOM_SELECTION",
       
@@ -96,7 +96,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_ZOOM_OUT"
+       * @default
        */
       ZOOM_OUT_TOPIC: "ALF_PDFJS_ZOOM_OUT",
       
@@ -105,7 +105,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_ZOOM_IN"
+       * @default
        */
       ZOOM_IN_TOPIC: "ALF_PDFJS_ZOOM_IN",
       
@@ -114,7 +114,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_PREVIOUS_PAGE"
+       * @default
        */
       PREVIOUS_PAGE_TOPIC: "ALF_PDFJS_PREVIOUS_PAGE",
       
@@ -123,7 +123,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_NEXT_PAGE"
+       * @default
        */
       NEXT_PAGE_TOPIC: "ALF_PDFJS_NEXT_PAGE",
       
@@ -132,7 +132,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_SET_PAGE_REQUEST"
+       * @default
        */
       SET_PAGE_REQUEST_TOPIC: "ALF_PDFJS_SET_PAGE_REQUEST",
       
@@ -141,7 +141,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_SET_PAGE_CONFIRMATION"
+       * @default
        */
       SET_PAGE_CONFIRMATION_TOPIC: "ALF_PDFJS_SET_PAGE_CONFIRMATION",
       
@@ -150,7 +150,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_SET_PAGE_INFO"
+       * @default
        */
       SET_PAGE_INFO_TOPIC: "ALF_PDFJS_SET_PAGE_INFO",
       
@@ -160,7 +160,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_DISABLE_PREVIOUS"
+       * @default
        */
       DISABLE_PREVIOUS_BUTTON_TOPIC: "ALF_PDFJS_DISABLE_PREVIOUS",
       
@@ -170,7 +170,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_DISABLE_NEXT"
+       * @default
        */
       DISABLE_NEXT_BUTTON_TOPIC: "ALF_PDFJS_DISABLE_NEXT",
       
@@ -180,7 +180,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_DISABLE_ZOOM_IN"
+       * @default
        */
       DISABLE_ZOOM_IN_BUTTON_TOPIC: "ALF_PDFJS_DISABLE_ZOOM_IN",
       
@@ -190,7 +190,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_DISABLE_ZOOM_OUT"
+       * @default
        */
       DISABLE_ZOOM_OUT_BUTTON_TOPIC: "ALF_PDFJS_DISABLE_ZOOM_OUT",
       
@@ -199,7 +199,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "page-width"
+       * @default
        */
       ZOOM_LEVEL_PAGE_WIDTH: "page-width",
       
@@ -208,7 +208,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "two-page-width"
+       * @default
        */
       ZOOM_LEVEL_TWO_PAGE_WIDTH: "two-page-width",
       
@@ -217,7 +217,7 @@ define([],function() {
        * 
        * @instance
        * @type {string}
-       * @default "page-height"
+       * @default
        */
       ZOOM_LEVEL_PAGE_HEIGHT: "page-height",
       
@@ -226,7 +226,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "page-fit"
+       * @default
        */
       ZOOM_LEVEL_PAGE_FIT: "page-fit",
       
@@ -235,7 +235,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "two-page-fit"
+       * @default
        */
       ZOOM_LEVEL_TWO_PAGE_FIT: "two-page-fit",
       
@@ -244,7 +244,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "auto"
+       * @default
        */
       ZOOM_LEVEL_AUTO: "auto",
       
@@ -253,7 +253,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_DOWNLOAD_PDF"
+       * @default
        */
       DOWNLOAD_PDF_TOPIC: "ALF_PDFJS_DOWNLOAD_PDF",
       
@@ -262,7 +262,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_DOWNLOAD_ORIGINAL"
+       * @default
        */
       DOWNLOAD_ORIGINAL_TOPIC: "ALF_PDFJS_DOWNLOAD_ORIGINAL",
       
@@ -272,7 +272,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_SHOW_LINK_INFO"
+       * @default
        */
       SHOW_LINK_INFO_TOPIC: "ALF_PDFJS_SHOW_LINK_INFO",
       
@@ -282,7 +282,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_UPDATE_LINK_URL"
+       * @default
        */
       UPDATE_LINK_URL_REQUEST_TOPIC: "ALF_PDFJS_UPDATE_LINK_URL",
       
@@ -291,7 +291,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_SET_LINK_URL"
+       * @default
        */
       SET_LINK_URL_TOPIC: "ALF_PDFJS_SET_LINK_URL",
       
@@ -300,7 +300,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_SHOW_SEARCH_TOOLS"
+       * @default
        */
       SHOW_SEARCH_TOOLS_TOPIC: "ALF_PDFJS_SHOW_SEARCH_TOOLS",
       
@@ -309,7 +309,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_FIND"
+       * @default
        */
       FIND_TOPIC: "ALF_PDFJS_FIND",
       
@@ -318,7 +318,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_FIND_NEXT"
+       * @default
        */
       FIND_NEXT_TOPIC: "ALF_PDFJS_FIND_NEXT",
       
@@ -327,7 +327,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_FIND_PREVIOUS"
+       * @default
        */
       FIND_PREVIOUS_TOPIC: "ALF_PDFJS_FIND_PREVIOUS",
       
@@ -337,7 +337,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_HIGHLIGHT_ALL"
+       * @default
        */
       HIGHLIGHT_ALL_TOPIC: "ALF_PDFJS_HIGHLIGHT_ALL",
       
@@ -346,7 +346,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_MATCH_CASE"
+       * @default
        */
       MATCH_CASE_TOPIC: "ALF_PDFJS_MATCH_CASE",
       
@@ -355,7 +355,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_VIEWER_SCROLLED"
+       * @default
        */
       VIEWER_SCROLL_TOPIC: "ALF_PDFJS_VIEWER_SCROLLED",
 
@@ -364,7 +364,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_PASSWORD_RELOAD"
+       * @default
        */
       PASSWORD_RELOAD: "ALF_PDFJS_PASSWORD_RELOAD",
 
@@ -373,7 +373,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_SHOW_INTERFACE"
+       * @default
        */
       SHOW_INTERFACE_TOPIC: "ALF_PDFJS_SHOW_INTERFACE",
 
@@ -382,7 +382,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_PDFJS_SHOW_NOTIFICATION"
+       * @default
        */
       SHOW_NOTIFICATION_TOPIC: "ALF_PDFJS_SHOW_NOTIFICATION"
    };

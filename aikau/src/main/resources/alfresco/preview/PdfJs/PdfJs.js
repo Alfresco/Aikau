@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default ""
+          * @default
           */
          srcMaxSize: "",
 
@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "false"
+          * @default
           */
          skipbrowsertest : "false",
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "auto"
+          * @default
           */
          defaultScale : "auto",
 
@@ -153,7 +153,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "1.1"
+          * @default
           */
          scaleDelta : "1.1",
 
@@ -162,7 +162,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "0.65"
+          * @default
           */
          autoMinScale : "0.65",
          autoMinScaleMobile: "0.525",
@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "1.25"
+          * @default
           */
          autoMaxScale : "1.25",
 
@@ -181,7 +181,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "multi"
+          * @default
           */
          pageLayout : "multi",
 
@@ -191,7 +191,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "false"
+          * @default
           */
          disableTextLayer : "false",
 
@@ -200,7 +200,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "true"
+          * @default
           */
          useLocalStorage : "true",
 
@@ -209,7 +209,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "true"
+          * @default
           */
          autoSearch : "false",
 
@@ -218,7 +218,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type String
-          * @default "false"
+          * @default
           */
          progressiveLoading: "false",
 

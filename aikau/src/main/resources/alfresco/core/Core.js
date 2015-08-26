@@ -377,7 +377,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       pubSubScope: "",
 
@@ -696,7 +696,7 @@ define(["dojo/_base/declare",
        * @instance
        * @event alfLoggingTopic
        * @type {string}
-       * @default "ALF_LOG_REQUEST"
+       * @default
        */
       alfLoggingTopic: "ALF_LOG_REQUEST",
 

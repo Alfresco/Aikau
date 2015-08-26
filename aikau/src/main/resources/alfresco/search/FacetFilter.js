@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "12x12-selected-icon.png"
+       * @default
        */
       appliedFilterImageSrc: "12x12-selected-icon.png",
 
@@ -119,7 +119,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       filterData: "",
 

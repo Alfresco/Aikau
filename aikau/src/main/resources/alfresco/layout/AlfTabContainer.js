@@ -213,7 +213,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "100%"
+       * @default
        */
       height: "100%",
 
@@ -222,7 +222,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "100%"
+       * @default
        */
       width: "100%",
 

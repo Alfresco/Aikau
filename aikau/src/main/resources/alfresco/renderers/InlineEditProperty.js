@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.cancel.label"
+       * @default
        */
       cancelLabel: "inline-edit.cancel.label",
 
@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.edit.altText"
+       * @default
        */
       editAltText: "inline-edit.edit.altText",
 
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.edit.label"
+       * @default
        */
       editLabel: "inline-edit.edit.label",
 
@@ -184,7 +184,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.save.label"
+       * @default
        */
       saveLabel: "inline-edit.save.label",
 

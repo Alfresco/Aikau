@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS"
+       * @default
        */
       documentSubscriptionTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
 
@@ -196,7 +196,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "nodeRef"
+       * @default
        */
       itemKey: "nodeRef",
 
@@ -205,7 +205,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default  "response.items"
+       * @default
        */
       itemsProperty: "response.items",
 
@@ -388,7 +388,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "tr"
+       * @default
        */
       renderFilterSelectorQuery: "tr",
 

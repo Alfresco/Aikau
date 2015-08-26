@@ -158,7 +158,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       availableItemsLabel: "",
 
@@ -167,7 +167,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       pickedItemsLabel: "",
 
@@ -177,7 +177,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default "items"
+       * @default
        */
       itemsProperty: "items",
 
@@ -200,7 +200,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       itemKey: "name",
 
@@ -211,7 +211,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       propertyToRender: "name",
 

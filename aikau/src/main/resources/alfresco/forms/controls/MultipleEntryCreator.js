@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.add"
+       * @default
        */
       addEntryAltText: "multiple-entry.add",
 
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "add-icon-16.png"
+       * @default
        */
       addEntryImage: "add-icon-16.png",
 

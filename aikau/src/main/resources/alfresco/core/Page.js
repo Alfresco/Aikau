@@ -52,7 +52,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-core-Page"
+       * @default
        */
       baseClass: "alfresco-core-Page",
 

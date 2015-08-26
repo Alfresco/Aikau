@@ -33,7 +33,7 @@ define([],function() {
        *
        * @instance
        * @type {String}
-       * @default "onAlfDndItemDelete"
+       * @default
        */
       deleteItemEvent: "onAlfDndItemDelete",
 
@@ -51,7 +51,7 @@ define([],function() {
        *
        * @instance
        * @type {String}
-       * @default "onAlfItemsReordered"
+       * @default
        */
       reorderItemsEvent: "onAlfItemsReordered",
 
@@ -60,7 +60,7 @@ define([],function() {
        *
        * @instance
        * @type {String}
-       * @default "onAlfItemSaved"
+       * @default
        */
       itemSavedEvent: "onAlfItemSaved",
 
@@ -69,7 +69,7 @@ define([],function() {
        *
        * @instance
        * @type {String}
-       * @default "onAlfItemSelected"
+       * @default
        */
       itemSelectedEvent: "onAlfItemSelected",
 
@@ -87,7 +87,7 @@ define([],function() {
        * 
        * @instance
        * @type {string}
-       * @default "onNestedDragOverEvent"
+       * @default
        */
       nestedDragOverEvent: "onNestedDragOverEvent",
 
@@ -96,7 +96,7 @@ define([],function() {
        * 
        * @instance
        * @type {string}
-       * @default "onNestedDragOutEvent"
+       * @default
        */
       nestedDragOutEvent: "onNestedDragOutEvent",
 
@@ -106,7 +106,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_DND_REQUEST_WIDGETS_FOR_DISPLAY"
+       * @default
        */
       requestWidgetsForDisplayTopic: "ALF_DND_REQUEST_WIDGETS_FOR_DISPLAY",
 
@@ -116,7 +116,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_DND_REQUEST_WIDGETS_FOR_CONFIG"
+       * @default
        */
       requestWidgetsForConfigTopic: "ALF_DND_REQUEST_WIDGETS_FOR_CONFIG",
 
@@ -127,7 +127,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_DND_REQUEST_WIDGETS_FOR_NESTED_CONFIG"
+       * @default
        */
       requestWidgetsForNestedConfigTopic: "ALF_DND_REQUEST_WIDGETS_FOR_NESTED_CONFIG",
 
@@ -137,7 +137,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "ALF_DND_REQUEST_ITEM_TO_ADD"
+       * @default
        */
       requestItemToAddTopic: "ALF_DND_REQUEST_ITEM_TO_ADD",
 
@@ -148,7 +148,7 @@ define([],function() {
        *
        * @instance
        * @type {String}
-       * @default "ALF_DND_SOURCE_ITEM_SELECTED"
+       * @default
        */
       itemSelectedTopic: "ALF_DND_SOURCE_ITEM_SELECTED",
 
@@ -159,7 +159,7 @@ define([],function() {
        *
        * @instance
        * @type {String}
-       * @default "ALF_DND_DROPPED_ITEM_DELETED"
+       * @default
        */
       itemDeletedTopic: "ALF_DND_DROPPED_ITEM_DELETED",
 
@@ -170,7 +170,7 @@ define([],function() {
        *
        * @instance
        * @type {String}
-       * @default "ALF_DND_ITEM_ADDED"
+       * @default
        */
       itemAddedTopic: "ALF_DND_ITEM_ADDED"
    };

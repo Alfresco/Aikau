@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "tag"
+       * @default
        */
       paramName: "tag",
 
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_DOCUMENTLIST_TAG_CHANGED"
+       * @default
        */
       filterSelectionTopic: "ALF_DOCUMENTLIST_TAG_CHANGED",
 

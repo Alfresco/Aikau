@@ -71,7 +71,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       customCssClasses: "",
       
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "documentlibrary.root.label"
+       * @default
        */
       rootLabel: "documentlibrary.root.label",
       
@@ -121,14 +121,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       rootValue: "",
       
       /**
        * @instance
        * @type {string}
-       * @default "docListTreePref"
+       * @default
        */
       filterPrefsName: "docListTreePref",
 
@@ -259,7 +259,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "CURRENT_ITEM"
+       * @default
        */
       publishPayloadType: "CURRENT_ITEM",
 

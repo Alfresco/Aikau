@@ -166,7 +166,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       postUrl: "",
       
@@ -608,7 +608,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "form.button.ok.label"
+       * @default
        */
       okButtonLabel: "form.button.ok.label",
       
@@ -639,7 +639,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "form.button.cancel.label"
+       * @default
        */
       cancelButtonLabel: "form.button.cancel.label",
       

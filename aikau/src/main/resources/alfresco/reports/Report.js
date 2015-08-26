@@ -38,7 +38,7 @@ define(["alfresco/core/ProcessWidgets",
              *
              * @instance
              * @type {string}
-             * @default "alfresco-reports-Report"
+             * @default
              */
             baseClass: "alfresco-reports-Report",
 

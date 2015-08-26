@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "title.label"
+       * @default
        */
       title: "title.label",
 
@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "description.label"
+       * @default
        */
       description: "description.label",
 
@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "completed.label"
+       * @default
        */
       successfulUploadsLabel: "completed.label",
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inprogress.label"
+       * @default
        */
       uploadsInProgressLabel: "inprogress.label",
 
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "aggregate-progress.label"
+       * @default
        */     
       aggregateProgressLabel: "aggregate-progress.label",
 
@@ -119,7 +119,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "failed.label"
+       * @default
        */
       failedUploadsLabel: "failed.label",
 

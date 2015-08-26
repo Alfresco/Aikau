@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "cm:name"
+       * @default
        */
       sortField: "cm:name",
 

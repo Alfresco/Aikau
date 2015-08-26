@@ -42,14 +42,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "version"
+       * @default
        */
       renderedValueClass: "version",
       
       /**
        * @instance
        * @type {string}
-       * @default "version"
+       * @default
        */
       propertyToRender: "version"
    });

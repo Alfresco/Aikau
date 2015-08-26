@@ -55,14 +55,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "categories"
+       * @default
        */
       customCssClasses: "categories",
       
       /**
        * @instance
        * @type {string}
-       * @default "categories.root.label"
+       * @default
        */
       rootLabel: "categories.root.label",
       
@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "ALF_DOCUMENTLIST_CATEGORY_CHANGED"
+       * @default
        */
       onClickTopic: "ALF_DOCUMENTLIST_CATEGORY_CHANGED",
 

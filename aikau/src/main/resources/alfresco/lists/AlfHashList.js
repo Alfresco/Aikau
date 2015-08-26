@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_LOCAL_STORAGE_HASH"
+       * @default
        */
       useLocalStorageHashFallbackKey: "ALF_LOCAL_STORAGE_HASH",
 

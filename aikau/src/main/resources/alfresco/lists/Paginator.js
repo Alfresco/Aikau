@@ -149,14 +149,14 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "ALF_PAGE_BACK"
+       * @default
        */
       pageBackTopic: "ALF_PAGE_BACK",
       
       /**
        * @instance 
        * @type {string}
-       * @default "ALF_PAGE_FORWARD"
+       * @default
        */
       pageForwardTopic: "ALF_PAGE_FORWARD",
 
@@ -194,7 +194,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "startIndex"
+       * @default
        */
       startIndexProperty: "startIndex",
 
@@ -221,7 +221,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "totalRecords"
+       * @default
        */
       totalResultsProperty: "totalRecords",
 

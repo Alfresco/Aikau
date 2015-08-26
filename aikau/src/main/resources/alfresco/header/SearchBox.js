@@ -359,7 +359,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default "right"
+       * @default
        */
       alignment: "right",
 
@@ -449,7 +449,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "documentlibrary"
+       * @default
        */
       documentLibraryPage: "documentlibrary",
 
@@ -460,7 +460,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "document-details"
+       * @default
        */
       documentPage: "document-details",
 
@@ -471,7 +471,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "blog-postview"
+       * @default
        */
       blogPage: "blog-postview",
 
@@ -482,7 +482,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "wiki-page"
+       * @default
        */
       wikiPage: "wiki-page",
 
@@ -494,7 +494,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "dashboard"
+       * @default
        */
       sitePage: "dashboard",
 
@@ -506,7 +506,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "profile"
+       * @default
        */
       peoplePage: "profile",
 
@@ -587,7 +587,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "search.instruction"
+       * @default
        */
       placeholder: "search.instruction",
 
@@ -596,7 +596,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "search.label"
+       * @default
        */
       accessibilityInstruction: "search.label",
 
@@ -605,7 +605,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "search.documents"
+       * @default
        */
       documentsTitle: "search.documents",
 
@@ -614,7 +614,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "search.sites"
+       * @default
        */
       sitesTitle: "search.sites",
 
@@ -623,7 +623,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "search.people"
+       * @default
        */
       peopleTitle: "search.people",
 
@@ -632,7 +632,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "search.more"
+       * @default
        */
       moreTitle: "search.more",
 
@@ -755,7 +755,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "repo"
+       * @default
        */
       defaultSearchScope: "repo",
 

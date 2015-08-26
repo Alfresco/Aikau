@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_ITEM_SELECTED"
+       * @default
        */
       publishTopic: "ALF_ITEM_SELECTED",
 
@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "CURRENT_ITEM"
+       * @default
        */
       publishPayloadType: "CURRENT_ITEM",
 

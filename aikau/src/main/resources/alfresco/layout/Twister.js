@@ -115,7 +115,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-layout-Twister--open"
+       * @default
        */
       CLASS_OPEN: "alfresco-layout-Twister--open",
       
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-layout-Twister--closed"
+       * @default
        */
       CLASS_CLOSED: "alfresco-layout-Twister--closed",
 
@@ -166,7 +166,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.twisters."
+       * @default
        */
       preferencePrefix: "org.alfresco.share.twisters.",
       

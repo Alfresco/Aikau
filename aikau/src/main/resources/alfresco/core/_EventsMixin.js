@@ -55,7 +55,7 @@ define(["alfresco/core/Core",
        * @event eventsScrollTopic
        * @instance
        * @type {String}
-       * @default "ALF_EVENTS_SCROLL"
+       * @default
        */
       eventsScrollTopic: "ALF_EVENTS_SCROLL",
 

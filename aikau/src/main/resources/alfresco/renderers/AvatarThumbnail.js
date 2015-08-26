@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "alfresco-renderers-AvatarThumbnail"
+       * @default
        */
       customClasses: "alfresco-renderers-AvatarThumbnail",
       
@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "userName"
+       * @default
        */
       userNameProperty: "userName",
 

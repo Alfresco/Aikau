@@ -54,7 +54,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default "xml"
+       * @default
        */
       editMode: "xml",
 

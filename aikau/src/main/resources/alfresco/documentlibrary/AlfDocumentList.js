@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {String}
-       * @default "ALF_DOCLIST_PARENT_NAV"
+       * @default
        */
       parentNavTopic: "ALF_DOCLIST_PARENT_NAV",
 
@@ -330,7 +330,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_DOCLIST_NAV"
+       * @default
        */
       linkClickTopic: "ALF_DOCLIST_NAV",
 

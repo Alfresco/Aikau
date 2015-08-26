@@ -32,7 +32,7 @@ define([],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_TAG_QUERY"
+       * @default
        */
       tagQueryTopic: "ALF_TAG_QUERY"
    };
