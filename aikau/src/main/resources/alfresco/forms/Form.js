@@ -116,9 +116,10 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dijit/registry",
         "dojo/Deferred",
-        "dojo/dom-construct"], 
+        "dojo/dom-construct",
+        "dojo/dom-class"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, topics, _AlfHashMixin, RulesEngineMixin, 
-                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct) {
+                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct, domClass) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin, RulesEngineMixin], {
       
@@ -398,6 +399,11 @@ define(["dojo/_base/declare",
                warnings: warnings
             }
          }).placeAt((this.warningsPosition === "top" ? this.warningsTopNode : this.warningsBottomNode));
+
+         if (warnings.length > 0)
+         {
+            domClass.remove(this.warningsPosition === "top" ? this.warningsTopNode : this.warningsBottomNode, "alfresco-forms-Form__warnings--hidden");
+         }
       },
 
       /**
