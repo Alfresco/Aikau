@@ -149,7 +149,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgetsForControl: null,
 
@@ -189,7 +189,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       noItemsMessage: null,
 
@@ -230,7 +230,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       loadDataPublishTopic: null,
 
@@ -240,7 +240,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       loadDataPublishPayload: null,
 
@@ -251,7 +251,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentData: null,
 

@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {Object[]}
-       * @default null 
+       * @default
        */
       widgetsContent: null,
       
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {Object[]}
-       * @default null 
+       * @default
        */
       widgetsButtons: null,
 
@@ -397,7 +397,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       _buttons: null,
 
@@ -410,7 +410,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       suppressCloseClasses: null,
 

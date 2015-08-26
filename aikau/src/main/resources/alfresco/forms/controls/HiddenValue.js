@@ -107,7 +107,7 @@ define(["alfresco/forms/controls/TextBox",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       ___hiddenValue: null,
 

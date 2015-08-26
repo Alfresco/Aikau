@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {Object}
-       * @default null
+       * @default
        * @deprecated Not sure that this is required anymore?
        */
       config: null,

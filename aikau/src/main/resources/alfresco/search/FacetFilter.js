@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       facet: null,
 
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       filter: null,
       

@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {String}
-       * @default null
+       * @default
        */
       _menuItemToParentTopic: null,
 
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * A URL to override the default. Primarily provided for the test harness.
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _templatesUrl: null,
       

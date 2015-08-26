@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
        * MultipleEntryCreator can be updated with delete requests.
        * 
        * @instance
-       * @default null
+       * @default
        */
       creator: null,
       
@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       saveEntryImageSrc: null,
 
@@ -115,7 +115,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       cancelEditImageSrc: null,
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       deleteEntryImageSrc: null,
 
@@ -173,7 +173,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       editEntryImageSrc: null,
 
@@ -228,7 +228,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       widget: null,
       

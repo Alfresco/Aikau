@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       targetUrl: null,
 
@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       disablementTopic: null,
 
@@ -137,7 +137,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null 
+       * @default
        */
       selectionTopic: null,
 

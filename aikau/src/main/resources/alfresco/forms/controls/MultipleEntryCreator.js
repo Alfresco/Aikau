@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       addEntryImageSrc: null,
 
@@ -142,7 +142,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _dndSource : null,
       
@@ -223,7 +223,7 @@ define(["dojo/_base/declare",
       /**
        * This is the list of elements to display/edit. It will be instantiated in the constructor.
        * @instance
-       * @default null 
+       * @default
        */
       elements: null,
       

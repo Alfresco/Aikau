@@ -42,7 +42,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {element}
-       * @default null
+       * @default
        */
       targetNode: null,
       
@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {element}
-       * @default null
+       * @default
        */
       dropTarget: null,
       

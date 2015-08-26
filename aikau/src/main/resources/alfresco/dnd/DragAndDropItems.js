@@ -120,7 +120,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       acceptTypes: null,
 
@@ -363,7 +363,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       items: null
    });

@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       breadcrumbs: null,
 
@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       lastBreadcrumbPublishTopic: null,
 
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       lastBreadcrumbPublishPayload: null,
 
@@ -195,7 +195,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       lastBreadcrumbPublishPayloadModifiers: null,
 
@@ -291,7 +291,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentNode: null,
       

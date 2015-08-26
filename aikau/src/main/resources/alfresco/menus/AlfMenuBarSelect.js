@@ -35,7 +35,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null 
+       * @default
        */
       selectionTopic: null,
 
@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _currentIconClass: null,
       

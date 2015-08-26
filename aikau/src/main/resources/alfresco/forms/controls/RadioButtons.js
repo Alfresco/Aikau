@@ -73,7 +73,7 @@ define(["alfresco/forms/controls/BaseFormControl",
       /**
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       options: null,
       

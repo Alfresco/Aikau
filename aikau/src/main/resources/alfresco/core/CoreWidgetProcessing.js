@@ -119,7 +119,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {Array}
-       * @default null
+       * @default
        */
       _processedWidgets: null,
 
@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       _processedWidgetCountdown: null,
 

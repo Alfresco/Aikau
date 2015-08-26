@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @default  null
+       * @default
        */
       searchBox: null,
       
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default  null
+       * @default
        */
       label: null,
       
@@ -255,7 +255,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _searchMenu: null,
 
@@ -271,7 +271,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       site: null,
 
@@ -299,7 +299,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       lastSearchText: null,
       
@@ -327,14 +327,14 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _LiveSearch: null,
       
        /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _requests: null,
       
@@ -348,7 +348,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       resultsCounts: null,
 
@@ -374,7 +374,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       publishTopic: null,
 
@@ -385,7 +385,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayload: null,
 
@@ -416,7 +416,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayloadType: null,
 
@@ -427,7 +427,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       publishPayloadModifiers: null,
 
@@ -746,7 +746,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       searchResultsPage: null,
 

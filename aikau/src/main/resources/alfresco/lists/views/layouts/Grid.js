@@ -345,7 +345,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       nextLinkLabel: null,
 
@@ -354,7 +354,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       nextLinkPublishTopic: null,
 

@@ -105,7 +105,7 @@ define(["alfresco/core/ProcessWidgets",
        * 
        * @instance
        * @type {string}
-       * @default null 
+       * @default
        */
       widgetWidth: null,
       
@@ -114,7 +114,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       widgetMarginLeft: null,
 
@@ -123,7 +123,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       widgetMarginRight: null,
 

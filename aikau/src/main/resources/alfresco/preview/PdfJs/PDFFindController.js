@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
-       * @default null
+       * @default
        */
       resumePageIdx: null,
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
-       * @default null
+       * @default
        */
       state: null,
 
@@ -140,7 +140,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       findTimeout: null,
 
@@ -149,7 +149,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       pdfPageSource: null,
 

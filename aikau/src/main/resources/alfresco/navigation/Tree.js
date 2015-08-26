@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       siteId: null,
        
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       containerId: null,
       
@@ -103,7 +103,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       rootNode: null,
       
@@ -139,7 +139,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       filterPaths: null,
 

@@ -200,7 +200,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       dataScope: null,
 
@@ -210,7 +210,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {function[]}
-       * @default null
+       * @default
        */
       dataBindingCallbacks: null,
 
@@ -387,7 +387,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {Array}
-       * @default null
+       * @default
        */
       alfSubscriptions: null,
 

@@ -93,14 +93,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       dragAndDropNode: null,
       
       /**
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       dndUploadEventHandlers: null,
       

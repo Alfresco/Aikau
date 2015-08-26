@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {array} 
-       * @default null
+       * @default
        */
       customResizeTopics: null,
       
@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
        * The last registered width (in pixels) of the sidebar (needed for window resize events)
        * @instance
        * @type {number}
-       * @default null 
+       * @default
        */
       lastSidebarWidth: null,
       
@@ -150,7 +150,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {element}
-       * @default null 
+       * @default
        */
       resizeHandlerNode: null,
       

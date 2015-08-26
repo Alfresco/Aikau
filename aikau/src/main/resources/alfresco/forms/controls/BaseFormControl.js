@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       wrappedWidget: null,
 
@@ -243,7 +243,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       options: null,
 
@@ -282,7 +282,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       noPostWhenValueIs: null,
 
@@ -415,7 +415,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       autoSetConfig: null,
 
@@ -772,7 +772,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _pubSubOptionsHandle: null,
 
@@ -990,7 +990,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       valueSubscriptionTopic: null,
 
@@ -1506,7 +1506,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       validationConfig: null,
 

@@ -308,7 +308,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgetsForEditMode: null
    });

@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       siteId: null,
 
@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       containerId: null,
 
@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       rootNode: null,
 
@@ -178,7 +178,7 @@ define(["dojo/_base/declare",
        * The current Node that content will be worked relative to.
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _currentNode: null,
 
@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentlySelectedDocuments: null,
 
@@ -276,7 +276,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {timeout}
-       * @default null
+       * @default
        */
       selectionTimeout: null,
 

@@ -80,7 +80,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       toggleLabel: null,
 

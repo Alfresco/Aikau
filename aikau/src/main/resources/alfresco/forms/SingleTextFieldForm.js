@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       textBoxIconClass: null,
 
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       textBoxCssClasses: null,
 
@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       textBoxLabel: null,
 
@@ -88,7 +88,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       textFieldName: null,
       

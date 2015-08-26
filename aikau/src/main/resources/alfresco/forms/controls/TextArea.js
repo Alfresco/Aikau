@@ -89,7 +89,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _oldValue: null,
       
@@ -98,7 +98,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       __oldValue: null,
 

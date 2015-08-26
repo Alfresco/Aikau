@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {String}
-       * @default null
+       * @default
        */
       headingId: null,
 
@@ -113,7 +113,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       additionalCssClasses: null,
 

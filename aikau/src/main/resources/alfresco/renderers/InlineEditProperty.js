@@ -126,7 +126,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       formWidget: null,
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       hiddenDataRules: null,
 
@@ -152,7 +152,7 @@ define(["dojo/_base/declare",
        * The is the name of the parameter that will be used to persist changes to the property
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       postParam: null,
       

@@ -105,7 +105,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object} 
-       * @default null
+       * @default
        */
       onConfig: null,
       
@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object} 
-       * @default null
+       * @default
        */
       offConfig: null,
       
@@ -152,7 +152,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       subscriptionTopic: null,
 
@@ -195,7 +195,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       hashName: null,
 

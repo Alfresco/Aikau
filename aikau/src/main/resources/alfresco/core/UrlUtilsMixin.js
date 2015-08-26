@@ -53,7 +53,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       sitePageTemplate: null,
 

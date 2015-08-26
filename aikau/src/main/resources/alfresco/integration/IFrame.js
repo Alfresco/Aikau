@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {null|string}
-             * @default null
+             * @default
              */
             src: null,
 

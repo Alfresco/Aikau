@@ -45,7 +45,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       minRwdWidth: null,
       
@@ -55,7 +55,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       maxRwdWidth: null,
       

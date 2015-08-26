@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {element}
-       * @default null
+       * @default
        */
       coverageField: null,
 

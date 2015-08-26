@@ -43,7 +43,7 @@ define(["alfresco/core/ProcessWidgets",
        * 
        * @instance
        * @type string
-       * @default null
+       * @default
        */
       quadds: null,
 

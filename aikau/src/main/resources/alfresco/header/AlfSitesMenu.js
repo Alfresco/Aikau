@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentUser: null,
       
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        * the "Add" and "Remove" favourite options will NOT be added.
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentSite: null,
 
@@ -313,7 +313,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _menuMessageItem: null,
       
@@ -336,7 +336,7 @@ define(["dojo/_base/declare",
        * A URL to override the default. Primarily provided for the test harness.
        * @instance
        * @type {string}
-       * @default null 
+       * @default
        */
       _favouritesUrl: null,
       
@@ -499,7 +499,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _favouritesMessageItem: null,
       

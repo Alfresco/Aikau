@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {String}
-       * @default null
+       * @default
        */
       rootNodeRef: null,
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayload: null,
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       publishPayloadModifiers: null,
 

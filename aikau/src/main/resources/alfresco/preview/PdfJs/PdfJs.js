@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type {String}
-          * @default null
+          * @default
           */
          src : null,
 
@@ -238,7 +238,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       pdfDocument : null,
 
@@ -328,7 +328,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentScaleSelection: null,
 
@@ -1317,7 +1317,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _findController: null,
 
@@ -1363,7 +1363,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _query: null,
 

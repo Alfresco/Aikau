@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
        * Currently active page
        * 
        * @instance
-       * @default null
+       * @default
        */
       activePage : null,
       
@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        * document is unloaded and used to set up the same view the next time it is loaded.
        * 
        * @instance
-       * @default null
+       * @default
        */
       lastScale : null,
 

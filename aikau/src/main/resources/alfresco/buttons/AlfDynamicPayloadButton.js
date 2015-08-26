@@ -81,7 +81,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       hashDataMapping: null,
 
@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       publishPayloadSubscriptions: null,
 

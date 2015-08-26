@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentlySelectedItems: null,
 
@@ -71,7 +71,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {timeout}
-       * @default null
+       * @default
        */
       selectionTimeout: null,
 

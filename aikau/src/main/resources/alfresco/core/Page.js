@@ -245,7 +245,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {Array}
-       * @default null
+       * @default
        */
       _processedServices: null,
 
@@ -255,7 +255,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       _processedServiceCountdown: null,
 
