@@ -76,9 +76,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default true
+       * @default
        */
-      searchStartsWith: true,
+      searchStartsWith: false,
 
       /**
        * If this is configured to be an array of fixed options then the query will be run against

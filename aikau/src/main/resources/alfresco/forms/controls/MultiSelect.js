@@ -48,7 +48,7 @@
  *             result: "${label}",
  *             full: "${value} - ${label}"
  *          },
- *          searchStartsWith: false // Whether the query attribute should start with the search string (defaults to true)
+ *          searchStartsWith: true // Whether the query attribute should start with the search string (defaults to false)
  *       }
  *    }
  * }
