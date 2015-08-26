@@ -60,7 +60,6 @@ define([
                id: this.id + "_CONTROL",
                name: this.name,
                width: this.width,
-               value: this.value,
                choiceCanWrap: this.optionsConfig.choiceCanWrap,
                choiceMaxWidth: this.optionsConfig.choiceMaxWidth,
                labelFormat: this.optionsConfig.labelFormat
