@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {integer}
-       * @default 180
+       * @default
        */
       width: "180",
 
@@ -306,21 +306,21 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {number}
-       * @default 250
+       * @default
        */
       _keyRepeatWait: 250,
       
       /**
        * @instance
        * @type {number}
-       * @default 2
+       * @default
        */
       _minimumSearchLength: 2,
       
       /**
        * @instance
        * @type {number}
-       * @default 5
+       * @default
        */
       _resultPageSize: 5,
       
@@ -341,7 +341,7 @@ define(["dojo/_base/declare",
        /**
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       _lastSearchIndex: 0,
       

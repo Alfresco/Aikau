@@ -33,7 +33,7 @@ define([],function() {
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       K_UNKNOWN_SCALE: 0,
 

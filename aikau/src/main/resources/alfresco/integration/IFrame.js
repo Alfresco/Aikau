@@ -105,7 +105,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {number}
-             * @default 600
+             * @default
              */
             height: 600,
 

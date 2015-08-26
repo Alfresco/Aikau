@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {integer}
-       * @default 0
+       * @default
        */
       documentsAvailable: 0,
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {integer}
-       * @default 0
+       * @default
        */
       documentsSelected: 0,
       

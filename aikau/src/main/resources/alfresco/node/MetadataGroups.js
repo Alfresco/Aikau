@@ -112,7 +112,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 30
+       * @default
        */
       labelToValueRatio: 30,
 

@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {int}
-       * @default 0
+       * @default
        */
       renderOnScrollZero : 0,
 

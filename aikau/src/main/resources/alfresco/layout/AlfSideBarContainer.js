@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {integer} 
-       * @default 0
+       * @default
        */
       footerHeight: 0,
       
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
        * The initial width (in pixels) of the sidebar
        * @instance
        * @type {number} 
-       * @default 350
+       * @default
        */
       initialSidebarWidth: 350,
       
@@ -141,7 +141,7 @@ define(["dojo/_base/declare",
        * The minimum width (in pixels) for the sidebar
        * @instance
        * @type {number} 
-       * @default 150
+       * @default
        */
       minSidebarWidth: 150,
       

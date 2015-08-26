@@ -247,7 +247,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type int
-       * @default 1
+       * @default
        */
       pageNum : 1,
 
@@ -274,7 +274,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type int
-       * @default 0
+       * @default
        */
       numPages : 0,
 

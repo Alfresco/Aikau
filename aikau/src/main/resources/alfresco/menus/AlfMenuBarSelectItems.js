@@ -44,28 +44,28 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {number} 
-       * @default 0
+       * @default
        */
       _NONE: 0,
 
       /**
        * @instance
        * @type {number} 
-       * @default 1
+       * @default
        */
       _SOME: 1,
 
       /**
        * @instance
        * @type {number} 
-       * @default 2
+       * @default
        */
       _ALL: 2,
       
       /**
        * @instance
        * @type {number} 
-       * @default 3
+       * @default
        */
       _UNKNOWN: 3,
       
@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number} 
-       * @default 0
+       * @default
        */
       _itemsSelected: 0,
       

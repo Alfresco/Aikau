@@ -65,7 +65,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 25
+       * @default
        */
       pageSize: 25,
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       startIndex: 0,
 

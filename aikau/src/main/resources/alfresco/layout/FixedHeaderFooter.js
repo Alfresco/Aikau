@@ -150,7 +150,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       autoHeightPaddingAllowance: 0,
 

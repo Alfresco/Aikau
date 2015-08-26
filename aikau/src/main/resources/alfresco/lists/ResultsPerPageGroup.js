@@ -47,7 +47,7 @@ define(["dojo/_base/declare",
       
       /**
        * @instance {number}
-       * @default 25
+       * @default
        */
       documentsPerPage: 25,
       

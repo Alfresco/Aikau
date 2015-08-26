@@ -54,7 +54,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {int}
-       * @default 500
+       * @default
        */
       scrollTolerance: 500,
 

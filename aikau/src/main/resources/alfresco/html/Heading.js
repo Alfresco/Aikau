@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default 1
+       * @default
        */
       level: 1,
 

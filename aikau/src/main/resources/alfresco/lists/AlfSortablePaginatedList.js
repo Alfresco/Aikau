@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 1
+       * @default
        */
       currentPage: 1,
 
@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 25
+       * @default
        */
       currentPageSize: 25,
 

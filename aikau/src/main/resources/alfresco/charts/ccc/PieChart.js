@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
              * {@link http://www.webdetails.pt/ctools/charts/jsdoc/symbols/pvc.options.plots.PiePlot.html#explodedSliceRadius}
              *
              * @instance
-             * @default 0
+             * @default
              */
             explodedSliceRadius: 0,
 

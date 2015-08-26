@@ -74,7 +74,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {number}
-       * @default 1
+       * @default
        */
       delta: 1,
 

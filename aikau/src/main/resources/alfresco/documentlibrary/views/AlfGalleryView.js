@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default 4
+       * @default
        */
       columns: 4,
 

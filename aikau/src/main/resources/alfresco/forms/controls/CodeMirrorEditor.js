@@ -129,7 +129,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {number}
-       * @default 600
+       * @default
        */
       width: 600,
 
