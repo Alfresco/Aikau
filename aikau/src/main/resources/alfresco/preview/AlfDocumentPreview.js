@@ -265,7 +265,6 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
        */
       widgetsForPlugins: [
          {
@@ -715,7 +714,6 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object[]}
-       * @default null
        */
       pluginConditions: [
          {
