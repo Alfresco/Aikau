@@ -51,7 +51,7 @@ define([],function() {
        *
        * @instance
        * @type {number}
-       * @default 0.25
+       * @default
        */
       K_MIN_SCALE: 0.25,
       
@@ -60,7 +60,7 @@ define([],function() {
        *
        * @instance
        * @type {number}
-       * @default 4.0
+       * @default
        */
       K_MAX_SCALE: 4.0,
 

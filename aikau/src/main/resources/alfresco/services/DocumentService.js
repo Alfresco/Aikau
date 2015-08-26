@@ -82,8 +82,8 @@ define(["dojo/_base/declare",
        * How many times should we retry a failed archive progress request?
        *
        * @instance
-       * @type {Number}
-       * @default [6]
+       * @type {int}
+       * @default
        */
       maxArchiveProgressRetryCount: 6,
 
@@ -91,8 +91,8 @@ define(["dojo/_base/declare",
        * How often should we request an update on an Archive's progress?
        *
        * @instance
-       * @type {Number}
-       * @default [250]
+       * @type {int}
+       * @default
        */
       archiveProgressUpdateInterval: 250,
 
@@ -100,8 +100,8 @@ define(["dojo/_base/declare",
        * How long should we wait before triggering a request on a failed progress update?
        *
        * @instance
-       * @type {Number}
-       * @default [5000]
+       * @type {int}
+       * @default
        */
       archiveProgressUpdateFailureInterval: 5000,
 

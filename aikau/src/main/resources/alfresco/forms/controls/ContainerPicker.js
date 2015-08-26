@@ -50,7 +50,6 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default []
        */
       configForPickedItems: {
          singleItemMode: true,
