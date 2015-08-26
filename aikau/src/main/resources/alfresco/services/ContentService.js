@@ -287,7 +287,7 @@ define(["dojo/_base/declare",
        * The current Node that content will be worked relative to.
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _currentNode: null,
       

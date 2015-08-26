@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "no-borders"
+       * @default
        */
       additionalCssClasses: "no-borders",
 

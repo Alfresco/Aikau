@@ -53,7 +53,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       placeHolder: null,
 

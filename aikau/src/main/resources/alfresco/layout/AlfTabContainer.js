@@ -204,7 +204,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       tabContainerWidget: null,
 
@@ -213,7 +213,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "100%"
+       * @default
        */
       height: "100%",
 
@@ -222,7 +222,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "100%"
+       * @default
        */
       width: "100%",
 
@@ -231,7 +231,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {Boolean}
-       * @default false
+       * @default
        */
       doLayout: false,
 
@@ -247,7 +247,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       tabSelectionTopic: null,
 
@@ -256,7 +256,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       tabDisablementTopic: null,
 
@@ -265,7 +265,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       tabAdditionTopic: null,
 
@@ -274,7 +274,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       tabDeletionTopic: null,
 

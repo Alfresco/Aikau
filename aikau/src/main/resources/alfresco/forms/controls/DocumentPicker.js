@@ -39,7 +39,7 @@ define(["alfresco/forms/controls/Picker",
        *
        * @instance
        * @type {string}
-       * @default "nodeRef"
+       * @default
        */
       itemKey: "nodeRef",
 

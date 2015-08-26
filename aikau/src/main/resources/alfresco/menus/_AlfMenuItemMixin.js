@@ -63,7 +63,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "16px"
+       * @default
        */
       iconImageWidth: "16px",
 
@@ -72,14 +72,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "16px"
+       * @default
        */
       iconImageHeight: "16px",
 
       /**
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       iconAltText: "",
 
@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       targetUrl: null,
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "PAGE_RELATIVE"
+       * @default
        */
       targetUrlType: "PAGE_RELATIVE",
 
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "PAGE_RELATIVE"
+       * @default
        */
       targetUrlLocation: "CURRENT",
 
@@ -119,7 +119,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {Boolean}
-       * @default false
+       * @default
        */
       publishOnRender: false,
 
@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       disablementTopic: null,
 
@@ -137,7 +137,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null 
+       * @default
        */
       selectionTopic: null,
 

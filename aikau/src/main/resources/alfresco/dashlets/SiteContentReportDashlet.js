@@ -54,7 +54,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {object[]}
-             * @default null
+             * @default [{name: "alfresco/reports/SiteContentReport", config: {title: ""}}]
              */
             widgetsForBody: [
                {

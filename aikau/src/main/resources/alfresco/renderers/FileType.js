@@ -50,7 +50,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "large"
+       * @default
        */
       size: "large",
 
@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       altText: "",
 
@@ -192,7 +192,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       customTypeMappings: null,
 
@@ -232,7 +232,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       customExtnMappings: null,
 

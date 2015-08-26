@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "docListFilterPref"
+       * @default
        */
       filterPrefsName: "docListTagFilterPref",
       
@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "tag"
+       * @default
        */
       paramName: "tag",
 
@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       siteId: null,
 
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       containerId: null,
 
@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       rootNode: null,
 
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_DOCUMENTLIST_TAG_CHANGED"
+       * @default
        */
       filterSelectionTopic: "ALF_DOCUMENTLIST_TAG_CHANGED",
 

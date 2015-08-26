@@ -150,14 +150,14 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _form: null,
       
       /**
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       widgets: null,
       
@@ -166,14 +166,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       postUrl: "",
       
       /**
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       convertFormToJsonString: false,
       
@@ -183,7 +183,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       invalidFormControls: null,
       
@@ -193,7 +193,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       okButton: null,
       
@@ -203,7 +203,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       cancelButton: null,
       
@@ -214,7 +214,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       scopeFormControls: true,
       
@@ -223,7 +223,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       displayButtons: true,
       
@@ -236,7 +236,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       setValueTopic: null,
 
@@ -246,7 +246,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       setValueTopicGlobalScope: true,
 
@@ -256,7 +256,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       setValueTopicParentScope: false,
 
@@ -267,7 +267,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showValidationErrorsImmediately: true,
 
@@ -279,7 +279,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       waitForPageWidgets: true,
 
@@ -553,7 +553,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       validFormValuesPublishTopic: null,
 
@@ -562,7 +562,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       validFormValuesPublishPayload: null,
 
@@ -571,7 +571,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default false
+       * @default
        */
       validFormValuesPublishGlobal: false,
 
@@ -580,7 +580,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       validFormValuesPublishOnInit: false,
 
@@ -589,7 +589,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showOkButton: true,
       
@@ -598,7 +598,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showCancelButton: true,
       
@@ -608,28 +608,28 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "form.button.ok.label"
+       * @default
        */
       okButtonLabel: "form.button.ok.label",
       
       /**
        * @instance 
        * @type {string}
-       * @default null
+       * @default
        */
       okButtonPublishTopic: null,
       
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       okButtonPublishPayload: null,
       
       /**
        * @instance 
        * @type {string}
-       * @default null
+       * @default
        */
       okButtonPublishGlobal: null,
 
@@ -639,28 +639,28 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "form.button.cancel.label"
+       * @default
        */
       cancelButtonLabel: "form.button.cancel.label",
       
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       cancelButtonPublishTopic: null,
       
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       cancelButtonPublishPayload: null,
 
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       cancelButtonPublishGlobal: null,
       
@@ -673,7 +673,7 @@ define(["dojo/_base/declare",
        * 
        * @instance 
        * @type {string}
-       * @default null
+       * @default
        */
       autoSavePublishTopic: null,
       
@@ -682,14 +682,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       autoSavePublishPayload: null,
       
       /**
        * @instance 
        * @type {string}
-       * @default null
+       * @default
        */
       autoSavePublishGlobal: null,
 
@@ -701,7 +701,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       autoSaveOnInvalid: false,
       
@@ -711,7 +711,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       widgetsAdditionalButtons: null,
       
@@ -722,7 +722,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       additionalButtons: null,
       
@@ -735,7 +735,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 
@@ -744,7 +744,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       setHash: false,
       
@@ -754,7 +754,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _formSetupComplete: false,
 

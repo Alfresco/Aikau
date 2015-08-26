@@ -103,7 +103,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "tr"
+       * @default
        */
       renderFilterSelectorQuery: "div.items ol li",
 

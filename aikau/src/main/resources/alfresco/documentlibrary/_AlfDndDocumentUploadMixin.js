@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean} 
-       * @default false
+       * @default
        */
       dndUploadEnabled: false,
       
@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean} 
-       * @default false
+       * @default
        */
       dndUploadCapable: false, 
     
@@ -93,14 +93,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       dragAndDropNode: null,
       
       /**
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       dndUploadEventHandlers: null,
       

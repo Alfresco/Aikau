@@ -54,7 +54,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default "xml"
+       * @default
        */
       editMode: "xml",
 
@@ -76,7 +76,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       isPromisedWidget: true,
 
@@ -129,7 +129,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {number}
-       * @default 600
+       * @default
        */
       width: 600,
 
@@ -138,7 +138,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {number}
-       * @default 600
+       * @default
        */
       height: 300,
 

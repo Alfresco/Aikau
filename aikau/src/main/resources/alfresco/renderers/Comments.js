@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "node.properties.fm:commentCount"
+       * @default
        */
       commentCountProperty: "node.properties.fm:commentCount",
 
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "FULL_PATH"
+       * @default
        */
       targetUrlType: "FULL_PATH",
 
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "CURRENT"
+       * @default
        */
       linkTarget: "CURRENT",
 
@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       subscriptionTopic: null,
 
@@ -196,7 +196,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "totalRecords"
+       * @default
        */
       publicationCountProperty: "totalRecords",
 

@@ -55,7 +55,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco://company/home"
+       * @default
        */
       repoNodeRef: "alfresco://company/home",
 
@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "slingshot/doclib/action/copy-to/node/"
+       * @default
        */
       copyAPI: "slingshot/doclib/action/copy-to/node/",
 
@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "slingshot/doclib/action/move-to/node/"
+       * @default
        */
       moveAPI: "slingshot/doclib/action/move-to/node/",
 

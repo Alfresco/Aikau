@@ -65,7 +65,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 25
+       * @default
        */
       pageSize: 25,
 
@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       query: "",
 
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       repo: true,
 
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco://company/home"
+       * @default
        */
       rootNode: "alfresco://company/home",
 
@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       site: "",
 
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       sort: "",
 
@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       sortAscending: true,
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       startIndex: 0,
 
@@ -153,7 +153,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       tag: "",
 

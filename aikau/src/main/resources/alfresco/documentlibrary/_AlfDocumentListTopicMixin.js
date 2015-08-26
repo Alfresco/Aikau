@@ -37,7 +37,7 @@ define(["dojo/_base/declare",
        * @event reloadDataTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_RELOAD_DATA"
+       * @default
        */
       reloadDataTopic: "ALF_DOCLIST_RELOAD_DATA",
       
@@ -48,7 +48,7 @@ define(["dojo/_base/declare",
        * @event metadataChangeTopic
        * @instance
        * @type {string} 
-       * @default "ALF_CURRENT_NODEREF_CHANGED"
+       * @default
        */
       metadataChangeTopic: "ALF_CURRENT_NODEREF_CHANGED",
       
@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
        * @event hashChangeTopic
        * @instance
        * @type {string} 
-       * @default "ALF_HASH_CHANGED"
+       * @default
        */
       hashChangeTopic: "ALF_HASH_CHANGED",
       
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        * @event filterSelectionTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_FILTER_SELECTION"
+       * @default
        */
       filterSelectionTopic: "ALF_DOCLIST_FILTER_SELECTION",
       
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        * @event userAccessChangeTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_USER_ACCESS_CHANGED"
+       * @default
        */
       userAccessChangeTopic: "ALF_DOCLIST_USER_ACCESS_CHANGED",
       
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        * @event documentsLoadedTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_DOCUMENTS_LOADED"
+       * @default
        */
       documentsLoadedTopic: "ALF_DOCLIST_DOCUMENTS_LOADED",
 
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        * @event documentLoadFailedTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_DOCUMENTS_LOAD_FAILED"
+       * @default
        */
       documentLoadFailedTopic: "ALF_DOCLIST_DOCUMENTS_LOAD_FAILED",
       
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        * @event pageSelectionTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_PAGE_SELECTED"
+       * @default
        */
       pageSelectionTopic: "ALF_DOCLIST_PAGE_SELECTED",
       
@@ -120,7 +120,7 @@ define(["dojo/_base/declare",
        * @event docsPerpageSelectionTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_DOCS_PER_PAGE_SELECTION"
+       * @default
        */
       docsPerpageSelectionTopic: "ALF_DOCLIST_DOCS_PER_PAGE_SELECTION",
       
@@ -131,7 +131,7 @@ define(["dojo/_base/declare",
        * @event selectionMenuItemTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIB_PROVIDE_VIEW_SELECTION_MENU_ITEM"
+       * @default
        */
       selectionMenuItemTopic: "ALF_DOCLIST_PROVIDE_VIEW_SELECTION_MENU_ITEM",
       
@@ -139,7 +139,7 @@ define(["dojo/_base/declare",
        * @event viewSelectionTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_SELECT_VIEW"
+       * @default
        */
       viewSelectionTopic: "ALF_DOCLIST_SELECT_VIEW",
       
@@ -149,7 +149,7 @@ define(["dojo/_base/declare",
        * @event viewSelectionMenuItemGroup
        * @instance
        * @type {string}
-       * @default "DOCUMENT_LIBRARY_VIEW"
+       * @default
        */
       viewSelectionMenuItemGroup: "DOCUMENT_LIBRARY_VIEW",
      
@@ -159,7 +159,7 @@ define(["dojo/_base/declare",
        * @event additionalViewControlsTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLST_PROVIDE_ADDITIONAL_VIEW_CONTROLS"
+       * @default
        */
       additionalViewControlsTopic: "ALF_DOCLIST_PROVIDE_ADDITIONAL_VIEW_CONTROLS",
       
@@ -169,7 +169,7 @@ define(["dojo/_base/declare",
        * @event documentSelectionTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_FILE_SELECTION"
+       * @default
        */
       documentSelectionTopic: "ALF_DOCLIST_FILE_SELECTION",
       
@@ -179,7 +179,7 @@ define(["dojo/_base/declare",
        * @event documentSelectedTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_DOCUMENT_SELECTED"
+       * @default
        */
       documentSelectedTopic: "ALF_DOCLIST_DOCUMENT_SELECTED",
       
@@ -189,7 +189,7 @@ define(["dojo/_base/declare",
        * @event selectedDocumentsChangeTopic
        * @instance
        * @type {string} 
-       * @default "ALF_SELECTED_FILES_CHANGED"
+       * @default
        */
       selectedDocumentsChangeTopic: "ALF_SELECTED_FILES_CHANGED",
       
@@ -199,7 +199,7 @@ define(["dojo/_base/declare",
        * @event documentDeselectedTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_DOCUMENT_DESELECTED"
+       * @default
        */
       documentDeselectedTopic: "ALF_DOCLIST_DOCUMENT_DESELECTED",
       
@@ -207,7 +207,7 @@ define(["dojo/_base/declare",
        * @event sortRequestTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_SORT"
+       * @default
        */
       sortRequestTopic: "ALF_DOCLIST_SORT",
       
@@ -215,7 +215,7 @@ define(["dojo/_base/declare",
        * @event
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_SORT_FIELD_SELECTION"
+       * @default
        */
       sortFieldSelectionTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
       
@@ -223,7 +223,7 @@ define(["dojo/_base/declare",
        * @event showFoldersTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_SHOW_FOLDERS"
+       * @default
        */
       showFoldersTopic: "ALF_DOCLIST_SHOW_FOLDERS",
       
@@ -233,7 +233,7 @@ define(["dojo/_base/declare",
        * @event showPathTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_SHOW_PATH"
+       * @default
        */
       showPathTopic: "ALF_DOCLIST_SHOW_PATH",
       
@@ -244,7 +244,7 @@ define(["dojo/_base/declare",
        * @event showSidebarTopic
        * @instance
        * @type {string} 
-       * @default "ALF_DOCLIST_SHOW_SIDEBAR"
+       * @default
        */
       showSidebarTopic: "ALF_DOCLIST_SHOW_SIDEBAR",
       
@@ -254,7 +254,7 @@ define(["dojo/_base/declare",
        * @event singleDocumentActionTopic
        * @instance
        * @type {string} 
-       * @default "ALF_SINGLE_DOCUMENT_ACTION_REQUEST"
+       * @default
        */
       singleDocumentActionTopic: "ALF_SINGLE_DOCUMENT_ACTION_REQUEST",
       
@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
        * @event documentTaggedTopic
        * @instance
        * @type {string}
-       * @default "ALF_DOCUMENT_TAGGED"
+       * @default
        */
       documentTaggedTopic: "ALF_DOCUMENT_TAGGED",
          
@@ -272,7 +272,7 @@ define(["dojo/_base/declare",
        * @event syncLocationTopic
        * @instance
        * @type {string}
-       * @default "ALF_UNSYNC_CURRENT_LOCATION"
+       * @default
        */
       syncLocationTopic: "ALF_SYNC_CURRENT_LOCATION",
       
@@ -280,7 +280,7 @@ define(["dojo/_base/declare",
        * @event unsyncLocationTopic
        * @instance
        * @type {string}
-       * @default "ALF_UNSYNC_CURRENT_LOCATION"
+       * @default
        */
       unsyncLocationTopic: "ALF_UNSYNC_CURRENT_LOCATION",
 
@@ -300,7 +300,7 @@ define(["dojo/_base/declare",
        * @event scrollReturn
        * @instance
        * @type {string}
-       * @default "ALF_SCROLL_RETURN"
+       * @default
        */
       scrollReturn: "ALF_SCROLL_RETURN",
 
@@ -311,7 +311,7 @@ define(["dojo/_base/declare",
        * @event requestInProgressTopic
        * @instance
        * @type {string}
-       * @default "ALF_DOCLIST_REQUEST_IN_PROGRESS"
+       * @default
        */
       requestInProgressTopic: "ALF_DOCLIST_REQUEST_IN_PROGRESS",
 
@@ -322,7 +322,7 @@ define(["dojo/_base/declare",
        * @event requestFinishedTopic
        * @instance
        * @type {string}
-       * @default "ALF_DOCLIST_REQUEST_FINISHED"
+       * @default
        */
       requestFinishedTopic: "ALF_DOCLIST_REQUEST_FINISHED",
 

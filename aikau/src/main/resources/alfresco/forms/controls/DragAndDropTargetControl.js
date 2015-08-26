@@ -54,7 +54,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       clearTopic: null,
       
@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       clearDroppedItemsTopic: null,
 
@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useModellingService: false,
 
@@ -88,7 +88,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgetsForWrappingDroppedItems: null,
 
@@ -97,7 +97,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgetsForDroppedItems: null,
 
@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       withHandles: true,
 
@@ -215,7 +215,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgetsForControl: null,
       

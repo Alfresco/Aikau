@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       currentPickerDepth: 0,
 
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       currentPickers: null,
 
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showPickedItems: true,
 
@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _processsingPickedItems: false,
 
@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       generatePubSubScope: true,
 
@@ -127,7 +127,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco://company/home"
+       * @default
        */
       repoNodeRef: "alfresco://company/home",
 
@@ -244,7 +244,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "pickedItems"
+       * @default
        */
       name: "pickedItems",
 
@@ -419,7 +419,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "picker.subPickers.label"
+       * @default
        */
       subPickersLabel: "picker.subPickers.label",
 
@@ -428,7 +428,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "picker.pickedItems.label"
+       * @default
        */
       pickedItemsLabel: "picker.pickedItems.label"
    });

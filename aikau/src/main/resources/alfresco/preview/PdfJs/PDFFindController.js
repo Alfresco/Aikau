@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       startedTextExtraction: false,
 
@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       active: false,
 
@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
-       * @default null
+       * @default
        */
       resumePageIdx: null,
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
-       * @default null
+       * @default
        */
       state: null,
 
@@ -131,7 +131,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       dirtyMatch: false,
 
@@ -140,7 +140,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       findTimeout: null,
 
@@ -149,7 +149,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       pdfPageSource: null,
 
@@ -158,7 +158,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       integratedFind: false,
 

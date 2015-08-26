@@ -37,7 +37,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       labelProperty: "config.name",
 
@@ -47,7 +47,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "fieldId"
+       * @default
        */
       valueProperty: "config.fieldId",
 

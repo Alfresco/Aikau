@@ -42,7 +42,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       waitForPageWidgets: false,
 
@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 
@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {String}
-       * @default null
+       * @default
        */
       rootNodeRef: null,
 
@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {Boolean}
-       * @default false
+       * @default
        */
       siteMode: false,
 
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_ITEM_SELECTED"
+       * @default
        */
       publishTopic: "ALF_ITEM_SELECTED",
 
@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "CURRENT_ITEM"
+       * @default
        */
       publishPayloadType: "CURRENT_ITEM",
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayload: null,
 
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       publishPayloadItemMixin: false,
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       publishPayloadModifiers: null,
 

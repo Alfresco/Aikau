@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_DYNAMIC_FORM_UPDATE"
+       * @default
        */
       subscriptionTopic: "ALF_DYNAMIC_FORM_UPDATE",
 
@@ -112,7 +112,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "value"
+       * @default
        */
       formWidgetsProperty: "value",
 
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       formWidetsPropertyStringified: true,
 
@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       formValueProperty: null,
 

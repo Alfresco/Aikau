@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       customClasses: "",
       
@@ -204,7 +204,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "displayName"
+       * @default
        */
       imageTitleProperty: "displayName",
 
@@ -213,7 +213,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "jsNode.nodeRef.nodeRef"
+       * @default
        */
       imageIdProperty: "jsNode.nodeRef.nodeRef",
 
@@ -225,7 +225,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       showDocumentPreview: false,
 
@@ -238,7 +238,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       assumeRendition: false,
 
@@ -249,7 +249,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       width: null,
 
@@ -288,7 +288,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "folder-64.png"
+       * @default
        */
       folderImage: "folder-64.png",
 
@@ -306,7 +306,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default "doclib"
+       * @default
        */
       renditionName: "doclib",
       
@@ -316,7 +316,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "jsNode.properties.cm:lastThumbnailModification"
+       * @default
        */
       lastThumbnailModificationProperty: "jsNode.properties.cm:lastThumbnailModification",
 

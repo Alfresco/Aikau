@@ -122,7 +122,7 @@ define([
           *
           * @instance
           * @type {boolean}
-          * @default true
+          * @default
           */
          choiceCanWrap: true,
 
@@ -131,7 +131,7 @@ define([
           *
           * @instance
           * @type {string}
-          * @default "100%"
+          * @default
           */
          choiceMaxWidth: "100%",
 

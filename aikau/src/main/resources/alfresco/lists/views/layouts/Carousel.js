@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 100
+       * @default
        */
       itemWidth: 100,
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 40
+       * @default
        */
       navigationMargin: 40,
 
@@ -191,7 +191,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       height: null,
 
@@ -254,7 +254,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       currentLeftPosition: 0,
 
@@ -263,7 +263,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       firstDisplayedIndex: 0,
 
@@ -272,7 +272,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       lastDisplayedIndex: null,
 

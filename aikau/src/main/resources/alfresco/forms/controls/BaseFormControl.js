@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       wrappedWidget: null,
 
@@ -155,7 +155,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       pubSubScope: "",
 
@@ -164,7 +164,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       type: "",
 
@@ -177,7 +177,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       fieldId: "",
 
@@ -187,7 +187,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       label: "",
 
@@ -197,7 +197,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       unitsLabel: "",
 
@@ -207,7 +207,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       description: "",
 
@@ -217,7 +217,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       inlineHelp: "",
 
@@ -234,7 +234,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       value: "",
 
@@ -243,7 +243,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       options: null,
 
@@ -256,7 +256,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       postWhenHiddenOrDisabled: true,
 
@@ -269,7 +269,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       noValueUpdateWhenHiddenOrDisabled: false,
 
@@ -282,7 +282,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       noPostWhenValueIs: null,
 
@@ -291,7 +291,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       _visible: true,
 
@@ -318,7 +318,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _required: false,
 
@@ -415,7 +415,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       autoSetConfig: null,
 
@@ -772,7 +772,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _pubSubOptionsHandle: null,
 
@@ -921,7 +921,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ajax_anim.gif"
+       * @default
        */
       validationInProgressImg: "ajax_anim.gif",
 
@@ -930,7 +930,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "validation.inprogress.alttext"
+       * @default
        */
       validationInProgressAltText: "validation.inprogress.alttext",
 
@@ -939,7 +939,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "help.png"
+       * @default
        */
       inlineHelpImg: "help.png",
 
@@ -948,7 +948,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "inlinehelp.alttext"
+       * @default
        */
       inlineHelpAltText: "inlinehelp.alttext",
 
@@ -957,7 +957,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default 300
+       * @default
        */
       inlineHelpWidth: 400,
 
@@ -990,7 +990,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       valueSubscriptionTopic: null,
 
@@ -1045,7 +1045,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       isPromisedWidget: false,
 
@@ -1244,7 +1244,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _hadFocus: false,
 
@@ -1317,7 +1317,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _convertStringValuesToBooleans: false,
 
@@ -1506,7 +1506,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       validationConfig: null,
 
@@ -1605,7 +1605,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showValidationErrorsImmediately: true,
 
@@ -1617,7 +1617,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _pendingValidationFailureDisplay: false,
 

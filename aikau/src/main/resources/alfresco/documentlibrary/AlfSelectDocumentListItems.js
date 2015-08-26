@@ -48,7 +48,7 @@ define(["dojo/_base/declare",
        * Overrides the default icon class for when the menu loads.
        * @instance
        * @type {string}
-       * @default "alf-noneselected-icon"
+       * @default
        */
       iconClass: "alf-noneselected-icon",
       
@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "  ALF_DOCLIST_DOCUMENT_SELECTED"
+       * @default
        */
       documentSelectionTopic: "ALF_DOCLIST_DOCUMENT_SELECTED",
 
@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_DOCLIST_DOCUMENT_DESELECTED"
+       * @default
        */
       documentDeselectionTopic: "ALF_DOCLIST_DOCUMENT_DESELECTED",
       
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {integer}
-       * @default 0
+       * @default
        */
       documentsAvailable: 0,
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {integer}
-       * @default 0
+       * @default
        */
       documentsSelected: 0,
       

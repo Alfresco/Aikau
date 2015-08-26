@@ -34,7 +34,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 200
+       * @default
        */
       responseCode: 200,
 

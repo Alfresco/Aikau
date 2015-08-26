@@ -45,7 +45,7 @@ define(["alfresco/core/_EventsMixin",
        * @event
        * @instance
        * @type {string}
-       * @default "ALF_NODE_RESIZED"
+       * @default
        */
       alfResizeNodeTopic: "ALF_NODE_RESIZED",
 

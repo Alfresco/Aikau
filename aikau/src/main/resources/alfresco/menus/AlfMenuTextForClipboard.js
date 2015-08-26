@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        * It can be left as null or the empty string if a label is not required.
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       label: null,
 
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       textForClipboard: null,
 

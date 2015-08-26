@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        * A reference to the cell that will be created by postCreate to handle toggling selection
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       checkCell: null,
 
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the menu item is selected or not
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       checked: false,
 
@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
        * The class to apply to render some checked indicator
        * @instance
        * @type {string}
-       * @default "alf-selected-icon"
+       * @default
        */
       checkedIconClass: "alf-selected-icon",
 
@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       group: null,
 
@@ -118,7 +118,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayload: null,
 
@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       subscriptionHandle: null,
 
@@ -139,7 +139,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       hashName: null,
 
@@ -242,7 +242,7 @@ define(["dojo/_base/declare",
        * Overrides the default value provided by the _AlfMenuItemMixin
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       closeOnClick: true,
 

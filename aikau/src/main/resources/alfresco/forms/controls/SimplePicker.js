@@ -149,7 +149,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgetsForControl: null,
 
@@ -158,7 +158,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       availableItemsLabel: "",
 
@@ -167,7 +167,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       pickedItemsLabel: "",
 
@@ -177,7 +177,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default "items"
+       * @default
        */
       itemsProperty: "items",
 
@@ -189,7 +189,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       noItemsMessage: null,
 
@@ -200,7 +200,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       itemKey: "name",
 
@@ -211,7 +211,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       propertyToRender: "name",
 
@@ -221,7 +221,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       singleItemMode: false,
 
@@ -230,7 +230,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       loadDataPublishTopic: null,
 
@@ -240,7 +240,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       loadDataPublishPayload: null,
 
@@ -251,7 +251,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentData: null,
 
@@ -260,7 +260,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       reorderable: false,
 

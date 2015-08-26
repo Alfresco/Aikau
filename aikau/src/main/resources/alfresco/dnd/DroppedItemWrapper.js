@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       value: null,
 
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "move-up.png"
+       * @default
        */
       upImg: "move-up.png",
       
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "move-down.png"
+       * @default
        */
       downImg: "move-down.png",
       
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "edit-16.png"
+       * @default
        */
       editImg: "edit-16.png",
       
@@ -120,7 +120,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "trashcan-16.png"
+       * @default
        */
       deleteImg: "trashcan-16.png",
 
@@ -130,7 +130,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "droppedItemWrapper.up.alt.text"
+       * @default
        */
       upAltText: "droppedItemWrapper.up.alt.text",
       
@@ -140,7 +140,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "droppedItemWrapper.down.alt.text"
+       * @default
        */
       downAltText: "droppedItemWrapper.down.alt.text",
       
@@ -150,7 +150,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "droppedItemWrapper.delete.alt.text"
+       * @default
        */
       deleteAltText: "droppedItemWrapper.delete.alt.text",
       
@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "droppedItemWrapper.edit.alt.text"
+       * @default
        */
       editAltText: "droppedItemWrapper.edit.alt.text",
 
@@ -171,7 +171,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       showEditButton: false,
 
@@ -331,7 +331,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_CREATE_FORM_DIALOG_REQUEST"
+       * @default
        */
       editPublishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
 
@@ -340,7 +340,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       editPublishGlobal: true,
 
@@ -349,7 +349,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       editPublishToParent: false,
 
@@ -378,7 +378,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "PROCESS"
+       * @default
        */
       editPublishPayloadType: "PROCESS",
 
@@ -388,7 +388,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       editPublishPayloadItemMixin: false,
 

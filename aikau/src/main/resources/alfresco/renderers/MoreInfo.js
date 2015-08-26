@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentItem: null,
 
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       moreInfoDialog: null,
 
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       xhrRequired: false,
 
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       darkIcon: false,
 
@@ -112,7 +112,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "moreinfo.altText.label"
+       * @default
        */
       altText: "moreinfo.altTextWithContext.label",
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "displayName"
+       * @default
        */
       propertyToRender: "displayName",
 

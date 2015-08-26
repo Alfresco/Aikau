@@ -48,7 +48,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       useCurrentItemAsPayload: true,
 
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       publishPayloadItemMixin: false,
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "PROCESS"
+       * @default
        */
       publishPayloadType: "PROCESS",
 
@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default []
+       * @default ["processCurrentItemTokens", "replaceColons"]
        */
       publishPayloadModifiers: ["processCurrentItemTokens", "replaceColons"]
    });

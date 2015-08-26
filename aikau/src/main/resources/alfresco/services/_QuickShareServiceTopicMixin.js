@@ -30,7 +30,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_ADD_QUICKSHARE"
+       * @default
        */
       addQuickShareTopic: "ALF_ADD_QUICKSHARE",
       
@@ -38,7 +38,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_REMOVE_QUICKSHARE"
+       * @default
        */
       removeQuickShareTopic: "ALF_REMOVE_QUICKSHARE",
       
@@ -46,7 +46,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_ADD_QUICKSHARE_SUCCESS"
+       * @default
        */
       addQuickShareSuccessTopic: "ALF_ADD_QUICKSHARE_SUCCESS",
       
@@ -54,7 +54,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_REMOVE_QUICKSHARE_SUCCESS"
+       * @default
        */
       removeQuickShareSuccessTopic: "ALF_REMOVE_QUICKSHARE_SUCCESS",
       
@@ -62,7 +62,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_ADD_QUICKSHARE_FAILURE"
+       * @default
        */
       addQuickShareFailureTopic: "ALF_ADD_QUICKSHARE_FAILURE",
       
@@ -70,21 +70,21 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_REMOVE_QUICKSHARE_FAILURE"
+       * @default
        */
       removeQuickShareFailureTopic: "ALF_REMOVE_QUICKSHARE_FAILURE",
       
       /**
        * @instance
        * @type {string}
-       * @default "ALF_GET_QUICKSHARE_LINK"
+       * @default
        */
       getQuickShareLinkTopic: "ALF_GET_QUICKSHARE_LINK",
       
       /**
        * @instance
        * @type {string}
-       * @default "ALF_GET_SOCIAL_LINKS"
+       * @default
        */
       getSocialLinksTopic: "ALF_GET_SOCIAL_LINKS"
    });

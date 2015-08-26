@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.add"
+       * @default
        */
       addEntryAltText: "multiple-entry.add",
 
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       addEntryImageSrc: null,
 
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "add-icon-16.png"
+       * @default
        */
       addEntryImage: "add-icon-16.png",
 
@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not re-ordering should be enabled through the use of drag and drop
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       enableDND: false,
       
@@ -142,7 +142,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _dndSource : null,
       
@@ -223,7 +223,7 @@ define(["dojo/_base/declare",
       /**
        * This is the list of elements to display/edit. It will be instantiated in the constructor.
        * @instance
-       * @default null 
+       * @default
        */
       elements: null,
       

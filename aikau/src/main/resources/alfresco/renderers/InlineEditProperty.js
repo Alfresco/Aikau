@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.cancel.label"
+       * @default
        */
       cancelLabel: "inline-edit.cancel.label",
 
@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.edit.altText"
+       * @default
        */
       editAltText: "inline-edit.edit.altText",
 
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.edit.label"
+       * @default
        */
       editLabel: "inline-edit.edit.label",
 
@@ -126,7 +126,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       formWidget: null,
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       hiddenDataRules: null,
 
@@ -152,7 +152,7 @@ define(["dojo/_base/declare",
        * The is the name of the parameter that will be used to persist changes to the property
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       postParam: null,
       
@@ -175,7 +175,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       refreshCurrentItem: false,
 
@@ -184,7 +184,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.save.label"
+       * @default
        */
       saveLabel: "inline-edit.save.label",
 
@@ -197,7 +197,6 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_CRUD_CREATE"
        */
       setDefaultPublicationData: function alfresco_renderers_InlineEditProperty__setDefaultPublicationData() {
          this.publishTopic = "ALF_CRUD_CREATE";

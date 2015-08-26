@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {String}
-       * @default null
+       * @default
        */
       _menuItemToParentTopic: null,
 
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _templatesAlreadyLoaded: false,
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * A URL to override the default. Primarily provided for the test harness.
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _templatesUrl: null,
       
@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "alf-textdoc-icon"
+       * @default
        */
       templateIconClass: "alf-textdoc-icon",
       
@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default "ALF_CREATE_CONTENT"
+       * @default
        */
       templatePublishTopic: "ALF_CREATE_CONTENT",
       
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "node"
+       * @default
        */
       templateType: "node",
 

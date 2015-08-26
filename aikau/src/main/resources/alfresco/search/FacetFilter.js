@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       applied: false,
       
@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "12x12-selected-icon.png"
+       * @default
        */
       appliedFilterImageSrc: "12x12-selected-icon.png",
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       facet: null,
 
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       filter: null,
       
@@ -119,7 +119,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       filterData: "",
 
@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       hide: false,
       
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 

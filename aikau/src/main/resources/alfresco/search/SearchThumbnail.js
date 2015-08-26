@@ -48,7 +48,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "lastThumbnailModification"
+       * @default
        */
       lastThumbnailModificationProperty: "lastThumbnailModification",
       

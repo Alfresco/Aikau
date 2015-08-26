@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 4
+       * @default
        */
       columns: 4,
 
@@ -336,7 +336,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       showNextLink: false,
 
@@ -345,7 +345,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       nextLinkLabel: null,
 
@@ -354,7 +354,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       nextLinkPublishTopic: null,
 

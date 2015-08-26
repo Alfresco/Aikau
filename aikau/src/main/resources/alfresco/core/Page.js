@@ -52,7 +52,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-core-Page"
+       * @default
        */
       baseClass: "alfresco-core-Page",
 
@@ -245,7 +245,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {Array}
-       * @default null
+       * @default
        */
       _processedServices: null,
 
@@ -255,7 +255,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       _processedServiceCountdown: null,
 
@@ -294,7 +294,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       serviceProcessingComplete: false,
 

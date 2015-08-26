@@ -40,7 +40,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco/pickers/ContainerPicker"
+       * @default
        */
       pickerWidget: "alfresco/pickers/ContainerPicker",
       
@@ -50,7 +50,6 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default []
        */
       configForPickedItems: {
          singleItemMode: true,

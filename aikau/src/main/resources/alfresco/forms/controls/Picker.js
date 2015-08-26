@@ -56,7 +56,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       itemKey: "name",
 
@@ -221,7 +221,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default "payload.dialogContent.0.pickedItemsWidget.currentData.items"
+       * @default
        */
       dialogPickedItemsProperty: "dialogContent.0.pickedItemsWidget.currentData.items",
 
@@ -302,7 +302,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {string}
-       * @default "alfresco/pickers/Picker"
+       * @default
        */
       pickerWidget: "alfresco/pickers/Picker",
 

@@ -99,7 +99,7 @@ define(["alfresco/core/Core",
           * A self-incrementing response delay that permits easy replication of a race-condition bug
           *
           * @type {number}
-          * @default  0
+          * @default
           */
          _responseDelayMs: 250,
 

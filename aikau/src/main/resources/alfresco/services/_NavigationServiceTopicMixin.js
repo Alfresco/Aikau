@@ -37,7 +37,7 @@ define(["dojo/_base/declare"],
        * @instance
        * @event navigateToPageTopic
        * @type {string}
-       * @default "ALF_NAVIGATE_TO_PAGE"
+       * @default
        */
       navigateToPageTopic: "ALF_NAVIGATE_TO_PAGE",
 
@@ -47,7 +47,7 @@ define(["dojo/_base/declare"],
        * @instance
        * @event reloadPageTopic
        * @type {string}
-       * @default "ALF_RELOAD_PAGE"
+       * @default
        */
       reloadPageTopic: "ALF_RELOAD_PAGE",
 
@@ -57,7 +57,7 @@ define(["dojo/_base/declare"],
        * @instance
        * @event postToPageTopic
        * @type {string}
-       * @default "ALF_POST_TO_PAGE"
+       * @default
        */
       postToPageTopic: "ALF_POST_TO_PAGE",
 
@@ -66,7 +66,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "SHARE_PAGE_RELATIVE"
+       * @default
        * @deprecated Since 1.0.17 - Use [pageRelativePath]{@link module:alfresco/services/_NavigationServiceTopicMixin#pageRelativePath} instead.
        */
       sharePageRelativePath: "SHARE_PAGE_RELATIVE",
@@ -76,7 +76,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "PAGE_RELATIVE"
+       * @default
        * @deprecated Since 1.0.17 - Use 
        */
       pageRelativePath: "PAGE_RELATIVE",
@@ -86,7 +86,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "CONTEXT_RELATIVE"
+       * @default
        */
       contextRelativePath: "CONTEXT_RELATIVE",
 
@@ -95,7 +95,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "FULL_PATH"
+       * @default
        */
       fullPath: "FULL_PATH",
 
@@ -104,7 +104,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "HASH"
+       * @default
        */
       hashPath: "HASH",
 
@@ -113,7 +113,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "CURRENT"
+       * @default
        */
       currentTarget: "CURRENT",
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "NEW"
+       * @default
        */
       newTarget: "NEW"
    });

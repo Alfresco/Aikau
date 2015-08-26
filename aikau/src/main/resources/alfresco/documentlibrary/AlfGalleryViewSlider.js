@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not to show the bigger/smaller buttons at either end of the slider
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showButtons: true,
       
@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
        * The minimum value on the slider
        * @instance
        * @type {number} 
-       * @default 0
+       * @default
        */
       minimum: 0,
       
@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
        * The maximum value on the slider.
        * @instance
        * @type {integer}
-       * @default 60 
+       * @default
        */
       maximum: 60,
       
@@ -75,7 +75,7 @@ define(["dojo/_base/declare",
        * The number of steps (including the beginning and end positions) on the slider
        * @instance
        * @type {integer}
-       * @default 4 
+       * @default
        */
       discreteValues: 4,
          
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 4
+       * @default
        */
       columns: 4,
 

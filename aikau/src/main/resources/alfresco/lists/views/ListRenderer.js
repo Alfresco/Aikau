@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
        * 
        * @instance 
        * @type {object[]} 
-       * @default null
+       * @default
        */
       widgets: null,
       
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       suppressKeyNavigation: false,
 

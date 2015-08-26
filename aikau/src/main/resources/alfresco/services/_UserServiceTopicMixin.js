@@ -32,7 +32,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_UPDATE_USER_STATUS"
+       * @default
        */
       updateUserStatusTopic: "ALF_UPDATE_USER_STATUS",
       
@@ -41,7 +41,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_USER_STATUS_UPDATED"
+       * @default
        */
       updateUserStatusSuccessTopic: "ALF_USER_STATUS_UPDATED",
       
@@ -50,7 +50,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_USER_STATUS_UPDATE_FAILURE"
+       * @default
        */
       updateUserStatusFailureTopic: "ALF_USER_STATUS_UPDATE_FAILURE",
       
@@ -59,7 +59,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_SET_USER_HOME_PAGE"
+       * @default
        */
       setUserHomePageTopic: "ALF_SET_USER_HOME_PAGE",
       
@@ -68,7 +68,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_SET_USER_HOME_PAGE_SUCCESS"
+       * @default
        */
       setUserHomePageSuccessTopic: "ALF_SET_USER_HOME_PAGE_SUCCESS",
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_SET_USER_HOME_PAGE_FAILURE"
+       * @default
        */
       setUserHomePageFailureTopic: "ALF_SET_USER_HOME_PAGE_FAILURE"
    });
