@@ -1,6 +1,10 @@
 <div class="alfresco-testing-MockXhr" data-dojo-attach-point="containerNode">
    <table class="log">
-      <caption data-dojo-attach-event="onclick:_toggleBody">MockXhr Log (toggle visibility)</caption>
+      <caption>
+         MockXhr Log
+         <button data-dojo-attach-event="onclick:_toggleBody" class="alfresco-testing-MockXhr__toggle-body">toggle body</button>
+         <button data-dojo-attach-event="onclick:_clearLog" class="alfresco-testing-MockXhr__clear-log">clear log</button>
+      </caption>
       <thead class="mx-thead">
          <tr>
             <th class="mx-method">Method</th>
