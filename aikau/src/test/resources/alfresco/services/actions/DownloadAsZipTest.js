@@ -23,9 +23,8 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"],
-        function(registerSuite, assert, require, TestCommon) {
+        function(registerSuite, assert, TestCommon) {
 
    var browser;
    registerSuite({
