@@ -31,6 +31,67 @@ define([],function() {
    return {
 
       /**
+       * Triggered when the progress request has failed
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.33
+       */
+      ARCHIVE_PROGRESS_FAILURE: "ALF_ARCHIVE_PROGRESS_REQUEST_FAILURE",
+
+      /**
+       * Triggered when the progress request has succeeded.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      ARCHIVE_PROGRESS_SUCCESS: "ALF_ARCHIVE_PROGRESS_REQUEST_SUCCESS",
+
+      /**
+       * Event topic to trigger the cancel the editing of a checkout document
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      CANCEL_EDIT: "ALF_DOC_CANCEL_EDITING",
+
+      /**
+       * Delete the archive created for downloading.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      DELETE_ARCHIVE: "ALF_ARCHIVE_DELETE",
+
+      /**
+       * This topic is published to request either the download of a single document or folder (or a selection
+       * of documents and folder) as a ZIP file.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.33
+       */
+      DOWNLOAD_AS_ZIP: "ALF_DOWNLOAD_AS_ZIP",
+
+      /**
+       * Event topic to trigger a file download in the browser
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      DOWNLOAD_NODE: "ALF_DOWNLOAD_FILE",
+
+      /**
        * This topic can be published to request that a notification be displayed. It is subscribed to 
        * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
        *
@@ -49,6 +110,39 @@ define([],function() {
        * @default
        */
       DISPLAY_PROMPT: "ALF_DISPLAY_PROMPT",
+
+      /**
+       * This topic can be published to request the data for a list of documents at the location
+       * provided in the payload. It is typically handled by the 
+       * [DocumentService]{@link module:alfresco/services/DocumentService}.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.33
+       */
+      GET_DOCUMENT_LIST: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
+
+      /**
+       * Get the node ref for the current node's parent.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      GET_PARENT_NODEREF: "ALF_DOC_GET_PARENT_NODEREF",
+
+      /**
+       * This topic can be published to request the data for a single document node. It is typically handled
+       * by the [DocumentService]{@link module:alfresco/services/DocumentService}.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.33
+       */
+      GET_DOCUMENT: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
 
       /**
        * This topic is fired automatically whenever a notification is destroyed.
@@ -82,15 +176,35 @@ define([],function() {
       PATH_CHANGED: "ALF_DOCUMENTLIST_PATH_CHANGED",
 
       /**
-       * This topic can be used to publish a request to change the title of a page. It is subscribed to by the
-       * [Title widget]{@link module:alfresco/header/Title} and published by the 
-       * [SetTitle widget]{@link module:alfresco/header/SetTitle}
+       * Called to start off the archiving process.
        *
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.33
        */
-      UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE",
+      REQUEST_ARCHIVE: "ALF_ARCHIVE_REQUEST",
+
+      /**
+       * Called to trigger a request to check progress
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      REQUEST_ARCHIVE_PROGRESS: "ALF_ARCHIVE_PROGRESS_REQUEST",
+
+      /**
+       * Called to trigger a delayed request to check progress
+       * delay is set in archiveProgressUpdateFailureInterval
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      REQUEST_DELAYED_ARCHIVE_PROGRESS: "ALF_ARCHIVE_DELAYED_PROGRESS_REQUEST",
 
       /**
        * <p>This topic is used to indicate that a navigable collection has been scrolled to
@@ -108,6 +222,17 @@ define([],function() {
        * @default
        * @since 1.0.32
        */
-      SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM"
+      SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM",
+
+      /**
+       * This topic can be used to publish a request to change the title of a page. It is subscribed to by the
+       * [Title widget]{@link module:alfresco/header/Title} and published by the 
+       * [SetTitle widget]{@link module:alfresco/header/SetTitle}
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE"
    };
 });

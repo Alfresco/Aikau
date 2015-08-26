@@ -1,13 +1,20 @@
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-doclib-action {
-   background-repeat: no-repeat;
-   height: 20px;
-   width: 20px;
-}
-
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-upload-new-version-icon {
-   background-image: url("./images/actions/document-upload-new-version-16.png");
-}
-
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-manage-aspects-icon {
-   background-image: url("./images/actions/document-manage-aspects-16.png");
+.alfresco-share {
+   .dijitIcon {
+      &.dijitMenuItemIcon {
+         &.alf-doclib-action {
+            background-repeat: no-repeat;
+            height: 20px;
+            width: 20px;
+         }
+         &.alf-download-as-zip-icon {
+            background-image: url("./images/actions/document-download-16.png");
+         }
+         &.alf-manage-aspects-icon {
+            background-image: url("./images/actions/document-manage-aspects-16.png");
+         }
+         &.alf-upload-new-version-icon {
+            background-image: url("./images/actions/document-upload-new-version-16.png");
+         }
+      }
+   }
 }

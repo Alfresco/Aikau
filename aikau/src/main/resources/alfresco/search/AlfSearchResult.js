@@ -41,10 +41,11 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-class",
         "alfresco/renderers/XhrContextActions",
+        "alfresco/renderers/Selector",
         "alfresco/renderers/Size",
         "alfresco/renderers/MoreInfo"],
         function(declare, Row, template, SearchThumbnail, SearchResultPropertyLink, PropertyLink, Property,
-                 DateLink, XhrActions, lang, domClass, XhrContextActions, Size, MoreInfo) {
+                 DateLink, XhrActions, lang, domClass, XhrContextActions, Selector, Size, MoreInfo) {
 
    return declare([Row], {
 
@@ -143,6 +144,16 @@ define(["dojo/_base/declare",
       showMoreInfo: true,
 
       /**
+       * Indicates whether or not a [Selector]{@link module:alfresco/renderers/Selector} widget should
+       * be rendered with the search result.
+       * @instance
+       * @type {boolean}
+       * @default 
+       * @since 1.0.33
+       */
+      showSelector: false,
+
+      /**
        * This can be configured to be an array of renderer widgets to place above the central column
        * of result properties. It should be a standard widget model array.
        *
@@ -171,6 +182,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_search_AlfSearchResult__postCreate() {
          this.generateActionFilters();
+         this.createSelectorRenderer();
          this.createThumbnailRenderer();
          this.createWidgetsAbove();
          this.createDisplayNameRenderer();
@@ -372,6 +384,30 @@ define(["dojo/_base/declare",
                   type: "PAGE_RELATIVE"
                }
             }, this.pathNode);
+         }
+      },
+
+      /**
+       * This function is called to create a [Selector widget]{@link module:alfresco/renderers/Selector}.
+       * It will only be rendered if [showSelector]{@link module:alfresco/search/AlfSearchResult#showSelector} is 
+       * configured to be true.
+       * 
+       * @instance
+       * @since 1.0.33
+       */
+      createSelectorRenderer: function alfresco_search_AlfSearchResult__createSelectorRenderer() {
+         // We only show the size if it's not empty and at least one byte
+         if (!this.showSelector)
+         {
+            domClass.add(this.selectorCell, "hidden");
+         }
+         else
+         {
+            // jshint nonew:false
+            new Selector({
+               currentItem : this.currentItem,
+               pubSubScope : this.pubSubScope
+            }, this.selectorNode);
          }
       },
 

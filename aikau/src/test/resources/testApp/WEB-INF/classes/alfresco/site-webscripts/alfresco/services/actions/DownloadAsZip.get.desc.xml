@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Download As Zip</shortname>
+  <description>A test page for verifying the Download As Zip action</description>
+  <family>aikau-unit-tests</family>
+  <url>/DownloadAsZip</url>
+</webscript>
