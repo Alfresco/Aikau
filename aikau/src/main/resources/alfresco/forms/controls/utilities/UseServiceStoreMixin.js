@@ -47,7 +47,7 @@ define(["dojo/_base/declare",
          var labelAttribute = lang.getObject("optionsConfig.labelAttribute", false, this);
          var valueAttribute = lang.getObject("optionsConfig.valueAttribute", false, this);
          var fixedOptions = lang.getObject("optionsConfig.fixed", false, this);
-         var searchStartsWith = lang.getObject("optionsConfig.searchStartsWith", true, this);
+         var searchStartsWith = lang.getObject("optionsConfig.searchStartsWith", false, this);
          var serviceStore = new ServiceStore({
             idProperty: (valueAttribute != null) ? valueAttribute : "value",
             queryAttribute: (queryAttribute != null) ? queryAttribute : "name",
@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
             publishTopic: publishTopic,
             publishPayload: publishPayload,
             fixed: fixedOptions,
-            searchStartsWith: searchStartsWith
+            searchStartsWith: !!searchStartsWith // Normalises to boolean; also means that default is false as per AKU-534
          });
          return serviceStore;
       },

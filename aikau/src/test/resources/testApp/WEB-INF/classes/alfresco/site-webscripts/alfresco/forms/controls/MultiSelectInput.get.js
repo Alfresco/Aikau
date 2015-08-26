@@ -107,8 +107,7 @@ model.jsonModel = {
                                  publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",
                                  publishPayload: {
                                     resultsProperty: "response.data.items"
-                                 },
-                                 searchStartsWith: false
+                                 }
                               },
                               requirementConfig: {
                                  initialValue: true
@@ -144,8 +143,7 @@ model.jsonModel = {
                                     choice: "{label}",
                                     result: "{value}: {label}",
                                     full: "ID={value}, Name={label}"
-                                 },
-                                 searchStartsWith: false
+                                 }
                               }
                            }
                         }
@@ -177,8 +175,7 @@ model.jsonModel = {
                                  publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",
                                  publishPayload: {
                                     resultsProperty: "response.data.items"
-                                 },
-                                 searchStartsWith: false
+                                 }
                               },
                               disablementConfig: {
                                  initialValue: true
