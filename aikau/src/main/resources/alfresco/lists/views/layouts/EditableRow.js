@@ -137,7 +137,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {Boolean}
-       * @default  true
+       * @default
        */
       _alfEditModeProcessing: false,
 

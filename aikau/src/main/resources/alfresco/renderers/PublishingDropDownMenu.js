@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       cancellationPublishGlobal: false,
 
@@ -162,7 +162,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       cancellationPublishPayloadItemMixin: true,
 
