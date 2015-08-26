@@ -287,6 +287,18 @@ define(["dojo/_base/declare",
       noPostWhenValueIs: null,
 
       /**
+       * Whether - when a publishTopic is available in the supplied optionsConfig - to immediately
+       * publish to that topic in order to retrieve any default pubSubOptions for this control. If
+       * set to false, then it will not do that initial publish.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.33
+       */
+      getPubSubOptionsImmediately: true,
+
+      /**
        * The default visibility status is always true (this can be overridden by extending controls).
        *
        * @instance
@@ -580,7 +592,7 @@ define(["dojo/_base/declare",
             var pubSub = lang.getObject("publishTopic", false, config),
                 callback = lang.getObject("callback", false, config),
                 fixed = lang.getObject("fixed", false, config);
-            if (pubSub)
+            if (pubSub && this.getPubSubOptionsImmediately)
             {
                this.getPubSubOptions(config);
             }
