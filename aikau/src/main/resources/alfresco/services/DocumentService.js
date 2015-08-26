@@ -29,13 +29,14 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/core/PathUtils",
         "alfresco/core/NodeUtils",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/_base/array"],
-        function(declare, BaseService, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, domConstruct, array) {
+        function(declare, BaseService, CoreXhr, topics, AlfConstants, PathUtils, NodeUtils, lang, domConstruct, array) {
 
    return declare([BaseService, CoreXhr, PathUtils], {
 
@@ -105,112 +106,26 @@ define(["dojo/_base/declare",
       archiveProgressUpdateFailureInterval: 5000,
 
       /**
-       * Called to start off the archiving process.
-       *
-       * @instance
-       * @type {String}
-       * @default ALF_ARCHIVE_REQUEST
-       */
-      requestArchiveTopic: "ALF_ARCHIVE_REQUEST",
-
-      /**
-       * Called to trigger a request to check progress
-       *
-       * @instance
-       * @type {String}
-       */
-      requestArchiveProgressTopic: "ALF_ARCHIVE_PROGRESS_REQUEST",
-
-      /**
-       * Called to trigger a delayed request to check progress
-       * delay is set in archiveProgressUpdateFailureInterval
-       *
-       * @instance
-       * @type {String}
-       */
-      requestDelayedArchiveProgressTopic: "ALF_ARCHIVE_DELAYED_PROGRESS_REQUEST",
-
-      /**
-       * Triggered when the progress request has failed
-       *
-       * @instance
-       * @type {String}
-       */
-      archiveProgressFailureTopic: "ALF_ARCHIVE_PROGRESS_REQUEST_FAILURE",
-
-      /**
-       * Triggered when the progress request has succeeded.
-       *
-       * @instance
-       * @type {String}
-       */
-      archiveProgressSuccessTopic: "ALF_ARCHIVE_PROGRESS_REQUEST_SUCCESS",
-
-      /**
-       * Delete the archive created for downloading.
-       *
-       * @instance
-       * @type {String}
-       */
-      deleteArchiveTopic: "ALF_ARCHIVE_DELETE",
-
-      /**
-       * Event topic to trigger a file download in the browser
-       *
-       * @instance
-       * @type {String}
-       * @default "ALF_DOWNLOAD_FILE"
-       */
-      downloadNodeTopic: "ALF_DOWNLOAD_FILE",
-
-      /**
-       * Event topic to trigger the cancel the editing of a checkout document
-       *
-       * @instance
-       * @type {String}
-       * @default "ALF_DOC_CANCEL_EDITING"
-       */
-      cancelEditTopic: "ALF_DOC_CANCEL_EDITING",
-
-      /**
-       * Event topic published when the cancel edit action has completed.
-       *
-       * @instance
-       * @type {String}
-       * @default "ALF_DOC_CANCEL_EDIT_SUCCESS"
-       */
-      cancelEditSuccessTopic: "ALF_DOC_CANCEL_EDIT_SUCCESS",
-
-
-      /**
-       * Get the node ref for the current node's parent.
-       *
-       * @instance
-       * @type {String}
-       * @default "ALF_DOC_GET_PARENT_NODEREF"
-       */
-      parentNodeRefTopic: "ALF_DOC_GET_PARENT_NODEREF",
-
-      /**
        *
        * @instance
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_DocumentService__registerSubscriptions() {
-         this.alfSubscribe("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", lang.hitch(this, this.onRetrieveSingleDocumentRequest));
-         this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST", lang.hitch(this, this.onRetrieveDocumentsRequest));
+         // Bind to document topics:
+         this.alfSubscribe(topics.GET_DOCUMENT, lang.hitch(this, this.onRetrieveSingleDocumentRequest));
+         this.alfSubscribe(topics.GET_DOCUMENT_LIST, lang.hitch(this, this.onRetrieveDocumentsRequest));
 
-         //Bind to archive topics:
-         this.alfSubscribe(this.requestArchiveTopic, lang.hitch(this, this.onRequestArchive));
-         this.alfSubscribe(this.requestArchiveProgressTopic, lang.hitch(this, this.onRequestArchiveProgress));
-         this.alfSubscribe(this.requestDelayedArchiveProgressTopic, lang.hitch(this, this.onRequestDelayedArchiveProgress));
-         this.alfSubscribe(this.deleteArchiveTopic, lang.hitch(this, this.onDeleteDownloadArchive));
+         // Bind to archive topics:
+         this.alfSubscribe(topics.REQUEST_ARCHIVE, lang.hitch(this, this.onRequestArchive));
+         this.alfSubscribe(topics.REQUEST_ARCHIVE_PROGRESS, lang.hitch(this, this.onRequestArchiveProgress));
+         this.alfSubscribe(topics.REQUEST_DELAYED_ARCHIVE_PROGRESS, lang.hitch(this, this.onRequestDelayedArchiveProgress));
+         this.alfSubscribe(topics.DELETE_ARCHIVE, lang.hitch(this, this.onDeleteDownloadArchive));
 
-         //Bind to download topics:
-         this.alfSubscribe(this.downloadNodeTopic, lang.hitch(this, this.onDownloadFile));
-         this.alfSubscribe(this.cancelEditTopic, lang.hitch(this, this.onCancelEdit));
-         this.alfSubscribe(this.parentNodeRefTopic, lang.hitch(this, this.onGetParentNodeRef));
-
+         // Bind to download topics:
+         this.alfSubscribe(topics.DOWNLOAD_AS_ZIP, lang.hitch(this, this.onDownloadAsZip));
+         this.alfSubscribe(topics.DOWNLOAD_NODE, lang.hitch(this, this.onDownloadFile));
+         this.alfSubscribe(topics.CANCEL_EDIT, lang.hitch(this, this.onCancelEdit));
+         this.alfSubscribe(topics.GET_PARENT_NODEREF, lang.hitch(this, this.onGetParentNodeRef));
       },
 
       /**
@@ -386,28 +301,66 @@ define(["dojo/_base/declare",
          this.serviceXhr(config);
       },
 
-      // Archive and Download:
-      // Init Archive:
+      /**
+       * 
+       * @instance
+       * @param {object} payload The payload containing the nodes to archive and download
+       * @since 1.0.33
+       */
+      onDownloadAsZip: function alfresco_services_DocumentService__onDownloadAsZip(payload) {
+         this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+            generatePubSubScope: true,
+            dialogId: "ARCHIVING_DIALOG",
+            dialogTitle: this.message("services.ActionService.ActionFolderDownload.title"),
+            hideTopic: "ALF_CLOSE_DIALOG",
+            widgetsContent: [
+               {
+                  name: "alfresco/renderers/Progress",
+                  config: {
+                     requestProgressTopic: topics.REQUEST_ARCHIVE,
+                     progressFinishedTopic: [topics.DOWNLOAD_NODE, topics.DELETE_ARCHIVE],
+                     nodes: payload.documents || [payload.document]
+                  }
+               }
+            ],
+            widgetsButtons: [
+               {
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: this.message("services.ActionService.button.cancel"),
+                     additionalCssClasses: "alfresco-dialogs-AlfProgress cancellation",
+                     publishTopic: "ALF_CLOSE_DIALOG"
+                  }
+               }
+            ],
+            handleOverflow: true
+         }, true);
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {object} payload
+       */
       onRequestArchive: function alfresco_services_DocumentService__onRequestArchive(payload) {
          var nodes = payload.nodes,
-            responseTopic = this.generateUuid();
-
-         if (!nodes) {
+             responseTopic = this.generateUuid();
+         if (!nodes) 
+         {
             this.alfLog("error", "No Nodes to generate Archive from");
-            return;
          }
-
-         var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onRequestArchiveSuccess));
-
-         this.serviceXhr({
-            alfTopic: responseTopic,
-            subscriptionHandle: subscriptionHandle,
-            url: this.downloadAPI,
-            method: "POST",
-            data: nodes,
-            payload: payload
-         });
-
+         else
+         {
+            var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onRequestArchiveSuccess));
+            this.serviceXhr({
+               alfTopic: responseTopic,
+               subscriptionHandle: subscriptionHandle,
+               url: this.downloadAPI,
+               method: "POST",
+               data: nodes,
+               payload: payload
+            });
+         }
       },
 
       /**
@@ -420,26 +373,29 @@ define(["dojo/_base/declare",
          this.alfLog("info", "Archive successfully requested");
 
          // Clean up listeners
-         if (payload.subscriptionHandle) {
+         if (payload.subscriptionHandle) 
+         {
             this.alfUnsubscribe(payload.subscriptionHandle);
          }
 
          var publishPayload = lang.getObject("requestConfig.payload", false, payload);
-
-         if (!publishPayload) {
+         if (!publishPayload) 
+         {
             this.alfLog("error", "Unable to retrieve passed in payload from requestConfig.");
-            return;
          }
-
-         publishPayload.archiveNodeRef= lang.getObject("response.nodeRef", false, payload);
-
-         if (!publishPayload.archiveNodeRef) {
-            this.alfLog("error", "archiveNodeRef missing from response object.");
-            return;
+         else
+         {
+            publishPayload.archiveNodeRef= lang.getObject("response.nodeRef", false, payload);
+            if (!publishPayload.archiveNodeRef) 
+            {
+               this.alfLog("error", "archiveNodeRef missing from response object.");
+            }
+            else
+            {
+               // The archiving has started - now check the progress:
+               this.alfPublish(topics.REQUEST_ARCHIVE_PROGRESS, publishPayload);
+            }
          }
-
-         // The archiving has started - now check the progress:
-         this.alfPublish(this.requestArchiveProgressTopic, publishPayload);
       },
 
       /**
@@ -466,37 +422,40 @@ define(["dojo/_base/declare",
          if (!progressRequestPayload.archiveNodeRef)
          {
             this.alfLog("error", "Unable to retrieve nodeRef from payload: " + progressRequestPayload);
-            return;
          }
-
-         var responseTopic = this.generateUuid();
-
-         // Remove old listeners before creating new ones.
-         if (progressRequestPayload.subscriptionHandles)
+         else
          {
-            this.alfUnsubscribe(progressRequestPayload.subscriptionHandles);
+            var responseTopic = this.generateUuid();
+            // Remove old listeners before creating new ones.
+            if (progressRequestPayload.subscriptionHandles)
+            {
+               this.alfUnsubscribe(progressRequestPayload.subscriptionHandles);
+            }
+
+            var subscriptionHandles = [
+               this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onActionRequestArchiveProgressSuccess)),
+               this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onActionRequestArchiveProgressFailure))
+            ];
+
+            this.serviceXhr({
+               alfTopic: responseTopic,
+               subscriptionHandles: subscriptionHandles,
+               progressRequestPayload: progressRequestPayload,
+               url: this.downloadAPI + "/" + progressRequestPayload.archiveNodeRef.replace("://", "/") + "/status",
+               method: "GET"
+            });
          }
-
-         var subscriptionHandles = [
-            this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onActionRequestArchiveProgressSuccess)),
-            this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onActionRequestArchiveProgressFailure))
-         ];
-
-         this.serviceXhr({
-            alfTopic: responseTopic,
-            subscriptionHandles: subscriptionHandles,
-            progressRequestPayload: progressRequestPayload,
-            url: this.downloadAPI + "/" + progressRequestPayload.archiveNodeRef.replace("://", "/") + "/status",
-            method: "GET"
-         });
-      },
-
-      onRequestDelayedArchiveProgress: function alfresco_services_DocumentService__onRequestDelayedArchiveProgress(payload) {
-         this.alfPublishDelayed(this.requestArchiveProgressTopic, payload, this.archiveProgressUpdateInterval);
       },
 
       /**
-       *
+       * @instance
+       * @param {object} payload
+       */
+      onRequestDelayedArchiveProgress: function alfresco_services_DocumentService__onRequestDelayedArchiveProgress(payload) {
+         this.alfPublishDelayed(topics.REQUEST_ARCHIVE_PROGRESS, payload, this.archiveProgressUpdateInterval);
+      },
+
+      /**
        * Handles the Archive progress response.
        *
        * @instance
@@ -512,46 +471,46 @@ define(["dojo/_base/declare",
          if (!(payload && payload.response && payload.response.status))
          {
             this.alfLog("error", "Archive Progress Response Status missing");
-            return;
          }
-         var status = payload.response.status;
-
-         var progressRequestPayload = payload.requestConfig.progressRequestPayload;
-
-         // Clean up the payload a little:
-         payload.nodeRef = payload.requestConfig.progressRequestPayload.archiveNodeRef;
-
-         switch (status)
+         else
          {
-            case "PENDING":
-               // Check again in a little bit.
-               this.alfPublish(this.requestDelayedArchiveProgressTopic, payload);
-               break;
+            var status = payload.response.status;
+            var progressRequestPayload = payload.requestConfig.progressRequestPayload;
 
-            case "IN_PROGRESS":
-               // ok, we've got progress. Check again soon.
-               this.alfPublish(this.requestDelayedArchiveProgressTopic, payload);
+            // Clean up the payload a little:
+            payload.nodeRef = payload.requestConfig.progressRequestPayload.archiveNodeRef;
+            switch (status)
+            {
+               case "PENDING":
+                  // Check again in a little bit.
+                  this.alfPublish(topics.REQUEST_DELAYED_ARCHIVE_PROGRESS, payload);
+                  break;
 
-               // Use the topic from the payload to notify the dialog of an update.
-               this.alfPublish(progressRequestPayload.progressUpdateTopic, payload);
-               break;
+               case "IN_PROGRESS":
+                  // ok, we've got progress. Check again soon.
+                  this.alfPublish(topics.REQUEST_DELAYED_ARCHIVE_PROGRESS, payload);
 
-            case "DONE":
-               // Now we're ready to download.
-               this.alfPublish(progressRequestPayload.progressCompleteTopic, payload);
-               break;
+                  // Use the topic from the payload to notify the dialog of an update.
+                  this.alfPublish(progressRequestPayload.progressUpdateTopic, payload);
+                  break;
 
-            case "CANCELLED":
-               this.alfLog("info", "Archive cancelled");
-               this.alfPublish(progressRequestPayload.progressCancelledTopic, payload);
-               break;
+               case "DONE":
+                  // Now we're ready to download.
+                  this.alfPublish(progressRequestPayload.progressCompleteTopic, payload);
+                  break;
 
-            default:
-               // Pass on error status:
-               // e.g. status = "MAX_CONTENT_SIZE_EXCEEDED"
-               progressRequestPayload.errorMessage = status;
-               this.alfPublish(progressRequestPayload.progressErrorTopic, payload);
-               break;
+               case "CANCELLED":
+                  this.alfLog("info", "Archive cancelled");
+                  this.alfPublish(progressRequestPayload.progressCancelledTopic, payload);
+                  break;
+
+               default:
+                  // Pass on error status:
+                  // e.g. status = "MAX_CONTENT_SIZE_EXCEEDED"
+                  progressRequestPayload.errorMessage = status;
+                  this.alfPublish(progressRequestPayload.progressErrorTopic, payload);
+                  break;
+            }
          }
       },
 
@@ -572,16 +531,15 @@ define(["dojo/_base/declare",
          }
 
          var failureCount = payload.requestConfig.progressRequestPayload.failureCount || 0;
-
          if (failureCount < this.maxArchiveProgressRetryCount)
          {
             payload.requestConfig.progressRequestPayload.failureCount = ++failureCount;
-            this.alfPublish(this.requestDelayedArchiveProgressTopic, payload);
+            this.alfPublish(topics.REQUEST_DELAYED_ARCHIVE_PROGRESS, payload);
          }
          else
          {
             this.alfLog("warn", "Failed to get archive progress");
-            this.alfPublish(this.archiveProgressFailureTopic, payload);
+            this.alfPublish(topics.ARCHIVE_PROGRESS_FAILURE, payload);
          }
       },
 
@@ -607,16 +565,13 @@ define(["dojo/_base/declare",
        */
       onDownloadFile: function alfresco_services_DocumentService__onDownloadFile(payload) {
          var nodeRefObj = NodeUtils.processNodeRef(payload.nodeRef);
-
          var fileName = payload.fileName || this.message("services.DocumentService.archiveName") + ".zip";
-
          var form = domConstruct.create("form");
          form.method = "GET";
          form.action = AlfConstants.PROXY_URI + "api/node/content/" + nodeRefObj.uri + "/" + encodeURIComponent(fileName);
          domConstruct.place(form, document.body);
 
          var iframe = domConstruct.create("iframe");
-
          iframe.style.display = "none";
          iframe.name = iframe.id = "downloadArchive_" + this.generateUuid();
          domConstruct.place(iframe, document.body);

@@ -46,6 +46,7 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/services/_NavigationServiceTopicMixin",
@@ -55,8 +56,8 @@ define(["dojo/_base/declare",
         "alfresco/core/JsNode",
         "alfresco/core/NotificationUtils",
         "dojo/_base/lang"],
-        function(declare, BaseService, AlfCoreXhr, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtilsMixin,
-                 ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang) {
+        function(declare, BaseService, AlfCoreXhr, topics, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, 
+                 UrlUtilsMixin, ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang) {
 
    // TODO: L18N sweep - lots of widgets defined with hard coded labels...
 
@@ -910,38 +911,25 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles requests to download multiple items as a single archive file. This is only expected to
+       * be called as a multiple item selection action
+       * 
+       * @instance
+       * @param {object} payload The payload from the original request
+       * @since 1.0.33
+       */
+      onActionDownload: function alfresco_services_ActionService__onActionDownload(payload) {
+         this.alfPublish(topics.DOWNLOAD_AS_ZIP, payload);
+      },
+
+      /**
        * Handles requests to start a folder download.
        *
        * @instance
        * @param {object} payload The payload from the original request
        */
       onActionFolderDownload: function alfresco_services_ActionService__onActionFolderDownload(payload) {
-         this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
-            generatePubSubScope: true,
-            dialogTitle: this.message("services.ActionService.ActionFolderDownload.title"),
-            hideTopic: "ALF_CLOSE_DIALOG",
-            widgetsContent: [
-               {
-                  name: "alfresco/renderers/Progress",
-                  config: {
-                     requestProgressTopic: "ALF_ARCHIVE_REQUEST",
-                     progressFinishedTopic: ["ALF_DOWNLOAD_FILE", "ALF_ARCHIVE_DELETE"],
-                     nodes: [payload.document]
-                  }
-               }
-            ],
-            widgetsButtons: [
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: this.message("services.ActionService.button.cancel"),
-                     additionalCssClasses: "alfresco-dialogs-AlfProgress cancellation",
-                     publishTopic: "ALF_CLOSE_DIALOG"
-                  }
-               }
-            ],
-            handleOverflow: true
-         }, true);
+         this.alfPublish(topics.DOWNLOAD_AS_ZIP, payload);
       },
 
       /**
