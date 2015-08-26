@@ -225,7 +225,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       showDocumentPreview: false,
 
@@ -238,7 +238,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       assumeRendition: false,
 

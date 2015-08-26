@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       filterActions: false,
 
@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       mergeActions: false,
 

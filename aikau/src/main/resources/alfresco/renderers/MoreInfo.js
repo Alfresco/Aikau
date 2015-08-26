@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       xhrRequired: false,
 
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       darkIcon: false,
 

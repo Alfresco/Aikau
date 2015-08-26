@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 
@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       mapHashVarsToPayload: false,
 
@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       updateInstanceValues: false,
 
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useLocalStorageHashFallback: false,
 

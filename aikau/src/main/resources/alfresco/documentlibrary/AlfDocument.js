@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       rawData: false,
 
@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       xhrRequired: false,
 

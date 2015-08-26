@@ -63,7 +63,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showArrow: true,
       

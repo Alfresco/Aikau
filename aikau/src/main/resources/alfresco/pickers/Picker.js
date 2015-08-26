@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showPickedItems: true,
 
@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _processsingPickedItems: false,
 

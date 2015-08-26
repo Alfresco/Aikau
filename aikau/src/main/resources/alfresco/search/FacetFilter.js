@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       applied: false,
       
@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       hide: false,
       
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 

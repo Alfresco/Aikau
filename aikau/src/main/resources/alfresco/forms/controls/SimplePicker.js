@@ -221,7 +221,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       singleItemMode: false,
 
@@ -260,7 +260,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       reorderable: false,
 

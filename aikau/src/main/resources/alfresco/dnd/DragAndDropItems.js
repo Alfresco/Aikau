@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       dragWithHandles: false,
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useItemsOnce: false,
 
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       immediateRender: true,
 
@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       selfAccept: false,
 

@@ -278,21 +278,21 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       advancedSearch: true,
       
       /**
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       allsites: false,
       
       /**
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       liveSearch: true,
       
@@ -395,7 +395,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       publishGlobal: false,
 
@@ -405,7 +405,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       publishToParent: false,
 
@@ -438,7 +438,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       publishPayloadItemMixin: true,
 
@@ -516,7 +516,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default  false
+       * @default
        */
       suppressRedirect: false,
 
@@ -525,7 +525,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showDocumentResults: true,
 
@@ -534,7 +534,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showSiteResults: true,
 
@@ -543,7 +543,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showPeopleResults: true,
 
@@ -733,7 +733,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       linkToFacetedSearch: true,
 

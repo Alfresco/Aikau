@@ -76,7 +76,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       isPromisedWidget: true,
 

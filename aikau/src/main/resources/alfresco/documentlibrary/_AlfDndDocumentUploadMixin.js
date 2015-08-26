@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean} 
-       * @default false
+       * @default
        */
       dndUploadEnabled: false,
       
@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean} 
-       * @default false
+       * @default
        */
       dndUploadCapable: false, 
     

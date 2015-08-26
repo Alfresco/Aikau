@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       cancelOnEscape: true,
 
@@ -140,7 +140,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       cancellationPublishToParent: false,
 

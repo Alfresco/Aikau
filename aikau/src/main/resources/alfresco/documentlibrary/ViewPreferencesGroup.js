@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       userIsSiteManager: false,
 

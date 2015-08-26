@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       excludeFromPubSubLog: true,
 

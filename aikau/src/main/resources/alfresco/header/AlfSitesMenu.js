@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the "Recent Sites" group should be displayed or not.
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showRecentSites: true,
       
@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showUsefulGroup: true,
       
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showSiteFinder: true,
       
@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the "Create Site" menu item should be displayed or not.
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showCreateSite: true,
 
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the "My Sites" menu item should be displayed or not.
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showMySites: true,
       
@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showFavourites: true,
       
@@ -189,7 +189,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the menu has been loaded yet.
        * @instance
        * @type {boolean} 
-       * @default false
+       * @default
        */
       _menuLoaded: false,
       
@@ -345,7 +345,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _favouritesLoaded: false,
       

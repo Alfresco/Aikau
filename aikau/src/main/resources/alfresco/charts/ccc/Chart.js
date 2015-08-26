@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {boolean|pvc.options.panels.LegendPanel}
-             * @default false
+             * @default
              */
             legend: false,
 
@@ -155,7 +155,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {boolean}
-             * @default false
+             * @default
              */
             selectable: false,
 
@@ -165,7 +165,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {boolean}
-             * @default false
+             * @default
              */
             hoverable: false,
 

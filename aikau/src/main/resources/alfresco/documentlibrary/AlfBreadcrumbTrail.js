@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not to hide the breadcrumb trail when first instantiated.
        * @instance 
        * @type{boolean}
-       * @default false
+       * @default
        */
       hide: false,
       
@@ -120,7 +120,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       lastBreadcrumbIsCurrentNode: false,
 
@@ -182,7 +182,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       lastBreadcrumbPublishPayloadItemMixin: false,
 
@@ -214,7 +214,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean} 
-       * @default true
+       * @default
        */
       showRootLabel: true,
          
@@ -224,7 +224,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 

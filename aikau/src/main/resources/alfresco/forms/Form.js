@@ -173,7 +173,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       convertFormToJsonString: false,
       
@@ -214,7 +214,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       scopeFormControls: true,
       
@@ -223,7 +223,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       displayButtons: true,
       
@@ -246,7 +246,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       setValueTopicGlobalScope: true,
 
@@ -256,7 +256,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       setValueTopicParentScope: false,
 
@@ -267,7 +267,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showValidationErrorsImmediately: true,
 
@@ -279,7 +279,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       waitForPageWidgets: true,
 
@@ -571,7 +571,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default false
+       * @default
        */
       validFormValuesPublishGlobal: false,
 
@@ -580,7 +580,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       validFormValuesPublishOnInit: false,
 
@@ -589,7 +589,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showOkButton: true,
       
@@ -598,7 +598,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showCancelButton: true,
       
@@ -701,7 +701,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       autoSaveOnInvalid: false,
       
@@ -735,7 +735,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 
@@ -744,7 +744,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       setHash: false,
       
@@ -754,7 +754,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _formSetupComplete: false,
 

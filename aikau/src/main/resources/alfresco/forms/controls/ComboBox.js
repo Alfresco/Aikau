@@ -53,7 +53,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       autoComplete: false,
 

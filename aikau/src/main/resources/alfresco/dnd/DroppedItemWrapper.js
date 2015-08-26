@@ -171,7 +171,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       showEditButton: false,
 
@@ -340,7 +340,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       editPublishGlobal: true,
 
@@ -349,7 +349,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       editPublishToParent: false,
 
@@ -388,7 +388,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       editPublishPayloadItemMixin: false,
 

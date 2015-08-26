@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type boolean
-       * @default false
+       * @default
        */
       sortable: false,
 
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type boolean
-       * @default false
+       * @default
        */
       usedForSort: false,
 
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type boolean
-       * @default false
+       * @default
        */
       sortedAscending: false,
 

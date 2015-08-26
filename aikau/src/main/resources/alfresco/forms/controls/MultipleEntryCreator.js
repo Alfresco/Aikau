@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not re-ordering should be enabled through the use of drag and drop
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       enableDND: false,
       

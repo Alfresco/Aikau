@@ -99,7 +99,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       initiallyRevealed: false,
 

@@ -228,7 +228,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type boolean
-          * @default true
+          * @default
           */
          disabledPageLinking: true
       },
@@ -292,7 +292,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       maximized : false,
 
@@ -310,7 +310,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       inDashlet : false,
 
@@ -1391,7 +1391,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _findPrevious: false,
 
@@ -1424,7 +1424,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _matchCase: false,
 
@@ -1444,7 +1444,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _highlightAll: false,
 

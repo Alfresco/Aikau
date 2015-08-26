@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {Boolean}
-          * @default false
+          * @default
           */
          singleItemMode: false,
 
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {Boolean}
-          * @default false
+          * @default
           */
          allowNone: false,
 

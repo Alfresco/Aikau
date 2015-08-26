@@ -42,7 +42,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       waitForPageWidgets: false,
 
@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 
@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {Boolean}
-       * @default false
+       * @default
        */
       siteMode: false,
 
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       publishPayloadItemMixin: false,
 

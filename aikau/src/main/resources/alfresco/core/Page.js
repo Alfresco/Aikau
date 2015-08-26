@@ -294,7 +294,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       serviceProcessingComplete: false,
 

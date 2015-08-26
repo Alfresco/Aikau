@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       horizontal: false,
       
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       withHandles: true,
 
@@ -211,7 +211,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useModellingService: false,
 

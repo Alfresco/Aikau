@@ -256,7 +256,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       postWhenHiddenOrDisabled: true,
 
@@ -269,7 +269,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       noValueUpdateWhenHiddenOrDisabled: false,
 
@@ -291,7 +291,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       _visible: true,
 
@@ -318,7 +318,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _required: false,
 
@@ -1045,7 +1045,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       isPromisedWidget: false,
 
@@ -1244,7 +1244,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _hadFocus: false,
 
@@ -1317,7 +1317,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _convertStringValuesToBooleans: false,
 
@@ -1605,7 +1605,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showValidationErrorsImmediately: true,
 
@@ -1617,7 +1617,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _pendingValidationFailureDisplay: false,
 

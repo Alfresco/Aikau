@@ -122,7 +122,7 @@ define([
           *
           * @instance
           * @type {boolean}
-          * @default true
+          * @default
           */
          choiceCanWrap: true,
 

@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the menu item is selected or not
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       checked: false,
 
@@ -242,7 +242,7 @@ define(["dojo/_base/declare",
        * Overrides the default value provided by the _AlfMenuItemMixin
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       closeOnClick: true,
 

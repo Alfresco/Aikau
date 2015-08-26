@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not to show the bigger/smaller buttons at either end of the slider
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showButtons: true,
       
