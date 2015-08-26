@@ -42,7 +42,7 @@ define([],function() {
        *
        * @instance
        * @type {String}
-       * @default "onItemsUpdated"
+       * @default
        */
       updateItemsEvent: "onAlfItemsUpdated",
 
@@ -78,7 +78,7 @@ define([],function() {
        *
        * @instance
        * @type {string}
-       * @default "onAlfItemAdditionalConfigRequest"
+       * @default
        */
       requestAdditionalConfigEvent: "onAdditionalConfigRequest",
 

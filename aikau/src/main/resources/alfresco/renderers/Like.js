@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "node.properties.fm:commentCount"
+       * @default
        */
       likeCountProperty: "likes.totalLikes",
 

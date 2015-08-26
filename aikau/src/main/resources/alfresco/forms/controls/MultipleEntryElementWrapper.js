@@ -164,7 +164,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.delete"
+       * @default
        */
       editEntryAltText: "multiple-entry.edit",
 
@@ -184,7 +184,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "delete-16.png"
+       * @default
        */
       editEntryImage: "edit-16.png",
 

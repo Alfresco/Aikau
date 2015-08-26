@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "PAGE_RELATIVE"
+       * @default
        */
       targetUrlLocation: "CURRENT",
 

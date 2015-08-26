@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "title.label"
+       * @default
        */
       label: "",
 

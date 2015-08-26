@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "docListFilterPref"
+       * @default
        */
       filterPrefsName: "docListTagFilterPref",
       

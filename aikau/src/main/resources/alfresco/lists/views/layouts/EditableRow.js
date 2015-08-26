@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_EDITABLE_ROW_READ_MODE"
+       * @default
        */
       readModeSavePublishTopic: "ALF_EDITABLE_ROW_READ_MODE_SAVE",
 
@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_EDITABLE_ROW_READ_MODE"
+       * @default
        */
       readModeCancelPublishTopic: "ALF_EDITABLE_ROW_READ_MODE_CANCEL",
 

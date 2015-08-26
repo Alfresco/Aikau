@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       dialogConfirmationButtonTitle: "OK",
 
@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       dialogCancellationButtonTitle: "Cancel",
 

@@ -112,7 +112,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "moreinfo.altText.label"
+       * @default
        */
       altText: "moreinfo.altTextWithContext.label",
 

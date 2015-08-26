@@ -47,7 +47,6 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-header-Header"
        */
       postCreate: function alfresco_core_ProcessWidgets__postCreate() {
          domClass.add(this.domNode, "alfresco-header-Header");

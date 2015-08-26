@@ -272,7 +272,7 @@ define(["dojo/_base/declare",
        * @event syncLocationTopic
        * @instance
        * @type {string}
-       * @default "ALF_UNSYNC_CURRENT_LOCATION"
+       * @default
        */
       syncLocationTopic: "ALF_SYNC_CURRENT_LOCATION",
       

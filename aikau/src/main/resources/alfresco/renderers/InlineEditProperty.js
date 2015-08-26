@@ -197,7 +197,6 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_CRUD_CREATE"
        */
       setDefaultPublicationData: function alfresco_renderers_InlineEditProperty__setDefaultPublicationData() {
          this.publishTopic = "ALF_CRUD_CREATE";
