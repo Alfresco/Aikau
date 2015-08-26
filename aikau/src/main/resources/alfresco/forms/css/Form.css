@@ -2,4 +2,8 @@
    .alfresco-header-Warning {
       margin-bottom: @standard-line-height;
    }
+
+   .alfresco-forms-Form__warnings--hidden {
+      display: none;
+   }
 }
