@@ -172,33 +172,17 @@ define(["alfresco/core/ProcessWidgets",
        * @since 1.0.33
        */
       getVisibilityRuleTopics: function alfresco_layout_HorizontalWidgets__getVisibilityRuleTopics(widgets) {
-         var topics = [];
-         var ruleTopicsObject = {};
+         var topicNames = {};
          array.forEach(widgets, function(widget) {
-            var visibilityRules = lang.getObject("config.visibilityConfig.rules", false, widget);
-            array.forEach(visibilityRules, function(rule) {
-               if (rule.topic && !ruleTopicsObject[rule.topic])
-               {
-                  ruleTopicsObject[rule.topic] = true;
-               }
-            });
-            var invisibilityRules = lang.getObject("config.invisibilityConfig.rules", false, widget);
-            array.forEach(invisibilityRules, function(rule) {
-               if (rule.topic && !ruleTopicsObject[rule.topic])
-               {
-                  ruleTopicsObject[rule.topic] = true;
+            var visibilityRules = lang.getObject("config.visibilityConfig.rules", false, widget) || [];
+            var invisibilityRules = lang.getObject("config.invisibilityConfig.rules", false, widget) || [];
+            array.forEach(visibilityRules.concat(invisibilityRules), function(rule) {
+               if (rule.topic) {
+                  topicNames[rule.topic] = true;
                }
             });
          });
-
-         for (var key in ruleTopicsObject) 
-         {
-            if (ruleTopicsObject.hasOwnProperty(key))
-            {
-               topics.push(key);
-            }
-         }
-         return topics;
+         return Object.keys(topicNames);
       },
 
       /**
