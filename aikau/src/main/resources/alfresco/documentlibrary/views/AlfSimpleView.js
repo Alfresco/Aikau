@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,7 +27,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView"],
-        function(declare, AlfDocumentListView, template) {
+        function(declare, AlfDocumentListView) {
 
    return declare([AlfDocumentListView], {
 
@@ -119,6 +119,7 @@ define(["dojo/_base/declare",
                                                 name: "alfresco/renderers/InlineEditPropertyLink",
                                                 config: {
                                                    propertyToRender: "node.properties.cm:name",
+                                                   permissionProperty: "node.permissions.user.Write",
                                                    postParam: "prop_cm_name",
                                                    renderSize: "large"
                                                 }
@@ -127,6 +128,7 @@ define(["dojo/_base/declare",
                                                 name: "alfresco/renderers/InlineEditProperty",
                                                 config: {
                                                    propertyToRender: "node.properties.cm:title",
+                                                   permissionProperty: "node.permissions.user.Write",
                                                    postParam: "prop_cm_title",
                                                    renderSize: "small",
                                                    renderedValuePrefix: "(",
