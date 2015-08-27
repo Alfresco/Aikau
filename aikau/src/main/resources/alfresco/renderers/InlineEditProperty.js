@@ -158,16 +158,15 @@ define(["dojo/_base/declare",
       
       /**
        * The value configured will be used to look up a property for the item being rendered to 
-       * determine whether or not to render the edit controls. The default value maps to the
-       * write permissions typically found in the data returned for a Node in the Alfresco
-       * repository. If this is configured to be null then the edit controls will always
-       * be rendered.
+       * determine whether or not to render the edit controls. If this is configured to be null 
+       * then the edit controls will always be rendered.
        *
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.31
        */
-      permissionProperty: "node.permissions.user.Write",
+      permissionProperty: null,
 
       /**
        * Indicates whether or not the currentItem should be updated following a successful
