@@ -57,7 +57,8 @@ model.jsonModel = {
                                                    label: "Channel Type",
                                                    name: "alfresco/renderers/InlineEditProperty",
                                                    config: {
-                                                      propertyToRender: "node.properties.audio:channelType"
+                                                      propertyToRender: "node.properties.audio:channelType",
+                                                      permissionProperty: "node.permissions.user.Write"
                                                    }
                                                 }
                                              ]
@@ -132,7 +133,8 @@ model.jsonModel = {
                                                    label: "Channel Type",
                                                    name: "alfresco/renderers/InlineEditProperty",
                                                    config: {
-                                                      propertyToRender: "node.properties.audio:channelType"
+                                                      propertyToRender: "node.properties.audio:channelType",
+                                                      permissionProperty: "node.permissions.user.Write"
                                                    }
                                                 }
                                              ]
