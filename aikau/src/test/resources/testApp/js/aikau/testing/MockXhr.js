@@ -199,6 +199,15 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
+      _clearLog: function alfresco_testing_MockXhr___clearLog() {
+         domConstruct.empty(this.logNode);
+      },
+
+      /**
+       * Toggle the body visibility for the log
+       *
+       * @instance
+       */
       _toggleBody: function alfresco_testing_MockXhr___toggleBody() {
          domClass.toggle(this.domNode, "alfresco-testing-MockXhr--hide-body");
       }
