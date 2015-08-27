@@ -212,9 +212,9 @@ define(["dojo/_base/declare",
       description: "",
 
       /**
-       * Inline help for the field. If this is not empty it will cause a help icon to show which, when clicked, will 
+       * Inline help for the field. If this is not empty it will cause a help icon to show which, when clicked, will
        * launch a dialog containing the additional help content.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -384,7 +384,7 @@ define(["dojo/_base/declare",
 
       /**
        * Defines the visibility behaviour of the widget. It is possible for the widget to dynamically be hidden
-       * or displayed based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/BaseFormControl#processConfig}
+       * or displayed based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/utilities/RulesEngineMixin#processConfig}
        * for the structure to use when configuring the rules</p>
        *
        * @instance
@@ -395,7 +395,7 @@ define(["dojo/_base/declare",
 
       /**
        * Defines the requirement behaviour of the widget. It is possible for the widget to dynamically be required
-       * to have a value provided based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/BaseFormControl#processConfig}
+       * to have a value provided based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/utilities/RulesEngineMixin#processConfig}
        * for the structure to use when configuring the rules</p>
        *
        * @instance
@@ -406,7 +406,7 @@ define(["dojo/_base/declare",
 
       /**
        * Defines the disablement behaviour of the widget. It is possible for the widget to dynamically be disabled
-       * or enabled based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/BaseFormControl#processConfig}
+       * or enabled based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/utilities/RulesEngineMixin#processConfig}
        * for the structure to use when configuring the rules</p>
        *
        * @instance
@@ -790,7 +790,7 @@ define(["dojo/_base/declare",
 
       /**
        * Delegates focus calls to the wrapped widget.
-       * 
+       *
        * @instance
        */
       focus: function alfresco_forms_controls_BaseFormControl__focus() {
@@ -939,7 +939,7 @@ define(["dojo/_base/declare",
 
       /**
        * The alt-text label to use for the validation in progress indicator.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -948,7 +948,7 @@ define(["dojo/_base/declare",
 
       /**
        * The local image to use for the inline help indicator.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -957,7 +957,7 @@ define(["dojo/_base/declare",
 
       /**
        * The alt-text label to use for the inline help indicator.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -966,7 +966,7 @@ define(["dojo/_base/declare",
 
       /**
        * The width of the inline help dialog.
-       * 
+       *
        * @instance
        * @type {number}
        * @default
@@ -1739,9 +1739,9 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is attached to the click event of the inline help icon and will display a dialog containing 
+       * This function is attached to the click event of the inline help icon and will display a dialog containing
        * inline help when called.
-       * 
+       *
        * @instance
        */
       showInlineHelp: function alfresco_forms_controls_BaseFormControl__showInlineHelp() {
