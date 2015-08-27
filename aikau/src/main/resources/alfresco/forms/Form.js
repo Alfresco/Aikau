@@ -619,6 +619,17 @@ define(["dojo/_base/declare",
       okButtonLabel: "form.button.ok.label",
       
       /**
+       * Additional CSS clases to apply to the confirmation button on the form. This defaults to
+       * have the "call-to-action" style, but this can be overridden as required.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      okButtonClass: "call-to-action",
+
+      /**
        * @instance 
        * @type {string}
        * @default

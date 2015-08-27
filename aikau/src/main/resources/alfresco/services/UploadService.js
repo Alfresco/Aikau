@@ -190,7 +190,8 @@ define(["dojo/_base/declare",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: this.message("progress-dialog.ok-button.label"),
-                        publishTopic: okButtonClickTopic
+                        publishTopic: okButtonClickTopic,
+                        additionalCssClasses: "call-to-action"
                      }
                   },
                   {

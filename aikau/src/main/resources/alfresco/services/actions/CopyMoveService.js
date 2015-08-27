@@ -147,7 +147,8 @@ define(["dojo/_base/declare",
                      publishPayload: publishPayload,
                      disableOnInvalidControls: true,
                      validTopic: "ALF_PICKER_VALID",
-                     invalidTopic: "ALF_PICKER_INVALID"
+                     invalidTopic: "ALF_PICKER_INVALID",
+                     additionalCssClasses: "call-to-action"
                   }
                },
                {

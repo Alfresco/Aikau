@@ -166,7 +166,7 @@ define(["dojo/_base/declare",
                      config: {
                         label: this.dialogConfirmationButtonTitle,
                         disableOnInvalidControls: true,
-                        additionalCssClasses: "alfresco-dialogs-_AlfCreateFormDialogMixin confirmation",
+                        additionalCssClasses: "alfresco-dialogs-_AlfCreateFormDialogMixin confirmation call-to-action",
                         publishTopic: this._formConfirmationTopic
                      }
                   },

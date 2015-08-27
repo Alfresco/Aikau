@@ -647,7 +647,7 @@ define(["dojo/_base/declare",
                         id: (config.dialogConfirmationButtonId) ? config.dialogConfirmationButtonId : dialogId + "_OK",
                         label: config.dialogConfirmationButtonTitle,
                         disableOnInvalidControls: true,
-                        additionalCssClasses: "confirmationButton",
+                        additionalCssClasses: "confirmationButton call-to-action",
                         publishTopic: this._formConfirmationTopic,
                         publishPayload: {
                            formSubmissionTopic: config.formSubmissionTopic,
