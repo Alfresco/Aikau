@@ -50,23 +50,22 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/DocumentService.properties"}],
 
       /**
-       * Overrides the default setting for encoding URIs
+       * How long should we wait before triggering a request on a failed progress update?
        *
        * @instance
-       * @type {boolean}
+       * @type {int}
        * @default
        */
-      encodeURIs: false,
+      archiveProgressUpdateFailureInterval: 5000,
 
       /**
-       * The URL to the download API
+       * How often should we request an update on an Archive's progress?
        *
        * @instance
-       * @type {String}
-       * @default [AlfConstants.PROXY_URI + "api/internal/downloads"]
-       * @todo should this be parameterised?
+       * @type {int}
+       * @default
        */
-      downloadAPI: AlfConstants.PROXY_URI + "api/internal/downloads",
+      archiveProgressUpdateInterval: 250,
 
       /**
        * The URL used to cancel document editing
@@ -79,6 +78,25 @@ define(["dojo/_base/declare",
       cancelEditAPI: AlfConstants.PROXY_URI + "slingshot/doclib/action/cancel-checkout/node/",
 
       /**
+       * The URL to the download API
+       *
+       * @instance
+       * @type {String}
+       * @default [AlfConstants.PROXY_URI + "api/internal/downloads"]
+       * @todo should this be parameterised?
+       */
+      downloadAPI: AlfConstants.PROXY_URI + "api/internal/downloads",
+
+      /**
+       * Overrides the default setting for encoding URIs
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      encodeURIs: false,
+
+      /**
        * How many times should we retry a failed archive progress request?
        *
        * @instance
@@ -88,22 +106,15 @@ define(["dojo/_base/declare",
       maxArchiveProgressRetryCount: 6,
 
       /**
-       * How often should we request an update on an Archive's progress?
-       *
+       * Indicates whether or not XHR requests should be rooted directly to the Alfresco Repository
+       * and bypass the Share web-tier.
+       * 
        * @instance
-       * @type {int}
+       * @type {boolean}
        * @default
+       * @since 1.0.33
        */
-      archiveProgressUpdateInterval: 250,
-
-      /**
-       * How long should we wait before triggering a request on a failed progress update?
-       *
-       * @instance
-       * @type {int}
-       * @default
-       */
-      archiveProgressUpdateFailureInterval: 5000,
+      rawData: false,
 
       /**
        *
@@ -163,7 +174,7 @@ define(["dojo/_base/declare",
 
             var alfTopic = payload.alfResponseTopic || "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST";
             var url;
-            if (payload.rawData === true)
+            if (payload.rawData === true || this.rawData === true)
             {
                url = AlfConstants.PROXY_URI + "slingshot/doclib2/node/" + targetNodeUri + params;
             }
@@ -284,7 +295,7 @@ define(["dojo/_base/declare",
          var alfTopic = payload.alfResponseTopic || "ALF_RETRIEVE_DOCUMENTS_REQUEST";
 
          var url;
-         if (payload.rawData === true)
+         if (payload.rawData === true || this.rawData === true)
          {
             url = AlfConstants.PROXY_URI + "slingshot/doclib2/doclist/" + params;
          }
@@ -308,6 +319,19 @@ define(["dojo/_base/declare",
        * @since 1.0.33
        */
       onDownloadAsZip: function alfresco_services_DocumentService__onDownloadAsZip(payload) {
+         // Make sure that the nodeRef is an attribute at the root of each document, this is 
+         // required to support clients using "raw" data retrieved directly from the Repository...
+         if (payload.documents)
+         {
+            array.forEach(payload.documents, function(item) {
+               item.nodeRef = item.nodeRef || item.node.nodeRef;
+            });
+         }
+         else if (payload.document)
+         {
+            payload.document.nodeRef = payload.document.nodeRef || payload.document.node.nodeRef;
+         }
+         
          this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
             generatePubSubScope: true,
             dialogId: "ARCHIVING_DIALOG",

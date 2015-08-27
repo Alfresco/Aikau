@@ -734,6 +734,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       clearViews: function alfresco_lists_AlfList__clearViews() {
+         // Publish the clear selected items topic to ensure that any selected items menus
+         // don't retain stale data
+         this.alfPublish(topics.CLEAR_SELECTED_ITEMS, {});
          for (var viewName in this.viewMap)
          {
             if (this.viewMap.hasOwnProperty(viewName))
