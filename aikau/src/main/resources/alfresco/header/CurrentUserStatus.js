@@ -181,7 +181,8 @@ define(["dojo/_base/declare",
                      config: {
                         label: this.message("post.button.label"),
                         publishTopic: this.postNewUserStatusTopic,
-                        publishPayload: payload
+                        publishPayload: payload,
+                        additionalCssClasses: "call-to-action"
                      }
                   },
                   {

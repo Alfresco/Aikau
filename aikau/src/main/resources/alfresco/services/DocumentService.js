@@ -328,7 +328,7 @@ define(["dojo/_base/declare",
                   name: "alfresco/buttons/AlfButton",
                   config: {
                      label: this.message("services.ActionService.button.cancel"),
-                     additionalCssClasses: "alfresco-dialogs-AlfProgress cancellation",
+                     additionalCssClasses: "alfresco-dialogs-AlfProgress cancellation call-to-action",
                      publishTopic: "ALF_CLOSE_DIALOG"
                   }
                }

@@ -605,7 +605,8 @@ define(["dojo/_base/declare",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: this.message("thumbnail.preview.dialog.close"),
-                        publishTopic: "NO_OP"
+                        publishTopic: "NO_OP",
+                        additionalCssClasses: "call-to-action"
                      }
                   }
                ],
