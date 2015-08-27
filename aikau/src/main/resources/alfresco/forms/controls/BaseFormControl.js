@@ -994,7 +994,9 @@ define(["dojo/_base/declare",
          {
             this.inlineHelpImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.inlineHelpImg;
          }
-         this.inlineHelpAltText = this.message(this.inlineHelpAltText) + " " + this.message(this.label);
+         this.inlineHelpAltText = this.message(this.inlineHelpAltText, {
+            0: this.message(this.label)
+         });
       },
 
       /**
