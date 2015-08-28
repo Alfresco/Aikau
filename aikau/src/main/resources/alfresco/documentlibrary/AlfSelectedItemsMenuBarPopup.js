@@ -29,8 +29,9 @@
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarPopup",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang"], 
-        function(declare, AlfMenuBarPopup, _AlfDocumentListTopicMixin, lang) {
+        function(declare, AlfMenuBarPopup, _AlfDocumentListTopicMixin, topics, lang) {
    
    return declare([AlfMenuBarPopup, _AlfDocumentListTopicMixin], {
       
@@ -103,7 +104,7 @@ define(["dojo/_base/declare",
             this.currentlySelectedItems = {};
             this.alfSubscribe(this.documentSelectedTopic, lang.hitch(this, this.onItemSelected));
             this.alfSubscribe(this.documentDeselectedTopic, lang.hitch(this, this.onItemDeselected));
-            this.alfSubscribe("ALF_CLEAR_SELECTED_ITEMS", lang.hitch(this, this.onItemSelectionCleared));
+            this.alfSubscribe(topics.CLEAR_SELECTED_ITEMS, lang.hitch(this, this.onItemSelectionCleared));
             this.alfSubscribe("ALF_SELECTED_DOCUMENTS_ACTION_REQUEST", lang.hitch(this, this.onSelectedDocumentsAction));
          }
          this.inherited(arguments);
@@ -195,7 +196,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This clears the currently selected items. It it bound to the "ALF_CLEAR_SELECTED_ITEMS" that is published
+       * This clears the currently selected items. It it bound to the 
+       * [CLEAR_SELECTED_ITEMS topic]{@link module:alfresco/core/topics#CLEAR_SELECTED_ITEMS} that is published
        * by the [AlfSelectedItemsMenuItem]{@link module:alfresco/menus/AlfSelectedItemsMenuItem} when clicked.
        *
        * @instance

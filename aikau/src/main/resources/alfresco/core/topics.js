@@ -61,6 +61,17 @@ define([],function() {
       CANCEL_EDIT: "ALF_DOC_CANCEL_EDITING",
 
       /**
+       * This can be published to clear any selected items that are logged by widgets
+       * such as the [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      CLEAR_SELECTED_ITEMS: "ALF_CLEAR_SELECTED_ITEMS",
+
+      /**
        * Delete the archive created for downloading.
        *
        * @instance

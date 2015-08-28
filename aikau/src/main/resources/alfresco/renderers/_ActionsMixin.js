@@ -153,6 +153,9 @@ define(["dojo/_base/declare",
        */
       widgetsForActions: [
          {
+            name: "alfresco/renderers/actions/DownloadAsZip"
+         },
+         {
             name: "alfresco/renderers/actions/UploadNewVersion"
          },
          {

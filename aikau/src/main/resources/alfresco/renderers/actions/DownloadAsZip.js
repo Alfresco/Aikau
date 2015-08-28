@@ -21,7 +21,7 @@
  * <p>This module provides the configuration that can be used for rendering a [menu item]{@link module:alfresco/menus/AlfMenuItem}
  * for the "Download As Zip" action. The action is only available for nodes that are folders.</p>
  * 
- * @module alfresco/renderers/actions/Download
+ * @module alfresco/renderers/actions/DownloadAsZip
  * @author Dave Draper
  * @since 1.0.33
  */
