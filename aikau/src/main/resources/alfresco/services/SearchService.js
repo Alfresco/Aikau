@@ -230,9 +230,8 @@ define(["dojo/_base/declare",
                sort = (payload.sortField || this.sort) + "|" + (payload.sortAscending || this.sortAscending);
             }
 
-            var defaultFacetFields = "{http://www.alfresco.org/model/content/1.0}content.mimetype,{http://www.alfresco.org/model/content/1.0}modifier.__,{http://www.alfresco.org/model/content/1.0}creator.__,{http://www.alfresco.org/model/content/1.0}description.__";
             var data = {
-               facetFields: payload.facetFields || defaultFacetFields,
+               facetFields: payload.facetFields || "",
                filters: payload.filters || "",
                term: payload.term,
                tag: payload.tag || this.tag,
