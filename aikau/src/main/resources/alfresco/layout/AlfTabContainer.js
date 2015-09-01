@@ -360,6 +360,7 @@ define(["dojo/_base/declare",
 
          this.alfSetupResizeSubscriptions(this.onResize, this);
          this.alfPublishResizeEvent(this.domNode);
+         domClass.add(this.domNode, "alfresco-layout-AlfTabContainer--tabsDisplayed");
       },
 
       /**

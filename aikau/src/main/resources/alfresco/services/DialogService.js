@@ -421,7 +421,7 @@ define(["dojo/_base/declare",
             id: payload.dialogId ? payload.dialogId : this.generateUuid(),
             title: this.message(payload.dialogTitle || ""),
             content: payload.textContent,
-            duration: payload.duration || 0,
+            // duration: payload.duration || 0,
             widgetsContent: payload.widgetsContent,
             widgetsButtons: payload.widgetsButtons,
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",
@@ -580,15 +580,26 @@ define(["dojo/_base/declare",
 
       /**
        * When repeating a request for a dialog (the "Create and then create another" paradigm) it is necessary to wait
-       * until the previous dialog has been completely hidden before attempting to create another one.
+       * until the previous dialog has been completely hidden before attempting to create another one if there is a
+       * fade out animation configured on the dialog.
        *
        * @instance
        * @param {object} payload A copy of the original form dialog creation request
        * @param {object} dialog The dialog that must be fully hidden before the request for a new dialog is made.
        */
       _repeatFormDialogRequestAfterHide: function alfresco_services_DialogService___repeatFormDialogRequestAfterHide(payload, dialog) {
-         var handle = aspect.after(dialog, "onHide", lang.hitch(this, this.onCreateFormDialogRequest, payload));
-         this.mapRequestedIdToHandle(payload, "dialog.repeat.hide", handle);
+         if (dialog._isShown())
+         {
+            // If the dialog is still shown then we need to set up an aspect to wait for the dialog to be hidden
+            // before we attempt to recreate a dialog with the original configuration...
+            var handle = aspect.after(dialog, "onHide", lang.hitch(this, this.onCreateFormDialogRequest, payload));
+            this.mapRequestedIdToHandle(payload, "dialog.repeat.hide", handle);
+         }
+         else
+         {
+            // ...but if the dialog is already hidden we can just go ahead and recreate it
+            this.onCreateFormDialogRequest(payload);
+         }
       },
 
       /**
@@ -634,7 +645,7 @@ define(["dojo/_base/declare",
             id: dialogId,
             title: this.message(config.dialogTitle || ""),
             pubSubScope: config.pubSubScope, // Scope the dialog content so that it doesn't pollute any other widgets,,
-            duration: config.duration || 0,
+            // duration: config.duration || 0,
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth,
             parentPubSubScope: config.parentPubSubScope,

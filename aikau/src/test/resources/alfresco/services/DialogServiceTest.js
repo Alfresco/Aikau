@@ -372,10 +372,12 @@ define(["intern!object",
          .end()
          .findAllByCssSelector("#TABBED_FORM_DIALOG.dialogDisplayed")
          .end()
+         .findAllByCssSelector("#TABBED_FORM_DIALOG.alfresco-layout-AlfTabContainer--tabsDisplayed")
+         .end()
          .findByCssSelector("#TABBED_FORM_DIALOG .dijitTabController")
             .getSize()
             .then(function(size) {
-               assert(size.height > 0, "Tabs were not displayed correctly when dialog is initially shown");
+               assert(size.height > 0, "Tabs were not displayed correctly when dialog is initially shown, height = " + size.height);
             });
       },
 
