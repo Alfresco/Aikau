@@ -91,6 +91,16 @@ define(["dojo/_base/declare",
       content: "",
       
       /**
+       * This controls the duration of the fade in/out effect when the dialog is shown and hidden.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.33
+       */
+      duration: 0,
+
+      /**
        * Widgets to be processed into the main node
        * 
        * @instance
