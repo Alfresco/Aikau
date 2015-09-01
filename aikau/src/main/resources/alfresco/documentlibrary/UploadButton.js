@@ -46,7 +46,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "upload.label"
+       * @default
        */
       label: "upload.label",
 
@@ -54,7 +54,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "alf-upload-icon"
+       * @default
        */
       iconClass: "alf-upload-icon",
       
@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "ALF_SHOW_UPLOADER"
+       * @default
        */
       publishTopic: "ALF_SHOW_UPLOADER",
 

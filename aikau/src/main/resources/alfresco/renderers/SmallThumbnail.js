@@ -43,7 +43,7 @@ define(["dojo/_base/declare",
        * Adds the "small" CSS classes the main DOM node defined in the template
        * @instance
        * @type {string}
-       * @default "small"
+       * @default
        */
       customClasses: "small",
       

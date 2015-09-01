@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "move-up.png"
+       * @default
        */
       upArrowImg: "move-up.png",
 
@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "move-down.png"
+       * @default
        */
       downArrowImg: "move-down.png",
 
@@ -119,7 +119,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_REORDER_UP"
+       * @default
        */
       upPublishTopic: "ALF_REORDER_UP",
 
@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_REORDER_DOWN"
+       * @default
        */
       downPublishTopic: "ALF_REORDER_DOWN",
 
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "reorder.moveup.altText"
+       * @default
        */
       upAltText: "reorder.moveup.altText",
 
@@ -147,7 +147,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "reorder.movedown.altText"
+       * @default
        */
       downAltText: "reorder.movedown.altText",
 
@@ -158,7 +158,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "displayName"
+       * @default
        */
       propertyToRender: "displayName",
 

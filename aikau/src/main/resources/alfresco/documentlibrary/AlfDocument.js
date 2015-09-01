@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST"
+       * @default
        */
       loadDataPublishTopic: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
 
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       rawData: false,
 
@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       xhrRequired: false,
 
@@ -151,7 +151,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       itemProperty: null,
 

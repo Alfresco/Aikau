@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       wrappedWidget: null,
 
@@ -155,7 +155,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       pubSubScope: "",
 
@@ -164,7 +164,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       type: "",
 
@@ -177,7 +177,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       fieldId: "",
 
@@ -187,7 +187,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       label: "",
 
@@ -197,7 +197,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       unitsLabel: "",
 
@@ -207,17 +207,17 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       description: "",
 
       /**
-       * Inline help for the field. If this is not empty it will cause a help icon to show which, when clicked, will 
+       * Inline help for the field. If this is not empty it will cause a help icon to show which, when clicked, will
        * launch a dialog containing the additional help content.
-       * 
+       *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       inlineHelp: "",
 
@@ -234,7 +234,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       value: "",
 
@@ -243,7 +243,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       options: null,
 
@@ -256,7 +256,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       postWhenHiddenOrDisabled: true,
 
@@ -269,7 +269,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       noValueUpdateWhenHiddenOrDisabled: false,
 
@@ -282,16 +282,28 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       noPostWhenValueIs: null,
+
+      /**
+       * Whether - when a publishTopic is available in the supplied optionsConfig - to immediately
+       * publish to that topic in order to retrieve any default pubSubOptions for this control. If
+       * set to false, then it will not do that initial publish.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.33
+       */
+      getPubSubOptionsImmediately: true,
 
       /**
        * The default visibility status is always true (this can be overridden by extending controls).
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       _visible: true,
 
@@ -318,7 +330,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _required: false,
 
@@ -372,7 +384,7 @@ define(["dojo/_base/declare",
 
       /**
        * Defines the visibility behaviour of the widget. It is possible for the widget to dynamically be hidden
-       * or displayed based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/BaseFormControl#processConfig}
+       * or displayed based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/utilities/RulesEngineMixin#processConfig}
        * for the structure to use when configuring the rules</p>
        *
        * @instance
@@ -383,7 +395,7 @@ define(["dojo/_base/declare",
 
       /**
        * Defines the requirement behaviour of the widget. It is possible for the widget to dynamically be required
-       * to have a value provided based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/BaseFormControl#processConfig}
+       * to have a value provided based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/utilities/RulesEngineMixin#processConfig}
        * for the structure to use when configuring the rules</p>
        *
        * @instance
@@ -394,7 +406,7 @@ define(["dojo/_base/declare",
 
       /**
        * Defines the disablement behaviour of the widget. It is possible for the widget to dynamically be disabled
-       * or enabled based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/BaseFormControl#processConfig}
+       * or enabled based on the value of one or more other widgets. See [processConfig]{@link module:alfresco/forms/controls/utilities/RulesEngineMixin#processConfig}
        * for the structure to use when configuring the rules</p>
        *
        * @instance
@@ -415,7 +427,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       autoSetConfig: null,
 
@@ -580,7 +592,7 @@ define(["dojo/_base/declare",
             var pubSub = lang.getObject("publishTopic", false, config),
                 callback = lang.getObject("callback", false, config),
                 fixed = lang.getObject("fixed", false, config);
-            if (pubSub)
+            if (pubSub && this.getPubSubOptionsImmediately)
             {
                this.getPubSubOptions(config);
             }
@@ -772,13 +784,13 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _pubSubOptionsHandle: null,
 
       /**
        * Delegates focus calls to the wrapped widget.
-       * 
+       *
        * @instance
        */
       focus: function alfresco_forms_controls_BaseFormControl__focus() {
@@ -921,43 +933,43 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ajax_anim.gif"
+       * @default
        */
       validationInProgressImg: "ajax_anim.gif",
 
       /**
        * The alt-text label to use for the validation in progress indicator.
-       * 
+       *
        * @instance
        * @type {string}
-       * @default "validation.inprogress.alttext"
+       * @default
        */
       validationInProgressAltText: "validation.inprogress.alttext",
 
       /**
        * The local image to use for the inline help indicator.
-       * 
+       *
        * @instance
        * @type {string}
-       * @default "help.png"
+       * @default
        */
       inlineHelpImg: "help.png",
 
       /**
        * The alt-text label to use for the inline help indicator.
-       * 
+       *
        * @instance
        * @type {string}
-       * @default "inlinehelp.alttext"
+       * @default
        */
       inlineHelpAltText: "inlinehelp.alttext",
 
       /**
        * The width of the inline help dialog.
-       * 
+       *
        * @instance
        * @type {number}
-       * @default 300
+       * @default
        */
       inlineHelpWidth: 400,
 
@@ -982,7 +994,9 @@ define(["dojo/_base/declare",
          {
             this.inlineHelpImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.inlineHelpImg;
          }
-         this.inlineHelpAltText = this.message(this.inlineHelpAltText) + " " + this.message(this.label);
+         this.inlineHelpAltText = this.message(this.inlineHelpAltText, {
+            0: this.message(this.label)
+         });
       },
 
       /**
@@ -990,7 +1004,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       valueSubscriptionTopic: null,
 
@@ -1045,7 +1059,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       isPromisedWidget: false,
 
@@ -1244,7 +1258,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _hadFocus: false,
 
@@ -1317,7 +1331,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _convertStringValuesToBooleans: false,
 
@@ -1506,7 +1520,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       validationConfig: null,
 
@@ -1605,7 +1619,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showValidationErrorsImmediately: true,
 
@@ -1617,7 +1631,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _pendingValidationFailureDisplay: false,
 
@@ -1727,9 +1741,9 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is attached to the click event of the inline help icon and will display a dialog containing 
+       * This function is attached to the click event of the inline help icon and will display a dialog containing
        * inline help when called.
-       * 
+       *
        * @instance
        */
       showInlineHelp: function alfresco_forms_controls_BaseFormControl__showInlineHelp() {

@@ -174,6 +174,7 @@ define(["dojo/_base/declare",
                               name: "alfresco/renderers/InlineEditPropertyLink",
                               config: {
                                  propertyToRender: "node.properties.cm:name",
+                                 permissionProperty: "node.permissions.user.Write",
                                  postParam: "prop_cm_name",
                                  renderAsLink: true
                               }
@@ -190,6 +191,7 @@ define(["dojo/_base/declare",
                               name: "alfresco/renderers/InlineEditProperty",
                               config: {
                                  propertyToRender: "node.properties.cm:title",
+                                 permissionProperty: "node.permissions.user.Write",
                                  postParam: "prop_cm_title",
                                  warnIfNotAvailable: true,
                                  warnIfNotAvailableMessage: "no.title.message"
@@ -207,6 +209,7 @@ define(["dojo/_base/declare",
                               name: "alfresco/renderers/InlineEditProperty",
                               config: {
                                  propertyToRender: "node.properties.cm:description",
+                                 permissionProperty: "node.permissions.user.Write",
                                  postParam: "prop_cm_description",
                                  warnIfNotAvailable: true,
                                  warnIfNotAvailableMessage: "no.description.message"

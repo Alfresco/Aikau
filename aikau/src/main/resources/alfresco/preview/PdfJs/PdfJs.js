@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type {String}
-          * @default null
+          * @default
           */
          src : null,
 
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default ""
+          * @default
           */
          srcMaxSize: "",
 
@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "false"
+          * @default
           */
          skipbrowsertest : "false",
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "auto"
+          * @default
           */
          defaultScale : "auto",
 
@@ -153,7 +153,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "1.1"
+          * @default
           */
          scaleDelta : "1.1",
 
@@ -162,7 +162,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "0.65"
+          * @default
           */
          autoMinScale : "0.65",
          autoMinScaleMobile: "0.525",
@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "1.25"
+          * @default
           */
          autoMaxScale : "1.25",
 
@@ -181,7 +181,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "multi"
+          * @default
           */
          pageLayout : "multi",
 
@@ -191,7 +191,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "false"
+          * @default
           */
          disableTextLayer : "false",
 
@@ -200,7 +200,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "true"
+          * @default
           */
          useLocalStorage : "true",
 
@@ -209,7 +209,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "true"
+          * @default
           */
          autoSearch : "false",
 
@@ -218,7 +218,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type String
-          * @default "false"
+          * @default
           */
          progressiveLoading: "false",
 
@@ -228,7 +228,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type boolean
-          * @default true
+          * @default
           */
          disabledPageLinking: true
       },
@@ -238,7 +238,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       pdfDocument : null,
 
@@ -247,7 +247,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type int
-       * @default 1
+       * @default
        */
       pageNum : 1,
 
@@ -274,7 +274,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type int
-       * @default 0
+       * @default
        */
       numPages : 0,
 
@@ -292,7 +292,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       maximized : false,
 
@@ -310,7 +310,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       inDashlet : false,
 
@@ -328,7 +328,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentScaleSelection: null,
 
@@ -1317,7 +1317,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _findController: null,
 
@@ -1363,7 +1363,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _query: null,
 
@@ -1391,7 +1391,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _findPrevious: false,
 
@@ -1424,7 +1424,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _matchCase: false,
 
@@ -1444,7 +1444,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _highlightAll: false,
 

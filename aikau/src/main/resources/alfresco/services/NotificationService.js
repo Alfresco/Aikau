@@ -120,7 +120,8 @@ define(["dojo/_base/declare",
                   {
                      name: "alfresco/buttons/AlfButton",
                      config: {
-                        label: "notification.ok.label"
+                        label: "notification.ok.label",
+                        additionalCssClasses: "call-to-action"
                      }
                   }
                ]

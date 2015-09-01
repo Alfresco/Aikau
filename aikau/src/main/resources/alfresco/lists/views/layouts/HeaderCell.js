@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type boolean
-       * @default false
+       * @default
        */
       sortable: false,
 
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type boolean
-       * @default false
+       * @default
        */
       usedForSort: false,
 
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type boolean
-       * @default false
+       * @default
        */
       sortedAscending: false,
 
@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       sortValue: null,
 
@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       toolTipMsg: null,
 
@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       a11yScope: null,
 
@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       sortAscAlt: null,
 
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       sortDescAlt: null,
 

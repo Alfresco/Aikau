@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
              * {@link http://www.webdetails.pt/ctools/charts/jsdoc/symbols/pvc.options.charts.BarChart.html#orientation}
              *
              * @instance
-             * @default "vertical"
+             * @default
              */
             orientation: "vertical",
 

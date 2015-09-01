@@ -1,4 +1,4 @@
-Aikau 1.0.31 Release Notes
+Aikau 1.0.33 Release Notes
 ===
 
 New deprecations: 
@@ -42,6 +42,19 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.33:
+* [AKU-478](https://issues.alfresco.com/jira/browse/AKU-478)       - Dynamic visibility width calculations in HorizontalWidgets
+* [AKU-516](https://issues.alfresco.com/jira/browse/AKU-516)       - Reduce options calls to server from MultiSelectInput
+* [AKU-518](https://issues.alfresco.com/jira/browse/AKU-518)       - Add default primary button to certain dialogs
+* [AKU-532](https://issues.alfresco.com/jira/browse/AKU-532)       - Multi-select download as zip in search support
+* [AKU-534](https://issues.alfresco.com/jira/browse/AKU-534)       - Changed default search style in FilteringSelect
+* [AKU-536](https://issues.alfresco.com/jira/browse/AKU-536)       - Remove encoding from AlfShareFooter
+* [AKU-537](https://issues.alfresco.com/jira/browse/AKU-537)       - Take AlfGalleryViewSlider columns configuration from AlfGalleryView
+* [AKU-539](https://issues.alfresco.com/jira/browse/AKU-539)       - Fix SingleTextFieldForm layout (also in 1.0.32.1)
+* [AKU-540](https://issues.alfresco.com/jira/browse/AKU-540)       - Fix default InlinedEditProperty permissions (also in 1.0.31.1 and 1.0.32.2)
+* [AKU-542](https://issues.alfresco.com/jira/browse/AKU-542)       - Remove animation from dialog fade in/out (now configurable)
+* [AKU-549](https://issues.alfresco.com/jira/browse/AKU-549)       - Remove default facets from SearchService
+
 1.0.32:
 * [AKU-460](https://issues.alfresco.com/jira/browse/AKU-460)       - Improved handling of hidden terms in alfresco/headers/SearchBox
 * [AKU-515](https://issues.alfresco.com/jira/browse/AKU-515)       - Fixed pubSubScope handling in alfresco/renderers/Thumbnail

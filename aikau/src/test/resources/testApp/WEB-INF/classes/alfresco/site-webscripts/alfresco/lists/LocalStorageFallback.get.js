@@ -8,7 +8,7 @@ var views = [
                config: {
                   widgets: [
                      {
-                        name: "alfresco/lists/views/layout/Cell",
+                        name: "alfresco/lists/views/layouts/Cell",
                         config: {
                            widgets: [
                               {

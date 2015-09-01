@@ -115,7 +115,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-layout-Twister--open"
+       * @default
        */
       CLASS_OPEN: "alfresco-layout-Twister--open",
       
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-layout-Twister--closed"
+       * @default
        */
       CLASS_CLOSED: "alfresco-layout-Twister--closed",
 
@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       headingLevel: null,
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       initiallyOpen: true,
 
@@ -155,7 +155,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       preferenceName: null,
 
@@ -166,7 +166,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.twisters."
+       * @default
        */
       preferencePrefix: "org.alfresco.share.twisters.",
       
@@ -177,7 +177,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       width: null,
 

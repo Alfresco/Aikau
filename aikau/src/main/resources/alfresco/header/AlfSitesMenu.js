@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentUser: null,
       
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        * the "Add" and "Remove" favourite options will NOT be added.
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentSite: null,
 
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the "Recent Sites" group should be displayed or not.
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showRecentSites: true,
       
@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showUsefulGroup: true,
       
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showSiteFinder: true,
       
@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the "Create Site" menu item should be displayed or not.
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showCreateSite: true,
 
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the "My Sites" menu item should be displayed or not.
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showMySites: true,
       
@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showFavourites: true,
       
@@ -189,7 +189,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the menu has been loaded yet.
        * @instance
        * @type {boolean} 
-       * @default false
+       * @default
        */
       _menuLoaded: false,
       
@@ -313,7 +313,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _menuMessageItem: null,
       
@@ -336,7 +336,7 @@ define(["dojo/_base/declare",
        * A URL to override the default. Primarily provided for the test harness.
        * @instance
        * @type {string}
-       * @default null 
+       * @default
        */
       _favouritesUrl: null,
       
@@ -345,7 +345,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _favouritesLoaded: false,
       
@@ -499,7 +499,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _favouritesMessageItem: null,
       
@@ -869,7 +869,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "recent.sites.label"
+       * @default
        */
       recentGroupLabel: "recent.sites.label",
       
@@ -878,7 +878,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "favourite.sites.label"
+       * @default
        */
       favouriteGroupLabel: "favourite.sites.label",
       
@@ -888,84 +888,84 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "useful.sites.label"
+       * @default
        */
       usefulGroupLabel: "useful.sites.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-favourite-site-icon"
+       * @default
        */
       favouriteGroupIconClass: "alf-favourite-site-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "site-finder.label"
+       * @default
        */
       siteFinderLabel: "site-finder.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-site-finder-icon"
+       * @default
        */
       siteFinderIconClass: "alf-site-finder-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "create-site.label"
+       * @default
        */
       createSiteLabel: "create-site.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-create-site-icon"
+       * @default
        */
       createSiteIconClass: "alf-create-site-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "my-sites.label"
+       * @default
        */
       mySitesLabel: "my-sites.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-my-sites-icon"
+       * @default
        */
       mySitesIconClass: "alf-my-sites-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "add-favourite-site.label"
+       * @default
        */
       addFavouriteLabel: "add-favourite-site.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-favourite-site-icon"
+       * @default
        */
       addFavouriteIconClass:  "alf-add-favourite-site-icon",
       
       /**
        * @instance
        * @type {string}
-       * @default "remove-favourite-site.label"
+       * @default
        */
       removeFavouriteLabel: "remove-favourite-site.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "alf-remove-favourite-site-icon"
+       * @default
        */
       removeFavouriteIconClass: "alf-remove-favourite-site-icon"
    });

@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "message.simple-workflow.approved"
+       * @default
        */
       approveSuccessMessage: "message.simple-workflow.approved",
 
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "message.simple-workflow.failure"
+       * @default
        */
       approveFailureMessage: "message.simple-workflow.failure",
 
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "message.simple-workflow.rejected"
+       * @default
        */
       rejectSuccessMessage: "message.simple-workflow.rejected",
 
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "message.simple-workflow.failure"
+       * @default
        */
       rejectFailureMessage: "message.simple-workflow.failure",
 
@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "start-workflow"
+       * @default
        */
       startWorkflowPage: "start-workflow",
 

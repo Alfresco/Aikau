@@ -480,7 +480,8 @@ define(["dojo/_base/declare",
                         url: "user/" + originalRequestConfig.user + "/dashboard",
                         type: "PAGE_RELATIVE",
                         target: "CURRENT"
-                     }
+                     },
+                     additionalCssClasses: "call-to-action"
                   }
                }
             ]
@@ -613,7 +614,8 @@ define(["dojo/_base/declare",
                   config: {
                      label: this.message("button.leave-site.confirm-label"),
                      publishTopic: "ALF_LEAVE_SITE_CONFIRMATION",
-                     publishPayload: payload
+                     publishPayload: payload,
+                     additionalCssClasses: "call-to-action"
                   }
                },
                {

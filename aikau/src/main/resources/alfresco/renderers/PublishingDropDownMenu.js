@@ -65,7 +65,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       publishTopic: null,
 
@@ -75,7 +75,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _dropDownWidget: null,
 
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       optionsConfig: null,
 
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       cancelOnEscape: true,
 
@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       cancellationPublishTopic: null,
 
@@ -118,7 +118,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       cancellationPublishPayload: null,
 
@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       cancellationPublishGlobal: false,
 
@@ -140,7 +140,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       cancellationPublishToParent: false,
 
@@ -151,7 +151,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       cancellationPublishPayloadType: null,
 
@@ -162,7 +162,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       cancellationPublishPayloadItemMixin: true,
 
@@ -175,7 +175,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       cancellationPublishPayloadModifiers: null,
 

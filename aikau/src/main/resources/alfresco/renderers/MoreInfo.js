@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentItem: null,
 
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       moreInfoDialog: null,
 
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       xhrRequired: false,
 
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       darkIcon: false,
 
@@ -112,7 +112,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "moreinfo.altText.label"
+       * @default
        */
       altText: "moreinfo.altTextWithContext.label",
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "displayName"
+       * @default
        */
       propertyToRender: "displayName",
 
@@ -322,6 +322,7 @@ define(["dojo/_base/declare",
                                        name: "alfresco/renderers/InlineEditProperty",
                                        config: {
                                           propertyToRender: "node.properties.cm:name",
+                                          permissionProperty: "node.permissions.user.Write",
                                           postParam: "prop_cm_name",
                                           renderSize: "large",
                                           publishTopic: "ALF_CRUD_CREATE",
@@ -351,6 +352,7 @@ define(["dojo/_base/declare",
                                        name: "alfresco/renderers/InlineEditProperty",
                                        config: {
                                           propertyToRender: "node.properties.cm:title",
+                                          permissionProperty: "node.permissions.user.Write",
                                           postParam: "prop_cm_title",
                                           renderSize: "small",
                                           warnIfNotAvailable: true,
@@ -431,6 +433,7 @@ define(["dojo/_base/declare",
                                        name: "alfresco/renderers/InlineEditProperty",
                                        config: {
                                           propertyToRender: "node.properties.cm:description",
+                                          permissionProperty: "node.permissions.user.Write",
                                           renderSize: "small",
                                           postParam: "prop_cm_description",
                                           warnIfNotAvailable: true,

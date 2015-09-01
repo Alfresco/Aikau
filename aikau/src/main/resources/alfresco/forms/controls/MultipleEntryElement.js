@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
        * and a value to use for rendering the element.
        * 
        * @instance
-       * @default null
+       * @default
        */
       elementConfig: null,
       
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "value"
+       * @default
        */
       readDisplayAttribute: "value",
 
@@ -147,7 +147,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       form: null,
       

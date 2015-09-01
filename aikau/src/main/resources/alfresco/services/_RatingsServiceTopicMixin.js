@@ -32,7 +32,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_RATING_ADD"
+       * @default
        */
       addRatingTopic: "ALF_RATING_ADD",
       
@@ -41,7 +41,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_RATING_REMOVE"
+       * @default
        */
       removeRatingTopic: "ALF_RATING_REMOVE",
       
@@ -50,7 +50,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_RATING_ADD_SUCCESS"
+       * @default
        */
       addRatingSuccessTopic: "ALF_RATING_ADD_SUCCESS",
       
@@ -59,7 +59,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_RATING_REMOVE_SUCCESS"
+       * @default
        */
       removeRatingSuccessTopic: "ALF_RATING_REMOVE_SUCCESS",
       
@@ -68,7 +68,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_RATING_ADD_FAILURE"
+       * @default
        */
       addRatingFailureTopic: "ALF_RATING_ADD_FAILURE",
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_RATING_REMOVE"
+       * @default
        */
       removeRatingFailureTopic: "ALF_RATING_REMOVE_FAILURE"
    });

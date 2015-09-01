@@ -112,7 +112,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {string}
-       * @default "alfresco-layout-FixedHeaderFooter"
+       * @default
        */
       baseClass: "alfresco-layout-FixedHeaderFooter",
 
@@ -137,7 +137,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {string}
-       * @default "auto"
+       * @default
        */
       height: "auto",
 
@@ -150,7 +150,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       autoHeightPaddingAllowance: 0,
 

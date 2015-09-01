@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        * Adds the "gallery" CSS classes the main DOM node defined in the template
        * @instance
        * @type {string}
-       * @default "gallery"
+       * @default
        */
       customClasses: "gallery",
       
@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
        * The type of rendition to use for the thumbnail
        * @instance
        * @type {string}
-       * @default "imgpreview"
+       * @default
        */
       renditionName: "imgpreview",
       
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
        *  
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       dimensions: null,
 

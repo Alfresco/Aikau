@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default ""
+       * @default
        */
       onLabel: "",
       
@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "favourite.add.label"
+       * @default
        */
       offLabel: "favourite.add.label",
       
@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "favourite.remove.tooltip"
+       * @default
        */
       onTooltip: "favourite.remove.tooltip",
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "favourite.add.tooltip"
+       * @default
        */
       offTooltip: "favourite.add.tooltip",
       
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        * The CSS class to apply for the on display
        * @instance
        * @type {string}
-       * @default "favourite"
+       * @default
        */
       toggleClass: "favourite",
       
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "isFavourite"
+       * @default
        */
       propertyToRender: "isFavourite"
    });

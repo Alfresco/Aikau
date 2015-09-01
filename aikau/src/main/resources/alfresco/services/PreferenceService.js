@@ -50,7 +50,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.documents.favourites"
+       * @default
        */
       FAVOURITE_DOCUMENTS: "org.alfresco.share.documents.favourites",
 
@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.folders.favourites"
+       * @default
        */
       FAVOURITE_FOLDERS: "org.alfresco.share.folders.favourites",
       
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object} 
-       * @default null
+       * @default
        */
       localPreferences: null,
       

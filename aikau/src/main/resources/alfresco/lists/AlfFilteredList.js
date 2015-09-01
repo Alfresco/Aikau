@@ -242,7 +242,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       filterName: "name",
 
@@ -253,7 +253,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "filtered.list.filter.label"
+       * @default
        */
       filterLabel: "filtered.list.filter.label",
 
@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "filtered.list.filter.description"
+       * @default
        */
       filterDescription: "filtered.list.filter.description",
 
@@ -275,7 +275,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "filtered.list.filter.placeholder"
+       * @default
        */
       filterPlaceholder: "filtered.list.filter.placeholder",
 
@@ -286,7 +286,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "filtered.list.filter.unitsLabel"
+       * @default
        */
       filterUnitsLabel: "filtered.list.filter.unitsLabel",
 

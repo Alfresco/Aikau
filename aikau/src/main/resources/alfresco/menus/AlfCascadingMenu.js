@@ -37,7 +37,7 @@ define(["dojo/_base/declare",
        * Overrides the default value provided by the _AlfMenuItemMixin
        * @instance
        * @type {boolean}
-       * @default false 
+       * @default
        */
       closeOnClick: false,
       

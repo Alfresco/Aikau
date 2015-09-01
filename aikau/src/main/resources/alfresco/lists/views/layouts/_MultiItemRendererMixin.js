@@ -63,7 +63,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {Object[]}
-       * @default null
+       * @default
        */
       currentData: null,
       
@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       currentIndex: null,
       
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {Object} 
-       * @default null
+       * @default
        */
       currentItem: null,
       
@@ -253,7 +253,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       _renderedItemWidgets: null,
 
@@ -308,7 +308,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       rootWidgetSubscriptions: null,
       
@@ -371,7 +371,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "nodeRef"
+       * @default
        */
       itemKey: "nodeRef",
 

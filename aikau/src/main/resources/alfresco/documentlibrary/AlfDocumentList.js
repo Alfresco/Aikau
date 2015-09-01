@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showFolders: true,
 
@@ -80,14 +80,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showDocuments: true,
 
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentFilter: null,
 
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {String}
-       * @default "ALF_DOCLIST_PARENT_NAV"
+       * @default
        */
       parentNavTopic: "ALF_DOCLIST_PARENT_NAV",
 
@@ -330,7 +330,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_DOCLIST_NAV"
+       * @default
        */
       linkClickTopic: "ALF_DOCLIST_NAV",
 
@@ -457,7 +457,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       rawData: false,
 

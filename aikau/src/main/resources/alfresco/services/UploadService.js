@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "ALF_UPLOAD_REQUEST"
+       * @default
        */
       _ALF_UPLOAD_TOPIC: "ALF_UPLOAD_REQUEST",
       
@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 1
+       * @default
        */
       STATE_BROWSING: 1,
 
@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 2
+       * @default
        */
       STATE_ADDED: 2,
 
@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 3
+       * @default
        */
       STATE_UPLOADING: 3,
 
@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 4
+       * @default
        */
       STATE_FINISHED: 4,
 
@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 5
+       * @default
        */
       STATE_FAILURE: 5,
 
@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 6
+       * @default
        */
       STATE_SUCCESS: 6,
 
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       aggregateUploadTargetSize: 0,
 
@@ -147,7 +147,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       aggregateUploadCurrentSize: 0,
 
@@ -190,7 +190,8 @@ define(["dojo/_base/declare",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: this.message("progress-dialog.ok-button.label"),
-                        publishTopic: okButtonClickTopic
+                        publishTopic: okButtonClickTopic,
+                        additionalCssClasses: "call-to-action"
                      }
                   },
                   {
@@ -741,7 +742,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       progressDialog: null,
 

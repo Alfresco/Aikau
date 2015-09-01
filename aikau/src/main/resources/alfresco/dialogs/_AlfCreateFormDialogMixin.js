@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       dialog: null,
 
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       dialogTitle: "",
 
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       dialogConfirmationButtonTitle: null,
 
@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       dialogCancellationButtonTitle: null,
 
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       widgets: null,
 
@@ -166,7 +166,7 @@ define(["dojo/_base/declare",
                      config: {
                         label: this.dialogConfirmationButtonTitle,
                         disableOnInvalidControls: true,
-                        additionalCssClasses: "alfresco-dialogs-_AlfCreateFormDialogMixin confirmation",
+                        additionalCssClasses: "alfresco-dialogs-_AlfCreateFormDialogMixin confirmation call-to-action",
                         publishTopic: this._formConfirmationTopic
                      }
                   },
@@ -206,7 +206,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       formSubmissionTopic: null,
 
@@ -216,7 +216,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       formSubmissionGlobal: true,
 
@@ -226,7 +226,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       formSubmissionToParent: false,
 

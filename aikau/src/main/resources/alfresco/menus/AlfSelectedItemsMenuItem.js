@@ -32,8 +32,9 @@
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuItem",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang"], 
-        function(declare, AlfMenuItem, _AlfDocumentListTopicMixin, lang) {
+        function(declare, AlfMenuItem, _AlfDocumentListTopicMixin, topics, lang) {
    
    return declare([AlfMenuItem, _AlfDocumentListTopicMixin], {
       
@@ -72,7 +73,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       clearSelectedItemsOnClick: false, 
 
@@ -88,7 +89,7 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          if (this.clearSelectedItemsOnClick === true)
          {
-            this.alfPublish("ALF_CLEAR_SELECTED_ITEMS", {
+            this.alfPublish(topics.CLEAR_SELECTED_ITEMS, {
                label: "select.none.label",
                value: "selectNone"
             });

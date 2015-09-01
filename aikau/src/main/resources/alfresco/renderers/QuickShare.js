@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "quick-share.enabled.label"
+       * @default
        */
       onLabel: "quick-share.enabled.label",
       
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "quick-share.disabled.label"
+       * @default
        */
       offLabel: "quick-share.disabled.label",
       
@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "quick-share.enabled.description"
+       * @default
        */
       onTooltip: "quick-share.enabled.description",
       
@@ -103,7 +103,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "quick-share.disabled.description"
+       * @default
        */
       offTooltip: "quick-share.disabled.description",
       
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        * The CSS class to apply for the on display
        * @instance
        * @type {string}
-       * @default "quick-share"
+       * @default
        */
       toggleClass: "quick-share",
       
@@ -146,7 +146,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "jsNode.properties.qshare:sharedId"
+       * @default
        */
       propertyToRender: "jsNode.properties.qshare:sharedId",
 
@@ -190,7 +190,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       quickShareLink: "",
 

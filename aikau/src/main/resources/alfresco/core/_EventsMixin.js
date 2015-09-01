@@ -55,7 +55,7 @@ define(["alfresco/core/Core",
        * @event eventsScrollTopic
        * @instance
        * @type {String}
-       * @default "ALF_EVENTS_SCROLL"
+       * @default
        */
       eventsScrollTopic: "ALF_EVENTS_SCROLL",
 
@@ -65,7 +65,7 @@ define(["alfresco/core/Core",
        * @event eventsResizeTopic
        * @instance
        * @type {String}
-       * @default "ALF_EVENTS_SCROLL"
+       * @default
        */
       eventsResizeTopic: "ALF_EVENTS_RESIZE",
 

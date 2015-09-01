@@ -66,7 +66,7 @@ define(["alfresco/core/ProcessWidgets",
        * 
        * @instance
        * @type {string}
-       * @default "alfresco-layout-VerticalWidgets"
+       * @default
        */
       baseClass: "alfresco-layout-VerticalWidgets",
 
@@ -75,7 +75,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       widgetMarginTop: null,
 
@@ -84,7 +84,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       widgetMarginBottom: null,
 

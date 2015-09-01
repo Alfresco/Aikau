@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "org.alfresco.Menus"
+       * @default
        */
       i18nScope: "org.alfresco.Menus",
       
@@ -63,14 +63,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showArrow: true,
       
       /**
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       iconAltText: "",
 
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       iconSrc: "",
       
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "alf-menu-bar-popup-label-node"
+       * @default
        */
       labelWithIconClass: "alf-menu-bar-popup-label-node",
       

@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       label: null,
       
@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       path: null,
       
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       publishTopic: null,
 
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayload: null,
       

@@ -59,7 +59,7 @@ define(["alfresco/core/Core",
           *
           * @instance
           * @type  {number}
-          * @default 1000
+          * @default
           */
          destroyAfterHideMs: 1000,
 
@@ -75,7 +75,7 @@ define(["alfresco/core/Core",
           *
           * @instance
           * @type  {number}
-          * @default 1
+          * @default
           */
          notificationFocusSecs: 1,
 
@@ -85,7 +85,7 @@ define(["alfresco/core/Core",
           *
           * @instance
           * @type  {number}
-          * @default 5
+          * @default
           */
          wordsPerSecond: 5,
 

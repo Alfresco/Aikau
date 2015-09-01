@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "toggle.on.label"
+       * @default
        */
       onLabel: "toggle.on.label",
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "toggle.off.label"
+       * @default
        */
       offLabel: "toggle.off.label",
       
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "toggle.on.tooltip"
+       * @default
        */
       onTooltip: "toggle.on.tooltip",
       
@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "toggle.off.tooltip"
+       * @default
        */
       offTooltip: "toggle.off.tooltip",
       
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * The CSS class to apply for the on display
        * @instance
        * @type {string} 
-       * @default ""
+       * @default
        */
       toggleClass: "",
       
@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
        * The topic to publish on when the toggle is switched "on"
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       toggleOnTopic: null,
       
@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
        * The topic to subscribe to for successful toggle "on" events
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       toggleOnSuccessTopic: null,
       
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
        * The topic to subscribe to for failed toggle "on" events
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       toggleOnFailureTopic: null,
       
@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
        * The topic to publish on when the toggle is switched "off"
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       toggleOffTopic: null,
       
@@ -141,7 +141,7 @@ define(["dojo/_base/declare",
        * The topic to subscribe to for successful toggle "off" events
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       toggleOffSuccessTopic: null,
       
@@ -149,7 +149,7 @@ define(["dojo/_base/declare",
        * The topic to subscribe to for failure toggle "off" events
        * @instance
        * @type {string} 
-       * @default null
+       * @default
        */
       toggleOffFailureTopic: null,
       
@@ -205,7 +205,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       propertyToRender: null,
 

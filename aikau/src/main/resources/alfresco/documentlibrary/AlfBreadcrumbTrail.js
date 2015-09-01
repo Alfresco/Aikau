@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       breadcrumbs: null,
 
@@ -103,7 +103,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "/"
+       * @default
        */
       currentPath: "/",
 
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not to hide the breadcrumb trail when first instantiated.
        * @instance 
        * @type{boolean}
-       * @default false
+       * @default
        */
       hide: false,
       
@@ -120,7 +120,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       lastBreadcrumbIsCurrentNode: false,
 
@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       lastBreadcrumbPublishTopic: null,
 
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       lastBreadcrumbPublishPayload: null,
 
@@ -171,7 +171,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "CONFIGURED"
+       * @default
        */
       lastBreadcrumbPublishPayloadType: "CONFIGURED",
 
@@ -182,7 +182,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       lastBreadcrumbPublishPayloadItemMixin: false,
 
@@ -195,7 +195,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       lastBreadcrumbPublishPayloadModifiers: null,
 
@@ -204,7 +204,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "root.label"
+       * @default
        */
       rootLabel: "root.label",
 
@@ -214,7 +214,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean} 
-       * @default true
+       * @default
        */
       showRootLabel: true,
          
@@ -224,7 +224,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 
@@ -291,7 +291,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentNode: null,
       

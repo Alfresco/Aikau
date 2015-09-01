@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @default  null
+       * @default
        */
       searchBox: null,
       
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default  null
+       * @default
        */
       label: null,
       
@@ -255,7 +255,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _searchMenu: null,
 
@@ -264,91 +264,91 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {integer}
-       * @default 180
+       * @default
        */
       width: "180",
 
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       site: null,
 
       /**
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       advancedSearch: true,
       
       /**
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       allsites: false,
       
       /**
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       liveSearch: true,
       
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       lastSearchText: null,
       
       /**
        * @instance
        * @type {number}
-       * @default 250
+       * @default
        */
       _keyRepeatWait: 250,
       
       /**
        * @instance
        * @type {number}
-       * @default 2
+       * @default
        */
       _minimumSearchLength: 2,
       
       /**
        * @instance
        * @type {number}
-       * @default 5
+       * @default
        */
       _resultPageSize: 5,
       
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _LiveSearch: null,
       
        /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _requests: null,
       
        /**
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       _lastSearchIndex: 0,
       
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       resultsCounts: null,
 
@@ -359,7 +359,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default "right"
+       * @default
        */
       alignment: "right",
 
@@ -374,7 +374,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       publishTopic: null,
 
@@ -385,7 +385,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayload: null,
 
@@ -395,7 +395,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       publishGlobal: false,
 
@@ -405,7 +405,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       publishToParent: false,
 
@@ -416,7 +416,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayloadType: null,
 
@@ -427,7 +427,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       publishPayloadModifiers: null,
 
@@ -438,7 +438,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       publishPayloadItemMixin: true,
 
@@ -449,7 +449,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "documentlibrary"
+       * @default
        */
       documentLibraryPage: "documentlibrary",
 
@@ -460,7 +460,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "document-details"
+       * @default
        */
       documentPage: "document-details",
 
@@ -471,7 +471,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "blog-postview"
+       * @default
        */
       blogPage: "blog-postview",
 
@@ -482,7 +482,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "wiki-page"
+       * @default
        */
       wikiPage: "wiki-page",
 
@@ -494,7 +494,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "dashboard"
+       * @default
        */
       sitePage: "dashboard",
 
@@ -506,7 +506,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "profile"
+       * @default
        */
       peoplePage: "profile",
 
@@ -516,7 +516,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default  false
+       * @default
        */
       suppressRedirect: false,
 
@@ -525,7 +525,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showDocumentResults: true,
 
@@ -534,7 +534,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showSiteResults: true,
 
@@ -543,7 +543,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showPeopleResults: true,
 
@@ -587,7 +587,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "search.instruction"
+       * @default
        */
       placeholder: "search.instruction",
 
@@ -596,7 +596,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "search.label"
+       * @default
        */
       accessibilityInstruction: "search.label",
 
@@ -605,7 +605,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "search.documents"
+       * @default
        */
       documentsTitle: "search.documents",
 
@@ -614,7 +614,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "search.sites"
+       * @default
        */
       sitesTitle: "search.sites",
 
@@ -623,7 +623,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "search.people"
+       * @default
        */
       peopleTitle: "search.people",
 
@@ -632,7 +632,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "search.more"
+       * @default
        */
       moreTitle: "search.more",
 
@@ -733,7 +733,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       linkToFacetedSearch: true,
 
@@ -746,7 +746,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       searchResultsPage: null,
 
@@ -755,7 +755,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "repo"
+       * @default
        */
       defaultSearchScope: "repo",
 

@@ -53,7 +53,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       autoComplete: false,
 
@@ -112,7 +112,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _oldValue: null,
       
@@ -121,7 +121,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       __oldValue: null,
 

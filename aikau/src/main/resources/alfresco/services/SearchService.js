@@ -65,7 +65,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 25
+       * @default
        */
       pageSize: 25,
 
@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       query: "",
 
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       repo: true,
 
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco://company/home"
+       * @default
        */
       rootNode: "alfresco://company/home",
 
@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       site: "",
 
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       sort: "",
 
@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       sortAscending: true,
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       startIndex: 0,
 
@@ -153,7 +153,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       tag: "",
 
@@ -230,9 +230,8 @@ define(["dojo/_base/declare",
                sort = (payload.sortField || this.sort) + "|" + (payload.sortAscending || this.sortAscending);
             }
 
-            var defaultFacetFields = "{http://www.alfresco.org/model/content/1.0}content.mimetype,{http://www.alfresco.org/model/content/1.0}modifier.__,{http://www.alfresco.org/model/content/1.0}creator.__,{http://www.alfresco.org/model/content/1.0}description.__";
             var data = {
-               facetFields: payload.facetFields || defaultFacetFields,
+               facetFields: payload.facetFields || "",
                filters: payload.filters || "",
                term: payload.term,
                tag: payload.tag || this.tag,

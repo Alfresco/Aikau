@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.logging"
+       * @default
        */
       loggingPreferencesId: "org.alfresco.share.logging",
 
@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       logSubscriptionHandle: null,
 
@@ -246,7 +246,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       detailsDialog: null,
 
@@ -257,7 +257,7 @@ define(["dojo/_base/declare",
        * @instance
        * @event
        * @type {string}
-       * @default "ALF_SAVE_LOGGING_PREFERNCES_UPDATE"
+       * @default
        */
       saveLoggingPrefsUpdateTopic: "ALF_SAVE_LOGGING_PREFERNCES_UPDATE",
 
@@ -268,7 +268,7 @@ define(["dojo/_base/declare",
        * @instance
        * @event
        * @type {string}
-       * @default "ALF_CANCEL_LOGGING_PREFERNCES_UPDATE"
+       * @default
        */
       cancelLoggingPrefsUpdateTopic: "ALF_CANCEL_LOGGING_PREFERNCES_UPDATE",
 
@@ -354,7 +354,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       loggingPreferences: null,
 

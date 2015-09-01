@@ -43,7 +43,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgets: null,
 
@@ -53,7 +53,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {function}
-       * @default null
+       * @default
        */
       callback: null,
 

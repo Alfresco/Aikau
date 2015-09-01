@@ -48,7 +48,7 @@ define(["dojo/_base/declare",
        * The default label for the view selection group. 
        * @instance
        * @type {string}
-       * @default "view-selection.group.label"
+       * @default
        */
       label: "view-selection.group.label",
       

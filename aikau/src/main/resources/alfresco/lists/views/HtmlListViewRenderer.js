@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "none"
+       * @default
        */
       listStyleType: "none",
 
@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       items: null,
 

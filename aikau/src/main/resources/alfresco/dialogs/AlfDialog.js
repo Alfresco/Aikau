@@ -86,16 +86,26 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {String}
-       * @default ""
+       * @default
        */
       content: "",
       
+      /**
+       * This controls the duration of the fade in/out effect when the dialog is shown and hidden.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.33
+       */
+      duration: 0,
+
       /**
        * Widgets to be processed into the main node
        * 
        * @instance
        * @type {Object[]}
-       * @default null 
+       * @default
        */
       widgetsContent: null,
       
@@ -104,7 +114,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {Object[]}
-       * @default null 
+       * @default
        */
       widgetsButtons: null,
 
@@ -116,7 +126,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       handleOverflow: true,
 
@@ -156,7 +166,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       fixedWidth: false,
       
@@ -397,7 +407,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       _buttons: null,
 
@@ -410,7 +420,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       suppressCloseClasses: null,
 

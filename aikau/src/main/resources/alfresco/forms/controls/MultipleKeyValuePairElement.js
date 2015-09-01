@@ -44,42 +44,42 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "label"
+       * @default
        */
       keyProp: "label",
       
       /**
        * @instance
        * @type {string}
-       * @default "multi.kvp.key.label"
+       * @default
        */
       keyLabel: "multi.kvp.key.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "multi.kvp.key.description"
+       * @default
        */
       keyDescription: "multi.kvp.key.description",
       
       /**
        * @instance
        * @type {string}
-       * @default "value"
+       * @default
        */
       valueProp: "value",
       
       /**
        * @instance
        * @type {string}
-       * @default "multi.kvp.value.label"
+       * @default
        */
       valueLabel: "multi.kvp.value.label",
       
       /**
        * @instance
        * @type {string}
-       * @default "multi.kvp.value.description"
+       * @default
        */
       valueDescription: "multi.kvp.value.description",
       

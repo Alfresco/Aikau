@@ -56,7 +56,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default "5"
+       * @default
        */
       rows: "5",
 
@@ -65,7 +65,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default "50"
+       * @default
        */
       cols: "50",
       
@@ -89,7 +89,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _oldValue: null,
       
@@ -98,7 +98,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       __oldValue: null,
 

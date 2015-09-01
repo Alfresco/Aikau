@@ -135,6 +135,7 @@ define({
       "src/test/resources/alfresco/layout/AlfStackContainerTest",
       "src/test/resources/alfresco/layout/AlfTabContainerTest",
       "src/test/resources/alfresco/layout/BasicLayoutTest",
+      "src/test/resources/alfresco/layout/DynamicHorizontalLayoutTest",
       "src/test/resources/alfresco/layout/FixedHeaderFooterTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/StripedContentTest",
@@ -231,6 +232,7 @@ define({
       "src/test/resources/alfresco/services/UserServiceTest",
 
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
+      "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
       "src/test/resources/alfresco/services/actions/ManageAspectsTest",
       "src/test/resources/alfresco/services/actions/NodeLocationTest",
       "src/test/resources/alfresco/services/actions/WorkflowTest",

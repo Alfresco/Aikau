@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       dragWithHandles: false,
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useItemsOnce: false,
 
@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       useItemsOnceComparisonKey: "name",
 
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       immediateRender: true,
 
@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       selfAccept: false,
 
@@ -120,7 +120,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       acceptTypes: null,
 
@@ -363,7 +363,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       items: null
    });

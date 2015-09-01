@@ -71,7 +71,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "" 
+       * @default
        */
       title: "",
       
@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       publishTopic: "",
       
@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayload: null,
       

@@ -46,7 +46,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "org.alfresco.share.user.homePage"
+       * @default
        */
       PREF_KEY_USER_HOME_PAGE: "org.alfresco.share.user.homePage",
       

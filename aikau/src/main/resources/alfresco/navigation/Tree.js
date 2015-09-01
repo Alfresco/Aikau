@@ -71,7 +71,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       customCssClasses: "",
       
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       siteId: null,
        
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       containerId: null,
       
@@ -103,14 +103,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       rootNode: null,
       
       /**
        * @instance
        * @type {string}
-       * @default "documentlibrary.root.label"
+       * @default
        */
       rootLabel: "documentlibrary.root.label",
       
@@ -121,14 +121,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       rootValue: "",
       
       /**
        * @instance
        * @type {string}
-       * @default "docListTreePref"
+       * @default
        */
       filterPrefsName: "docListTreePref",
 
@@ -139,7 +139,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       filterPaths: null,
 
@@ -148,7 +148,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showRoot: true,
       
@@ -259,7 +259,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "CURRENT_ITEM"
+       * @default
        */
       publishPayloadType: "CURRENT_ITEM",
 

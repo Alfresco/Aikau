@@ -59,6 +59,7 @@ model.jsonModel = {
                                     name: "alfresco/renderers/InlineEditProperty",
                                     config: {
                                        propertyToRender: "name",
+                                       permissionProperty: "node.permissions.user.Write",
                                        publishTopic: "ALF_CRUD_UPDATE",
                                        publishPayloadType: "PROCESS",
                                        publishPayloadModifiers: ["processCurrentItemTokens"],
@@ -82,6 +83,7 @@ model.jsonModel = {
                                     name: "alfresco/renderers/InlineEditSelect",
                                     config: {
                                        propertyToRender: "option",
+                                       permissionProperty: "node.permissions.user.Write",
                                        publishTopic: "ALF_CRUD_UPDATE",
                                        publishPayloadType: "PROCESS",
                                        publishPayloadModifiers: ["processCurrentItemTokens"],
@@ -104,6 +106,7 @@ model.jsonModel = {
                                     name: "alfresco/renderers/InlineEditProperty",
                                     config: {
                                        propertyToRender: "title",
+                                       permissionProperty: "node.permissions.user.Write",
                                        publishTopic: "ALF_CRUD_UPDATE",
                                        publishPayloadType: "PROCESS",
                                        publishPayloadModifiers: ["processCurrentItemTokens"],

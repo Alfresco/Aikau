@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_EDITABLE_ROW_READ_MODE"
+       * @default
        */
       readModeSavePublishTopic: "ALF_EDITABLE_ROW_READ_MODE_SAVE",
 
@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_EDITABLE_ROW_READ_MODE"
+       * @default
        */
       readModeCancelPublishTopic: "ALF_EDITABLE_ROW_READ_MODE_CANCEL",
 
@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_EDITABLE_ROW_EDIT_MODE"
+       * @default
        */
       editModePublishTopic: "ALF_EDITABLE_ROW_EDIT_MODE",
 
@@ -137,7 +137,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {Boolean}
-       * @default  true
+       * @default
        */
       _alfEditModeProcessing: false,
 
@@ -308,7 +308,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       widgetsForEditMode: null
    });

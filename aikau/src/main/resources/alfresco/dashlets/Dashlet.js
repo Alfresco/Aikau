@@ -115,7 +115,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {string}
-          * @default "alfresco-dashlets-Dashlet"
+          * @default
           */
          baseClass: "alfresco-dashlets-Dashlet",
 
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {string}
-          * @default ""
+          * @default
           */
          subClass: "",
 

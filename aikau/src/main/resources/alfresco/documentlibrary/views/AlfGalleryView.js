@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default 4
+       * @default
        */
       columns: 4,
 
@@ -125,7 +125,8 @@ define(["dojo/_base/declare",
          return [new AlfGalleryViewSlider({
             relatedViewName: this.getViewName(),
             pubSubScope: this.pubSubScope,
-            parentPubSubScope: this.parentPubSubScope
+            parentPubSubScope: this.parentPubSubScope,
+            columns: this.columns
          })];
       },
       
@@ -173,7 +174,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       showNextLink: false,
 
@@ -182,7 +183,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       nextLinkLabel: null,
 

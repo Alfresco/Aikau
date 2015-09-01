@@ -56,15 +56,16 @@ define(["intern!object",
       },
       
       "Test initial layout": function() {
-         // Check that the page has been initialised with 4 items per row...
+         // NOTE: That gallery view has been configured to have a non-default number of columns, 7 instead of 4...
+         // Check that the page has been initialised with 7 items per row...
          return browser.findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
-               assert(elements.length === 4, "The view initially displays an unexpected number of items per row, expected 4 but found: " + elements.length);
+               assert.lengthOf(elements, 7, "The view initially displays an unexpected number of items per row");
             });
       },
       
       "Test slider change decreases items per row": function() {
-         // Increment the view size and check that the number of of items per row has decreased to 3....
+         // Increment the view size and check that the number of of items per row has decreased to 4....
          return browser.findByCssSelector("#TOOLBAR .dijitSliderIncrementIconH")
             .clearLog()
             .click()
@@ -73,7 +74,7 @@ define(["intern!object",
          .end()
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
-               assert(elements.length === 3, "The number of items per row was not decreased, expected 3 but found: " + elements.length);
+               assert.lengthOf(elements, 4, "The number of items per row was not decreased");
             });
       },
       
@@ -81,11 +82,10 @@ define(["intern!object",
          // Decrement the view size and check the number of items per row increases...
          return browser.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
-            .click()
          .end()
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
-               assert(elements.length === 7, "The number of items per row was not increased, expected 7 but found: " + elements.length);
+               assert.lengthOf(elements, 7, "The number of items per row was not increased");
             });
       },
       
@@ -95,7 +95,7 @@ define(["intern!object",
          .end()
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
-               assert(elements.length === 10, "The number of items per row was not increased, expected 10 but found: : " + elements.length);
+               assert.lengthOf(elements, 10, "The number of items per row was not increased");
             });
       },
       
@@ -130,9 +130,6 @@ define(["intern!object",
          return TestCommon.loadTestWebScript(this.remote, "/GalleryView", "Gallery View Tests (Keyboard Navigation)")
          // Using the slider ensures everything is setup for keyboard navigation
          .findByCssSelector("#TOOLBAR .dijitSliderIncrementIconH")
-            .click()
-         .end()
-         .findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
          .end();
       },
