@@ -6,6 +6,9 @@
             height: 20px;
             width: 20px;
          }
+         &.alf-delete-icon {
+            background-image: url("./images/actions/document-delete-16.png");
+         }
          &.alf-download-as-zip-icon {
             background-image: url("./images/actions/document-download-16.png");
          }
