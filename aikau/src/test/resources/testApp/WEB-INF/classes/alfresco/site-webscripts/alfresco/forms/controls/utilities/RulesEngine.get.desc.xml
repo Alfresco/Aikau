@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Rules Engine Test</shortname>
+  <description>Tests out the ANY/ALL configuration options used by the Rules Engine for controlling visibility, requirement and enablement states.</description>
+  <family>aikau-unit-tests</family>
+  <url>/RulesEngine</url>
+</webscript>

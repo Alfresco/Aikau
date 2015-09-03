@@ -124,6 +124,8 @@ define({
       "src/test/resources/alfresco/forms/controls/ValidationTest",
       "src/test/resources/alfresco/forms/controls/XssPreventionTest",
 
+      "src/test/resources/alfresco/forms/controls/utilities/RulesEngineTest",
+
       "src/test/resources/alfresco/header/HeaderWidgetsTest",
       "src/test/resources/alfresco/header/SearchBoxTest",
       "src/test/resources/alfresco/header/WarningTest",
