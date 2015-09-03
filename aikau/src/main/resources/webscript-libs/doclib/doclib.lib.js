@@ -732,6 +732,7 @@ function getSelectedItemsActions(selectedItemsActions) {
             type: "action-link",
             id: "onActionDelete",
             icon: "document-delete",
+            iconClass: "alf-delete-icon",
             label: "menu.selected-items.delete",
             permission: "Delete",
             notAspect: "hwf:hybridWorkflow,sys:undeletable"
