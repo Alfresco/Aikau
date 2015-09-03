@@ -82,6 +82,16 @@ define([],function() {
       DELETE_ARCHIVE: "ALF_ARCHIVE_DELETE",
 
       /**
+       * This topic is published to request the deletion of a node.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.34
+       */
+      DELETE_CONTENT: "ALF_DELETE_CONTENT_REQUEST",
+
+      /**
        * This topic is published to request either the download of a single document or folder (or a selection
        * of documents and folder) as a ZIP file.
        * 
