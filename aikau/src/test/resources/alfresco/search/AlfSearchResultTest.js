@@ -90,6 +90,17 @@ define(["intern!object",
                });
          },
 
+         "Click on 'In folder' link": function() {
+            return browser.findByCssSelector(".alfresco-search-AlfSearchResult:first-child .pathCell .alfresco-renderers-PropertyLink > .inner")
+               .click()
+            .end()
+            
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "url", "site/normalResult/documentlibrary?path=%2F%2Fone%2Ftwo%2Fthree%2Ffour", "In folder link goes to the correct path");
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
