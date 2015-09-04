@@ -64,6 +64,7 @@ define(["dojo/_base/declare",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "alfresco/menus/AlfMenuBarItem",
         "alfresco/menus/AlfMenuBarSelect",
         "alfresco/menus/AlfMenuGroups",
         "alfresco/menus/AlfMenuGroup",
@@ -73,7 +74,7 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "dojo/when"], 
         function(declare, AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin, lang, array, 
-                 AlfMenuBarSelect, AlfMenuGroups, AlfMenuGroup, AlfCheckableMenuItem, registry, domClass, Deferred, when) {
+                 AlfMenuBarItem, AlfMenuBarSelect, AlfMenuGroups, AlfMenuGroup, AlfCheckableMenuItem, registry, domClass, Deferred, when) {
 
    return declare([AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin], {
       
