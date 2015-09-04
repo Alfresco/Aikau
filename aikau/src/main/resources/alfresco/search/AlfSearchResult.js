@@ -362,8 +362,8 @@ define(["dojo/_base/declare",
          else
          {
             // Create processed path as pathLink on this.currentItem
-            var repo = lang.getObject("site.title", false, this.currentItem) || true;
-            this.currentItem.pathLink = repo ?
+            var isRepo = !lang.exists("site.title", this.currentItem);
+            this.currentItem.pathLink = isRepo ?
                encodeURIComponent("/" + this.currentItem.path.split("/").slice(2).join("/")) :
                encodeURIComponent("/" + this.currentItem.path);
 
@@ -380,7 +380,7 @@ define(["dojo/_base/declare",
                publishPayloadType: "PROCESS",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
-                  url: repo ? "repository?path={pathLink}" : "site/{site.shortName}/documentlibrary?path={pathLink}",
+                  url: isRepo ? "repository?path={pathLink}" : "site/{site.shortName}/documentlibrary?path={pathLink}",
                   type: "PAGE_RELATIVE"
                }
             }, this.pathNode);

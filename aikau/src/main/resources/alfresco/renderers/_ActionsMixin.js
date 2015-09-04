@@ -159,6 +159,9 @@ define(["dojo/_base/declare",
             name: "alfresco/renderers/actions/UploadNewVersion"
          },
          {
+            name: "alfresco/renderers/actions/Delete"
+         },
+         {
             name: "alfresco/renderers/actions/ManageAspects"
          }
       ],

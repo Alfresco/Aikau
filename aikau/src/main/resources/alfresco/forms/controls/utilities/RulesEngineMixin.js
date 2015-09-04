@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
        * @param {string} attribute
        * @param {object} config
        */
-      processConfig: function alfresco_forms_controls_BaseFormControl__processConfig(attribute, config) {
+      processConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processConfig(attribute, config) {
          if (config)
          {
             // Set the initial value...
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
             // Process the rule subscriptions...
             if (typeof config.rules !== "undefined")
             {
-               this.processRulesConfig(attribute, config.rules);
+               this.processRulesConfig(attribute, config);
             }
             else
             {
@@ -110,9 +110,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {string} attribute E.g. visibility, editability, requirement
-       * @param {object} rules
+       * @param {object} config The full configuration for rules processing
        */
-      processRulesConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processRulesConfig(attribute, rules) {
+      processRulesConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processRulesConfig(attribute, config) {
          // TODO: Implement rules for handling changes in validity (each type could have rule type of "isValid"
          //       and should subscribe to changes in validity. The reason for this would be to allow changes
          //       on validity. Validity may change asynchronously from value as it could be performed via a
@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
             // Ensure that the rulesEngineData object has specific information about the form control attribute...
             this._rulesEngineData[attribute] = {};
          }
-         array.forEach(rules, lang.hitch(this, this.processRule, attribute));
+         array.forEach(config.rules, lang.hitch(this, this.processRule, attribute, config));
       },
 
       /**
@@ -138,10 +138,11 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {string} attribute The attribute that the rule effects (e.g. visibility)
+       * @param {object} config The full configuration for rules processing
        * @param {object} rule The rule to process.
        * @param {number} index The index of the rule.
        */
-      processRule: function alfresco_forms_controls_utilities_RulesEngineMixin__processRule(attribute, rule, /*jshint unused:false*/ index) {
+      processRule: function alfresco_forms_controls_utilities_RulesEngineMixin__processRule(attribute, config, rule, /*jshint unused:false*/ index) {
          if (rule.targetId)
          {
             if (typeof this._rulesEngineData[attribute][rule.targetId] === "undefined")
@@ -154,7 +155,7 @@ define(["dojo/_base/declare",
             this._rulesEngineData[attribute][rule.targetId].rules = rule;
 
             // Subscribe to changes in the relevant property...
-            this.alfSubscribe("_valueChangeOf_" + rule.targetId, lang.hitch(this, this.evaluateRules, attribute));
+            this.alfSubscribe("_valueChangeOf_" + rule.targetId, lang.hitch(this, this.evaluateRules, attribute, config));
          }
          else
          {
@@ -169,65 +170,66 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {string} attribute
+       * @param {object} config The full configuration for rules processing
        * @param {object} payload The publication posted on the topic that triggered the rule
        */
-      evaluateRules: function alfresco_forms_controls_utilities_RulesEngineMixin__evaluateRules(attribute, payload) {
+      evaluateRules: function alfresco_forms_controls_utilities_RulesEngineMixin__evaluateRules(attribute, config, payload) {
          this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + this.fieldId + "'");
 
          // Set the current value that triggered the evaluation of rules...
          this._rulesEngineData[attribute][payload.fieldId].currentValue = payload.value;
-
-         // Make the assumption that the current status is true (i.e. the rule is PASSED). This is done so that
-         // we can AND the value against the result of each iteration (we can also stop processing the rules once
-         // the rule is negated...
-         var status = true;
-
-         // The exception to the above comment is when NO rules are configured - in that case we leave the status
-         // as false by default
-         var hasProps = false;
-
-         // jshint forin:false
-         for (var key in this._rulesEngineData[attribute])
+         var rulesEngineKeys = Object.keys(this._rulesEngineData[attribute]);
+         var status;
+         if (config.rulesMethod === "ANY")
          {
-            // Need this assignment to "prove" there are properties (this approach is used for compatibility with older
-            // browsers)...
-            hasProps = true;
-
-            // Keep processing rules until the rule status is negated...
-            if (status)
-            {
-               var currentValue = this._rulesEngineData[attribute][key].currentValue;
-               var validValues = this._rulesEngineData[attribute][key].rules.is;
-               var invalidValues = this._rulesEngineData[attribute][key].rules.isNot;
-
-               // Assume that its NOT valid value (we'll only do the actual test if its not set to an INVALID value)...
-               // UNLESS there are no valid values specified (in which case any value is valid apart form those in the invalid list)
-               var isValidValue = typeof validValues === "undefined" || validValues.length === 0;
-
-               // Initialise the invalid value to be false if no invalid values have been declared (and only check values if defined)...
-               var isInvalidValue = typeof invalidValues !== "undefined" && invalidValues.length > 0;
-               if (isInvalidValue)
-               {
-                  // Check to see if the current value is set to an invalid value (i.e. a value that negates the rule)
-                  isInvalidValue = array.some(invalidValues, lang.hitch(this, this.ruleValueComparator, currentValue));
-               }
-
-               // Check to see if the current value is set to a valid value...
-               if (!isInvalidValue && typeof validValues !== "undefined" && validValues.length > 0)
-               {
-                  isValidValue = array.some(validValues, lang.hitch(this, this.ruleValueComparator, currentValue));
-               }
-
-               // The overall status is true (i.e. the rule is still passing) if the current status is true and the
-               // current value IS set to a valid value and NOT set to an invalid value
-               status = status && isValidValue && !isInvalidValue;
-            }
+            // NOTE: Array.every returns true for empty arrays, but Array.some returns false. We want to work on the
+            //       assumption that rules evaluate to true if there is no data to look at which is why we check the
+            //       length of the keys array...
+            status = rulesEngineKeys.length === 0 || array.some(rulesEngineKeys, lang.hitch(this, this.evaluateRule, this._rulesEngineData[attribute]));
+         }
+         else
+         {
+            status = array.every(rulesEngineKeys, lang.hitch(this, this.evaluateRule, this._rulesEngineData[attribute]));
          }
 
-         // This last AND ensures that we negate the rule if there were no rules to process...
-         status = status && hasProps;
          this[attribute](status);
          return status;
+      },
+
+      /**
+       * 
+       * @instance
+       * @since 1.0.34
+       * @param  {object} rulesEngineData The data required to evaluate the rule
+       * @param  {string} key The current key to use in the rulesEngineData
+       * @return {boolean} Whether or not the rule evaluated successfully
+       */
+      evaluateRule: function alfresco_forms_controls_utilities_RulesEngineMixin__evaluateRule(rulesEngineData, key) {
+         var currentValue = rulesEngineData[key].currentValue;
+         var validValues = rulesEngineData[key].rules.is;
+         var invalidValues = rulesEngineData[key].rules.isNot;
+
+         // Assume that its NOT valid value (we'll only do the actual test if its not set to an INVALID value)...
+         // UNLESS there are no valid values specified (in which case any value is valid apart form those in the invalid list)
+         var isValidValue = typeof validValues === "undefined" || validValues.length === 0;
+
+         // Initialise the invalid value to be false if no invalid values have been declared (and only check values if defined)...
+         var isInvalidValue = typeof invalidValues !== "undefined" && invalidValues.length > 0;
+         if (isInvalidValue)
+         {
+            // Check to see if the current value is set to an invalid value (i.e. a value that negates the rule)
+            isInvalidValue = array.some(invalidValues, lang.hitch(this, this.ruleValueComparator, currentValue));
+         }
+
+         // Check to see if the current value is set to a valid value...
+         if (!isInvalidValue && typeof validValues !== "undefined" && validValues.length > 0)
+         {
+            isValidValue = array.some(validValues, lang.hitch(this, this.ruleValueComparator, currentValue));
+         }
+
+         // The overall status is true (i.e. the rule is still passing) if the current status is true and the
+         // current value IS set to a valid value and NOT set to an invalid value
+         return isValidValue && !isInvalidValue;
       },
 
       /**

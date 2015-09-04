@@ -124,6 +124,8 @@ define({
       "src/test/resources/alfresco/forms/controls/ValidationTest",
       "src/test/resources/alfresco/forms/controls/XssPreventionTest",
 
+      "src/test/resources/alfresco/forms/controls/utilities/RulesEngineTest",
+
       "src/test/resources/alfresco/header/HeaderWidgetsTest",
       "src/test/resources/alfresco/header/SearchBoxTest",
       "src/test/resources/alfresco/header/WarningTest",
@@ -209,6 +211,7 @@ define({
       "src/test/resources/alfresco/renderers/ThumbnailTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
+      "src/test/resources/alfresco/renderers/actions/DeleteActionTest",
       "src/test/resources/alfresco/renderers/actions/ManageAspectsActionTest",
       "src/test/resources/alfresco/renderers/actions/UploadNewVersionActionTest",
 

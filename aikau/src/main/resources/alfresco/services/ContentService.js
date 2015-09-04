@@ -34,12 +34,13 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/NodeUtils"],
-        function(declare, BaseService, CoreXhr, AlfConstants, _AlfDocumentListTopicMixin, lang, array, NodeUtils) {
+        function(declare, BaseService, CoreXhr, topics, AlfConstants, _AlfDocumentListTopicMixin, lang, array, NodeUtils) {
    
    return declare([BaseService, CoreXhr, _AlfDocumentListTopicMixin], {
       
@@ -64,7 +65,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_CONTENT_SERVICE_UPLOAD_REQUEST_RECEIVED", lang.hitch(this, this.onFileUploadRequest));
          this.alfSubscribe("ALF_CREATE_CONTENT_REQUEST", lang.hitch(this, this.onCreateContent));
          this.alfSubscribe("ALF_UPDATE_CONTENT_REQUEST", lang.hitch(this, this.onUpdateContent));
-         this.alfSubscribe("ALF_DELETE_CONTENT_REQUEST", lang.hitch(this, this.onDeleteContent));
+         this.alfSubscribe(topics.DELETE_CONTENT, lang.hitch(this, this.onDeleteContent));
          this.alfSubscribe("ALF_EDIT_BASIC_METADATA_REQUEST", lang.hitch(this, this.onEditBasicMetadataRequest));
          this.alfSubscribe("ALF_BASIC_METADATA_SUCCESS", lang.hitch(this, this.onEditBasicMetadataReceived));
       },
@@ -149,7 +150,7 @@ define(["dojo/_base/declare",
          var responseTopic = this.generateUuid();
          this._actionDeleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onActionDeleteConfirmation), true);
 
-         var nodes = payload.documents || [payload.document];
+         var nodes = payload.documents || (payload.document ? [payload.document] : [payload]);
          this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
             dialogId: "ALF_DELETE_CONTENT_DIALOG",
             dialogTitle: this.message("contentService.delete.dialog.title"),
@@ -169,6 +170,7 @@ define(["dojo/_base/declare",
                                  {
                                     name: "alfresco/lists/views/layouts/Cell",
                                     config: {
+                                       width: "40px",
                                        widgets: [
                                           {
                                              name: "alfresco/renderers/SmallThumbnail"
@@ -217,7 +219,8 @@ define(["dojo/_base/declare",
             ],
             widgetsButtons: [
                {
-                  name: "alfresco/buttons/AlfButton",
+                  id: "ALF_DELETE_CONTENT_DIALOG_CONFIRMATION",
+                     name: "alfresco/buttons/AlfButton",
                   config: {
                      label: this.message("contentService.delete.confirmation"),
                      publishTopic: responseTopic,
@@ -228,6 +231,7 @@ define(["dojo/_base/declare",
                   }
                },
                {
+                  id: "ALF_DELETE_CONTENT_DIALOG_CANCELLATION",
                   name: "alfresco/buttons/AlfButton",
                   config: {
                      label: this.message("contentService.delete.cancellation"),
