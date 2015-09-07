@@ -83,6 +83,27 @@ define(["dojo/_base/declare",
       preferenceName: "org.alfresco.share.upload.destination.history",
 
       /**
+       * This is used to keep track of all the targets that have been previously created so that they can 
+       * be destroyed before re-rendering new targets.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       */
+      currentHistoryTargets: null,
+
+      /**
+       * This is an extension point for handling the completion of calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       *
+       * @extensionPoint
+       * @instance
+       * @param {Array} widgets An array of all the widgets that have been processed
+       */
+      allWidgetsProcessed: function alfresco_upload_UploadHistory__allWidgetsProcessed(widgets) {
+         this.currentHistoryTargets = widgets;
+      },
+
+      /**
        * Creates a single upload target for the supplied NodeRef using the configured
        * [widgetsForUploadTargets]{@link module:alfresco/upload/UploadHistory#widgetsForUploadTargets}
        * model.
@@ -140,6 +161,10 @@ define(["dojo/_base/declare",
        * @instance
        */
       render: function alfresco_upload_UploadHistory__render() {
+         array.forEach(this.currentHistoryTargets, function(target) {
+            target.destroy();
+         });
+         domConstruct.empty(this.domNode);
          this.alfPublish(topics.GET_PREFERENCE, {
             preference: this.preferenceName,
             callback: this.createUploadTargets,
