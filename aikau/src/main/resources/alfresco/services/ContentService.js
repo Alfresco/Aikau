@@ -378,6 +378,8 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} payload
+       *
+       * @fires module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST
        */
       showUploader: function alfresco_services_ContentService__showUploader(/*jshint unused:false*/ payload) {
          // Check to see what we're uploading, either new content to a location or updating a 
@@ -402,7 +404,7 @@ define(["dojo/_base/declare",
             updateNodeRef = lang.getObject("document.node.nodeRef", false, payload);
          }
 
-         this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
+         this.alfPublish(topics.CREATE_FORM_DIALOG, {
             dialogId: "ALF_UPLOAD_DIALOG",
             dialogTitle: (updateNodeRef ? "contentService.updater.dialog.title" : "contentService.uploader.dialog.title"),
             dialogConfirmationButtonTitle: "contentService.uploader.dialog.confirmation",
@@ -433,9 +435,11 @@ define(["dojo/_base/declare",
        * @instance
        * @param  {object} payload The payload from the upload request
        * @since 1.0.34
+       * 
+       * @fires module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST
        */
       showUploadLocationPicker: function alfresco_services_ContentService__showUploadLocationPicker(payload) {
-         this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
+         this.alfPublish(topics.CREATE_FORM_DIALOG, {
             dialogId: "ALF_UPLOAD_TO_LOCATION_DIALOG",
             dialogTitle: "contentService.no-location.uploader.dialog.title",
             dialogConfirmationButtonTitle: "contentService.uploader.dialog.confirmation",
