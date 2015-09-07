@@ -400,9 +400,10 @@ define(["dojo/_base/declare",
             if (evt.dataTransfer.files !== undefined && evt.dataTransfer.files !== null && evt.dataTransfer.files.length > 0)
             {
                this.removeDndHighlight();
+               var destination = this._currentNode ? this._currentNode.nodeRef : null;
                var config = this.getUploadConfig();
                var defaultConfig = {
-                  destination: this._currentNode.nodeRef,
+                  destination: destination,
                   siteId: null,
                   containerId: null,
                   uploadDirectory: null,

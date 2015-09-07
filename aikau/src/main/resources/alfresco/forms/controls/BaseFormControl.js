@@ -100,6 +100,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/FormControlValidationMixin",
         "alfresco/forms/controls/utilities/RulesEngineMixin",
         "dojo/text!./templates/BaseFormControl.html",
+        "alfresco/core/topics",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/ArrayUtils",
         "dojo/_base/lang",
@@ -112,8 +113,8 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/Deferred",
         "jquery"],
-        function(declare, _Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, RulesEngineMixin, template, ObjectTypeUtils,
-                 arrayUtils, lang, array, domStyle, domClass, Tooltip, domAttr, query, domConstruct, Deferred, $) {
+        function(declare, _Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, RulesEngineMixin, template, topics,
+                 ObjectTypeUtils, arrayUtils, lang, array, domStyle, domClass, Tooltip, domAttr, query, domConstruct, Deferred, $) {
 
    return declare([_Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, RulesEngineMixin], {
 
@@ -1749,7 +1750,7 @@ define(["dojo/_base/declare",
       showInlineHelp: function alfresco_forms_controls_BaseFormControl__showInlineHelp() {
          if (this.inlineHelp)
          {
-            this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+            this.alfPublish(topics.CREATE_DIALOG, {
                dialogId: "BASE_FORM_CONTROL_INLINE_HELP",
                dialogTitle: this.message(this.label),
                dialogWidth: this.inlineHelpWidth + "px",

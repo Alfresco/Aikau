@@ -1,0 +1,28 @@
+.alfresco-upload-UploadTarget {
+
+   border: 3px dashed @standard-border-color;
+   border-radius: @standard-border-radius;
+   height: 253px;
+   margin: 5px;
+   display: table;
+   vertical-align: top;
+
+   /* Required for Firefox */
+   width: ~"calc(100% - 16px)";
+
+   &.dndHighlight {
+      border: 3px solid @standard-border-color;
+   }
+
+   .alfresco-upload-UploadTarget__centered {
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
+      width: 100%;
+
+      .alfresco-upload-UploadTarget__title {
+         font-size: @large-font-size;
+      }
+   }
+   
+}

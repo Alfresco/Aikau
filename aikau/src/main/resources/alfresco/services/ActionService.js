@@ -819,7 +819,7 @@ define(["dojo/_base/declare",
                url: AlfConstants.PROXY_URI + response.results[0].downloadUrl,
                type: this.fullPath
             });
-            this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, originalRequestConfig.responseScope);
+            this.alfPublish(topics.RELOAD_DATA_TOPIC, {}, false, false, originalRequestConfig.responseScope);
          }
          else
          {

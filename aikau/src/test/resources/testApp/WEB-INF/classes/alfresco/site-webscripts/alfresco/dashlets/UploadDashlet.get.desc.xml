@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Upload Dashlet</shortname>
+  <description>This page demonstrates the upload dashlet components</description>
+  <family>aikau-unit-tests</family>
+  <url>/UploadDashlet</url>
+</webscript>

@@ -68,6 +68,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.DELETE_CONTENT, lang.hitch(this, this.onDeleteContent));
          this.alfSubscribe("ALF_EDIT_BASIC_METADATA_REQUEST", lang.hitch(this, this.onEditBasicMetadataRequest));
          this.alfSubscribe("ALF_BASIC_METADATA_SUCCESS", lang.hitch(this, this.onEditBasicMetadataReceived));
+         this.alfSubscribe(topics.UPLOAD_TO_UNKNOWN_LOCATION, lang.hitch(this, this.showUploadLocationPicker));
       },
       
       /**
@@ -151,7 +152,7 @@ define(["dojo/_base/declare",
          this._actionDeleteHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onActionDeleteConfirmation), true);
 
          var nodes = payload.documents || (payload.document ? [payload.document] : [payload]);
-         this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+         this.alfPublish(topics.CREATE_DIALOG, {
             dialogId: "ALF_DELETE_CONTENT_DIALOG",
             dialogTitle: this.message("contentService.delete.dialog.title"),
             widgetsContent: [
@@ -402,6 +403,7 @@ define(["dojo/_base/declare",
          }
 
          this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
+            dialogId: "ALF_UPLOAD_DIALOG",
             dialogTitle: (updateNodeRef ? "contentService.updater.dialog.title" : "contentService.uploader.dialog.title"),
             dialogConfirmationButtonTitle: "contentService.uploader.dialog.confirmation",
             dialogCancellationButtonTitle: "contentService.uploader.dialog.cancellation",
@@ -421,6 +423,62 @@ define(["dojo/_base/declare",
             },
             responseScope: payload.alfResponseScope,
             widgets: (updateNodeRef ? lang.clone(this.widgetsForUpdate) : lang.clone(this.widgetsForUpload))
+         });
+      },
+
+      /**
+       * Publishes a request to create a form dialog containing a file picker and a location so that the user
+       * can choose what to upload and where to upload it.
+       * 
+       * @instance
+       * @param  {object} payload The payload from the upload request
+       * @since 1.0.34
+       */
+      showUploadLocationPicker: function alfresco_services_ContentService__showUploadLocationPicker(payload) {
+         this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
+            dialogId: "ALF_UPLOAD_TO_LOCATION_DIALOG",
+            dialogTitle: "contentService.no-location.uploader.dialog.title",
+            dialogConfirmationButtonTitle: "contentService.uploader.dialog.confirmation",
+            dialogCancellationButtonTitle: "contentService.uploader.dialog.cancellation",
+            formSubmissionTopic: "ALF_CONTENT_SERVICE_UPLOAD_REQUEST_RECEIVED",
+            formSubmissionPayloadMixin: {
+               targetData: {
+                  siteId: null,
+                  containerId: null,
+                  uploadDirectory: null,
+                  description: "",
+                  overwrite: false,
+                  thumbnails: "doclib",
+                  username: null
+               }
+            },
+            responseScope: payload.alfResponseScope,
+            widgets: [
+               {
+                  id: "ALF_UPLOAD_TO_LOCATION_DIALOG_FILE_SELECT",
+                  name: "alfresco/forms/controls/FileSelect",
+                  config: {
+                     name: "files",
+                     label: "contentService.no-location.uploader.file.picker.label",
+                     description: "contentService.no-location.uploader.file.picker.description",
+                     requirementConfig: {
+                        initialValue: true
+                     }
+                  }
+               },
+               {
+                  id: "ALF_UPLOAD_TO_LOCATION_DIALOG_CONTAINER_PICKER",
+                  name: "alfresco/forms/controls/ContainerPicker",
+                  config: {
+                     name: "targetData.destination",
+                     label: "contentService.no-location.uploader.location.picker.label",
+                     description: "contentService.no-location.uploader.location.picker.description",
+                     requirementConfig: {
+                        initialValue: true
+                     }
+                  }
+               }
+            ]
          });
       },
 

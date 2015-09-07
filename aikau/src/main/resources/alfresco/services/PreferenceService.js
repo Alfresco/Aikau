@@ -34,13 +34,14 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreXhr",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "service/constants/Default",
         "alfresco/core/ArrayUtils",
         "dojo/Deferred",
         "dojo/when",
         "jquery"],
-        function(declare, BaseService, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin, lang, 
+        function(declare, BaseService, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin, topics, lang, 
                  AlfConstants, ArrayUtils, Deferred, when, $) {
    
    return declare([BaseService, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin], {
@@ -70,8 +71,8 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_PreferenceService__registerSubscriptions() {
-         this.alfSubscribe(this.getPreferenceTopic, lang.hitch(this, this.getPreference));
-         this.alfSubscribe(this.setPreferenceTopic, lang.hitch(this, this.setPreference));
+         this.alfSubscribe(topics.GET_PREFERENCE, lang.hitch(this, this.getPreference));
+         this.alfSubscribe(topics.SET_PREFERENCE, lang.hitch(this, this.setPreference));
          this.alfSubscribe(this.showFoldersTopic, lang.hitch(this, this.onShowFolders));
          this.alfSubscribe(this.showPathTopic, lang.hitch(this, this.onShowPath));
          this.alfSubscribe(this.viewSelectionTopic, lang.hitch(this, this.onViewSelection));

@@ -39,7 +39,7 @@ define(["dojo/_base/declare",
        * @type {string} 
        * @default
        */
-      reloadDataTopic: "ALF_DOCLIST_RELOAD_DATA",
+      reloadDataTopic: topics.RELOAD_DATA_TOPIC,
       
       /**
        * This topic is used to publish changes to the current displayed parent location. It should be used to provide

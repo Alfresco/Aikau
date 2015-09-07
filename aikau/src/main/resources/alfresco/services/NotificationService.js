@@ -112,7 +112,7 @@ define(["dojo/_base/declare",
          var message = lang.getObject("message", false, payload);
          if (message) {
             var title = payload.title || "notification.prompt.title";
-            this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+            this.alfPublish(topics.CREATE_DIALOG, {
                dialogId: "NOTIFICATION_PROMPT",
                dialogTitle: this.message(title),
                textContent: message,

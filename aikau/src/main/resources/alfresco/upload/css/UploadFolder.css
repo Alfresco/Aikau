@@ -1,0 +1,12 @@
+.alfresco-upload-UploadFolder {
+
+   margin: 5px;
+   padding: 5px;
+   border: 3px dashed @standard-border-color;
+   border-radius: @standard-border-radius;
+
+   &.dndHighlight {
+      border: 3px solid @standard-border-color;
+   }
+}
+
