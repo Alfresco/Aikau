@@ -56,15 +56,6 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/UploadHistory.properties"}],
 
       /**
-       * An array of the CSS files to use with this widget.
-       * 
-       * @instance
-       * @type {object[]}
-       * @default [{cssFile:"./css/UploadHistory.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/UploadHistory.css"}],
-         
-      /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
@@ -93,6 +84,17 @@ define(["dojo/_base/declare",
       currentHistoryTargets: null,
 
       /**
+       * This is used to keep track of all the subscriptions that are created for each upload target. It is
+       * only necessary to create one subscription for each target no matter how many times that a target is
+       * created because it is the index that is used for the pubSubScope.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       */
+      reloadSubscriptions: null,
+
+      /**
        * This is an extension point for handling the completion of calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        *
        * @extensionPoint
@@ -117,6 +119,15 @@ define(["dojo/_base/declare",
             nodeRef: nodeRef,
             index: index
          };
+
+         // Set up a subscription for this target index (if not previously subscribed)...
+         if (!this.reloadSubscriptions[index])
+         {
+            var topic = "NODE_HISTORY_" + index + topics.RELOAD_DATA_TOPIC;
+            this.reloadSubscriptions[index] = this.alfSubscribe(topic, lang.hitch(this, this.render), true);
+         }
+
+         // Create the upload target...
          var widgetModel = lang.clone(this.widgetsForUploadTargets);
          var targetNode = domConstruct.create("div", {
             className: "alfresco-upload-UploadHistory__target"
@@ -150,6 +161,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_upload_UploadHistory__postCreate() {
          this.render();
+         this.reloadSubscriptions = [];
          this.alfSubscribe(topics.RELOAD_DATA_TOPIC, lang.hitch(this, this.render));
       },
 
@@ -165,11 +177,11 @@ define(["dojo/_base/declare",
             target.destroy();
          });
          domConstruct.empty(this.domNode);
-         this.alfPublish(topics.GET_PREFERENCE, {
+         this.alfServicePublish(topics.GET_PREFERENCE, {
             preference: this.preferenceName,
             callback: this.createUploadTargets,
             callbackScope: this
-         }, true);
+         });
       },
 
       /**

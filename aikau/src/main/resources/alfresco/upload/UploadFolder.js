@@ -25,7 +25,9 @@
  * so that files can easily be dropped anywhere on the widgets rendered to trigger an upload.
  * 
  * @module alfresco/upload/UploadFolder
- * @extends alfresco/documentlibrary/AlfDocument
+ * @extends module:alfresco/documentlibrary/AlfDocument
+ * @mixes module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin
+ * @mixes module:alfresco/node/NodeDropTargetMixin
  * @author Dave Draper
  * @since 1.0.34
  */

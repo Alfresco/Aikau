@@ -18,6 +18,11 @@
  */
 
 /**
+ * Provides a way in which a user can quickly upload one or more files to a non-contextual location (e.g. a
+ * location anywhere within the Alfresco Repository and not necessarily related to a location currently
+ * being displayed). This supports both drag-and-drop file upload (where only the location is prompted for)
+ * and an accessible button that can be clicked (to prompt for both the files and the location to upload to).
+ * 
  * @module alfresco/upload/UploadTarget
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -68,6 +73,15 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * The instruction message to display on the drag-and-drop target. This can be a localization message key.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      uploadInstructions: "upload.target.instruction",
+
+      /**
        * Override the [inherited function]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#getUploadConfig}
        * to return a configuration object that indicates an overwrite action is required. This will cause the 
        * [onDndUploadDrop]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#onDndUploadDrop} function 
@@ -90,6 +104,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} uploadConfig The upload configuration.
        * @param {object[]} files The files that have been dragged and dropped onto the widget
+       *
+       * @fires module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST
        */
       publishUpdateRequest: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__publishUpdateRequest(uploadConfig, files) {
          // Set up a response topic for receiving notifications that the upload has completed...
@@ -101,7 +117,7 @@ define(["dojo/_base/declare",
          var filesRef = this.generateUuid();
          this.alfSetData(filesRef, files);
 
-         this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
+         this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
             dialogId: "ALF_UPLOAD_TARGET_DIALOG",
             dialogTitle: "upload.target.dialog.title",
             dialogConfirmationButtonTitle: "upload.target.dialog.confirmation",
@@ -114,7 +130,24 @@ define(["dojo/_base/declare",
             },
             fixedWidth: true,
             widgets: lang.clone(this.widgetsForLocationSelection)
-         }, true);
+         });
+      },
+
+      /**
+       * Ensures that the upload instructions are set an localized.
+       * 
+       * @instance
+       */
+      postMixInProperties: function alfresco_upload_UploadTarget__postMixInProperties() {
+         this.inherited(arguments);
+         if (this.uploadInstructions)
+         {
+            this.uploadInstructions = this.message(this.uploadInstructions);
+         }
+         else
+         {
+            this.uploadInstructions = this.message("upload.target.instruction");
+         }
       },
 
       /**

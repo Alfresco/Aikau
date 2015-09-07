@@ -154,6 +154,18 @@ define(["dojo/_base/declare",
       aggregateUploadCurrentSize: 0,
 
       /**
+       * This will be populated with the NodeRefs of the last few locations that the user has previously
+       * uploaded to. The number of NodeRefs that are stored are determined by the 
+       * [uploadHistorySize]{@link module:alfresco/services/UploadService#uploadHistorySize}.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.34
+       */
+      uploadHistory: null,
+
+      /**
        * The preference name to use for storing and retrieving upload location history.
        * In order for this preference to be used it will also be necessary to ensure that the 
        * [PreferenceService]{@link module:alfresco/services/PreferenceService} is included on the page.
@@ -437,7 +449,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This updates the [uploadHistory]{@link module:alfresco/services/UploadService#uploadHistory} with the
+       * This updates the [upload history]{@link module:alfresco/services/UploadService#uploadHistory} with the
        * supplied NodeRef. If the NodeRef is already in the history then it will not be added again. If the history
        * already contains the [maximum number of entries]{@link module:alfresco/services/UploadService#uploadHistorySize}
        * then the earliest used NodeRef in the history will be removed and the latest added.
@@ -447,9 +459,23 @@ define(["dojo/_base/declare",
        * @since 1.0.34
        */
       updateUploadHistory: function alfresco_services_UploadService__updateUploadHistory(nodeRef) {
-         var alreadyInHistory = array.some(this.uploadHistory, function(d) {
-            return d === nodeRef;
+         // Iterate over the previous upload history and if the NodeRef being uploaded to already
+         // exists in the history then move it to the first element.
+         var alreadyInHistory = false;
+         var processedUploadHistory = [];
+         array.forEach(this.uploadHistory, function(d) {
+            if (d === nodeRef)
+            {
+               processedUploadHistory.unshift(d);
+               alreadyInHistory = true;
+            }
+            else
+            {
+               processedUploadHistory.push(d);
+            }
          });
+         this.uploadHistory = processedUploadHistory;
+
          if (!alreadyInHistory)
          {
             if (this.uploadHistory.length === this.uploadHistorySize)
@@ -457,12 +483,13 @@ define(["dojo/_base/declare",
                this.uploadHistory.pop();
             }
             this.uploadHistory.unshift(nodeRef);
-            
-            this.alfPublish(topics.SET_PREFERENCE, {
-               preference: this.uploadHistoryPreferenceName,
-               value: this.uploadHistory.join(",")
-            });
          }
+         // Always update the latest history, even if no new NodeRef has been added then the previous
+         // NodeRefs may have been re-ordered...
+         this.alfPublish(topics.SET_PREFERENCE, {
+            preference: this.uploadHistoryPreferenceName,
+            value: this.uploadHistory.join(",")
+         });
       },
 
       /**
