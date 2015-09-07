@@ -110,6 +110,7 @@ define(["dojo/_base/declare",
        */
       _setPreviewerElementHeight: function alfresco_preview_AlfDocumentPreviewPlugin___setPreviewerElementHeight() {
          var pE = this.previewManager.getPreviewerElement();
+         this.heightMode = this.previewManager.heightMode;
          this.setHeight(pE);
       }
    });

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>HeightMixin Test Page</shortname>
+  <description>This WebScript defines the test page for testing the alfresco/layout/HeightMixin module</description>
+  <family>aikau-unit-tests</family>
+  <url>/HeightMixin</url>
+</webscript>

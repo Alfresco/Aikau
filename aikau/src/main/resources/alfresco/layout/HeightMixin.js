@@ -32,14 +32,16 @@
  * @since 1.0.34
  */
 define(["dojo/_base/declare",
-        "dojo/dom-style",
-        "dojo/window",
-        "jquery",
-        "jqueryui",
+        "dojo/aspect",
         "dojo/_base/lang",
-        "dojo/on",
-        "dojo/dom"], 
-        function(declare, domStyle, win, $) {
+        "dojo/Deferred",
+        "dojo/dom-style",
+        "dojo/when",
+        "dojo/window",
+        "dijit/registry",
+        "jquery",
+        "jqueryui"], 
+        function(declare, aspect, lang, Deferred, domStyle, when, win, registry, $) {
    
    return declare([], {
       
@@ -78,6 +80,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {element} domNode The DOM element to calculate the height for.
+       * @returns {number|promise} Either an actual height or a promise of the height (when using the "DIALOG" height mode)
        */
       calculateHeight: function alfresco_layout_HeightMixin__calculateHeight(domNode) {
          var calculatedHeight;
@@ -93,7 +96,21 @@ define(["dojo/_base/declare",
             var heightMode = this.heightMode;
             if (heightMode === "DIALOG")
             {
-               calculatedHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog").last().height();
+               calculatedHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog").last().innerHeight();
+               if (!calculatedHeight)
+               {
+                  // When using the DIALOG mode it is necessary to return a promise of the height because it won't 
+                  // be possible to know the height until the dialog is displayed.
+                  var containingDialog = registry.byNode($(domNode).parents(".alfresco-dialog-AlfDialog")[0]);
+                  if (containingDialog)
+                  {
+                     calculatedHeight = new Deferred();
+                     this.own(aspect.after(containingDialog, "_onFocus", function() {
+                        var dialogHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog").last().innerHeight();
+                        calculatedHeight.resolve(dialogHeight);
+                     }, true));
+                  }
+               }
             }
             else if (!heightMode || heightMode === "AUTO" || isNaN(heightMode))
             {
@@ -123,7 +140,9 @@ define(["dojo/_base/declare",
          var height = this.calculateHeight(domNode);
          if (height || height === 0)
          {
-            domStyle.set(domNode, "height", height + "px");
+            when(height, lang.hitch(this, function(value) {
+               domStyle.set(domNode, "height", value + "px");
+            }));
          }
       }
    });

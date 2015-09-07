@@ -207,6 +207,12 @@ define(["dojo/_base/declare",
             "class" : "dialog-body"
          }, this.containerNode, "last");
 
+         // Workout a maximum height for the dialog as it should always fit in the window...
+         var docHeight = $(document).height(),
+             clientHeight = $(window).height();
+         var h = (docHeight < clientHeight) ? docHeight : clientHeight;
+         var maxHeight = h - 200;
+
          // Set the dimensions of the body if required...
          domStyle.set(this.bodyNode, {
             width: this.contentWidth ? this.contentWidth: null,
@@ -239,20 +245,26 @@ define(["dojo/_base/declare",
 
          if (this.widgetsContent)
          {
-            // Workout a maximum height for the dialog as it should always fit in the window...
-            var docHeight = $(document).height(),
-                clientHeight = $(window).height();
-            var h = (docHeight < clientHeight) ? docHeight : clientHeight;
-
+            // This is a slightly unpleasant convergence of CSS and JS, but will suffice for the time being...
+            // There is a "no-padding" CSS class that can be applied which will remove the default padding applied
+            // to the dialog body, if we detect this setting then we should not compensate the content height 
+            // for this padding.
+            var paddingAdjustment = this.additionalCssClasses.indexOf("no-padding") === -1 ? 24 : 0;
+            var simplePanelHeight = null;
+            if (this.contentHeight)
+            {
+               simplePanelHeight = (parseInt(this.contentHeight, 10) - paddingAdjustment) + "px";
+            }
+            
             // Add widget content to the container node...
             var widgetsNode = domConstruct.create("div", {
-               style: "max-height:" + (h - 200) + "px"
+               style: "max-height:" + maxHeight + "px"
             }, this.bodyNode, "last");
             var bodyModel = [{
                name: "alfresco/layout/SimplePanel",
                assignTo: "_dialogPanel",
                config: {
-                  height: this.contentHeight,
+                  height: simplePanelHeight,
                   widgets: this.widgetsContent
                }
             }];
