@@ -1,0 +1,263 @@
+{
+   "metadata": {
+      "repositoryId": "1df45b73-b268-43a6-82f0-9f475a057acf",
+      "custom": {
+         "vtiServer": null,
+         "aos": {
+            "baseUrl": "http:\/\/dave-Latitude-E6530:8080\/alfresco\/aos"
+         }
+      },
+      "onlineEditing": false,
+      "workingCopyLabel": " (Working Copy)",
+      "shareURL": "http:\/\/localhost:8081\/share",
+      "serverURL": "http:\/\/localhost:8080",
+      "parent": {
+         "permissions": {
+            "user": {},
+            "roles": []
+         }
+      }
+   },
+   "item": {
+      "thumbnailDefinitions": [],
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site-2_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_site-2_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site-2_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site-2_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/fbc8abe0-6456-4371-b1b9-38effd4d37ad",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Sep 03 21:45:36 BST 2015",
+               "iso8601": "2015-09-03T20:45:36.861Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Thu Sep 03 11:15:36 BST 2015",
+               "iso8601": "2015-09-03T10:15:36.909Z"
+            },
+            "cm:name": "One & Two",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "st:siteContainer", "cm:ownable", "cm:tagscope", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site-2_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_site-2_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site-2_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site-2_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/2ccce1de-1bfd-43d4-b2af-bc14b5c2735a",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Sep 03 11:15:36 BST 2015",
+               "iso8601": "2015-09-03T10:15:36.922Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "Document Library",
+            "cm:creator": {
+               "lastName": "Griffin",
+               "userName": "chris",
+               "displayName": "Chris Griffin",
+               "firstName": "Chris"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Thu Aug 27 19:35:19 BST 2015",
+               "iso8601": "2015-08-27T18:35:19.254Z"
+            },
+            "st:componentId": "documentLibrary",
+            "cm:name": "documentLibrary",
+            "sys:store-protocol": null,
+            "cm:owner": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/site-2\/documentLibrary\/One%20%26%20Two",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "1df45b73-b268-43a6-82f0-9f475a057acf",
+         "site": {
+            "name": "site-2",
+            "title": "Site 2",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/",
+         "repoPath": "\/Sites\/site-2\/documentLibrary",
+         "file": "One & Two",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/fbc8abe0-6456-4371-b1b9-38effd4d37ad",
+      "fileName": "One & Two",
+      "displayName": "One & Two",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": "100"
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": "105"
+      }, {
+         "id": "document-edit-properties",
+         "icon": "folder-edit-properties",
+         "type": "javascript",
+         "label": "actions.folder.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": "110"
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": "150"
+      }, {
+         "id": "document-move-to",
+         "icon": "folder-move-to",
+         "type": "javascript",
+         "label": "actions.folder.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": "160"
+      }, {
+         "id": "folder-manage-rules",
+         "icon": "folder-manage-rules",
+         "type": "pagelink",
+         "label": "actions.folder.rules",
+         "params": {
+            "page": "folder-rules?nodeRef={node.nodeRef}"
+         },
+         "index": "170"
+      }, {
+         "id": "document-delete",
+         "icon": "folder-delete",
+         "type": "javascript",
+         "label": "actions.folder.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": "180"
+      }, {
+         "id": "document-manage-granular-permissions",
+         "icon": "folder-manage-permissions",
+         "type": "link",
+         "label": "actions.folder.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": "190"
+      }, {
+         "id": "document-manage-aspects",
+         "icon": "document-manage-aspects",
+         "type": "javascript",
+         "label": "actions.folder.manage-aspects",
+         "params": {
+            "function": "onActionManageAspects"
+         },
+         "index": "210"
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }
+}

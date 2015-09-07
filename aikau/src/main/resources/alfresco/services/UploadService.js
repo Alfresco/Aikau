@@ -29,14 +29,16 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "dojo/json",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/on",
         "alfresco/dialogs/AlfDialog",
         "alfresco/buttons/AlfButton",
-        "service/constants/Default"], 
-        function(declare, BaseService, CoreXhr, dojoJson, lang, array, on, AlfDialog, AlfButton, AlfConstants) {
+        "service/constants/Default",
+        "alfresco/core/ObjectTypeUtils"], 
+        function(declare, BaseService, CoreXhr, topics, dojoJson, lang, array, on, AlfDialog, AlfButton, AlfConstants, ObjectTypeUtils) {
    
    return declare([BaseService, CoreXhr], {
 
@@ -152,6 +154,41 @@ define(["dojo/_base/declare",
       aggregateUploadCurrentSize: 0,
 
       /**
+       * This will be populated with the NodeRefs of the last few locations that the user has previously
+       * uploaded to. The number of NodeRefs that are stored are determined by the 
+       * [uploadHistorySize]{@link module:alfresco/services/UploadService#uploadHistorySize}.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.34
+       */
+      uploadHistory: null,
+
+      /**
+       * The preference name to use for storing and retrieving upload location history.
+       * In order for this preference to be used it will also be necessary to ensure that the 
+       * [PreferenceService]{@link module:alfresco/services/PreferenceService} is included on the page.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.34
+       */
+      uploadHistoryPreferenceName: "org.alfresco.share.upload.destination.history",
+
+      /**
+       * The number of nodes previously uploaded to that should be stored in the user preferences as their 
+       * upload history. This defaults to 3 but can be overridden through configuration if required.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.34
+       */
+      uploadHistorySize: 3,
+
+      /**
        * Resets the widget
        *
        * @instance
@@ -164,6 +201,19 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * 
+       * @instance
+       * @param {string} value The preference value containing the nodeRefs last uploaded to
+       * @since 1.0.34
+       */
+      setUploadHistory: function alfresco_services_UploadService__setUploadHistory(value) {
+         if (value)
+         {
+            this.uploadHistory = value.split(",");
+         }
+      },
+
+      /**
        * @instance
        * @since 1.0.32
        */
@@ -171,6 +221,14 @@ define(["dojo/_base/declare",
          this.reset();
          this.alfSubscribe(this._ALF_UPLOAD_TOPIC, lang.hitch(this, this.onUploadRequest));
 
+         // Set up the upload history array from the user preferences
+         this.uploadHistory = [];
+         this.alfPublish(topics.GET_PREFERENCE, {
+            preference: this.uploadHistoryPreferenceName,
+            callback: this.setUploadHistory,
+            callbackScope: this
+         });
+         
          // Set up template?
          if (this.progressDialog === null || this.progressDialog === undefined)
          {
@@ -183,10 +241,12 @@ define(["dojo/_base/declare",
 
             // Create a new dialog... the content is variable, but the widgets are fixed...
             this.progressDialog = new AlfDialog({
+               id: "ALF_UPLOAD_PROGRESS_DIALOG",
                title: this.createProgressDialogTitle(),
                widgetsContent: this.widgetsForProgressDialog,
                widgetsButtons: [
                   {
+                     id: "ALF_UPLOAD_PROGRESS_DIALOG_CONFIRMATION",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: this.message("progress-dialog.ok-button.label"),
@@ -195,6 +255,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: this.message("progress-dialog.cancel-button.label"),
@@ -250,7 +311,7 @@ define(["dojo/_base/declare",
        * @param {object[]} files The array of files that have been requested to be uploaded
        */
       validateRequestedFiles: function alfresco_services_UploadService__validateRequestedFiles(files) {
-         array.forEach(files, lang.hitch(this, "validateRequestedFile"));
+         array.forEach(files, lang.hitch(this, this.validateRequestedFile));
       },
 
       /**
@@ -388,6 +449,50 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This updates the [upload history]{@link module:alfresco/services/UploadService#uploadHistory} with the
+       * supplied NodeRef. If the NodeRef is already in the history then it will not be added again. If the history
+       * already contains the [maximum number of entries]{@link module:alfresco/services/UploadService#uploadHistorySize}
+       * then the earliest used NodeRef in the history will be removed and the latest added.
+       *
+       * @instance
+       * @param {string} nodeRef The NodeRef to add to the upload history
+       * @since 1.0.34
+       */
+      updateUploadHistory: function alfresco_services_UploadService__updateUploadHistory(nodeRef) {
+         // Iterate over the previous upload history and if the NodeRef being uploaded to already
+         // exists in the history then move it to the first element.
+         var alreadyInHistory = false;
+         var processedUploadHistory = [];
+         array.forEach(this.uploadHistory, function(d) {
+            if (d === nodeRef)
+            {
+               processedUploadHistory.unshift(d);
+               alreadyInHistory = true;
+            }
+            else
+            {
+               processedUploadHistory.push(d);
+            }
+         });
+         this.uploadHistory = processedUploadHistory;
+
+         if (!alreadyInHistory)
+         {
+            if (this.uploadHistory.length === this.uploadHistorySize)
+            {
+               this.uploadHistory.pop();
+            }
+            this.uploadHistory.unshift(nodeRef);
+         }
+         // Always update the latest history, even if no new NodeRef has been added then the previous
+         // NodeRefs may have been re-ordered...
+         this.alfPublish(topics.SET_PREFERENCE, {
+            preference: this.uploadHistoryPreferenceName,
+            value: this.uploadHistory.join(",")
+         });
+      },
+
+      /**
        * Constructs the upload payload object to be added to the fileStore object for each file. 
        * The object constructed is designed to work with the Alfresco REST service for uploading
        * documents. This function can be overridden to support different APIs
@@ -398,6 +503,11 @@ define(["dojo/_base/declare",
        * @param {object} targetData
        */
       constructUploadData: function alfresco_services_UploadService__constructUploadData(file, fileName, targetData) {
+         // NOTE: This is to work around the fact that pickers always return an array, even in
+         //       single item mode - that needs to be better resolved at some point
+         var destination = ObjectTypeUtils.isArray(targetData.destination) ? targetData.destination[0] : targetData.destination;
+         this.updateUploadHistory(destination);
+         
          // TODO: NEED TO UPDATE THIS OBJECT AND INCLUDE DEFAULTS, ETC AS INSTANCE VARIABLES...
          // The object should take the values passed in the upload request rather than having statically
          // defined data created when the widget is instantiated (e.g. this should be able to respond to
@@ -406,7 +516,7 @@ define(["dojo/_base/declare",
          {
             filedata: file,
             filename: fileName,
-            destination: targetData.destination,
+            destination: destination,
             siteId: targetData.siteId,
             containerId: targetData.containerId,
             uploaddirectory: targetData.uploadDirectory,
@@ -449,8 +559,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} Contains info about the file and its request.
        */
-      startFileUpload: function alfresco_services_UploadService__startFileUpload(fileInfo)
-      {
+      startFileUpload: function alfresco_services_UploadService__startFileUpload(fileInfo) {
          // Mark file as being uploaded
          fileInfo.state = this.STATE_UPLOADING;
 
@@ -566,7 +675,6 @@ define(["dojo/_base/declare",
        * @param {object} fileInfo The data about the file being uploaded.
        */
       updateAggregateProgress: function alfresco_services_UploadService__updateAggregateProgress(fileInfo) {
-
          // Update the aggregate progress of all the files uploaded...
          if (this.uploadDisplayWidget !== null && 
              this.uploadDisplayWidget !== undefined && 

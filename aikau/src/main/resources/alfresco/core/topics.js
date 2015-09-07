@@ -72,6 +72,30 @@ define([],function() {
       CLEAR_SELECTED_ITEMS: "ALF_CLEAR_SELECTED_ITEMS",
 
       /**
+       * This can be published to make a request to create a dialog. It is typically handled by the
+       * [DialogService]{@link module:alfresco/services/DialogService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.34
+       */
+      CREATE_DIALOG: "ALF_CREATE_DIALOG_REQUEST",
+
+       /**
+       * This can be published to make a request to create a dialog that contains a form. This differs from the standard
+       * dialog request in that the payload is expected to contain a widget model containing the form controls to be placed
+       * inside the dialog. The confirmation buttons of the dialog are automatically setup to respond to changes of validity
+       * within the form.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.34
+       */
+      CREATE_FORM_DIALOG: "ALF_CREATE_FORM_DIALOG_REQUEST",
+
+      /**
        * Delete the archive created for downloading.
        *
        * @instance
@@ -166,6 +190,17 @@ define([],function() {
       GET_DOCUMENT: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
 
       /**
+       * This topic can be published to request a user preference be returned. It is typically handled by 
+       * the [PreferenceService]{@link module:alfresco/services/PreferenceService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.34
+       */
+      GET_PREFERENCE: "ALF_PREFERENCE_GET",
+
+      /**
        * This topic is fired automatically whenever a notification is destroyed.
        *
        * @instance
@@ -195,6 +230,17 @@ define([],function() {
        * @default
        */
       PATH_CHANGED: "ALF_DOCUMENTLIST_PATH_CHANGED",
+
+      /**
+       * This topic is published to indicate that data needs to be uploaded. This is typically list based data but can
+       * be used by other widgets.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.34
+       */
+      RELOAD_DATA_TOPIC: "ALF_DOCLIST_RELOAD_DATA",
 
       /**
        * Called to start off the archiving process.
@@ -246,6 +292,17 @@ define([],function() {
       SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM",
 
       /**
+       * This topic can be published to set a user preference. It is typically handled by 
+       * the [PreferenceService]{@link module:alfresco/services/PreferenceService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.34
+       */
+      SET_PREFERENCE: "ALF_PREFERENCE_SET",
+
+      /**
        * This topic can be used to publish a request to change the title of a page. It is subscribed to by the
        * [Title widget]{@link module:alfresco/header/Title} and published by the 
        * [SetTitle widget]{@link module:alfresco/header/SetTitle}
@@ -254,6 +311,18 @@ define([],function() {
        * @type {string}
        * @default
        */
-      UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE"
+      UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE",
+
+      /**
+       * This topic can be published to display a dialog that allows users to select one or more files
+       * to upload and the location to upload them to. This is typically handled by the 
+       * [ContentService]{@link module:alfresco/services/ContentService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.34
+       */
+      UPLOAD_TO_UNKNOWN_LOCATION: "ALF_UPLOAD_TO_UNKNOWN_LOCATION"
    };
 });
