@@ -85,6 +85,11 @@ define(["dojo/_base/declare",
          {
             // Get the position of the DOM node and the available view port height...
             var winBox = win.getBox();
+            
+            // We're using JQuery here to get the offset as it has proved more reliable than either the Dojo margin box
+            // or native browser offsetTop options...
+            var offset = $(domNode).offset().top;
+            var availableHeight = winBox.h - offset - this.footerHeight;
             var heightMode = this.heightMode;
             if (heightMode === "DIALOG")
             {
@@ -92,16 +97,12 @@ define(["dojo/_base/declare",
             }
             else if (!heightMode || heightMode === "AUTO" || isNaN(heightMode))
             {
-               // We're using JQuery here to get the offset as it has proved more reliable than either the Dojo margin box
-               // or native browser offsetTop options...
-               var offset = $(domNode).offset().top;
-               var availableHeight = winBox.h - offset - this.footerHeight;
                calculatedHeight =  availableHeight;
             }
             else if (heightMode < 0)
             {
                // If the height mode is a number less than zero, then deduct that height from the available space.
-               calculatedHeight = winBox.h + heightMode; // NOTE: Not a mistake, remember adding a negative number substracts! :)
+               calculatedHeight = availableHeight + heightMode; // NOTE: Not a mistake, remember adding a negative number substracts! :)
             }
             else
             {
