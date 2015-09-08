@@ -249,7 +249,12 @@ define(["dojo/_base/declare",
             // There is a "no-padding" CSS class that can be applied which will remove the default padding applied
             // to the dialog body, if we detect this setting then we should not compensate the content height 
             // for this padding.
-            var paddingAdjustment = this.additionalCssClasses.indexOf("no-padding") === -1 ? 24 : 0;
+            var paddingAdjustment = 24;
+            if (this.additionalCssClasses && this.additionalCssClasses.indexOf("no-padding") === -1)
+            {
+               paddingAdjustment = 0;
+            }
+            
             var simplePanelHeight = null;
             if (this.contentHeight)
             {

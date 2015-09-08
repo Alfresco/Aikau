@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
             var heightMode = this.heightMode;
             if (heightMode === "DIALOG")
             {
-               calculatedHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog").last().innerHeight();
+               calculatedHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").last().innerHeight() - 1;
                if (!calculatedHeight)
                {
                   // When using the DIALOG mode it is necessary to return a promise of the height because it won't 
@@ -106,8 +106,8 @@ define(["dojo/_base/declare",
                   {
                      calculatedHeight = new Deferred();
                      this.own(aspect.after(containingDialog, "_onFocus", function() {
-                        var dialogHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog").last().innerHeight();
-                        calculatedHeight.resolve(dialogHeight);
+                        var dialogHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").last().innerHeight();
+                        calculatedHeight.resolve(dialogHeight - 1);
                      }, true));
                   }
                }
