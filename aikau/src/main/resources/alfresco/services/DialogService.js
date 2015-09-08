@@ -162,15 +162,16 @@
 
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
-        "dojo/_base/lang",
+        "alfresco/core/topics",
         "alfresco/dialogs/AlfDialog",
         "alfresco/forms/Form",
+        "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/on",
         "dojo/keys",
         "jquery",
         "dojo/aspect"],
-        function(declare, BaseService, lang, AlfDialog, AlfForm, array, on, keys, $, aspect) {
+        function(declare, BaseService, topics, AlfDialog, AlfForm, lang, array, on, keys, $, aspect) {
 
    return declare([BaseService], {
 
@@ -285,9 +286,9 @@ define(["dojo/_base/declare",
       registerSubscriptions: function alfresco_services_DialogService__registerSubscriptions() {
          // Generate a new pub/sub scope for the widget (this will intentionally override any other settings
          // to contrain communication...
-         this.publishTopic = "ALF_CREATE_FORM_DIALOG_REQUEST";
+         this.publishTopic = topics.CREATE_FORM_DIALOG;
          this.alfSubscribe(this.publishTopic, lang.hitch(this, this.onCreateFormDialogRequest));
-         this.alfSubscribe("ALF_CREATE_DIALOG_REQUEST", lang.hitch(this, this.onCreateDialogRequest));
+         this.alfSubscribe(topics.CREATE_DIALOG, lang.hitch(this, this.onCreateDialogRequest));
 
          // Create a reference of IDs to dialogs...
          // The idea is that we shouldn't have multiple instances of a dialog with the same ID, but we

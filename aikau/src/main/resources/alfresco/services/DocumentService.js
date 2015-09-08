@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
             // View mode and No-cache
             var params = "?view=browse&noCache=" + new Date().getTime() + "&includeThumbnails=true";
 
-            var alfTopic = payload.alfResponseTopic || "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST";
+            var alfTopic = payload.alfResponseTopic || topics.GET_DOCUMENT;
             var url;
             if (payload.rawData === true || this.rawData === true)
             {
@@ -292,7 +292,7 @@ define(["dojo/_base/declare",
          // View mode and No-cache
          params += "&view=browse&noCache=" + new Date().getTime();
 
-         var alfTopic = payload.alfResponseTopic || "ALF_RETRIEVE_DOCUMENTS_REQUEST";
+         var alfTopic = payload.alfResponseTopic || topics.GET_DOCUMENT_LIST;
 
          var url;
          if (payload.rawData === true || this.rawData === true)
@@ -332,7 +332,7 @@ define(["dojo/_base/declare",
             payload.document.nodeRef = payload.document.nodeRef || payload.document.node.nodeRef;
          }
          
-         this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+         this.alfPublish(topics.CREATE_DIALOG, {
             generatePubSubScope: true,
             dialogId: "ARCHIVING_DIALOG",
             dialogTitle: this.message("services.ActionService.ActionFolderDownload.title"),
@@ -661,7 +661,7 @@ define(["dojo/_base/declare",
        * @param payload The payload from the request to cancel editing
        */
       onCancelEditNodeSuccess: function alfresco_services_DocumentService__onCancelEditNodeSuccess(payload) {
-         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, payload.requestConfig.responseScope);
+         this.alfPublish(topics.RELOAD_DATA_TOPIC, {}, false, false, payload.requestConfig.responseScope);
       },
 
       /**
@@ -680,7 +680,7 @@ define(["dojo/_base/declare",
          }
 
          payload.alfResponseTopic = responseTopic;
-         this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", payload);
+         this.alfPublish(topics.GET_DOCUMENT, payload);
       },
 
       /**

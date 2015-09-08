@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest"
+      "src/test/resources/alfresco/upload/UploadTargetTest"
    ],
 
    /**
@@ -124,6 +124,8 @@ define({
       "src/test/resources/alfresco/forms/controls/ValidationTest",
       "src/test/resources/alfresco/forms/controls/XssPreventionTest",
 
+      "src/test/resources/alfresco/forms/controls/utilities/RulesEngineTest",
+
       "src/test/resources/alfresco/header/HeaderWidgetsTest",
       "src/test/resources/alfresco/header/SearchBoxTest",
       "src/test/resources/alfresco/header/WarningTest",
@@ -138,6 +140,7 @@ define({
       "src/test/resources/alfresco/layout/DynamicHorizontalLayoutTest",
       "src/test/resources/alfresco/layout/FixedHeaderFooterTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
+      "src/test/resources/alfresco/layout/HeightMixinTest",
       "src/test/resources/alfresco/layout/StripedContentTest",
       "src/test/resources/alfresco/layout/TwisterTest",
       "src/test/resources/alfresco/layout/VerticalRevealTest",
@@ -209,6 +212,7 @@ define({
       "src/test/resources/alfresco/renderers/ThumbnailTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
+      "src/test/resources/alfresco/renderers/actions/DeleteActionTest",
       "src/test/resources/alfresco/renderers/actions/ManageAspectsActionTest",
       "src/test/resources/alfresco/renderers/actions/UploadNewVersionActionTest",
 
@@ -238,6 +242,7 @@ define({
       "src/test/resources/alfresco/services/actions/WorkflowTest",
 
       "src/test/resources/alfresco/upload/UploadTest",
+      "src/test/resources/alfresco/upload/UploadTargetTest",
 
       "src/test/resources/alfresco/util/functionUtilsTest",
       "src/test/resources/alfresco/util/urlUtilsTest"

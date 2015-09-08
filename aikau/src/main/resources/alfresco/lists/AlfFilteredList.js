@@ -55,6 +55,18 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfFilteredList.css"}],
 
       /**
+       * This is a boolean flag that exists for internal use only (e.g. it should not be configured
+       * referenced or updated by extending modules). It is used to track whether filter or view
+       * widgets are being processed so that post processing can be handled accordingly.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.34
+       */
+      ___processingFilters: null,
+
+      /**
        * Called after properties mixed into instance
        *
        * @instance
@@ -75,14 +87,42 @@ define(["dojo/_base/declare",
          if (this.widgetsForFilters)
          {
             // Process the widget model for the filtered widgets...
+            // NOTE: Set the flag to indicate that we are about to process filters, this ensures
+            //       that we're able to map them to the request parameter name that will be used
+            //       on the browser hash...
+            this.___processingFilters = true;
             var filtersModel = lang.clone(this.widgetsForFilters);
             this.processObject(["processInstanceTokens"], filtersModel);
             this.processWidgets(filtersModel, this.filtersNode);
+         }
+         this.inherited(arguments);
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#allWidgetsProcessed}
+       * to handle differentiate between filter widget and view widget post creation processing.
+       *
+       * @instance
+       * @param {object[]} widgets The widgets that have been created
+       * @since 1.0.34
+       */
+      allWidgetsProcessed: function alfresco_lists_AlfFilteredList__allWidgetsProcessed(widgets) {
+         if (this.___processingFilters === true)
+         {
+            this._storeFilterWidgets(widgets);
+            this._updateFilterFieldsFromHash();
 
             // Setup the filtering topics based on the filter widgets configured...
             array.forEach(this.widgetsForFilters, this.setupFilteringTopics, this);
+
+            // Need to reset this so that views get processed next time this function gets called.
+            this.___processingFilters = false;
          }
-         this.inherited(arguments);
+         else
+         {
+            // Only perform the inherited function (e.g. to processViews) when not processing filters
+            this.inherited(arguments);
+         }
       },
 
       /**
@@ -105,7 +145,6 @@ define(["dojo/_base/declare",
        * @param {object} payload The publication topic
        */
       onHashChange: function alfresco_lists_AlfFilteredList__onHashChange( /*jshint unused:false*/ payload) {
-
          // Only do this when we are mirroring the filters in the hash
          if (this.mapHashVarsToPayload) {
 
@@ -132,28 +171,15 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Widget has started
-       *
-       * @instance
-       * @override
-       */
-      startup: function alfresco_lists_AlfFilteredList__startup() {
-         this.inherited(arguments);
-         this._storeFilterWidgets();
-         this._updateFilterFieldsFromHash();
-      },
-
-      /**
        * Build a collection of filter widgets as a property on this instance
        *
        * @instance
        */
-      _storeFilterWidgets: function alfresco_lists_AlfFilteredList___storeFilterWidgets() {
-         var childWidgets = registry.findWidgets(this.domNode);
+      _storeFilterWidgets: function alfresco_lists_AlfFilteredList___storeFilterWidgets(widgets) {
          this._filterWidgets = {};
          array.forEach(this.widgetsForFilters, function(filterDef) {
             var filterName = filterDef.config.name;
-            this._filterWidgets[filterName] = array.filter(childWidgets, function(childWidget) {
+            this._filterWidgets[filterName] = array.filter(widgets, function(childWidget) {
                return childWidget.name === filterName;
             })[0];
          }, this);
@@ -166,7 +192,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       _updateFilterFieldsFromHash: function alfresco_lists_AlfFilteredList___updateFilterFieldsFromHash() {
-
          // Get the hash
          var currHash = hashUtils.getHash();
 
@@ -217,7 +242,8 @@ define(["dojo/_base/declare",
          if (filter && filter.config && filter.config.fieldId)
          {
             this.filteringTopics.push("_valueChangeOf_" + filter.config.fieldId);
-            if (this.mapHashVarsToPayload) {
+            if (this.mapHashVarsToPayload) 
+            {
                this.hashVarsForUpdate.push(filter.config.name);
             }
          }

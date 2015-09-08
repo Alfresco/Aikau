@@ -185,7 +185,7 @@ define(["alfresco/TestCommon",
             .pressKeys(keys.TAB)
             .end()
 
-         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500, "Didn't reload list after filter removal")
+         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED", 1500, "Didn't reload list after filter removal")
             .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")

@@ -581,7 +581,7 @@ define(["dojo/_base/declare",
             this.publishTopic = "ALF_CREATE_DIALOG_REQUEST";
             this.publishPayload = {
                contentWidth: (vs.w*0.7) + "px",
-               contentHeight: (vs.h-64) + "px",
+               contentHeight: (vs.h-250) + "px",
                handleOverflow: false,
                dialogTitle: this.imgTitle,
                additionalCssClasses: "no-padding",

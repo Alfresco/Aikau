@@ -21,8 +21,9 @@
  * @module alfresco/services/_PreferenceServiceTopicMixin
  * @author Dave Draper
  */
-define(["dojo/_base/declare"], 
-        function(declare) {
+define(["dojo/_base/declare",
+        "alfresco/core/topics"], 
+        function(declare, topics) {
    
    return declare(null, {
 
@@ -31,14 +32,14 @@ define(["dojo/_base/declare"],
        * @type {string}
        * @default
        */
-      getPreferenceTopic: "ALF_PREFERENCE_GET",
+      getPreferenceTopic: topics.GET_PREFERENCE,
       
       /**
        * @instance
        * @type {string}
        * @default
        */
-      setPreferenceTopic: "ALF_PREFERENCE_SET",
+      setPreferenceTopic: topics.SET_PREFERENCE,
       
       /**
        * This topic is used to request that a node should be made a favourite.

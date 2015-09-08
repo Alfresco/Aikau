@@ -819,7 +819,7 @@ define(["dojo/_base/declare",
                url: AlfConstants.PROXY_URI + response.results[0].downloadUrl,
                type: this.fullPath
             });
-            this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, originalRequestConfig.responseScope);
+            this.alfPublish(topics.RELOAD_DATA_TOPIC, {}, false, false, originalRequestConfig.responseScope);
          }
          else
          {
@@ -879,7 +879,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the original request
        */
       onActionDelete: function alfresco_services_ActionService__onActionDelete(payload) {
-         this.alfPublish("ALF_DELETE_CONTENT_REQUEST", payload);
+         this.alfPublish(topics.DELETE_CONTENT, payload);
       },
 
       /**
