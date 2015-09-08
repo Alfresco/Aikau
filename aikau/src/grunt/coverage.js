@@ -196,8 +196,10 @@ module.exports = function(grunt) {
             /*jshint unused:false*/
             if (!inUse) {
                var nodeCoverage = grunt.util.spawn({
-                  cmd: "node",
-                  args: ["node_modules/node-coverage/server.js",
+                  cmd: "forever",
+                  args: [
+                     "start",
+                     "node_modules/node-coverage/server.js",
                      "--port",
                      "8082",
                      "--report-dir",
