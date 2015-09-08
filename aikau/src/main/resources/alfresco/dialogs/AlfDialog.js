@@ -180,7 +180,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_dialogs_AlfDialog__postCreate() {
-         // jshint maxcomplexity:false
+         // jshint maxcomplexity:false, maxstatements:false
          this.inherited(arguments);
 
          // Listen for requests to resize the dialog...

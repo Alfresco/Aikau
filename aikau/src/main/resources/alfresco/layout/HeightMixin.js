@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
                      var heightAdjustment = this.heightAdjustment; // Required to compensate for lack of *this*
                      calculatedHeight = new Deferred();
                      this.own(aspect.after(containingDialog, "_onFocus", function() {
-                        var dialogHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").last().innerHeight();
+                        var dialogHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").first().innerHeight();
                         calculatedHeight.resolve(dialogHeight - heightAdjustment);
                      }, true));
                   }

@@ -71,6 +71,7 @@ model.jsonModel = {
                                  additionalCssClasses: "no-padding",
                                  widgetsContent: [
                                     {
+                                       id: "DIALOG_1_TEST",
                                        name: "aikauTesting/widgets/TestHeight",
                                        config: {
                                           heightMode: "DIALOG",
@@ -95,6 +96,7 @@ model.jsonModel = {
                                  contentHeight: "100px",
                                  widgetsContent: [
                                     {
+                                       id: "DIALOG_2_TEST",
                                        name: "aikauTesting/widgets/TestHeight",
                                        config: {
                                           heightMode: "DIALOG",
@@ -117,6 +119,7 @@ model.jsonModel = {
                                  dialogTitle: "Dialog",
                                  widgetsContent: [
                                     {
+                                       id: "DIALOG_3_TEST",
                                        name: "aikauTesting/widgets/TestHeight",
                                        config: {
                                           heightMode: "DIALOG",
@@ -139,6 +142,7 @@ model.jsonModel = {
                                  dialogTitle: "Dialog",
                                  widgetsContent: [
                                     {
+                                       id: "DIALOG_4_TEST",
                                        name: "aikauTesting/widgets/TestHeight",
                                        config: {
                                           heightMode: "DIALOG",
@@ -165,9 +169,6 @@ model.jsonModel = {
                
             ]
          }
-      },
-      {
-         name: "alfresco/logging/DebugLog"
       }
    ]
 };
