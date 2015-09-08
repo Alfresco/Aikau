@@ -629,8 +629,25 @@ define([
          },
 
          "Clicking folder loads new folder": function() {
-            // Not yet implemented
-            // Waiting for problems with layout/resizing/reloading of FilmStripView to be resolved
+            return browser.findByCssSelector("body").clearLog().end()
+               
+            .findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR")
+               .click()
+            .end()
+
+            .findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR_dropdown .alfresco-menus-AlfMenuItem:first-child")
+               .click()
+            .end()
+
+            .getLastPublish("PAGED_ALF_DOCLIST_REQUEST_FINISHED", true, "Did not load first page of results")
+
+            .clearLog()
+
+            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS li:first-child .alfresco-renderers-Thumbnail .inner img")
+               .click()
+            .end()
+
+            .getLastPublish("PAGED_ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "Did not load data");
          },
 
          "Post Coverage Results": function() {

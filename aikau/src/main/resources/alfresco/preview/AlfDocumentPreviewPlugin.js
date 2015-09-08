@@ -18,23 +18,28 @@
  */
 
 /**
- * This module is currently a BETA
+ * This is the base module should be extended by all plugins for the 
+ * [document previewer]{@link module:alfresco/preview/AlfDocumentPreview}. This provides basic 
+ * height calculations for the preview (which can be overridden if required). The 
+ * [display]{@link module:alfresco/preview/AlfDocumentPreviewPlugin#display} function should be
+ * overridden to implement the preview behaviour.
  *
  * @module alfresco/preview/AlfDocumentPreviewPlugin
  * @extends external:dijit/_WidgetBase
+ * @mixes module:alfresco/layout/HeightMixin
+ * @mixes module:alfresco/core/ResizeMixin
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
+        "alfresco/layout/HeightMixin",
         "alfresco/core/ResizeMixin",
         "alfresco/core/Core",
-        "dojo/_base/lang",
-        "dojo/dom-style",
-        "jquery"], 
-        function(declare, _Widget, ResizeMixin, Core, lang, domStyle, $) {
+        "dojo/_base/lang"], 
+        function(declare, _Widget, HeightMixin, ResizeMixin, Core, lang) {
    
-   return declare([_Widget, ResizeMixin, Core], {
+   return declare([_Widget, HeightMixin, ResizeMixin, Core], {
 
       /**
        *
@@ -69,8 +74,7 @@ define(["dojo/_base/declare",
        * Tests if the plugin can be used in the users browser.
        *
        * @instance
-       * @return {String} Returns nothing if the plugin may be used, otherwise returns a message containing the reason
-       * it cant be used as a string.
+       * @overridable
        */
       report: function alfresco_preview_AlfDocumentPreviewPlugin__report() {
          // By default don't report anything.
@@ -80,6 +84,7 @@ define(["dojo/_base/declare",
        * By default does nothing.
        *
        * @instance
+       * @overridable
        */
       display: function alfresco_preview_AlfDocumentPreviewPlugin__display() {
          this.alfSetupResizeSubscriptions(this.onRecalculatePreviewLayout, this);
@@ -97,50 +102,16 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * <p>This function attempts to set an appropriate height for the previewer. There are 3 different modes
-       * of controlling the height which can be set through the "heightMode" configuration of the main
-       * [AlfDocumentPreview widget]{@link module:alfresco/preview/AlfDocumentPreview}.</p>
-       * <p>"AUTO" will attempt to ensure that the the previewer takes up the complete vertical space in the 
-       * client from where it starts. This makes sense to use if you have a single previewer on a page.</p>
-       * <p>Any positive number (note: not as a string) will set an explicit height that won't change as the 
-       * browser resizes</p>
-       * <p>Any negative number will result in that amount being deducted from the browser window height and this
-       * will change as the browser is resized. This can be useful for setting the previewer in a dialog.</p>
+       * Sets the height of the previewer element using functions provided by calling the 
+       * [setHeight function]{@link module:alfresco/layout/HeightMixin#setHeight} provided by the
+       * [HeightMixin]{@link module:alfresco/layout/HeightMixin} module.
        *
        * @instance
        */
       _setPreviewerElementHeight: function alfresco_preview_AlfDocumentPreviewPlugin___setPreviewerElementHeight() {
-         var previewHeight;
          var pE = this.previewManager.getPreviewerElement();
-         if (pE)
-         {
-            var previewerOffset = $(pE).offset();
-            var docHeight = $(document).height(),
-                clientHeight = $(window).height();
-
-            // Work with either the window or document height depending upon which is smallest...
-            var h = (docHeight < clientHeight) ? docHeight : clientHeight;
-
-            var heightMode = this.previewManager.heightMode;
-            if (heightMode === "DIALOG")
-            {
-               previewHeight = $(pE).parentsUntil(".alfresco-dialog-AlfDialog").last().height();
-            }
-            else if (!heightMode || heightMode === "AUTO" || isNaN(heightMode))
-            {
-               previewHeight =  h- previewerOffset.top;
-            }
-            else if (heightMode < 0)
-            {
-               // If the height mode is a number less than zero, then deduct that height from the available space.
-               previewHeight = h + heightMode; // NOTE: Not a mistake, remember adding a negative number substracts! :)
-            }
-            else
-            {
-               previewHeight = heightMode;
-            }
-            domStyle.set(pE, "height", previewHeight + "px");
-         }
+         this.heightMode = this.previewManager.heightMode;
+         this.setHeight(pE);
       }
    });
 });
