@@ -250,7 +250,7 @@ define(["dojo/_base/declare",
             // to the dialog body, if we detect this setting then we should not compensate the content height 
             // for this padding.
             var paddingAdjustment = 24;
-            if (this.additionalCssClasses && this.additionalCssClasses.indexOf("no-padding") === -1)
+            if (this.additionalCssClasses && this.additionalCssClasses.indexOf("no-padding") !== -1)
             {
                paddingAdjustment = 0;
             }
@@ -269,6 +269,7 @@ define(["dojo/_base/declare",
                name: "alfresco/layout/SimplePanel",
                assignTo: "_dialogPanel",
                config: {
+                  handleOverflow: false,
                   height: simplePanelHeight,
                   widgets: this.widgetsContent
                }

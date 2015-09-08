@@ -46,21 +46,21 @@ define(["dojo/_base/declare",
    return declare([], {
       
       /**
-       * This property allows the height of the sidebar to accommodate a "sticky" footer. The height is otherwise calculated as
-       * the height of the view port minus the top position of the DOM element having its height set. By setting this property 
-       * it is possible to also deduct the height of a sticky footer. 
+       * This property allows for the height being set to be compensated for a number of different factors
+       * such as sticky footers or configured padding or margins that might increase the height of the widget
+       * DOM element.
        * 
        * @instance
        * @type {number} 
        * @default
        */
-      footerHeight: 0,
+      heightAdjustment: 0,
       
       /**
        * <p>This should be configured to indicate how the height of the widget should be calculated.
        *   <ul>
        *     <li>"AUTO" (the default) indicates that the height will be calculated to be the available space from the widgets position
-       * to the bottom of the screen (minus any [footerHeight]{@link module:alfresco/layout/HeightMixin#footerHeight}).<li>
+       * to the bottom of the screen (minus any [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment}).<li>
        *     <li>"DIALOG" indicates that the height should be taken from the available height of the dialog in which the widget
        * is displayed.</li>
        *     <li>Any negative number indicates that the "AUTO" height minus the supplied value will be used.</li>
@@ -92,11 +92,11 @@ define(["dojo/_base/declare",
             // We're using JQuery here to get the offset as it has proved more reliable than either the Dojo margin box
             // or native browser offsetTop options...
             var offset = $(domNode).offset().top;
-            var availableHeight = winBox.h - offset - this.footerHeight;
+            var availableHeight = winBox.h - offset - this.heightAdjustment;
             var heightMode = this.heightMode;
             if (heightMode === "DIALOG")
             {
-               calculatedHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").last().innerHeight() - 1;
+               calculatedHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").last().innerHeight();
                if (!calculatedHeight)
                {
                   // When using the DIALOG mode it is necessary to return a promise of the height because it won't 
@@ -104,12 +104,17 @@ define(["dojo/_base/declare",
                   var containingDialog = registry.byNode($(domNode).parents(".alfresco-dialog-AlfDialog")[0]);
                   if (containingDialog)
                   {
+                     var heightAdjustment = this.heightAdjustment; // Required to compensate for lack of *this*
                      calculatedHeight = new Deferred();
                      this.own(aspect.after(containingDialog, "_onFocus", function() {
                         var dialogHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").last().innerHeight();
-                        calculatedHeight.resolve(dialogHeight - 1);
+                        calculatedHeight.resolve(dialogHeight - heightAdjustment);
                      }, true));
                   }
+               }
+               else
+               {
+                  calculatedHeight -= this.heightAdjustment; // Deduct the adjustment value...
                }
             }
             else if (!heightMode || heightMode === "AUTO" || isNaN(heightMode))
