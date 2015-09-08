@@ -180,7 +180,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_dialogs_AlfDialog__postCreate() {
-         // jshint maxcomplexity:false
+         // jshint maxcomplexity:false, maxstatements:false
          this.inherited(arguments);
 
          // Listen for requests to resize the dialog...
@@ -206,6 +206,12 @@ define(["dojo/_base/declare",
          this.bodyNode = domConstruct.create("div", {
             "class" : "dialog-body"
          }, this.containerNode, "last");
+
+         // Workout a maximum height for the dialog as it should always fit in the window...
+         var docHeight = $(document).height(),
+             clientHeight = $(window).height();
+         var h = (docHeight < clientHeight) ? docHeight : clientHeight;
+         var maxHeight = h - 200;
 
          // Set the dimensions of the body if required...
          domStyle.set(this.bodyNode, {
@@ -239,20 +245,32 @@ define(["dojo/_base/declare",
 
          if (this.widgetsContent)
          {
-            // Workout a maximum height for the dialog as it should always fit in the window...
-            var docHeight = $(document).height(),
-                clientHeight = $(window).height();
-            var h = (docHeight < clientHeight) ? docHeight : clientHeight;
-
+            // This is a slightly unpleasant convergence of CSS and JS, but will suffice for the time being...
+            // There is a "no-padding" CSS class that can be applied which will remove the default padding applied
+            // to the dialog body, if we detect this setting then we should not compensate the content height 
+            // for this padding.
+            var paddingAdjustment = 24;
+            if (this.additionalCssClasses && this.additionalCssClasses.indexOf("no-padding") !== -1)
+            {
+               paddingAdjustment = 0;
+            }
+            
+            var simplePanelHeight = null;
+            if (this.contentHeight)
+            {
+               simplePanelHeight = (parseInt(this.contentHeight, 10) - paddingAdjustment) + "px";
+            }
+            
             // Add widget content to the container node...
             var widgetsNode = domConstruct.create("div", {
-               style: "max-height:" + (h - 200) + "px"
+               style: "max-height:" + maxHeight + "px"
             }, this.bodyNode, "last");
             var bodyModel = [{
                name: "alfresco/layout/SimplePanel",
                assignTo: "_dialogPanel",
                config: {
-                  height: this.contentHeight,
+                  handleOverflow: false,
+                  height: simplePanelHeight,
                   widgets: this.widgetsContent
                }
             }];

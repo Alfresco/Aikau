@@ -503,7 +503,6 @@ define(["dojo/_base/declare",
 
          // Set height of the container and the viewer area
          this._setPreviewerElementHeight();
-         this._setViewerHeight();
 
          // Load the PDF itself
          this._loadPdf();
@@ -587,47 +586,44 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      _setViewerHeight: function alfresco_preview_PdfJs_PdfJs__setViewerHeight() {
-         var pE = this.previewManager.getPreviewerElement();
-         if (pE)
+      setHeight: function alfresco_preview_PdfJs_PdfJs__setHeight(/*jshint unused:false*/ domNode) {
+         this.inherited(arguments);
+         var computedStyle = domStyle.getComputedStyle(this.viewer.parentNode);
+         var previewRegion = domGeom.getContentBox(this.viewer.parentNode, computedStyle);
+         computedStyle = domStyle.getComputedStyle(this.controls);
+         var controlRegion = domGeom.getContentBox(this.controls, computedStyle);
+         var controlHeight = !this.fullscreen ? controlRegion.h : 0;
+         var newHeight = previewRegion.h - controlHeight -1; // Allow for bottom border
+         
+         if (newHeight === 0)
          {
-            var computedStyle = domStyle.getComputedStyle(this.viewer.parentNode);
-            var previewRegion = domGeom.getContentBox(this.viewer.parentNode, computedStyle);
-            computedStyle = domStyle.getComputedStyle(this.controls);
-            var controlRegion = domGeom.getContentBox(this.controls, computedStyle);
-            var controlHeight = !this.fullscreen ? controlRegion.h : 0;
-            var newHeight = previewRegion.h - controlHeight -1; // Allow for bottom border
-            
-            if (newHeight === 0)
+            if (!this.maximized)
             {
-               if (!this.maximized)
-               {
-                  // var dialogPane;
-                  var previewHeight;
-                  var docHeight = $(document).height(),
-                      clientHeight = $(window).height();
-                  // Take the smaller of the two
-                  previewHeight = ((docHeight < clientHeight) ? docHeight : clientHeight) - 220;
-                  // Leave space for header etc.
-                  newHeight = previewHeight - 10 - controlHeight -1; // Allow for bottom border of 1px
-               }
-               else
-               {
-                  newHeight = $(window).height() - controlHeight - 1;
-               }
-            }
-            
-            if (!this.fullscreen)
-            {
-               this.alfLog("log","Setting viewer height to " + newHeight + "px (toolbar " + controlHeight + "px, container " + previewRegion.h + "px");
-               domStyle.set(this.viewer, "height", newHeight.toString() + "px");
-               domStyle.set(this.sidebar, "height", newHeight.toString() + "px");
+               // var dialogPane;
+               var previewHeight;
+               var docHeight = $(document).height(),
+                   clientHeight = $(window).height();
+               // Take the smaller of the two
+               previewHeight = ((docHeight < clientHeight) ? docHeight : clientHeight) - 220;
+               // Leave space for header etc.
+               newHeight = previewHeight - 10 - controlHeight -1; // Allow for bottom border of 1px
             }
             else
             {
-               this.alfLog("log","Setting viewer height to 100% (full-screen)");
-               domStyle.set(this.viewer, "height", "100%");
+               newHeight = $(window).height() - controlHeight - 1;
             }
+         }
+         
+         if (!this.fullscreen)
+         {
+            this.alfLog("log","Setting viewer height to " + newHeight + "px (toolbar " + controlHeight + "px, container " + previewRegion.h + "px");
+            domStyle.set(this.viewer, "height", newHeight.toString() + "px");
+            domStyle.set(this.sidebar, "height", newHeight.toString() + "px");
+         }
+         else
+         {
+            this.alfLog("log","Setting viewer height to 100% (full-screen)");
+            domStyle.set(this.viewer, "height", "100%");
          }
       },
 
@@ -1561,7 +1557,6 @@ define(["dojo/_base/declare",
       onMaximizeClick : function alfresco_preview_PdfJs_PdfJs__onMaximizeClick(payload) {
          this.maximized = payload.selected;
          this._setPreviewerElementHeight();
-         this._setViewerHeight();
          this.documentView.setScale(this.documentView.parseScale(this.currentScaleSelection ? this.currentScaleSelection : this.attributes.defaultScale));
          this._scrollToPage(this.pageNum);
          this.documentView.alignRows();
@@ -1612,7 +1607,6 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log","onRecalculatePreviewLayout");
             this._setPreviewerElementHeight();
-            this._setViewerHeight();
             this.documentView.onResize();
             this.documentView.setScale(this.documentView.parseScale(this.currentScaleSelection ? this.currentScaleSelection : this.attributes.defaultScale));
             this._scrollToPage(this.pageNum);
