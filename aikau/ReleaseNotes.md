@@ -1,4 +1,4 @@
-Aikau 1.0.33 Release Notes
+Aikau 1.0.34 Release Notes
 ===
 
 New deprecations: 
@@ -42,6 +42,16 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.34:
+* [AKU-507](https://issues.alfresco.com/jira/browse/AKU-507)       - Ensure clearing filters for AlfFilteredList loads data
+* [AKU-538](https://issues.alfresco.com/jira/browse/AKU-538)       - Updated AlfFilmStripView carousel to set height appropriately
+* [AKU-541](https://issues.alfresco.com/jira/browse/AKU-541)       - Added support for OR in forms rule engine
+* [AKU-543](https://issues.alfresco.com/jira/browse/AKU-543)       - Reset new style buttons not have bold text
+* [AKU-546](https://issues.alfresco.com/jira/browse/AKU-546)       - Added support for bulk delete on selected items
+* [AKU-550](https://issues.alfresco.com/jira/browse/AKU-550)       - Upload widgets
+* [AKU-556](https://issues.alfresco.com/jira/browse/AKU-556)       - Ensure "In folder" links on search results work
+* [AKU-559](https://issues.alfresco.com/jira/browse/AKU-559)       - Resolved missing dependency issue from non en locales
+
 1.0.33:
 * [AKU-478](https://issues.alfresco.com/jira/browse/AKU-478)       - Dynamic visibility width calculations in HorizontalWidgets
 * [AKU-516](https://issues.alfresco.com/jira/browse/AKU-516)       - Reduce options calls to server from MultiSelectInput
