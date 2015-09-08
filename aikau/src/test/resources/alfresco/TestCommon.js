@@ -60,9 +60,10 @@ define(["intern/dojo/node!fs",
        * @param {object} browser The browser object to work on
        */
       alfPostCoverageResults: function(test, browser) {
-         if(intern.args.doCoverage === "true")
+         if(intern.args.doCoverage === true)
          {
-            var dfd = test.async(90000);
+            console.log("Attempting to collect and skip converage results");
+            var dfd = test.async(30000);
             var js = "var coverageData = {" +
                "name : name || ''," +
                "lines : $$_l.lines," +
@@ -97,8 +98,20 @@ define(["intern/dojo/node!fs",
                             dfd.resolve();
                         });
                      });
+                     post_req.on("socket", function (socket) {
+                         socket.setTimeout(30000);
+                         socket.on("timeout", function() {
+                             console.log("Timeout Abort!");
+                             post_req.abort();
+                         });
+                     });
                      post_req.on("error", function(e) {
-                        console.log("Coverage data post failed", e);
+                        if (e.code === "ECONNRESET") {
+                             console.log("Timeout occurred waiting for coverage post response");
+                        }
+                        else {
+                           console.log("Coverage data post failed", e.code);
+                        }
                         dfd.reject(e);
                      });
                      post_req.write(data);
@@ -106,11 +119,17 @@ define(["intern/dojo/node!fs",
                   }
                   catch (e) {
                      console.log("An error occurred handling coverage data", e);
+                     dfd.reject(e);
                   }
+               },
+               function(e) {
+                  console.log("Couldn't collect coverage data from browser", e);
+                  dfd.reject(e);
                });
          }
          else
          {
+            console.log("Skipping coverage");
             return browser;
          }
       },
