@@ -97,19 +97,19 @@ define(["intern!object",
       },
 
       "Description populated when specified": function() {
-         return browser.findAllByCssSelector(".detail-item__description:not(.faded)")
+         return browser.findAllByCssSelector(".detail-item__description .alfresco-renderers-Property:not(.faded)")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Incorrect number of description widgets populated");
             })
             .end()
 
-         .findAllByCssSelector(".detail-item__description.faded")
+         .findAllByCssSelector(".detail-item__description .alfresco-renderers-Property.faded")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Incorrect number of empty description widgets");
             })
             .end()
 
-         .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .detail-item__description:not(.faded), .alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(4) .detail-item__description:not(.faded)")
+         .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .detail-item__description .alfresco-renderers-Property:not(.faded), .alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(4) .detail-item__description:not(.faded)")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Description widgets not populated for correct items");
             });

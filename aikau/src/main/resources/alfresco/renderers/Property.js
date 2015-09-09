@@ -257,13 +257,16 @@ define(["dojo/_base/declare",
        * @since 1.0.35
        */
       updateCssClasses: function alfresco_renderers_Property__updateCssClasses() {
-         if (this.warningDisplayed)
+         if (this.renderedValueNode)
          {
-            domClass.add(this.renderedValueNode, "faded");
-         }
-         else
-         {
-            domClass.remove(this.renderedValueNode, "faded");
+            if(this.warningDisplayed)
+            {
+               domClass.add(this.renderedValueNode, "faded");
+            }
+            else
+            {
+               domClass.remove(this.renderedValueNode, "faded");
+            }
          }
       },
 
@@ -284,7 +287,7 @@ define(["dojo/_base/declare",
          var valueRendering;
 
          // If the renderedValue is not set then display a warning message if requested...
-         if (!value || value === 0) 
+         if (this.renderedValue === null || this.renderedValue === "" || typeof this.renderedValue === "undefined") 
          {
             if (this.warnIfNotAvailable)
             {
