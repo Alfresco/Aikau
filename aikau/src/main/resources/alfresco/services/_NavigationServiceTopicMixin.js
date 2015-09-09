@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -26,8 +26,9 @@
  * @module alfresco/services/_NavigationServiceTopicMixin
  * @author Dave Draper
  */
-define(["dojo/_base/declare"],
-        function(declare) {
+define(["dojo/_base/declare",
+        "alfresco/core/topics"],
+        function(declare, topics) {
 
    return declare(null, {
 
@@ -35,31 +36,28 @@ define(["dojo/_base/declare"],
        * This topic is used to request that the browser displays a new page.
        *
        * @instance
-       * @event navigateToPageTopic
        * @type {string}
        * @default
        */
-      navigateToPageTopic: "ALF_NAVIGATE_TO_PAGE",
+      navigateToPageTopic: topics.NAVIGATE_TO_PAGE,
 
       /**
        * This topic is used to request that the current page be reloaded
        *
        * @instance
-       * @event reloadPageTopic
        * @type {string}
        * @default
        */
-      reloadPageTopic: "ALF_RELOAD_PAGE",
+      reloadPageTopic: topics.RELOAD_PAGE,
 
       /**
        * This topic is used to request a post to the page
        *
        * @instance
-       * @event postToPageTopic
        * @type {string}
        * @default
        */
-      postToPageTopic: "ALF_POST_TO_PAGE",
+      postToPageTopic: topics.POST_TO_PAGE,
 
       /**
        * This value is used to indicate that the supplied URL is relative to the Alfresco Page context (e.g. /share/page)
@@ -77,7 +75,6 @@ define(["dojo/_base/declare"],
        * @instance
        * @type {string}
        * @default
-       * @deprecated Since 1.0.17 - Use 
        */
       pageRelativePath: "PAGE_RELATIVE",
 

@@ -28,14 +28,13 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreXhr",
         "alfresco/core/NotificationUtils",
         "alfresco/core/ObjectTypeUtils",
-        "dojo/request/xhr",
-        "dojo/json",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
         "service/constants/Default"],
-        function(declare, BaseService, AlfXhr, NotificationUtils, ObjectTypeUtils, xhr, JSON, lang, AlfButton, AlfConstants) {
+        function(declare, BaseService, CoreXhr, NotificationUtils, ObjectTypeUtils, topics, lang, AlfButton, AlfConstants) {
 
-   return declare([BaseService, AlfXhr, NotificationUtils], {
+   return declare([BaseService, CoreXhr, NotificationUtils], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -50,6 +49,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/core/topics~event:DELETE_SITE
        */
       registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_SITES", lang.hitch(this, this.getSites));
@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_LEAVE_SITE_CONFIRMATION", lang.hitch(this, this.leaveSite));
          this.alfSubscribe("ALF_CREATE_SITE", lang.hitch(this, this.createSite));
          this.alfSubscribe("ALF_EDIT_SITE", lang.hitch(this, this.editSite));
-         this.alfSubscribe("ALF_DELETE_SITE", lang.hitch(this, this.onActionDeleteSite));
+         this.alfSubscribe(topics.DELETE_SITE, lang.hitch(this, this.onActionDeleteSite));
          this.alfSubscribe("ALF_ADD_FAVOURITE_SITE", lang.hitch(this, this.addSiteAsFavourite));
          this.alfSubscribe("ALF_REMOVE_FAVOURITE_SITE", lang.hitch(this, this.removeSiteFromFavourites));
          this.alfSubscribe("ALF_GET_RECENT_SITES", lang.hitch(this, this.getRecentSites));
@@ -206,8 +206,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the site to delete
        */
       onActionDeleteSite: function alfresco_services_SiteService__onActionDeleteSite(payload) {
-         var document = payload.document;
-         var shortName = lang.getObject("shortName", false, document);
+         var shortName = lang.getObject("document.shortName", false, payload) || lang.getObject("shortName", false, payload);
          if (shortName)
          {
             var responseTopic = this.generateUuid();
@@ -219,6 +218,7 @@ define(["dojo/_base/declare",
                textContent: this.message("message.delete-site-prompt", { "0": shortName}),
                widgetsButtons: [
                   {
+                     id: "ALF_SITE_SERVICE_DIALOG_CONFIRMATION",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: this.message("button.delete-site.confirm-label"),
@@ -227,6 +227,7 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "ALF_SITE_SERVICE_DIALOG_CANCELLATION",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: this.message("button.delete-site.cancel-label"),
@@ -251,9 +252,8 @@ define(["dojo/_base/declare",
       onActionDeleteSiteConfirmation: function alfresco_services_SiteService__onActionDeleteSiteConfirmation(payload) {
          this.alfUnsubscribeSaveHandles([this._actionDeleteHandle]);
          var responseTopic = this.generateUuid();
-         var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onActionDeleteSiteSuccess"), false);
-         var document = payload.document;
-         var shortName = lang.getObject("shortName", false, document);
+         var subscriptionHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onActionDeleteSiteSuccess), false);
+         var shortName = lang.getObject("document.shortName", false, payload) || lang.getObject("shortName", false, payload);
          if (shortName)
          {
             var url = AlfConstants.PROXY_URI + "api/sites/" + shortName;
@@ -261,6 +261,7 @@ define(["dojo/_base/declare",
                alfTopic: responseTopic,
                subscriptionHandle: subscriptionHandle,
                url: url,
+               data: payload,
                method: "DELETE"
             });
          }
@@ -275,6 +276,8 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload
+       * @fires module:alfresco/core/topics~event:NAVIGATE_TO_PAGE
+       * @fires module:alfresco/core/topics~event:RELOAD_DATA_TOPIC
        */
       onActionDeleteSiteSuccess: function alfresco_services_SiteService__onActionDeleteSiteSuccess(payload) {
          var subscriptionHandle = lang.getObject("requestConfig.subscriptionHandle", false, payload);
@@ -282,7 +285,20 @@ define(["dojo/_base/declare",
          {
             this.alfUnsubscribe(subscriptionHandle);
          }
-         this.reloadData();
+
+         var redirect = lang.getObject("requestConfig.data.redirect", false, payload);
+         if (redirect)
+         {
+            this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
+               url: redirect.url,
+               type: redirect.type,
+               target: redirect.target
+            });
+         }
+         else
+         {
+            this.reloadData();
+         }
       },
 
       /**

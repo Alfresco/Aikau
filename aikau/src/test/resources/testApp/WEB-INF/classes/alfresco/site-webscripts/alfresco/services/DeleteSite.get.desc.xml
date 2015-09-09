@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Delete Site (via SiteService)</shortname>
+  <description>Displays buttons that exercise the site delete capabilities of the SiteService.</description>
+  <family>aikau-unit-tests</family>
+  <url>/DeleteSite</url>
+</webscript>
