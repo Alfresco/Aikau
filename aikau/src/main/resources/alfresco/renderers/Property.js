@@ -229,6 +229,17 @@ define(["dojo/_base/declare",
       warnIfNotAvailableMessage: null,
 
       /**
+       * Indicates whether or not a warning should (or is) being displayed. This is for internal use only
+       * and should not be configured or programmatically set.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.35
+       */
+      warningDisplayed: false,
+
+      /**
        * The positions where a tooltip can appear over a truncated value
        *
        * @static
@@ -239,57 +250,110 @@ define(["dojo/_base/declare",
       _tooltipPositions: ["below-centered", "above-centered"],
 
       /**
+       * Updates CSS classes based on the current state of the renderer. Currently this only
+       * addressed warning message states.
+       * 
+       * @instance
+       * @since 1.0.35
+       */
+      updateCssClasses: function alfresco_renderers_Property__updateCssClasses() {
+         if (this.warningDisplayed)
+         {
+            domClass.add(this.renderedValueNode, "faded");
+         }
+         else
+         {
+            domClass.remove(this.renderedValueNode, "faded");
+         }
+      },
+
+      /**
+       * Generates the rendering of the property value. This will include any 
+       * [prefix]{@link module:alfresco/renderers/Property#renderedValuePrefix} and/or 
+       * [suffix]{@link module:alfresco/renderers/Property#renderedValueSuffix} as well
+       * as any configured
+       * [warning]{@link module:alfresco/renderers/Property#warnIfNotAvailableMessage}
+       * to be displayed when the property does not exist.
+       * 
+       * @instance
+       * @param {string} value The value to be rendered
+       * @return {string} Returns the rendered value
+       * @since 1.0.35
+       */
+      generateRendering: function alfresco_renderers_Property__generateRendering(value) {
+         var valueRendering;
+
+         // If the renderedValue is not set then display a warning message if requested...
+         if (!value || value === 0) 
+         {
+            if (this.warnIfNotAvailable)
+            {
+               // Get appropriate message
+               // Check message based on propertyToRender otherwise default to sensible alternative
+               var warningKey = this.warnIfNotAvailableMessage;
+               var warningMessage = "";
+               if (!warningKey) 
+               {
+                  warningKey = "no." + this.propertyToRender + ".message";
+                  warningMessage = this.message(warningKey);
+                  if (warningMessage === warningKey) 
+                  {
+                     warningMessage = this.message("no.property.message", {
+                        0: this.propertyToRender
+                     });
+                  }
+               } 
+               else 
+               {
+                  warningMessage = this.message(warningKey);
+               }
+               valueRendering = this.renderedValuePrefix + warningMessage + this.renderedValueSuffix;
+               this.warningDisplayed = true;
+            }
+            else
+            {
+               valueRendering = value;
+            }
+         }
+         else
+         {
+            valueRendering = this.renderedValuePrefix + value + this.renderedValueSuffix;
+            this.warningDisplayed = false;
+         }
+
+         return valueRendering;
+      },
+
+      /**
        * Set up the attributes to be used when rendering the template.
        *
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Property__postMixInProperties() {
-         if (this.label) {
+         if (this.label) 
+         {
             this.label = this.message(this.label) + ": ";
-         } else {
+         } 
+         else 
+         {
             this.label = "";
          }
 
          if (ObjectTypeUtils.isString(this.propertyToRender) &&
-            ObjectTypeUtils.isObject(this.currentItem) &&
-            lang.exists(this.propertyToRender, this.currentItem)) {
+             ObjectTypeUtils.isObject(this.currentItem) &&
+             lang.exists(this.propertyToRender, this.currentItem)) 
+         {
             this.renderPropertyNotFound = false;
             this.originalRenderedValue = this.getRenderedProperty(lang.getObject(this.propertyToRender, false, this.currentItem));
             this.renderedValue = this.mapValueToDisplayValue(this.originalRenderedValue);
-         } else {
+         } 
+         else 
+         {
             this.alfLog("log", "Property does not exist:", this);
          }
 
+         this.renderedValue = this.generateRendering(this.renderedValue);
          this.updateRenderedValueClass();
-
-         // If the renderedValue is not set then display a warning message if requested...
-         if (this.renderedValue === null || this.renderedValue === "" || typeof this.renderedValue === "undefined") {
-            if (this.warnIfNotAvailable) {
-               // Get appropriate message
-               // Check message based on propertyToRender otherwise default to sensible alternative
-               var warningKey = this.warnIfNotAvailableMessage,
-                  warningMessage = "";
-               if (!warningKey) {
-                  warningKey = "no." + this.propertyToRender + ".message";
-                  warningMessage = this.message(warningKey);
-                  if (warningMessage === warningKey) {
-                     warningMessage = this.message("no.property.message", {
-                        0: this.propertyToRender
-                     });
-                  }
-               } else {
-                  warningMessage = this.message(warningKey);
-               }
-               this.renderedValue = warningMessage;
-               this.renderedValueClass += " faded";
-            } else {
-               // Reset the prefix and suffix if there's no data to display
-               this.requestedValuePrefix = this.renderedValuePrefix;
-               this.requestedValueSuffix = this.renderedValueSuffix;
-               this.renderedValuePrefix = "";
-               this.renderedValueSuffix = "";
-            }
-         }
       },
 
       /**
@@ -315,16 +379,17 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_renderers_Property__postCreate() {
-         if (this.maxWidth) {
+         this.updateCssClasses();
+         if (this.maxWidth) 
+         {
             domClass.add(this.domNode, "has-max-width");
             domStyle.set(this.domNode, {
                maxWidth: this.maxWidth
             });
          }
-         if (this.onlyShowOnHover === true) {
+         if (this.onlyShowOnHover === true) 
+         {
             domClass.add(this.domNode, "hover-only");
-         } else {
-            // No action
          }
       },
 
