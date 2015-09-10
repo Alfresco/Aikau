@@ -480,15 +480,12 @@ define(["dojo/_base/declare",
          {
             lang.setObject(this.propertyToRender, this.originalRenderedValue, this.currentItem);
          }
-
-         // This is a bit ugly... there will be better ways to handle this...
-         // Basically it's handling the situation where the prefix/suffix for cleared when data wasn't originally available...
-         var prefix = (this.requestedValuePrefix) ? this.requestedValuePrefix : this.renderedValuePrefix;
-         var suffix = (this.requestedValueSuffix) ? this.requestedValueSuffix : this.renderedValueSuffix;
          
-         html.set(this.renderedValueNode, prefix + this.renderedValue + suffix);
-         domClass.remove(this.renderedValueNode, "hidden faded");
+         this.renderedValue = this.generateRendering(this.renderedValue);
+         html.set(this.renderedValueNode, this.renderedValue);
+         domClass.remove(this.renderedValueNode, "hidden");
          domClass.add(this.editNode, "hidden");
+         this.updateCssClasses();
          this.renderedValueNode.focus();
       },
 

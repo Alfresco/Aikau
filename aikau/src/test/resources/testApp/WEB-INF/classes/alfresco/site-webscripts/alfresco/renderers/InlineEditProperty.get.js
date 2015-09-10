@@ -124,6 +124,34 @@ model.jsonModel = {
                                        ],
                                        renderOnNewLine: true
                                     }
+                                 },
+                                 {
+                                    id: "INLINE_EDIT_NO_VALUE_WITH_WARNING",
+                                    name: "alfresco/renderers/InlineEditProperty",
+                                    config: {
+                                       propertyToRender: "title",
+                                       permissionProperty: "node.permissions.user.Write",
+                                       publishTopic: "ALF_CRUD_UPDATE",
+                                       publishPayloadType: "PROCESS",
+                                       publishPayloadModifiers: ["processCurrentItemTokens"],
+                                       publishPayloadItemMixin: true,
+                                       publishPayload: {
+                                          url: "api/solr/facet-config/{name}"
+                                       },
+                                       hiddenDataRules: [
+                                          {
+                                             name: "hiddenData",
+                                             rulePassValue: "hidden_update",
+                                             ruleFailValue: "",
+                                             is: ["New"]
+                                          }
+                                       ],
+                                       renderOnNewLine: true,
+                                       renderedValuePrefix: "(",
+                                       renderedValueSuffix: ")",
+                                       warnIfNotAvailable: true,
+                                       warnIfNotAvailableMessage: "No property set"
+                                    }
                                  }
                               ]
                            }

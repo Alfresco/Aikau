@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -32,10 +32,8 @@
  * @module alfresco/core/ValueDisplayMapMixin
  * @author Dave Draper
  */
-define(["dojo/_base/declare",
-        "dojo/_base/lang",
-        "dojo/_base/array"], 
-        function(declare, lang, array) {
+define(["dojo/_base/declare"], 
+        function(declare) {
    
    return declare(null, {
       
@@ -58,7 +56,7 @@ define(["dojo/_base/declare",
        */
       mapValueToDisplayValue: function alfresco_core_ValueDisplayMapMixin__mapValueToDisplayValue(value) {
          var displayValue = value;
-         if (this.valueDisplayMap != null)
+         if (this.valueDisplayMap)
          {
             var mappedValue = null;
             for (var i=0; i<this.valueDisplayMap.length && mappedValue === null; i++) {
