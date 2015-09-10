@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,11 +24,12 @@
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarSelect",
+        "alfresco/core/topics",
         "dojo/dom-class",
         "dojo/_base/lang",
         "dojo/on",
         "dojo/_base/event"], 
-        function(declare, AlfMenuBarSelect, domClass, lang, on, event) {
+        function(declare, AlfMenuBarSelect, topics, domClass, lang, on, event) {
    
    return declare([AlfMenuBarSelect], {
       
@@ -84,17 +85,16 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      notificationTopic: "ALF_DOCLIST_FILE_SELECTION",
+      notificationTopic: topics.DOCUMENT_SELECTION_UPDATE,
 
       /**
        * Extends the inherited implementation to set up the listener for clicks on the iconNode
        * 
        * @instance
        */
-      postCreate: function alfresco_menus_AlfMenuBarSelectItems__postCreate() 
-      {
+      postCreate: function alfresco_menus_AlfMenuBarSelectItems__postCreate() {
          this.inherited(arguments);
-         if (this.iconNode != null)
+         if (this.iconNode)
          {
             on(this.iconNode, "click", lang.hitch(this, "handleIconClick"));
          }
@@ -109,19 +109,19 @@ define(["dojo/_base/declare",
          
          // Close the popup if it's open...
          this.closePopupMenu();
-         if (this._itemsSelected == this._NONE)
+         if (this._itemsSelected === this._NONE)
          {
             // Select all...
             this.renderAllSelected();
             this.alfPublish(this.notificationTopic, { value: "selectAll" });
          }
-         else if (this._itemsSelected == this._SOME)
+         else if (this._itemsSelected === this._SOME)
          {
             // Select all...
             this.renderAllSelected();
             this.alfPublish(this.notificationTopic, { value: "selectAll" });
          }
-         else if (this._itemsSelected == this._ALL)
+         else if (this._itemsSelected === this._ALL)
          {
             // Select none...
             this.renderNoneSelected();
@@ -150,11 +150,11 @@ define(["dojo/_base/declare",
             // Default support is provided for "selectAll" and "selectNone" values (this function
             // could be extended to support additional values) so that the overall label/icon responds
             // to menu item clicks (and not just external selection events).
-            if (payload.value == "selectAll")
+            if (payload.value === "selectAll")
             {
                this.renderAllSelected();
             }
-            else if (payload.value == "selectNone")
+            else if (payload.value === "selectNone")
             {
                this.renderNoneSelected();
             }
@@ -176,11 +176,12 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       determineSelection: function alfresco_menus_AlfMenuBarSelectItems__determineSelection(payload) {
-         if (payload.availableItemCount != null && payload.selectedItemCount != null) 
+         if ((payload.availableItemCount || payload.availableItemCount === 0) && 
+             (payload.selectedItemCount || payload.selectedItemCount === 0)) 
          {
             // If no value is provided the selected items indicator is calculated based
             // on available and selected item counts...
-            if (payload.selectedItemCount == 0)
+            if (payload.selectedItemCount === 0)
             {
                this.renderNoneSelected();
             }
@@ -188,7 +189,7 @@ define(["dojo/_base/declare",
             {
                this.renderSomeSelected();
             }
-            else if (payload.availableItemCount == payload.selectedItemCount)
+            else if (payload.availableItemCount === payload.selectedItemCount)
             {
                this.renderAllSelected();
             }
