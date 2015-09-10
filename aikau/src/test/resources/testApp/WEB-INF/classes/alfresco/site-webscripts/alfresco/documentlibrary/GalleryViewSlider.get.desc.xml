@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfGalleryViewSlider</shortname>
+  <description>Renders an alfresco/documentlibrary/AlfGalleryViewSlider in order to test preferences handling</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfGalleryViewSlider</url>
+</webscript>
