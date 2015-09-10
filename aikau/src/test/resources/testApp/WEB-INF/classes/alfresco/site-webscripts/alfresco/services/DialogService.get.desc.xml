@@ -1,5 +1,6 @@
 <webscript>
   <shortname>DialogService Test</shortname>
+  <description>This page is used to test the alfresco/services/DialogSerice and can create various different styles of dialog</description>
   <family>aikau-unit-tests</family>
   <url>/DialogService</url>
 </webscript>
