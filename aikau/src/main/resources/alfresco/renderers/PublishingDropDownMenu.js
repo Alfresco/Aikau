@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
       publishTopic: null,
 
       /**
-       * This will be set to reference the [DojoSelect]{@link module:alfresco/forms/controls/Select} that is
+       * This will be set to reference the [Select]{@link module:alfresco/forms/controls/Select} that is
        * wrapped by this widget.
        *
        * @instance
@@ -180,6 +180,19 @@ define(["dojo/_base/declare",
       cancellationPublishPayloadModifiers: null,
 
       /**
+       * This is the dot-property that will be evaluated on the current item being rendered to determine whether or not
+       * the wrapped [select]{@link module:alfresco/forms/controls/Select} widget should be disabled. The value of the 
+       * evaluated property is expected to be a boolean (or it will be evalutated as a "truthy"/"falsy" value, e.g. 0
+       * would be false and 1 would be true, the empty string false, any other string true, etc).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      disablementProperty: null,
+
+      /**
        *
        * @instance
        */
@@ -196,6 +209,8 @@ define(["dojo/_base/declare",
             var fieldId = "DROPDOWN";
             var subscriptionTopic = uuid + "_valueChangeOf_" + fieldId;
 
+            var isDisabled = this.disablementProperty && lang.getObject(this.disablementProperty, false, this.currentItem);
+
             // Create the widget...
             this._dropDownWidget = new Select({
                id: this.id + "_SELECT",
@@ -203,7 +218,10 @@ define(["dojo/_base/declare",
                pubSubScope: uuid,
                fieldId: fieldId,
                value: this.value,
-               optionsConfig: this.optionsConfig
+               optionsConfig: this.optionsConfig,
+               disablementConfig: {
+                  initialValue: isDisabled
+               }
             }, this.dropDownNode);
 
             // Create the subscription AFTER the widget has been instantiated so that we don't
