@@ -23,6 +23,11 @@
    height: 20px;
 }
 
+.alfresco-menus-_AlfMenuItemMixin a.alfresco-navigation-_HtmlAnchorMixin,
+.alfresco-menus-_AlfMenuItemMixin a.alfresco-navigation-_HtmlAnchorMixin:hover {
+    text-decoration: none;
+}
+
 .alfresco-share .dijitIcon.dijitMenuItemIcon.alf-edit-icon {
    background: url("./images/Edit.png");
    background-repeat: no-repeat;
