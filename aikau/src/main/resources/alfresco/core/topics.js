@@ -116,6 +116,22 @@ define([],function() {
       DELETE_CONTENT: "ALF_DELETE_CONTENT_REQUEST",
 
       /**
+       * This topic is published to request the deletion of a site.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       *
+       * @event module:alfresco/core/topics~DELETE_SITE
+       * @property {object} [redirect] - The redirect data to use after successfully deleting the site
+       * @property {string} [redirect.url] - The URL to navigate to
+       * @property {string} [redirect.type="PAGE_RELATIVE"] - The type of navigation, either "PAGE_RELATIVE", "CONTEXT_RELATIVE", "FULL_PATH" or "HASH"
+       * @property {string} [redirect.target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
+       */
+      DELETE_SITE: "ALF_DELETE_SITE",
+
+      /**
        * This topic is published to request either the download of a single document or folder (or a selection
        * of documents and folder) as a ZIP file.
        * 
@@ -201,6 +217,21 @@ define([],function() {
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
 
       /**
+       * This topic can be published to request navigation to another URL.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       *
+       * @event module:alfresco/core/topics~NAVIGATE_TO_PAGE
+       * @property {string} url - The URL to navigate to
+       * @property {string} [type="PAGE_RELATIVE"] - The type of navigation, either "PAGE_RELATIVE", "CONTEXT_RELATIVE", "FULL_PATH" or "HASH"
+       * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
+       */
+      NAVIGATE_TO_PAGE: "ALF_NAVIGATE_TO_PAGE",
+
+      /**
        * This topic is fired automatically whenever a notification is destroyed.
        *
        * @instance
@@ -232,6 +263,22 @@ define([],function() {
       PATH_CHANGED: "ALF_DOCUMENTLIST_PATH_CHANGED",
 
       /**
+       * This topic can be published to request to POST data to a new page
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       *
+       * @event module:alfresco/core/topics~POST_TO_PAGE
+       * @property {string} url - The URL to navigate to
+       * @property {string} [type="PAGE_RELATIVE"] - The type of navigation, either "PAGE_RELATIVE", "CONTEXT_RELATIVE", "FULL_PATH" or "HASH"
+       * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
+       * @property {object} [parameters={}] - The parameters to include in the POST
+       */
+      POST_TO_PAGE: "ALF_POST_TO_PAGE",
+
+      /**
        * This topic is published to indicate that data needs to be uploaded. This is typically list based data but can
        * be used by other widgets.
        *
@@ -241,6 +288,18 @@ define([],function() {
        * @since 1.0.34
        */
       RELOAD_DATA_TOPIC: "ALF_DOCLIST_RELOAD_DATA",
+
+      /**
+       * This topic can be published to request to reload the current page
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       *
+       * @event module:alfresco/core/topics~RELOAD_PAGE
+       */
+      RELOAD_PAGE: "ALF_RELOAD_PAGE",
 
       /**
        * Called to start off the archiving process.

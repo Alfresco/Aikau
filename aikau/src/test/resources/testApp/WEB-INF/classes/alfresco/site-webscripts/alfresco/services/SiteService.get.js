@@ -185,7 +185,7 @@ model.jsonModel = {
          config: {
             id: "GET_SITE_MEMBERSHIPS_BAD1",
             label: "Get Site Memberships Bad 1",
-            publishTopic: "ALF_GET_SITE_MEMBERSHIPS",
+            publishTopic: "ALF_GET_SITE_MEMBERSHIPS"
          }
       },
       {
@@ -369,7 +369,7 @@ model.jsonModel = {
          config: {
             id: "GET_RECENT_SITES_BAD1",
             label: "Get Recent Sites Bad 1",
-            publishTopic: "ALF_GET_RECENT_SITES",
+            publishTopic: "ALF_GET_RECENT_SITES"
          }
       },
 
@@ -389,7 +389,7 @@ model.jsonModel = {
          config: {
             id: "GET_FAVOURITE_SITES_BAD1",
             label: "Get Favourite Sites Bad 1",
-            publishTopic: "ALF_GET_FAVOURITE_SITES",
+            publishTopic: "ALF_GET_FAVOURITE_SITES"
          }
       },
 
@@ -589,9 +589,6 @@ model.jsonModel = {
       },
       {
          name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };
