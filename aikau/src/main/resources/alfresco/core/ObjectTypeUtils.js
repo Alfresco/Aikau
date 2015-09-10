@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -49,7 +49,7 @@ define(["dojo/_base/lang"],
        * @returns {boolean} Returns true if the supplied value is a boolean
        */
       isBoolean: function(value) {
-        return typeof value === 'boolean';
+        return typeof value === "boolean";
       },
 
       /**
@@ -60,7 +60,7 @@ define(["dojo/_base/lang"],
        * @returns {boolean} Returns true if the supplied value is a number
        */
       isNumber: function(value) {
-        return typeof value === 'number' && isFinite(value);
+        return typeof value === "number" && isFinite(value);
       },
       
       /**
@@ -93,7 +93,7 @@ define(["dojo/_base/lang"],
        * @returns {boolean} Returns true if the supplied value is undefined
        */
       isUndefined: function alfresco_core_ObjectTypeUtils__isUndefined(value) {
-        return typeof value === 'undefined';
+        return typeof value === "undefined";
       },
 
       /**
@@ -105,7 +105,7 @@ define(["dojo/_base/lang"],
        * @return {boolean} Flag indicating whether the value is set or not.
        */
       isValueSet: function alfresco_core_ObjectTypeUtils__isValueSet(value, allowEmptyString) {
-         if (this.isUndefined(value) || value == null)
+         if (this.isUndefined(value) || value === null)
          {
             return false;
          }

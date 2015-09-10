@@ -287,7 +287,7 @@ define(["dojo/_base/declare",
          var valueRendering;
 
          // If the renderedValue is not set then display a warning message if requested...
-         if (this.renderedValue === null || this.renderedValue === "" || typeof this.renderedValue === "undefined") 
+         if (!ObjectTypeUtils.isValueSet(value, false)) 
          {
             if (this.warnIfNotAvailable)
             {
