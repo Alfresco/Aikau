@@ -48,13 +48,32 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfGalleryViewSlider.css"}],
       
       /**
-       * Indicates whether or not to show the bigger/smaller buttons at either end of the slider
+       * The number of columns to be represented by the slider.
+       *
        * @instance
-       * @type {boolean}
+       * @type {number}
        * @default
        */
-      showButtons: true,
-      
+      columns: 4,
+
+      /**
+       * The preference property to use for retrieving and setting the users preferred number of columns
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      columnsPreferenceProperty: "org.alfresco.share.documentList.galleryColumns",
+
+      /**
+       * The number of steps (including the beginning and end positions) on the slider
+       * @instance
+       * @type {integer}
+       * @default
+       */
+      discreteValues: 4,
+         
       /**
        * The minimum value on the slider
        * @instance
@@ -72,13 +91,13 @@ define(["dojo/_base/declare",
       maximum: 60,
       
       /**
-       * The number of steps (including the beginning and end positions) on the slider
+       * Indicates whether or not to show the bigger/smaller buttons at either end of the slider
        * @instance
-       * @type {integer}
+       * @type {boolean}
        * @default
        */
-      discreteValues: 4,
-         
+      showButtons: true,
+      
       /**
        * 
        * @instance
@@ -88,22 +107,13 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          domClass.add(this.domNode, "alfresco-documentlibrary-AlfGalleryViewSlider");
          this.set("value", this.getSliderValueFromColumns(this.columns));
-         this.alfPublish(this.getPreferenceTopic, {
-            preference: "org.alfresco.share.documentList.galleryColumns",
+         this.alfServicePublish(this.getPreferenceTopic, {
+            preference: this.columnsPreferenceProperty,
             callback: this.onColumnPreferences,
             callbackScope: this
          });
       },
       
-      /**
-       * The number of columns to be represented by the slider.
-       *
-       * @instance
-       * @type {number}
-       * @default
-       */
-      columns: 4,
-
       /**
        * This is called when column user preferences are provided. 
        * 
@@ -113,7 +123,7 @@ define(["dojo/_base/declare",
       onColumnPreferences: function alfresco_documentlibrary_AlfGalleryViewSlider__onColumnPreferences(value) {
          this.setColumns(value);
          this.alfPublish("ALF_DOCLIST_SET_GALLERY_COLUMNS", {
-            value: value
+            value: this.columns
          });
       },
 
@@ -122,11 +132,21 @@ define(["dojo/_base/declare",
        * @param {number} value The number of columns to set.
        */
       setColumns: function alfresco_documentlibrary_AlfGalleryViewSlider__setColumns(value) {
-         if (!value || isNaN(value))
+         // NOTE: Need to explicitly check for null as well as isNaN because null IS a number (good ol' JavaScript)...
+         
+         if (value && !isNaN(value))
          {
-            value = 4;
+            this.columns = value;
          }
-         this.columns = value;
+         else if (this.columns && !isNaN(this.columns))
+         {
+            // No action, leave columns as it is
+         }
+         else
+         {
+            // Default when no preference and invalid columns config
+            this.columns = 4;
+         }
          this.set("value", this.getSliderValueFromColumns(this.columns));
       },
       
@@ -152,6 +172,9 @@ define(["dojo/_base/declare",
       
       /**
        * Maps the columns provided to the value for the slider.
+       *
+       * @instance
+       * @return {number} The slider position based on the input
        */
       getSliderValueFromColumns: function alfresco_documentlibrary_AlfGalleryViewSlider__getSliderValueFromColumns(input) {
          switch(input)
@@ -179,8 +202,8 @@ define(["dojo/_base/declare",
          this.alfPublish("ALF_DOCLIST_SET_GALLERY_COLUMNS", {
             value: columns
          });
-         this.alfPublish(this.setPreferenceTopic, {
-            preference: "org.alfresco.share.documentList.galleryColumns",
+         this.alfServicePublish(this.setPreferenceTopic, {
+            preference: this.columnsPreferenceProperty,
             value: columns
          });
          this.columns = columns;

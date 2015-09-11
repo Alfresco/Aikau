@@ -74,6 +74,7 @@ define({
       "src/test/resources/alfresco/dnd/NestedConfigurationTest",
       "src/test/resources/alfresco/dnd/NestedReorderTest",
 
+      "src/test/resources/alfresco/documentlibrary/AlfGalleryViewSliderTest",
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
       "src/test/resources/alfresco/documentlibrary/DocumentLibraryTest",
