@@ -1,6 +1,14 @@
 model.jsonModel = {
    services: [
-      "alfresco/services/ErrorReporter"
+      {
+         name: "alfresco/services/LoggingService",
+         config: {
+            loggingPreferences: {
+               enabled: true,
+               all: true
+            }
+         }
+      }
    ],
    widgets: [
       {
@@ -20,9 +28,9 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
+                                    id: "SELECT_ALL",
                                     name: "alfresco/menus/AlfMenuItem",
                                     config: {
-                                       id: "SELECT_ALL",
                                        label: "All",
                                        publishTopic: "MENU_BAR_SELECT_ITEMS",
                                        publishPayload: {
@@ -32,9 +40,9 @@ model.jsonModel = {
                                     }
                                  },
                                  {
+                                    id: "SELECT_ALL_BY_ITEMS",
                                     name: "alfresco/menus/AlfMenuItem",
                                     config: {
-                                       id: "SELECT_ALL_BY_ITEMS",
                                        label: "All (by items)",
                                        publishTopic: "MENU_BAR_SELECT_ITEMS",
                                        publishPayload: {
@@ -44,9 +52,9 @@ model.jsonModel = {
                                     }
                                  },
                                  {
+                                    id: "SELECT_SOME_BY_ITEMS",
                                     name: "alfresco/menus/AlfMenuItem",
                                     config: {
-                                       id: "SELECT_SOME_BY_ITEMS",
                                        label: "Some (by items)",
                                        publishTopic: "MENU_BAR_SELECT_ITEMS",
                                        publishPayload: {
@@ -56,9 +64,9 @@ model.jsonModel = {
                                     }
                                  },
                                  {
+                                    id: "SELECT_NONE_BY_ITEMS",
                                     name: "alfresco/menus/AlfMenuItem",
                                     config: {
-                                       id: "SELECT_NONE_BY_ITEMS",
                                        label: "None (by items)",
                                        publishTopic: "MENU_BAR_SELECT_ITEMS",
                                        publishPayload: {
@@ -68,9 +76,9 @@ model.jsonModel = {
                                     }
                                  },
                                  {
+                                    id: "SELECT_NONE",
                                     name: "alfresco/menus/AlfMenuItem",
                                     config: {
-                                       id: "SELECT_NONE",
                                        label: "None",
                                        publishTopic: "MENU_BAR_SELECT_ITEMS",
                                        publishPayload: {
@@ -90,11 +98,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
-}
-;
+};

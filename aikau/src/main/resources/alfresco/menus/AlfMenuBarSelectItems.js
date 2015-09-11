@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          if (this.iconNode)
          {
-            on(this.iconNode, "click", lang.hitch(this, "handleIconClick"));
+            on(this.iconNode, "click", lang.hitch(this, this.handleIconClick));
          }
       },
       
@@ -176,20 +176,22 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       determineSelection: function alfresco_menus_AlfMenuBarSelectItems__determineSelection(payload) {
-         if ((payload.availableItemCount || payload.availableItemCount === 0) && 
-             (payload.selectedItemCount || payload.selectedItemCount === 0)) 
+         var available = parseInt(payload.availableItemCount, 10);
+         var selected = parseInt(payload.selectedItemCount, 10);
+         if ((available || available === 0) && 
+             (selected || selected === 0)) 
          {
             // If no value is provided the selected items indicator is calculated based
             // on available and selected item counts...
-            if (payload.selectedItemCount === 0)
+            if (selected === 0)
             {
                this.renderNoneSelected();
             }
-            else if (payload.availableItemCount > payload.selectedItemCount)
+            else if (available > selected)
             {
                this.renderSomeSelected();
             }
-            else if (payload.availableItemCount === payload.selectedItemCount)
+            else if (available === selected)
             {
                this.renderAllSelected();
             }
