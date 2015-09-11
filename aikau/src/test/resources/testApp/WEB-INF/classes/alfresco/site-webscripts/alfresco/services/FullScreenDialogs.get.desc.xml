@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Full Screen Dialogs</shortname>
+  <description>This page uses the alfresco/services/DialogService to create dialogs that take up the full screen</description>
+  <family>aikau-unit-tests</family>
+  <url>/FullScreenDialogs</url>
+</webscript>
