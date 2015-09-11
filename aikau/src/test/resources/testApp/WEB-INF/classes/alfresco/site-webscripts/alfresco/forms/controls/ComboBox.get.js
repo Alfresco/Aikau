@@ -26,6 +26,7 @@ model.jsonModel = {
                   id: "TAGS",
                   name: "alfresco/forms/controls/ComboBox", 
                   config: {
+                     fieldId: "TAGS",
                      label: "Tags",
                      name: "tag",
                      value: "",
@@ -42,6 +43,7 @@ model.jsonModel = {
                   id: "PROPERTIES",
                   name: "alfresco/forms/controls/ComboBox", 
                   config: {
+                     fieldId: "PROPERTIES",
                      label: "Properties",
                      name: "property",
                      value: "",
