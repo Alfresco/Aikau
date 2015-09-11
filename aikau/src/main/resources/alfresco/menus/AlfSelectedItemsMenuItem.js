@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
                label: "select.none.label",
                value: "selectNone"
             });
-            this.alfPublish("ALF_DOCLIST_FILE_SELECTION", {
+            this.alfPublish(topics.DOCUMENT_SELECTION_UPDATE, {
                label: "select.none.label",
                value: "selectNone"
             });

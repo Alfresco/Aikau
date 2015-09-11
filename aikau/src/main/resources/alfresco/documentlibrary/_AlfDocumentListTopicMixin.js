@@ -166,42 +166,38 @@ define(["dojo/_base/declare",
       /**
        * This differs from the "documentSelectedTopic" attribute as it is used to make general selection requests, e.g. "selectAll"
        * 
-       * @event documentSelectionTopic
        * @instance
        * @type {string} 
        * @default
        */
-      documentSelectionTopic: "ALF_DOCLIST_FILE_SELECTION",
+      documentSelectionTopic: topics.DOCUMENT_SELECTION_UPDATE,
       
       /**
        * This differs from the "documentSelectionTopic" attribute as it should be used for individual documents
        * 
-       * @event documentSelectedTopic
        * @instance
        * @type {string} 
        * @default
        */
-      documentSelectedTopic: "ALF_DOCLIST_DOCUMENT_SELECTED",
+      documentSelectedTopic: topics.DOCUMENT_SELECTED,
       
       /**
        * Used to indicate the list of currently selected documents has changed and provides the details of those items.
        * 
-       * @event selectedDocumentsChangeTopic
        * @instance
        * @type {string} 
        * @default
        */
-      selectedDocumentsChangeTopic: "ALF_SELECTED_FILES_CHANGED",
+      selectedDocumentsChangeTopic: topics.SELECTED_DOCUMENTS_CHANGED,
       
       /**
        * Use to indicate that an individual document has been deselected (e.g. that it should no longer be included in group actions).
        * 
-       * @event documentDeselectedTopic
        * @instance
        * @type {string} 
        * @default
        */
-      documentDeselectedTopic: "ALF_DOCLIST_DOCUMENT_DESELECTED",
+      documentDeselectedTopic: topics.DOCUMENT_DESELECTED,
       
       /**
        * @event sortRequestTopic

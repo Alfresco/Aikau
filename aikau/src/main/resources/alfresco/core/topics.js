@@ -132,6 +132,62 @@ define([],function() {
       DELETE_SITE: "ALF_DELETE_SITE",
 
       /**
+       * Publish this to indicate the de-selection of an individual item
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       * @since 1.0.35
+       *
+       * @event module:alfresco/core/topics~DOCUMENT_DESELECTED
+       * @parameter {object} value - The item de-selected
+       */
+      DOCUMENT_DESELECTED: "ALF_DOCLIST_DOCUMENT_DESELECTED",
+      
+      /**
+       * Publish this to indicate the selection of an individual item.
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       * @since 1.0.35
+       *
+       * @event module:alfresco/core/topics~DOCUMENT_SELECTED
+       * @parameter {object} value - The item selected
+       */
+      DOCUMENT_SELECTED: "ALF_DOCLIST_DOCUMENT_SELECTED",
+      
+      /**
+       * This can be used to publish bulk changes in document selection. This differs from the 
+       * [DOCUMENT_SELECTED]{@link module:alfresco/core/topics#DOCUMENT_SELECTED} as it is used to make general selection 
+       * requests, e.g. "selectAll". Alternatively a "selectedItems" attribute can be used to list specific items that
+       * should be selected.
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       * @since 1.0.35
+       * 
+       * @event module:alfresco/core/topics~DOCUMENT_SELECTION_UPDATE
+       * @parameter {string} [value=null] - The selection type, either "selectAll", "selectNone", "selectInvert", "selectFolders" or "selectDocuments"
+       * @parameter {object[]} [selectedItems=null] A specific set of items to be selected
+       */
+      DOCUMENT_SELECTION_UPDATE: "ALF_DOCLIST_FILE_SELECTION",
+      
+      /**
+       * Used to indicate the list of currently selected documents has changed and provides the details of those items.
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       * @since 1.0.35
+       * 
+       * @event module:alfresco/core/topics~SELECTED_DOCUMENTS_CHANGED
+       * @parameter {object[]} selectedItems - The items that are selected
+       */
+      SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
+
+      /**
        * This topic is published to request either the download of a single document or folder (or a selection
        * of documents and folder) as a ZIP file.
        * 

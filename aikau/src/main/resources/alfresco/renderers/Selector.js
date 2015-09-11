@@ -34,10 +34,11 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Selector.html",
         "alfresco/core/Core",
         "dojo/_base/lang",
+        "dojo/_base/array",
         "dojo/dom-class",
         "dojo/_base/event"], 
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _AlfDocumentListTopicMixin, template, 
-                 AlfCore, lang, domClass, Event) {
+                 AlfCore, lang, array, domClass, Event) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _AlfDocumentListTopicMixin, AlfCore], {
       
@@ -58,9 +59,22 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * The dot-notation property in the currentItem that uniquely idenfities that item. This defaults
+       * to "nodeRef" as the most likely use case is for working with Nodes but this can be configured
+       * to a different value.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      itemKey: "nodeRef",
+
+      /**
        * Set up the attributes to be used when rendering the template.
        * 
        * @instance
+       * @listens module:alfresco/core/topics~event:DOCUMENT_SELECTION_UPDATE
        */
       postMixInProperties: function alfresco_renderers_Selector__postMixInProperties() {
          this.intialClass = "unchecked";
@@ -68,7 +82,7 @@ define(["dojo/_base/declare",
          // Set up a subscription to handle file selection events, these will be along the lines of
          // select all, select none, invert, etc. Each individual selector will respond to these
          // events...
-         this.alfSubscribe(this.documentSelectionTopic, lang.hitch(this, "onFileSelection"), this.publishGlobal, this.publishToParent);
+         this.alfSubscribe(this.documentSelectionTopic, lang.hitch(this, this.onFileSelection), this.publishGlobal, this.publishToParent);
       },
       
       /**
@@ -120,6 +134,20 @@ define(["dojo/_base/declare",
                {
                   this.select();
                }
+            }
+            else if (payload.selectedItems)
+            {
+               // Check to see if the list of selected items contains the item that this instance has
+               // renderered.
+               array.some(payload.selectedItems, function(item) {
+                  var a = lang.getObject(this.itemKey, false, item);
+                  var b = lang.getObject(this.itemKey, false, this.currentItem);
+                  var match = ((a || a === 0) && a === b);
+                  if (match) {
+                     this.select();
+                  }
+                  return match;
+               }, this);
             }
          }
       },

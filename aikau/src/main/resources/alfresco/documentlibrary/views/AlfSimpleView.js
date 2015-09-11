@@ -78,6 +78,7 @@ define(["dojo/_base/declare",
                      config: {
                         widgets: [
                            {
+                              id: "SIMPLE_VIEW_SELECTOR",
                               name: "alfresco/renderers/Selector"
                            }
                         ]
@@ -88,6 +89,7 @@ define(["dojo/_base/declare",
                      config: {
                         widgets: [
                            {
+                              id: "SIMPLE_VIEW_INDICATORS",
                               name: "alfresco/renderers/Indicators"
                            }
                         ]
@@ -98,6 +100,7 @@ define(["dojo/_base/declare",
                      config: {
                         widgets: [
                            {
+                              id: "SIMPLE_VIEW_THUMBNAIL",
                               name: "alfresco/renderers/SmallThumbnail"
                            }
                         ]
@@ -116,6 +119,7 @@ define(["dojo/_base/declare",
                                        config: {
                                           widgets: [
                                              {
+                                                id: "SIMPLE_VIEW_NAME",
                                                 name: "alfresco/renderers/InlineEditPropertyLink",
                                                 config: {
                                                    propertyToRender: "node.properties.cm:name",
@@ -125,6 +129,7 @@ define(["dojo/_base/declare",
                                                 }
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_TITLE",
                                                 name: "alfresco/renderers/InlineEditProperty",
                                                 config: {
                                                    propertyToRender: "node.properties.cm:title",
@@ -145,24 +150,29 @@ define(["dojo/_base/declare",
                                        config: {
                                           widgets: [
                                              {
+                                                id: "SIMPLE_VIEW_DATE",
                                                 name: "alfresco/renderers/Date"
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_SIZE",
                                                 name: "alfresco/renderers/Size"
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_FAVOURITE",
                                                 name: "alfresco/renderers/Favourite"
                                              },
                                              {
                                                 name: "alfresco/renderers/Separator"
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_LIKE",
                                                 name: "alfresco/renderers/Like"
                                              },
                                              {
                                                 name: "alfresco/renderers/Separator"
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_COMMENTS",
                                                 name: "alfresco/renderers/Comments"
                                              }
                                           ]
@@ -179,6 +189,7 @@ define(["dojo/_base/declare",
                      config: {
                         widgets: [
                            {
+                              id: "SIMPLE_VIEW_ACTIONS",
                               name: "alfresco/renderers/Actions"
                            }
                         ]
