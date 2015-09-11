@@ -201,6 +201,10 @@ define(["dojo/_base/declare",
                this._itemsSelected = this._UNKNOWN;
             }
          }
+         else
+         {
+            this.alfLog("warn", "Invalid item selection requested", payload, this);
+         }
       },
       
       /**
