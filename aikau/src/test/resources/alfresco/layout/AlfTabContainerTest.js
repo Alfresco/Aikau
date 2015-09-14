@@ -664,6 +664,21 @@ define(["intern!object",
          .getLastPublish("ALF_SEARCH_REQUEST", "Search request did not occur");
       },
 
+      "Create a new tab": function() {
+         return browser.findById("CREATE_TAB_label")
+            .click()
+         .end()
+         .waitForDeletedByCssSelector("#ADDED_LIST .rendered-view.share-hidden")
+         .end()
+         .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
+         .end()
+         .findById("ADDED_LIST_VIEW")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The list was not displayed");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
