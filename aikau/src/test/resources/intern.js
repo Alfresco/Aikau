@@ -48,7 +48,7 @@ define(["./config/Suites"],
 
          // Maximum number of simultaneous integration tests that should be executed on the remote WebDriver service
          // maxConcurrency: 1,
-         maxConcurrency: Infinity,
+         maxConcurrency: 1,
 
          // Terminal information
          terminalInfo: {
