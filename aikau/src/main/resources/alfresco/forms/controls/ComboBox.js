@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,17 +25,22 @@
  *
  * @module alfresco/forms/controls/ComboBox
  * @extends module:alfresco/forms/controls/BaseFormControl
+ * @mixes module:alfresco/forms/controls/utilities/UseServiceStoreMixin
+ * @mixes module:alfresco/forms/controls/utilities/IconMixin
+ * @mixes module:alfresco/forms/controls/utilities/TextBoxValueChangeMixin
  * @author Dave Draper
  */
-define(["alfresco/forms/controls/BaseFormControl",
+define(["dojo/_base/declare",
+        "alfresco/forms/controls/BaseFormControl",
         "alfresco/forms/controls/utilities/UseServiceStoreMixin",
         "alfresco/forms/controls/utilities/IconMixin",
-        "dojo/_base/declare",
+        "alfresco/forms/controls/utilities/TextBoxValueChangeMixin",
         "dijit/form/ComboBox",
+        "dojo/aspect",
         "dojo/_base/lang"], 
-        function(BaseFormControl, UseServiceStoreMixin, IconMixin, declare, ComboBox, lang) {
+        function(declare, BaseFormControl, UseServiceStoreMixin, IconMixin, TextBoxValueChangeMixin, ComboBox, aspect, lang) {
 
-   return declare([BaseFormControl, UseServiceStoreMixin, IconMixin], {
+   return declare([BaseFormControl, UseServiceStoreMixin, IconMixin, TextBoxValueChangeMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -75,7 +80,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        */
-      createFormControl: function alfresco_forms_controls_ComboBox__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_ComboBox__createFormControl(/*jshint unused:false*/config, domNode) {
          var serviceStore = this.createServiceStore();
          var comboBox = new ComboBox({
             id: this.id + "_CONTROL",
@@ -108,42 +113,20 @@ define(["alfresco/forms/controls/BaseFormControl",
       },
 
       /**
-       * This will be set to the last known value of the text box before the current keyup event.
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      _oldValue: null,
-      
-      /**
-       * This is used as a temporary buffer variable to keep track of changes to the old value. 
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      __oldValue: null,
-
-      /**
-       * Overrides the default change events to use blur events on the text box. This is done so that we can validate
-       * on every single keypress. However, we need to keep track of old values as this information is not readily
-       * available from the text box itself.
+       * Extends the [mixed in setupChangeEvents]{@link alfresco/forms/controls/utilities/TextBoxValueChangeMixin#setupChangeEvents}
+       * to listen to selection events.
        * 
        * @instance
        */
       setupChangeEvents: function alfresco_forms_controls_ComboBox__setupChangeEvents() {
-         var _this = this;
+         this.inherited(arguments);
          if (this.wrappedWidget)
          {
-            this.wrappedWidget.on("keyup", function() {
-               _this._oldValue = _this.__oldValue; // Set the old value as the last buffer...
-               _this.__oldValue = this.getValue(); // Make the last buffer the current value being set
-               
-               _this.alfLog("log", "keyup - OLD value: " + _this._oldValue + ", NEW value: " + this.getValue());
-               _this.formControlValueChange(_this.name, _this._oldValue, this.getValue());
-               _this.validate();
-            });
+            aspect.after(this.wrappedWidget, "_selectOption", lang.hitch(this, function() {
+               this._oldValue = this.__oldValue; // Set the old value as the last buffer...
+               this.__oldValue = this.getValue(); // Make the last buffer the current value being set
+               this.onValueChangeEvent(this.name, this._oldValue, this.getValue());
+            }), true);
          }
       }
    });
