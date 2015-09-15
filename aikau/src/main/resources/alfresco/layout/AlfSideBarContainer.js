@@ -379,7 +379,7 @@ define(["dojo/_base/declare",
             // not. We're using the classes applied to the drag handle node to determine whether or not
             // to show or hide the sidebar.
             this.alfPublish("ALF_DOCLIST_SHOW_SIDEBAR", {
-               selected: domClass.contains(this.resizeHandlerButtonNode, "pop-out")
+               selected: domClass.contains(this.sidebarNode, "alfresco-layout-AlfSideBarContainer__sidebar--closed")
             });
          }
       },
@@ -407,42 +407,23 @@ define(["dojo/_base/declare",
             var width = (this.hiddenSidebarWidth) ? this.hiddenSidebarWidth : this.initialSidebarWidth;
             domStyle.set(this.sidebarNode, "width", width + "px");
 
-            // Add some right padding so that the resize bar doesn't appear over the content, this is
-            // particular important with regards to scrollbars that might be present (see AKU-514)
-            domStyle.set(this.sidebarNode, "padding-right", "10px");
             this.lastSidebarWidth = width;
             this.resizeHandler();
-            if (this.resizeHandlerButtonNode)
-            {
-               domClass.remove(this.resizeHandlerButtonNode, "pop-out");
-               domClass.add(this.resizeHandlerButtonNode, "pop-in");
-            }
+
+            domClass.add(this.sidebarNode, "alfresco-layout-AlfSideBarContainer__sidebar--open");
+            domClass.remove(this.sidebarNode, "alfresco-layout-AlfSideBarContainer__sidebar--closed");
          }
          else
          {
             // Hide the sidebar...
             domStyle.set(this.sidebarNode, "width", "9px");
 
-            // Remove the right-padding to ensure that the resize bar snaps cleanly to the outer edge of
-            // the container
-            domStyle.set(this.sidebarNode, "padding-right", "0");
             this.lastSidebarWidth = 9;
             this.resizeHandler();
             $(this.sidebarNode).resizable("disable"); // Lock the resizer when the sidebar is not shown...
-            if (this.resizeHandlerButtonNode)
-            {
-               domClass.add(this.resizeHandlerButtonNode, "pop-out");
-               domClass.remove(this.resizeHandlerButtonNode, "pop-in");
-            }
-            
-            // Hide all the child nodes of the side bar (except for the resize handle)...
-            for (var j=0; j<this.sidebarNode.children.length - 1; j++)
-            {
-               if (this.sidebarNode.children[j] !== this.resizeHandlerNode)
-               {
-                  domClass.add(this.sidebarNode.children[j], "share-hidden");
-               }
-            }
+
+            domClass.remove(this.sidebarNode, "alfresco-layout-AlfSideBarContainer__sidebar--open");
+            domClass.add(this.sidebarNode, "alfresco-layout-AlfSideBarContainer__sidebar--closed");
          }
       }
    });
