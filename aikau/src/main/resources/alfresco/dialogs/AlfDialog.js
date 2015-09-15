@@ -339,18 +339,6 @@ define(["dojo/_base/declare",
          domStyle.set(document.documentElement, "overflow", "");
          domClass.remove(this.domNode, "dialogDisplayed");
          domClass.add(this.domNode, "dialogHidden");
-         
-         // Normalise closing dialog by re-issuing escape key use (which could 
-         // actually have been used to close the dialog, but this ensures that
-         // any widgets listening for this keyup event get notificed)...
-         on.emit(this.domNode, "keyup", {
-            bubbles: true, 
-            cancelable: true, 
-            keyCode: 27, 
-            charCode: 27, 
-            keyCodeArg : 27, 
-            charCodeArg: 0
-         }); 
       },
 
       /**
