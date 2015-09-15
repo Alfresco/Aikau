@@ -250,6 +250,18 @@ define(["dojo/_base/declare",
       dataFailureMessage: "alflist.data.failure.message",
 
       /**
+       * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       * to create the views defined for the list to the resulting callback in 
+       * [allWidgetsProcessed]{@link module:alfresco/core/Core#allWidgetsProcessed}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      viewWidgetsMappingId: "VIEWS",
+
+      /**
        * The constructor
        *
        * @instance
@@ -289,7 +301,7 @@ define(["dojo/_base/declare",
             // for hasty re-insertion if necessary. It *shouldn't* be necessary to clone here because
             // the views will clone as necessary...
             // this.processWidgets(JSON.parse(JSON.stringify(this.widgets)));
-            this.processWidgets(this.widgets);
+            this.processWidgets(this.widgets, null, this.viewWidgetsMappingId);
          }
 
          if (this.filteringTopics)
@@ -450,8 +462,10 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object[]} The created widgets
+       * @param {string} processWidgetsId The ID that the call to the [processWidgets]{@link module:alfresco/core/Core#processWidgets} to
+       * create the views.
        */
-      allWidgetsProcessed: function alfresco_lists_AlfList__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_lists_AlfList__allWidgetsProcessed(widgets, /*jshint unused:false*/ processWidgetsId) {
          this.viewMap = {};
          array.forEach(widgets, lang.hitch(this, "registerView"));
 

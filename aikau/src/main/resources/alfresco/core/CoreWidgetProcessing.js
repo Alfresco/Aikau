@@ -58,8 +58,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} widgets An array of the widget definitions to instantiate
        * @param {element} rootNode The DOM node which should be used to add instantiated widgets to
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of the call to
        */
-      processWidgets: function alfresco_core_CoreWidgetProcessing__processWidgets(widgets, rootNode) {
+      processWidgets: function alfresco_core_CoreWidgetProcessing__processWidgets(widgets, rootNode, processWidgetsId) {
          // There are two options for providing configuration, either via a JSON object or
          // via a URL to asynchronously retrieve the configuration. The configuration object
          // takes precedence as it will be faster by virtue of not requiring a remote call.
@@ -76,7 +77,7 @@ define(["dojo/_base/declare",
                this._processedWidgets = [];
 
                // Iterate over all the widgets in the configuration object and add them...
-               array.forEach(widgets, lang.hitch(this, this.processWidget, rootNode));
+               array.forEach(widgets, lang.hitch(this, this.processWidget, rootNode, processWidgetsId));
             }
          }
          catch(e)
@@ -95,16 +96,17 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {element} rootNode The DOM node where the widget should be created.
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * @param {object} widgetConfig The configuration for the widget to be created
        * @param {number} index The index of the widget configuration in the array that it was taken from
        */
-      processWidget: function alfresco_core_CoreWidgetProcessing__processWidget(rootNode, widgetConfig, index) {
+      processWidget: function alfresco_core_CoreWidgetProcessing__processWidget(rootNode, processWidgetsId, widgetConfig, index) {
          if (widgetConfig)
          {
             if (this.filterWidget(widgetConfig, index))
             {
                var domNode = this.createWidgetDomNode(widgetConfig, rootNode, widgetConfig.className || "");
-               this.createWidget(widgetConfig, domNode, this._registerProcessedWidget, this, index);
+               this.createWidget(widgetConfig, domNode, this._registerProcessedWidget, this, index, processWidgetsId);
             }
          }
          else
@@ -141,24 +143,42 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} widget The widget that has just been processed.
        * @param {number} index The target index of the widget
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        */
-      _registerProcessedWidget: function alfresco_core_CoreWidgetProcessing___registerProcessedWidget(widget, index) {
+      _registerProcessedWidget: function alfresco_core_CoreWidgetProcessing___registerProcessedWidget(widget, index, processWidgetsId) {
          this._processedWidgetCountdown--;
          this.alfLog("log", "Widgets expected: ", this._processedWidgetCountdown, this.id);
          if (widget)
          {
-            if (!this._processedWidgets)
+            // 1.0.35 UPDATE
+            // If an "processWidgetsId" attribute is provided then we want to make sure that multiple calls to processWidgets
+            // will not result in a _processedWidgets attribute containing results different calls. Therefore we want to map each
+            // call to its own array... We still retain the original _processedWidgets object for backwards compatibility. The reason
+            // for this is to ensure that in the event of an XHR request being made for a dependency that the asynchronous processing
+            // is handled correctly.
+            
+            // Get or set-up the 
+            var processedWidgets;
+            var location = "_processedWidgets";
+            if (processWidgetsId)
             {
-               this._processedWidgets = [];
+               location = "_processedWidgetsMap." + processWidgetsId;
+            }
+
+            processedWidgets = lang.getObject(location, false, this);
+            if (!processedWidgets)
+            {
+               processedWidgets = [];
+               lang.setObject(location, processedWidgets, this);
             }
 
             if (!index || index === 0 || isNaN(index))
             {
-               this._processedWidgets.push(widget);
+               processedWidgets.push(widget);
             }
             else
             {
-               this._processedWidgets[index] = widget;
+               processedWidgets[index] = widget;
             }
 
             // Handle any dynamic visibility and invisibility rules...
@@ -174,10 +194,10 @@ define(["dojo/_base/declare",
          {
             // Double-check that no empty elements are in the array of processed widgets...
             // This could still be possible when indices have been used to set array contents...
-            this._processedWidgets = array.filter(this._processedWidgets, function(item) {
-               return item != null;
+            processedWidgets = array.filter(processedWidgets, function(item) {
+               return (item !== null && typeof item !== "undefined");
             }, this);
-            this.allWidgetsProcessed(this._processedWidgets);
+            this.allWidgetsProcessed(processedWidgets, processWidgetsId);
             this.widgetProcessingComplete = true;
             this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
          }
@@ -356,8 +376,9 @@ define(["dojo/_base/declare",
        * @extensionPoint
        * @instance
        * @param {Array} widgets An array of all the widgets that have been processed
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        */
-      allWidgetsProcessed: function alfresco_core_CoreWidgetProcessing__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_core_CoreWidgetProcessing__allWidgetsProcessed(widgets, processWidgetsId) {
          // jshint unused:false
          this.alfLog("log", "All widgets processed");
       },
@@ -479,7 +500,7 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the widget to create (this will effect it's location in the
        * [_processedWidgets]{@link module:alfresco/core/Core#_processedWidgets} array)
        */
-      createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(widget, domNode, callback, callbackScope, index) {
+      createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(widget, domNode, callback, callbackScope, index, processWidgetsId) {
          var _this = this;
          this.alfLog("log", "Creating widget: ",widget);
          var initArgs = this.processWidgetConfig(widget);
@@ -554,7 +575,7 @@ define(["dojo/_base/declare",
                   _this.alfLog("error", "The following error occurred creating a widget", e, this);
                   if (callback)
                   {
-                     callback.call((callbackScope || this), null, index);
+                     callback.call((callbackScope || this), null, index, processWidgetsId);
                   }
                   return null;
                }
@@ -568,7 +589,7 @@ define(["dojo/_base/declare",
             {
                // If there is a callback then call it with any provided scope (but default to the
                // "this" as the scope if one isn't provided).
-               callback.call((callbackScope || this), instantiatedWidget, index);
+               callback.call((callbackScope || this), instantiatedWidget, index, processWidgetsId);
             }
          });
 

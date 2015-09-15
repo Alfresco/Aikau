@@ -55,16 +55,15 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfFilteredList.css"}],
 
       /**
-       * This is a boolean flag that exists for internal use only (e.g. it should not be configured
-       * referenced or updated by extending modules). It is used to track whether filter or view
-       * widgets are being processed so that post processing can be handled accordingly.
-       *
+       * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       * to create the defined filters to the resulting callback in [allWidgetsProcessed]{@link module:alfresco/lists/AlfFilteredList#allWidgetsProcessed}
+       * 
        * @instance
-       * @type {boolean}
+       * @type {string}
        * @default
-       * @since 1.0.34
+       * @since 1.0.35
        */
-      ___processingFilters: null,
+      filterWidgetsMappingId: "FILTERS",
 
       /**
        * Called after properties mixed into instance
@@ -86,14 +85,9 @@ define(["dojo/_base/declare",
          this.filtersNode = domConstruct.create("div", {}, this.domNode, "first");
          if (this.widgetsForFilters)
          {
-            // Process the widget model for the filtered widgets...
-            // NOTE: Set the flag to indicate that we are about to process filters, this ensures
-            //       that we're able to map them to the request parameter name that will be used
-            //       on the browser hash...
-            this.___processingFilters = true;
             var filtersModel = lang.clone(this.widgetsForFilters);
             this.processObject(["processInstanceTokens"], filtersModel);
-            this.processWidgets(filtersModel, this.filtersNode);
+            this.processWidgets(filtersModel, this.filtersNode, this.filterWidgetsMappingId);
          }
          this.inherited(arguments);
       },
@@ -104,19 +98,17 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object[]} widgets The widgets that have been created
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * @since 1.0.34
        */
-      allWidgetsProcessed: function alfresco_lists_AlfFilteredList__allWidgetsProcessed(widgets) {
-         if (this.___processingFilters === true)
+      allWidgetsProcessed: function alfresco_lists_AlfFilteredList__allWidgetsProcessed(widgets, processWidgetsId) {
+         if (processWidgetsId === this.filterWidgetsMappingId)
          {
             this._storeFilterWidgets(widgets);
             this._updateFilterFieldsFromHash();
 
             // Setup the filtering topics based on the filter widgets configured...
             array.forEach(this.widgetsForFilters, this.setupFilteringTopics, this);
-
-            // Need to reset this so that views get processed next time this function gets called.
-            this.___processingFilters = false;
          }
          else
          {
