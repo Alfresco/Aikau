@@ -101,6 +101,52 @@ define(["dojo/_base/declare",
       duration: 0,
 
       /**
+       * If this is set to true then the dialog will retain it's opening width regardless of what happens
+       * to it's contents. This is especially useful when the dialog contains widgets that resize themselves
+       * that could result in the dialog shrinking (this can occur when using
+       * [HorizontalWidgets]{@link module:alfresco/layout/HorizontalWidgets}.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      fixedWidth: false,
+      
+      /**
+       * Indicates whether or not to override all dimension settings and to make the dialog consume all
+       * the available space on the screen (minus any [padding]{@link module:alfresco/dialogs/AlfDialog#fullScreenPadding}).
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.35
+       */
+      fullScreenMode: false,
+
+      /**
+       * When [full screen mode]{@link module:alfresco/dialogs/AlfDialog#fullScreenMode} is used this is the value in pixels
+       * that will be left as a padding between the edge of the dialog and the edge the screen.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.35
+       */
+      fullScreenPadding: 10,
+
+      /**
+       * In some cases the content placed within the dialog will handle overflow itself, in that
+       * case this should be set to false. However, in most cases the dialog will want to manage
+       * overflow itself. Effectively this means that scroll bars will be added as necessary to 
+       * ensure that the user can see all of the dialog content.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      handleOverflow: true,
+
+      /**
        * Widgets to be processed into the main node
        * 
        * @instance
@@ -117,18 +163,6 @@ define(["dojo/_base/declare",
        * @default
        */
       widgetsButtons: null,
-
-      /**
-       * In some cases the content placed within the dialog will handle overflow itself, in that
-       * case this should be set to false. However, in most cases the dialog will want to manage
-       * overflow itself. Effectively this means that scroll bars will be added as necessary to 
-       * ensure that the user can see all of the dialog content.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      handleOverflow: true,
 
       /**
        * Extends the default constructor to adjust for changes between 1.9.x and 1.10.x versions
@@ -158,18 +192,6 @@ define(["dojo/_base/declare",
          this.buttonCancel = this.message("button.close");
       },
 
-      /**
-       * If this is set to true then the dialog will retain it's opening width regardless of what happens
-       * to it's contents. This is especially useful when the dialog contains widgets that resize themselves
-       * that could result in the dialog shrinking (this can occur when using
-       * [HorizontalWidgets]{@link module:alfresco/layout/HorizontalWidgets}.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      fixedWidth: false,
-      
       /**
        * Extends the superclass implementation to process the widgets defined by 
        * [widgetButtons]{@link module:alfresco/dialogs/AlfDialog#widgetButtons} into the buttons bar
@@ -364,6 +386,30 @@ define(["dojo/_base/declare",
          
          // Publish the widgets ready
          this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
+      },
+
+      /**
+       * Extends the default resize function to to provide the 
+       * [full screen mode]{@link module:alfresco/dialogs/AlfDialog#fullScreenMode} capability.
+       * 
+       * @instance
+       * @since 1.0.35
+       */
+      resize: function alfresco_dialogs_AlfDialog__resize() {
+         if (this.fullScreenMode === true)
+         {
+            var dimensionAdjustment = this.fullScreenPadding * 2;
+            this.inherited(arguments, [{
+               t: this.fullScreenPadding,
+               l: this.fullScreenPadding,
+               w: $(window).width() - dimensionAdjustment,
+               h: $(window).height() - dimensionAdjustment
+            }]);
+         }
+         else
+         {
+            this.inherited(arguments);
+         }
       },
 
       /**

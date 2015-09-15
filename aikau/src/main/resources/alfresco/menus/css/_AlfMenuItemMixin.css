@@ -23,6 +23,11 @@
    height: 20px;
 }
 
+.alfresco-menus-_AlfMenuItemMixin a.alfresco-navigation-_HtmlAnchorMixin,
+.alfresco-menus-_AlfMenuItemMixin a.alfresco-navigation-_HtmlAnchorMixin:hover {
+    text-decoration: none;
+}
+
 .alfresco-share .dijitIcon.dijitMenuItemIcon.alf-edit-icon {
    background: url("./images/Edit.png");
    background-repeat: no-repeat;
@@ -172,6 +177,13 @@
 
 .alfresco-share .dijitIcon.dijitMenuItemIcon.alf-delete-icon {
    background: url("./images/delete-16.png");
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+}
+
+.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-delete-20-icon {
+   background: url("./images/delete-20.png");
    background-repeat: no-repeat;
    height: 20px;
    width: 20px;

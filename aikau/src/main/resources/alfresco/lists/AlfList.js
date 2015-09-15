@@ -181,6 +181,7 @@ define(["dojo/_base/declare",
          {
             this.alfSubscribe(this.scrollNearBottom, lang.hitch(this, this.onScrollNearBottom));
          }
+         this.alfSubscribe(this.selectedDocumentsChangeTopic, lang.hitch(this, this.onSelectedItemsChange));
       },
 
       /**
@@ -249,6 +250,18 @@ define(["dojo/_base/declare",
       dataFailureMessage: "alflist.data.failure.message",
 
       /**
+       * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       * to create the views defined for the list to the resulting callback in 
+       * [allWidgetsProcessed]{@link module:alfresco/core/Core#allWidgetsProcessed}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      viewWidgetsMappingId: "VIEWS",
+
+      /**
        * The constructor
        *
        * @instance
@@ -288,7 +301,7 @@ define(["dojo/_base/declare",
             // for hasty re-insertion if necessary. It *shouldn't* be necessary to clone here because
             // the views will clone as necessary...
             // this.processWidgets(JSON.parse(JSON.stringify(this.widgets)));
-            this.processWidgets(this.widgets);
+            this.processWidgets(this.widgets, null, this.viewWidgetsMappingId);
          }
 
          if (this.filteringTopics)
@@ -449,8 +462,10 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object[]} The created widgets
+       * @param {string} processWidgetsId The ID that the call to the [processWidgets]{@link module:alfresco/core/Core#processWidgets} to
+       * create the views.
        */
-      allWidgetsProcessed: function alfresco_lists_AlfList__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_lists_AlfList__allWidgetsProcessed(widgets, /*jshint unused:false*/ processWidgetsId) {
          this.viewMap = {};
          array.forEach(widgets, lang.hitch(this, "registerView"));
 
@@ -677,6 +692,36 @@ define(["dojo/_base/declare",
       currentData: null,
 
       /**
+       * Used to keep track of the items that are currently selected in order to ensure that those items are selected on 
+       * the next view displayed when switching views.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.35
+       */
+      selectedItems: null,
+
+      /**
+       * Tracks the currently selected items and stores them as the [selectedItems]{@link module:alfresco/lists/AlfList#selectedItems}
+       * variable.
+       * 
+       * @instance
+       * @param  {object} payload A payload expected to contain a "selectedItems" attribute
+       * @since 1.0.35
+       */
+      onSelectedItemsChange: function alfresco_lists_AlfList__onSelectedItemsChange(payload) {
+         if (payload.selectedItems)
+         {
+            this.selectedItems = payload.selectedItems;
+         }
+         else
+         {
+            this.alfLog("warn", "A publication was made indicating an item selection update, but no 'selectedItems' attribute was provided in the payload", payload, this);
+         }
+      },
+
+      /**
        * Handles requests to switch views. This is called whenever the [viewSelectionTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#viewSelectionTopic}
        * topic is published on and expects a payload containing an attribute "value" which should map to a registered
        * [view]{@link module:alfresco/lists/views/AlfListView}. The views are mapped against the index they were configured
@@ -719,6 +764,12 @@ define(["dojo/_base/declare",
                newView.currentData.previousItemCount = 0;
                newView.renderView(false);
                this.showView(newView);
+
+               // Publish the selected items when the view changes in order that item selection is maintained 
+               // between views...
+               this.alfPublish(topics.DOCUMENT_SELECTION_UPDATE, {
+                  selectedItems: this.selectedItems
+               });
             }
             else
             {

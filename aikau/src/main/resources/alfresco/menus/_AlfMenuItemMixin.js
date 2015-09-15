@@ -168,6 +168,8 @@ define(["dojo/_base/declare",
          this.set("label", this.label);
          this.inherited(arguments);
 
+         domClass.add(this.domNode, "alfresco-menus-_AlfMenuItemMixin");
+
          // Set up a handler for onContextMenu actions (e.g. right-clicks), although by default this will perform no action...
          on(this.domNode, "contextmenu", lang.hitch(this, "onContextMenu"));
          this.makeAnchor(this.targetUrl, this.targetUrlType);

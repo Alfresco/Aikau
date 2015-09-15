@@ -214,6 +214,53 @@ define(["intern!object",
          });
       },
 
+      // NOTE: These tests do not need to be duplicated across both non-hashing and hashing Document Libraries
+      
+      "Select items and switch views": function() {
+         // Select an item and make sure it is shown as selected...
+         return browser.findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_0.unchecked")
+            .click()
+         .end()
+         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_0.checked")
+         .end()
+
+         // Select another item and make sure it is shown as selected...
+         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_2.unchecked")
+            .click()
+         .end()
+         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_2.checked")
+         .end()
+
+         // Clear the log so that we can tell when view switching is complete...
+         .clearLog()
+
+         // Open the config menu...
+         .findByCssSelector("#DOCLIB_CONFIG_MENU img.alf-configure-icon")
+            .click()
+         .end()
+
+         // Select a new view...
+         .findByCssSelector("#DOCLIB_CONFIG_MENU_VIEW_SELECT_GROUP tr:nth-child(1) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         // Check selected files publication occurs...
+         .getLastPublish("ALF_SELECTED_FILES_CHANGED")
+         .end()
+
+         // Check the item selection has been retained...
+         .findAllByCssSelector("#SIMPLE_VIEW_SELECTOR_ITEM_0.checked")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Item 0 selection was not retained switching views");
+            })
+         .end()
+
+         .findAllByCssSelector("#SIMPLE_VIEW_SELECTOR_ITEM_2.checked")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Item 2 selection was not retained switching views");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

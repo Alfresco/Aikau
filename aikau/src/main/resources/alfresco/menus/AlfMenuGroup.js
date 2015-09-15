@@ -75,7 +75,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        */
-      constructor: function alfresco_menus_AlfMenuGroup__constructor(args) {
+      constructor: function alfresco_menus_AlfMenuGroup__constructor(/*jshint unused:false*/args) {
          this.templateString = string.substitute(template, { ddmTemplateString: AlfDropDownMenu.prototype.templateString});
       },
       
@@ -136,8 +136,12 @@ define(["dojo/_base/declare",
             var menuBarAncestor = this.findMenuBarAncestor(this.getParent());
             if (menuBarAncestor)
             {
-               this.alfLog("log", "Go to next item in menu bar");
-               menuBarAncestor.focusNext();
+               var next = menuBarAncestor._getNextFocusableChild(menuBarAncestor.focusedChild, 1);
+               if (next)
+               {
+                  this.alfLog("log", "Go to next item in menu bar");
+                  menuBarAncestor.focusChild(next);
+               }
             }
          }
       },
@@ -161,8 +165,12 @@ define(["dojo/_base/declare",
             var menuBarAncestor = this.findMenuBarAncestor(this.getParent());
             if (menuBarAncestor)
             {
-               this.alfLog("log", "Focus previous item in menu bar");
-               menuBarAncestor.focusPrev();
+               var prev = menuBarAncestor._getNextFocusableChild(menuBarAncestor.focusedChild, -1);
+               if (prev)
+               {
+                  this.alfLog("log", "Focus previous item in menu bar");
+                  menuBarAncestor.focusChild(prev, true);
+               }
             }
             else
             {

@@ -319,6 +319,64 @@ define(["intern!object",
             });
       },
 
+      "Check warning message on item with no value": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "(No property set)", "Value not rendered correctly");
+            });
+      },
+
+      "Check fade class applied to warning value": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded");
+      },
+
+      "Edit and save item check rendered value has prefix/suffix": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .editIcon")
+            .click()
+         .end()
+         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .alfresco-forms-controls-TextBox .dijitInputContainer input")
+            .clearValue()
+            .type("Updated")
+         .end()
+         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .action.save")
+            .click()
+         .end()
+         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "(Updated)", "Value not rendered correctly");
+            });
+      },
+
+      "Check that faded style has been removed": function() {
+         return browser.findAllByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Faded style was not removed when a value was provided");
+            });
+      },
+
+      "Edit and save item to remove value to check warning returns": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .editIcon")
+            .click()
+         .end()
+         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .alfresco-forms-controls-TextBox .dijitInputContainer input")
+            .clearValue()
+         .end()
+         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .action.save")
+            .click()
+         .end()
+         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "(No property set)", "Value not rendered correctly");
+            });
+      },
+
+      "Check that faded style has been reapplied": function() {
+         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded");
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

@@ -275,6 +275,45 @@ define(["intern!object",
             });
       },
 
+      "Test that second drop-down is disabled (in main view)": function() {
+         return browser.findByCssSelector("#PDM_ITEM_1_SELECT_CONTROL.dijitDisabled")
+            .getAttribute("aria-disabled")
+            .then(function(attribute) {
+               assert.equal(attribute, "true", "The drop-down was not disabled");
+            });
+      },
+
+      "Test that second drop-down is NOT disabled (in dialog)": function() {
+         return browser.findByCssSelector("#SHOW_DIALOG_label")
+            .click()
+         .end()
+         // Wait for dialog...
+         .findByCssSelector("#DIALOG1.dialogDisplayed")
+         .end()
+
+         // Check the 
+         .findAllByCssSelector("#DIALOG_PDM_ITEM_1_SELECT_CONTROL.dijitDisabled")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The drop-down was disabled");
+            })
+         .end()
+         .findById("DIALOG_PDM_ITEM_1_SELECT_CONTROL")
+            .getAttribute("aria-disabled")
+            .then(function(attribute) {
+               assert.equal(attribute, "false", "The drop-down was not disabled (aria)");
+            })
+         .end()
+        
+         // Close dialog
+         .findByCssSelector(".dijitDialogCloseIcon")
+            .click()
+         .end()
+
+         // Wait for dialog to be hidden...
+         .findAllByCssSelector("#DIALOG1.dialogHidden")
+         .end();
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

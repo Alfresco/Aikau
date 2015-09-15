@@ -140,6 +140,8 @@
  * @property {boolean} [handleOverflow=false] - Should scrollbars be added to if the content is bigger than the dialog
  * @property {boolean} [fixedWidth=false] - If set to true, prevents the dialog resizing to fit the content
  * @property {string} [hideTopic=null] - Topic to subscribe to to trigger a dialog hide. If this is set
+ * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
+ * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
  */
 
 /**
@@ -158,6 +160,8 @@
  * @property {Boolean} [handleOverflow=false] - Should scrollbars be added to if the content is bigger than the dialog
  * @property {Boolean} [fixedWidth=false] - If set to true, prevents the dialog resizing to fit the content
  * @property {Array} [publishOnShow=null] - An array of publications objects to make when the dialog is displayed
+ * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
+ * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
  */
 
 define(["dojo/_base/declare",
@@ -423,6 +427,8 @@ define(["dojo/_base/declare",
             title: this.message(payload.dialogTitle || ""),
             content: payload.textContent,
             duration: payload.duration || 0,
+            fullScreenMode: payload.fullScreenMode || false,
+            fullScreenPadding: payload.fullScreenPadding || 10,
             widgetsContent: payload.widgetsContent,
             widgetsButtons: payload.widgetsButtons,
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",
@@ -483,6 +489,7 @@ define(["dojo/_base/declare",
        * @param {module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST} payload The payload published on the request topic.
        */
       onCreateFormDialogRequest: function alfresco_services_DialogService__onCreateFormDialogRequest(payload) {
+         // jshint maxstatements:false
          this.cleanUpAnyPreviousDialog(payload);
          if (!payload.widgets)
          {
@@ -649,6 +656,8 @@ define(["dojo/_base/declare",
             duration: config.duration || 0,
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth,
+            fullScreenMode: config.fullScreenMode || false,
+            fullScreenPadding: config.fullScreenPadding || 10,
             parentPubSubScope: config.parentPubSubScope,
             additionalCssClasses: config.additionalCssClasses ? config.additionalCssClasses : "",
             suppressCloseClasses: suppressCloseClasses,

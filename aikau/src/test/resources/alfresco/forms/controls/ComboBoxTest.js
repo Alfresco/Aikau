@@ -42,6 +42,28 @@ define(["alfresco/TestCommon",
          browser.end();
       },
 
+      "Check that mouse selection of option updates value": function() {
+         return browser.findByCssSelector("#PROPERTIES label.label")
+            .click()
+         .end()
+
+         .findByCssSelector("#PROPERTIES .dijitArrowButtonInner")
+            .click()
+         .end()
+         .findByCssSelector("#PROPERTIES_CONTROL_popup0")
+            .click()
+         .end()
+
+         .findByCssSelector(".confirmationButton > span")
+            .click()
+            .end()
+
+         .getLastPublish("POST_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "property", "act:actionExecutionTitle", "Property value not set from mouse selection");
+            });
+      },
+
       "Checking the number of tag options...": function() {
          return browser.findByCssSelector("#TAGS .dijitArrowButtonInner")
             .click()

@@ -445,7 +445,7 @@ define(["alfresco/core/ObjectTypeUtils",
             var collapsedClass = this.rootClass + "__log__entry__data--collapsed",
                expandedDataClass = this.rootClass + "__log__entry__data__full",
                clickedOnExpandedData = domClass.contains(evt.target, expandedDataClass);
-            if (!clickedOnExpandedData) {
+            if (!clickedOnExpandedData && dataNode) {
                domClass.toggle(dataNode, collapsedClass);
             }
          }
