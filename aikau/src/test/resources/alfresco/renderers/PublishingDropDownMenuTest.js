@@ -183,12 +183,12 @@ define(["intern!object",
                });
          },
 
-         "Escape key cancels action": function() {
-            return browser.pressKeys(keys.ESCAPE)
-               .findByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.processing")
+         "Cancel 'button' cancels the publish": function() {
+            return browser.findByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.processing")
+               .click()
                .isDisplayed()
                .then(function(displayed) {
-                  assert.isFalse(displayed, "The spinner should have been hidden on ESC");
+                  assert.isFalse(displayed, "The spinner should have been hidden");
                })
                .end()
 
@@ -196,10 +196,7 @@ define(["intern!object",
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "Private", "The drop-down was not reset on cancel");
-               })
-               .end()
-
-            .getLastPublish("CANCEL_UPDATE");
+               });
          },
 
          "Value updates respect confirmation choice (in dialog)": function() {
