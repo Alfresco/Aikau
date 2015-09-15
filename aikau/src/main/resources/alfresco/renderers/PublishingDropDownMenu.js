@@ -354,7 +354,7 @@ define(["dojo/_base/declare",
        * and doesn't display anything else.
        *
        */
-      onChangeCancel: function alfresco_renderers_PublishingDropDownMenu__onChangeFailure(payload) {
+      onChangeCancel: function alfresco_renderers_PublishingDropDownMenu__onChangeCancel(payload) {
          this.alfUnsubscribeSaveHandles([this._updateSuccessHandle, this._updateFailureHandle, this._updateCancelHandle]);
          domClass.add(this.processingNode, "hidden");
          this.alfLog("log", "Update request cancelled", payload);
