@@ -103,7 +103,7 @@ define(["dojo/_base/declare",
       processWidget: function alfresco_core_CoreWidgetProcessing__processWidget(rootNode, processWidgetsId, widgetConfig, index) {
          if (widgetConfig)
          {
-            if (this.filterWidget(widgetConfig, index))
+            if (this.filterWidget(widgetConfig, index, processWidgetsId))
             {
                var domNode = this.createWidgetDomNode(widgetConfig, rootNode, widgetConfig.className || "");
                this.createWidget(widgetConfig, domNode, this._registerProcessedWidget, this, index, processWidgetsId);
@@ -148,29 +148,31 @@ define(["dojo/_base/declare",
       _registerProcessedWidget: function alfresco_core_CoreWidgetProcessing___registerProcessedWidget(widget, index, processWidgetsId) {
          this._processedWidgetCountdown--;
          this.alfLog("log", "Widgets expected: ", this._processedWidgetCountdown, this.id);
+         var processedWidgets;
+         // 1.0.35 UPDATE
+         // If an "processWidgetsId" attribute is provided then we want to make sure that multiple calls to processWidgets
+         // will not result in a _processedWidgets attribute containing results different calls. Therefore we want to map each
+         // call to its own array... We still retain the original _processedWidgets object for backwards compatibility. The reason
+         // for this is to ensure that in the event of an XHR request being made for a dependency that the asynchronous processing
+         // is handled correctly.
+         
+         // Get or set-up the 
+         var location = "_processedWidgets";
+         if (processWidgetsId)
+         {
+            location = "_processedWidgetsMap." + processWidgetsId;
+         }
+
+         processedWidgets = lang.getObject(location, false, this);
+         if (!processedWidgets)
+         {
+            processedWidgets = [];
+            lang.setObject(location, processedWidgets, this);
+         }
+         
          if (widget)
          {
-            // 1.0.35 UPDATE
-            // If an "processWidgetsId" attribute is provided then we want to make sure that multiple calls to processWidgets
-            // will not result in a _processedWidgets attribute containing results different calls. Therefore we want to map each
-            // call to its own array... We still retain the original _processedWidgets object for backwards compatibility. The reason
-            // for this is to ensure that in the event of an XHR request being made for a dependency that the asynchronous processing
-            // is handled correctly.
             
-            // Get or set-up the 
-            var processedWidgets;
-            var location = "_processedWidgets";
-            if (processWidgetsId)
-            {
-               location = "_processedWidgetsMap." + processWidgetsId;
-            }
-
-            processedWidgets = lang.getObject(location, false, this);
-            if (!processedWidgets)
-            {
-               processedWidgets = [];
-               lang.setObject(location, processedWidgets, this);
-            }
 
             if (!index || index === 0 || isNaN(index))
             {
@@ -609,13 +611,13 @@ define(["dojo/_base/declare",
        * @param {object} widgetConfig The configuration for the widget to be created
        * @returns {boolean} The result of the filter evaluation or true if no "renderFilter" is provided
        */
-      filterWidget: function alfresco_core_CoreWidgetProcessing__filterWidget(widgetConfig, index, decrementCounter) {
+      filterWidget: function alfresco_core_CoreWidgetProcessing__filterWidget(widgetConfig, index, processWidgetsId) {
          var shouldRender = this.processAllFilters(widgetConfig.config);
-         if (!shouldRender && decrementCounter !== false)
+         if (!shouldRender)
          {
             // It is not always necessary to call the _registerProcessedWidget. This is relevant for widgets
             // that work through an entire model before performing any processing (e.g. alfresco/core/FilteredPage)
-            this._registerProcessedWidget(null, index);
+            this._registerProcessedWidget(null, index, processWidgetsId);
          }
          return shouldRender;
       },
