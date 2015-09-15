@@ -41,14 +41,14 @@ define(["intern!object",
             browser.end();
          },
 
-         "Test drop down menu count": function() {
+         "Verify drop down menu count": function() {
             return browser.findAllByCssSelector("div.alfresco-renderers-PublishingDropDownMenu")
                .then(function(dropdowns) {
                   assert.lengthOf(dropdowns, 3, "There should be 3 dropdown menus rendered");
                });
          },
 
-         "Test first drop-down value is 'Public'": function() {
+         "First drop-down value is 'Public'": function() {
             return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
                .getVisibleText()
                .then(function(visibleText) {
@@ -56,7 +56,7 @@ define(["intern!object",
                });
          },
 
-         "Test menu opens on mouse click": function() {
+         "Menu opens on mouse click": function() {
             return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
                .click()
                .end()
@@ -64,32 +64,28 @@ define(["intern!object",
             .findByCssSelector(".dijitMenuPopup")
                .then(null, function() {
                   assert(false, "The drop down menu did not appear on mouse clicks");
-               });
-         },
-
-         "Test menu is visible": function() {
-            return browser.findByCssSelector(".dijitMenuPopup")
+               })
                .isDisplayed()
                .then(function(isDisplayed) {
                   assert.isTrue(isDisplayed, "The drop down menu should be visible on mouse clicks");
                });
          },
 
-         "Test that additional CSS classes are included in the popup": function() {
+         "Additional CSS classes are included in the popup": function() {
             return browser.findAllByCssSelector("#PDM_ITEM_0_SELECT_CONTROL_dropdown.custom-css")
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Could not find additional CSS classes on select popup");
                });
          },
 
-         "Test that value is included in data attribute of select option": function() {
+         "Value is included in data attribute of select option": function() {
             return browser.findAllByCssSelector("#PDM_ITEM_0_SELECT_CONTROL_dropdown tr[data-value='PUBLIC']")
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "Could not find select option via data-value attribute");
                });
          },
 
-         "Test menu code not removed on click": function() {
+         "Menu code not removed on click": function() {
             // Select "Private" (should succeed)...
             return browser.findByCssSelector("tr.dijitMenuItem:nth-of-type(3)")
                .click()
@@ -106,7 +102,7 @@ define(["intern!object",
                });
          },
 
-         "Test menu disappears after mouse click": function() {
+         "Dropdown disappears after mouse click": function() {
             return browser.findByCssSelector(".dijitMenuPopup")
                .isDisplayed()
                .then(function(isDisplayed) {
@@ -114,19 +110,19 @@ define(["intern!object",
                });
          },
 
-         "Test menu selection published on mouse click": function() {
+         "Selection published on mouse click": function() {
             return browser.findByCssSelector("body")
                .getLastPublish("ALF_PUBLISHING_DROPDOWN_MENU");
          },
 
-         "Test menu success item is displayed": function() {
+         "Success item is displayed": function() {
             return browser.findAllByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.success:not(.hidden)")
                .then(function(elements) {
                   assert(elements.length === 1, "The success icon did not display");
                });
          },
 
-         "Test menu failure item is displayed": function() {
+         "Failure item is displayed on failure": function() {
             return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
                .click()
                .end()
@@ -149,7 +145,7 @@ define(["intern!object",
                });
          },
 
-         "Test menu status icon is hidden on cancel": function() {
+         "Status icon is hidden on cancel": function() {
             return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
                .click()
                .end()
@@ -171,7 +167,7 @@ define(["intern!object",
                });
          },
 
-         "Test menu spinner icon is displayed": function() {
+         "Spinner icon is displayed": function() {
             return browser.findByCssSelector("span.dijitSelectLabel:nth-of-type(1)")
                .click()
                .end()
@@ -187,7 +183,7 @@ define(["intern!object",
                });
          },
 
-         "Test escape key cancels action": function() {
+         "Escape key cancels action": function() {
             return browser.pressKeys(keys.ESCAPE)
                .findByCssSelector(".alfresco-renderers-PublishingDropDownMenu .indicator.processing")
                .isDisplayed()
@@ -206,44 +202,72 @@ define(["intern!object",
             .getLastPublish("CANCEL_UPDATE");
          },
 
-         "Test use in dialog": function() {
-            return browser.findByCssSelector("#SHOW_DIALOG_label")
-               .clearLog()
+         "Value updates respect confirmation choice (in dialog)": function() {
+            return browser.findById("SHOW_DIALOG")
                .click()
                .end()
 
-            // Wait for dialog...
             .findByCssSelector("#DIALOG1.dialogDisplayed")
                .end()
 
-            .findByCssSelector("#DIALOG_PDM_ITEM_2_SELECT_CONTROL")
+            .findById("DIALOG_PDM_ITEM_0_SELECT_CONTROL")
                .click()
                .end()
 
-            // Select "Public" (there should be no response so the spinner will just keep spinning...)
-            .findByCssSelector("#DIALOG_PDM_ITEM_2_SELECT_CONTROL_menu tr:nth-child(1) .dijitMenuItemLabel")
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL_menu tr:nth-child(2) .dijitMenuItemLabel")
                .click()
                .end()
 
-            .findByCssSelector("#DIALOG1 tr:nth-child(3) .alfresco-renderers-PublishingDropDownMenu .indicator.processing")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "The spinner icon is not present");
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogDisplayed")
+               .end()
+
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG [widgetid='CANCEL'] .dijitButtonNode")
+               .click()
+               .end()
+
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogHidden")
+               .end()
+
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL .dijitSelectLabel")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Public", "Value changed when it should not have");
                })
                .end()
 
-            .findByCssSelector(".dijitDialogCloseIcon")
+            .findById("DIALOG_PDM_ITEM_0_SELECT_CONTROL")
                .click()
                .end()
 
-            // Wait for dialog to be hidden...
-            .findByCssSelector("#DIALOG1.dialogHidden")
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL_menu tr:nth-child(2) .dijitMenuItemLabel")
+               .click()
                .end()
 
-            .getLastPublish("CANCEL_UPDATE", "Cancel publication not made on escape key");
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogDisplayed")
+               .end()
+
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG [widgetid='OK'] .dijitButtonNode")
+               .click()
+               .end()
+
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogHidden")
+               .end()
+
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL .dijitSelectLabel")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Moderated", "Did not update value");
+               })
+               .end()
+
+            .findByCssSelector("#DIALOG1 .dijitDialogCloseIcon")
+               .click()
+               .end()
+
+            .findByCssSelector("#DIALOG1.dialogHidden");
          },
 
-         "Test menu publish is cleared on refresh": function() {
+         "Publish is cleared on refresh": function() {
             return browser.refresh()
                .end()
 
@@ -253,7 +277,7 @@ define(["intern!object",
                });
          },
 
-         "Test menu can be opened via keyboard": function() {
+         "Can be opened via keyboard": function() {
             return browser.pressKeys(keys.TAB)
                .pressKeys(keys.TAB)
                .pressKeys(keys.TAB)
@@ -268,7 +292,7 @@ define(["intern!object",
                });
          },
 
-         "Test menu hidden after keyboard selection": function() {
+         "Dropdown hidden after keyboard selection": function() {
             return browser.pressKeys(keys.ARROW_DOWN)
                .pressKeys(keys.RETURN)
                .sleep(500)
@@ -279,12 +303,12 @@ define(["intern!object",
                });
          },
 
-         "Test menu published after keyboard selection": function() {
+         "Selection published after keyboard selection": function() {
             return browser.findByCssSelector("body")
                .getLastPublish("ALF_PUBLISHING_DROPDOWN_MENU", "The menu did not publish on 'ALF_PUBLISHING_DROPDOWN_MENU' after key presses");
          },
 
-         "Test that second drop-down is disabled (in main view)": function() {
+         "Second drop-down is disabled (in main view)": function() {
             return browser.findByCssSelector("#PDM_ITEM_1_SELECT_CONTROL.dijitDisabled")
                .getAttribute("aria-disabled")
                .then(function(attribute) {
@@ -292,7 +316,7 @@ define(["intern!object",
                });
          },
 
-         "Test that second drop-down is NOT disabled (in dialog)": function() {
+         "Second drop-down is NOT disabled (in dialog)": function() {
             return browser.findByCssSelector("#SHOW_DIALOG_label")
                .click()
                .end()

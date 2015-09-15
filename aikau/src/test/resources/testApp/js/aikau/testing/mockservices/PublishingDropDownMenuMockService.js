@@ -63,6 +63,7 @@ define(["alfresco/core/Core",
          confirmDropdownPublish: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__confirmDropdownPublish(payload) {
             this.alfPublish(topics.CREATE_DIALOG, {
                dialogTitle: "Are you sure?",
+               dialogId: "CONFIRM_PUBLISH_DIALOG",
                handleOverflow: false,
                textContent: "Are you sure you wish to change this value?",
                widgetsButtons: [{
