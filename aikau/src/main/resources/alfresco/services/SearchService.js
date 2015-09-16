@@ -168,7 +168,7 @@ define(["dojo/_base/declare",
          if (!payload || !payload.term)
          {
             this.alfLog("warn", "A request was made to perform a search but no 'term' attribute was provided", payload, this);
-            this.alfPublish(payload.alfResponseScope + payload.alfResponseTopic + "_FAILURE");
+            this.alfPublish(payload.alfResponseTopic + "_FAILURE", {}, false, false, payload.alfResponseScope);
          }
          else
          {

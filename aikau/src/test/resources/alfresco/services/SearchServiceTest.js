@@ -107,11 +107,10 @@ define(["intern!object",
             .click()
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
-            .then(function(payload) {
-               assert.propertyVal(payload, "repo", false, "Repository scope used");
-               assert.propertyVal(payload, "site", "", "Site incorrect");
-            })
-         .end()
+         .then(function(payload) {
+            assert.propertyVal(payload, "repo", false, "Repository scope used");
+            assert.propertyVal(payload, "site", "", "Site incorrect");
+         })
          .findByCssSelector("tr.mx-row:nth-child(3) td.mx-url")
             .getVisibleText()
             .then(function(url) {
@@ -129,11 +128,10 @@ define(["intern!object",
             .click()
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
-            .then(function(payload) {
-               assert.propertyVal(payload, "repo", false, "Repository scope used");
-               assert.propertyVal(payload, "site", "site", "Site incorrect");
-            })
-         .end()
+         .then(function(payload) {
+            assert.propertyVal(payload, "repo", false, "Repository scope used");
+            assert.propertyVal(payload, "site", "site", "Site incorrect");
+         })
          .findByCssSelector("tr.mx-row:nth-child(4) td.mx-url")
             .getVisibleText()
             .then(function(url) {
@@ -152,10 +150,9 @@ define(["intern!object",
             .click()
          .end()
          .getLastPublish("ALF_SEARCH_REQUEST")
-            .then(function(payload) {
-               assert.propertyVal(payload, "repo", true, "Repository scope NOT used");
-            })
-         .end()
+         .then(function(payload) {
+            assert.propertyVal(payload, "repo", true, "Repository scope NOT used");
+         })
          .findByCssSelector("tr.mx-row:nth-child(5) td.mx-url")
             .getVisibleText()
             .then(function(url) {
