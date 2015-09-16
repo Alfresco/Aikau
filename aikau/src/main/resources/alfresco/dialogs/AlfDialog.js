@@ -291,7 +291,7 @@ define(["dojo/_base/declare",
                name: "alfresco/layout/SimplePanel",
                assignTo: "_dialogPanel",
                config: {
-                  handleOverflow: false,
+                  handleOverflow: this.handleOverflow,
                   height: simplePanelHeight,
                   widgets: this.widgetsContent
                }

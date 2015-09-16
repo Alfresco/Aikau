@@ -450,6 +450,93 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_LONG_FORM_DIALOG",
+         config: {
+            label: "Create Long Form Dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "LFD",
+               dialogTitle: "Long Form Dialog",
+               formSubmissionTopic: "POST_DIALOG_2",
+               formSubmissionPayloadMixin: {
+                  bonusData: "test"
+               },
+               widgets: [
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        requirementConfig: {
+                           initialValue: true
+                        }
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextArea",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/Select",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        optionsConfig: {
+                           fixed: [
+                              { label: "One", value: "ONE"}
+                           ]
+                        }
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/DateTextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text"
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text"
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text"
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
          id: "FULL_SCREEN_DIALOG",
          name: "alfresco/buttons/AlfButton",
          config: {
