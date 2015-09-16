@@ -16,7 +16,12 @@
       .alfresco-layout-AlfSideBarContainer__sidebar {
          color: @general-font-color;
          border: none;
-         /*border-right: @standard-border; */
+         padding-right: 10px;
+
+         /* Default display for all children in the sidebar when it's open */
+         > *:nth-child(n+2) {
+            display: inherit;
+         }
 
          /* Convert the YUI resize handle to be transparent and slightly wider
             to accommodate our custom image for popping the sidebar in and out */
@@ -41,6 +46,7 @@
                position: fixed;
                top: 50%;
                z-index: 500;
+               background-image: url("./images/PopInArrow.png");
             }
          }
 
@@ -55,20 +61,6 @@
          /* Ensure that the resize handle gets some colour when being used */ 
          .resize-handle.active{
             background-color: #dfdfdf;
-         }
-      }
-
-      .alfresco-layout-AlfSideBarContainer__sidebar--open {
-         padding-right: 10px;
-
-         /* Default display for all children in the sidebar when it's open */
-         > *:nth-child(n+2) {
-            display: inherit;
-         }
-
-         /* This selector should be applied when the sidebar is shown */
-         .alfresco-layout-AlfSideBarContainer__resizeButton {
-            background-image: url("./images/PopInArrow.png");
          }
       }
 

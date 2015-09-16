@@ -410,7 +410,6 @@ define(["dojo/_base/declare",
             this.lastSidebarWidth = width;
             this.resizeHandler();
 
-            domClass.add(this.sidebarNode, "alfresco-layout-AlfSideBarContainer__sidebar--open");
             domClass.remove(this.sidebarNode, "alfresco-layout-AlfSideBarContainer__sidebar--closed");
          }
          else
@@ -422,7 +421,6 @@ define(["dojo/_base/declare",
             this.resizeHandler();
             $(this.sidebarNode).resizable("disable"); // Lock the resizer when the sidebar is not shown...
 
-            domClass.remove(this.sidebarNode, "alfresco-layout-AlfSideBarContainer__sidebar--open");
             domClass.add(this.sidebarNode, "alfresco-layout-AlfSideBarContainer__sidebar--closed");
          }
       }
