@@ -1,10 +1,10 @@
-.alfresco-share .alf-menu-arrow {
+.@{alfresco} .alf-menu-arrow {
    margin-left: 3px;
    width: 20px;
    height: 20px;
 }
 
-.alfresco-share .alf-popup-menu-bar-image-item {
+.@{alfresco} .alf-popup-menu-bar-image-item {
    background: url("./images/MenuSearch.PNG");
    background-repeat: no-repeat;
    height: 20px;

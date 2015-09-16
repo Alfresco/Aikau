@@ -1,4 +1,4 @@
-.alfresco-share .alfresco-navigation-Link {
+.@{alfresco} .alfresco-navigation-Link {
    color: @link-font-color;
    text-decoration: @link-text-decoration;
    cursor: pointer;

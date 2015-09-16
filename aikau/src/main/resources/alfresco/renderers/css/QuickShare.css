@@ -18,7 +18,7 @@
   display: inline-block;
 }
 
-.alfresco-share .alf-quick-share-enabled-icon {
+.@{alfresco} .alf-quick-share-enabled-icon {
    background: url("./images/quickshare-action-enabled-16.png");
    background-repeat: no-repeat;
    height: 20px;
@@ -27,28 +27,28 @@
    float: left;
 }
 
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-social-email-icon {
+.@{alfresco} .dijitIcon.dijitMenuItemIcon.alf-social-email-icon {
    background: url("./images/social-email-16.png");
    background-repeat: no-repeat;
    height: 20px;
    width: 20px;
 }
 
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-social-facebook-icon {
+.@{alfresco} .dijitIcon.dijitMenuItemIcon.alf-social-facebook-icon {
    background: url("./images/social-facebook-16.png");
    background-repeat: no-repeat;
    height: 20px;
    width: 20px;
 }
 
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-social-twitter-icon {
+.@{alfresco} .dijitIcon.dijitMenuItemIcon.alf-social-twitter-icon {
    background: url("./images/social-twitter-16.png");
    background-repeat: no-repeat;
    height: 20px;
    width: 20px;
 }
 
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-social-google-plus-icon {
+.@{alfresco} .dijitIcon.dijitMenuItemIcon.alf-social-google-plus-icon {
    background: url("./images/social-google-16.png");
    background-repeat: no-repeat;
    height: 20px;
