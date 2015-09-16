@@ -21,6 +21,7 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
+                           id: "TC",
                            name: "alfresco/layout/AlfTabContainer",
                            config: {
                               tabSelectionTopic: "TABCONTAINER_SELECT_TAB_TOPIC",
@@ -108,7 +109,6 @@ model.jsonModel = {
                                     id: "FormControl1",
                                     name: "alfresco/forms/controls/Select",
                                     title: "DP Form Control",
-                                    // tabId: "FORM_CONTROL_TAB_1",
                                     delayProcessing: true,
                                     config: {
                                        fieldId: "SELECT",
@@ -128,7 +128,6 @@ model.jsonModel = {
                                  {
                                     id: "FormControl2",
                                     name: "alfresco/forms/controls/Select",
-                                    tabId: "FORM_CONTROL_TAB_2",
                                     title: "Non-DP Form Control",
                                     delayProcessing: false,
                                     config: {
@@ -157,9 +156,9 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
+                           id: "SELECT_TAB_1",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "SELECT_TAB_1",
                               label: "Select tab 1 (idx 0)",
                               publishTopic: "TABCONTAINER_SELECT_TAB_TOPIC",
                               publishPayload: {
@@ -168,9 +167,9 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "SELECT_TAB_2",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "SELECT_TAB_2",
                               label: "Select tab 2 (idx 1)",
                               publishTopic: "TABCONTAINER_SELECT_TAB_TOPIC",
                               publishPayload: {
@@ -179,9 +178,9 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "SELECT_TAB_3",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "SELECT_TAB_3",
                               label: "Select tab titled 'Logo 1'",
                               publishTopic: "TABCONTAINER_SELECT_TAB_TOPIC",
                               publishPayload: {
@@ -190,9 +189,9 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "SELECT_TAB_4",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "SELECT_TAB_4",
                               label: "Select tab titled 'Logo 2'",
                               publishTopic: "TABCONTAINER_SELECT_TAB_TOPIC",
                               publishPayload: {
@@ -201,24 +200,24 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "SELECT_TAB_5",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "SELECT_TAB_5",
-                              label: "Select tab with id 'dijit_layout_ContentPane_0'",
+                              label: "Select tab with id 'Logo1'",
                               publishTopic: "TABCONTAINER_SELECT_TAB_TOPIC",
                               publishPayload: {
-                                 id: "dijit_layout_ContentPane_0"
+                                 id: "Logo1"
                               }
                            }
                         },
                         {
+                           id: "SELECT_TAB_6",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "SELECT_TAB_6",
-                              label: "Select tab with id 'dijit_layout_ContentPane_1'",
+                              label: "Select tab with id 'Logo2'",
                               publishTopic: "TABCONTAINER_SELECT_TAB_TOPIC",
                               publishPayload: {
-                                 id: "dijit_layout_ContentPane_1"
+                                 id: "Logo2"
                               }
                            }
                         }
@@ -230,9 +229,9 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
+                           id: "DISABLE_TAB_1",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "DISABLE_TAB_1",
                               label: "Disable tab 1 (idx 0)",
                               publishTopic: "TABCONTAINER_DISABLE_TAB_TOPIC",
                               publishPayload: {
@@ -242,9 +241,9 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "DISABLE_TAB_2",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "DISABLE_TAB_2",
                               label: "Enable tab 1 (idx 0)",
                               publishTopic: "TABCONTAINER_DISABLE_TAB_TOPIC",
                               publishPayload: {
@@ -254,9 +253,9 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "DISABLE_TAB_3",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "DISABLE_TAB_3",
                               label: "Disable tab titled 'Logo 1'",
                               publishTopic: "TABCONTAINER_DISABLE_TAB_TOPIC",
                               publishPayload: {
@@ -266,9 +265,9 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "DISABLE_TAB_4",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "DISABLE_TAB_4",
                               label: "Enable tab titled 'Logo 1'",
                               publishTopic: "TABCONTAINER_DISABLE_TAB_TOPIC",
                               publishPayload: {
@@ -278,25 +277,25 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "DISABLE_TAB_5",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "DISABLE_TAB_5",
-                              label: "Disable tab with id 'dijit_layout_ContentPane_0'",
+                              label: "Disable tab with id 'Logo1'",
                               publishTopic: "TABCONTAINER_DISABLE_TAB_TOPIC",
                               publishPayload: {
-                                 id: "dijit_layout_ContentPane_0",
+                                 id: "Logo1",
                                  value: true
                               }
                            }
                         },
                         {
+                           id: "DISABLE_TAB_6",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "DISABLE_TAB_6",
-                              label: "Enable tab with id 'dijit_layout_ContentPane_0'",
+                              label: "Enable tab with id 'Logo1'",
                               publishTopic: "TABCONTAINER_DISABLE_TAB_TOPIC",
                               publishPayload: {
-                                 id: "dijit_layout_ContentPane_0",
+                                 id: "Logo1",
                                  value: false
                               }
                            }
@@ -309,9 +308,9 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
+                           id: "DELETE_TAB_1",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "DELETE_TAB_1",
                               label: "Delete tab 7 (idx 6)",
                               publishTopic: "TABCONTAINER_DELETE_TAB_TOPIC",
                               publishPayload: {
@@ -320,9 +319,9 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "DELETE_TAB_2",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "DELETE_TAB_2",
                               label: "Delete tab titled 'Logo 8'",
                               publishTopic: "TABCONTAINER_DELETE_TAB_TOPIC",
                               publishPayload: {
@@ -331,13 +330,13 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "DELETE_TAB_3",
                            name: "alfresco/buttons/AlfButton",
                            config: {
-                              id: "DELETE_TAB_3",
-                              label: "Delete tab with id 'dijit_layout_ContentPane_8'",
+                              label: "Delete tab with id 'Logo9'",
                               publishTopic: "TABCONTAINER_DELETE_TAB_TOPIC",
                               publishPayload: {
-                                 id: "dijit_layout_ContentPane_8"
+                                 id: "Logo9"
                               }
                            }
                         }
