@@ -31,8 +31,10 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dijit/registry",
-        "alfresco/util/hashUtils"], 
-        function(declare, AlfSortablePaginatedList, ObjectProcessingMixin, lang, array, domConstruct, domClass, registry, hashUtils) {
+        "alfresco/util/hashUtils",
+        "dojo/Deferred",
+        "dojo/when"], 
+        function(declare, AlfSortablePaginatedList, ObjectProcessingMixin, lang, array, domConstruct, domClass, registry, hashUtils, Deferred, when) {
    
    return declare([AlfSortablePaginatedList, ObjectProcessingMixin], {
       
@@ -83,11 +85,22 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_lists_AlfFilteredList__postCreate() {
          domClass.add(this.domNode, "alfresco-lists-AlfFilteredList");
          this.filtersNode = domConstruct.create("div", {}, this.domNode, "first");
+
+         // We need a promise here to address the scenario where XHR requests are made for filtering widgets
+         // that have not had there dependencies correctly analysed by Surf. This is the case for the ComboBox
+         // when used in a non-standard locale as language specific validation.js and common.js files are requested.
+         // Using a promise ensures that filters are only used when they're actually available. See AKU-559 for details
+         this._filtersWidgetsProcesed = new Deferred();
          if (this.widgetsForFilters)
          {
             var filtersModel = lang.clone(this.widgetsForFilters);
             this.processObject(["processInstanceTokens"], filtersModel);
             this.processWidgets(filtersModel, this.filtersNode, this.filterWidgetsMappingId);
+         }
+         else
+         {
+            this._filterWidgets = {};
+            this._filtersWidgetsProcesed.resolve();
          }
          this.inherited(arguments);
       },
@@ -140,22 +153,24 @@ define(["dojo/_base/declare",
          // Only do this when we are mirroring the filters in the hash
          if (this.mapHashVarsToPayload) {
 
-            // Initialise the data-filters to be all of the filters we have specified, without values
-            this.dataFilters = array.map(Object.keys(this._filterWidgets), function(filterName) {
-               return {
-                  name: filterName
-               };
-            });
+            when(this._filtersWidgetsProcesed, lang.hitch(this, function() {
+               // Initialise the data-filters to be all of the filters we have specified, without values
+               this.dataFilters = array.map(Object.keys(this._filterWidgets), function(filterName) {
+                  return {
+                     name: filterName
+                  };
+               });
 
-            // Filter to only include items currently in the hash and update values
-            var currHash = hashUtils.getHash();
-            this.dataFilters = array.filter(this.dataFilters, function(dataFilter) {
-               dataFilter.value = currHash[dataFilter.name];
-               return !!dataFilter.value;
-            });
+               // Filter to only include items currently in the hash and update values
+               var currHash = hashUtils.getHash();
+               this.dataFilters = array.filter(this.dataFilters, function(dataFilter) {
+                  dataFilter.value = currHash[dataFilter.name];
+                  return !!dataFilter.value;
+               });
 
-            // Update the filter fields
-            this._updateFilterFieldsFromHash();
+               // Update the filter fields
+               this._updateFilterFieldsFromHash();
+            }));
          }
 
          // Call inherited
@@ -175,6 +190,8 @@ define(["dojo/_base/declare",
                return childWidget.name === filterName;
             })[0];
          }, this);
+
+         this._filtersWidgetsProcesed.resolve();
       },
 
       /**
@@ -188,39 +205,40 @@ define(["dojo/_base/declare",
          var currHash = hashUtils.getHash();
 
          // Run through all of the filter widgets
-         array.forEach(Object.keys(this._filterWidgets), function(widgetName) {
+         when(this._filtersWidgetsProcesed, lang.hitch(this, function() {
+            array.forEach(Object.keys(this._filterWidgets), function(widgetName) {
 
-            // Get the widget and the filter value, normalising non-values to null
-            var widget = this._filterWidgets[widgetName],
-               filterValue = currHash[widgetName];
-            if (typeof filterValue === "undefined") {
-               filterValue = null;
-            }
-
-            // Update the dataFilters
-            if (filterValue === null) {
-               this.dataFilters = array.filter(this.dataFilters, function(filter) {
-                  return filter.name !== widgetName;
-               });
-            } else {
-               var filterFound = array.some(this.dataFilters, function(filter) {
-                  if (filter.name === widgetName) {
-                     filter.value = filterValue;
-                     return true;
-                  }
-               });
-               if (!filterFound) {
-                  this.dataFilters.push({
-                     name: widgetName,
-                     value: filterValue
-                  });
+               // Get the widget and the filter value, normalising non-values to null
+               var widget = this._filterWidgets[widgetName],
+                  filterValue = currHash[widgetName];
+               if (typeof filterValue === "undefined") {
+                  filterValue = null;
                }
-            }
 
-            // Set the widget value
-            widget.setValue && widget.setValue(filterValue);
+               // Update the dataFilters
+               if (filterValue === null) {
+                  this.dataFilters = array.filter(this.dataFilters, function(filter) {
+                     return filter.name !== widgetName;
+                  });
+               } else {
+                  var filterFound = array.some(this.dataFilters, function(filter) {
+                     if (filter.name === widgetName) {
+                        filter.value = filterValue;
+                        return true;
+                     }
+                  });
+                  if (!filterFound) {
+                     this.dataFilters.push({
+                        name: widgetName,
+                        value: filterValue
+                     });
+                  }
+               }
 
-         }, this);
+               // Set the widget value
+               widget && widget.setValue && widget.setValue(filterValue);
+            }, this);
+         }));
       },
 
       /**
