@@ -389,6 +389,19 @@ define([],function() {
       REQUEST_DELAYED_ARCHIVE_PROGRESS: "ALF_ARCHIVE_DELAYED_PROGRESS_REQUEST",
 
       /**
+       * Published to indicate that list data requests have been completed. Typically used to track whether or not
+       * XHR requests for data are in progress.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36
+       *
+       * @event module:alfresco/core/topics~REQUEST_FINISHED_TOPIC
+       */
+      REQUEST_FINISHED_TOPIC: "ALF_DOCLIST_REQUEST_FINISHED",
+
+      /**
        * <p>This topic is used to indicate that a navigable collection has been scrolled to
        * "near" its bottom. Since its creation, this topic's meaning has extended to go beyond
        * just scrolling (sometimes it's clicking arrows) and to not necessarily being the

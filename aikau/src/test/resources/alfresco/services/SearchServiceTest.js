@@ -20,15 +20,12 @@
 /**
  * This test uses a MockXhr service to test the search service responds as required.
  * 
- * @author Richard Smith
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
    var browser;
    registerSuite({
@@ -43,26 +40,29 @@ define(["intern!object",
          browser.end();
       },
 
+      // Because there is no searchTerm the SearchService publishes a failure. Hence the failure message displayed.
      "Check there are no results yet": function () {
          return browser.findById("FCTSRCH_SEARCH_RESULTS_LIST")
             .getVisibleText()
             .then(function (text){
-               expect(text).to.equal("No results found", "There should not be any results found yet");
-            });
+               assert.equal(text, "There was an error loading search results", "There should not be any results found yet");
+            })
+         .end()
+         .clearLog();
       },
 
       "Check there are the expected number of mocked results": function() {
          return browser.findByCssSelector("#FCTSRCH_SEARCH_FORM div.alfresco-forms-controls-TextBox div.control input[name='searchTerm']")
             .type("test")
-            .end()
+         .end()
 
          .findByCssSelector("#FCTSRCH_SEARCH_FORM div.buttons span.dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#FCTSRCH_SEARCH_RESULTS_LIST tr.alfresco-search-AlfSearchResult")
             .then(function (results){
-               expect(results).to.have.length(24, "There should be 24 mocked results");
+               assert.lengthOf(results, 24, "There should be 24 mocked results");
             });
       },
 
@@ -72,7 +72,7 @@ define(["intern!object",
 
          .findAllByCssSelector("#FCTSRCH_SEARCH_RESULTS_LIST tr.alfresco-search-AlfSearchResult")
             .then(function (results){
-               expect(results).to.have.length(24, "There should still be 24 mocked results");
+               assert.lengthOf(results, 24, "There should still be 24 mocked results");
             });
       },
 
@@ -82,6 +82,84 @@ define(["intern!object",
             .then(function(text) {
                assert(decodeURIComponent(text).indexOf("&query={") === -1, "unexpected query found");
             });
+      },
+
+      "Repository scope should be used by default": function() {
+         return browser.findByCssSelector("body").end().getLastPublish("ALF_SEARCH_REQUEST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "repo", true, "Repository scope not requested");
+            })
+         .end()
+         .findByCssSelector("tr.mx-row:nth-child(1) td.mx-url")
+            .getVisibleText()
+            .then(function(url) {
+               assert.include(url, "repo=true", "Repository scope not used in XHR");
+            })
+         .end()
+         .clearLog();
+      },
+
+      "Switch to All Sites scope": function() {
+         return browser.findById("FCTSRCH_SCOPE_SELECTION_MENU_text")
+            .click()
+         .end()
+         .findById("FCTSRCH_SET_ALL_SITES_SCOPE_text")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "repo", false, "Repository scope used");
+            assert.propertyVal(payload, "site", "", "Site incorrect");
+         })
+         .findByCssSelector("tr.mx-row:nth-child(3) td.mx-url")
+            .getVisibleText()
+            .then(function(url) {
+               assert.include(url, "repo=false", "Repository scope not used in XHR");
+            })
+         .end()
+         .clearLog();
+      },
+
+      "Switch to Site scope": function() {
+         return browser.findById("FCTSRCH_SCOPE_SELECTION_MENU_text")
+            .click()
+         .end()
+         .findById("FCTSRCH_SET_SPECIFIC_SITE_SCOPE_text")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "repo", false, "Repository scope used");
+            assert.propertyVal(payload, "site", "site", "Site incorrect");
+         })
+         .findByCssSelector("tr.mx-row:nth-child(4) td.mx-url")
+            .getVisibleText()
+            .then(function(url) {
+               assert.include(url, "repo=false", "Repository scope not used in XHR");
+               assert.include(url, "site=site", "Repository scope not used in XHR");
+            })
+         .end()
+         .clearLog();
+      },
+
+      "Switch to Repository scope": function() {
+         return browser.findById("FCTSRCH_SCOPE_SELECTION_MENU_text")
+            .click()
+         .end()
+         .findById("FCTSRCH_SET_REPO_SCOPE_text")
+            .click()
+         .end()
+         .getLastPublish("ALF_SEARCH_REQUEST")
+         .then(function(payload) {
+            assert.propertyVal(payload, "repo", true, "Repository scope NOT used");
+         })
+         .findByCssSelector("tr.mx-row:nth-child(5) td.mx-url")
+            .getVisibleText()
+            .then(function(url) {
+               assert.include(url, "repo=true", "Repository scope not used in XHR");
+            })
+         .end()
+         .clearLog();
       },
 
       "Post Coverage Results": function() {
