@@ -1,4 +1,4 @@
-.alfresco-share div.alf-menu-group.dijitMenu {
+.@{alfresco} div.alf-menu-group.dijitMenu {
   border: none;
 }
 
@@ -6,6 +6,6 @@
    of menus occupy a fixed width of the popup area. This is required because where there
    are multiple groups in a single popup the space between icon and label can vary.
    TODO: This fixes the width even when no icon is available */
-.alfresco-share .alf-menu-group-items td.dijitMenuItemIconCell {
+.@{alfresco} .alf-menu-group-items td.dijitMenuItemIconCell {
     width: 25px;
 }
