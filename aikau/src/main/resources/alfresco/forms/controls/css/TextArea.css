@@ -1,13 +1,17 @@
-.alfresco-forms-controls-TextArea div.control .dijitTextArea {
-   border-color: @standard-border-color;
-}
-
-.alfresco-forms-controls-TextArea div.control .dijitTextAreaHover {
-   border-color: @hover-border-color;
-   background-image: none;
-   background-color: inherit;
-}
-
-.alfresco-forms-controls-TextArea div.control .dijitTextAreaFocused {
-   border-color: @focused-border-color;
+.alfresco-forms-controls-TextArea {
+   div.control {
+      .dijitTextArea {
+         border-color: @standard-border-color;
+         font-family: @standard-font;
+         font-size: @normal-font-size;
+      }
+      .dijitTextAreaHover {
+         background-color: inherit;
+         background-image: none;
+         border-color: @hover-border-color;
+      }
+      .dijitTextAreaFocused {
+         border-color: @focused-border-color;
+      }
+   }
 }
