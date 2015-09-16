@@ -462,7 +462,6 @@ model.jsonModel = {
                formSubmissionPayloadMixin: {
                   bonusData: "test"
                },
-               handleOverflow: true,
                widgets: [
                   {
                      name: "alfresco/forms/controls/TextBox",
