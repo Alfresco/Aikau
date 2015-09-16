@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>TextArea Test</shortname>
+  <description>Test page for the alfresco/forms/controls/TextArea widget</description>
+  <family>aikau-unit-tests</family>
+  <url>/TextArea</url>
+</webscript>
