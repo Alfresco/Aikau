@@ -1,7 +1,7 @@
 /* global widgetUtils */
 
 // Define a list model that will be used in both the main list on the page and then again in a dialog...
-function getView(viewId, pdmId, disablementProperty) {
+function getView(viewId, pdmId, disablementProperty, publishTopic) {
    var widgets = {
       id: viewId,
       name: "alfresco/lists/views/AlfListView",
@@ -56,7 +56,7 @@ function getView(viewId, pdmId, disablementProperty) {
                                  name: "alfresco/renderers/PublishingDropDownMenu",
                                  config: {
                                     additionalCssClasses: "custom-css",
-                                    publishTopic: "ALF_PUBLISHING_DROPDOWN_MENU",
+                                    publishTopic: publishTopic,
                                     publishPayload: {
                                        shortName: {
                                           alfType: "item",
@@ -102,10 +102,11 @@ model.jsonModel = {
       },
       "aikauTesting/mockservices/PublishingDropDownMenuMockService",
       "alfresco/services/ErrorReporter",
-      "alfresco/services/DialogService"
+      "alfresco/services/DialogService",
+      "alfresco/services/NotificationService"
    ],
    widgets:[
-      getView("LIST_VIEW_1", "PDM", "disabled"),
+      getView("LIST_VIEW_1", "PDM", "disabled", "ALF_PUBLISHING_DROPDOWN_MENU"),
       {
          id: "SHOW_DIALOG",
          name: "alfresco/buttons/AlfButton",
@@ -115,12 +116,12 @@ model.jsonModel = {
             publishPayload: {
                dialogId: "DIALOG1",
                dialogTitle: "Test dialog",
-               widgetsContent: [getView("LIST_VIEW_2", "DIALOG_PDM", null)]
+               widgetsContent: [getView("LIST_VIEW_2", "DIALOG_PDM", null, "CONFIRM_DROPDOWN_PUBLISH")]
             }
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

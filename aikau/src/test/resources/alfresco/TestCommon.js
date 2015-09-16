@@ -240,8 +240,10 @@ define(["intern/dojo/node!fs",
             return dfd.promise;
          };
          command.session.clearLog = function() {
-            return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
-               .click();
+            return browser.execute(function(){
+               var clearButton = document.querySelector(".alfresco_logging_DebugLog__clear-button");
+               clearButton && clearButton.click();
+            });
          };
          command.session.getLastPublish = function(topicName) {
             var isGlobal,
