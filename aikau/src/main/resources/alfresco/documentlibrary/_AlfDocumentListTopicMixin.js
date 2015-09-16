@@ -318,9 +318,9 @@ define(["dojo/_base/declare",
        * @event requestFinishedTopic
        * @instance
        * @type {string}
-       * @default
+       * @default [topics.REQUEST_FINISHED_TOPIC]{@link module:alfresco/core/topics#REQUEST_FINISHED_TOPIC}
        */
-      requestFinishedTopic: "ALF_DOCLIST_REQUEST_FINISHED",
+      requestFinishedTopic: topics.REQUEST_FINISHED_TOPIC,
 
       /**
        * This topic should be published to indicate that a path has been changed. It is used by both the

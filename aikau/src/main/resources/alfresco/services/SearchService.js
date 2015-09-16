@@ -32,9 +32,10 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "alfresco/core/PathUtils",
         "alfresco/core/NodeUtils",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/json"],
-        function(declare, BaseService, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, dojoJson) {
+        function(declare, BaseService, CoreXhr, AlfConstants, PathUtils, NodeUtils, topics, lang, dojoJson) {
 
    return declare([BaseService, CoreXhr, PathUtils], {
 
@@ -167,6 +168,7 @@ define(["dojo/_base/declare",
          if (!payload || !payload.term)
          {
             this.alfLog("warn", "A request was made to perform a search but no 'term' attribute was provided", payload, this);
+            this.alfPublish(payload.alfResponseScope + payload.alfResponseTopic + "_FAILURE");
          }
          else
          {
@@ -239,7 +241,7 @@ define(["dojo/_base/declare",
                sort: sort,
                site: payload.site || this.site,
                rootNode: payload.rootNode || this.rootNode,
-               repo: payload.repo || this.repo,
+               repo: (payload.repo || payload.repo === false) ? payload.repo : this.repo,
                query: query,
                pageSize: payload.pageSize || this.pageSize, // It makes no sense for page size to ever be 0
                maxResults: payload.maxResults || 0,
