@@ -59,7 +59,8 @@ define([
       BgBlue: "\x1b[44m",
       BgMagenta: "\x1b[45m",
       BgCyan: "\x1b[46m",
-      BgWhite: "\x1b[47m"
+      BgWhite: "\x1b[47m",
+      Regex: /\u001b[^m]+m/gi
    };
 
    /**
@@ -109,7 +110,10 @@ define([
       },
       ScreenMargin: 2,
       SpinnerChars: "-\\|/-\\|/".split(""),
-      TitleIndent: 1
+      Title: {
+         Indent: 1,
+         UnderOverLineChar: "="
+      }
    };
 
    /**
@@ -121,7 +125,9 @@ define([
    var CONFIG = {
       BreakOnError: false,
       Title: "AIKAU UNIT TESTS",
-      TitleHelp: "(Ctrl-C to abort)"
+      TitleHelp: "(Ctrl-C to abort)",
+      ScreenRenderInterval: 500,
+      ProgressBarRenderInterval: 100
    };
 
    /**
@@ -256,14 +262,17 @@ define([
        * @property {Object} charm State values relating to charm
        * @property {int} charm.progressBarCurrPos Where the progress bar animation should be drawn (column index)
        * @property {int} charm.finalRow Where the cursor should finish after redraws (row index)
+       * @property {string[]} screenData The virtual screen contents
        * @property {string} tunnel The current tunnel state
        */
       state: {
          charm: {
+            emptyLine: null,
             finalRow: 0,
             nextSpinnerIndex: 0,
             progressBarCurrPos: CHARM.Col.ProgressBar
          },
+         screenData: "",
          tunnel: "N/A"
       },
 
@@ -316,28 +325,6 @@ define([
       },
 
       /**
-       * Augment the suite. Specifically, modify the setup() to: function read the
-       * environment name and populate the environments collection, before continuing
-       * with its normal behaviour.
-       *
-       * @instance
-       * @param {Object} suite The suite
-       */
-      augmentSuite: function(suite) {
-         var setupFunc = suite.setup,
-            environments = this.environments;
-         if (setupFunc) {
-            suite.setup = function() {
-               var envName = helper.getEnv(this);
-               environments[envName] = true;
-               return setupFunc.apply(this, arguments);
-            };
-         } else if (suite.name) {
-            this.addWarning(suite.name, "Suite does not have setup() method");
-         }
-      },
-
-      /**
        * Debug-only function that will take a message and immediately break and log it to console
        *
        * @instance
@@ -382,15 +369,9 @@ define([
        * @instance
        */
       finishUpdating: function() {
-         
+
          // Wrap all in try/catch
          try {
-
-            // Do final render
-            this.renderPageFramework();
-            this.renderProgressText();
-            this.renderStatus();
-            this.renderProgressBar();
 
             // Clear the intervals
             this.intervals.forEach(clearInterval);
@@ -463,6 +444,9 @@ define([
          // Wrap all in try/catch
          try {
 
+            // Set empty line variable
+            this.state.charm.emptyLine = new Array(this.terminalInfo.cols + 1).join(" ");
+
             // Calculate message space
             this.totalMessageRows = this.terminalInfo.rows - CHARM.Row.MessagesLine - CHARM.ScreenMargin;
 
@@ -471,22 +455,23 @@ define([
             charm.pipe(process.stdout);
             charm.reset();
 
-            // Always cast to string when using charm.write()
-            var originalWriteMethod = charm.write;
-            charm.write = function(str) {
-               originalWriteMethod.call(charm, "" + str);
-            };
-
-            // Do initial page draw
-            this.renderPageFramework();
-
-            // Setup redraw intervals
+            // Setup rendering intervals
             this.intervals = [
-               setInterval(this.hitch(this, this.renderPageFramework), 5000),
-               setInterval(this.hitch(this, this.renderProgressText), 1000),
-               setInterval(this.hitch(this, this.renderStatus), 500),
-               setInterval(this.hitch(this, this.renderProgressBar), 100)
+               setInterval(this.hitch(this, this.updateVirtualScreen), CONFIG.ScreenRenderInterval),
+               setInterval(this.hitch(this, this.renderToScreen), CONFIG.ScreenRenderInterval),
+               setInterval(this.hitch(this, this.renderProgressBar), CONFIG.ProgressBarRenderInterval)
             ];
+
+            // // Do initial page draw
+            // this.renderPageFramework();
+
+            // // Setup redraw intervals
+            // this.intervals = [
+            //    setInterval(this.hitch(this, this.renderPageFramework), 5000),
+            //    setInterval(this.hitch(this, this.renderProgressText), 1000),
+            //    setInterval(this.hitch(this, this.renderStatus), 500),
+            //    setInterval(this.hitch(this, this.renderProgressBar), 100)
+            // ];
 
          } catch (e) {
             this.exitWithError(e, "Error running initCharm()");
@@ -614,29 +599,29 @@ define([
        * @param {int} ms The number of milliseconds
        * @returns {string} The human readable time string
        */
-      msToTimeLeft: function(ms) {
+      msToTimeRemaining: function(ms) {
 
          // Declare result variable
-         var timeLeftMessage;
+         var timeRemainingMessage;
 
          // Just go by minutes remaining, unless over 10 minutes, then go by 5 minute intervals
          var minsRemaining = ms / 1000 / 60,
             modifiedMins;
          if (minsRemaining === 0) {
-            timeLeftMessage = "0 mins";
+            timeRemainingMessage = "0 mins";
          } else if (minsRemaining < 1) {
-            timeLeftMessage = "< 1 min";
+            timeRemainingMessage = "< 1 min";
          } else {
             modifiedMins = Math.ceil(minsRemaining);
             if (modifiedMins > 10) {
                modifiedMins = Math.ceil(minsRemaining / 5) * 5;
             }
-            timeLeftMessage = modifiedMins + " mins";
+            timeRemainingMessage = modifiedMins + " mins";
          }
-         timeLeftMessage += " remaining";
+         timeRemainingMessage += " remaining";
 
          // Pass back the message
-         return timeLeftMessage;
+         return timeRemainingMessage;
       },
 
       /**
@@ -781,107 +766,6 @@ define([
       },
 
       /**
-       * Clear the page and draw the basic page framework
-       *
-       * @instance
-       * @returns {[type]} [description]
-       */
-      renderPageFramework: function() {
-         /*jshint maxstatements:false*/
-
-         // Wrap all in try/catch
-         try {
-
-            // Delete everything on the page
-            charm.erase("screen");
-
-            // Setup function variables
-            var i;
-
-            // Output the title
-            var titleMessageParts = [CONFIG.Title, CONFIG.TitleHelp],
-               underOverLineLength = titleMessageParts.join(" ").length + (CHARM.TitleIndent * 2);
-            charm.position(CHARM.Col.Default, CHARM.Row.Title - 1);
-            charm.display("bright");
-            for (i = 0; i < underOverLineLength; i++) {
-               charm.write("=");
-            }
-            charm.position(CHARM.Col.Default + CHARM.TitleIndent, CHARM.Row.Title);
-            charm.write(CONFIG.Title);
-            if (CONFIG.TitleHelp) {
-               charm.display("reset");
-               charm.write(" " + CONFIG.TitleHelp);
-               charm.display("bright");
-            }
-            charm.position(CHARM.Col.Default, CHARM.Row.Title + 1);
-            for (i = 0; i < underOverLineLength; i++) {
-               charm.write("=");
-            }
-            charm.display("reset");
-
-            // Create the status section
-            charm.position(CHARM.Col.StatusName, CHARM.Row.StatusTitle);
-            charm.display("bright");
-            charm.write("STATUS");
-            charm.position(CHARM.Col.StatusName, CHARM.Row.Environments);
-            charm.display("reset");
-            charm.write("Environments: ");
-            charm.position(CHARM.Col.StatusName, CHARM.Row.Total);
-            charm.write("Total tests: ");
-            charm.position(CHARM.Col.StatusName, CHARM.Row.Passed);
-            charm.write("Passed: ");
-            charm.position(CHARM.Col.StatusName, CHARM.Row.Failed);
-            charm.write("Failed: ");
-            charm.position(CHARM.Col.StatusName, CHARM.Row.Skipped);
-            charm.write("Skipped: ");
-            charm.position(CHARM.Col.StatusName, CHARM.Row.Errors);
-            charm.write("Errors: ");
-            charm.position(CHARM.Col.StatusName, CHARM.Row.Warnings);
-            charm.write("Warnings: ");
-            charm.position(CHARM.Col.StatusName, CHARM.Row.Deprecations);
-            charm.write("Deprecations: ");
-
-            // Create the progress section
-            charm.position(CHARM.Col.ProgressName, CHARM.Row.ProgressTitle);
-            charm.display("bright");
-            charm.write("PROGRESS");
-            charm.display("reset");
-            charm.position(CHARM.Col.ProgressName, CHARM.Row.TunnelStatus);
-            charm.write("Tunnel status: ");
-            charm.position(CHARM.Col.ProgressName, CHARM.Row.PercentComplete);
-            charm.write("Percent complete: ");
-            charm.position(CHARM.Col.ProgressName, CHARM.Row.TimeTaken);
-            charm.write("Time Taken: ");
-            charm.position(CHARM.Col.ProgressName, CHARM.Row.TimeRemaining);
-            charm.write("Time Remaining: ");
-
-            // Draw progress bar
-            charm.position(CHARM.Col.ProgressName, CHARM.Row.ProgressBar - 1);
-            for (i = 0; i < CHARM.ProgressBar.Length; i++) {
-               charm.display("bright");
-               charm.write(CHARM.ProgressBar.LineChar);
-               charm.display("reset");
-            }
-            charm.position(CHARM.Col.ProgressName, CHARM.Row.ProgressBar);
-            for (i = 0; i < CHARM.ProgressBar.Length; i++) {
-               charm.write(CHARM.ProgressBar.EmptyChar);
-            }
-            charm.position(CHARM.Col.ProgressName, CHARM.Row.ProgressBar + 1);
-            for (i = 0; i < CHARM.ProgressBar.Length; i++) {
-               charm.display("bright");
-               charm.write(CHARM.ProgressBar.LineChar);
-               charm.display("reset");
-            }
-
-            // Update the status text
-            this.renderStatus();
-
-         } catch (e) {
-            this.exitWithError(e, "Error renderPageFramework()");
-         }
-      },
-
-      /**
        * Animate the progress bar
        *
        * @instance
@@ -909,75 +793,98 @@ define([
       },
 
       /**
-       * Update the progress text
+       * Render the virtual screen to the real screen
        *
        * @instance
        */
-      renderProgressText: function() {
-
-         // Wrap all in try/catch
-         try {
-
-            // Hide the cursor
-            charm.cursor(false);
-
-            // Calculate and update the text
-            var ratioComplete = this.testCounts.run / this.testCounts.total,
-               percentComplete = Math.floor(ratioComplete * 100) + "%",
-               timeTaken = Date.now() - this.startTime,
-               timeTakenMessage = this.msToHumanReadable(timeTaken),
-               timeLeftMs = timeTaken * ((1 / ratioComplete) - 1),
-               timeLeftMins = this.msToTimeLeft(timeLeftMs),
-               timeLeftMessage = this.pad(timeLeftMins, CHARM.Col.StatusName - CHARM.Col.ProgressValue, " ", true);
-            charm.position(CHARM.Col.ProgressValue, CHARM.Row.PercentComplete);
-            charm.write(percentComplete);
-            charm.position(CHARM.Col.ProgressValue, CHARM.Row.TunnelStatus);
-            charm.write(this.state.tunnel);
-            charm.position(CHARM.Col.ProgressValue, CHARM.Row.TimeTaken);
-            charm.write(timeTakenMessage);
-            charm.position(CHARM.Col.ProgressValue, CHARM.Row.TimeRemaining);
-            if (ratioComplete > 0.1 || (timeTaken > 60000 && ratioComplete > 0.05)) {
-               charm.write(timeLeftMessage);
-            } else {
-               charm.write("Calculating...");
-            }
-
-            // Update the progress bar
-            var progressBarPartsComplete = Math.floor(ratioComplete * CHARM.ProgressBar.Length);
-            charm.position(CHARM.Col.ProgressName, CHARM.Row.ProgressBar);
-            for (var i = 0; i < progressBarPartsComplete; i++) {
-               charm.write(CHARM.ProgressBar.CompleteChar);
-            }
-            this.state.charm.progressBarCurrPos = CHARM.Col.ProgressName + progressBarPartsComplete;
-
-            // Put the cursor back
-            this.resetCursor();
-
-         } catch (e) {
-            this.exitWithError(e, "Error running renderProgressText()");
-         }
-      },
-
-      /**
-       * Do a redraw of the latest information
-       *
-       * @instance
-       */
-      renderStatus: function() {
-         /*jshint maxstatements:false,maxcomplexity:false*/
+      renderToScreen: function() {
 
          // Catch all errors
          try {
 
-            // Setup variables
-            var environmentNames = Object.keys(this.environments),
-               messagesRow = CHARM.Row.MessagesLine;
+            charm.position(0, 1);
+            charm.write(this.state.screenData.join("\n"));
+            this.resetCursor();
 
-            // Hide cursor
-            charm.cursor(false);
+         } catch (e) {
+            this.exitWithError(e, "Error running renderToScreen()");
+         }
+      },
+
+      /**
+       * Reset the cursor
+       *
+       * @instance
+       */
+      resetCursor: function() {
+         charm.position(0, this.state.charm.finalRow);
+         charm.cursor(true);
+      },
+
+      /**
+       * Given the current state information, update the virtual screen data
+       *
+       * @instance
+       */
+      // TODO: Must DRY up the repetition in this oft-called function, e.g. setting up identical strings
+      updateVirtualScreen: function() {
+         /*jshint maxcomplexity:false,maxstatements:false*/
+
+         // Catch all errors
+         try {
+
+            // Create "new" virtual screen
+            var emptyLine = "N" + this.state.charm.emptyLine,
+               allLines = new Array(this.terminalInfo.rows + 1).join(emptyLine),
+               emptyRows = allLines.substr(1).split("N");
+            this.state.screenData = emptyRows;
+
+            // Output the title
+            var titleMessageParts = [CONFIG.Title, CONFIG.TitleHelp],
+               titleMessage = ANSI_CODES.Bright + CONFIG.Title + ANSI_CODES.Reset + " " + CONFIG.TitleHelp,
+               underOverLineLength = (titleMessageParts.join(" ")).length + (CHARM.Title.Indent * 2),
+               underOverLine = new Array(underOverLineLength + 1).join(CHARM.Title.UnderOverLineChar);
+            this.write(CHARM.Col.Default, CHARM.Row.Title - 1, underOverLine, ANSI_CODES.Bright);
+            this.write(CHARM.Col.Default + CHARM.Title.Indent, CHARM.Row.Title, titleMessage);
+            this.write(CHARM.Col.Default, CHARM.Row.Title + 1, underOverLine, ANSI_CODES.Bright);
+
+            // Calculate the progress information
+            var ratioComplete = this.testCounts.run / this.testCounts.total,
+               percentComplete = Math.floor(ratioComplete * 100) + "%",
+               timeTaken = Date.now() - this.startTime,
+               timeTakenMessage = this.msToHumanReadable(timeTaken),
+               timeRemainingMs = timeTaken * ((1 / ratioComplete) - 1),
+               timeRemainingMins = this.msToTimeRemaining(timeRemainingMs),
+               timeRemainingMessage = this.pad(timeRemainingMins, CHARM.Col.StatusName - CHARM.Col.ProgressValue, " ", true);
+            if ((timeTaken < 60000 && ratioComplete < 0.1) || ratioComplete < 0.05) {
+               timeRemainingMessage = "Calculating...";
+            }
+
+            // Output the progress section
+            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressTitle, "PROGRESS", ANSI_CODES.Bright);
+            this.write(CHARM.Col.ProgressName, CHARM.Row.TunnelStatus, "Tunnel status: " + this.state.tunnel);
+            this.write(CHARM.Col.ProgressName, CHARM.Row.PercentComplete, "Percent complete: " + percentComplete);
+            this.write(CHARM.Col.ProgressName, CHARM.Row.TimeTaken, "Time Taken: " + timeTakenMessage);
+            this.write(CHARM.Col.ProgressName, CHARM.Row.TimeRemaining, "Time Remaining: " + timeRemainingMessage);
+
+            // Draw progress bar
+            var progressBarLine = new Array(CHARM.ProgressBar.Length + 1).join(CHARM.ProgressBar.LineChar),
+               emptyProgressBar = new Array(CHARM.ProgressBar.Length + 1).join(CHARM.ProgressBar.EmptyChar);
+            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressBar - 1, progressBarLine, ANSI_CODES.Bright);
+            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressBar, emptyProgressBar);
+            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressBar + 1, progressBarLine, ANSI_CODES.Bright);
+
+            // Update the progress bar position
+            // TODO: Why is col off by one? Need to understand and remove arbitrary
+            // number. To do with this.write/charm.position differences, presumably?
+            var progressBarPartsComplete = Math.floor(ratioComplete * CHARM.ProgressBar.Length),
+               completedProgressBar = new Array(progressBarPartsComplete + 1).join(CHARM.ProgressBar.CompleteChar);
+            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressBar, completedProgressBar);
+            this.state.charm.progressBarCurrPos = CHARM.Col.ProgressName + progressBarPartsComplete;
 
             // Create environments message
-            var environmentsMessage = "Updating...",
+            var environmentNames = Object.keys(this.environments),
+               environmentsMessage = "Updating...",
                spaceToDisplayEnvironments = this.terminalInfo.cols - CHARM.Col.StatusValue - CHARM.ScreenMargin;
             if (environmentNames.length) {
                environmentsMessage = environmentNames.length + " (" + environmentNames.join(", ") + ")";
@@ -992,32 +899,25 @@ define([
                failed = this.testCounts.failed,
                skipped = this.testCounts.skipped;
             if (passed && passed !== total && (failed || skipped)) {
-               passed += " (" + (passed / total * 100).toFixed(1) + "%)"
+               passed += " (" + (passed / total * 100).toFixed(1) + "%)";
             }
             if (failed && failed !== total && (passed || skipped)) {
-               failed += " (" + (failed / total * 100).toFixed(1) + "%)"
+               failed += " (" + (failed / total * 100).toFixed(1) + "%)";
             }
             if (skipped && skipped !== total && (passed || failed)) {
-               skipped += " (" + (skipped / total * 100).toFixed(1) + "%)"
+               skipped += " (" + (skipped / total * 100).toFixed(1) + "%)";
             }
 
-            // Position, write, repeat (status info)
-            charm.position(CHARM.Col.StatusValue, CHARM.Row.Environments);
-            charm.write(environmentsMessage);
-            charm.position(CHARM.Col.StatusValue, CHARM.Row.Total);
-            charm.write(total);
-            charm.position(CHARM.Col.StatusValue, CHARM.Row.Passed);
-            charm.write(passed);
-            charm.position(CHARM.Col.StatusValue, CHARM.Row.Failed);
-            charm.write(failed);
-            charm.position(CHARM.Col.StatusValue, CHARM.Row.Skipped);
-            charm.write(skipped);
-            charm.position(CHARM.Col.StatusValue, CHARM.Row.Errors);
-            charm.write(this.testCounts.errors);
-            charm.position(CHARM.Col.StatusValue, CHARM.Row.Warnings);
-            charm.write(this.testCounts.warnings);
-            charm.position(CHARM.Col.StatusValue, CHARM.Row.Deprecations);
-            charm.write(this.testCounts.deprecations);
+            // Output the current status
+            this.write(CHARM.Col.StatusName, CHARM.Row.StatusTitle, "STATUS", ANSI_CODES.Bright);
+            this.write(CHARM.Col.StatusName, CHARM.Row.Environments, "Environments: " + environmentsMessage);
+            this.write(CHARM.Col.StatusName, CHARM.Row.Total, "Total tests: " + total);
+            this.write(CHARM.Col.StatusName, CHARM.Row.Passed, "Passed: " + passed);
+            this.write(CHARM.Col.StatusName, CHARM.Row.Failed, "Failed: " + failed);
+            this.write(CHARM.Col.StatusName, CHARM.Row.Skipped, "Skipped: " + skipped);
+            this.write(CHARM.Col.StatusName, CHARM.Row.Errors, "Errors: " + this.testCounts.errors);
+            this.write(CHARM.Col.StatusName, CHARM.Row.Warnings, "Warnings: " + this.testCounts.warnings);
+            this.write(CHARM.Col.StatusName, CHARM.Row.Deprecations, "Deprecations: " + this.testCounts.deprecations);
 
             // Prepare object to contain messages
             var messages = {
@@ -1117,56 +1017,159 @@ define([
                }
             }
 
-            // Remove previous messages
-            charm.position(0, messagesRow);
-            charm.erase("down");
-
             // Output the messages (array literal determines output order)
-            var messageGroups = ["failed", "errors", "warnings", "deprecations"];
+            var messagesRow = CHARM.Row.MessagesLine,
+               messageGroups = ["failed", "errors", "warnings", "deprecations"];
             messageGroups.forEach(function(groupName) {
 
-               // Display the title (broken to avoid weird grunt formatting)
-               charm.position(CHARM.Col.MessageTitle, messagesRow);
-               charm.display("bright");
-               charm.write(groupName.toUpperCase().substr(0, 1));
-               charm.position(CHARM.Col.MessageTitle + 1, messagesRow++);
-               charm.write(groupName.toUpperCase().substr(1));
-               charm.display("reset");
+               // Display the title
+               this.write(CHARM.Col.MessageTitle, messagesRow++, groupName.toUpperCase(), ANSI_CODES.Bright);
 
                // Display the messages
                var messageLines = messages[groupName];
                messageLines.forEach(function(nextLine) {
-                  charm.position(CHARM.Col.MessageTitle, messagesRow++);
                   var maxLineLength = this.terminalInfo.cols - 7; // 7 = ellipsis length (3) + side-margins (2x2)
                   if (nextLine.length > maxLineLength) {
                      nextLine = nextLine.slice(0, maxLineLength) + "...";
                   }
-                  charm.write(nextLine + ANSI_CODES.Reset);
+                  this.write(CHARM.Col.MessageTitle, messagesRow++, nextLine + ANSI_CODES.Reset);
                }, this);
 
                // Line-break before next set of messages
                messagesRow++;
             }, this);
 
-            // Update last-row state-variable
-            this.state.charm.finalRow = messagesRow;
-
-            // Reset cursor
-            this.resetCursor();
+            // Determine new final row
+            var finalUsedRowIndex = this.state.screenData.length;
+            while (finalUsedRowIndex--) {
+               if (this.state.screenData[finalUsedRowIndex] !== this.state.charm.emptyLine) {
+                  break;
+               }
+            }
+            this.state.charm.finalRow = finalUsedRowIndex + 1 + CHARM.ScreenMargin;
 
          } catch (e) {
-            this.exitWithError(e, "Error running renderStatus()");
+            this.exitWithError(e, "Error running updateVirtualScreen()");
          }
       },
 
       /**
-       * Reset the cursor
+       * Write to the virtual screen
        *
        * @instance
+       * @param {int} col Column number (one-indexed)
+       * @param {int} row Row number (one-indexed)
+       * @param {String} message The message to write
+       * @param {String|String[]} [ansiCodes] A string or array of ANSI chars to prepend to the
+       *                                      message. If any are present then a reset will be
+       *                                      appended to the message.
        */
-      resetCursor: function() {
-         charm.position(0, this.state.charm.finalRow);
-         charm.cursor(true);
+      write: function(col, row, message, ansiCodes) {
+
+         // Get the line to edit
+         var screen = this.state.screenData,
+            currentLine = screen[row - 1];
+
+         // Requested col value must be adjusted if escape codes are present, as
+         // they will have a length but not render to screen. Also, track escape
+         // codes as we will need to shut down any open ones at the end.
+         var prefix = "",
+            trueCol = col - 1, // Adjust to be zero-indexed
+            escapeCodeStr = null,
+            escapeCodeVal = 0,
+            activeEscapeCodes = [];
+         currentLine.split("").some(function(char, index) {
+
+            // If we're at the right place, stop
+            if (index === trueCol) {
+               return true;
+            }
+
+            // Add to the prefix and adjust "true col" if necessary
+            prefix += char;
+            if (escapeCodeStr !== null) {
+               trueCol++;
+               if (char === "m") {
+                  escapeCodeStr = null;
+                  escapeCodeVal = parseInt(escapeCodeStr, 10);
+                  if (escapeCodeVal === 0) {
+                     activeEscapeCodes = [];
+                  } else {
+                     activeEscapeCodes.push(escapeCodeVal);
+                  }
+               } else {
+                  escapeCodeStr += char;
+               }
+            } else if (char.charCodeAt(0) === 27) {
+               escapeCodeStr = "";
+               trueCol++;
+            }
+         });
+
+         // Ensure codes are closed
+         if (activeEscapeCodes.length) {
+            prefix += ANSI_CODES.Reset;
+         }
+
+         // Cast message to string and get its length
+         var messageToWrite = "" + message,
+            messageLength = messageToWrite.length,
+            messageVisibleLength = messageLength;
+         if (ANSI_CODES.Regex.test(prefix)) {
+            messageVisibleLength = messageToWrite.replace(ANSI_CODES.Regex, "").length;
+         }
+
+         // Build the suffix, tracking escape codes that we're replacing with the
+         // new message, in order to re-insert them at the beginning of the suffix
+         var suffix = "",
+            suffixStartPos = messageVisibleLength,
+            escapeCodesToRestore = [];
+         escapeCodeStr = null;
+         escapeCodeVal = 0;
+         currentLine.substr(trueCol).split("").forEach(function(char, index) {
+
+            // From the right place, just pipe the remaining string into the suffix
+            if (index >= suffixStartPos) {
+               suffix += char;
+               return;
+            }
+
+            // Handle and store escape codes
+            if (escapeCodeStr !== null) {
+               suffixStartPos++;
+               if (char === "m") {
+                  escapeCodeStr = null;
+                  escapeCodeVal = parseInt(escapeCodeStr, 10);
+                  if (escapeCodeVal === 0) {
+                     escapeCodesToRestore = [];
+                  } else {
+                     escapeCodesToRestore.push(escapeCodeVal);
+                  }
+               } else {
+                  escapeCodeStr += char;
+               }
+            } else if (char.charCodeAt(0) === 27) {
+               escapeCodeStr = "";
+               suffixStartPos++;
+            }
+         });
+
+         // If there were any active escape codes, restore them to the start of the suffix
+         escapeCodesToRestore.reverse().forEach(function(escapeCode) {
+            suffix = "\x1b[" + escapeCode + "m" + suffix;
+         });
+
+         // Wrap ansi-codes around the message if necessary
+         if (ansiCodes) {
+            if (ansiCodes.constructor !== Array) { // Fastest array-test according to http://bit.ly/1Kq1ifK (SO)
+               ansiCodes = [ansiCodes];
+            }
+            prefix += ansiCodes.join("");
+            suffix = ANSI_CODES.Reset + suffix;
+         }
+
+         // Update the current line value
+         screen[row - 1] = prefix + messageToWrite + suffix;
       }
    };
 
@@ -1236,7 +1239,7 @@ define([
        * @param {Object} suite The new suite
        */
       newSuite: function( /*jshint unused:false*/ suite) {
-         helper.augmentSuite(suite);
+         // Not currently used
       },
 
       /**
@@ -1245,7 +1248,9 @@ define([
        * @instance
        * @param {Object} test The new test
        */
-      newTest: function( /*jshint unused:false*/ test) {
+      newTest: function(test) {
+         var testEnv = helper.getEnv(test);
+         helper.environments[testEnv] = true;
          helper.incrementCounter("total");
       },
 
