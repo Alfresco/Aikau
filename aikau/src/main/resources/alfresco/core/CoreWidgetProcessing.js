@@ -34,9 +34,10 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-style",
+        "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
    return declare([AlfCore], {
 
@@ -501,18 +502,32 @@ define(["dojo/_base/declare",
        * @param {object} callbackScope The scope with which to call the callback
        * @param {number} index The index of the widget to create (this will effect it's location in the
        * [_processedWidgets]{@link module:alfresco/core/Core#_processedWidgets} array)
+       * @return {object|promise} Either the created widget or the promise of a widget
        */
       createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(widget, domNode, callback, callbackScope, index, processWidgetsId) {
          var _this = this;
          this.alfLog("log", "Creating widget: ",widget);
          var initArgs = this.processWidgetConfig(widget);
 
+         // In certain circumstances there is the possibility that Surf will not have been able to correctly
+         // identify all the dependencies for the widget that is being created. In this case we will return
+         // the promise of a widget and only register the widget once all the dependencies have been retrieved
+         // and the widget has been instantiated. This ensures that the allWidgetsProcessed function is never
+         // called until all widgets have truly been created.
+         var promisedWidget = new Deferred();
+         promisedWidget.then(lang.hitch(this, function(resolvedWidget) {
+            if (callback)
+            {
+               callback.call((callbackScope || this), resolvedWidget, index, processWidgetsId);
+            }
+         }));
+
          // Create a reference for the widget to be added to. Technically the require statement
          // will need to asynchronously request the widget module - however, assuming the widget
          // has been included in such a way that it will have been included in the generated
          // module cache then the require call will actually process synchronously and the widget
          // variable will be returned with an assigned value...
-         var instantiatedWidget = null;
+         var instantiatedWidget;
 
          // Dynamically require the specified widget
          // The use of indirection is done so modules will not rolled into a build (should we do one)
@@ -571,27 +586,19 @@ define(["dojo/_base/declare",
                   {
                      domClass.add(instantiatedWidget.domNode, initArgs.additionalCssClasses);
                   }
+                  promisedWidget.resolve(instantiatedWidget);
                }
                catch (e)
                {
-                  _this.alfLog("error", "The following error occurred creating a widget", e, this);
-                  if (callback)
-                  {
-                     callback.call((callbackScope || this), null, index, processWidgetsId);
-                  }
+                  _this.alfLog("error", "The following error occurred creating a widget", e, _this);
+                  promisedWidget.resolve(null);
                   return null;
                }
             }
             else
             {
-               _this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  widget.name + "'. Please correct the use of this widget in your page definition", this);
-            }
-            
-            if (callback)
-            {
-               // If there is a callback then call it with any provided scope (but default to the
-               // "this" as the scope if one isn't provided).
-               callback.call((callbackScope || this), instantiatedWidget, index, processWidgetsId);
+               _this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  widget.name + "'. Please correct the use of this widget in your page definition", _this);
+               promisedWidget.resolve(null);
             }
          });
 
@@ -599,7 +606,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "A widget was not declared so that it's modules were included in the loader cache", widget, this);
          }
-         return instantiatedWidget;
+         return instantiatedWidget || promisedWidget.promise;
       },
 
       /**
