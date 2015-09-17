@@ -26,8 +26,10 @@ define(["alfresco/TestCommon",
         "intern/chai!assert"], 
         function(TestCommon, registerSuite, assert) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "TextArea Tests",
 
       setup: function() {
@@ -82,5 +84,6 @@ define(["alfresco/TestCommon",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });
