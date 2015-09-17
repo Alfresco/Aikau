@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
          });
 
          // Determine the URL to use if login is successful, this is included in the payload...
-         var url = AlfConstants.URL_PAGECONTEXT + "dologin?username=" + payload.username + "&password=" + payload.password;
+         var url = AlfConstants.URL_SERVICECONTEXT + "dologin?username=" + payload.username + "&password=" + payload.password;
          if (payload.successUrl == null || lang.trim(payload.successUrl) === "")
          {
             payload.successful = AlfConstants.URL_PAGECONTEXT + this.defaultLoginPage;
