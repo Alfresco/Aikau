@@ -72,16 +72,23 @@ define([
    var CHARM = {
       Col: {
          Default: 3,
+         LastStarted: 80,
          MessageString: 3,
          MessageTitle: 3,
          ProgressBar: 3,
-         ProgressName: 3,
-         ProgressValue: 21,
-         StatusName: 50,
-         StatusValue: 64
+         Progress: 3,
+         Status: 50
       },
       Row: {
          Title: 3,
+
+         ProgressTitle: 6,
+         ProgressBar: 8,
+         PercentComplete: 11,
+         TunnelStatus: 12,
+         TimeTaken: 13,
+         TimeRemaining: 14,
+
          StatusTitle: 6,
          Environments: 7,
          Total: 8,
@@ -91,12 +98,12 @@ define([
          Errors: 12,
          Warnings: 13,
          Deprecations: 14,
-         ProgressTitle: 6,
-         PercentComplete: 11,
-         TunnelStatus: 12,
-         TimeTaken: 13,
-         TimeRemaining: 14,
-         ProgressBar: 8,
+
+         LastStartedTitle: 6,
+         LastStartedEnv: 7,
+         LastStartedSuite: 8,
+         LastStartedTest: 9,
+
          MessagesLine: 16
       },
       ProblemIndent: 2,
@@ -218,6 +225,21 @@ define([
        */
       errors: {
          _name: "Errors"
+      },
+
+      /**
+       * The last started test
+       *
+       * @instance
+       * @type {Object}
+       * @property {string} env Test environment
+       * @property {string} suite Suite name
+       * @property {string} test Test name
+       */
+      lastStarted: {
+         env: "Waiting...",
+         suite: "Waiting...",
+         test: "Waiting..."
       },
 
       /**
@@ -376,6 +398,17 @@ define([
 
             // Clear the intervals
             this.intervals.forEach(clearInterval);
+
+            // Update "last test" info
+            this.lastStarted = {
+               env: "Complete",
+               suite: "Complete",
+               test: "Complete"
+            };
+
+            // Do final update
+            this.updateVirtualScreen();
+            this.renderToScreen();
 
             // "Finish" the progress bar
             charm.position(CHARM.Col.Default, CHARM.Row.ProgressBar);
@@ -766,6 +799,34 @@ define([
       },
 
       /**
+       * Record the last-started test
+       *
+       * @instance
+       * @param {Object} test The test that has been started
+       */
+      recordLastStartedTest: function(test) {
+         this.lastStarted.test = test.name;
+         this.lastStarted.suite = test.parent.name;
+         this.lastStarted.env = this.getEnv(test);
+      },
+
+      /**
+       * Reduce a string, if necessary, and suffix with an ellipsis if it happens
+       *
+       * @instance
+       * @param {string} str String to reduce
+       * @param {int} maxLen Maximum length of the string
+       * @returns {string} The string (reduced if necessary)
+       */
+      reduce: function(str, maxLen) {
+         var reduced = str;
+         if (reduced.length > maxLen) {
+            reduced = reduced.substr(0, reduced.length - 3) + "...";
+         }
+         return reduced;
+      },
+
+      /**
        * Animate the progress bar
        *
        * @instance
@@ -862,49 +923,43 @@ define([
                timeTakenMessage = this.msToHumanReadable(timeTaken),
                timeRemainingMs = timeTaken * ((1 / ratioComplete) - 1),
                timeRemainingMins = this.msToTimeRemaining(timeRemainingMs),
-               timeRemainingMessage = this.pad(timeRemainingMins, CHARM.Col.StatusName - CHARM.Col.ProgressValue, " ", true);
+               timeRemainingMessage = timeRemainingMins;
             if ((timeTaken < 60000 && ratioComplete < 0.1) || ratioComplete < 0.05) {
                timeRemainingMessage = "Calculating...";
             }
 
             // Output the progress section
-            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressTitle, "PROGRESS", ANSI_CODES.Bright);
-            this.write(CHARM.Col.ProgressName, CHARM.Row.TunnelStatus, "Tunnel status: " + this.state.tunnel);
-            this.write(CHARM.Col.ProgressName, CHARM.Row.PercentComplete, "Percent complete: " + percentComplete);
-            this.write(CHARM.Col.ProgressName, CHARM.Row.TimeTaken, "Time Taken: " + timeTakenMessage);
-            this.write(CHARM.Col.ProgressName, CHARM.Row.TimeRemaining, "Time Remaining: " + timeRemainingMessage);
+            this.write(CHARM.Col.Progress, CHARM.Row.ProgressTitle, "PROGRESS", ANSI_CODES.Bright);
+            this.writeProperties(CHARM.Col.Progress, CHARM.Row.PercentComplete, [
+               ["Percent complete", percentComplete],
+               ["Tunnel status", this.state.tunnel],
+               ["Time taken", timeTakenMessage],
+               ["Time Remaining", timeRemainingMessage]
+            ]);
 
             // Draw progress bar
             var progressBarLine = new Array(CHARM.ProgressBar.Length + 1).join(CHARM.ProgressBar.LineChar),
                emptyProgressBar = new Array(CHARM.ProgressBar.Length + 1).join(CHARM.ProgressBar.EmptyChar);
-            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressBar - 1, progressBarLine, ANSI_CODES.Bright);
-            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressBar, emptyProgressBar);
-            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressBar + 1, progressBarLine, ANSI_CODES.Bright);
+            this.write(CHARM.Col.Progress, CHARM.Row.ProgressBar - 1, progressBarLine, ANSI_CODES.Bright);
+            this.write(CHARM.Col.Progress, CHARM.Row.ProgressBar, emptyProgressBar);
+            this.write(CHARM.Col.Progress, CHARM.Row.ProgressBar + 1, progressBarLine, ANSI_CODES.Bright);
 
             // Update the progress bar position
             // TODO: Why is col off by one? Need to understand and remove arbitrary
             // number. To do with this.write/charm.position differences, presumably?
             var progressBarPartsComplete = Math.floor(ratioComplete * CHARM.ProgressBar.Length),
                completedProgressBar = new Array(progressBarPartsComplete + 1).join(CHARM.ProgressBar.CompleteChar);
-            this.write(CHARM.Col.ProgressName, CHARM.Row.ProgressBar, completedProgressBar);
-            this.state.charm.progressBarCurrPos = CHARM.Col.ProgressName + progressBarPartsComplete;
-
-            // Create environments message
-            var environmentNames = Object.keys(this.environments),
-               environmentsMessage = "Updating...",
-               spaceToDisplayEnvironments = this.terminalInfo.cols - CHARM.Col.StatusValue - CHARM.ScreenMargin;
-            if (environmentNames.length) {
-               environmentsMessage = environmentNames.length + " (" + environmentNames.join(", ") + ")";
-               if (environmentsMessage.length > spaceToDisplayEnvironments - 4) {
-                  environmentsMessage = environmentsMessage.substr(0, spaceToDisplayEnvironments - 4) + "...)";
-               }
-            }
+            this.write(CHARM.Col.Progress, CHARM.Row.ProgressBar, completedProgressBar);
+            this.state.charm.progressBarCurrPos = CHARM.Col.Progress + progressBarPartsComplete;
 
             // Create passed/failed/skipped messages
             var total = this.testCounts.total,
                passed = this.testCounts.passed,
                failed = this.testCounts.failed,
-               skipped = this.testCounts.skipped;
+               skipped = this.testCounts.skipped,
+               errors = this.testCounts.errors,
+               warnings = this.testCounts.warnings,
+               deprecations = this.testCounts.deprecations;
             if (passed && passed !== total && (failed || skipped)) {
                passed += " (" + (passed / total * 100).toFixed(1) + "%)";
             }
@@ -916,15 +971,34 @@ define([
             }
 
             // Output the current status
-            this.write(CHARM.Col.StatusName, CHARM.Row.StatusTitle, "STATUS", ANSI_CODES.Bright);
-            this.write(CHARM.Col.StatusName, CHARM.Row.Environments, "Environments: " + environmentsMessage);
-            this.write(CHARM.Col.StatusName, CHARM.Row.Total, "Total tests: " + total);
-            this.write(CHARM.Col.StatusName, CHARM.Row.Passed, "Passed: " + passed);
-            this.write(CHARM.Col.StatusName, CHARM.Row.Failed, "Failed: " + failed);
-            this.write(CHARM.Col.StatusName, CHARM.Row.Skipped, "Skipped: " + skipped);
-            this.write(CHARM.Col.StatusName, CHARM.Row.Errors, "Errors: " + this.testCounts.errors);
-            this.write(CHARM.Col.StatusName, CHARM.Row.Warnings, "Warnings: " + this.testCounts.warnings);
-            this.write(CHARM.Col.StatusName, CHARM.Row.Deprecations, "Deprecations: " + this.testCounts.deprecations);
+            var numEnvironments = Object.keys(this.environments).length,
+               highlightCodes = [ANSI_CODES.Bright, ANSI_CODES.FgRed],
+               maxStatusLength = CHARM.Col.LastStarted - CHARM.Col.Status - 1;
+            this.write(CHARM.Col.Status, CHARM.Row.StatusTitle, "STATUS", ANSI_CODES.Bright);
+            this.writeProperties(CHARM.Col.Status, CHARM.Row.Environments, [
+               ["Environments", numEnvironments],
+               ["Total tests", total],
+               ["Passed", passed],
+               ["Failed", failed, failed ? highlightCodes : null],
+               ["Skipped", skipped],
+               ["Errors", errors, , failed ? highlightCodes : null],
+               ["Warnings", warnings],
+               ["Deprecations", deprecations]
+            ]);
+
+            // Prepare "last test" messages
+            var spaceToDisplayLastTestInfo = this.terminalInfo.cols - CHARM.Col.LastStarted - CHARM.ScreenMargin,
+               lastEnv = this.reduce(this.lastStarted.env, spaceToDisplayLastTestInfo),
+               lastSuite = this.reduce(this.lastStarted.suite, spaceToDisplayLastTestInfo),
+               lastTest = this.reduce(this.lastStarted.test, spaceToDisplayLastTestInfo);
+
+            // Output last test information
+            this.write(CHARM.Col.LastStarted, CHARM.Row.LastStartedTitle, "LAST STARTED TEST", ANSI_CODES.Bright);
+            this.writeProperties(CHARM.Col.LastStarted, CHARM.Row.LastStartedTitle + 1, [
+               ["Environment", lastEnv],
+               ["Suite name", lastSuite],
+               ["Test name", lastTest]
+            ], spaceToDisplayLastTestInfo);
 
             // Prepare object to contain messages
             var messages = {
@@ -1066,7 +1140,7 @@ define([
        * @instance
        * @param {int} col Column number (one-indexed)
        * @param {int} row Row number (one-indexed)
-       * @param {String} message The message to write
+       * @param {string} message The message to write
        * @param {String|String[]} [ansiCodes] A string or array of ANSI chars to prepend to the
        *                                      message. If any are present then a reset will be
        *                                      appended to the message.
@@ -1177,7 +1251,39 @@ define([
 
          // Update the current line value
          screen[row - 1] = prefix + messageToWrite + suffix;
-      }
+      },
+
+      /**
+       * Write a properties bundle to the screen
+       *
+       * @instance
+       * @param {int} col Column to start at on each row
+       * @param {int} row Starting row
+       * @param {Object[][]} properties The properties bundle
+       * @param {int} maxLen The maximum length for these properties
+       */
+      writeProperties: function(col, row, properties, maxLen) {
+
+         // Calculate longest property name
+         var longestProp = 0;
+         properties.forEach(function(propertyArgs) {
+            var propertyName = propertyArgs[0],
+               nameLen = propertyName.length;
+            if (nameLen > longestProp) {
+               longestProp = nameLen;
+            }
+         });
+         longestProp += ": ".length;
+
+         // Run through the properties
+         properties.forEach(function(propertyArgs) {
+            var propertyName = this.pad(propertyArgs[0] + ": ", longestProp, null, true),
+               propertyValue = propertyArgs[1],
+               ansiCodes = propertyArgs[2],
+               message = this.reduce(propertyName + propertyValue, maxLen);
+            this.write(col, row++, message, ansiCodes);
+         }, this);
+      },
    };
 
    /**
@@ -1404,8 +1510,8 @@ define([
        * @instance
        * @param {Object} test The test
        */
-      testStart: function( /*jshint unused:false*/ test) {
-         // Not currently used
+      testStart: function(test) {
+         helper.recordLastStartedTest(test);
       },
 
       /**

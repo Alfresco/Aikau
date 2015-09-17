@@ -129,11 +129,6 @@ define(["intern/dojo/node!fs",
                   dfd.reject(e);
                });
          }
-         else
-         {
-            console.log("Skipping coverage");
-            return browser;
-         }
       },
 
       /**
@@ -156,20 +151,20 @@ define(["intern/dojo/node!fs",
                   /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
-               }, [], 10000, 1000))
+               }, null, 10000))
             .then(
                function (element) {
                },
                function(error) {
                   // Failed to load, trying again...
                   browser.refresh();
-               })
+            })
             .then(pollUntil(
                function() {
                   /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
-               }, [], 10000, 1000))
+               }, null, 10000))
             .then(
                function(element) {
                   // Loaded successfully
@@ -184,7 +179,7 @@ define(["intern/dojo/node!fs",
                   {
                      assert.fail(null, null, "Test page could not be loaded");
                   }
-               })
+            })
             .end();
          command.session.alfPostCoverageResults = function(newBrowser) {
             return newBrowser;
