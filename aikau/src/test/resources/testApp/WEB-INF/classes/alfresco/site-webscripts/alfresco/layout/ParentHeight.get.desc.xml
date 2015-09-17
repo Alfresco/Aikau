@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Parent Height</shortname>
+  <description>Shows various layout widgets that set their height based on that of the first parent with an element height</description>
+  <family>aikau-unit-tests</family>
+  <url>/ParentHeight</url>
+</webscript>

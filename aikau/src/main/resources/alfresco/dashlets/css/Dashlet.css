@@ -146,17 +146,17 @@
    }
    /* Same-level classes */
    &.smallpad {
-      .alfresco-dashlets-Dashlet__body__widgets {
+      .alfresco-dashlets-Dashlet__body {
          padding: 4px;
       }
    }
    &.mediumpad {
-      .alfresco-dashlets-Dashlet__body__widgets {
+      .alfresco-dashlets-Dashlet__body {
          padding: 10px;
       }
    }
    &.largepad {
-      .alfresco-dashlets-Dashlet__body__widgets {
+      .alfresco-dashlets-Dashlet__body {
          padding: 16px;
       }
    }

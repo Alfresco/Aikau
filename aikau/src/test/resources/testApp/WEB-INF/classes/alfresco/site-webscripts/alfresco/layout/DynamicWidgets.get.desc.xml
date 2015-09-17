@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Dynamic Widget Processing</shortname>
+  <description>Demonstrates the alfresco/layout/DynamicWidgets layout container that renders a widget model defined in a published payload.</description>
+  <family>aikau-unit-tests</family>
+  <url>/DynamicWidgets</url>
+</webscript>
