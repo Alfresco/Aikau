@@ -270,7 +270,8 @@ define([
             emptyLine: null,
             finalRow: 0,
             nextSpinnerIndex: 0,
-            progressBarCurrPos: CHARM.Col.ProgressBar
+            progressBarCurrPos: CHARM.Col.ProgressBar,
+            progressBarActive: false
          },
          screenData: "",
          tunnel: "N/A"
@@ -458,8 +459,7 @@ define([
             // Setup rendering intervals
             this.intervals = [
                setInterval(this.hitch(this, this.updateVirtualScreen), CONFIG.ScreenRenderInterval),
-               setInterval(this.hitch(this, this.renderToScreen), CONFIG.ScreenRenderInterval),
-               setInterval(this.hitch(this, this.renderProgressBar), CONFIG.ProgressBarRenderInterval)
+               setInterval(this.hitch(this, this.renderToScreen), CONFIG.ScreenRenderInterval)
             ];
 
             // // Do initial page draw
@@ -802,9 +802,16 @@ define([
          // Catch all errors
          try {
 
+            // Render the screen
             charm.position(0, 1);
             charm.write(this.state.screenData.join("\n"));
             this.resetCursor();
+
+            // Start the progress bar spinner if it's not already going
+            if (!this.state.charm.progressBarActive) {
+               this.intervals.push(setInterval(this.hitch(this, this.renderProgressBar), CONFIG.ProgressBarRenderInterval));
+               this.state.charm.progressBarActive = true;
+            }
 
          } catch (e) {
             this.exitWithError(e, "Error running renderToScreen()");
