@@ -162,6 +162,13 @@
          </resource>
 
          <resource>
+            <!-- Spring Bean overrides -->
+            <targetPath>./alfresco/web-extension/</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/spring-context-config</directory>
+         </resource>
+
+         <resource>
             <!-- WebScript library files go straight into a package -->
             <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/webscript/libs</targetPath>
             <filtering>false</filtering>

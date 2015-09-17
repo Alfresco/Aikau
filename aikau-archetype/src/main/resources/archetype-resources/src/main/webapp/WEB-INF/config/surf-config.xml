@@ -16,6 +16,9 @@
    
    <!-- Import Surf Framework -->
    <import resource="classpath*:org/springframework/extensions/surf/*-context.xml" />
+
+   <!-- Custom bean override support -->
+   <import resource="classpath*:alfresco/web-extension/custom-web-framework-application-context.xml" />
    
     <!-- Set up to auto-resolve to url based views -->    
     <bean id="handlerMappings" parent="webframeworkHandlerMappings">

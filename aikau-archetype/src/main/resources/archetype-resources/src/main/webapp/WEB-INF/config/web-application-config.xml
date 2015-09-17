@@ -138,14 +138,4 @@
       </property>
    </bean>
    
-   <!-- Override DependencyAggregator to set compression exclusions -->
-   <bean id="dependency.aggregator" parent="dependency.aggregator.abstract" class="org.springframework.extensions.surf.DependencyAggregator">
-      <property name="compressionExclusions">
-         <list>
-            <!-- required for Aikau 1.0.36 to avoid LESS errors util Surf dependencies can be updated -->
-            <value>*.css</value>
-         </list>
-      </property>
-   </bean>
-   
 </beans>

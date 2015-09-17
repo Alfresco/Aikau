@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                http://www.hazelcast.com/schema/spring
+                http://www.hazelcast.com/schema/spring/hazelcast-spring-2.4.xsd">
+
+   <!-- Override DependencyAggregator to set compression exclusions 
+        NOTE: This is temporary until Surf is updated to remove YUI compression stage prior to LESS engine processing -->
+   <bean id="dependency.aggregator" parent="dependency.aggregator.abstract" class="org.springframework.extensions.surf.DependencyAggregator">
+      <property name="compressionExclusions">
+         <list>
+            <!-- required for Aikau 1.0.36 to avoid LESS errors util Surf dependencies can be updated -->
+            <value>*.css</value>
+         </list>
+      </property>
+   </bean>
+</beans>
