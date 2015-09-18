@@ -27,9 +27,9 @@ model.jsonModel = {
                            id: "VALID_DATE_VALUE_1",
                            config: {
                               name: "validDate1",
-                              value: "2012-12-12",
+                              value: "2012-12-25",
                               label: "Valid date",
-                              description: "Preset with the value \"2012-12-12\""
+                              description: "Preset with the value \"2012-12-25\""
                            }
                         },
                         {
@@ -37,43 +37,22 @@ model.jsonModel = {
                            id: "VALID_DATE_VALUE_2",
                            config: {
                               name: "validDate2",
-                              value: "2015-07-07",
+                              value: "2015-10-31",
                               label: "Valid date (mandatory)",
-                              description: "Preset with the value \"2015-07-07\"",
+                              description: "Preset with the value \"2015-10-31\"",
                               requirementConfig: {
                                  initialValue: true
                               }
                            }
                         },
                         {
-                           id: "RULES_CHECKER",
                            name: "alfresco/forms/controls/DateTextBox",
+                           id: "TODAYS_DATE",
                            config: {
-                              fieldId: "RULES_CHECKER",
-                              name: "date3",
-                              value: null,
-                              label: "Any Date",
-                              description: "Enter a data via the keyboard to ensure that the TextBox below becomes required."
-                           }
-                        },
-                        {
-                           id: "RULES_SUBSCRIBER",
-                           name: "alfresco/forms/controls/TextBox",
-                           config: {
-                              fieldId: "RULES_SUBSCRIBER",
-                              label: "Test",
-                              name: "test",
-                              description: "This should become required when a date is entered into the previous DataTextBox",
-                              value: "",
-                              requirementConfig: {
-                                 initialValue: false,
-                                 rules: [
-                                    {
-                                       targetId: "RULES_CHECKER",
-                                       isNot: ["",null]
-                                    }
-                                 ]
-                              }
+                              name: "todaysDate",
+                              value: "TODAY",
+                              label: "Today's date",
+                              description: "Preset with today's date"
                            }
                         }
                      ]
@@ -126,6 +105,37 @@ model.jsonModel = {
                               value: undefined,
                               label: "Undefined date",
                               description: "Preset with the value undefined"
+                           }
+                        },
+                        {
+                           id: "RULES_CHECKER",
+                           name: "alfresco/forms/controls/DateTextBox",
+                           config: {
+                              fieldId: "RULES_CHECKER",
+                              name: "date3",
+                              value: null,
+                              label: "Any Date",
+                              description: "Enter a data via the keyboard to ensure that the TextBox below becomes required."
+                           }
+                        },
+                        {
+                           id: "RULES_SUBSCRIBER",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              fieldId: "RULES_SUBSCRIBER",
+                              label: "Test",
+                              name: "test",
+                              description: "This should become required when a date is entered into the previous DataTextBox",
+                              value: "",
+                              requirementConfig: {
+                                 initialValue: false,
+                                 rules: [
+                                    {
+                                       targetId: "RULES_CHECKER",
+                                       isNot: ["",null]
+                                    }
+                                 ]
+                              }
                            }
                         }
                      ]

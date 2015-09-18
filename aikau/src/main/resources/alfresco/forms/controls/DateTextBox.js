@@ -18,7 +18,7 @@
  */
 
 /**
- * Creates a date-field input box
+ * Creates a date-field input box. Can be preset to today's date by passing a value of "TODAY".
  *
  * @example <caption>Sample usage:</caption>
  * {
@@ -62,7 +62,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function(){
-         if(!this.value || (typeof this.value === "string" && lang.trim(this.value).length === 0)) {
+         if (this.value === "TODAY") { // Special case
+            this.value = (new Date()).toISOString();
+         } else if (!this.value || (typeof this.value === "string" && lang.trim(this.value).length === 0)) {
             this.value = null; // Falsy values and empty strings should be treated as nulls, i.e. no value (see AKU-430)
          }
          this.inherited(arguments); // Must 'clean' the empty strings before calling this
