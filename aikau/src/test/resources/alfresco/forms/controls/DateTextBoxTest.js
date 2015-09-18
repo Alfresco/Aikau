@@ -49,8 +49,10 @@ registerSuite(function(){
             .click()
             .getLastPublish("VALID_DATES_FORM_SUBMIT")
             .then(function(payload) {
-               assert.propertyVal(payload, "validDate1", "2012-12-12", "Incorrect date value retrieved from control");
-               assert.propertyVal(payload, "validDate2", "2015-07-07", "Incorrect date value retrieved from control");
+               var todaysDate = (new Date()).toISOString().substr(0, 10);
+               assert.propertyVal(payload, "validDate1", "2012-12-25", "Incorrect date value retrieved from control");
+               assert.propertyVal(payload, "validDate2", "2015-10-31", "Incorrect date value retrieved from control");
+               assert.propertyVal(payload, "todaysDate", todaysDate, "Today's date was not set correctly");
             });
       },
 
@@ -101,8 +103,8 @@ registerSuite(function(){
             .click()
             .getLastPublish("VALID_DATES_FORM_SUBMIT")
             .then(function(payload) {
-               assert.propertyVal(payload, "validDate1", "2012-12-12", "Incorrect date value retrieved from control after other control updated");
-               assert.propertyVal(payload, "validDate2", "2015-07-14", "Incorrect date value retrieved from control after this control updated");
+               assert.propertyVal(payload, "validDate1", "2012-12-25", "Incorrect date value retrieved from control after other control updated");
+               assert.propertyVal(payload, "validDate2", "2015-10-13", "Incorrect date value retrieved from control after this control updated");
             });
       },
 
