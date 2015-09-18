@@ -78,9 +78,11 @@ define(["dojo/_base/declare",
        */
       getWidgetConfig: function alfresco_forms_controls_DateTextBox__getWidgetConfig() {
          this.configureValidation();
+         var placeHolder = this.message(this.placeHolder || "");
          return {
-            id : this.id + "_CONTROL",
+            id: this.id + "_CONTROL",
             name: this.name,
+            placeHolder: placeHolder,
             options: (this.options !== null) ? this.options : []
          };
       },
