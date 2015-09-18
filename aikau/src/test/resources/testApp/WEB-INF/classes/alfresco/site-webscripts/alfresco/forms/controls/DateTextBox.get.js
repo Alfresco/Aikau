@@ -60,6 +60,56 @@ model.jsonModel = {
                },
                {
                   name: "alfresco/forms/Form",
+                  id: "OTHER_DATES_FORM",
+                  config: {
+                     okButtonPublishTopic: "OTHER_DATES_FORM_SUBMIT",
+                     widgets: [
+                        {
+                           name: "alfresco/forms/controls/DateTextBox",
+                           id: "DATE_WITH_PLACEHOLDER",
+                           config: {
+                              name: "dateWithPlaceholder",
+                              label: "Date with placeholder",
+                              description: "No preset value, but placeholder text",
+                              placeHolder: "This is a placeholder"
+                           }
+                        },
+                        {
+                           id: "RULES_CHECKER",
+                           name: "alfresco/forms/controls/DateTextBox",
+                           config: {
+                              fieldId: "RULES_CHECKER",
+                              name: "date3",
+                              value: null,
+                              label: "Any Date",
+                              description: "Enter a data via the keyboard to ensure that the TextBox below becomes required."
+                           }
+                        },
+                        {
+                           id: "RULES_SUBSCRIBER",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              fieldId: "RULES_SUBSCRIBER",
+                              label: "Test",
+                              name: "test",
+                              description: "This should become required when a date is entered into the previous DataTextBox",
+                              value: "",
+                              requirementConfig: {
+                                 initialValue: false,
+                                 rules: [
+                                    {
+                                       targetId: "RULES_CHECKER",
+                                       isNot: ["",null]
+                                    }
+                                 ]
+                              }
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  name: "alfresco/forms/Form",
                   id: "INVALID_DATES_FORM",
                   config: {
                      okButtonPublishTopic: "INVALID_DATES_FORM_SUBMIT",
@@ -105,37 +155,6 @@ model.jsonModel = {
                               value: undefined,
                               label: "Undefined date",
                               description: "Preset with the value undefined"
-                           }
-                        },
-                        {
-                           id: "RULES_CHECKER",
-                           name: "alfresco/forms/controls/DateTextBox",
-                           config: {
-                              fieldId: "RULES_CHECKER",
-                              name: "date3",
-                              value: null,
-                              label: "Any Date",
-                              description: "Enter a data via the keyboard to ensure that the TextBox below becomes required."
-                           }
-                        },
-                        {
-                           id: "RULES_SUBSCRIBER",
-                           name: "alfresco/forms/controls/TextBox",
-                           config: {
-                              fieldId: "RULES_SUBSCRIBER",
-                              label: "Test",
-                              name: "test",
-                              description: "This should become required when a date is entered into the previous DataTextBox",
-                              value: "",
-                              requirementConfig: {
-                                 initialValue: false,
-                                 rules: [
-                                    {
-                                       targetId: "RULES_CHECKER",
-                                       isNot: ["",null]
-                                    }
-                                 ]
-                              }
                            }
                         }
                      ]

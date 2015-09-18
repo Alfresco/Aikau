@@ -56,6 +56,14 @@ registerSuite(function(){
             });
       },
 
+      "Ensure placeHolder attribute is used": function() {
+         return browser.findByCssSelector("#DATE_WITH_PLACEHOLDER .dijitPlaceHolder")
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "This is a placeholder");
+            });
+      },
+
       "Test initial invalid values": function() {
          return browser.findById("LETTERS_DATE_VALUE_CONTROL")
             .getProperty("value")
