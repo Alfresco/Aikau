@@ -29,8 +29,10 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function(registerSuite, assert, keys, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Base Form Control Tests",
 
       setup: function() {
@@ -120,7 +122,7 @@ define(["intern!object",
          .findAllByCssSelector("#AUTOSAVE_FORM .confirmationButton, #AUTOSAVE_FORM .cancelButton")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "OK/Cancel buttons found on autosave form");
-            })
+            });
       },
 
       "Updating autosave value publishes form": function() {
@@ -167,5 +169,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

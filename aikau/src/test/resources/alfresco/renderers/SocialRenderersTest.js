@@ -31,8 +31,10 @@ define(["intern!object",
       return "#" + id + "_ITEM_0 ." + status;
    };
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Social Renderers Test (Likes)",
 
       setup: function() {
@@ -155,9 +157,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Social Renderers Test (Favourites)",
 
       setup: function() {
@@ -256,10 +262,14 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Social Renderers Test (Comments)",
 
       setup: function() {
@@ -282,5 +292,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

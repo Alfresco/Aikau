@@ -24,13 +24,14 @@ define(["intern!object",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, expect, assert, require, TestCommon) {
 
-   registerSuite({
-      name: 'Selected Items Menu Test',
-      'Test Menu Initially Disabled': function () {
+registerSuite(function(){
+
+   return {
+      name: "Selected Items Menu Test",
+      "Test Menu Initially Disabled": function () {
 
          var testname = "Selected Items Menu Test";
          return TestCommon.loadTestWebScript(this.remote, "/SelectedItemsMenu", testname)
@@ -41,7 +42,7 @@ define(["intern!object",
                )
             .end();
       },
-      'Test Selecting Item Enables Menu': function () {
+      "Test Selecting Item Enables Menu": function () {
 
          var browser = this.remote;
 
@@ -64,7 +65,7 @@ define(["intern!object",
             )
          .end();
       },
-      'Test De-Selecting Item Disables Menu': function () {
+      "Test De-Selecting Item Disables Menu": function () {
 
          var browser = this.remote;
 
@@ -84,7 +85,7 @@ define(["intern!object",
             )
          .end();
       },
-      'Test Items Not Cleared': function () {
+      "Test Items Not Cleared": function () {
 
          var browser = this.remote;
 
@@ -125,7 +126,7 @@ define(["intern!object",
             )
          .end();
       },
-      'Test Menu Item Contains Selected Item': function () {
+      "Test Menu Item Contains Selected Item": function () {
 
          var browser = this.remote;
 
@@ -149,11 +150,11 @@ define(["intern!object",
 
          .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("TEST_ITEMS","selectedItems","data","item_one"))
             .then(function(elements) {
-               assert(elements.length == 1, "Test #3a - Didn't find selected item in publication payload");
+               assert.lengthOf(elements, 1, "Test #3a - Didn't find selected item in publication payload");
             })
          .end();
       },
-      'Test Menu Disabled After Item Click': function () {
+      "Test Menu Disabled After Item Click": function () {
          // Check that after the previous click the menu is disabled again...
          var browser = this.remote;
          return browser.findByCssSelector("#SELECTED_ITEMS.dijitDisabled")
@@ -163,7 +164,7 @@ define(["intern!object",
             )
          .end();
       },
-      'Test Clearing Selected Items Topic Published': function () {
+      "Test Clearing Selected Items Topic Published": function () {
          var browser = this.remote;
          return browser.findByCssSelector(TestCommon.topicSelector("ALF_CLEAR_SELECTED_ITEMS", "publish", "any"))
             .then(
@@ -172,7 +173,7 @@ define(["intern!object",
             )
          .end();
       },
-      'Test Select None Topic Published': function () {
+      "Test Select None Topic Published": function () {
          var browser = this.remote;
          return browser.findByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_FILE_SELECTION", "publish", "any"))
             .then(
@@ -181,7 +182,7 @@ define(["intern!object",
             )
          .end();
       },
-      'Test Multiple Item Selection': function () {
+      "Test Multiple Item Selection": function () {
 
          var browser = this.remote;
 
@@ -207,16 +208,17 @@ define(["intern!object",
 
          .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("TEST_ITEMS","selectedItems","data","item_one"))
             .then(function(elements) {
-               assert(elements.length == 2, "Test #5a - Didn't find selected item in publication payload");
+               assert.lengthOf(elements, 2, "Test #5a - Didn't find selected item in publication payload");
             })
          .end()
 
          .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("TEST_ITEMS","selectedItems","data","item_two"))
             .then(function(elements) {
-               assert(elements.length == 1, "Test #6a - Didn't find selected item in publication payload");
+               assert.lengthOf(elements, 1, "Test #6a - Didn't find selected item in publication payload");
             })
          .end()
          .alfPostCoverageResults(browser);
       }
+   };
    });
 });

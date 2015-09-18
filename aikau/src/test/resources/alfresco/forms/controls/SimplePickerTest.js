@@ -26,8 +26,10 @@ define(["intern!object",
         "require",
         "alfresco/TestCommon"],
         function(registerSuite, assert, require, TestCommon) {
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Simple Picker Tests",
 
       setup: function() {
@@ -142,5 +144,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

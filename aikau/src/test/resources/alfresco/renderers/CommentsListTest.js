@@ -23,13 +23,13 @@
 define(["intern!object",
       "intern/chai!assert",
       "require",
-      "alfresco/TestCommon",
-      "intern/dojo/node!leadfoot/keys"],
-      function(registerSuite, assert, require, TestCommon, keys) {
+      "alfresco/TestCommon"],
+      function(registerSuite, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "CommentsList Tests",
 
       setup: function() {
@@ -208,5 +208,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

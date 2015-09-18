@@ -28,8 +28,10 @@ define(["intern!object",
         function (registerSuite, expect, assert, require, TestCommon) {
 
    // var startSize;
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "AlfSideBarContainer Tests",
 
       setup: function() {
@@ -217,5 +219,6 @@ define(["intern!object",
       //    .end()
       //    .alfPostCoverageResults(browser);
       // }
+   };
    });
 });

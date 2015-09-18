@@ -27,9 +27,7 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/helpers/pollUntil"],
         function(registerSuite, assert, require, TestCommon, pollUntil) {
 
-   var browser;
-
-   function closeAllDialogs() {
+   function closeAllDialogs(browser) {
       // Todo: this fails to close multiple dialogs in Chrome
       return browser.end()
          .findAllByCssSelector(".dijitDialogCloseIcon")
@@ -49,7 +47,10 @@ define(["intern!object",
          }, 5000));
    }
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Dialog Service Tests",
 
       setup: function() {
@@ -79,7 +80,7 @@ define(["intern!object",
       },
 
       "Test recreating dialog with no ID": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("CREATE_FORM_DIALOG_NO_ID")
                   .click()
@@ -93,7 +94,7 @@ define(["intern!object",
       },
 
       "Test creating dialog with an ID": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("CREATE_FORM_DIALOG")
                   .click()
@@ -107,7 +108,7 @@ define(["intern!object",
       },
 
       "Test recreating dialog with an ID": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("CREATE_FORM_DIALOG")
                   .clearLog()
@@ -144,7 +145,7 @@ define(["intern!object",
       },
 
       "Check that form dialog dimensions can be set": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("CREATE_FORM_DIALOG")
                   .click()
@@ -162,7 +163,7 @@ define(["intern!object",
       },
 
       "Dialog is closed when dialogCloseTopic is set": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("LAUNCH_FAILURE_DIALOG")
                   .click()
@@ -186,7 +187,7 @@ define(["intern!object",
       },
 
       "Dialog remains open when dialogCloseTopic is set": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("LAUNCH_FAILURE_DIALOG")
                   .click()
@@ -210,7 +211,7 @@ define(["intern!object",
       },
 
       "Check that non-form dialog dimensions can be set": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("LAUNCH_OUTER_DIALOG_BUTTON")
                   .click()
@@ -228,7 +229,7 @@ define(["intern!object",
       },
 
       "Check form dialog has customised IDs for buttons": function () {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function () {
                return browser.findById("LAUNCH_CUSTOM_BUTTON_ID_DIALOG")
                   .click()
@@ -249,7 +250,7 @@ define(["intern!object",
       },
 
       "Count golden path repeating dialog buttons": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("CREATE_AND_CREATE_ANOTHER_1")
                   .click()
@@ -404,7 +405,7 @@ define(["intern!object",
       },
 
       "Can launch dialog within dialog": function() {
-         return closeAllDialogs()
+         return closeAllDialogs(browser)
             .then(function() {
                return browser.findById("LAUNCH_OUTER_DIALOG_BUTTON")
                   .click()
@@ -449,5 +450,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

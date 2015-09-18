@@ -30,8 +30,10 @@ define(["intern!object",
         function (registerSuite, assert, require, TestCommon, keys) {
 
    var alfPause = 250;
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Menus Tests",
 
       setup: function() {
@@ -387,5 +389,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

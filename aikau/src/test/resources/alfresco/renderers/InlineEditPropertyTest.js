@@ -29,9 +29,10 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"],
    function(registerSuite, expect, assert, require, TestCommon, keys) {
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "InlineEditProperty",
 
       setup: function() {
@@ -380,5 +381,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

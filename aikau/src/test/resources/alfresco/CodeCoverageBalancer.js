@@ -24,42 +24,39 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "intern",
-        "require",
+        "intern", 
+        "require", 
         "alfresco/TestCommon"], 
-        function (registerSuite, assert, intern, require, TestCommon) {
+        function(registerSuite, assert, intern, require, TestCommon) {
 
-   var browser;
-   registerSuite({
-      name: "Code Coverage Balancer",
+   registerSuite(function() {
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/RequireEverything", "Coverage Balancer").end();
-      },
+      return {
+         name: "Code Coverage Balancer",
 
-      beforeEach: function() {
-         browser.end();
-      },
+         setup: function() {
+            browser = this.remote;
+         },
 
-      "Balance": function () {
-         if(intern.args.doCoverage === "true")
-         {
-            return browser.findByCssSelector("#LABEL")
-               .getVisibleText()
-               .then(function(text) {
-                  assert(text === "Coverage Balanced!", "Code Coverage Balancer Didn't Load - coverage results will be invalid");
-               })
-            .end();
-          }
-          else
-          {
-            return browser.end();
-          }
-      },
+         "Balance": function() {
+            if (intern.args.doCoverage === true)
+            {
+               return TestCommon.loadTestWebScript(this.remote, "/RequireEverything", "Coverage Balancer")
+                  .end()
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
+               .findByCssSelector("#LABEL")
+                  .getVisibleText()
+                  .then(function(text) {
+                     assert(text === "Coverage Balanced!", "Code Coverage Balancer Didn't Load - coverage results will be invalid");
+                  })
+                  .end();
+            }
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

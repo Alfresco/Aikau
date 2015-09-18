@@ -14,6 +14,7 @@ module.exports = {
       js: "src/main/resources/alfresco/**/*.js",
       jsdocConfig: "conf.json",
       jsdocReadme: "src/jsdoc-templates/alfresco/README.md",
+      reporter: "src/test/resources/reporters/AikauConcurrentReporter.js",
       test: "tests/alfresco/**",
       testApp: "src/test/resources/testApp/WEB-INF/classes/alfresco/site-webscripts/**",
       testFramework: "src/test/resources/testApp/js/aikau/testing/**",

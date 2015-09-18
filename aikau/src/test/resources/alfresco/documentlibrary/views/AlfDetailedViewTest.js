@@ -25,9 +25,10 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function(registerSuite, assert, TestCommon) {
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "AlfDetailedView",
 
       setup: function() {
@@ -185,6 +186,8 @@ define(["intern!object",
             .click()
             .end()
 
+         .getLastPublish("ALF_GET_COMMENTS", true)
+
          .findByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .detail-item__commentsReveal > .content")
             .getSize()
             .then(function(size) {
@@ -202,5 +205,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

@@ -27,8 +27,10 @@ define(["intern!object",
         "alfresco/TestCommon"],
         function(registerSuite, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Number Spinner Tests",
 
       setup: function() {
@@ -178,7 +180,7 @@ define(["intern!object",
          .findAllByCssSelector("#NS7 .validation-error")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "'permitEmpty' number spinner should allow empty values");
-            })
+            });
       },
 
       "Empty value submits null value": function() {
@@ -308,5 +310,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

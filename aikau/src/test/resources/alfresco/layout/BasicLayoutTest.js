@@ -26,9 +26,11 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, require, TestCommon) {
 
-   var testableDimensions = {};
-   var browser;
-   registerSuite({
+registerSuite(function(){
+   var testableDimensions = {}, 
+      browser;
+
+   return {
       name: "Basic Layout Tests",
 
       setup: function() {
@@ -222,5 +224,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

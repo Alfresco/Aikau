@@ -28,13 +28,11 @@ define(["intern!object",
    ],
    function(registerSuite, assert, require, TestCommon) {
 
-      var browser,
-         singlePickerLaunchButton,
-         singlePickerResetButton,
-         multiPickerLaunchButton,
-         multiPickerResetButton;
 
-      registerSuite({
+      registerSuite(function(){
+      var browser;
+
+   return {
          name: "Site Picker Tests",
 
          setup: function() {
@@ -121,5 +119,6 @@ define(["intern!object",
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    });
