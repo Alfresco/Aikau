@@ -252,7 +252,7 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       onResize: function alfresco_layout_FixedHeaderFooter__onResize() {
-         if ((!this.heightMode || this.heightMode === "AUTO") && this.recalculateAutoHeightOnResize === true)
+         if (this.recalculateAutoHeightOnResize === true)
          {
             this.setHeight(this.domNode);
          }
