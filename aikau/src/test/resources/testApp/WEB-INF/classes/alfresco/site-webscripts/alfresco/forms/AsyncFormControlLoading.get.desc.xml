@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Async Form Control Loading</shortname>
+  <description>This test page deals with a specific scenario in which form controls nested within layout containers have dependencies that are loaded asynchronously and is used to test that Aikau is able to cope with this occurring without error.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AsyncFormControlLoading</url>
+</webscript>

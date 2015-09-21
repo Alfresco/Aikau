@@ -18,6 +18,35 @@
  */
 
 /**
+ * This layout widget allows widget models to be aligned to either the left or the right. Up until Aikau 1.0.36
+ * this was achieved by including an "align" attribute in each widget configured to be either "left" or "right".
+ * However, since Aikau 1.0.36 the [widgetsRight]{@link module:alfresco/layout/LeftAndRight#widgetsRight} and
+ * [widgetsLeft]{@link module:alfresco/layout/LeftAndRight#widgetsLeft} configuration attributes should be used
+ * instead.
+ *
+ * @example <caption>This is an example configuration:</caption>
+ * {
+ *   name: "alfresco/layout/LeftAndRight",
+ *   config: {
+ *     widgetsLeft: [
+ *        {
+ *           name: "alfresco/logo/Logo",
+ *           config: {
+ *              logoClasses: "surf-logo-small"
+ *           }
+ *        }
+ *     ],
+ *     widgetsRight: [
+ *        {
+ *           name: "alfresco/logo/Logo",
+ *           config: {
+ *              logoClasses: "alfresco-logo-only"
+ *           }
+ *        }
+ *     ]
+ *   }
+ * }
+ * 
  * @module alfresco/layouts/LeftAndRight
  * @extends module:alfresco/core/ProcessWidgets
  * @mixes module:alfresco/accessibility/_SemanticWrapperMixin
@@ -53,6 +82,26 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * The widgets model to align to the right.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.36
+       */
+      widgetsRight: null,
+
+      /**
+       * The widgets model to align to the left.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.36
+       */
+      widgetsLeft: null,
+
+      /**
        * Iterates through the array of widgets to be created and creates the appropriate DOM node based
        * on the "align" attribute of the widget configuration. 
        * 
@@ -60,49 +109,25 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_layout_LeftAndRight__postCreate() {
          domClass.add(this.domNode, this.additionalCssClasses || "");
-         if (this.widgets)
+         if (!this.widgetsRight && 
+             !this.widgetsLeft &&
+              this.widgets)
          {
-            this._processedWidgets = [];
-            
-            // Iterate over all the widgets in the configuration object and add them...
-            array.forEach(this.widgets, function(entry, i) {
-               if (this.filterWidget(entry, i))
-               {
-                  var domNode = null;
-                  if (entry.align === "right")
-                  {
-                     domNode = this.createWidgetDomNode(entry, this.rightWidgets, entry.className);
-                  }
-                  else
-                  {
-                     domNode = this.createWidgetDomNode(entry, this.leftWidgets, entry.className);
-                  }
-                  this.createWidget(entry, domNode, this._registerProcessedWidget, this, i);
-               }
-            }, this);
+            this.widgetsRight = array.filter(this.widgets, function(widget) {
+               return widget.align === "right";
+            });
+            this.widgetsLeft = array.filter(this.widgets, function(widget) {
+               return widget.align !== "right";
+            });
          }
+         this.processWidgets(this.widgetsRight, this.rightWidgets, "RIGHT");
+         this.processWidgets(this.widgetsLeft, this.leftWidgets, "LEFT");
 
          // Create a semantic wrapper if required
          if(this.semanticWrapper)
          {
             this.generateSemanticWrapper(this.parentNode, this.containerNode);
          }
-      },
-      
-      /**
-       * Overrides the default implementation to ensure that the DOM node created has the appropriate CSS
-       * classes applied such that they are aligned appropriately.
-       * 
-       * @instance
-       * @param {object} widget The configuration for the widget to create a new DOM node for.
-       * @param {element} rootNode The DOM node to add the new DOM node as a child of
-       * @param {string} rootClassName The CSS class (or space separated list of CSS classes) to be applied to the DOM node
-       */
-      createWidgetDomNode: function alfresco_layout_LeftAndRight__createWidgetDomNode(widget, rootNode, rootClassName) {
-         var className = (rootClassName) ? rootClassName + " horizontal-widget" : "horizontal-widget";
-         var outerDiv = domConstruct.create("div", { className: className}, rootNode);
-         var innerDiv = domConstruct.create("div", {}, outerDiv);
-         return innerDiv;
       }
    });
 });

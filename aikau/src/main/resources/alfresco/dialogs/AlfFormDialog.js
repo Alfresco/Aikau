@@ -33,8 +33,9 @@ define(["dojo/_base/declare",
         "alfresco/dialogs/AlfDialog",
         "dojo/_base/lang",
         "alfresco/forms/Form",
-        "alfresco/buttons/AlfButton"], 
-        function(declare, AlfDialog, lang, Form, AlfButton) {
+        "alfresco/buttons/AlfButton",
+        "dojo/when"], 
+        function(declare, AlfDialog, lang, Form, AlfButton, when) {
    
    return declare([AlfDialog], {
       
@@ -168,22 +169,25 @@ define(["dojo/_base/declare",
        * @param {object} payload The dialog content
        */
       onDialogConfirmation: function alfresco_dialogs_AlfFormDialog__onDialogConfirmation(payload) {
-         if (payload != null && 
-             payload.dialogContent != null &&
-             payload.dialogContent.length == 1 &&
-             typeof payload.dialogContent[0].getValue === "function")
+         if (payload && 
+             payload.dialogContent)
          {
-            var data = payload.dialogContent[0].getValue();
-            if (this.formSubmissionPayload == null)
-            {
-               this.formSubmissionPayload = {};
-            }
-            var payload = lang.mixin(data, this.formSubmissionPayload);
-            this.alfPublish(this.formSubmissionTopic, payload, true);
-         }
-         else
-         {
-            this.alfLog("error", "The format of the dialog content was not as expected, the 'formSubmissionTopic' will not be published", payload, this);
+            when(payload.dialogContent, lang.hitch(this, function(dialogContent) {
+               if (dialogContent && dialogContent.length)
+               {
+                  var data = payload.dialogContent[0].getValue();
+                  if (!this.formSubmissionPayload)
+                  {
+                     this.formSubmissionPayload = {};
+                  }
+                  data = lang.mixin(data, this.formSubmissionPayload);
+                  this.alfPublish(this.formSubmissionTopic, data, true);
+               }
+               else
+               {
+                  this.alfLog("error", "The format of the dialog content was not as expected, the 'formSubmissionTopic' will not be published", payload, this);
+               }
+            }));
          }
       }
    });

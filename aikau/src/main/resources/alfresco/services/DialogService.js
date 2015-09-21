@@ -171,11 +171,12 @@ define(["dojo/_base/declare",
         "alfresco/forms/Form",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/aspect",
         "dojo/on",
         "dojo/keys",
-        "jquery",
-        "dojo/aspect"],
-        function(declare, BaseService, topics, AlfDialog, AlfForm, lang, array, on, keys, $, aspect) {
+        "dojo/when",
+        "jquery"],
+        function(declare, BaseService, topics, AlfDialog, AlfForm, lang, array, aspect, on, keys, when, $) {
 
    return declare([BaseService], {
 
@@ -752,45 +753,48 @@ define(["dojo/_base/declare",
        */
       onFormDialogConfirmation: function alfresco_services_DialogService__onFormDialogConfirmation(payload) {
          if (payload &&
-             payload.dialogContent &&
-             payload.dialogContent.length &&
-             typeof payload.dialogContent[0].getValue === "function")
+             payload.dialogContent)
          {
-            var data = {};
-            var formData = payload.dialogContent[0].getValue();
+            when(payload.dialogContent, lang.hitch(this, function(dialogContent) {
+               if (dialogContent && dialogContent.length)
+               {
+                  var data = {};
+                  var formData = dialogContent[0].getValue();
 
-            // Destroy the dialog if a reference is provided...
-            if (payload.dialogReference && typeof payload.dialogReference.destroyRecursive === "function")
-            {
-               payload.dialogReference.destroyRecursive();
-            }
+                  // Destroy the dialog if a reference is provided...
+                  if (payload.dialogReference && typeof payload.dialogReference.destroyRecursive === "function")
+                  {
+                     payload.dialogReference.destroyRecursive();
+                  }
 
-            // Mixin in any additional payload information...
-            // An alfResponseScope should always have been set on a payload so it can be set as the
-            // responseScope, but a responseScope in the formSubmissionPayloadMixin will override it
-            lang.mixin(data, {
-               responseScope: payload.alfResponseScope
-            });
-            payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
+                  // Mixin in any additional payload information...
+                  // An alfResponseScope should always have been set on a payload so it can be set as the
+                  // responseScope, but a responseScope in the formSubmissionPayloadMixin will override it
+                  lang.mixin(data, {
+                     responseScope: payload.alfResponseScope
+                  });
+                  payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
 
-            // Using JQuery here in order to support deep merging of dot-notation properties...
-            $.extend(true, data, formData);
+                  // Using JQuery here in order to support deep merging of dot-notation properties...
+                  $.extend(true, data, formData);
 
-            // Publish the topic requested for complete...
-            var customScope;
-            if (payload.formSubmissionScope || payload.formSubmissionScope === "") 
-            {
-               customScope = payload.formSubmissionScope;
-            }
-            
-            var topic = payload.formSubmissionTopic,
-               globalScope = payload.hasOwnProperty("formSubmissionGlobal") ? !!payload.formSubmissionGlobal : true,
-               toParent = false;
-            this.alfPublish(topic, data, globalScope, toParent, customScope);
-         }
-         else
-         {
-            this.alfLog("error", "The format of the dialog content was not as expected, the 'formSubmissionTopic' will not be published", payload, this);
+                  // Publish the topic requested for complete...
+                  var customScope;
+                  if (payload.formSubmissionScope || payload.formSubmissionScope === "") 
+                  {
+                     customScope = payload.formSubmissionScope;
+                  }
+                  
+                  var topic = payload.formSubmissionTopic,
+                     globalScope = payload.hasOwnProperty("formSubmissionGlobal") ? !!payload.formSubmissionGlobal : true,
+                     toParent = false;
+                  this.alfPublish(topic, data, globalScope, toParent, customScope);
+               }
+               else
+               {
+                  this.alfLog("error", "The format of the dialog content was not as expected, the 'formSubmissionTopic' will not be published", payload, this);
+               }
+            }));
          }
       },
 
