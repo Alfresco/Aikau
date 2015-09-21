@@ -138,8 +138,9 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        * @type {string}
        * @default
+       * @deprecated Since 1.0.36 use [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode} instead
        */
-      height: "auto",
+      height: "AUTO",
 
       /**
        * If this widget is placed into a widget that has padding then this allowance can be configured which
@@ -186,7 +187,7 @@ define(["alfresco/core/ProcessWidgets",
          // HeightMixin and was expecting a "height" rather than a "heightMode" attribute.
          // It was also expecting "auto" rather than "AUTO" so for backwards compatibility
          // we convert non-numeric values to be all uppercase.
-         if (this.height && !this.heightMode)
+         if (this.height)
          {
             this.heightMode = this.height;
             if (typeof this.heightMode.toUpperCase === "function")

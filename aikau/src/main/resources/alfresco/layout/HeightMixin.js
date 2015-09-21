@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
             {
                calculatedHeight = this.calculateParentHeight(domNode, offset);
             }
-            else if (!heightMode || heightMode === "AUTO" || heightMode === "auto" || isNaN(heightMode))
+            else if (!heightMode || heightMode === "AUTO" || heightMode === "auto")
             {
                calculatedHeight =  availableHeight;
             }
@@ -186,7 +186,11 @@ define(["dojo/_base/declare",
          if (height || height === 0)
          {
             when(height, lang.hitch(this, function(value) {
-               domStyle.set(domNode, "height", value + "px");
+               if (!isNaN(height))
+               {
+                  height = height + "px";
+               }
+               domStyle.set(domNode, "height", value);
             }));
          }
       }
