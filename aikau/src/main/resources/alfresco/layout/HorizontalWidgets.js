@@ -67,8 +67,9 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-style",
-        "dojo/dom-geometry"], 
-        function(ProcessWidgets, declare, template, ResizeMixin, lang, array, domConstruct, domStyle, domGeom) {
+        "dojo/dom-geometry",
+        "dojo/when"], 
+        function(ProcessWidgets, declare, template, ResizeMixin, lang, array, domConstruct, domStyle, domGeom, when) {
    
    return declare([ProcessWidgets, ResizeMixin], {
       
@@ -351,13 +352,15 @@ define(["alfresco/core/ProcessWidgets",
        * @param {object} evt The resize event.
        */
       onResize: function alfresco_layout_HorizontalWidget__onResize() {
-         this.doWidthProcessing(this._processedWidgets, false);
-         array.forEach(this._processedWidgets, function(widget) {
-            if (widget && widget.domNode && widget.widthCalc)
-            {
-               domStyle.set(widget.domNode.parentNode, "width", widget.widthCalc + "px");
-            }
-         });
+         when(this.getProcessedWidgets(), lang.hitch(this, function(processedWidgets) {
+            this.doWidthProcessing(processedWidgets, false);
+            array.forEach(processedWidgets, function(widget) {
+               if (widget && widget.domNode && widget.widthCalc)
+               {
+                  domStyle.set(widget.domNode.parentNode, "width", widget.widthCalc + "px");
+               }
+            });
+         }));
       },
 
       /**

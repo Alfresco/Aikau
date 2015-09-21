@@ -378,7 +378,7 @@ define(["dojo/_base/declare",
                }
             }, this);
 
-            this.processWidgets(this.widgets, this._form.domNode);
+            this.processWidgets(this.widgets, this._form.domNode, "FIELDS");
          }
       },
 
@@ -881,8 +881,7 @@ define(["dojo/_base/declare",
          if (this.widgetsAdditionalButtons !== null)
          {
             this.additionalButtons = [];
-            this.__creatingButtons = true;
-            this.processWidgets(this.widgetsAdditionalButtons, this.buttonsNode);
+            this.processWidgets(this.widgetsAdditionalButtons, this.buttonsNode, "BUTTONS");
          }
          else
          {
@@ -908,12 +907,11 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      allWidgetsProcessed: function alfresco_forms_Form__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_forms_Form__allWidgetsProcessed(widgets, processWidgetsId) {
          // If additional button configuration has been processed, then get a reference to ALL the buttons...
-         if (this.__creatingButtons === true)
+         if (processWidgetsId === "BUTTONS")
          {
             this.additionalButtons = registry.findWidgets(this.buttonsNode);
-            this.__creatingButtons = false;
          }
          else
          {
@@ -1067,7 +1065,7 @@ define(["dojo/_base/declare",
        */
       validate: function alfresco_forms_Form__validate() {
          this.alfLog("log", "Validating form", this._form);
-         array.forEach(this._processedWidgets, function(widget) {
+         array.forEach(this._form.getChildren(), function(widget) {
             if (typeof widget.validateFormControlValue === "function")
             {
                widget.validateFormControlValue();

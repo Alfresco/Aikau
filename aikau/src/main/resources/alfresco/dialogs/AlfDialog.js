@@ -253,12 +253,10 @@ define(["dojo/_base/declare",
          // so that the buttons are disabled initially if required)
          if (this.widgetsButtons)
          {
-            this.creatingButtons = true;
             this.buttonsNode = domConstruct.create("div", {
                "class" : "footer"
             }, this.containerNode, "last");
-            this.processWidgets(this.widgetsButtons, this.buttonsNode);
-            this.creatingButtons = false;
+            this.processWidgets(this.widgetsButtons, this.buttonsNode, "BUTTONS");
          }
          else
          {
@@ -296,7 +294,7 @@ define(["dojo/_base/declare",
                   widgets: this.widgetsContent
                }
             }];
-            this.processWidgets(bodyModel, widgetsNode);
+            this.processWidgets(bodyModel, widgetsNode, "BODY");
          }
          else if (this.content)
          {
@@ -422,8 +420,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {Object[]}
        */
-      allWidgetsProcessed: function alfresco_dialogs_AlfDialog__allWidgetsProcessed(widgets) {
-         if (this.creatingButtons === true)
+      allWidgetsProcessed: function alfresco_dialogs_AlfDialog__allWidgetsProcessed(widgets, processWidgetsId) {
+         if (processWidgetsId === "BUTTONS")
          {
             // When creating the buttons, attach the handler to each created...
             this._buttons = [];

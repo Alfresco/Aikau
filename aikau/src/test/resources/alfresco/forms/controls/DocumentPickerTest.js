@@ -51,10 +51,6 @@ registerSuite(function(){
          browser.end();
       },
 
-      // teardown: function() {
-      //    return browser.end().alfPostCoverageResults(browser);
-      // },
-
       "Test picker dialog can be displayed": function () {
          return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
             .click()
