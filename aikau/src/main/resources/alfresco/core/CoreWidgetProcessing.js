@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
       _countDownLocationPrefix: "_processingCountDown",
 
       /**
-       * This string is used to identify locations where either processed widgets can be referenced. This location
+       * This string is used to identify locations where processed widgets can be referenced. This location
        * will either be populated with an array of widgets or with a promise that will be resolved once all the
        * widgets have been created. This should not be set or configured.
        *
@@ -119,17 +119,17 @@ define(["dojo/_base/declare",
        * @since 1.0.36
        */
       getProcessedWidgets: function alfresco_core_CoreWidgetProcessing__getProcessedWidgets(processWidgetsId) {
-         var r;
+         var widgets;
          var processedWidgets = lang.getObject(this.getWidgetProcessingLocation(processWidgetsId, this._processedWidgetsLocationPrefix), false, this);
          if (processedWidgets)
          {
-            r = processedWidgets.promise;
+            widgets = processedWidgets.promise;
          }
          else
          {
-            r = [];
+            widgets = [];
          }
-         return r;
+         return widgets;
       },
 
       /**
@@ -220,8 +220,9 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("warn", "Could not process widget because it was missing configuration - check 'widgets' array for empty elements", this, index);
-            var countdown = lang.getObject(this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix), false, this);
-            lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix), countdown - 1, this);
+            var location = this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix);
+            var countdown = lang.getObject(location, false, this);
+            lang.setObject(location, countdown - 1, this);
          }
       },
 
@@ -237,8 +238,9 @@ define(["dojo/_base/declare",
        */
       _registerProcessedWidget: function alfresco_core_CoreWidgetProcessing___registerProcessedWidget(widget, index, processWidgetsId) {
          // Decrement the count as another widget is registered...
-         var countdown = lang.getObject(this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix), false, this) - 1;
-         lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix), countdown, this);
+         var countDownLocation = this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix);
+         var countdown = lang.getObject(countDownLocation, false, this) - 1;
+         lang.setObject(countDownLocation, countdown, this);
 
          this.alfLog("log", "Widgets expected: ", countdown, this.id);
          

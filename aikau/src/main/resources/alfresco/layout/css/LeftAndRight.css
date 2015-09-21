@@ -1,14 +1,14 @@
 .alfresco-layout-LeftAndRight {
    width: 100%;
 
-   .alfresco-layout-LeftAndRight__left {
+   &__left {
       float: left;
       > * {
          float: left;
       }
    }
 
-   .alfresco-layout-LeftAndRight__right {
+   &__right {
       float: right;
       > * {
          float: right;

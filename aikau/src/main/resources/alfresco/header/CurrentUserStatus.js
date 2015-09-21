@@ -207,7 +207,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       setStatusRelativeTime: function alfresco_header_CurrentUserStatus__setStatusRelativeTime() {
-         var relativeTime = (this.userStatusTime === "" || !this.userStatusTime) ? this.message("status.never-updated") : this.getRelativeTime(this.userStatusTime);
+         var relativeTime = this.userStatusTime ? this.getRelativeTime(this.userStatusTime) : this.message("status.never-updated");
          this.lastUpdateNode.innerHTML = this.message("status.updated", [relativeTime]);
       },
       
