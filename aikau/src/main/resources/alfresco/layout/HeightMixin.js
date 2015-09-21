@@ -186,9 +186,9 @@ define(["dojo/_base/declare",
          if (height || height === 0)
          {
             when(height, lang.hitch(this, function(value) {
-               if (!isNaN(height))
+               if (!isNaN(value))
                {
-                  height = height + "px";
+                  value = value + "px";
                }
                domStyle.set(domNode, "height", value);
             }));
