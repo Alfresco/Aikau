@@ -231,6 +231,7 @@ define({
       "src/test/resources/alfresco/services/DeleteSiteTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
       "src/test/resources/alfresco/services/FullScreenDialogTest",
+      "src/test/resources/alfresco/services/LoggingServiceTest",
       "src/test/resources/alfresco/services/NavigationServiceTest",
       "src/test/resources/alfresco/services/NotificationServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",

@@ -269,6 +269,11 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.34
+       *
+       * @event module:alfresco/core/topics~GET_PREFERENCE
+       * @property {string} preference Dot-notation property indicating the user preference to retrieve
+       * @property {function} callback The function to call when the preference has been retrieved
+       * @property {object} callbackScope The scope with which to execute the callback
        */
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
 
