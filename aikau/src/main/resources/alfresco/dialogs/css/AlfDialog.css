@@ -45,10 +45,9 @@
 }
 
 .alfresco-dialog-AlfDialog .dialog-body {
-   padding: 12px;
+   padding: 12px; /* NOTE: If this is changed, the associated paddingAdjustment in the JS needs updating */
    overflow: auto;
-   height: ~"calc(100% - 40px)";
-   margin-bottom: 40px;
+   margin-bottom: 40px; /* NOTE: If this is changed, the associated margin adjustment in the JS needs updating */
    min-width: 560px;
 }
 
