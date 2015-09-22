@@ -198,8 +198,15 @@ define(["dojo/_base/declare",
          var docHeight = $(document).height(),
              clientHeight = $(window).height();
          var h = (docHeight < clientHeight) ? docHeight : clientHeight;
+
+         // We want to ensure that the dialog always fits within the viewport, so take the available
+         // height and remove 200 pixels to accomodate both the title and buttons bars and still leave
+         // some padding...
          var maxHeight = h - 200;
 
+         // By default there is padding around the dialog body (12px above and below the body)... 
+         // We need to take this into consideration when calculating the simple panel height to ensure
+         // that it fits perfectly within the available space...
          var paddingAdjustment = 24;
          if (this.additionalCssClasses && this.additionalCssClasses.indexOf("no-padding") !== -1)
          {
@@ -211,14 +218,18 @@ define(["dojo/_base/declare",
          {
             simplePanelHeight = (parseInt(this.contentHeight, 10) - paddingAdjustment) + "px";
          }
-
-         var containerHeight = $(this.containerNode).height();
-         if (containerHeight)
+         else
          {
-            containerHeight -= 40;
-            if (containerHeight < maxHeight)
+            // When there is no fixed content height, make sure that the max-height adapts to the displayed content...
+            var containerHeight = $(this.containerNode).height();
+            if (containerHeight)
             {
-               maxHeight = containerHeight;
+               // We need to deduct 40 pixels from the container height to accomodate the buttons bar...
+               containerHeight -= 40;
+               if (containerHeight < maxHeight)
+               {
+                  maxHeight = containerHeight;
+               }
             }
          }
 
@@ -379,9 +390,13 @@ define(["dojo/_base/declare",
        */
       onWindowResize: function alfresco_dialogs_AlfDialog__onWindowResize() {
          var calculatedHeights = this.calculateHeights();
-         domStyle.set(this.bodyNode, {
-            "max-height": calculatedHeights.maxBodyHeight + "px"
-         });
+         if (calculatedHeights.maxBodyHeight)
+         {
+            // Don't set a max-height when it's 0...
+            domStyle.set(this.bodyNode, {
+               "max-height": calculatedHeights.maxBodyHeight + "px"
+            });
+         }
       },
 
       /**
