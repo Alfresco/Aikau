@@ -115,7 +115,7 @@ registerSuite(function(){
 
             .getLastPublish("VALID_ID_ALF_STORE_DASHLET_HEIGHT_SUCCESS")
                .then(function(payload) {
-                  assert.deepPropertyVal(payload, "requestConfig.data.height", 250, "Did not publish new height");
+                  assert.deepPropertyVal(payload, "requestConfig.data.height", 270, "Did not publish new height");
                });
          },
 

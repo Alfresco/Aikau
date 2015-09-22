@@ -93,6 +93,7 @@
  */
 define(["alfresco/core/ProcessWidgets",
         "alfresco/core/ResizeMixin",
+        "alfresco/layout/HeightMixin",
         "dojo/_base/array",
         "dojo/_base/declare",
         "dojo/_base/lang",
@@ -101,11 +102,10 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/dom-construct",
         "dojo/dom-style",
         "dojo/topic",
-        "dojo/text!./templates/FixedHeaderFooter.html",
-        "jquery"],
-        function(ProcessWidgets, ResizeMixin, array, declare, lang, aspect, domClass, domConstruct, domStyle, topic, template, $) {
+        "dojo/text!./templates/FixedHeaderFooter.html"],
+        function(ProcessWidgets, ResizeMixin, HeightMixin, array, declare, lang, aspect, domClass, domConstruct, domStyle, topic, template) {
 
-   return declare([ProcessWidgets, ResizeMixin], {
+   return declare([ProcessWidgets, ResizeMixin, HeightMixin], {
 
       /**
        * The base class for the widget
@@ -138,8 +138,9 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        * @type {string}
        * @default
+       * @deprecated Since 1.0.36 use [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode} instead
        */
-      height: "auto",
+      height: "AUTO",
 
       /**
        * If this widget is placed into a widget that has padding then this allowance can be configured which
@@ -151,6 +152,7 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        * @type {number}
        * @default
+       * @deprecated Since 1.0.36 use [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment} instead
        */
       autoHeightPaddingAllowance: 0,
 
@@ -181,7 +183,25 @@ define(["alfresco/core/ProcessWidgets",
       postCreate: function alfresco_layout_FixedHeaderFooter__postCreate() {
          // We need to potentially resize sometimes ... use these triggers
          this.alfSetupResizeSubscriptions(this.onResize, this);
-         this.setHeight();
+
+         // This is to fix the fact that the FixedHeaderFooter didn't originally use the 
+         // HeightMixin and was expecting a "height" rather than a "heightMode" attribute.
+         // It was also expecting "auto" rather than "AUTO" so for backwards compatibility
+         // we convert non-numeric values to be all uppercase.
+         if (this.height !== "AUTO" && this.heightMode === "AUTO")
+         {
+            this.heightMode = this.height;
+            if (typeof this.heightMode.toUpperCase === "function")
+            {
+               this.heightMode = this.heightMode.toUpperCase();
+            }
+         }
+         if (this.autoHeightPaddingAllowance && !this.heightAdjustment)
+         {
+            this.heightAdjustment = this.autoHeightPaddingAllowance;
+         }
+
+         this.setHeight(this.domNode);
 
          // Add in the widgets
          this._doProcessWidgets([
@@ -202,45 +222,6 @@ define(["alfresco/core/ProcessWidgets",
          // Do the resize
          this.onResize();
          this.alfPublishResizeEvent(this.domNode);
-      },
-
-      /**
-       * Calculates and sets the height of the widget.
-       * 
-       * @instance
-       */
-      setHeight: function alfresco_layout_FixedHeaderFooter__setHeight() {
-         // When no height is specified (the only way to do this would be to configure in 
-         // null or 0) or the height is left as the default we'll try and set a sensible
-         // height based on the available space in the client window/document.
-         if (!this.height || this.height === "auto")
-         {
-            var offset = $(this.domNode).offset();
-            var docHeight = $(document).height(),
-                clientHeight = $(window).height();
-
-            // Work with either the window or document height depending upon which is smallest...
-            var h = (docHeight < clientHeight) ? docHeight : clientHeight;
-            var height = (h - offset.top - this.autoHeightPaddingAllowance) + "px";
-
-            // Set the height of the dom node
-            domStyle.set(this.domNode, {
-               height: height
-            });
-         }
-         else
-         {
-            // See AKU-483 - if the configured height is a number, assume it to be pixels...
-            if (!isNaN(this.height))
-            {
-               this.height = this.height + "px";
-            }
-
-            // Set the height of the dom node
-            domStyle.set(this.domNode, {
-               height: this.height
-            });
-         }
       },
 
       /**
@@ -271,9 +252,9 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       onResize: function alfresco_layout_FixedHeaderFooter__onResize() {
-         if ((!this.height || this.height === "auto") && this.recalculateAutoHeightOnResize === true)
+         if (this.recalculateAutoHeightOnResize === true)
          {
-            this.setHeight();
+            this.setHeight(this.domNode);
          }
 
          var widgetHeight = this.domNode.offsetHeight,

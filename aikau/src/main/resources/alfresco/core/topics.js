@@ -451,6 +451,17 @@ define([],function() {
        * @default
        * @since 1.0.34
        */
-      UPLOAD_TO_UNKNOWN_LOCATION: "ALF_UPLOAD_TO_UNKNOWN_LOCATION"
+      UPLOAD_TO_UNKNOWN_LOCATION: "ALF_UPLOAD_TO_UNKNOWN_LOCATION",
+
+      /**
+       * This topic is published to indicate that widget processing has been completed. It is typically
+       * fired by widgets that dynamically render widget models.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      WIDGET_PROCESSING_COMPLETE: "ALF_WIDGET_PROCESSING_COMPLETE"
    };
 });
