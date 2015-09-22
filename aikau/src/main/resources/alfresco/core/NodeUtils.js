@@ -73,15 +73,18 @@ define(["dojo/_base/lang",
        * @param {Object[]} nodes
        * @returns {Array} nodeRefArray
        */
-      nodeRefArray: function alfresco_core_NodeUtils__nodeRefArray(nodes) {
-         if (!lang.isArray(nodes))
+      nodeRefArray: function alfresco_core_NodeUtils__nodeRefArray(items) {
+         if (!lang.isArray(items))
          {
             this.alfLog("error", "expected an array of nodes, but didn't receive one");
          }
 
-         var nodeRefArray = array.map(nodes, function(node){
-            if (node.nodeRef) {
-               return node.nodeRef;
+         var nodeRefArray = array.map(items, function(item){
+            if (item.nodeRef) {
+               return item.nodeRef;
+            }
+            if (item.node && item.node.nodeRef) {
+               return item.node.nodeRef;
             }
          });
          return nodeRefArray;

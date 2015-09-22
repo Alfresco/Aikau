@@ -163,6 +163,9 @@ define(["dojo/_base/declare",
          },
          {
             name: "alfresco/renderers/actions/ManageAspects"
+         },
+         {
+            name: "alfresco/renderers/actions/StartWorkflow"
          }
       ],
 

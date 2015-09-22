@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Start Workflow</shortname>
+  <description>A test page for verifying the Start Workflow action</description>
+  <family>aikau-unit-tests</family>
+  <url>/StartWorkflow</url>
+</webscript>
