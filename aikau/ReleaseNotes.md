@@ -1,4 +1,4 @@
-Aikau 1.0.34 Release Notes
+Aikau 1.0.36 Release Notes
 ===
 
 New deprecations: 
@@ -42,6 +42,37 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.36:
+* [AKU-464](https://issues.alfresco.com/jira/browse/AKU-464)       - DateTextBox support current date config
+* [AKU-465](https://issues.alfresco.com/jira/browse/AKU-465)       - Added place holder support in DateTextBox
+* [AKU-468](https://issues.alfresco.com/jira/browse/AKU-468)       - Use consistent font in TextArea
+* [AKU-544](https://issues.alfresco.com/jira/browse/AKU-544)       - Bulk action support for copy
+* [AKU-547](https://issues.alfresco.com/jira/browse/AKU-547)       - Bulk action support for start workflow
+* [AKU-559](https://issues.alfresco.com/jira/browse/AKU-559)       - Async dependency handling
+* [AKU-568](https://issues.alfresco.com/jira/browse/AKU-568)       - Added alfresco/layout/DynamicWidgets
+* [AKU-571](https://issues.alfresco.com/jira/browse/AKU-571)       - Prevent form control cropping in dialogs
+* [AKU-573](https://issues.alfresco.com/jira/browse/AKU-573)       - Prevent creating tabs with duplicate IDs in AlfTabContainer
+* [AKU-574](https://issues.alfresco.com/jira/browse/AKU-574)       - Ensure AlfSideBarContainer can be re-opened
+* [AKU-578](https://issues.alfresco.com/jira/browse/AKU-578)       - Suppress user preferences in LoggingService
+* [AKU-579](https://issues.alfresco.com/jira/browse/AKU-579)       - Pervent nnnecessary scrollbar showing in form dialog
+* [AKU-580](https://issues.alfresco.com/jira/browse/AKU-580)       - PublishingDropDown cancel subscription updates
+* [AKU-584](https://issues.alfresco.com/jira/browse/AKU-584)       - SearchService scoping fix
+
+1.0.35:
+* [AKU-551](https://issues.alfresco.com/jira/browse/AKU-551)       - Retain item selection when switching views
+* [AKU-557](https://issues.alfresco.com/jira/browse/AKU-557)       - Added support for "full screen" dialogs
+* [AKU-558](https://issues.alfresco.com/jira/browse/AKU-558)       - Remove text-decoration from menu item links
+* [AKU-559](https://issues.alfresco.com/jira/browse/AKU-559)       - Address non-default locale AlfFilteredList rendering
+* [AKU-563](https://issues.alfresco.com/jira/browse/AKU-563)       - Improve InlineEditProperty re-rendering on updates
+* [AKU-565](https://issues.alfresco.com/jira/browse/AKU-565)       - Added 20x20 delete icon
+* [AKU-567](https://issues.alfresco.com/jira/browse/AKU-567)       - Defensive code against reference error in DebugLog
+* [AKU-569](https://issues.alfresco.com/jira/browse/AKU-569)       - Support disable in PublishingDropDownMenu
+* [AKU-572](https://issues.alfresco.com/jira/browse/AKU-572)       - FixedHeaderFooter height calculations
+* [AKU-575](https://issues.alfresco.com/jira/browse/AKU-575)       - ComboBox on change event handling updates
+* [AKU-576](https://issues.alfresco.com/jira/browse/AKU-576)       - AlfGalleryViewSlider default column handling updates
+* [AKU-577](https://issues.alfresco.com/jira/browse/AKU-577)       - IE9 keyboard navigation fix in menu items
+* [AKU-581](https://issues.alfresco.com/jira/browse/AKU-581)       - Ensure form control labels are visible
+
 1.0.34:
 * [AKU-507](https://issues.alfresco.com/jira/browse/AKU-507)       - Ensure clearing filters for AlfFilteredList loads data
 * [AKU-538](https://issues.alfresco.com/jira/browse/AKU-538)       - Updated AlfFilmStripView carousel to set height appropriately
