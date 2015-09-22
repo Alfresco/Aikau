@@ -37,7 +37,7 @@ define(["alfresco/core/topics"],
       publishPayloadModifiers: ["processCurrentItemTokens"],
       publishPayload: {
          nodes: [{
-            nodeRef: "{nodeRef}"
+            nodeRef: "{node.nodeRef}"
          }],
          currentTarget: "CURRENT" // This indicates that the start-workflow page will be displayed in the current browser window/tab
       },

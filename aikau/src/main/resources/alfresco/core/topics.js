@@ -59,8 +59,8 @@ define([],function() {
        * @since 1.0.36
        *
        * @event module:alfresco/core/topics~ASSIGN_WORKFLOW
-       * @parameter {object[]} nodes - The array of Nodes to start the workflow on
-       * @parameter {object} currentTarget - The current Node in which the nodes reside
+       * @property {object[]} nodes - The array of Nodes to start the workflow on
+       * @property {object} currentTarget - The current Node in which the nodes reside
        */
       ASSIGN_WORKFLOW: "ALF_ASSIGN_WORKFLOW",
 
@@ -84,6 +84,23 @@ define([],function() {
        * @since 1.0.33
        */
       CLEAR_SELECTED_ITEMS: "ALF_CLEAR_SELECTED_ITEMS",
+
+      /**
+       * This topic is published to launch the copying or moving of a node (or nodes) to another location.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36
+       * 
+       * @event module:alfresco/core/topics~COPY_OR_MOVE
+       * @property {object[]} documents The nodes/documents to be copied/moved
+       * @property {boolean} [copy=false] Whether to copy the node(s) - default is to move
+       * @property {boolean} [singleItemMode=true] The mode in which to launch the picker (to determine single or multiple destinations)
+       * @property {string} [dialogTitle] The title of the picker dialog - default is the generic "copy" title
+       * @property {string} [confirmButtonLabel] The label of the picker confirmation button - default is the generic "copy" button confirmation
+       */
+      COPY_OR_MOVE: "ALF_COPY_OR_MOVE_REQUEST",
 
       /**
        * This can be published to make a request to create a dialog. It is typically handled by the
@@ -154,7 +171,7 @@ define([],function() {
        * @since 1.0.35
        *
        * @event module:alfresco/core/topics~DOCUMENT_DESELECTED
-       * @parameter {object} value - The item de-selected
+       * @property {object} value - The item de-selected
        */
       DOCUMENT_DESELECTED: "ALF_DOCLIST_DOCUMENT_DESELECTED",
       
@@ -167,7 +184,7 @@ define([],function() {
        * @since 1.0.35
        *
        * @event module:alfresco/core/topics~DOCUMENT_SELECTED
-       * @parameter {object} value - The item selected
+       * @property {object} value - The item selected
        */
       DOCUMENT_SELECTED: "ALF_DOCLIST_DOCUMENT_SELECTED",
       
@@ -183,8 +200,8 @@ define([],function() {
        * @since 1.0.35
        * 
        * @event module:alfresco/core/topics~DOCUMENT_SELECTION_UPDATE
-       * @parameter {string} [value=null] - The selection type, either "selectAll", "selectNone", "selectInvert", "selectFolders" or "selectDocuments"
-       * @parameter {object[]} [selectedItems=null] A specific set of items to be selected
+       * @property {string} [value=null] - The selection type, either "selectAll", "selectNone", "selectInvert", "selectFolders" or "selectDocuments"
+       * @property {object[]} [selectedItems=null] A specific set of items to be selected
        */
       DOCUMENT_SELECTION_UPDATE: "ALF_DOCLIST_FILE_SELECTION",
       
@@ -434,7 +451,7 @@ define([],function() {
        * @since 1.0.35
        * 
        * @event module:alfresco/core/topics~SELECTED_DOCUMENTS_CHANGED
-       * @parameter {object[]} selectedItems - The items that are selected
+       * @property {object[]} selectedItems - The items that are selected
        */
       SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
 

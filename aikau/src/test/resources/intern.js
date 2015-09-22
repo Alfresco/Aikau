@@ -38,12 +38,12 @@ define(["./config/Suites"],
          // OnDemand. Options that will be permutated are browserName, version, platform, and platformVersion; any other
          // capabilities options specified for an environment will be copied as-is
          environments: [{
-            // browserName: "Chrome",
-            // chromeOptions: {
-            //    excludeSwitches: ["ignore-certificate-errors"]
-            // }
+            browserName: "Chrome",
+            chromeOptions: {
+               excludeSwitches: ["ignore-certificate-errors"]
+            }
          // }, {
-            browserName: "Firefox"
+         //    browserName: "Firefox"
          }],
 
          // Maximum number of simultaneous integration tests that should be executed on the remote WebDriver service

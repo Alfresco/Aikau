@@ -73,7 +73,6 @@ model.jsonModel = {
                items: [
                   {
                      displayName: "Document",
-                     nodeRef: "workspace://SpacesStore/node4",
                      node: {
                         nodeRef: "workspace://SpacesStore/node4",
                         isContainer: false
