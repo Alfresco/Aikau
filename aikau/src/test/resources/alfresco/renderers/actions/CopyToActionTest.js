@@ -27,146 +27,125 @@ define([
    ],
    function(TestCommon, registerSuite, assert) {
 
+      function testActionVisibility(browser, actionNames, indexArg) {
+         var index = indexArg || 0,
+            nextIndex = index + 1,
+            actionSelector = "#ACTIONS_ITEM_" + index + "_GROUP .dijitMenuItem",
+            nodeName = actionNames[index],
+            shouldBePresent = nodeName.indexOf("!") === -1;
+         if (!shouldBePresent) {
+            nodeName = nodeName.substr(1);
+         }
+         return browser.findByCssSelector(actionSelector)
+            .end()
+            .then(function() {
+               if (!shouldBePresent) {
+                  assert.fail(null, null, "'Copy to' action present on " + nodeName + " but should not be");
+               } else if (nextIndex < actionNames.length) {
+                  return testActionVisibility(browser, actionNames, nextIndex);
+               }
+            }, function() {
+               if (shouldBePresent) {
+                  assert.fail(null, null, "'Copy to' action not present on " + nodeName);
+               } else if (nextIndex < actionNames.length) {
+                  return testActionVisibility(browser, actionNames, nextIndex);
+               }
+            });
+      }
+
       registerSuite(function() {
          var browser;
 
          return {
-            name: "Delete Action Test",
+            name: "CopyTo Action Test",
 
             setup: function() {
                browser = this.remote;
-               return TestCommon.loadTestWebScript(this.remote, "/Delete", "Delete Action Test").end();
+               return TestCommon.loadTestWebScript(this.remote, "/CopyTo", "CopyTo Action Test").end();
             },
 
             beforeEach: function() {
                browser.end();
             },
 
-            "Check that action appears for folder node": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_0_MENU_text")
+            "Legacy single item copy works": function() {
+               return browser.findById("SINGLE_COPY_VIA_ACTION_SERVICE")
                   .click()
                   .end()
-                  .findAllByCssSelector("#ACTIONS_ITEM_0_DELETE")
-                  .then(function(elements) {
-                     assert.lengthOf(elements, 1, "Could not find delete action for folder node");
+
+               .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
+                  .end()
+
+               .getLastPublish("ALF_MOVE_LOCATION_PICKED")
+                  .then(function(payload) {
+                     assert.deepPropertyVal(payload, "nodes[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d");
                   });
             },
 
-            "Check that action appears for document node": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_1_MENU_text")
+            "Legacy multiple item copy works": function() {
+               return browser.findById("MULTIPLE_COPY_VIA_ACTION_SERVICE")
                   .click()
                   .end()
-                  .findAllByCssSelector("#ACTIONS_ITEM_1_DELETE")
-                  .then(function(elements) {
-                     assert.lengthOf(elements, 1, "Could not find delete action for document node");
+
+               .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
+                  .end()
+
+               .getLastPublish("ALF_MOVE_LOCATION_PICKED")
+                  .then(function(payload) {
+                     assert.deepPropertyVal(payload, "nodes[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
+                     assert.deepPropertyVal(payload, "nodes[1]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f");
                   });
             },
 
-            "Check that action appears for user owned working copy": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_2_MENU_text")
+            "Context action works": function() {
+               return browser.findByCssSelector("#ACTIONS_ITEM_0 .dijitMenuItem")
                   .click()
                   .end()
-                  .findAllByCssSelector("#ACTIONS_ITEM_2_DELETE")
-                  .then(function(elements) {
-                     assert.lengthOf(elements, 1, "Could not find delete action for user owned working copy");
+
+               .findByCssSelector("#ACTIONS_ITEM_0_GROUP .alfresco-menus-AlfMenuItem")
+                  .click()
+                  .end()
+
+               .getLastPublish("ALF_COPY_OR_MOVE_REQUEST", true)
+                  .then(function(payload) {
+                     assert.deepPropertyVal(payload, "documents[0].node.nodeRef", "some://dummy/node");
                   });
             },
 
-            "Check that action does not appear for working copy owned by another user": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_3_MENU_text")
-                  .click()
-                  .end()
-                  .findAllByCssSelector("#ACTIONS_ITEM_3_DELETE")
-                  .then(function(elements) {
-                     assert.lengthOf(elements, 0, "Delete action should not have been displayed for working copy owned by another user");
-                  });
-            },
-
-            "Check that action appears for user owned locked node": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_4_MENU_text")
-                  .click()
-                  .end()
-                  .findAllByCssSelector("#ACTIONS_ITEM_4_DELETE")
-                  .then(function(elements) {
-                     assert.lengthOf(elements, 1, "Could not find delete action for user locked node");
-                  });
-            },
-
-            "Check that action does not appear for node locked by another user": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_5_MENU_text")
-                  .click()
-                  .end()
-                  .findAllByCssSelector("#ACTIONS_ITEM_5_DELETE")
-                  .then(function(elements) {
-                     assert.lengthOf(elements, 0, "Delete action should not have been displayed for node locked by another user");
-                  });
-            },
-
-            "Check that action does not appear for node with node lock": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_6_MENU_text")
-                  .click()
-                  .end()
-                  .findAllByCssSelector("#ACTIONS_ITEM_6_DELETE")
-                  .then(function(elements) {
-                     assert.lengthOf(elements, 0, "Delete action should not have been displayed for node locked with NODE_LOCK");
-                  });
-            },
-
-            "Check that action does not appear for node without write permission": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_7_MENU_text")
-                  .click()
-                  .end()
-                  .findAllByCssSelector("#ACTIONS_ITEM_7_DELETE")
-                  .then(function(elements) {
-                     assert.lengthOf(elements, 0, "Delete action should not have been displayed for node without write permission");
-                  });
-            },
-
-            "Test legacy single item delete": function() {
-               return browser.findById("SINGLE_DELETE_VIA_ACTION_SERVICE_label")
-                  .click()
-                  .end()
-                  .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed")
-                  .end()
-                  .findById("ALF_DELETE_CONTENT_DIALOG_CONFIRMATION_label")
-                  .click()
-                  .end()
-                  .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
-                  .end()
-                  .findByCssSelector("tr.mx-row:nth-child(1) .mx-payload")
-                  .getVisibleText()
-                  .then(function(text) {
-                     assert.equal(text, "{\"nodeRefs\":[\"workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\"]}");
-                  });
-            },
-
-            "Test legacy multiple item delete": function() {
-               return browser.findById("MULTIPLE_DELETE_VIA_ACTION_SERVICE_label")
-                  .click()
-                  .end()
-                  .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed")
-                  .end()
-                  .findById("ALF_DELETE_CONTENT_DIALOG_CONFIRMATION_label")
-                  .click()
-                  .end()
-                  .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
-                  .end()
-                  .findByCssSelector("tr.mx-row:nth-child(2) .mx-payload")
-                  .getVisibleText()
-                  .then(function(text) {
-                     assert.equal(text, "{\"nodeRefs\":[\"workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\",\"workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\"]}");
-                  });
-            },
-
-            "Test actions renderer item delete": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_0_MENU_text")
-                  .click()
-                  .end()
-                  .findByCssSelector("#ACTIONS_ITEM_0_DELETE_text")
-                  .click()
-                  .end()
-                  .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed")
-                  .end();
+            "Context action appears appropriately": function() {
+               return testActionVisibility(browser, [
+                  "Folder node",
+                  "Document node",
+                  "User-owned working copy",
+                  "!Non-owned working copy",
+                  "User-owned locked node",
+                  "!Non-owned locked node",
+                  "!Node-locked node"
+               ]);
             },
 
             "Post Coverage Results": function() {

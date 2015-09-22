@@ -18,17 +18,16 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         id: "SINGLE_DELETE_VIA_ACTION_SERVICE",
+         id: "SINGLE_COPY_VIA_ACTION_SERVICE",
          name: "alfresco/buttons/AlfButton",
          config: {
             label: "Single Node",
             publishTopic: "ALF_SINGLE_DOCUMENT_ACTION_REQUEST",
             publishPayload: {
                action: {
-                  "id": "document-delete",
-                  "icon": "document-delete",
+                  "icon": "document-copy-to",
                   "type": "javascript",
-                  "label": "actions.document.delete",
+                  "label": "actions.document.copy-to",
                   "params": {
                      "function": "onActionCopyTo"
                   },
@@ -36,7 +35,7 @@ model.jsonModel = {
                },
                document: {
                   node: {
-                     nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"
+                     nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d"
                   },
                   displayName: "Some Node Title"
                }
@@ -44,7 +43,7 @@ model.jsonModel = {
          }
       },
       {
-         id: "MULTIPLE_DELETE_VIA_ACTION_SERVICE",
+         id: "MULTIPLE_COPY_VIA_ACTION_SERVICE",
          name: "alfresco/buttons/AlfButton",
          config: {
             label: "Multiple Nodes",
@@ -61,7 +60,7 @@ model.jsonModel = {
                   {
                      displayName: "Node 2",
                      node: {
-                        nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"
+                        nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f"
                      }
                   }
                ]
@@ -191,15 +190,6 @@ model.jsonModel = {
                         properties: {
                            "cm:lockType": "NODE_LOCK"
                         }
-                     }
-                  },
-                  {
-                     displayName: "No write permission",
-                     node: {
-                        aspects: [],
-                        nodeRef: "some://dummy/node",
-                        isLocked: false,
-                        isContainer: false
                      }
                   }
                ]

@@ -32,8 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      // "src/test/resources/alfresco/renderers/actions/CopyToActionTest",
-      "src/test/resources/alfresco/services/actions/CopyMoveTest"
+      "src/test/resources/alfresco/renderers/actions/CopyToActionTest"
    ],
 
    /**
