@@ -63,6 +63,17 @@ define(["dojo/_base/declare",
       logSubscriptionHandle: null,
 
       /**
+       * Indicates whether or not the user preferences for logging should be suppressed. If this is set to true then
+       * a request will not be made to retrieve the user preferences for logging.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.36
+       */
+      suppressUserPreferences: false,
+
+      /**
        * Sets up the subscriptions for the LoggingService
        *
        * @instance
@@ -72,7 +83,7 @@ define(["dojo/_base/declare",
        * @listens ALF_SHOW_DATA_MODEL
        * @listens ALF_TOGGLE_DEVELOPER_MODE
        *
-       * @fires getPreferenceTopic
+       * @fires module:alfresco/core/topics~event:GET_PREFERENCE
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_LoggingService__registerSubscriptions() {
@@ -89,13 +100,21 @@ define(["dojo/_base/declare",
             this.handleSubscription();
          }
 
-         this.alfPublish(this.getPreferenceTopic, {
-            preference: this.loggingPreferencesId,
-            callback: this.setLoggingStatus,
-            callbackScope: this
-         });
+         if (!this.suppressUserPreferences)
+         {
+            this.alfPublish(this.getPreferenceTopic, {
+               preference: this.loggingPreferencesId,
+               callback: this.setLoggingStatus,
+               callbackScope: this
+            });
+         }
       },
 
+      /**
+       * Switches into the developer mode that gives an exploded view of the widgets on the page.
+       * 
+       * @instance
+       */
       toggleDeveloperMode: function alfresco_services_LoggingService__toggleDeveloperMode() {
          domClass.toggle(win.body(), "alfresco-developer-mode-Enabled");
       },

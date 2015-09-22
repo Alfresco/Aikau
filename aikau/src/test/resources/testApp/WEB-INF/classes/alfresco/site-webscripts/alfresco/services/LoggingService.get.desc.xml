@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>LoggingService</shortname>
+  <description>This page is used to test the configuration options of the alfresco/services/LoggingService</description>
+  <family>aikau-unit-tests</family>
+  <url>/LoggingService</url>
+</webscript>
