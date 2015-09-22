@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
-       * The title text to be displayed when hovering over the cancel "button"
+       * Optional override for the title text to be displayed when hovering over the cancel "button"
        *
        * @instance
        * @type {String}
@@ -118,16 +118,6 @@ define(["dojo/_base/declare",
        * @since 1.0.35
        */
       disablementProperty: null,
-
-      /**
-       * This is run after the instance properties have been mixed in
-       *
-       * @instance
-       */
-      postMixInProperties: function alfresco_renderers_PublishingDropDownMenu__postMixInProperties() {
-         this.inherited(arguments);
-         this.cancelPublishLabel = this.message("alf.renderers.PublishingDropDownMenu.cancelPublish");
-      },
 
       /**
        *
@@ -204,6 +194,9 @@ define(["dojo/_base/declare",
             this._updateCancelHandle = this.alfSubscribe(responseTopic + "_CANCEL", lang.hitch(this, this.onChangeCancel));
 
             updatePayload.responseTopic = responseTopic;
+
+            // Update the title text of the cancel button
+            this.processingNode.title = this.cancelPublishLabel || this.message("alf.renderers.PublishingDropDownMenu.cancelUpdate", this.value);
 
             // Request to make the update...
             this._reponsePending = true;
