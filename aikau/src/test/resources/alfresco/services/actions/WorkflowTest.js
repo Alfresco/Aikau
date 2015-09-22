@@ -146,4 +146,67 @@ define(["intern!object",
          }
       };
    });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "Start Workflow Action Tests",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/StartWorkflow", "Start Workflow Action Tests").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Test single item download": function() {
+            // This test simulates the payload that would be generated from legacy document library action 
+            // configuration to check that the appropriate publications occur...
+            return browser.findById("SINGLE_VIA_ACTION_SERVICE_label")
+                  .click()
+               .end()
+               .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation not found")
+                  .then(function(payload) {
+                     assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node1", "Incorrect nodeRef");
+                     assert.propertyVal(payload, "target", "CURRENT", "Incorrect navigation target");
+                  })
+                  .clearLog();
+         },
+
+         "Test multiple item download": function() {
+            // This test simulates the payload that would be generated from a multiple item selection action 
+            // based on the legacy Share document library action configuration...
+            return browser.findById("MULTIPLE_VIA_ACTION_SERVICE_label")
+                  .click()
+               .end()
+               .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation not found")
+                  .then(function(payload) {
+                     assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node2,workspace://SpacesStore/node3", "Incorrect nodeRef");
+                     assert.propertyVal(payload, "target", "CURRENT", "Incorrect navigation target");
+                  })
+                  .clearLog();
+         },
+
+         "Test non-legacy action version": function() {
+            return browser.findByCssSelector("#ACTIONS_ITEM_0_MENU_text")
+               .click()
+            .end()
+            .findAllByCssSelector("#ACTIONS_ITEM_0_START-WORKFLOW_text")
+               .click()
+            .end()
+            .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation post not found")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node4", "Incorrect nodeRef");
+                  assert.propertyVal(payload, "target", "CURRENT", "Incorrect navigation target");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
 });

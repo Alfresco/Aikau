@@ -51,6 +51,20 @@ define([],function() {
       ARCHIVE_PROGRESS_SUCCESS: "ALF_ARCHIVE_PROGRESS_REQUEST_SUCCESS",
 
       /**
+       * The topic to publish to request starting a new workflow for one or more Nodes.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36
+       *
+       * @event module:alfresco/core/topics~ASSIGN_WORKFLOW
+       * @parameter {object[]} nodes - The array of Nodes to start the workflow on
+       * @parameter {object} currentTarget - The current Node in which the nodes reside
+       */
+      ASSIGN_WORKFLOW: "ALF_ASSIGN_WORKFLOW",
+
+      /**
        * Event topic to trigger the cancel the editing of a checkout document
        *
        * @instance
@@ -174,19 +188,6 @@ define([],function() {
        */
       DOCUMENT_SELECTION_UPDATE: "ALF_DOCLIST_FILE_SELECTION",
       
-      /**
-       * Used to indicate the list of currently selected documents has changed and provides the details of those items.
-       * 
-       * @instance
-       * @type {string} 
-       * @default
-       * @since 1.0.35
-       * 
-       * @event module:alfresco/core/topics~SELECTED_DOCUMENTS_CHANGED
-       * @parameter {object[]} selectedItems - The items that are selected
-       */
-      SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
-
       /**
        * This topic is published to request either the download of a single document or folder (or a selection
        * of documents and folder) as a ZIP file.
@@ -423,6 +424,19 @@ define([],function() {
        * @since 1.0.32
        */
       SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM",
+
+      /**
+       * Used to indicate the list of currently selected documents has changed and provides the details of those items.
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       * @since 1.0.35
+       * 
+       * @event module:alfresco/core/topics~SELECTED_DOCUMENTS_CHANGED
+       * @parameter {object[]} selectedItems - The items that are selected
+       */
+      SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
 
       /**
        * This topic can be published to set a user preference. It is typically handled by 

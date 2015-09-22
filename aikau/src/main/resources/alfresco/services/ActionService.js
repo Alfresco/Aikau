@@ -904,7 +904,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the original request
        */
       onActionAssignWorkflow: function alfresco_services_ActionService__onActionAssignWorkflow(payload) {
-         this.alfPublish("ALF_ASSIGN_WORKFLOW", {
+         this.alfPublish(topics.ASSIGN_WORKFLOW, {
             nodes: payload.documents || [payload.document],
             currentTarget: this.currentTarget
          });

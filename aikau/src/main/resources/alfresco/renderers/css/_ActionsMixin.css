@@ -15,6 +15,9 @@
          &.alf-manage-aspects-icon {
             background-image: url("./images/actions/document-manage-aspects-16.png");
          }
+         &.alf-start-workflow-icon {
+            background-image: url("./images/actions/document-assign-workflow-16.png");
+         }
          &.alf-upload-new-version-icon {
             background-image: url("./images/actions/document-upload-new-version-16.png");
          }
