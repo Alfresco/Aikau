@@ -84,25 +84,13 @@ define([
 
          ProgressTitle: 6,
          ProgressBar: 8,
-         PercentComplete: 11,
-         TunnelStatus: 12,
-         TimeTaken: 13,
-         TimeRemaining: 14,
+         FirstProgressProperty: 11,
 
          StatusTitle: 6,
-         Environments: 7,
-         Total: 8,
-         Passed: 9,
-         Failed: 10,
-         Skipped: 11,
-         Errors: 12,
-         Warnings: 13,
-         Deprecations: 14,
 
          LastStartedTitle: 6,
-         LastStartedEnv: 7,
-         LastStartedSuite: 8,
-         LastStartedTest: 9,
+
+         ReporterInfoTitle: 11,
 
          MessagesLine: 16
       },
@@ -131,6 +119,7 @@ define([
     */
    var CONFIG = {
       BreakOnError: false,
+      OutputReporterInfo: true,
       Title: "AIKAU UNIT TESTS",
       TitleHelp: "(Ctrl-C to abort)",
       ScreenRenderInterval: 500,
@@ -226,6 +215,14 @@ define([
       errors: {
          _name: "Errors"
       },
+
+      /**
+       * The name of the last method run by the reporter
+       *
+       * @instance
+       * @type {String}
+       */
+      lastReporterMethod: null,
 
       /**
        * The last started test
@@ -930,7 +927,7 @@ define([
 
             // Output the progress section
             this.write(CHARM.Col.Progress, CHARM.Row.ProgressTitle, "PROGRESS", ANSI_CODES.Bright);
-            this.writeProperties(CHARM.Col.Progress, CHARM.Row.PercentComplete, [
+            this.writeProperties(CHARM.Col.Progress, CHARM.Row.FirstProgressProperty, [
                ["Percent complete", percentComplete],
                ["Tunnel status", this.state.tunnel],
                ["Time taken", timeTakenMessage],
@@ -975,7 +972,7 @@ define([
                highlightCodes = [ANSI_CODES.Bright, ANSI_CODES.FgRed],
                maxStatusLength = CHARM.Col.LastStarted - CHARM.Col.Status - 1;
             this.write(CHARM.Col.Status, CHARM.Row.StatusTitle, "STATUS", ANSI_CODES.Bright);
-            this.writeProperties(CHARM.Col.Status, CHARM.Row.Environments, [
+            this.writeProperties(CHARM.Col.Status, CHARM.Row.StatusTitle + 1, [
                ["Environments", numEnvironments],
                ["Total tests", total],
                ["Passed", passed],
@@ -986,19 +983,24 @@ define([
                ["Deprecations", deprecations]
             ]);
 
-            // Prepare "last test" messages
-            var spaceToDisplayLastTestInfo = this.terminalInfo.cols - CHARM.Col.LastStarted - CHARM.ScreenMargin,
-               lastEnv = this.reduce(this.lastStarted.env, spaceToDisplayLastTestInfo),
-               lastSuite = this.reduce(this.lastStarted.suite, spaceToDisplayLastTestInfo),
-               lastTest = this.reduce(this.lastStarted.test, spaceToDisplayLastTestInfo);
+            // Calculate space remaining for final column
+            var finalColSpace = this.terminalInfo.cols - CHARM.Col.LastStarted - CHARM.ScreenMargin;
 
             // Output last test information
             this.write(CHARM.Col.LastStarted, CHARM.Row.LastStartedTitle, "LAST STARTED TEST", ANSI_CODES.Bright);
             this.writeProperties(CHARM.Col.LastStarted, CHARM.Row.LastStartedTitle + 1, [
-               ["Environment", lastEnv],
-               ["Suite name", lastSuite],
-               ["Test name", lastTest]
-            ], spaceToDisplayLastTestInfo);
+               ["Environment", this.lastStarted.env],
+               ["Suite name", this.lastStarted.suite],
+               ["Test name", this.lastStarted.test]
+            ], finalColSpace);
+
+            // Output reporter info
+            if (CONFIG.OutputReporterInfo) {
+               this.write(CHARM.Col.LastStarted, CHARM.Row.ReporterInfoTitle, "REPORTER INFO", ANSI_CODES.Bright);
+               this.writeProperties(CHARM.Col.LastStarted, CHARM.Row.ReporterInfoTitle + 1, [
+                  ["Last called method", this.lastReporterMethod]
+               ], finalColSpace);
+            }
 
             // Prepare object to contain messages
             var messages = {
@@ -1316,6 +1318,8 @@ define([
        * @param {Object} data The coverage data
        */
       coverage: function() {
+         helper.lastReporterMethod = "coverage";
+
          // Not currently used
       },
 
@@ -1328,6 +1332,8 @@ define([
        * @param {string} [extra] Any extra information
        */
       deprecated: function(name, replacement, extra) {
+         helper.lastReporterMethod = "deprecated";
+
          var msg = name + " has been deprecated and replaced by " + replacement;
          if (extra) {
             msg += " (" + extra + ")";
@@ -1342,6 +1348,8 @@ define([
        * @param {Error} error The error
        */
       fatalError: function(error) {
+         helper.lastReporterMethod = "fatalError";
+
          helper.logProblem(PROBLEM_TYPE.Error, "Fatal", error);
       },
 
@@ -1352,6 +1360,8 @@ define([
        * @param {Object} suite The new suite
        */
       newSuite: function( /*jshint unused:false*/ suite) {
+         helper.lastReporterMethod = "newSuite";
+
          // Not currently used
       },
 
@@ -1362,6 +1372,8 @@ define([
        * @param {Object} test The new test
        */
       newTest: function(test) {
+         helper.lastReporterMethod = "newTest";
+
          var testEnv = helper.getEnv(test);
          helper.environments[testEnv] = true;
          helper.incrementCounter("total");
@@ -1374,6 +1386,8 @@ define([
        * @param {Object} config The proxy config
        */
       proxyEnd: function( /*jshint unused:false*/ config) {
+         helper.lastReporterMethod = "proxyEnd";
+
          // Not currently used
       },
 
@@ -1384,6 +1398,8 @@ define([
        * @param {Object} config The proxy config
        */
       proxyStart: function( /*jshint unused:false*/ config) {
+         helper.lastReporterMethod = "proxyStart";
+
          // Not currently used
       },
 
@@ -1395,6 +1411,8 @@ define([
        * @param {Error} error The error
        */
       reporterError: function( /*jshint unused:false*/ reporter, error) {
+         helper.lastReporterMethod = "reporterError";
+
          helper.logProblem(PROBLEM_TYPE.Error, "Reporter", error);
       },
 
@@ -1405,6 +1423,8 @@ define([
        * @param {Object} executor The test executor
        */
       runEnd: function( /*jshint unused:false*/ executor) {
+         helper.lastReporterMethod = "runEnd";
+
          helper.finishUpdating();
          helper.outputFinalResults();
       },
@@ -1416,6 +1436,8 @@ define([
        * @param {Object} executor The test executor
        */
       runStart: function( /*jshint unused:false*/ executor) {
+         helper.lastReporterMethod = "runStart";
+
          if (helper.state.tunnel !== "N/A") {
             helper.state.tunnel = "Active";
          }
@@ -1435,6 +1457,8 @@ define([
        * @param {Object} suite The ended suite
        */
       suiteEnd: function( /*jshint unused:false*/ suite) {
+         helper.lastReporterMethod = "suiteEnd";
+
          // Not currently used
       },
 
@@ -1448,6 +1472,8 @@ define([
        * @param {Error} error The error
        */
       suiteError: function(suite, error) {
+         helper.lastReporterMethod = "suiteError";
+
          if (suite.name) {
             var envName = helper.getEnv(suite);
             helper.logProblem(PROBLEM_TYPE.Error, suite.name + " (" + envName + ")", error);
@@ -1461,6 +1487,8 @@ define([
        * @param {Object} suite The suite
        */
       suiteStart: function( /*jshint unused:false*/ suite) {
+         helper.lastReporterMethod = "suiteStart";
+
          // Not currently used
       },
 
@@ -1471,6 +1499,8 @@ define([
        * @param {Object} test The test
        */
       testEnd: function( /*jshint unused:false*/ test) {
+         helper.lastReporterMethod = "testEnd";
+
          helper.incrementCounter("run");
       },
 
@@ -1481,6 +1511,8 @@ define([
        * @param {Object} test The test
        */
       testFail: function(test) {
+         helper.lastReporterMethod = "testFail";
+
          helper.logResult(RESULT_TYPE.Failed, test);
       },
 
@@ -1491,6 +1523,8 @@ define([
        * @param {Object} test The test
        */
       testPass: function( /*jshint unused:false*/ test) {
+         helper.lastReporterMethod = "testPass";
+
          helper.incrementCounter("passed");
       },
 
@@ -1501,6 +1535,8 @@ define([
        * @param {Object} test The test
        */
       testSkip: function( /*jshint unused:false*/ test) {
+         helper.lastReporterMethod = "testSkip";
+
          helper.logResult(RESULT_TYPE.Skipped, test);
       },
 
@@ -1511,6 +1547,8 @@ define([
        * @param {Object} test The test
        */
       testStart: function(test) {
+         helper.lastReporterMethod = "testStart";
+
          helper.recordLastStartedTest(test);
       },
 
@@ -1524,6 +1562,8 @@ define([
        * @param {number} progress.total Number of bytes to download
        */
       tunnelDownloadProgress: function( /*jshint unused:false*/ tunnel, progress) {
+         helper.lastReporterMethod = "tunnelDownloadProgress";
+
          if (progress.type === "data") {
             var percentComplete = (progress.loaded / progress.total * 100).toFixed(1);
             helper.state.tunnel = "Downloading (" + percentComplete + "%)";
@@ -1537,6 +1577,8 @@ define([
        * @param {Object} tunnel The tunnel
        */
       tunnelEnd: function( /*jshint unused:false*/ tunnel) {
+         helper.lastReporterMethod = "tunnelEnd";
+
          helper.state.tunnel = "Closing";
       },
 
@@ -1547,6 +1589,8 @@ define([
        * @param {Object} tunnel The tunnel
        */
       tunnelStart: function( /*jshint unused:false*/ tunnel) {
+         helper.lastReporterMethod = "tunnelStart";
+
          helper.state.tunnel = "Starting";
       },
 
@@ -1558,6 +1602,8 @@ define([
        * @param {string} status The status update
        */
       tunnelStatus: function( /*jshint unused:false*/ tunnel, /*jshint unused:false*/ status) {
+         helper.lastReporterMethod = "tunnelStatus";
+
          helper.state.tunnel = status;
       }
    };

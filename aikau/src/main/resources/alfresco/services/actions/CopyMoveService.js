@@ -31,12 +31,13 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/when",
         "alfresco/core/NodeUtils"],
-        function(declare, BaseService, AlfCoreXhr, AlfConstants, lang, array, when, NodeUtils) {
+        function(declare, BaseService, AlfCoreXhr, topics, AlfConstants, lang, array, when, NodeUtils) {
 
    return declare([BaseService, AlfCoreXhr], {
 
@@ -85,7 +86,7 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_actions_CopyMoveService__registerSubscriptions() {
-         this.alfSubscribe("ALF_COPY_OR_MOVE_REQUEST", lang.hitch(this, this.createCopyMoveDialog));
+         this.alfSubscribe(topics.COPY_OR_MOVE, lang.hitch(this, this.createCopyMoveDialog));
       },
 
       /**

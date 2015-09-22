@@ -32,7 +32,8 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/forms/controls/AsyncFormControlLoadingTest"
+      // "src/test/resources/alfresco/renderers/actions/CopyToActionTest",
+      "src/test/resources/alfresco/services/actions/CopyMoveTest"
    ],
 
    /**
@@ -216,6 +217,7 @@ define({
       "src/test/resources/alfresco/renderers/ThumbnailTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
+      "src/test/resources/alfresco/renderers/actions/CopyToActionTest",
       "src/test/resources/alfresco/renderers/actions/DeleteActionTest",
       "src/test/resources/alfresco/renderers/actions/ManageAspectsActionTest",
       "src/test/resources/alfresco/renderers/actions/UploadNewVersionActionTest",

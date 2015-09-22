@@ -255,17 +255,23 @@ define(["alfresco/core/ObjectTypeUtils",
          _applyFilter: function alfresco_logging_DebugLog___applyFilter(filter, regexControl, include) {
             var filterValue = filter.value,
                useRegex = regexControl.checked,
-               matchRegex = new RegExp(filterValue, "i");
+               matchRegex = new RegExp(filterValue, "i"),
+               hiddenClass = this.rootClass + "__log__entry--hidden";
             array.forEach(this._entries, function(entry) {
-               var matchesTopic=false,
-               displayEntry = false;
+               var matchesTopic = false,
+                  currentlyHidden = domClass.contains(entry.node, hiddenClass),
+                  hideEntry = currentlyHidden;
                if (useRegex) {
                   matchesTopic = matchRegex.test(entry.topic);
                } else {
                   matchesTopic = entry.topic.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1;
                }
-               displayEntry = !filterValue || (include ? matchesTopic : !matchesTopic);
-               domClass[displayEntry ? "remove" : "add"](entry.node, this.rootClass + "__log__entry--hidden");
+               if (include) {
+                  hideEntry = filterValue && !matchesTopic;
+               } else if (filterValue && matchesTopic) {
+                  hideEntry = false;
+               }
+               domClass[hideEntry ? "add" : "remove"](entry.node, hiddenClass);
             }, this);
          },
 

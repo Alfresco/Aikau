@@ -847,10 +847,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the original request
        */
       onActionCopyTo: function alfresco_services_ActionService__onActionCopyTo(payload) {
-         this.alfPublish("ALF_COPY_OR_MOVE_REQUEST", {
-            documents: payload.documents || [payload.document],
+         var nodes = payload.documents || (payload.document ? [payload.document] : [payload]);
+         this.alfServicePublish(topics.COPY_OR_MOVE, {
+            documents: nodes,
             copy: true,
-            singleItemMode: true,
             responseScope: payload.alfResponseScope
          });
       },
@@ -862,7 +862,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the original request
        */
       onActionMoveTo: function alfresco_services_ActionService__onActionMoveTo(payload) {
-         this.alfPublish("ALF_COPY_OR_MOVE_REQUEST", {
+         this.alfPublish(topics.COPY_OR_MOVE, {
             documents: payload.documents || [payload.document],
             copy: false,
             dialogTitle: "services.ActionService.moveTo.title",
