@@ -18,11 +18,6 @@
          border: none;
          padding-right: 10px;
 
-         /* Default display for all children in the sidebar when it's open */
-         > *:nth-child(n+2) {
-            display: inherit;
-         }
-
          /* Convert the YUI resize handle to be transparent and slightly wider
             to accommodate our custom image for popping the sidebar in and out */
          .alfresco-layout-AlfSideBarContainer__resizeHandle {
@@ -72,9 +67,12 @@
             display: none;
          }
 
-         /* This selector should be applied when the sidebar is hidden */
-         .alfresco-layout-AlfSideBarContainer__resizeButton {
-            background-image: url("./images/PopOutArrow.png");
+         .alfresco-layout-AlfSideBarContainer__resizeHandle {
+
+            /* This selector should be applied when the sidebar is hidden */
+            .alfresco-layout-AlfSideBarContainer__resizeButton {
+               background-image: url("./images/PopOutArrow.png");
+            }
          }
       }
    }
