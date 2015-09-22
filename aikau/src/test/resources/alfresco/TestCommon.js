@@ -286,7 +286,7 @@ define(["intern/dojo/node!fs",
             var opts = lang.mixin({
                pos: "all",
                isGlobal: !!isGlobal,
-               queryTimeout: queryTimeout || 500
+               queryTimeout: queryTimeout || 2000
             }, filter || {});
 
             // Build the selector
@@ -310,7 +310,7 @@ define(["intern/dojo/node!fs",
                .then(function(timeout) {
                   existingTimeout = timeout;
                })
-               .setExecuteAsyncTimeout(opts.queryTimeout + 500)
+               .setExecuteAsyncTimeout(opts.queryTimeout + 2000)
                .executeAsync(function(entriesSelector, timeout, asyncComplete) {
 
                   // Store the start-time and start the interval
