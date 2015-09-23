@@ -285,12 +285,11 @@ define(["intern!object",
          },
 
          "Check that when a widget is revealed that a resize event is published": function() {
-            return browser.findByCssSelector("body").end()
+            return browser.findById("HIDE_WIDGET_2_BUTTON_label")
                .clearLog()
-               .findById("HIDE_WIDGET_2_BUTTON_label")
-                  .click()
-               .end()
-               .getLastPublish("ALF_NODE_RESIZED", "A resize publication should have been made");
+               .click()
+            .end()
+            .getLastPublish("ALF_NODE_RESIZED", "A resize publication should have been made");
          },
          
          "Post Coverage Results": function() {
