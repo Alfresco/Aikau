@@ -224,8 +224,13 @@ define(["dojo/_base/declare",
             var containerHeight = $(this.containerNode).height();
             if (containerHeight)
             {
-               // We need to deduct 40 pixels from the container height to accomodate the buttons bar...
-               containerHeight -= 40;
+               if (this.widgetsButtons)
+               {
+                  // We need to deduct 40 pixels from the container height to accomodate the buttons bar
+                  // if it is present...
+                  containerHeight -= 40;
+               }
+               
                if (containerHeight < maxHeight)
                {
                   maxHeight = containerHeight;
