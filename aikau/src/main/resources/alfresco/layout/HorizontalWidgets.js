@@ -357,9 +357,14 @@ define(["alfresco/core/ProcessWidgets",
             array.forEach(processedWidgets, function(widget) {
                if (widget && widget.domNode && widget.widthCalc)
                {
+                  var currentWidth = domGeom.getMarginBox(widget.domNode.parentNode).w;
                   domStyle.set(widget.domNode.parentNode, "width", widget.widthCalc + "px");
+                  if (currentWidth !== widget.widthCalc)
+                  {
+                     this.alfPublishResizeEvent(widget.domNode.parentNode);
+                  }
                }
-            });
+            }, this);
          }));
       },
 

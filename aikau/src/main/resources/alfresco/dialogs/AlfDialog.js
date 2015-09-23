@@ -80,6 +80,24 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/AlfDialog.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/AlfDialog.properties"}],
+
+      /**
+       * A scope against which to publish the cancellation topic
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      cancelPublishScope: null,
+      
+      /**
+       * An optional topic to be published when the dialog is cancelled (escape keypress or cross-button click)
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      cancelPublishTopic: null,
       
       /**
        * Basic text content to be added to the dialog.
@@ -224,8 +242,13 @@ define(["dojo/_base/declare",
             var containerHeight = $(this.containerNode).height();
             if (containerHeight)
             {
-               // We need to deduct 40 pixels from the container height to accomodate the buttons bar...
-               containerHeight -= 40;
+               if (this.widgetsButtons)
+               {
+                  // We need to deduct 40 pixels from the container height to accomodate the buttons bar
+                  // if it is present...
+                  containerHeight -= 40;
+               }
+               
                if (containerHeight < maxHeight)
                {
                   maxHeight = containerHeight;
@@ -365,6 +388,19 @@ define(["dojo/_base/declare",
                this.alfPublish("ALF_DIALOG_MOVE_STOP", null, true);
                return returnVal;
             }));
+         }
+      },
+
+      /**
+       * Override the onCancel method of the Dojo Dialog class
+       *
+       * @instance
+       * @override
+       */
+      onCancel: function alfresco_dialogs_AlfDialog__onCancel() {
+         this.inherited(arguments);
+         if (this.cancelPublishTopic) {
+            this.alfPublish(this.cancelPublishTopic, null, false, false, this.cancelPublishScope);
          }
       },
       
