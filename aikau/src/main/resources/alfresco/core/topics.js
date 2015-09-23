@@ -311,6 +311,23 @@ define([],function() {
       NAVIGATE_TO_PAGE: "ALF_NAVIGATE_TO_PAGE",
 
       /**
+       * This topic is published from the [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent} function.
+       * To publish this this topic a widget should mixin the [ResizeMixin]{@link module:alfresco/core/ResizeMixin} and call that function
+       * and to subscribe to it, a module should mixin the [ResizeMixin]{@link module:alfresco/core/ResizeMixin} and call the
+       * [alfSetupResizeSubscriptions]{@link module:alfresco/core/ResizeMixin#alfSetupResizeSubscriptions} to set up callback handlers 
+       * for resizing.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36.1
+       *
+       * @event
+       * @property {element} node The DOM node that has been resized
+       */
+      NODE_RESIZED: "ALF_NODE_RESIZED",
+
+      /**
        * This topic is fired automatically whenever a notification is destroyed.
        *
        * @instance
