@@ -61,7 +61,8 @@ define(["alfresco/core/Core",
           * @param {Object} payload The payload
           */
          confirmDropdownPublish: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__confirmDropdownPublish(payload) {
-            this.alfPublish(topics.CREATE_DIALOG, {
+            this.alfServicePublish(topics.CREATE_DIALOG, {
+               cancelPublishTopic: payload.responseTopic + "_CANCEL",
                dialogTitle: "Are you sure?",
                dialogId: "CONFIRM_PUBLISH_DIALOG",
                handleOverflow: false,
@@ -82,7 +83,7 @@ define(["alfresco/core/Core",
                      publishTopic: payload.responseTopic + "_CANCEL"
                   }
                }]
-            }, true);
+            });
          },
 
          /**

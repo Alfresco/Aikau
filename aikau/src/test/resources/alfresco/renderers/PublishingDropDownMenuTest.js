@@ -21,18 +21,17 @@
  * @author Dave Draper
  */
 define(["intern!object",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon",
-      "intern/dojo/node!leadfoot/keys"
-   ],
-   function(registerSuite, assert, require, TestCommon, keys) {
+       "intern/chai!assert", 
+       "require", 
+       "alfresco/TestCommon", 
+       "intern/dojo/node!leadfoot/keys"], 
+       function(registerSuite, assert, require, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function() {
+      var browser;
 
-   return {
-      name: "PublishingDropDownMenu Tests",
+      return {
+         name: "PublishingDropDownMenu Tests",
 
          setup: function() {
             browser = this.remote;
@@ -266,6 +265,94 @@ registerSuite(function(){
             .findByCssSelector("#DIALOG1.dialogHidden");
          },
 
+         "Confirmation dialog can be cancelled by button, escape or cross": function() {
+            // Launch dialog
+            return browser.findById("SHOW_DIALOG")
+               .click()
+               .end()
+            .findByCssSelector("#DIALOG1.dialogDisplayed")
+               .end()
+
+            // Choose second option
+            .findById("DIALOG_PDM_ITEM_0_SELECT_CONTROL")
+               .click()
+               .end()
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL_menu tr:nth-child(2) .dijitMenuItemLabel")
+               .click()
+               .end()
+
+            // Cancel confirmation dialog (via button-press)
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogDisplayed")
+               .end()
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG [widgetid='CANCEL'] .dijitButtonNode")
+               .click()
+               .end()
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogHidden")
+               .end()
+
+            // Confirm no change
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL .dijitSelectLabel")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Public", "Value changed after 'button-press cancel'");
+               })
+               .end()
+
+            // Choose second option
+            .findById("DIALOG_PDM_ITEM_0_SELECT_CONTROL")
+               .click()
+               .end()
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL_menu tr:nth-child(2) .dijitMenuItemLabel")
+               .click()
+               .end()
+
+            // Cancel confirmation dialog (via escape)
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogDisplayed")
+               .pressKeys(keys.ESCAPE)
+               .end()
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogHidden")
+               .end()
+
+            // Confirm no change
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL .dijitSelectLabel")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Public", "Value changed after 'escape cancel'");
+               })
+               .end()
+
+            // Choose second option
+            .findById("DIALOG_PDM_ITEM_0_SELECT_CONTROL")
+               .click()
+               .end()
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL_menu tr:nth-child(2) .dijitMenuItemLabel")
+               .click()
+               .end()
+
+            // Cancel confirmation dialog (via cross)
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogDisplayed")
+               .end()
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG .dijitDialogCloseIcon")
+               .click()
+               .end()
+            .findByCssSelector("#CONFIRM_PUBLISH_DIALOG.dialogHidden")
+               .end()
+
+            // Confirm no change
+            .findByCssSelector("#DIALOG_PDM_ITEM_0_SELECT_CONTROL .dijitSelectLabel")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Public", "Value changed after 'cross-click cancel'");
+               })
+               .end()
+
+            .findByCssSelector("#DIALOG1 .dijitDialogCloseIcon")
+               .click()
+               .end()
+
+            .findByCssSelector("#DIALOG1.dialogHidden");
+         },
+
          "Publish is cleared on refresh": function() {
             return browser.refresh()
                .end()
@@ -348,9 +435,9 @@ registerSuite(function(){
                .end();
          },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });
