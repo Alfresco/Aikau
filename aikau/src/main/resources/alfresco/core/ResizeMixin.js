@@ -30,24 +30,24 @@
  * @module alfresco/core/ResizeMixin
  * @author Dave Draper
  */
-define(["alfresco/core/_EventsMixin",
-        "dojo/_base/declare",
+define(["dojo/_base/declare",
+        "alfresco/core/_EventsMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/on",
         "dojo/dom"], 
-        function(_EventsMixin, declare, lang, on, dom) {
+        function( declare, _EventsMixin, topics, lang, on, dom) {
    
    return declare([_EventsMixin], {
       
       /**
        * The topic to use for publishing and subscribing to node resize events
        *
-       * @event
        * @instance
        * @type {string}
-       * @default
+       * @default [NODE_RESIZED]{@link module:alfresco/core/topics#NODE_RESIZED}
        */
-      alfResizeNodeTopic: "ALF_NODE_RESIZED",
+      alfResizeNodeTopic: topics.NODE_RESIZED,
 
       /**
        * Publishes on a topic that indicates that the supplied node has been resized.

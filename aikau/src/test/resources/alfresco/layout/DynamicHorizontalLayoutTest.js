@@ -283,6 +283,14 @@ define(["intern!object",
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 5 was not the correct size");
                });
          },
+
+         "Check that when a widget is revealed that a resize event is published": function() {
+            return browser.findById("HIDE_WIDGET_2_BUTTON_label")
+               .clearLog()
+               .click()
+            .end()
+            .getLastPublish("ALF_NODE_RESIZED", "A resize publication should have been made");
+         },
          
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
