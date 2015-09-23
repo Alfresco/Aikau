@@ -27,6 +27,7 @@ define(["intern!object",
    ],
    function(registerSuite, assert, TestCommon) {
 
+   registerSuite(function(){
       var browser;
       var scrollbarWidth;             // We'll calculate this by deducting the body width from the window width
       var windowSize = 1050;          // The size we'll set the window
@@ -36,7 +37,7 @@ define(["intern!object",
       var fixedWidthWidget = 200;     // The fixed width of WIDGET_1
       var availableWidth;             // We'll calculate this in the setup
 
-      registerSuite({
+      return {
          name: "Dynamic Horizontal Layout Tests",
 
          setup: function() {
@@ -286,5 +287,6 @@ define(["intern!object",
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    });

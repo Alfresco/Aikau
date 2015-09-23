@@ -28,8 +28,10 @@ define([
    ],
    function (TestCommon, registerSuite, assert, require) {
 
-      var browser;
-      registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
          name: "URL Utils Test",
 
          setup: function() {
@@ -107,6 +109,6 @@ define([
 
                });
          }
-      });
-   }
-);
+      };
+   });
+});

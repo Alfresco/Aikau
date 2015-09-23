@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -78,7 +78,7 @@ define(["alfresco/core/_EventsMixin",
          }
          else
          {
-            var scope = (resizeHandlerCallScope != null) ? resizeHandlerCallScope : this,
+            var scope = resizeHandlerCallScope || this,
                resizeListener = on(window, "resize", lang.hitch(scope, resizeHandler));
             if(typeof this.own === "function") { // If we're in a widget, use it to handle cleaning up the listener
                this.own(resizeListener);

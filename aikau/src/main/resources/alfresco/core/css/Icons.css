@@ -1,4 +1,4 @@
-.alfresco-share .dijitIcon {
+.@{alfresco} .dijitIcon {
 
    &.alf-sites-icon {
       background-image: url("../../css/images/site-24.png");

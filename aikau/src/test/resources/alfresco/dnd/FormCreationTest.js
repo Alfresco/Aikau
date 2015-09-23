@@ -28,8 +28,10 @@ define(["intern!object",
         function (registerSuite, assert, require, TestCommon, keys) {
 
    var pause = 150;
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
 
       name: "Form Creation DND tests",
 
@@ -190,5 +192,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

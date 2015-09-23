@@ -12,6 +12,7 @@ model.jsonModel = {
    ],
    widgets:[ 
       {
+         id: "TC1",
          name: "alfresco/layout/AlfTabContainer",
          config: {
             tabSelectionTopic: "ALF_SELECT_TAB",

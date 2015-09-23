@@ -28,8 +28,10 @@ define(["intern!object",
    ],
    function(registerSuite, assert, TestCommon) {
 
-      var browser;
-      registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
          name: "StripedContent tests",
 
          setup: function() {
@@ -90,5 +92,6 @@ define(["intern!object",
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    });

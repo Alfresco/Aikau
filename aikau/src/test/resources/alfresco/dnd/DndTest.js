@@ -27,8 +27,12 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, require, TestCommon, keys) {
 
+var pause = 150;
+
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
 
       name: "Basic DND tests",
 
@@ -132,9 +136,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
 
       name: "DND items provided by list",
 
@@ -158,10 +166,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   var pause = 150;
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
 
       name: "Accessibility DND tests",
 
@@ -314,9 +325,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
 
       name: "DND Nesting Tests",
 
@@ -340,9 +355,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
 
       name: "DND Modelling Tests",
 
@@ -447,5 +466,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

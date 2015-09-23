@@ -23,15 +23,12 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, require, TestCommon) {
 
    
 
-   var browser;
-
-   var testClearingDocumentList = function(buttonId, errorMsg) {
+   var testClearingDocumentList = function(browser, buttonId, errorMsg) {
       return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
          .click()
          .end()
@@ -60,7 +57,10 @@ define(["intern!object",
    };
 
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "AlfSortablePaginatedList Tests",
       
       setup: function() {
@@ -102,7 +102,7 @@ define(["intern!object",
             })
             .then(function(payload) {
                assert.propertyVal(payload, "preference", "custom.pageSize.preference", "Incorrect preference used for INFINITE_SCROLL_LIST list");
-            })
+            });
       },
 
       "Check URL hash controls displayed page": function() {
@@ -176,34 +176,38 @@ define(["intern!object",
 
       "Simulate a path change": function() {
          return browser.then(function() {
-            return testClearingDocumentList("#SIMULATE_PATH_CHANGE_label", "Old data not cleared when path change request applied");
+            return testClearingDocumentList(browser, "#SIMULATE_PATH_CHANGE_label", "Old data not cleared when path change request applied");
          });
       },
 
       "Simulate a category change": function() {
          return browser.then(function() {
-            return testClearingDocumentList("#SIMULATE_CATEGORY_CHANGE_label", "Old data not cleared when category change request applied");
+            return testClearingDocumentList(browser, "#SIMULATE_CATEGORY_CHANGE_label", "Old data not cleared when category change request applied");
          });
       },
 
       "Simulate a tag change": function() {
          return browser.then(function() {
-            return testClearingDocumentList("#SIMULATE_TAG_CHANGE_label", "Old data not cleared when tag change request applied");
+            return testClearingDocumentList(browser, "#SIMULATE_TAG_CHANGE_label", "Old data not cleared when tag change request applied");
          });
       },
 
       "Simulate a filter change": function() {
          return browser.then(function() {
-            return testClearingDocumentList("#SIMULATE_FILTER_CHANGE_label", "Old data not cleared when filter change request applied");
+            return testClearingDocumentList(browser, "#SIMULATE_FILTER_CHANGE_label", "Old data not cleared when filter change request applied");
          });
       },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "AlfSortablePaginatedList Tests (data load failure)",
       
       setup: function() {
@@ -267,5 +271,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

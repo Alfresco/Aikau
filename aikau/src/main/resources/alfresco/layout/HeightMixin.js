@@ -27,7 +27,7 @@
  * given a specific height or (if a negative value is provided) for a number of pixels to be deducted
  * from the available height.
  * 
- * @module alfresco/core/HeightMixin
+ * @module alfresco/layout/HeightMixin
  * @author Dave Draper
  * @since 1.0.34
  */
@@ -75,6 +75,38 @@ define(["dojo/_base/declare",
       heightMode: "AUTO",
 
       /**
+       * Calculates the height when [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode} is "DIALOG".
+       * 
+       * @instance
+       * @param {element} domNode The DOM element to calculate the height for.
+       * @returns {number|promise} Either an actual height or a promise of the height
+       * @since 1.0.36
+       */
+      calculateDialogHeight: function alfresco_layout_HeightMixin__calculateDialogHeight(domNode) {
+         var calculatedHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").last().innerHeight();
+         if (!calculatedHeight)
+         {
+            // When using the DIALOG mode it is necessary to return a promise of the height because it won't 
+            // be possible to know the height until the dialog is displayed.
+            var containingDialog = registry.byNode($(domNode).parents(".alfresco-dialog-AlfDialog")[0]);
+            if (containingDialog)
+            {
+               var heightAdjustment = this.heightAdjustment; // Required to compensate for lack of *this*
+               calculatedHeight = new Deferred();
+               this.own(aspect.after(containingDialog, "_onFocus", function() {
+                  var dialogHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").first().innerHeight();
+                  calculatedHeight.resolve(dialogHeight - heightAdjustment);
+               }, true));
+            }
+         }
+         else
+         {
+            calculatedHeight -= this.heightAdjustment; // Deduct the adjustment value...
+         }
+         return calculatedHeight;
+      },
+
+      /**
        * Calculates the height of the supplied element based on the available space using the configured 
        * [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode} setting.
        * 
@@ -96,28 +128,13 @@ define(["dojo/_base/declare",
             var heightMode = this.heightMode;
             if (heightMode === "DIALOG")
             {
-               calculatedHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").last().innerHeight();
-               if (!calculatedHeight)
-               {
-                  // When using the DIALOG mode it is necessary to return a promise of the height because it won't 
-                  // be possible to know the height until the dialog is displayed.
-                  var containingDialog = registry.byNode($(domNode).parents(".alfresco-dialog-AlfDialog")[0]);
-                  if (containingDialog)
-                  {
-                     var heightAdjustment = this.heightAdjustment; // Required to compensate for lack of *this*
-                     calculatedHeight = new Deferred();
-                     this.own(aspect.after(containingDialog, "_onFocus", function() {
-                        var dialogHeight = $(domNode).parentsUntil(".alfresco-dialog-AlfDialog .dialog-body").first().innerHeight();
-                        calculatedHeight.resolve(dialogHeight - heightAdjustment);
-                     }, true));
-                  }
-               }
-               else
-               {
-                  calculatedHeight -= this.heightAdjustment; // Deduct the adjustment value...
-               }
+               calculatedHeight = this.calculateDialogHeight(domNode);
             }
-            else if (!heightMode || heightMode === "AUTO" || isNaN(heightMode))
+            else if (heightMode === "PARENT")
+            {
+               calculatedHeight = this.calculateParentHeight(domNode, offset);
+            }
+            else if (!heightMode || heightMode === "AUTO" || heightMode === "auto")
             {
                calculatedHeight =  availableHeight;
             }
@@ -135,6 +152,29 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Calculates the height when [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode} is "PARENT".
+       * 
+       * @instance
+       * @param {element} domNode The DOM element to calculate the height for.
+       * @returns {number|promise} Either an actual height or a promise of the height
+       * @since 1.0.36
+       */
+      calculateParentHeight: function alfresco_layout_HeightMixin__calculateParentHeight(domNode, offset) {
+         var calculatedHeight;
+         var _this = this;
+         $(domNode).parents().each(function() {
+            var style = $(this).attr("style");
+            if (style && style.indexOf("height:") !== -1)
+            {
+               var parentOffset = offset - $(this).offset().top;
+               calculatedHeight = $(this).height() - parentOffset - _this.heightAdjustment;
+               return false;
+            }
+         });
+         return calculatedHeight;
+      },
+
+      /**
        * This sets the height of the supplied DOM element with the height returned from a call to the
        * [calculateHeight]{@link module:alfresco/layout/HeightMixin#calculateHeight} function.
        * 
@@ -146,7 +186,11 @@ define(["dojo/_base/declare",
          if (height || height === 0)
          {
             when(height, lang.hitch(this, function(value) {
-               domStyle.set(domNode, "height", value + "px");
+               if (!isNaN(value))
+               {
+                  value = value + "px";
+               }
+               domStyle.set(domNode, "height", value);
             }));
          }
       }

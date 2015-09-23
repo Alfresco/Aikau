@@ -103,6 +103,7 @@ define(["dojo/_base/declare",
        */
       allWidgetsProcessed: function alfresco_upload_UploadHistory__allWidgetsProcessed(widgets) {
          this.currentHistoryTargets = widgets;
+         this.alfPublish(topics.WIDGET_PROCESSING_COMPLETE);
       },
 
       /**

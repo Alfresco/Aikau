@@ -32,9 +32,10 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, expect, require, TestCommon, keys) {
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "GalleryView Tests",
       
       setup: function() {
@@ -119,10 +120,14 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
+registerSuite(function(){
+   var browser;
    var alfPause = 500;
-   registerSuite({
+
+   return {
       name: "GalleryView Keyboard Tests",
       
       setup: function() {
@@ -230,5 +235,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

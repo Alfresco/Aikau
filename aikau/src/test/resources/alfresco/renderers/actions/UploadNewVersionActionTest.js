@@ -26,9 +26,7 @@ define(["intern!object",
         "alfresco/TestCommon"],
        function (registerSuite, assert, require, TestCommon) {
 
-   var browser;
-
-   var checkAction = function(row, count, error) {
+   var checkAction = function(browser, row, count, error) {
       return browser.findByCssSelector("#LIST tr:nth-child(" + row + ") .dijitMenuBar")
          .getAttribute("id")
          .then(function(id) {
@@ -49,7 +47,7 @@ define(["intern!object",
          });
    };
 
-   var useAction = function(row) {
+   var useAction = function(browser, row) {
       return browser.findByCssSelector("#LIST tr:nth-child(" + row + ") .dijitMenuBar")
          .getAttribute("id")
          .then(function(id) {
@@ -67,7 +65,10 @@ define(["intern!object",
    };
 
 
-   registerSuite({
+   registerSuite(function(){
+   var browser;
+
+   return {
       name: "Upload New Version Action Test",
 
       setup: function() {
@@ -84,7 +85,7 @@ define(["intern!object",
             .click()
          .end()
          .then(function() {
-            return checkAction(1, 0, "Upload new version action shouldn't be rendered for a folder");
+            return checkAction(browser, 1, 0, "Upload new version action shouldn't be rendered for a folder");
          });
       },
 
@@ -93,7 +94,7 @@ define(["intern!object",
             .click()
          .end()
          .then(function() {
-            return checkAction(2, 1, "Upload new version action should be rendered for a basic node");
+            return checkAction(browser, 2, 1, "Upload new version action should be rendered for a basic node");
          });
       },
 
@@ -102,7 +103,7 @@ define(["intern!object",
             .click()
          .end()
          .then(function() {
-            return checkAction(3, 1, "Upload new version action should be rendered for working copy owned by the current user");
+            return checkAction(browser, 3, 1, "Upload new version action should be rendered for working copy owned by the current user");
          });
       },
 
@@ -111,7 +112,7 @@ define(["intern!object",
             .click()
          .end()
          .then(function() {
-            return checkAction(4, 0, "Upload new version action should not be rendered for a working copy owned by a different user");
+            return checkAction(browser, 4, 0, "Upload new version action should not be rendered for a working copy owned by a different user");
          });
       },
 
@@ -120,7 +121,7 @@ define(["intern!object",
             .click()
          .end()
          .then(function() {
-            return checkAction(5, 1, "Upload new version action should be rendered for a node locked by the current user");
+            return checkAction(browser, 5, 1, "Upload new version action should be rendered for a node locked by the current user");
          });
       },
 
@@ -129,7 +130,7 @@ define(["intern!object",
             .click()
          .end()
          .then(function() {
-            return checkAction(6, 0, "Upload new version action should not be rendered for a node locked by a different user");
+            return checkAction(browser, 6, 0, "Upload new version action should not be rendered for a node locked by a different user");
          });
       },
 
@@ -138,7 +139,7 @@ define(["intern!object",
             .click()
          .end()
          .then(function() {
-            return checkAction(7, 0, "Upload new version action should not be rendered for a node with lock type NODE_LOCK");
+            return checkAction(browser, 7, 0, "Upload new version action should not be rendered for a node with lock type NODE_LOCK");
          });
       },
 
@@ -147,7 +148,7 @@ define(["intern!object",
             .click()
          .end()
          .then(function() {
-            return checkAction(8, 0, "Upload new version action should not be rendered for a node without user write permissions");
+            return checkAction(browser, 8, 0, "Upload new version action should not be rendered for a node without user write permissions");
          });
       },
 
@@ -156,7 +157,7 @@ define(["intern!object",
             .click()
          .end()
          .then(function() {
-            return useAction(2);
+            return useAction(browser, 2);
          })
          .end()
          // Give the dialog a chance to appear...
@@ -172,5 +173,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.36-SNAPSHOT</version>
+   <version>1.0.37-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -159,6 +159,13 @@
             <targetPath>./alfresco/site-data/extensions/${project.version}</targetPath>
             <filtering>true</filtering>
             <directory>${basedir}/src/main/resources/extension-module</directory>
+         </resource>
+
+         <resource>
+            <!-- Spring Bean overrides -->
+            <targetPath>./alfresco/web-extension/</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/spring-context-config</directory>
          </resource>
 
          <resource>

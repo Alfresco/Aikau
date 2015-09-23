@@ -27,8 +27,7 @@ define(["intern!object",
    ],
    function(registerSuite, assert, require, TestCommon) {
 
-      var browser,
-         renderedValues = [
+      var renderedValues = [
             "Andy Healey previewed file P9111608.jpg in alfresco-uk-photo",
             "Tom Page liked file boats.jpg in alfresco-uk-photo",
             "Pete Philips updated wiki page Security_Blog in security",
@@ -42,7 +41,10 @@ define(["intern!object",
             "Ola Phillips added folder Connectivity Test - New Instructions in eng"
          ];
 
-      registerSuite({
+   registerSuite(function(){
+   var browser;
+
+   return {
          name: "ActivitySummary Tests",
 
          setup: function() {
@@ -74,5 +76,6 @@ define(["intern!object",
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    });

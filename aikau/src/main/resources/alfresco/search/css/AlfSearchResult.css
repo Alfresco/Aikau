@@ -3,6 +3,10 @@
    border-spacing: 0;
 }
 
+.alfresco-search-AlfSearchResult .selectorCell {
+   width: 20px;
+}
+
 .alfresco-search-AlfSearchResult .thumbnailCell {
    width: 100px;
 }

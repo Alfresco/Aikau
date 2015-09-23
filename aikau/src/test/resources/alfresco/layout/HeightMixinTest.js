@@ -27,138 +27,178 @@ define(["intern!object",
         "alfresco/TestCommon"],
        function(registerSuite, assert, TestCommon) {
 
-   var windowHeight;
-   var browser;
-   registerSuite({
-      name: "HeightMixin tests",
+   registerSuite(function(){
+      var windowHeight;
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/HeightMixin", "HeightMixin Tests").end();
-      },
+      return {
+         name: "HeightMixin tests",
 
-      beforeEach: function() {
-         browser.findByCssSelector("body")
-            .getSize()
-            .then(function(size) {
-               windowHeight = size.height - 20; // PLEASE NOTE: 20 pixels deducted for test page padding
-            })
-         .end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/HeightMixin", "HeightMixin Tests").end();
+         },
 
-      "Check AUTO height": function() {
-         return browser.findById("AUTO")
-            .getSize()
-            .then(function(size) {
-               assert.equal(size.height, windowHeight, "Height not calculated correctly");
-            });
-      },
+         beforeEach: function() {
+            browser.findByCssSelector("body")
+               .getSize()
+               .then(function(size) {
+                  windowHeight = size.height - 20; // PLEASE NOTE: 20 pixels deducted for test page padding
+               })
+            .end();
+         },
 
-      "Check AUTO height (with adjustment)": function() {
-         return browser.findById("AUTO_WITH_ADJUSTMENT")
-            .getSize()
-            .then(function(size) {
-               assert.equal(size.height, windowHeight - 50, "Height not calculated correctly");
-            });
-      },
+         "Check AUTO height": function() {
+            return browser.findById("AUTO")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, windowHeight, "Height not calculated correctly");
+               });
+         },
 
-      "Check FIXED height": function() {
-         return browser.findById("FIXED")
-            .getSize()
-            .then(function(size) {
-               // NOTE: Extra 2 pixels for border compensation
-               assert.equal(size.height, 202, "Height not calculated correctly");
-            });
-      },
+         "Check AUTO height (with adjustment)": function() {
+            return browser.findById("AUTO_WITH_ADJUSTMENT")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, windowHeight - 50, "Height not calculated correctly");
+               });
+         },
 
-      "Check MINUS height": function() {
-         return browser.findById("MINUS")
-            .getSize()
-            .then(function(size) {
-               assert.equal(size.height, windowHeight - 100, "Height not calculated correctly");
-            });
-      },
+         "Check FIXED height": function() {
+            return browser.findById("FIXED")
+               .getSize()
+               .then(function(size) {
+                  // NOTE: Extra 2 pixels for border compensation
+                  assert.equal(size.height, 202, "Height not calculated correctly");
+               });
+         },
 
-      "Show dialog with no padding and fixed height": function() {
-         return browser.findById("LAUNCH_DIALOG_1_label")
-            .click()
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_1.dialogDisplayed")
-         .end()
-         .findById("DIALOG_1_TEST")
-            .getSize()
-            .then(function(size) {
-               // Height is the dialog content height minus 2px adjustment to show border
-               assert.equal(size.height, 300, "Height not calculated correctly");
-            })
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_1 .dijitDialogCloseIcon")
-            .click()
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_1.dialogHidden")
-         .end();
-      },
+         "Check MINUS height": function() {
+            return browser.findById("MINUS")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, windowHeight - 100, "Height not calculated correctly");
+               });
+         },
 
-      "Show dialog with padding and fixed height": function() {
-         return browser.findById("LAUNCH_DIALOG_2_label")
-            .click()
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_2.dialogDisplayed")
-         .end()
-         .findById("DIALOG_2_TEST")
-            .getSize()
-            .then(function(size) {
-               // Height is minus the standard border adjustment of 24 pixels
-               assert.equal(size.height, 76, "Height not calculated correctly");
-            })
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_2 .dijitDialogCloseIcon")
-            .click()
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_2.dialogHidden")
-         .end();
-      },
+         "Show dialog with no padding and fixed height": function() {
+            return browser.findById("LAUNCH_DIALOG_1_label")
+               .click()
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_1.dialogDisplayed")
+            .end()
+            .findById("DIALOG_1_TEST")
+               .getSize()
+               .then(function(size) {
+                  // Height is the dialog content height minus 2px adjustment to show border
+                  assert.equal(size.height, 300, "Height not calculated correctly");
+               })
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_1 .dijitDialogCloseIcon")
+               .click()
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_1.dialogHidden")
+            .end();
+         },
 
-      "Show dialog with defaults": function() {
-         return browser.findById("LAUNCH_DIALOG_3_label")
-            .click()
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_3.dialogDisplayed")
-         .end()
-         .findById("DIALOG_3_TEST")
-            .getSize()
-            .then(function(size) {
-               assert.equal(size.height, 18, "Height not calculated correctly");
-            })
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_3 .dijitDialogCloseIcon")
-            .click()
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_3.dialogHidden")
-         .end();
-      },
+         "Show dialog with padding and fixed height": function() {
+            return browser.findById("LAUNCH_DIALOG_2_label")
+               .click()
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_2.dialogDisplayed")
+            .end()
+            .findById("DIALOG_2_TEST")
+               .getSize()
+               .then(function(size) {
+                  // Height is minus the standard border adjustment of 24 pixels
+                  assert.equal(size.height, 76, "Height not calculated correctly");
+               })
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_2 .dijitDialogCloseIcon")
+               .click()
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_2.dialogHidden")
+            .end();
+         },
 
-      "Show dialog with buttons": function() {
-         return browser.findById("LAUNCH_DIALOG_4_label")
-            .click()
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_4.dialogDisplayed")
-         .end()
-         .findById("DIALOG_4_TEST")
-            .getSize()
-            .then(function(size) {
-               assert.equal(size.height, 18, "Height not calculated correctly");
-            })
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_4 .dijitDialogCloseIcon")
-            .click()
-         .end()
-         .findByCssSelector("#HEIGHT_DIALOG_4.dialogHidden")
-         .end();
-      },
+         "Show dialog with defaults": function() {
+            return browser.findById("LAUNCH_DIALOG_3_label")
+               .click()
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_3.dialogDisplayed")
+            .end()
+            .findById("DIALOG_3_TEST")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, 18, "Height not calculated correctly");
+               })
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_3 .dijitDialogCloseIcon")
+               .click()
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_3.dialogHidden")
+            .end();
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
+         "Show dialog with buttons": function() {
+            return browser.findById("LAUNCH_DIALOG_4_label")
+               .click()
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_4.dialogDisplayed")
+            .end()
+            .findById("DIALOG_4_TEST")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, 18, "Height not calculated correctly");
+               })
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_4 .dijitDialogCloseIcon")
+               .click()
+            .end()
+            .findByCssSelector("#HEIGHT_DIALOG_4.dialogHidden")
+            .end();
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "HeightMixin tests (parent height)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/ParentHeight", "HeightMixin Tests (parent height)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Check FixedHeaderFooter height": function() {
+            return browser.findById("FIXED_HEADER_FOOTER_1")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, 600, "The FixedHeaderFooter widget did not take the parent height");
+               });
+         },
+
+         "Check PDF.js previewer height": function() {
+            return browser.findByCssSelector("#PDF_PREVIEW .alfresco-preview-PdfJs")
+               .getSize()
+               .then(function(size) {
+                  assert.closeTo(size.height, 558, 5, "The PDF.js previewer did not take the parent height");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

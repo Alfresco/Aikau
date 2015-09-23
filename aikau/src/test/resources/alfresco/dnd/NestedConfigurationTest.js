@@ -27,9 +27,11 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, require, TestCommon, keys) {
 
+registerSuite(function(){
    var pause = 150;
    var browser;
-   registerSuite({
+
+   return {
 
       name: "Inherited DND Configuration Tests",
 
@@ -211,5 +213,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

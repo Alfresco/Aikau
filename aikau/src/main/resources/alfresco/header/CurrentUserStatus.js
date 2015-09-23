@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -33,11 +33,12 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/on",
         "dojo/dom-class",
+        "dojo/when",
         "alfresco/dialogs/AlfDialog",
         "alfresco/buttons/AlfButton",
         "dijit/form/Textarea",
         "alfresco/core/TemporalUtils"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, on, domClass, AlfDialog, AlfButton, TextArea, TemporalUtils) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, on, domClass, when, AlfDialog, AlfButton, TextArea, TemporalUtils) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, TemporalUtils], {
       
@@ -107,7 +108,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_SET_USER_STATUS", lang.hitch(this, "showStatusDialog"));
          
          // Check that there is a valid user status and set it appropriately if not...
-         if (this.userStatus == "")
+         if (this.userStatus === "")
          {
             domClass.add(this.statusNode, "blank");
             this.userStatus = this.message("unknown.status.label");
@@ -118,7 +119,7 @@ define(["dojo/_base/declare",
          }
          
          // Set the current status...
-         this.statusNode.innerHTML = this.userStatus.replace(/\n/g, "<br>").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+         this.statusNode.innerHTML = this.userStatus.replace(/\n/g, "<br>").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
          // Set the relative time (the time supplied should be in ISO8061 standard)...
          this.setStatusRelativeTime();
@@ -159,7 +160,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       showStatusDialog: function alfresco_header_CurrentUserStatus__showStatusDialog(payload) {
-         if (this.statusDialog == null)
+         if (!this.statusDialog)
          {
             this.alfSubscribe(this.postNewUserStatusTopic, lang.hitch(this, "postStatus"));
             this.statusDialog = new AlfDialog({
@@ -205,9 +206,8 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      setStatusRelativeTime: function alfresco_header_CurrentUserStatus__setStatusRelativeTime()
-      {
-         var relativeTime = (this.userStatusTime == "" || this.userStatusTime == null) ? this.message("status.never-updated") : this.getRelativeTime(this.userStatusTime);
+      setStatusRelativeTime: function alfresco_header_CurrentUserStatus__setStatusRelativeTime() {
+         var relativeTime = this.userStatusTime ? this.getRelativeTime(this.userStatusTime) : this.message("status.never-updated");
          this.lastUpdateNode.innerHTML = this.message("status.updated", [relativeTime]);
       },
       
@@ -218,11 +218,19 @@ define(["dojo/_base/declare",
        * @param {object} payload The click event
        */
       postStatus: function alfresco_header_CurrentUserStatus__postStatus(payload) {
-         var newStatus = payload.dialogContent[0].getValue();
-         this.alfLog("log", "Status payload", payload, newStatus);
-         this.alfPublish("ALF_UPDATE_USER_STATUS", {
-            status: newStatus
-         });
+         if (payload.dialogContent)
+         {
+            when(payload.dialogContent, lang.hitch(this, function(content) {
+               if (content && content.length)
+               {
+                  var newStatus = content[0].getValue();
+                  this.alfLog("log", "Status payload", payload, newStatus);
+                  this.alfPublish("ALF_UPDATE_USER_STATUS", {
+                     status: newStatus
+                  });
+               }
+            }));
+         }
       },
       
       /**
@@ -233,15 +241,14 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      statusUpdated: function alfresco_header_CurrentUserStatus__statusUpdated(payload)
-      {
+      statusUpdated: function alfresco_header_CurrentUserStatus__statusUpdated(payload) {
          this.alfLog("log", "User status update", payload);
          
          // Update the user status if provided in the publication payload...
-         if (payload.userStatus != null)
+         if (payload.userStatus || payload.userStatus === "")
          {
             this.userStatus = payload.userStatus;
-            if (this.userStatus == "")
+            if (this.userStatus === "")
             {
                domClass.add(this.statusNode, "blank");
                this.userStatus = this.message("unknown.status.label");
@@ -250,7 +257,7 @@ define(["dojo/_base/declare",
             {
                domClass.remove(this.statusNode, "blank");
             }
-            this.statusNode.innerHTML = this.userStatus.replace(/\n/g, "<br>").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            this.statusNode.innerHTML = this.userStatus.replace(/\n/g, "<br>").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
          }
          else
          {

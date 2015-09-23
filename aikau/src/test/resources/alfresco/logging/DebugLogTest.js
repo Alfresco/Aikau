@@ -27,9 +27,10 @@ define(["intern!object",
    ],
    function(registerSuite, assert, require, TestCommon) {
 
-      var browser;
+registerSuite(function(){
+   var browser;
 
-      registerSuite({
+   return {
          name: "DebugLog Tests",
 
          setup: function() {
@@ -55,5 +56,6 @@ define(["intern!object",
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    });

@@ -1,5 +1,26 @@
 .alfresco-testing-SubscriptionLog {
    margin-top: 25px;
+   &__clear-log {
+      background: @standard-button-background;
+      border: @standard-button-border;
+      border-radius: @standard-button-border-radius;
+      color: @standard-button-font-color;
+      cursor: pointer;
+      font-size: 10px;
+      line-height: 19px;
+      margin-left: 10px;
+      padding: 0 5px;
+      position: relative;
+      &:hover, &:focus {
+         color: @standard-button-font-color-focus;
+         outline: 0;
+      }
+      &:active {
+         color: @standard-button-font-color-active;
+         left: 1px;
+         top: 1px;
+      }
+   }
    .log {
       border: 1px solid #808080;
       border-collapse: collapse;

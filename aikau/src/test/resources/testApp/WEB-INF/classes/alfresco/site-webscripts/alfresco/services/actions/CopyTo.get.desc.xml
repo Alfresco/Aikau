@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Copy-To Action</shortname>
+  <description>A test page for verifying the Copy-To action</description>
+  <family>aikau-unit-tests</family>
+  <url>/CopyTo</url>
+</webscript>

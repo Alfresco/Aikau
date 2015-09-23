@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/services/DeleteSiteTest"
+      "src/test/resources/alfresco/renderers/actions/CopyToActionTest"
    ],
 
    /**
@@ -104,6 +104,7 @@ define({
       "src/test/resources/alfresco/forms/SingleTextFieldFormTest",
       "src/test/resources/alfresco/forms/TabsInFormsTest",
 
+      "src/test/resources/alfresco/forms/controls/AsyncFormControlLoadingTest",
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",
       "src/test/resources/alfresco/forms/controls/CheckBoxTest",
@@ -120,6 +121,7 @@ define({
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/SitePickerTest",
+      "src/test/resources/alfresco/forms/controls/TextAreaTest",
       "src/test/resources/alfresco/forms/controls/TextBoxTest",
       "src/test/resources/alfresco/forms/controls/TinyMCETest",
       "src/test/resources/alfresco/forms/controls/ValidationTest",
@@ -139,6 +141,7 @@ define({
       "src/test/resources/alfresco/layout/AlfTabContainerTest",
       "src/test/resources/alfresco/layout/BasicLayoutTest",
       "src/test/resources/alfresco/layout/DynamicHorizontalLayoutTest",
+      "src/test/resources/alfresco/layout/DynamicWidgetsTest",
       "src/test/resources/alfresco/layout/FixedHeaderFooterTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/HeightMixinTest",
@@ -213,6 +216,7 @@ define({
       "src/test/resources/alfresco/renderers/ThumbnailTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
+      "src/test/resources/alfresco/renderers/actions/CopyToActionTest",
       "src/test/resources/alfresco/renderers/actions/DeleteActionTest",
       "src/test/resources/alfresco/renderers/actions/ManageAspectsActionTest",
       "src/test/resources/alfresco/renderers/actions/UploadNewVersionActionTest",
@@ -229,6 +233,7 @@ define({
       "src/test/resources/alfresco/services/DeleteSiteTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
       "src/test/resources/alfresco/services/FullScreenDialogTest",
+      "src/test/resources/alfresco/services/LoggingServiceTest",
       "src/test/resources/alfresco/services/NavigationServiceTest",
       "src/test/resources/alfresco/services/NotificationServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",

@@ -28,8 +28,10 @@ define(["alfresco/TestCommon",
         "intern!object"], 
         function(TestCommon, assert, registerSuite) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "AlfHashList Tests",
 
       setup: function() {
@@ -161,5 +163,6 @@ define(["alfresco/TestCommon",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

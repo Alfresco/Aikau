@@ -32,8 +32,10 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, expect, assert, require, TestCommon, keys) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "FacetFilters Tests (Mouse)",
 
       setup: function() {
@@ -232,9 +234,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "FacetFilters Tests (Keyboard)",
 
       setup: function() {
@@ -335,9 +341,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "FacetFilters Tests (URL Hash Tests)",
 
       setup: function() {
@@ -417,12 +427,16 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
    // See AKU-477...
    // FacetFilters publish information about themselves when they are created, but they wait for 
    // page loading to complete so that all widgets have been created before publishing occurs.
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "FacetFilters Tests (delayed creation)",
 
       setup: function() {
@@ -452,5 +466,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

@@ -29,8 +29,10 @@ define([
    ],
    function(registerSuite, assert, require, TestCommon, keys) {
 
-      var browser;
-      registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
          name: "Multi Select Input Tests",
 
          // STARTING STATE
@@ -687,10 +689,6 @@ define([
             return browser.findByCssSelector("#FORM3 .alfresco-forms-controls-MultiSelect--disabled");
          },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         },
-
          // STATE AFTER THIS TEST
          // 
          // Control 1
@@ -758,6 +756,7 @@ define([
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    }
 );

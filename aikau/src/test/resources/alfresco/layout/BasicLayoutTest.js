@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
@@ -26,9 +27,11 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, require, TestCommon) {
 
-   var testableDimensions = {};
-   var browser;
-   registerSuite({
+registerSuite(function(){
+   var testableDimensions = {}, 
+      browser;
+
+   return {
       name: "Basic Layout Tests",
 
       setup: function() {
@@ -93,14 +96,14 @@ define(["intern!object",
       },
 
       "Test left alignment": function() {
-         return browser.findByCssSelector(".left-widgets #SURF_LOGO4")
+         return browser.findByCssSelector(".alfresco-layout-LeftAndRight__left #SURF_LOGO4")
             .then(null, function() {
                assert(false, "Widget was not left aligned");
             });
       },
 
       "Test right alignment": function() {
-         return browser.findByCssSelector(".right-widgets #ALFRESCO_LOGO1")
+         return browser.findByCssSelector(".alfresco-layout-LeftAndRight__right #ALFRESCO_LOGO1")
             .then(null, function() {
                assert(false, "logo was not right aligned");
             });
@@ -222,5 +225,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

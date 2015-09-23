@@ -83,11 +83,20 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_lists_AlfFilteredList__postCreate() {
          domClass.add(this.domNode, "alfresco-lists-AlfFilteredList");
          this.filtersNode = domConstruct.create("div", {}, this.domNode, "first");
+
+         // We need a promise here to address the scenario where XHR requests are made for filtering widgets
+         // that have not had there dependencies correctly analysed by Surf. This is the case for the ComboBox
+         // when used in a non-standard locale as language specific validation.js and common.js files are requested.
+         // Using a promise ensures that filters are only used when they're actually available. See AKU-559 for details
          if (this.widgetsForFilters)
          {
             var filtersModel = lang.clone(this.widgetsForFilters);
             this.processObject(["processInstanceTokens"], filtersModel);
             this.processWidgets(filtersModel, this.filtersNode, this.filterWidgetsMappingId);
+         }
+         else
+         {
+            this._filterWidgets = {};
          }
          this.inherited(arguments);
       },
@@ -218,8 +227,7 @@ define(["dojo/_base/declare",
             }
 
             // Set the widget value
-            widget.setValue && widget.setValue(filterValue);
-
+            widget && widget.setValue && widget.setValue(filterValue);
          }, this);
       },
 

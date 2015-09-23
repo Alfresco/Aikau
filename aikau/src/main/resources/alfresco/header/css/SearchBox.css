@@ -2,7 +2,7 @@
    top: 2px;
 }
 
-.alfresco-share .alfresco-header-SearchBox {
+.@{alfresco} .alfresco-header-SearchBox {
    margin: 2px 10px 0px 10px;
    background-color: @primary-title-color;
    border-radius: 12px;
@@ -156,7 +156,7 @@
 }
 
 /* This overrides the header menu bar settings to ensure that the popup menu item is the right height */
-.alfresco-share .alfresco-header-SearchBox-menu .alfresco-menus-AlfMenuBar .dijitMenuBar .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
+.@{alfresco} .alfresco-header-SearchBox-menu .alfresco-menus-AlfMenuBar .dijitMenuBar .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     height: 16px;
     margin-top: 0;
     margin-left: 1px;

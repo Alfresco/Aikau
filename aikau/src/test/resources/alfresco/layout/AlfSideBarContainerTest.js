@@ -28,8 +28,10 @@ define(["intern!object",
         function (registerSuite, expect, assert, require, TestCommon) {
 
    // var startSize;
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "AlfSideBarContainer Tests",
 
       setup: function() {
@@ -61,7 +63,7 @@ define(["intern!object",
       },
 
       "Test Sidebar Placement": function () {
-         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar #SIDEBAR_LOGO")
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar #SIDEBAR_LOGO")
             .then(
                function() {
                   // No action required - found logo in sidebar
@@ -72,7 +74,7 @@ define(["intern!object",
       },
 
       "Test Main Panel Placement": function () {
-         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .main #MAIN_LOGO")
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__main #MAIN_LOGO")
             .then(
                function() {
                   // No action required - found logo in main panel
@@ -83,7 +85,7 @@ define(["intern!object",
       },
 
       "Test Initial Widths": function () {
-         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
             .getSize()
             .then(function(size) {
                // NOTE: The width has to take the 10px right padding into account
@@ -95,7 +97,7 @@ define(["intern!object",
          return browser.findByCssSelector(".resize-handle-button")
             .click()
          .end()
-         .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+         .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
             .getSize()
             .then(function(size) {
                assert.equal(size.width, 9, "The sidebar wasn't hidden via the bar control");
@@ -106,7 +108,7 @@ define(["intern!object",
          return browser.findByCssSelector(".resize-handle-button")
             .click()
          .end()
-         .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+         .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
             .getSize()
             .then(function(size) {
                // NOTE: The width has to take the 10px right padding into account
@@ -118,7 +120,7 @@ define(["intern!object",
          return this.remote.findByCssSelector("#HIDE_BUTTON")
             .click()
          .end()
-         .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+         .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
             .getSize()
             .then(function(size) {
                assert.equal(size.width, 9, "The sidebar wasn't hidden via publication");
@@ -129,7 +131,7 @@ define(["intern!object",
          return browser.findByCssSelector("#SHOW_BUTTON")
             .click()
          .end()
-         .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+         .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
             .getSize()
             .then(function(size) {
                // NOTE: The width has to take the 10px right padding into account
@@ -140,7 +142,7 @@ define(["intern!object",
 
       "Increase window size and check sidebar height": function() {
          var bodyHeight;
-         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar") // Need to find something before clearing logs!
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar") // Need to find something before clearing logs!
             .end()
             .clearLog() // Clear the logs otherwise they'll force the size of the window
             .setWindowSize(null, 1024, 968)
@@ -150,7 +152,7 @@ define(["intern!object",
                   // We need the body size, not the window size because the window size includes all the OS chrome
                   bodyHeight = size.height;
                })
-            .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+            .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
                .getSize()
                .then(function(size) {
                   // Substracting the padding from the height!
@@ -160,7 +162,7 @@ define(["intern!object",
 
       "Decrease window size and check sidebar height": function() {
          var bodyHeight;
-         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar") // Need to find something before clearing logs!
+         return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar") // Need to find something before clearing logs!
             .end()
             .clearLog() // Clear the logs otherwise they'll force the size of the window
             .setWindowSize(null, 1024, 568)
@@ -170,7 +172,7 @@ define(["intern!object",
                   // We need the body size, not the window size because the window size includes all the OS chrome
                   bodyHeight = size.height;
                })
-            .findByCssSelector(".alfresco-layout-AlfSideBarContainer .sidebar")
+            .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
                .getSize()
                .then(function(size) {
                   // Substracting the padding from the height!
@@ -185,7 +187,7 @@ define(["intern!object",
       // ,
       // "Test Resize": function () {
       //    var browser = this.remote;
-      //    return this.remote.findByCssSelector(".sidebar")
+      //    return this.remote.findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
       //       .getSize()
       //       .then(function(size) {
       //          console.log("Initial sidebar width: " + size.width);
@@ -207,7 +209,7 @@ define(["intern!object",
       //       .sleep(2000)
       //       .releaseMouseButton()
       //    .end()
-      //    .findByCssSelector(".sidebar")
+      //    .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
       //       .getSize()
       //       .then(function(endSize) {
       //          console.log("Final sidebar width: " + endSize.width);
@@ -217,5 +219,6 @@ define(["intern!object",
       //    .end()
       //    .alfPostCoverageResults(browser);
       // }
+   };
    });
 });

@@ -31,11 +31,13 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/when",
         "alfresco/core/NodeUtils"],
-        function(declare, BaseService, AlfCoreXhr, AlfConstants, lang, array, NodeUtils) {
+        function(declare, BaseService, AlfCoreXhr, topics, AlfConstants, lang, array, when, NodeUtils) {
 
    return declare([BaseService, AlfCoreXhr], {
 
@@ -84,7 +86,7 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_actions_CopyMoveService__registerSubscriptions() {
-         this.alfSubscribe("ALF_COPY_OR_MOVE_REQUEST", lang.hitch(this, this.createCopyMoveDialog));
+         this.alfSubscribe(topics.COPY_OR_MOVE, lang.hitch(this, this.createCopyMoveDialog));
       },
 
       /**
@@ -174,21 +176,31 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._actionCopyHandle]);
 
          // Get the locations to copy to and the documents to them...
-         var locations = lang.getObject("dialogContent.0.pickedItemsWidget.currentData.items", false, payload);
-         var documents = lang.getObject("documents", false, payload);
-         if (!locations || locations.length === 0)
+         if (payload.dialogContent)
          {
-            this.alfLog("error", "copyMoveTarget not specified");
+            when(payload.dialogContent, lang.hitch(this, function(content) {
+               if (content && content.length)
+               {
+                  var locations = lang.getObject("pickedItemsWidget.currentData.items", false, content[0]);
+                  var documents = lang.getObject("documents", false, payload);
+                  if (!locations || locations.length === 0)
+                  {
+                     this.alfLog("error", "copyMoveTarget not specified");
+                  }
+                  else if (!documents || documents.length === 0)
+                  {
+                     this.alfLog("error", "Documents to copy not specified.");
+                  }
+                  else
+                  {
+                     var nodeRefs = NodeUtils.nodeRefArray(documents);
+                     array.forEach(locations, lang.hitch(this, this.performAction, nodeRefs, urlPrefix, copy, payload.alfResponseScope));
+                  }
+               }
+            }));
          }
-         else if (!documents || documents.length === 0)
-         {
-            this.alfLog("error", "Documents to copy not specified.");
-         }
-         else
-         {
-            var nodeRefs = NodeUtils.nodeRefArray(documents);
-            array.forEach(locations, lang.hitch(this, this.performAction, nodeRefs, urlPrefix, copy, payload.alfResponseScope));
-         }
+
+         
       },
 
       /**

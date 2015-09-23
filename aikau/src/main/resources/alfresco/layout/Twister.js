@@ -248,14 +248,7 @@ define(["dojo/_base/declare",
          array.forEach(widgets, lang.hitch(this, function(widget) {
             widget.placeAt(this.contentNode);
          }), this);
-      },
 
-      /**
-       * Creates a "disclosure twister" UI control from existing mark-up.
-       *
-       * @instance
-       */
-      createTwister: function alfresco_layout_Twister__createTwister() {
          if (this.preferencePrefix && this.preferenceName)
          {
             this.alfPublish(this.getPreferenceTopic, {
@@ -264,7 +257,14 @@ define(["dojo/_base/declare",
                callbackScope: this
             });
          }
+      },
 
+      /**
+       * Creates a "disclosure twister" UI control from existing mark-up.
+       *
+       * @instance
+       */
+      createTwister: function alfresco_layout_Twister__createTwister() {
          // Initial State
          domClass.add(this.labelNode, this.initiallyOpen ? this.CLASS_OPEN : this.CLASS_CLOSED);
          domStyle.set(this.contentNode, "display", this.initiallyOpen ? "block" : "none");

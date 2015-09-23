@@ -296,6 +296,7 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_layout_AlfTabContainer__postCreate() {
          // Initialise a TabContainer instance and watch its selectedChildWidget event
          this.tabContainerWidget = new TabContainer({
+            id: this.id + "_TABCONTAINER",
             style: "height: " + this.height + "; width: " + this.width + ";",
             doLayout: this.doLayout
          }, this.tabNode);
@@ -363,6 +364,8 @@ define(["dojo/_base/declare",
          domClass.add(this.domNode, "alfresco-layout-AlfTabContainer--tabsDisplayed");
       },
 
+
+
       /**
        * This function adds widgets to the TabContainer widget
        * 
@@ -371,67 +374,101 @@ define(["dojo/_base/declare",
        * @param {integer} index The index of the required tab position
        */
       addWidget: function alfresco_layout_AlfTabContainer__addWidget(widget, /*jshint unused:false*/ index) {
-         // NOTE: It's important that the DOM structure of the tab is created and added to the page before 
-         //       creating each child widget in order that the child widget has access to the initial dimensions
-         //       of the tab (e.g. for an AlfSideBarContainer to calculate it's height appropriately)...
-         var domNode = domConstruct.create("div", {});
-         var cp = new ContentPane();
-         domClass.add(cp.domNode, "alfresco-layout-AlfTabContainer__OuterTab");
-         this.tabContainerWidget.addChild(cp, widget.tabIndex);
-
-         // Add content to the ContentPane
-         if(widget.content && typeof widget.content === "string")
+         var indexOfDuplicateTab = this.indexOfTabId(widget.id);
+         if (indexOfDuplicateTab !== -1)
          {
-            cp.set("content", widget.content);
+            // A tab with the requested ID has already been added, so just select it...
+            this.tabContainerWidget.selectChild(this.tabContainerWidget.getChildren()[indexOfDuplicateTab]);
          }
-
-         // Add a title to the ContentPane
-         if(widget.title && typeof widget.title === "string")
-         {
-            cp.set("title", this.message(widget.title));
-         }
-
-         // Add an iconClass to the ContentPane
-         if(widget.iconClass && typeof widget.iconClass === "string")
-         {
-            cp.set("iconClass", widget.iconClass);
-         }
-
-         // Should the ContentPane be closable?
-         if(widget.closable && typeof widget.closable === "boolean")
-         {
-            cp.set("closable", widget.closable);
-         }
-
-         // Should the ContentPane be disabled?
-         if(widget.disabled && typeof widget.disabled === "boolean")
-         {
-            cp.set("disabled", widget.disabled);
-         }
-
-         // If not delayed processing, create the widget and add to the panel
-         if(!widget.delayProcessing)
-         {
-            var widgetNode = this.createWidgetDomNode(widget, cp.domNode);
-            var w = this.createWidget(widget, widgetNode);
-         }
-         // Otherwise record the widget for processing later on
          else
          {
-            this._delayedProcessingWidgets.push(
-               {
-                  "domNode": cp.domNode,
-                  "contentPane": cp,
-                  "widget": widget
-               }
-            );
-         }
+            // NOTE: It's important that the DOM structure of the tab is created and added to the page before 
+            //       creating each child widget in order that the child widget has access to the initial dimensions
+            //       of the tab (e.g. for an AlfSideBarContainer to calculate it's height appropriately)...
+            var domNode = domConstruct.create("div", {});
+            var cp = new ContentPane({
+               id: widget.id || null
+            });
+            domClass.add(cp.domNode, "alfresco-layout-AlfTabContainer__OuterTab");
+            this.tabContainerWidget.addChild(cp, widget.tabIndex);
 
-         // If we have an index add the ContentPane at a particular position otherwise just add it
-         if (widget.selected === true)
-         {
-            this.tabContainerWidget.selectChild(cp);
+            // Add content to the ContentPane
+            if(widget.content && typeof widget.content === "string")
+            {
+               cp.set("content", widget.content);
+            }
+
+            // Add a title to the ContentPane
+            if(widget.title && typeof widget.title === "string")
+            {
+               cp.set("title", this.message(widget.title));
+            }
+
+            // Add an iconClass to the ContentPane
+            if(widget.iconClass && typeof widget.iconClass === "string")
+            {
+               cp.set("iconClass", widget.iconClass);
+            }
+
+            // Should the ContentPane be closable?
+            if(widget.closable && typeof widget.closable === "boolean")
+            {
+               cp.set("closable", widget.closable);
+            }
+
+            // Should the ContentPane be disabled?
+            if(widget.disabled && typeof widget.disabled === "boolean")
+            {
+               cp.set("disabled", widget.disabled);
+            }
+
+            // If not delayed processing, create the widget and add to the panel
+            if(!widget.delayProcessing)
+            {
+               var widgetNode = this.createWidgetDomNode(widget, cp.domNode);
+               var w = this.createWidget(widget, widgetNode);
+            }
+            // Otherwise record the widget for processing later on
+            else
+            {
+               this._delayedProcessingWidgets.push(
+                  {
+                     "domNode": cp.domNode,
+                     "contentPane": cp,
+                     "widget": widget
+                  }
+               );
+            }
+
+            // If we have an index add the ContentPane at a particular position otherwise just add it
+            if (widget.selected === true)
+            {
+               this.tabContainerWidget.selectChild(cp);
+            }
          }
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {string} id The ID of an existing tab to search for
+       * @return {number} The index of the duplicate tab and -1 if a duplicate does not exist
+       * @since 1.0.35
+       */
+      indexOfTabId: function alfresco_layout_AlfTabContainer__indexOfTabId(id) {
+         var duplicateTabIndex = -1;
+         if (id)
+         {
+            array.some(this.tabContainerWidget.getChildren(), function(tab, tabIndex) {
+               var match = tab.id === id;
+               if (match)
+               {
+                  duplicateTabIndex = tabIndex;
+               }
+               return match;
+            }, this);
+         }
+         return duplicateTabIndex;
       },
 
       /**
@@ -464,7 +501,7 @@ define(["dojo/_base/declare",
             this._delayedProcessingWidgets.splice(forDeletion, 1);
          }
          this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
-         this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
+         this.alfPublish(topics.WIDGET_PROCESSING_COMPLETE, {}, true);
          this.alfPublishResizeEvent(this.domNode);
       },
 

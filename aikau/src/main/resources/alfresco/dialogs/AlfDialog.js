@@ -181,6 +181,67 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Calculates various heights that are used to set dimensions of the dialog when it is created
+       * as well as on resize events (such as resizing the window).
+       * 
+       * @instance
+       * @returns {object} heights The calculated heights
+       * @returns {number} heights.clientHeight The height of the viewport
+       * @returns {number} heights.documentHeight The height of the document
+       * @returns {number} heights.maxBodyHeight The maximum height allowed for the body of the dialog
+       * @returns {number} heights.paddingAdjustment The pixels to allow for padding in the dialog body
+       * @returns {number} heights.simplePanelHeight The height of the [SimplePanel]{@link module:alfresco/layout/SimplePanel} containing the dialog content
+       * @since 1.0.36
+       */
+      calculateHeights: function alfresco_dialogs_AlfDialog__calculateHeights() {
+         var calculatedHeights = {};
+         var docHeight = $(document).height(),
+             clientHeight = $(window).height();
+         var h = (docHeight < clientHeight) ? docHeight : clientHeight;
+
+         // We want to ensure that the dialog always fits within the viewport, so take the available
+         // height and remove 200 pixels to accomodate both the title and buttons bars and still leave
+         // some padding...
+         var maxHeight = h - 200;
+
+         // By default there is padding around the dialog body (12px above and below the body)... 
+         // We need to take this into consideration when calculating the simple panel height to ensure
+         // that it fits perfectly within the available space...
+         var paddingAdjustment = 24;
+         if (this.additionalCssClasses && this.additionalCssClasses.indexOf("no-padding") !== -1)
+         {
+            paddingAdjustment = 0;
+         }
+
+         var simplePanelHeight = null;
+         if (this.contentHeight)
+         {
+            simplePanelHeight = (parseInt(this.contentHeight, 10) - paddingAdjustment) + "px";
+         }
+         else
+         {
+            // When there is no fixed content height, make sure that the max-height adapts to the displayed content...
+            var containerHeight = $(this.containerNode).height();
+            if (containerHeight)
+            {
+               // We need to deduct 40 pixels from the container height to accomodate the buttons bar...
+               containerHeight -= 40;
+               if (containerHeight < maxHeight)
+               {
+                  maxHeight = containerHeight;
+               }
+            }
+         }
+
+         calculatedHeights.documentHeight = docHeight;
+         calculatedHeights.clientHeight = clientHeight;
+         calculatedHeights.maxBodyHeight = maxHeight;
+         calculatedHeights.paddingAdjustment = paddingAdjustment;
+         calculatedHeights.simplePanelHeight = simplePanelHeight;
+         return calculatedHeights;
+      },
+
+      /**
        * Extends the superclass implementation to set the dialog as not closeable (by clicking an "X"
        * in the corner).
        * 
@@ -206,7 +267,7 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
 
          // Listen for requests to resize the dialog...
-         this.alfSubscribe("ALF_RESIZE_DIALOG", lang.hitch(this, "onResizeRequest"));
+         this.alfSubscribe("ALF_RESIZE_DIALOG", lang.hitch(this, this.onResizeRequest));
 
          domClass.add(this.domNode, "alfresco-dialog-AlfDialog");
 
@@ -224,17 +285,16 @@ define(["dojo/_base/declare",
             });
          }
 
+         // Calculate the heights required for the dialog...
+         var calculatedHeights = this.calculateHeights();
+
          domConstruct.empty(this.containerNode);
          this.bodyNode = domConstruct.create("div", {
-            "class" : "dialog-body"
+            "class" : "dialog-body",
+            style: "max-height:" + calculatedHeights.maxBodyHeight + "px"
          }, this.containerNode, "last");
 
          // Workout a maximum height for the dialog as it should always fit in the window...
-         var docHeight = $(document).height(),
-             clientHeight = $(window).height();
-         var h = (docHeight < clientHeight) ? docHeight : clientHeight;
-         var maxHeight = h - 200;
-
          // Set the dimensions of the body if required...
          domStyle.set(this.bodyNode, {
             width: this.contentWidth ? this.contentWidth: null,
@@ -253,12 +313,10 @@ define(["dojo/_base/declare",
          // so that the buttons are disabled initially if required)
          if (this.widgetsButtons)
          {
-            this.creatingButtons = true;
             this.buttonsNode = domConstruct.create("div", {
                "class" : "footer"
             }, this.containerNode, "last");
-            this.processWidgets(this.widgetsButtons, this.buttonsNode);
-            this.creatingButtons = false;
+            this.processWidgets(this.widgetsButtons, this.buttonsNode, "BUTTONS");
          }
          else
          {
@@ -267,36 +325,16 @@ define(["dojo/_base/declare",
 
          if (this.widgetsContent)
          {
-            // This is a slightly unpleasant convergence of CSS and JS, but will suffice for the time being...
-            // There is a "no-padding" CSS class that can be applied which will remove the default padding applied
-            // to the dialog body, if we detect this setting then we should not compensate the content height 
-            // for this padding.
-            var paddingAdjustment = 24;
-            if (this.additionalCssClasses && this.additionalCssClasses.indexOf("no-padding") !== -1)
-            {
-               paddingAdjustment = 0;
-            }
-            
-            var simplePanelHeight = null;
-            if (this.contentHeight)
-            {
-               simplePanelHeight = (parseInt(this.contentHeight, 10) - paddingAdjustment) + "px";
-            }
-            
-            // Add widget content to the container node...
-            var widgetsNode = domConstruct.create("div", {
-               style: "max-height:" + maxHeight + "px"
-            }, this.bodyNode, "last");
             var bodyModel = [{
                name: "alfresco/layout/SimplePanel",
                assignTo: "_dialogPanel",
                config: {
-                  handleOverflow: false,
-                  height: simplePanelHeight,
+                  handleOverflow: this.handleOverflow,
+                  height: calculatedHeights.simplePanelHeight,
                   widgets: this.widgetsContent
                }
             }];
-            this.processWidgets(bodyModel, widgetsNode);
+            this.processWidgets(bodyModel, this.bodyNode, "BODY");
          }
          else if (this.content)
          {
@@ -304,6 +342,8 @@ define(["dojo/_base/declare",
             // setting basic text content in an confirmation dialog...
             html.set(this.bodyNode, this.encodeHTML(this.content));
          }
+
+         this.alfSetupResizeSubscriptions(this.onWindowResize, this);
       },
       
       /**
@@ -339,18 +379,24 @@ define(["dojo/_base/declare",
          domStyle.set(document.documentElement, "overflow", "");
          domClass.remove(this.domNode, "dialogDisplayed");
          domClass.add(this.domNode, "dialogHidden");
-         
-         // Normalise closing dialog by re-issuing escape key use (which could 
-         // actually have been used to close the dialog, but this ensures that
-         // any widgets listening for this keyup event get notificed)...
-         on.emit(this.domNode, "keyup", {
-            bubbles: true, 
-            cancelable: true, 
-            keyCode: 27, 
-            charCode: 27, 
-            keyCodeArg : 27, 
-            charCodeArg: 0
-         }); 
+      },
+
+      /**
+       * This is called whenever the window is resized. It ensures that the dialog body is the correct height
+       * when taking into account the new size of the view port.
+       *
+       * @instance
+       * @since 1.0.36
+       */
+      onWindowResize: function alfresco_dialogs_AlfDialog__onWindowResize() {
+         var calculatedHeights = this.calculateHeights();
+         if (calculatedHeights.maxBodyHeight)
+         {
+            // Don't set a max-height when it's 0...
+            domStyle.set(this.bodyNode, {
+               "max-height": calculatedHeights.maxBodyHeight + "px"
+            });
+         }
       },
 
       /**
@@ -423,6 +469,7 @@ define(["dojo/_base/declare",
          if (this.domNode)
          {
             this.resize();
+            this.onWindowResize();
          }
       },
 
@@ -434,8 +481,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {Object[]}
        */
-      allWidgetsProcessed: function alfresco_dialogs_AlfDialog__allWidgetsProcessed(widgets) {
-         if (this.creatingButtons === true)
+      allWidgetsProcessed: function alfresco_dialogs_AlfDialog__allWidgetsProcessed(widgets, processWidgetsId) {
+         if (processWidgetsId === "BUTTONS")
          {
             // When creating the buttons, attach the handler to each created...
             this._buttons = [];

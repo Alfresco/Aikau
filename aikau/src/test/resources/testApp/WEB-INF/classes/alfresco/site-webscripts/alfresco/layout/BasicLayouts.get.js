@@ -69,19 +69,19 @@ model.jsonModel = {
                   name: "alfresco/layout/LeftAndRight",
                   config: {
                      id: "LEVEL2_LEFTANDRIGHT",
-                     widgets: [
+                     widgetsLeft: [
                         {
                            name: "alfresco/logo/Logo",
-                           align: "left",
                            className: "additional-test-class",
                            config: {
                               id: "SURF_LOGO4",
                               logoClasses: "surf-logo-small"
                            }
-                        },
+                        }
+                     ],
+                     widgetsRight: [
                         {
                            name: "alfresco/logo/Logo",
-                           align: "right",
                            config: {
                               id: "ALFRESCO_LOGO1",
                               logoClasses: "alfresco-logo-only"

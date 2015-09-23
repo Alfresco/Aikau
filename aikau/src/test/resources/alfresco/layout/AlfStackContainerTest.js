@@ -25,12 +25,13 @@
 define(["intern!object",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Stack Container Tests",
 
       setup: function() {
@@ -93,10 +94,14 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
    // This test reloads the page to clear any previous focus and make keyboard actions more predictable
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Stack Container Tests (function)",
 
       setup: function() {
@@ -362,10 +367,14 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
    // This test reloads the page to clear any previous focus and make keyboard actions more predictable
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Stack Container Tests (add pane)",
 
       setup: function() {
@@ -412,5 +421,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 }); 

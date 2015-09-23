@@ -39,10 +39,11 @@ define(["dojo/_base/declare",
          {
             var templateToUse = xhrSearchResponse;
             this.server.respondWith("GET",
-                                    /\/aikau\/proxy\/alfresco\/slingshot\/search/,
+                                    /(.*)/,
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      templateToUse]);
+            this.alfPublish("ALF_MOCK_XHR_SERVICE_READY");
          }
          catch(e)
          {

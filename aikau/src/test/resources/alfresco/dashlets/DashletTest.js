@@ -28,8 +28,10 @@ define(["alfresco/TestCommon",
    ],
    function(TestCommon, assert, registerSuite) {
 
-      var browser;
-      registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
          name: "Dashlet Tests",
 
          setup: function() {
@@ -101,7 +103,9 @@ define(["alfresco/TestCommon",
          },
 
          // This does not work in Chrome currently, however we expect the FF test to pass, so this provides some level of regression testability
-         "Resizing dashlet stores height (NOT EXPECTED TO WORK IN CHROME)": function() {
+         "Resizing dashlet stores height": function() {
+            TestCommon.skipIf(this, "environment", "chrome");
+
             return browser.findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__resize-bar__icon")
                .moveMouseTo(0, 0)
                .pressMouseButton()
@@ -111,12 +115,13 @@ define(["alfresco/TestCommon",
 
             .getLastPublish("VALID_ID_ALF_STORE_DASHLET_HEIGHT_SUCCESS")
                .then(function(payload) {
-                  assert.deepPropertyVal(payload, "requestConfig.data.height", 250, "Did not publish new height");
+                  assert.deepPropertyVal(payload, "requestConfig.data.height", 270, "Did not publish new height");
                });
          },
 
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    });

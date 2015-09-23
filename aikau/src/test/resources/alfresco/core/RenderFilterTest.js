@@ -39,8 +39,10 @@ define(["intern!object",
    // MBI6 - failed AND condition
    // MI2 - failed filter rule following inherited currentItem change
          
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "RenderFilter Tests",
 
       setup: function() {
@@ -160,5 +162,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

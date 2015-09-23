@@ -32,8 +32,10 @@ define(["intern!object",
    //              part of BaseFormControl) in the TextBoxTest. This test covers updates specific to
    //              ANY/ALL configuration (See AKU-451)...
    
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Rules Engine Test",
 
       setup: function() {
@@ -136,5 +138,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

@@ -51,6 +51,20 @@ define([],function() {
       ARCHIVE_PROGRESS_SUCCESS: "ALF_ARCHIVE_PROGRESS_REQUEST_SUCCESS",
 
       /**
+       * The topic to publish to request starting a new workflow for one or more Nodes.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36
+       *
+       * @event module:alfresco/core/topics~ASSIGN_WORKFLOW
+       * @property {object[]} nodes - The array of Nodes to start the workflow on
+       * @property {object} currentTarget - The current Node in which the nodes reside
+       */
+      ASSIGN_WORKFLOW: "ALF_ASSIGN_WORKFLOW",
+
+      /**
        * Event topic to trigger the cancel the editing of a checkout document
        *
        * @instance
@@ -70,6 +84,23 @@ define([],function() {
        * @since 1.0.33
        */
       CLEAR_SELECTED_ITEMS: "ALF_CLEAR_SELECTED_ITEMS",
+
+      /**
+       * This topic is published to launch the copying or moving of a node (or nodes) to another location.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36
+       * 
+       * @event module:alfresco/core/topics~COPY_OR_MOVE
+       * @property {object[]} documents The nodes/documents to be copied/moved
+       * @property {boolean} [copy=false] Whether to copy the node(s) - default is to move
+       * @property {boolean} [singleItemMode=true] The mode in which to launch the picker (to determine single or multiple destinations)
+       * @property {string} [dialogTitle] The title of the picker dialog - default is the generic "copy" title
+       * @property {string} [confirmButtonLabel] The label of the picker confirmation button - default is the generic "copy" button confirmation
+       */
+      COPY_OR_MOVE: "ALF_COPY_OR_MOVE_REQUEST",
 
       /**
        * This can be published to make a request to create a dialog. It is typically handled by the
@@ -140,7 +171,7 @@ define([],function() {
        * @since 1.0.35
        *
        * @event module:alfresco/core/topics~DOCUMENT_DESELECTED
-       * @parameter {object} value - The item de-selected
+       * @property {object} value - The item de-selected
        */
       DOCUMENT_DESELECTED: "ALF_DOCLIST_DOCUMENT_DESELECTED",
       
@@ -153,7 +184,7 @@ define([],function() {
        * @since 1.0.35
        *
        * @event module:alfresco/core/topics~DOCUMENT_SELECTED
-       * @parameter {object} value - The item selected
+       * @property {object} value - The item selected
        */
       DOCUMENT_SELECTED: "ALF_DOCLIST_DOCUMENT_SELECTED",
       
@@ -169,24 +200,11 @@ define([],function() {
        * @since 1.0.35
        * 
        * @event module:alfresco/core/topics~DOCUMENT_SELECTION_UPDATE
-       * @parameter {string} [value=null] - The selection type, either "selectAll", "selectNone", "selectInvert", "selectFolders" or "selectDocuments"
-       * @parameter {object[]} [selectedItems=null] A specific set of items to be selected
+       * @property {string} [value=null] - The selection type, either "selectAll", "selectNone", "selectInvert", "selectFolders" or "selectDocuments"
+       * @property {object[]} [selectedItems=null] A specific set of items to be selected
        */
       DOCUMENT_SELECTION_UPDATE: "ALF_DOCLIST_FILE_SELECTION",
       
-      /**
-       * Used to indicate the list of currently selected documents has changed and provides the details of those items.
-       * 
-       * @instance
-       * @type {string} 
-       * @default
-       * @since 1.0.35
-       * 
-       * @event module:alfresco/core/topics~SELECTED_DOCUMENTS_CHANGED
-       * @parameter {object[]} selectedItems - The items that are selected
-       */
-      SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
-
       /**
        * This topic is published to request either the download of a single document or folder (or a selection
        * of documents and folder) as a ZIP file.
@@ -269,6 +287,11 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.34
+       *
+       * @event module:alfresco/core/topics~GET_PREFERENCE
+       * @property {string} preference Dot-notation property indicating the user preference to retrieve
+       * @property {function} callback The function to call when the preference has been retrieved
+       * @property {object} callbackScope The scope with which to execute the callback
        */
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
 
@@ -389,6 +412,19 @@ define([],function() {
       REQUEST_DELAYED_ARCHIVE_PROGRESS: "ALF_ARCHIVE_DELAYED_PROGRESS_REQUEST",
 
       /**
+       * Published to indicate that list data requests have been completed. Typically used to track whether or not
+       * XHR requests for data are in progress.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36
+       *
+       * @event module:alfresco/core/topics~REQUEST_FINISHED_TOPIC
+       */
+      REQUEST_FINISHED_TOPIC: "ALF_DOCLIST_REQUEST_FINISHED",
+
+      /**
        * <p>This topic is used to indicate that a navigable collection has been scrolled to
        * "near" its bottom. Since its creation, this topic's meaning has extended to go beyond
        * just scrolling (sometimes it's clicking arrows) and to not necessarily being the
@@ -405,6 +441,19 @@ define([],function() {
        * @since 1.0.32
        */
       SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM",
+
+      /**
+       * Used to indicate the list of currently selected documents has changed and provides the details of those items.
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       * @since 1.0.35
+       * 
+       * @event module:alfresco/core/topics~SELECTED_DOCUMENTS_CHANGED
+       * @property {object[]} selectedItems - The items that are selected
+       */
+      SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
 
       /**
        * This topic can be published to set a user preference. It is typically handled by 
@@ -438,6 +487,17 @@ define([],function() {
        * @default
        * @since 1.0.34
        */
-      UPLOAD_TO_UNKNOWN_LOCATION: "ALF_UPLOAD_TO_UNKNOWN_LOCATION"
+      UPLOAD_TO_UNKNOWN_LOCATION: "ALF_UPLOAD_TO_UNKNOWN_LOCATION",
+
+      /**
+       * This topic is published to indicate that widget processing has been completed. It is typically
+       * fired by widgets that dynamically render widget models.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      WIDGET_PROCESSING_COMPLETE: "ALF_WIDGET_PROCESSING_COMPLETE"
    };
 });

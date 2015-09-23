@@ -27,9 +27,10 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/helpers/pollUntil"], 
         function(registerSuite, assert, require, TestCommon, pollUntil) {
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "CodeMirror",
 
       setup: function() {
@@ -103,5 +104,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

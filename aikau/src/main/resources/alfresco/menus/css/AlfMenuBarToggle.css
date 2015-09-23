@@ -1,5 +1,5 @@
 /* This is used for Popup items - NOT menu items */
-.alfresco-share .alf-sort-ascending-icon {
+.@{alfresco} .alf-sort-ascending-icon {
    background: url("./images/sort-ascending-16.png");
    background-repeat: no-repeat;
    height: 16px;
@@ -9,7 +9,7 @@
 }
 
 /* This is used for Popup items - NOT menu items */
-.alfresco-share .alf-sort-descending-icon {
+.@{alfresco} .alf-sort-descending-icon {
    background: url("./images/sort-descending-16.png");
    background-repeat: no-repeat;
    height: 16px;

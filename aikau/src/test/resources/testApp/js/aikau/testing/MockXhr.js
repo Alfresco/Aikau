@@ -195,7 +195,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Toggle the body visibility for the log
+       * Clear the log node
        *
        * @instance
        */
