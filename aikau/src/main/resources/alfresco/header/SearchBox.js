@@ -773,9 +773,9 @@ define(["dojo/_base/declare",
          var searchTerm = terms;
          if (this.hiddenSearchTerms)
          {
-            searchTerm = encodeURIComponent("(" + terms + ") " + this.hiddenSearchTerms);
+            searchTerm = "(" + terms + ") " + this.hiddenSearchTerms;
          }
-         return searchTerm;
+         return encodeURIComponent(searchTerm);
       },
 
       /**
