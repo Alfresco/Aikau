@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfTagFilters Test</shortname>
+  <description>This WebScript define the page for testing the alfresco/documentlibrary/AlfTagFilters widget</description>
+  <family>aikau-unit-tests</family>
+  <url>/TagFilters</url>
+</webscript>
