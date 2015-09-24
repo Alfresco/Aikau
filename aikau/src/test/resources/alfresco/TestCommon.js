@@ -209,11 +209,14 @@ define(["intern/dojo/node!fs",
                   urlDisplay.style.fontFamily = "Open Sans Bold, sans-serif";
                   urlDisplay.style.fontSize = "12px";
                   urlDisplay.style.lineHeight = "18px";
+                  urlDisplay.style.maxWidth = "400px";
                   urlDisplay.style.opacity = ".85";
                   urlDisplay.style.padding = "10px";
                   urlDisplay.style.position = "fixed";
                   urlDisplay.style.right = "0";
                   urlDisplay.style.bottom = "10px";
+                  urlDisplay.appendChild(document.createTextNode("User Agent: " + navigator.userAgent));
+                  urlDisplay.appendChild(document.createElement("BR"));
                   urlDisplay.appendChild(document.createTextNode("Time: " + (new Date()).toISOString()));
                   urlDisplay.appendChild(document.createElement("BR"));
                   urlDisplay.appendChild(document.createTextNode("URL: " + location.href));
