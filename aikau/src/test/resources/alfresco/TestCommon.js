@@ -185,7 +185,21 @@ define(["intern/dojo/node!fs",
             return newBrowser;
          };
          command.session.screenieIndex = 0;
-         command.session.screenie = function(description) {
+         command.session.screenie = function() {
+
+            // Parse arguments
+            var argsArray = Array.prototype.slice.call(arguments),
+               description,
+               logFocusedElement;
+            argsArray.forEach(function(arg) {
+               if (typeof arg === "string") {
+                  description = arg;
+               } else if (typeof arg === "boolean") {
+                  logFocusedElement = arg;
+               }
+            });
+
+            // Setup function variables
             var safeBrowserName = browser.environmentType.browserName.replace(/\W+/g, "_")
                .split("_")
                .map(function(namePart) {
@@ -198,9 +212,22 @@ define(["intern/dojo/node!fs",
                screenshotPath = "src/test/screenshots/" + screenshotName,
                infoId = "TestCommon__webpage-info",
                dfd = new Promise.Deferred();
-            browser.executeAsync(function(id, desc, asyncComplete) {
+
+            // Take and store the screenshot
+            browser.executeAsync(function(id, desc, logFocused, asyncComplete) {
+
+                  // Cleanup old info block
                   var oldInfo = document.getElementById(id);
                   oldInfo && document.body.removeChild(oldInfo);
+
+                  // Get details of the active (focused) element
+                  var focused = document.activeElement,
+                     focusedTag = focused.tagName,
+                     focusedId = focused.id ? "#" + focused.id : "",
+                     focusedClasses = focused.className ? "." + focused.className.split(" ").join(".") : "",
+                     focusedText = focusedTag + focusedId + focusedClasses;
+
+                  // Create new info block
                   var urlDisplay = document.createElement("DIV");
                   urlDisplay.id = id;
                   urlDisplay.style.background = "#666";
@@ -224,9 +251,16 @@ define(["intern/dojo/node!fs",
                      urlDisplay.appendChild(document.createElement("BR"));
                      urlDisplay.appendChild(document.createTextNode("Description: \"" + desc + "\""));
                   }
+                  if (logFocused) {
+                     urlDisplay.appendChild(document.createElement("BR"));
+                     urlDisplay.appendChild(document.createTextNode("Focused elem: " + focusedText));
+                  }
+
+                  // Add info block to page and complete async
                   document.body.appendChild(urlDisplay);
                   setTimeout(asyncComplete, 0);
-               }, [infoId, description])
+
+               }, [infoId, description, logFocusedElement])
                .takeScreenshot()
                .then(function(screenshot) {
                   fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary", function(err) {
@@ -237,6 +271,8 @@ define(["intern/dojo/node!fs",
                      }
                   });
                });
+
+            // Pass back a promise
             return dfd.promise;
          };
          command.session.clearLog = function() {
