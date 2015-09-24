@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfToolbar.css"}],
       
       /**
-       * Adds the "alf-documentlist-toolbar" CSS class to the DOM node.
+       * Adds the "alfresco-documentlibrary-AlfToolbar" CSS class to the DOM node.
        * @instance
        */
       postCreate: function alfresco_documentlibrary_AlfToolbar__postCreate() {
@@ -59,9 +59,8 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to add
        * @param {number} insertIndex The index at which to add the widget.
        */
-      addChild: function(widget, insertIndex) {
-         var refNode = domConstruct.create("div", { className: "horizontal-widget"}, this.rightWidgets, insertIndex);
-         domConstruct.place(widget.domNode, refNode, insertIndex);
+      addChild: function alfresco_documentlibrary_AlfToolbar__addChild(widget, /*jshint unused:false*/ insertIndex) {
+         domConstruct.place(widget.domNode, this.rightWidgets, "last");
       }
    });
 });
