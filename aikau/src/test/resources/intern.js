@@ -42,8 +42,8 @@ define(["./config/Suites"],
             chromeOptions: {
                excludeSwitches: ["ignore-certificate-errors"]
             }
-         // }, {
-         //    browserName: "Firefox"
+         }, {
+            browserName: "Firefox"
          }],
 
          // Maximum number of simultaneous integration tests that should be executed on the remote WebDriver service
