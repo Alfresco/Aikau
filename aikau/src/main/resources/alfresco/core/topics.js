@@ -58,7 +58,7 @@ define([],function() {
        * @default
        * @since 1.0.36
        *
-       * @event module:alfresco/core/topics~ASSIGN_WORKFLOW
+       * @event
        * @property {object[]} nodes - The array of Nodes to start the workflow on
        * @property {object} currentTarget - The current Node in which the nodes reside
        */
