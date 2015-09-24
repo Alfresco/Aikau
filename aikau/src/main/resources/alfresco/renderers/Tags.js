@@ -189,7 +189,7 @@ define(["dojo/_base/declare",
                additionalCssClasses: "hiddenlabel",
                optionsConfig: {
                   queryAttribute: "name",
-                  publishTopic: topics.ALF_RETRIEVE_CURRENT_TAGS,
+                  publishTopic: topics.RETRIEVE_CURRENT_TAGS,
                   publishPayload: {
                      resultsProperty: "response.data.items"
                   }
