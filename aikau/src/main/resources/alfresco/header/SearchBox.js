@@ -559,6 +559,45 @@ define(["dojo/_base/declare",
       hiddenSearchTerms: "",
 
       /**
+       * The URI to use performing the live search for documents. If the default is re-configured then REST API
+       * to be used is expected to be able to handle the request parameter of "t" for the search term,
+       * "maxResults" for the page size and "startIndex" for the first result in the page. The REST API is expected
+       * to be a Repository based WebScript supporting the GET method.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.37
+       */
+      liveSearchDocumentsUri: "slingshot/live-search-docs",
+
+      /**
+       * The URI to use performing the live search for sites. If the default is re-configured then REST API
+       * to be used is expected to be able to handle the request parameter of "t" for the search term,
+       * "maxResults" for the page size and "startIndex" for the first result in the page. The REST API is expected
+       * to be a Repository based WebScript supporting the GET method.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.37
+       */
+      liveSearchSitesUri: "slingshot/live-search-sites",
+
+      /**
+       * The URI to use performing the live search for people. If the default is re-configured then REST API
+       * to be used is expected to be able to handle the request parameter of "t" for the search term,
+       * "maxResults" for the page size and "startIndex" for the first result in the page. The REST API is expected
+       * to be a Repository based WebScript supporting the GET method.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.37
+       */
+      liveSearchPeopleUri: "slingshot/live-search-people",
+
+      /**
        * @instance
        */
       postMixInProperties: function alfresco_header_SearchBox__postMixInProperties() {
@@ -993,7 +1032,7 @@ define(["dojo/_base/declare",
       liveSearchDocuments: function alfresco_header_SearchBox__liveSearchDocuments(terms, startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-docs?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
+               url: AlfConstants.PROXY_URI + this.liveSearchDocumentsUri + "?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
                method: "GET",
                successCallback: function(response) {
                   if (startIndex === 0)
@@ -1087,7 +1126,7 @@ define(["dojo/_base/declare",
       liveSearchSites: function alfresco_header_SearchBox__liveSearchSites(terms, /*jshint unused:false*/ startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-sites?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
+               url: AlfConstants.PROXY_URI + this.liveSearchSitesUri + "?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
                method: "GET",
                successCallback: function(response) {
                   this._LiveSearch.containerNodeSites.innerHTML = "";
@@ -1134,7 +1173,7 @@ define(["dojo/_base/declare",
       liveSearchPeople: function alfresco_header_SearchBox__liveSearchPeople(terms, /*jshint unused:false*/ startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-people?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
+               url: AlfConstants.PROXY_URI + this.liveSearchPeopleUri + "?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
                method: "GET",
                successCallback: function(response) {
                   this._LiveSearch.containerNodePeople.innerHTML = "";
