@@ -442,15 +442,11 @@ define([
       getEnv: function(testOrSuite) {
          try {
             var env = (testOrSuite.remote && testOrSuite.remote.environmentType),
-               platform,
-               browser,
-               version,
                envName;
             if (env) {
-               platform = env.platform;
-               browser = env.browserName;
-               version = env.version;
-               envName = this.capitalise(browser) + " v" + version + " on " + this.capitalise(platform);
+               envName = this.capitalise(env.browserName);
+               envName += " v" + env.version;
+               envName += " on " + this.capitalise(env.platform);
             } else {
                envName = "Unknown";
                this.logProblem(PROBLEM_TYPE.Warning, "\"" + testOrSuite.name + "\"", "Unable to retrieve environment info", true);
@@ -476,6 +472,16 @@ define([
          }
          while ((parentTest = parentTest.parent));
          return envName;
+      },
+
+      /**
+       * Get the current state of the tunnel
+       *
+       * @instance
+       * @returns {string} The current state
+       */
+      getTunnelState: function() {
+         return this.state.tunnel;
       },
 
       /**
@@ -529,20 +535,25 @@ define([
                setInterval(this.hitch(this, this.renderToScreen), CONFIG.ScreenRenderInterval)
             ];
 
-            // // Do initial page draw
-            // this.renderPageFramework();
-
-            // // Setup redraw intervals
-            // this.intervals = [
-            //    setInterval(this.hitch(this, this.renderPageFramework), 5000),
-            //    setInterval(this.hitch(this, this.renderProgressText), 1000),
-            //    setInterval(this.hitch(this, this.renderStatus), 500),
-            //    setInterval(this.hitch(this, this.renderProgressBar), 100)
-            // ];
+            // Do initial page draw
+            this.updateVirtualScreen();
+            this.renderToScreen();
 
          } catch (e) {
             this.exitWithError(e, "Error running initCharm()");
          }
+      },
+
+      /**
+       * Log a new test being recorded
+       *
+       * @instance
+       * @param {Object} test The new test
+       */
+      logNewTest: function(test) {
+         var testEnv = this.getRequestedEnv(test);
+         this.requestedEnvironments[testEnv] = true;
+         this.incrementCounter("total");
       },
 
       /**
@@ -630,6 +641,28 @@ define([
       },
 
       /**
+       * Log the name of the last-called reporter method (for debugging progress)<br />
+       * <br />
+       * <strong>NOTE:</strong> Output of this can be configured in the CONFIG property
+       *
+       * @instance
+       * @param {string} methodName The name of the last-run method
+       */
+      logReporterMethod: function(methodName) {
+         this.lastReporterMethod = methodName;
+      },
+
+      /**
+       * Log the new state of the tunnel
+       *
+       * @instance
+       * @param {string} newState The new state
+       */
+      logTunnelState: function(newState) {
+         this.state.tunnel = newState;
+      },
+
+      /**
        * Convert a milliseconds value to a human readable minutes and seconds value
        *
        * @instance
@@ -711,11 +744,10 @@ define([
          console.log(ANSI_CODES.Bright + "===== ENVIRONMENTS =====" + ANSI_CODES.Reset);
          console.log(ANSI_CODES.Bright + "========================" + ANSI_CODES.Reset);
          console.log("");
-         console.log(ANSI_CODES.Bright + "--- Requested ---" + ANSI_CODES.Reset);
-         console.log(Object.keys(this.requestedEnvironments).join(", "));
-         console.log("");
-         console.log(ANSI_CODES.Bright + "--- Actual ---" + ANSI_CODES.Reset);
-         console.log(Object.keys(this.environments).join(", "));
+         Object.keys(this.requestedEnvironments).forEach(function(requestedEnv) {
+            var actualEnv = this.requestedEnvironments[requestedEnv];
+            console.log("\"" + requestedEnv + "\" was fulfilled by \"" + actualEnv + "\"");
+         }, this);
 
          // Output the "results" (i.e. failures and skipped tests)
          Object.keys(this.results).forEach(function(resultType) {
@@ -852,10 +884,13 @@ define([
        * @param {Object} test The test that has been started
        */
       recordLastStartedTest: function(test) {
+         var requestedEnv = this.getRequestedEnv(test),
+            actualEnv = this.getEnv(test);
          this.lastStarted.test = test.name;
          this.lastStarted.suite = test.parent.name;
-         this.lastStarted.env = this.getEnv(test);
-         this.environments[this.lastStarted.env] = true;
+         this.lastStarted.env = actualEnv;
+         this.environments[actualEnv] = true;
+         this.requestedEnvironments[requestedEnv] = actualEnv;
       },
 
       /**
@@ -935,6 +970,29 @@ define([
       resetCursor: function() {
          charm.position(0, this.state.charm.finalRow);
          charm.cursor(true);
+      },
+
+      /**
+       * Set the columns/rows of this terminal window
+       *
+       * @instance
+       * @param {int} cols Number of columns to work with
+       * @param {int} rows Number of rows to work with
+       */
+      setColsRows: function(cols, rows) {
+         this.terminalInfo = {
+            cols: cols,
+            rows: rows
+         };
+      },
+
+      /**
+       * Record the start of the test run
+       *
+       * @instance
+       */
+      startTestRun: function() {
+         this.startTime = Date.now();
       },
 
       /**
@@ -1371,9 +1429,7 @@ define([
        * @param {Object} data The coverage data
        */
       coverage: function() {
-         helper.lastReporterMethod = "coverage";
-
-         // Not currently used
+         helper.logReporterMethod("coverage");
       },
 
       /**
@@ -1385,7 +1441,7 @@ define([
        * @param {string} [extra] Any extra information
        */
       deprecated: function(name, replacement, extra) {
-         helper.lastReporterMethod = "deprecated";
+         helper.logReporterMethod("deprecated");
 
          var msg = name + " has been deprecated and replaced by " + replacement;
          if (extra) {
@@ -1401,8 +1457,7 @@ define([
        * @param {Error} error The error
        */
       fatalError: function(error) {
-         helper.lastReporterMethod = "fatalError";
-
+         helper.logReporterMethod("fatalError");
          helper.logProblem(PROBLEM_TYPE.Error, "Fatal", error);
       },
 
@@ -1413,9 +1468,7 @@ define([
        * @param {Object} suite The new suite
        */
       newSuite: function( /*jshint unused:false*/ suite) {
-         helper.lastReporterMethod = "newSuite";
-
-         // Not currently used
+         helper.logReporterMethod("newSuite");
       },
 
       /**
@@ -1425,11 +1478,8 @@ define([
        * @param {Object} test The new test
        */
       newTest: function(test) {
-         helper.lastReporterMethod = "newTest";
-
-         var testEnv = helper.getRequestedEnv(test);
-         helper.requestedEnvironments[testEnv] = true;
-         helper.incrementCounter("total");
+         helper.logReporterMethod("newTest");
+         helper.logNewTest(test);
       },
 
       /**
@@ -1439,9 +1489,7 @@ define([
        * @param {Object} config The proxy config
        */
       proxyEnd: function( /*jshint unused:false*/ config) {
-         helper.lastReporterMethod = "proxyEnd";
-
-         // Not currently used
+         helper.logReporterMethod("proxyEnd");
       },
 
       /**
@@ -1451,9 +1499,7 @@ define([
        * @param {Object} config The proxy config
        */
       proxyStart: function( /*jshint unused:false*/ config) {
-         helper.lastReporterMethod = "proxyStart";
-
-         // Not currently used
+         helper.logReporterMethod("proxyStart");
       },
 
       /**
@@ -1464,8 +1510,7 @@ define([
        * @param {Error} error The error
        */
       reporterError: function( /*jshint unused:false*/ reporter, error) {
-         helper.lastReporterMethod = "reporterError";
-
+         helper.logReporterMethod("reporterError");
          helper.logProblem(PROBLEM_TYPE.Error, "Reporter", error);
       },
 
@@ -1476,8 +1521,7 @@ define([
        * @param {Object} executor The test executor
        */
       runEnd: function( /*jshint unused:false*/ executor) {
-         helper.lastReporterMethod = "runEnd";
-
+         helper.logReporterMethod("runEnd");
          helper.finishUpdating();
          helper.outputFinalResults();
       },
@@ -1488,18 +1532,14 @@ define([
        * @instance
        * @param {Object} executor The test executor
        */
-      runStart: function( /*jshint unused:false*/ executor) {
-         helper.lastReporterMethod = "runStart";
-
-         if (helper.state.tunnel !== "N/A") {
-            helper.state.tunnel = "Active";
+      runStart: function(executor) {
+         helper.logReporterMethod("runStart");
+         if (helper.getTunnelState() !== "N/A") {
+            helper.logTunnelState("Active");
          }
-         var terminalInfo = executor.config.terminalInfo;
-         helper.terminalInfo = {
-            cols: terminalInfo.cols || 150,
-            rows: terminalInfo.rows || 35
-         };
-         helper.startTime = Date.now();
+         var terminalInfo = executor.config.terminalInfo || {};
+         helper.setColsRows(terminalInfo.cols || 100, terminalInfo.rows || 30);
+         helper.startTestRun();
          helper.initCharm();
       },
 
@@ -1510,9 +1550,7 @@ define([
        * @param {Object} suite The ended suite
        */
       suiteEnd: function( /*jshint unused:false*/ suite) {
-         helper.lastReporterMethod = "suiteEnd";
-
-         // Not currently used
+         helper.logReporterMethod("suiteEnd");
       },
 
       /**
@@ -1525,8 +1563,7 @@ define([
        * @param {Error} error The error
        */
       suiteError: function(suite, error) {
-         helper.lastReporterMethod = "suiteError";
-
+         helper.logReporterMethod("suiteError");
          if (suite.name) {
             var envName = helper.getEnv(suite);
             helper.logProblem(PROBLEM_TYPE.Error, suite.name + " (" + envName + ")", error);
@@ -1540,9 +1577,7 @@ define([
        * @param {Object} suite The suite
        */
       suiteStart: function( /*jshint unused:false*/ suite) {
-         helper.lastReporterMethod = "suiteStart";
-
-         // Not currently used
+         helper.logReporterMethod("suiteStart");
       },
 
       /**
@@ -1552,8 +1587,7 @@ define([
        * @param {Object} test The test
        */
       testEnd: function( /*jshint unused:false*/ test) {
-         helper.lastReporterMethod = "testEnd";
-
+         helper.logReporterMethod("testEnd");
          helper.incrementCounter("run");
       },
 
@@ -1564,8 +1598,7 @@ define([
        * @param {Object} test The test
        */
       testFail: function(test) {
-         helper.lastReporterMethod = "testFail";
-
+         helper.logReporterMethod("testFail");
          helper.logResult(RESULT_TYPE.Failed, test);
       },
 
@@ -1576,8 +1609,7 @@ define([
        * @param {Object} test The test
        */
       testPass: function( /*jshint unused:false*/ test) {
-         helper.lastReporterMethod = "testPass";
-
+         helper.logReporterMethod("testPass");
          helper.incrementCounter("passed");
       },
 
@@ -1588,8 +1620,7 @@ define([
        * @param {Object} test The test
        */
       testSkip: function( /*jshint unused:false*/ test) {
-         helper.lastReporterMethod = "testSkip";
-
+         helper.logReporterMethod("testSkip");
          helper.logResult(RESULT_TYPE.Skipped, test);
       },
 
@@ -1600,8 +1631,7 @@ define([
        * @param {Object} test The test
        */
       testStart: function(test) {
-         helper.lastReporterMethod = "testStart";
-
+         helper.logReporterMethod("testStart");
          helper.recordLastStartedTest(test);
       },
 
@@ -1615,11 +1645,10 @@ define([
        * @param {number} progress.total Number of bytes to download
        */
       tunnelDownloadProgress: function( /*jshint unused:false*/ tunnel, progress) {
-         helper.lastReporterMethod = "tunnelDownloadProgress";
-
+         helper.logReporterMethod("tunnelDownloadProgress");
          if (progress.type === "data") {
             var percentComplete = (progress.loaded / progress.total * 100).toFixed(1);
-            helper.state.tunnel = "Downloading (" + percentComplete + "%)";
+            helper.logTunnelState("Downloading (" + percentComplete + "%)");
          }
       },
 
@@ -1630,9 +1659,8 @@ define([
        * @param {Object} tunnel The tunnel
        */
       tunnelEnd: function( /*jshint unused:false*/ tunnel) {
-         helper.lastReporterMethod = "tunnelEnd";
-
-         helper.state.tunnel = "Closing";
+         helper.logReporterMethod("tunnelEnd");
+         helper.logTunnelState("Closing");
       },
 
       /**
@@ -1642,9 +1670,8 @@ define([
        * @param {Object} tunnel The tunnel
        */
       tunnelStart: function( /*jshint unused:false*/ tunnel) {
-         helper.lastReporterMethod = "tunnelStart";
-
-         helper.state.tunnel = "Starting";
+         helper.logReporterMethod("tunnelStart");
+         helper.logTunnelState("Starting");
       },
 
       /**
@@ -1655,9 +1682,8 @@ define([
        * @param {string} status The status update
        */
       tunnelStatus: function( /*jshint unused:false*/ tunnel, /*jshint unused:false*/ status) {
-         helper.lastReporterMethod = "tunnelStatus";
-
-         helper.state.tunnel = status;
+         helper.logReporterMethod("tunnelStatus");
+         helper.logTunnelState(status);
       }
    };
 
