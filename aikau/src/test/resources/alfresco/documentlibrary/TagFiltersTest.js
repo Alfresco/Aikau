@@ -51,6 +51,20 @@ define(["alfresco/TestCommon",
                   });
             },
 
+            "Clicked tags publish change notification (unscoped)": function(){
+               return browser.findByCssSelector("#TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter:last-child")
+                  .clearLog()
+                  .click()
+                  .getLastPublish("ALF_DOCUMENTLIST_TAG_CHANGED", true);
+            },
+
+            "Clicked tags publish change notification (scoped)": function(){
+               return browser.findByCssSelector("#SCOPED_TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter:last-child")
+                  .clearLog()
+                  .click()
+                  .getLastPublish("SCOPED_ALF_DOCUMENTLIST_TAG_CHANGED", true);
+            },
+
             beforeEach: function() {
                browser.end();
             },

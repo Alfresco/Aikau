@@ -27,7 +27,6 @@
 define(["dojo/_base/declare",
         "alfresco/documentlibrary/AlfDocumentFilters", 
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "alfresco/documentlibrary/AlfDocumentFilter",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/topics",
         "dojo/_base/lang",
@@ -35,9 +34,9 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/on",
-        "dijit/registry"], 
-        function(declare, AlfDocumentFilters, _AlfDocumentListTopicMixin, AlfDocumentFilter,
-               ObjectTypeUtils, topics, lang, array, domConstruct, domClass, on, registry) {
+        "dijit/registry",
+        "alfresco/documentlibrary/AlfDocumentFilter"], // Referenced in this.createWidget call, so must be explicitly included here
+        function(declare, AlfDocumentFilters, _AlfDocumentListTopicMixin, ObjectTypeUtils, topics, lang, array, domConstruct, domClass, on, registry) {
 
    return declare([AlfDocumentFilters, _AlfDocumentListTopicMixin], {
       
@@ -112,7 +111,7 @@ define(["dojo/_base/declare",
       /**
        * This topic is used to request that a node should be rated (the details should be supplied
        * as the publication payload).
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -173,7 +172,7 @@ define(["dojo/_base/declare",
             widget.destroy();
          }
       },
-      
+
       /**
        * Creates a new [filter widget]{@link module:alfresco/documentlibrary/AlfDocumentFilter} and then calls the
        * [addFilter function]{@link module:alfresco/documentlibrary/AlfDocumentFilters#addFilter} to add it.
@@ -186,11 +185,14 @@ define(["dojo/_base/declare",
              tagData.name &&
              tagData.count)
          {
-            var tagFilter = new AlfDocumentFilter({
-               filterSelectionTopic: this.filterSelectionTopic,
-               label: this.message("filter.tag.label", {"0": tagData.name, "1": tagData.count}),
-               filter: tagData.name,
-               description: this.message("filter.tagged.label", {"0":tagData.name})
+            var tagFilter = this.createWidget({
+               name: "alfresco/documentlibrary/AlfDocumentFilter",
+               config: {
+                  filterSelectionTopic: this.filterSelectionTopic,
+                  label: this.message("filter.tag.label", {"0": tagData.name, "1": tagData.count}),
+                  filter: tagData.name,
+                  description: this.message("filter.tagged.label", {"0": tagData.name})
+               }
             });
             this.addFilter(tagFilter);
          }
@@ -199,7 +201,7 @@ define(["dojo/_base/declare",
             this.alfLog("warn", "It is not possible to create a filter tag without 'name' and 'count' attributes", tagData);
          }
       },
-      
+
       /**
        * Used to keep track of the current set of filter tags.
        * 
