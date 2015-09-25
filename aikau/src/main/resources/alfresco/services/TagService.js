@@ -26,10 +26,10 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
-        "alfresco/services/_TagServiceTopics",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, BaseService, AlfXhr, _TagServiceTopics, lang, AlfConstants) {
+        function(declare, BaseService, AlfXhr, topics, lang, AlfConstants) {
    
    return declare([BaseService, AlfXhr], {
       
@@ -65,11 +65,14 @@ define(["dojo/_base/declare",
        * 
        * @instance 
        * @since 1.0.32
+       * @listens module:alfresco/core/topics#RETRIEVE_CURRENT_TAGS
+       * @listens module:alfresco/core/topics#TAG_QUERY
+       * @listens module:alfresco/core/topics#CREATE_TAG
        */
       registerSubscriptions: function alfresco_services_TagService__registerSubscriptions() {
-         this.alfSubscribe("ALF_RETRIEVE_CURRENT_TAGS", lang.hitch(this, this.onTagListRequest));
-         this.alfSubscribe(_TagServiceTopics.tagQueryTopic, lang.hitch(this, this.onTagQuery));
-         this.alfSubscribe("ALF_CREATE_TAG", lang.hitch(this, this.createTag));
+         this.alfSubscribe(topics.RETRIEVE_CURRENT_TAGS, lang.hitch(this, this.onTagListRequest));
+         this.alfSubscribe(topics.TAG_QUERY, lang.hitch(this, this.onTagQuery));
+         this.alfSubscribe(topics.CREATE_TAG, lang.hitch(this, this.createTag));
       },
       
       /**
@@ -101,7 +104,8 @@ define(["dojo/_base/declare",
          {
             this.serviceXhr({url: url,
                              query: options,
-                             alfTopic: (payload.alfResponseTopic ? payload.alfResponseTopic : null),
+                             alfTopic: payload.alfResponseTopic || null,
+                             alfResponseScope: payload.alfResponseScope,
                              method: "GET"});
          }
       },
@@ -114,7 +118,7 @@ define(["dojo/_base/declare",
       onTagQuery: function alfresco_services_TagService__onTagQuery(payload) {
          if (!payload || typeof payload.callback !== "function" || !payload.callbackScope)
         {
-           this.alfLog("warn", "A request was made for site tag data, but one or more of the following attributes was not provided: 'callback', 'callbackScope':", payload);
+           this.alfLog("error", "A request was made for site tag data, but one or more of the following attributes was not provided: 'callback', 'callbackScope':", payload);
         }
         else
         {
@@ -131,7 +135,7 @@ define(["dojo/_base/declare",
            }
            else
            {
-              this.alfLog("warn", "It is not possible to retrieve tags without a 'siteId' and 'containerId' or a 'rootNode' attribute provided in payload", this);
+              this.alfLog("error", "It is not possible to retrieve tags without a 'siteId' and 'containerId' or a 'rootNode' attribute provided in payload", this);
            }
            
            if (url)
@@ -161,7 +165,8 @@ define(["dojo/_base/declare",
             var config = {
                url: AlfConstants.PROXY_URI + "api/tag/workspace/SpacesStore",
                method: "POST",
-               alfTopic: (payload.alfResponseTopic ? payload.alfResponseTopic : null),
+               alfTopic: payload.alfResponseTopic,
+               responseScope: payload.alfResponseScope,
                data: {
                   name: tagName
                }

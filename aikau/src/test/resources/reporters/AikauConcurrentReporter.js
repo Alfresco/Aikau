@@ -72,19 +72,19 @@ define([
    var CHARM = {
       Col: {
          Default: 3,
-         LastStarted: 80,
+         LastStarted: 75,
          MessageString: 3,
          MessageTitle: 3,
          ProgressBar: 3,
          Progress: 3,
-         Status: 50
+         Status: 46
       },
       Row: {
          Title: 3,
 
          ProgressTitle: 6,
-         ProgressBar: 8,
-         FirstProgressProperty: 11,
+         ProgressBar: 9,
+         FirstProgressProperty: 12,
 
          StatusTitle: 6,
 
@@ -92,7 +92,7 @@ define([
 
          ReporterInfoTitle: 11,
 
-         MessagesLine: 16
+         MessagesLine: 17
       },
       ProblemIndent: 2,
       ProblemPrefix: "  - ",
@@ -252,6 +252,14 @@ define([
          errors: {},
          warnings: {}
       },
+
+      /**
+       * The environments within which the tests are requested to be run
+       *
+       * @type {Object}
+       * @property {boolean} envName The name of the environment as the key, with true as the value
+       */
+      requestedEnvironments: {},
 
       /**
        * The results container object
@@ -425,13 +433,42 @@ define([
       },
 
       /**
-       * Go up through the parent tests to find the current environment
+       * Get the real runtime environment of a test/suite
        *
        * @instance
-       * @param {Object} testOrSuite The test or suite (technically still a test)
+       * @param {Object} testOrSuite The test or suite
        * @returns {string} The environment name
        */
       getEnv: function(testOrSuite) {
+         try {
+            var env = (testOrSuite.remote && testOrSuite.remote.environmentType),
+               platform,
+               browser,
+               version,
+               envName;
+            if (env) {
+               platform = env.platform;
+               browser = env.browserName;
+               version = env.version;
+               envName = this.capitalise(browser) + " v" + version + " on " + this.capitalise(platform);
+            } else {
+               envName = "Unknown";
+               this.logProblem(PROBLEM_TYPE.Warning, "\"" + testOrSuite.name + "\"", "Unable to retrieve environment info", true);
+            }
+            return envName;
+         } catch (e) {
+            this.exitWithError(e, "Error retrieving environment details for test/suite with name \"" + testOrSuite.name + "\"");
+         }
+      },
+
+      /**
+       * Get the environment for a test/suite that's been requested in the configuration
+       *
+       * @instance
+       * @param {Object} testOrSuite The test or suite
+       * @returns {string} The requested environment details
+       */
+      getRequestedEnv: function(testOrSuite) {
          var parentTest = testOrSuite,
             envName;
          do {
@@ -667,6 +704,19 @@ define([
          // Next, stop using charm ... it's all console logging from now on
          charm.destroy();
 
+         // Output the environments (requested and actual)
+         console.log("");
+         console.log("");
+         console.log(ANSI_CODES.Bright + "========================" + ANSI_CODES.Reset);
+         console.log(ANSI_CODES.Bright + "===== ENVIRONMENTS =====" + ANSI_CODES.Reset);
+         console.log(ANSI_CODES.Bright + "========================" + ANSI_CODES.Reset);
+         console.log("");
+         console.log(ANSI_CODES.Bright + "--- Requested ---" + ANSI_CODES.Reset);
+         console.log(Object.keys(this.requestedEnvironments).join(", "));
+         console.log("");
+         console.log(ANSI_CODES.Bright + "--- Actual ---" + ANSI_CODES.Reset);
+         console.log(Object.keys(this.environments).join(", "));
+
          // Output the "results" (i.e. failures and skipped tests)
          Object.keys(this.results).forEach(function(resultType) {
 
@@ -805,6 +855,7 @@ define([
          this.lastStarted.test = test.name;
          this.lastStarted.suite = test.parent.name;
          this.lastStarted.env = this.getEnv(test);
+         this.environments[this.lastStarted.env] = true;
       },
 
       /**
@@ -968,12 +1019,14 @@ define([
             }
 
             // Output the current status
-            var numEnvironments = Object.keys(this.environments).length,
+            var numRequestedEnvs = Object.keys(this.requestedEnvironments).length,
+               numTestedEnvs = Object.keys(this.environments).length,
                highlightCodes = [ANSI_CODES.Bright, ANSI_CODES.FgRed],
                maxStatusLength = CHARM.Col.LastStarted - CHARM.Col.Status - 1;
             this.write(CHARM.Col.Status, CHARM.Row.StatusTitle, "STATUS", ANSI_CODES.Bright);
             this.writeProperties(CHARM.Col.Status, CHARM.Row.StatusTitle + 1, [
-               ["Environments", numEnvironments],
+               ["Requested Envs", numRequestedEnvs],
+               ["Tested Envs", numTestedEnvs],
                ["Total tests", total],
                ["Passed", passed],
                ["Failed", failed, failed ? highlightCodes : null],
@@ -981,7 +1034,7 @@ define([
                ["Errors", errors, , failed ? highlightCodes : null],
                ["Warnings", warnings],
                ["Deprecations", deprecations]
-            ]);
+            ], maxStatusLength);
 
             // Calculate space remaining for final column
             var finalColSpace = this.terminalInfo.cols - CHARM.Col.LastStarted - CHARM.ScreenMargin;
@@ -1374,8 +1427,8 @@ define([
       newTest: function(test) {
          helper.lastReporterMethod = "newTest";
 
-         var testEnv = helper.getEnv(test);
-         helper.environments[testEnv] = true;
+         var testEnv = helper.getRequestedEnv(test);
+         helper.requestedEnvironments[testEnv] = true;
          helper.incrementCounter("total");
       },
 

@@ -902,6 +902,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload from the original request
+       * @fires module:alfresco/core/topics#ASSIGN_WORKFLOW
        */
       onActionAssignWorkflow: function alfresco_services_ActionService__onActionAssignWorkflow(payload) {
          this.alfPublish(topics.ASSIGN_WORKFLOW, {
