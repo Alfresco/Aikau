@@ -18,7 +18,7 @@
  */
 
 /**
- *  * @author Martin Doyle
+ * @author Martin Doyle
  */
 define([
       "alfresco/TestCommon",
@@ -40,13 +40,13 @@ define([
             .end()
             .then(function() {
                if (!shouldBePresent) {
-                  assert.fail(null, null, "'Copy to' action present on " + nodeName + " but should not be");
+                  assert.fail(null, null, "'Move to' action present on " + nodeName + " but should not be");
                } else if (nextIndex < actionNames.length) {
                   return testActionVisibility(browser, actionNames, nextIndex);
                }
             }, function() {
                if (shouldBePresent) {
-                  assert.fail(null, null, "'Copy to' action not present on " + nodeName);
+                  assert.fail(null, null, "'Move to' action not present on " + nodeName);
                } else if (nextIndex < actionNames.length) {
                   return testActionVisibility(browser, actionNames, nextIndex);
                }
@@ -57,11 +57,11 @@ define([
          var browser;
 
          return {
-            name: "CopyTo Action Test",
+            name: "MoveTo Action Test",
 
             setup: function() {
                browser = this.remote;
-               return TestCommon.loadTestWebScript(this.remote, "/CopyTo", "CopyTo Action Test").end();
+               return TestCommon.loadTestWebScript(this.remote, "/MoveTo", "MoveTo Action Test").end();
             },
 
             beforeEach: function() {
@@ -69,7 +69,7 @@ define([
             },
 
             "Legacy single item copy works": function() {
-               return browser.findById("SINGLE_COPY_VIA_ACTION_SERVICE")
+               return browser.findById("SINGLE_MOVE_VIA_ACTION_SERVICE")
                   .click()
                   .end()
 
@@ -95,7 +95,7 @@ define([
             },
 
             "Legacy multiple item copy works": function() {
-               return browser.findById("MULTIPLE_COPY_VIA_ACTION_SERVICE")
+               return browser.findById("MULTIPLE_MOVE_VIA_ACTION_SERVICE")
                   .click()
                   .end()
 
@@ -123,6 +123,7 @@ define([
 
             "Context action works": function() {
                return browser.findByCssSelector("#ACTIONS_ITEM_0 .dijitMenuItem")
+                  .clearLog()
                   .click()
                   .end()
 
@@ -156,6 +157,11 @@ define([
                   });
             },
 
+            "List reload called after move success": function() {
+               return browser.findByCssSelector("body")
+                  .getLastPublish("SCOPED_ALF_DOCLIST_RELOAD_DATA", true);
+            },
+
             "Context action appears appropriately": function() {
                return testActionVisibility(browser, [
                   "Folder node",
@@ -164,7 +170,8 @@ define([
                   "!Non-owned working copy",
                   "User-owned locked node",
                   "!Non-owned locked node",
-                  "!Node-locked node"
+                  "!Node-locked node",
+                  "!No write permission"
                ]);
             },
 

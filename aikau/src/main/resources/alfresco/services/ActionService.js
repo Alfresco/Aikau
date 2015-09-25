@@ -862,12 +862,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the original request
        */
       onActionMoveTo: function alfresco_services_ActionService__onActionMoveTo(payload) {
-         this.alfPublish(topics.COPY_OR_MOVE, {
-            documents: payload.documents || [payload.document],
+         var nodes = payload.documents || (payload.document ? [payload.document] : [payload]);
+         this.alfServicePublish(topics.COPY_OR_MOVE, {
+            documents: nodes,
             copy: false,
-            dialogTitle: "services.ActionService.moveTo.title",
-            confirmButtonLabel: "services.ActionService.moveTo.ok",
-            singleItemMode: true,
             responseScope: payload.alfResponseScope
          });
       },

@@ -112,8 +112,9 @@ define(["dojo/_base/declare",
          var documents = payload.documents || [];
 
          var urlPrefix = payload.copy ? this.copyAPI : this.moveAPI, // Default to copy API.
-             dialogTitle = payload.dialogTitle || "services.ActionService.copyTo.title", // Default to copy title
-             confirmButtonLabel = payload.confirmButtonLabel || "services.ActionService.copyTo.ok", // Default to copy confirmation
+             propertyType = payload.copy ? "copyTo" : "moveTo",
+             dialogTitle = payload.dialogTitle || "services.ActionService." + propertyType + ".title", // Default to copy title
+             confirmButtonLabel = payload.confirmButtonLabel || "services.ActionService." + propertyType + ".ok", // Default to copy confirmation
              singleItemMode = payload.singleItemMode !== false;
 
          var responseTopic = this.generateUuid() + "_ALF_MOVE_LOCATION_PICKED",
