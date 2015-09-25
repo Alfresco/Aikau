@@ -32,8 +32,10 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/renderers/actions/CopyToActionTest",
-      "src/test/resources/alfresco/renderers/actions/MoveToActionTest"
+      "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
+      "src/test/resources/alfresco/lists/AlfHashListTest",
+      "src/test/resources/alfresco/lists/AlfSortablePaginatedListTest",
+      "src/test/resources/alfresco/search/SearchSuggestionsTest"
    ],
 
    /**
