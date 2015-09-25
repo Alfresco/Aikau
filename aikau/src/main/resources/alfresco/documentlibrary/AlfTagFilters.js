@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        * Called immediately after instantiation and before any processing
        * 
        * @instance
-       * @fires module:alfresco/core/topics~TAG_QUERY
+       * @fires module:alfresco/core/topics#TAG_QUERY
        */
       postMixInProperties: function alfresco_documentlibrary_AlfTagFilters__postMixInProperties() {
          this.inherited(arguments);
