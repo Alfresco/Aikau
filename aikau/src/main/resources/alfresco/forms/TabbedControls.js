@@ -83,9 +83,9 @@ define(["alfresco/layout/AlfTabContainer",
         "dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array"], 
-        function(HorizontalWidgets, LayoutMixin, declare, lang, array) {
+        function(AlfTabContainer, LayoutMixin, declare, lang, array) {
    
-   return declare([HorizontalWidgets, LayoutMixin], {
+   return declare([AlfTabContainer, LayoutMixin], {
       
       /**
        * Overrides the [default]{@link module:alfresco/layout/AlfTabContainer#delayProcessingDefault} 

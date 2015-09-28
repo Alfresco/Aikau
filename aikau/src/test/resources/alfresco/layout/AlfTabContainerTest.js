@@ -529,7 +529,7 @@ define(["intern!object",
          },
 
          "Check that delayed processing form control is displayed correctly": function() {
-            return browser.findById("TC_TABCONTAINER_tablist_FormControl1")
+            return browser.findById("TC_TABCONTAINER_tablist_TC_FormControl1")
                .click()
             .end()
             .findByCssSelector("#FormControl1 .label")
@@ -540,7 +540,7 @@ define(["intern!object",
          },
 
           "Check that non-delayed processing form control is displayed correctly": function() {
-            return browser.findById("TC_TABCONTAINER_tablist_FormControl2")
+            return browser.findById("TC_TABCONTAINER_tablist_TC_FormControl2")
                .click()
             .end()
             .findByCssSelector("#FormControl2 .label")
@@ -672,7 +672,7 @@ define(["intern!object",
 
          "Attempt to create the same tab": function() {
             // Switch back to the 2nd tab...
-            return browser.findById("TC1_TABCONTAINER_tablist_SEARCH_LIST")
+            return browser.findById("TC1_TABCONTAINER_tablist_TC1_SEARCH_LIST")
                .click()
             .end()
 
@@ -696,7 +696,7 @@ define(["intern!object",
 
          "Create a tab with a follow-on publication": function() {
             // Switch back to the 2nd tab...
-            return browser.findById("TC1_TABCONTAINER_tablist_SEARCH_LIST")
+            return browser.findById("TC1_TABCONTAINER_tablist_TC1_SEARCH_LIST")
                .click()
             .end()
 
