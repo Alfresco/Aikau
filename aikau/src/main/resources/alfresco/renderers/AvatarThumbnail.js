@@ -44,7 +44,7 @@
  *       currentItem: {
  *          userName: "guest"
  *       },
- *       publishTopic: "ALF_DISPLAY_NOTIFICATION",
+ *       publishTopic: topics.DISPLAY_NOTIFICATION,
  *       publishPayload: {
  *          message: "You clicked on the guest thumbnail"
  *       },

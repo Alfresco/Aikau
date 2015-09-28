@@ -239,6 +239,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onActionSuccess: function alfresco_services_ActionService__onActionSuccess(payload) {
          // jshint unused:false
@@ -249,7 +250,7 @@ define(["dojo/_base/declare",
          }
          if (payload.response.overallSuccess === true)
          {
-            this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
                message: payload.requestConfig.copy ? this.message("copyMoveService.copy.completeSuccess") : this.message("copyMoveService.move.completeSuccess")
             });
          }
@@ -282,6 +283,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onActionFailure: function alfresco_services_ActionService__onActionFailure(payload) {
          // jshint unused:false
@@ -291,7 +293,7 @@ define(["dojo/_base/declare",
          {
             this.alfUnsubscribeSaveHandles(subscriptionHandles);
          }
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: payload.requestConfig.copy ? this.message("copyMoveService.copy.failure") : this.message("copyMoveService.move.failure")
          });
       }
