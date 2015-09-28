@@ -55,6 +55,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default [topics.DISPLAY_NOTIFICATION]{@link module:alfresco/core/topics#DISPLAY_NOTIFICATION}
+       * @listens module:alfresco/core/topics#DISPLAY_NOTIFICATION
+       * @event
        */
       displayNotificationTopic: topics.DISPLAY_NOTIFICATION,
 
@@ -72,6 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/services/NotificationService#displayNotificationTopic
        */
       registerSubscriptions: function alfresco_services_NotificationService__registerSubscriptions() {
          this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));

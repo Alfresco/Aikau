@@ -28,11 +28,12 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/json"],
-        function(declare, BaseService, CoreXhr, AlfConstants, lang, array, dojoJson) {
+        function(declare, BaseService, CoreXhr, topics, AlfConstants, lang, array, dojoJson) {
    
    return declare([BaseService, CoreXhr], {
       
@@ -83,6 +84,7 @@ define(["dojo/_base/declare",
       /**
        * Parses the data JSON string back into an object.
        * @instance
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       refreshRequest: function alfresco_services_QuaddsService__refreshRequest(response, originalRequestConfig) {
          var responseTopic = lang.getObject("alfTopic", false, originalRequestConfig);
@@ -95,7 +97,7 @@ define(["dojo/_base/declare",
             this.alfLog("warn", "It was not possible to publish requested QuADDS data because the 'responseTopic' attribute was not set on the original request", response, originalRequestConfig);
          }
          // TODO: Need a context sensitive, localized message...
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: "Operation Completed Successfully"
          });
          this.alfPublish("ALF_DOCLIST_RELOAD_DATA");

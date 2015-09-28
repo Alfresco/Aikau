@@ -31,9 +31,10 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "dojo/_base/lang"],
-        function(declare, BaseService, AlfCoreXhr, AlfConstants, lang) {
+        function(declare, BaseService, AlfCoreXhr, topics, AlfConstants, lang) {
 
    return declare([BaseService, AlfCoreXhr], {
 
@@ -206,9 +207,10 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       templateContentCreateSuccess: function alfresco_services_ActionService__templateContentCreateSuccess(response, originalRequestConfig) {
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message("create.template.content.success", {
                0: response.name
             })

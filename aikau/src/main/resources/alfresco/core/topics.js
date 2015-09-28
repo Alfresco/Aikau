@@ -273,6 +273,13 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
+       *
+       * @event
+       * @property {string} message The message to be displayed
+       * @property {string} [publishTopic] A topic to be published after the notification has closed
+       * @property {object} [publishPayload] The payload to be published after the notification has closed
+       * @property {boolean} [publishGlobal] Whether to publish the topic globally
+       * @property {boolean} [publishToParent] Whether to publish the topic on the parent scope
        */
       DISPLAY_NOTIFICATION: "ALF_DISPLAY_NOTIFICATION",
 

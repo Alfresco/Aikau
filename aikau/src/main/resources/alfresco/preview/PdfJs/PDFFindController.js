@@ -32,8 +32,9 @@
  * @author Kevin Roast
  */
 define(["dojo/_base/declare",
+        "alfresco/core/topics",
         "alfresco/core/Core"], 
-        function(declare, AlfCore) {
+        function(declare, topics, AlfCore) {
    
    return declare([AlfCore], {
 
@@ -514,6 +515,7 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       updateUIState: function alfresco_preview_PdfJs_PDFFindController__updateUIState(state, previous) {
          var findMsg = "";
@@ -554,7 +556,7 @@ define(["dojo/_base/declare",
          }
          
          // This will require that the alfresco/service/NotificationService is on the page
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: findMsg
          }, true);
       }

@@ -555,10 +555,11 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response The response from the XHR request to join the site.
        * @param {object} originalRequestConfig The original configuration passed when the request was made.
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       siteJoined: function alfresco_services_SiteService__siteJoined(response, originalRequestConfig) {
          this.alfLog("log", "User has successfully joined a site", response, originalRequestConfig);
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message("message.joining", {
                "0": originalRequestConfig.user,
                "1": originalRequestConfig.site
