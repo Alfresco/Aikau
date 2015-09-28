@@ -34,6 +34,10 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/json"],
         function(declare, BaseService, CoreXhr, topics, AlfConstants, lang, array, dojoJson) {
+
+   function isRealString(testStr) {
+      return testStr && lang.trim(testStr);
+   }
    
    return declare([BaseService, CoreXhr], {
       
@@ -57,12 +61,12 @@ define(["dojo/_base/declare",
        */
       processQuaddItemData: function alfresco_services_QuaddsService__processQuaddItemData(response, originalRequestConfig) {
          var responseTopic = lang.getObject("alfTopic", false, originalRequestConfig);
-         if (responseTopic != null)
+         if (responseTopic)
          {
 
             this.alfLog("log", "Processing QuADDS data", response, originalRequestConfig, this);
 
-            array.forEach(response.items, function(item, index) {
+            array.forEach(response.items, function(item) {
                try
                {
                   item.data = dojoJson.parse(item.data, true);
@@ -88,7 +92,7 @@ define(["dojo/_base/declare",
        */
       refreshRequest: function alfresco_services_QuaddsService__refreshRequest(response, originalRequestConfig) {
          var responseTopic = lang.getObject("alfTopic", false, originalRequestConfig);
-         if (responseTopic != null)
+         if (responseTopic)
          {
             this.alfPublish(responseTopic + "_SUCCESS", response);
          }
@@ -110,7 +114,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload 
        */
-      onGetAllQuadds: function alfresco_services_QuaddsService__onGetAllQuadds(payload) {
+      onGetAllQuadds: function alfresco_services_QuaddsService__onGetAllQuadds(/*jshint unused:false*/payload) {
          var url = AlfConstants.PROXY_URI + "aikau/quadds";
          this.serviceXhr({url : url,
                           method: "GET"});
@@ -124,7 +128,7 @@ define(["dojo/_base/declare",
        */
       onGetQuaddsItems: function alfresco_services_QuaddsService__onGetQuaddsItems(payload) {
          var quadds = lang.getObject("quadds", false, payload);
-         if (quadds == null || lang.trim(quadds) === "")
+         if (!isRealString(quadds))
          {
             this.alfLog("warn", "A request was made to retrieve the data items from a QuADDS but no QuADDS was provided", payload, this);
          }
@@ -132,7 +136,7 @@ define(["dojo/_base/declare",
          {
             var url = AlfConstants.PROXY_URI + "aikau/quadds/" + lang.trim(quadds);
             this.serviceXhr({url : url,
-                             alfTopic: payload.alfResponseTopic != null ? payload.alfResponseTopic : payload.alfTopic,
+                             alfTopic: payload.alfResponseTopic || payload.alfTopic,
                              method: "GET",
                              successCallback: this.processQuaddItemData,
                              callbackScope: this});
@@ -148,11 +152,11 @@ define(["dojo/_base/declare",
       onGetQuaddsItem: function alfresco_services_QuaddsService__onGetQuaddsItem(payload) {
          var quadds = lang.getObject("quadds", false, payload);
          var name = lang.getObject("name", false, payload);
-         if (quadds == null || quadds === "")
+         if (!isRealString(quadds))
          {
             this.alfLog("warn", "A request was made to retrieve a data item from a QuADDS but no QuADDS was provided", payload, this);
          }
-         else if (name == null || lang.trim(name) === "")
+         else if (!isRealString(name))
          {
             this.alfLog("warn", "A request was made to retrieve a data item from a QuADDS but no item name was provided", payload, this);
          }
@@ -160,7 +164,7 @@ define(["dojo/_base/declare",
          {
             var url = AlfConstants.PROXY_URI + "aikau/quadds/" + lang.trim(quadds) + "/item/" + lang.trim(name);
             this.serviceXhr({url : url,
-                             alfTopic: payload.alfResponseTopic != null ? payload.alfResponseTopic : payload.alfTopic,
+                             alfTopic: payload.alfResponseTopic || payload.alfTopic,
                              method: "GET",
                              successCallback: this.processQuaddItemData,
                              callbackScope: this});
@@ -177,15 +181,15 @@ define(["dojo/_base/declare",
          var quadds = lang.getObject("quadds", false, payload);
          var name = lang.getObject("name", false, payload);
          var data = lang.getObject("data", false, payload);
-         if (quadds == null || lang.trim(quadds) === "")
+         if (!isRealString(quadds))
          {
             this.alfLog("warn", "A request was made to create a data item in a QuADDS but no QuADDS was provided", payload, this);
          }
-         else if (name == null || lang.trim(name) === "")
+         else if (!isRealString(name))
          {
             this.alfLog("warn", "A request was made to create a data item in a QuADDS but no item name was provided", payload, this);
          }
-         else if (data == null)
+         else if (!data)
          {
             this.alfLog("warn", "A request was made to create a data item in a QuADDS but no data was provided", payload, this);
          }
@@ -199,7 +203,7 @@ define(["dojo/_base/declare",
             this.serviceXhr({url : url,
                              data: config,
                              method: "POST",
-                             alfTopic: payload.alfResponseTopic != null ? payload.alfResponseTopic : payload.alfTopic,
+                             alfTopic: payload.alfResponseTopic || payload.alfTopic,
                              successCallback: this.refreshRequest,
                              callbackScope: this});
          }
@@ -214,15 +218,15 @@ define(["dojo/_base/declare",
          var quadds = lang.getObject("quadds", false, payload);
          var name = lang.getObject("name", false, payload);
          var data = lang.getObject("data", false, payload);
-         if (quadds == null || lang.trim(quadds) === "")
+         if (!isRealString(quadds))
          {
             this.alfLog("warn", "A request was made to update a data item in a QuADDS but no QuADDS was provided", payload, this);
          }
-         else if (name == null || lang.trim(name) === "")
+         else if (!isRealString(name))
          {
             this.alfLog("warn", "A request was made to update a data item in a QuADDS but no item name was provided", payload, this);
          }
-         else if (data == null)
+         else if (!data)
          {
             this.alfLog("warn", "A request was made to update a data item in a QuADDS but no data was provided", payload, this);
          }
@@ -236,7 +240,7 @@ define(["dojo/_base/declare",
             this.serviceXhr({url : url,
                              data: config,
                              method: "PUT",
-                             alfTopic: payload.alfResponseTopic != null ? payload.alfResponseTopic : payload.alfTopic,
+                             alfTopic: payload.alfResponseTopic || payload.alfTopic,
                              successCallback: this.refreshRequest,
                              callbackScope: this});
          }
@@ -250,11 +254,11 @@ define(["dojo/_base/declare",
       onDeleteQuaddsItem: function alfresco_services_QuaddsService__onDeleteQuaddsItem(payload) {
          var quadds = lang.getObject("quadds", false, payload);
          var name = lang.getObject("name", false, payload);
-         if (quadds == null || lang.trim(quadds) === "")
+         if (!isRealString(quadds))
          {
             this.alfLog("warn", "A request was made to delete a data item from a QuADDS but no QuADDS was provided", payload, this);
          }
-         else if (name == null || lang.trim(name) === "")
+         else if (!isRealString(name))
          {
             this.alfLog("warn", "A request was made to delete a data item from a QuADDS but no item name was provided", payload, this);
          }
@@ -263,7 +267,7 @@ define(["dojo/_base/declare",
             var url = AlfConstants.PROXY_URI + "aikau/quadds/" + lang.trim(quadds) + "/item/" + lang.trim(name);
             this.serviceXhr({url : url,
                              method: "DELETE",
-                             alfTopic: payload.alfResponseTopic != null ? payload.alfResponseTopic : payload.alfTopic,
+                             alfTopic: payload.alfResponseTopic || payload.alfTopic,
                              successCallback: this.refreshRequest,
                              callbackScope: this});
          }

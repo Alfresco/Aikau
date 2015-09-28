@@ -246,6 +246,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       extractText: function alfresco_preview_PdfJs_PDFFindController__extractText() {
+         /*jshint loopfunc:true*/
          if (this.startedTextExtraction) {
             return;
          }
@@ -337,6 +338,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       nextMatch: function alfresco_preview_PdfJs_PDFFindController__nextMatch() {
+         /*jshint loopfunc:true,maxstatements:false*/
          var previous = this.state.findPrevious;
          // ALFRESCO - changed .page to pageNum
          var currentPageIndex = this.pdfPageSource.pageNum - 1;
