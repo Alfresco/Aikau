@@ -627,7 +627,7 @@ define(["dojo/_base/declare",
                {
                   if (registry.byId(initArgs.id))
                   {
-                     initArgs.id = widget.name + "___" + _this.generateUuid();
+                     initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
                   }
 
                   // Instantiate the new widget

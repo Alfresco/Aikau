@@ -378,7 +378,13 @@ define(["dojo/_base/declare",
        * @param {integer} index The index of the required tab position
        */
       addWidget: function alfresco_layout_AlfTabContainer__addWidget(widget, /*jshint unused:false*/ index) {
-         var indexOfDuplicateTab = this.indexOfTabId(widget.id);
+         var targetTabId = null;
+         if (widget.id)
+         {
+            targetTabId = this.id + "_" + widget.id;
+         }
+
+         var indexOfDuplicateTab = this.indexOfTabId(targetTabId);
          if (indexOfDuplicateTab !== -1)
          {
             // A tab with the requested ID has already been added, so just select it...
@@ -391,7 +397,7 @@ define(["dojo/_base/declare",
             //       of the tab (e.g. for an AlfSideBarContainer to calculate it's height appropriately)...
             var domNode = domConstruct.create("div", {});
             var cp = new ContentPane({
-               id: widget.id || null
+               id: targetTabId
             });
             domClass.add(cp.domNode, "alfresco-layout-AlfTabContainer__OuterTab");
             this.tabContainerWidget.addChild(cp, widget.tabIndex);
@@ -537,9 +543,10 @@ define(["dojo/_base/declare",
          }
          else if(payload && (typeof payload.id === "string" || typeof payload.title === "string"))
          {
+            var targetTabId = this.id + "_" + payload.id;
             for(var i = 0; i < tabs.length; i++) // tabs does not support forEach
             {
-               if((payload.id && tabs[i].id === payload.id) || (payload.title && tabs[i].title === payload.title))
+               if((payload.id && tabs[i].id === targetTabId) || (payload.title && tabs[i].title === payload.title))
                {
                   tc.selectChild(tabs[i]);
                   break;
@@ -569,7 +576,8 @@ define(["dojo/_base/declare",
          {
             for(var i = 0; i < tabs.length; i++) // tabs does not support forEach
             {
-               if((payload.id && tabs[i].id === payload.id) || (payload.title && tabs[i].title === payload.title))
+               var targetTabId = this.id + "_" + payload.id;
+               if((payload.id && tabs[i].id === targetTabId) || (payload.title && tabs[i].title === payload.title))
                {
                   tabs[i].set("disabled", payload.value);
                   break;
@@ -632,7 +640,8 @@ define(["dojo/_base/declare",
          {
             for(var i = 0; i < tabs.length; i++) // tabs does not support forEach
             {
-               if((payload.id && tabs[i].id === payload.id) || (payload.title && tabs[i].title === payload.title))
+               var targetTabId = this.id + "_" + payload.id;
+               if((payload.id && tabs[i].id === targetTabId) || (payload.title && tabs[i].title === payload.title))
                {
                   tc.removeChild(tabs[i]);
                   break;
