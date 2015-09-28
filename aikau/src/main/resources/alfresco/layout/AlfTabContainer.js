@@ -24,13 +24,17 @@
  * height of the widget will grow and shrink based on the content of each tab by default unless
  * the [height]{@link module:alfresco/layout/AlfTabContainer#height} is explicitly set to a non-percentage
  * value.</p>
- * <p>If you want the widget to respond to publicationss to dynamically 
+ * <p>If you want the widget to respond to publications to dynamically 
  * [add]{@link module:alfresco/layout/AlfTabContainer#tabAdditionTopic}, 
  * [select]{@link module:alfresco/layout/AlfTabContainer#tabSelectionTopic}, 
  * [disable]{@link module:alfresco/layout/AlfTabContainer#tabDisablementTopic} or
  * [delete]{@link module:alfresco/layout/AlfTabContainer#tabDeletionTopic} tabs then you will need to
  * configure the topics to subscribe to. Subscriptions will be made at the configured 
  * [pubSubScope]{@link module:alfresco/core/Core#pubSubScope} of the widget.</p>
+ *
+ * <p>You can also request an additional publication occur when requesting to add a new tab by including a
+ * "publishOnAdd" attribute in the payload that is an object containing a "publishTopic" attribute (with optional
+ * "publishPayload", "publishGlobal", "publishToParent" and "publishScope" attributes).</p>
  * 
  * <p><b>PLEASE NOTE:</b> It is not possible to use this module to control the layout of controls within a form. If you wish
  * to create a form containing tabbed controls then you should use the 
@@ -588,6 +592,26 @@ define(["dojo/_base/declare",
          if (payload && payload.widgets)
          {
             array.forEach(payload.widgets, lang.hitch(this, this.addWidget));
+         }
+
+         // See AKU-583...
+         // It is possible to include a "publishOnAdd" attribute when creating tabs that define an additional publication to perform
+         // after the tab is added...
+         if (payload.publishOnAdd)
+         {
+            var publication = payload.publishOnAdd;
+            if (publication.publishTopic)
+            {
+               this.alfPublish(publication.publishTopic,
+                               publication.publishPayload,
+                               publication.publishGlobal,
+                               publication.publishToParent,
+                               publication.publishScope);
+            }
+            else
+            {
+               this.alfLog("warn", "A request to add a tab included a following publication, but it did not include a 'publishTopic' attribute", payload, this);
+            }
          }
       },
 
