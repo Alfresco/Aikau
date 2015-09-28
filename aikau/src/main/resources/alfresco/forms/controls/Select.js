@@ -18,6 +18,13 @@
  */
 
 /**
+ * <p>This control uses the standard Dojo Select control to provide a normal dropdown control.</p>
+ *
+ * <p>It's possible to constrain the width of the dropdown to the width of the control (for long
+ * options), by using the forceWidth config option set to true. Additionally, long options can be
+ * forced to remain on one line and then be truncated (with an ellipsis) by using forceWidth and
+ * truncate options both set to true in the config.</p>
+ * 
  * @module alfresco/forms/controls/Select
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @author Dave Draper
@@ -30,10 +37,58 @@ define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/array",
         "dojo/dom-class",
         "dojo/dom-attr",
+        "dojo/dom-style",
         "dojo/aspect"], 
-        function(BaseFormControl, declare, Select, focusUtil, lang, array, domClass, domAttr, aspect) {
+        function(BaseFormControl, declare, Select, focusUtil, lang, array, domClass, domAttr, domStyle, aspect) {
 
-   return declare([BaseFormControl], {
+    /**
+    * This is a customization of the default dijit/form/Select implementation to support
+    * AKU-467, specifically letting forceWidth truncate option values.
+    */
+   var CustomSelect = declare([Select], {
+
+      /**
+       * Overridden to allow forceWidth to work according to the
+       * requirements of AKU-467
+       * 
+       * @instance
+       * @override
+       */
+      openDropDown: function alfresco_forms_controls_Select_CustomSelect__openDropDown() {
+         this.inherited(arguments);
+         if (this.forceWidth && this.truncate) {
+            var dropdown = this.dropDown.domNode;
+            if (dropdown) {
+               var definedWidth = parseInt(dropdown.style.width, 10);
+               if (!isNaN(definedWidth)) {
+                  domClass.add(dropdown, "truncate");
+                  domStyle.set(dropdown, {
+                     maxWidth: definedWidth + "px"
+                  });
+               }
+            }
+         }
+      },
+
+      /**
+       * Overridden to ensure the label is always set in full in the
+       * title attribute when truncating the options
+       *
+       * @instance
+       * @override
+       * @param {Object} option The option object
+       * @returns {Object} An appropriate menu item
+       */
+      _getMenuItemForOption: function(option) {
+         var menuItem = this.inherited(arguments);
+         if (this.truncate && this.forceWidth && option.label) {
+            menuItem.domNode.title = option.label;
+         }
+         return menuItem;
+      }
+   });
+   
+  return declare([BaseFormControl], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -68,8 +123,9 @@ define(["alfresco/forms/controls/BaseFormControl",
          // Return the configuration for the widget
          return {
             id : this.id + "_CONTROL",
-            name: this.name//,
-            // options: (this.options !== null) ? this.options : []
+            name: this.name,
+            forceWidth: this.forceWidth,
+            truncate: this.truncate
          };
       },
       
@@ -77,7 +133,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       createFormControl: function alfresco_forms_controls_Select__createFormControl(config) {
-         var select = new Select(config);
+         var select = new CustomSelect(config);
          
          this.additionalCssClasses = this.additionalCssClasses || "";
 

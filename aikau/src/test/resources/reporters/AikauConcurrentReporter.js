@@ -471,7 +471,7 @@ define([
             envName = parentTest.name;
          }
          while ((parentTest = parentTest.parent));
-         return envName;
+         return this.capitalise(envName);
       },
 
       /**

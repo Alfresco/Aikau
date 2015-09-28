@@ -84,6 +84,7 @@ registerSuite(function(){
          return browser.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
          .end()
+         .getLastPublish("HAS_ITEMS_ALF_DOCLIST_SET_GALLERY_COLUMNS")
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
                assert.lengthOf(elements, 7, "The number of items per row was not increased");
@@ -94,6 +95,7 @@ registerSuite(function(){
          return browser.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
          .end()
+         .getLastPublish("HAS_ITEMS_ALF_DOCLIST_SET_GALLERY_COLUMNS")
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
                assert.lengthOf(elements, 10, "The number of items per row was not increased");
@@ -144,17 +146,13 @@ registerSuite(function(){
       },
       
       "Test selecting first item (Folder 1)": function () {
-         // 1. Focus on the first thumbnail...
-         return browser.pressKeys(keys.TAB) // Goes to first thumbnail...
-         .sleep(alfPause)
-         // 2. Tab again to select the selector...
-         .pressKeys(keys.TAB)
-         .sleep(alfPause)
-         .pressKeys(keys.SPACE)
-         .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
-            .then(function(payload) {
-               assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
-            });
+         return browser.findByCssSelector("body")
+            .tabToElement(".alfresco-lists-views-layouts-Grid tr:first-child td:first-child .alfresco-renderers-Thumbnail .alfresco-renderers-Selector")
+            .pressKeys(keys.SPACE)
+            .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
+               });
       },
 
       "Check selector click doesn't navigate": function() {
