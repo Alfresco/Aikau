@@ -71,6 +71,7 @@ model.jsonModel = {
          id: "LIST",
          name: "alfresco/lists/views/AlfListView",
          config: {
+            pubSubScope: "SCOPED_",
             currentData: {
                items: [
                   {
@@ -240,7 +241,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "aikauTesting/mockservices/DownloadArchiveMockXhr"
+         name: "aikauTesting/mockservices/GenericMockXhr"
       },
       {
          name: "alfresco/logging/DebugLog"
