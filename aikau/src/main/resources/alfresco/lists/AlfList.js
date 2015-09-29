@@ -303,13 +303,6 @@ define(["dojo/_base/declare",
             // this.processWidgets(JSON.parse(JSON.stringify(this.widgets)));
             this.processWidgets(this.widgets, null, this.viewWidgetsMappingId);
          }
-
-         if (this.filteringTopics)
-         {
-            array.forEach(this.filteringTopics, function(topic) {
-               this.alfSubscribe(topic, lang.hitch(this, this.onFilterRequest));
-            }, this);
-         }
       },
 
       /**
@@ -466,27 +459,38 @@ define(["dojo/_base/declare",
        * create the views.
        */
       allWidgetsProcessed: function alfresco_lists_AlfList__allWidgetsProcessed(widgets, /*jshint unused:false*/ processWidgetsId) {
-         this.viewMap = {};
-         array.forEach(widgets, lang.hitch(this, "registerView"));
+         this.createFilterSubscriptions();
+         this.registerViews(widgets);
+         this.completeListSetup();
+      },
 
-         // If no default view has been provided, then just use the first...
-         if (!this._currentlySelectedView)
+      /**
+       * Create the subscriptions for the [filteringTopics]{@link module:alfresco/lists/AlfList#filteringTopics}. This is
+       * called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed}.
+       * 
+       * @instance
+       * @param {object[]} The created widgets
+       * @since 1.0.36.4
+       */
+      createFilterSubscriptions: function alfresco_lists_AlfList__createFilterSubscriptions() {
+         if (this.filteringTopics)
          {
-            for (var view in this.viewMap) {
-               if (this.viewMap.hasOwnProperty(view))
-               {
-                  this._currentlySelectedView = view;
-                  break;
-               }
-            }
+            array.forEach(this.filteringTopics, function(topic) {
+               this.alfSubscribe(topic, lang.hitch(this, this.onFilterRequest));
+            }, this);
          }
+      },
 
-         this.alfPublish(this.viewSelectionTopic, {
-            value: this._currentlySelectedView,
-            preference: this.viewPreferenceProperty,
-            selected: true
-         });
-
+      /**
+       * This is called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed} to 
+       * determine whether or not to immediately load data or to wait for all of the widgets on the page to be
+       * created first.
+       * 
+       * @instance
+       * @param {object[]} The created widgets
+       * @since 1.0.36.4
+       */
+      completeListSetup: function alfresco_lists_AlfList__completeListSetup() {
          if (this.waitForPageWidgets === true)
          {
             // Create a subscription to listen out for all widgets on the page being reported
@@ -508,6 +512,39 @@ define(["dojo/_base/declare",
             this._readyToLoad = true;
             this.onPageWidgetsReady();
          }
+      },
+
+      /**
+       * Iterate of the supplied list of widgets (which should all be views) and calling the 
+       * [registerView]{@link module:alfresco/lists/AlfList#registerView} function for each of them. Once
+       * the views are all registered ensure that the requested view to be initially displayed is rendered.
+       * This is called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed}.
+       * 
+       * @instance
+       * @param {object[]} The created widgets
+       * @since 1.0.36.4
+       */
+      registerViews: function alfresco_lists_AlfList__registerViews(widgets) {
+         this.viewMap = {};
+         array.forEach(widgets, lang.hitch(this, this.registerView));
+
+         // If no default view has been provided, then just use the first...
+         if (!this._currentlySelectedView)
+         {
+            for (var view in this.viewMap) {
+               if (this.viewMap.hasOwnProperty(view))
+               {
+                  this._currentlySelectedView = view;
+                  break;
+               }
+            }
+         }
+
+         this.alfPublish(this.viewSelectionTopic, {
+            value: this._currentlySelectedView,
+            preference: this.viewPreferenceProperty,
+            selected: true
+         });
       },
 
       /**
