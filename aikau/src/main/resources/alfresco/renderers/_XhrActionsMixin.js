@@ -29,15 +29,23 @@
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/_ActionsMixin",
+        "alfresco/core/topics",
         "alfresco/menus/AlfMenuGroup",
         "dojo/_base/array",
-        "dojo/_base/lang",
-        "service/constants/Default",
-        "dijit/popup"], 
-        function(declare, _ActionsMixin, AlfMenuGroup, array, lang, AlfConstants, popup) {
+        "dojo/_base/lang"], 
+        function(declare, _ActionsMixin, topics, AlfMenuGroup, array, lang) {
 
    return declare([_ActionsMixin], {
       
+      /**
+       * A boolean flag indicating whether or not the actions have been loaded yet.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      _actionsLoaded: false,
+
       /**
        * The JSON model for controlling the widgets that are displayed whilst waiting for the
        * XHR request to complete.
@@ -56,38 +64,42 @@ define(["dojo/_base/declare",
       ],
 
       /**
-       *
+       * Extends the [inherited function]{@link module:alfresco/renderers/_ActionsMixin#addActions} to create place
+       * holding [widgets]{@link module:alfresco/renderers/_XhrActionsMixin#widgetsForLoading} to display until the
+       * XHR request to retrieve the full Node details returns. This function is subsequently called when the user
+       * opens the pop-up menu to render all the actions.
+       * 
        * @instance
        */
-      addActions: function alfresco_renderers_XhrActions__postCreate() {
-
-         // Pass the loading JSON model to the actions menu group to be displayed...
-         this.actionsGroup.processWidgets(this.widgetsForLoading);
-
-         if (this.actionsMenu.popup)
+      addActions: function alfresco_renderers__XhrActionsMixin__postCreate() {
+         if (this._actionsLoaded)
          {
-            // Load the actions only when the user opens the Actions menu...
-            this.actionsMenu.popup.onOpen = dojo.hitch(this, this.loadActions);
+            this.inherited(arguments);
          }
          else
          {
-            this.alfLog("log", "No Sites Menu popup - something has gone wrong!");
+            // Pass the loading JSON model to the actions menu group to be displayed...
+            this.actionsGroup.processWidgets(this.widgetsForLoading);
+            if (this.actionsMenu.popup)
+            {
+               // Load the actions only when the user opens the Actions menu...
+               this.actionsMenu.popup.onOpen = lang.hitch(this, this.loadActions);
+            }
+            else
+            {
+               this.alfLog("log", "No actions popup - something has gone wrong!");
+            }
          }
       },
 
       /**
-       * A boolean flag indicating whether or not the actions have been loaded yet.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      _actionsLoaded: false,
-
-      /**
+       * Called whenever the user opens up the actions pop-up menu. If an XHR request has not yet been made to 
+       * retrieve the full Node data for the current item then the [getXhrData]{@link module:alfresco/renderers/_XhrActionsMixin#getXhrData}
+       * function will be called, otherwise the previously rendered actions will be shown.
+       * 
        * @instance
        */
-      loadActions: function alfresco_renderers_XhrActions__loadActions() {
+      loadActions: function alfresco_renderers__XhrActionsMixin__loadActions() {
          if (this._actionsLoaded)
          {
             this.alfLog("log", "Actions already loaded");
@@ -100,18 +112,20 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Publishes a request to retrieve the full Node data for the current item.
        * 
        * @instance
+       * @fires module:alfresco/core/topics#GET_DOCUMENT
        */
-      getXhrData: function alfresco_renderers_XhrActions__getXhrData() {
+      getXhrData: function alfresco_renderers__XhrActionsMixin__getXhrData() {
          var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
          if (nodeRef)
          {
             // Generate a UUID for the response to the publication to ensure that only this widget
             // handles to the XHR data...
             var responseTopic = this.generateUuid();
-            this._xhrDataRequestHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onXhrData"), true);
-            this.alfPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", {
+            this._xhrDataRequestHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onXhrData), true);
+            this.alfPublish(topics.GET_DOCUMENT, {
                alfResponseTopic: responseTopic,
                nodeRef: nodeRef
             }, true);
@@ -123,60 +137,47 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Handles the processing of the asynchronously requested data. It will attempt to render the returned
-       * data item using the attribute "widgetsForXhrData".
+       * Handles the processing of the asynchronously requested data. It calls 
+       * [addXhrItems]{@link module:alfresco/renderers/_XhrActionsMixin#addXhrItems} to render the actions.
        * 
        * @instance
        * @param {object} payload 
        */
-      onXhrData: function alfresco_renderers_XhrActions__onXhrData(payload) {
+      onXhrData: function alfresco_renderers__XhrActionsMixin__onXhrData(payload) {
          this.alfUnsubscribeSaveHandles([this._xhrDataRequestHandle]);
          if (lang.exists("response.item", payload)) 
          {
             this._actionsLoaded = true;
             this.currentItem = payload.response.item;
-
             this.clearLoadingItem();
             this.addXhrItems();
-
-            // When we add in the XHR data there is a good chance that the new menu items will be wider
-            // that the original "Loading..." message, this can result in the popup being poorly placed,
-            // an example of this is on the search results page where the loaded actions are initially
-            // shown slightly off-screen. To work around this issue we will immediately close and then
-            // re-open the popup and leave dijit/popup to place the menu sensibly...
-
-            // PLEASE NOTE: Temporarily commented out as although this performs the re-draw admirably,
-            //              the first time the menu items are clicked they have no effect
-            //              See: https://issues.alfresco.com/jira/browse/ACE-1865
-            // popup.close(this.actionsMenu.popup);
-            // popup.open({popup:this.actionsMenu.popup,around:this.actionsMenu.domNode});
          }
          else
          {
-            this.alfLog("warn", "Document data was provided but the 'response.item' attribute was not found", payload, this);
+            this.alfLog("warn", "Node data was provided but the 'response.item' attribute was not found", payload, this);
          }
       },
 
       /**
-       * Removes the "Loading..." place holder menu item.
+       * Removes the "Loading..." place holder menu item. Called from [onXhrData]{@link module:alfresco/renderers/_XhrActionsMixin#onXhrData}
        * 
        * @instance
        */
-      clearLoadingItem: function alfresco_renderers_XhrActions__clearLoadingItem() {
+      clearLoadingItem: function alfresco_renderers__XhrActionsMixin__clearLoadingItem() {
          array.forEach(this.actionsMenu.popup.getChildren(), function(widget) {
             this.actionsMenu.popup.removeChild(widget);
          }, this);
       },
 
       /**
-       * Adds the menu items for the asynchronously retrieved data.
+       * Adds the menu items for the asynchronously retrieved data. Called from [onXhrData]{@link module:alfresco/renderers/_XhrActionsMixin#onXhrData}
        *
        * @instance
        */
-      addXhrItems: function alfresco_renderers_XhrActions__addXhrItems() {
+      addXhrItems: function alfresco_renderers__XhrActionsMixin__addXhrItems() {
          this.actionsGroup = new AlfMenuGroup({});
          this.actionsMenu.popup.addChild(this.actionsGroup);
-         array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
+         this.addActions();
       }
    });
 });
