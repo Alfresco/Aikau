@@ -1025,6 +1025,19 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * Creates a widget to render a single live search document result.
+       * 
+       * @instance
+       * @param  {object} data The data to create the document rendering with
+       * @return {object} An instance of LiveSearchItem
+       * @since 1.0.37
+       * @overridable
+       */
+      createLiveSearchDocument: function alfresco_header_SearchBox__createLiveSearchDocument(data) {
+         return new LiveSearchItem(data);
+      },
+
+      /**
        * @instance
        * @param {string} terms
        * @param {number} startIndex
@@ -1075,7 +1088,7 @@ define(["dojo/_base/declare",
                            break;
                      }
                      var lastModified = item.lastThumbnailModification || 1;
-                     var itemLink = new LiveSearchItem({
+                     var itemLink = this.createLiveSearchDocument({
                         searchBox: this,
                         cssClass: "alf-livesearch-thumbnail",
                         title: desc,
@@ -1119,6 +1132,19 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Creates a widget to render a single live search site result.
+       * 
+       * @instance
+       * @param  {object} data The data to create the site rendering with
+       * @return {object} An instance of LiveSearchItem
+       * @since 1.0.37
+       * @overridable
+       */
+      createLiveSearchSite: function alfresco_header_SearchBox__createLiveSearchSite(data) {
+         return new LiveSearchItem(data);
+      },
+
+      /**
        * @instance
        * @param {string} terms The search terms
        * @param {number} startIndex
@@ -1133,7 +1159,7 @@ define(["dojo/_base/declare",
                   
                   // construct each Site item as a LiveSearchItem widget
                   array.forEach(response.items, function(item) {
-                     var itemLink = new LiveSearchItem({
+                     var itemLink = this.createLiveSearchSite({
                         searchBox: this,
                         cssClass: "alf-livesearch-icon",
                         title: this.encodeHTML(item.description),
@@ -1166,6 +1192,19 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * Creates a widget to render a single live search person result.
+       * 
+       * @instance
+       * @param  {object} data The data to create the person rendering with
+       * @return {object} An instance of LiveSearchItem
+       * @since 1.0.37
+       * @overridable
+       */
+      createLiveSearchPerson: function alfresco_header_SearchBox__createLiveSearchPerson(data) {
+         return new LiveSearchItem(data);
+      },
+
+      /**
        * @instance
        * @param {string} terms The search terms
        * @param {number} startIndex
@@ -1182,7 +1221,7 @@ define(["dojo/_base/declare",
                   array.forEach(response.items, function(item) {
                      var fullName = item.firstName + " " + item.lastName;
                      var meta = this.encodeHTML(item.jobtitle || "") + (item.location ? (", "+this.encodeHTML(item.location)) : "");
-                     var itemLink = new LiveSearchItem({
+                     var itemLink = this.createLiveSearchPerson({
                         searchBox: this,
                         cssClass: "alf-livesearch-icon",
                         title: this.encodeHTML(item.jobtitle || ""),
