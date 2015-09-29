@@ -32,7 +32,10 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/renderers/actions/CopyToActionTest"
+      "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
+      "src/test/resources/alfresco/lists/AlfHashListTest",
+      "src/test/resources/alfresco/lists/AlfSortablePaginatedListTest",
+      "src/test/resources/alfresco/search/SearchSuggestionsTest"
    ],
 
    /**
@@ -85,6 +88,7 @@ define({
       "src/test/resources/alfresco/documentlibrary/SearchListTest",
       "src/test/resources/alfresco/documentlibrary/SelectedItemsMenuTest",
       "src/test/resources/alfresco/documentlibrary/SitesListTest",
+      "src/test/resources/alfresco/documentlibrary/TagFiltersTest",
       "src/test/resources/alfresco/documentlibrary/ViewPreferencesGroupTest",
       "src/test/resources/alfresco/documentlibrary/views/AlfDetailedViewTest",
       "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
@@ -219,6 +223,7 @@ define({
       "src/test/resources/alfresco/renderers/actions/CopyToActionTest",
       "src/test/resources/alfresco/renderers/actions/DeleteActionTest",
       "src/test/resources/alfresco/renderers/actions/ManageAspectsActionTest",
+      "src/test/resources/alfresco/renderers/actions/MoveToActionTest",
       "src/test/resources/alfresco/renderers/actions/UploadNewVersionActionTest",
 
       "src/test/resources/alfresco/search/AlfSearchResultTest",

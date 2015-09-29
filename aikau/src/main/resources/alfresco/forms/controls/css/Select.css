@@ -1,38 +1,58 @@
-.alfresco-forms-controls-BaseFormControl > .control-row > .control > table{
-   -moz-border-radius: 3px;
-   -webkit-border-radius: 3px;
-   -khtml-border-radius: 3px;
-   border-radius: 3px;
-   background-color: @primary-background-color;
-}
-
-.alfresco-forms-controls-BaseFormControl > .control-row > .control > table > tr{
-   background: transparent;
-}
-
-.alfresco-forms-controls-BaseFormControl > .control-row > .control > table td{
-   border: none;
-   padding: 1px 3px;
-   background: transparent;
-}
-
-.alfresco-forms-controls-BaseFormControl > .control-row > .control > table td.dijitArrowButton{
-   border: none;
-   background: transparent;
-   padding-right: 3px;
-}
-
-.alfresco-forms-controls-BaseFormControl > .control-row > .control > table td.dijitArrowButton > input{
-   border: none;
+.alfresco-forms-controls-BaseFormControl {
+   > .control-row {
+      > .control {
+         > table {
+            background-color: @primary-background-color;
+            border-radius: 3px;
+            tr, td {
+               background: transparent;
+            }
+            td {
+               border: none;
+               padding: 1px 3px;
+               &.dijitArrowButton {
+                  padding-right: 3px;
+                  > input {
+                     border: none;
+                  }
+               }
+            }
+         }
+      }
+   }
 }
 
 .dijitMenuPopup {
    margin-top: 3px;
 }
-.claro .dijitMenuPopup .dijitMenu .dijitMenuItem td.dijitMenuItemLabel {
-   padding: 5px;
+
+.claro {
+   .dijitMenuPopup .dijitMenu .dijitMenuItem td.dijitMenuItemLabel {
+      padding: 5px;
+   }
+   .dijitMenu .dijitSelectSelectedOption * {
+      font-family: @bold-font;
+   }
 }
 
-.claro .dijitMenu .dijitSelectSelectedOption * {
-   font-family: @bold-font;
+.dijitSelectMenu {
+   tbody {
+      max-width: inherit;
+      .dijitMenuItem {
+         max-width: inherit;
+         white-space: normal;
+         .dijitMenuItemLabel {
+            max-width: inherit;
+            overflow: hidden;
+            text-overflow: ellipsis;
+         }
+      }
+   }
+   &.truncate {
+      tbody {
+         .dijitMenuItem {
+            white-space: nowrap;
+         }
+      }
+   }
 }

@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        * @instance
        * @since 1.0.32
        *
-       * @listens module:alfresco/core/topics~event:ASSIGN_WORKFLOW
+       * @listens module:alfresco/core/topics#ASSIGN_WORKFLOW
        */
       registerSubscriptions: function alfresco_services_actions_WorkflowService__registerSubscriptions() {
          this.alfSubscribe("ALF_APPROVE_SIMPLE_WORKFLOW", lang.hitch(this, this.onApproveSimpleWorkflow));

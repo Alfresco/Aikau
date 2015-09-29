@@ -30,6 +30,7 @@
 define(["dojo/_base/declare",
         "alfresco/renderers/InlineEditProperty", 
         "alfresco/core/ObjectTypeUtils",
+        "alfresco/core/topics",
         "dojo/_base/array",
         "dojo/_base/lang",
         "alfresco/forms/controls/ComboBox",
@@ -41,8 +42,8 @@ define(["dojo/_base/declare",
         "dojo/on",
         "dojo/keys",
         "dojo/_base/event"], 
-        function(declare, InlineEditProperty, ObjectTypeUtils, array, lang, ComboBox, ReadOnlyTag, EditTag, domConstruct, 
-                 domClass, registry, on, keys, event) {
+        function(declare, InlineEditProperty, ObjectTypeUtils, topics, array, lang, ComboBox, ReadOnlyTag,
+            EditTag, domConstruct, domClass, registry, on, keys, event) {
 
    return declare([InlineEditProperty], {
       
@@ -188,7 +189,7 @@ define(["dojo/_base/declare",
                additionalCssClasses: "hiddenlabel",
                optionsConfig: {
                   queryAttribute: "name",
-                  publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",
+                  publishTopic: topics.RETRIEVE_CURRENT_TAGS,
                   publishPayload: {
                      resultsProperty: "response.data.items"
                   }
@@ -318,7 +319,7 @@ define(["dojo/_base/declare",
                alfResponseTopic: responseTopic
             };
             this._createTagHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onTagCreated), true);
-            this.alfPublish("ALF_CREATE_TAG", payload, true);
+            this.alfPublish(topics.CREATE_TAG, payload, true);
          }
       },
       

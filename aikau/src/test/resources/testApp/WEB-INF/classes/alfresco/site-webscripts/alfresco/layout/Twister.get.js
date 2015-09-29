@@ -15,9 +15,6 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "aikauTesting/mockservices/PreferenceServiceMockXhr"
-      },
-      {
          name: "aikauTesting/WaitForMockXhrService",
          config: {
             widgets: [
@@ -132,6 +129,9 @@ model.jsonModel = {
                }
             ]
          }
+      },
+      {
+         name: "aikauTesting/mockservices/PreferenceServiceMockXhr"
       },
       {
          name: "alfresco/logging/DebugLog"

@@ -106,6 +106,38 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "CREATE_TAB_WITH_PUBLICATION",
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              label: "Add tab (with additional publication)",
+                              publishTopic:"ALF_ADD_TAB",
+                              publishPayload: {
+                                 publishOnAdd: {
+                                    publishTopic: "ALF_DOCLIST_RELOAD_DATA",
+                                    publishScope: "LIST_2_SCOPE_"
+                                 },
+                                 widgets: [
+                                    {
+                                       id: "ADDED_LIST_2",
+                                       name: "alfresco/lists/AlfList",
+                                       title: "List that should reload",
+                                       closable: true,
+                                       selected: true,
+                                       config: {
+                                          pubSubScope: "LIST_2_SCOPE_",
+                                          useHash: false,
+                                          currentData: {
+                                             items: [
+                                                
+                                             ]
+                                          }
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
+                        },
+                        {
                            // name: "alfresco/lists/AlfList",
                            name: "alfresco/search/AlfSearchList",
                            config: {
