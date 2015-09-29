@@ -226,28 +226,28 @@ registerSuite(function(){
                   expect(currClasses).to.not.contain("dijitHidden", "The 4th panel should not be hidden");
                   expect(currClasses).to.contain("dijitVisible", "The 4th panel should be visible");
                });
-      },
+         },
 
-      "Checking 3rd panel is visible (2)": function() {
-         return browser.pressKeys(keys.ARROW_LEFT)
+         "Checking 3rd panel is visible (2)": function() {
+            return browser.pressKeys(keys.ARROW_LEFT)
 
-         // Test current panel states
-         .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-            .getAttribute("class")
-            .then(
-               function(currClasses) {
-                  expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
-                  expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
-               });
-      },
+            // Test current panel states
+            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+               .getAttribute("class")
+               .then(
+                  function(currClasses) {
+                     expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
+                     expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
+                  });
+         },
 
-      "Checking 4th panel is hidden": function() {
-         return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
-            .getAttribute("class")
-            .then(
-               function(currClasses) {
-                  expect(currClasses).to.contain("dijitHidden", "The 4th panel should be hidden");
-                  expect(currClasses).to.not.contain("dijitVisible", "The 4th panel should not be visible");
+         "Checking 4th panel is hidden": function() {
+            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
+               .getAttribute("class")
+               .then(
+                  function(currClasses) {
+                     expect(currClasses).to.contain("dijitHidden", "The 4th panel should be hidden");
+                     expect(currClasses).to.not.contain("dijitVisible", "The 4th panel should not be visible");
                });
       },
 
@@ -465,96 +465,96 @@ registerSuite(function(){
                function(currClasses) {
                   expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
                });
-      },
+         },
 
-      "Checking 1st tab is enabled after external selection by id": function() {
-         return browser.findById("DISABLE_TAB_6")
-            .click()
-         .end()
+         "Checking 1st tab is enabled after external selection by id": function() {
+            return browser.findById("DISABLE_TAB_6")
+               .click()
+            .end()
 
-         .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
-            .getAttribute("class")
-            .then(
-               function(currClasses) {
-                  expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
+            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+               .getAttribute("class")
+               .then(
+                  function(currClasses) {
+                     expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
+                  });
+         },
+
+         "Check the correct number of tabs is present": function() {
+            return browser.findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+               .then(
+                  function (tabs) {
+                     expect(tabs.length).to.equal(11, "There are not 11 tabs");
+                  }
+               );
+         },
+
+         "Check the correct number of tabs is present after deleting tab 7": function() {
+            return browser.findById("DELETE_TAB_1")
+               .click()
+            .end()
+
+            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+               .then(
+                  function (tabs) {
+                     expect(tabs.length).to.equal(10, "There are not 10 tabs");
+                  }
+               );
+         },
+
+         "Check the correct number of tabs is present after deleting tab titled 'Logo 8'": function() {
+            return browser.findById("DELETE_TAB_2")
+               .click()
+            .end()
+
+            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+               .then(
+                  function (tabs) {
+                     expect(tabs.length).to.equal(9, "There are not 9 tabs");
+                  }
+               );
+         },
+
+         "Check the correct number of tabs is present after deleting tab with id 'dijit_layout_ContentPane_8": function() {
+            return browser.findById("DELETE_TAB_3")
+               .click()
+            .end()
+
+            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+               .then(
+                  function (tabs) {
+                     expect(tabs.length).to.equal(8, "There are not 8 tabs");
+                  }
+               );
+         },
+
+         "Check that delayed processing form control is displayed correctly": function() {
+            return browser.findById("TC_TABCONTAINER_tablist_TC_FormControl1")
+               .click()
+            .end()
+            .findByCssSelector("#FormControl1 .label")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Select...", "The form control was not displayed correctly");
                });
-      },
+         },
 
-      "Check the correct number of tabs is present": function() {
-         return browser.findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-            .then(
-               function (tabs) {
-                  expect(tabs.length).to.equal(11, "There are not 11 tabs");
-               }
-            );
-      },
-
-      "Check the correct number of tabs is present after deleting tab 7": function() {
-         return browser.findById("DELETE_TAB_1")
-            .click()
-         .end()
-
-         .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-            .then(
-               function (tabs) {
-                  expect(tabs.length).to.equal(10, "There are not 10 tabs");
-               }
-            );
-      },
-
-      "Check the correct number of tabs is present after deleting tab titled 'Logo 8'": function() {
-         return browser.findById("DELETE_TAB_2")
-            .click()
-         .end()
-
-         .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-            .then(
-               function (tabs) {
-                  expect(tabs.length).to.equal(9, "There are not 9 tabs");
-               }
-            );
-      },
-
-      "Check the correct number of tabs is present after deleting tab with id 'dijit_layout_ContentPane_8": function() {
-         return browser.findById("DELETE_TAB_3")
-            .click()
-         .end()
-
-         .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-            .then(
-               function (tabs) {
-                  expect(tabs.length).to.equal(8, "There are not 8 tabs");
-               }
-            );
-      },
-
-      "Check that delayed processing form control is displayed correctly": function() {
-         return browser.findById("TC_TABCONTAINER_tablist_FormControl1")
-            .click()
-         .end()
-         .findByCssSelector("#FormControl1 .label")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Select...", "The form control was not displayed correctly");
-            });
-      },
-
-       "Check that non-delayed processing form control is displayed correctly": function() {
-         return browser.findById("TC_TABCONTAINER_tablist_FormControl2")
-            .click()
-         .end()
-         .findByCssSelector("#FormControl2 .label")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Select...", "The form control was not displayed correctly");
-            });
-      },
+          "Check that non-delayed processing form control is displayed correctly": function() {
+            return browser.findById("TC_TABCONTAINER_tablist_TC_FormControl2")
+               .click()
+            .end()
+            .findByCssSelector("#FormControl2 .label")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Select...", "The form control was not displayed correctly");
+               });
+         },
 
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
 registerSuite(function(){
@@ -672,7 +672,7 @@ registerSuite(function(){
 
       "Attempt to create the same tab": function() {
          // Switch back to the 2nd tab...
-         return browser.findById("TC1_TABCONTAINER_tablist_SEARCH_LIST")
+            return browser.findById("TC1_TABCONTAINER_tablist_TC1_SEARCH_LIST")
             .click()
          .end()
 
@@ -693,6 +693,29 @@ registerSuite(function(){
                assert.isTrue(displayed, "The existing tab was not re-selected");
             });
       },
+
+         "Create a tab with a follow-on publication": function() {
+            // Switch back to the 2nd tab...
+            return browser.findById("TC1_TABCONTAINER_tablist_TC1_SEARCH_LIST")
+               .click()
+            .end()
+
+            // Click the button to create a tab with a publication on addition...
+            .findById("CREATE_TAB_WITH_PUBLICATION_label")
+               .click()
+            .end()
+
+            // Find the new tab...
+            .findById("ADDED_LIST_2")
+            .end()
+            
+            // ...and check that it is loading (this will be a result of the reload publication)...
+            .findByCssSelector("#ADDED_LIST_2 .info.data-loading")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed, "The list should be attempting to load data");
+               });
+         },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);

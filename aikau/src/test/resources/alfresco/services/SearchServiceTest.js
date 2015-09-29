@@ -47,7 +47,7 @@ registerSuite(function(){
          return browser.findById("FCTSRCH_SEARCH_RESULTS_LIST")
             .getVisibleText()
             .then(function (text){
-               assert.equal(text, "There was an error loading search results", "There should not be any results found yet");
+               assert.equal(text, "We hit a problem getting your search results. Try searching again", "There should not be any results found yet");
             })
          .end()
          .clearLog();

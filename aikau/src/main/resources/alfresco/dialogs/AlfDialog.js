@@ -236,26 +236,7 @@ define(["dojo/_base/declare",
          {
             simplePanelHeight = (parseInt(this.contentHeight, 10) - paddingAdjustment) + "px";
          }
-         else
-         {
-            // When there is no fixed content height, make sure that the max-height adapts to the displayed content...
-            var containerHeight = $(this.containerNode).height();
-            if (containerHeight)
-            {
-               if (this.widgetsButtons)
-               {
-                  // We need to deduct 40 pixels from the container height to accomodate the buttons bar
-                  // if it is present...
-                  containerHeight -= 40;
-               }
-               
-               if (containerHeight < maxHeight)
-               {
-                  maxHeight = containerHeight;
-               }
-            }
-         }
-
+         
          calculatedHeights.documentHeight = docHeight;
          calculatedHeights.clientHeight = clientHeight;
          calculatedHeights.maxBodyHeight = maxHeight;
