@@ -30,12 +30,13 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/dialogs/AlfDialog",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/util/urlUtils"],
-        function(declare, BaseService, CoreXhr, AlfConstants, AlfDialog, lang, array, urlUtils) {
+        function(declare, BaseService, CoreXhr, topics, AlfConstants, AlfDialog, lang, array, urlUtils) {
 
    return declare([BaseService, CoreXhr], {
 
@@ -68,6 +69,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response The response from the original XHR request.
        * @param {object} originalRequestConfig The configuration passed to the original XHR request.
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       refreshRequest: function alfresco_services_CrudService__refreshRequest(response, originalRequestConfig) {
          var responseTopic = lang.getObject("alfTopic", false, originalRequestConfig);
@@ -82,7 +84,7 @@ define(["dojo/_base/declare",
             message = "crudservice.generic.success.message";
          }
 
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message(message)
          });
 

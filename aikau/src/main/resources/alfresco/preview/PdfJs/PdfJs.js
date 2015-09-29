@@ -45,6 +45,7 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/ObjectProcessingMixin",
         "alfresco/core/Core",
+        "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/preview/PdfJs/PdfJsConstants",
         "alfresco/preview/PdfJs/DocumentView",
@@ -62,7 +63,7 @@ define(["dojo/_base/declare",
         "dojo/window",
         "dojo/on",
         "jquery"], 
-        function(declare, AlfDocumentPreviewPlugin, FileSizeMixin, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore, AlfConstants, 
+        function(declare, AlfDocumentPreviewPlugin, FileSizeMixin, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore, topics, AlfConstants, 
                  PdfJsConstants, DocumentView, PDFFindController, WidgetsCreator, AlfTabContainer, lang, domGeom, 
                  domConstruct, domClass, domStyle, html, has, ioQuery, win, on, $) {
    
@@ -732,6 +733,7 @@ define(["dojo/_base/declare",
        * Error encountered retrieving PDF document
        * 
        * @instance
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       _onGetDocumentFailure: function alfresco_preview_PdfJs_PdfJs___onGetDocumentFailure(exception) {
 
@@ -800,7 +802,7 @@ define(["dojo/_base/declare",
                });
 
                // Display an error using the notification service
-               this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+               this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
                   message: loadingErrorMessage
                });
             }
@@ -1260,13 +1262,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload containing the details of the page to skip to.
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onSetPageConfirmation: function alfresco_preview_PdfJs_PdfJs__onSetPageConfirmation(payload) {
          var pn = lang.getObject("pageNumber", false, payload);
          if (!pn || pn < 1 || pn > this.numPages)
          {
             // This will require that the alfresco/service/NotificationService is on the page
-            this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
                message: this.previewManager.message("error.badpage")
             }, true);
          }

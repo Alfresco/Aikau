@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        * @instance
        * @since 1.0.32
        *
-       * @listens module:alfresco/core/topics~event:ASSIGN_WORKFLOW
+       * @listens module:alfresco/core/topics#ASSIGN_WORKFLOW
        */
       registerSubscriptions: function alfresco_services_actions_WorkflowService__registerSubscriptions() {
          this.alfSubscribe("ALF_APPROVE_SIMPLE_WORKFLOW", lang.hitch(this, this.onApproveSimpleWorkflow));
@@ -197,10 +197,11 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response
        * @param {object} originalRequestConfig The configuration used for the XHR request
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onApproveSuccess: function alfresco_services_actions_WorkflowService__onApproveSuccess(response, originalRequestConfig) {
          var message = lang.getObject("requestConfig.action.successMessage", false, response);
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message(message || this.approveSuccessMessage)
          });
          this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, originalRequestConfig.responseScope);
@@ -211,10 +212,11 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} response
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onApproveFailure: function alfresco_services_actions_WorkflowService__onApproveFailure(response) {
          var message = lang.getObject("requestConfig.action.failureMessage", false, response);
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message(message || this.approveFailureMessage)
          });
       },
@@ -225,10 +227,11 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response
        * @param {object} originalRequestConfig The configuration used for the XHR request
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onRejectSuccess: function alfresco_services_actions_WorkflowService__onRejectSuccess(response, originalRequestConfig) {
          var message = lang.getObject("requestConfig.action.successMessage", false, response);
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message(message || this.rejectSuccessMessage)
          });
          this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, originalRequestConfig.responseScope);
@@ -239,10 +242,11 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} response
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onRejectFailure: function alfresco_services_actions_WorkflowService__onRejectFailure(response) {
          var message = lang.getObject("requestConfig.action.failureMessage", false, response);
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message(message || this.rejectFailureMessage)
          });
       }

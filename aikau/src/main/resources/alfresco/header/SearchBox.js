@@ -559,6 +559,45 @@ define(["dojo/_base/declare",
       hiddenSearchTerms: "",
 
       /**
+       * The URI to use performing the live search for documents. If the default is re-configured then REST API
+       * to be used is expected to be able to handle the request parameter of "t" for the search term,
+       * "maxResults" for the page size and "startIndex" for the first result in the page. The REST API is expected
+       * to be a Repository based WebScript supporting the GET method.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.37
+       */
+      liveSearchDocumentsUri: "slingshot/live-search-docs",
+
+      /**
+       * The URI to use performing the live search for sites. If the default is re-configured then REST API
+       * to be used is expected to be able to handle the request parameter of "t" for the search term,
+       * "maxResults" for the page size and "startIndex" for the first result in the page. The REST API is expected
+       * to be a Repository based WebScript supporting the GET method.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.37
+       */
+      liveSearchSitesUri: "slingshot/live-search-sites",
+
+      /**
+       * The URI to use performing the live search for people. If the default is re-configured then REST API
+       * to be used is expected to be able to handle the request parameter of "t" for the search term,
+       * "maxResults" for the page size and "startIndex" for the first result in the page. The REST API is expected
+       * to be a Repository based WebScript supporting the GET method.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.37
+       */
+      liveSearchPeopleUri: "slingshot/live-search-people",
+
+      /**
        * @instance
        */
       postMixInProperties: function alfresco_header_SearchBox__postMixInProperties() {
@@ -986,6 +1025,19 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * Creates a widget to render a single live search document result.
+       * 
+       * @instance
+       * @param  {object} data The data to create the document rendering with
+       * @return {object} An instance of LiveSearchItem
+       * @since 1.0.37
+       * @overridable
+       */
+      createLiveSearchDocument: function alfresco_header_SearchBox__createLiveSearchDocument(data) {
+         return new LiveSearchItem(data);
+      },
+
+      /**
        * @instance
        * @param {string} terms
        * @param {number} startIndex
@@ -993,7 +1045,7 @@ define(["dojo/_base/declare",
       liveSearchDocuments: function alfresco_header_SearchBox__liveSearchDocuments(terms, startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-docs?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
+               url: AlfConstants.PROXY_URI + this.liveSearchDocumentsUri + "?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
                method: "GET",
                successCallback: function(response) {
                   if (startIndex === 0)
@@ -1036,7 +1088,7 @@ define(["dojo/_base/declare",
                            break;
                      }
                      var lastModified = item.lastThumbnailModification || 1;
-                     var itemLink = new LiveSearchItem({
+                     var itemLink = this.createLiveSearchDocument({
                         searchBox: this,
                         cssClass: "alf-livesearch-thumbnail",
                         title: desc,
@@ -1080,6 +1132,19 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Creates a widget to render a single live search site result.
+       * 
+       * @instance
+       * @param  {object} data The data to create the site rendering with
+       * @return {object} An instance of LiveSearchItem
+       * @since 1.0.37
+       * @overridable
+       */
+      createLiveSearchSite: function alfresco_header_SearchBox__createLiveSearchSite(data) {
+         return new LiveSearchItem(data);
+      },
+
+      /**
        * @instance
        * @param {string} terms The search terms
        * @param {number} startIndex
@@ -1087,14 +1152,14 @@ define(["dojo/_base/declare",
       liveSearchSites: function alfresco_header_SearchBox__liveSearchSites(terms, /*jshint unused:false*/ startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-sites?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
+               url: AlfConstants.PROXY_URI + this.liveSearchSitesUri + "?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
                method: "GET",
                successCallback: function(response) {
                   this._LiveSearch.containerNodeSites.innerHTML = "";
                   
                   // construct each Site item as a LiveSearchItem widget
                   array.forEach(response.items, function(item) {
-                     var itemLink = new LiveSearchItem({
+                     var itemLink = this.createLiveSearchSite({
                         searchBox: this,
                         cssClass: "alf-livesearch-icon",
                         title: this.encodeHTML(item.description),
@@ -1127,6 +1192,19 @@ define(["dojo/_base/declare",
       },
       
       /**
+       * Creates a widget to render a single live search person result.
+       * 
+       * @instance
+       * @param  {object} data The data to create the person rendering with
+       * @return {object} An instance of LiveSearchItem
+       * @since 1.0.37
+       * @overridable
+       */
+      createLiveSearchPerson: function alfresco_header_SearchBox__createLiveSearchPerson(data) {
+         return new LiveSearchItem(data);
+      },
+
+      /**
        * @instance
        * @param {string} terms The search terms
        * @param {number} startIndex
@@ -1134,7 +1212,7 @@ define(["dojo/_base/declare",
       liveSearchPeople: function alfresco_header_SearchBox__liveSearchPeople(terms, /*jshint unused:false*/ startIndex) {
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/live-search-people?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
+               url: AlfConstants.PROXY_URI + this.liveSearchPeopleUri + "?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize,
                method: "GET",
                successCallback: function(response) {
                   this._LiveSearch.containerNodePeople.innerHTML = "";
@@ -1143,7 +1221,7 @@ define(["dojo/_base/declare",
                   array.forEach(response.items, function(item) {
                      var fullName = item.firstName + " " + item.lastName;
                      var meta = this.encodeHTML(item.jobtitle || "") + (item.location ? (", "+this.encodeHTML(item.location)) : "");
-                     var itemLink = new LiveSearchItem({
+                     var itemLink = this.createLiveSearchPerson({
                         searchBox: this,
                         cssClass: "alf-livesearch-icon",
                         title: this.encodeHTML(item.jobtitle || ""),

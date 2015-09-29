@@ -72,6 +72,15 @@ define(["dojo/_base/declare",
        * @default
        */
       filterSelectionTopic: "ALF_DOCLIST_FILTER_SELECTION",
+
+      /**
+       * This is fired when a tag is chosen for a document list.
+       *
+       * @instance
+       * @type {string}
+       * @default [topics.DOCUMENTLIST_TAG_CHANGED]{@link module:alfresco/core/topics#DOCUMENTLIST_TAG_CHANGED}
+       */
+      docListTagChangedTopic: topics.DOCUMENTLIST_TAG_CHANGED,
       
       /**
        * This topic is used to publish changes for the users access rights to the current location, e.g. if they 
@@ -257,12 +266,11 @@ define(["dojo/_base/declare",
       /**
        * Used to indicate that a document has been tagged.
        *
-       * @event documentTaggedTopic
        * @instance
        * @type {string}
-       * @default
+       * @default [topics.DOCUMENT_TAGGED]{@link module:alfresco/core/topics#DOCUMENT_TAGGED}
        */
-      documentTaggedTopic: "ALF_DOCUMENT_TAGGED",
+      documentTaggedTopic: topics.DOCUMENT_TAGGED,
          
       /**
        * @event syncLocationTopic

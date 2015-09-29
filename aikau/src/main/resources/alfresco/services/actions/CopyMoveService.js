@@ -112,8 +112,9 @@ define(["dojo/_base/declare",
          var documents = payload.documents || [];
 
          var urlPrefix = payload.copy ? this.copyAPI : this.moveAPI, // Default to copy API.
-             dialogTitle = payload.dialogTitle || "services.ActionService.copyTo.title", // Default to copy title
-             confirmButtonLabel = payload.confirmButtonLabel || "services.ActionService.copyTo.ok", // Default to copy confirmation
+             propertyType = payload.copy ? "copyTo" : "moveTo",
+             dialogTitle = payload.dialogTitle || "services.ActionService." + propertyType + ".title", // Default to copy title
+             confirmButtonLabel = payload.confirmButtonLabel || "services.ActionService." + propertyType + ".ok", // Default to copy confirmation
              singleItemMode = payload.singleItemMode !== false;
 
          var responseTopic = this.generateUuid() + "_ALF_MOVE_LOCATION_PICKED",
@@ -238,6 +239,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onActionSuccess: function alfresco_services_ActionService__onActionSuccess(payload) {
          // jshint unused:false
@@ -248,7 +250,7 @@ define(["dojo/_base/declare",
          }
          if (payload.response.overallSuccess === true)
          {
-            this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
                message: payload.requestConfig.copy ? this.message("copyMoveService.copy.completeSuccess") : this.message("copyMoveService.move.completeSuccess")
             });
          }
@@ -281,6 +283,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onActionFailure: function alfresco_services_ActionService__onActionFailure(payload) {
          // jshint unused:false
@@ -290,7 +293,7 @@ define(["dojo/_base/declare",
          {
             this.alfUnsubscribeSaveHandles(subscriptionHandles);
          }
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: payload.requestConfig.copy ? this.message("copyMoveService.copy.failure") : this.message("copyMoveService.move.failure")
          });
       }

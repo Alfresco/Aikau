@@ -58,7 +58,7 @@ define([],function() {
        * @default
        * @since 1.0.36
        *
-       * @event module:alfresco/core/topics~ASSIGN_WORKFLOW
+       * @event
        * @property {object[]} nodes - The array of Nodes to start the workflow on
        * @property {object} currentTarget - The current Node in which the nodes reside
        */
@@ -125,6 +125,20 @@ define([],function() {
        * @since 1.0.34
        */
       CREATE_FORM_DIALOG: "ALF_CREATE_FORM_DIALOG_REQUEST",
+
+      /**
+       * Create a new tag
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.37
+       *
+       * @event
+       * @property {string} tagName The name of the tag to create
+       * @property {string} alfResponseTopic The topic on which to respond
+       */
+      CREATE_TAG: "ALF_CREATE_TAG",
 
       /**
        * Delete the archive created for downloading.
@@ -204,6 +218,32 @@ define([],function() {
        * @property {object[]} [selectedItems=null] A specific set of items to be selected
        */
       DOCUMENT_SELECTION_UPDATE: "ALF_DOCLIST_FILE_SELECTION",
+
+      /**
+       * Fired when a "document" has been tagged
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.37
+       *
+       * @event
+       */
+      DOCUMENT_TAGGED: "ALF_DOCUMENT_TAGGED",
+
+      /**
+       * Fired when a tag has been chosen to filter a document list.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.37
+       *
+       * @event
+       * @property {string} description A textual description of this tag
+       * @property {string} value The name of the tag on which to filter
+       */
+      DOCUMENTLIST_TAG_CHANGED: "ALF_DOCUMENTLIST_TAG_CHANGED",
       
       /**
        * This topic is published to request either the download of a single document or folder (or a selection
@@ -233,6 +273,13 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
+       *
+       * @event
+       * @property {string} message The message to be displayed
+       * @property {string} [publishTopic] A topic to be published after the notification has closed
+       * @property {object} [publishPayload] The payload to be published after the notification has closed
+       * @property {boolean} [publishGlobal] Whether to publish the topic globally
+       * @property {boolean} [publishToParent] Whether to publish the topic on the parent scope
        */
       DISPLAY_NOTIFICATION: "ALF_DISPLAY_NOTIFICATION",
 
@@ -442,6 +489,20 @@ define([],function() {
       REQUEST_FINISHED_TOPIC: "ALF_DOCLIST_REQUEST_FINISHED",
 
       /**
+       * Retrieve the currently available tags
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.37
+       *
+       * @event
+       * @property {string} alfResponseTopic The topic on which to publish the results
+       * @property {object} [query] An optional query to pass through with the tags request
+       */
+      RETRIEVE_CURRENT_TAGS: "ALF_RETRIEVE_CURRENT_TAGS",
+
+      /**
        * <p>This topic is used to indicate that a navigable collection has been scrolled to
        * "near" its bottom. Since its creation, this topic's meaning has extended to go beyond
        * just scrolling (sometimes it's clicking arrows) and to not necessarily being the
@@ -482,6 +543,23 @@ define([],function() {
        * @since 1.0.34
        */
       SET_PREFERENCE: "ALF_PREFERENCE_SET",
+
+      /**
+       * This topic is used to request tags for a node and its descendants. The payload must container either siteId and containerId, or rootNode.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.37
+       * @event
+       * @property {function} callback The function to be called after the query has successfully executed
+       * @property {object} callbackScope The scope within which to run the callback function
+       * @property {int} [maxTags=100] The maxinum number of tags to retrieve
+       * @property {string} [siteId] The site ID
+       * @property {string} [containerId] The container ID within the site
+       * @property {string} [rootNode] The root node
+       */
+      TAG_QUERY: "ALF_TAG_QUERY",
 
       /**
        * This topic can be used to publish a request to change the title of a page. It is subscribed to by the

@@ -42,6 +42,28 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.37:
+* [AKU-586](https://issues.alfresco.com/jira/browse/AKU-586)       - Ensure AlfTagFilters publish to correct scope
+* [AKU-591](https://issues.alfresco.com/jira/browse/AKU-591)       - Ensure delete action issues reload request on completion
+* [AKU-545](https://issues.alfresco.com/jira/browse/AKU-545)       - Support Move in bulk actions
+* [AKU-554](https://issues.alfresco.com/jira/browse/AKU-554)       - Support configurable URIs in SearchBox
+* [AKU-555](https://issues.alfresco.com/jira/browse/AKU-555)       - Externalise LiveSearchItem creation in SearchBox
+* [AKU-583](https://issues.alfresco.com/jira/browse/AKU-583)       - Support publishOnAdd for AlfTabContainer
+* [AKU-467](https://issues.alfresco.com/jira/browse/AKU-467)       - Support for truncated text in Select form control
+* [AKU-596](https://issues.alfresco.com/jira/browse/AKU-596)       - Defend against corrupt thumbnail rendition artifacts
+
+1.0.36.3:
+* [AKU-597](https://issues.alfresco.com/jira/browse/AKU-597)       - Ensure AlfSearchList respects initial URL hash parameters
+* [AKU-599](https://issues.alfresco.com/jira/browse/AKU-599)       - Prevent search terms from being truncated
+
+1.0.36.2:
+* [AKU-595](https://issues.alfresco.com/jira/browse/AKU-595)       - Ensure LeftAndRight ordering is correct
+
+1.0.36.1:
+* [AKU-592](https://issues.alfresco.com/jira/browse/AKU-592)       - Ensure PublishingDropDown cancellation behaves correctly
+* [AKU-593](https://issues.alfresco.com/jira/browse/AKU-593)       - Ensure dialog height is sized correctly for content
+* [AKU-588](https://issues.alfresco.com/jira/browse/AKU-588)       - Ensure GalleryView renders correctly on initial load
+
 1.0.36:
 * [AKU-464](https://issues.alfresco.com/jira/browse/AKU-464)       - DateTextBox support current date config
 * [AKU-465](https://issues.alfresco.com/jira/browse/AKU-465)       - Added place holder support in DateTextBox

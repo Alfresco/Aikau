@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Move-To Action</shortname>
+  <description>A test page for verifying the Move-To action</description>
+  <family>aikau-unit-tests</family>
+  <url>/MoveTo</url>
+</webscript>
