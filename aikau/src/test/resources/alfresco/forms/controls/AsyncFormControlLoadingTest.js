@@ -51,7 +51,7 @@ define(["intern!object",
             .end()
 
             // Select the "DYNAMIC" tab...
-            .findById("TABS_TABCONTAINER_tablist_DYNAMIC")
+            .findById("TABS_TABCONTAINER_tablist_TABS_DYNAMIC")
                .click()
             .end()
 
