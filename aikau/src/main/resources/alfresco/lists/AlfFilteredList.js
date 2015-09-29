@@ -118,11 +118,15 @@ define(["dojo/_base/declare",
 
             // Setup the filtering topics based on the filter widgets configured...
             array.forEach(this.widgetsForFilters, this.setupFilteringTopics, this);
+
+            // Create the subscriptions for the filters once created...
+            this.createFilterSubscriptions();
          }
          else
          {
             // Only perform the inherited function (e.g. to processViews) when not processing filters
-            this.inherited(arguments);
+            this.registerViews(widgets);
+            this.completeListSetup();
          }
       },
 
