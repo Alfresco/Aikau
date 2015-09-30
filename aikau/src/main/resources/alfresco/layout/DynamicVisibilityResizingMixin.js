@@ -73,13 +73,13 @@ define(["dojo/_base/declare",
        * and creates a subscription for each one bound to the supplied function.
        * 
        * @instance
-       * @param {function} f The function to bind each subscription to.
+       * @param {function} func The function to bind each subscription to.
        */
-      subscribeToVisibilityRuleTopics: function alfresco_layout_DynamicVisibilityResizingMixin__subscribeToVisibilityRuleTopics(f) {
+      subscribeToVisibilityRuleTopics: function alfresco_layout_DynamicVisibilityResizingMixin__subscribeToVisibilityRuleTopics(func) {
          if (this.visibilityRuleTopics)
          {
             array.forEach(this.visibilityRuleTopics, function(topic) {
-               this.alfSubscribe(topic, lang.hitch(this, f));
+               this.alfSubscribe(topic, lang.hitch(this, func));
             }, this);
          }
       }
