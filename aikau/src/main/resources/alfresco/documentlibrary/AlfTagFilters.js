@@ -115,6 +115,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @listens module:alfresco/core/topics#TAG_QUERY
+       * @event
        */
       tagQueryTopic: topics.TAG_QUERY,
 
@@ -156,7 +158,7 @@ define(["dojo/_base/declare",
        * Request the tags for this tags list
        *
        * @instance
-       * @fires module:alfresco/core/topics#TAG_QUERY
+       * @fires module:alfresco/documentlibrary/AlfTagFilters#tagQueryTopic
        */
       requestTags: function alfresco_documentlibrary_AlfTagFilters__requestTags(){
          this.alfServicePublish(this.tagQueryTopic, {
