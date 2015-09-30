@@ -20,18 +20,17 @@
 /**
  * This test generates some variations on AlfSearchResult to test the various if statements in the rendering widgets involved
  *
- * @author Richard Smith
+ * @author Dave Draper
  */
 define(["intern!object",
-      "intern/chai!assert",
-      "alfresco/TestCommon"
-   ],
+        "intern/chai!assert",
+        "alfresco/TestCommon"],
    function(registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
+      return {
          name: "AlfSearchResult Tests",
 
          setup: function() {
@@ -54,13 +53,13 @@ registerSuite(function(){
             var activeElementId;
             return browser.findByCssSelector(".alfresco-search-AlfSearchResult:last-child")
                .click()
-               .end()
+            .end()
 
             .getActiveElement()
                .then(function(element) {
                   activeElementId = element.elementId;
                })
-               .end()
+            .end()
 
             .findByCssSelector(".alfresco-search-AlfSearchResult:last-child")
 
@@ -102,9 +101,18 @@ registerSuite(function(){
                });
          },
 
+         "Check merged actions": function() {
+            return browser.findById("SR_ACTIONS_MENU_text")
+               .click()
+            .end()
+            .findById("SR_ACTIONS_CUSTOM3")
+            .end()
+            .findById("SR_ACTIONS_MANAGE_ASPECTS");
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
       };
-      });
    });
+});

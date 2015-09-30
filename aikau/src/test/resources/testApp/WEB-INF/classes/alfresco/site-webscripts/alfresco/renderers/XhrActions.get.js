@@ -9,7 +9,7 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/DocumentService"
    ],
    widgets:[
       {
@@ -18,7 +18,7 @@ model.jsonModel = {
             subscribeToDocRequests: true,
             currentData: {
                items: [
-                  {col1:"Test1", nodeRef:"12345"},
+                  {col1:"Test1", nodeRef:"workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339"},
                   {col1:"Test2", nodeRef:"23456"},
                   {col1:"Test3", nodeRef:"34567"}
                ]
@@ -47,7 +47,42 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
+                                    id: "XHR_ACTIONS",
                                     name: "alfresco/renderers/XhrActions"
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/views/layouts/Cell",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "MERGED_XHR_ACTIONS",
+                                    name: "alfresco/renderers/XhrActions",
+                                    config: {
+                                       filterActions: true,
+                                       mergeActions: true,
+                                       allowedActions: [
+                                          "document-delete",
+                                          "CUSTOM3"
+                                       ],
+                                       customActions: [
+                                          {
+                                             id: "CUSTOM3",
+                                             label: "Custom Action 3",
+                                             icon: "document-delete",
+                                             index: "10",
+                                             publishTopic: "DELETE_ACTION_TOPIC",
+                                             type: "javascript"
+                                          }
+                                       ],
+                                       widgetsForActions: [
+                                          {
+                                             name: "alfresco/renderers/actions/ManageAspects"
+                                          }
+                                       ]
+                                    }
                                  }
                               ]
                            }
@@ -59,10 +94,13 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "aikauTesting/mockservices/PdfJsMockXhr",
+         config: {
+            
+         }
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
