@@ -94,6 +94,7 @@
 define(["alfresco/core/ProcessWidgets",
         "alfresco/core/ResizeMixin",
         "alfresco/layout/HeightMixin",
+        "alfresco/layout/DynamicVisibilityResizingMixin",
         "dojo/_base/array",
         "dojo/_base/declare",
         "dojo/_base/lang",
@@ -103,9 +104,10 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/dom-style",
         "dojo/topic",
         "dojo/text!./templates/FixedHeaderFooter.html"],
-        function(ProcessWidgets, ResizeMixin, HeightMixin, array, declare, lang, aspect, domClass, domConstruct, domStyle, topic, template) {
+        function(ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin, array, declare, lang, aspect, 
+                 domClass, domConstruct, domStyle, topic, template) {
 
-   return declare([ProcessWidgets, ResizeMixin, HeightMixin], {
+   return declare([ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin], {
 
       /**
        * The base class for the widget
@@ -181,6 +183,19 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       postCreate: function alfresco_layout_FixedHeaderFooter__postCreate() {
+         // Get the details of the header and footer widgets that needs to iterate over looking
+         // for visibility configuration topics to subscribe to...
+         var widgets = [];
+         if (this.widgetsForHeader && typeof this.widgetsForHeader.concat === "function")
+         {
+            widgets = this.widgetsForHeader.concat(widgets);
+         }
+         if (this.widgetsForFooter && typeof this.widgetsForFooter.concat === "function")
+         {
+            widgets = this.widgetsForFooter.concat(widgets);
+         }
+         this.visibilityRuleTopics = this.getVisibilityRuleTopics(widgets);
+
          // We need to potentially resize sometimes ... use these triggers
          this.alfSetupResizeSubscriptions(this.onResize, this);
 
@@ -225,12 +240,33 @@ define(["alfresco/core/ProcessWidgets",
       },
 
       /**
+       * Extends the [inherited function]{@link module:alfresco/core/CoreWidgetProcessing#allWidgetsProcessed}
+       * to set up subscriptions for the [visibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#visibilityRuleTopics}
+       * that are returned by calling [getVisibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#getVisibilityRuleTopics}.
+       * The subscriptions need to be created after the widgets have been created in order that their visibility 
+       * is adjusted before the [onResize]{@link module:alfresco/layout/FixedHeaderFooter#onResize} function that is bound 
+       * to is called.
+       *
+       * @instance
+       * @param {object[]} widgets The widgets that have been created
+       * @since 1.0.38
+       */
+      allWidgetsProcessed: function alfresco_layout_HorizontalWidgets__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
+         this._allWidgetsProcessedCount++;
+         if (this._allWidgetsProcessedCount === 3)
+         {
+            this.subscribeToVisibilityRuleTopics(this.onResize);
+         }
+      },
+
+      /**
        * Call the processWidgets function for all provided widgets
        *
        * @instance
        * @param {object[]} widgetInfos The widget information as objects with 'widgets' and 'node' properties
        */
       _doProcessWidgets: function alfresco_layout_FixedHeaderFooter___doProcessWidgets(widgetInfos) {
+         this._allWidgetsProcessedCount = 0;
          array.forEach(widgetInfos, function(widgetInfo) {
             var widgets = widgetInfo.widgets,
                node = widgetInfo.node;
