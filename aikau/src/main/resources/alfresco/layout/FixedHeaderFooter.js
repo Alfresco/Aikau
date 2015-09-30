@@ -252,8 +252,8 @@ define(["alfresco/core/ProcessWidgets",
        * @since 1.0.38
        */
       allWidgetsProcessed: function alfresco_layout_HorizontalWidgets__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
-         this._allWidgetsProcessedCount++;
-         if (this._allWidgetsProcessedCount === 3)
+         this._allWidgetsProcessedCount--;
+         if (this._allWidgetsProcessedCount === 0)
          {
             this.subscribeToVisibilityRuleTopics(this.onResize);
          }
@@ -266,7 +266,7 @@ define(["alfresco/core/ProcessWidgets",
        * @param {object[]} widgetInfos The widget information as objects with 'widgets' and 'node' properties
        */
       _doProcessWidgets: function alfresco_layout_FixedHeaderFooter___doProcessWidgets(widgetInfos) {
-         this._allWidgetsProcessedCount = 0;
+         this._allWidgetsProcessedCount = widgetInfos.length;
          array.forEach(widgetInfos, function(widgetInfo) {
             var widgets = widgetInfo.widgets,
                node = widgetInfo.node;
