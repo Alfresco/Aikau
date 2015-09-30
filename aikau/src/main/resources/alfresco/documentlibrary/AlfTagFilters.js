@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
          // Create the tags...
          if (response && ObjectTypeUtils.isArray(response.tags))
          {
-            this.clearTags();
+            this.clearAllTags();
             array.forEach(response.tags, this.createTagFilter, this);
          }
          else
@@ -241,7 +241,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The publish payload
        */
       onDocumentTagged: function alfresco_documentlibrary_AlfTagFilters__onDocumentTagged(/*jshint unused:false*/ payload) {
-         this.clearTags();
+         this.clearAllTags();
          this.requestTags();
       },
       
