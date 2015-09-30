@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -95,13 +95,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Like__postMixInProperties() {
-         this.toggleOnTopic = (this.toggleOnTopic != null) ? this.toggleOnTopic : this.addFavouriteDocumentTopic;
-         this.toggleOnSuccessTopic = (this.toggleOnSuccessTopic != null) ? this.toggleOnSuccessTopic : this.addFavouriteDocumentSuccessTopic;
-         this.toggleOnFailureTopic = (this.toggleOnFailureTopic != null) ? this.toggleOnFailureTopic : this.addFavouriteDocumentFailureTopic;
-         this.toggleOffTopic = (this.toggleOffTopic != null) ? this.toggleOffTopic : this.removeFavouriteDocumentTopic;
-         this.toggleOffSuccessTopic = (this.toggleOffSuccessTopic != null) ? this.toggleOffSuccessTopic : this.removeFavouriteDocumentSuccessTopic;
-         this.toggleOffFailureTopic = (this.toggleOffFailureTopic != null) ? this.toggleOffFailureTopic : this.removeFavouriteDocumentFailureTopic;
-         
+         this.toggleOnTopic = this.toggleOnTopic || this.addFavouriteDocumentTopic;
+         this.toggleOffTopic = this.toggleOffTopic || this.removeFavouriteDocumentTopic;
          this.inherited(arguments);
       },
       

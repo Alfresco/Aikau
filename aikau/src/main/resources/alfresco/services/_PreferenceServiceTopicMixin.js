@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -20,6 +20,7 @@
 /**
  * @module alfresco/services/_PreferenceServiceTopicMixin
  * @author Dave Draper
+ * @deprecated Since 1.0.38 - Use [topics]{@link module:alfresco/core/topics} instead.
  */
 define(["dojo/_base/declare",
         "alfresco/core/topics"], 
@@ -48,7 +49,7 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      addFavouriteDocumentTopic: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE",
+      addFavouriteDocumentTopic: topics.ADD_FAVOURITE_NODE,
       
       /**
        * This topic is used to request that a node should be made a favourite.
@@ -57,7 +58,7 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      removeFavouriteDocumentTopic: "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE",
+      removeFavouriteDocumentTopic: topics.REMOVE_FAVOURITE_NODE,
       
       /**
        * This topic is used to indicate that a node was successfully made a favourite.
@@ -65,6 +66,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @deprecated Since 1.0.38 - no longer required within main Aikau codebase.
        */
       addFavouriteDocumentSuccessTopic: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE_SUCCESS",
       
@@ -74,6 +76,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @deprecated Since 1.0.38 - no longer required within main Aikau codebase.
        */
       removeFavouriteDocumentSuccessTopic: "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE_SUCCESS",
       
@@ -83,6 +86,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @deprecated Since 1.0.38 - no longer required within main Aikau codebase.
        */
       addFavouriteDocumentFailureTopic: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE_FAILURE",
       
@@ -92,6 +96,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @deprecated Since 1.0.38 - no longer required within main Aikau codebase.
        */
       removeFavouriteDocumentFailureTopic: "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE_FAILURE"
    });

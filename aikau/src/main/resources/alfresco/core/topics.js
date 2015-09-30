@@ -31,6 +31,19 @@ define([],function() {
    return {
 
       /**
+       * This can be published to request to add a node or nodes as a favourite.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.38
+       * @event
+       * @property {object} node - The node to add as a favourite
+       * @property {object[]} nodes - An array of nodes to add as a favourites
+       */
+      ADD_FAVOURITE_NODE: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE",
+
+      /**
        * Triggered when the progress request has failed
        *
        * @instance
@@ -443,6 +456,20 @@ define([],function() {
        * @event module:alfresco/core/topics~RELOAD_PAGE
        */
       RELOAD_PAGE: "ALF_RELOAD_PAGE",
+
+      /**
+       * This can be published to request to add a node or nodes as a favourite.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.38
+       * 
+       * @event
+       * @property {object} node - The node to remove from favourites
+       * @property {object[]} nodes - An array of nodes to remove from favourites
+       */
+      REMOVE_FAVOURITE_NODE: "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE",
 
       /**
        * Called to start off the archiving process.

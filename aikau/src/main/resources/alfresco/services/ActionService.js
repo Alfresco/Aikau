@@ -978,6 +978,36 @@ define(["dojo/_base/declare",
          this.alfPublish("ALF_LOCATE_DOCUMENT", {
             node: payload.document
          });
+      },
+
+      /**
+       * This function provides support for adding multiple folders and documents as user
+       * favourites via [AlfDocumentActionMenuItem]{@link module:alfresco/documentlibrary/AlfDocumentActionMenuItem}
+       * within a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
+       * 
+       * @instance
+       * @param  {object} payload The payload from the original request
+       * @since 1.0.38
+       */
+      onAddFavourite: function alfresco_services_ActionService__onAddFavourite(payload) {
+         this.alfPublish(topics.ADD_FAVOURITE_NODE, {
+            nodes: payload.documents || [payload.document]
+         });
+      },
+
+      /**
+       * This function provides support for adding multiple folders and documents as user
+       * favourites via [AlfDocumentActionMenuItem]{@link module:alfresco/documentlibrary/AlfDocumentActionMenuItem}
+       * within a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
+       * 
+       * @instance
+       * @param  {object} payload The payload from the original request
+       * @since 1.0.38
+       */
+      onRemoveFavourite: function alfresco_services_ActionService__onAddFavourite(payload) {
+         this.alfPublish(topics.REMOVE_FAVOURITE_NODE, {
+            nodes: payload.documents || [payload.document]
+         });
       }
    });
 });

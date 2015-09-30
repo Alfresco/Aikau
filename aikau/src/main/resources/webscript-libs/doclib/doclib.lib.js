@@ -816,7 +816,7 @@ function getDocLibSelectedItemActions(options) {
                id: (options.idPrefix || "") + "DOCLIB_SELECTED_ITEMS_MENU_GROUP1",
                name: "alfresco/menus/AlfMenuGroup",
                config: {
-                  widgets: getSelectedItemsActions()
+                  widgets: getSelectedItemsActions(options.selectedItemsActions)
                }
             }
          ]

@@ -36,13 +36,14 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/topics",
         "dojo/_base/lang",
+        "dojo/_base/array",
         "service/constants/Default",
         "alfresco/core/ArrayUtils",
         "dojo/Deferred",
         "dojo/when",
         "jquery"],
         function(declare, BaseService, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin, topics, lang, 
-                 AlfConstants, ArrayUtils, Deferred, when, $) {
+                 array, AlfConstants, ArrayUtils, Deferred, when, $) {
    
    return declare([BaseService, CoreXhr, _PreferenceServiceTopicMixin, _AlfDocumentListTopicMixin], {
       
@@ -69,6 +70,10 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/core/topics#GET_PREFERENCE
+       * @listens module:alfresco/core/topics#SET_PREFERENCE
+       * @listens module:alfresco/core/topics#ADD_FAVOURITE_NODE
+       * @listens module:alfresco/core/topics#REMOVE_FAVOURITE_NODE
        */
       registerSubscriptions: function alfresco_services_PreferenceService__registerSubscriptions() {
          this.alfSubscribe(topics.GET_PREFERENCE, lang.hitch(this, this.getPreference));
@@ -76,8 +81,8 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.showFoldersTopic, lang.hitch(this, this.onShowFolders));
          this.alfSubscribe(this.showPathTopic, lang.hitch(this, this.onShowPath));
          this.alfSubscribe(this.viewSelectionTopic, lang.hitch(this, this.onViewSelection));
-         this.alfSubscribe(this.addFavouriteDocumentTopic, lang.hitch(this, this.onAddFavouriteDocument));
-         this.alfSubscribe(this.removeFavouriteDocumentTopic, lang.hitch(this, this.onRemoveFavouriteDocument));
+         this.alfSubscribe(topics.ADD_FAVOURITE_NODE, lang.hitch(this, this.onAddFavouriteDocument));
+         this.alfSubscribe(topics.REMOVE_FAVOURITE_NODE, lang.hitch(this, this.onRemoveFavouriteDocument));
 
          // Load the user preferences...
          this._preferencesLoaded = new Deferred();
@@ -209,7 +214,8 @@ define(["dojo/_base/declare",
                }
                else
                {
-                  ArrayUtils.arrayRemove(arrValues, value);
+                  var valueArr = value.split(",");
+                  array.forEach(valueArr, lang.hitch(ArrayUtils, ArrayUtils.arrayRemove, arrValues));
                }
                
                // Save preference with the new value
@@ -319,43 +325,96 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Makes the supplied node a favourite of the requesting user
+       * Iterates over the supplied array of Nodes and puts the NodeRefs from them into the supplied
+       * arrays of folders and documents based on whether or not the Node has an "isContainer" attribute
+       * set to true.
+       * 
+       * @instance
+       * @param {object[]} nodes     An array of nodes to iterate over
+       * @param {string[]} folders   A string array to populate with folder NodeRefs
+       * @param {string[]} documents A string array to populate with document NodeRefs
+       * @since 1.0.38
+       */
+      separateFoldersAndDocuments: function alfresco_services_PreferenceService__separateFoldersAndDocuments(nodes, folders, documents) {
+         array.forEach(nodes, function(item) {
+            if (item.node)
+            {
+               if (item.node.isContainer)
+               {
+                  item.node.nodeRef && folders.push(item.node.nodeRef);
+               }
+               else
+               {
+                  item.node.nodeRef && documents.push(item.node.nodeRef);
+               }
+            } 
+         });
+      },
+
+      /**
+       * Adds nodes to or removes nodes from the documents and folders favourites in the current user preferences.
+       *
+       * @instance
+       * @param  {object} payload  The original payload for the add or remove favourites request.
+       * @param  {string} alfTopic The topic to publish on the callback
+       * @param  {boolean} add     Indicates whether or not this is an add request
+       * @since 1.0.38
+       */
+      processFavourites: function alfresco_services_PreferenceService__processFavourites(payload, alfTopic, add) {
+         // Default to favouriting documents since that's more likely...
+         if (payload.nodes && payload.nodes.length)
+         {
+            var folders = [];
+            var documents = [];
+            this.separateFoldersAndDocuments(payload.nodes, folders, documents);
+            if (folders.length)
+            {
+               this.update({
+                  name: this.FAVOURITE_FOLDERS,
+                  value: folders.join(","),
+                  alfTopic: alfTopic
+               }, add);
+            }
+            if (documents.length)
+            {
+               this.update({
+                  name: this.FAVOURITE_DOCUMENTS,
+                  value: documents.join(","),
+                  alfTopic: alfTopic
+               }, add);
+            }
+         }
+         else if (payload.node && payload.node.node && payload.node.node.nodeRef)
+         {
+            var prefKey = payload.node.node.isContainer ? this.FAVOURITE_FOLDERS : this.FAVOURITE_DOCUMENTS;
+            this.update({
+               name: prefKey,
+               value: payload.node.node.nodeRef,
+               alfTopic: alfTopic
+            }, add);
+         }
+      },
+
+      /**
+       * Makes the supplied node or nodes favourites of the current user
        * 
        * @instance
        * @param {object} payload
        */
       onAddFavouriteDocument: function alfresco_services_PreferenceService__onAddFavouriteDocument(payload) {
          var alfTopic = payload.alfResponseTopic || this.onAddFavouriteDocument;
-         var jsNode = lang.getObject("node.jsNode", false, payload);
-         if (jsNode)
-         {
-            var prefKey = jsNode.isContainer ? this.FAVOURITE_FOLDERS : this.FAVOURITE_DOCUMENTS;
-            this.update({
-               name: prefKey,
-               value: jsNode.nodeRef.nodeRef,
-               alfTopic: alfTopic
-            }, true);
-         }
+         this.processFavourites(payload, alfTopic, true);
       },
       
       /**
-       * Removes the supplied node from being a favourite.
+       * Removes the supplied node or nodes from being a favourite.
        * 
        * @instance
        * @param {object} payload
        */
       onRemoveFavouriteDocument: function alfresco_services_PreferenceService__onRemoveFavouriteDocument(payload) {
          var alfTopic = payload.alfResponseTopic || this.onRemoveFavouriteDocument;
-         var jsNode = lang.getObject("node.jsNode", false, payload);
-         if (jsNode)
-         {
-            var prefKey = jsNode.isContainer ? this.FAVOURITE_FOLDERS : this.FAVOURITE_DOCUMENTS;
-            this.update({
-               name: prefKey,
-               value: jsNode.nodeRef.nodeRef,
-               alfTopic: alfTopic
-            }, false);
-         }
+         this.processFavourites(payload, alfTopic, false);
       }
    });
 });
