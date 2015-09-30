@@ -28,70 +28,126 @@ define(["intern!object",
        function(registerSuite, assert, TestCommon) {
 
    /* global document*/
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "FixedHeaderFooter tests",
+      return {
+         name: "FixedHeaderFooter tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/FixedHeaderFooter#currentItem=10", "FixedHeaderFooter Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/FixedHeaderFooter#currentItem=10", "FixedHeaderFooter Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Total height is correct": function() {
-         return browser.findById("HEADER_FOOTER")
-            .getSize()
-            .then(function(size) {
-               assert.equal(size.height, 300, "Height not as per widget config");
-            });
-      },
+         "Total height is correct": function() {
+            return browser.findById("HEADER_FOOTER")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, 300, "Height not as per widget config");
+               });
+         },
 
-      "Only content is scrollable": function() {
-         function nodeOverflows(selector) {
-            var node = document.querySelector(selector);
-            return node.scrollHeight > node.offsetHeight;
+         "Header initially has no height": function() {
+            return browser.findByCssSelector(".alfresco-layout-FixedHeaderFooter__header")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, 0, "Header should not have had any height");
+               });
+         },
+
+         "Footer initially has no height": function() {
+            return browser.findByCssSelector(".alfresco-layout-FixedHeaderFooter__footer")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.height, 0, "Footer should not have had any height");
+               });
+         },
+
+         "Content offset should be zero": function() {
+            return browser.findByCssSelector(".alfresco-layout-FixedHeaderFooter__content")
+               .getPosition()
+               .then(function(position) {
+                  // NOTE: "top" takes margin of 10 into consideration...
+                  assert.equal(position.y, 10, "Content should be at top of page");
+               });
+         },
+
+         "Reveal header": function() {
+            return browser.findById("SHOW_HEADER_label")
+               .click()
+            .end()
+            .findByCssSelector(".alfresco-layout-FixedHeaderFooter__header")
+               .getSize()
+               .then(function(size) {
+                  assert.notEqual(size.height, 0, "Header should now have height");
+               });
+         },
+
+         "Reveal footer": function() {
+            return browser.findById("SHOW_FOOTER_label")
+               .click()
+            .end()
+            .findByCssSelector(".alfresco-layout-FixedHeaderFooter__footer")
+               .getSize()
+               .then(function(size) {
+                  assert.notEqual(size.height, 0, "Footer should now have height");
+               });
+         },
+
+         "Content offset should be increased": function() {
+            return browser.findByCssSelector(".alfresco-layout-FixedHeaderFooter__content")
+               .getPosition()
+               .then(function(position) {
+                  // NOTE: "top" takes margin of 10 into consideration...
+                  assert.notEqual(position.y, 10, "Content should no longer be at top of page");
+               });
+         },
+
+         "Only content is scrollable": function() {
+            function nodeOverflows(selector) {
+               var node = document.querySelector(selector);
+               return node.scrollHeight > node.offsetHeight;
+            }
+
+            return browser.execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__header"])
+               .then(function(overflows) {
+                  assert.isFalse(overflows, "Header is not same height as its content");
+               })
+
+            .execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__content"])
+               .then(function(overflows) {
+                  assert.isTrue(overflows, "Content is not overflowing");
+               })
+
+            .execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__footer"])
+               .then(function(overflows) {
+                  assert.isFalse(overflows, "Footer is not same height as its content");
+               });
+         },
+
+         "List has automatically scrolled to correct location": function() {
+            // See AKU-330
+            // The FixedHeaderFooter widget provides the best way of testing scrolling that is NOT on the
+            // main document...
+            function getScrollTop(selector) {
+               var node = document.querySelector(selector);
+               return node.scrollTop;
+            }
+            return browser.execute(getScrollTop, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__content"])
+               .then(function(scrollTop) {
+                  assert.notEqual(scrollTop, 0, "List did not scroll");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
          }
-
-         return browser.execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__header"])
-            .then(function(overflows) {
-               assert.isFalse(overflows, "Header is not same height as its content");
-            })
-
-         .execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__content"])
-            .then(function(overflows) {
-               assert.isTrue(overflows, "Content is not overflowing");
-            })
-
-         .execute(nodeOverflows, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__footer"])
-            .then(function(overflows) {
-               assert.isFalse(overflows, "Footer is not same height as its content");
-            });
-      },
-
-      "List has automatically scrolled to correct location": function() {
-         // See AKU-330
-         // The FixedHeaderFooter widget provides the best way of testing scrolling that is NOT on the
-         // main document...
-         function getScrollTop(selector) {
-            var node = document.querySelector(selector);
-            return node.scrollTop;
-         }
-         return browser.execute(getScrollTop, ["#HEADER_FOOTER .alfresco-layout-FixedHeaderFooter__content"])
-            .then(function(scrollTop) {
-               assert.notEqual(scrollTop, 0, "List did not scroll");
-            });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
-});
+      };
+   });
 
    registerSuite(function(){
       var browser;

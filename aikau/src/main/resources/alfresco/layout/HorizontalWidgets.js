@@ -57,21 +57,25 @@
  * 
  * @module alfresco/layout/HorizontalWidgets
  * @extends module:alfresco/core/ProcessWidgets
+ * @mixes module:alfresco/core/ResizeMixin
+ * @mixes module:alfresco/alfresco/layout/DynamicVisibilityResizingMixin
  * @author Dave Draper
  */
 define(["alfresco/core/ProcessWidgets",
         "dojo/_base/declare",
         "dojo/text!./templates/HorizontalWidgets.html",
         "alfresco/core/ResizeMixin",
+        "alfresco/layout/DynamicVisibilityResizingMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-style",
         "dojo/dom-geometry",
         "dojo/when"], 
-        function(ProcessWidgets, declare, template, ResizeMixin, lang, array, domConstruct, domStyle, domGeom, when) {
+        function(ProcessWidgets, declare, template, ResizeMixin, DynamicVisibilityResizingMixin, lang, array, 
+                 domConstruct, domStyle, domGeom, when) {
    
-   return declare([ProcessWidgets, ResizeMixin], {
+   return declare([ProcessWidgets, ResizeMixin, DynamicVisibilityResizingMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -98,18 +102,6 @@ define(["alfresco/core/ProcessWidgets",
        */
       baseClass: "horizontal-widgets",
       
-      /**
-       * This array is setup when the [getVisibilityRuleTopics]{@link module:alfresco/layout/HorizontalWidgets#getVisibilityRuleTopics}
-       * is called and each topic is then subscribed to in order to trigger resize events when widgets are
-       * displayed or hidden.
-       *
-       * @instance
-       * @type {string[]}
-       * @default
-       * @since 1.0.33
-       */
-      visibilityRuleTopics: null,
-
       /**
        * This will be set to a percentage value such that each widget displayed has an equal share
        * of page width. 
@@ -140,8 +132,8 @@ define(["alfresco/core/ProcessWidgets",
 
       /**
        * Extends the [inherited function]{@link module:alfresco/core/CoreWidgetProcessing#allWidgetsProcessed}
-       * to set up subscriptions for the [visibilityRuleTopics]{@link module:alfresco/layout/HorizontalWidgets#visibilityRuleTopics}
-       * that are returned by calling [getVisibilityRuleTopics]{@link module:alfresco/layout/HorizontalWidgets#getVisibilityRuleTopics}
+       * to set up subscriptions for the [visibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#visibilityRuleTopics}
+       * that are returned by calling [getVisibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#getVisibilityRuleTopics}
        * on the first pass through the [doWidthProcessing]{@link module:alfresco/layout/HorizontalWidgets#doWidthProcessing}
        * function. The subscriptions need to be created after the widgets have been created in order that their visibility 
        * is adjusted before the [onResize]{@link module:alfresco/layout/HorizontalWidgets#onResize} function that is bound 
@@ -153,37 +145,7 @@ define(["alfresco/core/ProcessWidgets",
        */
       allWidgetsProcessed: function alfresco_layout_HorizontalWidgets__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
          this.inherited(arguments);
-         if (this.visibilityRuleTopics)
-         {
-            array.forEach(this.visibilityRuleTopics, function(topic) {
-               this.alfSubscribe(topic, lang.hitch(this, this.onResize));
-            }, this);
-         }
-      },
-
-      /**
-       * This function is called on the first pass through the 
-       * [doWidthProcessing]{@link module:alfresco/layout/HorizontalWidgets#doWidthProcessing} function and checks all
-       * the supplied widgets for dynamic visibility configuration so that subscriptions can be created
-       * on the same rules to trigger resizing as widgets are displayed or hidden.
-       * 
-       * @instance
-       * @param {object[]} widgets The widgets to check for visibility/invisibility configuration
-       * @return {string[]} An array of the topics that are using in dynamic visibility/invisibility configuration
-       * @since 1.0.33
-       */
-      getVisibilityRuleTopics: function alfresco_layout_HorizontalWidgets__getVisibilityRuleTopics(widgets) {
-         var topicNames = {};
-         array.forEach(widgets, function(widget) {
-            var visibilityRules = lang.getObject("config.visibilityConfig.rules", false, widget) || [];
-            var invisibilityRules = lang.getObject("config.invisibilityConfig.rules", false, widget) || [];
-            array.forEach(visibilityRules.concat(invisibilityRules), function(rule) {
-               if (rule.topic) {
-                  topicNames[rule.topic] = true;
-               }
-            });
-         });
-         return Object.keys(topicNames);
+         this.subscribeToVisibilityRuleTopics(this.onResize);
       },
 
       /**
