@@ -169,13 +169,27 @@ define(["dojo/_base/declare",
             rootNode: this.rootNode
          });
       },
+
+      /**
+       * Destroys the supplied tag widget.
+       *
+       * @instance
+       * @param {object} widget The widget to destroy
+       * @param {number} index The index of the widget
+       * @deprecated Since 1.0.38 - use [clearAllTags]{@link module:alfresco/documentlibrary/AlfTagFilters#clearAllTags} instead.
+       */
+      clearTags: function alfresco_documentlibrary_AlfTagFilters__clearTags(widget, /*jshint unused:false*/ index) {
+         if (typeof widget.destroy === "function") {
+            widget.destroy();
+         }
+      },
       
       /**
        * Clears the current tags
        * 
        * @instance
        */
-      clearTags: function alfresco_documentlibrary_AlfTagFilters__clearTags() {
+      clearAllTags: function alfresco_documentlibrary_AlfTagFilters__clearAllTags() {
          var oldTags = registry.findWidgets(this.contentNode);
          array.forEach(oldTags, function(tagWidget) {
             tagWidget.destroy();
