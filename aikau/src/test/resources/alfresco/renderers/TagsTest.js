@@ -145,7 +145,8 @@ registerSuite(function(){
          return browser.findAllByCssSelector("#TAGS_3 .alfresco-renderers-ReadOnlyTag")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "There should be no tags initially");
-            });
+            })
+            .clearLog();
       },
 
       "Navigate to a node with no tags and edit it": function() {
@@ -191,6 +192,11 @@ registerSuite(function(){
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Should be displaying the tag just created");
             });
+      },
+
+      "The document-tagged event should have fired": function() {
+         return browser.findByCssSelector("body")
+            .getLastPublish("ALF_DOCUMENT_TAGGED");
       },
 
       "Post Coverage Results": function() {

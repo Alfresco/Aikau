@@ -15,6 +15,15 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "PUBLISH_TAGGED_BUTTON",
+         config: {
+            label: "Publish document-tagged event",
+            publishTopic: "ALF_DOCUMENT_TAGGED",
+            pubSubScope: "SCOPED_"
+         }
+      },
+      {
          name: "alfresco/layout/HorizontalWidgets",
          config: {
             widgets: [

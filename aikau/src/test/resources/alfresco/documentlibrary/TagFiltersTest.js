@@ -51,18 +51,28 @@ define(["alfresco/TestCommon",
                   });
             },
 
-            "Clicked tags publish change notification (unscoped)": function(){
+            "Clicked tags publish change notification (unscoped)": function() {
                return browser.findByCssSelector("#TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter:last-child")
                   .clearLog()
                   .click()
                   .getLastPublish("ALF_DOCUMENTLIST_TAG_CHANGED", true);
             },
 
-            "Clicked tags publish change notification (scoped)": function(){
+            "Clicked tags publish change notification (scoped)": function() {
                return browser.findByCssSelector("#SCOPED_TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter:last-child")
                   .clearLog()
                   .click()
                   .getLastPublish("SCOPED_ALF_DOCUMENTLIST_TAG_CHANGED", true);
+            },
+
+            "Document tagged event forces reload of scoped list": function() {
+               return browser.findById("PUBLISH_TAGGED_BUTTON_label")
+                  .click()
+                  .getLastPublish("SCOPED_ALF_DOCUMENT_TAGGED", true)
+                  .getLastPublish("ALF_TAG_QUERY", true)
+                  .then(function(payload) {
+                     assert.propertyVal(payload, "alfResponseScope", "SCOPED_");
+                  });
             },
 
             beforeEach: function() {
