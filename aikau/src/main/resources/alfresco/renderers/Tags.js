@@ -387,6 +387,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The success payload
+       * @fires module:alfresco/core/topics#DOCUMENT_TAGGED
        */
       onSaveSuccess: function alfresco_renderers_Tags__onSaveSuccess(/*jshint unused:false*/ payload) {
          this.alfUnsubscribeSaveHandles([this._saveSuccessHandle, this._saveFailureHandle]);
@@ -411,6 +412,9 @@ define(["dojo/_base/declare",
          domClass.remove(this.renderedValueNode, "hidden faded");
          domClass.add(this.editNode, "hidden");
          this.renderedValueNode.focus();
+
+         // Fire document tagged event
+         this.alfPublish(topics.DOCUMENT_TAGGED);
       },
 
       /**
