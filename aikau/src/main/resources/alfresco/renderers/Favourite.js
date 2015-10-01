@@ -109,6 +109,8 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @since 1.0.38
+       * @listens alfresco/renderers/Toggle#toggleOnSuccessTopic
+       * @listens alfresco/renderers/Toggle#toggleOffSuccessTopic
        */
       postCreate: function alfresco_renderers_Favourite__postCreate() {
          this.inherited(arguments);

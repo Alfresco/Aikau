@@ -118,6 +118,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
        */
       toggleOnSuccessTopic: null,
       
@@ -126,6 +127,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
        */
       toggleOnFailureTopic: null,
       
@@ -134,6 +136,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
        */
       toggleOffTopic: null,
       
@@ -142,6 +145,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
        */
       toggleOffSuccessTopic: null,
       
@@ -150,6 +154,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
        */
       toggleOffFailureTopic: null,
       

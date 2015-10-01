@@ -32,6 +32,10 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @event
+       * @property {string} preference A dot-notation property of the preference to retrieve
+       * @property {function} callback The function to call when the preference has been retrieved
+       * @property {object} callbackScope The scope with which to call the callback function
        */
       getPreferenceTopic: topics.GET_PREFERENCE,
       
@@ -39,6 +43,10 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @event
+       * @property {string} preference A dot-notation property of the preference to set
+       * @property {object} value The value to set as the preference
+       * @property {object} updatedValue The value that has been changed (e.g. this might be an item removed that)
        */
       setPreferenceTopic: topics.SET_PREFERENCE,
       

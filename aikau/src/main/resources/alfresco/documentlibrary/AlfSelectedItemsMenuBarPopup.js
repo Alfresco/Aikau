@@ -229,6 +229,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload containing the details of the action being requested
+       * @fires alfresco/core/topics#MULTIPLE_ITEM_ACTION_REQUEST
        */
       onSelectedDocumentsAction: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onSelectedDocumentsAction(payload) {
          var selectedItems = [];

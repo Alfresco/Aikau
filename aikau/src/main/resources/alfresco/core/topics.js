@@ -365,7 +365,7 @@ define([],function() {
        * @since 1.0.38
        *
        * @event
-       * @property {string} id The ID of the action (this should map to a function in the [ActionService]{@link module:alfresco/services/ActionService})
+       * @property {string} action The action to perform (this should map to a function in the [ActionService]{@link module:alfresco/services/ActionService})
        * @property {string} actionTopic A topic to forward the action request on to. 
        */
       MULTIPLE_ITEM_ACTION_REQUEST: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
