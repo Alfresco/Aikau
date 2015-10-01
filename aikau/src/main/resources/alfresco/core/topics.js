@@ -356,6 +356,21 @@ define([],function() {
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
 
       /**
+       * This can be published to request that an action be performed on multiple selected items. The 
+       * selected items are tracked by either the [ActionService]{@link module:alfresco/services/ActionService}
+       * or preferrably a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
+       * 
+       * @instance
+       * @type {string}
+       * @since 1.0.38
+       *
+       * @event
+       * @property {string} id The ID of the action (this should map to a function in the [ActionService]{@link module:alfresco/services/ActionService})
+       * @property {string} actionTopic A topic to forward the action request on to. 
+       */
+      MULTIPLE_ITEM_ACTION_REQUEST: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
+
+      /**
        * This topic can be published to request navigation to another URL.
        *
        * @instance

@@ -787,6 +787,7 @@ function getSelectedItemsActions(selectedItemsActions) {
                notAspect: (action.notAspect || "").toString(),
                publishTopic: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
                publishPayload: {
+                  actionTopic: (action.actionTopic || "").toString(),
                   action: (action.id || "").toString()
                }
             }

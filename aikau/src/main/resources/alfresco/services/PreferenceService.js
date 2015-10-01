@@ -174,6 +174,9 @@ define(["dojo/_base/declare",
             }
             this.serviceXhr({url : url,
                              alfTopic: responseTopic,
+                             preference: payload.preference,
+                             updatedValue: payload.updatedValue,
+                             value: payload.value,
                              data: preferenceObj,
                              method: "POST"});
 
@@ -219,9 +222,12 @@ define(["dojo/_base/declare",
                }
                
                // Save preference with the new value
+               // We include the updatedValue so that subscribers can identify the requested changes
+               // because the stored value will not included data that has been removed...
                this.setPreference({
                   alfTopic: requestConfig.data.alfTopic,
-                  preference: name, 
+                  preference: name,
+                  updatedValue: value, 
                   value: arrValues.join(",")
                });
             }
@@ -402,7 +408,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onAddFavouriteDocument: function alfresco_services_PreferenceService__onAddFavouriteDocument(payload) {
-         var alfTopic = payload.alfResponseTopic || this.onAddFavouriteDocument;
+         var alfTopic = payload.alfResponseTopic || topics.ADD_FAVOURITE_NODE;
          this.processFavourites(payload, alfTopic, true);
       },
       
@@ -413,7 +419,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onRemoveFavouriteDocument: function alfresco_services_PreferenceService__onRemoveFavouriteDocument(payload) {
-         var alfTopic = payload.alfResponseTopic || this.onRemoveFavouriteDocument;
+         var alfTopic = payload.alfResponseTopic || topics.REMOVE_FAVOURITE_NODE;
          this.processFavourites(payload, alfTopic, false);
       }
    });
