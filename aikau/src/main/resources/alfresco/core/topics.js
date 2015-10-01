@@ -31,6 +31,19 @@ define([],function() {
    return {
 
       /**
+       * This can be published to request to add a node or nodes as a favourite.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.38
+       * @event
+       * @property {object} node - The node to add as a favourite
+       * @property {object[]} nodes - An array of nodes to add as a favourites
+       */
+      ADD_FAVOURITE_NODE: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE",
+
+      /**
        * Triggered when the progress request has failed
        *
        * @instance
@@ -343,6 +356,21 @@ define([],function() {
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
 
       /**
+       * This can be published to request that an action be performed on multiple selected items. The 
+       * selected items are tracked by either the [ActionService]{@link module:alfresco/services/ActionService}
+       * or preferrably a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
+       * 
+       * @instance
+       * @type {string}
+       * @since 1.0.38
+       *
+       * @event
+       * @property {string} action The action to perform (this should map to a function in the [ActionService]{@link module:alfresco/services/ActionService})
+       * @property {string} actionTopic A topic to forward the action request on to. 
+       */
+      MULTIPLE_ITEM_ACTION_REQUEST: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
+
+      /**
        * This topic can be published to request navigation to another URL.
        *
        * @instance
@@ -443,6 +471,20 @@ define([],function() {
        * @event module:alfresco/core/topics~RELOAD_PAGE
        */
       RELOAD_PAGE: "ALF_RELOAD_PAGE",
+
+      /**
+       * This can be published to request to add a node or nodes as a favourite.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.38
+       * 
+       * @event
+       * @property {object} node - The node to remove from favourites
+       * @property {object[]} nodes - An array of nodes to remove from favourites
+       */
+      REMOVE_FAVOURITE_NODE: "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE",
 
       /**
        * Called to start off the archiving process.

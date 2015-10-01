@@ -115,6 +115,8 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @since 1.0.32
+       *
+       * @listens module:alfresco/core/topics#MULTIPLE_ITEM_ACTION_REQUEST
        */
       registerSubscriptions: function alfresco_services_ActionService__registerSubscriptions() {
          // Normal processing...
@@ -127,7 +129,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.syncLocationTopic, lang.hitch(this, this.onSyncLocation));
          this.alfSubscribe(this.unsyncLocationTopic, lang.hitch(this, this.onUnsyncLocation));
 
-         this.alfSubscribe("ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST", lang.hitch(this, this.handleMultiDocLegacyAction));
+         this.alfSubscribe(topics.MULTIPLE_ITEM_ACTION_REQUEST, lang.hitch(this, this.handleMultiDocLegacyAction));
          this.alfSubscribe("ALF_CREATE_CONTENT", lang.hitch(this, this.processActionObject));
 
          // Non-legacy action handlers...
@@ -232,28 +234,56 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function is called when handling actions for the currently selected items. If the
+       * payload provided does not include a "documents" attribute then one will be created and
+       * populated with the selected items that have been tracked by this service. Ideally this 
+       * will not be necessary as the payload should include the items populated by the
+       * [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
+       * 
+       * @instance
+       * @param {object} payload The data passed in the request to perform the action.
+       * @since 1.0.38
+       */
+      addSelectedItems: function alfresco_services_ActionService__addSelectedItems(payload) {
+         if (!payload.documents)
+         {
+            payload.documents = [];
+            for (var nodeRef in this.currentlySelectedDocuments)
+            {
+               if (this.currentlySelectedDocuments.hasOwnProperty(nodeRef))
+               {
+                  payload.documents.push(this.currentlySelectedDocuments[nodeRef]);
+               }
+            }
+         }
+         // NOTE: We also want to add the selected items to a "nodes" attribute as that is the attribute
+         //       that some of the services will be expecting. This is regrettable but until the next major
+         //       release we won't be able to remove these inconsistencies. By including the selected items
+         //       as "nodes" it allows us to forward to "actionTopics" without the need to create individual
+         //       actions to alias all the capabilities provided by other services.
+         payload.nodes = payload.documents;
+      },
+
+      /**
        *
        * @instance
        * @param {object} payload The data passed in the request to perform the action.
        */
-      handleMultiDocLegacyAction: function alfresco_services_ActionService__handleLegacyAction(payload) {
+      handleMultiDocLegacyAction: function alfresco_services_ActionService__handleMultiDocLegacyAction(payload) {
          this.alfLog("log", "Multiple document action request:", payload);
+
          if (typeof this[payload.action] === "function")
          {
-            // NOTE: We want to avoid relying on the service to track currently selected documents, this
-            //       is now handled AlfSelectedItemsMenuBarPopup...
-            if (!payload.documents)
-            {
-               payload.documents = [];
-               for (var nodeRef in this.currentlySelectedDocuments)
-               {
-                  if (this.currentlySelectedDocuments.hasOwnProperty(nodeRef))
-                  {
-                     payload.documents.push(this.currentlySelectedDocuments[nodeRef]);
-                  }
-               }
-            }
+            this.addSelectedItems(payload);
             this[payload.action].call(this, payload);
+         }
+         else if (payload.actionTopic)
+         {
+            // If an "actionTopic" attribute has been defined then it will be used to "forward" on the
+            // provided payload to the topic defined. This was added in 1.0.38 as a way in which to make
+            // it easier to process custom menu items added to a AlfSelectedItemsMenuBarPopup. 
+            this.addSelectedItems(payload);
+            this.alfServicePublish(payload.actionTopic, payload);
          }
       },
 
@@ -592,7 +622,6 @@ define(["dojo/_base/declare",
          if (typeof f === "function")
          {
             f.call(this, payload);
-            // f.call(this, payload.action, [payload.document]);
          }
          else
          {

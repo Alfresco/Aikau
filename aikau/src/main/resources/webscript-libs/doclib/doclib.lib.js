@@ -787,6 +787,7 @@ function getSelectedItemsActions(selectedItemsActions) {
                notAspect: (action.notAspect || "").toString(),
                publishTopic: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
                publishPayload: {
+                  actionTopic: (action.actionTopic || "").toString(),
                   action: (action.id || "").toString()
                }
             }
@@ -816,7 +817,7 @@ function getDocLibSelectedItemActions(options) {
                id: (options.idPrefix || "") + "DOCLIB_SELECTED_ITEMS_MENU_GROUP1",
                name: "alfresco/menus/AlfMenuGroup",
                config: {
-                  widgets: getSelectedItemsActions()
+                  widgets: getSelectedItemsActions(options.selectedItemsActions)
                }
             }
          ]
