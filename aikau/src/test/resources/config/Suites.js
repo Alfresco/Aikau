@@ -206,6 +206,7 @@ define({
       "src/test/resources/alfresco/renderers/IndicatorsTest",
       "src/test/resources/alfresco/renderers/InlineEditPropertyLinkTest",
       "src/test/resources/alfresco/renderers/InlineEditPropertyTest",
+      "src/test/resources/alfresco/renderers/MultiFavouriteTest",
       "src/test/resources/alfresco/renderers/ProgressTest",
       "src/test/resources/alfresco/renderers/PropertyLinkTest",
       "src/test/resources/alfresco/renderers/PropertyTest",
