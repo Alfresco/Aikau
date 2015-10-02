@@ -172,7 +172,7 @@ define(["alfresco/renderers/Property",
       getItemUrl: function alfresco_renderers_ActivitySummary__getItemUrl() {
 
          // Set default landing page
-         var localPage = this.siteLandingPage.replace(/^\/*/, "/"),
+         var localPage = this.siteLandingPage.replace(/^\/*/, "/");
 
          // Is there a specified page?
          if (this._summary.page) {
