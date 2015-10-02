@@ -74,6 +74,15 @@ define(["dojo/_base/declare",
       currentSite: null,
 
       /**
+       * The standard landing page for a site
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      siteLandingPage: "/dashboard",
+
+      /**
        * Extend the default constructor to add subscriptions for handling favourites being added and removed.
        * 
        * @instance
@@ -746,7 +755,7 @@ define(["dojo/_base/declare",
          var newFavourite = new AlfMenuItem({
             label: siteTitle,
             iconClass: this.favouriteGroupIconClass,
-            targetUrl: "site/" + siteShortName + "/dashboard",
+            targetUrl: "site/" + siteShortName + this.siteLandingPage.replace(/^\/*/, "/"),
             siteShortName: siteShortName
          });
          

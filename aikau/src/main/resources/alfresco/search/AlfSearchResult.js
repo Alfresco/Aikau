@@ -158,6 +158,15 @@ define(["dojo/_base/declare",
       otherNodeActions: null,
 
       /**
+       * The standard landing page for a site
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      siteLandingPage: "/dashboard",
+
+      /**
        * Indicates whether or not a [MoreInfo]{@link module:alfresco/renderers/MoreInfo} widget should
        * be rendered with the search result.
        *
@@ -487,7 +496,7 @@ define(["dojo/_base/declare",
                publishPayloadType: "PROCESS",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
-                  url: "site/{site.shortName}/dashboard",
+                  url: "site/{site.shortName}" + this.siteLandingPage.replace(/^\/*/, "/"),
                   type: "PAGE_RELATIVE"
                }
             }, this.siteNode);

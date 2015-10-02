@@ -66,6 +66,15 @@ define(["alfresco/renderers/Property",
       renderedValueClass: "alfresco-renderers-ActivitySummary",
 
       /**
+       * The standard landing page for a site
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      siteLandingPage: "/dashboard",
+
+      /**
        * The constructed activity item
        *
        * @instance
@@ -162,8 +171,8 @@ define(["alfresco/renderers/Property",
        */
       getItemUrl: function alfresco_renderers_ActivitySummary__getItemUrl() {
 
-         // Default page is the dashboard
-         var localPage = "/dashboard";
+         // Set default landing page
+         var localPage = this.siteLandingPage.replace(/^\/*/, "/"),
 
          // Is there a specified page?
          if (this._summary.page) {
@@ -200,13 +209,13 @@ define(["alfresco/renderers/Property",
       },
 
       /**
-       * Get the URL to the dashboard for this activity's site
+       * Get the URL to the landing page for this activity's site
        *
        * @instance
        * @returns  {string} The site URL
        */
       getSiteUrl: function alfresco_renderers_Property__getSiteUrl() {
-         return AlfConstants.URL_CONTEXT + "page/site/" + encodeURI(this._activity.siteNetwork) + "/dashboard";
+         return AlfConstants.URL_CONTEXT + "page/site/" + encodeURI(this._activity.siteNetwork) + this.siteLandingPage.replace(/^\/*/, "/");
       },
 
       /**

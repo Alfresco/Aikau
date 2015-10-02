@@ -45,6 +45,15 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/SiteService.properties"}],
 
       /**
+       * The standard landing page for a site
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      siteLandingPage: "/dashboard",
+
+      /**
        * Sets up the subscriptions for the SiteService
        *
        * @instance
@@ -493,7 +502,7 @@ define(["dojo/_base/declare",
                      label: this.message("button.leave-site.confirm-label"),
                      publishTopic: "ALF_NAVIGATE_TO_PAGE",
                      publishPayload: {
-                        url: "user/" + originalRequestConfig.user + "/dashboard",
+                        url: "user/" + originalRequestConfig.user + this.siteLandingPage.replace(/^\/*/, "/"),
                         type: "PAGE_RELATIVE",
                         target: "CURRENT"
                      },
@@ -740,7 +749,7 @@ define(["dojo/_base/declare",
        */
       leaveSiteSuccess: function alfresco_services_SiteService__leaveSiteSuccess(response, requestConfig) {
          this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-            url: "user/" + requestConfig.user + "/dashboard",
+            url: "user/" + requestConfig.user + this.siteLandingPage.replace(/^\/*/, "/"),
             type: "PAGE_RELATIVE",
             target: "CURRENT"
          });
