@@ -23,17 +23,19 @@
  * 
  * @module alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup
  * @extends module:alfresco/menus/AlfMenuBarPopup
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarPopup",
+        "alfresco/core/ObjectProcessingMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/topics",
         "dojo/_base/lang"], 
-        function(declare, AlfMenuBarPopup, _AlfDocumentListTopicMixin, topics, lang) {
+        function(declare, AlfMenuBarPopup, ObjectProcessingMixin, _AlfDocumentListTopicMixin, topics, lang) {
    
-   return declare([AlfMenuBarPopup, _AlfDocumentListTopicMixin], {
+   return declare([AlfMenuBarPopup, ObjectProcessingMixin, _AlfDocumentListTopicMixin], {
       
       /**
        * Controls whether or not this widget actively tracks the selected items or passively subscribes
@@ -241,7 +243,13 @@ define(["dojo/_base/declare",
             }
          }
          payload.documents = selectedItems;
-         this.alfServicePublish(topics.MULTIPLE_ITEM_ACTION_REQUEST, payload);
+
+         this.currentItem = {
+            nodes: selectedItems
+         };
+         var clonedPayload = lang.clone(payload);
+         this.processObject(["processCurrentItemTokens"], clonedPayload);
+         this.alfServicePublish(topics.MULTIPLE_ITEM_ACTION_REQUEST, clonedPayload);
       }
    });
 });
