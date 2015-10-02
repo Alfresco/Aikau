@@ -407,9 +407,9 @@ define(["dojo/_base/declare",
        */
       onWindowResize: function alfresco_dialogs_AlfDialog__onWindowResize() {
          var calculatedHeights = this.calculateHeights();
-         if (calculatedHeights.maxBodyHeight)
+         if (calculatedHeights.maxBodyHeight && !this.fullScreenMode)
          {
-            // Don't set a max-height when it's 0...
+            // Don't set a max-height when it's 0 or when in full screen mode...
             domStyle.set(this.bodyNode, {
                "max-height": calculatedHeights.maxBodyHeight + "px"
             });
@@ -468,6 +468,23 @@ define(["dojo/_base/declare",
                w: $(window).width() - dimensionAdjustment,
                h: $(window).height() - dimensionAdjustment
             }]);
+
+            // When in full screen mode it is also necessary to take care of the inner dimensions
+            // of the dialog...
+            var calculatedHeights = this.calculateHeights();
+            var containerHeight = $(this.containerNode).height();
+            var bodyHeight = containerHeight;
+            if (this.widgetsButtons)
+            {
+               // Dedebug height for the widgets buttons if present
+               bodyHeight = bodyHeight - 44;
+            }
+            $(this.bodyNode).height(bodyHeight);
+            $(this.bodyNode).css("max-height", bodyHeight); // NOTE: This is necessary to override the default max-height
+            if (this._dialogPanel)
+            {
+               $(this._dialogPanel.domNode).height(bodyHeight - calculatedHeights.paddingAdjustment);
+            }
          }
          else
          {

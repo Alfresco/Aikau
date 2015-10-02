@@ -54,6 +54,7 @@ model.jsonModel = {
                {
                   id: "DIALOG_LAUNCH_PANEL",
                   name: "alfresco/layout/ClassicWindow",
+                  widthPx: 500,
                   config: {
                      title: "Dialog launch panel",
                      widgets: [
@@ -162,11 +163,114 @@ model.jsonModel = {
                                  ]
                               }
                            }
+                        },
+                        {
+                           id: "FULL_SCREEN_DIALOG_NO_BUTTON",
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              label: "Launch full screen dialog",
+                              publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                              publishPayload: {
+                                 dialogId: "FSDNB",
+                                 dialogTitle: "Full Screen Dialog",
+                                 fullScreenMode: true,
+                                 fullScreenPadding: 40,
+                                 widgetsContent: [
+                                    {
+                                       name: "alfresco/layout/FixedHeaderFooter",
+                                       widthPc: 50,
+                                       config: {
+                                          heightMode: "DIALOG",
+                                          widgetsForHeader: [
+                                             {
+                                                name: "alfresco/html/Label",
+                                                config: {
+                                                   label: "Header"
+                                                }
+                                             }
+                                          ],
+                                          widgets: [
+                                             {
+                                                name: "alfresco/html/Label",
+                                                config: {
+                                                   label: "Content"
+                                                }
+                                             }
+                                          ],
+                                          widgetsForFooter: [
+                                             {
+                                                name: "alfresco/html/Label",
+                                                config: {
+                                                   label: "Footer"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
+                        },
+                        {
+                           id: "FULL_SCREEN_DIALOG",
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              label: "Full Screen With HeightMixin Content",
+                              publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                              publishPayload: {
+                                 dialogId: "FSD",
+                                 dialogTitle: "Full Screen Dialog",
+                                 fullScreenMode: true,
+                                 fullScreenPadding: 40,
+                                 widgetsContent: [
+                                    {
+                                       name: "alfresco/layout/FixedHeaderFooter",
+                                       widthPc: 50,
+                                       config: {
+                                          heightMode: "DIALOG",
+                                          widgetsForHeader: [
+                                             {
+                                                name: "alfresco/html/Label",
+                                                config: {
+                                                   label: "Header"
+                                                }
+                                             }
+                                          ],
+                                          widgets: [
+                                             {
+                                                name: "alfresco/html/Label",
+                                                config: {
+                                                   label: "Content"
+                                                }
+                                             }
+                                          ],
+                                          widgetsForFooter: [
+                                             {
+                                                name: "alfresco/html/Label",
+                                                config: {
+                                                   label: "Footer"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ],
+                                 widgetsButtons: [
+                                    {
+                                       name: "alfresco/buttons/AlfButton",
+                                       config: {
+                                          label: "OK",
+                                          additionalCssClasses: "cancellationButton",
+                                          publishTopic: "ALF_ITEMS_SELECTED"
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
                         }
                      ]
                   }
                }
-               
             ]
          }
       }
