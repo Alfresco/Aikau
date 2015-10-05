@@ -235,6 +235,7 @@ model.jsonModel = {
                   id: "SR",
                   name: "alfresco/search/AlfSearchResult",
                   config: {
+                     siteLandingPage: "landing",
                      pubSubScope: "AlfSearchResultScope",
                      mergeActions: true,
                      additionalDocumentAndFolderActions: [

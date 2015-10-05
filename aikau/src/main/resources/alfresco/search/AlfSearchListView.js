@@ -33,6 +33,15 @@ define(["dojo/_base/declare",
    return declare([AlfListView], {
       
       /**
+       * The standard landing page for a site
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      siteLandingPage: "/dashboard",
+
+      /**
        * The configuration for selecting the view (configured the menu item)
        * @instance
        * @type {object}
@@ -62,7 +71,10 @@ define(["dojo/_base/declare",
        */
       widgets: [
          {
-            name: "alfresco/search/AlfSearchResult"
+            name: "alfresco/search/AlfSearchResult",
+            config: {
+               siteLandingPage: this.siteLandingPage
+            }
          }
       ]
    });

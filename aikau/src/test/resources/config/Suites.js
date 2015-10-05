@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/services/SiteServiceTest"
+      "src/test/resources/alfresco/search/AlfSearchResultTest"
 
       // THESE SITES REGULARLY FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/preview/PdfJsPreviewTest",
