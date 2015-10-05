@@ -56,10 +56,11 @@ define(["dojo/_base/declare",
         "dojo/html",
         "dojo/aspect",
         "dojo/on",
+        "dojo/when",
         "jquery",
         "alfresco/layout/SimplePanel"], 
         function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, topics, _FocusMixin, lang, sniff, array,
-                 domConstruct, domClass, domStyle, domGeom, html, aspect, on, $) {
+                 domConstruct, domClass, domStyle, domGeom, html, aspect, on, when, $) {
    
    return declare([Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin], {
       
@@ -446,6 +447,22 @@ define(["dojo/_base/declare",
          domClass.remove(this.domNode, "dialogHidden");
          domClass.add(this.domNode, "dialogDisplayed");
          // TODO: We could optionally reveal the dialog after resizing to prevent any resizing jumping?
+         
+         // See AKU-604 - ensure that first item in dialog is focused...
+         if (this._dialogPanel)
+         {
+            when(this._dialogPanel.getProcessedWidgets(), lang.hitch(this, function(children) {
+               array.some(children, function(child) {
+                  var focused = false;
+                  if (typeof child.focus === "function")
+                  {
+                     child.focus();
+                     focused = true;
+                  }
+                  return focused;
+               });
+            }));
+         }
          
          // Publish the widgets ready
          this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
