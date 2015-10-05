@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/header/HeaderWidgetsTest"
+      "src/test/resources/alfresco/services/SiteServiceTest"
 
       // THESE SITES REGULARLY FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/preview/PdfJsPreviewTest",
@@ -249,7 +249,7 @@ define({
       "src/test/resources/alfresco/services/ServiceFilteringTest",
       "src/test/resources/alfresco/services/ServiceRegistryTest",
 
-      // "src/test/resources/alfresco/services/SiteServiceTest", - NO TESTS IN THIS SUITE THAT DO ANYTHING!
+      "src/test/resources/alfresco/services/SiteServiceTest",
       "src/test/resources/alfresco/services/UserServiceTest",
 
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
