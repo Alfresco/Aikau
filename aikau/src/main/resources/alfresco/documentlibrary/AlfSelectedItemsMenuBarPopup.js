@@ -19,21 +19,29 @@
 
 /**
  * Extends the [AlfMenuBarPopup]{@link module:alfresco/menus/AlfMenuBarPopup} widget to listen to publications
- * that indicate that documents have been selected and disables the menu bar if nothing is selected.
+ * that indicate that documents have been selected and disables the menu bar if nothing is selected. This widget
+ * actively monitors the state of selected items so that any 
+ * [menu items]{@link modulealfresco/documentlibrary/AlfDocumentActionMenuItem} contained in the pop-up menu that
+ * are used will have the selected nodes "attached" to their payload by the 
+ * [onSelectedDocumentsAction]{@link module:alfresco/menus/AlfMenuBarPopup#onSelectedDocumentsAction} function. This
+ * function will also process the action payload and swap out any "{nodes}" tokens with the array of selected
+ * nodes.
  * 
  * @module alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup
  * @extends module:alfresco/menus/AlfMenuBarPopup
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarPopup",
+        "alfresco/core/ObjectProcessingMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/topics",
         "dojo/_base/lang"], 
-        function(declare, AlfMenuBarPopup, _AlfDocumentListTopicMixin, topics, lang) {
+        function(declare, AlfMenuBarPopup, ObjectProcessingMixin, _AlfDocumentListTopicMixin, topics, lang) {
    
-   return declare([AlfMenuBarPopup, _AlfDocumentListTopicMixin], {
+   return declare([AlfMenuBarPopup, ObjectProcessingMixin, _AlfDocumentListTopicMixin], {
       
       /**
        * Controls whether or not this widget actively tracks the selected items or passively subscribes
@@ -241,7 +249,16 @@ define(["dojo/_base/declare",
             }
          }
          payload.documents = selectedItems;
-         this.alfServicePublish(topics.MULTIPLE_ITEM_ACTION_REQUEST, payload);
+
+         // There are circumstances where the requested action might need access to the selected nodes *within*
+         // the payload. This can be achieved by referencing the {nodes} token with the payload and using the standard
+         // object processing mixin.
+         this.currentItem = {
+            nodes: selectedItems
+         };
+         var clonedPayload = lang.clone(payload);
+         this.processObject(["processCurrentItemTokens"], clonedPayload);
+         this.alfServicePublish(topics.MULTIPLE_ITEM_ACTION_REQUEST, clonedPayload);
       }
    });
 });
