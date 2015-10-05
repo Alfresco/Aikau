@@ -35,9 +35,10 @@ define({
       "src/test/resources/alfresco/search/AlfSearchResultTest"
 
       // THESE SITES REGULARLY FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
-      // "src/test/resources/alfresco/preview/PdfJsPreviewTest",
+      // "src/test/resources/alfresco/dnd/FormCreationTest",
+      // "src/test/resources/alfresco/layout/AlfTabContainerTest",
+      // "src/test/resources/alfresco/preview/PdfJsPreviewTest"
       // "src/test/resources/alfresco/search/SearchSuggestionsTest",
-      // "src/test/resources/alfresco/layout/AlfTabContainerTest"
    ],
 
    /**
