@@ -605,8 +605,8 @@ define(["dojo/_base/declare",
                   // Unfortunately we made the error of using "scope" on the URL hash and
                   // "selectedScope" as the widget attribute. This means that we have to special
                   // case useHash being set to true to use the appropriate value for the mode being used...
-                  siteId = (this.scope === "repo" || this.scope === "all_sites") ? "" : this.scope;
-                  scope = this.scope;
+                  siteId = (this.scope === "repo" || this.scope === "all_sites") ? "" : scope;
+                  scope = this.scope || scope.toLowerCase();
                }
                
                this.currentRequestId = this.generateUuid();
