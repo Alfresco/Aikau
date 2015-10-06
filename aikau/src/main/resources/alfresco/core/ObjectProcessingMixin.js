@@ -185,13 +185,13 @@ define(["dojo/_base/declare",
                      {
                         array.forEach(functions, lang.hitch(this, this.applyFunction, value, index));
                      }
-                     else if (array.indexOf(ancestors, value) !== -1)
+                     else if (array.indexOf(ancestors, value) === -1)
                      {
                         this.processObject(functions, entry, ancestors.concat(obj));
                      }
                   }, this);
                }
-               else if (ObjectTypeUtils.isObject(value) && array.indexOf(ancestors, value) !== -1)
+               else if (ObjectTypeUtils.isObject(value) && array.indexOf(ancestors, value) === -1)
                {
                   obj[key] = this.processObject(functions, value, ancestors.concat(obj));
                }
