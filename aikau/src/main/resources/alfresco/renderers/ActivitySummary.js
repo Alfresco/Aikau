@@ -71,6 +71,7 @@ define(["alfresco/renderers/Property",
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.38
        */
       siteLandingPage: "/dashboard",
 

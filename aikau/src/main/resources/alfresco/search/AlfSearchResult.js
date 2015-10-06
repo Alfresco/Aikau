@@ -163,6 +163,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.38
        */
       siteLandingPage: "/dashboard",
 
