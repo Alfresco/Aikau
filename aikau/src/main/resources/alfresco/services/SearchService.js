@@ -165,9 +165,9 @@ define(["dojo/_base/declare",
        */
       onSearchRequest: function alfresco_services_SearchService__onSearchRequest(payload) {
          // jshint maxlen:300, maxcomplexity:false
-         if (!payload || !payload.term)
+         if (!payload)
          {
-            this.alfLog("warn", "A request was made to perform a search but no 'term' attribute was provided", payload, this);
+            this.alfLog("warn", "A request was made to perform a search but no payload was provided", payload, this);
             this.alfPublish(payload.alfResponseTopic + "_FAILURE", {}, false, false, payload.alfResponseScope);
          }
          else
