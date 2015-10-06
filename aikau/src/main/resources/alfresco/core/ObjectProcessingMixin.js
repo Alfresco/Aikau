@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
        */
       safeReplace: function alfresco_code_ObjectProcessingMixin__safeReplace(sourceObject, tokenIncudingBraces, tokenWithoutBraces) {
          var existingValue = lang.getObject(tokenWithoutBraces, false, sourceObject);
-         if (existingValue == null)
+         if (existingValue === null || typeof existingValue === "undefined")
          {
             return tokenIncudingBraces;
          }
@@ -160,63 +160,69 @@ define(["dojo/_base/declare",
        * values with all the supplied functions.
        *
        * @intance
-       * @param {array} functions An array of functions to apply to values
-       * @param {object} o The object to process
+       * @param {function[]|string[]} functions An array of functions or function names (within "this" scope) to apply to values
+       * @param {object} obj The object to process
+       * @param {object[]} [ancestors=[]] An ancestors stack, used to check for recursion
        * @return {object} The processed object
        */
-      processObject: function alfresco_core_ObjectProcessingMixin__processObject(functions, o) {
-         for (var key in o)
+      processObject: function alfresco_core_ObjectProcessingMixin__processObject(functions, obj, ancestors) {
+         /*jshint loopfunc:true*/
+         ancestors = ancestors || [];
+         for (var key in obj)
          {
-            var v = o[key];
-            if (ObjectTypeUtils.isString(v))
+            if (obj.hasOwnProperty(key))
             {
-               array.forEach(functions, lang.hitch(this, this.applyFunction, o, key));
-            }
-            else if (ObjectTypeUtils.isArray(v))
-            {
-               array.forEach(v, function(entry, index) {
-                  // Needs special handling for arrays of strings...
-                  if (ObjectTypeUtils.isString(entry))
-                  {
-                     array.forEach(functions, lang.hitch(this, this.applyFunction, v, index));
-                  }
-                  else
-                  {
-                     this.processObject(functions, entry);
-                  }
-               }, this);
-            }
-            else if (ObjectTypeUtils.isObject(v))
-            {
-               o[key] = this.processObject(functions, v);
+               var value = obj[key];
+               if (ObjectTypeUtils.isString(value))
+               {
+                  array.forEach(functions, lang.hitch(this, this.applyFunction, obj, key));
+               }
+               else if (ObjectTypeUtils.isArray(value))
+               {
+                  array.forEach(value, function(entry, index) {
+                     // Needs special handling for arrays of strings...
+                     if (ObjectTypeUtils.isString(entry))
+                     {
+                        array.forEach(functions, lang.hitch(this, this.applyFunction, value, index));
+                     }
+                     else if (array.indexOf(ancestors, value) !== -1)
+                     {
+                        this.processObject(functions, entry, ancestors.concat(obj));
+                     }
+                  }, this);
+               }
+               else if (ObjectTypeUtils.isObject(value) && array.indexOf(ancestors, value) !== -1)
+               {
+                  obj[key] = this.processObject(functions, value, ancestors.concat(obj));
+               }
             }
          }
-         return o;
+         return obj;
       },
 
       /**
        * Apply the supplied function to the value of the supplied key in the supplied object
        *
        * @instance
-       * @param {object} o The object to get the value from
+       * @param {object} obj The object to get the value from
        * @param {string} key The key of the object to use
-       * @param {string} f The name of the function to apply
+       * @param {function|string} func A function or function name (within "this" scope) to apply to values
        */
-      applyFunction: function alfresco_core_ObjectProcessingMixin__applyFunction(o, key, f) {
-         var v = o[key];
-         if (typeof f === "function")
+      applyFunction: function alfresco_core_ObjectProcessingMixin__applyFunction(obj, key, func) {
+         var value = obj[key];
+         if (typeof func === "function")
          {
-            v = f.apply(this, [v]);
+            value = func.apply(this, [value]);
          }
-         else if (typeof this[f] === "function")
+         else if (typeof this[func] === "function")
          {
-           v = this[f].apply(this, [v]);
+           value = this[func].apply(this, [value]);
          }
          else
          {
-            this.alfLog("warn", "The supplied function was not valid", f, this);
+            this.alfLog("warn", "The supplied function was not valid", func, this);
          }
-         o[key] = v;
+         obj[key] = value;
       }
    });
 });
