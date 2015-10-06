@@ -588,7 +588,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/SiteMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

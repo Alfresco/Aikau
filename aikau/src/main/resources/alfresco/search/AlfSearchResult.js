@@ -158,6 +158,16 @@ define(["dojo/_base/declare",
       otherNodeActions: null,
 
       /**
+       * The standard landing page for a site
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.38
+       */
+      siteLandingPage: "/dashboard",
+
+      /**
        * Indicates whether or not a [MoreInfo]{@link module:alfresco/renderers/MoreInfo} widget should
        * be rendered with the search result.
        *
@@ -483,11 +493,12 @@ define(["dojo/_base/declare",
                propertyToRender: "site.title",
                label: this.message("faceted-search.doc-lib.value-prefix.site"),
                publishTopic: "ALF_NAVIGATE_TO_PAGE",
+               publishGlobal: true,
                useCurrentItemAsPayload: false,
                publishPayloadType: "PROCESS",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
-                  url: "site/{site.shortName}/dashboard",
+                  url: "site/{site.shortName}" + this.siteLandingPage.replace(/^\/*/, "/"),
                   type: "PAGE_RELATIVE"
                }
             }, this.siteNode);

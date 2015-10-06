@@ -101,12 +101,27 @@ define(["intern!object",
                });
          },
 
+         "Site link uses correct landing page URL": function() {
+            return browser.findByCssSelector("#SEARCH_RESULTS_ITEMS .alfresco-search-AlfSearchResult:last-child .siteCell .alfresco-renderers-PropertyLink .inner")
+               .clearLog()
+               .click()
+               .end()
+
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE", true)
+               .then(function(payload) {
+                  assert.propertyVal(payload, "url", "site/eventResult/landing");
+               });
+         },
+
          "Check merged actions": function() {
             return browser.findById("SR_ACTIONS_MENU_text")
+               .moveMouseTo(1, 1)
                .click()
-            .end()
+               .end()
+
             .findById("SR_ACTIONS_CUSTOM3")
-            .end()
+               .end()
+
             .findById("SR_ACTIONS_MANAGE_ASPECTS");
          },
 

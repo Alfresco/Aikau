@@ -51,6 +51,15 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/CoreWidgetProcessing.css"}],
 
       /**
+       * The current item to act upon
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      currentItem: null,
+
+      /**
        * This string is used to identify locations of counts of widgets that are being processed.
        *
        * @instance
