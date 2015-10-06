@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {String}
-       * @default "ALF_PROGRESS_RENDER"
+       * @default
        */
       renderProgressUITopic: "ALF_PROGRESS_RENDER",
 
@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "renderer.progress.creating"
+       * @default
        */
       creatingMessage: "renderer.progress.creating",
 
@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "renderer.progress.status"
+       * @default
        */
       statusMessage: "renderer.progress.status",
 
@@ -102,7 +102,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "renderer.progress.error"
+       * @default
        */
       errorMessage: "renderer.progress.error",
 
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "renderer.progress.complete"
+       * @default
        */
       completedMessage: "renderer.progress.complete",
 
@@ -142,7 +142,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       requestProgressTopic: null,
 
@@ -151,7 +151,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_PROGRESS_UPDATED"
+       * @default
        */
       progressUpdateTopic: "ALF_PROGRESS_UPDATED",
 
@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_PROGRESS_COMPLETED"
+       * @default
        */
       progressCompleteTopic: "ALF_PROGRESS_COMPLETED",
 
@@ -169,7 +169,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_PROGRESS_CANCELLED"
+       * @default
        */
       progressCancelledTopic: "ALF_PROGRESS_CANCELLED",
 
@@ -178,7 +178,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_PROGRESS_ERROR"
+       * @default
        */
       progressErrorTopic: "ALF_PROGRESS_ERROR",
 
@@ -275,7 +275,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "response.done"
+       * @default
        */
       doneProperty: "response.done",
 
@@ -287,7 +287,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "response.total"
+       * @default
        */
       totalProperty: "response.total",
 
@@ -297,7 +297,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "response.filesAdded"
+       * @default
        */
       itemsAddedProperty: "response.filesAdded",
 
@@ -307,7 +307,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "response.totalFiles"
+       * @default
        */
       totalItemsProperty: "response.totalFiles",
 

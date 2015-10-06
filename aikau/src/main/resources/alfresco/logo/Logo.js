@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        * The CSS class or classes to use to generate the logo
        * @instance
        * @type {string} 
-       * @default "alfresco-logo-large"
+       * @default
        */
       logoClasses: "alfresco-logo-large",
       
@@ -75,7 +75,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "display: none;"
+       * @default
        */
       cssNodeStyle: "display: none;",
       
@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "display: none;"
+       * @default
        */
       imgNodeStyle: "display: none;",
          
@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "logo.alt.text"
+       * @default
        */
       altText: "logo.alt.text",
 

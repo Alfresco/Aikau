@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "192.168.56.1:8082"
+       * @default
        */
       nodeCoverageServer: "192.168.56.1:8082",
 
@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {element}
-       * @default null
+       * @default
        */
       coverageField: null,
 

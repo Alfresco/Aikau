@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       horizontal: false,
       
@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       previewTarget: null,
       
@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       acceptTypes: null,
 

@@ -34,11 +34,10 @@ define([
 
       // Setup cross-test variables
       var PREVIEW_CAROUSEL = "preview",
-         ITEMS_CAROUSEL = "items",
-         browser;
+         ITEMS_CAROUSEL = "items";
 
       // Define helper function to check visibility
-      function carouselItemIsDisplayed(itemNum, carouselType, idPrefix, returnDebugInfo) {
+      function carouselItemIsDisplayed(browser, itemNum, carouselType, idPrefix, returnDebugInfo) {
          var elemPrefix = "#" + (idPrefix || "") + "FILMSTRIP_VIEW_",
             carouselId = elemPrefix + (carouselType === PREVIEW_CAROUSEL ? "PREVIEWS" : "ITEMS");
          return browser.execute(function(carouselSelector, num, debugInfo) {
@@ -64,278 +63,297 @@ define([
          }, [carouselId, itemNum, returnDebugInfo]);
       }
 
-      registerSuite({
-         name: "FilmStripView Tests (Infinite scrolling)",
+      registerSuite(function() {
+         var browser;
 
-         setup: function() {
-            browser = this.remote;
-            browser.session.carouselItemIsDisplayed = carouselItemIsDisplayed;
-            return TestCommon.loadTestWebScript(this.remote, "/FilmStripView", "FilmStripView Tests").end();
-         },
+         return {
+            name: "FilmStripView Tests (Infinite scrolling)",
 
-         beforeEach: function() {
-            browser.end();
-         },
+            setup: function() {
+               browser = this.remote;
+               browser.session.carouselItemIsDisplayed = carouselItemIsDisplayed;
+               return TestCommon.loadTestWebScript(this.remote, "/FilmStripView", "FilmStripView Tests").end();
+            },
 
-         "Check initial controls state": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "Previous preview control should not be displayed");
-               })
-               .end()
+            beforeEach: function() {
+               browser.end();
+            },
 
-            .findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Next preview control should be displayed");
-               })
-               .end()
+            "Check initial controls state": function() {
+               return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "Previous preview control should not be displayed");
+                  })
+                  .end()
 
-            .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "Previous items control should not be displayed");
-               })
-               .end()
+               .findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "Next preview control should be displayed");
+                  })
+                  .end()
 
-            .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Next items control should be displayed");
-               });
-         },
+               .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "Previous items control should not be displayed");
+                  })
+                  .end()
 
-         "Previews generated and correct preview displayed": function() {
-            return this.remote.findAllByCssSelector("#FILMSTRIP_VIEW_PREVIEWS li")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 5, "Incorrect number of preview items");
-               })
-               .end()
+               .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "Next items control should be displayed");
+                  });
+            },
 
-            .carouselItemIsDisplayed(1, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first preview item should be displayed");
-               })
+            "Previews generated and correct preview displayed": function() {
+               return this.remote.findAllByCssSelector("#FILMSTRIP_VIEW_PREVIEWS li")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 5, "Incorrect number of preview items");
+                  })
+                  .end()
 
-            .carouselItemIsDisplayed(2, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The second preview item should not be displayed");
-               });
-         },
+               .carouselItemIsDisplayed(browser, 1, PREVIEW_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first preview item should be displayed");
+                  })
 
-         "Items generated and correct items displayed": function() {
-            return this.remote.findAllByCssSelector("#FILMSTRIP_VIEW_ITEMS li")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 5, "Incorrect number of items");
-               })
-               .end()
+               .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The second preview item should not be displayed");
+                  });
+            },
 
-            .carouselItemIsDisplayed(1, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first item should be displayed");
-               })
+            "Items generated and correct items displayed": function() {
+               return this.remote.findAllByCssSelector("#FILMSTRIP_VIEW_ITEMS li")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 5, "Incorrect number of items");
+                  })
+                  .end()
 
-            .carouselItemIsDisplayed(3, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third item should be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 1, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first item should be displayed");
+                  })
 
-            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
-               });
-         },
+               .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The third item should be displayed");
+                  })
 
-         "Can select next preview": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next img")
-               .clearLog()
-               .click()
-               .end()
+               .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The fourth item should not be displayed");
+                  });
+            },
 
-            .getLastPublish("ALF_FILMSTRIP_ITEM_CHANGED", true)
-               .then(function(payload) {
-                  assert.propertyVal(payload, "index", 1, "Did not select second preview item");
-               })
+            "Can select next preview": function() {
+               return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next img")
+                  .clearLog()
+                  .click()
+                  .end()
 
-            .carouselItemIsDisplayed(1, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The first preview item should not be displayed");
-               })
+               .getLastPublish("ALF_FILMSTRIP_ITEM_CHANGED", true)
+                  .then(function(payload) {
+                     assert.propertyVal(payload, "index", 1, "Did not select second preview item");
+                  })
 
-            .carouselItemIsDisplayed(2, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The second preview item should be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 1, PREVIEW_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The first preview item should not be displayed");
+                  })
 
-            .carouselItemIsDisplayed(3, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The third preview item should not be displayed");
-               });
-         },
+               .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The second preview item should be displayed");
+                  })
 
-         "Can select previous preview": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev img")
-               .clearLog()
-               .click()
-               .end()
+               .carouselItemIsDisplayed(browser, 3, PREVIEW_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The third preview item should not be displayed");
+                  });
+            },
 
-            .getLastPublish("ALF_FILMSTRIP_ITEM_CHANGED", true)
-               .then(function(payload) {
-                  assert.propertyVal(payload, "index", 0, "Did not select first preview item");
-               })
+            "Can select previous preview": function() {
+               return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev img")
+                  .clearLog()
+                  .click()
+                  .end()
 
-            .carouselItemIsDisplayed(1, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first preview item should be displayed");
-               })
+               .getLastPublish("ALF_FILMSTRIP_ITEM_CHANGED", true)
+                  .then(function(payload) {
+                     assert.propertyVal(payload, "index", 0, "Did not select first preview item");
+                  })
 
-            .carouselItemIsDisplayed(2, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The second preview item should not be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 1, PREVIEW_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first preview item should be displayed");
+                  })
 
-            .findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "Previous preview control should not be displayed");
-               });
-         },
+               .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The second preview item should not be displayed");
+                  })
 
-         "Selecting next page of items loads more data and displays second page": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
-               .clearLog()
-               .click()
-               .end()
+               .findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "Previous preview control should not be displayed");
+                  });
+            },
 
-            .getLastPublish("ALF_SCROLL_NEAR_BOTTOM", "Did not fire near-end event", true)
+            "Selecting next page of items loads more data and displays second page": function() {
+               return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
+                  .clearLog()
+                  .click()
+                  .end()
 
-            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Did not load more documents", true)
+               .getLastPublish("ALF_SCROLL_NEAR_BOTTOM", "Did not fire near-end event", true)
 
-            .findAllByCssSelector("#FILMSTRIP_VIEW_ITEMS li")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 10, "Did not load another page of five items");
-               })
-               .end()
+               .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Did not load more documents", true)
 
-            .carouselItemIsDisplayed(3, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The third item should not be displayed");
-               })
+               .findAllByCssSelector("#FILMSTRIP_VIEW_ITEMS li")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 10, "Did not load another page of five items");
+                  })
+                  .end()
 
-            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fourth item should be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The third item should not be displayed");
+                  })
 
-            .carouselItemIsDisplayed(6, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The sixth item should be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The fourth item should be displayed");
+                  })
 
-            .carouselItemIsDisplayed(7, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The seventh item should not be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 6, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The sixth item should be displayed");
+                  })
 
-            .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Second page of items should enable previous control");
-               });
-         },
+               .carouselItemIsDisplayed(browser, 7, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The seventh item should not be displayed");
+                  })
 
-         "Navigating to next preview loads first page of items": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next img")
-               .clearLog()
-               .click()
-               .end()
+               .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "Second page of items should enable previous control");
+                  });
+            },
 
-            .getLastPublish("ALF_FILMSTRIP_ITEM_CHANGED", true)
-               .then(function(payload) {
-                  assert.propertyVal(payload, "index", 1, "Did not select second preview item");
-               })
+            "Navigating to next preview loads first page of items": function() {
+               return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next img")
+                  .clearLog()
+                  .click()
+                  .end()
 
-            .carouselItemIsDisplayed(2, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The second preview item should be displayed");
-               })
+               .getLastPublish("ALF_FILMSTRIP_ITEM_CHANGED", true)
+                  .then(function(payload) {
+                     assert.propertyVal(payload, "index", 1, "Did not select second preview item");
+                  })
 
-            .carouselItemIsDisplayed(1, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first item should be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The second preview item should be displayed");
+                  })
 
-            .carouselItemIsDisplayed(3, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third item should be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 1, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first item should be displayed");
+                  })
 
-            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The third item should be displayed");
+                  })
 
-            .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "First page of items should disable previous control");
-               });
-         },
+               .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The fourth item should not be displayed");
+                  })
 
-         "Clicking on thumbnail updates preview": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(3) .alfresco-renderers-Thumbnail")
-               .clearLog()
-               .click()
-               .end()
+               .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "First page of items should disable previous control");
+                  });
+            },
 
-            .getLastPublish("ALF_FILMSTRIP_SELECT_ITEM", true)
-               .then(function(payload) {
-                  assert.propertyVal(payload, "index", 2, "Did not select third item from thumbnails list");
-               })
+            "Clicking on thumbnail updates preview": function() {
+               return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(3) .alfresco-renderers-Thumbnail")
+                  .clearLog()
+                  .click()
+                  .end()
 
-            .carouselItemIsDisplayed(3, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third preview item should be displayed");
-               });
-         },
+               .getLastPublish("ALF_FILMSTRIP_SELECT_ITEM", true)
+                  .then(function(payload) {
+                     assert.propertyVal(payload, "index", 2, "Did not select third item from thumbnails list");
+                  })
 
-         "Navigating to fourth page loads more items on first occasion only": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
-               .clearLog()
-               .click()
-               .click()
-               .click()
-               .end()
+               .carouselItemIsDisplayed(browser, 3, PREVIEW_CAROUSEL)
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The third preview item should be displayed");
+                  });
+            },
 
-            .getLastPublish("ALF_SCROLL_NEAR_BOTTOM", "Did not fire near-end event", true)
+            "Navigating to fourth page loads more items on first occasion only": function() {
+               return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
+                  .clearLog()
+                  .click()
+                  .click()
+                  .click()
+                  .end()
 
-            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Did not load more documents", true)
+               .getLastPublish("ALF_SCROLL_NEAR_BOTTOM", "Did not fire near-end event", true)
 
-            .findAllByCssSelector("#FILMSTRIP_VIEW_ITEMS li")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 11, "Did not load final item");
-               })
-               .end()
+               .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Did not load more documents", true)
 
-            .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev img")
-               .clearLog()
-               .click()
-               .end()
+               .findAllByCssSelector("#FILMSTRIP_VIEW_ITEMS li")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 11, "Did not load final item");
+                  })
+                  .end()
 
-            .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
-               .click()
-               .end()
+               .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev img")
+                  .clearLog()
+                  .click()
+                  .end()
 
-            .getAllPublishes("ALF_SCROLL_NEAR_BOTTOM")
-               .then(function(payloads) {
-                  assert.lengthOf(payloads, 0, "Fired scroll event unnecessarily");
-               });
-         },
+               .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
+                  .click()
+                  .end()
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
+               .getAllPublishes("ALF_SCROLL_NEAR_BOTTOM")
+                  .then(function(payloads) {
+                     assert.lengthOf(payloads, 0, "Fired scroll event unnecessarily");
+                  });
+            },
+
+            "Clicking folder updates hash": function() {
+               // Not yet implemented
+               // Waiting for problems with layout/resizing/reloading of FilmStripView to be resolved
+            },
+
+            "New folder contents loaded": function() {
+               // Not yet implemented
+               // Waiting for problems with layout/resizing/reloading of FilmStripView to be resolved
+            },
+
+            "Going back in browser history returns to previous folder": function() {
+               // Not yet implemented
+               // Waiting for problems with layout/resizing/reloading of FilmStripView to be resolved
+            },
+
+            "Post Coverage Results": function() {
+               TestCommon.alfPostCoverageResults(this, browser);
+            }
+         };
       });
 
       // ------------
@@ -347,274 +365,300 @@ define([
       // START OF SUITE
       // --------------
 
-      registerSuite({
-         name: "FilmStripView Tests (Paginated)",
+      registerSuite(function() {
+         var browser;
 
-         setup: function() {
-            browser = this.remote;
-            browser.session.carouselItemIsDisplayed = carouselItemIsDisplayed;
-            return TestCommon.loadTestWebScript(this.remote, "/FilmStripView", "FilmStripView Tests").end();
-         },
+         return {
+            name: "FilmStripView Tests (Paginated)",
 
-         beforeEach: function() {
-            browser.end();
-         },
+            setup: function() {
+               browser = this.remote;
+               browser.session.carouselItemIsDisplayed = carouselItemIsDisplayed;
+               return TestCommon.loadTestWebScript(this.remote, "/FilmStripView", "FilmStripView Tests").end();
+            },
 
-         "Check initial controls state": function() {
-            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "Previous preview control should not be displayed");
-               })
-               .end()
+            beforeEach: function() {
+               browser.end();
+            },
 
-            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .next")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Next preview control should be displayed");
-               })
-               .end()
+            "Check initial controls state": function() {
+               return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "Previous preview control should not be displayed");
+                  })
+                  .end()
 
-            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "Previous items control should not be displayed");
-               })
-               .end()
+               .findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .next")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "Next preview control should be displayed");
+                  })
+                  .end()
 
-            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .next")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Next items control should be displayed");
-               });
-         },
+               .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "Previous items control should not be displayed");
+                  })
+                  .end()
 
-         "Previews generated and correct preview displayed": function() {
-            return this.remote.findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS li")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 5, "Incorrect number of preview items");
-               })
-               .end()
+               .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .next")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "Next items control should be displayed");
+                  });
+            },
 
-            .carouselItemIsDisplayed(1, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first preview item should be displayed");
-               })
+            "Previews generated and correct preview displayed": function() {
+               return this.remote.findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS li")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 5, "Incorrect number of preview items");
+                  })
+                  .end()
 
-            .carouselItemIsDisplayed(2, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The second preview item should not be displayed");
-               });
-         },
+               .carouselItemIsDisplayed(browser, 1, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first preview item should be displayed");
+                  })
 
-         "Items generated and correct items displayed": function() {
-            return this.remote.findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 5, "Incorrect number of items");
-               })
-               .end()
+               .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The second preview item should not be displayed");
+                  });
+            },
 
-            .carouselItemIsDisplayed(1, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first item should be displayed");
-               })
+            "Items generated and correct items displayed": function() {
+               return this.remote.findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 5, "Incorrect number of items");
+                  })
+                  .end()
 
-            .carouselItemIsDisplayed(3, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third item should be displayed");
-               })
+               .carouselItemIsDisplayed(browser, 1, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first item should be displayed");
+                  })
 
-            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
-               });
-         },
+               .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The third item should be displayed");
+                  })
 
-         "Can select next preview": function() {
-            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .next img")
-               .clearLog()
+               .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The fourth item should not be displayed");
+                  });
+            },
+
+            "Can select next preview": function() {
+               return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .next img")
+                  .clearLog()
+                  .click()
+                  .end()
+
+               .getLastPublish("PAGED_ALF_FILMSTRIP_ITEM_CHANGED", true)
+                  .then(function(payload) {
+                     assert.propertyVal(payload, "index", 1, "Did not select second preview item");
+                  })
+
+               .carouselItemIsDisplayed(browser, 1, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The first preview item should not be displayed");
+                  })
+
+               .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The second preview item should be displayed");
+                  })
+
+               .carouselItemIsDisplayed(browser, 3, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The third preview item should not be displayed");
+                  });
+            },
+
+            "Can select previous preview": function() {
+               return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .prev img")
+                  .clearLog()
+                  .click()
+                  .end()
+
+               .getLastPublish("PAGED_ALF_FILMSTRIP_ITEM_CHANGED", true)
+                  .then(function(payload) {
+                     assert.propertyVal(payload, "index", 0, "Did not select first preview item");
+                  })
+
+               .carouselItemIsDisplayed(browser, 1, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first preview item should be displayed");
+                  })
+
+               .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The second preview item should not be displayed");
+                  })
+
+               .findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "Previous preview control should not be displayed");
+                  });
+            },
+
+            "Selecting next page of items displays second page of Page 1 of results": function() {
+               return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .next img")
+                  .clearLog()
+                  .click()
+                  .end()
+
+               .getAllPublishes("ALF_SCROLL_NEAR_BOTTOM")
+                  .then(function(payloads) {
+                     assert.lengthOf(payloads, 0, "Fired scroll event incorrectly");
+                  })
+
+               .findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 5, "Loaded more items");
+                  })
+                  .end()
+
+               .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The third item should not be displayed");
+                  })
+
+               .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The fourth item should be displayed");
+                  })
+
+               .carouselItemIsDisplayed(browser, 5, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The fifth item should be displayed");
+                  })
+
+               .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "Second page of items should enable previous control");
+                  });
+            },
+
+            "Navigating to next preview loads first page of items": function() {
+               return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .next img")
+                  .clearLog()
+                  .click()
+                  .end()
+
+               .getLastPublish("PAGED_ALF_FILMSTRIP_ITEM_CHANGED", true)
+                  .then(function(payload) {
+                     assert.propertyVal(payload, "index", 1, "Did not select second preview item");
+                  })
+
+               .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The second preview item should be displayed");
+                  })
+
+               .carouselItemIsDisplayed(browser, 1, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first item should be displayed");
+                  })
+
+               .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The third item should be displayed");
+                  })
+
+               .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "The fourth item should not be displayed");
+                  })
+
+               .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed, "First page of items should disable previous control");
+                  });
+            },
+
+            "Clicking on thumbnail updates preview": function() {
+               return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(3) .alfresco-renderers-Thumbnail")
+                  .clearLog()
+                  .click()
+                  .end()
+
+               .getLastPublish("PAGED_ALF_FILMSTRIP_SELECT_ITEM", true)
+                  .then(function(payload) {
+                     assert.propertyVal(payload, "index", 2, "Did not select third item from thumbnails list");
+                  })
+
+               .carouselItemIsDisplayed(browser, 3, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The third preview item should be displayed");
+                  });
+            },
+
+            "Navigating to Page 3 of results renders only one item": function() {
+               return browser.findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR_dropdown .alfresco-menus-AlfMenuItem:last-child")
+                  .click()
+                  .end()
+
+               .getLastPublish("PAGED_ALF_DOCLIST_REQUEST_FINISHED", true, "Did not load final page of results")
+
+               .findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS li")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 1, "Incorrect number of preview items");
+                  })
+                  .end()
+
+               .carouselItemIsDisplayed(browser, 1, PREVIEW_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first preview item should be displayed");
+                  })
+
+               .findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li")
+                  .then(function(elements) {
+                     assert.lengthOf(elements, 1, "Incorrect number of items");
+                  })
+                  .end()
+
+               .carouselItemIsDisplayed(browser, 1, ITEMS_CAROUSEL, "PAGED_")
+                  .then(function(isDisplayed) {
+                     assert.isTrue(isDisplayed, "The first item should be displayed");
+                  });
+            },
+
+         "Clicking folder loads new folder": function() {
+            return browser.findByCssSelector("body").clearLog().end()
+               
+            .findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR")
                .click()
-               .end()
+            .end()
 
-            .getLastPublish("PAGED_ALF_FILMSTRIP_ITEM_CHANGED", true)
-               .then(function(payload) {
-                  assert.propertyVal(payload, "index", 1, "Did not select second preview item");
-               })
+            .findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR_dropdown .alfresco-menus-AlfMenuItem:first-child")
+               .click()
+            .end()
 
-            .carouselItemIsDisplayed(1, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The first preview item should not be displayed");
-               })
+            .getLastPublish("PAGED_ALF_DOCLIST_REQUEST_FINISHED", true, "Did not load first page of results")
 
-            .carouselItemIsDisplayed(2, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The second preview item should be displayed");
-               })
+            .clearLog()
 
-            .carouselItemIsDisplayed(3, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The third preview item should not be displayed");
-               });
+            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS li:first-child .alfresco-renderers-Thumbnail .inner img")
+               .click()
+            .end()
+
+            .getLastPublish("PAGED_ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "Did not load data");
          },
 
-         "Can select previous preview": function() {
-            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .prev img")
-               .clearLog()
-               .click()
-               .end()
-
-            .getLastPublish("PAGED_ALF_FILMSTRIP_ITEM_CHANGED", true)
-               .then(function(payload) {
-                  assert.propertyVal(payload, "index", 0, "Did not select first preview item");
-               })
-
-            .carouselItemIsDisplayed(1, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first preview item should be displayed");
-               })
-
-            .carouselItemIsDisplayed(2, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The second preview item should not be displayed");
-               })
-
-            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "Previous preview control should not be displayed");
-               });
-         },
-
-         "Selecting next page of items displays second page of Page 1 of results": function() {
-            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .next img")
-               .clearLog()
-               .click()
-               .end()
-
-            .getAllPublishes("ALF_SCROLL_NEAR_BOTTOM")
-               .then(function(payloads) {
-                  assert.lengthOf(payloads, 0, "Fired scroll event incorrectly");
-               })
-
-            .findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 5, "Loaded more items");
-               })
-               .end()
-
-            .carouselItemIsDisplayed(3, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The third item should not be displayed");
-               })
-
-            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fourth item should be displayed");
-               })
-
-            .carouselItemIsDisplayed(5, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fifth item should be displayed");
-               })
-
-            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Second page of items should enable previous control");
-               });
-         },
-
-         "Navigating to next preview loads first page of items": function() {
-            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .next img")
-               .clearLog()
-               .click()
-               .end()
-
-            .getLastPublish("PAGED_ALF_FILMSTRIP_ITEM_CHANGED", true)
-               .then(function(payload) {
-                  assert.propertyVal(payload, "index", 1, "Did not select second preview item");
-               })
-
-            .carouselItemIsDisplayed(2, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The second preview item should be displayed");
-               })
-
-            .carouselItemIsDisplayed(1, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first item should be displayed");
-               })
-
-            .carouselItemIsDisplayed(3, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third item should be displayed");
-               })
-
-            .carouselItemIsDisplayed(4, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
-               })
-
-            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "First page of items should disable previous control");
-               });
-         },
-
-         "Clicking on thumbnail updates preview": function() {
-            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(3) .alfresco-renderers-Thumbnail")
-               .clearLog()
-               .click()
-               .end()
-
-            .getLastPublish("PAGED_ALF_FILMSTRIP_SELECT_ITEM", true)
-               .then(function(payload) {
-                  assert.propertyVal(payload, "index", 2, "Did not select third item from thumbnails list");
-               })
-
-            .carouselItemIsDisplayed(3, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third preview item should be displayed");
-               });
-         },
-
-         "Navigating to Page 3 of results renders only one item": function() {
-            return browser.findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR")
-               .click()
-               .end()
-
-            .findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR_dropdown .alfresco-menus-AlfMenuItem:last-child")
-               .click()
-               .end()
-
-            .getLastPublish("PAGED_ALF_DOCLIST_REQUEST_FINISHED", true, "Did not load final page of results")
-
-            .findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS li")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Incorrect number of preview items");
-               })
-               .end()
-
-            .carouselItemIsDisplayed(1, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first preview item should be displayed");
-               })
-
-            .findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Incorrect number of items");
-               })
-               .end()
-
-            .carouselItemIsDisplayed(1, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first item should be displayed");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
+            "Post Coverage Results": function() {
+               TestCommon.alfPostCoverageResults(this, browser);
+            }
+         };
       });
    });

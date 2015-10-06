@@ -55,7 +55,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       usePagination: true,
 
@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 1
+       * @default
        */
       currentPage: 1,
 
@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 25
+       * @default
        */
       currentPageSize: 25,
 
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       sortAscending: true,
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "cm:name"
+       * @default
        */
       sortField: "cm:name",
 

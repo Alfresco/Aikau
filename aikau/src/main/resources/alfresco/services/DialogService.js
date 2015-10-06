@@ -37,6 +37,10 @@
  * "dialogRepeats" attribute in the [ALF_CREATE_FORM_DIALOG_REQUEST]{@link module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST}
  * to be true. This will include an additional button in the dialog that when used will publish the value of the current form
  * and then recreate a new dialog with a new copy of the form.</p>
+ * <p>In order to be notified when a dialog is cancelled by either clicking on the cross in the top corner, or by pressing escape,
+ * a "cancelPublishTopic" can be supplied. This will never be published by someone clicking a "cancel" button - it will only be
+ * triggered using one of the two methods above. Scope can be overridden from the default response scope by providing a custom
+ * "cancelPublishScope" property. This can be used on normal dialogs and form dialogs.</p>
  *
  * @example <caption>Example button that requests a form dialog</caption>
  * {
@@ -45,6 +49,8 @@
  *       label: "Display form dialog",
  *       publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
  *       publishPayload: {
+ *          cancelPublishScope: "",
+ *          cancelPublishTopic: "DIALOG_CANCELLED",
  *          dialogId: "NAME_DIALOG",
  *          dialogTitle: "User name",
  *          dialogConfirmationButtonTitle: "Save",
@@ -123,6 +129,7 @@
  *
  * @event module:alfresco/services/DialogService~ALF_CREATE_FORM_DIALOG_REQUEST
  * @property {string} dialogTitle - The text to set in the dialog title bar
+ * @property {number} [duration=0] - The duration of the fade effect when showing or hiding the dialog
  * @property {string} formSubmissionTopic - The topic to publish when the confirmation button is used (the published payload will be the form value)
  * @property {Object} formSubmissionPayloadMixin - An additional object to "mixin" to the form value before it is published
  * @property {Object} [formValue={}] - The initial value to apply to the form when created. This should be an object with attributes mapping to the "name" attribute of each form control.
@@ -139,6 +146,8 @@
  * @property {boolean} [handleOverflow=false] - Should scrollbars be added to if the content is bigger than the dialog
  * @property {boolean} [fixedWidth=false] - If set to true, prevents the dialog resizing to fit the content
  * @property {string} [hideTopic=null] - Topic to subscribe to to trigger a dialog hide. If this is set
+ * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
+ * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
  */
 
 /**
@@ -147,6 +156,7 @@
  * @event module:alfresco/services/DialogService~ALF_CREATE_DIALOG_REQUEST
  * @property {string} dialogTitle - The text to set in the dialog title bar
  * @property {string} [dialogId=null] The ID of the dialog to display. Only one dialog with no dialogId can exist on a page at a time, therefore it is sensible to always include an id for your dialogs to allow stacking.
+ * @property {number} [duration=0] - The duration of the fade effect when showing or hiding the dialog
  * @property {string} [textContent=null] - Text to display in the dialog body
  * @property {array} [widgetsContent=null] - A widget model to display in the dialog body (this supercedes any textContent attribute)
  * @property {Array} [widgetsButtons=null] - A widget model of buttons to display in the dialog footer
@@ -156,19 +166,23 @@
  * @property {Boolean} [handleOverflow=false] - Should scrollbars be added to if the content is bigger than the dialog
  * @property {Boolean} [fixedWidth=false] - If set to true, prevents the dialog resizing to fit the content
  * @property {Array} [publishOnShow=null] - An array of publications objects to make when the dialog is displayed
+ * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
+ * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
  */
 
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
-        "dojo/_base/lang",
+        "alfresco/core/topics",
         "alfresco/dialogs/AlfDialog",
         "alfresco/forms/Form",
+        "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/aspect",
         "dojo/on",
         "dojo/keys",
-        "jquery",
-        "dojo/aspect"],
-        function(declare, BaseService, lang, AlfDialog, AlfForm, array, on, keys, $, aspect) {
+        "dojo/when",
+        "jquery"],
+        function(declare, BaseService, topics, AlfDialog, AlfForm, lang, array, aspect, on, keys, when, $) {
 
    return declare([BaseService], {
 
@@ -283,9 +297,9 @@ define(["dojo/_base/declare",
       registerSubscriptions: function alfresco_services_DialogService__registerSubscriptions() {
          // Generate a new pub/sub scope for the widget (this will intentionally override any other settings
          // to contrain communication...
-         this.publishTopic = "ALF_CREATE_FORM_DIALOG_REQUEST";
+         this.publishTopic = topics.CREATE_FORM_DIALOG;
          this.alfSubscribe(this.publishTopic, lang.hitch(this, this.onCreateFormDialogRequest));
-         this.alfSubscribe("ALF_CREATE_DIALOG_REQUEST", lang.hitch(this, this.onCreateDialogRequest));
+         this.alfSubscribe(topics.CREATE_DIALOG, lang.hitch(this, this.onCreateDialogRequest));
 
          // Create a reference of IDs to dialogs...
          // The idea is that we shouldn't have multiple instances of a dialog with the same ID, but we
@@ -419,6 +433,9 @@ define(["dojo/_base/declare",
             id: payload.dialogId ? payload.dialogId : this.generateUuid(),
             title: this.message(payload.dialogTitle || ""),
             content: payload.textContent,
+            duration: payload.duration || 0,
+            fullScreenMode: payload.fullScreenMode || false,
+            fullScreenPadding: payload.fullScreenPadding || 10,
             widgetsContent: payload.widgetsContent,
             widgetsButtons: payload.widgetsButtons,
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",
@@ -442,7 +459,7 @@ define(["dojo/_base/declare",
             array.forEach(payload.publishOnShow, lang.hitch(this, this.publishOnShow));
          }
          this.mapRequestedIdToDialog(payload, dialog);
-         this._showDialog(dialog);
+         this._showDialog(payload, dialog);
 
          if (payload.hideTopic)
          {
@@ -479,6 +496,7 @@ define(["dojo/_base/declare",
        * @param {module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST} payload The payload published on the request topic.
        */
       onCreateFormDialogRequest: function alfresco_services_DialogService__onCreateFormDialogRequest(payload) {
+         // jshint maxstatements:false
          this.cleanUpAnyPreviousDialog(payload);
          if (!payload.widgets)
          {
@@ -526,7 +544,7 @@ define(["dojo/_base/declare",
                var dialogConfig = this.createDialogConfig(config, formConfig);
                var dialog = new AlfDialog(dialogConfig);
                this.mapRequestedIdToDialog(payload, dialog);
-               this._showDialog(dialog);
+               this._showDialog(payload, dialog);
 
                if (config.dialogCloseTopic)
                {
@@ -577,15 +595,26 @@ define(["dojo/_base/declare",
 
       /**
        * When repeating a request for a dialog (the "Create and then create another" paradigm) it is necessary to wait
-       * until the previous dialog has been completely hidden before attempting to create another one.
+       * until the previous dialog has been completely hidden before attempting to create another one if there is a
+       * fade out animation configured on the dialog.
        *
        * @instance
        * @param {object} payload A copy of the original form dialog creation request
        * @param {object} dialog The dialog that must be fully hidden before the request for a new dialog is made.
        */
       _repeatFormDialogRequestAfterHide: function alfresco_services_DialogService___repeatFormDialogRequestAfterHide(payload, dialog) {
-         var handle = aspect.after(dialog, "onHide", lang.hitch(this, this.onCreateFormDialogRequest, payload));
-         this.mapRequestedIdToHandle(payload, "dialog.repeat.hide", handle);
+         if (dialog._isShown())
+         {
+            // If the dialog is still shown then we need to set up an aspect to wait for the dialog to be hidden
+            // before we attempt to recreate a dialog with the original configuration...
+            var handle = aspect.after(dialog, "onHide", lang.hitch(this, this.onCreateFormDialogRequest, payload));
+            this.mapRequestedIdToHandle(payload, "dialog.repeat.hide", handle);
+         }
+         else
+         {
+            // ...but if the dialog is already hidden we can just go ahead and recreate it
+            this.onCreateFormDialogRequest(payload);
+         }
       },
 
       /**
@@ -631,8 +660,11 @@ define(["dojo/_base/declare",
             id: dialogId,
             title: this.message(config.dialogTitle || ""),
             pubSubScope: config.pubSubScope, // Scope the dialog content so that it doesn't pollute any other widgets,,
+            duration: config.duration || 0,
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth,
+            fullScreenMode: config.fullScreenMode || false,
+            fullScreenPadding: config.fullScreenPadding || 10,
             parentPubSubScope: config.parentPubSubScope,
             additionalCssClasses: config.additionalCssClasses ? config.additionalCssClasses : "",
             suppressCloseClasses: suppressCloseClasses,
@@ -647,7 +679,7 @@ define(["dojo/_base/declare",
                         id: (config.dialogConfirmationButtonId) ? config.dialogConfirmationButtonId : dialogId + "_OK",
                         label: config.dialogConfirmationButtonTitle,
                         disableOnInvalidControls: true,
-                        additionalCssClasses: "confirmationButton",
+                        additionalCssClasses: "confirmationButton call-to-action",
                         publishTopic: this._formConfirmationTopic,
                         publishPayload: {
                            formSubmissionTopic: config.formSubmissionTopic,
@@ -727,45 +759,48 @@ define(["dojo/_base/declare",
        */
       onFormDialogConfirmation: function alfresco_services_DialogService__onFormDialogConfirmation(payload) {
          if (payload &&
-             payload.dialogContent &&
-             payload.dialogContent.length &&
-             typeof payload.dialogContent[0].getValue === "function")
+             payload.dialogContent)
          {
-            var data = {};
-            var formData = payload.dialogContent[0].getValue();
+            when(payload.dialogContent, lang.hitch(this, function(dialogContent) {
+               if (dialogContent && dialogContent.length)
+               {
+                  var data = {};
+                  var formData = dialogContent[0].getValue();
 
-            // Destroy the dialog if a reference is provided...
-            if (payload.dialogReference && typeof payload.dialogReference.destroyRecursive === "function")
-            {
-               payload.dialogReference.destroyRecursive();
-            }
+                  // Destroy the dialog if a reference is provided...
+                  if (payload.dialogReference && typeof payload.dialogReference.destroyRecursive === "function")
+                  {
+                     payload.dialogReference.destroyRecursive();
+                  }
 
-            // Mixin in any additional payload information...
-            // An alfResponseScope should always have been set on a payload so it can be set as the
-            // responseScope, but a responseScope in the formSubmissionPayloadMixin will override it
-            lang.mixin(data, {
-               responseScope: payload.alfResponseScope
-            });
-            payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
+                  // Mixin in any additional payload information...
+                  // An alfResponseScope should always have been set on a payload so it can be set as the
+                  // responseScope, but a responseScope in the formSubmissionPayloadMixin will override it
+                  lang.mixin(data, {
+                     responseScope: payload.alfResponseScope
+                  });
+                  payload.formSubmissionPayloadMixin && lang.mixin(data, payload.formSubmissionPayloadMixin);
 
-            // Using JQuery here in order to support deep merging of dot-notation properties...
-            $.extend(true, data, formData);
+                  // Using JQuery here in order to support deep merging of dot-notation properties...
+                  $.extend(true, data, formData);
 
-            // Publish the topic requested for complete...
-            var customScope;
-            if (payload.formSubmissionScope || payload.formSubmissionScope === "") 
-            {
-               customScope = payload.formSubmissionScope;
-            }
-            
-            var topic = payload.formSubmissionTopic,
-               globalScope = payload.hasOwnProperty("formSubmissionGlobal") ? !!payload.formSubmissionGlobal : true,
-               toParent = false;
-            this.alfPublish(topic, data, globalScope, toParent, customScope);
-         }
-         else
-         {
-            this.alfLog("error", "The format of the dialog content was not as expected, the 'formSubmissionTopic' will not be published", payload, this);
+                  // Publish the topic requested for complete...
+                  var customScope;
+                  if (payload.formSubmissionScope || payload.formSubmissionScope === "") 
+                  {
+                     customScope = payload.formSubmissionScope;
+                  }
+                  
+                  var topic = payload.formSubmissionTopic,
+                     globalScope = payload.hasOwnProperty("formSubmissionGlobal") ? !!payload.formSubmissionGlobal : true,
+                     toParent = false;
+                  this.alfPublish(topic, data, globalScope, toParent, customScope);
+               }
+               else
+               {
+                  this.alfLog("error", "The format of the dialog content was not as expected, the 'formSubmissionTopic' will not be published", payload, this);
+               }
+            }));
          }
       },
 
@@ -773,16 +808,48 @@ define(["dojo/_base/declare",
        * Show the supplied dialog (also used for adding hooks to the show/hide methods)
        *
        * @instance
+       * @param {Object} payload The original request payload
        * @param {Object} dialog The dialog to show
        */
-      _showDialog: function alfresco_services_DialogService___showDialog(dialog) {
+      _showDialog: function alfresco_services_DialogService___showDialog(payload, dialog) {
+
+         // Add to the stack of active dialogs
          this._activeDialogs.push(dialog);
+
+         // Handle cancelling
+         this._handleCancellation(payload, dialog);
+
+         // Show the dialog
          dialog.show();
+
+         // Hook up to the dialog hide event
          aspect.after(dialog, "onHide", lang.hitch(this, function() {
+            
+            // Remove any cancellation topic values
+            dialog.cancelPublishTopic = dialog.cancelPublishScope = null;
+
+            // Remove this dialog from the active dialogs stack
             this._activeDialogs = array.filter(this._activeDialogs, function(activeDialog) {
                return activeDialog !== dialog;
             });
          }));
+      },
+
+       /**
+       * When a cancelTopic has been defined, make sure it's published when the dialog
+       * is cancelled (via escape keypress or cross-button click).
+       *
+       * @instance
+       * @param {object} payload The original payload
+       * @param {object} dialog The dialog widget
+       */
+      _handleCancellation: function alfresco_services_DialogService___handleCancellation(payload, dialog) {
+         if (payload.cancelPublishTopic) {
+            dialog.cancelPublishTopic = payload.cancelPublishTopic;
+            dialog.cancelPublishScope = payload.cancelPublishScope || payload.alfResponseScope;
+         } else {
+            dialog.cancelPublishTopic = dialog.cancelPublishScope = null;
+         }
       },
 
       /**
@@ -793,7 +860,7 @@ define(["dojo/_base/declare",
       _handleEscape: function alfresco_services_DialogService___handleEscape() {
          if (this._activeDialogs.length) {
             var lastOpenedDialog = this._activeDialogs[this._activeDialogs.length - 1];
-            lastOpenedDialog.hide();
+            lastOpenedDialog.onCancel();
          }
       }
    });

@@ -27,20 +27,18 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, assert, require, TestCommon) {
 
-   var browser;
-
    // PLEASE NOTE:
    // We're going to run the same tests on the Document Library with URL hashing enabled and then disabled
    // so the tests are abstracted to their own individual functions for re-use (this is slightly different
    // that other tests)...
-   var countInitialBreadcrumbs = function() {
+   var countInitialBreadcrumbs = function(browser) {
       return browser.setFindTimeout(10000).findAllByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
          .then(function(elements) {
             assert.lengthOf(elements, 1, "No breadcrumbs were rendered on page load");
          }); 
    };
 
-   var checkInitialBreadcrumbText = function() {
+   var checkInitialBreadcrumbText = function(browser) {
       return browser.findByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb .breadcrumb")
          .getVisibleText()
          .then(function(text) {
@@ -48,7 +46,7 @@ define(["intern!object",
          });
    };
 
-   var clickOnFolderLink = function() {
+   var clickOnFolderLink = function(browser) {
       return browser.findByCssSelector("#DETAILED_VIEW_NAME_ITEM_0 .alfresco-renderers-Property")
          .clearLog()
             .click()
@@ -60,7 +58,7 @@ define(["intern!object",
             });
          };
 
-   var checkAddedBreadcrumbText = function() {
+   var checkAddedBreadcrumbText = function(browser) {
       return browser.findByCssSelector("#DOCLIB_BREADCRUMB_TRAIL .alfresco-documentlibrary-AlfBreadcrumb:nth-child(2) .breadcrumb")
          .getVisibleText()
          .then(function(text) {
@@ -68,7 +66,7 @@ define(["intern!object",
          });
    };
 
-   var returnToRoot = function() {
+   var returnToRoot = function(browser) {
       return browser.findByCssSelector("#DOCLIB_BREADCRUMB_TRAIL .alfresco-documentlibrary-AlfBreadcrumb:nth-child(1) .breadcrumb")
          .clearLog()
          .click()
@@ -86,7 +84,7 @@ define(["intern!object",
          });
    };
 
-   var switchToFilter = function(pubSubScope) {
+   var switchToFilter = function(browser, pubSubScope) {
       return browser.findByCssSelector(".alfresco-documentlibrary-AlfDocumentFilter:last-child span")
          .clearLog()
          .click()
@@ -103,7 +101,10 @@ define(["intern!object",
    // NOTE: For some as yet undetermined reason the first time we attempt to load the Document Library test page 
    //       with clear dependency caches it will fail. Therefore we register a dummy test suite that absorbs this
    //       failure so that subsequent tests can pass.
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Document Library Test (dummy load)",
 
       setup: function() {
@@ -111,9 +112,13 @@ define(["intern!object",
          return TestCommon.loadTestWebScript(this.remote, "/DocLib", "Document Library Test (dummy load)", null, true).end();
       }
       
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Document Library Test (default)",
 
       setup: function() {
@@ -127,46 +132,50 @@ define(["intern!object",
 
       "Count the initial breadcrumbs": function() {
          return browser.then(function() {
-            return countInitialBreadcrumbs();
+            return countInitialBreadcrumbs(browser);
          });
       },
 
       "Check the initial breadcrumb text": function() {
          return browser.then(function() {
-            return checkInitialBreadcrumbText();
+            return checkInitialBreadcrumbText(browser);
          });
       },
 
       "Click on a folder link and check for updated breadcrumb": function() {
          return browser.then(function() {
-            return clickOnFolderLink();
+            return clickOnFolderLink(browser);
          });
       },
 
       "Check the added breadcrumb text": function() {
          return browser.then(function() {
-            return checkAddedBreadcrumbText();
+            return checkAddedBreadcrumbText(browser);
          });
       },
 
       "Use the breadcrumb trail to return to the root": function() {
          return browser.then(function() {
-            return returnToRoot();
+            return returnToRoot(browser);
          });
       },
 
       "Switch to favourites filter": function() {
          return browser.then(function() {
-            return switchToFilter("SCOPED_");
+            return switchToFilter(browser, "SCOPED_");
          });
       },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Document Library Test (no URL hashing)",
 
       setup: function() {
@@ -180,42 +189,90 @@ define(["intern!object",
 
       "Count the initial breadcrumbs": function() {
          return browser.then(function() {
-            return countInitialBreadcrumbs();
+            return countInitialBreadcrumbs(browser);
          });
       },
 
       "Check the initial breadcrumb text": function() {
          return browser.then(function() {
-            return checkInitialBreadcrumbText();
+            return checkInitialBreadcrumbText(browser);
          });
       },
 
       "Click on a folder link and check for updated breadcrumb": function() {
          return browser.then(function() {
-            return clickOnFolderLink();
+            return clickOnFolderLink(browser);
          });
       },
 
       "Check the added breadcrumb text": function() {
          return browser.then(function() {
-            return checkAddedBreadcrumbText();
+            return checkAddedBreadcrumbText(browser);
          });
       },
 
       "Use the breadcrumb trail to return to the root": function() {
          return browser.then(function() {
-            return returnToRoot();
+            return returnToRoot(browser);
          });
       },
 
       "Switch to favourites filter": function() {
          return browser.then(function() {
-            return switchToFilter("");
+            return switchToFilter(browser, "");
          });
+      },
+
+      // NOTE: These tests do not need to be duplicated across both non-hashing and hashing Document Libraries
+      
+      "Select items and switch views": function() {
+         // Select an item and make sure it is shown as selected...
+         return browser.findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_0.unchecked")
+            .click()
+         .end()
+         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_0.checked")
+         .end()
+
+         // Select another item and make sure it is shown as selected...
+         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_2.unchecked")
+            .click()
+         .end()
+         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_2.checked")
+         .end()
+
+         // Clear the log so that we can tell when view switching is complete...
+         .clearLog()
+
+         // Open the config menu...
+         .findByCssSelector("#DOCLIB_CONFIG_MENU img.alf-configure-icon")
+            .click()
+         .end()
+
+         // Select a new view...
+         .findByCssSelector("#DOCLIB_CONFIG_MENU_VIEW_SELECT_GROUP tr:nth-child(1) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         // Check selected files publication occurs...
+         .getLastPublish("ALF_SELECTED_FILES_CHANGED")
+         .end()
+
+         // Check the item selection has been retained...
+         .findAllByCssSelector("#SIMPLE_VIEW_SELECTOR_ITEM_0.checked")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Item 0 selection was not retained switching views");
+            })
+         .end()
+
+         .findAllByCssSelector("#SIMPLE_VIEW_SELECTOR_ITEM_2.checked")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Item 2 selection was not retained switching views");
+            });
       },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

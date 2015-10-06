@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.cancel.label"
+       * @default
        */
       cancelLabel: "inline-edit.cancel.label",
 
@@ -99,7 +99,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.edit.altText"
+       * @default
        */
       editAltText: "inline-edit.edit.altText",
 
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.edit.label"
+       * @default
        */
       editLabel: "inline-edit.edit.label",
 
@@ -126,7 +126,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       formWidget: null,
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       hiddenDataRules: null,
 
@@ -152,22 +152,21 @@ define(["dojo/_base/declare",
        * The is the name of the parameter that will be used to persist changes to the property
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       postParam: null,
       
       /**
        * The value configured will be used to look up a property for the item being rendered to 
-       * determine whether or not to render the edit controls. The default value maps to the
-       * write permissions typically found in the data returned for a Node in the Alfresco
-       * repository. If this is configured to be null then the edit controls will always
-       * be rendered.
+       * determine whether or not to render the edit controls. If this is configured to be null 
+       * then the edit controls will always be rendered.
        *
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.31
        */
-      permissionProperty: "node.permissions.user.Write",
+      permissionProperty: null,
 
       /**
        * Indicates whether or not the currentItem should be updated following a successful
@@ -175,7 +174,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       refreshCurrentItem: false,
 
@@ -184,7 +183,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "inline-edit.save.label"
+       * @default
        */
       saveLabel: "inline-edit.save.label",
 
@@ -197,7 +196,6 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_CRUD_CREATE"
        */
       setDefaultPublicationData: function alfresco_renderers_InlineEditProperty__setDefaultPublicationData() {
          this.publishTopic = "ALF_CRUD_CREATE";
@@ -482,15 +480,12 @@ define(["dojo/_base/declare",
          {
             lang.setObject(this.propertyToRender, this.originalRenderedValue, this.currentItem);
          }
-
-         // This is a bit ugly... there will be better ways to handle this...
-         // Basically it's handling the situation where the prefix/suffix for cleared when data wasn't originally available...
-         var prefix = (this.requestedValuePrefix) ? this.requestedValuePrefix : this.renderedValuePrefix;
-         var suffix = (this.requestedValueSuffix) ? this.requestedValueSuffix : this.renderedValueSuffix;
          
-         html.set(this.renderedValueNode, prefix + this.renderedValue + suffix);
-         domClass.remove(this.renderedValueNode, "hidden faded");
+         this.renderedValue = this.generateRendering(this.renderedValue);
+         html.set(this.renderedValueNode, this.renderedValue);
+         domClass.remove(this.renderedValueNode, "hidden");
          domClass.add(this.editNode, "hidden");
+         this.updateCssClasses();
          this.renderedValueNode.focus();
       },
 

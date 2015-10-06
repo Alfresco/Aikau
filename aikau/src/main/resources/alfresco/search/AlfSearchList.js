@@ -32,8 +32,9 @@ define(["dojo/_base/declare",
         "alfresco/util/hashUtils",
         "dojo/io-query",
         "alfresco/core/ArrayUtils",
+        "alfresco/core/ObjectTypeUtils",
         "alfresco/search/AlfSearchListView"],
-        function(declare, AlfSortablePaginatedList, array, lang, hashUtils, ioQuery, arrayUtils) {
+        function(declare, AlfSortablePaginatedList, array, lang, hashUtils, ioQuery, arrayUtils, ObjectTypeUtils) {
 
    return declare([AlfSortablePaginatedList], {
 
@@ -60,7 +61,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       facetFields: "",
 
@@ -70,7 +71,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       facetFilters: null,
 
@@ -81,7 +82,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       hideFacets: true,
 
@@ -90,7 +91,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       searchTerm: "",
 
@@ -100,7 +101,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "repo"
+       * @default
        */
       selectedScope: "repo",
 
@@ -109,7 +110,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       spellcheck: true,
 
@@ -568,14 +569,31 @@ define(["dojo/_base/declare",
                this.alfPublish(this.requestInProgressTopic, {});
                this.showLoadingMessage();
 
+               // When loading a page containing filters to apply as a URL hash parameter, the facetFilters attribute
+               // will be a string, but when applied after the page is loaded it will be an object. We need to treat
+               // each case differently...
                var filters = "";
-               for (key in this.facetFilters)
+               if (ObjectTypeUtils.isString(this.facetFilters))
                {
-                  if (this.facetFilters.hasOwnProperty(key))
+                  // When facetFilters is a string it will be delimited by commas, the string can be split to get an array
+                  // of each filter to apply...
+                  var filtersArray = this.facetFilters.split(",");
+                  array.forEach(filtersArray, function(filter) {
+                     filters = filters + filter.replace(/\.__.u/g, "").replace(/\.__/g, "") + ",";
+                  });
+               }
+               else
+               {
+                  // When facetFilters is an object, each key will be a filter to be applied...
+                  for (key in this.facetFilters)
                   {
-                     filters = filters + key.replace(/\.__.u/g, "").replace(/\.__/g, "") + ",";
+                     if (this.facetFilters.hasOwnProperty(key))
+                     {
+                        filters = filters + key.replace(/\.__.u/g, "").replace(/\.__/g, "") + ",";
+                     }
                   }
                }
+               // Trim any trailing comma...
                filters = filters.substring(0, filters.length - 1);
 
                // Make sure the repo param is set appropriately...

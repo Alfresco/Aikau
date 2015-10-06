@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,7 +27,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView"],
-        function(declare, AlfDocumentListView, template) {
+        function(declare, AlfDocumentListView) {
 
    return declare([AlfDocumentListView], {
 
@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "no-borders"
+       * @default
        */
       additionalCssClasses: "no-borders",
 
@@ -78,6 +78,7 @@ define(["dojo/_base/declare",
                      config: {
                         widgets: [
                            {
+                              id: "SIMPLE_VIEW_SELECTOR",
                               name: "alfresco/renderers/Selector"
                            }
                         ]
@@ -88,6 +89,7 @@ define(["dojo/_base/declare",
                      config: {
                         widgets: [
                            {
+                              id: "SIMPLE_VIEW_INDICATORS",
                               name: "alfresco/renderers/Indicators"
                            }
                         ]
@@ -98,6 +100,7 @@ define(["dojo/_base/declare",
                      config: {
                         widgets: [
                            {
+                              id: "SIMPLE_VIEW_THUMBNAIL",
                               name: "alfresco/renderers/SmallThumbnail"
                            }
                         ]
@@ -116,17 +119,21 @@ define(["dojo/_base/declare",
                                        config: {
                                           widgets: [
                                              {
+                                                id: "SIMPLE_VIEW_NAME",
                                                 name: "alfresco/renderers/InlineEditPropertyLink",
                                                 config: {
                                                    propertyToRender: "node.properties.cm:name",
+                                                   permissionProperty: "node.permissions.user.Write",
                                                    postParam: "prop_cm_name",
                                                    renderSize: "large"
                                                 }
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_TITLE",
                                                 name: "alfresco/renderers/InlineEditProperty",
                                                 config: {
                                                    propertyToRender: "node.properties.cm:title",
+                                                   permissionProperty: "node.permissions.user.Write",
                                                    postParam: "prop_cm_title",
                                                    renderSize: "small",
                                                    renderedValuePrefix: "(",
@@ -143,24 +150,29 @@ define(["dojo/_base/declare",
                                        config: {
                                           widgets: [
                                              {
+                                                id: "SIMPLE_VIEW_DATE",
                                                 name: "alfresco/renderers/Date"
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_SIZE",
                                                 name: "alfresco/renderers/Size"
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_FAVOURITE",
                                                 name: "alfresco/renderers/Favourite"
                                              },
                                              {
                                                 name: "alfresco/renderers/Separator"
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_LIKE",
                                                 name: "alfresco/renderers/Like"
                                              },
                                              {
                                                 name: "alfresco/renderers/Separator"
                                              },
                                              {
+                                                id: "SIMPLE_VIEW_COMMENTS",
                                                 name: "alfresco/renderers/Comments"
                                              }
                                           ]
@@ -177,6 +189,7 @@ define(["dojo/_base/declare",
                      config: {
                         widgets: [
                            {
+                              id: "SIMPLE_VIEW_ACTIONS",
                               name: "alfresco/renderers/Actions"
                            }
                         ]

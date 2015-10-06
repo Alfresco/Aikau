@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -69,7 +69,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "toggle.on.label"
+       * @default
        */
       onLabel: "toggle.on.label",
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "toggle.off.label"
+       * @default
        */
       offLabel: "toggle.off.label",
       
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "toggle.on.tooltip"
+       * @default
        */
       onTooltip: "toggle.on.tooltip",
       
@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "toggle.off.tooltip"
+       * @default
        */
       offTooltip: "toggle.off.tooltip",
       
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * The CSS class to apply for the on display
        * @instance
        * @type {string} 
-       * @default ""
+       * @default
        */
       toggleClass: "",
       
@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
        * The topic to publish on when the toggle is switched "on"
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       toggleOnTopic: null,
       
@@ -117,7 +117,8 @@ define(["dojo/_base/declare",
        * The topic to subscribe to for successful toggle "on" events
        * @instance
        * @type {string} 
-       * @default null
+       * @default
+       * @event
        */
       toggleOnSuccessTopic: null,
       
@@ -125,7 +126,8 @@ define(["dojo/_base/declare",
        * The topic to subscribe to for failed toggle "on" events
        * @instance
        * @type {string} 
-       * @default null
+       * @default
+       * @event
        */
       toggleOnFailureTopic: null,
       
@@ -133,7 +135,8 @@ define(["dojo/_base/declare",
        * The topic to publish on when the toggle is switched "off"
        * @instance
        * @type {string} 
-       * @default null
+       * @default
+       * @event
        */
       toggleOffTopic: null,
       
@@ -141,7 +144,8 @@ define(["dojo/_base/declare",
        * The topic to subscribe to for successful toggle "off" events
        * @instance
        * @type {string} 
-       * @default null
+       * @default
+       * @event
        */
       toggleOffSuccessTopic: null,
       
@@ -149,7 +153,8 @@ define(["dojo/_base/declare",
        * The topic to subscribe to for failure toggle "off" events
        * @instance
        * @type {string} 
-       * @default null
+       * @default
+       * @event
        */
       toggleOffFailureTopic: null,
       
@@ -170,24 +175,24 @@ define(["dojo/_base/declare",
           * as this matches the pattern provided by the generic handlers of "alfresco/core/CoreXhr".
           * (obviously if they have been set then leave them as they are).
           */
-         if (this.toggleOnTopic != null)
+         if (this.toggleOnTopic)
          {
-            if (this.toggleOnSuccessTopic == null)
+            if (!this.toggleOnSuccessTopic)
             {
                this.toggleOnSuccessTopic = this.toggleOnTopic + "_SUCCESS";
             }
-            if (this.toggleOnFailureTopic == null)
+            if (!this.toggleOnFailureTopic)
             {
                this.toggleOnFailureTopic = this.toggleOnTopic + "_FAILURE";
             }
          }
-         if (this.toggleOffTopic != null)
+         if (this.toggleOffTopic)
          {
-            if (this.toggleOffSuccessTopic == null)
+            if (!this.toggleOffSuccessTopic)
             {
                this.toggleOffSuccessTopic = this.toggleOffTopic + "_SUCCESS";
             }
-            if (this.toggleOffFailureTopic == null)
+            if (!this.toggleOffFailureTopic)
             {
                this.toggleOffFailureTopic = this.toggleOffTopic + "_FAILURE";
             }
@@ -205,7 +210,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       propertyToRender: null,
 
@@ -216,9 +221,9 @@ define(["dojo/_base/declare",
        * @returns {boolean} Indicating the initial state of the toggle.
        */
       getInitialState: function alfresco_renderers_Toggle__getInitialState() {
-         if (this.propertyToRender != null)
+         if (this.propertyToRender)
          {
-            return (lang.getObject(this.propertyToRender, false, this.currentItem) == true);
+            return (lang.getObject(this.propertyToRender, false, this.currentItem) === true);
          }
          else
          {
@@ -320,11 +325,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       removeSubscriptionHandles: function alfresco_renderers_Toggle__removeSubscriptionHandles() {
-         if (this._successHandle != null)
+         if (this._successHandle)
          {
             this.alfUnsubscribe(this._successHandle);
          }
-         if (this._failureHandle != null)
+         if (this._failureHandle)
          {
             this.alfUnsubscribe(this._failureHandle);
          }
@@ -334,7 +339,7 @@ define(["dojo/_base/declare",
        * Called whenever the "toggleOnSuccessTopic" attribute is published on
        * @instance
        */
-      onToggleOnSuccess: function alfresco_renderers_Toggle__onToggleOnSuccess(payload) {
+      onToggleOnSuccess: function alfresco_renderers_Toggle__onToggleOnSuccess(/*jshint unused:false*/ payload) {
          this.removeSubscriptionHandles();
          this.isToggleOn = true;
          domClass.add(this.processingNode, "hidden");
@@ -345,7 +350,7 @@ define(["dojo/_base/declare",
        * Called whenever the "toggleOnFailureTopic" attribute is published on
        * @instance
        */
-      onToggleOnFailure: function alfresco_renderers_Toggle__onToggleOnFailure(payload) {
+      onToggleOnFailure: function alfresco_renderers_Toggle__onToggleOnFailure(/*jshint unused:false*/ payload) {
          this.removeSubscriptionHandles();
          this.isToggleOn = false;
          domClass.add(this.processingNode, "hidden");
@@ -357,7 +362,7 @@ define(["dojo/_base/declare",
        * Called whenever the "toggleOffSuccessTopic" attribute is published on
        * @instance
        */
-      onToggleOffSuccess: function alfresco_renderers_Toggle__onToggleOffSuccess(payload) {
+      onToggleOffSuccess: function alfresco_renderers_Toggle__onToggleOffSuccess(/*jshint unused:false*/ payload) {
          this.removeSubscriptionHandles();
          this.isToggleOn = false;
          domClass.add(this.processingNode, "hidden");
@@ -368,7 +373,7 @@ define(["dojo/_base/declare",
        * Called whenever the "toggleOffFailureTopic" attribute is published on
        * @instance
        */
-      onToggleOffFailure: function alfresco_renderers_Toggle__onToggleOffFailure(payload) {
+      onToggleOffFailure: function alfresco_renderers_Toggle__onToggleOffFailure(/*jshint unused:false*/ payload) {
          this.removeSubscriptionHandles();
          this.isToggleOn = true;
          domClass.add(this.processingNode, "hidden");

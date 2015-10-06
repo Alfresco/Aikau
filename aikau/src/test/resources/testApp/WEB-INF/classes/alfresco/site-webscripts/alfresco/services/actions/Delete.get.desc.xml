@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Delete Action</shortname>
+  <description>A test page for verifying the Delete action</description>
+  <family>aikau-unit-tests</family>
+  <url>/Delete</url>
+</webscript>

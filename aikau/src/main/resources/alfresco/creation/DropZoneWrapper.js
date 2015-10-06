@@ -65,7 +65,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       moduleName: "<not set>",
       

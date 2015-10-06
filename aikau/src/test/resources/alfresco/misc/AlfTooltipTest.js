@@ -26,8 +26,10 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "AlfTooltip Tests",
 
       setup: function() {
@@ -62,8 +64,7 @@ define(["intern!object",
             .getSize()
             .then(function(size) {
                // width set is 300, 306 accounts for styling
-               assert(size.width == 306, "The tooltip width was incorrect, " +
-               		"expected 306 but was " + size.width); 
+               assert.equal(size.width, 306, "The tooltip width was incorrect"); 
             });
       },
 
@@ -107,5 +108,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

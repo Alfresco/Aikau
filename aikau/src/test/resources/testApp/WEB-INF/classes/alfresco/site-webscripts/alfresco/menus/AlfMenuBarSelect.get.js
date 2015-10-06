@@ -137,4 +137,3 @@ model.jsonModel = {
       }
    ]
 }
-;

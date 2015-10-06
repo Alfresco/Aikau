@@ -48,7 +48,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       useCurrentItemAsPayload: true,
 
@@ -63,14 +63,14 @@ define(["dojo/_base/declare",
       onLinkClick: function alfresco_renderers_DateLink__onLinkClick(evt) {
          event.stop(evt);
          var publishTopic = this.getPublishTopic();
-         if (publishTopic == null || lang.trim(publishTopic) == "")
+         if (!publishTopic || !lang.trim(publishTopic))
          {
             this.alfLog("warn", "No publishTopic provided for DateLink", this);
          }
          else
          {
-            var publishGlobal = (this.publishGlobal != null) ? this.publishGlobal : false;
-            var publishToParent = (this.publishToParent != null) ? this.publishToParent : false;
+            var publishGlobal = this.publishGlobal || false;
+            var publishToParent = this.publishToParent || false;
             this.alfPublish(publishTopic, this.getPublishPayload(), publishGlobal, publishToParent);
          }
       },
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        * @returns {string} The currentItem being renderered.
        */ 
       getPublishPayload: function alfresco_renderers_DateLink__getPublishTopic() {
-         if (this.useCurrentItemAsPayload == true)
+         if (this.useCurrentItemAsPayload === true)
          {
             return this.currentItem;
          }
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       publishPayloadItemMixin: false,
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "PROCESS"
+       * @default
        */
       publishPayloadType: "PROCESS",
 
@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default []
+       * @default ["processCurrentItemTokens", "replaceColons"]
        */
       publishPayloadModifiers: ["processCurrentItemTokens", "replaceColons"]
    });

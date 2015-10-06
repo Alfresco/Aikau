@@ -13,6 +13,7 @@ module.exports = function(grunt) {
    // Register test tasks for local/vagrant/SauceLabs/grid respectively
    grunt.registerTask("test_local", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:local"]);
    grunt.registerTask("test", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:dev"]);
+   grunt.registerTask("test_bs", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:bs"]);
    grunt.registerTask("test_sl", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:sl"]);
    grunt.registerTask("test_grid", ["waitServer", "clean:testScreenshots", "generate-require-everything", "intern:grid"]);
 
@@ -75,11 +76,20 @@ module.exports = function(grunt) {
    // Update the grunt config
    grunt.config.merge({
       intern: {
+         options: {
+            rowsCols: process.stdout.rows + "|" + process.stdout.columns // Used by ConcurrentReporter
+         },
+         bs: {
+            options: {
+               runType: "runner",
+               config: "src/test/resources/intern_bs",
+               useLocalhost: true
+            }
+         },
          dev: {
             options: {
                runType: "runner",
-               config: "src/test/resources/intern",
-               doCoverage: false
+               config: "src/test/resources/intern"
             }
          },
          dev_coverage: {
@@ -92,22 +102,19 @@ module.exports = function(grunt) {
          local: {
             options: {
                runType: "runner",
-               config: "src/test/resources/intern_local",
-               doCoverage: false
+               config: "src/test/resources/intern_local"
             }
          },
          sl: {
             options: {
                runType: "runner",
-               config: "src/test/resources/intern_sl",
-               doCoverage: false
+               config: "src/test/resources/intern_sl"
             }
          },
          grid: {
             options: {
                runType: "runner",
-               config: "src/test/resources/intern_grid",
-               doCoverage: false
+               config: "src/test/resources/intern_grid"
             }
          }
       }

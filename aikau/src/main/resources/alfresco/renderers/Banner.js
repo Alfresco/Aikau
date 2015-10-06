@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        * The message to display in the banner
        * @instance
        * @type {string} 
-       * @default ""
+       * @default
        */
       bannerMessage: "",
       

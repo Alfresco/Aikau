@@ -55,6 +55,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default [topics.DISPLAY_NOTIFICATION]{@link module:alfresco/core/topics#DISPLAY_NOTIFICATION}
+       * @listens module:alfresco/core/topics#DISPLAY_NOTIFICATION
+       * @event
        */
       displayNotificationTopic: topics.DISPLAY_NOTIFICATION,
 
@@ -72,6 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/services/NotificationService#displayNotificationTopic
        */
       registerSubscriptions: function alfresco_services_NotificationService__registerSubscriptions() {
          this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));
@@ -112,7 +115,7 @@ define(["dojo/_base/declare",
          var message = lang.getObject("message", false, payload);
          if (message) {
             var title = payload.title || "notification.prompt.title";
-            this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+            this.alfPublish(topics.CREATE_DIALOG, {
                dialogId: "NOTIFICATION_PROMPT",
                dialogTitle: this.message(title),
                textContent: message,
@@ -120,7 +123,8 @@ define(["dojo/_base/declare",
                   {
                      name: "alfresco/buttons/AlfButton",
                      config: {
-                        label: "notification.ok.label"
+                        label: "notification.ok.label",
+                        additionalCssClasses: "call-to-action"
                      }
                   }
                ]

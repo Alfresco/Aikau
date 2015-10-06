@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {String}
-       * @default null
+       * @default
        */
       headingId: null,
 
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default 1
+       * @default
        */
       level: 1,
 
@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {String}
-       * @default ""
+       * @default
        */
       label: "",
 
@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {Boolean}
-       * @default false
+       * @default
        */
       isHidden: false,
 
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "hiddenAccessible"
+       * @default
        */
       _hiddenAccessibleClass: "hiddenAccessible",
 
@@ -113,7 +113,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       additionalCssClasses: null,
 

@@ -28,8 +28,10 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function(registerSuite, expect, assert, require, TestCommon, keys) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Basic Header Widgets Tests",
 
       setup: function() {
@@ -224,49 +226,72 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
-      name: "Add Favourites Tests",
+   registerSuite(function() {
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AddFavouriteSite", "Add Favourites Tests").end();
-      },
+      return {
+         name: "Add Favourites Tests",
 
-      beforeEach: function() {
-         browser.end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/AddFavouriteSite", "Add Favourites Tests").end();
+         },
 
-      "Test add favourite request published": function() {
-         return browser.findByCssSelector("#SITES_MENU_text")
-            .click()
-            .sleep(500)
-            .end()
+         beforeEach: function() {
+            browser.end();
+         },
 
-         .findByCssSelector("#SITES_MENU_ADD_FAVOURITE_text")
-            .click()
-            .end()
+         "Test add favourite request published": function() {
+            return browser.findByCssSelector("#SITES_MENU")
+               .click()
+               .end()
 
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_ADD_FAVOURITE_SITE", "publish", "last"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Add favourite topic not published");
-            });
-      },
+            // Open the favourites menu to do initial load
+            .findById("SITES_MENU_FAVOURITES")
+               .click()
+               .end()
 
-      "Test favourite request published correctly": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", "site1"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Favourite not added correctly");
-            });
-      },
+            .findByCssSelector("#SITES_MENU_FAVOURITES_dropdown .alfresco-menus-AlfMenuItem")
+               .end()
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
+            .findByCssSelector("#SITES_MENU_ADD_FAVOURITE")
+               .click()
+               .end()
+
+            .getLastPublish("ALF_ADD_FAVOURITE_SITE", true)
+               .then(function(payload) {
+                  assert.propertyVal(payload, "site", "site1");
+                  assert.propertyVal(payload, "title", "Site One");
+               })
+
+            .findByCssSelector("#SITES_MENU")
+               .click()
+               .end()
+
+            .findById("SITES_MENU_FAVOURITES")
+               .click()
+               .end()
+
+            .findByCssSelector("#SITES_MENU_FAVOURITES_dropdown .dijitMenuItemLabel [title=\"Site One\"]")
+               .getAttribute("href")
+               .then(function(href) {
+                  assert.equal(href, "/aikau/page/site/site1/wibble");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Remove Favourites Tests",
 
       setup: function() {
@@ -304,9 +329,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Title Tests",
 
       setup: function() {
@@ -362,9 +391,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Set Title Tests",
 
       setup: function() {
@@ -394,5 +427,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

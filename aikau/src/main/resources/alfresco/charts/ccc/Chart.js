@@ -50,7 +50,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {string}
-             * @default "alfresco-charts-ccc-Chart"
+             * @default
              */
             baseClass: "alfresco-charts-ccc-Chart",
 
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {number|null}
-             * @default null
+             * @default
              */
             width: null,
 
@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {number}
-             * @default 400
+             * @default
              */
             height: 400,
 
@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {boolean|pvc.options.panels.LegendPanel}
-             * @default false
+             * @default
              */
             legend: false,
 
@@ -155,7 +155,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {boolean}
-             * @default false
+             * @default
              */
             selectable: false,
 
@@ -165,7 +165,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {boolean}
-             * @default false
+             * @default
              */
             hoverable: false,
 
@@ -192,7 +192,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {null|pvc.options.DimensionsReader}
-             * @default null
+             * @default
              */
             readers: null,
 
@@ -204,7 +204,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {null|pvc.options.DimensionType}
-             * @default null
+             * @default
              */
             dimensions: null,
 

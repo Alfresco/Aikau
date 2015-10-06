@@ -32,9 +32,10 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, expect, require, TestCommon, keys) {
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "GalleryView Tests",
       
       setup: function() {
@@ -83,6 +84,7 @@ define(["intern!object",
          return browser.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
          .end()
+         .getLastPublish("HAS_ITEMS_ALF_DOCLIST_SET_GALLERY_COLUMNS")
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
                assert.lengthOf(elements, 7, "The number of items per row was not increased");
@@ -93,6 +95,7 @@ define(["intern!object",
          return browser.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
          .end()
+         .getLastPublish("HAS_ITEMS_ALF_DOCLIST_SET_GALLERY_COLUMNS")
          .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
                assert.lengthOf(elements, 10, "The number of items per row was not increased");
@@ -119,10 +122,14 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
+registerSuite(function(){
+   var browser;
    var alfPause = 500;
-   registerSuite({
+
+   return {
       name: "GalleryView Keyboard Tests",
       
       setup: function() {
@@ -139,17 +146,13 @@ define(["intern!object",
       },
       
       "Test selecting first item (Folder 1)": function () {
-         // 1. Focus on the first thumbnail...
-         return browser.pressKeys(keys.TAB) // Goes to first thumbnail...
-         .sleep(alfPause)
-         // 2. Tab again to select the selector...
-         .pressKeys(keys.TAB)
-         .sleep(alfPause)
-         .pressKeys(keys.SPACE)
-         .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
-            .then(function(payload) {
-               assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
-            });
+         return browser.findByCssSelector("body")
+            .tabToElement(".alfresco-lists-views-layouts-Grid tr:first-child td:first-child .alfresco-renderers-Thumbnail .alfresco-renderers-Selector")
+            .pressKeys(keys.SPACE)
+            .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
+               });
       },
 
       "Check selector click doesn't navigate": function() {
@@ -230,5 +233,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

@@ -30,11 +30,12 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/ObjectTypeUtils"],
-        function(declare, BaseService, AlfCoreXhr, AlfConstants, lang, array, ObjectTypeUtils) {
+        function(declare, BaseService, AlfCoreXhr, topics, AlfConstants, lang, array, ObjectTypeUtils) {
 
    return declare([BaseService, AlfCoreXhr], {
 
@@ -52,7 +53,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       availableAspects: null,
 
@@ -64,7 +65,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       addableAspects: null,
 
@@ -76,7 +77,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       removableAspects: null,
 
@@ -85,7 +86,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "id"
+       * @default
        */
       itemKey: "id",
 
@@ -375,7 +376,7 @@ define(["dojo/_base/declare",
        */
       onUpdateSuccess: function  alfresco_services_actions_ManageAspectsService__onUpdateSuccess(response, originalRequestConfig) {
          this.alfLog("info", "Aspects updated successfully", response, originalRequestConfig, this);
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message("services.actionservice.ManageAspects.aspectUpdateSuccess", {
                "0": originalRequestConfig.item.displayName
             })

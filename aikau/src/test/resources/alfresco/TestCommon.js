@@ -32,8 +32,9 @@ define(["intern/dojo/node!fs",
         "config/Config",
         "intern/dojo/Promise",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
-        "intern/chai!assert"],
-        function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert) {
+        "intern/chai!assert",
+        "intern/dojo/node!leadfoot/keys"], 
+        function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert, keys) {
    return {
 
       /**
@@ -45,7 +46,8 @@ define(["intern/dojo/node!fs",
        */
       testWebScriptURL: function (webScriptURL, webScriptPrefix) {
          if (!Config.urls.unitTestAppBaseUrl) {
-            var testServer = "http://" + this._getLocalIP() + ":8089";
+            var serverAddress = (intern.args.useLocalhost === "true") ? "localhost" : this._getLocalIP(),
+               testServer = "http://" + serverAddress + ":8089";
             Config.urls.unitTestAppBaseUrl = testServer;
             // console.log("Using test-server URL: " + testServer);
          }
@@ -60,9 +62,10 @@ define(["intern/dojo/node!fs",
        * @param {object} browser The browser object to work on
        */
       alfPostCoverageResults: function(test, browser) {
-         if(intern.args.doCoverage === "true")
+         if(intern.args.doCoverage === true)
          {
-            var dfd = test.async(90000);
+            console.log("Attempting to collect and skip converage results");
+            var dfd = test.async(30000);
             var js = "var coverageData = {" +
                "name : name || ''," +
                "lines : $$_l.lines," +
@@ -97,8 +100,20 @@ define(["intern/dojo/node!fs",
                             dfd.resolve();
                         });
                      });
+                     post_req.on("socket", function (socket) {
+                         socket.setTimeout(30000);
+                         socket.on("timeout", function() {
+                             console.log("Timeout Abort!");
+                             post_req.abort();
+                         });
+                     });
                      post_req.on("error", function(e) {
-                        console.log("Coverage data post failed", e);
+                        if (e.code === "ECONNRESET") {
+                             console.log("Timeout occurred waiting for coverage post response");
+                        }
+                        else {
+                           console.log("Coverage data post failed", e.code);
+                        }
                         dfd.reject(e);
                      });
                      post_req.write(data);
@@ -106,12 +121,13 @@ define(["intern/dojo/node!fs",
                   }
                   catch (e) {
                      console.log("An error occurred handling coverage data", e);
+                     dfd.reject(e);
                   }
+               },
+               function(e) {
+                  console.log("Couldn't collect coverage data from browser", e);
+                  dfd.reject(e);
                });
-         }
-         else
-         {
-            return browser;
          }
       },
 
@@ -125,7 +141,7 @@ define(["intern/dojo/node!fs",
        * @param {string} testWebScriptPrefix Optional prefix to use before the WebScript URL
        * @param {boolean} noPageLoadError Optional boolean to suppress page load failure errors
        */
-      loadTestWebScript: function (browser, testWebScriptURL, testName, testWebScriptPrefix, noPageLoadError) {
+      loadTestWebScript: function(browser, testWebScriptURL, testName, testWebScriptPrefix, noPageLoadError) {
          this._applyTimeouts(browser);
          this._maxWindow(browser);
          this._cancelModifierKeys(browser);
@@ -135,25 +151,25 @@ define(["intern/dojo/node!fs",
                   /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
-               }, [], 10000, 1000))
+               }, null, 10000))
             .then(
                function (element) {
                },
-               function (error) {
+               function(error) {
                   // Failed to load, trying again...
                   browser.refresh();
-               })
+            })
             .then(pollUntil(
                function() {
                   /*jshint browser:true*/
                   var elements = document.getElementsByClassName("aikau-reveal");
                   return elements.length > 0 ? true : null;
-               }, [], 10000, 1000))
+               }, null, 10000))
             .then(
-               function (element) {
+               function(element) {
                   // Loaded successfully
                },
-               function (error) {
+               function(error) {
                   // Failed to load after two attempts
                   if (noPageLoadError === true)
                   {
@@ -163,13 +179,27 @@ define(["intern/dojo/node!fs",
                   {
                      assert.fail(null, null, "Test page could not be loaded");
                   }
-               })
+            })
             .end();
-         command.session.alfPostCoverageResults = function (newBrowser) { 
-            return newBrowser; 
+         command.session.alfPostCoverageResults = function(newBrowser) {
+            return newBrowser;
          };
          command.session.screenieIndex = 0;
-         command.session.screenie = function(description) {
+         command.session.screenie = function() {
+
+            // Parse arguments
+            var argsArray = Array.prototype.slice.call(arguments),
+               description,
+               logFocusedElement;
+            argsArray.forEach(function(arg) {
+               if (typeof arg === "string") {
+                  description = arg;
+               } else if (typeof arg === "boolean") {
+                  logFocusedElement = arg;
+               }
+            });
+
+            // Setup function variables
             var safeBrowserName = browser.environmentType.browserName.replace(/\W+/g, "_")
                .split("_")
                .map(function(namePart) {
@@ -182,22 +212,38 @@ define(["intern/dojo/node!fs",
                screenshotPath = "src/test/screenshots/" + screenshotName,
                infoId = "TestCommon__webpage-info",
                dfd = new Promise.Deferred();
-            browser.executeAsync(function(id, desc, asyncComplete) {
+
+            // Take and store the screenshot
+            browser.executeAsync(function(id, desc, logFocused, asyncComplete) {
+
+                  // Cleanup old info block
                   var oldInfo = document.getElementById(id);
                   oldInfo && document.body.removeChild(oldInfo);
+
+                  // Get details of the active (focused) element
+                  var focused = document.activeElement,
+                     focusedTag = focused.tagName,
+                     focusedId = focused.id ? "#" + focused.id : "",
+                     focusedClasses = focused.className ? "." + focused.className.split(" ").join(".") : "",
+                     focusedText = focusedTag + focusedId + focusedClasses;
+
+                  // Create new info block
                   var urlDisplay = document.createElement("DIV");
                   urlDisplay.id = id;
                   urlDisplay.style.background = "#666";
-                  urlDisplay.style.borderRadius = "0 0 0 5px";
+                  urlDisplay.style.borderRadius = "5px 0 0 5px";
                   urlDisplay.style.color = "#fff";
                   urlDisplay.style.fontFamily = "Open Sans Bold, sans-serif";
                   urlDisplay.style.fontSize = "12px";
                   urlDisplay.style.lineHeight = "18px";
-                  urlDisplay.style.opacity = ".9";
+                  urlDisplay.style.maxWidth = "400px";
+                  urlDisplay.style.opacity = ".85";
                   urlDisplay.style.padding = "10px";
                   urlDisplay.style.position = "fixed";
                   urlDisplay.style.right = "0";
-                  urlDisplay.style.top = "0";
+                  urlDisplay.style.bottom = "10px";
+                  urlDisplay.appendChild(document.createTextNode("User Agent: " + navigator.userAgent));
+                  urlDisplay.appendChild(document.createElement("BR"));
                   urlDisplay.appendChild(document.createTextNode("Time: " + (new Date()).toISOString()));
                   urlDisplay.appendChild(document.createElement("BR"));
                   urlDisplay.appendChild(document.createTextNode("URL: " + location.href));
@@ -205,9 +251,16 @@ define(["intern/dojo/node!fs",
                      urlDisplay.appendChild(document.createElement("BR"));
                      urlDisplay.appendChild(document.createTextNode("Description: \"" + desc + "\""));
                   }
+                  if (logFocused) {
+                     urlDisplay.appendChild(document.createElement("BR"));
+                     urlDisplay.appendChild(document.createTextNode("Focused elem: " + focusedText));
+                  }
+
+                  // Add info block to page and complete async
                   document.body.appendChild(urlDisplay);
                   setTimeout(asyncComplete, 0);
-               }, [infoId, description])
+
+               }, [infoId, description, logFocusedElement])
                .takeScreenshot()
                .then(function(screenshot) {
                   fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary", function(err) {
@@ -218,11 +271,15 @@ define(["intern/dojo/node!fs",
                      }
                   });
                });
+
+            // Pass back a promise
             return dfd.promise;
          };
          command.session.clearLog = function() {
-            return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
-               .click();
+            return browser.execute(function(){
+               var clearButton = document.querySelector(".alfresco_logging_DebugLog__clear-button");
+               clearButton && clearButton.click();
+            });
          };
          command.session.getLastPublish = function(topicName) {
             var isGlobal,
@@ -268,7 +325,7 @@ define(["intern/dojo/node!fs",
             var opts = lang.mixin({
                pos: "all",
                isGlobal: !!isGlobal,
-               queryTimeout: queryTimeout || 500
+               queryTimeout: queryTimeout || 2000
             }, filter || {});
 
             // Build the selector
@@ -292,7 +349,7 @@ define(["intern/dojo/node!fs",
                .then(function(timeout) {
                   existingTimeout = timeout;
                })
-               .setExecuteAsyncTimeout(opts.queryTimeout + 500)
+               .setExecuteAsyncTimeout(opts.queryTimeout + 2000)
                .executeAsync(function(entriesSelector, timeout, asyncComplete) {
 
                   // Store the start-time and start the interval
@@ -333,8 +390,8 @@ define(["intern/dojo/node!fs",
                      // Construct the error message
                      var customMessage = messageIfError ? messageIfError + ": " : "",
                         entryType = opts.type || "PUBorSUB",
-                        topic = opts.isGlobal ? opts.topic : "*" + opts.topic,
-                        errorMessage = "Unable to find a " + entryType + " of " + topic + " (timeout=" + opts.queryTimeout + "ms)";
+                        topic = opts.isGlobal ? opts.topic + " (global)" : "*" + opts.topic,
+                        errorMessage = "Unable to find a " + entryType + " of " + topic + " with timeout of " + opts.queryTimeout + "ms)";
 
                      // Throw the error
                      throw new Error(customMessage + errorMessage);
@@ -348,8 +405,82 @@ define(["intern/dojo/node!fs",
                   throw error;
                });
          };
+         command.session.tabToElement = function(selector, collectionIndex, maxTabs) {
+
+            // Setup variables
+            var tabbedToElement = false,
+               numTabs = 0,
+               dfd = new Promise.Deferred();
+
+            // Sanitise arguments
+            collectionIndex = collectionIndex || 0;
+            maxTabs = maxTabs || 10;
+            if (!selector) {
+               throw new Error("No valid selector provided in tabToElement()");
+            }
+
+            // Define tabAndCheck function
+            function tabAndCheck() {
+               return browser.pressKeys(keys.TAB)
+                  .execute(function(targetElemSelector, index) {
+                     var targetElem = document.querySelectorAll(targetElemSelector)[index];
+                     return targetElem && targetElem === document.activeElement;
+                  }, [selector, collectionIndex])
+                  .then(function(foundElem) {
+                     if (typeof foundElem === "undefined") {
+                        throw new Error("Unable to find target element with selector \"" + selector + "\" and index " + collectionIndex);
+                     } else if (!foundElem && numTabs++ < maxTabs) {
+                        return tabAndCheck();
+                     } else if (!foundElem) {
+                        throw new Error("Unable to tab to element with selector \"" + selector + "\" after " + maxTabs + " attempts");
+                     } else {
+                        return true;
+                     }
+                  });
+            }
+
+            // Tab until found
+            tabAndCheck().then(function(foundElem) {
+               dfd.resolve();
+            }, function(err) {
+               dfd.reject(err);
+            });
+
+            // Pass back the base promise
+            return dfd.promise;
+         };
 
          return command;
+      },
+
+      /**
+       * Skip the supplied test if all the search strings are found in the environment
+       *
+       * @instance
+       * @param {Object} testObj The test object (normally passed as "this")
+       * @param {string} conditionType The condition type (only supported one atm is "environment")
+       * @param {string|string[]} searchString The search strings, normalised to an array
+       *                                       if just a single-string, which all must
+       *                                       match for the test to skip
+       */
+      skipIf: function(testObj, conditionType, searchString) {
+         if (conditionType !== "environment") {
+            throw new Error("Unknown condition type in skipIf(): \"" + conditionType + "\"");
+         }
+         var parentTest = testObj,
+            searchRegex = new RegExp(searchString, "i"),
+            maxLoops = 5,
+            loopIndex = 0,
+            envName;
+         do {
+            envName = parentTest.name;
+            if (loopIndex++ >= maxLoops) {
+               throw new Error("Error finding root suite (too many loops)");
+            }
+         } while ((parentTest = parentTest.parent));
+         if (searchRegex.test(envName)) {
+            testObj.skip("Test skipped because test environment is \"" + envName + "\"");
+         }
       },
 
       /**

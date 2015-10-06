@@ -75,7 +75,7 @@ define(["dojo/_base/declare",
        * that 
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       showTopics: null,
       
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       hideTopics: null,
       
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        * that 
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       showEvents: null,
       
@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       hideEvents: null,
       
@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
        * that 
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       adjustHeightTopics: null,
       
@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
        * that 
        * @instance
        * @type {string[]}
-       * @default null
+       * @default
        */
       adjustHeightEvents: null,
       
@@ -207,7 +207,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       overlayHidden: true,
       

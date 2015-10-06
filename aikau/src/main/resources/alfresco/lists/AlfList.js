@@ -181,6 +181,7 @@ define(["dojo/_base/declare",
          {
             this.alfSubscribe(this.scrollNearBottom, lang.hitch(this, this.onScrollNearBottom));
          }
+         this.alfSubscribe(this.selectedDocumentsChangeTopic, lang.hitch(this, this.onSelectedItemsChange));
       },
 
       /**
@@ -249,6 +250,18 @@ define(["dojo/_base/declare",
       dataFailureMessage: "alflist.data.failure.message",
 
       /**
+       * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       * to create the views defined for the list to the resulting callback in 
+       * [allWidgetsProcessed]{@link module:alfresco/core/Core#allWidgetsProcessed}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      viewWidgetsMappingId: "VIEWS",
+
+      /**
        * The constructor
        *
        * @instance
@@ -288,14 +301,7 @@ define(["dojo/_base/declare",
             // for hasty re-insertion if necessary. It *shouldn't* be necessary to clone here because
             // the views will clone as necessary...
             // this.processWidgets(JSON.parse(JSON.stringify(this.widgets)));
-            this.processWidgets(this.widgets);
-         }
-
-         if (this.filteringTopics)
-         {
-            array.forEach(this.filteringTopics, function(topic) {
-               this.alfSubscribe(topic, lang.hitch(this, this.onFilterRequest));
-            }, this);
+            this.processWidgets(this.widgets, null, this.viewWidgetsMappingId);
          }
       },
 
@@ -449,29 +455,42 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object[]} The created widgets
+       * @param {string} processWidgetsId The ID that the call to the [processWidgets]{@link module:alfresco/core/Core#processWidgets} to
+       * create the views.
        */
-      allWidgetsProcessed: function alfresco_lists_AlfList__allWidgetsProcessed(widgets) {
-         this.viewMap = {};
-         array.forEach(widgets, lang.hitch(this, "registerView"));
+      allWidgetsProcessed: function alfresco_lists_AlfList__allWidgetsProcessed(widgets, /*jshint unused:false*/ processWidgetsId) {
+         this.createFilterSubscriptions();
+         this.registerViews(widgets);
+         this.completeListSetup();
+      },
 
-         // If no default view has been provided, then just use the first...
-         if (!this._currentlySelectedView)
+      /**
+       * Create the subscriptions for the [filteringTopics]{@link module:alfresco/lists/AlfList#filteringTopics}. This is
+       * called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed}.
+       * 
+       * @instance
+       * @param {object[]} The created widgets
+       * @since 1.0.36.4
+       */
+      createFilterSubscriptions: function alfresco_lists_AlfList__createFilterSubscriptions() {
+         if (this.filteringTopics)
          {
-            for (var view in this.viewMap) {
-               if (this.viewMap.hasOwnProperty(view))
-               {
-                  this._currentlySelectedView = view;
-                  break;
-               }
-            }
+            array.forEach(this.filteringTopics, function(topic) {
+               this.alfSubscribe(topic, lang.hitch(this, this.onFilterRequest));
+            }, this);
          }
+      },
 
-         this.alfPublish(this.viewSelectionTopic, {
-            value: this._currentlySelectedView,
-            preference: this.viewPreferenceProperty,
-            selected: true
-         });
-
+      /**
+       * This is called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed} to 
+       * determine whether or not to immediately load data or to wait for all of the widgets on the page to be
+       * created first.
+       * 
+       * @instance
+       * @param {object[]} The created widgets
+       * @since 1.0.36.4
+       */
+      completeListSetup: function alfresco_lists_AlfList__completeListSetup() {
          if (this.waitForPageWidgets === true)
          {
             // Create a subscription to listen out for all widgets on the page being reported
@@ -493,6 +512,39 @@ define(["dojo/_base/declare",
             this._readyToLoad = true;
             this.onPageWidgetsReady();
          }
+      },
+
+      /**
+       * Iterate of the supplied list of widgets (which should all be views) and calling the 
+       * [registerView]{@link module:alfresco/lists/AlfList#registerView} function for each of them. Once
+       * the views are all registered ensure that the requested view to be initially displayed is rendered.
+       * This is called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed}.
+       * 
+       * @instance
+       * @param {object[]} The created widgets
+       * @since 1.0.36.4
+       */
+      registerViews: function alfresco_lists_AlfList__registerViews(widgets) {
+         this.viewMap = {};
+         array.forEach(widgets, lang.hitch(this, this.registerView));
+
+         // If no default view has been provided, then just use the first...
+         if (!this._currentlySelectedView)
+         {
+            for (var view in this.viewMap) {
+               if (this.viewMap.hasOwnProperty(view))
+               {
+                  this._currentlySelectedView = view;
+                  break;
+               }
+            }
+         }
+
+         this.alfPublish(this.viewSelectionTopic, {
+            value: this._currentlySelectedView,
+            preference: this.viewPreferenceProperty,
+            selected: true
+         });
       },
 
       /**
@@ -677,6 +729,36 @@ define(["dojo/_base/declare",
       currentData: null,
 
       /**
+       * Used to keep track of the items that are currently selected in order to ensure that those items are selected on 
+       * the next view displayed when switching views.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.35
+       */
+      selectedItems: null,
+
+      /**
+       * Tracks the currently selected items and stores them as the [selectedItems]{@link module:alfresco/lists/AlfList#selectedItems}
+       * variable.
+       * 
+       * @instance
+       * @param  {object} payload A payload expected to contain a "selectedItems" attribute
+       * @since 1.0.35
+       */
+      onSelectedItemsChange: function alfresco_lists_AlfList__onSelectedItemsChange(payload) {
+         if (payload.selectedItems)
+         {
+            this.selectedItems = payload.selectedItems;
+         }
+         else
+         {
+            this.alfLog("warn", "A publication was made indicating an item selection update, but no 'selectedItems' attribute was provided in the payload", payload, this);
+         }
+      },
+
+      /**
        * Handles requests to switch views. This is called whenever the [viewSelectionTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#viewSelectionTopic}
        * topic is published on and expects a payload containing an attribute "value" which should map to a registered
        * [view]{@link module:alfresco/lists/views/AlfListView}. The views are mapped against the index they were configured
@@ -719,6 +801,12 @@ define(["dojo/_base/declare",
                newView.currentData.previousItemCount = 0;
                newView.renderView(false);
                this.showView(newView);
+
+               // Publish the selected items when the view changes in order that item selection is maintained 
+               // between views...
+               this.alfPublish(topics.DOCUMENT_SELECTION_UPDATE, {
+                  selectedItems: this.selectedItems
+               });
             }
             else
             {
@@ -734,6 +822,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       clearViews: function alfresco_lists_AlfList__clearViews() {
+         // Publish the clear selected items topic to ensure that any selected items menus
+         // don't retain stale data
+         this.alfPublish(topics.CLEAR_SELECTED_ITEMS);
          for (var viewName in this.viewMap)
          {
             if (this.viewMap.hasOwnProperty(viewName))

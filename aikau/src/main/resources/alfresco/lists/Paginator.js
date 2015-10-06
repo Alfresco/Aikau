@@ -64,6 +64,7 @@ define(["dojo/_base/declare",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "alfresco/menus/AlfMenuBarItem",
         "alfresco/menus/AlfMenuBarSelect",
         "alfresco/menus/AlfMenuGroups",
         "alfresco/menus/AlfMenuGroup",
@@ -73,7 +74,7 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "dojo/when"], 
         function(declare, AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin, lang, array, 
-                 AlfMenuBarSelect, AlfMenuGroups, AlfMenuGroup, AlfCheckableMenuItem, registry, domClass, Deferred, when) {
+                 AlfMenuBarItem, AlfMenuBarSelect, AlfMenuGroups, AlfMenuGroup, AlfCheckableMenuItem, registry, domClass, Deferred, when) {
 
    return declare([AlfMenuBar, _AlfDocumentListTopicMixin, _PreferenceServiceTopicMixin], {
       
@@ -92,7 +93,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       compactMode: false,
 
@@ -110,7 +111,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default 25
+       * @default
        */
       documentsPerPage: 25,
       
@@ -149,14 +150,14 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "ALF_PAGE_BACK"
+       * @default
        */
       pageBackTopic: "ALF_PAGE_BACK",
       
       /**
        * @instance 
        * @type {string}
-       * @default "ALF_PAGE_FORWARD"
+       * @default
        */
       pageForwardTopic: "ALF_PAGE_FORWARD",
 
@@ -194,7 +195,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "startIndex"
+       * @default
        */
       startIndexProperty: "startIndex",
 
@@ -221,7 +222,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "totalRecords"
+       * @default
        */
       totalResultsProperty: "totalRecords",
 

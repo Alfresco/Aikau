@@ -57,7 +57,7 @@ define(["dojo/_base/declare",
        * The optional semantic wrapper to be applied around the content.
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       semanticWrapper: null,
 

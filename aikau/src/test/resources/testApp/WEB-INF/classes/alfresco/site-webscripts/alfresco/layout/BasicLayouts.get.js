@@ -66,25 +66,82 @@ model.jsonModel = {
                   }
                },
                {
+                  id: "LEVEL2_LEFTANDRIGHT",
                   name: "alfresco/layout/LeftAndRight",
                   config: {
-                     id: "LEVEL2_LEFTANDRIGHT",
-                     widgets: [
+                     widgetsLeft: [
                         {
+                           id: "SURF_LOGO4",
                            name: "alfresco/logo/Logo",
-                           align: "left",
                            className: "additional-test-class",
                            config: {
-                              id: "SURF_LOGO4",
                               logoClasses: "surf-logo-small"
                            }
                         },
                         {
+                           id: "SURF_LOGO5",
+                           name: "alfresco/logo/Logo",
+                           className: "additional-test-class-2",
+                           config: {
+                              logoClasses: "surf-logo-small"
+                           }
+                        }
+                     ],
+                     widgetsRight: [
+                        {
+                           id: "ALFRESCO_LOGO1",
+                           name: "alfresco/logo/Logo",
+                           config: {
+                              logoClasses: "alfresco-logo-only"
+                           }
+                        },
+                        {
+                           id: "ALFRESCO_LOGO2",
+                           name: "alfresco/logo/Logo",
+                           config: {
+                              logoClasses: "surf-logo-large"
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "LEVEL3_LEFTANDRIGHT",
+                  name: "alfresco/layout/LeftAndRight",
+                  config: {
+                     widgets: [
+                        {
+                           id: "SURF_LOGO6",
+                           name: "alfresco/logo/Logo",
+                           className: "additional-test-class-3",
+                           align: "left",
+                           config: {
+                              logoClasses: "surf-logo-small"
+                           }
+                        },
+                        {
+                           id: "SURF_LOGO7",
+                           name: "alfresco/logo/Logo",
+                           className: "additional-test-class-4",
+                           align: "left",
+                           config: {
+                              logoClasses: "surf-logo-small"
+                           }
+                        },
+                        {
+                           id: "ALFRESCO_LOGO3",
                            name: "alfresco/logo/Logo",
                            align: "right",
                            config: {
-                              id: "ALFRESCO_LOGO1",
                               logoClasses: "alfresco-logo-only"
+                           }
+                        },
+                        {
+                           id: "ALFRESCO_LOGO4",
+                           name: "alfresco/logo/Logo",
+                           align: "right",
+                           config: {
+                              logoClasses: "surf-logo-large"
                            }
                         }
                      ]

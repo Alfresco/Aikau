@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -26,8 +26,9 @@
  * @module alfresco/services/_NavigationServiceTopicMixin
  * @author Dave Draper
  */
-define(["dojo/_base/declare"],
-        function(declare) {
+define(["dojo/_base/declare",
+        "alfresco/core/topics"],
+        function(declare, topics) {
 
    return declare(null, {
 
@@ -35,38 +36,35 @@ define(["dojo/_base/declare"],
        * This topic is used to request that the browser displays a new page.
        *
        * @instance
-       * @event navigateToPageTopic
        * @type {string}
-       * @default "ALF_NAVIGATE_TO_PAGE"
+       * @default
        */
-      navigateToPageTopic: "ALF_NAVIGATE_TO_PAGE",
+      navigateToPageTopic: topics.NAVIGATE_TO_PAGE,
 
       /**
        * This topic is used to request that the current page be reloaded
        *
        * @instance
-       * @event reloadPageTopic
        * @type {string}
-       * @default "ALF_RELOAD_PAGE"
+       * @default
        */
-      reloadPageTopic: "ALF_RELOAD_PAGE",
+      reloadPageTopic: topics.RELOAD_PAGE,
 
       /**
        * This topic is used to request a post to the page
        *
        * @instance
-       * @event postToPageTopic
        * @type {string}
-       * @default "ALF_POST_TO_PAGE"
+       * @default
        */
-      postToPageTopic: "ALF_POST_TO_PAGE",
+      postToPageTopic: topics.POST_TO_PAGE,
 
       /**
        * This value is used to indicate that the supplied URL is relative to the Alfresco Page context (e.g. /share/page)
        *
        * @instance
        * @type {string}
-       * @default "SHARE_PAGE_RELATIVE"
+       * @default
        * @deprecated Since 1.0.17 - Use [pageRelativePath]{@link module:alfresco/services/_NavigationServiceTopicMixin#pageRelativePath} instead.
        */
       sharePageRelativePath: "SHARE_PAGE_RELATIVE",
@@ -76,8 +74,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "PAGE_RELATIVE"
-       * @deprecated Since 1.0.17 - Use 
+       * @default
        */
       pageRelativePath: "PAGE_RELATIVE",
 
@@ -86,7 +83,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "CONTEXT_RELATIVE"
+       * @default
        */
       contextRelativePath: "CONTEXT_RELATIVE",
 
@@ -95,7 +92,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "FULL_PATH"
+       * @default
        */
       fullPath: "FULL_PATH",
 
@@ -104,7 +101,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "HASH"
+       * @default
        */
       hashPath: "HASH",
 
@@ -113,7 +110,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "CURRENT"
+       * @default
        */
       currentTarget: "CURRENT",
 
@@ -122,7 +119,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @type {string}
-       * @default "NEW"
+       * @default
        */
       newTarget: "NEW"
    });

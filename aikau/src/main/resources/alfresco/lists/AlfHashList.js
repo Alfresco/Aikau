@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 
@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       mapHashVarsToPayload: false,
 
@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       updateInstanceValues: false,
 
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useLocalStorageHashFallback: false,
 
@@ -95,9 +95,23 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_LOCAL_STORAGE_HASH"
+       * @default
        */
       useLocalStorageHashFallbackKey: "ALF_LOCAL_STORAGE_HASH",
+
+      /**
+       * This is used to keep track of any filters that are removed from the URL hash. It is reset in each call to
+       * [onFiltersUpdated]{@link module:alfresco/lists/AlfHashList#onFiltersUpdated} and then incremented each time
+       * a filter is removed (because it has become the empty string). This is then referenced in the
+       * [onHashChange]{@link module:alfresco/lists/AlfHashList#onHashChange} in order to determine whether or not 
+       * data reloading needs to occur as a result of filter removal.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.34
+       */
+      ___filtersRemoved: 0,
 
       /**
        * The AlfHashList is intended to work co-operatively with other widgets on a page to assist with
@@ -242,10 +256,8 @@ define(["dojo/_base/declare",
        */
       onHashChanged: function alfresco_lists_AlfHashList__onHashChanged(payload) {
          // Process the hash...
-         var dataLoaded = false,
-            numCurrentFilters = lang.getObject("currentData.filters.length", false, this),
-            filtersRemoved = !this.dataFilters.length && numCurrentFilters;
-         if(this.doHashVarUpdate(payload, this.updateInstanceValues) || filtersRemoved)
+         var dataLoaded = false;
+         if(this.doHashVarUpdate(payload, this.updateInstanceValues) || this.___filtersRemoved)
          {
             this._updateCoreHashVars(payload);
             if (this._readyToLoad)
@@ -297,23 +309,29 @@ define(["dojo/_base/declare",
        * Handle filters being updated
        *
        * @instance
-       * @override
        */
       onFiltersUpdated: function alfresco_lists_AlfHashList__onFiltersUpdated() {
+         // Reset the filtersRemoved count
+         this.___filtersRemoved = 0;
          if (this.useHash) {
             var filterValues = {};
-            array.forEach(this.dataFilters, function(dataFilter){
+            array.forEach(this.dataFilters, function(dataFilter) {
                var filterValue = dataFilter.value;
-               if(filterValue !== null && typeof filterValue !== "undefined") {
-                  if(typeof filterValue === "string") {
+               if(filterValue !== null && typeof filterValue !== "undefined") 
+               {
+                  if(typeof filterValue === "string") 
+                  {
                      filterValue = lang.trim(filterValue);
-                     if(!filterValue.length) {
-                        filterValue = null; // Remove empty strings from hash
+                     if(!filterValue.length) 
+                     {
+                        // Remove empty strings from hash and update the count of filters removed
+                        filterValue = null; 
+                        this.___filtersRemoved++;
                      }
                   }
                }
                filterValues[dataFilter.name] = filterValue;
-            });
+            }, this);
             hashUtils.updateHash(filterValues);
          } else {
             this.clearViews();

@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       excludeFromPubSubLog: true,
 
@@ -200,7 +200,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       dataScope: null,
 
@@ -210,7 +210,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {function[]}
-       * @default null
+       * @default
        */
       dataBindingCallbacks: null,
 
@@ -377,7 +377,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       pubSubScope: "",
 
@@ -387,7 +387,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {Array}
-       * @default null
+       * @default
        */
       alfSubscriptions: null,
 
@@ -696,7 +696,7 @@ define(["dojo/_base/declare",
        * @instance
        * @event alfLoggingTopic
        * @type {string}
-       * @default "ALF_LOG_REQUEST"
+       * @default
        */
       alfLoggingTopic: "ALF_LOG_REQUEST",
 

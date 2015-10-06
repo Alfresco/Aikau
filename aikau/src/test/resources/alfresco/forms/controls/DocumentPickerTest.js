@@ -36,9 +36,10 @@ define(["intern!object",
    // TODO: Click on a folder to get sub-results
    // TODO: Check singleItemMode works.
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "Document Picker Test",
 
       setup: function() {
@@ -49,10 +50,6 @@ define(["intern!object",
       beforeEach: function() {
          browser.end();
       },
-
-      // teardown: function() {
-      //    return browser.end().alfPostCoverageResults(browser);
-      // },
 
       "Test picker dialog can be displayed": function () {
          return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
@@ -214,5 +211,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

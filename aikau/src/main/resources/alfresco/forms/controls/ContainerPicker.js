@@ -36,11 +36,21 @@ define(["dojo/_base/declare",
    return declare([Picker], {
 
       /**
+       * Overrides the default itemKey to be "nodeRef" as this is likely to be the most important attribute
+       * when selecting a container.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      itemKey: "nodeRef",
+
+      /**
        * Overrides the default picker module.
        *
        * @instance
        * @type {string}
-       * @default "alfresco/pickers/ContainerPicker"
+       * @default
        */
       pickerWidget: "alfresco/pickers/ContainerPicker",
       
@@ -50,7 +60,6 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default []
        */
       configForPickedItems: {
          singleItemMode: true,

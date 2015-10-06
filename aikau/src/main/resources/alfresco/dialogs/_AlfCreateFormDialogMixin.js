@@ -32,8 +32,9 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/_base/lang",
         "alfresco/dialogs/AlfDialog",
-        "alfresco/forms/Form"],
-        function(declare, AlfCore, lang, AlfDialog, /*jshint unused:false*/ AlfForm) {
+        "alfresco/forms/Form",
+        "dojo/when"],
+        function(declare, AlfCore, lang, AlfDialog, /*jshint unused:false*/ AlfForm, when) {
 
    return declare([AlfCore], {
 
@@ -73,7 +74,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       dialog: null,
 
@@ -82,7 +83,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       dialogTitle: "",
 
@@ -90,7 +91,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       dialogConfirmationButtonTitle: null,
 
@@ -98,7 +99,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       dialogCancellationButtonTitle: null,
 
@@ -108,7 +109,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       widgets: null,
 
@@ -166,7 +167,7 @@ define(["dojo/_base/declare",
                      config: {
                         label: this.dialogConfirmationButtonTitle,
                         disableOnInvalidControls: true,
-                        additionalCssClasses: "alfresco-dialogs-_AlfCreateFormDialogMixin confirmation",
+                        additionalCssClasses: "alfresco-dialogs-_AlfCreateFormDialogMixin confirmation call-to-action",
                         publishTopic: this._formConfirmationTopic
                      }
                   },
@@ -206,7 +207,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       formSubmissionTopic: null,
 
@@ -216,7 +217,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       formSubmissionGlobal: true,
 
@@ -226,7 +227,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       formSubmissionToParent: false,
 
@@ -240,16 +241,20 @@ define(["dojo/_base/declare",
        */
       onDialogConfirmation: function alfresco_dialogs__CreateFormDialogMixin__onDialogConfirmation(payload) {
          if (payload &&
-             payload.dialogContent &&
-             payload.dialogContent.length === 1 &&
-             typeof payload.dialogContent[0].getValue === "function")
+             payload.dialogContent)
          {
-            var data = payload.dialogContent[0].getValue();
-            this.alfPublish(this.formSubmissionTopic, data, this.formSubmissionGlobal, this.formSubmissionToParent);
-         }
-         else
-         {
-            this.alfLog("error", "The format of the dialog content was not as expected, the 'formSubmissionTopic' will not be published", payload, this);
+            when(payload.dialogContent, lang.hitch(this, function(dialogContent) {
+               if (dialogContent && dialogContent.length)
+               {
+                  var data = {};
+                  var formData = dialogContent[0].getValue();
+                  this.alfPublish(this.formSubmissionTopic, formData, this.formSubmissionGlobal, this.formSubmissionToParent);
+               }
+               else
+               {
+                  this.alfLog("error", "The format of the dialog content was not as expected, the 'formSubmissionTopic' will not be published", payload, this);
+               }
+            }));
          }
       }
    });

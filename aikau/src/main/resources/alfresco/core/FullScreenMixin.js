@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       isWindowOnly: true,
       
@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_FULL_WINDOW"
+       * @default
        */
       fullWindowTopic: "ALF_FULL_WINDOW",
 
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_FULL_SCREEN"
+       * @default
        */
       fullScreenTopic: "ALF_FULL_SCREEN",
 

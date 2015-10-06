@@ -28,6 +28,7 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes external:dojo/_OnDijitClickMixin
  * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/layout/HeightMixin
  * @mixes module:alfresco/core/ResizeMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @author Dave Draper
@@ -37,6 +38,7 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dijit/_OnDijitClickMixin",
         "alfresco/core/Core",
+        "alfresco/layout/HeightMixin",
         "alfresco/core/ResizeMixin",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/topics",
@@ -46,12 +48,11 @@ define(["dojo/_base/declare",
         "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-style",
-        "dojo/dom-geometry",
-        "dojo/window"],
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, ResizeMixin, _MultiItemRendererMixin, 
-                 topics, template, lang, array, domClass, domConstruct, domStyle, domGeom, win) {
+        "dojo/dom-geometry"],
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, HeightMixin, ResizeMixin, _MultiItemRendererMixin, 
+                 topics, template, lang, array, domClass, domConstruct, domStyle, domGeom) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ResizeMixin, _MultiItemRendererMixin, AlfCore], {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, HeightMixin, ResizeMixin, _MultiItemRendererMixin, AlfCore], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -135,7 +136,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 100
+       * @default
        */
       itemWidth: 100,
 
@@ -144,7 +145,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 40
+       * @default
        */
       navigationMargin: 40,
 
@@ -191,7 +192,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       height: null,
 
@@ -223,13 +224,7 @@ define(["dojo/_base/declare",
             }
             else
             {
-               // Calculate a suitable height...
-               // We're going to set the height to be as big as the viewing port allows
-               // from the starting vertical position of the node
-               var position = domGeom.position(this.domNode);
-               var viewPort = win.getBox();
-               this.height = viewPort.h - position.y;
-               this.height += "px";
+               this.height = this.calculateHeight(this.domNode) + "px";
             }
          }
       },
@@ -254,7 +249,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       currentLeftPosition: 0,
 
@@ -263,7 +258,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       firstDisplayedIndex: 0,
 
@@ -272,7 +267,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       lastDisplayedIndex: null,
 

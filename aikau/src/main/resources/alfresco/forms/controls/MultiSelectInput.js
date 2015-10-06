@@ -38,6 +38,18 @@ define([
       return declare([BaseFormControl, CoreWidgetProcessing, UseServiceStoreMixin, IconMixin], {
 
          /**
+          * Override the [inherited value]{@link module:alfresco/forms/controls/BaseFormControl#getPubSubOptionsImmediately}
+          * to suppress the initial retrieval of pubSubOptions for this control.
+          *
+          * @instance
+          * @override
+          * @type {boolean}
+          * @default
+          * @since 1.0.33
+          */
+         getPubSubOptionsImmediately: false,
+
+         /**
           * @override
           * @instance
           */
@@ -48,7 +60,6 @@ define([
                id: this.id + "_CONTROL",
                name: this.name,
                width: this.width,
-               value: this.value,
                choiceCanWrap: this.optionsConfig.choiceCanWrap,
                choiceMaxWidth: this.optionsConfig.choiceMaxWidth,
                labelFormat: this.optionsConfig.labelFormat

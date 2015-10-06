@@ -35,7 +35,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _oldValue: null,
       
@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       __oldValue: null,
 

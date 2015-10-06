@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       groups: null,
 
@@ -112,7 +112,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 30
+       * @default
        */
       labelToValueRatio: 30,
 
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       separated: false,
 
@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       width: null,
 

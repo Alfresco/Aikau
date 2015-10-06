@@ -56,10 +56,11 @@ define(["dojo/_base/declare",
         "dojo/html",
         "dojo/aspect",
         "dojo/on",
+        "dojo/when",
         "jquery",
         "alfresco/layout/SimplePanel"], 
         function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, topics, _FocusMixin, lang, sniff, array,
-                 domConstruct, domClass, domStyle, domGeom, html, aspect, on, $) {
+                 domConstruct, domClass, domStyle, domGeom, html, aspect, on, when, $) {
    
    return declare([Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin], {
       
@@ -80,33 +81,77 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/AlfDialog.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/AlfDialog.properties"}],
+
+      /**
+       * A scope against which to publish the cancellation topic
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      cancelPublishScope: null,
+      
+      /**
+       * An optional topic to be published when the dialog is cancelled (escape keypress or cross-button click)
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      cancelPublishTopic: null,
       
       /**
        * Basic text content to be added to the dialog.
        * 
        * @instance
        * @type {String}
-       * @default ""
+       * @default
        */
       content: "",
       
       /**
-       * Widgets to be processed into the main node
-       * 
+       * This controls the duration of the fade in/out effect when the dialog is shown and hidden.
+       *
        * @instance
-       * @type {Object[]}
-       * @default null 
+       * @type {number}
+       * @default
+       * @since 1.0.33
        */
-      widgetsContent: null,
+      duration: 0,
+
+      /**
+       * If this is set to true then the dialog will retain it's opening width regardless of what happens
+       * to it's contents. This is especially useful when the dialog contains widgets that resize themselves
+       * that could result in the dialog shrinking (this can occur when using
+       * [HorizontalWidgets]{@link module:alfresco/layout/HorizontalWidgets}.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      fixedWidth: false,
       
       /**
-       * Widgets to be processed into the button bar
+       * Indicates whether or not to override all dimension settings and to make the dialog consume all
+       * the available space on the screen (minus any [padding]{@link module:alfresco/dialogs/AlfDialog#fullScreenPadding}).
        * 
        * @instance
-       * @type {Object[]}
-       * @default null 
+       * @type {boolean}
+       * @default
+       * @since 1.0.35
        */
-      widgetsButtons: null,
+      fullScreenMode: false,
+
+      /**
+       * When [full screen mode]{@link module:alfresco/dialogs/AlfDialog#fullScreenMode} is used this is the value in pixels
+       * that will be left as a padding between the edge of the dialog and the edge the screen.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.35
+       */
+      fullScreenPadding: 10,
 
       /**
        * In some cases the content placed within the dialog will handle overflow itself, in that
@@ -116,9 +161,27 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       handleOverflow: true,
+
+      /**
+       * Widgets to be processed into the main node
+       * 
+       * @instance
+       * @type {Object[]}
+       * @default
+       */
+      widgetsContent: null,
+      
+      /**
+       * Widgets to be processed into the button bar
+       * 
+       * @instance
+       * @type {Object[]}
+       * @default
+       */
+      widgetsButtons: null,
 
       /**
        * Extends the default constructor to adjust for changes between 1.9.x and 1.10.x versions
@@ -137,6 +200,53 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Calculates various heights that are used to set dimensions of the dialog when it is created
+       * as well as on resize events (such as resizing the window).
+       * 
+       * @instance
+       * @returns {object} heights The calculated heights
+       * @returns {number} heights.clientHeight The height of the viewport
+       * @returns {number} heights.documentHeight The height of the document
+       * @returns {number} heights.maxBodyHeight The maximum height allowed for the body of the dialog
+       * @returns {number} heights.paddingAdjustment The pixels to allow for padding in the dialog body
+       * @returns {number} heights.simplePanelHeight The height of the [SimplePanel]{@link module:alfresco/layout/SimplePanel} containing the dialog content
+       * @since 1.0.36
+       */
+      calculateHeights: function alfresco_dialogs_AlfDialog__calculateHeights() {
+         var calculatedHeights = {};
+         var docHeight = $(document).height(),
+             clientHeight = $(window).height();
+         var h = (docHeight < clientHeight) ? docHeight : clientHeight;
+
+         // We want to ensure that the dialog always fits within the viewport, so take the available
+         // height and remove 200 pixels to accomodate both the title and buttons bars and still leave
+         // some padding...
+         var maxHeight = h - 200;
+
+         // By default there is padding around the dialog body (12px above and below the body)... 
+         // We need to take this into consideration when calculating the simple panel height to ensure
+         // that it fits perfectly within the available space...
+         var paddingAdjustment = 24;
+         if (this.additionalCssClasses && this.additionalCssClasses.indexOf("no-padding") !== -1)
+         {
+            paddingAdjustment = 0;
+         }
+
+         var simplePanelHeight = null;
+         if (this.contentHeight)
+         {
+            simplePanelHeight = (parseInt(this.contentHeight, 10) - paddingAdjustment) + "px";
+         }
+         
+         calculatedHeights.documentHeight = docHeight;
+         calculatedHeights.clientHeight = clientHeight;
+         calculatedHeights.maxBodyHeight = maxHeight;
+         calculatedHeights.paddingAdjustment = paddingAdjustment;
+         calculatedHeights.simplePanelHeight = simplePanelHeight;
+         return calculatedHeights;
+      },
+
+      /**
        * Extends the superclass implementation to set the dialog as not closeable (by clicking an "X"
        * in the corner).
        * 
@@ -149,18 +259,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * If this is set to true then the dialog will retain it's opening width regardless of what happens
-       * to it's contents. This is especially useful when the dialog contains widgets that resize themselves
-       * that could result in the dialog shrinking (this can occur when using
-       * [HorizontalWidgets]{@link module:alfresco/layout/HorizontalWidgets}.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      fixedWidth: false,
-      
-      /**
        * Extends the superclass implementation to process the widgets defined by 
        * [widgetButtons]{@link module:alfresco/dialogs/AlfDialog#widgetButtons} into the buttons bar
        * and either the widgets defined by [widgetsContent]{@link module:alfresco/dialogs/AlfDialog#widgetsContent}
@@ -170,11 +268,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_dialogs_AlfDialog__postCreate() {
-         // jshint maxcomplexity:false
+         // jshint maxcomplexity:false, maxstatements:false
          this.inherited(arguments);
 
          // Listen for requests to resize the dialog...
-         this.alfSubscribe("ALF_RESIZE_DIALOG", lang.hitch(this, "onResizeRequest"));
+         this.alfSubscribe("ALF_RESIZE_DIALOG", lang.hitch(this, this.onResizeRequest));
 
          domClass.add(this.domNode, "alfresco-dialog-AlfDialog");
 
@@ -192,11 +290,16 @@ define(["dojo/_base/declare",
             });
          }
 
+         // Calculate the heights required for the dialog...
+         var calculatedHeights = this.calculateHeights();
+
          domConstruct.empty(this.containerNode);
          this.bodyNode = domConstruct.create("div", {
-            "class" : "dialog-body"
+            "class" : "dialog-body",
+            style: "max-height:" + calculatedHeights.maxBodyHeight + "px"
          }, this.containerNode, "last");
 
+         // Workout a maximum height for the dialog as it should always fit in the window...
          // Set the dimensions of the body if required...
          domStyle.set(this.bodyNode, {
             width: this.contentWidth ? this.contentWidth: null,
@@ -215,12 +318,10 @@ define(["dojo/_base/declare",
          // so that the buttons are disabled initially if required)
          if (this.widgetsButtons)
          {
-            this.creatingButtons = true;
             this.buttonsNode = domConstruct.create("div", {
                "class" : "footer"
             }, this.containerNode, "last");
-            this.processWidgets(this.widgetsButtons, this.buttonsNode);
-            this.creatingButtons = false;
+            this.processWidgets(this.widgetsButtons, this.buttonsNode, "BUTTONS");
          }
          else
          {
@@ -229,24 +330,16 @@ define(["dojo/_base/declare",
 
          if (this.widgetsContent)
          {
-            // Workout a maximum height for the dialog as it should always fit in the window...
-            var docHeight = $(document).height(),
-                clientHeight = $(window).height();
-            var h = (docHeight < clientHeight) ? docHeight : clientHeight;
-
-            // Add widget content to the container node...
-            var widgetsNode = domConstruct.create("div", {
-               style: "max-height:" + (h - 200) + "px"
-            }, this.bodyNode, "last");
             var bodyModel = [{
                name: "alfresco/layout/SimplePanel",
                assignTo: "_dialogPanel",
                config: {
-                  height: this.contentHeight,
+                  handleOverflow: this.handleOverflow,
+                  height: calculatedHeights.simplePanelHeight,
                   widgets: this.widgetsContent
                }
             }];
-            this.processWidgets(bodyModel, widgetsNode);
+            this.processWidgets(bodyModel, this.bodyNode, "BODY");
          }
          else if (this.content)
          {
@@ -254,6 +347,8 @@ define(["dojo/_base/declare",
             // setting basic text content in an confirmation dialog...
             html.set(this.bodyNode, this.encodeHTML(this.content));
          }
+
+         this.alfSetupResizeSubscriptions(this.onWindowResize, this);
       },
       
       /**
@@ -277,6 +372,19 @@ define(["dojo/_base/declare",
             }));
          }
       },
+
+      /**
+       * Override the onCancel method of the Dojo Dialog class
+       *
+       * @instance
+       * @override
+       */
+      onCancel: function alfresco_dialogs_AlfDialog__onCancel() {
+         this.inherited(arguments);
+         if (this.cancelPublishTopic) {
+            this.alfPublish(this.cancelPublishTopic, null, false, false, this.cancelPublishScope);
+         }
+      },
       
       /**
        * Called when the dialog is hidden.
@@ -289,18 +397,24 @@ define(["dojo/_base/declare",
          domStyle.set(document.documentElement, "overflow", "");
          domClass.remove(this.domNode, "dialogDisplayed");
          domClass.add(this.domNode, "dialogHidden");
-         
-         // Normalise closing dialog by re-issuing escape key use (which could 
-         // actually have been used to close the dialog, but this ensures that
-         // any widgets listening for this keyup event get notificed)...
-         on.emit(this.domNode, "keyup", {
-            bubbles: true, 
-            cancelable: true, 
-            keyCode: 27, 
-            charCode: 27, 
-            keyCodeArg : 27, 
-            charCodeArg: 0
-         }); 
+      },
+
+      /**
+       * This is called whenever the window is resized. It ensures that the dialog body is the correct height
+       * when taking into account the new size of the view port.
+       *
+       * @instance
+       * @since 1.0.36
+       */
+      onWindowResize: function alfresco_dialogs_AlfDialog__onWindowResize() {
+         var calculatedHeights = this.calculateHeights();
+         if (calculatedHeights.maxBodyHeight && !this.fullScreenMode)
+         {
+            // Don't set a max-height when it's 0 or when in full screen mode...
+            domStyle.set(this.bodyNode, {
+               "max-height": calculatedHeights.maxBodyHeight + "px"
+            });
+         }
       },
 
       /**
@@ -334,8 +448,65 @@ define(["dojo/_base/declare",
          domClass.add(this.domNode, "dialogDisplayed");
          // TODO: We could optionally reveal the dialog after resizing to prevent any resizing jumping?
          
+         // See AKU-604 - ensure that first item in dialog is focused...
+         if (this._dialogPanel)
+         {
+            when(this._dialogPanel.getProcessedWidgets(), lang.hitch(this, function(children) {
+               array.some(children, function(child) {
+                  var focused = false;
+                  if (typeof child.focus === "function")
+                  {
+                     child.focus();
+                     focused = true;
+                  }
+                  return focused;
+               });
+            }));
+         }
+         
          // Publish the widgets ready
          this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
+      },
+
+      /**
+       * Extends the default resize function to to provide the 
+       * [full screen mode]{@link module:alfresco/dialogs/AlfDialog#fullScreenMode} capability.
+       * 
+       * @instance
+       * @since 1.0.35
+       */
+      resize: function alfresco_dialogs_AlfDialog__resize() {
+         if (this.fullScreenMode === true)
+         {
+            var dimensionAdjustment = this.fullScreenPadding * 2;
+            this.inherited(arguments, [{
+               t: this.fullScreenPadding,
+               l: this.fullScreenPadding,
+               w: $(window).width() - dimensionAdjustment,
+               h: $(window).height() - dimensionAdjustment
+            }]);
+
+            // When in full screen mode it is also necessary to take care of the inner dimensions
+            // of the dialog...
+            var calculatedHeights = this.calculateHeights();
+            var containerHeight = $(this.containerNode).height();
+            var bodyHeight = containerHeight;
+            if (this.widgetsButtons)
+            {
+               // Dedebug height for the widgets buttons if present
+               bodyHeight = bodyHeight - 44;
+            }
+            $(this.bodyNode).height(bodyHeight);
+            $(this.bodyNode).css("max-height", bodyHeight); // NOTE: This is necessary to override the default max-height
+            if (this._dialogPanel)
+            {
+               $(this._dialogPanel.domNode).height(bodyHeight - calculatedHeights.paddingAdjustment);
+            }
+         }
+         else
+         {
+            this.inherited(arguments);
+         }
       },
 
       /**
@@ -349,6 +520,7 @@ define(["dojo/_base/declare",
          if (this.domNode)
          {
             this.resize();
+            this.onWindowResize();
          }
       },
 
@@ -360,8 +532,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {Object[]}
        */
-      allWidgetsProcessed: function alfresco_dialogs_AlfDialog__allWidgetsProcessed(widgets) {
-         if (this.creatingButtons === true)
+      allWidgetsProcessed: function alfresco_dialogs_AlfDialog__allWidgetsProcessed(widgets, processWidgetsId) {
+         if (processWidgetsId === "BUTTONS")
          {
             // When creating the buttons, attach the handler to each created...
             this._buttons = [];
@@ -397,7 +569,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       _buttons: null,
 
@@ -410,7 +582,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       suppressCloseClasses: null,
 

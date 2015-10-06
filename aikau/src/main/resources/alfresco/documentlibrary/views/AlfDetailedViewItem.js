@@ -139,6 +139,7 @@ define(["alfresco/lists/views/layouts/Row",
             name: "alfresco/renderers/InlineEditPropertyLink",
             config: {
                propertyToRender: "node.properties.cm:name",
+               permissionProperty: "node.permissions.user.Write",
                postParam: "prop_cm_name",
                renderSize: "large",
                linkPublishGlobal: false,
@@ -150,6 +151,7 @@ define(["alfresco/lists/views/layouts/Row",
             name: "alfresco/renderers/InlineEditProperty",
             config: {
                propertyToRender: "node.properties.cm:title",
+               permissionProperty: "node.permissions.user.Write",
                postParam: "prop_cm_title",
                renderSize: "small",
                renderedValuePrefix: "(",
@@ -184,6 +186,7 @@ define(["alfresco/lists/views/layouts/Row",
             name: "alfresco/renderers/InlineEditProperty",
             config: {
                propertyToRender: "node.properties.cm:description",
+               permissionProperty: "node.permissions.user.Write",
                postParam: "prop_cm_description",
                warnIfNotAvailable: true,
                warnIfNotAvailableMessage: "no.description.message"

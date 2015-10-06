@@ -80,7 +80,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       toggleLabel: null,
 
@@ -89,7 +89,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {string}
-       * @default "ALF_VERTICAL_REVEAL"
+       * @default
        */
       subscriptionTopic: "ALF_VERTICAL_REVEAL",
 
@@ -99,7 +99,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       initiallyRevealed: false,
 

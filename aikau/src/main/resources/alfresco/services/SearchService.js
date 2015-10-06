@@ -32,9 +32,10 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "alfresco/core/PathUtils",
         "alfresco/core/NodeUtils",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/json"],
-        function(declare, BaseService, CoreXhr, AlfConstants, PathUtils, NodeUtils, lang, dojoJson) {
+        function(declare, BaseService, CoreXhr, AlfConstants, PathUtils, NodeUtils, topics, lang, dojoJson) {
 
    return declare([BaseService, CoreXhr, PathUtils], {
 
@@ -65,7 +66,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 25
+       * @default
        */
       pageSize: 25,
 
@@ -74,7 +75,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       query: "",
 
@@ -84,7 +85,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       repo: true,
 
@@ -94,7 +95,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco://company/home"
+       * @default
        */
       rootNode: "alfresco://company/home",
 
@@ -116,7 +117,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       site: "",
 
@@ -125,7 +126,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       sort: "",
 
@@ -134,7 +135,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       sortAscending: true,
 
@@ -144,7 +145,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       startIndex: 0,
 
@@ -153,7 +154,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       tag: "",
 
@@ -167,6 +168,7 @@ define(["dojo/_base/declare",
          if (!payload || !payload.term)
          {
             this.alfLog("warn", "A request was made to perform a search but no 'term' attribute was provided", payload, this);
+            this.alfPublish(payload.alfResponseTopic + "_FAILURE", {}, false, false, payload.alfResponseScope);
          }
          else
          {
@@ -230,9 +232,8 @@ define(["dojo/_base/declare",
                sort = (payload.sortField || this.sort) + "|" + (payload.sortAscending || this.sortAscending);
             }
 
-            var defaultFacetFields = "{http://www.alfresco.org/model/content/1.0}content.mimetype,{http://www.alfresco.org/model/content/1.0}modifier.__,{http://www.alfresco.org/model/content/1.0}creator.__,{http://www.alfresco.org/model/content/1.0}description.__";
             var data = {
-               facetFields: payload.facetFields || defaultFacetFields,
+               facetFields: payload.facetFields || "",
                filters: payload.filters || "",
                term: payload.term,
                tag: payload.tag || this.tag,
@@ -240,7 +241,7 @@ define(["dojo/_base/declare",
                sort: sort,
                site: payload.site || this.site,
                rootNode: payload.rootNode || this.rootNode,
-               repo: payload.repo || this.repo,
+               repo: (payload.repo || payload.repo === false) ? payload.repo : this.repo,
                query: query,
                pageSize: payload.pageSize || this.pageSize, // It makes no sense for page size to ever be 0
                maxResults: payload.maxResults || 0,

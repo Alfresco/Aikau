@@ -46,7 +46,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       subscriptions: null,
 
@@ -61,6 +61,9 @@ define(["dojo/_base/declare",
        * @listens reloadPageTopic
        * @listens postToPageTopic
        * @since 1.0.32
+       * @listens module:alfresco/core/topics~event:NAVIGATE_TO_PAGE
+       * @listens module:alfresco/core/topics~event:RELOAD_PAGE
+       * @listens module:alfresco/core/topics~event:POST_TO_PAGE
        */
       registerSubscriptions: function alfresco_services_NavigationService__registerSubscriptions() {
          this.alfSubscribe(this.navigateToPageTopic, lang.hitch(this, this.navigateToPage));
@@ -97,6 +100,7 @@ define(["dojo/_base/declare",
        * @return {string} The built URL
        */
       buildUrl: function alfresco_services_NavigationService__buildUrl(data) {
+         // jshint maxcomplexity:false
          var url;
          if (!data.type || data.type === this.sharePageRelativePath || data.type === this.pageRelativePath)
          {

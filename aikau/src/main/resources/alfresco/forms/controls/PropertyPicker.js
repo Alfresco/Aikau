@@ -37,7 +37,6 @@ define(["alfresco/forms/controls/Picker",
        *
        * @instance
        * @type {object}
-       * @default []
        */
       configForPickedItems: {
          itemKey: "name",
@@ -96,7 +95,6 @@ define(["alfresco/forms/controls/Picker",
        *
        * @instance
        * @type {object}
-       * @default []
        */
       configForPicker: {
          generatePubSubScope: true,

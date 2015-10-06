@@ -45,6 +45,7 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/ObjectProcessingMixin",
         "alfresco/core/Core",
+        "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/preview/PdfJs/PdfJsConstants",
         "alfresco/preview/PdfJs/DocumentView",
@@ -62,7 +63,7 @@ define(["dojo/_base/declare",
         "dojo/window",
         "dojo/on",
         "jquery"], 
-        function(declare, AlfDocumentPreviewPlugin, FileSizeMixin, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore, AlfConstants, 
+        function(declare, AlfDocumentPreviewPlugin, FileSizeMixin, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore, topics, AlfConstants, 
                  PdfJsConstants, DocumentView, PDFFindController, WidgetsCreator, AlfTabContainer, lang, domGeom, 
                  domConstruct, domClass, domStyle, html, has, ioQuery, win, on, $) {
    
@@ -114,7 +115,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type {String}
-          * @default null
+          * @default
           */
          src : null,
 
@@ -125,7 +126,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default ""
+          * @default
           */
          srcMaxSize: "",
 
@@ -135,7 +136,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "false"
+          * @default
           */
          skipbrowsertest : "false",
 
@@ -144,7 +145,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "auto"
+          * @default
           */
          defaultScale : "auto",
 
@@ -153,7 +154,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "1.1"
+          * @default
           */
          scaleDelta : "1.1",
 
@@ -162,7 +163,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "0.65"
+          * @default
           */
          autoMinScale : "0.65",
          autoMinScaleMobile: "0.525",
@@ -172,7 +173,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "1.25"
+          * @default
           */
          autoMaxScale : "1.25",
 
@@ -181,7 +182,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "multi"
+          * @default
           */
          pageLayout : "multi",
 
@@ -191,7 +192,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "false"
+          * @default
           */
          disableTextLayer : "false",
 
@@ -200,7 +201,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "true"
+          * @default
           */
          useLocalStorage : "true",
 
@@ -209,7 +210,7 @@ define(["dojo/_base/declare",
           * 
           * @instance
           * @type String
-          * @default "true"
+          * @default
           */
          autoSearch : "false",
 
@@ -218,7 +219,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type String
-          * @default "false"
+          * @default
           */
          progressiveLoading: "false",
 
@@ -228,7 +229,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type boolean
-          * @default true
+          * @default
           */
          disabledPageLinking: true
       },
@@ -238,7 +239,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       pdfDocument : null,
 
@@ -247,7 +248,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type int
-       * @default 1
+       * @default
        */
       pageNum : 1,
 
@@ -274,7 +275,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type int
-       * @default 0
+       * @default
        */
       numPages : 0,
 
@@ -292,7 +293,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       maximized : false,
 
@@ -310,7 +311,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       inDashlet : false,
 
@@ -328,7 +329,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentScaleSelection: null,
 
@@ -503,7 +504,6 @@ define(["dojo/_base/declare",
 
          // Set height of the container and the viewer area
          this._setPreviewerElementHeight();
-         this._setViewerHeight();
 
          // Load the PDF itself
          this._loadPdf();
@@ -587,47 +587,44 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      _setViewerHeight: function alfresco_preview_PdfJs_PdfJs__setViewerHeight() {
-         var pE = this.previewManager.getPreviewerElement();
-         if (pE)
+      setHeight: function alfresco_preview_PdfJs_PdfJs__setHeight(/*jshint unused:false*/ domNode) {
+         this.inherited(arguments);
+         var computedStyle = domStyle.getComputedStyle(this.viewer.parentNode);
+         var previewRegion = domGeom.getContentBox(this.viewer.parentNode, computedStyle);
+         computedStyle = domStyle.getComputedStyle(this.controls);
+         var controlRegion = domGeom.getContentBox(this.controls, computedStyle);
+         var controlHeight = !this.fullscreen ? controlRegion.h : 0;
+         var newHeight = previewRegion.h - controlHeight -1; // Allow for bottom border
+         
+         if (newHeight === 0)
          {
-            var computedStyle = domStyle.getComputedStyle(this.viewer.parentNode);
-            var previewRegion = domGeom.getContentBox(this.viewer.parentNode, computedStyle);
-            computedStyle = domStyle.getComputedStyle(this.controls);
-            var controlRegion = domGeom.getContentBox(this.controls, computedStyle);
-            var controlHeight = !this.fullscreen ? controlRegion.h : 0;
-            var newHeight = previewRegion.h - controlHeight -1; // Allow for bottom border
-            
-            if (newHeight === 0)
+            if (!this.maximized)
             {
-               if (!this.maximized)
-               {
-                  // var dialogPane;
-                  var previewHeight;
-                  var docHeight = $(document).height(),
-                      clientHeight = $(window).height();
-                  // Take the smaller of the two
-                  previewHeight = ((docHeight < clientHeight) ? docHeight : clientHeight) - 220;
-                  // Leave space for header etc.
-                  newHeight = previewHeight - 10 - controlHeight -1; // Allow for bottom border of 1px
-               }
-               else
-               {
-                  newHeight = $(window).height() - controlHeight - 1;
-               }
-            }
-            
-            if (!this.fullscreen)
-            {
-               this.alfLog("log","Setting viewer height to " + newHeight + "px (toolbar " + controlHeight + "px, container " + previewRegion.h + "px");
-               domStyle.set(this.viewer, "height", newHeight.toString() + "px");
-               domStyle.set(this.sidebar, "height", newHeight.toString() + "px");
+               // var dialogPane;
+               var previewHeight;
+               var docHeight = $(document).height(),
+                   clientHeight = $(window).height();
+               // Take the smaller of the two
+               previewHeight = ((docHeight < clientHeight) ? docHeight : clientHeight) - 220;
+               // Leave space for header etc.
+               newHeight = previewHeight - 10 - controlHeight -1; // Allow for bottom border of 1px
             }
             else
             {
-               this.alfLog("log","Setting viewer height to 100% (full-screen)");
-               domStyle.set(this.viewer, "height", "100%");
+               newHeight = $(window).height() - controlHeight - 1;
             }
+         }
+         
+         if (!this.fullscreen)
+         {
+            this.alfLog("log","Setting viewer height to " + newHeight + "px (toolbar " + controlHeight + "px, container " + previewRegion.h + "px");
+            domStyle.set(this.viewer, "height", newHeight.toString() + "px");
+            domStyle.set(this.sidebar, "height", newHeight.toString() + "px");
+         }
+         else
+         {
+            this.alfLog("log","Setting viewer height to 100% (full-screen)");
+            domStyle.set(this.viewer, "height", "100%");
          }
       },
 
@@ -736,6 +733,7 @@ define(["dojo/_base/declare",
        * Error encountered retrieving PDF document
        * 
        * @instance
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       _onGetDocumentFailure: function alfresco_preview_PdfJs_PdfJs___onGetDocumentFailure(exception) {
 
@@ -804,7 +802,7 @@ define(["dojo/_base/declare",
                });
 
                // Display an error using the notification service
-               this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+               this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
                   message: loadingErrorMessage
                });
             }
@@ -1264,13 +1262,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload containing the details of the page to skip to.
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onSetPageConfirmation: function alfresco_preview_PdfJs_PdfJs__onSetPageConfirmation(payload) {
          var pn = lang.getObject("pageNumber", false, payload);
          if (!pn || pn < 1 || pn > this.numPages)
          {
             // This will require that the alfresco/service/NotificationService is on the page
-            this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
                message: this.previewManager.message("error.badpage")
             }, true);
          }
@@ -1317,7 +1316,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _findController: null,
 
@@ -1363,7 +1362,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       _query: null,
 
@@ -1391,7 +1390,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _findPrevious: false,
 
@@ -1424,7 +1423,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _matchCase: false,
 
@@ -1444,7 +1443,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _highlightAll: false,
 
@@ -1561,7 +1560,6 @@ define(["dojo/_base/declare",
       onMaximizeClick : function alfresco_preview_PdfJs_PdfJs__onMaximizeClick(payload) {
          this.maximized = payload.selected;
          this._setPreviewerElementHeight();
-         this._setViewerHeight();
          this.documentView.setScale(this.documentView.parseScale(this.currentScaleSelection ? this.currentScaleSelection : this.attributes.defaultScale));
          this._scrollToPage(this.pageNum);
          this.documentView.alignRows();
@@ -1612,7 +1610,6 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log","onRecalculatePreviewLayout");
             this._setPreviewerElementHeight();
-            this._setViewerHeight();
             this.documentView.onResize();
             this.documentView.setScale(this.documentView.parseScale(this.currentScaleSelection ? this.currentScaleSelection : this.attributes.defaultScale));
             this._scrollToPage(this.pageNum);

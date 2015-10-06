@@ -46,6 +46,7 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/services/_NavigationServiceTopicMixin",
@@ -55,8 +56,8 @@ define(["dojo/_base/declare",
         "alfresco/core/JsNode",
         "alfresco/core/NotificationUtils",
         "dojo/_base/lang"],
-        function(declare, BaseService, AlfCoreXhr, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, UrlUtilsMixin,
-                 ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang) {
+        function(declare, BaseService, AlfCoreXhr, topics, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, 
+                 UrlUtilsMixin, ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang) {
 
    // TODO: L18N sweep - lots of widgets defined with hard coded labels...
 
@@ -76,7 +77,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       siteId: null,
 
@@ -85,7 +86,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       containerId: null,
 
@@ -96,7 +97,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       currentTarget: "CURRENT",
 
@@ -105,7 +106,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       rootNode: null,
 
@@ -114,6 +115,8 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @since 1.0.32
+       *
+       * @listens module:alfresco/core/topics#MULTIPLE_ITEM_ACTION_REQUEST
        */
       registerSubscriptions: function alfresco_services_ActionService__registerSubscriptions() {
          // Normal processing...
@@ -126,7 +129,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.syncLocationTopic, lang.hitch(this, this.onSyncLocation));
          this.alfSubscribe(this.unsyncLocationTopic, lang.hitch(this, this.onUnsyncLocation));
 
-         this.alfSubscribe("ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST", lang.hitch(this, this.handleMultiDocLegacyAction));
+         this.alfSubscribe(topics.MULTIPLE_ITEM_ACTION_REQUEST, lang.hitch(this, this.handleMultiDocLegacyAction));
          this.alfSubscribe("ALF_CREATE_CONTENT", lang.hitch(this, this.processActionObject));
 
          // Non-legacy action handlers...
@@ -177,7 +180,7 @@ define(["dojo/_base/declare",
        * The current Node that content will be worked relative to.
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _currentNode: null,
 
@@ -231,28 +234,56 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function is called when handling actions for the currently selected items. If the
+       * payload provided does not include a "documents" attribute then one will be created and
+       * populated with the selected items that have been tracked by this service. Ideally this 
+       * will not be necessary as the payload should include the items populated by the
+       * [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
+       * 
+       * @instance
+       * @param {object} payload The data passed in the request to perform the action.
+       * @since 1.0.38
+       */
+      addSelectedItems: function alfresco_services_ActionService__addSelectedItems(payload) {
+         if (!payload.documents)
+         {
+            payload.documents = [];
+            for (var nodeRef in this.currentlySelectedDocuments)
+            {
+               if (this.currentlySelectedDocuments.hasOwnProperty(nodeRef))
+               {
+                  payload.documents.push(this.currentlySelectedDocuments[nodeRef]);
+               }
+            }
+         }
+         // NOTE: We also want to add the selected items to a "nodes" attribute as that is the attribute
+         //       that some of the services will be expecting. This is regrettable but until the next major
+         //       release we won't be able to remove these inconsistencies. By including the selected items
+         //       as "nodes" it allows us to forward to "actionTopics" without the need to create individual
+         //       actions to alias all the capabilities provided by other services.
+         payload.nodes = payload.documents;
+      },
+
+      /**
        *
        * @instance
        * @param {object} payload The data passed in the request to perform the action.
        */
-      handleMultiDocLegacyAction: function alfresco_services_ActionService__handleLegacyAction(payload) {
+      handleMultiDocLegacyAction: function alfresco_services_ActionService__handleMultiDocLegacyAction(payload) {
          this.alfLog("log", "Multiple document action request:", payload);
+
          if (typeof this[payload.action] === "function")
          {
-            // NOTE: We want to avoid relying on the service to track currently selected documents, this
-            //       is now handled AlfSelectedItemsMenuBarPopup...
-            if (!payload.documents)
-            {
-               payload.documents = [];
-               for (var nodeRef in this.currentlySelectedDocuments)
-               {
-                  if (this.currentlySelectedDocuments.hasOwnProperty(nodeRef))
-                  {
-                     payload.documents.push(this.currentlySelectedDocuments[nodeRef]);
-                  }
-               }
-            }
+            this.addSelectedItems(payload);
             this[payload.action].call(this, payload);
+         }
+         else if (payload.actionTopic)
+         {
+            // If an "actionTopic" attribute has been defined then it will be used to "forward" on the
+            // provided payload to the topic defined. This was added in 1.0.38 as a way in which to make
+            // it easier to process custom menu items added to a AlfSelectedItemsMenuBarPopup. 
+            this.addSelectedItems(payload);
+            this.alfServicePublish(payload.actionTopic, payload);
          }
       },
 
@@ -263,7 +294,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentlySelectedDocuments: null,
 
@@ -275,7 +306,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {timeout}
-       * @default null
+       * @default
        */
       selectionTimeout: null,
 
@@ -591,7 +622,6 @@ define(["dojo/_base/declare",
          if (typeof f === "function")
          {
             f.call(this, payload);
-            // f.call(this, payload.action, [payload.document]);
          }
          else
          {
@@ -818,7 +848,7 @@ define(["dojo/_base/declare",
                url: AlfConstants.PROXY_URI + response.results[0].downloadUrl,
                type: this.fullPath
             });
-            this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, originalRequestConfig.responseScope);
+            this.alfPublish(topics.RELOAD_DATA_TOPIC, {}, false, false, originalRequestConfig.responseScope);
          }
          else
          {
@@ -846,10 +876,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the original request
        */
       onActionCopyTo: function alfresco_services_ActionService__onActionCopyTo(payload) {
-         this.alfPublish("ALF_COPY_OR_MOVE_REQUEST", {
-            documents: payload.documents || [payload.document],
+         var nodes = payload.documents || (payload.document ? [payload.document] : [payload]);
+         this.alfServicePublish(topics.COPY_OR_MOVE, {
+            documents: nodes,
             copy: true,
-            singleItemMode: true,
             responseScope: payload.alfResponseScope
          });
       },
@@ -861,12 +891,10 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the original request
        */
       onActionMoveTo: function alfresco_services_ActionService__onActionMoveTo(payload) {
-         this.alfPublish("ALF_COPY_OR_MOVE_REQUEST", {
-            documents: payload.documents || [payload.document],
+         var nodes = payload.documents || (payload.document ? [payload.document] : [payload]);
+         this.alfServicePublish(topics.COPY_OR_MOVE, {
+            documents: nodes,
             copy: false,
-            dialogTitle: "services.ActionService.moveTo.title",
-            confirmButtonLabel: "services.ActionService.moveTo.ok",
-            singleItemMode: true,
             responseScope: payload.alfResponseScope
          });
       },
@@ -878,7 +906,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the original request
        */
       onActionDelete: function alfresco_services_ActionService__onActionDelete(payload) {
-         this.alfPublish("ALF_DELETE_CONTENT_REQUEST", payload);
+         this.alfPublish(topics.DELETE_CONTENT, payload);
       },
 
       /**
@@ -901,12 +929,25 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload from the original request
+       * @fires module:alfresco/core/topics#ASSIGN_WORKFLOW
        */
       onActionAssignWorkflow: function alfresco_services_ActionService__onActionAssignWorkflow(payload) {
-         this.alfPublish("ALF_ASSIGN_WORKFLOW", {
+         this.alfPublish(topics.ASSIGN_WORKFLOW, {
             nodes: payload.documents || [payload.document],
             currentTarget: this.currentTarget
          });
+      },
+
+      /**
+       * Handles requests to download multiple items as a single archive file. This is only expected to
+       * be called as a multiple item selection action
+       * 
+       * @instance
+       * @param {object} payload The payload from the original request
+       * @since 1.0.33
+       */
+      onActionDownload: function alfresco_services_ActionService__onActionDownload(payload) {
+         this.alfPublish(topics.DOWNLOAD_AS_ZIP, payload);
       },
 
       /**
@@ -916,32 +957,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from the original request
        */
       onActionFolderDownload: function alfresco_services_ActionService__onActionFolderDownload(payload) {
-         this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
-            generatePubSubScope: true,
-            dialogTitle: this.message("services.ActionService.ActionFolderDownload.title"),
-            hideTopic: "ALF_CLOSE_DIALOG",
-            widgetsContent: [
-               {
-                  name: "alfresco/renderers/Progress",
-                  config: {
-                     requestProgressTopic: "ALF_ARCHIVE_REQUEST",
-                     progressFinishedTopic: ["ALF_DOWNLOAD_FILE", "ALF_ARCHIVE_DELETE"],
-                     nodes: [payload.document]
-                  }
-               }
-            ],
-            widgetsButtons: [
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: this.message("services.ActionService.button.cancel"),
-                     additionalCssClasses: "alfresco-dialogs-AlfProgress cancellation",
-                     publishTopic: "ALF_CLOSE_DIALOG"
-                  }
-               }
-            ],
-            handleOverflow: true
-         }, true);
+         this.alfPublish(topics.DOWNLOAD_AS_ZIP, payload);
       },
 
       /**

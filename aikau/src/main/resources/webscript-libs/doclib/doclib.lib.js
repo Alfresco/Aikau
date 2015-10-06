@@ -478,9 +478,9 @@ function getDocumentLibraryServices() {
    return services;
 }
 
-function getDocLibFilters() {
+function getDocLibFilters(options) {
    var filters = {
-      id: "DOCLIB_FILTERS",
+      id: (options.idPrefix || "") + "DOCLIB_FILTERS",
       name: "alfresco/documentlibrary/AlfDocumentFilters",
       config: {
          label: "filter.label.documents",
@@ -566,6 +566,7 @@ function getDocLibFilters() {
 
 function getDocLibTree(options) {
    var tree = {
+      id: (options.idPrefix || "") + "DOCLIB_TREE",
       name: "alfresco/layout/Twister",
       config: {
          label: "twister.library.label",
@@ -589,7 +590,7 @@ function getDocLibTree(options) {
 
 function getDocLibTags(options) {
    var tags = {
-      id: "DOCLIB_TAGS",
+      id: (options.idPrefix || "") + "DOCLIB_TAGS",
       name: "alfresco/documentlibrary/AlfTagFilters",
       config: {
          label: "filter.label.tags",
@@ -602,8 +603,9 @@ function getDocLibTags(options) {
    return tags;
 }
 
-function getDocLibCategories() {
+function getDocLibCategories(options) {
    var categories = {
+      id: (options.idPrefix || "") + "DOCLIB_CATEGORIES_TWISTER",
       name: "alfresco/layout/Twister",
       config: {
          label: "twister.categories.label",
@@ -618,14 +620,14 @@ function getDocLibCategories() {
    return categories;
 }
 
-function getDocLibCreateContentMenu() {
+function getDocLibCreateContentMenu(options) {
    var menu = {
-      id: "DOCLIB_CREATE_CONTENT_MENU",
+      id: (options.idPrefix || "") + "DOCLIB_CREATE_CONTENT_MENU",
       name: "alfresco/documentlibrary/AlfCreateContentMenuBarPopup",
       config: {
          widgets: [
             {
-               id: "DOCLIB_CREATE_CONTENT_MENU_GROUP1",
+               id: (options.idPrefix || "") + "DOCLIB_CREATE_CONTENT_MENU_GROUP1",
                name: "alfresco/menus/AlfMenuGroup",
                config: {
                   widgets: createContent
@@ -643,11 +645,11 @@ function getDocLibCreateContentMenu() {
  *                                                                                 *
  ***********************************************************************************/
 
-function getDocLibCloudSyncToolbarActions() {
+function getDocLibCloudSyncToolbarActions(options) {
    var actions = [];
    if (getSyncMode() !== "OFF") {
       actions.push({
-         id: "DOCLIB_SYNC_TO_CLOUD_BUTTON",
+         id: (options.idPrefix || "") + "DOCLIB_SYNC_TO_CLOUD_BUTTON",
          name: "alfresco/documentlibrary/AlfCloudSyncFilteredMenuBarItem",
          config: {
             label: msg.get("actions.document.cloud-sync"),
@@ -655,7 +657,7 @@ function getDocLibCloudSyncToolbarActions() {
          }
       },
       {
-         id: "DOCLIB_UNSYNC_FROM_CLOUD_BUTTON",
+         id: (options.idPrefix || "") + "DOCLIB_UNSYNC_FROM_CLOUD_BUTTON",
          name: "alfresco/documentlibrary/AlfCloudSyncFilteredMenuBarItem",
          config: {
             label: msg.get("actions.document.cloud-unsync"),
@@ -703,6 +705,7 @@ function getSelectedItemsActions(selectedItemsActions) {
             type: "action-link",
             id: "onActionDownload",
             icon: "document-download",
+            iconClass: "alf-download-as-zip-icon",
             label: "menu.selected-items.download"
          },
          {
@@ -729,6 +732,7 @@ function getSelectedItemsActions(selectedItemsActions) {
             type: "action-link",
             id: "onActionDelete",
             icon: "document-delete",
+            iconClass: "alf-delete-icon",
             label: "menu.selected-items.delete",
             permission: "Delete",
             notAspect: "hwf:hybridWorkflow,sys:undeletable"
@@ -775,7 +779,6 @@ function getSelectedItemsActions(selectedItemsActions) {
             config: {
                id: (action.id || "").toString(),
                label: (action.label || "").toString(),
-               iconImage: getMultiActionImage(action),
                type: (action.type || "").toString(),
                permission: (action.permission || "").toString(),
                asset: (action.asset || "").toString(),
@@ -784,28 +787,37 @@ function getSelectedItemsActions(selectedItemsActions) {
                notAspect: (action.notAspect || "").toString(),
                publishTopic: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
                publishPayload: {
+                  actionTopic: (action.actionTopic || "").toString(),
                   action: (action.id || "").toString()
                }
             }
          };
+         if (action.iconClass)
+         {
+            actionItem.config.iconClass = action.iconClass;
+         }
+         else
+         {
+            actionItem.config.iconImage = getMultiActionImage(action);
+         }
          actions.push(actionItem);
       }
    }
    return actions;
 }
 
-function getDocLibSelectedItemActions() {
+function getDocLibSelectedItemActions(options) {
    var actionsMenu = {
-      id: "DOCLIB_SELECTED_ITEMS_MENU",
+      id: (options.idPrefix || "") + "DOCLIB_SELECTED_ITEMS_MENU",
       name: "alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup",
       config: {
          label: msg.get("selected-items.label"),
          widgets: [
             {
-               id: "DOCLIB_SELECTED_ITEMS_MENU_GROUP1",
+               id: (options.idPrefix || "") + "DOCLIB_SELECTED_ITEMS_MENU_GROUP1",
                name: "alfresco/menus/AlfMenuGroup",
                config: {
-                  widgets: getSelectedItemsActions()
+                  widgets: getSelectedItemsActions(options.selectedItemsActions)
                }
             }
          ]
@@ -928,13 +940,13 @@ function getDocLibSortOptions(options, sortingConfigItems) {
 function getDocLibConfigMenu(options) {
    setupDocLibPreferences(options);
    return {
-      id: "DOCLIB_CONFIG_MENU",
+      id: (options.idPrefix || "") + "DOCLIB_CONFIG_MENU",
       name: "alfresco/menus/AlfMenuBarPopup",
       config: {
          iconClass: "alf-configure-icon",
          widgets: [
             {
-               id: "DOCLIB_CONFIG_MENU_VIEW_SELECT_GROUP",
+               id: (options.idPrefix || "") + "DOCLIB_CONFIG_MENU_VIEW_SELECT_GROUP",
                name: "alfresco/documentlibrary/AlfViewSelectionGroup"
             },
             // The actions to toggle full-screen and full-window have been left in place
@@ -942,13 +954,13 @@ function getDocLibConfigMenu(options) {
             // issues with absolutely positioned popups used for menus that are not shown.
             // Theses issues need to be resolved before this can be released.
             {
-               id: "DOCLIB_CONFIG_MENU_VIEW_MODE_GROUP",
+               id: (options.idPrefix || "") + "DOCLIB_CONFIG_MENU_VIEW_MODE_GROUP",
                name: "alfresco/menus/AlfMenuGroup",
                config: {
                   label: msg.get("doclib.viewModes.label"),
                   widgets: [
                      {
-                        id: "DOCLIB_FULL_WINDOW_OPTION",
+                        id: (options.idPrefix || "") + "DOCLIB_FULL_WINDOW_OPTION",
                         name: "alfresco/menus/AlfCheckableMenuItem",
                         config: {
                            label: msg.get("doclib.fullwindow.label"),
@@ -958,7 +970,7 @@ function getDocLibConfigMenu(options) {
                         }
                      },
                      {
-                        id: "DOCLIB_FULL_SCREEN_OPTION",
+                        id: (options.idPrefix || "") + "DOCLIB_FULL_SCREEN_OPTION",
                         name: "alfresco/menus/AlfCheckableMenuItem",
                         config: {
                            label: msg.get("doclib.fullscreen.label"),
@@ -971,13 +983,13 @@ function getDocLibConfigMenu(options) {
                }
             },
             {
-               id: "DOCLIB_CONFIG_MENU_OPTIONS_GROUP",
+               id: (options.idPrefix || "") + "DOCLIB_CONFIG_MENU_OPTIONS_GROUP",
                name: "alfresco/menus/AlfMenuGroup",
                config: {
                   label: msg.get("doclib.options.label"),
                   widgets: [
                      {
-                        id: "DOCLIB_SHOW_FOLDERS_OPTION",
+                        id: (options.idPrefix || "") + "DOCLIB_SHOW_FOLDERS_OPTION",
                         name: "alfresco/menus/AlfCheckableMenuItem",
                         config: {
                            label: msg.get("show-folders.label"),
@@ -987,7 +999,7 @@ function getDocLibConfigMenu(options) {
                         }
                      },
                      {
-                        id: "DOCLIB_SHOW_PATH_OPTION",
+                        id: (options.idPrefix || "") + "DOCLIB_SHOW_PATH_OPTION",
                         name: "alfresco/menus/AlfCheckableMenuItem",
                         config: {
                            label: msg.get("show-path.label"),
@@ -997,7 +1009,7 @@ function getDocLibConfigMenu(options) {
                         }
                      },
                      {
-                        id: "DOCLIB_SHOW_SIDEBAR_OPTION",
+                        id: (options.idPrefix || "") + "DOCLIB_SHOW_SIDEBAR_OPTION",
                         name: "alfresco/menus/AlfCheckableMenuItem",
                         config: {
                            label: msg.get("show-sidebar.label"),
@@ -1028,7 +1040,7 @@ function getDocLibConfigMenu(options) {
 function getDocLibList(options) {
    setupDocLibPreferences(options);
    return {
-      id: "DOCLIB_DOCUMENT_LIST",
+      id: (options.idPrefix || "") + "DOCLIB_DOCUMENT_LIST",
       name: "alfresco/documentlibrary/AlfDocumentList",
       config: {
          waitForPageWidgets: (options.waitForPageWidgets !== false),
@@ -1073,28 +1085,28 @@ function getDocLibToolbar(options) {
    setupDocLibPreferences(options);
    var leftToolbar = [
       {
-         id: "DOCLIB_SELECT_ITEMS_MENU",
+         id: (options.idPrefix || "") + "DOCLIB_SELECT_ITEMS_MENU",
          name: "alfresco/documentlibrary/AlfSelectDocumentListItems"
       },
-      getDocLibCreateContentMenu(),
+      getDocLibCreateContentMenu(options),
       {
-         id: "DOCLIB_UPLOAD_BUTTON",
+         id: (options.idPrefix || "") + "DOCLIB_UPLOAD_BUTTON",
          name: "alfresco/documentlibrary/UploadButton",
          config: {
             label: msg.get("upload.label")
          }
       }
-   ].concat(getDocLibCloudSyncToolbarActions())
-   .concat([getDocLibSelectedItemActions()]);
+   ].concat(getDocLibCloudSyncToolbarActions(options))
+   .concat([getDocLibSelectedItemActions(options)]);
 
    return {
-      id: "DOCLIB_TOOLBAR",
+      id: (options.idPrefix || "") + "DOCLIB_TOOLBAR",
       name: "alfresco/documentlibrary/AlfToolbar",
       config: {
-         id: "DOCLIB_TOOLBAR",
+         id: (options.idPrefix || "") + "DOCLIB_TOOLBAR",
          widgets: [
             {
-               id: "DOCLIB_TOOLBAR_LEFT_MENU",
+               id: (options.idPrefix || "") + "DOCLIB_TOOLBAR_LEFT_MENU",
                name: "alfresco/menus/AlfMenuBar",
                align: "left",
                config: {
@@ -1102,18 +1114,18 @@ function getDocLibToolbar(options) {
                }
             },
             {
-               id: "DOCLIB_PAGINATION_MENU",
+               id: (options.idPrefix || "") + "DOCLIB_PAGINATION_MENU",
                name: "alfresco/documentlibrary/AlfDocumentListPaginator",
                align: "left"
             },
             {
-               id: "DOCLIB_TOOLBAR_RIGHT_MENU",
+               id: (options.idPrefix || "") + "DOCLIB_TOOLBAR_RIGHT_MENU",
                name: "alfresco/menus/AlfMenuBar",
                align: "right",
                config: {
                   widgets: [
                      {
-                        id: "DOCLIB_SORT_ORDER_TOGGLE",
+                        id: (options.idPrefix || "") + "DOCLIB_SORT_ORDER_TOGGLE",
                         name: "alfresco/menus/AlfMenuBarToggle",
                         config: {
                            checked: options.docLibPrefrences.sortAscending,
@@ -1134,13 +1146,13 @@ function getDocLibToolbar(options) {
                         }
                      },
                      {
-                        id: "DOCLIB_SORT_FIELD_SELECT",
+                        id: (options.idPrefix || "") + "DOCLIB_SORT_FIELD_SELECT",
                         name: "alfresco/menus/AlfMenuBarSelect",
                         config: {
                            selectionTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
                            widgets: [
                               {
-                                 id: "DOCLIB_SORT_FIELD_SELECT_GROUP",
+                                 id: (options.idPrefix || "") + "DOCLIB_SORT_FIELD_SELECT_GROUP",
                                  name: "alfresco/menus/AlfMenuGroup",
                                  config: {
                                     widgets: getDocLibSortOptions(options)
@@ -1158,6 +1170,65 @@ function getDocLibToolbar(options) {
    };
 }
 
+/**
+ * This creates the breadcrumb trail for the document list
+ */
+function getDocLibBreadcrumbTrail(options) {
+   var breadcrumbTrail = {
+      id: (options.idPrefix || "") + "DOCLIB_BREADCRUMB_TRAIL",
+      name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
+      config: {
+         hide: options.docLibPrefrences.hideBreadcrumbTrail,
+         rootLabel: options.rootLabel || "root.label",
+         lastBreadcrumbIsCurrentNode: true,
+         useHash: (options.useHash !== false),
+         pathChangeTopic: "ALF_DOCUMENTLIST_PATH_CHANGED",
+         lastBreadcrumbPublishTopic: "ALF_NAVIGATE_TO_PAGE",
+         lastBreadcrumbPublishPayload: {
+            url: "folder-details?nodeRef={currentNode.parent.nodeRef}",
+            type: "PAGE_RELATIVE",
+            target: "CURRENT"
+         },
+         lastBreadcrumbPublishPayloadType: "PROCESS",
+         lastBreadcrumbPublishPayloadModifiers: ["processInstanceTokens"]
+      }
+   };
+
+   // Override with any specific breadcrumb trail configuration options...
+   var bco = options.breadcrumbTrail;
+   if (bco)
+   {
+      if (bco.lastBreadcrumbPublishTopic)
+      {
+         breadcrumbTrail.config.lastBreadcrumbPublishTopic = bco.lastBreadcrumbPublishTopic;
+      }
+      if (bco.lastBreadcrumbPublishPayload)
+      {
+         breadcrumbTrail.config.lastBreadcrumbPublishPayload = bco.lastBreadcrumbPublishPayload;
+      }
+      if (bco.lastBreadcrumbPublishPayloadType)
+      {
+         breadcrumbTrail.config.lastBreadcrumbPublishPayloadType = bco.lastBreadcrumbPublishPayloadType;
+      }
+      if (bco.lastBreadcrumbPublishPayloadModifiers)
+      {
+         breadcrumbTrail.config.lastBreadcrumbPublishPayloadModifiers = bco.lastBreadcrumbPublishPayloadModifiers;
+      }
+      if (bco.lastBreadcrumbPublishGlobal === true || bco.lastBreadcrumbPublishGlobal === false)
+      {
+         breadcrumbTrail.config.lastBreadcrumbPublishGlobal = bco.lastBreadcrumbPublishGlobal;
+      }
+      if (bco.lastBreadcrumbPublishToParent === true || bco.lastBreadcrumbPublishToParent === false)
+      {
+         breadcrumbTrail.config.lastBreadcrumbPublishToParent = bco.lastBreadcrumbPublishToParent;
+      }
+      if (bco.lastBreadcrumbPublishPayloadItemMixin === true || bco.lastBreadcrumbPublishPayloadItemMixin === false)
+      {
+         breadcrumbTrail.config.lastBreadcrumbPublishPayloadItemMixin = bco.lastBreadcrumbPublishPayloadItemMixin;
+      }
+   }
+   return breadcrumbTrail;
+}
 
 /**
  * Builds the JSON model for rendering a DocumentLibrary. 
@@ -1168,7 +1239,7 @@ function getDocLibToolbar(options) {
 function getDocLib(options) {
    setupDocLibPreferences(options);
    var docLibModel = {
-      id: "DOCLIB_SIDEBAR",
+      id: (options.idPrefix || "") + "DOCLIB_SIDEBAR",
       name: "alfresco/layout/AlfSideBarContainer",
       config: {
          showSidebar: options.docLibPrefrences.showSidebar,
@@ -1176,43 +1247,25 @@ function getDocLib(options) {
          footerHeight: 50,
          widgets: [
             {
-               id: "DOCLIB_SIDEBAR_BAR",
+               id: (options.idPrefix || "") + "DOCLIB_SIDEBAR_BAR",
                align: "sidebar",
                name: "alfresco/layout/VerticalWidgets",
                config: {
                   widgets: [
-                     getDocLibFilters(),
+                     getDocLibFilters(options),
                      getDocLibTree(options),
                      getDocLibTags(options),
-                     getDocLibCategories()
+                     getDocLibCategories(options)
                   ]
                }
             },
             {
-               id: "DOCLIB_SIDEBAR_MAIN",
+               id: (options.idPrefix || "") + "DOCLIB_SIDEBAR_MAIN",
                name: "alfresco/layout/FullScreenWidgets",
                config: {
                   widgets: [
                      getDocLibToolbar(options),
-                     {
-                        id: "DOCLIB_BREADCRUMB_TRAIL",
-                        name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
-                        config: {
-                           hide: options.docLibPrefrences.hideBreadcrumbTrail,
-                           rootLabel: options.rootLabel || "root.label",
-                           lastBreadcrumbIsCurrentNode: true,
-                           useHash: (options.useHash !== false),
-                           pathChangeTopic: "ALF_DOCUMENTLIST_PATH_CHANGED",
-                           lastBreadcrumbPublishTopic: "ALF_NAVIGATE_TO_PAGE",
-                           lastBreadcrumbPublishPayload: {
-                              url: "folder-details?nodeRef={currentNode.parent.nodeRef}",
-                              type: "PAGE_RELATIVE",
-                              target: "CURRENT"
-                           },
-                           lastBreadcrumbPublishPayloadType: "PROCESS",
-                           lastBreadcrumbPublishPayloadModifiers: ["processInstanceTokens"]
-                        }
-                     },
+                     getDocLibBreadcrumbTrail(options),
                      getDocLibList(options)
                   ]
                }
@@ -1220,6 +1273,5 @@ function getDocLib(options) {
          ]
       }
    };
-   
    return docLibModel;
 }

@@ -116,9 +116,10 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dijit/registry",
         "dojo/Deferred",
-        "dojo/dom-construct"], 
+        "dojo/dom-construct",
+        "dojo/dom-class"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, topics, _AlfHashMixin, RulesEngineMixin, 
-                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct) {
+                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct, domClass) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin, RulesEngineMixin], {
       
@@ -150,14 +151,14 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       _form: null,
       
       /**
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       widgets: null,
       
@@ -166,14 +167,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default ""
+       * @default
        */
       postUrl: "",
       
       /**
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       convertFormToJsonString: false,
       
@@ -183,7 +184,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       invalidFormControls: null,
       
@@ -193,7 +194,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       okButton: null,
       
@@ -203,7 +204,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       cancelButton: null,
       
@@ -214,7 +215,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       scopeFormControls: true,
       
@@ -223,7 +224,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       displayButtons: true,
       
@@ -236,7 +237,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       setValueTopic: null,
 
@@ -246,7 +247,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       setValueTopicGlobalScope: true,
 
@@ -256,7 +257,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       setValueTopicParentScope: false,
 
@@ -267,7 +268,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showValidationErrorsImmediately: true,
 
@@ -279,7 +280,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       waitForPageWidgets: true,
 
@@ -377,7 +378,7 @@ define(["dojo/_base/declare",
                }
             }, this);
 
-            this.processWidgets(this.widgets, this._form.domNode);
+            this.processWidgets(this.widgets, this._form.domNode, "FIELDS");
          }
       },
 
@@ -398,6 +399,11 @@ define(["dojo/_base/declare",
                warnings: warnings
             }
          }).placeAt((this.warningsPosition === "top" ? this.warningsTopNode : this.warningsBottomNode));
+
+         if (warnings.length > 0)
+         {
+            domClass.remove(this.warningsPosition === "top" ? this.warningsTopNode : this.warningsBottomNode, "alfresco-forms-Form__warnings--hidden");
+         }
       },
 
       /**
@@ -553,7 +559,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       validFormValuesPublishTopic: null,
 
@@ -562,7 +568,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       validFormValuesPublishPayload: null,
 
@@ -571,7 +577,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default false
+       * @default
        */
       validFormValuesPublishGlobal: false,
 
@@ -580,7 +586,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       validFormValuesPublishOnInit: false,
 
@@ -589,7 +595,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showOkButton: true,
       
@@ -598,7 +604,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showCancelButton: true,
       
@@ -608,28 +614,39 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "form.button.ok.label"
+       * @default
        */
       okButtonLabel: "form.button.ok.label",
       
       /**
+       * Additional CSS clases to apply to the confirmation button on the form. This defaults to
+       * have the "call-to-action" style, but this can be overridden as required.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.33
+       */
+      okButtonClass: "call-to-action",
+
+      /**
        * @instance 
        * @type {string}
-       * @default null
+       * @default
        */
       okButtonPublishTopic: null,
       
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       okButtonPublishPayload: null,
       
       /**
        * @instance 
        * @type {string}
-       * @default null
+       * @default
        */
       okButtonPublishGlobal: null,
 
@@ -639,28 +656,28 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "form.button.cancel.label"
+       * @default
        */
       cancelButtonLabel: "form.button.cancel.label",
       
       /**
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       cancelButtonPublishTopic: null,
       
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       cancelButtonPublishPayload: null,
 
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       cancelButtonPublishGlobal: null,
       
@@ -673,7 +690,7 @@ define(["dojo/_base/declare",
        * 
        * @instance 
        * @type {string}
-       * @default null
+       * @default
        */
       autoSavePublishTopic: null,
       
@@ -682,14 +699,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       autoSavePublishPayload: null,
       
       /**
        * @instance 
        * @type {string}
-       * @default null
+       * @default
        */
       autoSavePublishGlobal: null,
 
@@ -701,7 +718,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       autoSaveOnInvalid: false,
       
@@ -711,7 +728,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       widgetsAdditionalButtons: null,
       
@@ -722,7 +739,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       additionalButtons: null,
       
@@ -735,7 +752,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 
@@ -744,7 +761,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       setHash: false,
       
@@ -754,7 +771,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _formSetupComplete: false,
 
@@ -864,8 +881,7 @@ define(["dojo/_base/declare",
          if (this.widgetsAdditionalButtons !== null)
          {
             this.additionalButtons = [];
-            this.__creatingButtons = true;
-            this.processWidgets(this.widgetsAdditionalButtons, this.buttonsNode);
+            this.processWidgets(this.widgetsAdditionalButtons, this.buttonsNode, "BUTTONS");
          }
          else
          {
@@ -891,12 +907,11 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      allWidgetsProcessed: function alfresco_forms_Form__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_forms_Form__allWidgetsProcessed(widgets, processWidgetsId) {
          // If additional button configuration has been processed, then get a reference to ALL the buttons...
-         if (this.__creatingButtons === true)
+         if (processWidgetsId === "BUTTONS")
          {
             this.additionalButtons = registry.findWidgets(this.buttonsNode);
-            this.__creatingButtons = false;
          }
          else
          {
@@ -1050,7 +1065,7 @@ define(["dojo/_base/declare",
        */
       validate: function alfresco_forms_Form__validate() {
          this.alfLog("log", "Validating form", this._form);
-         array.forEach(this._processedWidgets, function(widget) {
+         array.forEach(this._form.getChildren(), function(widget) {
             if (typeof widget.validateFormControlValue === "function")
             {
                widget.validateFormControlValue();

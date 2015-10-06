@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Dynamic Horizontal Layout</shortname>
+  <description>Demonstrates horizontally laid out widgets resizing as widgets are hidden and revealed</description>
+  <family>aikau-unit-tests</family>
+  <url>/DynamicHorizontalLayout</url>
+</webscript>

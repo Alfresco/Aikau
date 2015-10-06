@@ -66,7 +66,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       pubSubLog: null,
 
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       topicsToIgnore: null,
 
@@ -268,6 +268,15 @@ define(["dojo/_base/declare",
                this.addValueToLog(value, valueCellNode, depth);
             }
          }
+      },
+
+      /**
+       * Clear the log node
+       *
+       * @instance
+       */
+      _clearLog: function alfresco_testing_Subscription___clearLog() {
+         domConstruct.empty(this.logNode);
       }
    });
 });

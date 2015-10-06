@@ -48,7 +48,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {string}
-             * @default "alfresco-integration-IFrame"
+             * @default
              */
             baseClass: "alfresco-integration-IFrame",
 
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {null|string}
-             * @default null
+             * @default
              */
             src: null,
 
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {number|null|string}
-             * @default "100%"
+             * @default
              */
             width: "100%",
 
@@ -105,7 +105,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              * @type {number}
-             * @default 600
+             * @default
              */
             height: 600,
 

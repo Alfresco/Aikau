@@ -31,8 +31,10 @@ define(["intern!object",
         "alfresco/TestCommon"],
         function (registerSuite, expect, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "FileType Tests",
 
       setup: function() {
@@ -57,7 +59,7 @@ define(["intern!object",
             .getAttribute("src")
             .then(function (imgUrl){
                assert.include(imgUrl, "alfresco/logo/css/images/AlfrescoLogoOnly.PNG", "Expected Alfresco logo, but got: "+imgUrl);
-            })
+            });
       },
 
       "Check non-custom image has loaded": function () {
@@ -65,11 +67,12 @@ define(["intern!object",
             .getAttribute("src")
             .then(function (imgUrl){
                assert.include(imgUrl, "ppt-file-48.png", "Expected ppt-file-48, but got: "+imgUrl);
-            })
+            });
       },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

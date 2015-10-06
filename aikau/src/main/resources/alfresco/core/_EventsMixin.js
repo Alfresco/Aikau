@@ -41,11 +41,12 @@
  * @author Martin Doyle
  */
 define(["alfresco/core/Core",
+        "alfresco/core/topics",
         "alfresco/util/functionUtils", 
         "dojo/_base/declare", 
         "dojo/_base/lang", 
         "dojo/on"], 
-        function(AlfCore, funcUtils, declare, lang, on) {
+        function(AlfCore, topics, funcUtils, declare, lang, on) {
 
    return declare([AlfCore], {
 
@@ -55,7 +56,7 @@ define(["alfresco/core/Core",
        * @event eventsScrollTopic
        * @instance
        * @type {String}
-       * @default "ALF_EVENTS_SCROLL"
+       * @default
        */
       eventsScrollTopic: "ALF_EVENTS_SCROLL",
 
@@ -65,7 +66,7 @@ define(["alfresco/core/Core",
        * @event eventsResizeTopic
        * @instance
        * @type {String}
-       * @default "ALF_EVENTS_SCROLL"
+       * @default
        */
       eventsResizeTopic: "ALF_EVENTS_RESIZE",
 
@@ -146,7 +147,7 @@ define(["alfresco/core/Core",
             resizeListener = on(window, "resize", resizeAction);
             this.own && this.own(resizeListener);
          } else {
-            resizeSubscription = this.alfSubscribe("ALF_NODE_RESIZED", lang.hitch(this, function(payload) {
+            resizeSubscription = this.alfSubscribe(topics.NODE_RESIZED, lang.hitch(this, function(payload) {
                var resizedNode = payload.node,
                   resizedNodeIsAncestor = false,
                   testNode = nodeToMonitor;

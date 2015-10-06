@@ -30,21 +30,21 @@ define(["dojo/_base/declare"],
       /**
        * @instance
        * @type {number}
-       * @default 1024
+       * @default
        */
       BYTES_KB: 1024,
 
       /**
        * @instance
        * @type {number}
-       * @default 1048576
+       * @default
        */
       BYTES_MB: 1048576,
 
       /**
        * @instance
        * @type {number}
-       * @default 1073741824
+       * @default
        */
       BYTES_GB: 1073741824,
 

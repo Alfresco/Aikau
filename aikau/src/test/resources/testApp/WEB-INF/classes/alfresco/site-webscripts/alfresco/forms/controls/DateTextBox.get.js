@@ -27,9 +27,9 @@ model.jsonModel = {
                            id: "VALID_DATE_VALUE_1",
                            config: {
                               name: "validDate1",
-                              value: "2012-12-12",
+                              value: "2012-12-25",
                               label: "Valid date",
-                              description: "Preset with the value \"2012-12-12\""
+                              description: "Preset with the value \"2012-12-25\""
                            }
                         },
                         {
@@ -37,12 +37,41 @@ model.jsonModel = {
                            id: "VALID_DATE_VALUE_2",
                            config: {
                               name: "validDate2",
-                              value: "2015-07-07",
+                              value: "2015-10-31",
                               label: "Valid date (mandatory)",
-                              description: "Preset with the value \"2015-07-07\"",
+                              description: "Preset with the value \"2015-10-31\"",
                               requirementConfig: {
                                  initialValue: true
                               }
+                           }
+                        },
+                        {
+                           name: "alfresco/forms/controls/DateTextBox",
+                           id: "TODAYS_DATE",
+                           config: {
+                              name: "todaysDate",
+                              value: "TODAY",
+                              label: "Today's date",
+                              description: "Preset with today's date"
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  name: "alfresco/forms/Form",
+                  id: "OTHER_DATES_FORM",
+                  config: {
+                     okButtonPublishTopic: "OTHER_DATES_FORM_SUBMIT",
+                     widgets: [
+                        {
+                           name: "alfresco/forms/controls/DateTextBox",
+                           id: "DATE_WITH_PLACEHOLDER",
+                           config: {
+                              name: "dateWithPlaceholder",
+                              label: "Date with placeholder",
+                              description: "No preset value, but placeholder text",
+                              placeHolder: "This is a placeholder"
                            }
                         },
                         {

@@ -27,8 +27,10 @@ define(["intern!object",
         "alfresco/TestCommon"],
         function (registerSuite, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Advanced Form Validation Tests",
 
       setup: function() {
@@ -300,5 +302,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

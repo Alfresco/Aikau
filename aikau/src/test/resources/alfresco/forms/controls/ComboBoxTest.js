@@ -18,18 +18,21 @@
  */
 
 /**
- * 
+ * Test the ComboBox control
+ *
  * @author Dave Draper
+ * @author Martin Doyle
  */
-define(["intern!object",
+define(["alfresco/TestCommon",
+        "intern!object",
         "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(TestCommon, registerSuite, assert, keys) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "ComboBox Tests (mouse)",
 
       setup: function() {
@@ -41,56 +44,79 @@ define(["intern!object",
          browser.end();
       },
 
-      "Checking the number of tag options...": function () {
-         return browser.findByCssSelector("#TAGS .dijitArrowButtonInner")
+      "Check that mouse selection of option updates value": function() {
+         return browser.findByCssSelector("#PROPERTIES label.label")
             .click()
          .end()
 
+         .findByCssSelector("#PROPERTIES .dijitArrowButtonInner")
+            .click()
+         .end()
+         .findByCssSelector("#PROPERTIES_CONTROL_popup0")
+            .click()
+         .end()
+
+         .findByCssSelector(".confirmationButton > span")
+            .click()
+            .end()
+
+         .getLastPublish("POST_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "property", "act:actionExecutionTitle", "Property value not set from mouse selection");
+            });
+      },
+
+      "Checking the number of tag options...": function() {
+         return browser.findByCssSelector("#TAGS .dijitArrowButtonInner")
+            .click()
+            .end()
+
          .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
             .then(function(elements) {
-               assert(elements.length === 4, "Test 1a - Four tag options were expected, found: " + elements.length);
+               assert.lengthOf(elements, 4, "Didn't display full list of tags");
             });
       },
 
       "Checking the number of properties options": function() {
          return browser.findByCssSelector("#TAGS label.label")
             .click()
-         .end()
+            .end()
 
-         // Open the properties combo and count the available options...
          .findByCssSelector("#PROPERTIES .dijitArrowButtonInner")
             .click()
-         .end()
+            .end()
 
          .findAllByCssSelector("#PROPERTIES_CONTROL_popup .dijitMenuItem[item]")
             .then(function(elements) {
-               assert(elements.length === 5, "Test 1b - Five property options were expected, found: " + elements.length);
+               assert.lengthOf(elements, 5, "Didn't display full list of properties");
             });
       },
 
       "Checking tag options are reduced": function() {
          return browser.findByCssSelector("#TAGS_CONTROL")
-            .click()
+            .clearLog()
             .type("t")
-            .sleep(1000)
-         .end()
+            .end()
+
+         .getLastPublish("_SUCCESS")
 
          .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
             .then(function(elements) {
-               assert(elements.length === 3, "Three tag options were expected, found: " + elements.length);
+               assert.lengthOf(elements, 4, "Did not expect 't' to reduce elements list");
             });
       },
 
       "Checking tag options are further reduced": function() {
          return browser.findByCssSelector("#TAGS_CONTROL")
-            .click()
+            .clearLog()
             .type("ag1")
-            .sleep(1000)
-         .end()
+            .end()
+
+         .getLastPublish("_SUCCESS")
 
          .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
             .then(function(elements) {
-               assert(elements.length === 2, "Two tag options were expected, found: " + elements.length);
+               assert.lengthOf(elements, 2, "List was not filtered correctly for search 'tag1'");
             });
       },
 
@@ -98,24 +124,28 @@ define(["intern!object",
          return browser.findByCssSelector("#TAGS_CONTROL")
             .click()
             .pressKeys(keys.RETURN)
-         .end()
+            .end()
 
          .findByCssSelector(".confirmationButton > span")
             .click()
-         .end()
+            .end()
 
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("POST_FORM", "tag", "tag1"))
-            .then(function(elements) {
-               assert(elements.length === 1, "The tag value was not auto-completed and posted");
+         .getLastPublish("POST_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "tag", "tag1", "Tag value was not auto-completed and posted");
             });
       },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "ComboBox Tests (keyboard)",
 
       setup: function() {
@@ -127,17 +157,17 @@ define(["intern!object",
          browser.end();
       },
 
-      "Down arrow test": function () {
+      "Down arrow test": function() {
          // Slightly convoluted way to leave a result stem in the #TAGS_CONTROL
          return browser.pressKeys(keys.TAB)
-            .pressKeys("ta")
+            .pressKeys("g1")
             .sleep(500)
             .pressKeys(keys.TAB)
             .sleep(500)
             .pressKeys([keys.SHIFT, keys.TAB])
             .pressKeys(keys.ARROW_DOWN)
             .sleep(500)
-         .end()
+            .end()
 
          // Release SHIFT and TAB before assertion...
          .pressKeys([keys.SHIFT, keys.TAB])
@@ -145,12 +175,13 @@ define(["intern!object",
          // Test that clicking the down arrow gives results based on the stem left above
          .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
             .then(function(elements) {
-               assert(elements.length === 3, "Three tag options were expected, found: " + elements.length);
+               assert.lengthOf(elements, 2, "Wrong number of results for search string 'g1'");
             });
       },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

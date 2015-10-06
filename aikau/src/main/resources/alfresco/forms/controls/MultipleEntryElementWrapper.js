@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
        * MultipleEntryCreator can be updated with delete requests.
        * 
        * @instance
-       * @default null
+       * @default
        */
       creator: null,
       
@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       previouslyExisted: false,
 
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.save"
+       * @default
        */
       saveEntryAltText: "multiple-entry.save",
 
@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       saveEntryImageSrc: null,
 
@@ -97,7 +97,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "done-16.png"
+       * @default
        */
       saveEntryImage: "done-16.png",
 
@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.cancel"
+       * @default
        */
       cancelEditAltText: "multiple-entry.cancel",
 
@@ -115,7 +115,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       cancelEditImageSrc: null,
 
@@ -126,7 +126,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "delete-16.png"
+       * @default
        */
       cancelEditImage: "delete-16.png",
 
@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.delete"
+       * @default
        */
       deleteEntryAltText: "multiple-entry.delete",
 
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       deleteEntryImageSrc: null,
 
@@ -155,7 +155,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "delete-16.png"
+       * @default
        */
       deleteEntryImage: "delete-16.png",
 
@@ -164,7 +164,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "multiple-entry.delete"
+       * @default
        */
       editEntryAltText: "multiple-entry.edit",
 
@@ -173,7 +173,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       editEntryImageSrc: null,
 
@@ -184,7 +184,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "delete-16.png"
+       * @default
        */
       editEntryImage: "edit-16.png",
 
@@ -228,7 +228,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       widget: null,
       

@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default "default.label"
+       * @default
        */
       label: "default.label",
       
@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "alf-create-icon"
+       * @default
        */
       iconClass: "alf-create-icon",
       

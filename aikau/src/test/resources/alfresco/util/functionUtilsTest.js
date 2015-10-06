@@ -28,8 +28,10 @@ define([
    ],
    function(TestCommon, registerSuite, assert, require) {
 
-      var browser;
-      registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
          name: "Function Utils Test",
 
          setup: function() {
@@ -168,6 +170,7 @@ define([
                   assert.closeTo(timeOfExecution, 0, 25, "Did not handle execFirst option in debounce function correctly");
                });
          }
+      };
       });
    }
 );

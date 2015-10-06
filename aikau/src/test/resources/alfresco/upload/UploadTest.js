@@ -27,17 +27,18 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, assert, require, TestCommon) {
 
-   var browser;
    var uploadsSelector = ".alfresco-dialog-AlfDialog .alfresco-upload-AlfUploadDisplay .uploads";
    var successfulUploadsSelector = uploadsSelector + "> .successful table tr";
    var failedUploadsSelector = uploadsSelector + " > .failed table tr";
    var aggProgStatusSelector = uploadsSelector + " .aggregate-progress .percentage";
    var okButtonSelector = ".alfresco-dialog-AlfDialog .footer > span:first-child > span";
    var cancelButtonSelector = ".alfresco-dialog-AlfDialog .footer > span:nth-child(2) > span";
-
    var dialogDelay = 500;
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Upload Failure Tests",
 
       setup: function() {
@@ -73,8 +74,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
-   registerSuite({
+
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Upload Tests",
       
       setup: function() {
@@ -197,5 +203,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

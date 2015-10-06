@@ -27,16 +27,16 @@
 define(["dojo/_base/declare",
         "alfresco/documentlibrary/AlfDocumentFilters", 
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "alfresco/services/_TagServiceTopics",
-        "alfresco/documentlibrary/AlfDocumentFilter",
         "alfresco/core/ObjectTypeUtils",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/on",
-        "dijit/registry"], 
-        function(declare, AlfDocumentFilters, _AlfDocumentListTopicMixin, _TagServiceTopics, AlfDocumentFilter, ObjectTypeUtils, lang, array, domConstruct, domClass, on, registry) {
+        "dijit/registry",
+        "alfresco/documentlibrary/AlfDocumentFilter"], // Referenced in this.createWidget call, so must be explicitly included here
+        function(declare, AlfDocumentFilters, _AlfDocumentListTopicMixin, ObjectTypeUtils, topics, lang, array, domConstruct, domClass, on, registry) {
 
    return declare([AlfDocumentFilters, _AlfDocumentListTopicMixin], {
       
@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "docListFilterPref"
+       * @default
        */
       filterPrefsName: "docListTagFilterPref",
       
@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "tag"
+       * @default
        */
       paramName: "tag",
 
@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       siteId: null,
 
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       containerId: null,
 
@@ -95,36 +95,45 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       rootNode: null,
 
       /**
-       * Overrides the mixed-in constant so that a tag specific topic is published on
+       * Overrides the mixed-in value so that a tag specific topic is published
        *
        * @instance
        * @type {string}
-       * @default "ALF_DOCUMENTLIST_TAG_CHANGED"
+       * @default
        */
-      filterSelectionTopic: "ALF_DOCUMENTLIST_TAG_CHANGED",
+      filterSelectionTopic: topics.DOCUMENTLIST_TAG_CHANGED,
 
       /**
+       * This topic is used to request that a node should be rated (the details should be supplied
+       * as the publication payload).
+       *
        * @instance
+       * @type {string}
+       * @default
+       * @listens module:alfresco/core/topics#TAG_QUERY
+       * @event
+       */
+      tagQueryTopic: topics.TAG_QUERY,
+
+      /**
+       * Called immediately after instantiation and before any processing
+       * 
+       * @instance
+       * @listens module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentTaggedTopic
        */
       postMixInProperties: function alfresco_documentlibrary_AlfTagFilters__postMixInProperties() {
          this.inherited(arguments);
          
          // Subscribe to publications about documents being tagged/untagged...
-         this.alfSubscribe(this.documentTaggedTopic, lang.hitch(this, "onDocumentTagged"));
-         
+         this.alfSubscribe(this.documentTaggedTopic, lang.hitch(this, this.onDocumentTagged));
+
          // Make a request to get the initial set of tags for the current location...
-         this.alfPublish(_TagServiceTopics.tagQueryTopic, {
-            callback: this.onTagQueryResults,
-            callbackScope: this,
-            siteId: this.siteId,
-            containerId: this.containerId,
-            rootNode: this.rootNode
-         });
+         this.requestTags();
       },
       
       /**
@@ -136,29 +145,57 @@ define(["dojo/_base/declare",
          // Create the tags...
          if (response && ObjectTypeUtils.isArray(response.tags))
          {
-            var oldTags = registry.findWidgets(this.contentNode);
-            array.forEach(oldTags, lang.hitch(this, "clearTags"));
-            array.forEach(response.tags, lang.hitch(this, "createTagFilter"));
+            this.clearAllTags();
+            array.forEach(response.tags, this.createTagFilter, this);
          }
          else
          {
             this.alfLog("warn", "A request was made to generate filter tag links, but no 'tags' array attribute was provided", response, originalRequestConfig);
          }
       },
-      
+
+      /**
+       * Request the tags for this tags list
+       *
+       * @instance
+       * @fires module:alfresco/documentlibrary/AlfTagFilters#tagQueryTopic
+       */
+      requestTags: function alfresco_documentlibrary_AlfTagFilters__requestTags(){
+         this.alfServicePublish(this.tagQueryTopic, {
+            callback: this.onTagQueryResults,
+            callbackScope: this,
+            siteId: this.siteId,
+            containerId: this.containerId,
+            rootNode: this.rootNode
+         });
+      },
+
       /**
        * Destroys the supplied tag widget.
-       * 
+       *
        * @instance
        * @param {object} widget The widget to destroy
        * @param {number} index The index of the widget
+       * @deprecated Since 1.0.38 - use [clearAllTags]{@link module:alfresco/documentlibrary/AlfTagFilters#clearAllTags} instead.
        */
       clearTags: function alfresco_documentlibrary_AlfTagFilters__clearTags(widget, /*jshint unused:false*/ index) {
-         if (typeof widget.destroy === "function")
-         {
+         if (typeof widget.destroy === "function") {
             widget.destroy();
          }
       },
+      
+      /**
+       * Clears the current tags
+       * 
+       * @instance
+       */
+      clearAllTags: function alfresco_documentlibrary_AlfTagFilters__clearAllTags() {
+         var oldTags = registry.findWidgets(this.contentNode);
+         array.forEach(oldTags, function(tagWidget) {
+            tagWidget.destroy();
+         });
+      },
+
       /**
        * Creates a new [filter widget]{@link module:alfresco/documentlibrary/AlfDocumentFilter} and then calls the
        * [addFilter function]{@link module:alfresco/documentlibrary/AlfDocumentFilters#addFilter} to add it.
@@ -171,11 +208,14 @@ define(["dojo/_base/declare",
              tagData.name &&
              tagData.count)
          {
-            var tagFilter = new AlfDocumentFilter({
-               filterSelectionTopic: this.filterSelectionTopic,
-               label: this.message("filter.tag.label", {"0": tagData.name, "1": tagData.count}),
-               filter: tagData.name,
-               description: this.message("filter.tagged.label", {"0":tagData.name})
+            var tagFilter = this.createWidget({
+               name: "alfresco/documentlibrary/AlfDocumentFilter",
+               config: {
+                  filterSelectionTopic: this.filterSelectionTopic,
+                  label: this.message("filter.tag.label", {"0": tagData.name, "1": tagData.count}),
+                  filter: tagData.name,
+                  description: this.message("filter.tagged.label", {"0": tagData.name})
+               }
             });
             this.addFilter(tagFilter);
          }
@@ -184,7 +224,7 @@ define(["dojo/_base/declare",
             this.alfLog("warn", "It is not possible to create a filter tag without 'name' and 'count' attributes", tagData);
          }
       },
-      
+
       /**
        * Used to keep track of the current set of filter tags.
        * 
@@ -195,12 +235,14 @@ define(["dojo/_base/declare",
       currentTagFilters: null,
       
       /**
-       * Handles documents being tagged and creates a filter for the tag.
+       * Handles documents being tagged and recreates the tags list
        * 
        * @instance
-       * @param {object} payload
+       * @param {object} payload The publish payload
        */
       onDocumentTagged: function alfresco_documentlibrary_AlfTagFilters__onDocumentTagged(/*jshint unused:false*/ payload) {
+         this.clearAllTags();
+         this.requestTags();
       },
       
       /**

@@ -87,6 +87,7 @@ define(["dojo/_base/declare",
       "alfresco/core/Core",
       "alfresco/core/CoreWidgetProcessing",
       "alfresco/core/ResizeMixin",
+      "alfresco/core/topics",
       "alfresco/services/_DashletServiceTopicMixin",
       "dojo/_base/lang",
       "dojo/_base/array",
@@ -97,7 +98,7 @@ define(["dojo/_base/declare",
       "jqueryui"
    ],
    function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing,
-      ResizeMixin, _DashletServiceTopicMixin, lang, array, domConstruct, domClass, domStyle, $) {
+      ResizeMixin, topics, _DashletServiceTopicMixin, lang, array, domConstruct, domClass, domStyle, $) {
 
       return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin, _DashletServiceTopicMixin], {
 
@@ -115,7 +116,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {string}
-          * @default "alfresco-dashlets-Dashlet"
+          * @default
           */
          baseClass: "alfresco-dashlets-Dashlet",
 
@@ -125,7 +126,7 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @type {string}
-          * @default ""
+          * @default
           */
          subClass: "",
 
@@ -300,9 +301,10 @@ define(["dojo/_base/declare",
           *
           * @instance
           * @param {Object} payload The payload from the publishing of the failure topic
+          * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
           */
          onHeightStorageError: function(payload) {
-            this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
                message: "Error occurred while storing dashlet height"
             }, true);
             this.alfLog("error", "Error storing dashlet height:\n\"" + payload.response.message + "\"");

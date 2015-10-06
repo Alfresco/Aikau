@@ -30,9 +30,10 @@ define(["intern!object",
    ],
    function(registerSuite, expect, assert, require, TestCommon, keys) {
 
-      var browser;
+registerSuite(function(){
+   var browser;
 
-      registerSuite({
+   return {
          name: "InlineEditPropertyLink",
 
          setup: function() {
@@ -318,5 +319,6 @@ define(["intern!object",
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
+      };
       });
    });

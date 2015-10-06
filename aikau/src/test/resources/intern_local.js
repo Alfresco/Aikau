@@ -3,6 +3,19 @@
 // packages, suites, excludeInstrumentation, and (if you want functional tests) functionalSuites.
 define(["./config/Suites"],
    function(Suites) {
+
+      // Extract the rows and columns from the command-line arguments
+      var rowsColsRegex = /rowsCols=(\d+)\|(\d+)/,
+         rows,
+         cols;
+      process.argv.forEach(function(arg) {
+         var match = rowsColsRegex.exec(arg);
+         if (match) {
+            rows = parseInt(match[1], 10);
+            cols = parseInt(match[2], 10);
+         }
+      });
+
       return {
 
          // The port on which the instrumenting proxy will listen
@@ -31,12 +44,16 @@ define(["./config/Suites"],
             }
          }, {
             browserName: "firefox"
-         // }, {
-         //    browserName: "ie"
          }],
 
          // Maximum number of simultaneous integration tests that should be executed on the remote WebDriver service
          maxConcurrency: 1,
+
+         // Terminal information
+         terminalInfo: {
+            rows: rows,
+            cols: cols
+         },
 
          // Dig Dug tunnel handler
          tunnel: "NullTunnel",
@@ -61,6 +78,9 @@ define(["./config/Suites"],
             }, {
                name: "reporters",
                location: "./src/test/resources/reporters"
+            }, {
+               name: "dojo",
+               location: "./node_modules/intern/node_modules/dojo"
             }]
          },
 
@@ -77,6 +97,7 @@ define(["./config/Suites"],
          reporters: [
             // "Console",
             // "Runner",
+            // "reporters/AikauConcurrentReporter"
             "reporters/AikauReporter"
          ]
 

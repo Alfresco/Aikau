@@ -1,4 +1,4 @@
-Aikau 1.0.31 Release Notes
+Aikau 1.0.36 Release Notes
 ===
 
 New deprecations: 
@@ -42,6 +42,82 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.37:
+* [AKU-586](https://issues.alfresco.com/jira/browse/AKU-586)       - Ensure AlfTagFilters publish to correct scope
+* [AKU-591](https://issues.alfresco.com/jira/browse/AKU-591)       - Ensure delete action issues reload request on completion
+* [AKU-545](https://issues.alfresco.com/jira/browse/AKU-545)       - Support Move in bulk actions
+* [AKU-554](https://issues.alfresco.com/jira/browse/AKU-554)       - Support configurable URIs in SearchBox
+* [AKU-555](https://issues.alfresco.com/jira/browse/AKU-555)       - Externalise LiveSearchItem creation in SearchBox
+* [AKU-583](https://issues.alfresco.com/jira/browse/AKU-583)       - Support publishOnAdd for AlfTabContainer
+* [AKU-467](https://issues.alfresco.com/jira/browse/AKU-467)       - Support for truncated text in Select form control
+* [AKU-596](https://issues.alfresco.com/jira/browse/AKU-596)       - Defend against corrupt thumbnail rendition artifacts
+
+1.0.36.3:
+* [AKU-597](https://issues.alfresco.com/jira/browse/AKU-597)       - Ensure AlfSearchList respects initial URL hash parameters
+* [AKU-599](https://issues.alfresco.com/jira/browse/AKU-599)       - Prevent search terms from being truncated
+
+1.0.36.2:
+* [AKU-595](https://issues.alfresco.com/jira/browse/AKU-595)       - Ensure LeftAndRight ordering is correct
+
+1.0.36.1:
+* [AKU-592](https://issues.alfresco.com/jira/browse/AKU-592)       - Ensure PublishingDropDown cancellation behaves correctly
+* [AKU-593](https://issues.alfresco.com/jira/browse/AKU-593)       - Ensure dialog height is sized correctly for content
+* [AKU-588](https://issues.alfresco.com/jira/browse/AKU-588)       - Ensure GalleryView renders correctly on initial load
+
+1.0.36:
+* [AKU-464](https://issues.alfresco.com/jira/browse/AKU-464)       - DateTextBox support current date config
+* [AKU-465](https://issues.alfresco.com/jira/browse/AKU-465)       - Added place holder support in DateTextBox
+* [AKU-468](https://issues.alfresco.com/jira/browse/AKU-468)       - Use consistent font in TextArea
+* [AKU-544](https://issues.alfresco.com/jira/browse/AKU-544)       - Bulk action support for copy
+* [AKU-547](https://issues.alfresco.com/jira/browse/AKU-547)       - Bulk action support for start workflow
+* [AKU-559](https://issues.alfresco.com/jira/browse/AKU-559)       - Async dependency handling
+* [AKU-568](https://issues.alfresco.com/jira/browse/AKU-568)       - Added alfresco/layout/DynamicWidgets
+* [AKU-571](https://issues.alfresco.com/jira/browse/AKU-571)       - Prevent form control cropping in dialogs
+* [AKU-573](https://issues.alfresco.com/jira/browse/AKU-573)       - Prevent creating tabs with duplicate IDs in AlfTabContainer
+* [AKU-574](https://issues.alfresco.com/jira/browse/AKU-574)       - Ensure AlfSideBarContainer can be re-opened
+* [AKU-578](https://issues.alfresco.com/jira/browse/AKU-578)       - Suppress user preferences in LoggingService
+* [AKU-579](https://issues.alfresco.com/jira/browse/AKU-579)       - Pervent nnnecessary scrollbar showing in form dialog
+* [AKU-580](https://issues.alfresco.com/jira/browse/AKU-580)       - PublishingDropDown cancel subscription updates
+* [AKU-584](https://issues.alfresco.com/jira/browse/AKU-584)       - SearchService scoping fix
+
+1.0.35:
+* [AKU-551](https://issues.alfresco.com/jira/browse/AKU-551)       - Retain item selection when switching views
+* [AKU-557](https://issues.alfresco.com/jira/browse/AKU-557)       - Added support for "full screen" dialogs
+* [AKU-558](https://issues.alfresco.com/jira/browse/AKU-558)       - Remove text-decoration from menu item links
+* [AKU-559](https://issues.alfresco.com/jira/browse/AKU-559)       - Address non-default locale AlfFilteredList rendering
+* [AKU-563](https://issues.alfresco.com/jira/browse/AKU-563)       - Improve InlineEditProperty re-rendering on updates
+* [AKU-565](https://issues.alfresco.com/jira/browse/AKU-565)       - Added 20x20 delete icon
+* [AKU-567](https://issues.alfresco.com/jira/browse/AKU-567)       - Defensive code against reference error in DebugLog
+* [AKU-569](https://issues.alfresco.com/jira/browse/AKU-569)       - Support disable in PublishingDropDownMenu
+* [AKU-572](https://issues.alfresco.com/jira/browse/AKU-572)       - FixedHeaderFooter height calculations
+* [AKU-575](https://issues.alfresco.com/jira/browse/AKU-575)       - ComboBox on change event handling updates
+* [AKU-576](https://issues.alfresco.com/jira/browse/AKU-576)       - AlfGalleryViewSlider default column handling updates
+* [AKU-577](https://issues.alfresco.com/jira/browse/AKU-577)       - IE9 keyboard navigation fix in menu items
+* [AKU-581](https://issues.alfresco.com/jira/browse/AKU-581)       - Ensure form control labels are visible
+
+1.0.34:
+* [AKU-507](https://issues.alfresco.com/jira/browse/AKU-507)       - Ensure clearing filters for AlfFilteredList loads data
+* [AKU-538](https://issues.alfresco.com/jira/browse/AKU-538)       - Updated AlfFilmStripView carousel to set height appropriately
+* [AKU-541](https://issues.alfresco.com/jira/browse/AKU-541)       - Added support for OR in forms rule engine
+* [AKU-543](https://issues.alfresco.com/jira/browse/AKU-543)       - Reset new style buttons not have bold text
+* [AKU-546](https://issues.alfresco.com/jira/browse/AKU-546)       - Added support for bulk delete on selected items
+* [AKU-550](https://issues.alfresco.com/jira/browse/AKU-550)       - Upload widgets
+* [AKU-556](https://issues.alfresco.com/jira/browse/AKU-556)       - Ensure "In folder" links on search results work
+* [AKU-559](https://issues.alfresco.com/jira/browse/AKU-559)       - Resolved missing dependency issue from non en locales
+
+1.0.33:
+* [AKU-478](https://issues.alfresco.com/jira/browse/AKU-478)       - Dynamic visibility width calculations in HorizontalWidgets
+* [AKU-516](https://issues.alfresco.com/jira/browse/AKU-516)       - Reduce options calls to server from MultiSelectInput
+* [AKU-518](https://issues.alfresco.com/jira/browse/AKU-518)       - Add default primary button to certain dialogs
+* [AKU-532](https://issues.alfresco.com/jira/browse/AKU-532)       - Multi-select download as zip in search support
+* [AKU-534](https://issues.alfresco.com/jira/browse/AKU-534)       - Changed default search style in FilteringSelect
+* [AKU-536](https://issues.alfresco.com/jira/browse/AKU-536)       - Remove encoding from AlfShareFooter
+* [AKU-537](https://issues.alfresco.com/jira/browse/AKU-537)       - Take AlfGalleryViewSlider columns configuration from AlfGalleryView
+* [AKU-539](https://issues.alfresco.com/jira/browse/AKU-539)       - Fix SingleTextFieldForm layout (also in 1.0.32.1)
+* [AKU-540](https://issues.alfresco.com/jira/browse/AKU-540)       - Fix default InlinedEditProperty permissions (also in 1.0.31.1 and 1.0.32.2)
+* [AKU-542](https://issues.alfresco.com/jira/browse/AKU-542)       - Remove animation from dialog fade in/out (now configurable)
+* [AKU-549](https://issues.alfresco.com/jira/browse/AKU-549)       - Remove default facets from SearchService
+
 1.0.32:
 * [AKU-460](https://issues.alfresco.com/jira/browse/AKU-460)       - Improved handling of hidden terms in alfresco/headers/SearchBox
 * [AKU-515](https://issues.alfresco.com/jira/browse/AKU-515)       - Fixed pubSubScope handling in alfresco/renderers/Thumbnail

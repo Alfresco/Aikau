@@ -76,7 +76,7 @@ define(["alfresco/core/ProcessWidgets",
           * @instance
           * @override
           * @type {string}
-          * @default "alfresco-layout-StripedContent"
+          * @default
           */
          baseClass: "alfresco-layout-StripedContent",
 
@@ -85,7 +85,7 @@ define(["alfresco/core/ProcessWidgets",
           *
           * @instance
           * @type {string}
-          * @default "960px"
+          * @default
           */
          contentWidth: "960px",
 

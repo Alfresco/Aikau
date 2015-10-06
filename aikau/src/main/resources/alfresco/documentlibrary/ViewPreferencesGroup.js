@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       userPreferredView: null,
 
@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       userIsSiteManager: false,
 
@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "documentlibrary.view.preference.group"
+       * @default
        */
       label: "documentlibrary.view.preference.group",
 

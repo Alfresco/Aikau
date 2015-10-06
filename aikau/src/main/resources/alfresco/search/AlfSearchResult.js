@@ -41,10 +41,11 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-class",
         "alfresco/renderers/XhrContextActions",
+        "alfresco/renderers/Selector",
         "alfresco/renderers/Size",
         "alfresco/renderers/MoreInfo"],
         function(declare, Row, template, SearchThumbnail, SearchResultPropertyLink, PropertyLink, Property,
-                 DateLink, XhrActions, lang, domClass, XhrContextActions, Size, MoreInfo) {
+                 DateLink, XhrActions, lang, domClass, XhrContextActions, Selector, Size, MoreInfo) {
 
    return declare([Row], {
 
@@ -99,6 +100,17 @@ define(["dojo/_base/declare",
       additionalOtherNodeActions: null,
 
       /**
+       * The [customActions]{@link module:alfresco/renderers/_ActionsMixin#customActions} to apply to the
+       * configuration of the enclosed [XhrActions]{@link module:alfresco/renderers/XhrActions} widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.38
+       */
+      customActions: null,
+
+      /**
        * This can be configured to override the default filter for the actions that are applicable to 
        * folder and document nodes. Actions need to be filtered as Aikau does not currently support all
        * of the actions that can be configured in Alfresco Share. However, if custom actions are provided
@@ -120,6 +132,19 @@ define(["dojo/_base/declare",
       enableContextMenu: false,
 
       /**
+       * Indicates whether or not the standard actions (e.g. those derived from Document Library XML configuration)
+       * should be merged with any [customActions]{@link module:alfresco/renderers/_ActionsMixin#customActions} and
+       * [widgetsForActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions}. This is applied to 
+       * the configuration of the enclosed [XhrActions]{@link module:alfresco/renderers/XhrActions} widget.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.38
+       */
+      mergeActions: false,
+
+      /**
        * This can be configured to override the default filter for the actions that are applicable to 
        * all nodes that are neither folders nor documents. Actions need to be filtered as Aikau does not 
        * currently support all of the actions that can be configured in Alfresco Share. However, if custom 
@@ -133,6 +158,16 @@ define(["dojo/_base/declare",
       otherNodeActions: null,
 
       /**
+       * The standard landing page for a site
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.38
+       */
+      siteLandingPage: "/dashboard",
+
+      /**
        * Indicates whether or not a [MoreInfo]{@link module:alfresco/renderers/MoreInfo} widget should
        * be rendered with the search result.
        *
@@ -141,6 +176,16 @@ define(["dojo/_base/declare",
        * @default
        */
       showMoreInfo: true,
+
+      /**
+       * Indicates whether or not a [Selector]{@link module:alfresco/renderers/Selector} widget should
+       * be rendered with the search result.
+       * @instance
+       * @type {boolean}
+       * @default 
+       * @since 1.0.33
+       */
+      showSelector: false,
 
       /**
        * This can be configured to be an array of renderer widgets to place above the central column
@@ -163,6 +208,17 @@ define(["dojo/_base/declare",
       widgetsBelow: null,
 
       /**
+       * The [customActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions} to apply to the
+       * configuration of the enclosed [XhrActions]{@link module:alfresco/renderers/XhrActions} widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.38
+       */
+      widgetsForActions: null,
+
+      /**
        * Creates the renderers to display for a search result and adds them into the template. Renderers
        * will only be created if there is data for them. This is done to further improve the performance
        * of the search rendering.
@@ -171,6 +227,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_search_AlfSearchResult__postCreate() {
          this.generateActionFilters();
+         this.createSelectorRenderer();
          this.createThumbnailRenderer();
          this.createWidgetsAbove();
          this.createDisplayNameRenderer();
@@ -195,11 +252,15 @@ define(["dojo/_base/declare",
       createActionsRenderer: function alfresco_search_AlfSearchResult__createActionsRenderer() {
          // jshint nonew:false
          new XhrActions({
+            id: this.id + "_ACTIONS",
             onlyShowOnHover: true,
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
+            customActions: this.customActions,
             filterActions: true,
-            allowedActions: (this.currentItem.type === "document" || this.currentItem.type === "folder") ? this.documentAndFolderActions : this.otherNodeActions
+            mergeActions: this.mergeActions,
+            allowedActions: (this.currentItem.type === "document" || this.currentItem.type === "folder") ? this.documentAndFolderActions : this.otherNodeActions,
+            widgetsForActions: this.widgetsForActions
          }, this.actionsNode);
       },
 
@@ -248,6 +309,7 @@ define(["dojo/_base/declare",
          {
             // jshint nonew:false
             new Property({
+               id: this.id + "_DESCRIPTION",
                currentItem: this.currentItem,
                pubSubScope: this.pubSubScope,
                propertyToRender: "description",
@@ -266,6 +328,7 @@ define(["dojo/_base/declare",
       createDateRenderer: function alfresco_search_AlfSearchResult__createDateRenderer() {
          // jshint nonew:false
          new DateLink({
+            id: this.id + "_DATE",
             renderedValueClass: "alfresco-renderers-Property pointer",
             renderSize: "small",
             deemphasized: true,
@@ -295,6 +358,7 @@ define(["dojo/_base/declare",
       createDisplayNameRenderer: function alfresco_search_AlfSearchResult__createDisplayNameRenderer() {
          // jshint nonew:false
          new SearchResultPropertyLink({
+            id: this.id + "_DISPLAY_NAME",
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
             propertyToRender: "displayName",
@@ -315,6 +379,7 @@ define(["dojo/_base/declare",
          if (this.showMoreInfo === true)
          {
             var moreInfoConfig = {
+               id: this.id + "_MORE_INFO",
                currentItem: this.currentItem,
                pubSubScope: this.pubSubScope,
                xhrRequired: true,
@@ -350,13 +415,14 @@ define(["dojo/_base/declare",
          else
          {
             // Create processed path as pathLink on this.currentItem
-            var repo = lang.getObject("site.title", false, this.currentItem) || true;
-            this.currentItem.pathLink = repo ?
+            var isRepo = !lang.exists("site.title", this.currentItem);
+            this.currentItem.pathLink = isRepo ?
                encodeURIComponent("/" + this.currentItem.path.split("/").slice(2).join("/")) :
                encodeURIComponent("/" + this.currentItem.path);
 
             // jshint nonew:false
             new PropertyLink({
+               id: this.id + "_PATH",
                renderedValueClass: "alfresco-renderers-Property pointer",
                pubSubScope : this.pubSubScope,
                currentItem : this.currentItem,
@@ -368,10 +434,35 @@ define(["dojo/_base/declare",
                publishPayloadType: "PROCESS",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
-                  url: repo ? "repository?path={pathLink}" : "site/{site.shortName}/documentlibrary?path={pathLink}",
+                  url: isRepo ? "repository?path={pathLink}" : "site/{site.shortName}/documentlibrary?path={pathLink}",
                   type: "PAGE_RELATIVE"
                }
             }, this.pathNode);
+         }
+      },
+
+      /**
+       * This function is called to create a [Selector widget]{@link module:alfresco/renderers/Selector}.
+       * It will only be rendered if [showSelector]{@link module:alfresco/search/AlfSearchResult#showSelector} is 
+       * configured to be true.
+       * 
+       * @instance
+       * @since 1.0.33
+       */
+      createSelectorRenderer: function alfresco_search_AlfSearchResult__createSelectorRenderer() {
+         // We only show the size if it's not empty and at least one byte
+         if (!this.showSelector)
+         {
+            domClass.add(this.selectorCell, "hidden");
+         }
+         else
+         {
+            // jshint nonew:false
+            new Selector({
+               id: this.id + "_SELECTOR",
+               currentItem : this.currentItem,
+               pubSubScope : this.pubSubScope
+            }, this.selectorNode);
          }
       },
 
@@ -394,6 +485,7 @@ define(["dojo/_base/declare",
          {
             // jshint nonew:false
             new PropertyLink({
+               id: this.id + "_SITE",
                renderedValueClass: "alfresco-renderers-Property pointer",
                renderSize: "small",
                pubSubScope: this.pubSubScope,
@@ -401,11 +493,12 @@ define(["dojo/_base/declare",
                propertyToRender: "site.title",
                label: this.message("faceted-search.doc-lib.value-prefix.site"),
                publishTopic: "ALF_NAVIGATE_TO_PAGE",
+               publishGlobal: true,
                useCurrentItemAsPayload: false,
                publishPayloadType: "PROCESS",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
-                  url: "site/{site.shortName}/dashboard",
+                  url: "site/{site.shortName}" + this.siteLandingPage.replace(/^\/*/, "/"),
                   type: "PAGE_RELATIVE"
                }
             }, this.siteNode);
@@ -428,6 +521,7 @@ define(["dojo/_base/declare",
          {
             // jshint nonew:false
             new Size({
+               id: this.id + "_SIZE",
                currentItem : this.currentItem,
                pubSubScope : this.pubSubScope,
                label : this.message("faceted-search.doc-lib.value-prefix.size"),
@@ -446,6 +540,7 @@ define(["dojo/_base/declare",
       createThumbnailRenderer: function alfresco_search_AlfSearchResult__createThumbnailRenderer() {
          // jshint nonew:false
          new SearchThumbnail({
+            id: this.id + "_THUMBNAIL",
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
             showDocumentPreview: true
@@ -502,6 +597,7 @@ define(["dojo/_base/declare",
          else
          {
             new Property({
+               id: this.id + "_TITLE",
                currentItem: this.currentItem,
                pubSubScope: this.pubSubScope,
                propertyToRender: "title",

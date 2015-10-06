@@ -27,67 +27,92 @@
  * @author David Webster
  */
 define(["alfresco/core/Core",
+      "alfresco/core/topics",
       "dojo/_base/declare",
       "dojo/_base/lang"
    ],
-   function(AlfCore, declare, lang) {
+   function(AlfCore, topics, declare, lang) {
 
       return declare([AlfCore], {
 
          /**
-          * Save a reference to the subscription handle so we can unsubscribe later
+          * Counter for the number of publishes (used to determine response)
           *
-          * @instance
-          * @type {Object}
+          * @instance 
+          * @type {number}
           */
-         subscriptionHandle: null,
+         publishCounter: 0,
 
          /**
           * Constructor
           *
           * @instance
-          * @param {array} args The constructor arguments.
           */
-         constructor: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__constructor(args) {
-            this.subscriptionHandle = this.alfSubscribe("ALF_PUBLISHING_DROPDOWN_MENU", lang.hitch(this, this.onDropDownPublishSuccess));
+         constructor: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__constructor() {
+            this.alfSubscribe("ALF_PUBLISHING_DROPDOWN_MENU", lang.hitch(this, this.onDropdownMenuPublish));
+            this.alfSubscribe("DROPDOWN_PUBLISH_CONFIRMED", lang.hitch(this, this.onDropdownPublishConfirmed));
+            this.alfSubscribe("CONFIRM_DROPDOWN_PUBLISH", lang.hitch(this, this.confirmDropdownPublish));
          },
 
          /**
-          * Publish the SUCCESS event and swap subscription to trigger FAILURE event next time
+          * Confirm the change and re-publish to correct topic if confirmed
           *
           * @instance
-          * @param    {object} payload The publish payload
+          * @param {Object} payload The payload
           */
-         onDropDownPublishSuccess: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__onDropDownPublishSuccess(payload) {
-            // Unsubscribe from the success event handler and resubscribe for failure event
-            this.alfUnsubscribe(this.subscriptionHandle);
-            this.subscriptionHandle = this.alfSubscribe("ALF_PUBLISHING_DROPDOWN_MENU", lang.hitch(this, this.onDropDownPublishFailure));
-            this.alfPublish(payload.responseTopic + "_SUCCESS", {});
+         confirmDropdownPublish: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__confirmDropdownPublish(payload) {
+            this.alfServicePublish(topics.CREATE_DIALOG, {
+               cancelPublishTopic: payload.responseTopic + "_CANCEL",
+               dialogTitle: "Are you sure?",
+               dialogId: "CONFIRM_PUBLISH_DIALOG",
+               handleOverflow: false,
+               textContent: "Are you sure you wish to change this value?",
+               widgetsButtons: [{
+                  name: "alfresco/buttons/AlfButton",
+                  id: "OK",
+                  config: {
+                     label: "OK",
+                     publishTopic: "DROPDOWN_PUBLISH_CONFIRMED",
+                     publishPayload: payload
+                  }
+               }, {
+                  name: "alfresco/buttons/AlfButton",
+                  id: "CANCEL",
+                  config: {
+                     label: "Cancel",
+                     publishTopic: payload.responseTopic + "_CANCEL"
+                  }
+               }]
+            });
          },
 
          /**
-          * Publish the FAILURE event and swap subscription to trigger CANCEL event next time
+          * Handle dropdown menu publishes
           *
           * @instance
-          * @param    {object} payload The publish payload
+          * @param {Object} payload The payload
           */
-         onDropDownPublishFailure: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__onDropDownPublishFailure(payload) {
-            // Unsubscribe from the failure event handler and resubscripbe for cancel event
-            this.alfUnsubscribe(this.subscriptionHandle);
-            this.subscriptionHandle = this.alfSubscribe("ALF_PUBLISHING_DROPDOWN_MENU", lang.hitch(this, this.onDropDownPublishCancel));
-            this.alfPublish(payload.responseTopic + "_FAILURE", {});
+         onDropdownMenuPublish: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__onDropdownMenuPublish(payload) {
+            if (this.publishCounter === 0) {
+               this.alfPublish(payload.responseTopic + "_SUCCESS");
+            } else if (this.publishCounter === 1) {
+               this.alfPublish(payload.responseTopic + "_FAILURE");
+            } else if (this.publishCounter === 2) {
+               this.alfPublish(payload.responseTopic + "_CANCEL");
+            }
+            this.publishCounter++;
          },
 
          /**
-          * Publish the CANCEL event and remove subscriptions. This service is now done.
+          * Handle confirmation of the dropdown menu change
           *
           * @instance
-          * @param    {object} payload The publish payload
+          * @param {Object} payload The payload
           */
-         onDropDownPublishCancel: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__onDropDownPublishCancel(payload) {
-            // Unsubscribe for cancel event and don't resubscribe.
-            this.alfUnsubscribe(this.subscriptionHandle);
-            this.alfPublish(payload.responseTopic + "_CANCEL", {});
+         onDropdownPublishConfirmed: function alfresco_testing_mockservices_PublishingDropDownMenuMockService__onDropdownPublishConfirmed(payload) {
+            setTimeout(lang.hitch(this, function() {
+               this.alfPublish(payload.responseTopic + "_SUCCESS");
+            }), 50);
          }
       });
    });

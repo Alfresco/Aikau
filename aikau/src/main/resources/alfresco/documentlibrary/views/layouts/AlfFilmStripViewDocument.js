@@ -61,7 +61,8 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_documentlibrary_views_layouts_AlfFilmStripViewDocument__postCreate() {
          this.isContainer = lang.getObject("currentItem.node.isContainer", false, this);
-         this.nodeRef = lang.getObject("currentItem.nodeRef", false, this);
+         this.nodeRef = lang.getObject("currentItem.nodeRef", false, this) || lang.getObject("currentItem.node.nodeRef", false, this);
+
          if (this.isContainer === null)
          {
             // No container information, no subscription
@@ -105,7 +106,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       _documentRequested: false,
 

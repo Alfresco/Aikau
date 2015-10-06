@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,9 +29,9 @@
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarSelectItems",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "dojo/_base/lang",
-        "dojo/dom-class"], 
-        function(declare, AlfMenuBarSelectItems, _AlfDocumentListTopicMixin, lang, domClass) {
+        "alfresco/core/topics",
+        "dojo/_base/lang"], 
+        function(declare, AlfMenuBarSelectItems, _AlfDocumentListTopicMixin, topics, lang) {
    
    return declare([AlfMenuBarSelectItems, _AlfDocumentListTopicMixin], {
       
@@ -48,7 +48,7 @@ define(["dojo/_base/declare",
        * Overrides the default icon class for when the menu loads.
        * @instance
        * @type {string}
-       * @default "alf-noneselected-icon"
+       * @default
        */
       iconClass: "alf-noneselected-icon",
       
@@ -58,9 +58,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "  ALF_DOCLIST_DOCUMENT_SELECTED"
+       * @default
        */
-      documentSelectionTopic: "ALF_DOCLIST_DOCUMENT_SELECTED",
+      documentSelectionTopic: topics.DOCUMENT_SELECTED,
 
       /**
        * The topic that is subscribed to in order to count the number of individual items that
@@ -68,16 +68,16 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_DOCLIST_DOCUMENT_DESELECTED"
+       * @default
        */
-      documentDeselectionTopic: "ALF_DOCLIST_DOCUMENT_DESELECTED",
+      documentDeselectionTopic: topics.DOCUMENT_DESELECTED,
       
       /**
        * @instance
        */
       postCreate: function alfresco_documentlibrary_AlfSelectDocumentListItems__postCreate() {
          this.selectionTopic = this.selectedDocumentsChangeTopic;
-         this.alfSubscribe(this.documentsLoadedTopic, lang.hitch(this, "onDocumentsLoaded"));
+         this.alfSubscribe(this.documentsLoadedTopic, lang.hitch(this, this.onDocumentsLoaded));
          this.inherited(arguments);
 
          // Subscribe to topics for detecting individual changes...
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {integer}
-       * @default 0
+       * @default
        */
       documentsAvailable: 0,
 
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {integer}
-       * @default 0
+       * @default
        */
       documentsSelected: 0,
       
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the selected document
        */
-      onDocumentSelected: function alfresco_documentlibrary_AlfSelectDocumentListItems__onDocumentSelected(payload) {
+      onDocumentSelected: function alfresco_documentlibrary_AlfSelectDocumentListItems__onDocumentSelected(/*jshint unused:false*/ payload) {
          this.documentsSelected++;
          if (this.documentsSelected > this.documentsAvailable)
          {
@@ -130,7 +130,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the selected document
        */
-      onDocumentDeselected: function alfresco_documentlibrary_AlfSelectDocumentListItems__onDocumentDeselected(payload) {
+      onDocumentDeselected: function alfresco_documentlibrary_AlfSelectDocumentListItems__onDocumentDeselected(/*jshint unused:false*/ payload) {
          this.documentsSelected--;
          if (this.documentsSelected < 0)
          {
@@ -151,7 +151,7 @@ define(["dojo/_base/declare",
        */
       onDocumentsLoaded: function alfresco_documentlibrary_AlfSelectDocumentListItems__onDocumentsLoaded(payload) {
          this.alfLog("log", "New Documents Loaded", payload);
-         if (payload && payload.documents && payload.documents.length != null)
+         if (payload && payload.documents && (payload.documents.length || payload.documents.length === 0))
          {
             this.documentsAvailable = payload.documents.length;
          }
@@ -165,9 +165,9 @@ define(["dojo/_base/declare",
        * @param {object} payload The publication of the selected item change.
        */
       determineSelection: function alfresco_menus_AlfMenuBarSelectItems__determineSelection(payload) {
-         if (payload.selectedFiles != null && payload.selectedFiles.length != null)
+         if (payload.selectedFiles && (payload.selectedFiles.length || payload.selectedFiles.length === 0))
          {
-            if (this.documentsAvailable == 0 || payload.selectedFiles.length == 0)
+            if (this.documentsAvailable === 0 || payload.selectedFiles.length === 0)
             {
                this.renderNoneSelected();
                this.documentsSelected = 0;
@@ -176,7 +176,7 @@ define(["dojo/_base/declare",
             {
                this.renderSomeSelected();
             }
-            else if (this.documentsAvailable == payload.selectedFiles.length)
+            else if (this.documentsAvailable === payload.selectedFiles.length)
             {
                this.renderAllSelected();
                this.documentsSelected = this.documentsAvailable;
@@ -197,8 +197,8 @@ define(["dojo/_base/declare",
                   {
                      name: "alfresco/menus/AlfMenuItem",
                      config: {
-                        label: "All",
-                        publishTopic: "ALF_DOCLIST_FILE_SELECTION",
+                        label: "select.all.label",
+                        publishTopic: topics.DOCUMENT_SELECTION_UPDATE,
                         publishPayload: {
                            label: "select.all.label",
                            value: "selectAll"
@@ -208,8 +208,8 @@ define(["dojo/_base/declare",
                   {
                      name: "alfresco/menus/AlfMenuItem",
                      config: {
-                        label: "None",
-                        publishTopic: "ALF_DOCLIST_FILE_SELECTION",
+                        label: "select.none.label",
+                        publishTopic: topics.DOCUMENT_SELECTION_UPDATE,
                         publishPayload: {
                            label: "select.none.label",
                            value: "selectNone"
@@ -219,8 +219,8 @@ define(["dojo/_base/declare",
                   {
                      name: "alfresco/menus/AlfMenuItem",
                      config: {
-                        label: "Invert",
-                        publishTopic: "ALF_DOCLIST_FILE_SELECTION",
+                        label: "invert.selection.label",
+                        publishTopic: topics.DOCUMENT_SELECTION_UPDATE,
                         publishPayload: {
                            label: "invert.selection.label",
                            value: "selectInvert"
@@ -230,8 +230,8 @@ define(["dojo/_base/declare",
                   {
                      name: "alfresco/menus/AlfMenuItem",
                      config: {
-                        label: "Documents",
-                        publishTopic: "ALF_DOCLIST_FILE_SELECTION",
+                        label: "select.documents.label",
+                        publishTopic: topics.DOCUMENT_SELECTION_UPDATE,
                         publishPayload: {
                            label: "select.documents.label",
                            value: "selectDocuments"
@@ -241,8 +241,8 @@ define(["dojo/_base/declare",
                   {
                      name: "alfresco/menus/AlfMenuItem",
                      config: {
-                        label: "Folders",
-                        publishTopic: "ALF_DOCLIST_FILE_SELECTION",
+                        label: "select.folders.label",
+                        publishTopic: topics.DOCUMENT_SELECTION_UPDATE,
                         publishPayload: {
                            label: "select.folders.label",
                            value: "selectFolders"

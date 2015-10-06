@@ -35,8 +35,9 @@
 define(["alfresco/core/Core",
         "dojo/_base/declare",
         "dojo/_base/lang",
-        "dojo/_base/array"], 
-        function(AlfCore, declare, lang, array) {
+        "dojo/_base/array",
+        "dojo/when"], 
+        function(AlfCore, declare, lang, array, when) {
    
    return declare([AlfCore], {
       
@@ -47,7 +48,9 @@ define(["alfresco/core/Core",
        * @param {object} values The object to set with the values from each form control
        */
       addFormControlValue: function alfresco_forms_LayoutMixin__addFormControlValue(values) {
-         array.forEach(this.getFormLayoutChildren(), lang.hitch(this, this.addChildFormControlValue, values));
+         when(this.getFormLayoutChildren(), lang.hitch(this, function(children) {
+            array.forEach(children, lang.hitch(this, this.addChildFormControlValue, values));
+         }));
       },
 
       /**
@@ -71,7 +74,7 @@ define(["alfresco/core/Core",
        * @return {object[]} An array of the form controls to iterate over.
        */
       getFormLayoutChildren: function alfresco_forms_LayoutMixin__getFormLayoutChildren() {
-         return this._processedWidgets;
+         return this.getProcessedWidgets();
       },
 
       /**
@@ -81,7 +84,9 @@ define(["alfresco/core/Core",
        * @param {Deferred} [deferred] A deferred object can optionally be passed. This will only be resolved as widget value
        */
       publishValue: function alfresco_forms_LayoutMixin__publishValue(deferred) {
-         array.forEach(this.getFormLayoutChildren(), lang.hitch(this, this.publishChildValue, deferred));
+         when(this.getFormLayoutChildren(), lang.hitch(this, function(children) {
+            array.forEach(children, lang.hitch(this, this.publishChildValue, deferred));
+         }));
       },
 
       /**
@@ -107,7 +112,9 @@ define(["alfresco/core/Core",
        * @param {object} values The object to set the each form control value from
        */
       updateFormControlValue: function alfresco_forms_LayoutMixin__addFormControlValue(values) {
-         array.forEach(this.getFormLayoutChildren(), lang.hitch(this, this.updateChildFormControlValue, values));
+         when(this.getFormLayoutChildren(), lang.hitch(this, function(children) {
+            array.forEach(children, lang.hitch(this, this.updateChildFormControlValue, values));
+         }));
       },
 
       /**
@@ -130,7 +137,9 @@ define(["alfresco/core/Core",
        * @instance
        */
       validateFormControlValue: function alfresco_forms_LayoutMixin__validateFormControlValue() {
-         array.forEach(this.getFormLayoutChildren(), lang.hitch(this, this.validateChildFormControlValue));
+         when(this.getFormLayoutChildren(), lang.hitch(this, function(children) {
+            array.forEach(children, lang.hitch(this, this.validateChildFormControlValue));
+         }));
       },
 
       /**

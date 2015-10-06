@@ -36,7 +36,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_CREATE_PAGE_DEFINITION"
+       * @default
        */
       createPageTopic: "ALF_CREATE_PAGE_DEFINITION",
       
@@ -46,7 +46,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_CREATE_PAGE_DEFINITION_SUCCESS"
+       * @default
        */
       createPageSuccessTopic: "ALF_CREATE_PAGE_DEFINITION_SUCCESS",
       
@@ -55,7 +55,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_CREATE_PAGE_DEFINITION_FAILURE"
+       * @default
        */
       createPageFailureTopic: "ALF_CREATE_PAGE_DEFINITION_FAILURE",
       
@@ -64,7 +64,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_UPDATE_PAGE_DEFINITION"
+       * @default
        */
       updatePageTopic: "ALF_UPDATE_PAGE_DEFINITION",
       
@@ -74,7 +74,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_UPDATE_PAGE_DEFINITION_SUCCESS"
+       * @default
        */
       updatePageSuccessTopic: "ALF_UPDATE_PAGE_DEFINITION_SUCCESS",
       
@@ -83,7 +83,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_UDPATE_PAGE_DEFINITION_FAILURE"
+       * @default
        */
       updatePageFailureTopic: "ALF_UDPATE_PAGE_DEFINITION_FAILURE",
       
@@ -92,7 +92,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_REQUEST_PAGE_DEFINITIONS"
+       * @default
        */
       availablePagesRequestTopic: "ALF_REQUEST_PAGE_DEFINITIONS",
       
@@ -101,7 +101,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_AVAILABLE_PAGE_DEFINITIONS"
+       * @default
        */
       availablePagesTopic: "ALF_AVAILABLE_PAGE_DEFINITIONS",
       
@@ -110,7 +110,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_AVAILABLE_PAGE_DEFINITIONS_LOAD_SUCCESS"
+       * @default
        */
       availablePagesLoadSuccess: "ALF_AVAILABLE_PAGE_DEFINITIONS_LOAD_SUCCESS",
 
@@ -119,7 +119,7 @@ define(["dojo/_base/declare"],
        * 
        * @instance
        * @type {string}
-       * @default "ALF_AVAILABLE_PAGE_DEFINITIONS_LOAD_FAILURE"
+       * @default
        */
       availablePagesLoadFailure: "ALF_AVAILABLE_PAGE_DEFINITIONS_LOAD_FAILURE"
    });

@@ -31,11 +31,13 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/when",
         "alfresco/core/NodeUtils"],
-        function(declare, BaseService, AlfCoreXhr, AlfConstants, lang, array, NodeUtils) {
+        function(declare, BaseService, AlfCoreXhr, topics, AlfConstants, lang, array, when, NodeUtils) {
 
    return declare([BaseService, AlfCoreXhr], {
 
@@ -55,7 +57,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "alfresco://company/home"
+       * @default
        */
       repoNodeRef: "alfresco://company/home",
 
@@ -64,7 +66,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "slingshot/doclib/action/copy-to/node/"
+       * @default
        */
       copyAPI: "slingshot/doclib/action/copy-to/node/",
 
@@ -73,7 +75,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "slingshot/doclib/action/move-to/node/"
+       * @default
        */
       moveAPI: "slingshot/doclib/action/move-to/node/",
 
@@ -84,7 +86,7 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_actions_CopyMoveService__registerSubscriptions() {
-         this.alfSubscribe("ALF_COPY_OR_MOVE_REQUEST", lang.hitch(this, this.createCopyMoveDialog));
+         this.alfSubscribe(topics.COPY_OR_MOVE, lang.hitch(this, this.createCopyMoveDialog));
       },
 
       /**
@@ -110,8 +112,9 @@ define(["dojo/_base/declare",
          var documents = payload.documents || [];
 
          var urlPrefix = payload.copy ? this.copyAPI : this.moveAPI, // Default to copy API.
-             dialogTitle = payload.dialogTitle || "services.ActionService.copyTo.title", // Default to copy title
-             confirmButtonLabel = payload.confirmButtonLabel || "services.ActionService.copyTo.ok", // Default to copy confirmation
+             propertyType = payload.copy ? "copyTo" : "moveTo",
+             dialogTitle = payload.dialogTitle || "services.ActionService." + propertyType + ".title", // Default to copy title
+             confirmButtonLabel = payload.confirmButtonLabel || "services.ActionService." + propertyType + ".ok", // Default to copy confirmation
              singleItemMode = payload.singleItemMode !== false;
 
          var responseTopic = this.generateUuid() + "_ALF_MOVE_LOCATION_PICKED",
@@ -147,7 +150,8 @@ define(["dojo/_base/declare",
                      publishPayload: publishPayload,
                      disableOnInvalidControls: true,
                      validTopic: "ALF_PICKER_VALID",
-                     invalidTopic: "ALF_PICKER_INVALID"
+                     invalidTopic: "ALF_PICKER_INVALID",
+                     additionalCssClasses: "call-to-action"
                   }
                },
                {
@@ -173,21 +177,31 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._actionCopyHandle]);
 
          // Get the locations to copy to and the documents to them...
-         var locations = lang.getObject("dialogContent.0.pickedItemsWidget.currentData.items", false, payload);
-         var documents = lang.getObject("documents", false, payload);
-         if (!locations || locations.length === 0)
+         if (payload.dialogContent)
          {
-            this.alfLog("error", "copyMoveTarget not specified");
+            when(payload.dialogContent, lang.hitch(this, function(content) {
+               if (content && content.length)
+               {
+                  var locations = lang.getObject("pickedItemsWidget.currentData.items", false, content[0]);
+                  var documents = lang.getObject("documents", false, payload);
+                  if (!locations || locations.length === 0)
+                  {
+                     this.alfLog("error", "copyMoveTarget not specified");
+                  }
+                  else if (!documents || documents.length === 0)
+                  {
+                     this.alfLog("error", "Documents to copy not specified.");
+                  }
+                  else
+                  {
+                     var nodeRefs = NodeUtils.nodeRefArray(documents);
+                     array.forEach(locations, lang.hitch(this, this.performAction, nodeRefs, urlPrefix, copy, payload.alfResponseScope));
+                  }
+               }
+            }));
          }
-         else if (!documents || documents.length === 0)
-         {
-            this.alfLog("error", "Documents to copy not specified.");
-         }
-         else
-         {
-            var nodeRefs = NodeUtils.nodeRefArray(documents);
-            array.forEach(locations, lang.hitch(this, this.performAction, nodeRefs, urlPrefix, copy, payload.alfResponseScope));
-         }
+
+         
       },
 
       /**
@@ -225,6 +239,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onActionSuccess: function alfresco_services_ActionService__onActionSuccess(payload) {
          // jshint unused:false
@@ -235,7 +250,7 @@ define(["dojo/_base/declare",
          }
          if (payload.response.overallSuccess === true)
          {
-            this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
                message: payload.requestConfig.copy ? this.message("copyMoveService.copy.completeSuccess") : this.message("copyMoveService.move.completeSuccess")
             });
          }
@@ -268,6 +283,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       onActionFailure: function alfresco_services_ActionService__onActionFailure(payload) {
          // jshint unused:false
@@ -277,7 +293,7 @@ define(["dojo/_base/declare",
          {
             this.alfUnsubscribeSaveHandles(subscriptionHandles);
          }
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: payload.requestConfig.copy ? this.message("copyMoveService.copy.failure") : this.message("copyMoveService.move.failure")
          });
       }

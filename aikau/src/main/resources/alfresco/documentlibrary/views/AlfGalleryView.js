@@ -83,9 +83,19 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {number}
-       * @default 4
+       * @default
        */
       columns: 4,
+
+       /**
+       * The preference property to use for retrieving and setting the users preferred number of columns
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      columnsPreferenceProperty: "org.alfresco.share.documentList.galleryColumns",
 
       /**
        * This function updates the [columns]{@link module:alfresco/documentlibrary/views/AlfGalleryView#columns}
@@ -126,7 +136,8 @@ define(["dojo/_base/declare",
             relatedViewName: this.getViewName(),
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
-            columns: this.columns
+            columns: this.columns,
+            columnsPreferenceProperty: this.columnsPreferenceProperty
          })];
       },
       
@@ -174,7 +185,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       showNextLink: false,
 
@@ -183,7 +194,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       nextLinkLabel: null,
 

@@ -24,13 +24,17 @@
  * height of the widget will grow and shrink based on the content of each tab by default unless
  * the [height]{@link module:alfresco/layout/AlfTabContainer#height} is explicitly set to a non-percentage
  * value.</p>
- * <p>If you want the widget to respond to publicationss to dynamically 
+ * <p>If you want the widget to respond to publications to dynamically 
  * [add]{@link module:alfresco/layout/AlfTabContainer#tabAdditionTopic}, 
  * [select]{@link module:alfresco/layout/AlfTabContainer#tabSelectionTopic}, 
  * [disable]{@link module:alfresco/layout/AlfTabContainer#tabDisablementTopic} or
  * [delete]{@link module:alfresco/layout/AlfTabContainer#tabDeletionTopic} tabs then you will need to
  * configure the topics to subscribe to. Subscriptions will be made at the configured 
  * [pubSubScope]{@link module:alfresco/core/Core#pubSubScope} of the widget.</p>
+ *
+ * <p>You can also request an additional publication occur when requesting to add a new tab by including a
+ * "publishOnAdd" attribute in the payload that is an object containing a "publishTopic" attribute (with optional
+ * "publishPayload", "publishGlobal", "publishToParent" and "publishScope" attributes).</p>
  * 
  * <p><b>PLEASE NOTE:</b> It is not possible to use this module to control the layout of controls within a form. If you wish
  * to create a form containing tabbed controls then you should use the 
@@ -204,7 +208,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       tabContainerWidget: null,
 
@@ -213,7 +217,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "100%"
+       * @default
        */
       height: "100%",
 
@@ -222,7 +226,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "100%"
+       * @default
        */
       width: "100%",
 
@@ -231,7 +235,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {Boolean}
-       * @default false
+       * @default
        */
       doLayout: false,
 
@@ -247,7 +251,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       tabSelectionTopic: null,
 
@@ -256,7 +260,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       tabDisablementTopic: null,
 
@@ -265,7 +269,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       tabAdditionTopic: null,
 
@@ -274,7 +278,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       tabDeletionTopic: null,
 
@@ -296,6 +300,7 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_layout_AlfTabContainer__postCreate() {
          // Initialise a TabContainer instance and watch its selectedChildWidget event
          this.tabContainerWidget = new TabContainer({
+            id: this.id + "_TABCONTAINER",
             style: "height: " + this.height + "; width: " + this.width + ";",
             doLayout: this.doLayout
          }, this.tabNode);
@@ -360,7 +365,10 @@ define(["dojo/_base/declare",
 
          this.alfSetupResizeSubscriptions(this.onResize, this);
          this.alfPublishResizeEvent(this.domNode);
+         domClass.add(this.domNode, "alfresco-layout-AlfTabContainer--tabsDisplayed");
       },
+
+
 
       /**
        * This function adds widgets to the TabContainer widget
@@ -370,70 +378,107 @@ define(["dojo/_base/declare",
        * @param {integer} index The index of the required tab position
        */
       addWidget: function alfresco_layout_AlfTabContainer__addWidget(widget, /*jshint unused:false*/ index) {
-         // NOTE: It's important that the DOM structure of the tab is created and added to the page before 
-         //       creating each child widget in order that the child widget has access to the initial dimensions
-         //       of the tab (e.g. for an AlfSideBarContainer to calculate it's height appropriately)...
-         var domNode = domConstruct.create("div", {});
-         var cp = new ContentPane();
-         domClass.add(cp.domNode, "alfresco-layout-AlfTabContainer__OuterTab");
-         this.tabContainerWidget.addChild(cp, widget.tabIndex);
-
-         // Add content to the ContentPane
-         if(widget.content && typeof widget.content === "string")
+         var targetTabId = null;
+         if (widget.id)
          {
-            cp.set("content", widget.content);
+            targetTabId = this.id + "_" + widget.id;
          }
 
-         // Add a title to the ContentPane
-         if(widget.title && typeof widget.title === "string")
+         var indexOfDuplicateTab = this.indexOfTabId(targetTabId);
+         if (indexOfDuplicateTab !== -1)
          {
-            cp.set("title", this.message(widget.title));
+            // A tab with the requested ID has already been added, so just select it...
+            this.tabContainerWidget.selectChild(this.tabContainerWidget.getChildren()[indexOfDuplicateTab]);
          }
-
-         // Add an iconClass to the ContentPane
-         if(widget.iconClass && typeof widget.iconClass === "string")
-         {
-            cp.set("iconClass", widget.iconClass);
-         }
-
-         // Should the ContentPane be closable?
-         if(widget.closable && typeof widget.closable === "boolean")
-         {
-            cp.set("closable", widget.closable);
-         }
-
-         // Should the ContentPane be disabled?
-         if(widget.disabled && typeof widget.disabled === "boolean")
-         {
-            cp.set("disabled", widget.disabled);
-         }
-
-         // If not delayed processing, create the widget and add to the panel
-         if(!widget.delayProcessing)
-         {
-            var widgetNode = this.createWidgetDomNode(widget, cp.domNode);
-            var w = this.createWidget(widget, widgetNode);
-
-            // Add the widget to the ContentPane
-            this._tabWidgetProcessingComplete();
-         }
-         // Otherwise record the widget for processing later on
          else
          {
-            this._delayedProcessingWidgets.push(
-               {
-                  "domNode": cp.domNode,
-                  "contentPane": cp,
-                  "widget": widget
-               }
-            );
-         }
+            // NOTE: It's important that the DOM structure of the tab is created and added to the page before 
+            //       creating each child widget in order that the child widget has access to the initial dimensions
+            //       of the tab (e.g. for an AlfSideBarContainer to calculate it's height appropriately)...
+            var domNode = domConstruct.create("div", {});
+            var cp = new ContentPane({
+               id: targetTabId
+            });
+            domClass.add(cp.domNode, "alfresco-layout-AlfTabContainer__OuterTab");
+            this.tabContainerWidget.addChild(cp, widget.tabIndex);
 
-         // If we have an index add the ContentPane at a particular position otherwise just add it
-         if (widget.selected === true)
-         {
-            this.tabContainerWidget.selectChild(cp);
+            // Add content to the ContentPane
+            if(widget.content && typeof widget.content === "string")
+            {
+               cp.set("content", widget.content);
+            }
+
+            // Add a title to the ContentPane
+            if(widget.title && typeof widget.title === "string")
+            {
+               cp.set("title", this.message(widget.title));
+            }
+
+            // Add an iconClass to the ContentPane
+            if(widget.iconClass && typeof widget.iconClass === "string")
+            {
+               cp.set("iconClass", widget.iconClass);
+            }
+
+            // Should the ContentPane be closable?
+            if(widget.closable && typeof widget.closable === "boolean")
+            {
+               cp.set("closable", widget.closable);
+            }
+
+            // Should the ContentPane be disabled?
+            if(widget.disabled && typeof widget.disabled === "boolean")
+            {
+               cp.set("disabled", widget.disabled);
+            }
+
+            // If not delayed processing, create the widget and add to the panel
+            if(!widget.delayProcessing)
+            {
+               var widgetNode = this.createWidgetDomNode(widget, cp.domNode);
+               var w = this.createWidget(widget, widgetNode);
+            }
+            // Otherwise record the widget for processing later on
+            else
+            {
+               this._delayedProcessingWidgets.push(
+                  {
+                     "domNode": cp.domNode,
+                     "contentPane": cp,
+                     "widget": widget
+                  }
+               );
+            }
+
+            // If we have an index add the ContentPane at a particular position otherwise just add it
+            if (widget.selected === true)
+            {
+               this.tabContainerWidget.selectChild(cp);
+            }
          }
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {string} id The ID of an existing tab to search for
+       * @return {number} The index of the duplicate tab and -1 if a duplicate does not exist
+       * @since 1.0.35
+       */
+      indexOfTabId: function alfresco_layout_AlfTabContainer__indexOfTabId(id) {
+         var duplicateTabIndex = -1;
+         if (id)
+         {
+            array.some(this.tabContainerWidget.getChildren(), function(tab, tabIndex) {
+               var match = tab.id === id;
+               if (match)
+               {
+                  duplicateTabIndex = tabIndex;
+               }
+               return match;
+            }, this);
+         }
+         return duplicateTabIndex;
       },
 
       /**
@@ -457,8 +502,6 @@ define(["dojo/_base/declare",
 
                // Add the widget to the ContentPane
                newTab.addChild(w);
-               this._tabWidgetProcessingComplete();
-
                forDeletion = i;
                break;
             }
@@ -468,6 +511,8 @@ define(["dojo/_base/declare",
             this._delayedProcessingWidgets.splice(forDeletion, 1);
          }
          this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
+         this.alfPublish(topics.WIDGET_PROCESSING_COMPLETE, {}, true);
+         this.alfPublishResizeEvent(this.domNode);
       },
 
       /**
@@ -498,9 +543,10 @@ define(["dojo/_base/declare",
          }
          else if(payload && (typeof payload.id === "string" || typeof payload.title === "string"))
          {
+            var targetTabId = this.id + "_" + payload.id;
             for(var i = 0; i < tabs.length; i++) // tabs does not support forEach
             {
-               if((payload.id && tabs[i].id === payload.id) || (payload.title && tabs[i].title === payload.title))
+               if((payload.id && tabs[i].id === targetTabId) || (payload.title && tabs[i].title === payload.title))
                {
                   tc.selectChild(tabs[i]);
                   break;
@@ -511,7 +557,6 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "Attempt made to select a TabController tab with an inapproriate payload", this);
          }
-         this._tabWidgetProcessingComplete();
       },
 
       /**
@@ -531,7 +576,8 @@ define(["dojo/_base/declare",
          {
             for(var i = 0; i < tabs.length; i++) // tabs does not support forEach
             {
-               if((payload.id && tabs[i].id === payload.id) || (payload.title && tabs[i].title === payload.title))
+               var targetTabId = this.id + "_" + payload.id;
+               if((payload.id && tabs[i].id === targetTabId) || (payload.title && tabs[i].title === payload.title))
                {
                   tabs[i].set("disabled", payload.value);
                   break;
@@ -555,7 +601,26 @@ define(["dojo/_base/declare",
          {
             array.forEach(payload.widgets, lang.hitch(this, this.addWidget));
          }
-         this._tabWidgetProcessingComplete();
+
+         // See AKU-583...
+         // It is possible to include a "publishOnAdd" attribute when creating tabs that define an additional publication to perform
+         // after the tab is added...
+         if (payload.publishOnAdd)
+         {
+            var publication = payload.publishOnAdd;
+            if (publication.publishTopic)
+            {
+               this.alfPublish(publication.publishTopic,
+                               publication.publishPayload,
+                               publication.publishGlobal,
+                               publication.publishToParent,
+                               publication.publishScope);
+            }
+            else
+            {
+               this.alfLog("warn", "A request to add a tab included a following publication, but it did not include a 'publishTopic' attribute", payload, this);
+            }
+         }
       },
 
       /**
@@ -575,7 +640,8 @@ define(["dojo/_base/declare",
          {
             for(var i = 0; i < tabs.length; i++) // tabs does not support forEach
             {
-               if((payload.id && tabs[i].id === payload.id) || (payload.title && tabs[i].title === payload.title))
+               var targetTabId = this.id + "_" + payload.id;
+               if((payload.id && tabs[i].id === targetTabId) || (payload.title && tabs[i].title === payload.title))
                {
                   tc.removeChild(tabs[i]);
                   break;
@@ -586,16 +652,6 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "Attempt made to remove a TabController tab with an inapproriate payload", this);
          }
-      },
-
-      /**
-       * It is necessary to publish a topic to ensure that all widgets know that processing is complete,
-       * this is particularly important for form controls to ensure that they are properly rendered.
-       *
-       * @instance
-       */
-      _tabWidgetProcessingComplete: function alfresco_layout_AlfTabContainer___tabWidgetProcessingComplete() {
-         this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
       }
    });
 });

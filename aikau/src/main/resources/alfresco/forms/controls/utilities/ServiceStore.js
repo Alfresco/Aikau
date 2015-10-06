@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       publishTopic: null,
 
@@ -54,7 +54,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       publishPayload: null,
 
@@ -66,7 +66,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       queryAttribute: "name",
 
@@ -76,9 +76,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default true
+       * @default
        */
-      searchStartsWith: true,
+      searchStartsWith: false,
 
       /**
        * If this is configured to be an array of fixed options then the query will be run against
@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       fixed: null,
 

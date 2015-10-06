@@ -48,7 +48,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       encodeURIs: false,
 
@@ -57,7 +57,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       preventCache: false,
 
@@ -115,6 +115,7 @@ define(["dojo/_base/declare",
        * @property {function} [progressCallback] - overrides the default progress callback
        * @property {function} [callbackScope=_this] - the scope to pass to the overridden callback function
        * @property {string} [alfTopic] - The topic to by published by the default request callbacks.
+       * @property {string} [alfResponseScope=""] - The scope to use when publishing in the default request callbacks.
        * Appended with "_PROGRESS", "_FAILURE" or "_SUCCESS" depending on response status code.
        *
        *
@@ -312,7 +313,7 @@ define(["dojo/_base/declare",
             this.alfPublish(requestConfig.alfTopic + "_SUCCESS", {
                requestConfig: requestConfig,
                response: response
-            });
+            }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
          }
          else
          {
@@ -334,7 +335,7 @@ define(["dojo/_base/declare",
             this.alfPublish(requestConfig.alfTopic + "_FAILURE", {
                requestConfig: requestConfig,
                response: response
-            });
+            }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
          }
          if (typeof this.displayMessage === "function" && response.response.text)
          {
@@ -377,7 +378,7 @@ define(["dojo/_base/declare",
             this.alfPublish(requestConfig.alfTopic + "_PROGRESS", {
                requestConfig: requestConfig,
                response: response
-            });
+            }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
          }
       },
 

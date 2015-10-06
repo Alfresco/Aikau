@@ -27,9 +27,10 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function(registerSuite, expect, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
 
-   registerSuite({
+   return {
       name: "Pagination Tests",
 
       setup: function() {
@@ -314,10 +315,14 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
    // See AKU-330...
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Pagination Tests (Custom page sizes)",
 
       setup: function() {
@@ -330,71 +335,75 @@ define(["intern!object",
       },
 
       "Starting page is initialised and working (useHash=false)": function() {
-         return checkPage("CUSTOM_", 1)()
-            .then(gotoNextPage("CUSTOM_"))
-            .then(checkPage("CUSTOM_", 2));
+         return checkPage(browser, "CUSTOM_", 1)()
+            .then(gotoNextPage(browser, "CUSTOM_"))
+            .then(checkPage(browser, "CUSTOM_", 2));
       },
 
       "Changing filter changes to page 1 (useHash=false)": function() {
-         return clickButton("CHANGE_FILTER")
-            .then(checkPage("CUSTOM_", 1))
-            .then(gotoNextPage("CUSTOM_"));
+         return clickButton(browser, "CHANGE_FILTER")
+            .then(checkPage(browser, "CUSTOM_", 1))
+            .then(gotoNextPage(browser, "CUSTOM_"));
       },
 
       "Changing tag changes to page 1 (useHash=false)": function() {
-         return clickButton("CHANGE_TAG")
-            .then(checkPage("CUSTOM_", 1))
-            .then(gotoNextPage("CUSTOM_"));
+         return clickButton(browser, "CHANGE_TAG")
+            .then(checkPage(browser, "CUSTOM_", 1))
+            .then(gotoNextPage(browser, "CUSTOM_"));
       },
 
       "Changing category changes to page 1 (useHash=false)": function() {
-         return clickButton("CHANGE_CATEGORY")
-            .then(checkPage("CUSTOM_", 1))
-            .then(gotoNextPage("CUSTOM_"));
+         return clickButton(browser, "CHANGE_CATEGORY")
+            .then(checkPage(browser, "CUSTOM_", 1))
+            .then(gotoNextPage(browser, "CUSTOM_"));
       },
 
       "Changing path changes to page 1 (useHash=false)": function() {
-         return clickButton("CHANGE_PATH")
-            .then(checkPage("CUSTOM_", 1))
-            .then(gotoNextPage("CUSTOM_"));
+         return clickButton(browser, "CHANGE_PATH")
+            .then(checkPage(browser, "CUSTOM_", 1))
+            .then(gotoNextPage(browser, "CUSTOM_"));
       },
 
       "Starting page is initialised and working (useHash=true)": function() {
-         return checkPage("HASH_CUSTOM_", 1)()
-            .then(gotoNextPage("HASH_CUSTOM_"))
-            .then(checkPage("HASH_CUSTOM_", 2));
+         return checkPage(browser, "HASH_CUSTOM_", 1)()
+            .then(gotoNextPage(browser, "HASH_CUSTOM_"))
+            .then(checkPage(browser, "HASH_CUSTOM_", 2));
       },
 
       "Changing filter changes to page 1 (useHash=true)": function() {
-         return clickButton("HASH_CHANGE_FILTER")
-            .then(checkPage("HASH_CUSTOM_", 1))
-            .then(gotoNextPage("HASH_CUSTOM_"));
+         return clickButton(browser, "HASH_CHANGE_FILTER")
+            .then(checkPage(browser, "HASH_CUSTOM_", 1))
+            .then(gotoNextPage(browser, "HASH_CUSTOM_"));
       },
 
       "Changing tag changes to page 1 (useHash=true)": function() {
-         return clickButton("HASH_CHANGE_TAG")
-            .then(checkPage("HASH_CUSTOM_", 1))
-            .then(gotoNextPage("HASH_CUSTOM_"));
+         return clickButton(browser, "HASH_CHANGE_TAG")
+            .then(checkPage(browser, "HASH_CUSTOM_", 1))
+            .then(gotoNextPage(browser, "HASH_CUSTOM_"));
       },
 
       "Changing category changes to page 1 (useHash=true)": function() {
-         return clickButton("HASH_CHANGE_CATEGORY")
-            .then(checkPage("HASH_CUSTOM_", 1))
-            .then(gotoNextPage("HASH_CUSTOM_"));
+         return clickButton(browser, "HASH_CHANGE_CATEGORY")
+            .then(checkPage(browser, "HASH_CUSTOM_", 1))
+            .then(gotoNextPage(browser, "HASH_CUSTOM_"));
       },
 
       "Changing path changes to page 1 (useHash=true)": function() {
-         return clickButton("HASH_CHANGE_PATH")
-            .then(checkPage("HASH_CUSTOM_", 1))
-            .then(gotoNextPage("HASH_CUSTOM_"));
+         return clickButton(browser, "HASH_CHANGE_PATH")
+            .then(checkPage(browser, "HASH_CUSTOM_", 1))
+            .then(gotoNextPage(browser, "HASH_CUSTOM_"));
       },
 
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Pagination Tests (invalid current page)",
 
       setup: function() {
@@ -449,9 +458,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Pagination Tests (valid current page)",
 
       setup: function() {
@@ -505,10 +518,14 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
    // See AKU-330...
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Scroll to item test",
 
       setup: function() {
@@ -537,19 +554,20 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
    /********************/
    /* Helper functions */
    /********************/
-   function clickButton(buttonId) {
+   function clickButton(browser, buttonId) {
       return browser.findByCssSelector("[widgetid=\"" + buttonId + "\"] .dijitButtonNode")
          .click()
          .sleep(500)
          .end();
    }
 
-   function gotoNextPage(scope) {
+   function gotoNextPage(browser, scope) {
       return function() {
          return browser.end()
             .findById(scope + "PAGE_SIZE_PAGINATOR_PAGE_FORWARD")
@@ -558,7 +576,7 @@ define(["intern!object",
       };
    }
 
-   function checkPage(scope, pageNum) {
+   function checkPage(browser, scope, pageNum) {
       var firstItem = ((pageNum - 1) * 10) + 1;
       return function() {
          return browser.end()

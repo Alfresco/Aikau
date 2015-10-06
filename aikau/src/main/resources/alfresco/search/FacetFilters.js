@@ -38,7 +38,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {string}
-       * @default "docListFilterPref"
+       * @default
        */
       filterPrefsName: "docListFilterPref",
       
@@ -47,7 +47,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       facetQName: null,
 
@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       maxFilters: null,
 
@@ -75,7 +75,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       minFilterValueLength: null,
 
@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALPHABETICALLY"
+       * @default
        */
       sortBy: "ALPHABETICALLY",
 
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       useHash: false,
 
@@ -123,7 +123,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       blockIncludeFacetRequest: false,
 

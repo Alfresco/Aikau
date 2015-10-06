@@ -149,14 +149,14 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       origX: 0,
       
       /**
        * @instance
        * @type {number}
-       * @default 0
+       * @default
        */
       origY: 0,
       

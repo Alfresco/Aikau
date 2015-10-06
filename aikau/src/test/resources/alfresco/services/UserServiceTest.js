@@ -30,8 +30,10 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, expect, assert, require, TestCommon) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "User Service Test (successful)",
 
       setup: function() {
@@ -80,9 +82,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "User Service Test (failure)",
 
       setup: function() {
@@ -134,9 +140,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
    
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "User Service Home Page Test",
 
       setup: function() {
@@ -164,5 +174,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

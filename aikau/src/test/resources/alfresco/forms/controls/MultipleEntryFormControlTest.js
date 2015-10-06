@@ -44,8 +44,10 @@ define(["intern!object",
       return "#" + id + " .alfresco-forms-controls-MultipleEntryElementWrapper:nth-child(" + elementIndex + ") .alfresco-forms-controls-MultipleEntryElement > div:first-child";
    };
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "MultipleEntryFormControlTest",
       setup: function() {
          browser = this.remote;
@@ -334,5 +336,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

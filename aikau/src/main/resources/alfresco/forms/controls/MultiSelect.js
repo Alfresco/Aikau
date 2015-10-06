@@ -48,7 +48,7 @@
  *             result: "${label}",
  *             full: "${value} - ${label}"
  *          },
- *          searchStartsWith: false // Whether the query attribute should start with the search string (defaults to true)
+ *          searchStartsWith: true // Whether the query attribute should start with the search string (defaults to false)
  *       }
  *    }
  * }
@@ -62,6 +62,7 @@ define([
       "alfresco/core/Core",
       "alfresco/core/ObjectProcessingMixin",
       "alfresco/core/ObjectTypeUtils",
+      "alfresco/util/functionUtils",
       "dijit/_FocusMixin",
       "dijit/_TemplatedMixin",
       "dijit/_WidgetBase",
@@ -78,7 +79,7 @@ define([
       "dojo/when",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(Core, ObjectProcessingMixin, ObjectTypeUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array,
+   function(Core, ObjectProcessingMixin, ObjectTypeUtils, functionUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array,
       declare, lang, Deferred, domConstruct, domGeom, domStyle, domClass, keys, on, when, template) {
 
       return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core, ObjectProcessingMixin], {
@@ -122,7 +123,7 @@ define([
           *
           * @instance
           * @type {boolean}
-          * @default true
+          * @default
           */
          choiceCanWrap: true,
 
@@ -131,7 +132,7 @@ define([
           *
           * @instance
           * @type {string}
-          * @default "100%"
+          * @default
           */
          choiceMaxWidth: "100%",
 
@@ -389,6 +390,7 @@ define([
             this.inherited(arguments);
             this._setupDisabling();
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
+            this._setupScrollHandling();
             if (!this.choiceCanWrap) {
                domClass.add(this.domNode, this.rootClass + "--choices-nowrap");
             }
@@ -476,6 +478,23 @@ define([
                newValuesArray = newValueParam;
             if (!ObjectTypeUtils.isArray(newValuesArray)) {
                newValuesArray = (newValueParam && [newValueParam]) || [];
+            }
+
+            // Normalise attrNames 
+            if (!nameAttrName && !labelAttrName && !valueAttrName) {
+               throw new Error("No attribute names available!");
+            } else if (nameAttrName && !labelAttrName && !valueAttrName) {
+               labelAttrName = valueAttrName = nameAttrName;
+            } else if (!nameAttrName && labelAttrName && !valueAttrName) {
+               nameAttrName = valueAttrName = labelAttrName;
+            } else if (!nameAttrName && !labelAttrName && valueAttrName) {
+               nameAttrName = labelAttrName = valueAttrName;
+            } else if (!nameAttrName) {
+               nameAttrName = labelAttrName;
+            } else if (!labelAttrName) {
+               labelAttrName = nameAttrName;
+            } else if (!valueAttrName) {
+               valueAttrName = nameAttrName;
             }
 
             // Clear existing values
@@ -1095,7 +1114,7 @@ define([
           * @instance
           * @param {object} evt Dojo-normalised event object
           */
-         _onSearchKeyup: function alfresco_forms_controls_MultiSelect___onSearchKeyup(/*jshint unused:false*/ evt) {
+         _onSearchKeyup: function alfresco_forms_controls_MultiSelect___onSearchKeyup( /*jshint unused:false*/ evt) {
             if (this._suppressKeyUp) {
                this._suppressKeyUp = false;
             } else {
@@ -1272,7 +1291,8 @@ define([
           * @instance
           */
          _setupDisabling: function alfresco_forms_controls_MultiSelect___setupDisabling() {
-            var methodsToDisable = ["_onChoiceClick",
+            var methodsToDisable = [
+               "_onChoiceClick",
                "_onChoiceCloseClick",
                "_onControlClick",
                "_onFocus",
@@ -1281,17 +1301,48 @@ define([
                "_onSearchChange",
                "_onSearchKeypress",
                "_onSearchKeyup",
-               "_onSearchUpdate"];
-            array.forEach(methodsToDisable, function(methodName){
+               "_onSearchUpdate"
+            ];
+            array.forEach(methodsToDisable, function(methodName) {
                var oldMethodName = "_OLD" + methodName;
                this[oldMethodName] = this[methodName];
                this[methodName] = lang.hitch(this, function() {
-                  if(this._disabled) {
+                  if (this._disabled) {
                      return;
                   } else {
                      return this[oldMethodName].apply(this, arguments);
                   }
                });
+            }, this);
+         },
+
+         /**
+          * Setup listening for scrolls happening which can affect the position of this control
+          * and hence the dropdown
+          *
+          * @instance
+          * @since 1.0.33
+          */
+         _setupScrollHandling: function alfresco_forms_controls_MultiSelect___setupScrollHandling() {
+
+            // Find all ancestor elements that could scroll            
+            var scrollingElems = [window],
+               testElem = this.domNode;
+            while ((testElem = testElem.parentNode) && testElem.tagName !== "BODY") {
+               if (testElem.scrollHeight > testElem.clientHeight) {
+                  scrollingElems.push(scrollingElems);
+               }
+            }
+
+            // Add listener to each one that will call a throttled re-position
+            array.forEach(scrollingElems, function(scrollElem) {
+               this.own(on(scrollElem, "scroll", lang.hitch(this, function() {
+                  functionUtils.throttle({
+                     name: this.id,
+                     func: lang.hitch(this, this._positionDropdown),
+                     timeoutMs: 50
+                  })
+               })))
             }, this);
          },
 

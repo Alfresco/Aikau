@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -57,22 +57,25 @@
  * 
  * @module alfresco/layout/HorizontalWidgets
  * @extends module:alfresco/core/ProcessWidgets
+ * @mixes module:alfresco/core/ResizeMixin
+ * @mixes module:alfresco/alfresco/layout/DynamicVisibilityResizingMixin
  * @author Dave Draper
  */
 define(["alfresco/core/ProcessWidgets",
         "dojo/_base/declare",
         "dojo/text!./templates/HorizontalWidgets.html",
         "alfresco/core/ResizeMixin",
+        "alfresco/layout/DynamicVisibilityResizingMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-style",
         "dojo/dom-geometry",
-        "dojo/on",
-        "alfresco/core/ObjectTypeUtils"], 
-        function(ProcessWidgets, declare, template, ResizeMixin, lang, array, domConstruct, domStyle, domGeom, on, ObjectTypeUtils) {
+        "dojo/when"], 
+        function(ProcessWidgets, declare, template, ResizeMixin, DynamicVisibilityResizingMixin, lang, array, 
+                 domConstruct, domStyle, domGeom, when) {
    
-   return declare([ProcessWidgets, ResizeMixin], {
+   return declare([ProcessWidgets, ResizeMixin, DynamicVisibilityResizingMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -95,7 +98,7 @@ define(["alfresco/core/ProcessWidgets",
        * 
        * @instance
        * @type {string}
-       * @default "horizontal-widgets"
+       * @default
        */
       baseClass: "horizontal-widgets",
       
@@ -105,7 +108,7 @@ define(["alfresco/core/ProcessWidgets",
        * 
        * @instance
        * @type {string}
-       * @default null 
+       * @default
        */
       widgetWidth: null,
       
@@ -114,7 +117,7 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       widgetMarginLeft: null,
 
@@ -123,9 +126,27 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       widgetMarginRight: null,
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/core/CoreWidgetProcessing#allWidgetsProcessed}
+       * to set up subscriptions for the [visibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#visibilityRuleTopics}
+       * that are returned by calling [getVisibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#getVisibilityRuleTopics}
+       * on the first pass through the [doWidthProcessing]{@link module:alfresco/layout/HorizontalWidgets#doWidthProcessing}
+       * function. The subscriptions need to be created after the widgets have been created in order that their visibility 
+       * is adjusted before the [onResize]{@link module:alfresco/layout/HorizontalWidgets#onResize} function that is bound 
+       * to is called.
+       *
+       * @instance
+       * @param {object[]} widgets The widgets that have been created
+       * @since 1.0.33
+       */
+      allWidgetsProcessed: function alfresco_layout_HorizontalWidgets__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
+         this.inherited(arguments);
+         this.subscribeToVisibilityRuleTopics(this.onResize);
+      },
 
       /**
        * Sets up the default width to be allocated to each child widget to be added.
@@ -135,7 +156,8 @@ define(["alfresco/core/ProcessWidgets",
       postCreate: function alfresco_layout_HorizontalWidgets__postCreate() {
          // Split the full width between all widgets... 
          // We should update this to allow for specific widget width requests...
-         this.doWidthProcessing(this.widgets);
+         this.visibilityRuleTopics = this.getVisibilityRuleTopics(this.widgets);
+         this.doWidthProcessing(this.widgets, true);
          this.inherited(arguments);
 
          // Update the grid as the window changes...
@@ -150,9 +172,12 @@ define(["alfresco/core/ProcessWidgets",
        *
        * @instance
        * @param {array} widgets The widgets or widget configurations to process the widths for
+       * @param {boolean} firstPass Indicates whether this is the first pass (this determines whether to look at visibility
+       * rule configuration or DOM node visibility).
        */
-      doWidthProcessing: function alfresco_layout_HorizontalWidgets__doWidthProcessing(widgets) {
-         if (widgets != null && this.domNode != null)
+      doWidthProcessing: function alfresco_layout_HorizontalWidgets__doWidthProcessing(widgets, firstPass) {
+         // jshint maxstatements:false
+         if (widgets && this.domNode)
          {
             // Get the dimensions of the current DOM node...
             var computedStyle = domStyle.getComputedStyle(this.domNode);
@@ -166,17 +191,38 @@ define(["alfresco/core/ProcessWidgets",
             // Subtract the margins from the overall width
             var leftMarginsSize = 0,
                 rightMarginsSize = 0;
-            if (this.widgetMarginLeft != null && !isNaN(this.widgetMarginLeft))
+
+            // Filter out any widgets that are configured to be initially invisible (on first pass processing)
+            // or that have a DOM node that is not displayed (on resizing)...
+            if (firstPass)
             {
-               leftMarginsSize = widgets.length * parseInt(this.widgetMarginLeft);
+               widgets = array.filter(widgets, function(widget) {
+                  var visibleInitialValue = lang.getObject("config.visibilityConfig.initialValue", false, widget);
+                  var invisibleInitialValue = lang.getObject("config.invisibilityConfig.initialValue", false, widget);
+                  return visibleInitialValue !== false && invisibleInitialValue !== true;
+               });
+            }
+            else
+            {
+               widgets = array.filter(widgets, function(widget) {
+                  return widget.domNode && domStyle.get(widget.domNode, "display") !== "none";
+               });
+            }
+            
+            // NOTE: In the "if" statements below we're not worried about widgetMarginLeft 
+            //       or widgetMarginRight being 0 and thus the statement failing to evaluate
+            //       to true since the calculated size would remain 0 anyway
+            if (this.widgetMarginLeft && !isNaN(this.widgetMarginLeft))
+            {
+               leftMarginsSize = widgets.length * parseInt(this.widgetMarginLeft, 10);
             }
             else
             {
                this.widgetMarginLeft = 0;
             }
-            if (this.widgetMarginRight != null && !isNaN(this.widgetMarginRight))
+            if (this.widgetMarginRight && !isNaN(this.widgetMarginRight))
             {
-               rightMarginsSize = widgets.length * parseInt(this.widgetMarginRight);
+               rightMarginsSize = widgets.length * parseInt(this.widgetMarginRight, 10);
             }
             else
             {
@@ -187,13 +233,13 @@ define(["alfresco/core/ProcessWidgets",
             // Work out how many pixels widgets have requested and subtract that from the remainder...
             var widgetRequestedWidth = 0;
             var widgetsWithNoWidthReq = 0;
-            array.forEach(widgets, function(widget, index) {
-               if (widget.widthPx != null && !isNaN(widget.widthPx))
+            array.forEach(widgets, function(widget) {
+               if ((widget.widthPx || widget.widthPx === 0) && !isNaN(widget.widthPx))
                {
-                  widgetRequestedWidth += parseInt(widget.widthPx);
+                  widgetRequestedWidth += parseInt(widget.widthPx, 10);
                   widget.widthCalc = widget.widthPx;
                }
-               else if (widget.widthPc != null && !isNaN(widget.widthPc))
+               else if ((widget.widthPc || widget.widthPc === 0) && !isNaN(widget.widthPc))
                {
                   // No action, just avoiding adding to the count of widgets that don't request
                   // a width as either a pixel or percentage size.
@@ -217,10 +263,10 @@ define(["alfresco/core/ProcessWidgets",
 
             // Update the widgets that have requested a percentage of space with a value that is calculated from the remaining space
             var totalWidthAsRequestedPercentage = 0;
-            array.forEach(widgets, function(widget, index) {
-               if (widget.widthPc != null && !isNaN(widget.widthPc))
+            array.forEach(widgets, function(widget) {
+               if ((widget.widthPc || widget.widthPc === 0) && !isNaN(widget.widthPc))
                {
-                  var pc = parseInt(widget.widthPc);
+                  var pc = parseInt(widget.widthPc, 10);
                   totalWidthAsRequestedPercentage += pc;
 
                   if (pc > 100)
@@ -245,11 +291,11 @@ define(["alfresco/core/ProcessWidgets",
             }
 
             // Divide up the remaining horizontal space between the remaining widgets...
-            var remainingPercentage = remainingPercentage / widgetsWithNoWidthReq,
-                standardWidgetWidth = remainingWidth * (remainingPercentage/100);
-            array.forEach(widgets, function(widget, index) {
-               if ((widget.widthPc != null && !isNaN(widget.widthPc)) ||
-                   (widget.widthPx != null && !isNaN(widget.widthPx)))
+            remainingPercentage = remainingPercentage / widgetsWithNoWidthReq;
+            var standardWidgetWidth = remainingWidth * (remainingPercentage/100);
+            array.forEach(widgets, function(widget) {
+               if (((widget.widthPc || widget.widthPc === 0) && !isNaN(widget.widthPc)) ||
+                   ((widget.widthPx || widget.widthPx === 0) && !isNaN(widget.widthPx)))
                {
                   // No action required. 
                }
@@ -268,13 +314,20 @@ define(["alfresco/core/ProcessWidgets",
        * @param {object} evt The resize event.
        */
       onResize: function alfresco_layout_HorizontalWidget__onResize() {
-         this.doWidthProcessing(this._processedWidgets);
-         array.forEach(this._processedWidgets, function(widget, index) {
-            if (widget != null && widget.domNode != null && widget.widthCalc != null && widget.widthCalc != 0)
-            {
-               domStyle.set(widget.domNode.parentNode, "width", widget.widthCalc + "px");
-            }
-         });
+         when(this.getProcessedWidgets(), lang.hitch(this, function(processedWidgets) {
+            this.doWidthProcessing(processedWidgets, false);
+            array.forEach(processedWidgets, function(widget) {
+               if (widget && widget.domNode && widget.widthCalc)
+               {
+                  var currentWidth = domGeom.getMarginBox(widget.domNode.parentNode).w;
+                  domStyle.set(widget.domNode.parentNode, "width", widget.widthCalc + "px");
+                  if (currentWidth !== widget.widthCalc)
+                  {
+                     this.alfPublishResizeEvent(widget.domNode.parentNode);
+                  }
+               }
+            }, this);
+         }));
       },
 
       /**
@@ -289,15 +342,15 @@ define(["alfresco/core/ProcessWidgets",
        * @param {string} rootClassName A string containing one or more space separated CSS classes to set on the DOM node
        * @returns {element} A new DOM node for the widget to be attached to
        */
-      createWidgetDomNode: function alfresco_layout_HorizontalWidgets__createWidgetDomNode(widget, rootNode, rootClassName) {
+      createWidgetDomNode: function alfresco_layout_HorizontalWidgets__createWidgetDomNode(widget, /*jshint unused:false*/ rootNode, rootClassName) {
          var outerDiv = domConstruct.create("div", { className: "horizontal-widget"}, this.containerNode);
          
          // Set the width of each widget according to how many there are...
          var style = {
             "marginLeft": this.widgetMarginLeft + "px",
             "marginRight": this.widgetMarginRight + "px"
-         }
-         if (widget.widthCalc != 0)
+         };
+         if (widget.widthCalc)
          {
             style.width =  widget.widthCalc + "px";
          }
@@ -317,15 +370,15 @@ define(["alfresco/core/ProcessWidgets",
        * @param {number} index The index of the widget to create (this will effect it's location in the 
        * [_processedWidgets]{@link module:alfresco/core/Core#_processedWidgets} array)
        */
-      createWidget: function alfresco_layout_HorizontalWidgets__createWidget(config, domNode, callback, callbackScope, index) {
+      createWidget: function alfresco_layout_HorizontalWidgets__createWidget(config, /*jshint unused:false*/ domNode, callback, callbackScope, index) {
          var widget = this.inherited(arguments);
-         if (widget != null)
+         if (widget)
          {
-            if (config.widthPx != null && !isNaN(config.widthPx))
+            if ((config.widthPx || config.widgetPx === 0) && !isNaN(config.widthPx))
             {
                widget.widthPx = config.widthPx;
             }
-            else if (config.widthPc != null && !isNaN(config.widthPc))
+            else if ((config.widthPc || config.widthPc === 0) && !isNaN(config.widthPc))
             {
                widget.widthPc = config.widthPc;
             }

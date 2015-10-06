@@ -1,13 +1,32 @@
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-doclib-action {
-   background-repeat: no-repeat;
-   height: 20px;
-   width: 20px;
-}
-
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-upload-new-version-icon {
-   background-image: url("./images/actions/document-upload-new-version-16.png");
-}
-
-.alfresco-share .dijitIcon.dijitMenuItemIcon.alf-manage-aspects-icon {
-   background-image: url("./images/actions/document-manage-aspects-16.png");
+.@{alfresco} {
+   .dijitIcon {
+      &.dijitMenuItemIcon {
+         &.alf-doclib-action {
+            background-repeat: no-repeat;
+            height: 20px;
+            width: 20px;
+         }
+         &.alf-delete-icon {
+            background-image: url("./images/actions/document-delete-16.png");
+         }
+         &.alf-copy-to-icon {
+            background-image: url("./images/actions/document-copy-to-16.png");
+         }
+         &.alf-download-as-zip-icon {
+            background-image: url("./images/actions/document-download-16.png");
+         }
+         &.alf-manage-aspects-icon {
+            background-image: url("./images/actions/document-manage-aspects-16.png");
+         }
+         &.alf-move-to-icon {
+            background-image: url("./images/actions/document-move-to-16.png");
+         }
+         &.alf-start-workflow-icon {
+            background-image: url("./images/actions/document-assign-workflow-16.png");
+         }
+         &.alf-upload-new-version-icon {
+            background-image: url("./images/actions/document-upload-new-version-16.png");
+         }
+      }
+   }
 }

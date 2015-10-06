@@ -34,9 +34,10 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-style",
+        "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
    return declare([AlfCore], {
 
@@ -50,6 +51,119 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/CoreWidgetProcessing.css"}],
 
       /**
+       * The current item to act upon
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      currentItem: null,
+
+      /**
+       * This string is used to identify locations of counts of widgets that are being processed.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36
+       */
+      _countDownLocationPrefix: "_processingCountDown",
+
+      /**
+       * This string is used to identify locations where processed widgets can be referenced. This location
+       * will either be populated with an array of widgets or with a promise that will be resolved once all the
+       * widgets have been created. This should not be set or configured.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36
+       */
+      _processedWidgetsLocationPrefix: "_processedWidgets",
+
+      /**
+       * This string is used to identify locations of arrays where widgets that are being created will be stored. 
+       * THis should not be set or configured.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.36
+       */
+      _processingWidgetsLocationPrefix: "_processingWidgets",
+
+      /**
+       * Used to keep track of all the widgets created as a result of a call to the 
+       * [processWidgets]{@link module:alfresco/core/Core#processWidgets} function. This should not be referenced directly,
+       * instead the [getProcessedWidgets]{@link module:alfresco/core/Core#getProcessedWidgets} should be called.
+       *
+       * @instance
+       * @type {Array}
+       * @default
+       */
+      _processedWidgets: null,
+
+      /**
+       * As of 1.0.36 this is no longer used and it should not be referenced
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @deprecated Since 1.0.36
+       */
+      _processedWidgetCountdown: null,
+      
+      /**
+       * This function can be used to retrieve the widgets that have been processed by a call to 
+       * [processWidgets]{@link module:alfresco/core/CoreWidgetProcessing#processWidgets}. It return a promise
+       * of the widgets that will be created an as such calls to this function should be protected through
+       * the use of dojo/when. It is not recommended to use this function, instead it is better to extend
+       * the [allWidgetsProcessed]{@link module:alfresco/core/CoreWidgetProcessing#allWidgetsProcessed} function
+       * as this will only be called when widget processing has completed and is passed an argument of the
+       * widgets that were created.
+       * 
+       * @instance
+       * @param  {string} processWidgetsId The ID mapped to the original processWidgets call
+       * @return {object[]|promise} The array of processed widgets or a promise of them
+       * @since 1.0.36
+       */
+      getProcessedWidgets: function alfresco_core_CoreWidgetProcessing__getProcessedWidgets(processWidgetsId) {
+         var widgets;
+         var processedWidgets = lang.getObject(this.getWidgetProcessingLocation(processWidgetsId, this._processedWidgetsLocationPrefix), false, this);
+         if (processedWidgets)
+         {
+            widgets = processedWidgets.promise;
+         }
+         else
+         {
+            widgets = [];
+         }
+         return widgets;
+      },
+
+      /**
+       * This function is used to get the dot-notation property of the key attributes used when processing widgets. When
+       * a processWidgetsId is provided, the location will be a location within a map. The supplied prefix indicates
+       * the type of property required - this will either be the remaining count of widgets to process, the array of
+       * widgets processed so far or the promise of all the widgets when processing is complete.
+       * 
+       * @instance
+       * @param  {string} processWidgetsId The ID mapped to the original processWidgets call
+       * @param {string} prefix Expected to be either [_processedWidgetsLocationPrefix]{@link module:alfresco/core/CoreWidgetProcessing#_processedWidgetsLocationPrefix}
+       * or [_processingWidgetsLocationPrefix]{@link module:alfresco/core/CoreWidgetProcessing#_processingWidgetsLocationPrefix}
+       * @return {string} A dot-notation property to set or retrieve the processed widgets
+       * @since 1.0.36
+       */
+      getWidgetProcessingLocation: function alfresco_core_CoreWidgetProcessing__getWidgetProcessingLocation(processWidgetsId, prefix) {
+         var location = prefix;
+         if (processWidgetsId)
+         {
+            location = prefix + "Map." + processWidgetsId;
+         }
+         return location;
+      },
+
+      /**
        * This function can be used to instantiate an array of widgets. Each widget configuration in supplied
        * widgets array is passed to the [processWidget]{@link module:alfresco/core/Core#processWidget} function
        * to handle it's creation.
@@ -58,8 +172,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} widgets An array of the widget definitions to instantiate
        * @param {element} rootNode The DOM node which should be used to add instantiated widgets to
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of the call to
        */
-      processWidgets: function alfresco_core_CoreWidgetProcessing__processWidgets(widgets, rootNode) {
+      processWidgets: function alfresco_core_CoreWidgetProcessing__processWidgets(widgets, rootNode, processWidgetsId) {
          // There are two options for providing configuration, either via a JSON object or
          // via a URL to asynchronously retrieve the configuration. The configuration object
          // takes precedence as it will be faster by virtue of not requiring a remote call.
@@ -68,15 +183,18 @@ define(["dojo/_base/declare",
             // For the moment we'll just ignore handling the configUrl...
             if (widgets && widgets instanceof Array)
             {
-               // Reset the processing complete flag (this is to support multiple invocations of widget processing)...
+               // Reset the processing complete flag... NOTE: THIS CAN NO LONGER BE RELIED ON UNLESS ONLY USED FOR SINGLE REQUESTS
                this.widgetProcessingComplete = false;
 
-               // TODO: Using these attributes will not support multiple calls to processWidgets from within the same object instance
-               this._processedWidgetCountdown = widgets.length;
-               this._processedWidgets = [];
-
+               // Reset all the data for this call... we create a Deferred object for anyone trying to get the widgets before
+               // they've all be created, a countdown to track all the widgets that need to be created and an array to add widgets
+               // to as they are created...
+               lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix), widgets.length, this);
+               lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._processedWidgetsLocationPrefix), new Deferred(), this);
+               lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._processingWidgetsLocationPrefix), [], this);
+               
                // Iterate over all the widgets in the configuration object and add them...
-               array.forEach(widgets, lang.hitch(this, this.processWidget, rootNode));
+               array.forEach(widgets, lang.hitch(this, this.processWidget, rootNode, processWidgetsId));
             }
          }
          catch(e)
@@ -95,43 +213,27 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {element} rootNode The DOM node where the widget should be created.
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * @param {object} widgetConfig The configuration for the widget to be created
        * @param {number} index The index of the widget configuration in the array that it was taken from
        */
-      processWidget: function alfresco_core_CoreWidgetProcessing__processWidget(rootNode, widgetConfig, index) {
+      processWidget: function alfresco_core_CoreWidgetProcessing__processWidget(rootNode, processWidgetsId, widgetConfig, index) {
          if (widgetConfig)
          {
-            if (this.filterWidget(widgetConfig, index))
+            if (this.filterWidget(widgetConfig, index, processWidgetsId))
             {
                var domNode = this.createWidgetDomNode(widgetConfig, rootNode, widgetConfig.className || "");
-               this.createWidget(widgetConfig, domNode, this._registerProcessedWidget, this, index);
+               this.createWidget(widgetConfig, domNode, this._registerProcessedWidget, this, index, processWidgetsId);
             }
          }
          else
          {
             this.alfLog("warn", "Could not process widget because it was missing configuration - check 'widgets' array for empty elements", this, index);
-            this._processedWidgetCountdown--;
+            var location = this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix);
+            var countdown = lang.getObject(location, false, this);
+            lang.setObject(location, countdown - 1, this);
          }
       },
-
-      /**
-       * Used to keep track of all the widgets created as a result of a call to the [processWidgets]{@link module:alfresco/core/Core#processWidgets} function
-       *
-       * @instance
-       * @type {Array}
-       * @default null
-       */
-      _processedWidgets: null,
-
-      /**
-       * This is used to countdown the widgets that are still waiting to be created. It is initialised to the size
-       * of the widgets array supplied to the [processWidgets]{@link module:alfresco/core/Core#processWidgets} function.
-       *
-       * @instance
-       * @type {number}
-       * @default null
-       */
-      _processedWidgetCountdown: null,
 
       /**
        * This function registers the creation of a widget. It decrements the
@@ -141,24 +243,34 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} widget The widget that has just been processed.
        * @param {number} index The target index of the widget
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        */
-      _registerProcessedWidget: function alfresco_core_CoreWidgetProcessing___registerProcessedWidget(widget, index) {
-         this._processedWidgetCountdown--;
-         this.alfLog("log", "Widgets expected: ", this._processedWidgetCountdown, this.id);
+      _registerProcessedWidget: function alfresco_core_CoreWidgetProcessing___registerProcessedWidget(widget, index, processWidgetsId) {
+         // Decrement the count as another widget is registered...
+         var countDownLocation = this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix);
+         var countdown = lang.getObject(countDownLocation, false, this) - 1;
+         lang.setObject(countDownLocation, countdown, this);
+
+         this.alfLog("log", "Widgets expected: ", countdown, this.id);
+         
+         // 1.0.35 UPDATE
+         // If an "processWidgetsId" attribute is provided then we want to make sure that multiple calls to processWidgets
+         // will not result in a _processedWidgets attribute containing results different calls. Therefore we want to map each
+         // call to its own array... We still retain the original _processedWidgets object for backwards compatibility. The reason
+         // for this is to ensure that in the event of an XHR request being made for a dependency that the asynchronous processing
+         // is handled correctly.
+         var location = this.getWidgetProcessingLocation(processWidgetsId, this._processingWidgetsLocationPrefix);
+         var processedWidgets = lang.getObject(location, false, this);
+         
          if (widget)
          {
-            if (!this._processedWidgets)
-            {
-               this._processedWidgets = [];
-            }
-
             if (!index || index === 0 || isNaN(index))
             {
-               this._processedWidgets.push(widget);
+               processedWidgets.push(widget);
             }
             else
             {
-               this._processedWidgets[index] = widget;
+               processedWidgets[index] = widget;
             }
 
             // Handle any dynamic visibility and invisibility rules...
@@ -170,15 +282,20 @@ define(["dojo/_base/declare",
             this.alfLog("warn", "No widget supplied following registration", this);
          }
 
-         if (this._processedWidgetCountdown === 0)
+         if (countdown === 0)
          {
             // Double-check that no empty elements are in the array of processed widgets...
             // This could still be possible when indices have been used to set array contents...
-            this._processedWidgets = array.filter(this._processedWidgets, function(item) {
-               return item != null;
+            processedWidgets = array.filter(processedWidgets, function(item) {
+               return (item !== null && typeof item !== "undefined");
             }, this);
-            this.allWidgetsProcessed(this._processedWidgets);
-            this.widgetProcessingComplete = true;
+
+            // IMPORTANT: We need to reset the processedWidgets with the filtered version...
+            var promise = lang.getObject(this.getWidgetProcessingLocation(processWidgetsId, this._processedWidgetsLocationPrefix), false, this);
+            promise.resolve(processedWidgets);
+
+            this.allWidgetsProcessed(processedWidgets, processWidgetsId);
+            this.widgetProcessingComplete = true; // NOTE: Not safe to refer to when calling processWidgets multiple times from a single widget
             this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
          }
       },
@@ -346,7 +463,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       widgetProcessingComplete: false,
 
@@ -356,8 +473,9 @@ define(["dojo/_base/declare",
        * @extensionPoint
        * @instance
        * @param {Array} widgets An array of all the widgets that have been processed
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        */
-      allWidgetsProcessed: function alfresco_core_CoreWidgetProcessing__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_core_CoreWidgetProcessing__allWidgetsProcessed(widgets, processWidgetsId) {
          // jshint unused:false
          this.alfLog("log", "All widgets processed");
       },
@@ -478,18 +596,32 @@ define(["dojo/_base/declare",
        * @param {object} callbackScope The scope with which to call the callback
        * @param {number} index The index of the widget to create (this will effect it's location in the
        * [_processedWidgets]{@link module:alfresco/core/Core#_processedWidgets} array)
+       * @return {object|promise} Either the created widget or the promise of a widget
        */
-      createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(widget, domNode, callback, callbackScope, index) {
+      createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(widget, domNode, callback, callbackScope, index, processWidgetsId) {
          var _this = this;
          this.alfLog("log", "Creating widget: ",widget);
          var initArgs = this.processWidgetConfig(widget);
+
+         // In certain circumstances there is the possibility that Surf will not have been able to correctly
+         // identify all the dependencies for the widget that is being created. In this case we will return
+         // the promise of a widget and only register the widget once all the dependencies have been retrieved
+         // and the widget has been instantiated. This ensures that the allWidgetsProcessed function is never
+         // called until all widgets have truly been created.
+         var promisedWidget = new Deferred();
+         promisedWidget.then(lang.hitch(this, function(resolvedWidget) {
+            if (callback)
+            {
+               callback.call((callbackScope || this), resolvedWidget, index, processWidgetsId);
+            }
+         }));
 
          // Create a reference for the widget to be added to. Technically the require statement
          // will need to asynchronously request the widget module - however, assuming the widget
          // has been included in such a way that it will have been included in the generated
          // module cache then the require call will actually process synchronously and the widget
          // variable will be returned with an assigned value...
-         var instantiatedWidget = null;
+         var instantiatedWidget;
 
          // Dynamically require the specified widget
          // The use of indirection is done so modules will not rolled into a build (should we do one)
@@ -504,7 +636,7 @@ define(["dojo/_base/declare",
                {
                   if (registry.byId(initArgs.id))
                   {
-                     initArgs.id = widget.name + "___" + _this.generateUuid();
+                     initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
                   }
 
                   // Instantiate the new widget
@@ -548,27 +680,19 @@ define(["dojo/_base/declare",
                   {
                      domClass.add(instantiatedWidget.domNode, initArgs.additionalCssClasses);
                   }
+                  promisedWidget.resolve(instantiatedWidget);
                }
                catch (e)
                {
-                  _this.alfLog("error", "The following error occurred creating a widget", e, this);
-                  if (callback)
-                  {
-                     callback.call((callbackScope || this), null, index);
-                  }
+                  _this.alfLog("error", "The following error occurred creating a widget", e, _this);
+                  promisedWidget.resolve(null);
                   return null;
                }
             }
             else
             {
-               _this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  widget.name + "'. Please correct the use of this widget in your page definition", this);
-            }
-            
-            if (callback)
-            {
-               // If there is a callback then call it with any provided scope (but default to the
-               // "this" as the scope if one isn't provided).
-               callback.call((callbackScope || this), instantiatedWidget, index);
+               _this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  widget.name + "'. Please correct the use of this widget in your page definition", _this);
+               promisedWidget.resolve(null);
             }
          });
 
@@ -576,7 +700,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "A widget was not declared so that it's modules were included in the loader cache", widget, this);
          }
-         return instantiatedWidget;
+         return instantiatedWidget || promisedWidget.promise;
       },
 
       /**
@@ -588,13 +712,13 @@ define(["dojo/_base/declare",
        * @param {object} widgetConfig The configuration for the widget to be created
        * @returns {boolean} The result of the filter evaluation or true if no "renderFilter" is provided
        */
-      filterWidget: function alfresco_core_CoreWidgetProcessing__filterWidget(widgetConfig, index, decrementCounter) {
+      filterWidget: function alfresco_core_CoreWidgetProcessing__filterWidget(widgetConfig, index, processWidgetsId) {
          var shouldRender = this.processAllFilters(widgetConfig.config);
-         if (!shouldRender && decrementCounter !== false)
+         if (!shouldRender)
          {
             // It is not always necessary to call the _registerProcessedWidget. This is relevant for widgets
             // that work through an entire model before performing any processing (e.g. alfresco/core/FilteredPage)
-            this._registerProcessedWidget(null, index);
+            this._registerProcessedWidget(null, index, processWidgetsId);
          }
          return shouldRender;
       },

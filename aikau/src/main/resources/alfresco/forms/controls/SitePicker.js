@@ -160,7 +160,8 @@ define(["alfresco/forms/controls/Picker",
                                     config: {
                                        label: "picker.ok.label",
                                        publishTopic: "ALF_ITEMS_SELECTED",
-                                       pubSubScope: "{itemSelectionPubSubScope}"
+                                       pubSubScope: "{itemSelectionPubSubScope}",
+                                       additionalCssClasses: "call-to-action"
                                     }
                                  },
                                  {

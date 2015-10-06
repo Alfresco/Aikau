@@ -27,9 +27,11 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, require, TestCommon, keys) {
 
-   var pause = 150;
+var pause = 150;
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
 
       name: "Multi-source DND tests",
 
@@ -114,9 +116,10 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   var setupDroppedItems = function() {
+   var setupDroppedItems = function(browser) {
       // Select the item in the first source...
       return browser.pressKeys(keys.TAB)
          .sleep(pause)
@@ -163,7 +166,10 @@ define(["intern!object",
             .end();
    };
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
 
       name: "Multi-source DND tests (clear using publication)",
 
@@ -179,7 +185,7 @@ define(["intern!object",
 
       "Nest single use item in multiple use item": function() {
          return browser.then(function() {
-               return setupDroppedItems();
+               return setupDroppedItems(browser);
             })
 
             // Make sure everything is setup correctly
@@ -208,9 +214,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
 
       name: "Multi-source DND tests (clear with no restore using publication)",
 
@@ -226,7 +236,7 @@ define(["intern!object",
 
       "Nest single use item in multiple use item": function() {
          return browser.then(function() {
-               return setupDroppedItems();
+               return setupDroppedItems(browser);
             })
 
             .findByCssSelector("#BRUTAL_CLEAR_BUTTON_label")
@@ -248,9 +258,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
 
       name: "Multi-source DND tests (test preset value loading)",
 
@@ -296,5 +310,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -37,7 +37,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_core_DynamicWidgetProcessing__postCreate() {
-         this.alfSubscribe(this.dynamicallyAddWidgetTopic, lang.hitch(this, "processDynamicUpdates"))
+         this.alfSubscribe(this.dynamicallyAddWidgetTopic, lang.hitch(this, this.processDynamicUpdates));
          this.inherited(arguments);
       },
       
@@ -61,10 +61,10 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "A request made to add widgets dynamically but a 'widgets' attribute was not provided", payload);
          }
-         else if (payload.targetId == this.id)
+         else if (payload.targetId === this.id)
          {
             var targetPosition = (typeof payload.targetPosition === "number") ? payload.targetPosition : null;
-            array.forEach(payload.widgets, lang.hitch(this, "addWidgetDynamically", payload.targetId, targetPosition));
+            array.forEach(payload.widgets, lang.hitch(this, this.addWidgetDynamically, payload.targetId, targetPosition));
          }
       },
       
@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to add
        * @param {integer} index The index of the widget
        */
-      addWidgetDynamically: function alfresco_core_DynamicWidgetProcessing__addWidgetDynamically(targetId, targetPosition, widget, index) {
+      addWidgetDynamically: function alfresco_core_DynamicWidgetProcessing__addWidgetDynamically(targetId, targetPosition, widget, /*jshint unused:false*/index) {
          if (typeof widget.placeAt !== "function")
          {
             this.alfLog("error", "Widget has no 'placeAt' function so cannot be dynamically added", widget);

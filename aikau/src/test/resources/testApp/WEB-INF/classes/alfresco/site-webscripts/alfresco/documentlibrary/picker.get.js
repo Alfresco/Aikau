@@ -119,6 +119,7 @@ model.jsonModel = {
                                                                name: "alfresco/renderers/InlineEditProperty",
                                                                config: {
                                                                   propertyToRender: "node.properties.cm:name",
+                                                                  permissionProperty: "node.permissions.user.Write",
                                                                   postParam: "prop_cm_name",
                                                                   renderSize: "large",
                                                                   renderAsLink: true
@@ -128,6 +129,7 @@ model.jsonModel = {
                                                                name: "alfresco/renderers/InlineEditProperty",
                                                                config: {
                                                                   propertyToRender: "node.properties.cm:title",
+                                                                  permissionProperty: "node.permissions.user.Write",
                                                                   postParam: "prop_cm_title",
                                                                   renderedValuePrefix: "(",
                                                                   renderedValueSuffix: ")",

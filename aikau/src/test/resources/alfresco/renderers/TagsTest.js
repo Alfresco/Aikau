@@ -29,8 +29,10 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, require, TestCommon, keys) {
 
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "Tags Tests",
 
       setup: function() {
@@ -121,9 +123,13 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "Tags Tests (inline creation and save)",
 
       setup: function() {
@@ -139,7 +145,8 @@ define(["intern!object",
          return browser.findAllByCssSelector("#TAGS_3 .alfresco-renderers-ReadOnlyTag")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "There should be no tags initially");
-            });
+            })
+            .clearLog();
       },
 
       "Navigate to a node with no tags and edit it": function() {
@@ -187,8 +194,14 @@ define(["intern!object",
             });
       },
 
+      "The document-tagged event should have fired": function() {
+         return browser.findByCssSelector("body")
+            .getLastPublish("ALF_DOCUMENT_TAGGED");
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

@@ -18,7 +18,11 @@
  */
 
 /**
+ * This mixin used to be used to contain the topics used by the tag service, however it has now been superseded by the global topics module.
+ * 
  * @module alfresco/services/_TagServiceTopics
+ * @deprecated Since 1.0.37 - Use [global topics module]{@link module:alfresco/core/topics} instead.
+ * @deprecated [description]
  * @author Dave Draper
  */
 define([], 
@@ -31,8 +35,9 @@ define([],
        * as the publication payload).
        * 
        * @instance
+       * @deprecated Since 1.0.37 - Use [topics.TAG_QUERY]{@link module:alfresco/core/topics#TAG_QUERY} instead.
        * @type {string}
-       * @default "ALF_TAG_QUERY"
+       * @default
        */
       tagQueryTopic: "ALF_TAG_QUERY"
    };

@@ -30,7 +30,7 @@
 define(["dojo/_base/declare",
         "alfresco/renderers/InlineEditProperty",
         "alfresco/forms/controls/Select"], 
-        function(declare, InlineEditProperty, DojoSelect) {
+        function(declare, InlineEditProperty) {
 
    return declare([InlineEditProperty], {
 

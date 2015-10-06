@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,8 +25,9 @@
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/Toggle",
-        "alfresco/services/_PreferenceServiceTopicMixin"], 
-        function(declare, Toggle, _PreferenceServiceTopicMixin) {
+        "alfresco/services/_PreferenceServiceTopicMixin",
+        "dojo/_base/lang"], 
+        function(declare, Toggle, _PreferenceServiceTopicMixin, lang) {
 
    return declare([Toggle, _PreferenceServiceTopicMixin], {
       
@@ -52,7 +53,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default ""
+       * @default
        */
       onLabel: "",
       
@@ -60,7 +61,7 @@ define(["dojo/_base/declare",
        * The label to show when the toggle is on
        * @instance
        * @type {string} 
-       * @default "favourite.add.label"
+       * @default
        */
       offLabel: "favourite.add.label",
       
@@ -68,7 +69,7 @@ define(["dojo/_base/declare",
        * The tooltip to show when the toggle is on
        * @instance
        * @type {string}
-       * @default "favourite.remove.tooltip"
+       * @default
        */
       onTooltip: "favourite.remove.tooltip",
       
@@ -77,7 +78,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "favourite.add.tooltip"
+       * @default
        */
       offTooltip: "favourite.add.tooltip",
       
@@ -85,7 +86,7 @@ define(["dojo/_base/declare",
        * The CSS class to apply for the on display
        * @instance
        * @type {string}
-       * @default "favourite"
+       * @default
        */
       toggleClass: "favourite",
       
@@ -94,15 +95,55 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      postMixInProperties: function alfresco_renderers_Like__postMixInProperties() {
-         this.toggleOnTopic = (this.toggleOnTopic != null) ? this.toggleOnTopic : this.addFavouriteDocumentTopic;
-         this.toggleOnSuccessTopic = (this.toggleOnSuccessTopic != null) ? this.toggleOnSuccessTopic : this.addFavouriteDocumentSuccessTopic;
-         this.toggleOnFailureTopic = (this.toggleOnFailureTopic != null) ? this.toggleOnFailureTopic : this.addFavouriteDocumentFailureTopic;
-         this.toggleOffTopic = (this.toggleOffTopic != null) ? this.toggleOffTopic : this.removeFavouriteDocumentTopic;
-         this.toggleOffSuccessTopic = (this.toggleOffSuccessTopic != null) ? this.toggleOffSuccessTopic : this.removeFavouriteDocumentSuccessTopic;
-         this.toggleOffFailureTopic = (this.toggleOffFailureTopic != null) ? this.toggleOffFailureTopic : this.removeFavouriteDocumentFailureTopic;
-         
+      postMixInProperties: function alfresco_renderers_Favourite__postMixInProperties() {
+         this.toggleOnTopic = this.toggleOnTopic || this.addFavouriteDocumentTopic;
+         this.toggleOffTopic = this.toggleOffTopic || this.removeFavouriteDocumentTopic;
          this.inherited(arguments);
+      },
+
+      /**
+       * Extends the [inherted function]{@link module:alfresco/renderers/Toggle#postCreate} to
+       * create additional subscriptions to the [toggleOnSuccessTopic]{@link module:alfresco/renderers/Toggle#toggleOnSuccessTopic}
+       * and [toggleOffSuccessTopic]{@link module::alfresco/renderers/Toggle#toggleOffSuccessTopic} in order
+       * to track bulk adding and removing of favourites.
+       * 
+       * @instance
+       * @since 1.0.38
+       * @listens alfresco/renderers/Toggle#toggleOnSuccessTopic
+       * @listens alfresco/renderers/Toggle#toggleOffSuccessTopic
+       */
+      postCreate: function alfresco_renderers_Favourite__postCreate() {
+         this.inherited(arguments);
+         this.alfSubscribe(this.toggleOnSuccessTopic, lang.hitch(this, this.onBulkUpdate, true), true);
+         this.alfSubscribe(this.toggleOffSuccessTopic, lang.hitch(this, this.onBulkUpdate, false), true);
+      },
+
+      /**
+       * This function evaluates whether or not a bulk add or remove favourite operation effects the 
+       * Node rendered by the current instance and if so, calls the appropriate functions to update
+       * the rendering accordingly.
+       * 
+       * @param {boolean} add Indicates whether or not the bulk change was to add favourites
+       * @param {object}  payload The payload from the bulk update publication.
+       * @since 1.0.38
+       */
+      onBulkUpdate: function alfresco_renderers_Favourite__onBulkUpdate(add, payload) {
+         this.alfLog("log", "Favourites added", payload);
+         var updatedNodes = lang.getObject("requestConfig.updatedValue", false, payload);
+         var currentNodeRef = lang.getObject("node.nodeRef", false, this.currentItem);
+         if (updatedNodes && currentNodeRef && updatedNodes.indexOf(currentNodeRef) !== -1)
+         {
+            if (add)
+            {
+               this.renderToggledOn();
+               this.onToggleOnSuccess();
+            }
+            else
+            {
+               this.renderToggledOff();
+               this.onToggleOffSuccess();
+            }
+         }
       },
       
       /**
@@ -110,7 +151,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "isFavourite"
+       * @default
        */
       propertyToRender: "isFavourite"
    });

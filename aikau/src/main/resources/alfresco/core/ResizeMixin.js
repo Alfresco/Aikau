@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,24 +30,24 @@
  * @module alfresco/core/ResizeMixin
  * @author Dave Draper
  */
-define(["alfresco/core/_EventsMixin",
-        "dojo/_base/declare",
+define(["dojo/_base/declare",
+        "alfresco/core/_EventsMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/on",
         "dojo/dom"], 
-        function(_EventsMixin, declare, lang, on, dom) {
+        function( declare, _EventsMixin, topics, lang, on, dom) {
    
    return declare([_EventsMixin], {
       
       /**
        * The topic to use for publishing and subscribing to node resize events
        *
-       * @event
        * @instance
        * @type {string}
-       * @default "ALF_NODE_RESIZED"
+       * @default [NODE_RESIZED]{@link module:alfresco/core/topics#NODE_RESIZED}
        */
-      alfResizeNodeTopic: "ALF_NODE_RESIZED",
+      alfResizeNodeTopic: topics.NODE_RESIZED,
 
       /**
        * Publishes on a topic that indicates that the supplied node has been resized.
@@ -78,7 +78,7 @@ define(["alfresco/core/_EventsMixin",
          }
          else
          {
-            var scope = (resizeHandlerCallScope != null) ? resizeHandlerCallScope : this,
+            var scope = resizeHandlerCallScope || this,
                resizeListener = on(window, "resize", lang.hitch(scope, resizeHandler));
             if(typeof this.own === "function") { // If we're in a widget, use it to handle cleaning up the listener
                this.own(resizeListener);

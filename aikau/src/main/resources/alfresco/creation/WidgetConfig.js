@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "ALF_CONFIGURE_WIDGET"
+       * @default
        */
       configTopic: "ALF_CONFIGURE_WIDGET",
       
@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "ALF_CLEAR_CONFIGURE_WIDGET"
+       * @default
        */
       clearTopic: "ALF_CLEAR_CONFIGURE_WIDGET",
 
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default "ALF_SAVE_CONFIGURE_WIDGET"
+       * @default
        */
       saveTopic: "ALF_SAVE_CONFIGURE_WIDGET",
       

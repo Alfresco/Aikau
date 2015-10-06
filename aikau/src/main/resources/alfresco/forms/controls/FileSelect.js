@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -44,7 +44,7 @@ define(["alfresco/forms/controls/BaseFormControl",
       /**
        * @instance
        */
-      createFormControl: function alfresco_forms_controls_FileSelect__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_FileSelect__createFormControl(config, /*jshint unused:false*/ domNode) {
          return new FileInput(config);
       },
       
@@ -58,7 +58,7 @@ define(["alfresco/forms/controls/BaseFormControl",
       setupChangeEvents: function alfresco_forms_controls_FileSelect__setupChangeEvents() {
          if (this.wrappedWidget)
          {
-            this.wrappedWidget.on("change", lang.hitch(this, "onFilesSelected"));
+            this.wrappedWidget.on("change", lang.hitch(this, this.onFilesSelected));
          }
       },
 
@@ -68,7 +68,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       onFilesSelected: function alfresco_forms_controls_FileSelect__FileSelect(evt) {
          this.alfLog("log", "Files selected", evt, this);
-         this.formControlValueChange(this.name, null, this.wrappedWidget.getValue());
+         this.onValueChangeEvent(this.name, this.lastValue, this.wrappedWidget.getValue());
       }
    });
 });

@@ -21,63 +21,61 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
-        "require",
+        "intern/chai!assert",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
-   var browser;
-   
-   registerSuite({
-      name: "SemanticWrapperMixin Test",
+   registerSuite(function(){
+      var browser;
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SemanticWrapperMixin", "SemanticWrapperMixin Tests").end();
-      },
+      return {
+         name: "SemanticWrapperMixin Test",
 
-      beforeEach: function() {
-         browser.end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/SemanticWrapperMixin", "SemanticWrapperMixin Tests").end();
+         },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Test NO_WRAPPER is correct": function () {
-         return browser.findByCssSelector("#NO_WRAPPER > span.copyright > span.licenseHolder")
-            .getVisibleText()
-            .then(function (text) {
-               expect(text).to.equal("Licensed To: NO_WRAPPER licenseLabel", "The NO_WRAPPER dom must be incorrect");
-            });
-      },
 
-      "Test GOOD_WRAPPER is correct": function() {
-         return browser.findByCssSelector("#GOOD_WRAPPER > footer > span.copyright > span.licenseHolder")
-            .getVisibleText()
-            .then(function (text) {
-               expect(text).to.equal("Licensed To: GOOD_WRAPPER licenseLabel", "The GOOD_WRAPPER dom must be incorrect");
-            });
-      },
+         "Test NO_WRAPPER is correct": function () {
+            return browser.findByCssSelector("#NO_WRAPPER > span.copyright > span.licenseHolder")
+               .getVisibleText()
+               .then(function (text) {
+                  assert.equal(text, "Licensed To: NO_WRAPPER licenseLabel", "The NO_WRAPPER dom must be incorrect");
+               });
+         },
 
-      "Test BAD_WRAPPER is correct": function() {
-         return browser.findByCssSelector("#BAD_WRAPPER > span.copyright > span.licenseHolder")
-            .getVisibleText()
-            .then(function (text) {
-               expect(text).to.equal("Licensed To: BAD_WRAPPER licenseLabel", "The BAD_WRAPPER dom must be incorrect");
-            });
-      },
+         "Test GOOD_WRAPPER is correct": function() {
+            return browser.findByCssSelector("#GOOD_WRAPPER > footer > span.copyright > span.licenseHolder")
+               .getVisibleText()
+               .then(function (text) {
+                  assert.equal(text, "Licensed To: GOOD_WRAPPER licenseLabel", "The GOOD_WRAPPER dom must be incorrect");
+               });
+         },
 
-      "Test LEFT_AND_RIGHT_WRAPPER is correct": function() {
-         return browser.findByCssSelector("#LEFT_AND_RIGHT_WRAPPER > header > div > div.left-widgets")
-            .getVisibleText()
-            .then(function (text) {
-               expect(text).to.equal("This is a title with a semantic wrapper", "The LEFT_AND_RIGHT_WRAPPER dom must be incorrect");
-            });
-      },
+         "Test BAD_WRAPPER is correct": function() {
+            return browser.findByCssSelector("#BAD_WRAPPER > span.copyright > span.licenseHolder")
+               .getVisibleText()
+               .then(function (text) {
+                  assert.equal(text, "Licensed To: BAD_WRAPPER licenseLabel", "The BAD_WRAPPER dom must be incorrect");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
+         "Test LEFT_AND_RIGHT_WRAPPER is correct": function() {
+            return browser.findByCssSelector("#LEFT_AND_RIGHT_WRAPPER > header > div > div.alfresco-layout-LeftAndRight__left")
+               .getVisibleText()
+               .then(function (text) {
+                  assert.equal(text, "This is a title with a semantic wrapper", "The LEFT_AND_RIGHT_WRAPPER dom must be incorrect");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

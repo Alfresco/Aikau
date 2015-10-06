@@ -37,7 +37,7 @@ define(["dojo/_base/declare"],
        * @event dynamicallyAddWidgetTopic
        * @instance
        * @type {string}
-       * @default "ALF_DYNAMICALLY_ADD_WIDGET"
+       * @default
        */
       dynamicallyAddWidgetTopic: "ALF_DYNAMICALLY_ADD_WIDGET"
    });

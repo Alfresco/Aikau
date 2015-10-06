@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       allowedActions: null,
 
@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {array}
-       * @default null
+       * @default
        */
       allowedActionsString: null,
 
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default null
+       * @default
        */
       customActions: null,
 
@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       filterActions: false,
 
@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       mergeActions: false,
 
@@ -153,10 +153,25 @@ define(["dojo/_base/declare",
        */
       widgetsForActions: [
          {
+            name: "alfresco/renderers/actions/DownloadAsZip"
+         },
+         {
             name: "alfresco/renderers/actions/UploadNewVersion"
          },
          {
+            name: "alfresco/renderers/actions/CopyTo"
+         },
+         {
+            name: "alfresco/renderers/actions/Delete"
+         },
+         {
             name: "alfresco/renderers/actions/ManageAspects"
+         },
+         {
+            name: "alfresco/renderers/actions/MoveTo"
+         },
+         {
+            name: "alfresco/renderers/actions/StartWorkflow"
          }
       ],
 

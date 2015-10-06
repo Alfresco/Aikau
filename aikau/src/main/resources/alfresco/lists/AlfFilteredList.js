@@ -55,6 +55,17 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfFilteredList.css"}],
 
       /**
+       * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       * to create the defined filters to the resulting callback in [allWidgetsProcessed]{@link module:alfresco/lists/AlfFilteredList#allWidgetsProcessed}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      filterWidgetsMappingId: "FILTERS",
+
+      /**
        * Called after properties mixed into instance
        *
        * @instance
@@ -72,17 +83,51 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_lists_AlfFilteredList__postCreate() {
          domClass.add(this.domNode, "alfresco-lists-AlfFilteredList");
          this.filtersNode = domConstruct.create("div", {}, this.domNode, "first");
+
+         // We need a promise here to address the scenario where XHR requests are made for filtering widgets
+         // that have not had there dependencies correctly analysed by Surf. This is the case for the ComboBox
+         // when used in a non-standard locale as language specific validation.js and common.js files are requested.
+         // Using a promise ensures that filters are only used when they're actually available. See AKU-559 for details
          if (this.widgetsForFilters)
          {
-            // Process the widget model for the filtered widgets...
             var filtersModel = lang.clone(this.widgetsForFilters);
             this.processObject(["processInstanceTokens"], filtersModel);
-            this.processWidgets(filtersModel, this.filtersNode);
+            this.processWidgets(filtersModel, this.filtersNode, this.filterWidgetsMappingId);
+         }
+         else
+         {
+            this._filterWidgets = {};
+         }
+         this.inherited(arguments);
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#allWidgetsProcessed}
+       * to handle differentiate between filter widget and view widget post creation processing.
+       *
+       * @instance
+       * @param {object[]} widgets The widgets that have been created
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       * @since 1.0.34
+       */
+      allWidgetsProcessed: function alfresco_lists_AlfFilteredList__allWidgetsProcessed(widgets, processWidgetsId) {
+         if (processWidgetsId === this.filterWidgetsMappingId)
+         {
+            this._storeFilterWidgets(widgets);
+            this._updateFilterFieldsFromHash();
 
             // Setup the filtering topics based on the filter widgets configured...
             array.forEach(this.widgetsForFilters, this.setupFilteringTopics, this);
+
+            // Create the subscriptions for the filters once created...
+            this.createFilterSubscriptions();
          }
-         this.inherited(arguments);
+         else
+         {
+            // Only perform the inherited function (e.g. to processViews) when not processing filters
+            this.registerViews(widgets);
+            this.completeListSetup();
+         }
       },
 
       /**
@@ -105,7 +150,6 @@ define(["dojo/_base/declare",
        * @param {object} payload The publication topic
        */
       onHashChange: function alfresco_lists_AlfFilteredList__onHashChange( /*jshint unused:false*/ payload) {
-
          // Only do this when we are mirroring the filters in the hash
          if (this.mapHashVarsToPayload) {
 
@@ -132,28 +176,15 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Widget has started
-       *
-       * @instance
-       * @override
-       */
-      startup: function alfresco_lists_AlfFilteredList__startup() {
-         this.inherited(arguments);
-         this._storeFilterWidgets();
-         this._updateFilterFieldsFromHash();
-      },
-
-      /**
        * Build a collection of filter widgets as a property on this instance
        *
        * @instance
        */
-      _storeFilterWidgets: function alfresco_lists_AlfFilteredList___storeFilterWidgets() {
-         var childWidgets = registry.findWidgets(this.domNode);
+      _storeFilterWidgets: function alfresco_lists_AlfFilteredList___storeFilterWidgets(widgets) {
          this._filterWidgets = {};
          array.forEach(this.widgetsForFilters, function(filterDef) {
             var filterName = filterDef.config.name;
-            this._filterWidgets[filterName] = array.filter(childWidgets, function(childWidget) {
+            this._filterWidgets[filterName] = array.filter(widgets, function(childWidget) {
                return childWidget.name === filterName;
             })[0];
          }, this);
@@ -166,7 +197,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       _updateFilterFieldsFromHash: function alfresco_lists_AlfFilteredList___updateFilterFieldsFromHash() {
-
          // Get the hash
          var currHash = hashUtils.getHash();
 
@@ -201,8 +231,7 @@ define(["dojo/_base/declare",
             }
 
             // Set the widget value
-            widget.setValue && widget.setValue(filterValue);
-
+            widget && widget.setValue && widget.setValue(filterValue);
          }, this);
       },
 
@@ -217,7 +246,8 @@ define(["dojo/_base/declare",
          if (filter && filter.config && filter.config.fieldId)
          {
             this.filteringTopics.push("_valueChangeOf_" + filter.config.fieldId);
-            if (this.mapHashVarsToPayload) {
+            if (this.mapHashVarsToPayload) 
+            {
                this.hashVarsForUpdate.push(filter.config.name);
             }
          }
@@ -242,7 +272,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "name"
+       * @default
        */
       filterName: "name",
 
@@ -253,7 +283,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "filtered.list.filter.label"
+       * @default
        */
       filterLabel: "filtered.list.filter.label",
 
@@ -264,7 +294,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "filtered.list.filter.description"
+       * @default
        */
       filterDescription: "filtered.list.filter.description",
 
@@ -275,7 +305,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "filtered.list.filter.placeholder"
+       * @default
        */
       filterPlaceholder: "filtered.list.filter.placeholder",
 
@@ -286,7 +316,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "filtered.list.filter.unitsLabel"
+       * @default
        */
       filterUnitsLabel: "filtered.list.filter.unitsLabel",
 

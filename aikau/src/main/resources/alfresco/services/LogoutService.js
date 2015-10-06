@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
        */
       doLogout: function alfresco_services_LogoutService__doLogout() {
          this.serviceXhr({
-            url: AlfConstants.URL_PAGECONTEXT + "dologout",
+            url: AlfConstants.URL_SERVICECONTEXT + "dologout",
             method: "POST",
             successCallback: this.reloadPage,
             callbackScope: this

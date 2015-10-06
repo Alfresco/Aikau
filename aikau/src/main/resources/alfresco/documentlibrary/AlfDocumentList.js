@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showFolders: true,
 
@@ -80,14 +80,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default true
+       * @default
        */
       showDocuments: true,
 
       /**
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       currentFilter: null,
 
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {String}
-       * @default "ALF_DOCLIST_PARENT_NAV"
+       * @default
        */
       parentNavTopic: "ALF_DOCLIST_PARENT_NAV",
 
@@ -141,7 +141,7 @@ define(["dojo/_base/declare",
        * @instance
        * @listens ALF_DOCUMENTLIST_PATH_CHANGED
        * @listens ALF_DOCUMENTLIST_CATEGORY_CHANGED
-       * @listens ALF_DOCUMENTLIST_TAG_CHANGED
+       * @listens module:alfresco/core/topics#DOCUMENTLIST_TAG_CHANGED
        * @listens filterSelectionTopic
        * @listens documentSelectionTopic
        * @listens parentNavTopic
@@ -150,7 +150,7 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          this.alfSubscribe(topics.PATH_CHANGED, lang.hitch(this, this.onPathChanged));
          this.alfSubscribe("ALF_DOCUMENTLIST_CATEGORY_CHANGED", lang.hitch(this, this.onCategoryChanged));
-         this.alfSubscribe("ALF_DOCUMENTLIST_TAG_CHANGED", lang.hitch(this, this.onTagChanged));
+         this.alfSubscribe(this.docListTagChangedTopic, lang.hitch(this, this.onTagChanged));
          this.alfSubscribe(this.filterSelectionTopic, lang.hitch(this, this.onFilterChanged));
          this.alfSubscribe(this.documentSelectionTopic, lang.hitch(this, this.onDocumentSelection));
          this.alfSubscribe(this.showFoldersTopic, lang.hitch(this, this.onShowFolders));
@@ -330,7 +330,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {string}
-       * @default "ALF_DOCLIST_NAV"
+       * @default
        */
       linkClickTopic: "ALF_DOCLIST_NAV",
 
@@ -457,7 +457,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       rawData: false,
 

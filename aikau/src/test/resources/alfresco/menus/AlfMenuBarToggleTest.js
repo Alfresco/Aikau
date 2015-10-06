@@ -33,8 +33,10 @@ define(["intern!object",
         function (registerSuite, expect, assert, require, TestCommon, keys) {
 
    var alfPause = 200;
+registerSuite(function(){
    var browser;
-   registerSuite({
+
+   return {
       name: "AlfMenuBarToggle Tests (Mouse)",
 
       setup: function() {
@@ -146,10 +148,14 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 
 
-   registerSuite({
+registerSuite(function(){
+   var browser;
+
+   return {
       name: "AlfMenuBarToggle Tests (Keyboard)",
 
       setup: function() {
@@ -302,5 +308,6 @@ define(["intern!object",
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
+   };
    });
 });

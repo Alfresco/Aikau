@@ -54,7 +54,7 @@ define(["alfresco/layout/HorizontalWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       widgetMarginLeft: 0,
 
@@ -63,7 +63,7 @@ define(["alfresco/layout/HorizontalWidgets",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       widgetMarginRight: 30,
 
@@ -73,7 +73,7 @@ define(["alfresco/layout/HorizontalWidgets",
        *
        * @instance
        * @type {string}
-       * @default null
+       * @default
        */
       title: null,
 

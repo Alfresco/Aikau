@@ -32,8 +32,9 @@
  * @author Kevin Roast
  */
 define(["dojo/_base/declare",
+        "alfresco/core/topics",
         "alfresco/core/Core"], 
-        function(declare, AlfCore) {
+        function(declare, topics, AlfCore) {
    
    return declare([AlfCore], {
 
@@ -49,7 +50,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       startedTextExtraction: false,
 
@@ -76,7 +77,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       active: false,
 
@@ -114,7 +115,7 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
-       * @default null
+       * @default
        */
       resumePageIdx: null,
 
@@ -122,7 +123,7 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
-       * @default null
+       * @default
        */
       state: null,
 
@@ -131,7 +132,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       dirtyMatch: false,
 
@@ -140,7 +141,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {number}
-       * @default null
+       * @default
        */
       findTimeout: null,
 
@@ -149,7 +150,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object}
-       * @default null
+       * @default
        */
       pdfPageSource: null,
 
@@ -158,7 +159,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {boolean}
-       * @default false
+       * @default
        */
       integratedFind: false,
 
@@ -245,6 +246,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       extractText: function alfresco_preview_PdfJs_PDFFindController__extractText() {
+         /*jshint loopfunc:true*/
          if (this.startedTextExtraction) {
             return;
          }
@@ -336,6 +338,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       nextMatch: function alfresco_preview_PdfJs_PDFFindController__nextMatch() {
+         /*jshint loopfunc:true,maxstatements:false*/
          var previous = this.state.findPrevious;
          // ALFRESCO - changed .page to pageNum
          var currentPageIndex = this.pdfPageSource.pageNum - 1;
@@ -514,6 +517,7 @@ define(["dojo/_base/declare",
        *
        *
        * @instance
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
       updateUIState: function alfresco_preview_PdfJs_PDFFindController__updateUIState(state, previous) {
          var findMsg = "";
@@ -554,7 +558,7 @@ define(["dojo/_base/declare",
          }
          
          // This will require that the alfresco/service/NotificationService is on the page
-         this.alfPublish("ALF_DISPLAY_NOTIFICATION", {
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: findMsg
          }, true);
       }
