@@ -163,8 +163,8 @@ define(["dojo/_base/declare",
       publishPayloadModifiers: null,
 
       /**
-       * The type of payload to generate. Fixed set of default values defined by
-       * [PayloadTypes enum]{@link module:alfresco/renderers/_PublishPayloadMixin#PayloadTypes}
+       * The type of payload to generate. When specified, should comprise one or more of the default values defined by
+       * [the PayloadTypes enum]{@link module:alfresco/renderers/_PublishPayloadMixin#PayloadTypes}
        *
        * @instance
        * @type {module:alfresco/renderers/_PublishPayloadMixin#PayloadTypes}
