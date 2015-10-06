@@ -35,6 +35,15 @@ define(["dojo/_base/declare",
    return declare(null, {
 
       /**
+       * The current item to act upon
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      currentItem: null,
+
+      /**
        * This utility function will convert the value "___AlfCurrentItem" into the actual
        * currentItem object. It will return the supplied value if it is anything else.
        *

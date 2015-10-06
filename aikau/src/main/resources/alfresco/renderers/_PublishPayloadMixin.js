@@ -101,6 +101,7 @@
  * @extends alfresco/core/ObjectProcessingMixin
  * @auther Dave Draper
  * @author Richard Smith
+ * @author Martin Doyle
  */
 define(["dojo/_base/declare",
         "alfresco/core/ObjectProcessingMixin",
@@ -109,6 +110,20 @@ define(["dojo/_base/declare",
         function(declare, ObjectProcessingMixin, lang, ObjectTypeUtils) {
 
    return declare([ObjectProcessingMixin], {
+
+      /**
+       * The default payload types
+       *
+       * @instance
+       * @readonly
+       * @enum {string}
+       */
+      PayloadTypes: {
+         CONFIGURED: "CONFIGURED",
+         CURRENT_ITEM: "CURRENT_ITEM",
+         PROCESS: "PROCESS",
+         BUILD: "BUILD"
+      },
 
       /**
        * Whether to publish the topic globally
@@ -127,6 +142,35 @@ define(["dojo/_base/declare",
        * @default
        */
       publishPayload: null,
+
+      /**
+       * Whether to mix the current item into the generated payload
+       *
+       * @instance 
+       * @type {boolean}
+       * @default
+       */
+      publishPayloadItemMixin: false,
+
+      /**
+       * An array of modifier functions to apply when the type is
+       * [PROCESS]{@link module:alfresco/renderers/_PublishPayloadMixin#PayloadTypes}
+       *
+       * @instance
+       * @type {string[]}
+       * @default
+       */
+      publishPayloadModifiers: null,
+
+      /**
+       * The type of payload to generate. Fixed set of default values defined by
+       * [PayloadTypes enum]{@link module:alfresco/renderers/_PublishPayloadMixin#PayloadTypes}
+       *
+       * @instance
+       * @type {module:alfresco/renderers/_PublishPayloadMixin#PayloadTypes}
+       * @default
+       */
+      publishPayloadType: null,
 
       /**
        * Whether to publish the topic using the parent pubSubScope
