@@ -45,6 +45,16 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/SiteService.properties"}],
 
       /**
+       * The standard landing page for a site
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.38
+       */
+      siteLandingPage: "/dashboard",
+
+      /**
        * Sets up the subscriptions for the SiteService
        *
        * @instance
@@ -305,22 +315,24 @@ define(["dojo/_base/declare",
        * Handles requesting that a site be made a favourite.
        *
        * @instance
-       * @param {config} config The payload containing the details of the site to add to the favourites list
+       * @param {object} payload The payload containing the details of the site to add to the favourites list
        */
-      addSiteAsFavourite: function alfresco_services_SiteService__addSiteAsFavourite(config) {
-         if (config.site && config.user)
+      addSiteAsFavourite: function alfresco_services_SiteService__addSiteAsFavourite(payload) {
+         if (payload.site && payload.user)
          {
             // Set up the favourites information...
-            var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(config.user) + "/preferences",
+            var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(payload.user) + "/preferences",
                 favObj = {org:{alfresco:{share:{sites:{favourites:{}}}}}};
-            favObj.org.alfresco.share.sites.favourites[config.site] = true;
+            favObj.org.alfresco.share.sites.favourites[payload.site] = true;
             this.serviceXhr({url : url,
-                             site: config.site,
-                             user: config.user,
+                             site: payload.site,
+                             user: payload.user,
+                             title: payload.title,
                              data: favObj,
                              method: "POST",
                              successCallback: this.favouriteSiteAdded,
-                             callbackScope: this});
+                             callbackScope: this,
+                             alfResponseScope: payload.alfResponseScope});
          }
          else
          {
@@ -339,31 +351,37 @@ define(["dojo/_base/declare",
        */
       favouriteSiteAdded: function alfresco_services_SiteService__favouriteSiteAdded(response, originalRequestConfig) {
          this.alfLog("log", "Favourite Site Added Successfully", response, originalRequestConfig);
-         this.alfPublish("ALF_FAVOURITE_SITE_ADDED", { site: originalRequestConfig.site, user: originalRequestConfig.user});
+         this.alfPublish("ALF_FAVOURITE_SITE_ADDED", {
+            site: originalRequestConfig.site,
+            user: originalRequestConfig.user,
+            title: originalRequestConfig.title
+         }, false, false, originalRequestConfig.alfResponseScope);
       },
 
       /**
        * Handles requesting that a site be removed from favourites
        *
        * @instance
-       * @param {config} config The payload containing the details of the site to remove from the favourites list
+       * @param {object} payload The payload containing the details of the site to remove from the favourites list
        */
-      removeSiteFromFavourites: function alfresco_services_SiteService__removeSiteFromFavourites(config) {
-         if (config.site && config.user)
+      removeSiteFromFavourites: function alfresco_services_SiteService__removeSiteFromFavourites(payload) {
+         if (payload.site && payload.user)
          {
             // Set up the favourites information...
-            var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(config.user) + "/preferences?pf=org.alfresco.share.sites.favourites." + config.site;
+            var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(payload.user) + "/preferences?pf=org.alfresco.share.sites.favourites." + payload.site;
             this.serviceXhr({url : url,
-                             site: config.site,
-                             user: config.user,
+                             site: payload.site,
+                             user: payload.user,
+                             title: payload.title,
                              method: "DELETE",
                              successCallback: this.favouriteSiteRemoved,
-                             callbackScope: this});
+                             callbackScope: this,
+                             alfResponseScope: payload.alfResponseScope});
          }
          else
          {
             // Handle error conditions...
-            this.alfLog("error", "A request to remove a site from the favourites list but either the site or user was not specified", config);
+            this.alfLog("error", "A request to remove a site from the favourites list but either the site or user was not specified", payload);
          }
       },
 
@@ -377,7 +395,11 @@ define(["dojo/_base/declare",
        */
       favouriteSiteRemoved: function alfresco_services_SiteService_favouriteSiteRemoved(response, originalRequestConfig) {
          this.alfLog("log", "Favourite Site Removed Successfully", response, originalRequestConfig);
-         this.alfPublish("ALF_FAVOURITE_SITE_REMOVED", { site: originalRequestConfig.site, user: originalRequestConfig.user});
+         this.alfPublish("ALF_FAVOURITE_SITE_REMOVED", {
+            site: originalRequestConfig.site,
+            user: originalRequestConfig.user,
+            title: originalRequestConfig.title
+         }, false, false, originalRequestConfig.alfResponseScope);
       },
 
       /**
@@ -493,7 +515,7 @@ define(["dojo/_base/declare",
                      label: this.message("button.leave-site.confirm-label"),
                      publishTopic: "ALF_NAVIGATE_TO_PAGE",
                      publishPayload: {
-                        url: "user/" + originalRequestConfig.user + "/dashboard",
+                        url: "user/" + originalRequestConfig.user + this.siteLandingPage.replace(/^\/*/, "/"),
                         type: "PAGE_RELATIVE",
                         target: "CURRENT"
                      },
@@ -740,7 +762,7 @@ define(["dojo/_base/declare",
        */
       leaveSiteSuccess: function alfresco_services_SiteService__leaveSiteSuccess(response, requestConfig) {
          this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-            url: "user/" + requestConfig.user + "/dashboard",
+            url: "user/" + requestConfig.user + this.siteLandingPage.replace(/^\/*/, "/"),
             type: "PAGE_RELATIVE",
             target: "CURRENT"
          });

@@ -115,6 +115,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @listens module:alfresco/core/topics#TAG_QUERY
+       * @event
        */
       tagQueryTopic: topics.TAG_QUERY,
 
@@ -122,22 +124,16 @@ define(["dojo/_base/declare",
        * Called immediately after instantiation and before any processing
        * 
        * @instance
-       * @fires module:alfresco/core/topics#TAG_QUERY
+       * @listens module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentTaggedTopic
        */
       postMixInProperties: function alfresco_documentlibrary_AlfTagFilters__postMixInProperties() {
          this.inherited(arguments);
          
          // Subscribe to publications about documents being tagged/untagged...
          this.alfSubscribe(this.documentTaggedTopic, lang.hitch(this, this.onDocumentTagged));
-         
+
          // Make a request to get the initial set of tags for the current location...
-         this.alfServicePublish(this.tagQueryTopic, {
-            callback: this.onTagQueryResults,
-            callbackScope: this,
-            siteId: this.siteId,
-            containerId: this.containerId,
-            rootNode: this.rootNode
-         });
+         this.requestTags();
       },
       
       /**
@@ -149,28 +145,55 @@ define(["dojo/_base/declare",
          // Create the tags...
          if (response && ObjectTypeUtils.isArray(response.tags))
          {
-            var oldTags = registry.findWidgets(this.contentNode);
-            array.forEach(oldTags, lang.hitch(this, "clearTags"));
-            array.forEach(response.tags, lang.hitch(this, "createTagFilter"));
+            this.clearAllTags();
+            array.forEach(response.tags, this.createTagFilter, this);
          }
          else
          {
             this.alfLog("warn", "A request was made to generate filter tag links, but no 'tags' array attribute was provided", response, originalRequestConfig);
          }
       },
-      
+
+      /**
+       * Request the tags for this tags list
+       *
+       * @instance
+       * @fires module:alfresco/documentlibrary/AlfTagFilters#tagQueryTopic
+       */
+      requestTags: function alfresco_documentlibrary_AlfTagFilters__requestTags(){
+         this.alfServicePublish(this.tagQueryTopic, {
+            callback: this.onTagQueryResults,
+            callbackScope: this,
+            siteId: this.siteId,
+            containerId: this.containerId,
+            rootNode: this.rootNode
+         });
+      },
+
       /**
        * Destroys the supplied tag widget.
-       * 
+       *
        * @instance
        * @param {object} widget The widget to destroy
        * @param {number} index The index of the widget
+       * @deprecated Since 1.0.38 - use [clearAllTags]{@link module:alfresco/documentlibrary/AlfTagFilters#clearAllTags} instead.
        */
       clearTags: function alfresco_documentlibrary_AlfTagFilters__clearTags(widget, /*jshint unused:false*/ index) {
-         if (typeof widget.destroy === "function")
-         {
+         if (typeof widget.destroy === "function") {
             widget.destroy();
          }
+      },
+      
+      /**
+       * Clears the current tags
+       * 
+       * @instance
+       */
+      clearAllTags: function alfresco_documentlibrary_AlfTagFilters__clearAllTags() {
+         var oldTags = registry.findWidgets(this.contentNode);
+         array.forEach(oldTags, function(tagWidget) {
+            tagWidget.destroy();
+         });
       },
 
       /**
@@ -212,12 +235,14 @@ define(["dojo/_base/declare",
       currentTagFilters: null,
       
       /**
-       * Handles documents being tagged and creates a filter for the tag.
+       * Handles documents being tagged and recreates the tags list
        * 
        * @instance
-       * @param {object} payload
+       * @param {object} payload The publish payload
        */
       onDocumentTagged: function alfresco_documentlibrary_AlfTagFilters__onDocumentTagged(/*jshint unused:false*/ payload) {
+         this.clearAllTags();
+         this.requestTags();
       },
       
       /**

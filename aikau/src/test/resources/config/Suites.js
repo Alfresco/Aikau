@@ -32,10 +32,13 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
-      "src/test/resources/alfresco/lists/AlfHashListTest",
-      "src/test/resources/alfresco/lists/AlfSortablePaginatedListTest",
-      "src/test/resources/alfresco/search/SearchSuggestionsTest"
+      "src/test/resources/alfresco/search/AlfSearchResultTest"
+
+      // THESE SITES REGULARLY FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
+      // "src/test/resources/alfresco/dnd/FormCreationTest",
+      // "src/test/resources/alfresco/layout/AlfTabContainerTest",
+      // "src/test/resources/alfresco/preview/PdfJsPreviewTest"
+      // "src/test/resources/alfresco/search/SearchSuggestionsTest",
    ],
 
    /**
@@ -101,6 +104,7 @@ define({
       "src/test/resources/alfresco/forms/ControlRowTest",
       "src/test/resources/alfresco/forms/CrudFormTest",
       "src/test/resources/alfresco/forms/DynamicFormTest",
+      "src/test/resources/alfresco/forms/FormFieldFocusOrderTest",
       "src/test/resources/alfresco/forms/FormWarningsTest",
       "src/test/resources/alfresco/forms/FormsTest",
       "src/test/resources/alfresco/forms/FormValidationTest",
@@ -208,6 +212,7 @@ define({
       "src/test/resources/alfresco/renderers/IndicatorsTest",
       "src/test/resources/alfresco/renderers/InlineEditPropertyLinkTest",
       "src/test/resources/alfresco/renderers/InlineEditPropertyTest",
+      "src/test/resources/alfresco/renderers/MultiFavouriteTest",
       "src/test/resources/alfresco/renderers/ProgressTest",
       "src/test/resources/alfresco/renderers/PropertyLinkTest",
       "src/test/resources/alfresco/renderers/PropertyTest",
@@ -245,7 +250,7 @@ define({
       "src/test/resources/alfresco/services/ServiceFilteringTest",
       "src/test/resources/alfresco/services/ServiceRegistryTest",
 
-      // "src/test/resources/alfresco/services/SiteServiceTest", - NO TESTS IN THIS SUITE THAT DO ANYTHING!
+      "src/test/resources/alfresco/services/SiteServiceTest",
       "src/test/resources/alfresco/services/UserServiceTest",
 
       "src/test/resources/alfresco/services/actions/CopyMoveTest",

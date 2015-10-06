@@ -9,7 +9,7 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/DocumentService"
    ],
    widgets:[
       {
@@ -19,7 +19,7 @@ model.jsonModel = {
             currentData: {
                items: [
                   {
-                     nodeRef: "dummy://nodeRef/1",
+                     nodeRef: "workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339",
                      type: "folder",
                      name: "test1 & test2",
                      displayName: "Normal result",
@@ -232,12 +232,39 @@ model.jsonModel = {
             ],
             widgets:[
                {
+                  id: "SR",
                   name: "alfresco/search/AlfSearchResult",
                   config: {
-                     pubSubScope: "AlfSearchResultScope"
+                     siteLandingPage: "landing",
+                     pubSubScope: "AlfSearchResultScope",
+                     mergeActions: true,
+                     additionalDocumentAndFolderActions: [
+                        "CUSTOM3"
+                     ],
+                     customActions: [
+                        {
+                           id: "CUSTOM3",
+                           label: "Custom Action 3",
+                           icon: "document-delete",
+                           index: "10",
+                           publishTopic: "DELETE_ACTION_TOPIC",
+                           type: "javascript"
+                        }
+                     ],
+                     widgetsForActions: [
+                        {
+                           name: "alfresco/renderers/actions/ManageAspects"
+                        }
+                     ]
                   }
                }
             ]
+            
+         }
+      },
+      {
+         name: "aikauTesting/mockservices/PdfJsMockXhr",
+         config: {
             
          }
       },

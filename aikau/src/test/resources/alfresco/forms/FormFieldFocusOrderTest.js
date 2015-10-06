@@ -18,43 +18,35 @@
  */
 
 /**
- * This test uses a MockXhr service to test the site service responds as required.
- * 
- * @author Martin Doyle
+ * @author Dave Draper
  */
-define(["alfresco/TestCommon", 
-        "intern!object", 
-        "intern/chai!assert"], 
-        function(TestCommon, registerSuite, assert) {
+define(["intern!object",
+        "intern/chai!assert",
+        "alfresco/TestCommon"], 
+        function (registerSuite, assert, TestCommon) {
 
-   registerSuite(function() {
+   registerSuite(function(){
       var browser;
 
       return {
-         name: "SiteService Tests",
+         name: "Form Field Focus Order Tests",
 
          setup: function() {
             browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/SiteService", "SiteService Tests");
+            return TestCommon.loadTestWebScript(this.remote, "/FormFieldFocusOrder", "Form Field Focus Order Test").end();
          },
 
          beforeEach: function() {
             browser.end();
          },
 
-         "Leave site and confirm landing page override works": function(){
-            return browser.findById("LEAVE_SITE")
+         "Check first form field is focused": function() {
+            return browser.findById("CREATE_DIALOG_FORM_label")
                .click()
-               .end()
-
-            .findByCssSelector("#ALF_SITE_SERVICE_DIALOG.dialogDisplayed .dijitButton:first-child .dijitButtonNode")
-               .click()
-               .end()
-
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-               .then(function(payload){
-                  assert.propertyVal(payload, "url", "user/admin/dashboard", "Did not generate URL with correct landing page");
-               });
+            .end()
+            .findByCssSelector("#FD1.dialogDisplayed")
+            .end()
+            .findByCssSelector("#SELECT_CONTROL.dijitSelectFocused");
          },
 
          "Post Coverage Results": function() {

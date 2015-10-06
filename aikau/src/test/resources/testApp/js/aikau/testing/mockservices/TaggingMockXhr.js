@@ -49,6 +49,9 @@ define(["dojo/_base/declare",
             this.server.respondWith("GET",
                                     /\/proxy\/alfresco\/api\/forms\/picker\/category\/workspace\/SpacesStore\/tag:tag-root\/(.*)/,
                                     lang.hitch(this, this.getTags));
+            this.server.respondWith("POST",
+                                    /.*\/aikau\/proxy\/alfresco\/api\/node\/.*\/formprocessor/,
+                                    "OK");
          }
          catch(e)
          {

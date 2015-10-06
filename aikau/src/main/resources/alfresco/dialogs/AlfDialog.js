@@ -56,10 +56,11 @@ define(["dojo/_base/declare",
         "dojo/html",
         "dojo/aspect",
         "dojo/on",
+        "dojo/when",
         "jquery",
         "alfresco/layout/SimplePanel"], 
         function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, topics, _FocusMixin, lang, sniff, array,
-                 domConstruct, domClass, domStyle, domGeom, html, aspect, on, $) {
+                 domConstruct, domClass, domStyle, domGeom, html, aspect, on, when, $) {
    
    return declare([Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin], {
       
@@ -407,9 +408,9 @@ define(["dojo/_base/declare",
        */
       onWindowResize: function alfresco_dialogs_AlfDialog__onWindowResize() {
          var calculatedHeights = this.calculateHeights();
-         if (calculatedHeights.maxBodyHeight)
+         if (calculatedHeights.maxBodyHeight && !this.fullScreenMode)
          {
-            // Don't set a max-height when it's 0...
+            // Don't set a max-height when it's 0 or when in full screen mode...
             domStyle.set(this.bodyNode, {
                "max-height": calculatedHeights.maxBodyHeight + "px"
             });
@@ -447,6 +448,22 @@ define(["dojo/_base/declare",
          domClass.add(this.domNode, "dialogDisplayed");
          // TODO: We could optionally reveal the dialog after resizing to prevent any resizing jumping?
          
+         // See AKU-604 - ensure that first item in dialog is focused...
+         if (this._dialogPanel)
+         {
+            when(this._dialogPanel.getProcessedWidgets(), lang.hitch(this, function(children) {
+               array.some(children, function(child) {
+                  var focused = false;
+                  if (typeof child.focus === "function")
+                  {
+                     child.focus();
+                     focused = true;
+                  }
+                  return focused;
+               });
+            }));
+         }
+         
          // Publish the widgets ready
          this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
       },
@@ -468,6 +485,23 @@ define(["dojo/_base/declare",
                w: $(window).width() - dimensionAdjustment,
                h: $(window).height() - dimensionAdjustment
             }]);
+
+            // When in full screen mode it is also necessary to take care of the inner dimensions
+            // of the dialog...
+            var calculatedHeights = this.calculateHeights();
+            var containerHeight = $(this.containerNode).height();
+            var bodyHeight = containerHeight;
+            if (this.widgetsButtons)
+            {
+               // Dedebug height for the widgets buttons if present
+               bodyHeight = bodyHeight - 44;
+            }
+            $(this.bodyNode).height(bodyHeight);
+            $(this.bodyNode).css("max-height", bodyHeight); // NOTE: This is necessary to override the default max-height
+            if (this._dialogPanel)
+            {
+               $(this._dialogPanel.domNode).height(bodyHeight - calculatedHeights.paddingAdjustment);
+            }
          }
          else
          {

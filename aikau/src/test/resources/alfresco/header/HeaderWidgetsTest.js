@@ -229,48 +229,63 @@ registerSuite(function(){
    };
    });
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function() {
+      var browser;
 
-   return {
-      name: "Add Favourites Tests",
+      return {
+         name: "Add Favourites Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AddFavouriteSite", "Add Favourites Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/AddFavouriteSite", "Add Favourites Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Test add favourite request published": function() {
-         return browser.findByCssSelector("#SITES_MENU_text")
-            .click()
-            .sleep(500)
-            .end()
+         "Test add favourite request published": function() {
+            return browser.findByCssSelector("#SITES_MENU")
+               .click()
+               .end()
 
-         .findByCssSelector("#SITES_MENU_ADD_FAVOURITE_text")
-            .click()
-            .end()
+            // Open the favourites menu to do initial load
+            .findById("SITES_MENU_FAVOURITES")
+               .click()
+               .end()
 
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_ADD_FAVOURITE_SITE", "publish", "last"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Add favourite topic not published");
-            });
-      },
+            .findByCssSelector("#SITES_MENU_FAVOURITES_dropdown .alfresco-menus-AlfMenuItem")
+               .end()
 
-      "Test favourite request published correctly": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", "site1"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Favourite not added correctly");
-            });
-      },
+            .findByCssSelector("#SITES_MENU_ADD_FAVOURITE")
+               .click()
+               .end()
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+            .getLastPublish("ALF_ADD_FAVOURITE_SITE", true)
+               .then(function(payload) {
+                  assert.propertyVal(payload, "site", "site1");
+                  assert.propertyVal(payload, "title", "Site One");
+               })
+
+            .findByCssSelector("#SITES_MENU")
+               .click()
+               .end()
+
+            .findById("SITES_MENU_FAVOURITES")
+               .click()
+               .end()
+
+            .findByCssSelector("#SITES_MENU_FAVOURITES_dropdown .dijitMenuItemLabel [title=\"Site One\"]")
+               .getAttribute("href")
+               .then(function(href) {
+                  assert.equal(href, "/aikau/page/site/site1/wibble");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
 registerSuite(function(){

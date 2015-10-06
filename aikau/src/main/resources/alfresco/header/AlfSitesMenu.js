@@ -74,6 +74,16 @@ define(["dojo/_base/declare",
       currentSite: null,
 
       /**
+       * The standard landing page for a site
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.38
+       */
+      siteLandingPage: "/dashboard",
+
+      /**
        * Extend the default constructor to add subscriptions for handling favourites being added and removed.
        * 
        * @instance
@@ -541,7 +551,10 @@ define(["dojo/_base/declare",
        */
       _addMenuItem: function alfresco_header_AlfSitesMenu___addMenuItem(group, widget, index) {
          this.alfLog("log", "Adding menu item", widget, index, group);
-         var item = new AlfMenuItem(widget.config);
+         var item = this.createWidget({
+            name: "alfresco/header/AlfMenuItem",
+            config: widget.config
+         })
          group.addChild(item);
       },
       
@@ -564,31 +577,40 @@ define(["dojo/_base/declare",
             // Create and add the 'My Sites', 'Site Finder' and 'Create Site' menu items to it...
             if (this.showMySites)
             {
-               this.mySites = new AlfMenuItem({
-                  id: this.id + "_MY_SITES",
-                  label: this.mySitesLabel,
-                  iconClass: this.mySitesIconClass,
-                  targetUrl: "user/" + encodeURIComponent(AlfConstants.USERNAME) + "/user-sites"
+               this.mySites = this.createWidget({
+                  name: "alfresco/header/AlfMenuItem",
+                  config: {
+                     id: this.id + "_MY_SITES",
+                     label: this.mySitesLabel,
+                     iconClass: this.mySitesIconClass,
+                     targetUrl: "user/" + encodeURIComponent(AlfConstants.USERNAME) + "/user-sites"
+                  }
                });
                this.usefulGroup.addChild(this.mySites);
             }
             if (this.showSiteFinder)
             {
-               this.siteFinder = new AlfMenuItem({
-                  id: this.id + "_SITE_FINDER",
-                  label: this.siteFinderLabel,
-                  iconClass: this.siteFinderIconClass,
-                  targetUrl: "site-finder"
+               this.siteFinder = this.createWidget({
+                  name: "alfresco/header/AlfMenuItem",
+                  config: {
+                     id: this.id + "_SITE_FINDER",
+                     label: this.siteFinderLabel,
+                     iconClass: this.siteFinderIconClass,
+                     targetUrl: "site-finder"
+                  }
                });
                this.usefulGroup.addChild(this.siteFinder);
             }
             if (this.showCreateSite)
             {
-               this.createSite = new AlfMenuItem({
-                  id: this.id + "_CREATE_SITE",
-                  label: this.createSiteLabel,
-                  iconClass: this.createSiteIconClass,
-                  publishTopic: "ALF_CREATE_SITE"
+               this.createSite = this.createWidget({
+                  name: "alfresco/header/AlfMenuItem",
+                  config: {
+                     id: this.id + "_CREATE_SITE",
+                     label: this.createSiteLabel,
+                     iconClass: this.createSiteIconClass,
+                     publishTopic: "ALF_CREATE_SITE"
+                  }
                });
                this.usefulGroup.addChild(this.createSite);
             }
@@ -624,24 +646,35 @@ define(["dojo/_base/declare",
                {
                   // Always create the Add and Remove favourite menu items, but only add them if requested
                   // This is done so that we can add and remove the menu items easily upon request...
-                  this.addFavourite = new AlfMenuItem({
-                     id: this.id + "_ADD_FAVOURITE",
-                     label: this.addFavouriteLabel,
-                     iconClass: this.addFavouriteIconClass,
-                     publishTopic: "ALF_ADD_FAVOURITE_SITE",
-                     publishPayload: {
-                        site: this.currentSite,
-                        user: this.currentUser
+                  
+                  this.addFavourite = this.createWidget({
+                     name: "alfresco/header/AlfMenuItem",
+                     config: {
+                        id: this.id + "_ADD_FAVOURITE",
+                        label: this.addFavouriteLabel,
+                        iconClass: this.addFavouriteIconClass,
+                        publishTopic: "ALF_ADD_FAVOURITE_SITE",
+                        publishPayload: {
+                           site: this.currentSite,
+                           user: this.currentUser,
+                           title: this.currentSiteTitle
+                        },
+                        publishGlobal: true
                      }
                   });
-                  this.removeFavourite = new AlfMenuItem({
-                     id: this.id + "_REMOVE_FAVOURITE",
-                     label: this.removeFavouriteLabel,
-                     iconClass: this.removeFavouriteIconClass,
-                     publishTopic: "ALF_REMOVE_FAVOURITE_SITE",
-                     publishPayload: {
-                        site: this.currentSite,
-                        user: this.currentUser
+                  this.removeFavourite = this.createWidget({
+                     name: "alfresco/header/AlfMenuItem",
+                     config: {
+                        id: this.id + "_REMOVE_FAVOURITE",
+                        label: this.removeFavouriteLabel,
+                        iconClass: this.removeFavouriteIconClass,
+                        publishTopic: "ALF_REMOVE_FAVOURITE_SITE",
+                        publishPayload: {
+                           site: this.currentSite,
+                           user: this.currentUser,
+                           title: this.currentSiteTitle
+                        },
+                        publishGlobal: true
                      }
                   });
 
@@ -743,11 +776,14 @@ define(["dojo/_base/declare",
             this.favouritesList.removeChild(this._favouritesMessageItem);
          }
 
-         var newFavourite = new AlfMenuItem({
-            label: siteTitle,
-            iconClass: this.favouriteGroupIconClass,
-            targetUrl: "site/" + siteShortName + "/dashboard",
-            siteShortName: siteShortName
+         var newFavourite = this.createWidget({
+            name: "alfresco/header/AlfMenuItem",
+            config: {
+               label: siteTitle,
+               iconClass: this.favouriteGroupIconClass,
+               targetUrl: "site/" + siteShortName + this.siteLandingPage.replace(/^\/*/, "/"),
+               siteShortName: siteShortName
+            }
          });
          
          if (this.favouritesList)

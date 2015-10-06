@@ -269,6 +269,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default [topics.DOCUMENT_TAGGED]{@link module:alfresco/core/topics#DOCUMENT_TAGGED}
+       * @listens module:alfresco/core/topics#DOCUMENT_TAGGED
+       * @event
        */
       documentTaggedTopic: topics.DOCUMENT_TAGGED,
          

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Form field focus order</shortname>
+  <description>This page is used to verify that the correct form field is initially focused when the form is displayed</description>
+  <family>aikau-unit-tests</family>
+  <url>/FormFieldFocusOrder</url>
+</webscript>
