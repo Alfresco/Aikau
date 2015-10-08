@@ -64,7 +64,8 @@ define(["./config/Suites"],
 	      // Note: the config package is specifically for sauce labs (sl)
 	      packages: [
             { name: 'alfresco', location: './src/test/resources/alfresco' },
-            { name: 'config', location: './src/test/resources/config/sl' }
+            { name: 'config', location: './src/test/resources/config/sl' },
+            { name: "lodash", location: "./src/test/resources/lib/lodash", main: "lodash.compat" }
          ]
       },
 
