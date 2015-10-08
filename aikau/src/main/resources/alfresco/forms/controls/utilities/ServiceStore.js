@@ -117,8 +117,8 @@ define(["dojo/_base/declare",
             payload.alfResponseTopic = responseTopic;
             var resultsProperty = this.publishPayload.resultsProperty || "response";
             this._getOptionsHandle = [];
-            this._getOptionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onGetOptions", response, resultsProperty, id), true));
-            this.alfPublish(this.publishTopic, payload, true);
+            this._getOptionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onGetOptions", response, resultsProperty, id)));
+            this.alfPublish(this.publishTopic, payload, this.publishGlobal);
          }
          else if (this.fixed)
          {
@@ -300,9 +300,9 @@ define(["dojo/_base/declare",
          payload.query = query[this.queryAttribute || "name"];
 
          var optionsHandle = [];
-         optionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle), true));
-         optionsHandle.push(this.alfSubscribe(responseTopic, lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle), true));
-         this.alfPublish(this.publishTopic, payload, true);
+         optionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle)));
+         optionsHandle.push(this.alfSubscribe(responseTopic, lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle)));
+         this.alfPublish(this.publishTopic, payload, this.publishGlobal);
          return response;
       },
 

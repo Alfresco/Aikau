@@ -1,0 +1,124 @@
+{
+   "totalResults": 5,
+   "resultsTrimmed": false,
+   "parent":
+   {
+      "nodeRef": "workspace://SpacesStore/5f7d4b83-f1ae-4353-83bc-d9ed12ff9992",
+      "userAccess":
+      {
+         "create": true,
+         "edit": false,
+         "delete": false
+      }
+   },
+   "items":
+   [
+      {
+         "nodeRef": "workspace://SpacesStore/5abec47f-15dd-472a-8f86-6c74e5d7d6d2",
+         "name": "Presentation Collaboration",
+         "description": "Folders for uploading presentation abstracts, drafts, and other assets that are not intended to be published.",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": false,
+            "delete": false
+         },
+         "aspects": 
+         [
+            "sys:localized",
+            "cm:auditable",
+            "sync:syncSetMemberNode",
+            "sys:referenceable",
+            "cm:titled",
+            "sync:synced",
+            "cm:versionable"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/7323b890-fe60-40c5-b627-dc0e3e190d61",
+         "name": "Presentation Publications",
+         "description": "Assets put into these folders will be published on the public site for Alfresco Summit 2014.",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": false,
+            "delete": false
+         },
+         "aspects": 
+         [
+            "sys:localized",
+            "cm:auditable",
+            "sync:syncSetMemberNode",
+            "sys:referenceable",
+            "cm:titled",
+            "sync:synced",
+            "cm:versionable"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/df0264f6-3a01-4c23-8cd8-190968f63f8c",
+         "name": "Resources",
+         "description": "Resources for speakers to read and download.",
+         "hasChildren": false,
+         "userAccess":
+         {
+            "create": true,
+            "edit": false,
+            "delete": false
+         },
+         "aspects": 
+         [
+            "sys:localized",
+            "cm:auditable",
+            "sys:referenceable",
+            "cm:titled",
+            "cm:taggable"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/dd8398d2-450a-4ada-9db1-2c85b615a186",
+         "name": "Speaker Profiles",
+         "description": "Each speaker will have a folder for their bio, company bio, and photo. These will be manually moved to the public web site.",
+         "hasChildren": true,
+         "userAccess":
+         {
+            "create": true,
+            "edit": false,
+            "delete": false
+         },
+         "aspects": 
+         [
+            "sys:localized",
+            "cm:auditable",
+            "sync:syncSetMemberNode",
+            "sys:referenceable",
+            "cm:titled",
+            "sync:synced",
+            "cm:versionable",
+            "cm:taggable"
+         ]
+      },
+      {
+         "nodeRef": "workspace://SpacesStore/f112e5a4-dd1b-4b0c-9fdd-167e8384ccf9",
+         "name": "Sponsor Assets",
+         "description": "",
+         "hasChildren": false,
+         "userAccess":
+         {
+            "create": true,
+            "edit": false,
+            "delete": false
+         },
+         "aspects": 
+         [
+            "sys:localized",
+            "cm:auditable",
+            "sys:referenceable",
+            "cm:titled",
+            "cm:taggable"
+         ]
+      }
+   ]
+}

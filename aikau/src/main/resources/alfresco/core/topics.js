@@ -99,6 +99,34 @@ define([],function() {
       CLEAR_SELECTED_ITEMS: "ALF_CLEAR_SELECTED_ITEMS",
 
       /**
+       * This can be published to request authentication to the Cloud for the purposes of sync'ing
+       * Alfresco Repository content with the Alfresc Cloud.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       *
+       * @event
+       * @property {string} username The username to authenticate (this should be the e-mail address associated with the Cloud)
+       * @property {string} password The password to authenticate with
+       */
+      CLOUD_AUTHENTICATION_REQUEST: "ALF_CLOUD_AUTHENTICATION_REQUEST",
+
+      /**
+       * This can be published to indicate that authentication to the Cloud for the purposes of sync'ing
+       * Alfresco Repository content with the Alfresc Cloud has completed successfully.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       *
+       * @event
+       */
+      CLOUD_AUTHENTICATION_SUCCESS: "ALF_CLOUD_AUTHENTICATION_SUCCESS",
+
+      /**
        * This topic is published to launch the copying or moving of a node (or nodes) to another location.
        *
        * @instance
@@ -307,6 +335,48 @@ define([],function() {
       DISPLAY_PROMPT: "ALF_DISPLAY_PROMPT",
 
       /**
+       * This topic can be used to request Cloud specific paths to use in an
+       * [Tree form control]{@link module:alfresco/forms/controls/Tree}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * @event
+       * @property {string} remoteSiteId The site on the Cloud tenant from which to retrieve path data
+       * @property {string} remoteTenantId The tenant on the Cloud on which the remoteSiteId can be found
+       */
+      GET_CLOUD_PATH: "ALF_GET_CLOUD_PATH",
+
+      /**
+       * This topic can be used from a [form control]{@link module:alfresco/form/controls/BaseFormControl}
+       * such as a [Select]{@link module:alfresco/forms/controls/Select} as the optionsConfig.publishTopic
+       * for retrieving the sites on a specified Cloud tenant (network) that the user has access to.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * @event
+       * @property {string} username The username to request site data for
+       * @property {string} remoteTenantId The tenant on which to look for sites
+       */
+      GET_CLOUD_SITES: "ALF_GET_CLOUD_SITES",
+
+      /**
+       * This topic can be used from a [form control]{@link module:alfresco/form/controls/BaseFormControl}
+       * such as a [Select]{@link module:alfresco/forms/controls/Select} as the optionsConfig.publishTopic
+       * for retrieving the Cloud tenants (networks) that the user has access to.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * @event
+       */
+      GET_CLOUD_TENANTS: "ALF_GET_CLOUD_TENANTS",
+
+      /**
        * This topic can be published to request the data for a list of documents at the location
        * provided in the payload. It is typically handled by the 
        * [DocumentService]{@link module:alfresco/services/DocumentService}.
@@ -340,6 +410,21 @@ define([],function() {
       GET_DOCUMENT: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
 
       /**
+       * This topic can be published by a [form control]{@link module:alfresco/forms/controls/BaseFormControl}
+       * when it needs to retrieve options that can only be determined from other values containined within the
+       * form. This allows options to be dynamically requested that change as other form values are updated.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * 
+       * @event
+       * @property {string} publishTopic The topic publish the payload once augmented with the form value.
+       */
+      GET_FORM_VALUE_DEPENDENT_OPTIONS: "ALF_GET_FORM_VALUE_DEPENDENT_OPTIONS",
+
+      /**
        * This topic can be published to request a user preference be returned. It is typically handled by 
        * the [PreferenceService]{@link module:alfresco/services/PreferenceService}.
        *
@@ -354,6 +439,18 @@ define([],function() {
        * @property {object} callbackScope The scope with which to execute the callback
        */
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
+
+      /**
+       * Can be published to initialise the creation of a synchronization between an on-premise node and
+       * a location on the Alfresco Cloud.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * @event
+       */
+      INIT_CLOUD_SYNC: "ALF_INIT_CLOUD_SYNC",
 
       /**
        * This can be published to request that an action be performed on multiple selected items. The 
@@ -585,6 +682,27 @@ define([],function() {
        * @since 1.0.34
        */
       SET_PREFERENCE: "ALF_PREFERENCE_SET",
+
+      /**
+       * This topic is published in order to make the actual request to sync a node or nodes
+       * with the Cloud.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       */
+      SYNC_TO_CLOUD: "ALF_SYNC_TO_CLOUD",
+
+      /**
+       * This topic is published when a Cloud sync is successfully created.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       */
+      SYNC_TO_CLOUD_SUCCESS: "ALF_SYNC_TO_CLOUD_SUCCESS",
 
       /**
        * This topic is used to request tags for a node and its descendants. The payload must container either siteId and containerId, or rootNode.
