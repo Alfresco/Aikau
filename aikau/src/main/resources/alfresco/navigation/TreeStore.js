@@ -54,6 +54,7 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        * @since 1.0.39
+       * @event
        */
       publishTopic: null,
 
