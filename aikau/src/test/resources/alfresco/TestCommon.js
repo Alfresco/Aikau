@@ -33,8 +33,9 @@ define(["intern/dojo/node!fs",
         "intern/dojo/Promise",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/chai!assert",
-        "intern/dojo/node!leadfoot/keys"], 
-        function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert, keys) {
+        "intern/dojo/node!leadfoot/keys",
+        "lodash"], 
+        function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert, keys, _) {
    return {
 
       /**
