@@ -71,6 +71,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {boolean}
        * @default
+       * @since 1.0.39
        */
       hideTitle: false,
 

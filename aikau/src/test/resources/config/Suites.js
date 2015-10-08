@@ -150,6 +150,7 @@ define({
       "src/test/resources/alfresco/layout/AlfStackContainerTest",
       "src/test/resources/alfresco/layout/AlfTabContainerTest",
       "src/test/resources/alfresco/layout/BasicLayoutTest",
+      "src/test/resources/alfresco/layout/ClassicWindowTest",
       "src/test/resources/alfresco/layout/DynamicHorizontalLayoutTest",
       "src/test/resources/alfresco/layout/DynamicWidgetsTest",
       "src/test/resources/alfresco/layout/FixedHeaderFooterTest",

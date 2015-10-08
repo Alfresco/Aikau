@@ -27,5 +27,5 @@
 }
 
 .alfresco-forms-controls-TextBox.radius div.control div.dijitValidationTextBox {
-   border-radius: @standard-button-border-radius;
+   border-radius: @radius-textbox-border-radius;
 }
