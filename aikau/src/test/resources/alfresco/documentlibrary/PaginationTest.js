@@ -135,7 +135,7 @@ registerSuite(function(){
                assert.include(text, "aikau/proxy/alfresco/api/people/guest/preferences", "Page size preference not updated");
             })
          .end()
-         .findByCssSelector("tr.mx-row:nth-child(1) .mx-payload")
+         .findByCssSelector("tr.mx-row:nth-child(1) .mx-request-body")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "{\"org\":{\"alfresco\":{\"share\":{\"documentList\":{\"documentsPerPage\":50}}}}}", "Page size preference not with correct value");
