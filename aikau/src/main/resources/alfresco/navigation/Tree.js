@@ -153,6 +153,38 @@ define(["dojo/_base/declare",
       showRoot: true,
       
       /**
+       * This is a topic that can be published to request child data.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       */
+      childRequestPublishTopic: null,
+
+      /**
+       * This is the payload that will be published to request child data when a
+       * [publishTopic]{@link module:alfresco/navigation/Tree#childRequestPublishTopic} has been configured.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.39
+       */
+      childRequestPublishPayload: null,
+
+      /**
+       * Indicates whether or not requests to get child data will be published globally using the 
+       * [publishTopic]{@link module:alfresco/navigation/Tree#childRequestPublishTopic} that has been configured.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      childRequestPublishGlobal: true,
+
+      /**
        * @instance
        * @return {string} The root of the URL to use when requesting child nodes.
        */
@@ -166,7 +198,7 @@ define(["dojo/_base/declare",
          {
             url = AlfConstants.PROXY_URI + "slingshot/doclib/treenode/node/alfresco/company/home";
          }
-         else
+         else if (!this.childRequestPublishTopic)
          {
             this.alfLog("error", "Cannot create a tree without 'siteId' and 'containerId' or 'rootNode' attributes", this);
          }
@@ -211,6 +243,10 @@ define(["dojo/_base/declare",
 
          // Create a new tree store using the the siteId as part of the URL
          this.treeStore = new TreeStore({
+            publishTopic: this.childRequestPublishTopic,
+            publishPayload: this.childRequestPublishPayload,
+            publishGlobal: this.childRequestPublishGlobal,
+            pubSubScope: this.pubSubScope,
             target: this.getTargetUrl(),
             targetQueryObject: this.getTargetQueryObject(),
             filterPaths: this.filterPaths

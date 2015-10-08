@@ -648,7 +648,11 @@ define(["dojo/_base/declare",
                      _this.widgetsToDestroy.push(widget);
                   }
                   _this.alfLog("log", "Created widget", instantiatedWidget);
-                  instantiatedWidget.startup();
+                  if (typeof instantiatedWidget.startup === "function")
+                  {
+                     instantiatedWidget.startup();
+                  }
+               
                   if (widget.assignTo)
                   {
                      _this[widget.assignTo] = instantiatedWidget;

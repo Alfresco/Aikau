@@ -315,6 +315,12 @@ define(["dojo/_base/declare",
                response: response
             }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
          }
+         else if (requestConfig.data && requestConfig.data.alfResponseTopic) {
+            this.alfPublish(requestConfig.data.alfResponseTopic, {
+               requestConfig: requestConfig,
+               response: response
+            }, false, false, requestConfig.data.alfResponseScope || this.pubSubScope);
+         }
          else
          {
             this.alfLog("warn", "[DEFAULT CALLBACK] Default success callback has been called but no requestConfig.alfTopic has been set.");
@@ -336,6 +342,12 @@ define(["dojo/_base/declare",
                requestConfig: requestConfig,
                response: response
             }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
+         }
+         else if (requestConfig.data && requestConfig.data.alfResponseTopic) {
+            this.alfPublish(requestConfig.data.alfResponseTopic, {
+               requestConfig: requestConfig,
+               response: response
+            }, false, false, requestConfig.data.alfResponseScope || this.pubSubScope);
          }
          if (typeof this.displayMessage === "function" && response.response.text)
          {
@@ -379,6 +391,12 @@ define(["dojo/_base/declare",
                requestConfig: requestConfig,
                response: response
             }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
+         }
+         else if (requestConfig.data && requestConfig.data.alfResponseTopic) {
+            this.alfPublish(requestConfig.data.alfResponseTopic, {
+               requestConfig: requestConfig,
+               response: response
+            }, false, false, requestConfig.data.alfResponseScope || this.pubSubScope);
          }
       },
 

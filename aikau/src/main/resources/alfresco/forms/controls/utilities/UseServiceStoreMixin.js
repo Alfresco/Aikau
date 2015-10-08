@@ -25,15 +25,16 @@
  * a [ServiceStore]{@link module:alfresco/forms/controls/utilities/ServiceStore}.
  *
  * @module alfresco/forms/controls/utilities/UseServiceStoreMixin
- * @extends external:dojo/store/JsonRest
+ * @extends module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
+        "alfresco/core/CoreWidgetProcessing",
         "dojo/_base/lang",
         "alfresco/forms/controls/utilities/ServiceStore"],
-        function(declare, lang, ServiceStore) {
+        function(declare, CoreWidgetProcessing, lang, /*jshint unused:false*/ ServiceStore) {
 
-   return declare([], {
+   return declare([CoreWidgetProcessing], {
 
       /**
        * Creates and returns a new service store.
@@ -43,20 +44,25 @@ define(["dojo/_base/declare",
       createServiceStore: function alfresco_forms_controls_utilities_UseServiceStoreMixin__createServiceStore() {
          var publishTopic = lang.getObject("optionsConfig.publishTopic", false, this);
          var publishPayload = lang.getObject("optionsConfig.publishPayload", false, this);
+         var publishGlobal = lang.getObject("optionsConfig.publishGlobal", false, this);
          var queryAttribute = lang.getObject("optionsConfig.queryAttribute", false, this);
          var labelAttribute = lang.getObject("optionsConfig.labelAttribute", false, this);
          var valueAttribute = lang.getObject("optionsConfig.valueAttribute", false, this);
          var fixedOptions = lang.getObject("optionsConfig.fixed", false, this);
          var searchStartsWith = lang.getObject("optionsConfig.searchStartsWith", false, this);
-         var serviceStore = new ServiceStore({
-            idProperty: (valueAttribute != null) ? valueAttribute : "value",
-            queryAttribute: (queryAttribute != null) ? queryAttribute : "name",
-            labelAttribute: (labelAttribute != null) ? labelAttribute : "label",
-            valueAttribute: (valueAttribute != null) ? valueAttribute : "value",
-            publishTopic: publishTopic,
-            publishPayload: publishPayload,
-            fixed: fixedOptions,
-            searchStartsWith: !!searchStartsWith // Normalises to boolean; also means that default is false as per AKU-534
+         var serviceStore = this.createWidget({
+            name: "alfresco/forms/controls/utilities/ServiceStore",
+            config: {
+               idProperty: valueAttribute || "value",
+               queryAttribute: queryAttribute || "name",
+               labelAttribute: labelAttribute || "label",
+               valueAttribute: valueAttribute || "value",
+               publishTopic: publishTopic,
+               publishPayload: publishPayload,
+               publishGlobal: (publishGlobal !== false), // true should be the default here
+               fixed: fixedOptions,
+               searchStartsWith: !!searchStartsWith // Normalises to boolean; also means that default is false as per AKU-534
+            }
          });
          return serviceStore;
       },

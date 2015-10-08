@@ -1,0 +1,24 @@
+{
+   "defaultTenant": {
+      "isSyncEnabled": true,
+      "name": "alfresco.com"
+   },
+   "tenant": "alfresco.com",
+   "email": "tony@alfresco.com",
+   "homeTenant": {
+      "isSyncEnabled": true,
+      "name": "alfresco.com"
+   },
+   "secondaryTenants": [
+      {
+         "isSyncEnabled": true,
+         "name": "sync.enabled.com"
+      },
+      {
+         "isSyncEnabled": false,
+         "name": "sync.disabled.com"
+      }
+   ],
+   "tenantUser": true,
+   "multiTenancyEnabled": true
+}
