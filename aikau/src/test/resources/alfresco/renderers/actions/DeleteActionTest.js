@@ -133,7 +133,7 @@ registerSuite(function(){
          .end()
          .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
          .end()
-         .findByCssSelector("tr.mx-row:nth-child(1) .mx-payload")
+         .findByCssSelector("tr.mx-row:nth-child(1) .mx-request-body")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "{\"nodeRefs\":[\"workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\"]}");
@@ -151,7 +151,7 @@ registerSuite(function(){
          .end()
          .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
          .end()
-         .findByCssSelector("tr.mx-row:nth-child(2) .mx-payload")
+         .findByCssSelector("tr.mx-row:nth-child(2) .mx-request-body")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "{\"nodeRefs\":[\"workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\",\"workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\"]}");
