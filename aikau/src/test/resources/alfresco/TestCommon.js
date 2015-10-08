@@ -480,9 +480,15 @@ define(["intern/dojo/node!fs",
                                  responseBody = entry.getAttribute("data-aikau-xhr-response-body");
 
                               // Reformat if necessary
-                              requestHeaders = JSON.parse(requestHeaders);
-                              responseHeaders = JSON.parse(responseHeaders);
-
+                              [requestHeaders, requestBody, requestBody, responseBody].map(function(val) {
+                                 try {
+                                    return JSON.parse(val);
+                                 } catch (e) {
+                                    // Ignore
+                                 }
+                                 return val;
+                              });
+                              
                               return {
                                  request: {
                                     method: method,
