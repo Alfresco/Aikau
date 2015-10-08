@@ -388,7 +388,7 @@ registerSuite(function(){
          .end()
          .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden")
          .end()
-         .findByCssSelector(".mx-row:nth-child(4) .mx-payload")
+         .findByCssSelector(".mx-row:nth-child(4) .mx-request-body")
             .getVisibleText()
             .then(function(payload) {
                // NOTE: Checking payload elements individually because order is not guaranteed...

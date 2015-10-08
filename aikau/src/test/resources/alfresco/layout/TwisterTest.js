@@ -197,7 +197,7 @@ registerSuite(function(){
             .click()
          .end()
 
-         .findByCssSelector("tr.mx-row:nth-child(1) td.mx-payload")
+         .findByCssSelector("tr.mx-row:nth-child(1) td.mx-request-body")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "{\"org\":{\"alfresco\":{\"share\":{\"twisters\":{\"twister1\":false}}}}}", "Preference not saved on close");
@@ -209,7 +209,7 @@ registerSuite(function(){
             .click()
          .end()
 
-         .findByCssSelector("tr.mx-row:nth-child(2) td.mx-payload")
+         .findByCssSelector("tr.mx-row:nth-child(2) td.mx-request-body")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "{\"org\":{\"alfresco\":{\"share\":{\"twisters\":{\"twister1\":true}}}}}", "Preference not saved on open");

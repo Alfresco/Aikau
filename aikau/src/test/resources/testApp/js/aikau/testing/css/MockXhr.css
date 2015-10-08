@@ -19,7 +19,13 @@
    }
    th, td, caption {
       border: 1px solid #808080;
+      min-width: 100px;
       padding: 4px;
+      text-align: left;
+      vertical-align: top;
+   }
+   th {
+      font-family: @bold-font;
    }
    td > table {
       border: none;
@@ -79,17 +85,15 @@
                margin-top: 0;
             }
          }
-         dd {
-            .nowrap {
-               white-space: nowrap;
-            }
-         }
       }
       &:hover {
          .mx-response__info {
             display: block;
          }
       }
+   }
+   .nowrap {
+      white-space: nowrap;
    }
    &--hide-body {
       opacity: .3;
@@ -100,4 +104,7 @@
          display: none;
       }
    }
+}
+strong {
+   font-family: @bold-font;
 }

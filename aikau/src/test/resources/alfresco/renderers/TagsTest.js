@@ -164,7 +164,7 @@ registerSuite(function(){
       "Type a new tag name and hit enter to create it": function() {
          return browser.pressKeys("tag1")
             .pressKeys(keys.ENTER)
-            .findByCssSelector(".mx-row:last-child .mx-payload")
+            .findByCssSelector(".mx-row:last-child .mx-request-body")
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "{\"name\":\"tag1\"}", "Request to create new tag not made");

@@ -129,7 +129,7 @@ registerSuite(function(){
          return browser.findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .confirmationButton > span")
             .click()
          .end()
-         .findByCssSelector(".mx-row:nth-child(2) .mx-payload")
+         .findByCssSelector(".mx-row:nth-child(2) .mx-request-body")
             .getVisibleText()
             .then(function(payload) {
                assert.equal(payload, "{\"added\":[\"cm:complianceable\"],\"removed\":[\"cm:generalclassifiable\"]}", "The added/removed payload wasn't generated correctly");
