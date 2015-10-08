@@ -342,6 +342,9 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.39
+       * @event
+       * @property {string} remoteSiteId The site on the Cloud tenant from which to retrieve path data
+       * @property {string} remoteTenantId The tenant on the Cloud on which the remoteSiteId can be found
        */
       GET_CLOUD_PATH: "ALF_GET_CLOUD_PATH",
 
@@ -354,6 +357,9 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.39
+       * @event
+       * @property {string} username The username to request site data for
+       * @property {string} remoteTenantId The tenant on which to look for sites
        */
       GET_CLOUD_SITES: "ALF_GET_CLOUD_SITES",
 
@@ -366,6 +372,7 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.39
+       * @event
        */
       GET_CLOUD_TENANTS: "ALF_GET_CLOUD_TENANTS",
 
@@ -415,7 +422,7 @@ define([],function() {
        * @event
        * @property {string} publishTopic The topic publish the payload once augmented with the form value.
        */
-      GET_FORM_VALUE_DEPENDANT_OPTIONS: "ALF_GET_FORM_VALUE_DEPENDANT_OPTIONS",
+      GET_FORM_VALUE_DEPENDENT_OPTIONS: "ALF_GET_FORM_VALUE_DEPENDENT_OPTIONS",
 
       /**
        * This topic can be published to request a user preference be returned. It is typically handled by 

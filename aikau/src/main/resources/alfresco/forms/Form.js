@@ -347,7 +347,7 @@ define(["dojo/_base/declare",
 
          // Create a subscription that allows fields within the form to request options with a payload
          // that is augmented with the value of the form...
-         this.alfSubscribe(topics.GET_FORM_VALUE_DEPENDANT_OPTIONS, lang.hitch(this, this.getFormValueDependantOptions));
+         this.alfSubscribe(topics.GET_FORM_VALUE_DEPENDENT_OPTIONS, lang.hitch(this, this.getFormValueDependantOptions));
 
          // Generate a new pubSubScope if required...
          if (this.scopeFormControls === true && this.pubSubScope === "")
@@ -1099,7 +1099,7 @@ define(["dojo/_base/declare",
       /**
        * This function is used to forward on options requests from controls contained within the form. It
        * can be used by setting the "publishTopic" in the "optionsConfig" to be
-       * [GET_FORM_VALUE_DEPENDANT_OPTIONS]{@link module:alfresco/core/topics#GET_FORM_VALUE_DEPENDANT_OPTIONS}.
+       * [GET_FORM_VALUE_DEPENDENT_OPTIONS]{@link module:alfresco/core/topics#GET_FORM_VALUE_DEPENDENT_OPTIONS}.
        * The "publishPayload" in the "optionsConfig" should contain a "publishTopic" attribute that the 
        * request should ultimately be forwarded on to. The reason to use this topic is that the forwarded
        * payload will be updated to include the current form value. This makes it possible for options to

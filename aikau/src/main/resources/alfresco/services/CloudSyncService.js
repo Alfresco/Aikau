@@ -51,8 +51,9 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @listens module:alfresco/core/topics#CLOUD_AUTHENTICATION_REQUEST
-       * @listens module:alfresco/core/topics#GET_CLOUD_TENANTS
+       * @listens module:alfresco/core/topics#GET_CLOUD_PATH
        * @listens module:alfresco/core/topics#GET_CLOUD_SITES
+       * @listens module:alfresco/core/topics#GET_CLOUD_TENANTS
        * @listens module:alfresco/core/topics#INIT_CLOUD_SYNC
        * @listens module:alfresco/core/topics#SYNC_TO_CLOUD
        */
@@ -116,7 +117,7 @@ define(["dojo/_base/declare",
          this.alfPublish(originalRequestConfig.data.alfResponseTopic, {
             requestConfig: originalRequestConfig,
             response: options
-         }, false, false, originalRequestConfig.data.alfResponseScope || this.pubSubScope);
+         }, false, false, originalRequestConfig.data.alfResponseScope);
       },
 
       /**
@@ -308,6 +309,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
+       * @fires module:alfresco/services/DialogService#ALF_CREATE_FORM_DIALOG_REQUEST
        */
       onCloudAuthenticationReponse: function alfresco_services_CloudSyncService__onCloudAuthenticationReponse(response, originalRequestConfig) {
          var known = lang.getObject("known", false, response);
@@ -355,20 +357,21 @@ define(["dojo/_base/declare",
        * model.
        * 
        * @instance
-       * @param {object} payload The payload containing the nodes requested to be sync'd
+       * @param {object} data The data about the nodes requested to be sync'd
+       * @fires module:alfresco/services/DialogService#ALF_CREATE_FORM_DIALOG_REQUEST
        */
-      showCloudLocationPicker: function alfresco_services_CloudSyncService__showCloudLocationPicker(payload) {
-         if (payload && payload.nodes)
+      showCloudLocationPicker: function alfresco_services_CloudSyncService__showCloudLocationPicker(data) {
+         if (data && data.nodes)
          {
             // Get the nodeRefs from the selected nodes...
-            var memberNodeRefs = NodeUtils.nodeRefArray(payload.nodes);
+            var memberNodeRefs = NodeUtils.nodeRefArray(data.nodes);
          
             // Set an appropriate dialog title - if we're sync'ing just a single node then
             // we can include its displayName in the dialog title otherwise just use a generic title...
             var dialogTitle = this.message("cloud-sync.dialog.multiple.title");
-            if (payload.nodes.length === 1)
+            if (data.nodes.length === 1)
             {
-               var displayName = payload.node[0].displayName;
+               var displayName = data.node[0].displayName;
                dialogTitle = this.message("cloud-sync.dialog.single.title", {
                   0: displayName
                });
@@ -384,7 +387,7 @@ define(["dojo/_base/declare",
                   memberNodeRefs: memberNodeRefs
                },
                formValue: {
-                  username: payload.username
+                  username: data.username
                },
                showValidationErrorsImmediately: false,
                widgets: this.widgetsForSyncDialog
@@ -392,7 +395,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            this.alfLog("warn", "No nodes provided to sync to the cloud", payload, this);
+            this.alfLog("warn", "No nodes provided to sync to the cloud", data, this);
          }
       },
 
@@ -483,7 +486,7 @@ define(["dojo/_base/declare",
                   queryAttribute: "title",
                   labelAttribute: "title",
                   valueAttribute: "shortName",
-                  publishTopic: topics.GET_FORM_VALUE_DEPENDANT_OPTIONS,
+                  publishTopic: topics.GET_FORM_VALUE_DEPENDENT_OPTIONS,
                   publishPayload: {
                      publishTopic: topics.GET_CLOUD_SITES,
                      resultsProperty: "response"
@@ -506,7 +509,7 @@ define(["dojo/_base/declare",
                         targetId: "CLOUD_SYNC_SITE"
                      }
                   ],
-                  publishTopic: topics.GET_FORM_VALUE_DEPENDANT_OPTIONS,
+                  publishTopic: topics.GET_FORM_VALUE_DEPENDENT_OPTIONS,
                   publishPayload: {
                      publishTopic: topics.GET_CLOUD_PATH
                   },

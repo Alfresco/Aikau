@@ -35,7 +35,7 @@
  *     label: "cloud-sync.dialog.path.label",
  *     valueProperty: "nodeRef",
  *     optionsConfig: {
- *        publishTopic: topics.GET_FORM_VALUE_DEPENDANT_OPTIONS,
+ *        publishTopic: topics.GET_FORM_VALUE_DEPENDENT_OPTIONS,
  *        publishPayload: {
  *           publishTopic: topics.GET_CLOUD_PATH
  *        },
@@ -66,6 +66,16 @@ define(["dojo/_base/declare",
        * @default
        */
       valueProperty: null,
+
+      /**
+       * This will be assigned a UUID value by the [createFormControl]{@link module:alfresco/forms/controls/Tree#createFormControl}
+       * and used to publish the selection of nodes in the tree.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      _treeNodeSelectedTopic: null,
 
       /**
        * @instance

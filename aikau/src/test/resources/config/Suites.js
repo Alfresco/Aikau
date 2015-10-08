@@ -31,8 +31,9 @@ define({
     * @type {string[]}
     */
    // Uncomment and add specific tests as necessary during development!
-   xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/core/CoreXhrTest"
+   baseFunctionalSuites: [
+      "src/test/resources/alfresco/services/CloudSyncServiceTest",
+      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest"
 
       // THESE SITES REGULARLY FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/dnd/FormCreationTest",
@@ -47,7 +48,7 @@ define({
     * @instance
     * @type {string[]}
     */
-   baseFunctionalSuites: [
+   xbaseFunctionalSuites: [
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 

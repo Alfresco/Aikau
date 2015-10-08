@@ -313,13 +313,13 @@ define(["dojo/_base/declare",
             this.alfPublish(requestConfig.alfTopic + "_SUCCESS", {
                requestConfig: requestConfig,
                response: response
-            }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
+            }, false, false, requestConfig.alfResponseScope);
          }
          else if (requestConfig.data && requestConfig.data.alfResponseTopic) {
             this.alfPublish(requestConfig.data.alfResponseTopic, {
                requestConfig: requestConfig,
                response: response
-            }, false, false, requestConfig.data.alfResponseScope || this.pubSubScope);
+            }, false, false, requestConfig.data.alfResponseScope);
          }
          else
          {
@@ -341,13 +341,13 @@ define(["dojo/_base/declare",
             this.alfPublish(requestConfig.alfTopic + "_FAILURE", {
                requestConfig: requestConfig,
                response: response
-            }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
+            }, false, false, requestConfig.alfResponseScope);
          }
          else if (requestConfig.data && requestConfig.data.alfResponseTopic) {
             this.alfPublish(requestConfig.data.alfResponseTopic, {
                requestConfig: requestConfig,
                response: response
-            }, false, false, requestConfig.data.alfResponseScope || this.pubSubScope);
+            }, false, false, requestConfig.data.alfResponseScope);
          }
          if (typeof this.displayMessage === "function" && response.response.text)
          {
@@ -390,13 +390,13 @@ define(["dojo/_base/declare",
             this.alfPublish(requestConfig.alfTopic + "_PROGRESS", {
                requestConfig: requestConfig,
                response: response
-            }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
+            }, false, false, requestConfig.alfResponseScope);
          }
          else if (requestConfig.data && requestConfig.data.alfResponseTopic) {
             this.alfPublish(requestConfig.data.alfResponseTopic, {
                requestConfig: requestConfig,
                response: response
-            }, false, false, requestConfig.data.alfResponseScope || this.pubSubScope);
+            }, false, false, requestConfig.data.alfResponseScope);
          }
       },
 

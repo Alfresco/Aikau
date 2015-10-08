@@ -33,6 +33,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Tree.html",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/core/Core",
+        "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
@@ -43,10 +44,10 @@ define(["dojo/_base/declare",
         "alfresco/navigation/TreeStore",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree"], 
-        function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, topics, AlfConstants, _AlfDocumentListTopicMixin, 
+        function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, CoreWidgetProcessing, topics, AlfConstants, _AlfDocumentListTopicMixin, 
                  _NavigationServiceTopicMixin, domConstruct, lang, array, TreeStore, ObjectStoreModel, Tree) {
    
-   return declare([_Widget, _Templated, _PublishPayloadMixin, AlfCore, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin], {
+   return declare([_Widget, _Templated, _PublishPayloadMixin, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -159,6 +160,7 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        * @since 1.0.39
+       * @event
        */
       childRequestPublishTopic: null,
 
@@ -242,14 +244,16 @@ define(["dojo/_base/declare",
          this.showRoot = this.showRoot !== null ? this.showRoot : true;
 
          // Create a new tree store using the the siteId as part of the URL
-         this.treeStore = new TreeStore({
-            publishTopic: this.childRequestPublishTopic,
-            publishPayload: this.childRequestPublishPayload,
-            publishGlobal: this.childRequestPublishGlobal,
-            pubSubScope: this.pubSubScope,
-            target: this.getTargetUrl(),
-            targetQueryObject: this.getTargetQueryObject(),
-            filterPaths: this.filterPaths
+         this.treeStore = this.createWidget({
+            name: "alfresco/navigation/TreeStore",
+            config: {
+               publishTopic: this.childRequestPublishTopic,
+               publishPayload: this.childRequestPublishPayload,
+               publishGlobal: this.childRequestPublishGlobal,
+               target: this.getTargetUrl(),
+               targetQueryObject: this.getTargetQueryObject(),
+               filterPaths: this.filterPaths
+            }
          });
          
          // Create the object store...
