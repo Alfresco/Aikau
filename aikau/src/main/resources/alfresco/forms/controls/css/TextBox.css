@@ -19,3 +19,13 @@
 .alfresco-forms-controls-TextBox div.control div.dijitValidationTextBox.dijitTextBoxFocused {
    border-color: @focused-border-color;
 }
+
+.alfresco-forms-controls-TextBox.biggerBolder div.control div.dijitValidationTextBox {
+   font-family: @bold-font;
+   font-weight: normal;
+   font-size: @large-font-size;
+}
+
+.alfresco-forms-controls-TextBox.radius div.control div.dijitValidationTextBox {
+   border-radius: @standard-button-border-radius;
+}

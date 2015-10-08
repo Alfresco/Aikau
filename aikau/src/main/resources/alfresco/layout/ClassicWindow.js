@@ -34,8 +34,9 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/ClassicWindow.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domClass) {
+        "dojo/dom-class",
+        "dojo/dom-construct"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domClass, domConstruct) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -65,6 +66,15 @@ define(["dojo/_base/declare",
       title: "",
 
       /**
+       * Hide the title?
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      hideTitle: false,
+
+      /**
        * Ensures that the title and description are converted from key to localised message.
        * 
        * @instance
@@ -86,6 +96,10 @@ define(["dojo/_base/declare",
          if (this.widgets != null)
          {
             this.processWidgets(this.widgets, this.contentNode);
+         }
+         if (this.hideTitle)
+         {
+            domConstruct.destroy(this.titleBarNode);
          }
       }
    });
