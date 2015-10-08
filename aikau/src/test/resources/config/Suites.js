@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/core/ObjectProcessingMixinTest"
+      "src/test/resources/alfresco/core/CoreXhrTest"
 
       // THESE SITES REGULARLY FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/dnd/FormCreationTest",
@@ -57,6 +57,7 @@ define({
 
       "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
       "src/test/resources/alfresco/core/CoreRwdTest",
+      "src/test/resources/alfresco/core/CoreXhrTest",
       "src/test/resources/alfresco/core/NotificationUtilsTest",
       "src/test/resources/alfresco/core/ObjectProcessingMixinTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",

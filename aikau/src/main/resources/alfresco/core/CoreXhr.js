@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        *
        * @typedef {Object} serviceXhrConfig
        * @property {String} url - Where should we send the request to.
-       * @property {Object} [headers={'Content-Type': 'application/json'}] headers - Request headers to send (overrides default)
+       * @property {Object} [headers] headers - Request headers to send (replaces [the default headers]{@link module:alfresco/core/CoreXhr#getDefaultHeaders} if specified)
        * @property {Object} [data=null] - data for the request body
        * @property {String} [query=null] - data for the query string
        * @property {String} [handleAs=text] - TODO - document this feature.
@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
             }
             else
             {
-               var headers = (config.headers) ? config.headers : { "Content-Type": "application/json" };
+               var headers = (config.headers) ? config.headers : this.getDefaultHeaders();
                if (this.isCsrfFilterEnabled())
                {
                   headers[this.getCsrfHeader()] = this.getCsrfToken();
@@ -380,6 +380,36 @@ define(["dojo/_base/declare",
                response: response
             }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
          }
+      },
+
+      /**
+       * <p>Get the default headers. Currently these are:</p>
+       * <ul>
+       *    <li>Content-Type: application/json</li>
+       *    <li>Accept-Language: [uses browser provided languages]</li>
+       * </ul>
+       *
+       * @instance
+       * @returns {object} The default headers
+       */
+      getDefaultHeaders: function alfresco_core_CoreXhr___getDefaultHeaders() {
+
+         // Build up the Accept-Language header value
+         var languages = navigator.languages;
+         if (languages) {
+            languages = array.map(languages, function(lang) {
+               return lang.toLowerCase();
+            }).join(", ");
+         } else {
+            languages = (navigator.language || navigator.userLanguage).toLowerCase();
+         }
+
+         // Construct and return the headers
+         var defaultHeaders = {
+            "Content-Type": "application/json",
+            "Accept-Language": languages
+         };
+         return defaultHeaders;
       },
 
       /**

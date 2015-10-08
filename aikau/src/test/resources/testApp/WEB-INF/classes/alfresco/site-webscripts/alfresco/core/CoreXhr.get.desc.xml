@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>CoreXhr Test</shortname>
+  <description>This WebScript tests the alfresco/core/CoreXhr base class</description>
+  <family>aikau-unit-tests</family>
+  <url>/CoreXhr</url>
+</webscript>
