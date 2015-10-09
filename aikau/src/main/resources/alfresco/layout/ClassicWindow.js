@@ -18,8 +18,14 @@
  */
 
 /**
- * This is a simple layout structure that allows for a title and description to be specified as properties and for the
- * configured widgets to be placed underneath. 
+ * <p>This is a simple layout structure that creates a window panel with a title and the configured widgets 
+ * placed inside.</p>
+ * <p>The following additionalCssClasses are built in and can be included if required:</p>
+ * <ul>
+ * <li><strong>shadow</strong>: A standard shadow is applied around the ClassicWindow</li>
+ * <li><strong>bottomBorderRadius</strong>: The bottom border of the ClassicWindow is given radius corners</li>
+ * <li><strong>borderLess</strong>: The border on the ClassicWindow is removed</li>
+ * </ul>
  * 
  * @module alfresco/layout/ClassicWindow
  * @extends external:dijit/_WidgetBase
@@ -76,7 +82,7 @@ define(["dojo/_base/declare",
       hideTitle: false,
 
       /**
-       * Ensures that the title and description are converted from key to localised message.
+       * Ensures that the title is converted from key to localised message.
        * 
        * @instance
        */

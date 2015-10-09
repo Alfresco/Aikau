@@ -18,11 +18,16 @@
  */
 
 /**
- * This is the basic text box form control. It extends the [BaseFormControl]
+ * <p>This is the basic text box form control. It extends the [BaseFormControl]
  * {@link module:alfresco/forms/controls/BaseFormControl} and supports the standard
  * form control configuration. It addition it supports the additional configuration 
  * attribute [placeHolder]{@link module:alfresco/forms/controls/TextBox#placeHolder} 
- * that can be used to assign place holder text when no value has been specified.
+ * that can be used to assign place holder text when no value has been specified.</p>
+ * <p>The following additionalCssClasses are built in and can be included if required:</p>
+ * <ul>
+ * <li><strong>biggerBolder</strong>: The TextBox is rendered with a bigger, bold font</li>
+ * <li><strong>radius</strong>: The TextBox is given radius corners</li>
+ * </ul>
  * 
  * @module alfresco/forms/controls/TextBox
  * @extends module:alfresco/forms/controls/BaseFormControl
