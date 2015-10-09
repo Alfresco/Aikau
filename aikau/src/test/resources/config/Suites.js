@@ -241,6 +241,7 @@ define({
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
       "src/test/resources/alfresco/services/ActionServiceTest",
+      "src/test/resources/alfresco/services/CloudSyncServiceTest",
       "src/test/resources/alfresco/services/ContentServiceTest",
       "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DeleteSiteTest",

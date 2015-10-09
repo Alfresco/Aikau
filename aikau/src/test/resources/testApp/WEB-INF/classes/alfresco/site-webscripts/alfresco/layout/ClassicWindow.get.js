@@ -32,9 +32,6 @@ model.jsonModel = {
                }
             ]
          }
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

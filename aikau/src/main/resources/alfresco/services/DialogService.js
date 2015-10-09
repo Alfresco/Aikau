@@ -148,6 +148,7 @@
  * @property {string} [hideTopic=null] - Topic to subscribe to to trigger a dialog hide. If this is set
  * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
  * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
+ * @property {boolean} [showValidationErrorsImmediately=true] Indicates whether or not to display form errors immediately
  */
 
 /**

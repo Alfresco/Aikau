@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Cloud Sync Service</shortname>
+  <description>This is the test page for the alfresco/services/CloudSyncService</description>
+  <family>aikau-unit-tests</family>
+  <url>/CloudSyncService</url>
+</webscript>

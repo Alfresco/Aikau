@@ -1,0 +1,30 @@
+{
+   "totalResults": 1,
+   "resultsTrimmed": false,
+   "parent": {
+      "nodeRef": "workspace://SpacesStore/b123c9e2-24db-4f33-aaa1-58c4a37697fc",
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      }
+   },
+   "items": [{
+      "nodeRef": "workspace://SpacesStore/e3073965-2163-48c7-93db-c63accf68e1b",
+      "name": "CANNOT SYNC",
+      "description": "",
+      "hasChildren": true,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "cm:auditable",
+         "sys:referenceable",
+         "cm:titled",
+         "cm:taggable"
+      ]
+   }]
+}

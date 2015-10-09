@@ -345,6 +345,10 @@ define(["dojo/_base/declare",
             this.alfSubscribe(this.setValueTopic, lang.hitch(this, this.setValue), this.setValueTopicGlobalScope, this.setValueTopicParentScope);
          }
 
+         // Create a subscription that allows fields within the form to request options with a payload
+         // that is augmented with the value of the form...
+         this.alfSubscribe(topics.GET_FORM_VALUE_DEPENDENT_OPTIONS, lang.hitch(this, this.getFormValueDependantOptions));
+
          // Generate a new pubSubScope if required...
          if (this.scopeFormControls === true && this.pubSubScope === "")
          {
@@ -1089,6 +1093,29 @@ define(["dojo/_base/declare",
                payload = this.getValue();
             }
             this.alfPublish(this.validFormValuesPublishTopic, payload, this.validFormValuesPublishGlobal);
+         }
+      },
+
+      /**
+       * This function is used to forward on options requests from controls contained within the form. It
+       * can be used by setting the "publishTopic" in the "optionsConfig" to be
+       * [GET_FORM_VALUE_DEPENDENT_OPTIONS]{@link module:alfresco/core/topics#GET_FORM_VALUE_DEPENDENT_OPTIONS}.
+       * The "publishPayload" in the "optionsConfig" should contain a "publishTopic" attribute that the 
+       * request should ultimately be forwarded on to. The reason to use this topic is that the forwarded
+       * payload will be updated to include the current form value. This makes it possible for options to
+       * be generated that are dependant upon changing form values.
+       * 
+       * @instance
+       * @param  {object} payload The payload requesting the options.
+       * @since 1.0.39
+       */
+      getFormValueDependantOptions: function alfresco_forms_Form__getFormValueDependantOptions(payload) {
+         if (payload.publishTopic)
+         {
+            var currentValue = this.getValue();
+            var clonedPayload = lang.clone(payload);
+            lang.mixin(clonedPayload, currentValue);
+            this.alfServicePublish(payload.publishTopic, clonedPayload);
          }
       }
    });

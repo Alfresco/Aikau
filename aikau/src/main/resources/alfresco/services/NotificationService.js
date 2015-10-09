@@ -121,6 +121,7 @@ define(["dojo/_base/declare",
                textContent: message,
                widgetsButtons: [
                   {
+                     id: "NOTIFCATION_PROMPT_ACKNOWLEDGEMENT",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: "notification.ok.label",

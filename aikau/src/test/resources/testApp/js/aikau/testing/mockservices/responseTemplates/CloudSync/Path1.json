@@ -1,0 +1,91 @@
+{
+   "totalResults": 5,
+   "resultsTrimmed": false,
+   "parent": {
+      "nodeRef": "workspace://SpacesStore/0d66f160-ff20-460d-bb5b-392c7feebf48",
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      }
+   },
+   "items": [{
+      "nodeRef": "workspace://SpacesStore/c58eae70-669f-4310-935c-8261c4b76142",
+      "name": "diagrams",
+      "description": "",
+      "hasChildren": false,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "sys:referenceable",
+         "cm:auditable"
+      ]
+   }, {
+      "nodeRef": "workspace://SpacesStore/5976a9e3-b108-4baa-8822-20c0d1e8387b",
+      "name": "process",
+      "description": "",
+      "hasChildren": true,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "cm:auditable",
+         "fm:discussable",
+         "sys:referenceable",
+         "fm:commentsRollup"
+      ]
+   }, {
+      "nodeRef": "workspace://SpacesStore/ebbb07f6-25ae-41b0-8745-377fdc2397c1",
+      "name": "product issues",
+      "description": "",
+      "hasChildren": false,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "sys:referenceable",
+         "cm:auditable"
+      ]
+   }, {
+      "nodeRef": "workspace://SpacesStore/b123c9e2-24db-4f33-aaa1-58c4a37697fc",
+      "name": "release pipeline",
+      "description": "",
+      "hasChildren": true,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "sys:referenceable",
+         "cm:auditable"
+      ]
+   }, {
+      "nodeRef": "workspace://SpacesStore/1a9af076-12fc-4dde-b7a5-2c9237ebb7fa",
+      "name": "templates",
+      "description": "",
+      "hasChildren": false,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "sys:referenceable",
+         "cm:titled",
+         "cm:auditable"
+      ]
+   }]
+}
