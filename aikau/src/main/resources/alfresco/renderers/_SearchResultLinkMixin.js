@@ -31,6 +31,28 @@ define(["alfresco/core/TemporalUtils",
    return declare([TemporalUtils], {
 
       /**
+       * The URL type used for links. By default this is "PAGE_RELATIVE" as all the links are expected to be
+       * relative to the application page context.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       */
+      navigationType: "PAGE_RELATIVE",
+
+      /**
+       * The navigation target for links. By default this will result in links being opened in the current window/tab
+       * but this can be configured to be "NEW" so that links are opened in a new window/tab.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       */
+      navigationTarget: "CURRENT",
+
+      /**
        * This function generates a payload for the [NavigationService]{@link module:alfresco/services/NavigationService}
        * that varies depending upon the type of search result (e.g. a document or folder, in a site or in
        * the repository, etc) which can also be used to extrapolate an HTML anchor for 
@@ -42,8 +64,8 @@ define(["alfresco/core/TemporalUtils",
       generateSearchLinkPayload: function alfresco_renderers__SearchResultLinkMixin__generateSearchLinkPayload() {
          // jshint maxcomplexity:false
          var payload = {
-            type: "PAGE_RELATIVE",
-            target: "CURRENT",
+            type: this.navigationType,
+            target: this.navigationTarget,
             url: null
          };
          var type = lang.getObject("type", false, this.currentItem),

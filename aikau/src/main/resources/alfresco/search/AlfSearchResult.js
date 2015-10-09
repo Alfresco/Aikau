@@ -145,6 +145,17 @@ define(["dojo/_base/declare",
       mergeActions: false,
 
       /**
+       * The navigation target for links. By default this will result in links being opened in the current window/tab
+       * but this can be configured to be "NEW" so that links are opened in a new window/tab.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       */
+      navigationTarget: "CURRENT",
+
+      /**
        * This can be configured to override the default filter for the actions that are applicable to 
        * all nodes that are neither folders nor documents. Actions need to be filtered as Aikau does not 
        * currently support all of the actions that can be configured in Alfresco Share. However, if custom 
@@ -342,7 +353,8 @@ define(["dojo/_base/declare",
             publishPayloadModifiers: ["processCurrentItemTokens"],
             publishPayload: {
                url: "user/{modifiedByUser}/profile",
-               type: "PAGE_RELATIVE"
+               type: "PAGE_RELATIVE",
+               target: this.navigationTarget
             }
          }, this.dateNode);
       },
@@ -357,13 +369,18 @@ define(["dojo/_base/declare",
        */
       createDisplayNameRenderer: function alfresco_search_AlfSearchResult__createDisplayNameRenderer() {
          // jshint nonew:false
-         new SearchResultPropertyLink({
+         var config = {
             id: this.id + "_DISPLAY_NAME",
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
             propertyToRender: "displayName",
             renderSize: "large"
-         }, this.nameNode);
+         };
+         if (this.navigationTarget)
+         {
+            config.navigationTarget = this.navigationTarget;
+         }
+         new SearchResultPropertyLink(config, this.nameNode);
       },
 
       /**
@@ -435,7 +452,8 @@ define(["dojo/_base/declare",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
                   url: isRepo ? "repository?path={pathLink}" : "site/{site.shortName}/documentlibrary?path={pathLink}",
-                  type: "PAGE_RELATIVE"
+                  type: "PAGE_RELATIVE",
+                  target: this.navigationTarget
                }
             }, this.pathNode);
          }
@@ -499,7 +517,8 @@ define(["dojo/_base/declare",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
                   url: "site/{site.shortName}" + this.siteLandingPage.replace(/^\/*/, "/"),
-                  type: "PAGE_RELATIVE"
+                  type: "PAGE_RELATIVE",
+                  target: this.navigationTarget
                }
             }, this.siteNode);
          }
@@ -539,12 +558,17 @@ define(["dojo/_base/declare",
        */
       createThumbnailRenderer: function alfresco_search_AlfSearchResult__createThumbnailRenderer() {
          // jshint nonew:false
-         new SearchThumbnail({
+         var config = {
             id: this.id + "_THUMBNAIL",
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
             showDocumentPreview: true
-         }, this.thumbnailNode);
+         };
+         if (this.navigationTarget)
+         {
+            config.navigationTarget = this.navigationTarget;
+         }
+         new SearchThumbnail(config, this.thumbnailNode);
       },
 
       /**
