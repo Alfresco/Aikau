@@ -95,6 +95,7 @@ model.jsonModel = {
                         {
                            name: "alfresco/documentlibrary/views/AlfGalleryView",
                            config: {
+                              itemKeyProperty: "nodeRef",
                               columns: 7,
                               widgets: [
                                  {

@@ -673,6 +673,18 @@ define([],function() {
       SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
 
       /**
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       *
+       * @event
+       * 
+       */
+      SELECTED_DOCUMENTS_ACTION: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
+
+      /**
        * This topic can be published to set a user preference. It is typically handled by 
        * the [PreferenceService]{@link module:alfresco/services/PreferenceService}.
        *

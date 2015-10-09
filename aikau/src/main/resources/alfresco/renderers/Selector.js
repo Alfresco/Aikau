@@ -144,7 +144,8 @@ define(["dojo/_base/declare",
                   var b = lang.getObject(this.itemKey, false, this.currentItem);
                   var match = ((a || a === 0) && a === b);
                   if (match) {
-                     this.select();
+                     domClass.add(this.selectorNode, "checked");
+                     domClass.remove(this.selectorNode, "unchecked");
                   }
                   return match;
                }, this);
