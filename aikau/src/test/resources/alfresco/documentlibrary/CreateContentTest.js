@@ -389,13 +389,12 @@ registerSuite(function(){
          .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden")
          .end()
          .getXhrEntries({url: "folder-templates", method: "POST", pos: "last"})
-            .then(function(xhrEntry){
-               var requestBody = xhrEntry.request.body;
-               assert.propertyVal(requestBody, "parentNodeRef", "some://dummy/node");
-               assert.propertyVal(requestBody, "sourceNodeRef", "workspace://SpacesStore/c90aa137-2c57-4a36-8681-b0b207cbee91");
-               assert.propertyVal(requestBody, "prop_cm_name", "Name");
-               assert.propertyVal(requestBody, "prop_cm_title", "Title");
-               assert.propertyVal(requestBody, "prop_cm_description", "Description");
+            .then(function(xhr){
+               assert.propertyVal(xhr.request.body, "parentNodeRef", "some://dummy/node");
+               assert.propertyVal(xhr.request.body, "sourceNodeRef", "workspace://SpacesStore/c90aa137-2c57-4a36-8681-b0b207cbee91");
+               assert.propertyVal(xhr.request.body, "prop_cm_name", "Name");
+               assert.propertyVal(xhr.request.body, "prop_cm_title", "Title");
+               assert.propertyVal(xhr.request.body, "prop_cm_description", "Description");
             });
       },
 
