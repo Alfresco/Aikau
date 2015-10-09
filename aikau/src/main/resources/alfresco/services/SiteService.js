@@ -45,14 +45,14 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/SiteService.properties"}],
 
       /**
-       * The standard landing page for a site
+       * The standard home page for a user
        *
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.38
+       * @since 1.0.39
        */
-      siteLandingPage: "/dashboard",
+      userHomePage: "/dashboard",
 
       /**
        * Sets up the subscriptions for the SiteService
@@ -505,9 +505,9 @@ define(["dojo/_base/declare",
        */
       siteMembershipRequestComplete: function alfresco_services_SiteService__siteMembershipRequestComplete(response, originalRequestConfig) {
          this.alfLog("log", "User has successfully requested to join a moderated site", response, originalRequestConfig);
-         this.displayPrompt({
-            title: this.message("message.request-join-success-title"),
-            message: this.message("message.request-join-success", { "0": originalRequestConfig.user, "1": originalRequestConfig.site}),
+         this.alfServicePublish(topics.CREATE_DIALOG, {
+            dialogTitle: this.message("message.request-join-success-title"),
+            textContent: this.message("message.request-join-success", {"0": originalRequestConfig.user, "1": originalRequestConfig.site}),
             widgetsButtons: [
                {
                   name: "alfresco/buttons/AlfButton",
@@ -515,7 +515,7 @@ define(["dojo/_base/declare",
                      label: this.message("button.leave-site.confirm-label"),
                      publishTopic: "ALF_NAVIGATE_TO_PAGE",
                      publishPayload: {
-                        url: "user/" + originalRequestConfig.user + this.siteLandingPage.replace(/^\/*/, "/"),
+                        url: "user/" + originalRequestConfig.user + this.userHomePage.replace(/^\/*/, "/"),
                         type: "PAGE_RELATIVE",
                         target: "CURRENT"
                      },
@@ -761,8 +761,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       leaveSiteSuccess: function alfresco_services_SiteService__leaveSiteSuccess(response, requestConfig) {
-         this.alfPublish("ALF_NAVIGATE_TO_PAGE", {
-            url: "user/" + requestConfig.user + this.siteLandingPage.replace(/^\/*/, "/"),
+         this.alfServicePublish("ALF_NAVIGATE_TO_PAGE", {
+            url: "user/" + requestConfig.user + this.userHomePage.replace(/^\/*/, "/"),
             type: "PAGE_RELATIVE",
             target: "CURRENT"
          });

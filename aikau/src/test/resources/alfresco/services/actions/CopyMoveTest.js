@@ -196,19 +196,16 @@ registerSuite(function(){
       },
 
       "Test the repository root override is applied": function() {
-         return browser.findByCssSelector(".mx-row:nth-child(1) .mx-url")
-            .getVisibleText()
-            .then(function(text) {
-               assert(text.indexOf("libraryRoot=some%3A%2F%2Ffake%2Fnode") !== -1, "The configured root node was not used: ", text);
+         return browser.findByCssSelector("body")
+            .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/treenode/node/alfresco/company/home")
+            .then(function(xhr){
+               assert.include(xhr.request.url, "libraryRoot=some%3A%2F%2Ffake%2Fnode");
             });
       },
 
       "Test that the custom copyAPI was used": function() {
-         return browser.findByCssSelector(".mx-row:nth-child(2) .mx-url")
-            .getVisibleText()
-            .then(function(text) {
-               assert(text.indexOf("/aikau/proxy/alfresco/fail/some/fake/node") !== -1, "The custom copy API was not used");
-            });
+         return browser.findByCssSelector("body")
+            .getLastXhr("aikau/proxy/alfresco/fail/some/fake/node");
       },
 
       "Post Coverage Results": function() {
