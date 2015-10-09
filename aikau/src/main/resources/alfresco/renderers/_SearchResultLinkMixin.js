@@ -32,7 +32,11 @@ define(["alfresco/core/TemporalUtils",
 
       /**
        * The URL type used for links. By default this is "PAGE_RELATIVE" as all the links are expected to be
-       * relative to the application page context.
+       * relative to the application page context. The available options are 
+       * ["PAGE_RELATIVE"]{@link module:alfresco/services/_NavigationServiceTopicMixin#pageRelativePath}, 
+       * ["CONTEXT_RELATIVE"]{@link module:alfresco/services/_NavigationServiceTopicMixin#contextRelativePath},
+       * ["FULL_PATH"]{@link module:alfresco/services/_NavigationServiceTopicMixin#fullPath} and
+       * ["HASH"]{@link module:alfresco/services/_NavigationServiceTopicMixin#hashPath}
        * 
        * @instance
        * @type {string}
@@ -43,7 +47,9 @@ define(["alfresco/core/TemporalUtils",
 
       /**
        * The navigation target for links. By default this will result in links being opened in the current window/tab
-       * but this can be configured to be "NEW" so that links are opened in a new window/tab.
+       * but this can be configured to be "NEW" so that links are opened in a new window/tab. The available options are 
+       * ["CURRENT"]{@link module:alfresco/services/_NavigationServiceTopicMixin#currentTarget} and
+       * ["NEW"]{@link module:alfresco/services/_NavigationServiceTopicMixin#newTarget}.
        * 
        * @instance
        * @type {string}
