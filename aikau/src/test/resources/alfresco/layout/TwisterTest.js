@@ -199,8 +199,7 @@ registerSuite(function(){
 
          .getLastXhr("aikau/proxy/alfresco/api/people/guest/preferences")
             .then(function(xhr){
-               var requestBody = xhr.request.body;
-               assert.deepPropertyVal(requestBody, "org.alfresco.share.twisters.twister1", false);
+               assert.deepPropertyVal(xhr.request.body, "org.alfresco.share.twisters.twister1", false);
             });
       },
 
@@ -211,8 +210,7 @@ registerSuite(function(){
 
          .getLastXhr("aikau/proxy/alfresco/api/people/guest/preferences")
             .then(function(xhr){
-               var requestBody = xhr.request.body;
-               assert.deepPropertyVal(requestBody, "org.alfresco.share.twisters.twister1", true);
+               assert.deepPropertyVal(xhr.request.body, "org.alfresco.share.twisters.twister1", true);
             });
       },
 

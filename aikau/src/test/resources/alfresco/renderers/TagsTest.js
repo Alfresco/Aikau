@@ -166,8 +166,7 @@ registerSuite(function(){
             .pressKeys(keys.ENTER)
             .getLastXhr("aikau/proxy/alfresco/api/tag/workspace/SpacesStore")
             .then(function(xhr){
-               var requestBody = xhr.request.body;
-               assert.propertyVal(requestBody, "name", "tag1");
+               assert.propertyVal(xhr.request.body, "name", "tag1");
             });
       },
 
@@ -182,8 +181,7 @@ registerSuite(function(){
          return browser.pressKeys([keys.ENTER])
             .getLastXhr("aikau/proxy/alfresco/api/node/workspace/SpacesStore/d91128af-3b99-4710-95b6-a858eb090418/formprocessor")
             .then(function(xhr){
-               var requestBody = xhr.request.body;
-               assert.propertyVal(requestBody, "node.properties.cm:taggable", "workspace://SpacesStore/6619a771-5e35-40be-8c08-2f4791d9a056");
+               assert.propertyVal(xhr.request.body, "node.properties.cm:taggable", "workspace://SpacesStore/6619a771-5e35-40be-8c08-2f4791d9a056");
             });
       },
 

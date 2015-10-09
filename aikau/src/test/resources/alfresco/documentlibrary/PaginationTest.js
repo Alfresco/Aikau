@@ -133,8 +133,7 @@ registerSuite(function(){
 
          .getLastXhr("aikau/proxy/alfresco/api/people/guest/preferences")
             .then(function(xhr){
-               var requestBody = xhr.request.body;
-               assert.deepPropertyVal(requestBody, "org.alfresco.share.documentList.documentsPerPage", 50);
+               assert.deepPropertyVal(xhr.request.body, "org.alfresco.share.documentList.documentsPerPage", 50);
             });
       },
 

@@ -135,8 +135,7 @@ registerSuite(function(){
          .end()
          .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete")
             .then(function(xhr){
-               var requestBody = xhr.request.body;
-               assert.deepPropertyVal(requestBody, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d");
+               assert.deepPropertyVal(xhr.request.body, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d");
             });
       },
 
@@ -153,9 +152,8 @@ registerSuite(function(){
          .end()
          .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete")
             .then(function(xhr){
-               var requestBody = xhr.request.body;
-               assert.deepPropertyVal(requestBody, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
-               assert.deepPropertyVal(requestBody, "nodeRefs[1]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f");
+               assert.deepPropertyVal(xhr.request.body, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
+               assert.deepPropertyVal(xhr.request.body, "nodeRefs[1]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f");
             });
       },
 
