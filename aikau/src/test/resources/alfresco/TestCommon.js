@@ -463,6 +463,16 @@ define(["intern/dojo/node!fs",
                .setExecuteAsyncTimeout(opts.queryTimeout + 2000)
                .executeAsync(function(entriesSelector, timeout, asyncComplete) {
 
+                  // Create helper function outside of loop
+                  var jsonify = function(data) {
+                     try {
+                        return JSON.parse(data);
+                     } catch (e) {
+                        // Ignore
+                     }
+                     return data;
+                  };
+
                   // Store the start-time and start the interval
                   var before = Date.now(),
                      intervalPointer = setInterval(function() {
@@ -479,20 +489,16 @@ define(["intern/dojo/node!fs",
                                  responseHeaders = entry.getAttribute("data-aikau-xhr-response-headers"),
                                  responseBody = entry.getAttribute("data-aikau-xhr-response-body");
 
-                              // Reformat if necessary
-                              requestHeaders = JSON.parse(requestHeaders);
-                              responseHeaders = JSON.parse(responseHeaders);
-
                               return {
                                  request: {
                                     method: method,
                                     url: url,
-                                    headers: requestHeaders,
-                                    body: requestBody
+                                    headers: jsonify(requestHeaders),
+                                    body: jsonify(requestBody)
                                  },
                                  response: {
-                                    headers: responseHeaders,
-                                    body: responseBody
+                                    headers: jsonify(responseHeaders),
+                                    body: jsonify(responseBody)
                                  }
                               };
                            });

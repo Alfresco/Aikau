@@ -23,9 +23,8 @@
 define(["intern!object",
         "intern/chai!expect", 
         "intern/chai!assert", 
-        "require", 
         "alfresco/TestCommon"], 
-        function(registerSuite, expect, assert, require, TestCommon) {
+        function(registerSuite, expect, assert, TestCommon) {
 
 registerSuite(function(){
    var browser;
@@ -129,16 +128,12 @@ registerSuite(function(){
       },
 
       "Test that user page size user preference is updated": function() {
-         return browser.findByCssSelector("tr.mx-row:nth-child(1) .mx-url")
-            .getVisibleText()
-            .then(function(text) {
-               assert.include(text, "aikau/proxy/alfresco/api/people/guest/preferences", "Page size preference not updated");
-            })
-         .end()
-         .findByCssSelector("tr.mx-row:nth-child(1) .mx-request-body")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "{\"org\":{\"alfresco\":{\"share\":{\"documentList\":{\"documentsPerPage\":50}}}}}", "Page size preference not with correct value");
+         return browser.findByCssSelector("body")
+            .end()
+
+         .getLastXhr("aikau/proxy/alfresco/api/people/guest/preferences")
+            .then(function(xhr){
+               assert.deepPropertyVal(xhr.request.body, "org.alfresco.share.documentList.documentsPerPage", 50);
             });
       },
 
