@@ -46,7 +46,6 @@
             <list>
             	<ref bean="requestContextInterceptor"/>
             	<ref bean="themeInterceptor"/>
-                <ref bean="previewContextInterceptor"/>
             </list>
         </property>
 	</bean>
