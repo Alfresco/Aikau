@@ -31,6 +31,7 @@ model.jsonModel = {
                   config: {
                      pubSubScope: "HAS_ITEMS_",
                      useHash: false,
+                     itemKeyProperty: "nodeRef",
                      additionalControlsTarget: "TOOLBAR",
                      currentData: {
                         items: [
@@ -95,7 +96,6 @@ model.jsonModel = {
                         {
                            name: "alfresco/documentlibrary/views/AlfGalleryView",
                            config: {
-                              itemKeyProperty: "nodeRef",
                               columns: 7,
                               widgets: [
                                  {
@@ -119,6 +119,7 @@ model.jsonModel = {
                   name: "alfresco/lists/AlfList",
                   config: {
                      pubSubScope: "NO_ITEMS_",
+                     itemKeyProperty: "nodeRef",
                      useHash: false,
                      additionalControlsTarget: "TOOLBAR_NO_ITEMS",
                      additionalViewControlVisibilityConfig: {
