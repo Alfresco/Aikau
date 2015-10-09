@@ -101,6 +101,17 @@ define(["dojo/_base/declare",
       parentNavTopic: "ALF_DOCLIST_PARENT_NAV",
 
       /**
+       * Overrides the [default configuration]{@link module:alfresco/lists/AlfList#suppressDndUploading}
+       * to ensure that document lists support drag-and-drop uploading (unless otherwise configured).
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      suppressDndUploading: false,
+    
+      /**
        * Overrides the [inherited default]{@link module:alfresco/lists/AlfHashList#updateInstanceValues}
        * to ensure that instance values should be updated from the hash. This only appliees when
        * [useHash]{@link module:alfresco/lists/AlfHashList#useHash} is configured to be true.

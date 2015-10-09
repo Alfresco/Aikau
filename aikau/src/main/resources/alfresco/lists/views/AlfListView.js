@@ -116,6 +116,18 @@ define(["dojo/_base/declare",
       documentSubscriptionTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
 
       /**
+       * Overrides the 
+       * [inherited default configuration]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#suppressDndUploading}
+       * to suppress the drag-and-drop upload highlighting.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      suppressDndUploading: true,
+    
+      /**
        * Whether the list that's creating this view has infinite scroll turned on
        *
        * @instance

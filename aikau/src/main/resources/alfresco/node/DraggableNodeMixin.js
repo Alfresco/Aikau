@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,7 +18,7 @@
  */
 
 /**
- * This module simply provides a set of attributes that define topic names for publications
+ * This module provides a set of attributes that define topic names for publications
  * and subscriptions. This should be mixed into any widget that wishes to use those topics
  * to ensure consistency. It also allows the actual values to be managed from a single file. 
  * 
@@ -50,6 +50,17 @@ define(["dojo/_base/declare",
       draggableNode: null,
       
       /**
+       * Indicates whether or not the mixing module should take advantage of the capabilities. This makes
+       * it possible to "opt-out" through configuration or extension.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      isDraggable: true,
+
+      /**
        * This will be assigned a reference to the "dojo/dnd/Moveable" instance created by the 
        * [postCreate function]{@link module:alfresco/node/DraggableNodeMixin#onDragStart}
        * 
@@ -76,32 +87,32 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_node_DraggableNodeMixin__postCreate() {
          this.inherited(arguments);
-         
-         if (this.draggableNode == null && 
-             this.domNode != null)
+         if (this.isDraggable)
          {
-            this.draggableNode = this.domNode;
-         }
-         if (this.draggableNode != null)
-         {
-            // It's important to set a delay (this is a measure of pixels NOT time) so that
-            // regular click events can be processed...
-            this.moveable = new Moveable(this.draggableNode, {
-               delay: 20
-            });
-            // Use aspect to hitch some events to work around 2nd drag event bugs...
-            aspect.before(this.moveable, "onMoveStart", lang.hitch(this, "onDragStart"));
-            aspect.after(this.moveable, "onMoveStop", lang.hitch(this, "onDragEnd"), true);
-            on(this.moveable.handle, "mousedown", lang.hitch(this, "onMouseDown"));
-            on(this.moveable.handle, "mouseup", lang.hitch(this, "onMouseUp"));
-            on(this.moveable.handle, "click", lang.hitch(this, "onDraggableClick"));
+            if (!this.draggableNode && this.domNode)
+            {
+               this.draggableNode = this.domNode;
+            }
+            if (this.draggableNode)
+            {
+               // It's important to set a delay (this is a measure of pixels NOT time) so that
+               // regular click events can be processed...
+               this.moveable = new Moveable(this.draggableNode, {
+                  delay: 20
+               });
+               // Use aspect to hitch some events to work around 2nd drag event bugs...
+               aspect.before(this.moveable, "onMoveStart", lang.hitch(this, "onDragStart"));
+               aspect.after(this.moveable, "onMoveStop", lang.hitch(this, "onDragEnd"), true);
+               on(this.moveable.handle, "mousedown", lang.hitch(this, "onMouseDown"));
+               on(this.moveable.handle, "mouseup", lang.hitch(this, "onMouseUp"));
+               on(this.moveable.handle, "click", lang.hitch(this, "onDraggableClick"));
+            }
          }
       },
       
       onMouseDown: function alfresco_node_DraggableNodeMixin__onMouseDown(evt) {
          this.alfLog("log", "On mouse down", evt);
          var output = domGeom.position(this.draggableNode);
-         this.alfLog("log", "Computed style: ", output.x, output.y);
          this.origX = output.x;
          this.origY = output.y;
       },
@@ -120,9 +131,8 @@ define(["dojo/_base/declare",
        */
       onMouseUp: function alfresco_node_DraggableNodeMixin__onMouseUp(e) {
          this.alfLog("log", "On Mouse Up", e);
-         if (this.mover != null)
+         if (this.mover)
          {
-            this.alfLog("log", "Calling mover onMouseUp");
             this.mover.onMouseUp(e);
             this.mover = null;
             event.stop(e);
@@ -137,7 +147,6 @@ define(["dojo/_base/declare",
        */
       onDraggableClick: function alfresco_node_DraggableNodeMixin__onDraggableClick(e) {
          this.alfLog("log", "On draggable click", e, this.dragInFlight);
-         
          if (this.dragInFlight)
          {
             this.alfLog("log", "Cancelling in flight");
