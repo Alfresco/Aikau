@@ -164,11 +164,11 @@ registerSuite(function(){
       "Type a new tag name and hit enter to create it": function() {
          return browser.pressKeys("tag1")
             .pressKeys(keys.ENTER)
-            .findByCssSelector(".mx-row:last-child .mx-request-body")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "{\"name\":\"tag1\"}", "Request to create new tag not made");
-               });
+            .getLastXhr("aikau/proxy/alfresco/api/tag/workspace/SpacesStore")
+            .then(function(xhr){
+               var requestBody = xhr.request.body;
+               assert.propertyVal(requestBody, "name", "tag1");
+            });
       },
 
       "New tag should be displayed": function() {
@@ -180,11 +180,11 @@ registerSuite(function(){
 
       "Hit return to save the node with the new tag": function() {
          return browser.pressKeys([keys.ENTER])
-            .findByCssSelector(".mx-row:last-child .mx-url")
-               .getVisibleText()
-               .then(function(url) {
-                  assert.include(url, "proxy/alfresco/api/node/workspace/SpacesStore/d91128af-3b99-4710-95b6-a858eb090418/formprocessor", "A request was not made to save the node");
-               });
+            .getLastXhr("aikau/proxy/alfresco/api/node/workspace/SpacesStore/d91128af-3b99-4710-95b6-a858eb090418/formprocessor")
+            .then(function(xhr){
+               var requestBody = xhr.request.body;
+               assert.propertyVal(requestBody, "node.properties.cm:taggable", "workspace://SpacesStore/6619a771-5e35-40be-8c08-2f4791d9a056");
+            });
       },
 
       "The updated tag should be displayed in read-only mode": function() {

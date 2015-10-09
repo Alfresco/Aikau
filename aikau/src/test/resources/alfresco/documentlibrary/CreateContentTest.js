@@ -388,15 +388,14 @@ registerSuite(function(){
          .end()
          .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden")
          .end()
-         .findByCssSelector(".mx-row:nth-child(4) .mx-request-body")
-            .getVisibleText()
-            .then(function(payload) {
-               // NOTE: Checking payload elements individually because order is not guaranteed...
-               assert.include(payload, "\"parentNodeRef\":\"some://dummy/node\"", "Parent NodeRef incorrect");
-               assert.include(payload, "\"sourceNodeRef\":\"workspace://SpacesStore/c90aa137-2c57-4a36-8681-b0b207cbee91\"", "Source NodeRef incorrect");
-               assert.include(payload, "\"prop_cm_name\":\"Name\"", "Name incorrect");
-               assert.include(payload, "\"prop_cm_title\":\"Title\"", "Title incorrect");
-               assert.include(payload, "\"prop_cm_description\":\"Description\"", "Description incorrect");
+         .getXhrEntries({url: "folder-templates", method: "POST", pos: "last"})
+            .then(function(xhrEntry){
+               var requestBody = xhrEntry.request.body;
+               assert.propertyVal(requestBody, "parentNodeRef", "some://dummy/node");
+               assert.propertyVal(requestBody, "sourceNodeRef", "workspace://SpacesStore/c90aa137-2c57-4a36-8681-b0b207cbee91");
+               assert.propertyVal(requestBody, "prop_cm_name", "Name");
+               assert.propertyVal(requestBody, "prop_cm_title", "Title");
+               assert.propertyVal(requestBody, "prop_cm_description", "Description");
             });
       },
 

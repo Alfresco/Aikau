@@ -133,10 +133,10 @@ registerSuite(function(){
          .end()
          .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
          .end()
-         .findByCssSelector("tr.mx-row:nth-child(1) .mx-request-body")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "{\"nodeRefs\":[\"workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\"]}");
+         .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete")
+            .then(function(xhr){
+               var requestBody = xhr.request.body;
+               assert.deepPropertyVal(requestBody, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d");
             });
       },
 
@@ -151,10 +151,11 @@ registerSuite(function(){
          .end()
          .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
          .end()
-         .findByCssSelector("tr.mx-row:nth-child(2) .mx-request-body")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "{\"nodeRefs\":[\"workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\",\"workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e\"]}");
+         .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete")
+            .then(function(xhr){
+               var requestBody = xhr.request.body;
+               assert.deepPropertyVal(requestBody, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
+               assert.deepPropertyVal(requestBody, "nodeRefs[1]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f");
             });
       },
 

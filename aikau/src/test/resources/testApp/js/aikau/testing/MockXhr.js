@@ -188,7 +188,7 @@ define(["dojo/_base/declare",
             "data-aikau-xhr-url": xhrRequest.url || "",
             "data-aikau-xhr-request-headers": (xhrRequest.requestHeaders && JSON.stringify(xhrRequest.requestHeaders)) || "",
             "data-aikau-xhr-request-body": xhrRequest.requestBody || "",
-         }, this.logNode);
+         }, this.logNode, "first");
          domConstruct.create("td", {
             className: "mx-method",
             innerHTML: xhrRequest.method,
