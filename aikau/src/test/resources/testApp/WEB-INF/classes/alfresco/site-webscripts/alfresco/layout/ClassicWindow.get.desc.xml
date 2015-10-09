@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>ClassicWindow Test</shortname>
+  <description>This WebScript defines the ClassicWindow page test</description>
+  <family>aikau-unit-tests</family>
+  <url>/ClassicWindow</url>
+</webscript>

@@ -26,6 +26,13 @@
    width: 48px;
 }
 
+.alfresco-logo-Logo .alfresco-logo-grey {
+   background-image: url("./images/alfresco_grey.png");
+   background-repeat: no-repeat;
+   height: 43px;
+   width: 187px;
+}
+
 .alfresco-logo-Logo .surf-logo-large {
    background-image: url("./images/SurfLogo200.jpg");
    background-repeat: no-repeat;

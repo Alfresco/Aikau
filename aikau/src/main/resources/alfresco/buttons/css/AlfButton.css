@@ -99,4 +99,9 @@
          }
       }
    }
+   &.biggerBolder .dijitButtonText {
+      font-family: @bold-font;
+      font-weight: @standard-button-font-weight;
+      font-size: @large-font-size;
+   }
 }
