@@ -673,6 +673,10 @@ define([],function() {
       SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
 
       /**
+       * This topic should be published by [menu items]{@link module:alfresco/menus/AlfMenuItem} contained within
+       * a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup} to
+       * be forwarded onto the [ActionService]{@link module:alfresco/services/ActionService} in order to request
+       * that the configured action be performed on the currently selected items.
        * 
        * @instance
        * @type {string}
@@ -680,7 +684,8 @@ define([],function() {
        * @since 1.0.39
        *
        * @event
-       * 
+       * @param {string} [action] The action to perform
+       * @param {string} [actionTopic] The topic to re-publish the action request on
        */
       SELECTED_DOCUMENTS_ACTION: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
 
