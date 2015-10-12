@@ -135,7 +135,7 @@ define(["dojo/_base/declare",
          }
          if (this.disableWhenNothingSelected)
          {
-            this.disable(this.selectedItems.length === 0);
+            this.setDisabled(this.selectedItems.length === 0);
          }
          
          this.publishSelectedItems(this.selectedItems);
@@ -152,7 +152,7 @@ define(["dojo/_base/declare",
        * @param {boolean} disable Indicates whether to disable or enable the widget
        * @overridable
        */
-      disable: function alfresco_lists_SelectedItemStateMixin__disable(disable) {
+      setDisabled: function alfresco_lists_SelectedItemStateMixin__setDisabled(disable) {
          this.set("disabled", disable);
       },
 
