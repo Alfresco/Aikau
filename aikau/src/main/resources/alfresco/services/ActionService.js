@@ -173,7 +173,7 @@ define(["dojo/_base/declare",
       onDocumentsLoaded: function alfresco_services_ActionService__onDocumentsLoaded(payload) {
          this.alfLog("log", "New Documents Loaded", payload);
          this.currentlySelectedDocuments = {};
-         this.onselectedItemsChanged();
+         this.onSelectedItemsChanged();
       },
 
       /**
@@ -332,12 +332,12 @@ define(["dojo/_base/declare",
        * This is called from [onDocumentSelected]{@link module:alfresco/services/ActionService#onDocumentSelected}
        * when the [selectionTimeout]{@link module:alfresco/services/ActionService#selectionTimeout} times out. It
        * rests the [selectionTimeout]{@link module:alfresco/services/ActionService#selectionTimeout} to null and
-       * calls [onselectedItemsChanged]{@link module:alfresco/services/ActionService#deselectionTimeout}
+       * calls [onSelectedItemsChanged]{@link module:alfresco/services/ActionService#deselectionTimeout}
        *
        * @instance
        */
       deferredSelectionHandler: function alfresco_services_ActionService__deferredSelectionHandler() {
-         this.onselectedItemsChanged();
+         this.onSelectedItemsChanged();
          this.selectionTimeout = null;
       },
 
@@ -385,7 +385,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      onselectedItemsChanged: function alfresco_services_ActionService__onselectedItemsChanged() {
+      onSelectedItemsChanged: function alfresco_services_ActionService__onSelectedItemsChanged() {
          /*jshint maxcomplexity:false*/
          var files = this.getSelectedDocumentArray(), fileTypes = [], file,
              fileType, userAccess = {}, fileAccess, index,

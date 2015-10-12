@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * selected items occurs.
        *
        * @instance
-       * @type {timeout}
+       * @type {number}
        * @default
        */
       selectionTimeout: null,
@@ -121,7 +121,7 @@ define(["dojo/_base/declare",
        * This is called from [onItemSelected]{@link module:alfresco/lists/SelectedItemStateMixin#onItemSelected}
        * when the [selectionTimeout]{@link module:alfresco/lists/SelectedItemStateMixin#selectionTimeout} times out. It
        * resets the [selectionTimeout]{@link module:alfresco/lists/SelectedItemStateMixin#selectionTimeout} to null and
-       * calls [onselectedItemsChanged]{@link module:alfresco/lists/SelectedItemStateMixin#deselectionTimeout}
+       * calls [onSelectedItemsChanged]{@link module:alfresco/lists/SelectedItemStateMixin#deselectionTimeout}
        *
        * @instance
        */

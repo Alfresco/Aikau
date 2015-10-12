@@ -660,19 +660,6 @@ define([],function() {
       SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM",
 
       /**
-       * Used to indicate the list of currently selected documents has changed and provides the details of those items.
-       * 
-       * @instance
-       * @type {string} 
-       * @default
-       * @since 1.0.35
-       * 
-       * @event module:alfresco/core/topics~SELECTED_DOCUMENTS_CHANGED
-       * @property {object[]} selectedItems - The items that are selected
-       */
-      SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
-
-      /**
        * This topic should be published by [menu items]{@link module:alfresco/menus/AlfMenuItem} contained within
        * a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup} to
        * be forwarded onto the [ActionService]{@link module:alfresco/services/ActionService} in order to request
@@ -684,10 +671,23 @@ define([],function() {
        * @since 1.0.39
        *
        * @event
-       * @param {string} [action] The action to perform
-       * @param {string} [actionTopic] The topic to re-publish the action request on
+       * @property {string} [action] The action to perform
+       * @property {string} [actionTopic] The topic to re-publish the action request on
        */
       SELECTED_DOCUMENTS_ACTION: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
+
+      /**
+       * Used to indicate the list of currently selected documents has changed and provides the details of those items.
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       * @since 1.0.35
+       * 
+       * @event module:alfresco/core/topics~SELECTED_DOCUMENTS_CHANGED
+       * @property {object[]} selectedItems - The items that are selected
+       */
+      SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
 
       /**
        * This topic can be published to set a user preference. It is typically handled by 
