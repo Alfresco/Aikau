@@ -130,4 +130,69 @@ define(["intern!object",
          }
       };
    });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "AlfSearchResult Tests (navigation overrides)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/AlfSearchResult?override=navigation", "AlfSearchResult Tests (navigation overrides)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Name goes to new target": function() {
+            return browser.findByCssSelector("#SR_DISPLAY_NAME .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Site goes to new target": function() {
+            return browser.findByCssSelector("#SR_SITE .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Path goes to new target": function() {
+            return browser.findByCssSelector("#SR_PATH .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Date goes to new target": function() {
+            return browser.findByCssSelector("#SR_DATE .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
 });

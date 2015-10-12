@@ -61,6 +61,17 @@ define(["dojo/_base/declare",
        * @default
        */
       dndUploadCapable: false, 
+
+      /**
+       * Indicates whether or not the mixing module should take advantage of the drag-and-drop uploading capabilities. 
+       * This makes it possible to "opt-out" through configuration or extension.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      suppressDndUploading: false,
     
       /**
        * Determines whether or not the browser supports drag and drop file upload.
@@ -111,7 +122,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       subscribeToCurrentNodeChanges: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__subscribeToCurrentNodeChanges(domNode) {
-         if (this.dndUploadCapable)
+         if (this.dndUploadCapable && !this.suppressDndUploading)
          {
             // Handle updates to the metadata (this is required in order for the view to know what
             // root Node it represents is)
@@ -194,7 +205,7 @@ define(["dojo/_base/declare",
        * @param {object} domNode The DOM node to add drag and drop listeners to
        */
       addUploadDragAndDrop: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__addUploadDragAndDrop(domNode) {
-         if (this.dndUploadCapable)
+         if (this.dndUploadCapable && !this.suppressDndUploading)
          {
             this.alfLog("log", "Adding DND upload capabilities", this);
             try
@@ -212,10 +223,9 @@ define(["dojo/_base/declare",
                
                // Add listeners for the mouse entering (these handlers allow us to normalise browser events that
                // are "broken" due to firing across all child nodes...
-               this.dndUploadEventHandlers.push(on(win.body(), "dragenter", lang.hitch(this, "onDndUploadDragEnter")));
-               this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "dragover", lang.hitch(this, "onDndUploadDragOver")));
-               this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "drop", lang.hitch(this, "onDndUploadDrop")));
-               this.alfLog("log", "Handlers: ", this.dndUploadEventHandlers);
+               this.dndUploadEventHandlers.push(on(win.body(), "dragenter", lang.hitch(this, this.onDndUploadDragEnter)));
+               this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "dragover", lang.hitch(this, this.onDndUploadDragOver)));
+               this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "drop", lang.hitch(this, this.onDndUploadDrop)));
             }
             catch(exception)
             {

@@ -570,7 +570,7 @@ define([],function() {
       RELOAD_PAGE: "ALF_RELOAD_PAGE",
 
       /**
-       * This can be published to request to add a node or nodes as a favourite.
+       * This can be published to request to remove a node or nodes from the list of favourites.
        *
        * @instance
        * @type {String}

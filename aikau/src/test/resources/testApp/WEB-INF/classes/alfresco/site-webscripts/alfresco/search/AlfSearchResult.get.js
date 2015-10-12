@@ -1,3 +1,41 @@
+/* global page */
+function getSearchResult() {
+   var searchResult = {
+      id: "SR",
+      name: "alfresco/search/AlfSearchResult",
+      config: {
+         siteLandingPage: "landing",
+         pubSubScope: "AlfSearchResultScope",
+         mergeActions: true,
+         additionalDocumentAndFolderActions: [
+            "CUSTOM3"
+         ],
+         customActions: [
+            {
+               id: "CUSTOM3",
+               label: "Custom Action 3",
+               icon: "document-delete",
+               index: "10",
+               publishTopic: "DELETE_ACTION_TOPIC",
+               type: "javascript"
+            }
+         ],
+         widgetsForActions: [
+            {
+               name: "alfresco/renderers/actions/ManageAspects"
+            }
+         ]
+      }
+   };
+   /* jshint sub:true */
+   if (page.url.args["override"])
+   {
+      searchResult.config.navigationTarget = "NEW";
+   }
+
+   return searchResult;
+}
+
 model.jsonModel = {
    services: [
       {
@@ -231,35 +269,8 @@ model.jsonModel = {
                }
             ],
             widgets:[
-               {
-                  id: "SR",
-                  name: "alfresco/search/AlfSearchResult",
-                  config: {
-                     siteLandingPage: "landing",
-                     pubSubScope: "AlfSearchResultScope",
-                     mergeActions: true,
-                     additionalDocumentAndFolderActions: [
-                        "CUSTOM3"
-                     ],
-                     customActions: [
-                        {
-                           id: "CUSTOM3",
-                           label: "Custom Action 3",
-                           icon: "document-delete",
-                           index: "10",
-                           publishTopic: "DELETE_ACTION_TOPIC",
-                           type: "javascript"
-                        }
-                     ],
-                     widgetsForActions: [
-                        {
-                           name: "alfresco/renderers/actions/ManageAspects"
-                        }
-                     ]
-                  }
-               }
+               getSearchResult()
             ]
-            
          }
       },
       {
