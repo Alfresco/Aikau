@@ -46,6 +46,17 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/SearchThumbnailMixin.properties"}],
 
       /**
+       * Overrides the [inherited default configuration]{@link module:alfresco/node/DraggableNodeMixin#isDraggable}
+       * to prevent search result thumbnails from being draggable.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      isDraggable: false,
+
+      /**
        * Generates the publication payload by calling the mixed in 
        * [generatePayload]{@link module:alfresco/renderers/_SearchResultLinkMixin#generatePayload}
        * function and then wraps the property in an anchor element by calling the mixed in 

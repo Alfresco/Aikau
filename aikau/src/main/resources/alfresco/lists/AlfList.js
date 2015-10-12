@@ -155,6 +155,18 @@ define(["dojo/_base/declare",
       loadDataImmediately: true,
 
       /**
+       * Indicates whether or not views should apply drag-and-drop highlighting. Each view used by the
+       * list will have this value applied (even if it overrides custom configuration) as it is up to
+       * the list to control whether or not it supported drag-and-drop behaviour.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      suppressDndUploading: true,
+    
+      /**
        * Subscribe the document list topics.
        *
        * @instance
@@ -202,7 +214,6 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-
       noDataMessage: "alflist.no.data.message",
 
       /**
@@ -213,7 +224,6 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-
       fetchingDataMessage: "alflist.loading.data.message",
 
       /**
@@ -224,7 +234,6 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-
       renderingViewMessage: "alflist.rendering.data.message",
 
       /**
@@ -235,7 +244,6 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-
       fetchingMoreDataMessage: "alflist.loading.data.message",
 
       /**
@@ -297,6 +305,13 @@ define(["dojo/_base/declare",
          // Process the array of widgets. Only views should be included as widgets of the DocumentList.
          if (this.widgets)
          {
+            // Iterate over all the configured views and apply the DND upload suppression
+            // configuration to each of them...
+            array.forEach(this.widgets, function(view) {
+               var viewConfig = lang.getObject("config", true, view); // NOTE: Create the config object if it doesn't exist
+               viewConfig.suppressDndUploading = this.suppressDndUploading;
+            }, this);
+
             // Opting to NOT clone the widgets for performance here, but leaving the code commented out
             // for hasty re-insertion if necessary. It *shouldn't* be necessary to clone here because
             // the views will clone as necessary...
