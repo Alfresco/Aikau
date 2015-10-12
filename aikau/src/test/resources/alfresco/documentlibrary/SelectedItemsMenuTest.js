@@ -21,204 +21,158 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Selected Items Menu Test",
-      "Test Menu Initially Disabled": function () {
+      return {
+         name: "Selected Items Menu Test",
 
-         var testname = "Selected Items Menu Test";
-         return TestCommon.loadTestWebScript(this.remote, "/SelectedItemsMenu", testname)
-            .findByCssSelector("#SELECTED_ITEMS.dijitDisabled")
-               .then(
-                  null,
-                  function(){assert(false, "Test #1a - The menu was not initially disabled");}
-               )
-            .end();
-      },
-      "Test Selecting Item Enables Menu": function () {
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/SelectedItemsMenu", "Selected Items Menu Test").end();
+         },
 
-         var browser = this.remote;
+         beforeEach: function() {
+            browser.end();
+         },
 
-         // Simulate selection of an item...
-         return browser.findByCssSelector("#SELECT_ITEM_1_label")
-            .click()
-         .end()
+         "Test Menu Initially Disabled": function () {
+            return browser.findByCssSelector("#SELECTED_ITEMS.dijitDisabled");
+         },
 
-         // Sleep is required for selection timeout...
-         .sleep(100)
+         "Test Selecting Item Enables Menu": function () {
+            // Simulate selection of an item...
+            return browser.findByCssSelector("#SELECT_ITEM_1_label")
+               .click()
+            .end()
 
-         // Check that the menu item is no longer disabled...
-         .findByCssSelector("#SELECTED_ITEMS.dijitDisabled")
-            .then(
-               function(){assert(false, "Test #2a - The menu was not enabled when clicking an item");},
-               function() {
-                  // DIDN'T FIND (success)
-                  assert(true, "Test #3 - Did NOT find menu item as expected");
-               }
-            )
-         .end();
-      },
-      "Test De-Selecting Item Disables Menu": function () {
+            // Wait until publication of the selected items occurs...
+            .getLastPublish("ALF_DOCLIST_FILE_SELECTION")
+            .clearLog()
 
-         var browser = this.remote;
+            // Check that the menu item is no longer disabled...
+            .findAllByCssSelector("#SELECTED_ITEMS.dijitDisabled")
+               .then(function(elements){
+                  assert.lengthOf(elements, 0, "The menu was not disabled");
+               });
+         },
 
-         // Simulate de-selection of an item...
-         return browser.findByCssSelector("#DESELECT_ITEM_1_label")
-            .click()
-         .end()
+         "Test De-Selecting Item Disables Menu": function () {
+            // Simulate de-selection of an item...
+            return browser.findByCssSelector("#DESELECT_ITEM_1_label")
+               .click()
+            .end()
 
-         // Sleep is required for selection timeout...
-         .sleep(100)
+            // Wait until publication of the selected items occurs...
+            .getLastPublish("ALF_DOCLIST_FILE_SELECTION")
+            .clearLog()
 
-         // Check that the menu item is now disabled again...
-         .findByCssSelector("#SELECTED_ITEMS.dijitDisabled")
-            .then(
-               null,
-               function(){assert(false, "Test #4a - The menu was not disabled when de-selecting items");}
-            )
-         .end();
-      },
-      "Test Items Not Cleared": function () {
+            // Check that the menu item is now disabled again...
+            .findByCssSelector("#SELECTED_ITEMS.dijitDisabled");
+         },
 
-         var browser = this.remote;
+         "Test Items Not Cleared": function () {
+            // Add the item again...
+            return browser.findByCssSelector("#SELECT_ITEM_1_label")
+               .click()
+            .end()
 
-         // Add the item again...
-         return browser.findByCssSelector("#SELECT_ITEM_1_label")
-            .click()
-         .end()
+            // Wait until publication of the selected items occurs...
+            .getLastPublish("ALF_DOCLIST_FILE_SELECTION")
+            .clearLog()
 
-         // Sleep is required for selection timeout...
-         .sleep(100)
+            // Open the menu...
+            .findByCssSelector("#SELECTED_ITEMS_text")
+               .click()
+            .end()
 
-         // Open the menu...
-         .findByCssSelector("#SELECTED_ITEMS_text")
-            .click()
-         .end()
+            // Click the second menu item (which is configured to NOT clear selected items)
+            .findByCssSelector("#MENU_ITEM_NO_CLEAR_text")
+               .click()
+            .end()
 
-         // Click the second menu item (which is configured to NOT clear selected items)
-         .findByCssSelector("#MENU_ITEM_NO_CLEAR_text")
-            .click()
-         .end()
+            .getAllPublishes("ALF_CLEAR_SELECTED_ITEMS")
+               .then(function(payloads) {
+                  assert.lengthOf(payloads, 0, "The topic to clear selected items should NOT have been published");
+               })
+            .getAllPublishes("ALF_DOCLIST_FILE_SELECTION")
+               .then(function(payloads) {
+                  assert.lengthOf(payloads, 0, "Item selection topic should NOT have been published");
+               })
+            .clearLog();
+         },
 
-         .findByCssSelector(TestCommon.topicSelector("ALF_CLEAR_SELECTED_ITEMS", "publish", "any"))
-            .then(
-               function(){assert(false, "Test #4b - The topic to clear selected items was not published");},
-               function() {
-                  // DIDN'T FIND (success)
-                  assert(true, "Test #3 - Did NOT find menu item as expected");
-               }
-            )
-         .end()
-         .findByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_FILE_SELECTION", "publish", "any"))
-            .then(
-               function(){assert(false, "Test #4c - The topic to clear selected items was not published");},
-               function() {
-                  // DIDN'T FIND (success)
-                  assert(true, "Test #3 - Did NOT find menu item as expected");
-               }
-            )
-         .end();
-      },
-      "Test Menu Item Contains Selected Item": function () {
+         "Test Menu Item Contains Selected Item": function () {
+            // Add the item again...
+            return browser.findByCssSelector("#SELECT_ITEM_1_label")
+               .click()
+            .end()
 
-         var browser = this.remote;
+            // Wait until publication of the selected items occurs...
+            .getLastPublish("ALF_DOCLIST_FILE_SELECTION")
+            .clearLog()
 
-         // Add the item again...
-         return browser.findByCssSelector("#SELECT_ITEM_1_label")
-            .click()
-         .end()
+            // Open the menu...
+            .findByCssSelector("#SELECTED_ITEMS_text")
+               .click()
+            .end()
 
-         // Sleep is required for selection timeout...
-         .sleep(100)
+            // Click the menu item...
+            .findByCssSelector("#MENU_ITEM_text")
+               .click()
+            .end()
 
-         // Open the menu...
-         .findByCssSelector("#SELECTED_ITEMS_text")
-            .click()
-         .end()
+            .getLastPublish("TEST_ITEMS")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "selectedItems.0.data","item_one", "Didn't find selected item in publication payload");
+               })
+            .getLastPublish("ALF_CLEAR_SELECTED_ITEMS", "The topic to clear selected items was not published")
+            .getLastPublish("ALF_DOCLIST_FILE_SELECTION", "The topic to clear selected items was not published")
+            .clearLog();
+         },
 
-         // Click the menu item...
-         .findByCssSelector("#MENU_ITEM_text")
-            .click()
-         .end()
+         "Test Menu Disabled After Item Click": function () {
+            // Check that after the previous click the menu is disabled again...
+            return browser.findByCssSelector("#SELECTED_ITEMS.dijitDisabled");
+         },
 
-         .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("TEST_ITEMS","selectedItems","data","item_one"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Test #3a - Didn't find selected item in publication payload");
-            })
-         .end();
-      },
-      "Test Menu Disabled After Item Click": function () {
-         // Check that after the previous click the menu is disabled again...
-         var browser = this.remote;
-         return browser.findByCssSelector("#SELECTED_ITEMS.dijitDisabled")
-            .then(
-               null,
-               function(){assert(false, "Test #4a - The menu was not initially disabled");}
-            )
-         .end();
-      },
-      "Test Clearing Selected Items Topic Published": function () {
-         var browser = this.remote;
-         return browser.findByCssSelector(TestCommon.topicSelector("ALF_CLEAR_SELECTED_ITEMS", "publish", "any"))
-            .then(
-               null,
-               function(){assert(false, "Test #4b - The topic to clear selected items was not published");}
-            )
-         .end();
-      },
-      "Test Select None Topic Published": function () {
-         var browser = this.remote;
-         return browser.findByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_FILE_SELECTION", "publish", "any"))
-            .then(
-               null,
-               function(){assert(false, "Test #4c - The topic to clear selected items was not published");}
-            )
-         .end();
-      },
-      "Test Multiple Item Selection": function () {
+         "Test Multiple Item Selection": function () {
+            // Simulate selection of an item...
+            return browser.findByCssSelector("#SELECT_ITEM_1_label")
+               .click()
+            .end()
+            
+            .findByCssSelector("#SELECT_ITEM_2_label")
+               .click()
+            .end()
 
-         var browser = this.remote;
+            // Wait until publication of the selected items occurs...
+            .getLastPublish("ALF_DOCLIST_FILE_SELECTION")
+            .clearLog()
 
-         // Simulate selection of an item...
-         return browser.findByCssSelector("#SELECT_ITEM_1_label")
-            .click()
-         .end()
-         .findByCssSelector("#SELECT_ITEM_2_label")
-            .click()
-         .end()
+            .findByCssSelector("#SELECTED_ITEMS_text")
+               .click()
+            .end()
 
-         // Sleep is required for selection timeout...
-         .sleep(100)
+            // Click the menu item...
+            .findByCssSelector("#MENU_ITEM_text")
+               .click()
+            .end()
 
-         .findByCssSelector("#SELECTED_ITEMS_text")
-            .click()
-         .end()
+            .getLastPublish("TEST_ITEMS")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "selectedItems.0.data","item_one", "Didn't find first selected item in publication payload");
+                  assert.deepPropertyVal(payload, "selectedItems.1.data","item_two", "Didn't find second selected item in publication payload");
+               });
+         },
 
-         // Click the menu item...
-         .findByCssSelector("#MENU_ITEM_text")
-            .click()
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("TEST_ITEMS","selectedItems","data","item_one"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "Test #5a - Didn't find selected item in publication payload");
-            })
-         .end()
-
-         .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("TEST_ITEMS","selectedItems","data","item_two"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Test #6a - Didn't find selected item in publication payload");
-            })
-         .end()
-         .alfPostCoverageResults(browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

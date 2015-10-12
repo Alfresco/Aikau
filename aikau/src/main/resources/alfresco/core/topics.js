@@ -660,6 +660,23 @@ define([],function() {
       SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM",
 
       /**
+       * This topic should be published by [menu items]{@link module:alfresco/menus/AlfMenuItem} contained within
+       * a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup} to
+       * be forwarded onto the [ActionService]{@link module:alfresco/services/ActionService} in order to request
+       * that the configured action be performed on the currently selected items.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       *
+       * @event
+       * @property {string} [action] The action to perform
+       * @property {string} [actionTopic] The topic to re-publish the action request on
+       */
+      SELECTED_DOCUMENTS_ACTION: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
+
+      /**
        * Used to indicate the list of currently selected documents has changed and provides the details of those items.
        * 
        * @instance
