@@ -42,10 +42,11 @@ define(["dojo/_base/declare",
    return declare([Core, _AlfDocumentListTopicMixin], {
       
       /**
-       * This is used to keep track of the documents that are currently selected. It is initialised to an empty
-       * array in the constructor, [onItemSelected]{@link module:alfresco/lists/SelectedItemStateMixin#onItemSelected} 
-       * adds elements and the [onItemDeselected]{@link module:alfresco/lists/SelectedItemStateMixin#onItemDeselected} 
-       * removes them.
+       * This is used to keep track of the items that are currently selected. 
+       * [onItemSelected]{@link module:alfresco/lists/SelectedItemStateMixin#onItemSelected} 
+       * adds items and the [onItemDeselected]{@link module:alfresco/lists/SelectedItemStateMixin#onItemDeselected} 
+       * removes them. The [itemKeyProperty]{@link module:alfresco/lists/SelectedItemStateMixin#itemKeyProperty} 
+       * is used as the key and the entire item is the value.
        *
        * @instance
        * @type {object}
@@ -84,13 +85,10 @@ define(["dojo/_base/declare",
       itemKeyProperty: "node.nodeRef",
 
       /**
-       * An array of the [itemKeyProperty]{@link module:alfresco/lists/SelectedItemStateMixin#itemKeyProperty}
-       * attributes taken from each entry in the 
-       * [currentlySelectedItems]{@link module:alfresco/lists/SelectedItemStateMixin#currentlySelectedItems}
-       * map.
+       * An array of the currently selected items.
        * 
        * @instance
-       * @type {string[]}
+       * @type {object[]}
        * @default
        */
       selectedItems: null,
