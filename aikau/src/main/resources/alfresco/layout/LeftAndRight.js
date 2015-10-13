@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
          }
          // We need to reverse the order of RIGHT widgets so that the last widget is defined is furthest
          // to the RIGHT
-         this.widgetsRight.reverse();
+         this.widgetsRight && this.widgetsRight.reverse();
          this.processWidgets(this.widgetsRight, this.rightWidgets, "RIGHT");
          this.processWidgets(this.widgetsLeft, this.leftWidgets, "LEFT");
 

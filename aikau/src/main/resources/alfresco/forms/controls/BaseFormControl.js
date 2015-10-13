@@ -819,7 +819,7 @@ define(["dojo/_base/declare",
             }
             payload.responseTopic = responseTopic;
             this._pubSubOptionsHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onPubSubOptions), true);
-            this.alfPublish(config.publishTopic, payload, true);
+            this.alfPublish(config.publishTopic, payload, (config.publishGlobal !== false));
          }
          else
          {

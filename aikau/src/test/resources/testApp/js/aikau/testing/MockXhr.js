@@ -19,20 +19,20 @@
 
 /*globals sinon*/
 /**
- *
  * @module aikauTesting/MockXhr
  * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase",
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/MockXhr.html",
-        "alfresco/core/Core",
-        "dojo/_base/lang",
-        "dojo/dom-class",
-        "dojo/dom-construct",
-        "dojo/aspect",
-        "dojo/Deferred"],
+        "dijit/_WidgetBase", 
+        "dijit/_TemplatedMixin", 
+        "dojo/text!./templates/MockXhr.html", 
+        "alfresco/core/Core", 
+        "dojo/_base/lang", 
+        "dojo/dom-class", 
+        "dojo/dom-construct", 
+        "dojo/aspect", 
+        "dojo/Deferred"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domClass, domConstruct, aspect, Deferred) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        * @type {object[]}
        * @default [{cssFile:"./css/MockXhr.css"}]
        */
-      cssRequirements: [{cssFile:"./css/MockXhr.css"}],
+      cssRequirements: [{cssFile: "./css/MockXhr.css"}],
 
       /**
        * The HTML template to use for the widget.
@@ -70,6 +70,44 @@ define(["dojo/_base/declare",
          // Capture each request and log it...
          this.requests = [];
          aspect.before(this.server, "handleRequest", lang.hitch(this, this.updateLog));
+      },
+
+      /**
+       * Build the HTML for displaying a request/response body on the page
+       *
+       * @instance
+       * @param {object} body The body object (request or response)
+       * @returns {string} The HTML
+       */
+      buildBodyHTML: function alfresco_testing_MockXhr__buildBodyHTML(body) {
+         var bodyHTML = body;
+         try {
+            bodyHTML = JSON.parse(bodyHTML);
+            bodyHTML = JSON.stringify(bodyHTML, null, 2);
+         } catch (e) {
+            // Ignore
+         }
+         return bodyHTML;
+      },
+
+      /**
+       * Build the HTML for displaying headers on the page
+       *
+       * @instance
+       * @param {object} headers The headers object (request or response)
+       * @returns {string} The HTML
+       */
+      buildHeadersHTML: function alfresco_testing_MockXhr__buildHeadersHTML(headers) {
+         var headersHtmlBuffer = [],
+            headerName,
+            headerValue;
+         for (headerName in headers) {
+            if (headers.hasOwnProperty(headerName)) {
+               headerValue = headers[headerName];
+               headersHtmlBuffer.push("<span class='nowrap'><strong>" + headerName + ":</strong> " + headerValue + "</span>");
+            }
+         }
+         return (headersHtmlBuffer.length && headersHtmlBuffer.join("<br />")) || "N/A"
       },
 
       /**
@@ -145,20 +183,31 @@ define(["dojo/_base/declare",
 
          // Add a new row to the log
          var rowNode = domConstruct.create("tr", {
-            className: "mx-row"
-         }, this.logNode);
+            className: "mx-row",
+            "data-aikau-xhr-method": xhrRequest.method || "",
+            "data-aikau-xhr-url": xhrRequest.url || "",
+            "data-aikau-xhr-request-headers": (xhrRequest.requestHeaders && JSON.stringify(xhrRequest.requestHeaders)) || "",
+            "data-aikau-xhr-request-body": xhrRequest.requestBody || "",
+         }, this.logNode, "first");
          domConstruct.create("td", {
             className: "mx-method",
-            innerHTML: xhrRequest.method
+            innerHTML: xhrRequest.method,
+            title: xhrRequest.method
          }, rowNode);
          domConstruct.create("td", {
             className: "mx-url",
-            innerHTML: xhrRequest.url
+            innerHTML: xhrRequest.url,
+            title: xhrRequest.url
          }, rowNode);
          domConstruct.create("td", {
-            className: "mx-payload",
-            innerHTML: xhrRequest.requestBody || "",
-            "data-aikau-xhr-payload": xhrRequest.requestBody || ""
+            className: "mx-request-headers",
+            innerHTML: this.buildHeadersHTML(xhrRequest.requestHeaders),
+            title: this.buildHeadersHTML(xhrRequest.requestHeaders)
+         }, rowNode);
+         domConstruct.create("td", {
+            className: "mx-request-body",
+            innerHTML: this.buildBodyHTML(xhrRequest.requestBody) || "&nbsp;",
+            title: this.buildBodyHTML(xhrRequest.requestBody) || "&nbsp;"
          }, rowNode);
          var responseNode = domConstruct.create("td", {
             className: "mx-response",
@@ -166,17 +215,12 @@ define(["dojo/_base/declare",
          }, rowNode);
 
          // Once we've had a response, add it to the log
-         deferred.promise.then(function() {
+         deferred.promise.then(lang.hitch(this, function() {
 
-            // Construct headers HTML
-            var headersHtmlBuffer = [];
-            for (var headerName in xhrRequest.responseHeaders) {
-               if (xhrRequest.responseHeaders.hasOwnProperty(headerName)) {
-                  headersHtmlBuffer.push("<span class='nowrap'>" + headerName + ": " + xhrRequest.responseHeaders[headerName] + "</span>");
-               }
-            }
-            var headersHtml = (headersHtmlBuffer.length && headersHtmlBuffer.join("<br />")) || "N/A",
-               responseText = (xhrRequest.responseText && lang.trim(xhrRequest.responseText)) || "N/A";
+            // Construct headers HTML and tidy response text
+            var headersHtml = this.buildHeadersHTML(xhrRequest.responseHeaders),
+               responseHeaders = (xhrRequest.responseHeaders && JSON.stringify(xhrRequest.responseHeaders)) || "";
+            responseBody = (xhrRequest.responseText && lang.trim(xhrRequest.responseText)) || "N/A";
 
             // Build response info
             var responseHtml = xhrRequest.status + " (" + xhrRequest.statusText + ")<br />";
@@ -185,13 +229,14 @@ define(["dojo/_base/declare",
             responseHtml += "<dt>Headers</dt>";
             responseHtml += "<dd>" + headersHtml + "</dd>";
             responseHtml += "<dt>Reponse body</dt>";
-            responseHtml += "<dd>" + responseText + "</dd>";
+            responseHtml += "<dd>" + this.buildBodyHTML(responseBody) + "</dd>";
             responseHtml += "</dl>";
 
             // Add a new row to the log and update the data attribute
             responseNode.innerHTML = responseHtml;
-            responseNode.setAttribute("data-aikau-xhr-response-text", responseText);
-         });
+            rowNode.setAttribute("data-aikau-xhr-response-headers", responseHeaders);
+            rowNode.setAttribute("data-aikau-xhr-response-body", responseBody);
+         }));
       },
 
       /**

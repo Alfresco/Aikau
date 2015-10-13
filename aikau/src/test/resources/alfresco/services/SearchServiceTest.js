@@ -62,10 +62,12 @@ registerSuite(function(){
       },
 
       "Check there are no unexpected queries": function() {
-         return browser.findByCssSelector("td.mx-url")
-            .getVisibleText()
-            .then(function(text) {
-               assert(decodeURIComponent(text).indexOf("&query={") === -1, "unexpected query found");
+         return browser.findByCssSelector("body")
+            .end()
+
+         .getXhrEntries({url: "&query={"})
+            .then(function(entries) {
+               assert.lengthOf(entries, 0);
             });
       },
 
@@ -75,13 +77,11 @@ registerSuite(function(){
                assert.propertyVal(payload, "repo", true, "Repository scope not requested");
             })
          .end()
-         .findByCssSelector("tr.mx-row:nth-child(1) td.mx-url")
-            .getVisibleText()
-            .then(function(url) {
-               assert.include(url, "repo=true", "Repository scope not used in XHR");
+         .getLastXhr("aikau/proxy/alfresco/slingshot/search")
+            .then(function(xhr){
+               assert.include(xhr.request.url, "repo=true");
             })
-         .end()
-         .clearLog();
+            .clearLog();
       },
 
       "Switch to All Sites scope": function() {
@@ -96,13 +96,11 @@ registerSuite(function(){
             assert.propertyVal(payload, "repo", false, "Repository scope used");
             assert.propertyVal(payload, "site", "", "Site incorrect");
          })
-         .findByCssSelector("tr.mx-row:nth-child(3) td.mx-url")
-            .getVisibleText()
-            .then(function(url) {
-               assert.include(url, "repo=false", "Repository scope not used in XHR");
+         .getLastXhr("aikau/proxy/alfresco/slingshot/search")
+            .then(function(xhr){
+               assert.include(xhr.request.url, "repo=false");
             })
-         .end()
-         .clearLog();
+            .clearLog();
       },
 
       "Switch to Site scope": function() {
@@ -117,14 +115,12 @@ registerSuite(function(){
             assert.propertyVal(payload, "repo", false, "Repository scope used");
             assert.propertyVal(payload, "site", "site", "Site incorrect");
          })
-         .findByCssSelector("tr.mx-row:nth-child(4) td.mx-url")
-            .getVisibleText()
-            .then(function(url) {
-               assert.include(url, "repo=false", "Repository scope not used in XHR");
-               assert.include(url, "site=site", "Repository scope not used in XHR");
+         .getLastXhr("aikau/proxy/alfresco/slingshot/search")
+            .then(function(xhr){
+               assert.include(xhr.request.url, "repo=false");
+               assert.include(xhr.request.url, "site=site");
             })
-         .end()
-         .clearLog();
+            .clearLog();
       },
 
       "Switch to Repository scope": function() {
@@ -138,13 +134,11 @@ registerSuite(function(){
          .then(function(payload) {
             assert.propertyVal(payload, "repo", true, "Repository scope NOT used");
          })
-         .findByCssSelector("tr.mx-row:nth-child(5) td.mx-url")
-            .getVisibleText()
-            .then(function(url) {
-               assert.include(url, "repo=true", "Repository scope not used in XHR");
+         .getLastXhr("aikau/proxy/alfresco/slingshot/search")
+            .then(function(xhr){
+               assert.include(xhr.request.url, "repo=true");
             })
-         .end()
-         .clearLog();
+            .clearLog();
       },
 
       "Post Coverage Results": function() {

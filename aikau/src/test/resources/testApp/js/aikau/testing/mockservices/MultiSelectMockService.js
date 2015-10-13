@@ -124,7 +124,7 @@ define(["alfresco/core/Core",
             setTimeout(lang.hitch(this, function() {
                this.alfPublish(payload.alfResponseTopic || payload.responseTopic, {
                   response: this._celestialCategories
-               });
+               }, false, false, payload.alfResponseScope);
             }), (this._responseDelayMs += 50));
          }
       });

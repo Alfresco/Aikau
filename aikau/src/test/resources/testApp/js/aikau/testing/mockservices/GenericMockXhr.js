@@ -41,7 +41,9 @@ define([
             try {
                this.server.respondWith([200, {
                   "Content-Type": "application/json;charset=UTF-8"
-               }, "OK"]);
+               }, JSON.stringify({
+                  result: "OK"
+               })]);
                this.alfPublish("ALF_MOCK_XHR_SERVICE_READY");
             } catch (e) {
                this.alfLog("error", "The following error occurred setting up the mock server", e);

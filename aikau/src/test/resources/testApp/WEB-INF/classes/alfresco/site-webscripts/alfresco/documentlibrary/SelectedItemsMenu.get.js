@@ -69,6 +69,7 @@ model.jsonModel = {
                            id: "SELECTED_ITEMS",
                            name: "alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup",
                            config: {
+                              debounceTime: 0, // Remove debounce time to aid testing
                               passive: false,
                               itemKeyProperty: "itemKey",
                               label: "Selected items...",
@@ -108,10 +109,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

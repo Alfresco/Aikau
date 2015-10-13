@@ -1,9 +1,10 @@
-Aikau 1.0.36 Release Notes
+Aikau 1.0.39 Release Notes
 ===
 
 New deprecations: 
 ---
-None
+* alfresco/services/_PreferenceServiceTopicMixin.js              (use alfresco/core/topics)
+* alfresco/services/actions/SimpleWorkflowService.js             (use alfresco/services/actions/WorkflowService)
 
 Previous deprecations:
 ---
@@ -11,12 +12,16 @@ Previous deprecations:
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 * alfresco/core/UrlUtils.js                                      (use alfresco/util/urlUtils or alfresco/core/UrlUtilsMixin)
 * alfresco/dialogs/_AlfCreateFormDialogMixin.js                  (use alfresco/services/DialogService)
+* alfresco/dialogs/AlfDialogService                              (use: alfresco/services/Dialog) 
 * alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
 * alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
 * alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
-* alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
-* alfresco/documentlibrary/views/DocumentListRenderer            (use: alfresco/lists/views/ListRenderer)
+* alfresco/documentlibrary/AlfSearchList                         (use: alfresco/search/AlfSearchList)
 * alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin  (use: alfresco/lists/views/_AlfAdditionalViewControlMixin)
+* alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
+* alfresco/documentlibrary/views/AlfSearchListView               (use: alfresco/search/AlfSearchListView)
+* alfresco/documentlibrary/views/DocumentListRenderer            (use: alfresco/lists/views/ListRenderer)
+* alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin (use: alfresco/lists/views/layouts/_MultiItemRendererMixin)
 * alfresco/documentlibrary/views/layouts/Carousel                (use: alfresco/lists/views/layouts/Carousel)
 * alfresco/documentlibrary/views/layouts/Cell                    (use: alfresco/lists/views/layouts/Cell)
 * alfresco/documentlibrary/views/layouts/Column                  (use: alfresco/lists/views/layouts/Column)
@@ -26,22 +31,42 @@ Previous deprecations:
 * alfresco/documentlibrary/views/layouts/Row                     (use: alfresco/lists/views/layouts/Row)
 * alfresco/documentlibrary/views/layouts/Table                   (use: alfresco/lists/views/layouts/Table)
 * alfresco/documentlibrary/views/layouts/XhrLayout               (use: alfresco/lists/views/layouts/XhrLayout)
-* alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin (use: alfresco/lists/views/layouts/_MultiItemRendererMixin)
-* alfresco/documentlibrary/AlfSearchList                         (use: alfresco/search/AlfSearchList)
-* alfresco/documentlibrary/views/AlfSearchListView               (use: alfresco/search/AlfSearchListView)
-* alfresco/renderers/SearchResultPropertyLink                    (use: alfresco/search/SearchResultPropertyLink)
-* alfresco/renderers/SearchThumbnail                             (use: alfresco/search/SearchThumbnail)
-* alfresco/upload/AlfUpload                                      (use: alfresco/services/UploadService)
-* alfresco/dialogs/AlfDialogService                              (use: alfresco/services/Dialog) 
-* alfresco/forms/controls/DojoValidationTextBox                  (use: alfresco/forms/controls/TextBox)
 * alfresco/forms/controls/DojoCheckBox                           (use: alfresco/forms/controls/CheckBox)
 * alfresco/forms/controls/DojoDateTextBox                        (use: alfresco/forms/controls/DateTextBox)
 * alfresco/forms/controls/DojoRadioButtons                       (use: alfresco/forms/controls/RadioButtons)
 * alfresco/forms/controls/DojoSelect                             (use: alfresco/forms/controls/Select)
 * alfresco/forms/controls/DojoTextarea                           (use: alfresco/forms/controls/TextArea)
+* alfresco/forms/controls/DojoValidationTextBox                  (use: alfresco/forms/controls/TextBox)
+* alfresco/renderers/SearchResultPropertyLink                    (use: alfresco/search/SearchResultPropertyLink)
+* alfresco/renderers/SearchThumbnail                             (use: alfresco/search/SearchThumbnail)
+* alfresco/upload/AlfUpload                                      (use: alfresco/services/UploadService)
 
 Resolved issues:
 ---
+1.0.39:
+* [AKU-548](https://issues.alfresco.com/jira/browse/AKU-548)       - New bulk action support (sync to cloud)
+* [AKU-605](https://issues.alfresco.com/jira/browse/AKU-605)       - Fix horizontal scrollbars in IE and possibly address dialog width-change on hover issue (IE only)
+* [AKU-610](https://issues.alfresco.com/jira/browse/AKU-610)       - AlfFilteredList hash ignored on load in non-English locales
+* [AKU-611](https://issues.alfresco.com/jira/browse/AKU-611)       - Navigation target/type now configurable in _SearchResultLinkMixin
+* [AKU-612](https://issues.alfresco.com/jira/browse/AKU-612)       - Send Accept-Language header with all XHR requests
+* [AKU-614](https://issues.alfresco.com/jira/browse/AKU-614)       - Dialogs should now resize larger on browser resize, where apropriate
+* [AKU-615](https://issues.alfresco.com/jira/browse/AKU-615)       - Selection now retained when changing number of displayed columns in search results
+* [AKU-617](https://issues.alfresco.com/jira/browse/AKU-617)       - Request to join a site now correctly returns user to their home page (defaults to their dashboard)
+* [AKU-619](https://issues.alfresco.com/jira/browse/AKU-619)       - "Advanced Search with name, title or description is not working"
+* [AKU-622](https://issues.alfresco.com/jira/browse/AKU-622)       - Remove default drag/drop capability within faceted search results
+* [AKU-623](https://issues.alfresco.com/jira/browse/AKU-623)       - Make user home page configurable in SiteService and default to /dashboard
+
+1.0.38:
+* [AKU-559](https://issues.alfresco.com/jira/browse/AKU-559)       - Widget instantiation order different in non English languages
+* [AKU-590](https://issues.alfresco.com/jira/browse/AKU-590)       - Correct Dojo locale initialisation problems
+* [AKU-598](https://issues.alfresco.com/jira/browse/AKU-598)       - Properly handle ALF_DOCUMENT_TAGGED topic
+* [AKU-600](https://issues.alfresco.com/jira/browse/AKU-600)       - Resize FixedHeaderFooter widget when header/footer children visibility is altered
+* [AKU-604](https://issues.alfresco.com/jira/browse/AKU-604)       - Field focus order incorrect in non English languages
+* [AKU-606](https://issues.alfresco.com/jira/browse/AKU-606)       - Site landing page now configurable (still defaults to /dashboard)
+* [AKU-607](https://issues.alfresco.com/jira/browse/AKU-607)       - Aikau actions now work properly in a search result list
+* [AKU-608](https://issues.alfresco.com/jira/browse/AKU-608)       - XhrActions now supports widgetsForActions
+* [AKU-609](https://issues.alfresco.com/jira/browse/AKU-609)       - Support multiple nodes when adding/removing favourites
+
 1.0.37:
 * [AKU-586](https://issues.alfresco.com/jira/browse/AKU-586)       - Ensure AlfTagFilters publish to correct scope
 * [AKU-591](https://issues.alfresco.com/jira/browse/AKU-591)       - Ensure delete action issues reload request on completion

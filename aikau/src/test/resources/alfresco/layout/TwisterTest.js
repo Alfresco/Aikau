@@ -195,24 +195,22 @@ registerSuite(function(){
       "Check that closing a twister updates its preferences": function() {
          return browser.findByCssSelector("#TWISTER_BAD_HEADING_LEVEL > div.label")
             .click()
-         .end()
+            .end()
 
-         .findByCssSelector("tr.mx-row:nth-child(1) td.mx-payload")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "{\"org\":{\"alfresco\":{\"share\":{\"twisters\":{\"twister1\":false}}}}}", "Preference not saved on close");
+         .getLastXhr("aikau/proxy/alfresco/api/people/guest/preferences")
+            .then(function(xhr){
+               assert.deepPropertyVal(xhr.request.body, "org.alfresco.share.twisters.twister1", false);
             });
       },
 
-      "Check that opending a twister updates its preferences": function() {
+      "Check that opening a twister updates its preferences": function() {
          return browser.findByCssSelector("#TWISTER_BAD_HEADING_LEVEL > div.label")
             .click()
-         .end()
+            .end()
 
-         .findByCssSelector("tr.mx-row:nth-child(2) td.mx-payload")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "{\"org\":{\"alfresco\":{\"share\":{\"twisters\":{\"twister1\":true}}}}}", "Preference not saved on open");
+         .getLastXhr("aikau/proxy/alfresco/api/people/guest/preferences")
+            .then(function(xhr){
+               assert.deepPropertyVal(xhr.request.body, "org.alfresco.share.twisters.twister1", true);
             });
       },
 

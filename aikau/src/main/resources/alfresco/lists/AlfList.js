@@ -25,7 +25,7 @@
  * @mixes external:dijit/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
- * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
+ * @mixes module:alfresco/lists/SelectedItemStateMixin
  * @mixes module:alfresco/core/DynamicWidgetProcessingTopics
  * @author Dave Draper
  */
@@ -36,19 +36,21 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/topics",
-        "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
+        "alfresco/lists/SelectedItemStateMixin",
         "alfresco/core/DynamicWidgetProcessingTopics",
         "alfresco/lists/views/AlfListView",
         "alfresco/menus/AlfCheckableMenuItem",
+        "dojo/aspect",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/io-query"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, _AlfDocumentListTopicMixin,
-                 DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, array, lang, domConstruct, domClass, ioQuery) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, SelectedItemStateMixin,
+                 DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct, 
+                 domClass, ioQuery) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, DynamicWidgetProcessingTopics], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, SelectedItemStateMixin, DynamicWidgetProcessingTopics], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -155,6 +157,18 @@ define(["dojo/_base/declare",
       loadDataImmediately: true,
 
       /**
+       * Indicates whether or not views should apply drag-and-drop highlighting. Each view used by the
+       * list will have this value applied (even if it overrides custom configuration) as it is up to
+       * the list to control whether or not it supported drag-and-drop behaviour.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      suppressDndUploading: true,
+    
+      /**
        * Subscribe the document list topics.
        *
        * @instance
@@ -181,7 +195,7 @@ define(["dojo/_base/declare",
          {
             this.alfSubscribe(this.scrollNearBottom, lang.hitch(this, this.onScrollNearBottom));
          }
-         this.alfSubscribe(this.selectedDocumentsChangeTopic, lang.hitch(this, this.onSelectedItemsChange));
+         this.createSelectedItemSubscriptions();
       },
 
       /**
@@ -202,7 +216,6 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-
       noDataMessage: "alflist.no.data.message",
 
       /**
@@ -213,7 +226,6 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-
       fetchingDataMessage: "alflist.loading.data.message",
 
       /**
@@ -224,7 +236,6 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-
       renderingViewMessage: "alflist.rendering.data.message",
 
       /**
@@ -235,7 +246,6 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-
       fetchingMoreDataMessage: "alflist.loading.data.message",
 
       /**
@@ -297,6 +307,13 @@ define(["dojo/_base/declare",
          // Process the array of widgets. Only views should be included as widgets of the DocumentList.
          if (this.widgets)
          {
+            // Iterate over all the configured views and apply the DND upload suppression
+            // configuration to each of them...
+            array.forEach(this.widgets, function(view) {
+               var viewConfig = lang.getObject("config", true, view); // NOTE: Create the config object if it doesn't exist
+               viewConfig.suppressDndUploading = this.suppressDndUploading;
+            }, this);
+
             // Opting to NOT clone the widgets for performance here, but leaving the code commented out
             // for hasty re-insertion if necessary. It *shouldn't* be necessary to clone here because
             // the views will clone as necessary...
@@ -612,6 +629,13 @@ define(["dojo/_base/declare",
          // Attempt to get a localized version of the label...
          viewSelectionConfig.label = this.message(viewSelectionConfig.label);
 
+         // After a view has been rendered publish the selected items to ensure
+         // that selection consistency has been maintained. This approach also ensures
+         // that where views re-render themselves (e.g. resizing a gallery view)
+         // that selection will be maintained even if the underlying renderer is destroyed
+         // and recreated...
+         aspect.after(view, "renderView", lang.hitch(this, this.publishSelectedItems));
+
          // Publish the additional controls...
          this.publishAdditionalControls(viewName, view);
 
@@ -729,36 +753,6 @@ define(["dojo/_base/declare",
       currentData: null,
 
       /**
-       * Used to keep track of the items that are currently selected in order to ensure that those items are selected on 
-       * the next view displayed when switching views.
-       * 
-       * @instance
-       * @type {object[]}
-       * @default
-       * @since 1.0.35
-       */
-      selectedItems: null,
-
-      /**
-       * Tracks the currently selected items and stores them as the [selectedItems]{@link module:alfresco/lists/AlfList#selectedItems}
-       * variable.
-       * 
-       * @instance
-       * @param  {object} payload A payload expected to contain a "selectedItems" attribute
-       * @since 1.0.35
-       */
-      onSelectedItemsChange: function alfresco_lists_AlfList__onSelectedItemsChange(payload) {
-         if (payload.selectedItems)
-         {
-            this.selectedItems = payload.selectedItems;
-         }
-         else
-         {
-            this.alfLog("warn", "A publication was made indicating an item selection update, but no 'selectedItems' attribute was provided in the payload", payload, this);
-         }
-      },
-
-      /**
        * Handles requests to switch views. This is called whenever the [viewSelectionTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#viewSelectionTopic}
        * topic is published on and expects a payload containing an attribute "value" which should map to a registered
        * [view]{@link module:alfresco/lists/views/AlfListView}. The views are mapped against the index they were configured
@@ -801,12 +795,6 @@ define(["dojo/_base/declare",
                newView.currentData.previousItemCount = 0;
                newView.renderView(false);
                this.showView(newView);
-
-               // Publish the selected items when the view changes in order that item selection is maintained 
-               // between views...
-               this.alfPublish(topics.DOCUMENT_SELECTION_UPDATE, {
-                  selectedItems: this.selectedItems
-               });
             }
             else
             {

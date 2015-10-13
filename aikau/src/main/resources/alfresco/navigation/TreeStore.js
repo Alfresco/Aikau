@@ -47,6 +47,50 @@ define(["dojo/_base/declare",
       filterPaths: null,
 
       /**
+       * This is a topic that can be published to request child data. This an alternative to the 
+       * [target]{@link module:alfresco/navigation/TreeStore#target} URL prefix that can also be configured.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * @event
+       */
+      publishTopic: null,
+
+      /**
+       * This is the payload that will be published to request child data when a
+       * [publishTopic]{@link module:alfresco/navigation/TreeStore#publishTopic} has been configured.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.39
+       */
+      publishPayload: null,
+
+      /**
+       * Indicates whether or not requests to get child data will be published globally using the 
+       * [publishTopic]{@link module:alfresco/navigation/TreeStore#publishTopic} that has been configured.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      publishGlobal: true,
+
+      /**
+       * The URL prefix to use for requesting child data. This will only be used if a 
+       * [publishTopic]{@link module:alfresco/navigation/TreeStore#publishTopic} has not been configured.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      target: null,
+
+      /**
        * Makes an asynchronous request to retrieve the children of the supplied parent object. It immediately returns
        * a Deferred object that is also passed as part of the request configuration. The Deferred object is resolved
        * by either the success or failure callback handler depending upon the result of the request.
@@ -57,20 +101,65 @@ define(["dojo/_base/declare",
        */
       getChildren: function alfresco_navigation_TreeStore__getChildren(object, /*jshint unused:false*/ options) {
          var deferred = new Deferred();
-         var config = {
-            url: this.target + object.path,
-            query: this.targetQueryObject,
-            method: "GET",
-            deferred: deferred,
-            parent: object,
-            successCallback: this.onChildRequestSuccess,
-            failureCallback: this.onChildRequestFailure,
-            callbackScope: this
-         };
-         this.serviceXhr(config);
+         if (this.publishTopic)
+         {
+            var responseTopic = this.generateUuid();
+            var subscriptionHandles = [];
+
+            if (!this.publishPayload)
+            {
+               this.publishPayload = {};
+            }
+            this.publishPayload.alfResponseTopic = responseTopic;
+            this.publishPayload.path = object.path;
+
+            subscriptionHandles.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onChildren, deferred, parent, subscriptionHandles)));
+            subscriptionHandles.push(this.alfSubscribe(responseTopic, lang.hitch(this, this.onChildren, deferred, object, subscriptionHandles)));
+            this.alfPublish(this.publishTopic, this.publishPayload, this.publishGlobal);
+         }
+         else
+         {
+            var config = {
+               url: this.target + object.path,
+               query: this.targetQueryObject,
+               method: "GET",
+               deferred: deferred,
+               parent: object,
+               successCallback: this.onChildRequestSuccess,
+               failureCallback: this.onChildRequestFailure,
+               callbackScope: this
+            };
+            this.serviceXhr(config);
+         }
          return deferred;
       },
       
+      /**
+       * Handles child data provided when a [publishTopic]{@link module:alfresco/navigation/TreeStore#publishTopic} 
+       * has been configured to request child data.
+       * 
+       * @instance
+       * @param {object} deferred The deferred object to resolve with the child data
+       * @param {object} parent The parent node in the tree
+       * @param {object[]} subscriptionHandles Subscription handles created for the request that need to be removed
+       * @param {object} payload The payload containing the child data.
+       * @since 1.0.39
+       */
+      onChildren: function alfresco_navigation_TreeStore__onChildren(deferred, parent, subscriptionHandles, payload) {
+         this.alfUnsubscribeSaveHandles(subscriptionHandles);
+         array.forEach(payload.response.items, lang.hitch(this, this.updateChild, parent));
+         
+         // If required, filter the items based on their paths...
+         var filteredResponse = payload.response.items;
+         if (this.filterPaths !== null)
+         {
+            filteredResponse = array.filter(payload.response.items, lang.hitch(this, this.filterChildren));
+         }
+
+         // Resolve the promise...
+         deferred.resolve(filteredResponse);
+      },
+
       /**
        * This is the success callback from the [getChildren function]{@link module:alfresco/navigation/TreeStore#getChildren}
        * and iterates over the results calling the [updateChild function]{@link module:alfresco/navigation/TreeStore#updateChild} for 
@@ -82,9 +171,8 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig The configuration object passed when making the request
        */
       onChildRequestSuccess: function alfresco_navigation_TreeStore__onChildRequestSuccess(response, originalRequestConfig) {
-
          // Update each item to set it's path...
-         array.forEach(response.items, lang.hitch(this, "updateChild", originalRequestConfig.parent));
+         array.forEach(response.items, lang.hitch(this, this.updateChild, originalRequestConfig.parent));
          
          // If required, filter the items based on their paths...
          var filteredResponse = response.items;
@@ -137,7 +225,7 @@ define(["dojo/_base/declare",
       updateChild: function alfresco_navigation_TreeStore__updateChild(parent, child, /*jshint unused:false*/ index) {
          child.id = child.nodeRef;
          child.value = child.name;
-         child.path = parent.path + child.name + "/";
+         child.path = (parent.path || "/") + child.name + "/";
          
          // Modify the name to be the description for site containers...
          if (child.description && 

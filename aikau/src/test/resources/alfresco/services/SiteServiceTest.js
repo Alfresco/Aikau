@@ -42,18 +42,39 @@ define(["alfresco/TestCommon",
             browser.end();
          },
 
-         "Leave site and confirm landing page override works": function(){
-            return browser.findById("LEAVE_SITE")
+         "Request to join site navigates user to their dashboard afterwards": function(){
+            return browser.findById("REQUEST_SITE_MEMBERSHIP_label")
                .click()
                .end()
 
-            .findByCssSelector("#ALF_SITE_SERVICE_DIALOG.dialogDisplayed .dijitButton:first-child .dijitButtonNode")
+            .findByCssSelector(".dialogDisplayed .dijitButtonNode")
                .click()
+               .end()
+
+            .waitForDeletedByCssSelector(".dialogDisplayed")
                .end()
 
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload){
-                  assert.propertyVal(payload, "url", "user/admin/dashboard", "Did not generate URL with correct landing page");
+                  assert.propertyVal(payload, "url", "user/admin/home", "Did not navigate to user home page");
+               });
+         },
+
+         "Leave site and confirm user home page override works": function(){
+            return browser.findById("LEAVE_SITE_label")
+               .click()
+               .end()
+
+            .findByCssSelector(".dialogDisplayed .dijitButton:first-child .dijitButtonNode")
+               .click()
+               .end()
+
+            .waitForDeletedByCssSelector(".dialogDisplayed")
+               .end()
+
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload){
+                  assert.propertyVal(payload, "url", "user/admin/home", "Did not generate URL with correct user home page");
                });
          },
 

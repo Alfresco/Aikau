@@ -33,8 +33,9 @@ define(["intern/dojo/node!fs",
         "intern/dojo/Promise",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/chai!assert",
-        "intern/dojo/node!leadfoot/keys"], 
-        function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert, keys) {
+        "intern/dojo/node!leadfoot/keys",
+        "lodash"], 
+        function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert, keys, _) {
    return {
 
       /**
@@ -337,9 +338,6 @@ define(["intern/dojo/node!fs",
                opts.topic && selectorBits.push("[data-aikau-log-topic$=\"" + opts.topic + "\"]"); // Topic ends with "..."
             }
             opts.object && selectorBits.push("[data-aikau-log-object=\"" + opts.object + "\"]"); // Object is "..."
-            if (opts.debug) {
-               console.log("Log entry selector: \"" + selectorBits.join("") + "\"");
-            }
 
             // Declare variable to hold the existing async timeout
             var existingTimeout;
@@ -391,7 +389,150 @@ define(["intern/dojo/node!fs",
                      var customMessage = messageIfError ? messageIfError + ": " : "",
                         entryType = opts.type || "PUBorSUB",
                         topic = opts.isGlobal ? opts.topic + " (global)" : "*" + opts.topic,
-                        errorMessage = "Unable to find a " + entryType + " of " + topic + " with timeout of " + opts.queryTimeout + "ms)";
+                        errorMessage = "Unable to find a " + entryType + " of " + topic + " with timeout of " + opts.queryTimeout + "ms";
+
+                     // Throw the error
+                     throw new Error(customMessage + errorMessage);
+                  }
+               })
+               .then(function(entries) {
+                  browser.setExecuteAsyncTimeout(existingTimeout);
+                  return entries;
+               }, function(error) {
+                  browser.setExecuteAsyncTimeout(existingTimeout);
+                  throw error;
+               });
+         };
+         command.session.clearXhrLog = function() {
+            return browser.execute(function(){
+               var clearButton = document.getElementById("mockXhr_clearLog");
+               clearButton && clearButton.click();
+            });
+         };
+         command.session.getLastXhr = function(url) {
+            var messageIfError,
+               queryTimeout;
+            Array.prototype.slice.call(arguments, 1).forEach(function(arg, index) {
+               if (typeof arg === "number") {
+                  queryTimeout = arg;
+               } else {
+                  messageIfError = arg;
+               }
+            });
+            return this.getXhrEntries({
+               url: url,
+               pos: "last"
+            }, messageIfError, queryTimeout);
+         };
+         command.session.getXhrEntries = function(opts, messageIfError, queryTimeout) {
+
+            // Normalise arguments to single object
+            opts = lang.mixin({
+               queryTimeout: 2000,
+               pos: "all",
+               url: "", // Searches for this string inside URL
+               method: "", // Directly compares this string to the method (will be automatically upper-cased)
+               headers: {}, // Checks for all header name/value pairs
+               body: "", // Searches for this string inside request body
+            }, opts || {});
+
+            // Build the selector
+            var selectorBits = [".mx-row"];
+            opts.url && selectorBits.push("[data-aikau-xhr-url*=\"" + opts.url + "\"]");
+            opts.method && selectorBits.push("[data-aikau-xhr-method=\"" + opts.method.toUpperCase() + "\"]");
+            Object.keys(opts.headers).forEach(function(key) {
+               var value = opts.headers[key],
+                  quotedName = "\"" + key + "\"",
+                  quotedValue = "\"" + value + "\"";
+               if (value.constructor === Array) {
+                  quotedValue = "[\"" + value.join("\",\"") + "\"]";
+               }
+               var attributeValue = _.unescape(quotedName + ":" + quotedValue);
+               selectorBits.push("[data-aikau-xhr-headers*=\"" + attributeValue + "\"]");
+            });
+            opts.body && selectorBits.push("[data-aikau-xhr-request-body*=\"" + opts.body + "\"]");
+
+            // Declare variable to hold the existing async timeout
+            var existingTimeout;
+
+            // Store the async timeout and then perform the search and reset the timeout
+            return browser.getExecuteAsyncTimeout()
+               .then(function(timeout) {
+                  existingTimeout = timeout;
+               })
+               .setExecuteAsyncTimeout(opts.queryTimeout + 2000)
+               .executeAsync(function(entriesSelector, timeout, asyncComplete) {
+
+                  // Create helper function outside of loop
+                  var jsonify = function(data) {
+                     try {
+                        return JSON.parse(data);
+                     } catch (e) {
+                        // Ignore
+                     }
+                     return data;
+                  };
+
+                  // Store the start-time and start the interval
+                  var before = Date.now(),
+                     intervalPointer = setInterval(function() {
+
+                        // Perform the search and grab the payloads
+                        var entries = document.querySelectorAll(entriesSelector),
+                           dataObjs = Array.prototype.map.call(entries, function(entry) {
+
+                              // Get raw attribute values
+                              var method = entry.getAttribute("data-aikau-xhr-method"),
+                                 url = entry.getAttribute("data-aikau-xhr-url"),
+                                 requestHeaders = entry.getAttribute("data-aikau-xhr-request-headers"),
+                                 requestBody = entry.getAttribute("data-aikau-xhr-request-body"),
+                                 responseHeaders = entry.getAttribute("data-aikau-xhr-response-headers"),
+                                 responseBody = entry.getAttribute("data-aikau-xhr-response-body");
+
+                              return {
+                                 request: {
+                                    method: method,
+                                    url: url,
+                                    headers: jsonify(requestHeaders),
+                                    body: jsonify(requestBody)
+                                 },
+                                 response: {
+                                    headers: jsonify(responseHeaders),
+                                    body: jsonify(responseBody)
+                                 }
+                              };
+                           });
+
+                        // Finish if we have data or if timeout exceeded
+                        if (dataObjs.length || (Date.now() - before > timeout)) {
+                           clearInterval(intervalPointer);
+                           asyncComplete(dataObjs);
+                        }
+
+                     }, 50);
+
+               }, [selectorBits.join(""), opts.queryTimeout])
+               .then(function(entries) {
+
+                  // Return value depends upon "pos" attribute
+                  if (entries.length || opts.pos === "all") {
+
+                     // Entries found, or empty collection acceptable
+                     var returnValue = entries;
+                     if (opts.pos === "first") {
+                        returnValue = entries.pop();
+                     } else if (opts.pos === "last") {
+                        returnValue = entries.shift();
+                     }
+                     return returnValue;
+
+                  } else {
+
+                     // Construct the error message
+                     var customMessage = messageIfError ? messageIfError + ": " : "",
+                        url = opts.url || "ANY",
+                        method = opts.method || "ANY",
+                        errorMessage = "Unable to find a " + method + " to \"" + url + "\" with specified headers/body filter and timeout of " + opts.queryTimeout + "ms";
 
                      // Throw the error
                      throw new Error(customMessage + errorMessage);

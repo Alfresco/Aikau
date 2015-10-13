@@ -63,6 +63,10 @@ define(["./config/Suites"],
             }, {
                name: "reporters",
                location: "./src/test/resources/reporters"
+            }, {
+               name: "lodash",
+               location: "./src/test/resources/lib/lodash",
+               main: "lodash.compat"
             }]
          },
 

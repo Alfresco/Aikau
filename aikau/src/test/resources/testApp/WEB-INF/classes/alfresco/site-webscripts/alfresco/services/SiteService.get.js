@@ -10,7 +10,10 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/services/SiteService"
+         name: "alfresco/services/SiteService",
+         config: {
+            userHomePage: "home"
+         }
       },
       {
          name: "alfresco/services/DialogService"

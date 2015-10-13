@@ -32,13 +32,14 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/search/AlfSearchResultTest"
+      "src/test/resources/alfresco/services/SiteServiceTest"
 
-      // THESE SITES REGULARLY FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
+      // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/dnd/FormCreationTest",
       // "src/test/resources/alfresco/layout/AlfTabContainerTest",
       // "src/test/resources/alfresco/preview/PdfJsPreviewTest"
       // "src/test/resources/alfresco/search/SearchSuggestionsTest",
+      // "src/test/resources/alfresco/services/CloudSyncServiceTest",
    ],
 
    /**
@@ -57,7 +58,9 @@ define({
 
       "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
       "src/test/resources/alfresco/core/CoreRwdTest",
+      "src/test/resources/alfresco/core/CoreXhrTest",
       "src/test/resources/alfresco/core/NotificationUtilsTest",
+      "src/test/resources/alfresco/core/ObjectProcessingMixinTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
       "src/test/resources/alfresco/core/ResponseScopeTest",
@@ -148,6 +151,7 @@ define({
       "src/test/resources/alfresco/layout/AlfStackContainerTest",
       "src/test/resources/alfresco/layout/AlfTabContainerTest",
       "src/test/resources/alfresco/layout/BasicLayoutTest",
+      "src/test/resources/alfresco/layout/ClassicWindowTest",
       "src/test/resources/alfresco/layout/DynamicHorizontalLayoutTest",
       "src/test/resources/alfresco/layout/DynamicWidgetsTest",
       "src/test/resources/alfresco/layout/FixedHeaderFooterTest",
@@ -238,6 +242,7 @@ define({
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
       "src/test/resources/alfresco/services/ActionServiceTest",
+      "src/test/resources/alfresco/services/CloudSyncServiceTest",
       "src/test/resources/alfresco/services/ContentServiceTest",
       "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DeleteSiteTest",

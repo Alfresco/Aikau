@@ -129,10 +129,12 @@ registerSuite(function(){
          return browser.findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .confirmationButton > span")
             .click()
          .end()
-         .findByCssSelector(".mx-row:nth-child(2) .mx-payload")
-            .getVisibleText()
-            .then(function(payload) {
-               assert.equal(payload, "{\"added\":[\"cm:complianceable\"],\"removed\":[\"cm:generalclassifiable\"]}", "The added/removed payload wasn't generated correctly");
+         .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/action/aspects/node/workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e")
+            .then(function(xhr){
+               assert.lengthOf(xhr.request.body.added, 1, "Wrong number of aspects added");
+               assert.lengthOf(xhr.request.body.removed, 1, "Wrong number of aspects removed");
+               assert.deepPropertyVal(xhr.request.body, "added[0]", "cm:complianceable");
+               assert.deepPropertyVal(xhr.request.body, "removed[0]", "cm:generalclassifiable");
             });
       },
 

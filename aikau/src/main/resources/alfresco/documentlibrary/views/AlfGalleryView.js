@@ -23,19 +23,20 @@
  * 
  * @module alfresco/documentlibrary/views/AlfGalleryView
  * @extends module:alfresco/lists/views/AlfListView
- * @mixes module:alfresco/lists/views/layouts/Grid
+ * @mixes module:alfresco/lists/SelectedItemStateMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView",
+        "alfresco/lists/SelectedItemStateMixin",
         "dojo/text!./templates/AlfGalleryView.html",
         "alfresco/lists/views/layouts/Grid",
         "alfresco/documentlibrary/AlfGalleryViewSlider",
         "dojo/_base/lang",
         "alfresco/core/topics"], 
-        function(declare, AlfDocumentListView, template, Grid, AlfGalleryViewSlider, lang, topics) {
+        function(declare, AlfListView, SelectedItemStateMixin, template, Grid, AlfGalleryViewSlider, lang, topics) {
    
-   return declare([AlfDocumentListView], {
+   return declare([AlfListView, SelectedItemStateMixin], {
       
       /**
        * The HTML template to use for the widget.
@@ -43,6 +44,20 @@ define(["dojo/_base/declare",
        * @type {String}
        */
       templateString: template,
+
+      /**
+       * This enables the mixed in [SelectedItemStateMixin]{@link module:alfresco/lists/SelectedItemStateMixin}
+       * capabilities to track items as they are selected and deselected. This should only be changed from the
+       * default when the view is not used within a [list]{@link module:alfresco/lists/AlfList} (as lists will
+       * track selected items). This also ensures that when used outside of a list that the selected item 
+       * state will be maintained when the thumbnails are resized.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      manageSelectedItemState: false,
 
       /**
        * Returns the name of the view that is used when saving user view preferences.
@@ -76,6 +91,11 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_documentlibrary_views_AlfGalleryView__postCreate() {
          this.inherited(arguments);
          this.alfSubscribe("ALF_DOCLIST_SET_GALLERY_COLUMNS", lang.hitch(this, this.updateColumns));
+
+         if (this.manageSelectedItemState)
+         {
+            this.createSelectedItemSubscriptions();
+         }
       },
 
       /**
@@ -166,6 +186,10 @@ define(["dojo/_base/declare",
             if (this.docListRenderer)
             {
                this.docListRenderer.resizeCells();
+            }
+            if (this.manageSelectedItemState)
+            {
+               this.publishSelectedItems();
             }
             this._renderingView = false;
 
