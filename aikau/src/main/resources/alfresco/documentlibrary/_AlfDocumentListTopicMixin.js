@@ -178,6 +178,9 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
+       * @property {string} [value] One of "selectAll", "selectNone", "selectInvert", "selectFolders" or "selectDocuments"
+       * @property {object[]} [selectedItems] An array of items that have been selected
        */
       documentSelectionTopic: topics.DOCUMENT_SELECTION_UPDATE,
       
@@ -187,6 +190,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
+       * @property {object} value The item selected
        */
       documentSelectedTopic: topics.DOCUMENT_SELECTED,
       
@@ -205,6 +210,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
+       * @property {object} value The item de-selected
        */
       documentDeselectedTopic: topics.DOCUMENT_DESELECTED,
       

@@ -10,8 +10,7 @@ model.jsonModel = {
                error: true
             }
          }
-      },
-      "alfresco/services/ErrorReporter"
+      }
    ],
    widgets: [
       {
@@ -48,20 +47,26 @@ model.jsonModel = {
                         items: [
                            {
                               name: "Not a container",
-                              jsNode: {
-                                 isContainer: false
+                              node: {
+                                 displayName: "Not a container",
+                                 isContainer: false,
+                                 nodeRef: "workspace://SpacesStore/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8"
                               }
                            },
                            {
                               name: "Container",
-                              jsNode: {
-                                 isContainer: true
+                              node: {
+                                 displayName: "Container",
+                                 isContainer: true,
+                                 nodeRef: "some://node/2"
                               }
                            },
                            {
                               name: "Another Container",
-                              jsNode: {
-                                 isContainer: true
+                              node: {
+                                 displayName: "Another Container",
+                                 isContainer: true,
+                                 nodeRef: "some://node/3"
                               }
                            }
                         ]
@@ -72,22 +77,120 @@ model.jsonModel = {
                            name: "alfresco/lists/views/AlfListView",
                            config: {
                               additionalCssClasses: "bordered",
-                              widgets: [
+                              widgetsForHeader: [
+                                    {
+                                       name: "alfresco/lists/views/layouts/HeaderCell",
+                                       config: {
+                                          id: "ID",
+                                          label: "Selector"
+                                       }
+                                    },
+                                    {
+                                       name: "alfresco/lists/views/layouts/HeaderCell",
+                                       config: {
+                                          id: "NAME",
+                                          label: "Name"
+                                       }
+                                    },
+                                    {
+                                       name: "alfresco/lists/views/layouts/HeaderCell",
+                                       config: {
+                                          id: "OPTION",
+                                          label: "Thumbnail (selection only)"
+                                       }
+                                    },
+                                    {
+                                       name: "alfresco/lists/views/layouts/HeaderCell",
+                                       config: {
+                                          id: "OPTION",
+                                          label: "Thumbnail (selection plus regular action)"
+                                       }
+                                    },
+                                    {
+                                       name: "alfresco/lists/views/layouts/HeaderCell",
+                                       config: {
+                                          id: "OPTION",
+                                          label: "Thumbnail (regular action only)"
+                                       }
+                                    }
+                                 ],
+                                 widgets: [
                                  {
+                                    id: "ROW",
                                     name: "alfresco/lists/views/layouts/Row",
                                     config: {
                                        widgets: [
                                           {
+                                             id: "COL1",
                                              name: "alfresco/lists/views/layouts/Cell",
                                              config: {
                                                 widgets:[
                                                    {
+                                                      id: "SELECTOR",
                                                       name: "alfresco/renderers/Selector"
-                                                   },
+                                                   }
+                                                ]
+                                             }
+                                          },
+                                          {
+                                             id: "COL2",
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets:[
                                                    {
+                                                      id: "NAME",
                                                       name: "alfresco/renderers/Property",
                                                       config: {
                                                          propertyToRender: "name"
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          },
+                                          {
+                                             id: "COL3",
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets:[
+                                                   {
+                                                      id: "SELECT_THUMBNAIL",
+                                                      name: "alfresco/renderers/Thumbnail",
+                                                      config: {
+                                                         updateOnSelection: true,
+                                                         selectOnClick: true,
+                                                         onlySelectOnClick: true
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          },
+                                          {
+                                             id: "COL4",
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets:[
+                                                   {
+                                                      id: "MIXED_THUMBNAIL",
+                                                      name: "alfresco/renderers/Thumbnail",
+                                                      config: {
+                                                         updateOnSelection: true,
+                                                         selectOnClick: true
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          },
+                                          {
+                                             id: "COL5",
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets:[
+                                                   {
+                                                      id: "NON_SELECT_THUMBNAIL",
+                                                      name: "alfresco/renderers/Thumbnail",
+                                                      config: {
+                                                         updateOnSelection: false,
+                                                         selectOnClick: false
                                                       }
                                                    }
                                                 ]
@@ -106,10 +209,10 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "aikauTesting/mockservices/ThumbnailsMockXhr"
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

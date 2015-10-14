@@ -26,38 +26,51 @@
  * requests to display the content of that folder and clicking on a document links to the details
  * page that renders the document) it is also possible to configure custom actions along with the
  * ability to request a preview of the node be displayed.</p>
+ * <p>A thumbnail can also be configured to perform selection/de-selection action when clicked through
+ * the configuration of the [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
+ * and [onlySelectOnClick]{@link module:alfresco/renderers/Thumbnail#onlySelectOnClick} attributes.</p>
  *
  * @example <caption>Example configuration for use in Document Library:</caption>
  * {
- *    "name": "alfresco/renderers/Thumbnail"
+ *    name: "alfresco/renderers/Thumbnail"
  * }
  *
  * @example <caption>Example setting a fixed width for the imgpreview rendition:</caption>
  * {
- *    "name": "alfresco/renderers/Thumbnail",
- *    "config": {
- *       "renditionName": "imgpreview",
- *       "width": "200px"
+ *    name: "alfresco/renderers/Thumbnail",
+ *    config: {
+ *       renditionName: "imgpreview",
+ *       width: "200px"
  *    }
  * }
  *
  * @example <caption>Example requesting a preview when only nodeRef available:</caption>
  * {
- *    "name": "alfresco/renderers/Thumbnail",
- *    "config": {
- *       "assumeRendition": true,
- *       "showDocumentPreview": true
+ *    name: "alfresco/renderers/Thumbnail",
+ *    config: {
+ *       assumeRendition: true,
+ *       showDocumentPreview: true
+ *    }
+ * }
+ *
+ * @example <caption>Example thumbnail that only performs selection/deselection actions when clicked:</caption>
+ * {
+ *    name: "alfresco/renderers/Thumbnail",
+ *    config: {
+ *       selectOnClick: true,
+ *       onlySelectOnClick: true
  *    }
  * }
  * 
  * @module alfresco/renderers/Thumbnail
  * @extends external:dijit/_WidgetBase
  * @mixes external:dijit/_TemplatedMixin
+ * @mixes external:dijit/_OnDijitClickMixin
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/node/DraggableNodeMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @mixes module:alfresco/node/NodeDropTargetMixin
- * @mixes module:dijit/_OnDijitClickMixin
+ * @mixes module:alfresco/node/ItemSelectionMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -68,6 +81,7 @@ define(["dojo/_base/declare",
         "alfresco/node/NodeDropTargetMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "dijit/_OnDijitClickMixin",
+        "alfresco/lists/ItemSelectionMixin",
         "dojo/text!./templates/Thumbnail.html",
         "alfresco/core/Core",
         "alfresco/renderers/_ItemLinkMixin",
@@ -81,10 +95,11 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "dojo/when"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
-                 _PublishPayloadMixin, _OnDijitClickMixin, template, AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, 
+                 _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, template, AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, 
                  AlfConstants, lang, event, domStyle, NodeUtils, win, Deferred, when) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, _PublishPayloadMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
+                   AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, _PublishPayloadMixin, ItemSelectionMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -113,6 +128,19 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * Some APIs provide very little information other than the nodeRef, however if we really
+       * believe that the thumbnails are only going to be of something that has a rendition then
+       * we can just "go for it" (all bets are really off though as to what we get back though
+       * so this should only set to true when you're confident that a valid thumbnail rendition
+       * will be available.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      assumeRendition: false,
+
+      /**
        * Additional CSS classes to apply to the main DOM node defined in the template
        * 
        * @instance
@@ -121,6 +149,115 @@ define(["dojo/_base/declare",
        */
       customClasses: "",
       
+      /**
+       * The name of the folder image to use. Valid options are: "folder-32.png", "folder-48.png", "folder-64.png"
+       * and "folder-256.png". The default is "folder-64.png".
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      folderImage: "folder-64.png",
+
+      /**
+       * The property to use for the image id. Defaults to "jsNode.nodeRef.nodeRef"
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      imageIdProperty: "jsNode.nodeRef.nodeRef",
+
+      /**
+       * The property to use for the image title. Defaults to "displayName"
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      imageTitleProperty: "displayName",
+
+      /**
+       * This property is used to determine whether or not a new version of the thumbnail needs
+       * to be generated or if the cached version can be used.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      lastThumbnailModificationProperty: "jsNode.properties.cm:lastThumbnailModification",
+
+      /**
+       * If this is configured to be true then this will ensure that click actions only perform a
+       * selection action. However, this also requires that the 
+       * [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick} attribute also 
+       * be configured to be true. 
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      onlySelectOnClick: false,
+
+      /**
+       * The type of rendition to use for the thumbnail.
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       */
+      renditionName: "doclib",
+      
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#selectOnClick} to 
+       * disable selection on click by default.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      selectOnClick: false,
+
+      /**
+       * Indicates whether or not selection publication and subscriptions are made using the global scope.
+       * This is only used when either [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
+       * or [updateOnSelection]{@link module:alfresco/renderers/Thumbnail#updateOnSelection} are configured
+       * to be true.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      selectionPublishGlobal: false,
+
+      /**
+       * Indicates whether or not selection publication and subscriptions are made using the parent scope.
+       * This is only used when either [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
+       * or [updateOnSelection]{@link module:alfresco/renderers/Thumbnail#updateOnSelection} are configured
+       * to be true.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      selectionPublishToParent: false,
+
+      /**
+       * Indicates whether or not a preview of the node represented by the thumbnail should be
+       * displayed when it is clicked. If this is set to true and there is not enough information
+       * to determine whether or not the the node can be previewed then a request will be published
+       * to retrieve that information.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showDocumentPreview: false,
+
       /**
        * This allows a tokenized template to be defined where the tokens will be populated from
        * values in the "currentItem" attribute using the 
@@ -133,6 +270,55 @@ define(["dojo/_base/declare",
        * @default
        */
       thumbnailUrlTemplate: null,
+
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#updateOnSelection} to 
+       * not set up the item selection listeners. If this is configured to be true then the thumbnail will be
+       * highlighted when the item it represents is selected.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      updateOnSelection: false,
+
+      /**
+       * The width to render the thumbnail. Units of measurement need to be provided, e.g.
+       * "100px" for 100 pixels. The default is null, and if left as this the thumbnail will
+       * be rendered at the original image size.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      width: null,
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/lists/ItemSelectionMixin#getSelectionPublishGlobal}
+       * to return [selectionPublishGlobal]{@link module:alfresco/renderers/Thumbnail#selectionPublishGlobal} to
+       * avoid conflicts with scope configuration for other events (such as linking and showing previews).
+       *
+       * @instance
+       * @overridable
+       * @return {boolean} A boolean indicating whether or not to publish and subscribe to selection topics globally.
+       */
+      getSelectionPublishGlobal: function alfresco_lists_ItemSelectionMixin__getSelectionPublishGlobal() {
+         return this.selectionPublishGlobal;
+      },
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/lists/ItemSelectionMixin#getSelectionPublishToParent}
+       * to return [selectionPublishToParent]{@link module:alfresco/renderers/Thumbnail#selectionPublishToParent} to
+       * avoid conflicts with scope configuration for other events (such as linking and showing previews).
+       *
+       * @instance
+       * @overridable
+       * @return {boolean}  A boolean indicating whether or not to publish and subscribe to selection topics to the parent scope.
+       */
+      getSelectionPublishToParent: function alfresco_lists_ItemSelectionMixin__getSelectionPublishToParent() {
+         return this.selectionPublishToParent;
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.
@@ -200,60 +386,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The property to use for the image title. Defaults to "displayName"
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      imageTitleProperty: "displayName",
-
-      /**
-       * The property to use for the image id. Defaults to "jsNode.nodeRef.nodeRef"
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      imageIdProperty: "jsNode.nodeRef.nodeRef",
-
-      /**
-       * Indicates whether or not a preview of the node represented by the thumbnail should be
-       * displayed when it is clicked. If this is set to true and there is not enough information
-       * to determine whether or not the the node can be previewed then a request will be published
-       * to retrieve that information.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      showDocumentPreview: false,
-
-      /**
-       * Some APIs provide very little information other than the nodeRef, however if we really
-       * believe that the thumbnails are only going to be of something that has a rendition then
-       * we can just "go for it" (all bets are really off though as to what we get back though
-       * so this should only set to true when you're confident that a valid thumbnail rendition
-       * will be available.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      assumeRendition: false,
-
-      /**
-       * The width to render the thumbnail. Units of measurement need to be provided, e.g.
-       * "100px" for 100 pixels. The default is null, and if left as this the thumbnail will
-       * be rendered at the original image size.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      width: null,
-
-      /**
        * Sets the title to display over the thumbnail
        *
        * @instance
@@ -283,16 +415,6 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * The name of the folder image to use. Valid options are: "folder-32.png", "folder-48.png", "folder-64.png"
-       * and "folder-256.png". The default is "folder-64.png".
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      folderImage: "folder-64.png",
-
-      /**
        * Returns a URL to the image to use when rendering a folder
        * 
        * @instance
@@ -301,25 +423,6 @@ define(["dojo/_base/declare",
          return require.toUrl("alfresco/renderers") + "/css/images/" + this.folderImage;
       },
       
-      /**
-       * The type of rendition to use for the thumbnail.
-       * 
-       * @instance
-       * @type {string} 
-       * @default
-       */
-      renditionName: "doclib",
-      
-      /**
-       * This property is used to determine whether or not a new version of the thumbnail needs
-       * to be generated or if the cached version can be used.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      lastThumbnailModificationProperty: "jsNode.properties.cm:lastThumbnailModification",
-
       /**
        * Generates the URL to use as the source of the thumbnail.
        * 
@@ -385,6 +488,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_Thumbnail__postCreate() {
          this.inherited(arguments);
+         this.createItemSelectionSubscriptions();
          if (this.width)
          {
             domStyle.set(this.imgNode, "width", this.width);
@@ -408,31 +512,40 @@ define(["dojo/_base/declare",
       onLinkClick: function alfresco_renderers_Thumbnail__onLinkClick(evt) {
          event.stop(evt);
 
-         // TODO: Need to use a nodeRef property attribute that can be configured
-         var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
-         if (!nodeRef)
-         {
-            nodeRef = lang.getObject("node.nodeRef", false, this.currentItem);
-         }
+         // Delegate to the ItemSelectionMixin - this will check if select on click is supported...
+         this.onSelectionClick();
 
-         // Check to see if the thumbnail is configured to display previews when clicked,
-         // this particular type of action could require an XHR request of the full node
-         // data so it needs to be handled in a specific way...
-         if (this.showDocumentPreview)
+         // Check whether or not the thumbnail should ONLY support selection on click (because in 
+         // some circumstances, e.g. film strip view carousel we might want to select AND perform
+         // an additinal action)...
+         if (!this.onlySelectOnClick)
          {
-            this.nodePromise = this.currentItem;
-            var type = lang.getObject("node.type", false, this.currentItem),
-                mimetype = lang.getObject("node.mimetype", false, this.currentItem);
-            if (!type || !mimetype)
+            // TODO: Need to use a nodeRef property attribute that can be configured
+            var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
+            if (!nodeRef)
             {
-               this.nodePromise = new Deferred();
-               this.onLoadNode(nodeRef);
+               nodeRef = lang.getObject("node.nodeRef", false, this.currentItem);
             }
-            when(this.nodePromise, lang.hitch(this, this.onNodePromiseResolved, nodeRef));
-         }
-         else
-         {
-            this.onNonPreviewAction();
+
+            // Check to see if the thumbnail is configured to display previews when clicked,
+            // this particular type of action could require an XHR request of the full node
+            // data so it needs to be handled in a specific way...
+            if (this.showDocumentPreview)
+            {
+               this.nodePromise = this.currentItem;
+               var type = lang.getObject("node.type", false, this.currentItem),
+                   mimetype = lang.getObject("node.mimetype", false, this.currentItem);
+               if (!type || !mimetype)
+               {
+                  this.nodePromise = new Deferred();
+                  this.onLoadNode(nodeRef);
+               }
+               when(this.nodePromise, lang.hitch(this, this.onNodePromiseResolved, nodeRef));
+            }
+            else
+            {
+               this.onNonPreviewAction();
+            }
          }
       },
 
