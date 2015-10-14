@@ -128,6 +128,15 @@ define(["dojo/_base/declare",
        * @default
        */
       initialSidebarWidth: 350,
+
+      /**
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      isResizeable: true,
       
       /**
        * The last registered width (in pixels) of the sidebar (needed for window resize events)
@@ -227,17 +236,24 @@ define(["dojo/_base/declare",
             max = null;
          }
          
-         $(this.sidebarNode).resizable({
-            handles: {
-               "e": ".resize-handle"
-            },
-            minWidth: this.minSidebarWidth,
-            maxWidth: max,
-            resize: lang.hitch(this, this.resizeHandler),
-            stop: lang.hitch(this, this.endResizing)
-         });
-         
-         on(this.resizeHandlerButtonNode, "click", lang.hitch(this, this.onResizeHandlerClick));
+         if (this.isResizeable)
+         {
+            $(this.sidebarNode).resizable({
+               handles: {
+                  "e": ".resize-handle"
+               },
+               minWidth: this.minSidebarWidth,
+               maxWidth: max,
+               resize: lang.hitch(this, this.resizeHandler),
+               stop: lang.hitch(this, this.endResizing)
+            });
+
+            on(this.resizeHandlerButtonNode, "click", lang.hitch(this, this.onResizeHandlerClick));
+         }
+         else
+         {
+            domClass.add(this.domNode, "alfresco-layout-AlfSideBarContainer--resizeDisabled");
+         }
          
          // We need to subscribe after the resize widget has been created...
          this.alfSubscribe("ALF_DOCLIST_SHOW_SIDEBAR", lang.hitch(this, this.showEventListener));
@@ -315,6 +331,12 @@ define(["dojo/_base/declare",
 
          domStyle.set(this.sidebarNode, "height", h + "px");
          domStyle.set(this.mainNode, "width", (size - w - 16) + "px");
+
+         if (!this.isResizeable)
+         {
+            // domStyle.set(this.resizeHandlerNode, "display", "none");
+            domStyle.set(this.sidebarNode, "width", w + "px");
+         }
          
          // Fire a custom event to let contained objects know that the node has been resized.
          this.alfPublishResizeEvent(this.mainNode);
