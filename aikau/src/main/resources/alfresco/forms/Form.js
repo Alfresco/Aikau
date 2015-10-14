@@ -117,10 +117,9 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "dojo/Deferred",
         "dojo/dom-construct",
-        "dojo/dom-class",
-        "dojo/on"], 
+        "dojo/dom-class"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, topics, _AlfHashMixin, RulesEngineMixin, 
-                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct, domClass, on) {
+                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct, domClass) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin, RulesEngineMixin], {
       
@@ -310,27 +309,7 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       warningsPosition: "top",
-
-      /**
-       * Should the first field in the form be focused when the form is loaded?
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       * @since 1.0.40
-       */
-      firstFieldFocusOnLoad: false,
-
-      /**
-       * Should the form automatically submit when the enter key is pressed?
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       * @since 1.0.40
-       */
-      submitOnEnter: false,
-
+      
       /**
        * @instance
        */
@@ -404,24 +383,6 @@ define(["dojo/_base/declare",
             }, this);
 
             this.processWidgets(this.widgets, this._form.domNode, "FIELDS");
-         }
-
-         // If configured, focus the first field in the form
-         if (this.firstFieldFocusOnLoad)
-         {
-            this.focus();
-         }
-
-         // If configured, allow the form to be submitted by pressing the enter key
-         if (this.submitOnEnter && !this.autoSavePublishTopic)
-         {
-            on(this, "keydown", lang.hitch(this, function(event){
-               if (event.keyCode === dojo.keys.ENTER && this.invalidFormControls.length === 0)
-               {
-                  var payload = lang.mixin(this.okButtonPublishPayload || {}, this.getValue());
-                  this.alfPublish(this.okButtonPublishTopic, payload, (this.okButtonPublishGlobal !== undefined && this.okButtonPublishGlobal === true));
-               }  
-            }));
          }
       },
 

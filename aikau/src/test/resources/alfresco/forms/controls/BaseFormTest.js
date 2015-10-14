@@ -29,193 +29,146 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function(registerSuite, assert, keys, TestCommon) {
 
-   registerSuite(function(){
-      var browser;
+registerSuite(function(){
+   var browser;
 
-      return {
-         name: "Base Form Control Tests",
+   return {
+      name: "Base Form Control Tests",
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/BaseForm", "Base Form Control Tests").end();
-         },
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/BaseForm", "Base Form Control Tests").end();
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      beforeEach: function() {
+         browser.end();
+      },
 
-         "Checking the form field is initially empty": function() {
-            return browser.findByCssSelector("div#FORM_FIELD div.control input[name='control']")
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "", "Form field not initially empty");
-               });
-         },
+      "Checking the form field is initially empty": function() {
+         return browser.findByCssSelector("div#FORM_FIELD div.control input[name='control']")
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "", "Form field not initially empty");
+            });
+      },
 
-         "No payload does not update value": function() {
-            return browser.findById("SET_FORM_VALUE_1")
-               .click()
-               .end()
+      "No payload does not update value": function() {
+         return browser.findById("SET_FORM_VALUE_1")
+            .click()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "", "No payload published but field value updated");
-               });
-         },
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "", "No payload published but field value updated");
+            });
+      },
 
-         "Invalid field name does not update value": function() {
-            return browser.findById("SET_FORM_VALUE_2")
-               .click()
-               .end()
+      "Invalid field name does not update value": function() {
+         return browser.findById("SET_FORM_VALUE_2")
+            .click()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "", "Invalid field name provided but value updated");
-               });
-         },
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "", "Invalid field name provided but value updated");
+            });
+      },
 
-         "Setting string value updates field appropriately": function() {
-            return browser.findById("SET_FORM_VALUE_3")
-               .click()
-               .end()
+      "Setting string value updates field appropriately": function() {
+         return browser.findById("SET_FORM_VALUE_3")
+            .click()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "this is the new value", "Field value not updated to published string value");
-               });
-         },
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "this is the new value", "Field value not updated to published string value");
+            });
+      },
 
-         "Setting number value updates field appropriately": function() {
-            return browser.findById("SET_FORM_VALUE_4")
-               .click()
-               .end()
+      "Setting number value updates field appropriately": function() {
+         return browser.findById("SET_FORM_VALUE_4")
+            .click()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "3.14159265", "Field value not updated to published numeric value");
-               });
-         },
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "3.14159265", "Field value not updated to published numeric value");
+            });
+      },
 
-         "Setting boolean value updates field appropriately": function() {
-            return browser.findById("SET_FORM_VALUE_5")
-               .click()
-               .end()
+      "Setting boolean value updates field appropriately": function() {
+         return browser.findById("SET_FORM_VALUE_5")
+            .click()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "true", "Field value not updated to published boolean value");
-               });
-         },
+         .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "true", "Field value not updated to published boolean value");
+            });
+      },
 
-         "Autosave on a form removes OK/Cancel buttons": function() {
-            return browser.findAllByCssSelector("#BASIC_FORM .confirmationButton, #BASIC_FORM .cancelButton")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 2, "OK/Cancel buttons not found on basic form");
-               })
-               .end()
+      "Autosave on a form removes OK/Cancel buttons": function() {
+         return browser.findAllByCssSelector("#BASIC_FORM .confirmationButton, #BASIC_FORM .cancelButton")
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "OK/Cancel buttons not found on basic form");
+            })
+            .end()
 
-            .findAllByCssSelector("#AUTOSAVE_FORM .confirmationButton, #AUTOSAVE_FORM .cancelButton")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "OK/Cancel buttons found on autosave form");
-               });
-         },
+         .findAllByCssSelector("#AUTOSAVE_FORM .confirmationButton, #AUTOSAVE_FORM .cancelButton")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "OK/Cancel buttons found on autosave form");
+            });
+      },
 
-         "Updating autosave value publishes form": function() {
-            return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD .dijitInputInner")
-               .clearValue()
-               .type("wibble")
-               .getLastPublish("AUTOSAVE_FORM_1")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "control", "wibble", "Did not autosave updated value");
-                  assert.propertyVal(payload, "alfValidForm", true, "Did not autosave validity property");
-               });
-         },
+      "Updating autosave value publishes form": function() {
+         return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD .dijitInputInner")
+            .clearValue()
+            .type("wibble")
+            .getLastPublish("AUTOSAVE_FORM_1")
+            .then(function(payload) {
+               assert.propertyVal(payload, "control", "wibble", "Did not autosave updated value");
+               assert.propertyVal(payload, "alfValidForm", true, "Did not autosave validity property");
+            });
+      },
 
-         "Updating to invalid value does not autosave form": function() {
-            return browser.findById("CLEAR_AUTOSAVE_1")
-               .click()
-               .clearLog()
-               .getAllPublishes("AUTOSAVE_FORM_1")
-               .then(function(payloads) {
-                  assert.lengthOf(payloads, 0, "Published form when invalid");
-               });
-         },
+      "Updating to invalid value does not autosave form": function() {
+         return browser.findById("CLEAR_AUTOSAVE_1")
+            .click()
+            .clearLog()
+            .getAllPublishes("AUTOSAVE_FORM_1")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Published form when invalid");
+            });
+      },
 
-         "Autosave on invalid flag publishes invalid form": function() {
-            return browser.findByCssSelector("#AUTOSAVE_INVALID_FORM_FIELD .dijitInputInner")
-               .clearLog()
-               .clearValue()
-               .pressKeys(keys.BACKSPACE) // Need to trigger an update!
-               .getLastPublish("AUTOSAVE_FORM_2")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "control", "", "Did not autosave updated, invalid value");
-                  assert.propertyVal(payload, "alfValidForm", false, "Did not autosave validity property");
-               });
-         },
+      "Autosave on invalid flag publishes invalid form": function() {
+         return browser.findByCssSelector("#AUTOSAVE_INVALID_FORM_FIELD .dijitInputInner")
+            .clearLog()
+            .clearValue()
+            .pressKeys(keys.BACKSPACE) // Need to trigger an update!
+            .getLastPublish("AUTOSAVE_FORM_2")
+            .then(function(payload) {
+               assert.propertyVal(payload, "control", "", "Did not autosave updated, invalid value");
+               assert.propertyVal(payload, "alfValidForm", false, "Did not autosave validity property");
+            });
+      },
 
-         "Autosaving with defined payload mixes payload into form values": function(){
-            return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD") // Need to get session to check for publish
-               .getLastPublish("AUTOSAVE_FORM_2")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "customProperty", "awooga", "Did not mix custom payload into form values");
-               });
-         },
+      "Autosaving with defined payload mixes payload into form values": function(){
+         return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD") // Need to get session to check for publish
+            .getLastPublish("AUTOSAVE_FORM_2")
+            .then(function(payload) {
+               assert.propertyVal(payload, "customProperty", "awooga", "Did not mix custom payload into form values");
+            });
+      },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
-   });
-
-   // This test reloads the page to clear any previous focus
-   registerSuite(function(){
-      var browser;
-
-      return {
-         name: "Base Form Control Tests - Focus and Enter to Submit",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/BaseForm", "Base Form Control Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check the form fields are correctly focused": function() {
-            return browser.findByCssSelector("#FOCUS_AND_SUBMIT_ON_ENTER_FORM #FORM_FIELD1 div.dijitFocused")
-               .end()
-
-            .findByCssSelector("#FOCUS_AND_SUBMIT_ON_ENTER_FORM #FORM_FIELD2 div.dijitFocused")
-               .then(function () {
-                  assert.fail(null, null, "Form field 2 should not be focused");
-               },
-               function () {
-                  
-               });
-         },
-
-         "Check the form submits by the enter key": function() {
-            return browser.findByCssSelector("#FOCUS_AND_SUBMIT_ON_ENTER_FORM #FORM_FIELD1 .dijitInputInner")
-               .clearValue()
-               .type("wibble")
-               .pressKeys(keys.ENTER)
-               .getLastPublish("SUBMIT_FOCUS_AND_SUBMIT_ON_ENTER_FORM")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "control1", "wibble", "control1 value incorrect");
-                  assert.propertyVal(payload, "control2", "", "control2 value incorrect");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
+   };
    });
 });

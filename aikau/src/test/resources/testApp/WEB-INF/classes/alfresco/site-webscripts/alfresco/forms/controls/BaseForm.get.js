@@ -172,34 +172,6 @@ model.jsonModel = {
                         }
                      ]
                   }
-               },
-               {
-                  name: "alfresco/forms/Form",
-                  id: "FOCUS_AND_SUBMIT_ON_ENTER_FORM",
-                  config: {
-                     okButtonPublishTopic: "SUBMIT_FOCUS_AND_SUBMIT_ON_ENTER_FORM",
-                     okButtonPublishGlobal: true,
-                     firstFieldFocusOnLoad: true,
-                     submitOnEnter: true,
-                     widgets: [
-                        {
-                           id: "FORM_FIELD1",
-                           name: "alfresco/forms/controls/TextBox",
-                           config: {
-                              name: "control1",
-                              label: "Basic form control 1"
-                           }
-                        },
-                        {
-                           id: "FORM_FIELD2",
-                           name: "alfresco/forms/controls/TextBox",
-                           config: {
-                              name: "control2",
-                              label: "Basic form control 2"
-                           }
-                        }
-                     ]
-                  }
                }
             ]
          }
