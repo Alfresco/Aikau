@@ -18,15 +18,42 @@
  */
 
 /**
- * This layout widget provides a resizeable sidebar that can be snapped open and closed into which widgets
+ * <p>This layout widget provides a resizeable sidebar that can be snapped open and closed into which widgets
  * can be placed. Each widget in the <b>widgets</b> array can given an optional <b>align</b> attribute that if set to
  * <b>"sidebar"</b> will result in that widget being placed into the sidebar (widgets without an <b>align</b> attribute
- * or with the <b>align</b> attribute set to any other value will be placed into the main panel).
+ * or with the <b>align</b> attribute set to any other value will be placed into the main panel).</p>
+ * <p>If you don't want the sidebar to be resizeable then you can set the 
+ * [isResizeable]{@link module:alfresco/layout/AlfSideBarContainer#isResizeable} to be false. This will result in a simple
+ * border separating the sidebar and main areas.</p>
  *
  * @example <caption>Example configuration placing one widget in the sidebar and the other in the main panel</caption>
  * {
  *    name: "alfresco/layout/AlfSideBarContainer",
  *    config: {
+ *       widgets: [
+ *          {
+ *             name: "alfresco/html/Label",
+ *             align: "sidebar",
+ *             config: {
+ *                label: "This is in the sidebar"
+ *             }
+ *          },
+ *          {
+ *             name: "alfresco/html/Label",
+ *             config: {
+ *                label: "This is in the main panel"
+ *             }
+ *          }
+ *       ]
+ *    }
+ * }
+ *
+ * @example <caption>Example configuration where the sidebar cannot be resized (with custom width)</caption>
+ * {
+ *    name: "alfresco/layout/AlfSideBarContainer",
+ *    config: {
+ *       isResizeable: false,
+ *       initialSidebarWidth: 250,
  *       widgets: [
  *          {
  *             name: "alfresco/html/Label",
