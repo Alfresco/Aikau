@@ -23,7 +23,7 @@
  * <b>"sidebar"</b> will result in that widget being placed into the sidebar (widgets without an <b>align</b> attribute
  * or with the <b>align</b> attribute set to any other value will be placed into the main panel).</p>
  * <p>If you don't want the sidebar to be resizeable then you can set the 
- * [isResizeable]{@link module:alfresco/layout/AlfSideBarContainer#isResizeable} to be false. This will result in a simple
+ * [isResizable]{@link module:alfresco/layout/AlfSideBarContainer#isResizable} to be false. This will result in a simple
  * border separating the sidebar and main areas.</p>
  *
  * @example <caption>Example configuration placing one widget in the sidebar and the other in the main panel</caption>
@@ -52,7 +52,7 @@
  * {
  *    name: "alfresco/layout/AlfSideBarContainer",
  *    config: {
- *       isResizeable: false,
+ *       isResizable: false,
  *       initialSidebarWidth: 250,
  *       widgets: [
  *          {
@@ -164,7 +164,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.40
        */
-      isResizeable: true,
+      isResizable: true,
       
       /**
        * The last registered width (in pixels) of the sidebar (needed for window resize events)
@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
             max = null;
          }
          
-         if (this.isResizeable)
+         if (this.isResizable)
          {
             $(this.sidebarNode).resizable({
                handles: {
@@ -360,7 +360,7 @@ define(["dojo/_base/declare",
          domStyle.set(this.sidebarNode, "height", h + "px");
          domStyle.set(this.mainNode, "width", (size - w - 16) + "px");
 
-         if (!this.isResizeable)
+         if (!this.isResizable)
          {
             // domStyle.set(this.resizeHandlerNode, "display", "none");
             domStyle.set(this.sidebarNode, "width", w + "px");
@@ -453,7 +453,7 @@ define(["dojo/_base/declare",
             }
             
             // Show the sidebar...
-            if (this.isResizeable)
+            if (this.isResizable)
             {
                $(this.sidebarNode).resizable("enable"); // Unlock the resizer when the sidebar is not shown...
             }
