@@ -6,7 +6,7 @@
    background-image: url(./images/NoneSelected.png);
 
    /* NOTE: Using class provided by mixin module */;
-   &.alfresco-lists-ItemSelectionMixin--checked {
+   &.alfresco-lists-ItemSelectionMixin--selected {
       background-image: url(./images/AllSelected.png);
    }
 }

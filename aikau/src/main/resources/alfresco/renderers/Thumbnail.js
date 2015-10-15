@@ -151,7 +151,7 @@ define(["dojo/_base/declare",
       
       /**
        * The name of the folder image to use. Valid options are: "folder-32.png", "folder-48.png", "folder-64.png"
-       * and "folder-256.png". The default is "folder-64.png".
+       * and "folder-256.png".
        *
        * @instance
        * @type {string}
@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
       folderImage: "folder-64.png",
 
       /**
-       * The property to use for the image id. Defaults to "jsNode.nodeRef.nodeRef"
+       * The property to use for the image id.
        * 
        * @instance
        * @type {string}
@@ -169,7 +169,7 @@ define(["dojo/_base/declare",
       imageIdProperty: "jsNode.nodeRef.nodeRef",
 
       /**
-       * The property to use for the image title. Defaults to "displayName"
+       * The property to use for the image title.
        *
        * @instance
        * @type {string}

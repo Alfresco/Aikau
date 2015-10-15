@@ -48,7 +48,7 @@ define(["intern!object",
          // },
 
          // "Count the checked selectors": function() {
-         //     return browser.findAllByCssSelector("#VIEW tr .alfresco-lists-ItemSelectionMixin--checked")
+         //     return browser.findAllByCssSelector("#VIEW tr .alfresco-lists-ItemSelectionMixin--selected")
          //       .then(function(elements) {
          //          assert.lengthOf(elements, 0, "An unexpected number of CHECKED selectors were found");
          //       });
@@ -102,14 +102,14 @@ define(["intern!object",
          //    .findDisplayedByCssSelector(".dijitMenuItem:nth-child(4) > td.dijitMenuItemLabel")
          //       .click()
          //    .end()
-         //    .findByCssSelector("#SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--checked")
+         //    .findByCssSelector("#SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
          //       .then(null, function() {
          //          assert(false, "First item was not checked when 'Documents' selected");
          //       });
          // },
 
          // "Check that second item is not checked": function() {
-         //    return browser.findAllByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--checked")
+         //    return browser.findAllByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
          //       .then(function(elements) {
          //          assert.lengthOf(elements, 0, "Second item was unexpectedly checked when 'Documents' selected");
          //       });
@@ -124,14 +124,14 @@ define(["intern!object",
          //       .click()
          //    .end()
 
-         //    .findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--checked")
+         //    .findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
          //       .then(null, function() {
          //          assert(false, "First item was unexpectedly checked when 'Folders' selected");
          //       });
          // },
 
          // "Check that second item is checked": function() {
-         //    return browser.findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--checked")
+         //    return browser.findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
          //       .then(null, function() {
          //          assert(false, "Second item was not checked when 'Folders' selected");
          //       });

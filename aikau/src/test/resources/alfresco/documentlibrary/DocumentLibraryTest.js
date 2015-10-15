@@ -230,14 +230,14 @@ registerSuite(function(){
          return browser.findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_0")
             .click()
          .end()
-         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--checked")
+         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
          .end()
 
          // Select another item and make sure it is shown as selected...
          .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_2")
             .click()
          .end()
-         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--checked")
+         .findByCssSelector("#DETAILED_VIEW_SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--selected")
          .end()
 
          // Clear the log so that we can tell when view switching is complete...
@@ -258,13 +258,13 @@ registerSuite(function(){
          .end()
 
          // Check the item selection has been retained...
-         .findAllByCssSelector("#SIMPLE_VIEW_SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--checked")
+         .findAllByCssSelector("#SIMPLE_VIEW_SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Item 0 selection was not retained switching views");
             })
          .end()
 
-         .findAllByCssSelector("#SIMPLE_VIEW_SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--checked")
+         .findAllByCssSelector("#SIMPLE_VIEW_SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--selected")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Item 2 selection was not retained switching views");
             });

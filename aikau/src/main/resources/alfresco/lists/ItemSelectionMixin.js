@@ -50,6 +50,30 @@ define(["dojo/_base/declare",
       itemKey: "nodeRef",
 
       /**
+       * Indicates whether the subscriptions made by 
+       * [createItemSelectionSubscriptions]{@link module:alfresco/lists/ItemSelectionMixin#createItemSelectionSubscriptions}
+       * and the publications made by [select]{@link module:alfresco/lists/ItemSelectionMixin#select} and 
+       * [deselect]{@link module:alfresco/lists/ItemSelectionMixin#deselect} should be made on the global scope.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      publishGlobal: null,
+
+      /**
+       * Indicates whether the subscriptions made by 
+       * [createItemSelectionSubscriptions]{@link module:alfresco/lists/ItemSelectionMixin#createItemSelectionSubscriptions}
+       * and the publications made by [select]{@link module:alfresco/lists/ItemSelectionMixin#select} and 
+       * [deselect]{@link module:alfresco/lists/ItemSelectionMixin#deselect} should be made on the parent scope.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      publishToParent: null,
+
+      /**
        * This indicates whether or not the mixing widget should subscribe to item selection events. This
        * attribute is inspected by the [createItemSelectionSubscriptions]{@link module:alfresco/lists/ItemSelectionMixin#createItemSelectionSubscriptions}
        * function to determine whether to bind the 
@@ -186,7 +210,7 @@ define(["dojo/_base/declare",
                   var b = lang.getObject(this.itemKey, false, this.currentItem);
                   var match = ((a || a === 0) && a === b);
                   if (match) {
-                     domClass.add(this.getSelectorNode(), "alfresco-lists-ItemSelectionMixin--checked");
+                     domClass.add(this.getSelectorNode(), "alfresco-lists-ItemSelectionMixin--selected");
                   }
                   return match;
                }, this);
@@ -203,7 +227,7 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentSelectedTopic
        */
       select: function alfresco_lists_ItemSelectionMixin__select() {
-         domClass.add(this.getSelectorNode(), "alfresco-lists-ItemSelectionMixin--checked");
+         domClass.add(this.getSelectorNode(), "alfresco-lists-ItemSelectionMixin--selected");
          this.alfPublish(this.documentSelectedTopic, {
             value: this.currentItem
          }, this.getSelectionPublishGlobal(), this.getSelectionPublishToParent());
@@ -218,7 +242,7 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentDeselectedTopic
        */
       deselect: function alfresco_lists_ItemSelectionMixin__deselect() {
-         domClass.remove(this.getSelectorNode(), "alfresco-lists-ItemSelectionMixin--checked");
+         domClass.remove(this.getSelectorNode(), "alfresco-lists-ItemSelectionMixin--selected");
          this.alfPublish(this.documentDeselectedTopic, {
             value: this.currentItem
          }, this.getSelectionPublishGlobal(), this.getSelectionPublishToParent());
@@ -236,7 +260,7 @@ define(["dojo/_base/declare",
          if (this.selectOnClick)
          {
             evt && Event.stop(evt);
-            if (domClass.contains(this.getSelectorNode(), "alfresco-lists-ItemSelectionMixin--checked"))
+            if (domClass.contains(this.getSelectorNode(), "alfresco-lists-ItemSelectionMixin--selected"))
             {
                // De-select if currently selected...
                this.deselect();
