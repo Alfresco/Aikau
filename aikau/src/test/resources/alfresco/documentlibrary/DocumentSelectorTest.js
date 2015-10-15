@@ -21,160 +21,191 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
-   // Use this function for getting an individual selector...
-   var selectorSelector = function(row) {
-      return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector";
-   };
-   // Use this function for getting all checked selectors...
-   var checkedSelectorSelector = function() {
-      return "#VIEW tr .alfresco-renderers-Selector.checked";
-   };
-   // Use this function for getting all unchecked selectors...
-   var uncheckedSelectorSelector = function() {
-      return "#VIEW tr .alfresco-renderers-Selector.unchecked";
-   };
-   // Use this function to check if a specific entry is checked...
-   var specificCheckedSelectorSelector = function(row) {
-      return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector.checked";
-   };
-   // Use this function for getting all unchecked selectors...
-   var specificUncheckedSelectorSelector = function(row) {
-      return "#VIEW tr:nth-child(" + row + ") .alfresco-renderers-Selector.unchecked";
-   };
+   registerSuite(function(){
+      var browser;
 
-registerSuite(function(){
-   var browser;
+      return {
+         name: "Document Selector Tests",
 
-   return {
-      name: "Document Selector Tests",
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/DocumentSelector", "Document Selector Tests").end();
+         },
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/DocumentSelector", "Document Selector Tests").end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         // "Count the rows": function () {
+         //    return browser.findAllByCssSelector("#VIEW tr")
+         //       .then(function(elements) {
+         //          assert.lengthOf(elements, 3, "An unexpected number of rows were detected");
+         //       });
+         // },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-     
-      "Count the rows": function () {
-         return browser.findAllByCssSelector("#VIEW tr")
-            .then(function(elements) {
-               assert(elements.length === 3, "An unexpected number of rows were detected: " + elements.length);
-            });
-      },
+         // "Count the checked selectors": function() {
+         //     return browser.findAllByCssSelector("#VIEW tr .alfresco-lists-ItemSelectionMixin--selected")
+         //       .then(function(elements) {
+         //          assert.lengthOf(elements, 0, "An unexpected number of CHECKED selectors were found");
+         //       });
+         // },
 
-      "Count the unchecked selectors": function() {
-         return browser.findAllByCssSelector(uncheckedSelectorSelector())
-            .then(function(elements) {
-               assert(elements.length === 3, "An unexpected number of UNCHECKED selectors were found: " + elements.length);
-            });
-      },
+         // "Check that the overall selector indicates that none have been selected": function() {
+         //    return browser.findByCssSelector("#SELECTED_ITEMS .alf-noneselected-icon")
+         //       .then(null, function() {
+         //          assert(false, "The selected items widget doesn't indicate that NO items are selected");
+         //       });
+         // },
 
-      "Count the checked selectors": function() {
-          return browser.findAllByCssSelector(checkedSelectorSelector())
-            .then(function(elements) {
-               assert(elements.length === 0, "An unexpected number of CHECKED selectors were found: " + elements.length);
-            });
-      },
+         // "Check the first selector": function() {
+         //    return browser.findById("SELECTOR_ITEM_0")
+         //       .click()
+         //    .end()
+         //    .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
+         //       .then(null, function() {
+         //          assert(false, "The selected items widget doesn't indicate that SOME items are selected");
+         //       });
+         // },
 
-      "Check that the overall selector indicates that none have been selected": function() {
-         return browser.findByCssSelector("#SELECTED_ITEMS .alf-noneselected-icon")
-            .then(null, function() {
-               assert(false, "The selected items widget doesn't indicate that NO items are selected");
-            });
-      },
+         // "Check the other two selectors": function() {
+         //    return browser.findById("SELECTOR_ITEM_1")
+         //       .click()
+         //    .end()
+         //    .findById("SELECTOR_ITEM_2")
+         //       .click()
+         //    .end()
+         //    .findByCssSelector("#SELECTED_ITEMS .alf-allselected-icon")
+         //       .then(null, function() {
+         //          assert(false, "The selected items widget doesn't indicate that ALL items are selected");
+         //       });
+         // },
 
-      "Check the first selector": function() {
-         return browser.findByCssSelector(selectorSelector(1))
-            .click()
-         .end()
-         .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
-            .then(null, function() {
-               assert(false, "The selected items widget doesn't indicate that SOME items are selected");
-            });
-      },
+         // "Uncheck the middle selector": function() {
+         //    return browser.findById("SELECTOR_ITEM_1")
+         //       .click()
+         //    .end()
+         //    .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
+         //       .then(null, function() {
+         //          assert(false, "The selected items widget doesn't indicate that SOME items are selected");
+         //       });
+         // },
 
-      "Check the other two selectors": function() {
-         return browser.findByCssSelector(selectorSelector(2))
-            .click()
-         .end()
-         .findByCssSelector(selectorSelector(3))
-            .click()
-         .end()
-         .findByCssSelector("#SELECTED_ITEMS .alf-allselected-icon")
-            .then(null, function() {
-               assert(false, "The selected items widget doesn't indicate that ALL items are selected");
-            });
-      },
+         // "Open the menu and select documents": function() {
+         //    return browser.findByCssSelector(".alf-menu-arrow")
+         //       .click()
+         //    .end()
 
-      "Uncheck the middle selector": function() {
-         return browser.findByCssSelector(selectorSelector(2))
-            .click()
-         .end()
-         .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
-            .then(null, function() {
-               assert(false, "The selected items widget doesn't indicate that SOME items are selected");
-            });
-      },
+         //    .findDisplayedByCssSelector(".dijitMenuItem:nth-child(4) > td.dijitMenuItemLabel")
+         //       .click()
+         //    .end()
+         //    .findByCssSelector("#SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
+         //       .then(null, function() {
+         //          assert(false, "First item was not checked when 'Documents' selected");
+         //       });
+         // },
 
-      "Open the menu and select documents": function() {
-         return browser.findByCssSelector(".alf-menu-arrow")
-            .click()
-         .end()
-         .sleep(150)
-         .findByCssSelector(".dijitMenuItem:nth-child(4) > td.dijitMenuItemLabel")
-            .click()
-         .end()
-         .findByCssSelector(specificCheckedSelectorSelector(1))
-            .then(null, function() {
-               assert(false, "First item was not checked when 'Documents' selected");
-            });
-      },
+         // "Check that second item is not checked": function() {
+         //    return browser.findAllByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
+         //       .then(function(elements) {
+         //          assert.lengthOf(elements, 0, "Second item was unexpectedly checked when 'Documents' selected");
+         //       });
+         // },
 
-      "Check that second item is not checked": function() {
-         return browser.findByCssSelector(specificUncheckedSelectorSelector(2))
-            .then(null, function() {
-               assert(false, "Second item was unexpectedly checked when 'Documents' selected");
-            });
-      },
+         // "Open the menu and select folders": function() {
+         //    return browser.findByCssSelector(".alf-menu-arrow")
+         //       .click()
+         //    .end()
 
-      "Open the menu and select folders": function() {
-         return browser.findByCssSelector(".alf-menu-arrow")
-            .click()
-         .end()
-         .sleep(150)
+         //    .findDisplayedByCssSelector(".dijitMenuItem:nth-child(5) > td.dijitMenuItemLabel")
+         //       .click()
+         //    .end()
 
-         .findByCssSelector(".dijitMenuItem:nth-child(5) > td.dijitMenuItemLabel")
-            .click()
-         .end()
+         //    .findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
+         //       .then(null, function() {
+         //          assert(false, "First item was unexpectedly checked when 'Folders' selected");
+         //       });
+         // },
 
-         .findByCssSelector(specificCheckedSelectorSelector(2))
-            .then(null, function() {
-               assert(false, "First item was unexpectedly checked when 'Folders' selected");
-            });
-      },
+         // "Check that second item is checked": function() {
+         //    return browser.findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
+         //       .then(null, function() {
+         //          assert(false, "Second item was not checked when 'Folders' selected");
+         //       });
+         // },
 
-      "Check that second item is checked": function() {
-         return browser.findByCssSelector(specificUncheckedSelectorSelector(1))
-            .then(null, function() {
-               assert(false, "Second item was not checked when 'Folders' selected");
-            });
-      },
+         "Select via thumbnail (selection only capability)": function() {
+            return browser.findByCssSelector("#SELECT_THUMBNAIL_ITEM_0 .inner img")
+               .clearLog()
+               .click()
+            .end()
+            .getLastPublish("ALF_DOCLIST_DOCUMENT_SELECTED", "Thumbnail click did not publish selection")
+            .getAllPublishes("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payloads) {
+                  assert.lengthOf(payloads, 0, "Navigation publication should not have been made");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Deselect via thumbnail (selection only capability)": function() {
+            return browser.findByCssSelector("#SELECT_THUMBNAIL_ITEM_0 .inner img")
+               .clearLog()
+               .click()
+            .end()
+            .getLastPublish("ALF_DOCLIST_DOCUMENT_DESELECTED", "Thumbnail click did not publish de-selection")
+            .getAllPublishes("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payloads) {
+                  assert.lengthOf(payloads, 0, "Navigation publication should not have been made");
+               });
+         },
+
+         "Select via thumbnail (selection and navigation capability)": function() {
+            return browser.findByCssSelector("#MIXED_THUMBNAIL_ITEM_0 .inner img")
+               .clearLog()
+               .click()
+            .end()
+            .getLastPublish("ALF_DOCLIST_DOCUMENT_SELECTED", "Thumbnail click did not publish selection")
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Navigation publication not made");
+         },
+
+         "Deselect via thumbnail (selection and navigation capability)": function() {
+            return browser.findByCssSelector("#MIXED_THUMBNAIL_ITEM_0 .inner img")
+               .clearLog()
+               .click()
+            .end()
+            .getLastPublish("ALF_DOCLIST_DOCUMENT_DESELECTED", "Thumbnail click did not publish de-selection")
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Navigation publication not made");
+         },
+
+         "Select via thumbnail (selection disabled)": function() {
+            return browser.findByCssSelector("#NON_SELECT_THUMBNAIL_ITEM_0 .inner img")
+               .clearLog()
+               .click()
+            .end()
+            .getAllPublishes("ALF_DOCLIST_DOCUMENT_SELECTED")
+               .then(function(payloads) {
+                  assert.lengthOf(payloads, 0, "Selection publication should not have been made");
+               })
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Navigation publication not made");
+         },
+
+         "Deselect via thumbnail (selection disabled)": function() {
+            return browser.findByCssSelector("#NON_SELECT_THUMBNAIL_ITEM_0 .inner img")
+               .clearLog()
+               .click()
+            .end()
+            .getAllPublishes("ALF_DOCLIST_DOCUMENT_SELECTED")
+               .then(function(payloads) {
+                  assert.lengthOf(payloads, 0, "Selection publication should not have been made");
+               })
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Navigation publication not made");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });
