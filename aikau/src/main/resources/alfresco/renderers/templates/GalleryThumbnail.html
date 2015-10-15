@@ -4,7 +4,9 @@
    <div class="selectBar share-hidden" data-dojo-attach-point="titleNode">
       <div data-dojo-attach-point="selectBarNode"></div>
    </div>
-   <div class="displayName" data-dojo-attach-point="displayNameNode">${imgTitle}</div>
+   <div class="displayName" data-dojo-attach-point="displayNameNode">
+      <div class="displayName__content" title="${imgTitle}">${imgTitle}</div>
+   </div>
    <span class="inner">
       <img data-dojo-attach-point="imgNode" id="${imgId}" src="${thumbnailUrl}" alt="${imgAltText}" title="${imgTitle}"/>
    </span>

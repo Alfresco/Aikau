@@ -2,6 +2,7 @@
 
    .alfresco-layout-AlfSideBarContainer__container {
       overflow: hidden;
+      background-color: @sidebar-container-main-background-color;
 
       .alfresco-layout-AlfSideBarContainer__sidebar,
       .alfresco-layout-AlfSideBarContainer__main {
@@ -17,22 +18,23 @@
          color: @general-font-color;
          border: none;
          padding-right: 10px;
+         background-color: @sidebar-container-sidebar-background-color;
 
          /* Convert the YUI resize handle to be transparent and slightly wider
             to accommodate our custom image for popping the sidebar in and out */
          .alfresco-layout-AlfSideBarContainer__resizeHandle {
-            background-color: #ffffff;
+            background-color: @sidebar-container-resize-handle-background-color;
             width: 9px;
             right: 0;
-            border-right: @standard-border;
-            border-left: @standard-border;
+            border-right: @sidebar-container-borders;
+            border-left: @sidebar-container-borders;
 
             /* Override the default drag handle image */
             .alfresco-layout-AlfSideBarContainer__resizeButton {
                background-position: 0 6px;
                background-color: transparent;
                background-repeat: no-repeat;
-               border: @standard-border;
+               border: @sidebar-container-borders;
                border-left: none;
                border-right: none;
                width: 8px;
@@ -55,7 +57,7 @@
 
          /* Ensure that the resize handle gets some colour when being used */ 
          .resize-handle.active{
-            background-color: #dfdfdf;
+            background-color: @sidebar-container-resize-handle-background-color-active;
          }
       }
 
@@ -74,6 +76,19 @@
                background-image: url("./images/PopOutArrow.png");
             }
          }
+      }
+   }
+
+   &--resizeDisabled {
+      .alfresco-layout-AlfSideBarContainer__container {
+         .alfresco-layout-AlfSideBarContainer__sidebar {
+            border-right: @sidebar-container-borders;
+            padding-right: 0;
+         }
+      }
+      
+      .alfresco-layout-AlfSideBarContainer__resizeHandle {
+         display: none;
       }
    }
 }

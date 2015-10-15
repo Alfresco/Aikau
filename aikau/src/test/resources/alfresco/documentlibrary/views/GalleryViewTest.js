@@ -117,6 +117,26 @@ define(["intern!object",
                });
          },
 
+         "Long item names are truncated": function(){
+            var normalNameHeight;
+            return browser.findByCssSelector("#DOCLIST tr:nth-child(1) td:nth-child(1) .displayName")
+               .getSize()
+               .then(function(size){
+                  normalNameHeight = size.height;
+               })
+               .end()
+
+            .findByCssSelector("#DOCLIST tr:nth-child(1) td:nth-child(6) .displayName")
+               .getVisibleText()
+               .then(function(visibleText){
+                  assert.equal(visibleText, "Link with a really, really long title that won't fit properly", "Incorrect item being tested for height")
+               })
+               .getSize()
+               .then(function(size){
+                  assert.equal(normalNameHeight, size.height, "Height not consistent with being truncated (i.e. is probably wrapping)");
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }

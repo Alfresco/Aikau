@@ -76,7 +76,7 @@ registerSuite(function(){
          return browser.findByCssSelector("#PRESET_STATUS > div.lastUpdate > span")
             .getVisibleText()
             .then(function(resultText) {
-               assert.equal(resultText, "over 15 years ago", "Preset status time not displayed as expected");
+               assert.equal(resultText, "over 16 years ago", "Preset status time not displayed as expected");
             });
       },
 
@@ -165,7 +165,7 @@ registerSuite(function(){
          return browser.findByCssSelector("#NO_STATUS > div.lastUpdate > span")
             .getVisibleText()
             .then(function(resultText) {
-               assert.equal(resultText, "over 15 years ago", "Status time not updated");
+               assert.equal(resultText, "over 16 years ago", "Status time not updated");
             })
             .end();
 
