@@ -87,8 +87,7 @@ define(["dojo/_base/declare",
       updateOnSelection: true,
 
       /**
-       * The CSS class to apply to the DOM element returned from calling
-       * [getSelectorNode]{@link module:alfresco/lists/ItemSelectionMixin#getSelectorNode}.
+       * The CSS class to apply to the root DOM node of the widget
        *
        * @instance
        * @type {string}
@@ -150,18 +149,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called to get the DOM node to add the CSS class that indicates whether or not the 
-       * item is selected. It attempts to return a "selectorNode" in the widget template but if one is not available
-       * then it will return the widgets outer node.
-       * 
-       * @instance
-       * @overridable
-       */
-      getSelectorNode: function alfresco_lists_ItemSelectionMixin__getSelectorNode() {
-         return this.selectorNode || this.domNode;
-      },
-
-      /**
        * Handles selection request events for the following values: "selectAll", "selectNone",
        * "selectInvert", "selectFolders" & "selectDocuments". All other selection requests are
        * ignored.
@@ -220,7 +207,7 @@ define(["dojo/_base/declare",
                   var b = lang.getObject(this.itemKey, false, this.currentItem);
                   var match = ((a || a === 0) && a === b);
                   if (match) {
-                     domClass.add(this.getSelectorNode(), this.selectedCssClass);
+                     domClass.add(this.domNode, this.selectedCssClass);
                   }
                   return match;
                }, this);
@@ -237,7 +224,7 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentSelectedTopic
        */
       select: function alfresco_lists_ItemSelectionMixin__select() {
-         domClass.add(this.getSelectorNode(), this.selectedCssClass);
+         domClass.add(this.domNode, this.selectedCssClass);
          this.alfPublish(this.documentSelectedTopic, {
             value: this.currentItem
          }, this.getSelectionPublishGlobal(), this.getSelectionPublishToParent());
@@ -252,7 +239,7 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentDeselectedTopic
        */
       deselect: function alfresco_lists_ItemSelectionMixin__deselect() {
-         domClass.remove(this.getSelectorNode(), this.selectedCssClass);
+         domClass.remove(this.domNode, this.selectedCssClass);
          this.alfPublish(this.documentDeselectedTopic, {
             value: this.currentItem
          }, this.getSelectionPublishGlobal(), this.getSelectionPublishToParent());
@@ -270,7 +257,7 @@ define(["dojo/_base/declare",
          if (this.selectOnClick)
          {
             evt && event.stop(evt);
-            if (domClass.contains(this.getSelectorNode(), this.selectedCssClass))
+            if (domClass.contains(this.domNode, this.selectedCssClass))
             {
                // De-select if currently selected...
                this.deselect();
