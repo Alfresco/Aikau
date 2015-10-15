@@ -61,7 +61,7 @@ model.jsonModel = {
                               type: "wikipage"
                            },
                            {
-                              displayName: "Link",
+                              displayName: "Link with a really, really long title that won't fit properly",
                               nodeRef: "dummy://nodeRef/6",
                               type: "link"
                            },
