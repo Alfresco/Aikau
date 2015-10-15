@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Simple AlfSideBarContainer</shortname>
+  <description>This page shows the AlfSideBarContainer configured to not be resizeable.</description>
+  <family>aikau-unit-tests</family>
+  <url>/SimpleSideBarContainer</url>
+</webscript>
