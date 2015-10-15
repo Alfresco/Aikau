@@ -177,10 +177,8 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default
+       * @default [DOCUMENT_SELECTION_UPDATE]{@link module:alfresco/core/topics#DOCUMENT_SELECTION_UPDATE}
        * @event
-       * @property {string} [value] One of "selectAll", "selectNone", "selectInvert", "selectFolders" or "selectDocuments"
-       * @property {object[]} [selectedItems] An array of items that have been selected
        */
       documentSelectionTopic: topics.DOCUMENT_SELECTION_UPDATE,
       
