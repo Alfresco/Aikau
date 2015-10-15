@@ -15,6 +15,7 @@ model.jsonModel = {
          name: "alfresco/layout/AlfSideBarContainer",
          config: {
             isResizeable: false,
+            initialSidebarWidth: 250,
             footerHeight: 10,
             widgets: [
                {

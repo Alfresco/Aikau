@@ -83,6 +83,7 @@
       .alfresco-layout-AlfSideBarContainer__container {
          .alfresco-layout-AlfSideBarContainer__sidebar {
             border-right: @sidebar-container-borders;
+            padding-right: 0;
          }
       }
       

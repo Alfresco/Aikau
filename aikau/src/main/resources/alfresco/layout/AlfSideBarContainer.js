@@ -130,6 +130,7 @@ define(["dojo/_base/declare",
       initialSidebarWidth: 350,
 
       /**
+       * Indicates whether or not the sidebar should be resizable or not.
        * 
        * @instance
        * @type {boolean}
@@ -425,7 +426,11 @@ define(["dojo/_base/declare",
             }
             
             // Show the sidebar...
-            $(this.sidebarNode).resizable("enable"); // Unlock the resizer when the sidebar is not shown...
+            if (this.isResizeable)
+            {
+               $(this.sidebarNode).resizable("enable"); // Unlock the resizer when the sidebar is not shown...
+            }
+            
             var width = (this.hiddenSidebarWidth) ? this.hiddenSidebarWidth : this.initialSidebarWidth;
             domStyle.set(this.sidebarNode, "width", width + "px");
 
