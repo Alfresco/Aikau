@@ -18,27 +18,32 @@
  */
 
 /**
- * Displays an image typically used as an application logo. Provides a number of Alfresco and
- * Surf logos out-of-the-box but can be configured with a specific URL to render any image.
+ * <p>Displays an image typically used as an application logo. Provides a number of Alfresco and
+ * Surf logos out-of-the-box but can be configured with a specific URL to render any image.</p>
+ *
+ * <p>By providing a publishTopic in the config, the logo will publish to that topic when clicked
+ * (publishPayload, publishGlobal and publishToParent are also supported).</p>
+ *
+ * <p>By providing a targetUrl (and optional targetUrlType), the logo will act as a link when
+ * clicked</p>
  * 
  * @module alfresco/logo/Logo
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/_PublishOrLinkMixin
  * @author Dave Draper
  */
-define(["dojo/_base/declare",
+define(["dojo/_base/declare", 
         "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Logo.html",
-        "alfresco/core/Core",
-        "dojo/dom-construct",
-        "dojo/dom-style",
-        "dojo/dom-class"], 
-        function(declare, _Widget, _Templated, template, Core, domConstruct, domStyle, domClass) {
-   
-   return declare([_Widget, _Templated, Core], {
-      
+        "dijit/_TemplatedMixin", 
+        "dojo/text!./templates/Logo.html", 
+        "alfresco/core/Core", 
+        "alfresco/core/_PublishOrLinkMixin"], 
+        function(declare, _Widget, _Templated, template, Core, _PublishOrLinkMixin) {
+
+   return declare([_Widget, _Templated, Core, _PublishOrLinkMixin], {
+
       /**
        * An array of the i18n files to use with this widget.
        * 
@@ -47,7 +52,7 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/Logo.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/Logo.properties"}],
-      
+
       /**
        * An array of the CSS files to use with this widget.
        * 
@@ -55,7 +60,7 @@ define(["dojo/_base/declare",
        * @type {object[]}
        * @default [{cssFile:"./css/Logo.css"}]
        */
-      cssRequirements: [{cssFile:"./css/Logo.css"}],
+      cssRequirements: [{cssFile: "./css/Logo.css"}],
 
       /**
        * The CSS class or classes to use to generate the logo
@@ -64,7 +69,7 @@ define(["dojo/_base/declare",
        * @default
        */
       logoClasses: "alfresco-logo-large",
-      
+
       /**
        * @instance
        * @type {string} 
@@ -78,7 +83,7 @@ define(["dojo/_base/declare",
        * @default
        */
       cssNodeStyle: "display: none;",
-      
+
       /**
        * 
        * @instance
@@ -86,14 +91,14 @@ define(["dojo/_base/declare",
        * @default
        */
       imgNodeStyle: "display: none;",
-         
+
       /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
        */
       templateString: template,
-      
+
       /**
        * Some alt text for the logo image.
        *
@@ -115,13 +120,26 @@ define(["dojo/_base/declare",
          this.altText = this.encodeHTML(this.message(this.altText));
          if (this.logoSrc)
          {
-            this.imgNodeStyle = "display: block;";
+            this.imgNodeStyle = "display: inline-block;";
          }
          else
          {
-            this.cssNodeStyle = "display: block";
+            this.cssNodeStyle = "display: inline-block";
          }
          this.inherited(arguments);
+      },
+
+      /**
+       * Called after properties have been mixed into this instance.
+       *
+       * @instance
+       * @override
+       */
+      postMixInProperties: function alfresco_logo_Logo__postMixInProperties() {
+         this.inherited(arguments);
+         if (this.targetUrl && !this.label) {
+            this.label = this.altText;
+         }
       }
    });
 });
