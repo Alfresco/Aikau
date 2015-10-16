@@ -649,7 +649,7 @@ define([
 
             .clearLog()
 
-            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS li:first-child .alfresco-renderers-Thumbnail .inner img")
+            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS li:first-child .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
                .click()
             .end()
 
