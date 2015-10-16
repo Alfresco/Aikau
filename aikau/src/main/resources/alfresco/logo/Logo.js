@@ -134,6 +134,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @override
+       * @since 1.0.40
        */
       postMixInProperties: function alfresco_logo_Logo__postMixInProperties() {
          this.inherited(arguments);

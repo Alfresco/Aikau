@@ -32,8 +32,6 @@
  * [_PublishPayloadMixin]{@link module:alfresco/renderers/_PublishPayloadMixin} are also available to
  * anyone mixing in this class.</p>
  *
- * <p><em>NOTE:</em> This widget's test cases are fulfilled by the Logo test page</p>
- *
  * @module alfresco/core/_PublishOrLinkMixin
  * @extends module:alfresco/navigation/_HtmlAnchorMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
@@ -62,6 +60,7 @@ define(["alfresco/navigation/_HtmlAnchorMixin",
 
       /**
        * When set to true, the widget/anchors will be removed from the page tab-order by setting the tabindex to -1.
+       * This overrides and changes the [inherited value]{@link alfresco/navigation/_HtmlAnchorMixin#excludeFromTabOrder}.
        *
        * @instance
        * @override
@@ -104,6 +103,7 @@ define(["alfresco/navigation/_HtmlAnchorMixin",
       /**
        * When set to true, all of the direct children of this widget's root node will be wrapped in a single anchor,
        * rather than the default [_HtmlAnchorMixin]{@link module:alfresco/navigation/_HtmlAnchorMixin} behaviour.
+       * This overrides and changes the [inherited value]{@link alfresco/navigation/_HtmlAnchorMixin#wrapAllChildren}.
        *
        * @instance
        * @override
