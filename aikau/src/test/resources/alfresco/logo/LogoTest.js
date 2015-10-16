@@ -19,64 +19,128 @@
 
 /**
  * @author Dave Draper
+ * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define([
+      "alfresco/TestCommon",
+      "intern!object",
+      "intern/chai!assert",
+      "intern/dojo/node!leadfoot/keys"
+   ],
+   function(TestCommon, registerSuite, assert, keys) {
 
-registerSuite(function(){
-   var browser;
+      registerSuite(function() {
+         var browser;
 
-   return {
-      name: "Logo Tests",
+         return {
+            name: "Logo Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/Logo", "Logo Tests").end();
-      },
+            setup: function() {
+               browser = this.remote;
+               return TestCommon.loadTestWebScript(this.remote, "/Logo", "Logo Tests");
+            },
 
-      beforeEach: function() {
-         browser.end();
-      },
+            beforeEach: function() {
+               browser.end();
+            },
 
-     "Check CSS logo": function () {
-         return browser.findByCssSelector("#LOGO1.alfresco-logo-Logo .alfresco-logo-large")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isTrue(displayed, "CSS logo was not displayed");
-            });
-      },
+            "Check CSS logo": function() {
+               return browser.findByCssSelector("#LOGO1.alfresco-logo-Logo .alfresco-logo-large")
+                  .isDisplayed()
+                  .then(function(displayed) {
+                     assert.isTrue(displayed, "CSS logo was not displayed");
+                  });
+            },
 
-      "Check image logo": function () {
-         return browser.findByCssSelector("#LOGO2.alfresco-logo-Logo .alfresco-logo-large")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isFalse(displayed, "CSS logo was not displayed for Logo with image source");
-            });
-      },
+            "Check image logo": function() {
+               return browser.findByCssSelector("#LOGO2.alfresco-logo-Logo .alfresco-logo-large")
+                  .isDisplayed()
+                  .then(function(displayed) {
+                     assert.isFalse(displayed, "CSS logo was not displayed for Logo with image source");
+                  });
+            },
 
-      "Check image logo height": function() {
-         return browser.findByCssSelector("#LOGO2 img")
-            .getComputedStyle("height")
-            .then(function(height) {
-               assert.equal(height, "48px", "The height of the image logo was incorrect");
-            });
-      },
+            "Check image logo height": function() {
+               return browser.findByCssSelector("#LOGO2 img")
+                  .getComputedStyle("height")
+                  .then(function(height) {
+                     assert.equal(height, "48px", "The height of the image logo was incorrect");
+                  });
+            },
 
-      "Check image logo width": function() {
-         // The width of image logo should be set to auto, only CSS logos should have fixed widths
-         return browser.findByCssSelector("#LOGO2 img")
-            .getComputedStyle("width")
-            .then(function(width) {
-               assert.equal(width, "auto", "The width of the image should be auto");
-            });
-      },
+            "Check image logo width": function() {
+               // The width of image logo should be set to auto, only CSS logos should have fixed widths
+               return browser.findByCssSelector("#LOGO2 img")
+                  .getComputedStyle("width")
+                  .then(function(width) {
+                     assert.equal(width, "auto", "The width of the image should be auto");
+                  });
+            },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+            "Logo will publish topic when configured to do so": function() {
+               return browser.findById("LOGO_WITH_TOPIC")
+                  .click()
+                  .getLastPublish("LOGO_TOPIC_PUBLISHED");
+            },
+
+            "Logo will act as link when configured to do so": function() {
+               return browser.findByCssSelector("#LOGO_WITH_URL a")
+                  .click()
+                  .end()
+
+               .findByCssSelector("#TDAC .title")
+                  .getVisibleText()
+                  .then(function(visibleText) {
+                     assert.equal(visibleText, "Aikau Unit Tests");
+                  });
+            },
+
+            "Post Coverage Results": function() {
+               TestCommon.alfPostCoverageResults(this, browser);
+            }
+         };
+      });
+
+      registerSuite(function() {
+         var browser;
+
+         return {
+            name: "Logo Keyboard Tests",
+
+            setup: function() {
+               browser = this.remote;
+               return TestCommon.loadTestWebScript(this.remote, "/Logo", "Logo Keyboard Tests");
+            },
+
+            beforeEach: function() {
+               browser.end();
+            },
+
+            "Logo will publish topic when ENTER pressed": function() {
+               return browser.findByCssSelector("body")
+                  .tabToElement("#LOGO_WITH_TOPIC")
+                  .screenie(true)
+                  .pressKeys(keys.ENTER)
+                  .getLastPublish("LOGO_TOPIC_PUBLISHED");
+            },
+
+            "Logo will act as link when ENTER pressed": function() {
+               return browser.findByCssSelector("body")
+                  .tabToElement("#LOGO_WITH_URL a")
+                  .screenie(true)
+                  .pressKeys(keys.ENTER)
+                  .end()
+
+               .findByCssSelector("#TDAC .title")
+                  .getVisibleText()
+                  .then(function(visibleText) {
+                     assert.equal(visibleText, "Aikau Unit Tests");
+                  });
+            },
+
+            "Post Coverage Results": function() {
+               TestCommon.alfPostCoverageResults(this, browser);
+            }
+         };
+      });
    });
-});
