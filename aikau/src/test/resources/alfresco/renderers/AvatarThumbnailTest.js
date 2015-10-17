@@ -50,7 +50,7 @@ registerSuite(function(){
       },
 
       "Publishes topic when clicked": function() {
-         return browser.findByCssSelector("#GUEST_THUMBNAIL .inner")
+         return browser.findByCssSelector("#GUEST_THUMBNAIL .alfresco-renderers-Thumbnail__frame")
             .click()
             .getLastPublish("ALF_DISPLAY_NOTIFICATION", true, "Did not publish correct topic when clicked")
             .then(function(payload) {
