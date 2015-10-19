@@ -33,8 +33,10 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/lists/views/_AlfAdditionalViewControlMixin",
         "alfresco/services/_PreferenceServiceTopicMixin",
+        "alfresco/core/topics",
         "dojo/dom-class"], 
-        function(declare, HorizontalSlider, AlfCore, _AlfAdditionalViewControlMixin, _PreferenceServiceTopicMixin, domClass) {
+        function(declare, HorizontalSlider, AlfCore, _AlfAdditionalViewControlMixin, _PreferenceServiceTopicMixin, 
+                 topics, domClass) {
    
    return declare([HorizontalSlider, AlfCore, _AlfAdditionalViewControlMixin, _PreferenceServiceTopicMixin], {
       
@@ -101,7 +103,7 @@ define(["dojo/_base/declare",
       /**
        * 
        * @instance
-       * @fires getPreferenceTopic
+       * @fires module:alfresco/services/_PreferenceServiceTopicMixin#getPreferenceTopic
        */
       postCreate: function alfresco_documentlibrary_AlfGalleryViewSlider__postCreate() {
          this.inherited(arguments);
@@ -119,10 +121,11 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {number} value The number of columns to set.
+       * @fires module:alfresco/core/topics#SET_COLUMNS
        */
       onColumnPreferences: function alfresco_documentlibrary_AlfGalleryViewSlider__onColumnPreferences(value) {
          this.setColumns(value);
-         this.alfPublish("ALF_DOCLIST_SET_GALLERY_COLUMNS", {
+         this.alfPublish(topics.SET_COLUMNS, {
             value: this.columns
          });
       },
@@ -194,12 +197,12 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {number} value The value provided from the change to the slider.
-       * @fires ALF_DOCLIST_SET_GALLERY_COLUMNS
-       * @fires setPreferenceTopic
+       * @fires module:alfresco/core/topics#SET_COLUMNS
+       * @fires module:alfresco/services/_PreferenceServiceTopicMixin#setPreferenceTopic
        */
       onChange: function alfresco_documentlibrary_AlfGalleryViewSlider__onChange(value) {
          var columns = this.getColumnsFromSliderValue(value);
-         this.alfPublish("ALF_DOCLIST_SET_GALLERY_COLUMNS", {
+         this.alfPublish(topics.SET_COLUMNS, {
             value: columns
          });
          this.alfServicePublish(this.setPreferenceTopic, {
@@ -224,10 +227,10 @@ define(["dojo/_base/declare",
        * This is called whenever the control is displayed to ensure that sizes are initialised.
        *  
        * @instance
-       * @fires ALF_DOCLIST_SET_GALLERY_COLUMNS
+       * @fires module:alfresco/core/topics#SET_COLUMNS
        */
       onControlDisplayed: function alfresco_documentlibrary_AlfGalleryViewSlider__onControlDisplayed() {
-         this.alfPublish("ALF_DOCLIST_SET_GALLERY_COLUMNS", {
+         this.alfPublish(topics.SET_COLUMNS, {
             value: this.getColumnsFromSliderValue(this.value)
          });
       }

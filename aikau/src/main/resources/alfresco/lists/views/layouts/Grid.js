@@ -92,6 +92,17 @@ define(["dojo/_base/declare",
       emptyCells: null,
 
       /**
+       * Indicates whether the number of columns is fixed for resize events. This means that
+       * the thumbnail size can change. 
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      fixedColumns: true,
+
+      /**
        * The label to use for the next link. This defaults to null, so MUST be set for the next link to be displayed.
        *
        * @instance
@@ -119,6 +130,17 @@ define(["dojo/_base/declare",
        * @default
        */
       showNextLink: false,
+
+      /**
+       * The size of each thumbnail. This is only used when
+       * [columns are not fixed]{@link module:alfresco/lists/views/layouts/Grid#fixedColumns}.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      thumbnailSize: null,
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
@@ -150,10 +172,10 @@ define(["dojo/_base/declare",
        */
       setupKeyboardNavigation: function alfresco_lists_views_layouts_Grid__setupKeyboardNavigation() {
          // this.connectKeyNavHandlers([keys.LEFT_ARROW], [keys.RIGHT_ARROW]);
-         this._keyNavCodes[keys.UP_ARROW] = lang.hitch(this, "focusOnCellAbove");
-         this._keyNavCodes[keys.RIGHT_ARROW] = lang.hitch(this, "focusOnCellRight");
-         this._keyNavCodes[keys.DOWN_ARROW] = lang.hitch(this, "focusOnCellBelow");
-         this._keyNavCodes[keys.LEFT_ARROW] = lang.hitch(this, "focusOnCellLeft");
+         this._keyNavCodes[keys.UP_ARROW] = lang.hitch(this, this.focusOnCellAbove);
+         this._keyNavCodes[keys.RIGHT_ARROW] = lang.hitch(this, this.focusOnCellRight);
+         this._keyNavCodes[keys.DOWN_ARROW] = lang.hitch(this, this.focusOnCellBelow);
+         this._keyNavCodes[keys.LEFT_ARROW] = lang.hitch(this, this.focusOnCellLeft);
       },
 
       /**
@@ -282,8 +304,43 @@ define(["dojo/_base/declare",
          if (node)
          {
             var marginBox = domGeom.getContentBox(node); // NOTE: Get the parent node for the size because the table will grow outside of its allotted area
-            var widthToSet = (Math.floor(marginBox.w / this.columns) - 4) + "px";
-            query("tr > td", node).forEach(lang.hitch(this, "resizeCell", marginBox, widthToSet));
+            if (this.fixedColumns === true)
+            {
+               var widthToSet = (Math.floor(marginBox.w / this.columns) - 4) + "px";
+               query("tr > td", node).forEach(lang.hitch(this, this.resizeCell, marginBox, widthToSet));
+            }
+            else
+            {
+               // When not resizing based on fixed columns it is necessary to work out the containable
+               // number of columns for the configured thumbnail size and then update the grid width
+               // as necessary to ensure neat spacing of thumbnails...
+               var remainingSpace = marginBox.w % this.thumbnailSize;
+               var gridWidth = marginBox.w - remainingSpace;
+               if (gridWidth)
+               {
+                  var columns = gridWidth / this.thumbnailSize;
+                  if (columns !== this.columns)
+                  {
+                     // If the number of columns containable has changed then it is necessary to completely
+                     // re-render the layout, so the existing widgets need to be destroyed and then recreated
+                     this.columns = columns;
+
+                     // Find and destroy all the existing widgetrs...
+                     var widgets = registry.findWidgets(this.containerNode);
+                     array.forEach(widgets, function(widget) {
+                        widget.destroy();
+                     });
+                     domConstruct.empty(this.containerNode);
+                     
+                     // Re-render the data for the new columns...
+                     this.renderData();
+                  }
+
+                  // Resize the cells and widgets...
+                  domStyle.set(this.domNode, "width", gridWidth + "px");
+                  query("tr > td", node).forEach(lang.hitch(this, this.resizeCell, marginBox, this.thumbnailSize + "px"));
+               }
+            }
          }
       },
 

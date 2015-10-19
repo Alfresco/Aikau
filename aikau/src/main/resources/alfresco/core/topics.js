@@ -690,6 +690,21 @@ define([],function() {
       SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
 
       /**
+       * Use by the [AlfGalleryViewSlider]{@link module:alfresco/documentlibrary/AlfGalleryViewSlider}
+       * to publish changes in the number of columns that should be shown in the 
+       * [AlfGalleryView]{@link module:alfresco/documentlibrary/views/AlfGalleryView}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.40
+       *
+       * @event
+       * @property {number} value - The number of columns to display.
+       */
+      SET_COLUMNS: "ALF_DOCLIST_SET_GALLERY_COLUMNS",
+
+      /**
        * This topic can be published to set a user preference. It is typically handled by 
        * the [PreferenceService]{@link module:alfresco/services/PreferenceService}.
        *
@@ -699,6 +714,21 @@ define([],function() {
        * @since 1.0.34
        */
       SET_PREFERENCE: "ALF_PREFERENCE_SET",
+
+      /**
+       * Use by the [AlfGalleryViewSlider]{@link module:alfresco/documentlibrary/ThumbnailSizeSlider}
+       * to publish changes to the size of the thumbnails that are shown in the 
+       * [AlfGalleryView]{@link module:alfresco/documentlibrary/views/AlfGalleryView}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.40
+       *
+       * @event
+       * @property {number} value - The size (in pixels) to make the thumbnails.
+       */
+      SET_THUMBNAIL_SIZE: "ALF_SET_THUMBNAIL_SIZE",
 
       /**
        * This topic is published in order to make the actual request to sync a node or nodes
