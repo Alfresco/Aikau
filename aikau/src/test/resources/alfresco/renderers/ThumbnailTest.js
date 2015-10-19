@@ -49,14 +49,14 @@ define(["intern!object",
          },
 
          "Standard document link": function() {
-            return browser.findByCssSelector("#DOCLIB_RENDITIONS tr:nth-child(2) .alfresco-renderers-Thumbnail .inner img")
+            return browser.findByCssSelector("#DOCLIB_RENDITIONS tr:nth-child(2) .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
                .click()
             .end();
             // TODO: Link is currently not created properly outside of Share, raised https://issues.alfresco.com/jira/browse/AKU-240
          },
 
          "Standard container link": function() {
-            return browser.findByCssSelector("#DOCLIB_RENDITIONS tr:nth-child(1) .alfresco-renderers-Thumbnail .inner img")
+            return browser.findByCssSelector("#DOCLIB_RENDITIONS tr:nth-child(1) .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
                .click()
             .end()
             .getLastPublish("ALF_DOCUMENTLIST_PATH_CHANGED")
@@ -66,7 +66,7 @@ define(["intern!object",
          },
 
          "Custom thumbnail link": function() {
-            return browser.findByCssSelector("#IMGPREVIEW_RENDITIONS tr:nth-child(2) .alfresco-renderers-Thumbnail .inner img")
+            return browser.findByCssSelector("#IMGPREVIEW_RENDITIONS tr:nth-child(2) .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
                .click()
             .end()
 
@@ -77,7 +77,7 @@ define(["intern!object",
          },
 
          "Lightbox preview": function() {
-            return browser.findByCssSelector("#TASKS1 .alfresco-renderers-Thumbnail .inner img")
+            return browser.findByCssSelector("#TASKS1 .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
                .click()
             .end()
             .sleep(1000) // Give the lightbox a chance to populate
@@ -98,7 +98,7 @@ define(["intern!object",
          },
 
          "PDFjs Preview": function() {
-            return browser.findByCssSelector("#HARDCODED .alfresco-renderers-Thumbnail .inner img")
+            return browser.findByCssSelector("#HARDCODED .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
                .click()
             .end()
             .findAllByCssSelector(".alfresco-dialog-AlfDialog .alfresco-preview-PdfJs")

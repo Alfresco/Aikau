@@ -1,48 +1,52 @@
 .alfresco-renderers-Thumbnail {
-   width: 100px;
+   width: @thumbnail-width;
+   height: @thumbnail-height;
    position: relative; /* This is required for absolutely positioned overlays */
-}
 
-.alfresco-renderers-Thumbnail span.link
-{
-   background: url(./images/link-32.png) no-repeat;
-   height: 32px;
-   width: 32px;
-   position: absolute;
-}
+   .alfresco-renderers-Thumbnail__frame {
+      display: inline-block;
+      height: @thumbnail-height;
+      width: @thumbnail-width;
+      line-height: @thumbnail-height;
+      text-align: center;
+   }
 
-.alfresco-renderers-Thumbnail span.link.hidden
-{
-   display: none;
-}
+   .alfresco-renderers-Thumbnail__image {
+      cursor: pointer;
+      max-height: @thumbnail-height - @thumbnail-margin - @thumbnail-margin - @thumbnail-border-width;
+      max-width:  @thumbnail-width - @thumbnail-margin - @thumbnail-margin - @thumbnail-border-width;
+      vertical-align: top;
+      margin: @thumbnail-margin;
+      border: @thumbnail-border-width @thumbnail-border-style @thumbnail-border-color;
+   }
+   
+   &--shadow {
+      .alfresco-renderers-Thumbnail__image {
+         box-shadow: @thumbnail-box-shadow;
+      }
+   }
 
-.alfresco-renderers-Thumbnail span.droppable
-{
-   background: url(./images/drop-arrow-left-large.png) no-repeat;
-   display: none;
-   height: 25px;
-   position: absolute;
-   width: 60px;
-   z-index: 1;
-   margin-left: 40px;
-}
+   &--bottom {
+      .alfresco-renderers-Thumbnail__image {
+         vertical-align: bottom;
+      }
+   }
 
-.alfresco-renderers-Thumbnail > span.inner {
-   cursor: pointer;
-}
+   &--middle {
+      .alfresco-renderers-Thumbnail__image {
+         vertical-align: middle;
+      }
+   }
 
-/* Drag and Drop */
+   &--left {
+      .alfresco-renderers-Thumbnail__frame {
+         text-align: left;
+      }
+   }
 
-.alfresco-renderers-Thumbnail.dndHighlight span.droppable
-{
-   display: block !important;
-}
-
-.alfresco-renderers-Thumbnail.dndHighlight img
-{
-   background-color: #dceaf4;
-   outline: 2px solid #4F94C9;
-   padding: 2px;
-   position: relative;
-   top: -2px;
+   &--right {
+      .alfresco-renderers-Thumbnail__frame {
+         text-align: right;
+      }
+   }
 }
