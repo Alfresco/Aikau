@@ -33,7 +33,7 @@
  * [cropped to fit]{@link module:alfresco/renderers/Thumbnail#cropToFit} or 
  * [stretched to fit]{@link module:alfresco/renderers/Thumbnail#stretchToFit} so that no white space
  * is shown within the thumbnail. When images are not cropped or stretched the position of the image
- * can be controlled by configuring the [horiztonal]{@link module:alfresco/renderers/Thumbnail#horizontalAlignment}
+ * can be controlled by configuring the [horizontal]{@link module:alfresco/renderers/Thumbnail#horizontalAlignment}
  * and [vertical]{@link module:alfresco/renderers/Thumbnail#verticallAlignment} to control where the
  * whitespace around the image appears.</p>
  *
@@ -56,7 +56,7 @@
  *    name: "alfresco/renderers/Thumbnail",
  *    config: {
  *       assumeRendition: true,
- *       showDocumentPreview: true,
+ *       showDocumentPreview: true
  *    }
  * }
  *
