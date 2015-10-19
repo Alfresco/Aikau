@@ -29,6 +29,13 @@
  * <p>A thumbnail can also be configured to perform selection/de-selection action when clicked through
  * the configuration of the [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
  * and [onlySelectOnClick]{@link module:alfresco/renderers/Thumbnail#onlySelectOnClick} attributes.</p>
+ * <p>It is possible to configure thumbnails so that images are 
+ * [cropped to fit]{@link module:alfresco/renderers/Thumbnail#cropToFit} or 
+ * [stretched to fit]{@link module:alfresco/renderers/Thumbnail#stretchToFit} so that no white space
+ * is shown within the thumbnail. When images are not cropped or stretched the position of the image
+ * can be controlled by configuring the [horizontal]{@link module:alfresco/renderers/Thumbnail#horizontalAlignment}
+ * and [vertical]{@link module:alfresco/renderers/Thumbnail#verticallAlignment} to control where the
+ * whitespace around the image appears.</p>
  *
  * @example <caption>Example configuration for use in Document Library:</caption>
  * {
@@ -62,6 +69,19 @@
  *    }
  * }
  * 
+ * @example <caption>Example configuring full dimensions with a cropped image:</caption>
+ * {
+ *    name: "alfresco/renderers/Thumbnail",
+ *    config: {
+ *       dimensions: {
+ *          w: "150px",
+ *          h: "150px",
+ *          margins: "5px"
+ *       },
+ *       cropToFit: true
+ *    }
+ * }
+ * 
  * @module alfresco/renderers/Thumbnail
  * @extends external:dijit/_WidgetBase
  * @mixes external:dijit/_TemplatedMixin
@@ -89,6 +109,7 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/event",
+        "dojo/dom-class",
         "dojo/dom-style",
         "alfresco/core/NodeUtils",
         "dojo/window",
@@ -96,7 +117,7 @@ define(["dojo/_base/declare",
         "dojo/when"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
                  _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, template, AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, 
-                 AlfConstants, lang, event, domStyle, NodeUtils, win, Deferred, when) {
+                 AlfConstants, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
                    AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, _PublishPayloadMixin, ItemSelectionMixin], {
@@ -141,6 +162,18 @@ define(["dojo/_base/declare",
       assumeRendition: false,
 
       /**
+       * If this is configured to be true then the image will be cropped within the thumbnail.
+       * It does mean that aspect ratio of the image will be maintained but that not all of
+       * the image will be visible.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      cropToFit: false,
+
+      /**
        * Additional CSS classes to apply to the main DOM node defined in the template
        * 
        * @instance
@@ -149,6 +182,27 @@ define(["dojo/_base/declare",
        */
       customClasses: "",
       
+      /**
+       * The Dimensions object that defines the dimension attributes of the thumbnail. This will override
+       * the default CSS styling.
+       * 
+       * @typedef {Dimensions}
+       * @property {string} [w] The width of the thumbnail
+       * @property {string} [h] The height of the thumbnail
+       * @property {string} [margin] The padding around the image
+       */
+
+      /**
+       * This should be set to an object containing the starting dimensions of the thumbnail as well as optional
+       * information on padding and whether the aspect ratio of the image should be maintained.
+       *  
+       * @instance
+       * @type {Dimensions}
+       * @default
+       * @since 1.0.40
+       */
+      dimensions: null,
+
       /**
        * The name of the folder image to use. Valid options are: "folder-32.png", "folder-48.png", "folder-64.png"
        * and "folder-256.png".
@@ -160,6 +214,27 @@ define(["dojo/_base/declare",
       folderImage: "folder-64.png",
 
       /**
+       * Indicates whether or not the thumbnail image should be given a shadow effect.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      hasShadow: false,
+
+      /**
+       * Indicates how the thumbnail image should be aligned horizontally, the options are "LEFT",
+       * "MIDDLE" and "RIGHT".
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.40
+       */
+      horizontalAlignment: "MIDDLE",
+
+      /**
        * The property to use for the image id.
        * 
        * @instance
@@ -167,6 +242,26 @@ define(["dojo/_base/declare",
        * @default
        */
       imageIdProperty: "jsNode.nodeRef.nodeRef",
+
+      /**
+       * This will be set to the height of the image node.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.40
+       */
+      imageNodeHeight: null,
+
+      /**
+       * This will be set to the width of the image node.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.40
+       */
+      imageNodeWidth: null,
 
       /**
        * The property to use for the image title.
@@ -186,6 +281,28 @@ define(["dojo/_base/declare",
        * @default
        */
       lastThumbnailModificationProperty: "jsNode.properties.cm:lastThumbnailModification",
+
+      /**
+       * This will be set to the natural height of the displayed image.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @readonly
+       * @since 1.0.40
+       */
+      naturalImageHeight: null,
+
+      /**
+       * This will be set to the natural width of the displayed image.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @readonly
+       * @since 1.0.40
+       */
+      naturalImageWidth: null,
 
       /**
        * If this is configured to be true then this will ensure that click actions only perform a
@@ -259,6 +376,20 @@ define(["dojo/_base/declare",
       showDocumentPreview: false,
 
       /**
+       * This indicates whether or not the aspect ratio of the thumbnail will be retained. This means that
+       * for images will be stretched to ensure that there is no white-space visible. However unlike 
+       * [cropToFit]{@link module:alfresco/renderers/Thumbnail#cropToFit} the entire image will be visible
+       * although possible distorted. If no [dimensions]{@link module:alfresco/renderers/Thumbnail#dimensions}
+       * are provided then the aspect ratio will always be maintained and the image will not be stretched.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      stretchToFit: false,
+
+      /**
        * This allows a tokenized template to be defined where the tokens will be populated from
        * values in the "currentItem" attribute using the 
        * [processCurrentItemTokens function]{@link module:alfresco/core/ObjectProcessingMixin#processCurrentItemTokens}
@@ -284,9 +415,21 @@ define(["dojo/_base/declare",
       updateOnSelection: false,
 
       /**
+       * Indicates how the thumbnail image should be aligned vertically, the options are "TOP",
+       * "MIDDLE" and "BOTTOM".
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.40
+       */
+      verticalAlignment: "TOP",
+
+      /**
        * The width to render the thumbnail. Units of measurement need to be provided, e.g.
        * "100px" for 100 pixels. The default is null, and if left as this the thumbnail will
-       * be rendered at the original image size.
+       * be rendered at the original image size. This is shorthand configuration when not 
+       * providing full [dimensions]{@link module:alfresco/renderers/Thumbnail#dimensions}.
        *
        * @instance
        * @type {string}
@@ -498,6 +641,180 @@ define(["dojo/_base/declare",
             this.addUploadDragAndDrop(this.imgNode);
             this.addNodeDropTarget(this.imgNode);
             this._currentNode = this.currentItem.node;
+         }
+         // If no full dimensions have been provided but a simple width has then
+         // just use that to derive the full thumbnail dimensions...
+         if (!this.dimensions && this.width)
+         {
+            this.dimensions = {
+               w: this.width
+            };
+         }
+         this.resize(this.dimensions);
+
+         // Apply some additional styling...
+         if (this.hasShadow)
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--shadow");
+         }
+         if (this.horizontalAlignment === "LEFT")
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--left");
+         }
+         if (this.horizontalAlignment === "RIGHT")
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--right");
+         }
+         if (this.verticalAlignment === "MIDDLE")
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--middle");
+         }
+         if (this.verticalAlignment === "BOTTOM")
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--bottom");
+         }
+      },
+
+      /**
+       * This sizes the thumbnail based on the dimensions that have been provided. It is
+       * entirely possible to size the thumbnail with just a width (dimensions.w) however
+       * a height (dimensions.h) and margin (dimensions.margin) can also be provided.
+       * 
+       * @instance
+       * @param {Dimensions} dimensions
+       * @since 1.0.40
+       */
+      resize: function alfresco_renderers_Thumbnail__resize(dimensions) {
+         if (this.imgNode && dimensions && dimensions.w)
+         {
+            // Get the height and width for the outer thumbnail frame...
+            var thumbnailWidth = parseInt(dimensions.w, 10);
+            var thumbnailHeight = thumbnailWidth;
+            if (dimensions.h)
+            {
+               thumbnailHeight = parseInt(dimensions.h, 10);
+            }
+
+            // Get the margin and border (in order to calculate the appropriate
+            // inner image size)...
+            var margin = 0;
+            if (dimensions.margin)
+            {
+               margin = parseInt(dimensions.margin, 10);
+            }
+
+            // Calcuate the image dimensions...
+            var borderThickness = parseInt(domStyle.get(this.imgNode, "borderWidth"), 10);
+            this.imageNodeHeight = thumbnailHeight - (margin + borderThickness);
+            this.imageNodeWidth = thumbnailHeight - (margin + borderThickness);
+            
+            // Update the thumbnail nodes...
+            domStyle.set(this.thumbnailNode, {
+               "width": thumbnailWidth + "px",
+               "height": thumbnailHeight + "px"
+            });
+            domStyle.set(this.frameNode, {
+               "width": thumbnailWidth + "px",
+               "height": thumbnailHeight + "px",
+               "lineHeight": thumbnailHeight + "px"
+            });
+            domStyle.set(this.imgNode, "margin", margin + "px");
+
+            if (this.cropToFit)
+            {
+               // If cropping to fit we require the natural image width and height to be available
+               // (which are set on image load)...
+               this.naturalImageWidth && this.naturalHeight && this.cropImage();
+            }
+            else if (this.stretchToFit)
+            {
+               // If stretching we use the width as the minimum height, this will stretch landscape
+               // images vertically...
+               domStyle.set(this.imgNode, {
+                  "width": this.imageNodeWidth + "px",
+                  "minHeight": this.imageNodeWidth + "px",
+                  "maxHeight": "none",
+                  "maxWidth": "none"
+               });
+            }
+            else
+            {
+               // Otherwise just allow the image to maintain its natural aspect ratio with white
+               // space showing...
+               domStyle.set(this.imgNode, {
+                  "maxWidth": this.imageNodeWidth + "px",
+                  "maxHeight": this.imageNodeHeight + "px"
+               });
+            }
+         }
+      },
+
+      /**
+       * This function is used to configure the thumbnail DOM model so that the image is cropped and
+       * centered within the thumbnail. It relies on 
+       * [getNaturalImageSize]{@link module:alfresco/renderers/Thumbnail#getNaturalImageSize} 
+       * having been called to establish the orientation of the image. Therefore it is important that
+       * this is only called when the natural image dimensions have been established.
+       *
+       * @instance
+       * @since 1.0.40
+       */
+      cropImage: function alfresco_renderers_Thumbnail__cropImage() {
+         domStyle.set(this.frameNode, {
+            position: "relative",
+            overflow: "hidden",
+            textAlign: "left"
+         });
+
+         // When cropping the image we need to know whether we want to crop off the top and bottom (if the image
+         // is in portrait) or off the sides (if the image is in landscape)...
+         if (this.naturalImageHeight > this.naturalImageWidth)
+         {
+            // For portrait images...
+            // The offset is the half of the amount that that the image is taller than it is wide...
+            var vOffset = ((this.imageNodeWidth / (this.naturalImageWidth / this.naturalImageHeight)) - this.imageNodeWidth) / 2;
+            domStyle.set(this.imgNode, {
+               "width": this.imageNodeWidth + "px",
+               "position": "absolute",
+               "margin": "auto",
+               "maxHeight": "none",
+               "maxWidth": "none",
+               "top": "-" + vOffset + "px"
+            });
+         }
+         else
+         {
+            // For landscape images...
+            // The offset is half the amount that the image is wider than it is tall...
+            var hOffset = ((this.imageNodeHeight / (this.naturalImageHeight / this.naturalImageWidth)) - this.imageNodeHeight) / 2;
+            domStyle.set(this.imgNode, {
+               "height": this.imageNodeHeight + "px",
+               "position": "absolute",
+               "margin": "auto",
+               "maxHeight": "none",
+               "maxWidth": "none",
+               "left": "-" + hOffset + "px"
+            });
+         }
+         this.croppedToFit = true;
+      },
+
+      /**
+       * This function is called when the thumbnail image has been loaded and is used to store the 
+       * natural height and width of the image. This allows us to work out whether or not the image
+       * is in portrait or landscape and allows [cropImage]{@link module:alfresco/renderers/Thumbnail#cropImage}
+       * to determine the position and size of the image.
+       * 
+       * @instance
+       * @since 1.0.40
+       */
+      getNaturalImageSize: function alfresco_renderers_Thumbnail__getNaturalImageSize() {
+         this.naturalImageHeight = this.imgNode.naturalHeight;
+         this.naturalImageWidth = this.imgNode.naturalWidth;
+         if (this.cropToFit === true && !this.croppedToFit)
+         {
+            this.alfLog("info", "Cropping on image load");
+            this.cropImage();
          }
       },
 

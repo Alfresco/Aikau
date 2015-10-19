@@ -40,105 +40,105 @@ define(["intern!object",
             browser.end();
          },
 
-         // "Count the rows": function () {
-         //    return browser.findAllByCssSelector("#VIEW tr")
-         //       .then(function(elements) {
-         //          assert.lengthOf(elements, 3, "An unexpected number of rows were detected");
-         //       });
-         // },
+         "Count the rows": function () {
+            return browser.findAllByCssSelector("#VIEW tr")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 3, "An unexpected number of rows were detected");
+               });
+         },
 
-         // "Count the checked selectors": function() {
-         //     return browser.findAllByCssSelector("#VIEW tr .alfresco-lists-ItemSelectionMixin--selected")
-         //       .then(function(elements) {
-         //          assert.lengthOf(elements, 0, "An unexpected number of CHECKED selectors were found");
-         //       });
-         // },
+         "Count the checked selectors": function() {
+             return browser.findAllByCssSelector("#VIEW tr .alfresco-lists-ItemSelectionMixin--selected")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "An unexpected number of CHECKED selectors were found");
+               });
+         },
 
-         // "Check that the overall selector indicates that none have been selected": function() {
-         //    return browser.findByCssSelector("#SELECTED_ITEMS .alf-noneselected-icon")
-         //       .then(null, function() {
-         //          assert(false, "The selected items widget doesn't indicate that NO items are selected");
-         //       });
-         // },
+         "Check that the overall selector indicates that none have been selected": function() {
+            return browser.findByCssSelector("#SELECTED_ITEMS .alf-noneselected-icon")
+               .then(null, function() {
+                  assert(false, "The selected items widget doesn't indicate that NO items are selected");
+               });
+         },
 
-         // "Check the first selector": function() {
-         //    return browser.findById("SELECTOR_ITEM_0")
-         //       .click()
-         //    .end()
-         //    .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
-         //       .then(null, function() {
-         //          assert(false, "The selected items widget doesn't indicate that SOME items are selected");
-         //       });
-         // },
+         "Check the first selector": function() {
+            return browser.findById("SELECTOR_ITEM_0")
+               .click()
+            .end()
+            .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
+               .then(null, function() {
+                  assert(false, "The selected items widget doesn't indicate that SOME items are selected");
+               });
+         },
 
-         // "Check the other two selectors": function() {
-         //    return browser.findById("SELECTOR_ITEM_1")
-         //       .click()
-         //    .end()
-         //    .findById("SELECTOR_ITEM_2")
-         //       .click()
-         //    .end()
-         //    .findByCssSelector("#SELECTED_ITEMS .alf-allselected-icon")
-         //       .then(null, function() {
-         //          assert(false, "The selected items widget doesn't indicate that ALL items are selected");
-         //       });
-         // },
+         "Check the other two selectors": function() {
+            return browser.findById("SELECTOR_ITEM_1")
+               .click()
+            .end()
+            .findById("SELECTOR_ITEM_2")
+               .click()
+            .end()
+            .findByCssSelector("#SELECTED_ITEMS .alf-allselected-icon")
+               .then(null, function() {
+                  assert(false, "The selected items widget doesn't indicate that ALL items are selected");
+               });
+         },
 
-         // "Uncheck the middle selector": function() {
-         //    return browser.findById("SELECTOR_ITEM_1")
-         //       .click()
-         //    .end()
-         //    .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
-         //       .then(null, function() {
-         //          assert(false, "The selected items widget doesn't indicate that SOME items are selected");
-         //       });
-         // },
+         "Uncheck the middle selector": function() {
+            return browser.findById("SELECTOR_ITEM_1")
+               .click()
+            .end()
+            .findByCssSelector("#SELECTED_ITEMS .alf-someselected-icon")
+               .then(null, function() {
+                  assert(false, "The selected items widget doesn't indicate that SOME items are selected");
+               });
+         },
 
-         // "Open the menu and select documents": function() {
-         //    return browser.findByCssSelector(".alf-menu-arrow")
-         //       .click()
-         //    .end()
+         "Open the menu and select documents": function() {
+            return browser.findByCssSelector(".alf-menu-arrow")
+               .click()
+            .end()
 
-         //    .findDisplayedByCssSelector(".dijitMenuItem:nth-child(4) > td.dijitMenuItemLabel")
-         //       .click()
-         //    .end()
-         //    .findByCssSelector("#SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
-         //       .then(null, function() {
-         //          assert(false, "First item was not checked when 'Documents' selected");
-         //       });
-         // },
+            .findDisplayedByCssSelector(".dijitMenuItem:nth-child(4) > td.dijitMenuItemLabel")
+               .click()
+            .end()
+            .findByCssSelector("#SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
+               .then(null, function() {
+                  assert(false, "First item was not checked when 'Documents' selected");
+               });
+         },
 
-         // "Check that second item is not checked": function() {
-         //    return browser.findAllByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
-         //       .then(function(elements) {
-         //          assert.lengthOf(elements, 0, "Second item was unexpectedly checked when 'Documents' selected");
-         //       });
-         // },
+         "Check that second item is not checked": function() {
+            return browser.findAllByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "Second item was unexpectedly checked when 'Documents' selected");
+               });
+         },
 
-         // "Open the menu and select folders": function() {
-         //    return browser.findByCssSelector(".alf-menu-arrow")
-         //       .click()
-         //    .end()
+         "Open the menu and select folders": function() {
+            return browser.findByCssSelector(".alf-menu-arrow")
+               .click()
+            .end()
 
-         //    .findDisplayedByCssSelector(".dijitMenuItem:nth-child(5) > td.dijitMenuItemLabel")
-         //       .click()
-         //    .end()
+            .findDisplayedByCssSelector(".dijitMenuItem:nth-child(5) > td.dijitMenuItemLabel")
+               .click()
+            .end()
 
-         //    .findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
-         //       .then(null, function() {
-         //          assert(false, "First item was unexpectedly checked when 'Folders' selected");
-         //       });
-         // },
+            .findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
+               .then(null, function() {
+                  assert(false, "First item was unexpectedly checked when 'Folders' selected");
+               });
+         },
 
-         // "Check that second item is checked": function() {
-         //    return browser.findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
-         //       .then(null, function() {
-         //          assert(false, "Second item was not checked when 'Folders' selected");
-         //       });
-         // },
+         "Check that second item is checked": function() {
+            return browser.findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
+               .then(null, function() {
+                  assert(false, "Second item was not checked when 'Folders' selected");
+               });
+         },
 
          "Select via thumbnail (selection only capability)": function() {
-            return browser.findByCssSelector("#SELECT_THUMBNAIL_ITEM_0 .inner img")
+            return browser.findByCssSelector("#SELECT_THUMBNAIL_ITEM_0 .alfresco-renderers-Thumbnail__image")
                .clearLog()
                .click()
             .end()
@@ -150,7 +150,7 @@ define(["intern!object",
          },
 
          "Deselect via thumbnail (selection only capability)": function() {
-            return browser.findByCssSelector("#SELECT_THUMBNAIL_ITEM_0 .inner img")
+            return browser.findByCssSelector("#SELECT_THUMBNAIL_ITEM_0 .alfresco-renderers-Thumbnail__image")
                .clearLog()
                .click()
             .end()
@@ -162,7 +162,7 @@ define(["intern!object",
          },
 
          "Select via thumbnail (selection and navigation capability)": function() {
-            return browser.findByCssSelector("#MIXED_THUMBNAIL_ITEM_0 .inner img")
+            return browser.findByCssSelector("#MIXED_THUMBNAIL_ITEM_0 .alfresco-renderers-Thumbnail__image")
                .clearLog()
                .click()
             .end()
@@ -171,7 +171,7 @@ define(["intern!object",
          },
 
          "Deselect via thumbnail (selection and navigation capability)": function() {
-            return browser.findByCssSelector("#MIXED_THUMBNAIL_ITEM_0 .inner img")
+            return browser.findByCssSelector("#MIXED_THUMBNAIL_ITEM_0 .alfresco-renderers-Thumbnail__image")
                .clearLog()
                .click()
             .end()
@@ -180,7 +180,7 @@ define(["intern!object",
          },
 
          "Select via thumbnail (selection disabled)": function() {
-            return browser.findByCssSelector("#NON_SELECT_THUMBNAIL_ITEM_0 .inner img")
+            return browser.findByCssSelector("#NON_SELECT_THUMBNAIL_ITEM_0 .alfresco-renderers-Thumbnail__image")
                .clearLog()
                .click()
             .end()
@@ -192,7 +192,7 @@ define(["intern!object",
          },
 
          "Deselect via thumbnail (selection disabled)": function() {
-            return browser.findByCssSelector("#NON_SELECT_THUMBNAIL_ITEM_0 .inner img")
+            return browser.findByCssSelector("#NON_SELECT_THUMBNAIL_ITEM_0 .alfresco-renderers-Thumbnail__image")
                .clearLog()
                .click()
             .end()

@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_AvatarThumbnail__postCreate(){
          this.inherited(arguments);
-         this.publishTopic && domStyle.set(this.clickNode, "cursor", "pointer");
+         this.publishTopic && domStyle.set(this.frameNode, "cursor", "pointer");
       },
 
       /**
