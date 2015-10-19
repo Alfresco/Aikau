@@ -62,7 +62,7 @@ model.jsonModel = {
                         {
                            name: "alfresco/lists/views/layouts/HeaderCell",
                            config: {
-                              label: "GalleryThumbnail (with dimensions)"
+                              label: "GalleryThumbnail (stretched with dimensions)"
                            }
                         },
                         {
@@ -153,6 +153,7 @@ model.jsonModel = {
                                                    h: "200px",
                                                    margin: 0
                                                 },
+                                                stretchToFit: true,
                                                 cropToFit: false
                                              }
                                           }
@@ -171,7 +172,6 @@ model.jsonModel = {
                                                 dimensions: {
                                                    w: "300px"
                                                 },
-                                                maintainAspectRatio: true,
                                                 horizontalAlignment: "LEFT",
                                                 verticalAlignment: "BOTTOM",
                                                 cropToFit: false
@@ -192,7 +192,6 @@ model.jsonModel = {
                                                 dimensions: {
                                                    w: "250px"
                                                 },
-                                                maintainAspectRatio: true,
                                                 horizontalAlignment: "RIGHT",
                                                 verticalAlignment: "MIDDLE",
                                                 cropToFit: false

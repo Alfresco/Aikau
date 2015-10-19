@@ -13,8 +13,8 @@
 
    .alfresco-renderers-Thumbnail__image {
       cursor: pointer;
-      max-height: ~'calc(100% - @thumbnail-margin - @thumbnail-margin - @thumbnail-border-width)';
-      max-width: ~'calc(100% - @thumbnail-margin - @thumbnail-margin - @thumbnail-border-width)';
+      max-height: @thumbnail-height - @thumbnail-margin - @thumbnail-margin - @thumbnail-border-width;
+      max-width:  @thumbnail-width - @thumbnail-margin - @thumbnail-margin - @thumbnail-border-width;
       vertical-align: top;
       margin: @thumbnail-margin;
       border: @thumbnail-border-width @thumbnail-border-style @thumbnail-border-color;

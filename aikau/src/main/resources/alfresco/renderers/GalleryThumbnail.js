@@ -76,17 +76,6 @@ define(["dojo/_base/declare",
       customClasses: "gallery",
       
       /**
-       * Overrides the [inherited default]{@link module:alfresco/renderers/Thumbnail#maintainAspectRatio} to
-       * prevent the aspect ratio from being maintained.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       * @since 1.0.40
-       */
-      maintainAspectRatio: false,
-
-      /**
        * The type of rendition to use for the thumbnail
        * 
        * @instance
