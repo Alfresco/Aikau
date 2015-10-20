@@ -1,7 +1,6 @@
 .alfresco-renderers-Thumbnail {
    &.gallery {
       cursor: pointer;
-      overflow: hidden;
       .displayName, .selectBar {
          background-color: black;
          color: #fff;
@@ -23,6 +22,7 @@
       }
       .selectBar {
          top: 0;
+         box-sizing: border-box;
       }
       .alfresco-renderers-Selector {
          background-image: url(./images/NoneSelectedWhite.png);

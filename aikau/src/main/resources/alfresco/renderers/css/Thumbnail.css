@@ -9,6 +9,7 @@
       width: @thumbnail-width;
       line-height: @thumbnail-height;
       text-align: center;
+      overflow: hidden;
    }
 
    .alfresco-renderers-Thumbnail__image {
@@ -47,6 +48,13 @@
    &--right {
       .alfresco-renderers-Thumbnail__frame {
          text-align: right;
+      }
+   }
+
+   &.alfresco-lists-ItemSelectionMixin--selected {
+
+      .alfresco-renderers-Thumbnail__frame {
+         box-shadow: @selection-box-shadow;
       }
    }
 }
