@@ -55,6 +55,27 @@
       <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/Thumbnails/imgpreview_rendition.jpg</to>
    </rule>
 
+   <!-- DocLib Thumbnail Landscape -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/Landscape/content/thumbnails/doclib(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/Thumbnails/doclib_landscape.png</to>
+   </rule>
+   <!-- DocLib Thumbnail Portrait -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/Portrait/content/thumbnails/doclib(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/Thumbnails/doclib_portrait.png</to>
+   </rule>
+   <!-- Gallery Thumbnail Landscape -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/Landscape/content/thumbnails/imgpreview(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/Thumbnails/imgpreview_landscape.jpg</to>
+   </rule>
+   <!-- Gallery Thumbnail Portrait -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/Portrait/content/thumbnails/imgpreview(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/Thumbnails/imgpreview_portrait.jpg</to>
+   </rule>
+
    <rule>
       <from>/proxy/alfresco/slingshot/profile/avatar/(.*)/thumbnail/avatar</from>
       <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/Thumbnails/avatar.png</to>

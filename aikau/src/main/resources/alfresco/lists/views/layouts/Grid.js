@@ -79,6 +79,70 @@ define(["dojo/_base/declare",
       columns: 4,
 
       /**
+       * This is used to keep track of any empty cells that are created as a result of calling 
+       * [completeRow]{@link module:alfresco/lists/views/layouts/Grid#completeRow} so that they
+       * can be destroyed when more results are added (when used within an infinite scrolling
+       * list).
+       * 
+       * @instance
+       * @type {element[]}
+       * @default
+       * @since 1.0.40
+       */
+      emptyCells: null,
+
+      /**
+       * Indicates whether the number of columns is fixed for resize events. This means that
+       * the thumbnail size can change. 
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      fixedColumns: true,
+
+      /**
+       * The label to use for the next link. This defaults to null, so MUST be set for the next link to be displayed.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      nextLinkLabel: null,
+
+      /**
+       * The topic to publish when the next link is clicked.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      nextLinkPublishTopic: null,
+
+      /**
+       * When set to true this will show a link for requesting more data (if available). This should be used when
+       * the grid is rendering data in an infinite scroll view. It is required because when the grid cells are small
+       * the data may not be sufficient to allow the scrolling events to occur that will request more data.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showNextLink: false,
+
+      /**
+       * The size of each thumbnail. This is only used when
+       * [columns are not fixed]{@link module:alfresco/lists/views/layouts/Grid#fixedColumns}.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      thumbnailSize: null,
+
+      /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        *
        * @instance postCreate
@@ -108,10 +172,10 @@ define(["dojo/_base/declare",
        */
       setupKeyboardNavigation: function alfresco_lists_views_layouts_Grid__setupKeyboardNavigation() {
          // this.connectKeyNavHandlers([keys.LEFT_ARROW], [keys.RIGHT_ARROW]);
-         this._keyNavCodes[keys.UP_ARROW] = lang.hitch(this, "focusOnCellAbove");
-         this._keyNavCodes[keys.RIGHT_ARROW] = lang.hitch(this, "focusOnCellRight");
-         this._keyNavCodes[keys.DOWN_ARROW] = lang.hitch(this, "focusOnCellBelow");
-         this._keyNavCodes[keys.LEFT_ARROW] = lang.hitch(this, "focusOnCellLeft");
+         this._keyNavCodes[keys.UP_ARROW] = lang.hitch(this, this.focusOnCellAbove);
+         this._keyNavCodes[keys.RIGHT_ARROW] = lang.hitch(this, this.focusOnCellRight);
+         this._keyNavCodes[keys.DOWN_ARROW] = lang.hitch(this, this.focusOnCellBelow);
+         this._keyNavCodes[keys.LEFT_ARROW] = lang.hitch(this, this.focusOnCellLeft);
       },
 
       /**
@@ -240,8 +304,43 @@ define(["dojo/_base/declare",
          if (node)
          {
             var marginBox = domGeom.getContentBox(node); // NOTE: Get the parent node for the size because the table will grow outside of its allotted area
-            var widthToSet = (Math.floor(marginBox.w / this.columns) - 4) + "px";
-            query("tr > td", node).forEach(lang.hitch(this, "resizeCell", marginBox, widthToSet));
+            if (this.fixedColumns === true)
+            {
+               var widthToSet = (Math.floor(marginBox.w / this.columns) - 4) + "px";
+               query("tr > td", node).forEach(lang.hitch(this, this.resizeCell, marginBox, widthToSet));
+            }
+            else
+            {
+               // When not resizing based on fixed columns it is necessary to work out the containable
+               // number of columns for the configured thumbnail size and then update the grid width
+               // as necessary to ensure neat spacing of thumbnails...
+               var remainingSpace = marginBox.w % this.thumbnailSize;
+               var gridWidth = marginBox.w - remainingSpace;
+               if (gridWidth)
+               {
+                  var columns = gridWidth / this.thumbnailSize;
+                  if (columns !== this.columns)
+                  {
+                     // If the number of columns containable has changed then it is necessary to completely
+                     // re-render the layout, so the existing widgets need to be destroyed and then recreated
+                     this.columns = columns;
+
+                     // Find and destroy all the existing widgetrs...
+                     var widgets = registry.findWidgets(this.containerNode);
+                     array.forEach(widgets, function(widget) {
+                        widget.destroy();
+                     });
+                     domConstruct.empty(this.containerNode);
+                     
+                     // Re-render the data for the new columns...
+                     this.renderData();
+                  }
+
+                  // Resize the cells and widgets...
+                  domStyle.set(this.domNode, "width", gridWidth + "px");
+                  query("tr > td", node).forEach(lang.hitch(this, this.resizeCell, marginBox, this.thumbnailSize + "px"));
+               }
+            }
          }
       },
 
@@ -320,43 +419,40 @@ define(["dojo/_base/declare",
       renderNextItem: function alfresco_lists_views_layouts_Grid__renderNextItem() {
          if (this.nextLinkDisplay)
          {
-            var cell = this.nextLinkDisplay.domNode.parentNode;
-            var row = cell.parentNode;
-            row.removeChild(cell);
             this.nextLinkDisplay.destroy();
             this.nextLinkDisplay = null;
+         }
+         if (this.emptyCells)
+         {
+            array.forEach(this.emptyCells, function(emptyCell) {
+               domConstruct.destroy(emptyCell);
+            });
+            this.emptyCells = [];
          }
          this.inherited(arguments);
       },
 
       /**
-       * When set to true this will show a link for requesting more data (if available). This should be used when
-       * the grid is rendering data in an infinite scroll view. It is required because when the grid cells are small
-       * the data may not be sufficient to allow the scrolling events to occur that will request more data.
-       *
+       * To ensure that the grid items are spaced correctly when there are less items
+       * in the final row than there are columns, it is necessary to create empty cells
+       * to fill the final columns in the row.
+       * 
        * @instance
-       * @type {boolean}
-       * @default
+       * @since 1.0.40
        */
-      showNextLink: false,
-
-      /**
-       * The label to use for the next link. This defaults to null, so MUST be set for the next link to be displayed.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      nextLinkLabel: null,
-
-      /**
-       * The topic to publish when the next link is clicked.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      nextLinkPublishTopic: null,
+      completeRow: function alfresco_lists_views_layouts_Grid__completeRow(lastColumn) {
+         if (!this.emptyCells)
+         {
+            this.emptyCells = [];
+         }
+         for (var i=lastColumn; i<this.columns; i++)
+         {
+            var cell = domConstruct.create("TD", {
+               className: "alfresco-lists-views-layouts-Grid__emptyCell"
+            }, this.domNode.lastChild);
+            this.emptyCells.push(cell);
+         }
+      },
 
       /**
        * Overrides the [inherited function]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#allItemsRendered}
@@ -365,11 +461,25 @@ define(["dojo/_base/declare",
        * @instance
        */
       allItemsRendered: function alfresco_lists_views_layouts_Grid__allItemsRendered() {
+         var lastColumn = this.currentIndex % this.columns;
+         if (lastColumn !== 0)
+         {
+            this.completeRow(lastColumn);
+         }
+         
          if(this.showNextLink &&
             ((this.totalRecords > (this.startIndex + this.currentPageSize)) ||
-            (this.currentData.totalRecords < this.currentData.numberFound)))
+             this.currentData.totalRecords < this.currentData.numberFound ||
+             this.currentData.totalRecords > this.currentData.items.length))
          {
-            this.processWidgets([{
+            if (lastColumn === 0)
+            {
+               // We need to create a new row for the "Show Next" link because the previous row is complete...
+               domConstruct.create("TR", {}, this.domNode);
+               this.completeRow(lastColumn);
+            }
+
+            this.nextLinkDisplay = this.createWidget({
                name: "alfresco/layout/VerticalWidgets",
                assignTo: "nextLinkDisplay",
                config: {
@@ -390,7 +500,8 @@ define(["dojo/_base/declare",
                      }
                   ]
                }
-            }], this.containerNode);
+            });
+            this.nextLinkDisplay.placeAt(this.emptyCells[0]);
          }
       }
    });

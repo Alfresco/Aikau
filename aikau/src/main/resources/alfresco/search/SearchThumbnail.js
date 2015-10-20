@@ -35,13 +35,26 @@ define(["dojo/_base/declare",
    return declare([Thumbnail, SearchThumbnailMixin], {
 
       /**
-       * An array of the CSS files to use with this widget.
+       * Overrides the [inherited default]{@link module:alfresco/renderers/Thumbnail#hasShadow} to
+       * set a shadow.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      hasShadow: true,
+
+      /**
+       * Overrides the [inherited default]{@link module:alfresco/renderers/Thumbnail#horizontalAlignment} to
+       * align the image to the right
        * 
        * @instance
-       * @type {object[]}
-       * @default [{cssFile:"./css/Thumbnail.css"}]
+       * @type {string}
+       * @default
+       * @since 1.0.40
        */
-      cssRequirements: [{cssFile:"./css/SearchThumbnail.css"}],
+      horizontalAlignment: "RIGHT",
 
       /**
        * Overrides the inherited value to reference the property provided by the search API
@@ -50,19 +63,6 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      lastThumbnailModificationProperty: "lastThumbnailModification",
-      
-      /**
-       * Generates the publication payload by calling the mixed in 
-       * [generatePayload]{@link module:alfresco/renderers/_SearchResultLinkMixin#generatePayload}
-       * function and then wraps the property in an anchor element by calling the mixed in 
-       * [makeAnchor]{@link module:alfresco/navigation/_HtmlAnchorMixin#makeAnchor} function
-       *
-       * @instance
-       */
-      postCreate: function alfresco_search_SearchThumbnail__postCreate() {
-         this.inherited(arguments);
-         domClass.add(this.domNode, "alfresco-search-SearchThumbnail");
-      }
+      lastThumbnailModificationProperty: "lastThumbnailModification"
    });
 });

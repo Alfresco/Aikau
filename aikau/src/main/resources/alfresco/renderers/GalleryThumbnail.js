@@ -57,6 +57,17 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * Overrides the [inherited default]{@link module:alfresco/renderers/Thumbnail#cropToFit} to
+       * crop the image to fit within the thumbnail.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      cropToFit: true,
+
+      /**
        * Adds the "gallery" CSS classes the main DOM node defined in the template
        * @instance
        * @type {string}
@@ -64,6 +75,26 @@ define(["dojo/_base/declare",
        */
       customClasses: "gallery",
       
+      /**
+       * The type of rendition to use for the thumbnail
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      renditionName: "imgpreview",
+      
+      /**
+       * Overrides the [default configuration]{@link module:alfresco/lists/ItemSelectionMixin#updateOnSelection} function
+       * to ensure that the gallery thumbnail is highlighted on selection.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      updateOnSelection: true,
+
       /**
        * @instance
        * @returns {boolean}
@@ -73,44 +104,16 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * The type of rendition to use for the thumbnail
-       * @instance
-       * @type {string}
-       * @default
-       */
-      renditionName: "imgpreview",
-      
-      /**
-       * This should be set to an object containing the starting dimensions of the thumbnail. The object needs
-       * to have a "w" attribute to indicate the width and should be a string including the unit of measurement
-       * (e.g. "100px").
-       *  
-       * @instance
-       * @type {object}
-       * @default
-       */
-      dimensions: null,
-
-      /**
+       * Extends the [inherited function]{@link module:alfresco/renderers/Thumbnail#resize}
+       * to call [setOverlayWidths]{@link module:alfresco/renderers/GalleryThumbnail#setOverlayWidths}
+       * after the thumbnail is resized.
+       * 
        * @instance
        * @param {object} dimensions
        */
       resize: function alfresco_renderers_GalleryThumbnail__resize(dimensions) {
-         if (this.imgNode && dimensions && dimensions.w)
-         {
-            // Set the container height AND the image height and widths...
-            // Heights are set to ensure a nice square thumbnail...
-            // A small deduction is made to allow for spacing...
-            var w = dimensions.w;
-            domStyle.set(this.thumbnailNode, "width", w);
-            domStyle.set(this.thumbnailNode, "height", w);
-            domStyle.set(this.imgNode, "width", w);
-            domStyle.set(this.imgNode, "minHeight", w);
-            
-            // It's also necessary to set the width of the overlaid information...
-            domStyle.set(this.selectBarNode, "width", w);
-            domStyle.set(this.displayNameNode, "width", w);
-         }
+         this.inherited(arguments);
+         this.setOverlayWidths(dimensions);
       },
       
       /**
@@ -133,9 +136,21 @@ define(["dojo/_base/declare",
          {
             domStyle.set(this.titleNode, "display", "none");
          }
-         if (this.dimensions)
+         this.setOverlayWidths(this.dimensions);
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {object} dimensions The thumbnail dimensions
+       * @since 1.0.40
+       */
+      setOverlayWidths: function alfresco_renderers_GalleryThumbnail__setOverlayWidths(dimensions) {
+         if (this.imgNode && dimensions && dimensions.w)
          {
-            this.resize(this.dimensions);
+            var thumbnailWidth = parseInt(dimensions.w, 10);
+            domStyle.set(this.titleNode, "width", thumbnailWidth + "px");
+            domStyle.set(this.displayNameNode, "width", thumbnailWidth + "px");
          }
       },
       

@@ -31,22 +31,22 @@ define(["dojo/_base/declare",
    return declare([Thumbnail], {
       
       /**
-       * An array of the CSS files to use with this widget.
+       * Extends the [inherited function]{@link module:alfresco/renderers/Thumbnail#postMixInProperties}
+       * to set the standard small thumbnail dimensions.
        * 
        * @instance
-       * @type {object[]}
-       * @default [{cssFile:"./css/SmallThumbnail.css"}]
+       * @since 1.0.40
        */
-      cssRequirements: [{cssFile:"./css/SmallThumbnail.css"}],
-      
-      /**
-       * Adds the "small" CSS classes the main DOM node defined in the template
-       * @instance
-       * @type {string}
-       * @default
-       */
-      customClasses: "small",
-      
+      postMixInProperties: function alfresco_renderers_SmallThumbnail__postMixInProperties() {
+         this.inherited(arguments);
+         if (!this.dimensions)
+         {
+            this.dimensions = {
+               w: "40px"
+            };
+         }
+      },
+
       /**
        * Generates the URL to use as the source of the thumbnail.
        * 

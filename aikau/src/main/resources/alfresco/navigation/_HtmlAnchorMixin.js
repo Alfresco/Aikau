@@ -32,6 +32,7 @@
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
@@ -39,10 +40,11 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/dom-construct",
         "dojo/query",
         "dojo/NodeList",
         "dojo/NodeList-manipulate"], 
-        function(declare, AlfCore, _NavigationServiceTopicMixin, AlfConstants, lang, array, query /*, NodeList, NodeListManipulate*/) {
+        function(declare, AlfCore, _NavigationServiceTopicMixin, AlfConstants, lang, array, domConstruct, query /*, NodeList, NodeListManipulate*/) {
    
    return declare([AlfCore, _NavigationServiceTopicMixin], {
 
@@ -54,6 +56,36 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/_HtmlAnchorMixin.css"}]
        */
       cssRequirements: [{cssFile:"./css/_HtmlAnchorMixin.css"}],
+
+      /**
+       * When set to true, the resulting anchor(s) will be removed from the page tab-order by setting their tabindex to -1.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      excludeFromTabOrder: true,
+
+      /**
+       * The title text to put on the generated link(s).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      label: null,
+
+      /**
+       * When set to true, all of the direct children of this widget's root node will be wrapped in a single anchor,
+       * when [makeAnchor()]{@link module:alfresco/navigation/_HtmlAnchorMixin#makeAnchor} is called.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      wrapAllChildren: false,
 
       /**
        * When a targetUrl is specified we want to wrap menu item labels in <a> elements to allow the browsers context menu
@@ -97,9 +129,31 @@ define(["dojo/_base/declare",
        * @param {string} url The URL to use for the anchor
        */
       _addAnchors: function alfresco_navigation__HtmlAnchorMixin__addAnchors(url) {
-         array.forEach(this.getAnchorTargetSelectors(), function(selector) {
-            query(selector, this.domNode).wrapInner("<a tabIndex='-1' class='alfresco-navigation-_HtmlAnchorMixin' title='" + this.label + "' href='" + url + "'></a>");
-         }, this);
+
+         // Setup and create the anchor
+         var anchorAttrs = {
+            className: "alfresco-navigation-_HtmlAnchorMixin",
+            href: url
+         };
+         if (this.label) {
+            anchorAttrs.title = this.label;
+         }
+         if (this.excludeFromTabOrder) {
+            anchorAttrs.tabIndex = "-1";
+         }
+         var anchor = domConstruct.create("A", anchorAttrs);
+
+         // Create anchor(s) based upon wrapAllChildren setting
+         if (this.wrapAllChildren) {
+            this.domNode.appendChild(anchor);
+            while (this.domNode.firstChild !== anchor) {
+               anchor.appendChild(this.domNode.firstChild);
+            }
+         } else {
+            array.forEach(this.getAnchorTargetSelectors(), function(selector) {
+               query(selector, this.domNode).wrapInner(anchor);
+            }, this);
+         }
       },
 
       /**

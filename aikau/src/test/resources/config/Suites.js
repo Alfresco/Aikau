@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/services/SiteServiceTest"
+      "src/test/resources/alfresco/logo/LogoTest"
 
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/dnd/FormCreationTest",
@@ -100,6 +100,7 @@ define({
       "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
       "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
+      "src/test/resources/alfresco/documentlibrary/views/GalleryViewThumbnailSizingTest",
 
       "src/test/resources/alfresco/footer/FooterTest",
 
@@ -169,6 +170,7 @@ define({
       "src/test/resources/alfresco/lists/LocalStorageFallbackTest",
       "src/test/resources/alfresco/lists/PaginatorVisibilityTest",
       "src/test/resources/alfresco/lists/views/AlfListViewTest",
+      "src/test/resources/alfresco/lists/views/GalleryViewInfiniteScrollTest",
       "src/test/resources/alfresco/lists/views/HtmlListViewTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
@@ -227,6 +229,7 @@ define({
       "src/test/resources/alfresco/renderers/SocialRenderersTest",
       "src/test/resources/alfresco/renderers/TagsTest",
       "src/test/resources/alfresco/renderers/ThumbnailTest",
+      "src/test/resources/alfresco/renderers/ThumbnailAspectAndSizeTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
       "src/test/resources/alfresco/renderers/actions/CopyToActionTest",
