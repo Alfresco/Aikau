@@ -60,6 +60,7 @@ define(["dojo/_base/declare",
 
       /**
        * The number of steps (including the beginning and end positions) on the slider
+       * 
        * @instance
        * @type {integer}
        * @default
@@ -67,7 +68,7 @@ define(["dojo/_base/declare",
       discreteValues: 16,
          
       /**
-       * The minimum value on the slider (this will represent the smalled size in pixels that a thumbnail
+       * The minimum value on the slider (this will represent the smallest size in pixels that a thumbnail
        * can be decreased to).
        * 
        * @instance

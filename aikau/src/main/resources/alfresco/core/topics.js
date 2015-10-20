@@ -716,7 +716,7 @@ define([],function() {
       SET_PREFERENCE: "ALF_PREFERENCE_SET",
 
       /**
-       * Use by the [AlfGalleryViewSlider]{@link module:alfresco/documentlibrary/ThumbnailSizeSlider}
+       * Use by the [ThumbnailSizeSlider]{@link module:alfresco/documentlibrary/ThumbnailSizeSlider}
        * to publish changes to the size of the thumbnails that are shown in the 
        * [AlfGalleryView]{@link module:alfresco/documentlibrary/views/AlfGalleryView}.
        *

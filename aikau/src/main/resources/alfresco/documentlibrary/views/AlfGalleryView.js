@@ -94,10 +94,10 @@ define(["dojo/_base/declare",
       /**
        * The topic to publish when the next link is clicked.
        * 
-       * @event nextLinkPublishTopic
        * @instance
        * @type {string}
        * @default [topics.SCROLL_NEAR_BOTTOM]{@link module:alfresco/core/topics#SCROLL_NEAR_BOTTOM}
+       * @event
        */
       nextLinkPublishTopic: topics.SCROLL_NEAR_BOTTOM,
 
