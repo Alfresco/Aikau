@@ -1,0 +1,37 @@
+.alfresco-html-Image {
+   display: inline-block;
+   font-size: 0; // This stops white-space from expanding the container div
+   &__img {
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      display: inline-block;
+      &.alfresco-logo-one {
+         background-image: url(./images/alfresco-one.png);
+      }
+      &.alfresco-logo-community {
+         background-image: url(./images/alfresco-community.png);
+      }
+      &.alfresco-logo-large {
+         background-image: url(./images/alfresco.png);
+         background-position: 5px 5px;
+         background-size: auto auto;
+         height: 48px;
+         width: 184px;
+      }
+      &.alfresco-logo-only {
+         background-image: url(./images/app-logo-48.png);
+      }
+      &.alfresco-logo-grey {
+         background-image: url(./images/alfresco_grey.png);
+      }
+      &.surf-logo-large {
+         background-image: url(./images/SurfLogo200.jpg);
+      }
+      &.surf-logo-small {
+         background-image: url(./images/surf32.jpg);
+      }
+   }
+   &--block {
+      display: block;
+   }
+}
