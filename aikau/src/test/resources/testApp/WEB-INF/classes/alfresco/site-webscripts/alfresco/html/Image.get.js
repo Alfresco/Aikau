@@ -20,12 +20,12 @@ model.jsonModel = {
       },
       {
          name: "alfresco/html/Image",
-         id: "SIMPLE_IMAGE",
+         id: "IMAGE_WITH_DIMENSIONS",
          config: {
-            height: "75px",
+            height: 75,
             src: "images/app-logo-48.png",
             srcType: "CONTEXT_RELATIVE",
-            width: "150px"
+            width: 150
          }
       },
       {
@@ -37,9 +37,27 @@ model.jsonModel = {
       },
       {
          name: "alfresco/html/Image",
-         id: "NO_SRC",
+         id: "IMAGE_WITHOUT_SRC",
          config: {
             isBlockElem: true
+         }
+      },
+      {
+         name: "alfresco/html/Heading",
+         config: {
+            label: "Image class provided; one dimension provided, aspect ratio of 1",
+            level: 3
+         }
+      },
+      {
+         name: "alfresco/html/Image",
+         id: "IMAGE_CLASS_AND_DIMENSIONS",
+         config: {
+            aspectRatio: 1,
+            classes: "alfresco-logo-one",
+            dimensions: {
+               w: 100
+            }
          }
       },
       {
@@ -51,7 +69,7 @@ model.jsonModel = {
       },
       {
          name: "alfresco/html/Image",
-         id: "PUBLISH",
+         id: "IMAGE_CLASS_STYLE_TOPIC",
          config: {
             altText: "This is some alt text",
             classes: "alfresco-logo-community",
@@ -69,26 +87,10 @@ model.jsonModel = {
       },
       {
          name: "alfresco/html/Image",
-         id: "LINK",
+         id: "IMAGE_CLASS_LINK",
          config: {
             classes: "alfresco-logo-large",
             targetUrl: "tp/ws/Index"
-         }
-      },
-      {
-         name: "alfresco/html/Heading",
-         config: {
-            label: "Image class provided; custom dimensions",
-            level: 3
-         }
-      },
-      {
-         name: "alfresco/html/Image",
-         id: "LINK",
-         config: {
-            classes: "alfresco-logo-one",
-            height: "60px",
-            width: "240px"
          }
       },
       {

@@ -22,6 +22,7 @@
  * 
  * @module alfresco/enums/urlTypes
  * @author Martin Doyle
+ * @since 1.0.41
  */
 define([], function() {
 

@@ -25,7 +25,9 @@
  * @module alfresco/html/Image
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
+ * @mixes module:alfresco/core/_PublishOrLinkMixin
  * @author Martin Doyle
+ * @since 1.0.41
  */
 define([
       "alfresco/core/_PublishOrLinkMixin",
@@ -72,15 +74,6 @@ define([
          templateString: template,
 
          /**
-          * Any optional classes to be added to the wrapped image element.
-          *
-          * @instance
-          * @type {string|string[]}
-          * @default
-          */
-         classes: null,
-
-         /**
           * Alt text for the image.
           *
           * @instance
@@ -88,6 +81,30 @@ define([
           * @default
           */
          altText: null,
+
+         /**
+          * <p>An optional aspect ratio that will be used if only one of [width]{@link module:alfresco/html/Image#width}
+          * or [height]{@link module:alfresco/html/Image#height} has been specified. This is specified as a floating
+          * point number as a ratio to 1.</p>
+          *
+          * <p>Example from Wikipedia: "Two common videographic aspect ratios are 4:3 (1.33:1), the universal video
+          * format of the 20th century, and 16:9 (1.77:1), universal for high-definition television and European digital
+          * television". So, the value in these two examples would be 1.33 and 1.77 respectively.</p>
+          *
+          * @instance
+          * @type {number?}
+          * @default
+          */
+         aspectRatio: null,
+
+         /**
+          * Any optional classes to be added to the wrapped image element.
+          *
+          * @instance
+          * @type {string|string[]}
+          * @default
+          */
+         classes: null,
 
          /**
           * If we can get no other sizes, then rather than having a zero-by-zero image,
@@ -100,13 +117,28 @@ define([
          defaultMinimumSize: 50,
 
          /**
-          * An optional CSS height to apply to the image node (e.g. "10px" or "50%")
+          * Short-hand property for setting both width and height simultaneously. This
+          * will override any individual width/height property setting.
           *
           * @instance
-          * @type {string}
+          * @type {object}
+          * @property {number} [w] Width
+          * @property {number} [h] Height
           * @default
           */
-         height: null,
+         dimensions: null,
+
+         /**
+          * An optional CSS height to apply to the image node in pixels. If height
+          * is specified without width then the other will be calculated using the
+          * aspectRatio property, or the calculated naturalAspectRatio if not
+          * specified.
+          *
+          * @instance
+          * @type {number}
+          * @default
+          */
+         height: 0,
 
          /**
           * Any optional style rules to be applied to the wrapped image element.
@@ -125,6 +157,22 @@ define([
           * @default
           */
          isBlockElem: false,
+
+         /**
+          * <p>This will be set to the natural aspect-ratio of the displayed image. This
+          * is specified as a floating point number as a ratio to 1.</p>
+          *
+          * <p>Example from Wikipedia: "Two common videographic aspect ratios are 4:3 (1.33:1),
+          * the universal video format of the 20th century, and 16:9 (1.77:1), universal for
+          * high-definition television and European digital television". So, the value in
+          * these two examples would be 1.33 and 1.77 respectively.</p>
+          *
+          * @instance
+          * @type {number}
+          * @readonly
+          * @default
+          */
+         naturalAspectRatio: 0,
 
          /**
           * This will be set to the natural height of the displayed image.
@@ -176,13 +224,15 @@ define([
          srcType: urlTypes.PAGE_RELATIVE,
 
          /**
-          * An optional CSS width to apply to the image node (e.g. "10px" or "50%")
+          * An optional CSS width to apply to the image node in pixels. If width is
+          * specified without height then the other will be calculated using the
+          * aspectRatio property, or the calculated naturalAspectRatio if not specified.
           *
           * @instance
-          * @type {string}
+          * @type {number}
           * @default
           */
-         width: null,
+         width: 0,
 
          /**
           * This is run after the config has been mixed into this instance.
@@ -201,6 +251,12 @@ define([
             // Encode the alt text, after checking for properties
             if (this.altText) {
                this.altText = this.encodeHTML(this.message(this.altText));
+            }
+
+            // It's possible to provide a dimensions object, so use this if available
+            if (this.dimensions) {
+               this.width = this.dimensions.w || null;
+               this.height = this.dimensions.h || null;
             }
 
             // If a src is specified, update it according to the srcType
@@ -275,7 +331,7 @@ define([
           * @instance
           * @returns {external:dojo/promise/Promise} A promise that will resolve to a [dimensions]{@link module:alfresco/html/Image#Dimensions} object
           */
-         getNaturalDimensions: function alfresco_html_Image__getNaturalDimensions() {
+         getNaturalImageSize: function alfresco_html_Image__getNaturalImageSize() {
             return this._updateNaturalDimensions().then(lang.hitch(this, function() {
                return {
                   w: this.naturalWidth,
@@ -293,29 +349,41 @@ define([
           */
          resize: function alfresco_html_Image__resize(forceNatural) {
 
-            // Use configured width/height first
-            if ((this.width || this.height) && !forceNatural) {
+            // Make sure we know the natural dimensions of the image
+            this._updateNaturalDimensions().then(lang.hitch(this, function() {
 
-               // Just style according to whichever dimension(s) we have
-               domStyle.set(this.imageNode, {
-                  width: this.width || "auto",
-                  height: this.height || "auto"
-               })
+               // Use configured width/height first
+               if ((this.width || this.height) && !forceNatural) {
 
-            } else {
+                  // Fill in any missing values (defaults to square if no aspect ratios
+                  // because could not determine natural dimensions)
+                  var aspectRatio = this.aspectRatio || this.naturalAspectRatio || 1;
+                  if (!this.height) {
+                     this.height = this.width / aspectRatio;
+                  } else if (!this.width) {
+                     this.width = this.height * aspectRatio;
+                  }
 
-               // Are there any CSS dimensions we should leave in-place
-               var cssDimensions = this.getCssDimensions(),
-                  hasCssDimensions = cssDimensions.w || cssDimensions.h;
+                  // Just style according to whichever dimension(s) we have
+                  domStyle.set(this.imageNode, {
+                     width: this.width + "px",
+                     height: this.height + "px"
+                  })
 
-               // Do the resize only if no CSS dimensions, or if forceNatural is true
-               if (!hasCssDimensions || forceNatural) {
-                  this._updateNaturalDimensions().then(lang.hitch(this, function() {
+               } else {
 
-                     // Use the natural dimensions, unless neither exist
+                  // Are there any CSS dimensions we should leave in-place
+                  var cssDimensions = this.getCssDimensions(),
+                     hasCssDimensions = cssDimensions.w || cssDimensions.h;
+
+                  // Do the resize only if no CSS dimensions, or if forceNatural is true
+                  if (!hasCssDimensions || forceNatural) {
+
+                     // Use the natural dimensions if we have them (must have both, as an
+                     // image with zero width or zero height will not display at all)
                      var w = this.naturalWidth,
                         h = this.naturalHeight;
-                     if (!w && !h) {
+                     if (!w || !h) {
                         w = h = this.defaultMinimumSize;
                      }
 
@@ -324,8 +392,23 @@ define([
                         width: w + "px",
                         height: h + "px"
                      });
-                  }));
+                  }
                }
+            }));
+         },
+
+         /**
+          * This function assumes that the naturalWidth/naturalHeight properties have already been set,
+          * and calculates the resultant natural aspect-ratio, as a floating point ratio to 1.
+          *
+          * @instance
+          */
+         _calculateNaturalAspectRatio: function alfresco_html_Image___calculateNaturalAspectRatio() {
+            try {
+               this.naturalAspectRatio = this.naturalWidth / this.naturalHeight;
+            } catch (e) {
+               this.naturalAspectRatio = 0;
+               this.alfLog("error", "Error calculating aspect ratio (naturalWidth=" + this.naturalWidth + ", naturalHeight=" + this.naturalHeight + ")");
             }
          },
 
@@ -415,7 +498,9 @@ define([
             }
 
             // Pass back the promise
-            return dfd.promise;
+            return dfd.promise.then(lang.hitch(this, function() {
+               this._calculateNaturalAspectRatio();
+            }));
          }
       });
    });
