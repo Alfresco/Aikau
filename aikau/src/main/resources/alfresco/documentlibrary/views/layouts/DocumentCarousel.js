@@ -29,6 +29,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/Carousel",
+        "alfresco/enums/urlTypes",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/dom-construct",
@@ -36,7 +37,7 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/query", 
         "dojo/NodeList-dom"], 
-        function(declare, Carousel, lang, domClass, domConstruct, domStyle, domGeom, query, nodeListDom) {
+        function(declare, Carousel, urlTypes, lang, domClass, domConstruct, domStyle, domGeom, query, nodeListDom) {
 
    return declare([Carousel], {
       
@@ -50,13 +51,35 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/DocumentCarousel.css"}],
 
       /**
-       * Sets up image source files, etc.
-       * 
-       * @instance postCreate
+       * Override the [inherited value]{@link module:alfresco/lists/views/layouts/Carousel#nextArrow}
+       * to use a DocumentCarousel-specific arrow.
+       *
+       * @instance
+       * @override
+       * @type {object}
        */
-      postMixInProperties: function alfresco_documentlibrary_views_layouts_DocumentCarousel__postMixInProperties() {
-         this.contentNavNextArrowImgSrc = require.toUrl("alfresco/documentlibrary/views/layouts") + "/css/images/filmstrip-main-nav-next.png";
-         this.contentNavPrevArrowImgSrc = require.toUrl("alfresco/documentlibrary/views/layouts") + "/css/images/filmstrip-main-nav-prev.png";
+      nextArrow: {
+         altText: "next-arrow.alt-text",
+         src: "alfresco/documentlibrary/views/layouts/css/images/filmstrip-main-nav-next.png",
+         srcType: urlTypes.REQUIRE_PATH,
+         width: 29,
+         height: 74
+      },
+
+      /**
+       * Override the [inherited value]{@link module:alfresco/lists/views/layouts/Carousel#prevArrow}
+       * to use a DocumentCarousel-specific arrow.
+       *
+       * @instance
+       * @override
+       * @type {object}
+       */
+      prevArrow: {
+         altText: "prev-arrow.alt-text",
+         src: "alfresco/documentlibrary/views/layouts/css/images/filmstrip-main-nav-prev.png",
+         srcType: urlTypes.REQUIRE_PATH,
+         width: 29,
+         height: 74
       },
 
       /**

@@ -92,7 +92,7 @@ define(["alfresco/core/_PublishOrLinkMixin",
       advancedSizeRetrieval: false,
 
       /**
-       * Alt text for the image.
+       * Alt text for the image. This will be encoded and checked against i18n property bundles.
        *
        * @instance
        * @type {string}
