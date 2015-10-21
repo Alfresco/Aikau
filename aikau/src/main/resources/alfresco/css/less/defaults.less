@@ -107,7 +107,6 @@
 @link-title-font-color-hover: @link-title-font-color;
 @link-title-text-decoration-hover: @link-title-text-decoration;
 
-
 // Borders...
 // These have been initially added for form controls...
 @standard-border-width: 1px;
@@ -120,6 +119,12 @@
 @hover-border-color: #d3d3d3;
 @focused-border-color: #8dc63f;
 @thick-border-width: 3px;
+
+// Seed colours
+@color-two-light: #47aa42;
+@color-two-medium: #358032;
+@color-two-dark: #2c6a29;
+@color-two-text: #fff;
 
 // Button (colours)
 @button-color-background: #fff;
@@ -182,6 +187,32 @@
 @call-to-action-button-padding-horizontal: @standard-button-padding-horizontal;
 @call-to-action-button-padding: @call-to-action-button-padding-vertical @call-to-action-button-padding-horizontal;
 @call-to-action-button-margin: @standard-button-margin;
+
+// "color-two" button
+@color-two-button-background: @color-two-light;
+@color-two-button-background-focus: @color-two-medium;
+@color-two-button-background-active: @color-two-dark;
+@color-two-button-background-disabled: @button-color-disabled;
+@color-two-button-border-width: 1px;
+@color-two-button-border-style: solid;
+@color-two-button-border: @color-two-button-border-width @color-two-button-border-style @color-two-medium;
+@color-two-button-border-focus: @color-two-button-border-width @color-two-button-border-style @color-two-dark;
+@color-two-button-border-active: @color-two-button-border-width @color-two-button-border-style @color-two-dark;
+@color-two-button-border-disabled: @color-two-button-border-width @color-two-button-border-style @button-color-disabled;
+@color-two-button-border-radius: @standard-button-border-radius;
+@color-two-button-font-color: @color-two-text;
+@color-two-button-font-color-focus: @color-two-text;
+@color-two-button-font-color-active: @color-two-text;
+@color-two-button-font-color-disabled: fade(@button-color-background, 50%);
+@color-two-button-font-family: @standard-button-font-family;
+@color-two-button-font-size: @standard-button-font-size;
+@color-two-button-font-weight: @standard-button-font-weight;
+@color-two-button-height: @standard-button-height;
+@color-two-button-line-height: @standard-button-line-height;
+@color-two-button-padding-vertical: (@color-two-button-height - (@color-two-button-border-width * 2) - @color-two-button-line-height) / 2;
+@color-two-button-padding-horizontal: @standard-button-padding-horizontal;
+@color-two-button-padding: @color-two-button-padding-vertical @color-two-button-padding-horizontal;
+@color-two-button-margin: @standard-button-margin;
 
 // The radius textbox is a modifier to the standard textbox
 @radius-textbox-border-radius: 3px;

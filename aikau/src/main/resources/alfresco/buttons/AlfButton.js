@@ -26,6 +26,7 @@
  * <ul>
  * <li><strong>call-to-action</strong>: The AlfButton is rendered in call-to-action colours</li>
  * <li><strong>biggerBolder</strong>: The AlfButton is rendered with a bigger, bold font</li>
+ * <li><strong>color-two</strong>: The AlfButton is rendered using the color-two scheme of colours</li>
  * </ul>
  *
  * @module alfresco/buttons/AlfButton

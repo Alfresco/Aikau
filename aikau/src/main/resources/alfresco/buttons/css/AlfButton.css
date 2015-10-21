@@ -59,6 +59,7 @@
          opacity: .5;
       }
    }
+
    &.call-to-action {
       background: @call-to-action-button-background;
       border: @call-to-action-button-border;
@@ -99,6 +100,48 @@
          }
       }
    }
+
+   &.color-two {
+      background: @color-two-button-background;
+      border: @color-two-button-border;
+      border-radius: @color-two-button-border-radius;
+      margin: @color-two-button-margin;
+      padding: @color-two-button-padding;
+      .dijitButtonContents, .dijitButtonText {
+         line-height: @color-two-button-line-height;
+      }
+      .dijitButtonText {
+         font-family: @color-two-button-font-family;
+         font-size: @color-two-button-font-size;
+         font-weight: @color-two-button-font-weight;
+         padding: 0;
+      }
+      .dijitReset.dijitInline.dijitButtonNode {
+         color: @color-two-button-font-color;
+      }
+      &.dijitButtonFocused, &.dijitButtonHover {
+         background: @color-two-button-background-focus;
+         border: @color-two-button-border-focus;
+         .dijitReset.dijitInline.dijitButtonNode {
+            color: @color-two-button-font-color-focus;
+         }
+      }
+      &.dijitButtonActive {
+         background: @color-two-button-background-active;
+         border: @color-two-button-border-active;
+         .dijitReset.dijitInline.dijitButtonNode {
+            color: @color-two-button-font-color-active;
+         }
+      }
+      &.dijitButtonDisabled {
+         background: @color-two-button-background-disabled;
+         border: @color-two-button-border-disabled;
+         .dijitReset.dijitInline.dijitButtonNode {
+            color: @color-two-button-font-color-disabled;
+         }
+      }
+   }
+
    &.biggerBolder .dijitButtonText {
       font-family: @bold-font;
       font-weight: @standard-button-font-weight;
