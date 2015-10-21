@@ -18,31 +18,23 @@
  */
 
 /**
- * <p>Displays an image typically used as an application logo. Provides a number of Alfresco and
- * Surf logos out-of-the-box but can be configured with a specific URL to render any image.</p>
- *
- * <p>By providing a publishTopic in the config, the logo will publish to that topic when clicked
- * (publishPayload, publishGlobal and publishToParent are also supported).</p>
- *
- * <p>By providing a targetUrl (and optional targetUrlType), the logo will act as a link when
- * clicked</p>
+ * <p>Extends the [alfresco/html/Image]{@link module:alfresco/html/Image} widget to
+ * provide backwards compatibility (the recommendation would be to use the Image
+ * widget instead now), and also adds custom CSS that makes this directly applicable
+ * to dropping into Share.</p>
  * 
  * @module alfresco/logo/Logo
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/_PublishOrLinkMixin
+ * @extends module:alfresco/html/Image
  * @author Dave Draper
+ * @author Martin Doyle
  */
-define(["dojo/_base/declare", 
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin", 
-        "dojo/text!./templates/Logo.html", 
-        "alfresco/core/Core", 
-        "alfresco/core/_PublishOrLinkMixin"], 
-        function(declare, _Widget, _Templated, template, Core, _PublishOrLinkMixin) {
+define(["alfresco/enums/urlTypes", 
+        "alfresco/html/Image", 
+        "dojo/_base/declare", 
+        "dojo/dom-class"], 
+        function(urlTypes, Image, declare, domClass) {
 
-   return declare([_Widget, _Templated, Core, _PublishOrLinkMixin], {
+   return declare([Image], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -51,7 +43,9 @@ define(["dojo/_base/declare",
        * @type {object[]}
        * @default [{i18nFile: "./i18n/Logo.properties"}]
        */
-      i18nRequirements: [{i18nFile: "./i18n/Logo.properties"}],
+      i18nRequirements: [{
+         i18nFile: "./i18n/Logo.properties"
+      }],
 
       /**
        * An array of the CSS files to use with this widget.
@@ -60,44 +54,9 @@ define(["dojo/_base/declare",
        * @type {object[]}
        * @default [{cssFile:"./css/Logo.css"}]
        */
-      cssRequirements: [{cssFile: "./css/Logo.css"}],
-
-      /**
-       * The CSS class or classes to use to generate the logo
-       * @instance
-       * @type {string} 
-       * @default
-       */
-      logoClasses: "alfresco-logo-large",
-
-      /**
-       * @instance
-       * @type {string} 
-       */
-      logoSrc: null,
-
-      /**
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      cssNodeStyle: "display: none;",
-
-      /**
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      imgNodeStyle: "display: none;",
-
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
+      cssRequirements: [{
+         cssFile: "./css/Logo.css"
+      }],
 
       /**
        * Some alt text for the logo image.
@@ -109,38 +68,96 @@ define(["dojo/_base/declare",
       altText: "logo.alt.text",
 
       /**
-       * This controls whether or not the image is rendered with the img element or the div in the template.
-       * The default it to use the div because it is controlled via CSS which allows for finer control over the
-       * dimensions of the displayed logo. When using the img element the dimensions will be those of the supplied
-       * image. 
+       * The CSS class or classes to use to generate the logo
+       *
+       * @instance
+       * @override
+       * @type {string} 
+       * @default
+       */
+      classes: "alfresco-logo-large",
+
+      /**
+       * Overrides the [inherited property]{@link module:alfresco/html/Image#isBlockElem} to
+       * retain the default block-level styling of the Logo widget.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      isBlockElem: true,
+
+      /**
+       * The CSS class or classes to use to generate the logo (while this property exists, it
+       * takes priority over the classes property)
        * 
        * @instance
+       * @type {string} 
+       * @default
+       * @deprecated since 1.0.41 Use [classes]{@link module:alfresco/logo/Logo#classes} instead
        */
-      buildRendering: function alfresco_logo_Logo__buildRendering() {
-         this.altText = this.encodeHTML(this.message(this.altText));
-         if (this.logoSrc)
-         {
-            this.imgNodeStyle = "display: inline-block;";
-         }
-         else
-         {
-            this.cssNodeStyle = "display: inline-block";
-         }
-         this.inherited(arguments);
-      },
+      logoClasses: null,
+
+      /**
+       * The logo src (while this property exists, it takes priority over the src property)
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       * @deprecated since 1.0.41 Use [src]{@link module:alfresco/logo/Logo#src} instead
+       */
+      logoSrc: null,
+
+      /**
+       * The logo src
+       * 
+       * @instance
+       * @override
+       * @type {string} 
+       * @default
+       */
+      src: null,
+
+      /**
+       * Override the [inherited value]{@link module:alfresco/html/Image#srcType} because
+       * logo src has historically been the full path.
+       *
+       * @instance
+       * @type {string}
+       * @default {@link module:alfresco/enums/urlTypes#FULL_PATH}
+       */
+      srcType: urlTypes.FULL_PATH,
 
       /**
        * Called after properties have been mixed into this instance.
        *
        * @instance
        * @override
-       * @since 1.0.40
+       * @since 1.0.41
        */
       postMixInProperties: function alfresco_logo_Logo__postMixInProperties() {
-         this.inherited(arguments);
+         if (this.logoClasses) {
+            this.classes = this.logoClasses;
+         }
+         if (this.logoSrc) {
+            this.src = this.logoSrc;
+         }
          if (this.targetUrl && !this.label) {
             this.label = this.altText;
          }
+         this.inherited(arguments);
+      },
+
+      /**
+       * Called after widget created (but child widgets may not have been).
+       *
+       * @instance
+       * @override
+       * @since  1.0.41
+       */
+      postCreate: function alfresco_logo_Logo__postCreate() {
+         domClass.add(this.domNode, "alfresco-logo-Logo");
+         this.inherited(arguments);
       }
    });
 });
