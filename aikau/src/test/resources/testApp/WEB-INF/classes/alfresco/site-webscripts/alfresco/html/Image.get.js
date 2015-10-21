@@ -57,7 +57,8 @@ model.jsonModel = {
             classes: "alfresco-logo-one",
             dimensions: {
                w: 100
-            }
+            },
+            imgStyle: "background-size: 100% 100%"
          }
       },
       {

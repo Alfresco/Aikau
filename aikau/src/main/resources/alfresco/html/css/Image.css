@@ -3,13 +3,16 @@
    font-size: 0; // This stops white-space from expanding the container div
    &__img {
       background-repeat: no-repeat;
-      background-size: 100% 100%;
       display: inline-block;
-      &.alfresco-logo-one {
-         background-image: url(./images/alfresco-one.png);
-      }
       &.alfresco-logo-community {
          background-image: url(./images/alfresco-community.png);
+         height: 27px;
+         width: 215px;
+      }
+      &.alfresco-logo-one {
+         background-image: url(./images/alfresco-one.png);
+         height: 27px;
+         width: 149px;
       }
       &.alfresco-logo-large {
          background-image: url(./images/alfresco.png);
@@ -18,20 +21,35 @@
          height: 48px;
          width: 184px;
       }
-      &.alfresco-logo-only {
-         background-image: url(./images/app-logo-48.png);
-      }
       &.alfresco-logo-grey {
          background-image: url(./images/alfresco_grey.png);
+         height: 43px;
+         width: 187px;
       }
-      &.surf-logo-large {
-         background-image: url(./images/SurfLogo200.jpg);
+      &.alfresco-logo-only {
+         background-image: url(./images/app-logo-48.png);
+         height: 48px;
+         width: 48px;
       }
       &.surf-logo-small {
          background-image: url(./images/surf32.jpg);
+         height: 34px;
+         width: 32px;
+      }
+      &.surf-logo-large {
+         background-image: url(./images/SurfLogo200.jpg);
+         height: 85px;
+         width: 200px;
       }
    }
    &--block {
       display: block;
+   }
+   &--advanced-sizing {
+      .alfresco-html-Image {
+         &__img {
+            background-size: 100% 100%;
+         }
+      }
    }
 }
