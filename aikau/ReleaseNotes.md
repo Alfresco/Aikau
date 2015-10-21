@@ -1,10 +1,5 @@
-Aikau 1.0.39 Release Notes
+Aikau 1.0.40 Release Notes
 ===
-
-New deprecations: 
----
-* alfresco/services/_PreferenceServiceTopicMixin.js              (use alfresco/core/topics)
-* alfresco/services/actions/SimpleWorkflowService.js             (use alfresco/services/actions/WorkflowService)
 
 Previous deprecations:
 ---
@@ -39,10 +34,22 @@ Previous deprecations:
 * alfresco/forms/controls/DojoValidationTextBox                  (use: alfresco/forms/controls/TextBox)
 * alfresco/renderers/SearchResultPropertyLink                    (use: alfresco/search/SearchResultPropertyLink)
 * alfresco/renderers/SearchThumbnail                             (use: alfresco/search/SearchThumbnail)
+* alfresco/services/_PreferenceServiceTopicMixin.js              (use alfresco/core/topics)
+* alfresco/services/actions/SimpleWorkflowService.js             (use alfresco/services/actions/WorkflowService)
 * alfresco/upload/AlfUpload                                      (use: alfresco/services/UploadService)
 
 Resolved issues:
 ---
+1.0.40:
+* [AKU-626](https://issues.alfresco.com/jira/browse/AKU-626)       - Thumbnail highlighting on selection
+* [AKU-627](https://issues.alfresco.com/jira/browse/AKU-627)       - Thumbnail click to select support
+* [AKU-628](https://issues.alfresco.com/jira/browse/AKU-628)       - Gallery view thumbnail resizing
+* [AKU-629](https://issues.alfresco.com/jira/browse/AKU-629)       - Gallery view layout fixes
+* [AKU-630](https://issues.alfresco.com/jira/browse/AKU-630)       - Truncate display name on GalleryThumbnail
+* [AKU-631](https://issues.alfresco.com/jira/browse/AKU-631)       - Configurable Thumbnail rendering
+* [AKU-633](https://issues.alfresco.com/jira/browse/AKU-633)       - Link support for Logo
+* [AKU-634](https://issues.alfresco.com/jira/browse/AKU-634)       - Disable resizing in sidebar
+
 1.0.39:
 * [AKU-548](https://issues.alfresco.com/jira/browse/AKU-548)       - New bulk action support (sync to cloud)
 * [AKU-605](https://issues.alfresco.com/jira/browse/AKU-605)       - Fix horizontal scrollbars in IE and possibly address dialog width-change on hover issue (IE only)

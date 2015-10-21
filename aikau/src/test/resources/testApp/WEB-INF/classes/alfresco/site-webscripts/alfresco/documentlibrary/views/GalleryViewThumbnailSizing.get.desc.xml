@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>GalleryView (Resizable thumbnails)</shortname>
+  <description>Shows an example gallery view where thumbnail size (rather than colum count) can be adjusted by a slide</description>
+  <family>aikau-unit-tests</family>
+  <url>/GalleryViewThumbnailSizing</url>
+</webscript>

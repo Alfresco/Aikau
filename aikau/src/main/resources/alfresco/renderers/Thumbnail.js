@@ -273,6 +273,17 @@ define(["dojo/_base/declare",
       imageTitleProperty: "displayName",
 
       /**
+       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#itemKey} to
+       * set a value suitable for use with standard Alfresco Repository APIs (the default remains the
+       * same for backwards compatibility).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      itemKey: "node.nodeRef",
+
+      /**
        * This property is used to determine whether or not a new version of the thumbnail needs
        * to be generated or if the cached version can be used.
        *
@@ -724,7 +735,7 @@ define(["dojo/_base/declare",
             {
                // If cropping to fit we require the natural image width and height to be available
                // (which are set on image load)...
-               this.naturalImageWidth && this.naturalHeight && this.cropImage();
+               this.naturalImageWidth && this.naturalImageHeight && this.cropImage();
             }
             else if (this.stretchToFit)
             {

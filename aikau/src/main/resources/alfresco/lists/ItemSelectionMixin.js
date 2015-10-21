@@ -121,6 +121,8 @@ define(["dojo/_base/declare",
          if (this.updateOnSelection)
          {
             this.alfSubscribe(this.documentSelectionTopic, lang.hitch(this, this.onItemSelection), this.getSelectionPublishGlobal(), this.getSelectionPublishToParent());
+            this.alfSubscribe(this.documentDeselectedTopic, lang.hitch(this, this.onIndividualItemSelection, false), this.getSelectionPublishGlobal(), this.getSelectionPublishToParent());
+            this.alfSubscribe(this.documentSelectedTopic, lang.hitch(this, this.onIndividualItemSelection, true), this.getSelectionPublishGlobal(), this.getSelectionPublishToParent());
          }
       },
 
@@ -146,6 +148,29 @@ define(["dojo/_base/declare",
        */
       getSelectionPublishToParent: function alfresco_lists_ItemSelectionMixin__getSelectionPublishToParent() {
          return this.publishToParent;
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {boolean} select  Indicates if this is a selection action
+       * @param {object} payload The payload containing the details of the item selected
+       */
+      onIndividualItemSelection: function alfresco_lists_ItemSelectionMixin__onIndividualItemSelection(select, payload) {
+         var a = lang.getObject(this.itemKey, false, payload.value);
+         var b = lang.getObject(this.itemKey, false, this.currentItem);
+         var match = ((a || a === 0) && a === b);
+         if (match)
+         {
+            if (select)
+            {
+               domClass.add(this.domNode, this.selectedCssClass);
+            }
+            else
+            {
+               domClass.remove(this.domNode, this.selectedCssClass);
+            }
+         }
       },
 
       /**

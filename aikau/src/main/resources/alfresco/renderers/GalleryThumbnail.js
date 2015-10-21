@@ -85,6 +85,17 @@ define(["dojo/_base/declare",
       renditionName: "imgpreview",
       
       /**
+       * Overrides the [default configuration]{@link module:alfresco/lists/ItemSelectionMixin#updateOnSelection} function
+       * to ensure that the gallery thumbnail is highlighted on selection.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      updateOnSelection: true,
+
+      /**
        * @instance
        * @returns {boolean}
        */

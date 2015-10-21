@@ -170,6 +170,14 @@ define(["intern!object",
             .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Navigation publication not made");
          },
 
+         "Check that other renderers have detected selection": function() {
+            return browser.findByCssSelector("#SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
+               .end()
+               .findByCssSelector("#SELECT_THUMBNAIL_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
+               .end()
+               .findByCssSelector("#GALLERY_THUMBNAIL_ITEM_0.alfresco-lists-ItemSelectionMixin--selected");
+         },
+
          "Deselect via thumbnail (selection and navigation capability)": function() {
             return browser.findByCssSelector("#MIXED_THUMBNAIL_ITEM_0 .alfresco-renderers-Thumbnail__image")
                .clearLog()
