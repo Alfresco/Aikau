@@ -31,6 +31,7 @@
  */
 define(["alfresco/core/_PublishOrLinkMixin", 
         "alfresco/enums/urlTypes", 
+        "alfresco/util/urlUtils",
         "dijit/_TemplatedMixin", 
         "dijit/_WidgetBase", 
         "dojo/_base/declare", 
@@ -38,9 +39,8 @@ define(["alfresco/core/_PublishOrLinkMixin",
         "dojo/Deferred", 
         "dojo/dom-class", 
         "dojo/dom-style", 
-        "dojo/text!./templates/Image.html", 
-        "service/constants/Default"], 
-        function(_PublishOrLinkMixin, urlTypes, _TemplatedMixin, _WidgetBase, declare, lang, Deferred, domClass, domStyle, template, AlfConstants) {
+        "dojo/text!./templates/Image.html"], 
+        function(_PublishOrLinkMixin, urlTypes, urlUtils, _TemplatedMixin, _WidgetBase, declare, lang, Deferred, domClass, domStyle, template) {
 
    return declare([_WidgetBase, _TemplatedMixin, _PublishOrLinkMixin], {
 
@@ -277,15 +277,8 @@ define(["alfresco/core/_PublishOrLinkMixin",
             this.height = this.dimensions.h || null;
          }
 
-         // If a src is specified, update it according to the srcType
-         // NOTE: If anyone uses FULL or HASH, don't alter the src path
-         if (this.src) {
-            if (this.srcType === urlTypes.PAGE_RELATIVE) {
-               this.src = AlfConstants.URL_PAGECONTEXT + this.src.replace(/^\/+/, "");
-            } else if (this.srcType === urlTypes.CONTEXT_RELATIVE) {
-               this.src = AlfConstants.URL_CONTEXT + this.src.replace(/^\/+/, "");
-            }
-         }
+         // Update the src according to the srcType
+         this.src = urlUtils.convertUrl(this.src, this.srcType);
       },
 
       /**
@@ -306,7 +299,7 @@ define(["alfresco/core/_PublishOrLinkMixin",
          // No configured src, so set to blank.gif if a background image is present
          if (!this.src) {
             if (this._getBackgroundImageUrl()) {
-               this.imageNode.src = require.toUrl(this.pathToBlankGif);
+               this.imageNode.src = urlUtils.convertUrl(this.pathToBlankGif, urlTypes.REQUIRE_PATH);
             } else {
                this.imageNode.src = this.src;
             }

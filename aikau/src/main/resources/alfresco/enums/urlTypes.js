@@ -49,6 +49,16 @@ define([], function() {
       CONTEXT_RELATIVE: "CONTEXT_RELATIVE",
 
       /**
+       * This value is used to indicate that the accompanying URL is a path
+       * that can be resolve by doing require.toUrl(...)
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      REQUIRE_PATH: "REQUIRE_PATH",
+
+      /**
        * This value is used to indicate that the accompanying URL is a full
        * path (i.e. it should contain "//").
        *

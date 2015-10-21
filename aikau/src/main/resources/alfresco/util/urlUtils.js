@@ -25,9 +25,12 @@
  * @author Martin Doyle
  * @author David Webster
  */
-define(["dojo/_base/lang",
-      "dojo/io-query"],
-   function(lang, ioQuery) {
+define(["alfresco/enums/urlTypes",
+      "dojo/_base/lang",
+      "dojo/io-query",
+      "service/constants/Default"
+   ],
+   function(urlTypes, lang, ioQuery, AlfConstants) {
 
       // The private container for the functionality and properties of the util
       var util = {
@@ -39,13 +42,12 @@ define(["dojo/_base/lang",
           * @returns {object}
           */
          parseUrl: function alfresco_util_urlUtils__parseUrl(url) {
-            if (!url.indexOf("://"))
-            {
+            if (!url.indexOf("://")) {
                this.alfLog("warn", "Attempting to parse a relative URL. This will return an absolute URL");
             }
 
             var a = document.createElement("a"),
-               _sanitizedPathname = function (pathname) {
+               _sanitizedPathname = function(pathname) {
                   // pathname MUST include leading slash (IE<9: this code is for you).
                   var prepend = (pathname.substring(0, 1) === "/") ? "" : "/";
                   return prepend + pathname;
@@ -61,7 +63,7 @@ define(["dojo/_base/lang",
                pathname: _sanitizedPathname(a.pathname), // includes leading slash
                queryParams: ioQuery.queryToObject(a.search.slice(1)), // remove ? before parsing
                hashParams: ioQuery.queryToObject(a.hash.slice(1)), // remove # before parsing
-               toString: function () {
+               toString: function() {
                   var search = ioQuery.objectToQuery(this.queryParams),
                      hash = ioQuery.objectToQuery(this.hashParams);
                   search = (search) ? "?" + search : search;
@@ -80,19 +82,16 @@ define(["dojo/_base/lang",
             if (url.indexOf("#") !== -1) {
                var urlParts = url.split("#");
 
-               if(url.indexOf("?") !== -1) {
+               if (url.indexOf("?") !== -1) {
                   returnUrl = urlParts[0] + "&" + param + "=" + safeValue + "#" + urlParts[1];
-               }
-               else {
+               } else {
                   returnUrl = urlParts[0] + "?" + param + "=" + safeValue + "#" + urlParts[1];
                }
 
-            }
-            else if (url.indexOf("?") !== -1) {
+            } else if (url.indexOf("?") !== -1) {
                returnUrl = url + "&" + param + "=" + safeValue;
-            }
-            else {
-                  returnUrl = url + "?" + param + "=" + safeValue;
+            } else {
+               returnUrl = url + "?" + param + "=" + safeValue;
             }
 
             return returnUrl;
@@ -106,12 +105,55 @@ define(["dojo/_base/lang",
             if (url.indexOf("#") !== -1) {
                returnUrl = url + "&" + param + "=" + safeValue;
 
-            }
-            else {
+            } else {
                returnUrl = url + "#" + param + "=" + safeValue;
             }
 
             return returnUrl;
+         },
+
+         // See API below
+         convertUrl: function alfresco_util_urlUtils__convertUrl(url, urlType) {
+            var convertedUrl = url;
+            if (url && urlType) {
+               switch (urlType) {
+
+                  case urlTypes.PAGE_RELATIVE:
+                     // Relative to the application Page context (e.g. /[application-context]/page)
+                     // Ensure no leading slashes (as the constant already has a trailing one)
+                     convertedUrl = AlfConstants.URL_PAGECONTEXT + url.replace(/^\/+/, "");
+                     break;
+
+                  case urlTypes.CONTEXT_RELATIVE:
+                     // Relative to the application context (e.g. /share)
+                     // Ensure no leading slashes (as the constant already has a trailing one)
+                     convertedUrl = AlfConstants.URL_CONTEXT + url.replace(/^\/+/, "");
+                     break;
+
+                  case urlTypes.REQUIRE_PATH:
+                     // URL is resolved by doing require.toUrl(...) on it
+                     convertedUrl = require.toUrl(url);
+                     break;
+
+                  case urlTypes.FULL_PATH:
+                     // Absolute URL
+                     // Don't change the passed-in URL
+                     convertedUrl = url;
+                     break;
+
+                  case urlTypes.HASH:
+                     // A hash path
+                     // Ensure there is no leading hash
+                     convertedUrl = url.replace(/^#+/, "");
+                     break;
+
+                  default:
+                     // No valid url type supplied
+                     convertedUrl = "[invalid urlType \"" + urlType + "\"]";
+                     break;
+               }
+            }
+            return convertedUrl;
          }
       };
 
@@ -130,7 +172,7 @@ define(["dojo/_base/lang",
           * @param {string} url The URL to parse
           * @returns {object} The URL object
           */
-         parseUrl: lang.hitch(util,  util.parseUrl),
+         parseUrl: lang.hitch(util, util.parseUrl),
 
          /**
           * This function can be used to append the supplied query parameter name and value onto the
@@ -159,6 +201,19 @@ define(["dojo/_base/lang",
           * @param {bool} [encodeValue] Whether to URI-encode the value
           * @returns {string} The updated URL
           */
-         addHashParameter: lang.hitch(util, util.addHashParameter)
+         addHashParameter: lang.hitch(util, util.addHashParameter),
+
+         /**
+          * This function is used to resolve a url string and a
+          * [urlType]{@link module:alfresco/enums/urlType} string
+          *
+          * @instance
+          * @function
+          * @param {string} url The URL to convert
+          * @param {string} urlType The URL type which must be a value in
+          *                         [the urlTypes enum]{@link module:alfresco/enums/urlTypes}
+          * @returns {string} The converted URL
+          */
+         convertUrl: lang.hitch(util, util.convertUrl)
       };
    });
