@@ -50,10 +50,10 @@ define(["intern!object",
          },
 
          "Check the Classic Windows have appropriate title bars shown": function() {
-            return browser.findByCssSelector("#WINDOW1 .titlebar")
+            return browser.findByCssSelector("#WINDOW1 .alfresco-layout-ClassicWindow__titlebar")
             .end()
 
-            .findByCssSelector("#WINDOW2 .titlebar")
+            .findByCssSelector("#WINDOW2 .alfresco-layout-ClassicWindow__titlebar")
                .then(function () {
                   assert.fail(null, null, "Classic Window 2 should not have a titlebar");
                },
@@ -62,12 +62,30 @@ define(["intern!object",
                });
          },
 
-         "Check Classic Window 1 has the appropariate title": function() {
-            return browser.findByCssSelector("#WINDOW1 .titlebar")
+         "Check Classic Window 1 has the appropriate title": function() {
+            return browser.findByCssSelector("#WINDOW1 .alfresco-layout-ClassicWindow__titlebar")
                .getVisibleText()
                .then(function (text) {
                   assert.strictEqual(text, "Test title");
                });
+         },
+
+         /* global document*/
+         "Check for scrollbars on overflow": function() {
+            function nodeOverflows(selector) {
+               var node = document.querySelector(selector);
+               return node.scrollWidth > node.clientWidth;
+            }
+
+            return browser.execute(nodeOverflows, ["#WINDOW3 .alfresco-layout-ClassicWindow__content"])
+               .then(function(overflows) {
+                  assert.isTrue(overflows, "Scroll bar is not displayed");
+               });
+            // return browser.findByCssSelector("#WINDOW3 .alfresco-layout-ClassicWindow__content")
+            //    .then(function(element) {
+            //       console.log("Scroll width=" + element.scrollWidth + ", client width=" + element.clientWidth);
+            //       assert(element.scrollWidth > element.clientWidth, "Scroll bar is not displayed");
+            //    });
          },
 
          "Post Coverage Results": function() {
