@@ -14,7 +14,7 @@
 
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <dependency.surf.version>5.0.d</dependency.surf.version>
+      <dependency.surf.version>5.2-SNAPSHOT</dependency.surf.version>
       <dependency.dojo.version>1.10.4</dependency.dojo.version>
       <dependency.jquery.version>1.11.1</dependency.jquery.version>
       <dependency.jquery-ui.version>1.11.1</dependency.jquery-ui.version>      
@@ -80,7 +80,7 @@
       <dependency>
          <groupId>com.asual.lesscss</groupId>
          <artifactId>lesscss-engine</artifactId>
-         <version>1.5.0</version>
+         <version>1.5.1</version>
          <exclusions>
             <exclusion>
                <groupId>org.mozilla</groupId>
