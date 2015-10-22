@@ -114,7 +114,7 @@ define(["alfresco/enums/urlTypes",
 
          // See API below
          convertUrl: function alfresco_util_urlUtils__convertUrl(url, urlType) {
-            var convertedUrl = url;
+            var convertedUrl = "[invalid urlType \"" + urlType + "\"]";
             if (url && urlType) {
                switch (urlType) {
 
@@ -149,7 +149,6 @@ define(["alfresco/enums/urlTypes",
 
                   default:
                      // No valid url type supplied
-                     convertedUrl = "[invalid urlType \"" + urlType + "\"]";
                      break;
                }
             }
