@@ -32,6 +32,34 @@ model.jsonModel = {
                }
             ]
          }
+      },
+      {
+         id: "HORIZONTAL_WIDGETS",
+         name: "alfresco/layout/HorizontalWidgets",
+         config: {
+            widgets: [
+               {
+                  id: "WINDOW3",
+                  name: "alfresco/layout/ClassicWindow",
+                  widthPx: "200",
+                  config: {
+                     title: "Overflow",
+                     additionalCssClasses: "bottomBorderRadius shadow",
+                     widgets: [
+                        {
+                           name: "alfresco/logo/Logo",
+                           config: {
+                              logoClasses: "surf-logo-large"
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

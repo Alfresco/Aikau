@@ -1,7 +1,6 @@
 .alfresco-renderers-Thumbnail {
    &.gallery {
       cursor: pointer;
-      overflow: hidden;
       .displayName, .selectBar {
          background-color: black;
          color: #fff;
@@ -10,6 +9,7 @@
          position: absolute;
          text-shadow: 1px 1px #333;
          width: 100%;
+         z-index: 1;
       }
       .displayName {
          bottom: 0;
@@ -22,16 +22,13 @@
       }
       .selectBar {
          top: 0;
-      }
-      img {
-         width: 100%;
+         box-sizing: border-box;
       }
       .alfresco-renderers-Selector {
-         &.checked {
+         background-image: url(./images/NoneSelectedWhite.png);
+
+         &.alfresco-lists-ItemSelectionMixin--selected {
             background-image: url(./images/AllSelectedWhite.png);
-         }
-         &.unchecked {
-            background-image: url(./images/NoneSelectedWhite.png);
          }
       }
       &:hover .selectBar {

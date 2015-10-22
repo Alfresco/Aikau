@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Thumbnail (aspect ratio and size configuration)</shortname>
+  <description>Shows examples of the Thumbnail renderer with different size and aspect ration configurations applied</description>
+  <description></description>
+  <family>aikau-unit-tests</family>
+  <url>/ThumbnailAspectAndSize</url>
+</webscript>

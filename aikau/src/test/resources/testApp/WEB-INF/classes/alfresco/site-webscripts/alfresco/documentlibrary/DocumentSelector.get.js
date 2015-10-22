@@ -112,6 +112,13 @@ model.jsonModel = {
                                           id: "OPTION",
                                           label: "Thumbnail (regular action only)"
                                        }
+                                    },
+                                    {
+                                       name: "alfresco/lists/views/layouts/HeaderCell",
+                                       config: {
+                                          id: "OPTION",
+                                          label: "Gallery Thumbnai"
+                                       }
                                     }
                                  ],
                                  widgets: [
@@ -127,7 +134,10 @@ model.jsonModel = {
                                                 widgets:[
                                                    {
                                                       id: "SELECTOR",
-                                                      name: "alfresco/renderers/Selector"
+                                                      name: "alfresco/renderers/Selector",
+                                                      config: {
+                                                         itemKey: "node.nodeRef"
+                                                      }
                                                    }
                                                 ]
                                              }
@@ -191,6 +201,21 @@ model.jsonModel = {
                                                       config: {
                                                          updateOnSelection: false,
                                                          selectOnClick: false
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          },
+                                          {
+                                             id: "COL6",
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                widgets:[
+                                                   {
+                                                      id: "GALLERY_THUMBNAIL",
+                                                      name: "alfresco/renderers/GalleryThumbnail",
+                                                      config: {
+                                                         width: "200px"
                                                       }
                                                    }
                                                 ]

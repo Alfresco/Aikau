@@ -87,6 +87,17 @@ define(["dojo/_base/declare",
       hideFacets: true,
 
       /**
+       * Overrides the [mixed in default]{@link module:alfresco/lists/SelectedItemStateMixin#itemKeyProperty}
+       * to set a property more applicable to search APIs.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      itemKeyProperty: "nodeRef",
+
+      /**
        * The current term to search on
        *
        * @instance

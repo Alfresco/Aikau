@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Image Test</shortname>
+  <description>This WebScript exercises the alfresc/html/Image widget</description>
+  <family>aikau-unit-tests</family>
+  <url>/Image</url>
+</webscript>

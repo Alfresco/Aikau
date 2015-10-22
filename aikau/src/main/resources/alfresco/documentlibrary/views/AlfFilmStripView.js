@@ -220,6 +220,7 @@ define(["dojo/_base/declare",
          {
             name: "alfresco/renderers/GalleryThumbnail",
             config: {
+               isDraggable: false,
                dimensions: {
                   w: "100px"
                },

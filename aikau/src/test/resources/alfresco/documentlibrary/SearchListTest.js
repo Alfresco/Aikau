@@ -21,11 +21,9 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
    registerSuite(function(){
       var browser;
@@ -319,6 +317,17 @@ define(["intern!object",
                .then(function(elements) {
                   assert.lengthOf(elements, 3, "Number of results expected is 3, actual results displayed is: " + elements.length);
                });
+         },
+
+         "Select an item": function() {
+            // Simulate the selection of an item to check that the itemPropertyKey matches
+            // nodeRef (AlfSearchList has an override of the default)...
+            return browser.findByCssSelector("#SELECT_A_RESULT")
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_SELECTED_FILES_CHANGED", "Item selection not detected");
          },
 
          "Post Coverage Results": function() {
