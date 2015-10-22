@@ -46,13 +46,50 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/AlfFilmStripView.css"}]
        */
       cssRequirements: [{cssFile:"./css/AlfFilmStripView.css"}],
-            
+
+      /**
+       * <p>This property can be used to customise the arrows used in the carousels. The four properties
+       * (contentPrev, contentNext, listPrev, listNext) correspond to the previous and next arrows in the
+       * content carousel and the item-list carousel respectively.</p>
+       *
+       * <p>The value of each property should correspond to the properties of an
+       * [Image]{@link module:alfresco/html/Image} widget, which should be used as a reference of
+       * available properties.</p>
+       *
+       * <p><strong>NOTE:</strong> All defaults are as they are in the Image widget, apart from srcType
+       * which instead defaults to [FULL_PATH]{@link module:alfresco/enums/urlTypes#FULL_PATH}.</p>
+       *
+       * @instance
+       * @type {object}
+       * @property {object} [contentPrev] The replacement [Image]{@link module:alfresco/html/Image} config
+       *                                  for the previous-arrow in the content carousel
+       * @property {object} [contentNext] The replacement [Image]{@link module:alfresco/html/Image} config
+       *                                  for the next-arrow in the content carousel
+       * @property {object} [listPrev]    The replacement [Image]{@link module:alfresco/html/Image} config
+       *                                  for the previous-arrow in the item-list carousel
+       * @property {object} [listNext]    The replacement [Image]{@link module:alfresco/html/Image}
+       *                                  config for the next-arrow in the item-list carousel
+       * @see module:alfresco/html/Image
+       * @default
+       */
+      arrows: null,
+
       /**
        * The HTML template to use for the widget.
        * @instance
        * @type {String}
        */
       templateString: template,
+
+      /**
+       * Override the default selector to match items in the FilmStrip view. This is required because the view
+       * doesn't render table rows.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      renderFilterSelectorQuery: "div.items ol li",
 
       /**
        * The configuration for selecting the view (configured the menu item)
@@ -98,16 +135,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Override the default selector to match items in the FilmStrip view. This is required because the view
-       * doesn't render table rows.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      renderFilterSelectorQuery: "div.items ol li",
-
-      /**
        * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#onViewShown}
        * to ensure that both carousels are sized appropriately after being added into the view.
        *
@@ -143,7 +170,9 @@ define(["dojo/_base/declare",
             currentData: this.currentData,
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
-            itemSelectionTopics: ["ALF_FILMSTRIP_SELECT_ITEM"]
+            itemSelectionTopics: ["ALF_FILMSTRIP_SELECT_ITEM"],
+            nextArrow: this.arrows && this.arrows.contentNext,
+            prevArrow: this.arrows && this.arrows.contentPrev
          });
          this.contentCarousel.placeAt(this.previewNode);
          this.contentCarousel.resize();
@@ -156,7 +185,9 @@ define(["dojo/_base/declare",
             parentPubSubScope: this.parentPubSubScope,
             fixedHeight: "112px",
             useInfiniteScroll: this.useInfiniteScroll,
-            itemSelectionTopics: ["ALF_FILMSTRIP_ITEM_CHANGED"]
+            itemSelectionTopics: ["ALF_FILMSTRIP_ITEM_CHANGED"],
+            nextArrow: this.arrows && this.arrows.listNext,
+            prevArrow: this.arrows && this.arrows.listPrev
          });
          return dlr;
       },
