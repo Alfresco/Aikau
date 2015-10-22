@@ -51,15 +51,16 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/DocumentCarousel.css"}],
 
       /**
-       * Override the [inherited value]{@link module:alfresco/lists/views/layouts/Carousel#nextArrow}
-       * to use a DocumentCarousel-specific arrow.
+       * This is the default next arrow for the DocumentCarousel. It can be overridden using the
+       * [nextArrow property]{@link module:alfresco/lists/views/Carousel#nextArrow}. It should
+       * not be used directly.
        *
        * @instance
-       * @override
        * @type {object}
+       * @readonly
        * @since 1.0.41
        */
-      nextArrow: {
+      defaultNextArrow: {
          altText: "next-arrow.alt-text",
          src: "alfresco/documentlibrary/views/layouts/css/images/filmstrip-main-nav-next.png",
          srcType: urlTypes.REQUIRE_PATH,
@@ -68,15 +69,16 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Override the [inherited value]{@link module:alfresco/lists/views/layouts/Carousel#prevArrow}
-       * to use a DocumentCarousel-specific arrow.
+       * This is the default previous arrow for the DocumentCarousel. It can be overridden using the
+       * [previousArrow property]{@link module:alfresco/lists/views/Carousel#previousArrow}. It should
+       * not be used directly.
        *
        * @instance
-       * @override
        * @type {object}
+       * @readonly
        * @since 1.0.41
        */
-      prevArrow: {
+      defaultPrevArrow: {
          altText: "prev-arrow.alt-text",
          src: "alfresco/documentlibrary/views/layouts/css/images/filmstrip-main-nav-prev.png",
          srcType: urlTypes.REQUIRE_PATH,
