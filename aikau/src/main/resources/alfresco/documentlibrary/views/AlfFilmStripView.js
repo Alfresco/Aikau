@@ -83,6 +83,30 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * This is used to set the [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment}
+       * of the [AlfFilmStripViewDocument]{@link module:alfresco/documentlibrary/views/layouts/AlfFilmStripViewDocument}
+       * that is rendered by default.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.41
+       */
+      heightAdjustment: 0,
+
+      /**
+       * This is used to set the [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode}
+       * of the [AlfFilmStripViewDocument]{@link module:alfresco/documentlibrary/views/layouts/AlfFilmStripViewDocument}
+       * that is rendered by default.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      heightMode: "AUTO",
+
+      /**
        * Override the default selector to match items in the FilmStrip view. This is required because the view
        * doesn't render table rows.
        *
@@ -165,10 +189,18 @@ define(["dojo/_base/declare",
          // NOTE: Any previous previews should have been destroyed, but empty the previewNode just to be on the safe side
          //       TODO: Possible memory leak to investigate here, because the call to empy the node *is* required.
          domConstruct.empty(this.previewNode);
+
+         // Process the widgets for content in order to swap in instance tokens such as the
+         // heightMode and heightAdjustment...
+         var clonedWidgetsForContent = lang.clone(this.widgetsForContent);
+         // this.processObject(["processInstanceTokens"], clonedWidgetsForContent);
+
          this.contentCarousel = new DocumentCarousel({
             id: this.id + "_PREVIEWS",
-            widgets: lang.clone(this.widgetsForContent),
+            widgets: clonedWidgetsForContent,
             currentData: this.currentData,
+            heightAdjustment: this.heightAdjustment,
+            heightMode: this.heightMode,
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
             itemSelectionTopics: ["ALF_FILMSTRIP_SELECT_ITEM"],
@@ -238,7 +270,11 @@ define(["dojo/_base/declare",
             }
          },
          {
-            name: "alfresco/documentlibrary/views/layouts/AlfFilmStripViewDocument"
+            name: "alfresco/documentlibrary/views/layouts/AlfFilmStripViewDocument",
+            config: {
+               heightAdjustment: 0,
+               heightMode: "PARENT"
+            }
          }
       ],
 

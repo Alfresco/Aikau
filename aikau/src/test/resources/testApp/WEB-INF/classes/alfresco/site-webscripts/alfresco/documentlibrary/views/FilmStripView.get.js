@@ -72,7 +72,8 @@ model.jsonModel = {
                                              width: 25,
                                              height: 25
                                           }
-                                       }
+                                       },
+                                       heightMode: 400
                                     }
                                  }
                               ]
