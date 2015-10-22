@@ -55,6 +55,7 @@ define([], function() {
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.41
        */
       REQUIRE_PATH: "REQUIRE_PATH",
 

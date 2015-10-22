@@ -71,6 +71,7 @@ define(["dojo/_base/declare",
        *                                  config for the next-arrow in the item-list carousel
        * @see module:alfresco/html/Image
        * @default
+       * @since 1.0.41
        */
       arrows: null,
 

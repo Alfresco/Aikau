@@ -213,6 +213,7 @@ define(["alfresco/enums/urlTypes",
           * @param {string} urlType The URL type which must be a value in
           *                         [the urlTypes enum]{@link module:alfresco/enums/urlTypes}
           * @returns {string} The converted URL
+          * @since 1.0.41
           */
          convertUrl: lang.hitch(util, util.convertUrl)
       };

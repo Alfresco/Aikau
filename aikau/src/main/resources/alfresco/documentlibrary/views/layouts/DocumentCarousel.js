@@ -57,6 +57,7 @@ define(["dojo/_base/declare",
        * @instance
        * @override
        * @type {object}
+       * @since 1.0.41
        */
       nextArrow: {
          altText: "next-arrow.alt-text",
@@ -73,6 +74,7 @@ define(["dojo/_base/declare",
        * @instance
        * @override
        * @type {object}
+       * @since 1.0.41
        */
       prevArrow: {
          altText: "prev-arrow.alt-text",

@@ -63,6 +63,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/Carousel.properties"}]
+       * @since 1.0.41
        */
       i18nRequirements: [{i18nFile: "./i18n/Carousel.properties"}],
 
@@ -102,6 +103,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object}
        * @readonly
+       * @since 1.0.41
        */
       defaultNextArrow: {
          altText: "next-arrow.alt-text",
@@ -118,6 +120,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object}
        * @readonly
+       * @since 1.0.41
        */
       defaultPrevArrow: {
          altText: "prev-arrow.alt-text",
@@ -196,6 +199,7 @@ define(["dojo/_base/declare",
        * @type {object}
        * @see module:alfresco/html/Image
        * @default
+       * @since 1.0.41
        */
       nextArrow: null,
 
@@ -211,6 +215,7 @@ define(["dojo/_base/declare",
        * @type {object}
        * @see module:alfresco/html/Image
        * @default
+       * @since 1.0.41
        */
       prevArrow: null,
 
@@ -473,6 +478,7 @@ define(["dojo/_base/declare",
        * Configured and create the navigation arrows.
        *
        * @instance
+       * @since 1.0.41
        */
       setupNavigationArrows: function alfresco_lists_views_layouts_Carousel__setupNavigationArrows() {
          // NOTE: Can't use this.createWidget() as the inherited implementation needs a currentItem property
