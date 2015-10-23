@@ -55,6 +55,18 @@ define(["alfresco/TestCommon",
                   assert.propertyVal(requestHeaders, "Content-Type", "application/json");
                });
          },
+         
+         "Ensure 401 is handled correctly when a handler is provided by a service request": function() {
+            return browser.findById("AUTHENTICATION_FAIL_BUTTON")
+               .click()
+               .end()
+
+            .getLastXhr("authfail")
+               .then(function(xhr) {
+                  var body = lang.getProperty(xhr, "response.body");
+                  assert.property(body, "result");
+               });
+         },
 
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);

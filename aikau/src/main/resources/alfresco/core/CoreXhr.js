@@ -113,11 +113,11 @@ define(["dojo/_base/declare",
        * @property {function} [successCallback] - overrides the default success callback
        * @property {function} [failureCallback] - overrides the default failure callback
        * @property {function} [progressCallback] - overrides the default progress callback
+       * @property {function} [authenticationFailureCallback] - overrides the default authentication failure behaviour
        * @property {function} [callbackScope=_this] - the scope to pass to the overridden callback function
        * @property {string} [alfTopic] - The topic to by published by the default request callbacks.
        * @property {string} [alfResponseScope=""] - The scope to use when publishing in the default request callbacks.
        * Appended with "_PROGRESS", "_FAILURE" or "_SUCCESS" depending on response status code.
-       *
        *
        * @instance
        * @callable
@@ -195,7 +195,6 @@ define(["dojo/_base/declare",
                      {
                         _this.alfLog("error", "An error occurred parsing an XHR JSON success response", response, this);
                      }
-
                   }
                   if (typeof config.successCallback === "function")
                   {
@@ -209,24 +208,34 @@ define(["dojo/_base/declare",
 
                }, function(response) {
 
-                  // HANDLE SESSION TIMEOUT
+                  // Handle authentication failure (401) or Session timeout
                   if (response.response && response.response.status === 401)
                   {
-                     var redirect = response.response.getHeader("Location");
-                     if (redirect)
+                     if (typeof config.authenticationFailureCallback === "function")
                      {
-                        if (redirect.indexOf("http://") === 0 || redirect.indexOf("https://") === 0 ) {
-                           window.location.href = redirect;
-                        }
-                        else {
-                           window.location.href = window.location.protocol + "//" + window.location.host + redirect;
-                        }
-                        return;
+                        var callbackScope = config.failureCallbackScope || config.callbackScope || _this;
+                        config.authenticationFailureCallback.call(callbackScope, response, config);
                      }
                      else
                      {
-                        window.location.reload(true);
-                        return;
+                        var redirect = response.response.getHeader("Location");
+                        if (redirect)
+                        {
+                           if (redirect.indexOf("http://") === 0 || redirect.indexOf("https://") === 0 )
+                           {
+                              window.location.href = redirect;
+                           }
+                           else
+                           {
+                              window.location.href = window.location.protocol + "//" + window.location.host + redirect;
+                           }
+                           return;
+                        }
+                        else
+                        {
+                           window.location.reload(true);
+                           return;
+                        }
                      }
                   }
 
