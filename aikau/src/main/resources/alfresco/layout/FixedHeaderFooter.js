@@ -102,10 +102,11 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-style",
+        "dojo/sniff",
         "dojo/topic",
         "dojo/text!./templates/FixedHeaderFooter.html"],
         function(ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin, array, declare, lang, aspect, 
-                 domClass, domConstruct, domStyle, topic, template) {
+                 domClass, domConstruct, domStyle, has, topic, template) {
 
    return declare([ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin], {
 
@@ -253,26 +254,41 @@ define(["alfresco/core/ProcessWidgets",
        */
       addHeaderResizeListener: function alfresco_layout_FixedHeaderFooter__addHeaderResizeListener() {
 
-         // Create the resize object
-         var resizeObj = domConstruct.create("object", {
-            className: this.baseClass + "__header__resize-object",
-            type: "text/html",
-            data: "about:blank"
-         });
+         // Setup the resize listener function
+         var onResize = lang.hitch(this, this.alfPublishResizeEvent, this.domNode);
 
-         // Setup the onload listener for the object to add a resize event handler
-         var that = this;
+         // NOTE: Dojo IE detection not working very well here, so done manually instead
+         var ieRegex = /(Trident\/)|(Edge\/)/,
+            isIE = has("IE") || ieRegex.test(navigator.userAgent);
+
+         // Create the resize object
+         var resizeObj = document.createElement("object");
+         resizeObj.className = this.baseClass + "__header__resize-object";
+         resizeObj.type = "text/html";
          resizeObj.onload = function() {
-            this.contentDocument.defaultView.addEventListener("resize", function() {
-               that.alfPublishResizeEvent(that.domNode);
-            });
+            resizeObj.contentDocument.defaultView.addEventListener("resize", onResize);
+         };
+
+         // FF doesn't like visibility hidden (interferes with the resize event), Chrome doesn't care, IE needs it
+         if (isIE) {
+            resizeObj.style.visibility = "hidden";
+         }
+
+         // Normal browsers do this before appending to the DOM
+         if (!isIE) {
+            resizeObj.data = "about:blank";
          }
 
          // Add the object to the document
-         if (resizeObj.hasChildNodes()) {
+         if (this.header.hasChildNodes()) {
             this.header.insertBefore(resizeObj, this.header.firstChild);
          } else {
             this.header.appendChild(resizeObj);
+         }
+
+         // IE needs to do this after
+         if (isIE) {
+            resizeObj.data = "about:blank";
          }
       },
 
