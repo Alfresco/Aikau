@@ -56,12 +56,12 @@ define([
                return browser.findByCssSelector("#LOGO2.alfresco-logo-Logo .alfresco-logo-large")
                   .isDisplayed()
                   .then(function(displayed) {
-                     assert.isFalse(displayed, "CSS logo was not displayed for Logo with image source");
+                     assert.isTrue(displayed, "Logo with image source was not displayed");
                   });
             },
 
             "Check image logo height": function() {
-               return browser.findByCssSelector("#LOGO2 img")
+               return browser.findByCssSelector("#LOGO2 .alfresco-html-Image__img")
                   .getComputedStyle("height")
                   .then(function(height) {
                      assert.equal(height, "48px", "The height of the image logo was incorrect");
@@ -119,7 +119,6 @@ define([
             "Logo will publish topic when ENTER pressed": function() {
                return browser.findByCssSelector("body")
                   .tabToElement("#LOGO_WITH_TOPIC")
-                  .screenie(true)
                   .pressKeys(keys.ENTER)
                   .getLastPublish("LOGO_TOPIC_PUBLISHED");
             },
@@ -127,7 +126,6 @@ define([
             "Logo will act as link when ENTER pressed": function() {
                return browser.findByCssSelector("body")
                   .tabToElement("#LOGO_WITH_URL a")
-                  .screenie(true)
                   .pressKeys(keys.ENTER)
                   .end()
 

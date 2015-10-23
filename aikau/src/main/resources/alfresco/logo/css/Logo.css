@@ -4,36 +4,4 @@
       border-right: @standard-border;
       padding-right: 14px;
    }
-   img {
-      height: 48px;
-   }
-   &__default {
-      background-repeat: no-repeat;
-      &.alfresco-logo-large {
-         background-image: url("./images/alfresco.png");
-         background-position: 5px 5px;
-         height: 48px;
-         width: 184px;
-      }
-      &.alfresco-logo-only {
-         background-image: url("./images/app-logo-48.png");
-         height: 48px;
-         width: 48px;
-      }
-      &.alfresco-logo-grey {
-         background-image: url("./images/alfresco_grey.png");
-         height: 43px;
-         width: 187px;
-      }
-      &.surf-logo-large {
-         background-image: url("./images/SurfLogo200.jpg");
-         height: 85px;
-         width: 200px;
-      }
-      &.surf-logo-small {
-         background-image: url("./images/surf32.jpg");
-         height: 34px;
-         width: 32px;
-      }
-   }
 }
