@@ -42,11 +42,12 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "alfresco/core/Core",
         "alfresco/core/topics",
+        "alfresco/enums/urlTypes",
         "dojo/dom-class",
         "dojo/dom-style",
         "dojo/has"], 
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _HtmlAnchorMixin, _NavigationServiceTopicMixin, 
-                 template, lang, AlfCore, topics, domClass, domStyle, has) {
+                 template, lang, AlfCore, topics, urlTypes, domClass, domStyle, has) {
    
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _HtmlAnchorMixin, _NavigationServiceTopicMixin, AlfCore], {
       
@@ -104,16 +105,14 @@ define(["dojo/_base/declare",
       targetUrl: null,
       
       /**
-       * Indicates how the target URL should be handled. This defaults to "PAGE_RELATIVE" which means that the URL
-       * will be appended to the 'AlfConstants.URL_PAGECONTEXT' Global JavaScript constant. This can be overridden
-       * on instantiation to indicate that another URL type, such as "FULL_PATH" should be used.
+       * Indicates how the target URL should be handled.
        *
        * @instance
        * @type {string}
-       * @default
+       * @default [PAGE_RELATIVE]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        * @since 1.0.32
        */
-      targetUrlType: "PAGE_RELATIVE",
+      targetUrlType: urlTypes.PAGE_RELATIVE,
 
       /**
        * It's important to perform label encoding before buildRendering occurs (e.g. before postCreate)

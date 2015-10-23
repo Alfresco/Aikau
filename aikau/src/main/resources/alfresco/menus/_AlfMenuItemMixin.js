@@ -31,6 +31,7 @@
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreRwd",
+        "alfresco/enums/urlTypes",
         "alfresco/menus/_AlfPopupCloseMixin",
         "alfresco/services/_NavigationServiceTopicMixin",
         "alfresco/renderers/_PublishPayloadMixin",
@@ -43,7 +44,7 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/event",
         "dojo/has"],
-        function(declare, AlfCore, AlfCoreRwd, _AlfPopupCloseMixin, _NavigationServiceTopicMixin, _PublishPayloadMixin,
+        function(declare, AlfCore, AlfCoreRwd, urlTypes, _AlfPopupCloseMixin, _NavigationServiceTopicMixin, _PublishPayloadMixin,
                  _HtmlAnchorMixin, AlfConstants, domClass, domStyle, domConstruct, on, lang, event, has) {
 
    return declare([AlfCore, AlfCoreRwd, _AlfPopupCloseMixin, _NavigationServiceTopicMixin, _PublishPayloadMixin, _HtmlAnchorMixin], {
@@ -93,17 +94,14 @@ define(["dojo/_base/declare",
        */
       targetUrl: null,
 
-      // TODO: It might be nice to retrieve this from the NavigationService itself??
       /**
-       * Indicates how the target URL should be handled. This defaults to "PAGE_RELATIVE" which means that the URL
-       * will be appended to the 'AlfConstants.URL_PAGECONTEXT' Global JavaScript constant. This can be overridden
-       * on instantiation to indicate that another URL type, such as "FULL_PATH" should be used.
+       * Indicates how the target URL should be handled.
        *
        * @instance
        * @type {string}
-       * @default
+       * @default [PAGE_RELATIVE]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        */
-      targetUrlType: "PAGE_RELATIVE",
+      targetUrlType: urlTypes.PAGE_RELATIVE,
 
       /**
        * Indicates whether or not the URL should be opened in the current window/tab or in a new window.

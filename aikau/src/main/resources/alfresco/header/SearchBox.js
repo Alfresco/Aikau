@@ -51,7 +51,9 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/LiveSearchItem.html",
         "alfresco/core/Core",
         "alfresco/core/CoreXhr",
+        "alfresco/enums/urlTypes",
         "alfresco/header/AlfMenuBar",
+        "alfresco/util/urlUtils",
         "service/constants/Default",
         "dojo/json",
         "dojo/dom-attr",
@@ -61,8 +63,8 @@ define(["dojo/_base/declare",
         "dojo/date/stamp",
         "dojo/on"], 
         function(declare, lang, array, _Widget, _Templated, TemporalUtils, FileSizeMixin, _PublishPayloadMixin,
-                 SearchBoxTemplate, LiveSearchTemplate, LiveSearchItemTemplate, AlfCore, AlfXhr, AlfMenuBar, 
-                 AlfConstants, JSON, domAttr, domStyle, domClass, domConstruct, Stamp, on) {
+                 SearchBoxTemplate, LiveSearchTemplate, LiveSearchItemTemplate, AlfCore, AlfXhr, urlTypes, AlfMenuBar, 
+                 urlUtils, AlfConstants, JSON, domAttr, domStyle, domClass, domConstruct, Stamp, on) {
 
    /**
     * LiveSearch widget
@@ -974,7 +976,7 @@ define(["dojo/_base/declare",
                   var url = this.generateSearchPageLink(terms);
                   this.alfPublish("ALF_NAVIGATE_TO_PAGE", { 
                      url: url,
-                     type: "PAGE_RELATIVE",
+                     type: urlTypes.PAGE_RELATIVE,
                      target: "CURRENT"
                   });
                }
@@ -1058,11 +1060,13 @@ define(["dojo/_base/declare",
                      // construct the meta-data - site information, modified by and title description as tooltip
                      var site = (item.site ? "site/" + item.site.shortName + "/" : "");
                      var info = "";
+                     var siteDocLibUrl = urlUtils.convertUrl(site + this.documentLibraryPage, urlTypes.PAGE_RELATIVE);
                      if (item.site)
                      {
-                        info += "<a href='" + AlfConstants.URL_PAGECONTEXT + site + this.documentLibraryPage + "'>" + this.encodeHTML(item.site.title) + "</a> | ";
+                        info += "<a href='" + siteDocLibUrl + "'>" + this.encodeHTML(item.site.title) + "</a> | ";
                      }
-                     info += "<a href='" + AlfConstants.URL_PAGECONTEXT + "user/" + this.encodeHTML(item.modifiedBy) + "/" + this.peoplePage + "'>" + this.encodeHTML(item.modifiedBy) + "</a> | ";
+                     var modifiedUserUrl = urlUtils.convertUrl("user/" + this.encodeHTML(item.modifiedBy) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE);
+                     info += "<a href='" + modifiedUserUrl + "'>" + this.encodeHTML(item.modifiedBy) + "</a> | ";
                      info += this.getRelativeTime(item.modifiedOn) + " | ";
                      info += this.formatFileSize(item.size);
 
@@ -1093,7 +1097,7 @@ define(["dojo/_base/declare",
                         cssClass: "alf-livesearch-thumbnail",
                         title: desc,
                         label: this.encodeHTML(item.name),
-                        link: AlfConstants.URL_PAGECONTEXT + site + link,
+                        link: urlUtils.convertUrl(site + link, urlTypes.PAGE_RELATIVE),
                         icon: AlfConstants.PROXY_URI + "api/node/" + item.nodeRef.replace(":/", "") + "/content/thumbnails/doclib?c=queue&ph=true&lastModified=" + lastModified,
                         alt: this.encodeHTML(item.name),
                         meta: info,
@@ -1164,7 +1168,7 @@ define(["dojo/_base/declare",
                         cssClass: "alf-livesearch-icon",
                         title: this.encodeHTML(item.description),
                         label: this.encodeHTML(item.title),
-                        link: AlfConstants.URL_PAGECONTEXT + "site/" + item.shortName + "/" + this.sitePage,
+                        link: urlUtils.convertUrl("site/" + item.shortName + "/" + this.sitePage, urlTypes.PAGE_RELATIVE),
                         icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-32.png",
                         alt: this.encodeHTML(item.title),
                         meta: item.description ? this.encodeHTML(item.description) : "&nbsp;",
@@ -1226,7 +1230,7 @@ define(["dojo/_base/declare",
                         cssClass: "alf-livesearch-icon",
                         title: this.encodeHTML(item.jobtitle || ""),
                         label: this.encodeHTML(fullName + " (" + item.userName + ")"),
-                        link: AlfConstants.URL_PAGECONTEXT + "user/" + encodeURIComponent(item.userName) + "/" + this.peoplePage,
+                        link: urlUtils.convertUrl("user/" + encodeURIComponent(item.userName) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE),
                         icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar32",
                         alt: this.encodeHTML(fullName),
                         meta: meta ? meta : "&nbsp;",

@@ -29,6 +29,17 @@ define([], function() {
    return {
 
       /**
+       * This value is used to indicate that the supplied URL is relative to the
+       * Alfresco Page context (e.g. /share/page)
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @deprecated Since 1.0.17 - Use [PAGE_RELATIVE]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE} instead.
+       */
+      SHARE_PAGE_RELATIVE: "SHARE_PAGE_RELATIVE",
+
+      /**
        * This value is used to indicate that the accompanying URL is relative
        * to the application Page context (e.g. /[application-context]/page).
        *

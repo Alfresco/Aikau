@@ -113,10 +113,24 @@ define(["alfresco/enums/urlTypes",
          },
 
          // See API below
+         // NOTE: Using existing logic from NavigationService, falsy values default to
+         //       PAGE_RELATIVE and specified, invalid values do not modify the URL but
+         //       do log an error.
          convertUrl: function alfresco_util_urlUtils__convertUrl(url, urlType) {
-            var convertedUrl = "[invalid urlType \"" + urlType + "\"]";
-            if (url && urlType) {
-               switch (urlType) {
+            var convertedUrl = url,
+               falsyUrlTypeFallback = "FALSY_URL_TYPE_SUPPLIED";
+            if (url) {
+               switch (urlType || falsyUrlTypeFallback) {
+
+                  case urlTypes.SHARE_PAGE_RELATIVE:
+                     // This is deprecated and shouldn't be used, but keeping in for the moment
+                     // for backwards-compatibility reasons
+                     /* falls through */
+
+                  case falsyUrlTypeFallback:
+                     // Default according to NavigationService, for falsy types, is to use
+                     // PAGE_RELATIVE, so fall through
+                     /* falls through */
 
                   case urlTypes.PAGE_RELATIVE:
                      // Relative to the application Page context (e.g. /[application-context]/page)
@@ -138,7 +152,6 @@ define(["alfresco/enums/urlTypes",
                   case urlTypes.FULL_PATH:
                      // Absolute URL
                      // Don't change the passed-in URL
-                     convertedUrl = url;
                      break;
 
                   case urlTypes.HASH:
@@ -148,8 +161,11 @@ define(["alfresco/enums/urlTypes",
                      break;
 
                   default:
-                     // No valid url type supplied
+                     // On invalid types, just leave the URL unchanged
+                     // TODO We want to log an error here, but can't easily access the pub/sub
+                     //      mechanism yet, so don't do anything yet!
                      break;
+
                }
             }
             return convertedUrl;

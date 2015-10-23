@@ -31,10 +31,11 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Links.html",
         "alfresco/core/Core",
+        "alfresco/enums/urlTypes",
+        "alfresco/util/urlUtils",
         "dojo/dom-construct",
-        "dojo/_base/array",
-        "service/constants/Default"], 
-        function(declare, _Widget, _Templated, template, AlfCore, domConstruct, array, AlfConstants) {
+        "dojo/_base/array"], 
+        function(declare, _Widget, _Templated, template, AlfCore, urlTypes, urlUtils, domConstruct, array) {
    
    return declare([_Widget, _Templated, AlfCore], {
       
@@ -65,12 +66,12 @@ define(["dojo/_base/declare",
             
             domConstruct.empty(_this.linksNode);
             
-            array.forEach(pageList, function(page, i) {
+            array.forEach(pageList, function(page) {
                
                if (page.label && page.value)
                {
                   var nodeRef = page.value.replace("://", "/"),
-                      uri = AlfConstants.URL_PAGECONTEXT + "hdp/ws/rpr/" + nodeRef;
+                      uri = urlUtils.convertUrl("hdp/ws/rpr/" + nodeRef, urlTypes.PAGE_RELATIVE);
                   domConstruct.create("div", {
                      innerHTML: "<a href='" + uri + "'>" + this.encodeHTML(page.label) + "</a>"
                   }, _this.linksNode);

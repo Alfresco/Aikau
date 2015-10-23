@@ -32,7 +32,7 @@ define([
 
          function convertUrl(url, urlTypeName, callback) {
             require(["alfresco/util/urlUtils", "alfresco/enums/urlTypes"], function(urlUtils, urlTypes) {
-               callback(urlUtils.convertUrl(url, urlTypes[urlTypeName]));
+               callback(urlUtils.convertUrl(url, urlTypes[urlTypeName] || urlTypeName));
             });
          }
 
@@ -126,6 +126,17 @@ define([
                   });
             },
 
+            "convertUrl() handles no urlType": function() {
+               return browser.executeAsync(convertUrl, ["/hello", null])
+                  .then(function(convertedUrl) {
+                     assert.equal(convertedUrl, "/aikau/page/hello");
+                  })
+                  .executeAsync(convertUrl, ["hello", null])
+                  .then(function(convertedUrl) {
+                     assert.equal(convertedUrl, "/aikau/page/hello");
+                  });
+            },
+
             "convertUrl() handles urlTypes.CONTEXT_RELATIVE": function() {
                return browser.executeAsync(convertUrl, ["/hello", "CONTEXT_RELATIVE"])
                   .then(function(convertedUrl) {
@@ -164,9 +175,10 @@ define([
             },
 
             "convertUrl() handles invalid urlTypes": function() {
-               return browser.executeAsync(convertUrl, ["/hello", "MADE_UP_TYPE"])
+               var testUrl = "//www.unchanged.me/this/should?not=be#updated";
+               return browser.executeAsync(convertUrl, [testUrl, "MADE_UP_TYPE"])
                   .then(function(convertedUrl) {
-                     assert.equal(convertedUrl, "[invalid urlType \"undefined\"]");
+                     assert.equal(convertedUrl, testUrl);
                   });
             },
          };
