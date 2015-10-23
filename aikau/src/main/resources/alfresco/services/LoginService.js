@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
             method: "POST",
             data: payload,
             successCallback: this.onLoginSuccess,
-            failureCallback: this.onLoginFailure,
+            authenticationFailureCallback: this.onLoginFailure,
             callbackScope: this
          });
       },
