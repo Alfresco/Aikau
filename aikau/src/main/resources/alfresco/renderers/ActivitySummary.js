@@ -38,10 +38,11 @@
  * @author Martin Doyle
  */
 define(["alfresco/renderers/Property",
+        "alfresco/enums/urlTypes",
+        "alfresco/util/urlUtils",
         "dojo/_base/declare", 
-        "dojo/_base/lang", 
-        "service/constants/Default"], 
-        function(Property, declare, lang, AlfConstants) {
+        "dojo/_base/lang"], 
+        function(Property, urlTypes, urlUtils, declare, lang) {
 
    return declare([Property], {
 
@@ -195,7 +196,7 @@ define(["alfresco/renderers/Property",
          }
 
          // Return the final URL
-         return AlfConstants.URL_CONTEXT + "page/site/" + encodeURI(this._activity.siteNetwork) + localPage;
+         return urlUtils.convertUrl("page/site/" + encodeURI(this._activity.siteNetwork) + localPage, urlTypes.CONTEXT_RELATIVE);
       },
 
       /**
@@ -216,14 +217,14 @@ define(["alfresco/renderers/Property",
        * @returns  {string} The site URL
        */
       getSiteUrl: function alfresco_renderers_Property__getSiteUrl() {
-         return AlfConstants.URL_CONTEXT + "page/site/" + encodeURI(this._activity.siteNetwork) + this.siteLandingPage.replace(/^\/*/, "/");
+         return urlUtils.convertUrl("page/site/" + encodeURI(this._activity.siteNetwork) + this.siteLandingPage.replace(/^\/*/, "/"), urlTypes.CONTEXT_RELATIVE);
       },
 
       /**
        * URL to user profile page
        */
       getUserProfileUrl: function alfresco_renderers_Property__getUserProfileUrl(userId) {
-         return AlfConstants.URL_CONTEXT + "page/user/" + encodeURI(userId) + "/profile";
+         return urlUtils.convertUrl("page/user/" + encodeURI(userId) + "/profile", urlTypes.CONTEXT_RELATIVE);
       },
 
       /**

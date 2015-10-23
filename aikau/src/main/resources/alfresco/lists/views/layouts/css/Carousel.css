@@ -1,56 +1,29 @@
 .alfresco-lists-views-layouts-Carousel {
-   background-image: url(./images/black-50-transparency.png);
-   background-repeat: repeat;
-}
-
-.alfresco-lists-views-layouts-Carousel .items {
-   overflow: hidden;
    position: relative;
-   z-index: 2;
-   margin: 0 auto; /* Center the items */
-}
-
-/* This needs to be set to relative so that the controls can be absolutely positioned over it */
-.alfresco-lists-views-layouts-Carousel {
-   position: relative;
-}
-
-.alfresco-lists-views-layouts-Carousel div.frame {
-}
-
-/*
- * The width needs to be properly calculated, this is just a really big number at the moment
- * to get the frame working
- */
-.alfresco-lists-views-layouts-Carousel > div.items > div.frame > ol {
-   padding: 0;
-   position: relative;
-   transition: left 0.5s cubic-bezier(0, 1, 0.75, 1.01);
-}
-
-.alfresco-lists-views-layouts-Carousel > div.items > div.frame > ol > li {
-   display: inline-block;
-   float: left;
-   margin-top: 6px;
-}
-
-/* Absolute position over the list of items, and ensure full width so that the floated left and right
- * controls are in the correct positions */
-.alfresco-lists-views-layouts-Carousel > div.controls {
-   position: absolute;
-   top: 6px;
-   width: 100%;
-   z-index: 1;
-}
-
-.alfresco-lists-views-layouts-Carousel > div.controls .prev{
-   float: left;
-   margin-left: 10px;
-   z-index: 2;
-}
-
-.alfresco-lists-views-layouts-Carousel > div.controls .next{
-   float: right;
-   margin-right: 10px;
-   z-index: 2;
+   .items {
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      ol {
+         padding: 0;
+         position: relative;
+         transition: left .5s cubic-bezier(0, 1, .75, 1.01);
+      }
+      li {
+         display: inline-block;
+         margin-top: 6px;
+      }
+   }
+   .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 6px;
+      z-index: 1;
+   }
+   .prev {
+      left: 10px;
+   }
+   .next {
+      right: 10px;
+   }
 }

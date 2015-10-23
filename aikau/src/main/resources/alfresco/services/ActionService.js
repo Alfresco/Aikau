@@ -47,6 +47,7 @@ define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/core/topics",
+        "alfresco/enums/urlTypes",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/services/_NavigationServiceTopicMixin",
@@ -56,7 +57,7 @@ define(["dojo/_base/declare",
         "alfresco/core/JsNode",
         "alfresco/core/NotificationUtils",
         "dojo/_base/lang"],
-        function(declare, BaseService, AlfCoreXhr, topics, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, 
+        function(declare, BaseService, AlfCoreXhr, topics, urlTypes, AlfConstants, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin, 
                  UrlUtilsMixin, ArrayUtils, ObjectTypeUtils, JsNode, NotificationUtils, lang) {
 
    // TODO: L18N sweep - lots of widgets defined with hard coded labels...
@@ -555,7 +556,7 @@ define(["dojo/_base/declare",
          }
 
          var publishPayload = {
-            type: this.pageRelativePath,
+            type: urlTypes.PAGE_RELATIVE,
             url: url,
             target: this.currentTarget
             },
@@ -592,7 +593,7 @@ define(["dojo/_base/declare",
             target = "NEW";
          }
          this.alfPublish(this.navigateToPageTopic, {
-            type: this.fullPath,
+            type: urlTypes.FULL_PATH,
             url: url,
             target: target
          });
@@ -846,7 +847,7 @@ define(["dojo/_base/declare",
             this.displayMessage(this.message("message.edit-offline.success", {"0": response.results[0].id}));
             this.alfPublish(this.navigateToPageTopic, {
                url: AlfConstants.PROXY_URI + response.results[0].downloadUrl,
-               type: this.fullPath
+               type: urlTypes.FULL_PATH
             });
             this.alfPublish(topics.RELOAD_DATA_TOPIC, {}, false, false, originalRequestConfig.responseScope);
          }

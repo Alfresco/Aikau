@@ -29,6 +29,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/Carousel",
+        "alfresco/enums/urlTypes",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/dom-construct",
@@ -36,7 +37,7 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/query", 
         "dojo/NodeList-dom"], 
-        function(declare, Carousel, lang, domClass, domConstruct, domStyle, domGeom, query, nodeListDom) {
+        function(declare, Carousel, urlTypes, lang, domClass, domConstruct, domStyle, domGeom, query, nodeListDom) {
 
    return declare([Carousel], {
       
@@ -50,13 +51,39 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/DocumentCarousel.css"}],
 
       /**
-       * Sets up image source files, etc.
-       * 
-       * @instance postCreate
+       * This is the default next arrow for the DocumentCarousel. It can be overridden using the
+       * [nextArrow property]{@link module:alfresco/lists/views/Carousel#nextArrow}. It should
+       * not be used directly.
+       *
+       * @instance
+       * @type {object}
+       * @readonly
+       * @since 1.0.41
        */
-      postMixInProperties: function alfresco_documentlibrary_views_layouts_DocumentCarousel__postMixInProperties() {
-         this.contentNavNextArrowImgSrc = require.toUrl("alfresco/documentlibrary/views/layouts") + "/css/images/filmstrip-main-nav-next.png";
-         this.contentNavPrevArrowImgSrc = require.toUrl("alfresco/documentlibrary/views/layouts") + "/css/images/filmstrip-main-nav-prev.png";
+      defaultNextArrow: {
+         altText: "next-arrow.alt-text",
+         src: "alfresco/documentlibrary/views/layouts/css/images/filmstrip-main-nav-next.png",
+         srcType: urlTypes.REQUIRE_PATH,
+         width: 29,
+         height: 74
+      },
+
+      /**
+       * This is the default previous arrow for the DocumentCarousel. It can be overridden using the
+       * [previousArrow property]{@link module:alfresco/lists/views/Carousel#previousArrow}. It should
+       * not be used directly.
+       *
+       * @instance
+       * @type {object}
+       * @readonly
+       * @since 1.0.41
+       */
+      defaultPrevArrow: {
+         altText: "prev-arrow.alt-text",
+         src: "alfresco/documentlibrary/views/layouts/css/images/filmstrip-main-nav-prev.png",
+         srcType: urlTypes.REQUIRE_PATH,
+         width: 29,
+         height: 74
       },
 
       /**

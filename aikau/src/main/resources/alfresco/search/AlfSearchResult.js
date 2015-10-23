@@ -43,9 +43,10 @@ define(["dojo/_base/declare",
         "alfresco/renderers/XhrContextActions",
         "alfresco/renderers/Selector",
         "alfresco/renderers/Size",
-        "alfresco/renderers/MoreInfo"],
+        "alfresco/renderers/MoreInfo",
+        "alfresco/enums/urlTypes"],
         function(declare, Row, template, SearchThumbnail, SearchResultPropertyLink, PropertyLink, Property,
-                 DateLink, XhrActions, lang, domClass, XhrContextActions, Selector, Size, MoreInfo) {
+                 DateLink, XhrActions, lang, domClass, XhrContextActions, Selector, Size, MoreInfo, urlTypes) {
 
    return declare([Row], {
 
@@ -353,7 +354,7 @@ define(["dojo/_base/declare",
             publishPayloadModifiers: ["processCurrentItemTokens"],
             publishPayload: {
                url: "user/{modifiedByUser}/profile",
-               type: "PAGE_RELATIVE",
+               type: urlTypes.PAGE_RELATIVE,
                target: this.navigationTarget
             }
          }, this.dateNode);
@@ -452,7 +453,7 @@ define(["dojo/_base/declare",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
                   url: isRepo ? "repository?path={pathLink}" : "site/{site.shortName}/documentlibrary?path={pathLink}",
-                  type: "PAGE_RELATIVE",
+                  type: urlTypes.PAGE_RELATIVE,
                   target: this.navigationTarget
                }
             }, this.pathNode);
@@ -517,7 +518,7 @@ define(["dojo/_base/declare",
                publishPayloadModifiers: ["processCurrentItemTokens"],
                publishPayload: {
                   url: "site/{site.shortName}" + this.siteLandingPage.replace(/^\/*/, "/"),
-                  type: "PAGE_RELATIVE",
+                  type: urlTypes.PAGE_RELATIVE,
                   target: this.navigationTarget
                }
             }, this.siteNode);

@@ -27,8 +27,9 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/topics"],
-        function(declare, topics) {
+        "alfresco/core/topics",
+        "alfresco/enums/urlTypes"],
+        function(declare, topics, urlTypes) {
 
    return declare(null, {
 
@@ -65,45 +66,49 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
-       * @deprecated Since 1.0.17 - Use [pageRelativePath]{@link module:alfresco/services/_NavigationServiceTopicMixin#pageRelativePath} instead.
+       * @deprecated Since 1.0.17 - Use [urlTypes.PAGE_RELATIVE]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE} instead.
        */
-      sharePageRelativePath: "SHARE_PAGE_RELATIVE",
+      sharePageRelativePath: urlTypes.SHARE_PAGE_RELATIVE,
 
       /**
        * This value is used to indicate that the supplied URL is relative to the application Page context (e.g. /<application-context>/page)
        *
        * @instance
        * @type {string}
-       * @default
+       * @default [PAGE_RELATIVE]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
+       * @deprecated since 1.0.41 - Use [urlTypes.PAGE_RELATIVE]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE} instead.
        */
-      pageRelativePath: "PAGE_RELATIVE",
+      pageRelativePath: urlTypes.PAGE_RELATIVE,
 
       /**
        * This value is used to indicate that the supplied URL is relative to the application context (e.g. /share)
        *
        * @instance
        * @type {string}
-       * @default
+       * @default [CONTEXT_RELATIVE]{@link module:alfresco/enums/urlTypes#CONTEXT_RELATIVE}
+       * @deprecated since 1.0.41 - Use [urlTypes.CONTEXT_RELATIVE]{@link module:alfresco/enums/urlTypes#CONTEXT_RELATIVE} instead.
        */
-      contextRelativePath: "CONTEXT_RELATIVE",
+      contextRelativePath: urlTypes.CONTEXT_RELATIVE,
 
       /**
        * This value is used to indicate that the supplied URL is a full path (e.g. it will begin "http")
        *
        * @instance
        * @type {string}
-       * @default
+       * @default [FULL_PATH]{@link module:alfresco/enums/urlTypes#FULL_PATH}
+       * @deprecated since 1.0.41 - Use [urlTypes.FULL_PATH]{@link module:alfresco/enums/urlTypes#FULL_PATH} instead.
        */
-      fullPath: "FULL_PATH",
+      fullPath: urlTypes.FULL_PATH,
 
       /**
        * This value is used to indicate that the supplied URL is a hash path (e.g. it just applies a new hash value to the current URL)
        *
        * @instance
        * @type {string}
-       * @default
+       * @default [HASH]{@link module:alfresco/enums/urlTypes#HASH}
+       * @deprecated since 1.0.41 - Use [urlTypes.HASH]{@link module:alfresco/enums/urlTypes#HASH} instead.
        */
-      hashPath: "HASH",
+      hashPath: urlTypes.HASH,
 
       /**
        * This value is used to indicate that the URL should be displayed in the current browser window.

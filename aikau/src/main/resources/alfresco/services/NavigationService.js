@@ -28,15 +28,15 @@
  */
 define(["dojo/_base/declare",
         "module",
+        "alfresco/enums/urlTypes",
         "alfresco/services/BaseService",
         "alfresco/services/_NavigationServiceTopicMixin",
         "alfresco/util/hashUtils",
         "alfresco/util/urlUtils",
         "dojo/_base/array",
         "dojo/_base/lang",
-        "dojo/dom-construct",
-        "service/constants/Default"],
-        function(declare, module, BaseService, _NavigationServiceTopicMixin, hashUtils, urlUtils, array, lang, domConstruct, AlfConstants) {
+        "dojo/dom-construct"],
+        function(declare, module, urlTypes, BaseService, _NavigationServiceTopicMixin, hashUtils, urlUtils, array, lang, domConstruct) {
 
    return declare([BaseService, _NavigationServiceTopicMixin], {
 
@@ -101,31 +101,15 @@ define(["dojo/_base/declare",
        */
       buildUrl: function alfresco_services_NavigationService__buildUrl(data) {
          // jshint maxcomplexity:false
-         var url;
-         if (!data.type || data.type === this.sharePageRelativePath || data.type === this.pageRelativePath)
-         {
-            var siteStem = "site/" + data.site + "/";
-            url = data.url;
 
-            // Cater for site urls that are sent from a non-site context.
-            if (data.site && url.indexOf(siteStem) === -1)
-            {
-               url = siteStem + url;
-            }
-            url = AlfConstants.URL_PAGECONTEXT + url;
+         // Update the URL based on the site and type properties of the data object
+         var url = data.url,
+            urlType = data.type,
+            siteStem = "site/" + data.site + "/";
+         if(data.site && url.indexOf(siteStem) === -1) {
+            url = siteStem + url;
          }
-         else if (data.type === this.contextRelativePath)
-         {
-            url = AlfConstants.URL_CONTEXT + data.url;
-         }
-         else if (data.type === this.fullPath || data.type === this.hashPath)
-         {
-            url = data.url;
-         }
-         else
-         {
-            this.alfLog("error", "An unknown URL type of '" + data.type + "' was provided for a navigation request", data, this);
-         }
+         url = urlUtils.convertUrl(url, urlType);
 
          // Encode Parameters?
          var encodeParams = (typeof data.encodeParams !== "undefined")? data.encodeParams : true;
@@ -157,7 +141,7 @@ define(["dojo/_base/declare",
        */
       navigateToPage: function alfresco_services_NavigationService__navigateToPage(data) {
          // jshint maxcomplexity:false
-         if (data.type !== this.hashPath && !data.url)
+         if (data.type !== urlTypes.HASH && !data.url)
          {
             this.alfLog("error", "A page navigation request was made without a target URL defined as a 'url' attribute", data);
          }
@@ -168,7 +152,7 @@ define(["dojo/_base/declare",
             if (url || url === "")
             {
                // Determine the location of the URL...
-               if (data.type === this.hashPath)
+               if (data.type === urlTypes.HASH)
                {
                   hashUtils.setHashString(url);
                }
