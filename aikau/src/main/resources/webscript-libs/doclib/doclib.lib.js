@@ -1056,21 +1056,26 @@ function getDocLibList(options) {
          view: options.docLibPreferences.viewRendererName,
          widgets: [
             {
+               id: (options.idPrefix || "") + "DOCLIB_SIMPLE_VIEW",
                name: "alfresco/documentlibrary/views/AlfSimpleView"
             },
             {
+               id: (options.idPrefix || "") + "DOCLIB_DETAILED_VIEW",
                name: "alfresco/documentlibrary/views/AlfDetailedView"
             },
             {
+               id: (options.idPrefix || "") + "DOCLIB_GALLERY_VIEW",
                name: "alfresco/documentlibrary/views/AlfGalleryView",
                config: {
                   columns: options.docLibPreferences.galleryColumns || 4
                }
             },
             {
+               id: (options.idPrefix || "") + "DOCLIB_TABLE_VIEW",
                name: "alfresco/documentlibrary/views/AlfTableView"
             },
             {
+               id: (options.idPrefix || "") + "DOCLIB_FILMSTRIP_VIEW",
                name: "alfresco/documentlibrary/views/AlfFilmStripView"
             }
          ]
