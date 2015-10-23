@@ -328,7 +328,6 @@ define(["alfresco/core/_PublishOrLinkMixin",
        * Prepare the image node
        *
        * @instance
-       * @returns {[type]} [description]
        */
       setupImageNode: function alfresco_html_Image__setupImageNode() {
 

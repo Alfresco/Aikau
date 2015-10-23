@@ -243,8 +243,11 @@ define(["alfresco/core/ProcessWidgets",
       },
 
       /**
-       * Setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
-       * whenever a resize is detected in the header.
+       * <p>Setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
+       * whenever a resize is detected in the header.</p>
+       *
+       * <p>NOTE: This is based on a technique described at
+       * {@link http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection}</p>
        *
        * @instance
        */
