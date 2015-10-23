@@ -34,12 +34,13 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreXhr",
         "alfresco/core/UrlUtilsMixin",
         "alfresco/core/topics",
+        "alfresco/enums/urlTypes",
         "alfresco/services/_NavigationServiceTopicMixin",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/NodeUtils"],
-        function(declare, BaseService, AlfCoreXhr, UrlUtilsMixin, topics, _NavigationServiceTopicMixin, AlfConstants, lang, array, NodeUtils) {
+        function(declare, BaseService, AlfCoreXhr, UrlUtilsMixin, topics, urlTypes, _NavigationServiceTopicMixin, AlfConstants, lang, array, NodeUtils) {
 
    return declare([BaseService, AlfCoreXhr, UrlUtilsMixin, _NavigationServiceTopicMixin], {
 
@@ -134,7 +135,7 @@ define(["dojo/_base/declare",
             var url = this.buildUrl(this.startWorkflowPage, null);
             this.alfPublish(this.postToPageTopic, {
                method: "POST",
-               type: this.fullPath,
+               type: urlTypes.FULL_PATH,
                url: url,
                target: payload.currentTarget || this.currentTarget,
                parameters: postBody

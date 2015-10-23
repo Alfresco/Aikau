@@ -57,7 +57,23 @@ model.jsonModel = {
                               widgets: [
                                  {
                                     id: "FILMSTRIP_VIEW",
-                                    name: "alfresco/documentlibrary/views/AlfFilmStripView"
+                                    name: "alfresco/documentlibrary/views/AlfFilmStripView",
+                                    config: {
+                                       arrows: {
+                                          contentNext: {
+                                             src: "images/right-cursor-25x25.png",
+                                             srcType: "CONTEXT_RELATIVE",
+                                             width: 25,
+                                             height: 25
+                                          },
+                                          contentPrev: {
+                                             src: "images/left-cursor-25x25.png",
+                                             srcType: "CONTEXT_RELATIVE",
+                                             width: 25,
+                                             height: 25
+                                          }
+                                       }
+                                    }
                                  }
                               ]
                            }
@@ -118,7 +134,23 @@ model.jsonModel = {
                               widgets: [
                                  {
                                     id: "PAGED_FILMSTRIP_VIEW",
-                                    name: "alfresco/documentlibrary/views/AlfFilmStripView"
+                                    name: "alfresco/documentlibrary/views/AlfFilmStripView",
+                                    config: {
+                                       arrows: {
+                                          listNext: {
+                                             src: "images/right-cursor-25x25.png",
+                                             srcType: "CONTEXT_RELATIVE",
+                                             width: 25,
+                                             height: 25
+                                          },
+                                          listPrev: {
+                                             src: "images/left-cursor-25x25.png",
+                                             srcType: "CONTEXT_RELATIVE",
+                                             width: 25,
+                                             height: 25
+                                          }
+                                       }
+                                    }
                                  }
                               ]
                            }

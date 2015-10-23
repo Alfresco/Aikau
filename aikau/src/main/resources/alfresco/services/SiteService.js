@@ -29,10 +29,11 @@ define(["dojo/_base/declare",
         "alfresco/core/NotificationUtils",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/topics",
+        "alfresco/enums/urlTypes",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
         "service/constants/Default"],
-        function(declare, BaseService, CoreXhr, NotificationUtils, ObjectTypeUtils, topics, lang, AlfButton, AlfConstants) {
+        function(declare, BaseService, CoreXhr, NotificationUtils, ObjectTypeUtils, topics, urlTypes, lang, AlfButton, AlfConstants) {
 
    return declare([BaseService, CoreXhr, NotificationUtils], {
 
@@ -337,7 +338,7 @@ define(["dojo/_base/declare",
          else
          {
             // Handle error conditions...
-            this.alfLog("error", "A request to make a site a favourite but either the site or user was not specified", config);
+            this.alfLog("error", "A request to make a site a favourite but either the site or user was not specified", payload);
          }
       },
 
@@ -516,7 +517,7 @@ define(["dojo/_base/declare",
                      publishTopic: "ALF_NAVIGATE_TO_PAGE",
                      publishPayload: {
                         url: "user/" + originalRequestConfig.user + this.userHomePage.replace(/^\/*/, "/"),
-                        type: "PAGE_RELATIVE",
+                        type: urlTypes.PAGE_RELATIVE,
                         target: "CURRENT"
                      },
                      additionalCssClasses: "call-to-action"
@@ -763,7 +764,7 @@ define(["dojo/_base/declare",
       leaveSiteSuccess: function alfresco_services_SiteService__leaveSiteSuccess(response, requestConfig) {
          this.alfServicePublish("ALF_NAVIGATE_TO_PAGE", {
             url: "user/" + requestConfig.user + this.userHomePage.replace(/^\/*/, "/"),
-            type: "PAGE_RELATIVE",
+            type: urlTypes.PAGE_RELATIVE,
             target: "CURRENT"
          });
       },

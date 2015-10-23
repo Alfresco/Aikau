@@ -30,6 +30,8 @@
 define(["alfresco/core/ProcessWidgets",
         "alfresco/core/ResizeMixin",
         "alfresco/core/topics",
+        "alfresco/enums/urlTypes",
+        "alfresco/util/urlUtils",
         "service/constants/Default",
         "dojo/string",
         "dojo/_base/declare",
@@ -42,7 +44,7 @@ define(["alfresco/core/ProcessWidgets",
         "jquery", // NOTE: Need to include JQuery at root page to prevent XHR require request for first module that uses it
         "jqueryui", // NOTE: Need to include JQuery UI at root page to prevent XHR require request for first module that uses it
         "alfresco/core/shims"],
-        function(ProcessWidgets, ResizeMixin, topics, AlfConstants, string, declare, domConstruct, array,
+        function(ProcessWidgets, ResizeMixin, topics, urlTypes, urlUtils, AlfConstants, string, declare, domConstruct, array,
                  lang, domClass, win, PubQueue, jquery, jqueryui, shims) {
 
    return declare([ProcessWidgets, ResizeMixin], {
@@ -90,7 +92,7 @@ define(["alfresco/core/ProcessWidgets",
             if (AlfConstants.DEBUG && this.domNode && this.webScriptId)
             {
                this.webScriptLabel = "WebScript ID:";
-               this.extensionDownloadUrl = AlfConstants.URL_PAGECONTEXT + "generator/extension?webscriptId=" + this.webScriptId;
+               this.extensionDownloadUrl = urlUtils.convertUrl("generator/extension?webscriptId=" + this.webScriptId, urlTypes.PAGE_RELATIVE);
                this.extensionDownloadLabel = "(Click to generate extension JAR)";
                var pageInfoTemplate = "<div class=\"alfresco-debug-PageInfo\">" +
                   "<span class=\"label\">${webScriptLabel}</span>" +

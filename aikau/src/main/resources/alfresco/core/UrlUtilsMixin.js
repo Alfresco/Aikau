@@ -28,10 +28,12 @@
 define(["dojo/_base/declare",
         "alfresco/core/PathUtils",
         "alfresco/core/ObjectTypeUtils",
+        "alfresco/enums/urlTypes",
+        "alfresco/util/urlUtils",
         "service/constants/Default",
         "dojo/_base/lang",
         "jquery"],
-        function(declare, PathUtils, ObjectTypeUtils, AlfConstants, lang, jquery) {
+        function(declare, PathUtils, ObjectTypeUtils, urlTypes, urlUtils, AlfConstants, lang, jquery) {
 
    return declare([PathUtils], {
 
@@ -210,7 +212,7 @@ define(["dojo/_base/declare",
          if (!regExp.test(uri))
          {
             // Page context required
-            uri = this.combinePaths(AlfConstants.URL_PAGECONTEXT, uri);
+            uri = urlUtils.convertUrl(uri, urlTypes.PAGE_RELATIVE);
          }
 
          // Absolute URI needs current protocol and host
