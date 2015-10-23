@@ -1,3 +1,5 @@
+var noDataMessage = "No data found. This page no longer works without hash parameters. By default, try /FixedHeaderFooter#currentItem";
+
 model.jsonModel = {
    services: [
       {
@@ -62,6 +64,7 @@ model.jsonModel = {
                            id: "LIST",
                            name: "alfresco/documentlibrary/AlfDocumentList",
                            config: {
+                              noDataMessage: noDataMessage,
                               useHash: true,
                               widgets: [
                                  {

@@ -130,6 +130,20 @@ define(["alfresco/core/ProcessWidgets",
       }],
 
       /**
+       * If this widget is placed into a widget that has padding then this allowance can be configured which
+       * will be substituted from the calculated height to take padding into account so that an outer scroll
+       * bar is not required on the page. This defaults to 0 and has only been provided for potential 
+       * convenience. This value will only be used on when [height]{@link module:alfresco/layout/FixedHeaderFooter#height}
+       * is set to "auto" (which is also the default).
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @deprecated Since 1.0.36 use [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment} instead
+       */
+      autoHeightPaddingAllowance: 0,
+
+      /**
        * The height of the widget (in CSS units). The default value is "auto" which means that the
        * height of the widget will automatically be set to take up the available space from its current
        * position to the bottom of the window or document (whichever is smallest) so that the entire
@@ -143,20 +157,6 @@ define(["alfresco/core/ProcessWidgets",
        * @deprecated Since 1.0.36 use [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode} instead
        */
       height: "AUTO",
-
-      /**
-       * If this widget is placed into a widget that has padding then this allowance can be configured which
-       * will be substituted from the calculated height to take padding into account so that an outer scroll
-       * bar is not required on the page. This defaults to 0 and has only been provided for potential 
-       * convenience. This value will only be used on when [height]{@link module:alfresco/layout/FixedHeaderFooter#height}
-       * is set to "auto" (which is also the default).
-       *
-       * @instance
-       * @type {number}
-       * @default
-       * @deprecated Since 1.0.36 use [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment} instead
-       */
-      autoHeightPaddingAllowance: 0,
 
       /**
        * If this is configured to be true the the height of the widget will be reset as the browser window is resized.
@@ -234,9 +234,43 @@ define(["alfresco/core/ProcessWidgets",
             }
          ]);
 
+         // Add resize listeners to the header/footer
+         this.addHeaderResizeListener();
+
          // Do the resize
          this.onResize();
          this.alfPublishResizeEvent(this.domNode);
+      },
+
+      /**
+       * Setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
+       * whenever a resize is detected in the header.
+       *
+       * @instance
+       */
+      addHeaderResizeListener: function alfresco_layout_FixedHeaderFooter__addHeaderResizeListener() {
+
+         // Create the resize object
+         var resizeObj = domConstruct.create("object", {
+            className: this.baseClass + "__header__resize-object",
+            type: "text/html",
+            data: "about:blank"
+         });
+
+         // Setup the onload listener for the object to add a resize event handler
+         var that = this;
+         resizeObj.onload = function() {
+            this.contentDocument.defaultView.addEventListener("resize", function() {
+               that.alfPublishResizeEvent(that.domNode);
+            });
+         }
+
+         // Add the object to the document
+         if (resizeObj.hasChildNodes()) {
+            this.header.insertBefore(resizeObj, this.header.firstChild);
+         } else {
+            this.header.appendChild(resizeObj);
+         }
       },
 
       /**
@@ -251,7 +285,7 @@ define(["alfresco/core/ProcessWidgets",
        * @param {object[]} widgets The widgets that have been created
        * @since 1.0.38
        */
-      allWidgetsProcessed: function alfresco_layout_HorizontalWidgets__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
+      allWidgetsProcessed: function alfresco_layout_FixedHeaderFooter__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
          this._allWidgetsProcessedCount--;
          if (this._allWidgetsProcessedCount === 0)
          {
