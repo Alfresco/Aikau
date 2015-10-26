@@ -38,14 +38,15 @@
  * @author Martin Doyle
  * @since 1.0.40
  */
-define(["alfresco/navigation/_HtmlAnchorMixin",
+define(["alfresco/enums/urlTypes",
+        "alfresco/navigation/_HtmlAnchorMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/keys",
         "dojo/on"],
-        function(_HtmlAnchorMixin, _PublishPayloadMixin, declare, lang, domClass, keys, on) {
+        function(urlTypes, _HtmlAnchorMixin, _PublishPayloadMixin, declare, lang, domClass, keys, on) {
 
    return declare([_HtmlAnchorMixin, _PublishPayloadMixin], {
 
@@ -90,15 +91,13 @@ define(["alfresco/navigation/_HtmlAnchorMixin",
       targetUrl: null,
 
       /**
-       * Indicates how the target URL should be handled. This defaults to "PAGE_RELATIVE" which means that the URL
-       * will be appended to the 'AlfConstants.URL_PAGECONTEXT' Global JavaScript constant. This can be overridden
-       * on instantiation to indicate that another URL type, such as "FULL_PATH" should be used.
+       * Indicates how the target URL should be handled.
        *
        * @instance
        * @type {string}
-       * @default
+       * @default [PAGE_RELATIVE]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        */
-      targetUrlType: "PAGE_RELATIVE",
+      targetUrlType: urlTypes.PAGE_RELATIVE,
 
       /**
        * When set to true, all of the direct children of this widget's root node will be wrapped in a single anchor,

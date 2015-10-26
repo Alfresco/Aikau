@@ -28,12 +28,13 @@
 define(["dojo/_base/declare",
    "alfresco/core/Core",
    "alfresco/core/I18nUtils",
+   "alfresco/enums/urlTypes",
    "alfresco/reports/Report",
    "alfresco/services/_NavigationServiceTopicMixin",
    "dojo/_base/lang",
    "dojo/date",
    "dojo/date/stamp"],
-      function(declare, AlfCore, I18nUtils, Report, _NavigationServiceTopicMixin, lang, date, stamp) {
+      function(declare, AlfCore, I18nUtils, urlTypes, Report, _NavigationServiceTopicMixin, lang, date, stamp) {
 
          // Lets default the report to show data from the last month
          var timePeriod = "30D";
@@ -116,7 +117,7 @@ define(["dojo/_base/declare",
              */
             onReportItemClick: function(value) {
                this.alfPublish(this.navigateToPageTopic, {
-                  type: this.contextRelativePath,
+                  type: urlTypes.CONTEXT_RELATIVE,
                   url: "page/user/" + encodeURIComponent(value) + "/profile"
                }, true);
             },

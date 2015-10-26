@@ -31,16 +31,12 @@ define(["alfresco/core/TemporalUtils",
    return declare([TemporalUtils], {
 
       /**
-       * The URL type used for links. By default this is "PAGE_RELATIVE" as all the links are expected to be
-       * relative to the application page context. The available options are 
-       * ["PAGE_RELATIVE"]{@link module:alfresco/services/_NavigationServiceTopicMixin#pageRelativePath}, 
-       * ["CONTEXT_RELATIVE"]{@link module:alfresco/services/_NavigationServiceTopicMixin#contextRelativePath},
-       * ["FULL_PATH"]{@link module:alfresco/services/_NavigationServiceTopicMixin#fullPath} and
-       * ["HASH"]{@link module:alfresco/services/_NavigationServiceTopicMixin#hashPath}
-       * 
+       * The URL type used for links. By default this is [PAGE_RELATIVE]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
+       * as all the links are expected to be relative to the application page context.
+       *
        * @instance
        * @type {string}
-       * @default
+       * @default [PAGE_RELATIVE]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        * @since 1.0.39
        */
       navigationType: "PAGE_RELATIVE",

@@ -26,9 +26,11 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/enum/urlTypes",
+        "alfresco/util/urlUtils",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, BaseService, CoreXhr, lang, AlfConstants) {
+        function(declare, BaseService, CoreXhr, urlTypes, urlUtils, lang, AlfConstants) {
    
    return declare([BaseService, CoreXhr], {
       
@@ -59,7 +61,7 @@ define(["dojo/_base/declare",
          var url = AlfConstants.URL_SERVICECONTEXT + "dologin?username=" + payload.username + "&password=" + payload.password;
          if (payload.successUrl == null || lang.trim(payload.successUrl) === "")
          {
-            payload.successful = AlfConstants.URL_PAGECONTEXT + this.defaultLoginPage;
+            payload.successful = urlUtils.convertUrl(this.defaultLoginPage, urlTypes.PAGE_RELATIVE);
          }
 
          // Attempt the login for the supplied credentials...

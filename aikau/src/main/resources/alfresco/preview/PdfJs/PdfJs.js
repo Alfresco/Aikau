@@ -46,6 +46,8 @@ define(["dojo/_base/declare",
         "alfresco/core/ObjectProcessingMixin",
         "alfresco/core/Core",
         "alfresco/core/topics",
+        "alfresco/enums/urlTypes",
+        "alfresco/util/urlUtils",
         "service/constants/Default",
         "alfresco/preview/PdfJs/PdfJsConstants",
         "alfresco/preview/PdfJs/DocumentView",
@@ -63,7 +65,7 @@ define(["dojo/_base/declare",
         "dojo/window",
         "dojo/on",
         "jquery"], 
-        function(declare, AlfDocumentPreviewPlugin, FileSizeMixin, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore, topics, AlfConstants, 
+        function(declare, AlfDocumentPreviewPlugin, FileSizeMixin, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore, topics, urlTypes, urlUtils, AlfConstants, 
                  PdfJsConstants, DocumentView, PDFFindController, WidgetsCreator, AlfTabContainer, lang, domGeom, 
                  domConstruct, domClass, domStyle, html, has, ioQuery, win, on, $) {
    
@@ -417,7 +419,7 @@ define(["dojo/_base/declare",
          // Remove the annoying 'Setting up Previewer' message
          this.previewManager.getPreviewerElement().innerHTML = "";
 
-         this.workerSrc = AlfConstants.URL_CONTEXT + "res/js/lib/pdfjs/pdf.worker.js";
+         this.workerSrc = urlUtils.convertUrl("res/js/lib/pdfjs/pdf.worker.js", urlTypes.CONTEXT_RELATIVE);
          this._loadDocumentConfig();
 
          // Setup display options, page linking only works for specific pages
