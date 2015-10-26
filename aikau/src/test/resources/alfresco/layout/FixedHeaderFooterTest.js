@@ -143,6 +143,23 @@ define(["intern!object",
                });
          },
 
+         "Header resize fires resize event": function() {
+            return browser.findById("SHOW_HEADER_label")
+               .click()
+               .end()
+
+            .findByCssSelector("#HEADER_TWISTER .label")
+               .clearLog()
+               .click()
+               .end()
+
+            .getLastPublish("ALF_NODE_RESIZED")
+               .then(function(payload) {
+                  assert.property(payload, "node");
+                  assert.match(payload.node, /^div#HEADER_FOOTER/);
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
