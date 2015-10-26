@@ -1075,8 +1075,11 @@ function getDocLibList(options) {
                name: "alfresco/documentlibrary/views/AlfTableView"
             },
             {
-               id: (options.idPrefix || "") + "DOCLIB_FILMSTRIP_VIEW",
-               name: "alfresco/documentlibrary/views/AlfFilmStripView"
+               name: "alfresco/documentlibrary/views/AlfFilmStripView",
+               config: {
+                  heightAdjustment: 0,
+                  heightMode: 400
+               }
             }
          ]
       }

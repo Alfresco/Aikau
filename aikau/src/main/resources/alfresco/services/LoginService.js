@@ -26,7 +26,7 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
-        "alfresco/enum/urlTypes",
+        "alfresco/enums/urlTypes",
         "alfresco/util/urlUtils",
         "dojo/_base/lang",
         "service/constants/Default"],
