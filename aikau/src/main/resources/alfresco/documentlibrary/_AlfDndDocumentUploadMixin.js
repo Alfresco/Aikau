@@ -38,12 +38,37 @@ define(["dojo/_base/declare",
         "dojo/on",
         "dijit/registry",
         "dojo/dom-class",
+        "dojo/dom-construct",
+        "dojo/dom-geometry",
+        "dojo/dom-style",
         "dojo/dom",
-        "dojo/_base/window"], 
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, lang, array, mouse, on, registry, domClass, dom, win) {
+        "dojo/_base/window",
+        "dojo/query"], 
+        function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, lang, array, mouse, on, registry, domClass, 
+                 domConstruct, domGeom, domStyle, dom, win, query) {
    
    return declare([AlfCore, _AlfDocumentListTopicMixin, PathUtils], {
 
+      /**
+       * An array of the i18n files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/_AlfDndDocumentUploadMixin.properties"}]
+       * @since 1.0.41
+       */
+      i18nRequirements: [{i18nFile: "./i18n/_AlfDndDocumentUploadMixin.properties"}],
+
+      /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance cssRequirements {Array}
+       * @type {object[]}
+       * @default [{cssFile:"./css/_AlfDndDocumentUploadMixin.css"}]
+       * @since 1.0.41
+       */
+      cssRequirements: [{cssFile:"./css/_AlfDndDocumentUploadMixin.css"}],
+      
       /**
        * Indicates whether drag and drop is enabled. 
        * 
@@ -61,6 +86,53 @@ define(["dojo/_base/declare",
        * @default
        */
       dndUploadCapable: false, 
+
+      /**
+       * Keeps track of the DOM node that the drag-and-drop events are listened on.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       */
+      dragAndDropNode: null,
+      
+      /**
+       * 
+       * @instance
+       * @type {element}
+       * @default
+       * @since 1.0.41
+       */
+      dragAndDropOverlayNode: null,
+
+      /**
+       * @instance
+       * @type {object[]}
+       * @default
+       */
+      dndUploadEventHandlers: null,
+      
+      /**
+       * The image to use for the upload highlighting. Currently the only other option apart from the default is
+       * "elipse-cross.png"
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      dndUploadHighlightImage: "large-folder-icon.png",
+
+      /**
+       * The text to display for upload highlighting. If configured or overridden to be null or the
+       * empty string then no text will be displayed.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      dndUploadHighlightText: "dnd.upload.highlight.label",
 
       /**
        * Indicates whether or not the mixing module should take advantage of the drag-and-drop uploading capabilities. 
@@ -99,22 +171,6 @@ define(["dojo/_base/declare",
          this.dndUploadEventHandlers = [];
       },
 
-      /**
-       * Keeps track of the DOM node that the drag-and-drop events are listened on.
-       * 
-       * @instance
-       * @type {object}
-       * @default
-       */
-      dragAndDropNode: null,
-      
-      /**
-       * @instance
-       * @type {object[]}
-       * @default
-       */
-      dndUploadEventHandlers: null,
-      
       /**
        * Adds subscriptions to topics providing information on the changes to the current node being represented. This 
        * has been primarily added to support widgets that change the displayed view.
@@ -213,19 +269,14 @@ define(["dojo/_base/declare",
                // Add listeners to the HTML5 drag and drop events
                this.dndUploadEnabled = true;
                this.dragAndDropNode = domNode;
-               
-               // Clean up any previously created event handlers...
-               if (this.dndUploadEventHandlers)
-               {
-                  array.forEach(this.dndUploadEventHandlers, function(handle){ handle.remove(); });
-               }
-               this.dndUploadEventHandlers = [];
-               
-               // Add listeners for the mouse entering (these handlers allow us to normalise browser events that
-               // are "broken" due to firing across all child nodes...
-               this.dndUploadEventHandlers.push(on(win.body(), "dragenter", lang.hitch(this, this.onDndUploadDragEnter)));
-               this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "dragover", lang.hitch(this, this.onDndUploadDragOver)));
-               this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "drop", lang.hitch(this, this.onDndUploadDrop)));
+
+               // Adding the base class will set an invisible border that can then be "coloured" in when
+               // dragging and item over the node (this prevents the display "jumping")...
+               domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin");
+
+               // Reset the handlers...
+               this.removeDndUploadHandlers();
+               this.addDndUploadHandlers();
             }
             catch(exception)
             {
@@ -238,6 +289,109 @@ define(["dojo/_base/declare",
          }
       },
 
+      /**
+       * Sets up the handlers for the drag and drop events. These handlers are all added to the
+       * [dndUploadEventHandlers]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadEventHandlers}
+       * array so that they can be easily cleaned up by
+       * [removeDndUploadHandlers]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#removeDndUploadHandlers} 
+       * 
+       * @instance
+       * @since 1.0.41
+       */
+      addDndUploadHandlers: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__removeDndUploadHandlers() {
+         this.dndUploadEventHandlers.push(on(win.body(), "dragenter", lang.hitch(this, this.onDndUploadDragEnter)));
+         this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "dragover", lang.hitch(this, this.onDndUploadDragOver)));
+         this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "drop", lang.hitch(this, this.onDndUploadDrop)));
+      },
+
+      /**
+       * 
+       *
+       * @instance
+       * @param {object} e HTML5 drag and drop event
+       */
+      onDndUploadDragEnter: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDragEnter(e) {
+         if (dom.isDescendant(e.target, this.dragAndDropNode) &&
+             this.checkApplicable(e.target, "onDndUploadDragEnter"))
+         {
+            this.addDndHighlight();
+         }
+         else
+         {
+            this.removeDndHighlight();
+         }
+      },
+
+      /**
+       * This function is used to check that the event to be handled relates directly to the current widget. This check is needed
+       * because it is possible that a widget that handles drag and drop could be a child of another widget that handles drag and 
+       * drop.
+       * 
+       * It returns true if the supplied DOM node belongs to the current widget (e.g. "this") and that the widget has the same
+       * function. This isn't a perfect solution as there is a possibility that another widget could have an identical function 
+       * name but this should be unlikely. It would have been preferable to use the "isInstanceOf" function, but that would require
+       * a reference to the class that this function is being declared as part of!
+       * 
+       * As long as the function stops the event then this should not be necessary.
+       * 
+       * @instance
+       * @param {object} domNode The DOM node that the event has occurred on
+       * @param {string} currentFunctionName The name of the function being processed
+       * @returns true if the current function should be executed
+       */
+      checkApplicable: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__checkApplicable(domNode, currentFunctionName) {
+         var applicable = false;
+         var widget = registry.getEnclosingWidget(domNode);
+         if (!widget)
+         {
+            // Something odd has happened. This should never really occur since in order for this function to be
+            // called a widget must have DnD capabilities added!
+            this.alfLog("log", "No widget found - unexpected behaviour: ", this);
+         }
+         else if (widget !== this && 
+                  typeof widget[currentFunctionName] === "function" &&
+                  widget.dndUploadEnabled === true)
+         {
+            // The event relates to a different widget
+            this.alfLog("debug", "Related drag enter detected: ", this.id);
+         }
+         else
+         {
+            // The event relates to the current instance
+            this.alfLog("debug", "Unrelated drag enter detected", this.id);
+            applicable = true;
+         }
+         return applicable;
+      },
+
+      /**
+       * Clean up any previously created event handlers stored in the 
+       * [dndUploadEventHandlers]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadEventHandlers}
+       * array.
+       * 
+       * @instance
+       * @since 1.0.41
+       */
+      removeDndUploadHandlers: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__removeDndUploadHandlers() {
+         if (this.dndUploadEventHandlers)
+         {
+            array.forEach(this.dndUploadEventHandlers, function(handle){ handle.remove(); });
+         }
+         this.dndUploadEventHandlers = [];
+      },
+
+      /**
+       * It's important that the drag over event is handled and that "preventDefault" is called on it. If this is 
+       * not done then the "drop" event will not be processed.
+       *
+       * @instance
+       * @param {object} e HTML5 drag and drop event
+       */
+      onDndUploadDragOver: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDragOver(e) {
+         e.stopPropagation();
+         e.preventDefault();
+      },
+      
       /**
        * Fired when an object starts getting dragged. The event is swallowed because we only want to 
        * allow drag and drop events that begin outside the browser window (e.g. for files). This prevents
@@ -294,48 +448,50 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
-       *
-       * @instance
-       * @param {object} e HTML5 drag and drop event
-       */
-      onDndUploadDragEnter: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDragEnter(e) {
-         if (dom.isDescendant(e.target, this.dragAndDropNode) &&
-             this.checkApplicable(e.target, "onDndUploadDragEnter"))
-         {
-            this.alfLog("log", "Adding DND highlight", this);
-            this.addDndHighlight();
-         }
-         else
-         {
-            this.alfLog("log", "Removing DND highlight", this);
-            this.removeDndHighlight();
-         }
-      },
-      
-      /**
-       * It's important that the drag over event is handled and that "preventDefault" is called on it. If this is 
-       * not done then the "drop" event will not be processed.
-       *
-       * @instance
-       * @param {object} e HTML5 drag and drop event
-       */
-      onDndUploadDragOver: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDragOver(e) {
-         // Firefox 3.6 set effectAllowed = "move" for files, however the "copy" effect is more accurate for uploads
-//         e.dataTransfer.dropEffect = Math.floor(YAHOO.env.ua.gecko) === 1 ? "move" : "copy";
-         e.stopPropagation();
-         e.preventDefault();
-      },
-      
-      /**
        * This should be overridden to add highlighting when an item is dragged over the target.
        * 
        * @instance
        */
       addDndHighlight: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__addDragEnterHighlight() {
-         if (this.domNode)
+         if (this.dragAndDropNode)
          {
-            domClass.add(this.domNode, "dndHighlight");
+            // Create a new node for indicating that a drag and drop upload is possible.
+            // NOTE: The reason for using query here is that it covers all bases, in particular it addresses
+            //       scenario where list views are emptying the DOM model (including any previously created
+            //       overlays)...
+            var overlayResults = query(".alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay", this.dragAndDropNode.parentNode);
+            if (!overlayResults.length)
+            {
+               this.dragAndDropOverlayNode = domConstruct.create("div", {
+                  className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay"
+               }, this.dragAndDropNode.parentNode, "first");
+
+               var pNode = domConstruct.create("p", {
+                  className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay__info"
+               }, this.dragAndDropOverlayNode);
+
+               if (this.dndUploadHighlightText)
+               {
+                  domConstruct.create("span", {
+                     className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay__info__title",
+                     innerHTML: this.message(this.dndUploadHighlightText)
+                  }, pNode);
+                  domConstruct.create("br", {}, pNode);
+               }
+               domConstruct.create("img", {
+                  className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay__info__icon",
+                  src: require.toUrl("alfresco/documentlibrary/css/images/") + this.dndUploadHighlightImage
+               }, pNode);
+            }
+            
+            var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
+            var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
+            domStyle.set(this.dragAndDropOverlayNode, {
+               height: dndNodeDimensions.h + "px",
+               width: dndNodeDimensions.w + "px"
+            });
+            domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
+            domClass.add(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
          }
       },
       
@@ -345,52 +501,14 @@ define(["dojo/_base/declare",
        * @instance
        */
       removeDndHighlight: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__addDragEnterHighlight() {
-         if (this.domNode)
+         if (this.dragAndDropNode)
          {
-            domClass.remove(this.domNode, "dndHighlight");
+            domClass.remove(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
+            if (this.dragAndDropOverlayNode)
+            {
+               domClass.remove(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
+            }
          }
-      },
-      
-      /**
-       * This function is used to check that the event to be handled relates directly to the current widget. This check is needed
-       * because it is possible that a widget that handles drag and drop could be a child of another widget that handles drag and 
-       * drop.
-       * 
-       * It returns true if the supplied DOM node belongs to the current widget (e.g. "this") and that the widget has the same
-       * function. This isn't a perfect solution as there is a possibility that another widget could have an identical function 
-       * name but this should be unlikely. It would have been preferable to use the "isInstanceOf" function, but that would require
-       * a reference to the class that this function is being declared as part of!
-       * 
-       * As long as the function stops the event then this should not be necessary.
-       * 
-       * @instance
-       * @param {object} domNode The DOM node that the event has occurred on
-       * @param {string} currentFunctionName The name of the function being processed
-       * @returns true if the current function should be executed
-       */
-      checkApplicable: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__checkApplicable(domNode, currentFunctionName) {
-         var applicable = false;
-         var widget = registry.getEnclosingWidget(domNode);
-         if (!widget)
-         {
-            // Something odd has happened. This should never really occur since in order for this function to be
-            // called a widget must have DnD capabilities added!
-            this.alfLog("log", "No widget found - unexpected behaviour: ", this);
-         }
-         else if (widget !== this && 
-                  typeof widget[currentFunctionName] === "function" &&
-                  widget.dndUploadEnabled === true)
-         {
-            // The event relates to a different widget
-            this.alfLog("log", "This event does NOT relate to me: ", this);
-         }
-         else
-         {
-            // The event relates to the current instance
-            this.alfLog("log", "This event relates to me: ", this);
-            applicable = true;
-         }
-         return applicable;
       },
       
       /**
@@ -457,6 +575,11 @@ define(["dojo/_base/declare",
          }
          // Remove the drag highlight...
          this.removeDndHighlight();
+
+         // Destroy the overlay node (required for views that will re-render all the contents)...
+         domConstruct.destroy(this.dragAndDropOverlayNode);
+         this.dragAndDropOverlayNode = null;
+
          evt.stopPropagation();
          evt.preventDefault();
       },
