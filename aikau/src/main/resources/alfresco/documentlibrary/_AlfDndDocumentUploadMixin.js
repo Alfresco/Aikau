@@ -55,6 +55,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/_AlfDndDocumentUploadMixin.properties"}]
+       * @since 1.0.41
        */
       i18nRequirements: [{i18nFile: "./i18n/_AlfDndDocumentUploadMixin.properties"}],
 
@@ -352,12 +353,12 @@ define(["dojo/_base/declare",
                   widget.dndUploadEnabled === true)
          {
             // The event relates to a different widget
-            this.alfLog("log", "RELATED DRAG ENTER: ", this.id);
+            this.alfLog("debug", "Related drag enter detected: ", this.id);
          }
          else
          {
             // The event relates to the current instance
-            this.alfLog("log", "UNRELATED DRAG ENTER", this.id);
+            this.alfLog("debug", "Unrelated drag enter detected", this.id);
             applicable = true;
          }
          return applicable;
