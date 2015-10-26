@@ -236,7 +236,7 @@ define(["alfresco/core/ProcessWidgets",
          ]);
 
          // Add resize listeners to the header/footer
-         this.addHeaderResizeListener();
+         setTimeout(lang.hitch(this, this.addHeaderResizeListener));
 
          // Do the resize
          this.onResize();
