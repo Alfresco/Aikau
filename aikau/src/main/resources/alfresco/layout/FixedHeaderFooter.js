@@ -236,7 +236,8 @@ define(["alfresco/core/ProcessWidgets",
          ]);
 
          // Add resize listeners to the header/footer
-         setTimeout(lang.hitch(this, this.addHeaderResizeListener));
+         // NOTE: This is done asynchronously to avoid delaying the resize event firing
+         setTimeout(lang.hitch(this, this.addHeaderResizeListener), 0);
 
          // Do the resize
          this.onResize();
@@ -251,6 +252,7 @@ define(["alfresco/core/ProcessWidgets",
        * {@link http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection}</p>
        *
        * @instance
+       * @since 1.0.41
        */
       addHeaderResizeListener: function alfresco_layout_FixedHeaderFooter__addHeaderResizeListener() {
 
