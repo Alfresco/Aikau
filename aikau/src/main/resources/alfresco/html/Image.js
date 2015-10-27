@@ -242,6 +242,16 @@ define(["alfresco/core/_PublishOrLinkMixin",
       srcType: urlTypes.PAGE_RELATIVE,
 
       /**
+       * We want to set a maximum time for waiting for the widget to be attached to
+       * the DOM before trying to setup the widget.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      timeForDomAttach: 5000,
+
+      /**
        * An optional CSS width to apply to the image node in pixels. If width is
        * specified without height then the other will be calculated using the
        * aspectRatio property, or the calculated naturalAspectRatio if not specified.
@@ -251,6 +261,15 @@ define(["alfresco/core/_PublishOrLinkMixin",
        * @default
        */
       width: 0,
+
+      /**
+       * In order to ensure we don't try forever to setup this widget when it's not
+       * being attached to the DOM, note when we first retry the setup.
+       *
+       * @instance
+       * @type {number?}
+       */
+      _firstAttemptedSetup: null,
 
       /**
        * This is run after the config has been mixed into this instance.
@@ -296,6 +315,40 @@ define(["alfresco/core/_PublishOrLinkMixin",
             domClass.add(this.imageNode, this.classes);
          }
 
+         // Add "block state"
+         if (this.isBlockElem) {
+            domClass.add(this.domNode, "alfresco-html-Image--block");
+         }
+
+         // Setup the image node (sizing, etc)
+         this.setupImageNode();
+      },
+
+      /**
+       * Prepare the image node
+       *
+       * @instance
+       */
+      setupImageNode: function alfresco_html_Image__setupImageNode() {
+
+         // The image-node setup will only work if attached to the DOM, so try again later if necessary
+         var nextParent = this.domNode,
+            isAttached;
+         while((nextParent = nextParent.parentNode) && !isAttached) {
+            isAttached = (nextParent === document.body);
+         }
+         if(!isAttached) {
+
+            // We can't let this run forever, so break out if necessary
+            if(!this._firstAttemptedSetup) {
+               this._firstAttemptedSetup = Date.now();
+            }
+            if(Date.now() - this._firstAttemptedSetup < this.timeForDomAttach) {
+               setTimeout(lang.hitch(this, this.setupImageNode), 200);
+               return;
+            }
+         }
+
          // No configured src, so set to blank.gif if a background image is present
          if (!this.src) {
             if (this._getBackgroundImageUrl()) {
@@ -303,11 +356,6 @@ define(["alfresco/core/_PublishOrLinkMixin",
             } else {
                this.imageNode.src = this.src;
             }
-         }
-
-         // Add "block state"
-         if (this.isBlockElem) {
-            domClass.add(this.domNode, "alfresco-html-Image--block");
          }
 
          // Resize the image node

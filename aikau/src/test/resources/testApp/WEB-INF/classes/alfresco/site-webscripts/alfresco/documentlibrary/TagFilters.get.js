@@ -45,6 +45,15 @@ model.jsonModel = {
                      containerId: "documentLibrary",
                      pubSubScope: "SCOPED_"
                   }
+               },
+               {
+                  name: "alfresco/documentlibrary/AlfTagFilters",
+                  id: "TAG_FILTERS_ROOT_NODE",
+                  config: {
+                     label: "Tags (Root Node - none expected)",
+                     rootNode: "some://fake/node",
+                     pubSubScope: "ROOT_NODE_SCOPE_"
+                  }
                }
             ]
          }

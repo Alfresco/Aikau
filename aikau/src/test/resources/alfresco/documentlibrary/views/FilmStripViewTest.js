@@ -79,6 +79,14 @@ define([
                browser.end();
             },
 
+            "Check configured height": function() {
+               return browser.findById("FILMSTRIP_VIEW")
+                  .getSize()
+                  .then(function(size) {
+                     assert.equal(size.height, 400, "Height was not applied to view");
+                  });
+            },
+
             "Check initial controls state": function() {
                return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev")
                   .isDisplayed()

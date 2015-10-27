@@ -1,7 +1,5 @@
 .alfresco-upload-UploadTarget {
 
-   border: @thick-border-width dashed @standard-border-color;
-   border-radius: @standard-border-radius;
    height: 253px;
    margin: 5px;
    display: table;
@@ -10,8 +8,9 @@
    /* Required for Firefox */
    width: ~"calc(100% - 16px)";
 
-   &.dndHighlight {
-      border: @thick-border-width solid @standard-border-color;
+   &.alfresco-documentlibrary-_AlfDndDocumentUploadMixin {
+      border: @thick-border-width dashed @standard-border-color;
+      border-radius: @standard-border-radius;
    }
 
    .alfresco-upload-UploadTarget__centered {

@@ -43,6 +43,28 @@ define(["dojo/_base/declare",
    return declare([AlfDocument, ResizeMixin], {
       
       /**
+       * This is used to set the [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment}
+       * of the rendered [previewer]{@link module:alfresco/preview/AlfDocumentPreview}.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.41
+       */
+      heightAdjustment: 0,
+
+      /**
+       * This is used to set the [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode}
+       * of the rendered [previewer]{@link module:alfresco/preview/AlfDocumentPreview}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      heightMode: "AUTO",
+
+      /**
        * Overrides the [inherited function]{@link module:alfresco/documentlibrary/AlfDocument#postMixInProperties}
        * to prevent the subscription to the standard document request from being created.
        * 
@@ -76,10 +98,12 @@ define(["dojo/_base/declare",
          else if (this.isContainer === false)
          {
             // This is a document so we can subscribe to the expected request to display content
-            // TODO: This contains a temporary config override whilst we wait for full adoption of the 
-            //       Aikau only PDF.js preview plugin. This override can be removed after adoption occurs.
             this.widgets = [{
-               name: "alfresco/preview/AlfDocumentPreview"
+               name: "alfresco/preview/AlfDocumentPreview",
+               config: {
+                  heightMode: this.heightMode,
+                  heightAdjustment: this.heightAdjustment
+               }
             }];
             this.alfSubscribe("ALF_FILMSTRIP_DOCUMENT_REQUEST__" + this.nodeRef, lang.hitch(this, this.requestDocument, this.nodeRef));
          }

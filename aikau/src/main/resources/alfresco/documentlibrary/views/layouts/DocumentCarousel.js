@@ -46,7 +46,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {object[]}
-       * @default [{cssFile:"./css/Carousel.css"}]
+       * @default [{cssFile:"./css/DocumentCarousel.css"}]
        */
       cssRequirements: [{cssFile:"./css/DocumentCarousel.css"}],
 
@@ -127,7 +127,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      onPrevClick: function alfresco_documentlibrary_views_layouts_DocumentCarousel__onPrevClick(evt) {
+      onPrevClick: function alfresco_documentlibrary_views_layouts_DocumentCarousel__onPrevClick(/*jshint unused:false*/ evt) {
          this.inherited(arguments);
          this.alfPublish("ALF_FILMSTRIP_ITEM_CHANGED", {
             index: this.firstDisplayedIndex
@@ -142,7 +142,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      onNextClick: function alfresco_documentlibrary_views_layouts_DocumentCarousel__onNextClick(evt) {
+      onNextClick: function alfresco_documentlibrary_views_layouts_DocumentCarousel__onNextClick(/*jshint unused:false*/ evt) {
          this.inherited(arguments);
          this.alfPublish("ALF_FILMSTRIP_ITEM_CHANGED", {
             index: this.firstDisplayedIndex
