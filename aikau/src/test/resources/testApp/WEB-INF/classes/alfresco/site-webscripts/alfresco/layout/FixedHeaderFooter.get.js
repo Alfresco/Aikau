@@ -1,3 +1,5 @@
+var noDataMessage = "No data found. This page no longer works without hash parameters. By default, try /FixedHeaderFooter#currentItem";
+
 model.jsonModel = {
    services: [
       {
@@ -55,6 +57,29 @@ model.jsonModel = {
                                  ]
                               }
                            }
+                        },
+                        {
+                           name: "alfresco/layout/Twister",
+                           id: "HEADER_TWISTER",
+                           config: {
+                              label: "Toggle me to change header size",
+                              initiallyOpen: false,
+                              widgets: [
+                                 {
+                                    name: "alfresco/logo/Logo"
+                                 }
+                              ],
+                              visibilityConfig: {
+                                 initialValue: false,
+                                 rules: [
+                                    {
+                                       topic: "HEADER_VISIBILITY",
+                                       attribute: "value",
+                                       isNot: ["HIDE"]
+                                    }
+                                 ]
+                              }
+                           }
                         }
                      ],
                      widgets: [
@@ -62,6 +87,7 @@ model.jsonModel = {
                            id: "LIST",
                            name: "alfresco/documentlibrary/AlfDocumentList",
                            config: {
+                              noDataMessage: noDataMessage,
                               useHash: true,
                               widgets: [
                                  {

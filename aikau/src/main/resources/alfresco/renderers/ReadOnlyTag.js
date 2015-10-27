@@ -34,8 +34,9 @@ define(["dojo/_base/declare",
         "alfresco/services/_NavigationServiceTopicMixin",
         "dojo/text!./templates/ReadOnlyTag.html",
         "alfresco/core/Core",
+        "alfresco/enums/urlTypes",
         "alfresco/navigation/Link"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _NavigationServiceTopicMixin, template, AlfCore, Link) {
+        function(declare, _WidgetBase, _TemplatedMixin, _NavigationServiceTopicMixin, template, AlfCore, urlTypes, Link) {
 
    return declare([_WidgetBase, _TemplatedMixin, _NavigationServiceTopicMixin, AlfCore], {
       
@@ -93,7 +94,7 @@ define(["dojo/_base/declare",
             title: this.message("tag.filter.title", {"0": this.tagName}),
             publishTopic: this.navigateToPageTopic,
             publishPayload: {
-               type: this.hashPath,
+               type: urlTypes.HASH,
                url: "tag=" + this.tagName
             }
          });

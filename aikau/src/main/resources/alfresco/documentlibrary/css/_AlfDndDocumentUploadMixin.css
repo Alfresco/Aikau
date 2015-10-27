@@ -1,0 +1,38 @@
+.alfresco-documentlibrary-_AlfDndDocumentUploadMixin {
+   
+   &--dndHighlight {
+      opacity: 0.2;
+   }
+}
+
+.alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay {
+   display: none;
+   opacity: 1;
+   position: absolute;
+   border: @upload-highlight-border;
+   border-radius: 10px;
+   
+   &--display {
+      display: table;
+   }
+
+   &__info {
+      display: table-cell;
+      border-radius: 10px;
+      width: 100%;
+      text-align: center;
+      vertical-align: middle;
+      background-image: url("./images/panel.gif");
+
+      &__title {
+         color: @de-emphasized-font-color;
+         font-size: @large-font-size;
+         text-align: center;
+         line-height: 60px;
+      }
+
+      &__icon {
+         text-align: center;
+      }
+   }
+}

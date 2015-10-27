@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -99,8 +99,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_layout_ClassicWindow__postCreate() {
-         domClass.add(this.domNode, (this.additionalCssClasses != null ? this.additionalCssClasses : ""));
-         if (this.widgets != null)
+         if (this.widgets)
          {
             this.processWidgets(this.widgets, this.contentNode);
          }

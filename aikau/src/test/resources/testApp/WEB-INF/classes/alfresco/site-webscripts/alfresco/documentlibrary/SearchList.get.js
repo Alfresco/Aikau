@@ -198,15 +198,31 @@ model.jsonModel = {
                   },
                   items: [
                      {
-                        name: "Res1"
+                        name: "Res1",
+                        nodeRef: "some://fake/node1"
                      },
                      {
-                        name: "Res2"
+                        name: "Res2",
+                        nodeRef: "some://fake/node2"
                      },
                      {
-                        name: "Res3"
+                        name: "Res3",
+                        nodeRef: "some://fake/node3"
                      }
                   ]
+               }
+            }
+         }
+      },
+      {
+         id: "SELECT_A_RESULT",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Select a result",
+            publishTopic: "ALF_DOCLIST_DOCUMENT_SELECTED",
+            publishPayload: {
+               value: {
+                  nodeRef: "some://fake/node1"
                }
             }
          }

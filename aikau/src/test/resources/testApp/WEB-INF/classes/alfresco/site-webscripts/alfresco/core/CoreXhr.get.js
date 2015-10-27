@@ -26,9 +26,19 @@ model.jsonModel = {
             publishGlobal: true,
             pubSubScope: "SCOPED_"
          }
-      },   
+      },
       {
-         name: "aikauTesting/mockservices/GenericMockXhr"
+         name: "alfresco/buttons/AlfButton",
+         id: "AUTHENTICATION_FAIL_BUTTON",
+         config: {
+            label: "Publish a 401 auth failure request",
+            publishTopic: "ALF_AUTHENTICATION_FAIL",
+            publishGlobal: true,
+            pubSubScope: "SCOPED_"
+         }
+      },
+      {
+         name: "aikauTesting/mockservices/AuthMockXhr"
       },   
       {
          name: "alfresco/logging/DebugLog"

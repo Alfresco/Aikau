@@ -79,6 +79,14 @@ define([
                browser.end();
             },
 
+            "Check configured height": function() {
+               return browser.findById("FILMSTRIP_VIEW")
+                  .getSize()
+                  .then(function(size) {
+                     assert.equal(size.height, 400, "Height was not applied to view");
+                  });
+            },
+
             "Check initial controls state": function() {
                return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev")
                   .isDisplayed()
@@ -173,6 +181,21 @@ define([
                .carouselItemIsDisplayed(browser, 3, PREVIEW_CAROUSEL)
                   .then(function(isDisplayed) {
                      assert.isFalse(isDisplayed, "The third preview item should not be displayed");
+                  });
+            },
+
+            "Custom arrow images are used": function() {
+               return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next .alfresco-html-Image__img")
+                  .getAttribute("src")
+                  .then(function(src) {
+                     assert.equal(src, "/aikau/images/right-cursor-25x25.png");
+                  })
+                  .end()
+
+               .findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev .alfresco-html-Image__img")
+                  .getAttribute("src")
+                  .then(function(src) {
+                     assert.equal(src, "/aikau/images/left-cursor-25x25.png");
                   });
             },
 
@@ -451,6 +474,14 @@ define([
                   });
             },
 
+            "Custom next arrow image is used": function() {
+               return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .next .alfresco-html-Image__img")
+                  .getAttribute("src")
+                  .then(function(src) {
+                     assert.equal(src, "/aikau/images/right-cursor-25x25.png");
+                  });
+            },
+
             "Can select next preview": function() {
                return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .next img")
                   .clearLog()
@@ -475,6 +506,14 @@ define([
                .carouselItemIsDisplayed(browser, 3, PREVIEW_CAROUSEL, "PAGED_")
                   .then(function(isDisplayed) {
                      assert.isFalse(isDisplayed, "The third preview item should not be displayed");
+                  });
+            },
+
+            "Custom previous arrow image is used": function() {
+               return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev .alfresco-html-Image__img")
+                  .getAttribute("src")
+                  .then(function(src) {
+                     assert.equal(src, "/aikau/images/left-cursor-25x25.png");
                   });
             },
 

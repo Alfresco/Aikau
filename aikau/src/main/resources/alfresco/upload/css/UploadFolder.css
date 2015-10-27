@@ -4,9 +4,5 @@
    padding: 5px;
    border: @thick-border-width dashed @standard-border-color;
    border-radius: @standard-border-radius;
-
-   &.dndHighlight {
-      border: @thick-border-width solid @standard-border-color;
-   }
 }
 

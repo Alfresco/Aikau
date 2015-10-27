@@ -1,4 +1,5 @@
 .alfresco-renderers-Thumbnail {
+   display: block;
    width: @thumbnail-width;
    height: @thumbnail-height;
    position: relative; /* This is required for absolutely positioned overlays */

@@ -42,17 +42,30 @@ define(["dojo/_base/declare",
         "alfresco/core/ResizeMixin",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/topics",
+        "alfresco/enums/urlTypes",
         "dojo/text!./templates/Carousel.html",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-style",
-        "dojo/dom-geometry"],
+        "dojo/dom-geometry",
+        "dojo/on",
+        "alfresco/html/Image"],
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, HeightMixin, ResizeMixin, _MultiItemRendererMixin, 
-                 topics, template, lang, array, domClass, domConstruct, domStyle, domGeom) {
+                 topics, urlTypes, template, lang, array, domClass, domConstruct, domStyle, domGeom, on, Image) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, HeightMixin, ResizeMixin, _MultiItemRendererMixin, AlfCore], {
+
+      /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/Carousel.properties"}]
+       * @since 1.0.41
+       */
+      i18nRequirements: [{i18nFile: "./i18n/Carousel.properties"}],
 
       /**
        * An array of the CSS files to use with this widget.
@@ -61,7 +74,7 @@ define(["dojo/_base/declare",
        * @type {object[]}
        * @default [{cssFile:"./css/Carousel.css"}]
        */
-      cssRequirements: [{cssFile:"./css/Carousel.css"}],
+      cssRequirements: [{cssFile: "./css/Carousel.css"}],
 
       /**
        * The HTML template to use for the widget.
@@ -70,6 +83,89 @@ define(["dojo/_base/declare",
        * @type {String}
        */
       templateString: template,
+
+      /**
+       * This keeps track of the current left position (e.g. the setting that controls what items you can see
+       * within the clipped frame). This value is updated by the
+       * [onPrevClick]{@link module:alfresco/lists/views/layouts/Carousel#onPrevClick} and
+       * [onNextClick]{@link module:alfresco/lists/views/layouts/Carousel#onNextClick} functions.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      currentLeftPosition: 0,
+
+      /**
+       * This is the default next arrow. It can be overridden using the [nextArrow property]{@link
+       * module:alfresco/lists/views/Carousel#nextArrow}. It should not be used directly.
+       *
+       * @instance
+       * @type {object}
+       * @readonly
+       * @since 1.0.41
+       */
+      defaultNextArrow: {
+         altText: "next-arrow.alt-text",
+         src: "alfresco/documentlibrary/views/layouts/css/images/filmstrip-content-nav-next.png",
+         srcType: urlTypes.REQUIRE_PATH,
+         width: 27,
+         height: 100
+      },
+
+      /**
+       * This is the default previous arrow. It can be overridden using the [prevArrow property]{@link
+       * module:alfresco/lists/views/Carousel#prevArrow}. It should not be used directly.
+       *
+       * @instance
+       * @type {object}
+       * @readonly
+       * @since 1.0.41
+       */
+      defaultPrevArrow: {
+         altText: "prev-arrow.alt-text",
+         src: "alfresco/documentlibrary/views/layouts/css/images/filmstrip-content-nav-prev.png",
+         srcType: urlTypes.REQUIRE_PATH,
+         width: 27,
+         height: 100
+      },
+
+      /**
+       * This keeps track of the first displayed item in the currently visible frame.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      firstDisplayedIndex: 0,
+
+      /**
+       * This can be set to a value (in pixels) to fix the height. If this is left as null then
+       * a suitable height will attempt to be calculated
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      height: null,
+
+      /**
+       * Sets the width of each item (in pixels)
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      itemWidth: 100,
+
+      /**
+       * This keeps track of the lasts displayed item in the currently visible frame
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      lastDisplayedIndex: null,
 
       /**
        * Used to indicate more data is required, as we're at the end of the current data
@@ -83,6 +179,47 @@ define(["dojo/_base/declare",
       loadMoreDataTopic: topics.SCROLL_NEAR_BOTTOM,
 
       /**
+       * Sets the width to allow for the next and previous buttons
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      navigationMargin: 40,
+
+      /**
+       * <p>This property can be used to customise the arrow used in the carousel. The values within
+       * this object correspond to the properties of an [Image]{@link module:alfresco/html/Image}
+       * widget, which should be used as a reference of available properties.</p>
+       *
+       * <p><strong>NOTE:</strong> All defaults are as they are in the Image widget, apart from srcType
+       * which instead defaults to [FULL_PATH]{@link module:alfresco/enums/urlTypes#FULL_PATH}.</p>
+       *
+       * @instance
+       * @type {object}
+       * @see module:alfresco/html/Image
+       * @default
+       * @since 1.0.41
+       */
+      nextArrow: null,
+
+      /**
+       * <p>This property can be used to customise the arrow used in the carousel. The values within
+       * this object correspond to the properties of an [Image]{@link module:alfresco/html/Image}
+       * widget, which should be used as a reference of available properties.</p>
+       *
+       * <p><strong>NOTE:</strong> All defaults are as they are in the Image widget, apart from srcType
+       * which instead defaults to [FULL_PATH]{@link module:alfresco/enums/urlTypes#FULL_PATH}.</p>
+       *
+       * @instance
+       * @type {object}
+       * @see module:alfresco/html/Image
+       * @default
+       * @since 1.0.41
+       */
+      prevArrow: null,
+
+      /**
        * Whether the list that's creating this view has infinite scroll turned on
        *
        * @instance
@@ -91,16 +228,6 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       useInfiniteScroll: false,
-      
-      /**
-       * Sets up image source files, etc.
-       *
-       * @instance postCreate
-       */
-      postMixInProperties: function alfresco_lists_views_layouts_Carousel__postMixInProperties() {
-         this.contentNavNextArrowImgSrc = require.toUrl("alfresco/documentlibrary/views/layouts") + "/css/images/filmstrip-content-nav-next.png";
-         this.contentNavPrevArrowImgSrc = require.toUrl("alfresco/documentlibrary/views/layouts") + "/css/images/filmstrip-content-nav-prev.png";
-      },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
@@ -108,6 +235,7 @@ define(["dojo/_base/declare",
        * @instance postCreate
        */
       postCreate: function alfresco_lists_views_layouts_Carousel__postCreate() {
+
          if (this.currentItem)
          {
             if (this.widgets)
@@ -115,6 +243,9 @@ define(["dojo/_base/declare",
                this.processWidgets(this.widgets, this.containerNode);
             }
          }
+
+         // Create and place the navigation arrows
+         this.setupNavigationArrows();
 
          // Subscribe to selection topics...
          if (this.itemSelectionTopics)
@@ -130,24 +261,6 @@ define(["dojo/_base/declare",
          // Handle resize events...
          this.alfSetupResizeSubscriptions(this.resize, this);
       },
-
-      /**
-       * Sets the width of each item (in pixels)
-       *
-       * @instance
-       * @type {number}
-       * @default
-       */
-      itemWidth: 100,
-
-      /**
-       * Sets the width to allow for the next and previous buttons
-       *
-       * @instance
-       * @type {number}
-       * @default
-       */
-      navigationMargin: 40,
 
       /**
        * This function is called once all widgets have been added onto the page. At this point it can be
@@ -186,17 +299,7 @@ define(["dojo/_base/declare",
          }
       },
 
-      /**
-       * This can be set to a value (in pixels) to fix the height. If this is left as null then
-       * a suitable height will attempt to be calculated
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      height: null,
-
-      /**
+         /**
        * Gets the available dimensions of the DOM node in preparation for resizing the widget components.
        * This also works out how many items should be shown within the current viewing frame.
        *
@@ -240,36 +343,6 @@ define(["dojo/_base/declare",
          var nodeToAdd = domConstruct.create("li", {}, rootNode);
          this.inherited(arguments, [widgets, nodeToAdd]);
       },
-
-      /**
-       * This keeps track of the current left position (e.g. the setting that controls what items you can see
-       * within the clipped frame). This value is updated by the
-       * [onPrevClick]{@link module:alfresco/lists/views/layouts/Carousel#onPrevClick} and
-       * [onNextClick]{@link module:alfresco/lists/views/layouts/Carousel#onNextClick} functions.
-       *
-       * @instance
-       * @type {number}
-       * @default
-       */
-      currentLeftPosition: 0,
-
-      /**
-       * This keeps track of the first displayed item in the currently visible frame.
-       *
-       * @instance
-       * @type {number}
-       * @default
-       */
-      firstDisplayedIndex: 0,
-
-      /**
-       * This keeps track of the lasts displayed item in the currently visible frame
-       *
-       * @instance
-       * @type {number}
-       * @default
-       */
-      lastDisplayedIndex: null,
 
       /**
        * Handles the user clicking on the previous items navigation control.
@@ -399,6 +472,30 @@ define(["dojo/_base/declare",
                this.renderDisplayedItems();
             }
          }
+      },
+
+      /**
+       * Configured and create the navigation arrows.
+       *
+       * @instance
+       * @since 1.0.41
+       */
+      setupNavigationArrows: function alfresco_lists_views_layouts_Carousel__setupNavigationArrows() {
+         // NOTE: Can't use this.createWidget() as the inherited implementation needs a currentItem property
+         var nextConfig = lang.mixin({
+               pubSubScope: this.pubSubScope,
+               parentPubSubScope: this.parentPubSubScope
+            }, this.nextArrow || this.defaultNextArrow),
+            prevConfig = lang.mixin({
+               pubSubScope: this.pubSubScope,
+               parentPubSubScope: this.parentPubSubScope
+            }, this.prevArrow || this.defaultPrevArrow),
+            nextArrow = new Image(nextConfig),
+            prevArrow = new Image(prevConfig);
+         nextArrow.placeAt(this.nextNode);
+         prevArrow.placeAt(this.prevNode);
+         this.own(on(nextArrow, "click", lang.hitch(this, this.onNextClick)));
+         this.own(on(prevArrow, "click", lang.hitch(this, this.onPrevClick)));
       }
    });
 });

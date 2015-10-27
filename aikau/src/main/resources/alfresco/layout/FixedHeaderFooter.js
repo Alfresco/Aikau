@@ -102,10 +102,11 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-style",
+        "dojo/sniff",
         "dojo/topic",
         "dojo/text!./templates/FixedHeaderFooter.html"],
         function(ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin, array, declare, lang, aspect, 
-                 domClass, domConstruct, domStyle, topic, template) {
+                 domClass, domConstruct, domStyle, has, topic, template) {
 
    return declare([ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin], {
 
@@ -130,6 +131,20 @@ define(["alfresco/core/ProcessWidgets",
       }],
 
       /**
+       * If this widget is placed into a widget that has padding then this allowance can be configured which
+       * will be substituted from the calculated height to take padding into account so that an outer scroll
+       * bar is not required on the page. This defaults to 0 and has only been provided for potential 
+       * convenience. This value will only be used on when [height]{@link module:alfresco/layout/FixedHeaderFooter#height}
+       * is set to "auto" (which is also the default).
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @deprecated Since 1.0.36 use [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment} instead
+       */
+      autoHeightPaddingAllowance: 0,
+
+      /**
        * The height of the widget (in CSS units). The default value is "auto" which means that the
        * height of the widget will automatically be set to take up the available space from its current
        * position to the bottom of the window or document (whichever is smallest) so that the entire
@@ -143,20 +158,6 @@ define(["alfresco/core/ProcessWidgets",
        * @deprecated Since 1.0.36 use [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode} instead
        */
       height: "AUTO",
-
-      /**
-       * If this widget is placed into a widget that has padding then this allowance can be configured which
-       * will be substituted from the calculated height to take padding into account so that an outer scroll
-       * bar is not required on the page. This defaults to 0 and has only been provided for potential 
-       * convenience. This value will only be used on when [height]{@link module:alfresco/layout/FixedHeaderFooter#height}
-       * is set to "auto" (which is also the default).
-       *
-       * @instance
-       * @type {number}
-       * @default
-       * @deprecated Since 1.0.36 use [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment} instead
-       */
-      autoHeightPaddingAllowance: 0,
 
       /**
        * If this is configured to be true the the height of the widget will be reset as the browser window is resized.
@@ -234,9 +235,63 @@ define(["alfresco/core/ProcessWidgets",
             }
          ]);
 
+         // Add resize listeners to the header/footer
+         // NOTE: This is done asynchronously to avoid delaying the resize event firing
+         setTimeout(lang.hitch(this, this.addHeaderResizeListener), 0);
+
          // Do the resize
          this.onResize();
          this.alfPublishResizeEvent(this.domNode);
+      },
+
+      /**
+       * <p>Setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
+       * whenever a resize is detected in the header.</p>
+       *
+       * <p>NOTE: This is based on a technique described at
+       * {@link http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection}</p>
+       *
+       * @instance
+       * @since 1.0.41
+       */
+      addHeaderResizeListener: function alfresco_layout_FixedHeaderFooter__addHeaderResizeListener() {
+
+         // Setup the resize listener function
+         var onResize = lang.hitch(this, this.alfPublishResizeEvent, this.domNode);
+
+         // NOTE: Dojo IE detection not working very well here, so done manually instead
+         var ieRegex = /(Trident\/)|(Edge\/)/,
+            isIE = has("IE") || ieRegex.test(navigator.userAgent);
+
+         // Create the resize object
+         var resizeObj = document.createElement("object");
+         resizeObj.className = this.baseClass + "__header__resize-object";
+         resizeObj.type = "text/html";
+         resizeObj.onload = function() {
+            resizeObj.contentDocument.defaultView.addEventListener("resize", onResize);
+         };
+
+         // FF doesn't like visibility hidden (interferes with the resize event), Chrome doesn't care, IE needs it
+         if (isIE) {
+            resizeObj.style.visibility = "hidden";
+         }
+
+         // Normal browsers do this before appending to the DOM
+         if (!isIE) {
+            resizeObj.data = "about:blank";
+         }
+
+         // Add the object to the document
+         if (this.header.hasChildNodes()) {
+            this.header.insertBefore(resizeObj, this.header.firstChild);
+         } else {
+            this.header.appendChild(resizeObj);
+         }
+
+         // IE needs to do this after
+         if (isIE) {
+            resizeObj.data = "about:blank";
+         }
       },
 
       /**
@@ -251,7 +306,7 @@ define(["alfresco/core/ProcessWidgets",
        * @param {object[]} widgets The widgets that have been created
        * @since 1.0.38
        */
-      allWidgetsProcessed: function alfresco_layout_HorizontalWidgets__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
+      allWidgetsProcessed: function alfresco_layout_FixedHeaderFooter__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
          this._allWidgetsProcessedCount--;
          if (this._allWidgetsProcessedCount === 0)
          {
