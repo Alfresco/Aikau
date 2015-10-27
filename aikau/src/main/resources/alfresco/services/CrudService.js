@@ -89,12 +89,15 @@ define(["dojo/_base/declare",
          });
 
          var noRefresh = lang.getObject("data.noRefresh", false, originalRequestConfig);
-         if (noRefresh === true) {
+         if (noRefresh === true) 
+         {
             // Don't make a refresh request...
-         } else {
+         } 
+         else 
+         {
             // When refreshing, check to see if a pubSubScope was provided...
-            var pubSubScope = lang.getObject("data.pubSubScope", false, originalRequestConfig) || "";
-            this.alfPublish(pubSubScope + "ALF_DOCLIST_RELOAD_DATA");
+            var pubSubScope = lang.getObject("responseScope", false, originalRequestConfig) || "";
+            this.alfPublish("ALF_DOCLIST_RELOAD_DATA", null, false, false, pubSubScope);
          }
       },
 
@@ -187,6 +190,7 @@ define(["dojo/_base/declare",
 
          var config = {
             url: url,
+            responseScope: payload.alfResponseScope,
             data: this.clonePayload(payload),
             alfTopic: payload.alfResponseTopic || null,
             method: "GET"
@@ -215,6 +219,7 @@ define(["dojo/_base/declare",
          if (url) {
             this.serviceXhr({
                url: url,
+               responseScope: payload.alfResponseScope,
                data: this.clonePayload(payload),
                method: "GET"
             });
@@ -233,6 +238,7 @@ define(["dojo/_base/declare",
          var url = this.getUrlFromPayload(payload);
          this.serviceXhr({
             url: url,
+            responseScope: payload.alfResponseScope,
             data: this.clonePayload(payload),
             method: "POST",
             alfTopic: payload.alfResponseTopic,
@@ -253,6 +259,7 @@ define(["dojo/_base/declare",
          var url = this.getUrlFromPayload(payload);
          this.serviceXhr({
             url: url,
+            responseScope: payload.alfResponseScope,
             data: this.clonePayload(payload),
             method: "PUT",
             alfTopic: payload.alfResponseTopic,
@@ -309,19 +316,20 @@ define(["dojo/_base/declare",
          var confirmButtonLabel = payload.confirmationButtonLabel || "crudservice.generic.delete.confirmationButtonLabel";
          var cancelButtonLabel = payload.cancellationButtonLabel || "crudservice.generic.delete.cancellationButtonLabel";
 
-         var dialog = new AlfDialog({
-            generatePubSubScope: false,
-            title: this.message(title),
-            content: this.message(prompt),
+         this.alfServicePublish(topics.CREATE_DIALOG, {
+            dialogId: "ALF_CRUD_SERVICE_DELETE_CONFIRMATION_DIALOG",
+            dialogTitle: this.message(title),
+            textContent: this.message(prompt),
             widgetsButtons: [
                {
+                  id: "ALF_CRUD_SERVICE_DELETE_CONFIRMATION_DIALOG_CONFIRM",
                   name: "alfresco/buttons/AlfButton",
                   config: {
                      label: this.message(confirmButtonLabel),
                      publishTopic: responseTopic,
                      publishPayload: {
                         url: url,
-                        pubSubScope: payload.pubSubScope,
+                        responseScope: payload.alfResponseScope,
                         responseTopic: payload.responseTopic,
                         successMessage: this.message(payload.successMessage || "crudservice.generic.success.message"),
                         failureMessage: this.message(payload.failureMessage || "crudservice.generic.failure.message")
@@ -329,6 +337,7 @@ define(["dojo/_base/declare",
                   }
                },
                {
+                  id: "ALF_CRUD_SERVICE_DELETE_CONFIRMATION_DIALOG_CANCEL",
                   name: "alfresco/buttons/AlfButton",
                   config: {
                      label: this.message(cancelButtonLabel),
@@ -337,7 +346,6 @@ define(["dojo/_base/declare",
                }
             ]
          });
-         dialog.show();
       },
 
       /**
@@ -354,6 +362,7 @@ define(["dojo/_base/declare",
          this.serviceXhr({
             url: url,
             method: "DELETE",
+            responseScope: payload.alfResponseScope,
             data: this.clonePayload(payload),
             alfTopic: payload.responseTopic,
             successMessage: this.message(payload.successMessage || "crudservice.generic.success.message"),
