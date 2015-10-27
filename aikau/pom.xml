@@ -332,7 +332,7 @@
                <directoryRoots>
                   <directoryRoot>${basedir}/src/main/resources/alfresco/</directoryRoot>
                </directoryRoots>
-               <templateDirectory>${basedir}/src/jsdoc-templates/alfresco</templateDirectory>
+               <templateDirectory>${basedir}/resources/jsdoc/templates/alfresco</templateDirectory>
                <configFile>${basedir}/conf.json</configFile>
             </configuration>
          </plugin>

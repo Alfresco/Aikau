@@ -9,14 +9,14 @@
         "excludePattern": "(^|\\/|\\\\)\\$"
     },
     "plugins": [
-      "src/jsdoc-plugins/customization-support-tags"
+      "resources/jsdoc/plugins/customization-support-tags"
     ],
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": false
     },
     "opts": {
-        "template": "src/jsdoc-templates/alfresco",
+        "template": "resources/jsdoc/templates/alfresco",
         "encoding": "utf8",
         "destination": "../../docs",
         "recurse": true,

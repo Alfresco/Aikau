@@ -9,6 +9,6 @@ module.exports = function(grunt) {
    require("time-grunt")(grunt);
 
    // Load external grunt tasks
-   grunt.loadTasks("src/grunt");
+   grunt.loadTasks("resources/grunt");
 
 };
