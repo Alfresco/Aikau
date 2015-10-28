@@ -14,5 +14,6 @@
 /.sublime-grunt.cache
 /clientConfig.js
 /phantomjsdriver.log
+/resources/vagrant/.vagrant/
 /src/test/resources/testApp/js/aikau/testing/RequireEverything.js
 /src/test/vagrant/.vagrant/

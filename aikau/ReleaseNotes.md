@@ -1,4 +1,4 @@
-Aikau 1.0.40 Release Notes
+Aikau 1.0.41 Release Notes
 ===
 
 Previous deprecations:
@@ -40,6 +40,16 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.41:
+* [AKU-632](https://issues.alfresco.com/jira/browse/AKU-632)       - Support configurable images in Carousel
+* [AKU-637](https://issues.alfresco.com/jira/browse/AKU-637)       - Disable draggable thumbnails in AlfFilmStripView
+* [AKU-638](https://issues.alfresco.com/jira/browse/AKU-638)       - Support configurable height in AlfFilmStripView
+* [AKU-642](https://issues.alfresco.com/jira/browse/AKU-642)       - Updated drag-and-drop upload highlighting
+* [AKU-643](https://issues.alfresco.com/jira/browse/AKU-643)       - Added simple clickable icon widget
+* [AKU-644](https://issues.alfresco.com/jira/browse/AKU-644)       - Prevent ClassicWindow overflowing content
+* [AKU-646](https://issues.alfresco.com/jira/browse/AKU-646)       - Capture resize events in FixedHeaderFooter
+* [AKU-648](https://issues.alfresco.com/jira/browse/AKU-648)       - Override default itemKeyProperty in AlfSearchList
+
 1.0.40:
 * [AKU-626](https://issues.alfresco.com/jira/browse/AKU-626)       - Thumbnail highlighting on selection
 * [AKU-627](https://issues.alfresco.com/jira/browse/AKU-627)       - Thumbnail click to select support
