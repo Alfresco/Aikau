@@ -32,13 +32,12 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/layout/FixedHeaderFooterTest"
+      "src/test/resources/alfresco/forms/controls/MultiSelectInputTest"
 
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
-      // "src/test/resources/alfresco/dnd/FormCreationTest",
       // "src/test/resources/alfresco/layout/AlfTabContainerTest",
+      // "src/test/resources/alfresco/layout/HeightMixinTest",
       // "src/test/resources/alfresco/preview/PdfJsPreviewTest"
-      // "src/test/resources/alfresco/search/SearchSuggestionsTest",
       // "src/test/resources/alfresco/services/CloudSyncServiceTest",
    ],
 

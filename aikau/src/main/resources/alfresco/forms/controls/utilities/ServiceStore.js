@@ -281,7 +281,7 @@ define(["dojo/_base/declare",
        * @param {object} options The optional arguments to apply to the resultset.
        * @returns {object} The results of the query, extended with iterative methods.
        */
-      queryXhrOptions: function alfresco_forms_controls_utilities_ServiceStore__query(query, /*jshint unused:false*/ options) {
+      queryXhrOptions: function alfresco_forms_controls_utilities_ServiceStore__queryXhrOptions(query, /*jshint unused:false*/ options) {
          var response = new Deferred();
          var responseTopic = this.generateUuid();
          var payload = lang.clone(this.publishPayload);
