@@ -280,11 +280,6 @@ define(["alfresco/core/_PublishOrLinkMixin",
       postMixInProperties: function alfresco_html_Image__postMixInProperties() {
          this.inherited(arguments);
 
-         // Encode the alt text, after checking for properties
-         if (this.altText) {
-            this.altText = this.encodeHTML(this.message(this.altText));
-         }
-
          // If this is being made into a link, try and make sure we have some "title" text
          if (this.targetUrl && !this.label) {
             this.label = this.altText;
@@ -309,6 +304,11 @@ define(["alfresco/core/_PublishOrLinkMixin",
        */
       postCreate: function alfresco_html_Image__postCreate() {
          this.inherited(arguments);
+
+         // Set the alt attribute value (the JS will make it "safe" automatically)
+         if (this.altText) {
+            this.imageNode.setAttribute("alt", this.message(this.altText));
+         }
 
          // Add any image classes
          if (this.classes) {
