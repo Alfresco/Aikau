@@ -18,9 +18,11 @@
  */
 
 /**
- * This mixin provides functions that allow files to be uploaded by dragging and dropping them
+ * <p>This mixin provides functions that allow files to be uploaded by dragging and dropping them
  * onto the widget. It also provides functions that control highlighting the widget when 
- * files are dragged over the widget.
+ * files are dragged over the widget.</p>
+ * <p><b>NOTE: Highlighting of items provided by this module is not supported for any version of Internet
+ * Explorer prior to version 10</b></p>
  * 
  * @module alfresco/documentlibrary/_AlfDndDocumentUploadMixin
  * @extends module:alfresco/core/Core
@@ -42,10 +44,9 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/dom-style",
         "dojo/dom",
-        "dojo/_base/window",
-        "dojo/query"], 
+        "dojo/_base/window"], 
         function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, lang, array, mouse, on, registry, domClass, 
-                 domConstruct, domGeom, domStyle, dom, win, query) {
+                 domConstruct, domGeom, domStyle, dom, win) {
    
    return declare([AlfCore, _AlfDocumentListTopicMixin, PathUtils], {
 
@@ -246,8 +247,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       hasUploadPermissions: function alfresco_documentlibrary___AlfDndDocumentUploadMixin__hasUploadPermissions() {
-         var isContainer = lang.getObject("currentItem.jsNode.isContainer", false, this);
-         var userPermissions = lang.getObject("currentItem.jsNode.permissions.user", false, this);
+         var isContainer = lang.getObject("currentItem.node.isContainer", false, this);
+         var userPermissions = lang.getObject("currentItem.node.permissions.user", false, this);
 
          return userPermissions &&
                 ((isContainer === true && userPermissions.CreateChildren === true) ||
@@ -318,7 +319,14 @@ define(["dojo/_base/declare",
          }
          else
          {
-            this.removeDndHighlight();
+            if (dom.isDescendant(e.target, this.dragAndDropOverlayNode))
+            {
+               this.alfLog("info", "Over the overlay!");
+            }
+            else
+            {
+               this.removeDndHighlight();
+            }
          }
       },
 
@@ -456,15 +464,14 @@ define(["dojo/_base/declare",
          if (this.dragAndDropNode)
          {
             // Create a new node for indicating that a drag and drop upload is possible.
-            // NOTE: The reason for using query here is that it covers all bases, in particular it addresses
-            //       scenario where list views are emptying the DOM model (including any previously created
-            //       overlays)...
-            var overlayResults = query(".alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay", this.dragAndDropNode.parentNode);
-            if (!overlayResults.length)
+            if (!this.dragAndDropOverlayNode)
             {
-               this.dragAndDropOverlayNode = domConstruct.create("div", {
+               // NOTE: We are deliberately creating an svg element here in order to retain IE10 support.
+               //       Firefox, Chrome and IE11 would support pointer-events none on any element, but IE10
+               //       only supports this on SVG elements.
+               this.dragAndDropOverlayNode = domConstruct.create("svg", {
                   className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay"
-               }, this.dragAndDropNode.parentNode, "first");
+               }, win.body());
 
                var pNode = domConstruct.create("p", {
                   className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay__info"
@@ -486,9 +493,12 @@ define(["dojo/_base/declare",
             
             var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
             var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
+            var dndNodePosition = domGeom.position(this.dragAndDropNode);
             domStyle.set(this.dragAndDropOverlayNode, {
                height: dndNodeDimensions.h + "px",
-               width: dndNodeDimensions.w + "px"
+               width: dndNodeDimensions.w + "px",
+               top: dndNodePosition.y + "px",
+               left: dndNodePosition.x + "px"
             });
             domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
             domClass.add(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
