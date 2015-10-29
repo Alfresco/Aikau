@@ -280,14 +280,14 @@ define(["alfresco/core/_PublishOrLinkMixin",
       postMixInProperties: function alfresco_html_Image__postMixInProperties() {
          this.inherited(arguments);
 
-         // If this is being made into a link, try and make sure we have some "title" text
-         if (this.targetUrl && !this.label) {
-            this.label = this.altText;
-         }
-
          // Encode the alt text, after checking for properties
          if (this.altText) {
             this.altText = this.encodeHTML(this.message(this.altText));
+         }
+
+         // If this is being made into a link, try and make sure we have some "title" text
+         if (this.targetUrl && !this.label) {
+            this.label = this.altText;
          }
 
          // It's possible to provide a dimensions object, so use this if available

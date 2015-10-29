@@ -142,10 +142,7 @@ define(["alfresco/enums/urlTypes",
          if (this.logoSrc) {
             this.src = this.logoSrc;
          }
-         if (this.targetUrl && !this.label) {
-            this.label = this.altText;
-         }
-         this.inherited(arguments);
+         this.inherited(arguments); // At end of func because inherited func uses this.src
       },
 
       /**

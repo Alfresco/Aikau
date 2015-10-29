@@ -83,9 +83,18 @@ define([
                   .getLastPublish("LOGO_TOPIC_PUBLISHED");
             },
 
+            "Title text of link is correctly substituted": function() {
+               return browser.findByCssSelector("#LOGO_WITH_URL .alfresco-navigation-_HtmlAnchorMixin")
+                  .getAttribute("title")
+                  .then(function(attributeValue) {
+                     assert.equal(attributeValue, "Logo image");
+                  });
+            },
+
             "Logo will act as link when configured to do so": function() {
                return browser.findByCssSelector("#LOGO_WITH_URL a")
                   .click()
+                  .sleep(2000)
                   .end()
 
                .findByCssSelector("#TDAC .title")
