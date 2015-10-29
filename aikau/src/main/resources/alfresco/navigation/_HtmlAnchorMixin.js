@@ -118,7 +118,7 @@ define(["dojo/_base/declare",
             href: url
          };
          if (this.label) {
-            anchorAttrs.title = this.label;
+            anchorAttrs.title = this.message(this.label);
          }
          if (this.excludeFromTabOrder) {
             anchorAttrs.tabIndex = "-1";
