@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfDocument</shortname>
+  <description>This page shows how the alfresco/documentlibrary/AlfDocument widget can be used to render the details of an individual node.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfDocument</url>
+</webscript>
