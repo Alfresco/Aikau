@@ -1,0 +1,139 @@
+{
+   "totalRecords": 1,
+   "startIndex": 0,
+   "metadata": {
+      "repositoryId": "b6e41981-597d-44e2-b6e0-d2dbb613e122",
+      "container": "workspace://SpacesStore/abaf3fec-a221-4836-bab7-975eec206aed",
+      "parent": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_site_SiteCollaborator;SiteCollaborator;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/abaf3fec-a221-4836-bab7-975eec206aed",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Oct 29 09:58:53 GMT 2015",
+               "iso8601": "2015-10-29T09:58:53.042Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Thu Oct 15 14:59:32 BST 2015",
+               "iso8601": "2015-10-15T13:59:32.616Z"
+            },
+            "cm:name": "FirstFolderInRoot",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "custom": {
+         "vtiServer": null,
+         "aos": {
+            "baseUrl": "http://dave-Latitude-E6530:8080/alfresco/aos"
+         }
+      },
+      "onlineEditing": false,
+      "itemCounts": {
+         "folders": 1,
+         "documents": 0
+      },
+      "workingCopyLabel": " (Working Copy)"
+   },
+   "items": [{
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED", "ALLOWED;GROUP_site_site_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_site_site_SiteCollaborator;SiteCollaborator;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/468e8e55-35c4-45f0-aa11-ea0c8c2e3066",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Oct 29 09:58:52 GMT 2015",
+               "iso8601": "2015-10-29T09:58:52.998Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Thu Oct 15 14:59:48 BST 2015",
+               "iso8601": "2015-10-15T13:59:48.643Z"
+            },
+            "cm:name": "Folder",
+            "cm:title": "",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/site\/documentLibrary\/UseAsRoot\/FirstFolderInRoot\/Folder",
+
+      "isFavourite": false,
+
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b6e41981-597d-44e2-b6e0-d2dbb613e122",
+         "path": "\/",
+         "repoPath": "\/Sites\/site\/documentLibrary\/UseAsRoot\/FirstFolderInRoot",
+         "file": "Folder",
+         "parent": {}
+      }
+   }]
+}
