@@ -464,10 +464,7 @@ define([
 
             // Infer missing properties
             if (this.inferMissingProperties && (itemName || itemLabel || itemValue)) {
-               if (!this.store.queryAttribute && !this.store.labelAttribute && !this.store.valueAttribute) {
-                  this.alfLog("error", "Invalid item", item);
-                  throw new Error("Item provided with no " + this.store.queryAttribute + ", " + this.store.labelAttribute + " or " + this.store.valueAttribute + "");
-               } else if (itemName && !itemLabel && !itemValue) {
+               if (itemName && !itemLabel && !itemValue) {
                   itemLabel = itemValue = itemName;
                } else if (!itemName && itemLabel && !itemValue) {
                   itemName = itemValue = itemLabel;
