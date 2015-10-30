@@ -556,6 +556,7 @@ model.jsonModel = {
                ],
                widgetsButtons: [
                   {
+                     id: "FULL_SCREEN_DIALOG_CLOSE",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: "OK",

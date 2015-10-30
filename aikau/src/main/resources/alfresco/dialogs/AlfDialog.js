@@ -486,6 +486,11 @@ define(["dojo/_base/declare",
                h: $(window).height() - dimensionAdjustment
             }]);
 
+            // NOTE: Need to set this on the element (rather than using CSS because the underlying 
+            //       Dojo code sets position, the only CSS option would be to use !important which
+            //       we'd prefer to avoid).
+            domStyle.set(this.domNode, "position", "fixed");
+
             // When in full screen mode it is also necessary to take care of the inner dimensions
             // of the dialog...
             var calculatedHeights = this.calculateHeights();
@@ -493,7 +498,7 @@ define(["dojo/_base/declare",
             var bodyHeight = containerHeight;
             if (this.widgetsButtons)
             {
-               // Dedebug height for the widgets buttons if present
+               // Deduct height for the widgets buttons if present
                bodyHeight = bodyHeight - 44;
             }
             $(this.bodyNode).height(bodyHeight);
