@@ -51,9 +51,9 @@ function getThumbnail(options) {
       name: "alfresco/renderers/Thumbnail",
       config: {}
    };
-   if (options.dragableThumbnail === true || options.dragableThumbnail === false)
+   if (options.draggableThumbnail === true || options.draggableThumbnail === false)
    {
-      thumbnail.config.isDraggable = options.dragableThumbnail;
+      thumbnail.config.isDraggable = options.draggableThumbnail;
    }
    if (options.thumbnailSuppress === true || options.thumbnailSuppress === false)
    {
@@ -184,7 +184,7 @@ model.jsonModel = {
                            rowSuppress: false,
                            setData: false,
                            thumbnailSuppress: false,
-                           dragableThumbnail: false
+                           draggableThumbnail: false
                         })
                      ]
                   }
@@ -201,7 +201,7 @@ model.jsonModel = {
                            rowSuppress: null,
                            setData: true,
                            thumbnailSuppress: false,
-                           dragableThumbnail: null
+                           draggableThumbnail: null
                         })
                      ]
                   }
@@ -218,7 +218,7 @@ model.jsonModel = {
                            rowSuppress: false,
                            setData: true,
                            thumbnailSuppress: false,
-                           dragableThumbnail: false
+                           draggableThumbnail: false
                         })
                      ]
                   }
@@ -235,7 +235,7 @@ model.jsonModel = {
                            rowSuppress: false,
                            setData: true,
                            thumbnailSuppress: true,
-                           dragableThumbnail: false
+                           draggableThumbnail: false
                         })
                      ]
                   }
