@@ -160,6 +160,7 @@ model.jsonModel = {
       {
          name: "alfresco/layout/UploadContainer",
          config: {
+            proxyDragAndDropNode: "#NO_OVERRIDES",
             widgets: [
                {
                   name: "alfresco/layout/HorizontalWidgets",

@@ -30,7 +30,10 @@
  * <p>If the widget is not intended to be used to contain all the widgets on the page then
  * [fullScreenDndHighlight]{@link module:alfresco/layout/UploadContainer#fullScreenDndHighlight}
  * can be configured to be false and the drag-and-drop upload highlight will only be applied
- * to the area containing the child widgets.</p>
+ * to the area containing the child widgets. Alternatively a
+ * [proxyDragAndDropNode]{@link module:alfresco/layout/UploadContainer#proxyDragAndDropNode}
+ * selectory query can be provided to place the overlay over another node on the screen.</p>
+ * 
  * 
  * @module alfresco/layout/VerticalWidgets
  * @extends module:alfresco/layout/VerticalWidgets
@@ -41,9 +44,11 @@
 define(["dojo/_base/declare",
         "alfresco/layout/VerticalWidgets",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
+        "dojo/dom-geometry",
         "dojo/dom-style",
+        "dojo/query",
         "dojo/window"], 
-        function(declare, VerticalWidgets, _AlfDndDocumentUploadMixin, domStyle, win) {
+        function(declare, VerticalWidgets, _AlfDndDocumentUploadMixin, domGeom, domStyle, query, win) {
    
    return declare([VerticalWidgets, _AlfDndDocumentUploadMixin], {
       
@@ -58,6 +63,18 @@ define(["dojo/_base/declare",
       fullScreenDndHighlight: true,
 
       /**
+       * This can be set to a CSS selector to find another element in the DOM on which to apply the overlay node.
+       * This use-case for this attribute is to allow the user to drop a file anywhere on the page but
+       * for the overlay to be applied to a [document list]{@link module:alfresco/documentlibrary/AlfDocumentList}.
+       * Note that the CSS selector query must only yield a single result.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      proxyDragAndDropNode: null,
+
+      /**
        * 
        * @instance
        */
@@ -68,15 +85,35 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * If [fullScreenDndHighlight]{@link module:alfresco/layout/UploadContainer#fullScreenDndHighlight} is
-       * configured to be false then this overrides the 
-       * [mixed in function]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#setDndHighlightDimensions}
-       * to ensure that the drag-and-drop upload highlight is fixed to fill the browser view port.
+       * <p>If a [proxyDragAndDropNode]{@link module:alfresco/layout/UploadContainer#proxyDragAndDropNode}
+       * selectory query has been provided that yields a single result then the 
+       * [overlay node]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropOverlayNode}
+       * will be placed directly over that target.</p>
+       * <p>If [fullScreenDndHighlight]{@link module:alfresco/layout/UploadContainer#fullScreenDndHighlight} is
+       * configured to be false then the drag-and-drop upload highlight is fixed to fill the browser view port.</p>
+       * <p>If neither a [proxyDragAndDropNode]{@link module:alfresco/layout/UploadContainer#proxyDragAndDropNode}
+       * is provided or [fullScreenDndHighlight]{@link module:alfresco/layout/UploadContainer#fullScreenDndHighlight}
+       * is configured to be false then the 
+       * [default]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#setDndHighlightDimensions}
+       * overlay dimensions will be .</p>
        * 
        * @instance
        */
       setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
-         if (this.fullScreenDndHighlight)
+         if (this.proxyDragAndDropNode && query(this.proxyDragAndDropNode).length === 1)
+         {
+            var proxyNode = query(this.proxyDragAndDropNode)[0];
+            var computedStyle = domStyle.getComputedStyle(proxyNode);
+            var dndNodeDimensions = domGeom.getMarginBox(proxyNode, computedStyle);
+            var dndNodePosition = domGeom.position(proxyNode);
+            domStyle.set(this.dragAndDropOverlayNode, {
+               height: dndNodeDimensions.h + "px",
+               width: dndNodeDimensions.w + "px",
+               top: dndNodePosition.y + "px",
+               left: dndNodePosition.x + "px"
+            });
+         }
+         else if (this.fullScreenDndHighlight)
          {
             var viewPortDimensions = win.getBox();
             domStyle.set(this.dragAndDropOverlayNode, {
