@@ -11,8 +11,6 @@ model.jsonModel = {
             }
          }
       }
-      // ,
-      // "alfresco/services/DocumentService"
    ],
    widgets: [
       {
