@@ -63,6 +63,13 @@ define([
                choiceCanWrap: this.optionsConfig.choiceCanWrap,
                choiceMaxWidth: this.optionsConfig.choiceMaxWidth,
                labelFormat: this.optionsConfig.labelFormat
+
+               // NOTE: This is not currently enabled, as it would create inconsistencies between
+               // controls' abilities, however the intention is at some point to use this control
+               // as a template to enable this option across all controls that take options (as
+               // long as it's deemed appropriate to do so when we next look at it)
+               // 
+               // inferMissingProperties: this.optionsConfig.inferMissingProperties
             };
 
             // Don't want to pass through undefined values (will override defaults)

@@ -137,13 +137,67 @@ model.jsonModel = {
          }
       },
       {
+         id: "SCOPED_CREATE",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            pubSubScope: "SCOPE1_",
+            label: "Scoped create",
+            publishTopic: "ALF_CRUD_CREATE",
+            publishPayload: {
+               url: "resources/123",
+               alfResponseTopic: "ALF_CRUD_CREATED"
+            },
+            publishGlobal: true
+         }
+      },
+      {
+         id: "SCOPED_DELETE",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            pubSubScope: "SCOPE2_",
+            label: "Scoped delete",
+            publishTopic: "ALF_CRUD_DELETE",
+            publishPayload: {
+               url: "resources/123",
+               responseTopic: "ALF_CRUD_DELETED"
+            },
+            publishGlobal: true
+         }
+      },
+      {
+         id: "SCOPED_DELETE_WITH_CONFIRMATION",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            pubSubScope: "SCOPE3_",
+            label: "Scoped delete (with confirmation)",
+            publishTopic: "ALF_CRUD_DELETE",
+            publishPayload: {
+               requiresConfirmation: true,
+               url: "resources/123",
+               responseTopic: "ALF_CRUD_DELETED"
+            },
+            publishGlobal: true
+         }
+      },
+      {
+         id: "SCOPED_UPDATE",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            pubSubScope: "SCOPE4_",
+            label: "Scoped update",
+            publishTopic: "ALF_CRUD_UPDATE",
+            publishPayload: {
+               url: "resources/123",
+               alfResponseTopic: "ALF_CRUD_UPDATED"
+            },
+            publishGlobal: true
+         }
+      },
+      {
          name: "aikauTesting/mockservices/CrudServiceMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
