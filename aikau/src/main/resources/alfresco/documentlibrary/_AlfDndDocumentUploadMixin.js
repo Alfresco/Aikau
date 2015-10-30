@@ -114,6 +114,19 @@ define(["dojo/_base/declare",
       dndUploadEventHandlers: null,
       
       /**
+       * This is the length of time (in milliseconds) that the highlight will be displayed on the screen without the mouse 
+       * moving over any element within the element on which the highlight can be applied. This exists so 
+       * that if the drag moves out of the browser without leaving the element (i.e. if it is moved onto
+       * an overlapping window) the highlight will not remain displayed forever.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.42
+       */
+      dndUploadHighlightDebounceTime: 2500,
+
+      /**
        * The image to use for the upload highlighting. Currently the only other option apart from the default is
        * "elipse-cross.png"
        * 
@@ -134,6 +147,17 @@ define(["dojo/_base/declare",
        * @since 1.0.41
        */
       dndUploadHighlightText: "dnd.upload.highlight.label",
+
+      /**
+       * This is used as a reference for a timeout handle that will remove the highlight if the mouse
+       * does not move over an element within the element that the upload highlight can be applied to.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.42
+       */
+      dndUploadHighlightTimeout: null,
 
       /**
        * Indicates whether or not the mixing module should take advantage of the drag-and-drop uploading capabilities. 
@@ -316,6 +340,15 @@ define(["dojo/_base/declare",
              this.checkApplicable(e.target, "onDndUploadDragEnter"))
          {
             this.addDndHighlight();
+
+            // We want to set a timeout for showing the highlight, if a timeout has previously been set we want
+            // to clear it, and then set a new timeout for this highlight. This is done in order to prevent the
+            // highlight remaining displayed when the drag event leaves the element by going onto an overlaid window
+            if (this.dndUploadHighlightTimeout)
+            {
+               clearTimeout(this.dndUploadHighlightTimeout);
+            }
+            this.dndUploadHighlightTimeout = setTimeout(lang.hitch(this, this.removeDndHighlight), this.dndUploadHighlightDebounceTime);
          }
          else
          {
