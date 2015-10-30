@@ -35,10 +35,12 @@ define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
         "alfresco/lists/views/layouts/_LayoutMixin",
+        "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, _LayoutMixin, domClass) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, _LayoutMixin, 
+                 _AlfDndDocumentUploadMixin, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _LayoutMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _LayoutMixin, _AlfDndDocumentUploadMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -67,6 +69,40 @@ define(["dojo/_base/declare",
       additionalCssClasses: null,
 
       /**
+       * Overrides the [mixed in default]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadHighLightImage}
+       * to use the smaller image.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.42
+       */
+      dndUploadHighlightImage: "elipse-cross.png",
+
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadText}
+       * to hide the upload message.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.42
+       */
+      dndUploadHighlightText: "",
+
+      /**
+       * Overrides the 
+       * [default mixed in configuration]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#suppressDndUploading}
+       * to suppress upload highlighting by default.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.42
+       */
+      suppressDndUploading: true,
+    
+      /**
        * Indicates that a "zebra striping" style should be applied (e.g. odd and even rows being different
        * colours). 
        *
@@ -90,6 +126,12 @@ define(["dojo/_base/declare",
                this.processObject(this.widgetModelModifiers, this.widgets);
             }
             this.processWidgets(this.widgets, this.containerNode);
+         }
+
+         if (this.hasUploadPermissions() === true)
+         {
+            this.addUploadDragAndDrop(this.domNode);
+            this._currentNode = this.currentItem.node;
          }
       },
 
