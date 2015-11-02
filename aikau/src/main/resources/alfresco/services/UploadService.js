@@ -944,6 +944,21 @@ define(["dojo/_base/declare",
        */
       onProgressDialogCancelClick: function alfresco_services_UploadService__onProgressDialogCancelClick(/*jshint unused:false*/ payload) {
          this.alfLog("log", "Upload progress dialog 'cancel' button clicked");
+
+         for (var key in this.fileStore)
+         {
+            if (this.fileStore.hasOwnProperty(key))
+            {
+               var fileInfo = this.fileStore[key];
+               if (fileInfo.state === this.STATE_UPLOADING)
+               {
+                   // We will only attempt an upload abort if the file is still being uploaded (there is
+                   // no point in aborting if the file has completed or failed)
+                   fileInfo.request.abort();
+               }
+            }
+         }
+
          this.reset();
          if (this.uploadDisplayWidget !== null && 
              this.uploadDisplayWidget !== undefined && 
