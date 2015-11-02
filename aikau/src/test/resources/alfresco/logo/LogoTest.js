@@ -53,18 +53,22 @@ define([
             },
 
             "Check image logo": function() {
-               return browser.findByCssSelector("#LOGO2.alfresco-logo-Logo .alfresco-logo-large")
+               return browser.findByCssSelector("#LOGO2 .alfresco-html-Image__img")
                   .isDisplayed()
                   .then(function(displayed) {
                      assert.isTrue(displayed, "Logo with image source was not displayed");
                   });
             },
 
-            "Check image logo height": function() {
+            "Check image logo dimensions": function() {
                return browser.findByCssSelector("#LOGO2 .alfresco-html-Image__img")
                   .getComputedStyle("height")
                   .then(function(height) {
                      assert.equal(height, "48px", "The height of the image logo was incorrect");
+                  })
+                  .getComputedStyle("width")
+                  .then(function(width) {
+                     assert.equal(width, "172px", "The width of the image logo was incorrect");
                   });
             },
 
