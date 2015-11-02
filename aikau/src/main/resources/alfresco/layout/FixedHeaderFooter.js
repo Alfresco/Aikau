@@ -102,11 +102,10 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-style",
-        "dojo/sniff",
         "dojo/topic",
         "dojo/text!./templates/FixedHeaderFooter.html"],
         function(ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin, array, declare, lang, aspect, 
-                 domClass, domConstruct, domStyle, has, topic, template) {
+                 domClass, domConstruct, domStyle, topic, template) {
 
    return declare([ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin], {
 
@@ -235,63 +234,26 @@ define(["alfresco/core/ProcessWidgets",
             }
          ]);
 
-         // Add resize listeners to the header/footer
-         // NOTE: This is done asynchronously to avoid delaying the resize event firing
-         setTimeout(lang.hitch(this, this.addHeaderResizeListener), 0);
-
          // Do the resize
          this.onResize();
          this.alfPublishResizeEvent(this.domNode);
+
+         // Setup the header resize listener
+         this.addResizeListener(this.header);
       },
 
       /**
        * <p>Setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
        * whenever a resize is detected in the header.</p>
        *
-       * <p>NOTE: This is based on a technique described at
-       * {@link http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection}</p>
+       * <p><strong>NOTE:</strong> This method is no longer called by the postCreate method, and will be removed in a future version</p>
        *
        * @instance
        * @since 1.0.41
+       * @deprecated Since 1.0.42 - use [ResizeMixin.addResizeListener]{@link module:alfresco/core/ResizeMixin#addResizeListener} instead.
        */
       addHeaderResizeListener: function alfresco_layout_FixedHeaderFooter__addHeaderResizeListener() {
-
-         // Setup the resize listener function
-         var onResize = lang.hitch(this, this.alfPublishResizeEvent, this.domNode);
-
-         // NOTE: Dojo IE detection not working very well here, so done manually instead
-         var ieRegex = /(Trident\/)|(Edge\/)/,
-            isIE = has("IE") || ieRegex.test(navigator.userAgent);
-
-         // Create the resize object
-         var resizeObj = document.createElement("object");
-         resizeObj.className = this.baseClass + "__header__resize-object";
-         resizeObj.type = "text/html";
-         resizeObj.onload = function() {
-            resizeObj.contentDocument.defaultView.addEventListener("resize", onResize);
-         };
-
-         // FF doesn't like visibility hidden (interferes with the resize event), Chrome doesn't care, IE needs it
-         if (isIE) {
-            resizeObj.style.visibility = "hidden";
-         }
-
-         // Normal browsers do this before appending to the DOM
-         if (!isIE) {
-            resizeObj.data = "about:blank";
-         }
-
-         // Add the object to the document
-         if (this.header.hasChildNodes()) {
-            this.header.insertBefore(resizeObj, this.header.firstChild);
-         } else {
-            this.header.appendChild(resizeObj);
-         }
-
-         // IE needs to do this after
-         if (isIE) {
-            resizeObj.data = "about:blank";
-         }
+         this.addResizeListener(this.header);
       },
 
       /**

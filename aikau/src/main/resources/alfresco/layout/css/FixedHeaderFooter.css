@@ -8,16 +8,6 @@
    }
    &__header {
       top: 0;
-      &__resize-object {
-         display: block;
-         height: 100%;
-         left: 0;
-         overflow: hidden;
-         position: absolute;
-         top: 0;
-         width: 100%;
-         z-index: -1;
-      }
    }
    &__footer {
       bottom: 0;
