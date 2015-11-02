@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfDocumentList (filtered)</shortname>
+  <description>This page shows how the alfresco/documentlibrary/AlfDocumentList widget can be configured to use filters for controlling the requests made for data to display.</description>
+  <family>aikau-unit-tests</family>
+  <url>/FilteredDocumentList</url>
+</webscript>
