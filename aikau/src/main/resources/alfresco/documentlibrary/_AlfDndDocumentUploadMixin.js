@@ -524,18 +524,30 @@ define(["dojo/_base/declare",
                }, pNode);
             }
             
-            var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
-            var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
-            var dndNodePosition = domGeom.position(this.dragAndDropNode);
-            domStyle.set(this.dragAndDropOverlayNode, {
-               height: dndNodeDimensions.h + "px",
-               width: dndNodeDimensions.w + "px",
-               top: dndNodePosition.y + "px",
-               left: dndNodePosition.x + "px"
-            });
+            this.setDndHighlightDimensions();
             domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
             domClass.add(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
          }
+      },
+
+      /**
+       * This sets the position and dimensions of the 
+       * [dragAndDropOverlayNode]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropOverlayNode}
+       * 
+       * @instance
+       * @overridable
+       * @since 1.0.42
+       */
+      setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
+         var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
+         var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
+         var dndNodePosition = domGeom.position(this.dragAndDropNode);
+         domStyle.set(this.dragAndDropOverlayNode, {
+            height: dndNodeDimensions.h + "px",
+            width: dndNodeDimensions.w + "px",
+            top: dndNodePosition.y + "px",
+            left: dndNodePosition.x + "px"
+         });
       },
       
       /**
