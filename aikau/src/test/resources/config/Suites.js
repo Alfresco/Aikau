@@ -32,8 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/html/ImageTest",
-      "src/test/resources/alfresco/logo/LogoTest"
+      "src/test/resources/alfresco/layout/FixedHeaderFooterTest"
 
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/layout/AlfTabContainerTest",

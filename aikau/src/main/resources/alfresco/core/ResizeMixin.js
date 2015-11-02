@@ -33,10 +33,11 @@
 define(["dojo/_base/declare",
         "alfresco/core/_EventsMixin",
         "alfresco/core/topics",
+        "alfresco/util/domUtils",
         "dojo/_base/lang",
         "dojo/on",
         "dojo/dom"], 
-        function( declare, _EventsMixin, topics, lang, on, dom) {
+        function( declare, _EventsMixin, topics, domUtils, lang, on, dom) {
    
    return declare([_EventsMixin], {
       
@@ -101,6 +102,23 @@ define(["dojo/_base/declare",
          {
             resizeHandler.apply(resizeHandlerCallScope, [payload.node]);
          }
+      },
+
+      /**
+       * <p>In IE9+ and Chrome/FF, setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
+       * whenever a resize is detected in the specified node.</p>
+       *
+       * <p>NOTE: This is based on a technique described at
+       * {@link http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection}</p>
+       *
+       * @instance
+       * @param {object} node The node to monitor
+       * @returns {object} A pointer to the listener, with a remove function on it (i.e. it can be passed to this.own)
+       * @since 1.0.42
+       */
+      addResizeListener: function alfresco_core_ResizeMixin__addResizeListener(node) {
+         var resizeHandler = lang.hitch(this, this.alfPublishResizeEvent, node.parentNode); // Must use parentNode to meet condition in alfOnNodeResized above
+         return domUtils.addResizeListener(node, resizeHandler);
       }
    });
 });
