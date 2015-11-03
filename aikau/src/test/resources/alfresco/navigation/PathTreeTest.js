@@ -155,12 +155,8 @@ define(["intern!object",
                });
          },
 
-         "Check that expanded node is focused": function() {
-            return browser.getActiveElement()
-               .getVisibleText()
-                  .then(function(text) {
-                     assert.equal(text, "Invoices", "The expanded node was not focused");
-                  });
+         "Check that expanded node is selected": function() {
+            return browser.findByCssSelector("#TREE2_TREE_workspace_SpacesStore_d56afdc3-0174-4f8c-bce8-977cafd712ab > .dijitTreeRowSelected");
          },
 
          "Post Coverage Results": function() {
