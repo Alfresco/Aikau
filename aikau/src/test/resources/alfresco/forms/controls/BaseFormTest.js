@@ -166,6 +166,21 @@ registerSuite(function(){
             });
       },
 
+      "Ensure hidden button inputs have value": function() {
+         return browser.findByCssSelector("#BASIC_FORM .alfresco-buttons-AlfButton:nth-child(1) input[type=\"button\"]")
+            .getAttribute("value")
+            .then(function(value) {
+               assert.equal(value, "OK");
+            })
+            .end()
+
+         .findByCssSelector("#BASIC_FORM .alfresco-buttons-AlfButton:nth-child(2) input[type=\"button\"]")
+            .getAttribute("value")
+            .then(function(value) {
+               assert.equal(value, "CANCEL");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
