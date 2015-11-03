@@ -1,3 +1,11 @@
+/* global page*/
+/* jshint sub:true */
+var useHash = true;
+if (page.url.args["useHash"])
+{
+   useHash = (page.url.args["useHash"] === "true");
+}
+
 model.jsonModel = {
    services: [
       {
@@ -42,7 +50,7 @@ model.jsonModel = {
                                                 group: "SEARCHLIST_SCOPE",
                                                 publishTopic: "ALF_SEARCHLIST_SCOPE_SELECTION",
                                                 checked: false,
-                                                hashName: "scope",
+                                                hashName: (useHash ? "scope" : null),
                                                 publishPayload: {
                                                    label: "Site",
                                                    value: "site"
@@ -58,7 +66,7 @@ model.jsonModel = {
                                                 group: "SEARCHLIST_SCOPE",
                                                 publishTopic: "ALF_SEARCHLIST_SCOPE_SELECTION",
                                                 checked: false,
-                                                hashName: "scope",
+                                                hashName: (useHash ? "scope" : null),
                                                 publishPayload: {
                                                    label: "All Sites",
                                                    value: "all_sites"
@@ -74,7 +82,7 @@ model.jsonModel = {
                                                 group: "SEARCHLIST_SCOPE",
                                                 publishTopic: "ALF_SEARCHLIST_SCOPE_SELECTION",
                                                 checked: true,
-                                                hashName: "scope",
+                                                hashName: (useHash ? "scope" : null),
                                                 publishPayload: {
                                                    label: "Repository",
                                                    value: "repo"
@@ -165,7 +173,7 @@ model.jsonModel = {
                   id: "FCTSRCH_SEARCH_FORM",
                   name: "alfresco/forms/SingleTextFieldForm",
                   config: {
-                     useHash: true,
+                     useHash: useHash,
                      okButtonLabel: "Ok",
                      okButtonPublishTopic: "ALF_SET_SEARCH_TERM",
                      okButtonPublishGlobal: true,
@@ -184,7 +192,7 @@ model.jsonModel = {
                      viewPreferenceProperty: "org.alfresco.share.searchList.viewRendererName",
                      view: "simple",
                      waitForPageWidgets: false,
-                     useHash: true,
+                     useHash: useHash,
                      hashVarsForUpdate: [
                         "searchTerm",
                         "facetFilters",

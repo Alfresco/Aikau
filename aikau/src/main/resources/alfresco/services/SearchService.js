@@ -229,7 +229,8 @@ define(["dojo/_base/declare",
             }
             else
             {
-               sort = (payload.sortField || this.sort) + "|" + (payload.sortAscending || this.sortAscending);
+               var sortAscending = (payload.sortAscending !== null && typeof payload.sortAscending !== "undefined") ? payload.sortAscending : this.sortAscending;
+               sort = (payload.sortField || this.sort) + "|" + sortAscending;
             }
 
             var data = {

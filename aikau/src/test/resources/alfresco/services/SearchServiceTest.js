@@ -187,4 +187,67 @@ define(["intern!object",
          }
       };
    });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "Search Service Test (no hashing)",
+
+         setup: function() {
+            browser = this.remote;
+            // NOTE: Load with a scope set because one will be set regardless...
+            return TestCommon.loadTestWebScript(this.remote, "/SearchService?useHash=false", "Search Service Test (no hashing)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Change sort field": function() {
+            return browser.findById("FCTSRCH_SORT_MENU_text")
+               .click()
+            .end()
+
+            .clearLog()
+            .clearXhrLog()
+
+            .findDisplayedById("SORT_BY_NAME_text")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_SEARCH_REQUEST")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "sortField", "cm:name", "Sort field not updated correctly");
+               })
+
+            .getLastXhr()
+               .then(function(xhr) {
+                  assert.include(xhr.request.url, encodeURIComponent("cm:name|true"), "Sort not correctly requested");
+               });
+         },
+
+         "Change sort order": function() {
+            return browser.findByCssSelector("#FCTSRCH_SORT_ORDER_TOGGLE img.dijitMenuItemIcon")
+               .clearLog()
+               .clearXhrLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_SEARCH_REQUEST")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "sortAscending", false, "Sort order not updated correctly");
+               })
+
+            .getLastXhr()
+               .then(function(xhr) {
+                  assert.include(xhr.request.url, encodeURIComponent("cm:name|false"), "Sort order not correctly requested");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
 });
