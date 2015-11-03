@@ -12,6 +12,9 @@
          &.alf-copy-to-icon {
             background-image: url("./images/actions/document-copy-to-16.png");
          }
+         &.alf-download-icon {
+            background-image: url("./images/actions/document-download-16.png");
+         }
          &.alf-download-as-zip-icon {
             background-image: url("./images/actions/document-download-16.png");
          }

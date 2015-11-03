@@ -287,6 +287,20 @@ define([],function() {
       DOCUMENTLIST_TAG_CHANGED: "ALF_DOCUMENTLIST_TAG_CHANGED",
       
       /**
+       * This topic is published to request the download of a single document
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.43
+       *
+       * @event
+       * @property {object} [node] - An object containing the node data.
+       * @property {string} [node.contentURL] - The URL to use for the node to download
+       */
+      DOWNLOAD: "ALF_DOWNLOAD",
+
+      /**
        * This topic is published to request either the download of a single document or folder (or a selection
        * of documents and folder) as a ZIP file.
        * 

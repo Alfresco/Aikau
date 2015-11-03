@@ -33,10 +33,11 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "alfresco/core/PathUtils",
         "alfresco/core/NodeUtils",
+        "alfresco/enums/urlTypes",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/_base/array"],
-        function(declare, BaseService, CoreXhr, topics, AlfConstants, PathUtils, NodeUtils, lang, domConstruct, array) {
+        function(declare, BaseService, CoreXhr, topics, AlfConstants, PathUtils, NodeUtils, urlTypes, lang, domConstruct, array) {
 
    return declare([BaseService, CoreXhr, PathUtils], {
 
@@ -120,6 +121,16 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/core/topics#GET_DOCUMENT
+       * @listens module:alfresco/core/topics#GET_DOCUMENT_LIST
+       * @listens module:alfresco/core/topics#REQUEST_ARCHIVE
+       * @listens module:alfresco/core/topics#REQUEST_ARCHIVE_PROGRESS
+       * @listens module:alfresco/core/topics#DELETE_ARCHIVE
+       * @listens module:alfresco/core/topics#DOWNLOAD
+       * @listens module:alfresco/core/topics#DOWNLOAD_AS_ZIP
+       * @listens module:alfresco/core/topics#DOWNLOAD_GENERATED_ARCHIVE
+       * @listens module:alfresco/core/topics#CANCEL_EDIT
+       * @listens module:alfresco/core/topics#GET_PARENT_NODEREF
        */
       registerSubscriptions: function alfresco_services_DocumentService__registerSubscriptions() {
          // Bind to document topics:
@@ -133,6 +144,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.DELETE_ARCHIVE, lang.hitch(this, this.onDeleteDownloadArchive));
 
          // Bind to download topics:
+         this.alfSubscribe(topics.DOWNLOAD, lang.hitch(this, this.onDownload));
          this.alfSubscribe(topics.DOWNLOAD_AS_ZIP, lang.hitch(this, this.onDownloadAsZip));
          this.alfSubscribe(topics.DOWNLOAD_NODE, lang.hitch(this, this.onDownloadFile));
          this.alfSubscribe(topics.CANCEL_EDIT, lang.hitch(this, this.onCancelEdit));
@@ -313,6 +325,40 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles requests to download a single document.
+       * 
+       * @instance
+       * @param  {object} payload The published payload that should contain a node.contentURL attribute.
+       * @since 1.0.43
+       * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
+       */
+      onDownload: function alfresco_services_DocumentService__onDownload(payload) {
+         var contentURL = lang.getObject("node.contentURL", false, payload);
+         if (contentURL)
+         {
+            // Strip off any superfluous forward slash at the beginning of the URL, this is required
+            // because the PROXY_URI has a trailing slash included...
+            if (contentURL[0] === "/")
+            {
+               contentURL = contentURL.substring(1);
+            }
+
+            // NOTE: The key request parameter of "a=true" is important to ensure that a download rather than
+            //       a navigation occurs...
+            this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
+               url: AlfConstants.PROXY_URI + contentURL + "?a=true",
+               type: urlTypes.FULL_PATH,
+               target: "NEW"
+            });
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to download a document but no 'node.contentURL' attribute was found in the payload provided", payload, this);
+         }
+      },
+
+      /**
+       * Handles requests to download one or more documents and/or folders as a ZIP archive.
        * 
        * @instance
        * @param {object} payload The payload containing the nodes to archive and download
@@ -590,6 +636,7 @@ define(["dojo/_base/declare",
       onDownloadFile: function alfresco_services_DocumentService__onDownloadFile(payload) {
          var nodeRefObj = NodeUtils.processNodeRef(payload.nodeRef);
          var fileName = payload.fileName || this.message("services.DocumentService.archiveName") + ".zip";
+
          var form = domConstruct.create("form");
          form.method = "GET";
          form.action = AlfConstants.PROXY_URI + "api/node/content/" + nodeRefObj.uri + "/" + encodeURIComponent(fileName);
