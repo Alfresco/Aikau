@@ -86,6 +86,77 @@ model.jsonModel = {
                                  }
                               ]
                            }
+                        },
+                        {
+                           id: "FCTSRCH_SORT_ORDER_TOGGLE",
+                           name: "alfresco/menus/AlfMenuBarToggle",
+                           config: {
+                              checked: true,
+                              onConfig: {
+                                 iconClass: "alf-sort-ascending-icon",
+                                 publishTopic: "ALF_DOCLIST_SORT",
+                                 publishPayload: {
+                                    direction: "ascending"
+                                 }
+                              },
+                              offConfig: {
+                                 iconClass: "alf-sort-descending-icon",
+                                 publishTopic: "ALF_DOCLIST_SORT",
+                                 publishPayload: {
+                                    direction: "descending"
+                                 }
+                              }
+                           }
+                        },
+                        {
+                           id: "FCTSRCH_SORT_MENU",
+                           name: "alfresco/menus/AlfMenuBarSelect",
+                           config: {
+                              title: "Sort by",
+                              selectionTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+                              widgets: [
+                                 {
+                                    id: "DOCLIB_SORT_FIELD_SELECT_GROUP",
+                                    name: "alfresco/menus/AlfMenuGroup",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             id: "SORT_BY_RELEVANCE",
+                                             name: "alfresco/menus/AlfCheckableMenuItem",
+                                             config: {
+                                                label: "Relevance",
+                                                value: "",
+                                                group: "DOCUMENT_LIBRARY_SORT_FIELD",
+                                                publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+                                                checked: true,
+                                                publishPayload: {
+                                                   label: "Relevance",
+                                                   direction: "ascending",
+                                                   sortable: false
+                                                }
+                                             }
+                                          },
+                                          {
+                                             id: "SORT_BY_NAME",
+                                             name: "alfresco/menus/AlfCheckableMenuItem",
+                                             config: {
+                                                label: "Name",
+                                                value: "cm:name",
+                                                group: "DOCUMENT_LIBRARY_SORT_FIELD",
+                                                publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+                                                checked: false,
+                                                publishPayload: {
+                                                   label: "Name",
+                                                   direction: "ascending",
+                                                   sortable: true
+                                                }
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
                         }
                      ]
                   }
