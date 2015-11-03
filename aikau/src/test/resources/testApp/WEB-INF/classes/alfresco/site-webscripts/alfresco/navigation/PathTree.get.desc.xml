@@ -1,5 +1,6 @@
 <webscript>
   <shortname>PathTree Test</shortname>
+  <description>This test page shows the alfresco/navigation/PathTree widget configured for both URL hashing and non-URL hashing modes.</description>
   <family>aikau-unit-tests</family>
   <url>/PathTree</url>
 </webscript>

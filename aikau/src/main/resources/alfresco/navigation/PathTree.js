@@ -130,6 +130,11 @@ define(["dojo/_base/declare",
                this.tree._expandNode(targetChildNode);
                this.expandPathElement(targetChildNode, pathElements);
             }
+            else
+            {
+               // Focus the last expanded node
+               this.tree.focusNode(node);
+            }
          }
       }
    });
