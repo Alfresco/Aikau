@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.42-SNAPSHOT</version>
+   <version>1.0.43-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -332,7 +332,7 @@
                <directoryRoots>
                   <directoryRoot>${basedir}/src/main/resources/alfresco/</directoryRoot>
                </directoryRoots>
-               <templateDirectory>${basedir}/src/jsdoc-templates/alfresco</templateDirectory>
+               <templateDirectory>${basedir}/resources/jsdoc/templates/alfresco</templateDirectory>
                <configFile>${basedir}/conf.json</configFile>
             </configuration>
          </plugin>

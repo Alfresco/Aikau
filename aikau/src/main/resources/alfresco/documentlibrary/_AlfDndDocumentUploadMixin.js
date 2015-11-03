@@ -18,9 +18,11 @@
  */
 
 /**
- * This mixin provides functions that allow files to be uploaded by dragging and dropping them
+ * <p>This mixin provides functions that allow files to be uploaded by dragging and dropping them
  * onto the widget. It also provides functions that control highlighting the widget when 
- * files are dragged over the widget.
+ * files are dragged over the widget.</p>
+ * <p><b>NOTE: Highlighting of items provided by this module is not supported for any version of Internet
+ * Explorer prior to version 10</b></p>
  * 
  * @module alfresco/documentlibrary/_AlfDndDocumentUploadMixin
  * @extends module:alfresco/core/Core
@@ -42,10 +44,9 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/dom-style",
         "dojo/dom",
-        "dojo/_base/window",
-        "dojo/query"], 
+        "dojo/_base/window"], 
         function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, lang, array, mouse, on, registry, domClass, 
-                 domConstruct, domGeom, domStyle, dom, win, query) {
+                 domConstruct, domGeom, domStyle, dom, win) {
    
    return declare([AlfCore, _AlfDocumentListTopicMixin, PathUtils], {
 
@@ -113,6 +114,19 @@ define(["dojo/_base/declare",
       dndUploadEventHandlers: null,
       
       /**
+       * This is the length of time (in milliseconds) that the highlight will be displayed on the screen without the mouse 
+       * moving over any element within the element on which the highlight can be applied. This exists so 
+       * that if the drag moves out of the browser without leaving the element (i.e. if it is moved onto
+       * an overlapping window) the highlight will not remain displayed forever.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.42
+       */
+      dndUploadHighlightDebounceTime: 2500,
+
+      /**
        * The image to use for the upload highlighting. Currently the only other option apart from the default is
        * "elipse-cross.png"
        * 
@@ -133,6 +147,17 @@ define(["dojo/_base/declare",
        * @since 1.0.41
        */
       dndUploadHighlightText: "dnd.upload.highlight.label",
+
+      /**
+       * This is used as a reference for a timeout handle that will remove the highlight if the mouse
+       * does not move over an element within the element that the upload highlight can be applied to.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.42
+       */
+      dndUploadHighlightTimeout: null,
 
       /**
        * Indicates whether or not the mixing module should take advantage of the drag-and-drop uploading capabilities. 
@@ -246,8 +271,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       hasUploadPermissions: function alfresco_documentlibrary___AlfDndDocumentUploadMixin__hasUploadPermissions() {
-         var isContainer = lang.getObject("currentItem.jsNode.isContainer", false, this);
-         var userPermissions = lang.getObject("currentItem.jsNode.permissions.user", false, this);
+         var isContainer = lang.getObject("currentItem.node.isContainer", false, this);
+         var userPermissions = lang.getObject("currentItem.node.permissions.user", false, this);
 
          return userPermissions &&
                 ((isContainer === true && userPermissions.CreateChildren === true) ||
@@ -315,10 +340,26 @@ define(["dojo/_base/declare",
              this.checkApplicable(e.target, "onDndUploadDragEnter"))
          {
             this.addDndHighlight();
+
+            // We want to set a timeout for showing the highlight, if a timeout has previously been set we want
+            // to clear it, and then set a new timeout for this highlight. This is done in order to prevent the
+            // highlight remaining displayed when the drag event leaves the element by going onto an overlaid window
+            if (this.dndUploadHighlightTimeout)
+            {
+               clearTimeout(this.dndUploadHighlightTimeout);
+            }
+            this.dndUploadHighlightTimeout = setTimeout(lang.hitch(this, this.removeDndHighlight), this.dndUploadHighlightDebounceTime);
          }
          else
          {
-            this.removeDndHighlight();
+            if (dom.isDescendant(e.target, this.dragAndDropOverlayNode))
+            {
+               this.alfLog("info", "Over the overlay!");
+            }
+            else
+            {
+               this.removeDndHighlight();
+            }
          }
       },
 
@@ -456,15 +497,14 @@ define(["dojo/_base/declare",
          if (this.dragAndDropNode)
          {
             // Create a new node for indicating that a drag and drop upload is possible.
-            // NOTE: The reason for using query here is that it covers all bases, in particular it addresses
-            //       scenario where list views are emptying the DOM model (including any previously created
-            //       overlays)...
-            var overlayResults = query(".alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay", this.dragAndDropNode.parentNode);
-            if (!overlayResults.length)
+            if (!this.dragAndDropOverlayNode)
             {
-               this.dragAndDropOverlayNode = domConstruct.create("div", {
+               // NOTE: We are deliberately creating an svg element here in order to retain IE10 support.
+               //       Firefox, Chrome and IE11 would support pointer-events none on any element, but IE10
+               //       only supports this on SVG elements.
+               this.dragAndDropOverlayNode = domConstruct.create("svg", {
                   className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay"
-               }, this.dragAndDropNode.parentNode, "first");
+               }, win.body());
 
                var pNode = domConstruct.create("p", {
                   className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay__info"
@@ -484,15 +524,30 @@ define(["dojo/_base/declare",
                }, pNode);
             }
             
-            var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
-            var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
-            domStyle.set(this.dragAndDropOverlayNode, {
-               height: dndNodeDimensions.h + "px",
-               width: dndNodeDimensions.w + "px"
-            });
+            this.setDndHighlightDimensions();
             domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
             domClass.add(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
          }
+      },
+
+      /**
+       * This sets the position and dimensions of the 
+       * [dragAndDropOverlayNode]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropOverlayNode}
+       * 
+       * @instance
+       * @overridable
+       * @since 1.0.42
+       */
+      setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
+         var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
+         var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
+         var dndNodePosition = domGeom.position(this.dragAndDropNode);
+         domStyle.set(this.dragAndDropOverlayNode, {
+            height: dndNodeDimensions.h + "px",
+            width: dndNodeDimensions.w + "px",
+            top: dndNodePosition.y + "px",
+            left: dndNodePosition.x + "px"
+         });
       },
       
       /**

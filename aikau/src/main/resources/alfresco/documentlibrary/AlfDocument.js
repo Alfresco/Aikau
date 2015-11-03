@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the document that have been provided.
        */
       onDocumentLoaded: function alfresco_documentlibrary_AlfDocument__onDocumentLoaded(payload) {
-         if (this.itemProperty && lang.exists(this.itemProperty, payload))
+         if ((this.itemProperty || this.itemProperty === "") && lang.exists(this.itemProperty, payload))
          {
             this.currentItem = lang.getObject(this.itemProperty, false, payload);
             this.renderDocument();

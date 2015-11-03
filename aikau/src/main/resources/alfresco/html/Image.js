@@ -116,7 +116,9 @@ define(["alfresco/core/_PublishOrLinkMixin",
       aspectRatio: null,
 
       /**
-       * Any optional classes to be added to the wrapped image element.
+       * Any optional classes to be added to the wrapped image element. If a
+       * [src]{@link module:alfresco/html/Image#src} property is provided then
+       * this property will not be used.
        *
        * @instance
        * @type {string|string[]}
@@ -223,7 +225,9 @@ define(["alfresco/core/_PublishOrLinkMixin",
 
       /**
        * The URL of the image to use (this is used in conjunction with the
-       * [srcType]{@link module:alfresco/html/Image#srcType} property).
+       * [srcType]{@link module:alfresco/html/Image#srcType} property). If a src
+       * is provided, then the [classes]{@link module:alfresco/html/Image#classes}
+       * property will not be used.
        *
        * @instance
        * @type {string}
@@ -285,11 +289,6 @@ define(["alfresco/core/_PublishOrLinkMixin",
             this.label = this.altText;
          }
 
-         // Encode the alt text, after checking for properties
-         if (this.altText) {
-            this.altText = this.encodeHTML(this.message(this.altText));
-         }
-
          // It's possible to provide a dimensions object, so use this if available
          if (this.dimensions) {
             this.width = this.dimensions.w || null;
@@ -310,8 +309,13 @@ define(["alfresco/core/_PublishOrLinkMixin",
       postCreate: function alfresco_html_Image__postCreate() {
          this.inherited(arguments);
 
-         // Add any image classes
-         if (this.classes) {
+         // Set the alt attribute value (the JS will make it "safe" automatically)
+         if (this.altText) {
+            this.imageNode.setAttribute("alt", this.message(this.altText));
+         }
+
+         // Add any image classes (but only if no src provided)
+         if (this.classes && !this.src) {
             domClass.add(this.imageNode, this.classes);
          }
 
@@ -439,8 +443,8 @@ define(["alfresco/core/_PublishOrLinkMixin",
             var cssDimensions = this.getCssDimensions(),
                hasCssDimensions = cssDimensions.w || cssDimensions.h;
 
-            // Do the resize only if no CSS dimensions, or if forceNatural is true
-            if (!hasCssDimensions || forceNatural) {
+            // Do the resize only if no CSS dimensions or it's a normal self-sizing image, or if forceNatural is true
+            if ((!hasCssDimensions && !this.src) || forceNatural) {
 
                // Use the natural dimensions if we have them (must have both, as an
                // image with zero width or zero height will not display at all)

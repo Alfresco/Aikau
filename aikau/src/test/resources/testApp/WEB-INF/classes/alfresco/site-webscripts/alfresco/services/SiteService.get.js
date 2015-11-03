@@ -297,7 +297,7 @@ model.jsonModel = {
             publishTopic: "ALF_REQUEST_SITE_MEMBERSHIP",
             publishPayload: {
                site: "swsdp",
-               user: "admin",
+               user: "admin@alfresco.com",
                role: "SiteCollaborator",
                comments: "Just for fun"
             }
@@ -468,7 +468,7 @@ model.jsonModel = {
             publishTopic: "ALF_LEAVE_SITE",
             publishPayload: {
                site: "swsdp",
-               user: "admin"
+               user: "admin@alfresco.com"
             }
          }
       },

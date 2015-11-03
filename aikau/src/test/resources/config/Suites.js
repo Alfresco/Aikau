@@ -35,10 +35,9 @@ define({
       "src/test/resources/alfresco/layout/FixedHeaderFooterTest"
 
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
-      // "src/test/resources/alfresco/dnd/FormCreationTest",
       // "src/test/resources/alfresco/layout/AlfTabContainerTest",
+      // "src/test/resources/alfresco/layout/HeightMixinTest",
       // "src/test/resources/alfresco/preview/PdfJsPreviewTest"
-      // "src/test/resources/alfresco/search/SearchSuggestionsTest",
       // "src/test/resources/alfresco/services/CloudSyncServiceTest",
    ],
 
@@ -83,12 +82,14 @@ define({
       "src/test/resources/alfresco/dnd/NestedConfigurationTest",
       "src/test/resources/alfresco/dnd/NestedReorderTest",
 
+      "src/test/resources/alfresco/documentlibrary/AlfDocumentTest",
       "src/test/resources/alfresco/documentlibrary/AlfGalleryViewSliderTest",
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
       "src/test/resources/alfresco/documentlibrary/DocumentLibraryTest",
       "src/test/resources/alfresco/documentlibrary/DocumentListTest",
       "src/test/resources/alfresco/documentlibrary/DocumentSelectorTest",
+      "src/test/resources/alfresco/documentlibrary/FilteredDocumentListTest",
       "src/test/resources/alfresco/documentlibrary/PaginationTest",
       "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
       "src/test/resources/alfresco/documentlibrary/SearchListTest",

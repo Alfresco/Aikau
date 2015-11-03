@@ -20,11 +20,11 @@
 /**
  *
  * @module alfresco/documentlibrary/AlfDocumentList
- * @extends module:alfresco/lists/AlfSortablePaginatedList
+ * @extends module:alfresco/lists/AlfFilteredList
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/lists/AlfSortablePaginatedList",
+        "alfresco/lists/AlfFilteredList",
         "alfresco/core/JsNode",
         "alfresco/core/topics",
         "dojo/_base/array",
@@ -568,6 +568,17 @@ define(["dojo/_base/declare",
                this.loadData();
             }
          }
-      }
+      },
+
+      /**
+       * Overrides the [default filters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} as 
+       * there should be no filters for document lists unless explicitly configured.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.42
+       */
+      widgetsForFilters: null
    });
 });

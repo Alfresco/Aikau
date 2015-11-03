@@ -56,7 +56,7 @@ define(["alfresco/TestCommon",
 
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload){
-                  assert.propertyVal(payload, "url", "user/admin/home", "Did not navigate to user home page");
+                  assert.propertyVal(payload, "url", "user/admin%40alfresco.com/home", "Did not navigate to user home page");
                });
          },
 
@@ -74,7 +74,7 @@ define(["alfresco/TestCommon",
 
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload){
-                  assert.propertyVal(payload, "url", "user/admin/home", "Did not generate URL with correct user home page");
+                  assert.propertyVal(payload, "url", "user/admin%40alfresco.com/home", "Did not generate URL with correct user home page");
                });
          },
 

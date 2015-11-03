@@ -155,14 +155,14 @@ model.jsonModel = {
                   name: "alfresco/forms/Form",
                   config: {
                      okButtonPublishTopic: "FORM_POST",
-                     pubSubScope: "FORM1_",
+                     pubSubScope: "FORM3_",
                      scopeFormControls: false,
                      value: {
                         tags: tagsValue
                      },
                      widgets: [
                         {
-                           id: "MULTISELECT_1",
+                           id: "MULTISELECT_3",
                            name: "alfresco/forms/controls/MultiSelectInput",
                            config: {
                               label: "Tags (disabled)",
@@ -179,6 +179,56 @@ model.jsonModel = {
                               },
                               disablementConfig: {
                                  initialValue: true
+                              }
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/layout/HorizontalWidgets",
+         config: {
+            widgets: [
+               {
+                  id: "FORM4",
+                  name: "alfresco/forms/Form",
+                  config: {
+                     okButtonPublishTopic: "FORM_POST",
+                     pubSubScope: "FORM4_",
+                     widgets: [
+                        {
+                           id: "MULTISELECT_4",
+                           name: "alfresco/forms/controls/MultiSelectInput",
+                           config: {
+                              label: "Sweets (fixed options)",
+                              name: "sweets",
+                              width: "300px",
+                              optionsConfig: {
+                                 fixed: [
+                                    {
+                                       label: "Foam Strawberries",
+                                       value: "foam_strawberries"
+                                    },
+                                    {
+                                       label: "Sherbert Lemons",
+                                       value: "sherbert_lemons"
+                                    },
+                                    {
+                                       label: "White Chocolate Mice",
+                                       value: "white_chocolate_mice"
+                                    },
+                                    {
+                                       label: "Refreshers",
+                                       value: "refreshers"
+                                    },
+                                    {
+                                       label: "Flying Saucers",
+                                       value: "flying_saucers"
+                                    }
+                                 ]
                               }
                            }
                         }
