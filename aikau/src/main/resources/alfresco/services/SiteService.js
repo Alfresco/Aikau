@@ -516,7 +516,7 @@ define(["dojo/_base/declare",
                      label: this.message("button.leave-site.confirm-label"),
                      publishTopic: "ALF_NAVIGATE_TO_PAGE",
                      publishPayload: {
-                        url: "user/" + originalRequestConfig.user + this.userHomePage.replace(/^\/*/, "/"),
+                        url: "user/" + encodeURIComponent(originalRequestConfig.user) + this.userHomePage.replace(/^\/*/, "/"),
                         type: urlTypes.PAGE_RELATIVE,
                         target: "CURRENT"
                      },
@@ -763,7 +763,7 @@ define(["dojo/_base/declare",
        */
       leaveSiteSuccess: function alfresco_services_SiteService__leaveSiteSuccess(response, requestConfig) {
          this.alfServicePublish("ALF_NAVIGATE_TO_PAGE", {
-            url: "user/" + requestConfig.user + this.userHomePage.replace(/^\/*/, "/"),
+            url: "user/" + encodeURIComponent(requestConfig.user) + this.userHomePage.replace(/^\/*/, "/"),
             type: urlTypes.PAGE_RELATIVE,
             target: "CURRENT"
          });
