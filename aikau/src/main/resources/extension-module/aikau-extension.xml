@@ -15,6 +15,7 @@
                      <bootstrap-file>/res/js/lib/dojo-${dependency.dojo.version}/dojo/dojo.js</bootstrap-file>
                      <page-widget>alfresco/core/Page</page-widget>
                      <base-url>/res/</base-url>
+                     <aikau-version>${project.version}</aikau-version>
                      <default-less-configuration>/js/aikau/${project.version}/alfresco/css/less/defaults.less</default-less-configuration><messages-object>Alfresco</messages-object>
                      <packages>
                         <package name="webscripts"    location="../service/${webscript.version}" />
