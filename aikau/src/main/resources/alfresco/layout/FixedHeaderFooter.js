@@ -239,7 +239,7 @@ define(["alfresco/core/ProcessWidgets",
          this.alfPublishResizeEvent(this.domNode);
 
          // Setup the header resize listener
-         this.addResizeListener(this.header);
+         this.own(this.addResizeListener(this.header));
       },
 
       /**
