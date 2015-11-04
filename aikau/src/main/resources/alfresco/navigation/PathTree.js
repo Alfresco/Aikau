@@ -132,8 +132,7 @@ define(["dojo/_base/declare",
             }
             else
             {
-               // Focus the last expanded node
-               // this.tree.focusNode(node);
+               // Select the last expanded node
                node.setSelected(true);
             }
          }
