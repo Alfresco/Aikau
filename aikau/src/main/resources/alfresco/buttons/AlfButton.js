@@ -138,6 +138,10 @@ define(["dojo/_base/declare",
             this.alfSubscribe(this.invalidTopic, lang.hitch(this, "onInvalidControl"));
             this.alfSubscribe(this.validTopic, lang.hitch(this, "onValidControl"));
          }
+
+         if (!this.value && this.publishTopic) {
+            this.valueNode.setAttribute("value", this.publishTopic);
+         }
       },
 
       /**
