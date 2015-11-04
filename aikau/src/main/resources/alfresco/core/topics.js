@@ -794,6 +794,31 @@ define([],function() {
       UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE",
 
       /**
+       * This topic is published when the user acknowledges the completion of uploading files to the
+       * repository
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       */
+      UPLOAD_COMPLETION_ACKNOWLEDGEMENT: "ALF_UPLOAD_DIALOG_OK_CLICK",
+
+      /**
+       * This topic is published to cancel any file uploads that are currently in progress.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       */
+      UPLOAD_CANCELLATION: "ALF_UPLOAD_DIALOG_CANCEL_CLICK",
+
+      /**
        * This topic can be published to display a dialog that allows users to select one or more files
        * to upload and the location to upload them to. This is typically handled by the 
        * [ContentService]{@link module:alfresco/services/ContentService}.
