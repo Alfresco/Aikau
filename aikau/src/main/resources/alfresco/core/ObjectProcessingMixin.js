@@ -111,6 +111,19 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Wrapper for processTokens, searching within currentMetadata
+       *
+       * @instance
+       * @param {string} v The value to process.
+       * @returns {*} The processed value
+       * @since 1.0.43
+       */
+      processCurrentMetadataTokens: function alfresco_core_ObjectProcessingMixin__processCurrentMetadataTokens(v) {
+         // Search for tokens in the current metadata
+         return this.processTokens(v, this.currentMetadata);
+      },
+
+      /**
        * This utility function will convert any NodeRef token into a URL friendly version (e.g. the "://" will
        * be converted to "/")
        *
