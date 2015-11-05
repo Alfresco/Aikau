@@ -415,6 +415,7 @@ define(["dojo/_base/declare",
                "max-height": calculatedHeights.maxBodyHeight + "px"
             });
          }
+         this.resize();
       },
 
       /**
@@ -524,7 +525,6 @@ define(["dojo/_base/declare",
          // jshint unused:false
          if (this.domNode)
          {
-            this.resize();
             this.onWindowResize();
          }
       },

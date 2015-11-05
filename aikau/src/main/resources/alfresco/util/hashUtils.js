@@ -113,6 +113,7 @@ define(["dojo/_base/array",
        * a suppresssDecoding argument of true is provided.
        *
        * @instance
+       * @function
        * @param {boolean} [suppressDecoding] Optionally suppress URI decoding
        * @returns {Object} The hash value as an object
        */
@@ -122,6 +123,7 @@ define(["dojo/_base/array",
        * Get the current hash value as a string. All values will be URI decoded.
        *
        * @instance
+       * @function
        * @returns {string} The hash value as a string
        */
       getHashString: lang.hitch(util, util.getHashString),
@@ -131,6 +133,7 @@ define(["dojo/_base/array",
        * a suppressEncoding argument of true is provided.
        *
        * @instance
+       * @function
        * @param {Object} hashObj The new hash object
        * @param {boolean} [replace] Replace the current hash, rather than changing
        *                            (i.e. do not add to the history)
@@ -142,6 +145,7 @@ define(["dojo/_base/array",
        * Set the current hash value from a string. All values will be URI encoded.
        *
        * @instance
+       * @function
        * @param {string} hashString The new hash string
        * @param {boolean} [replace] Replace the current hash, rather than changing
        *                            (i.e. do not add to the history)
@@ -154,6 +158,7 @@ define(["dojo/_base/array",
        * or undefined. All values will be URI encoded.
        *
        * @instance
+       * @function
        * @param {Object} newValues The new hash values with hash names as keys and
        *                           hash values as their values (will only change
        *                           values for hash names with keys in this object)
