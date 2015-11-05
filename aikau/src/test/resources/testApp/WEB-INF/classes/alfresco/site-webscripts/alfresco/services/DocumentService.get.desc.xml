@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DocumentService Test</shortname>
+  <description>This page is used to test the alfresco/services/DocumentService</description>
+  <family>aikau-unit-tests</family>
+  <url>/DocumentService</url>
+</webscript>
