@@ -32,7 +32,6 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/ObjectProcessingMixin",
         "dojo/text!./templates/DragAndDropItems.html",
         "alfresco/core/Core",
         "alfresco/dnd/Constants",
@@ -44,10 +43,10 @@ define(["dojo/_base/declare",
         "dojo/string",
         "dojo/dom-construct",
         "dojo/dom-class"], 
-        function(declare, _Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, template, AlfCore, Constants, 
+        function(declare, _Widget, _Templated, CoreWidgetProcessing, template, AlfCore, Constants, 
                  Source, lang, array, dom, on, stringUtil, domConstruct, domClass) {
    
-   return declare([_Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore], {
+   return declare([_Widget, _Templated, CoreWidgetProcessing, AlfCore], {
       
       /**
        * An array of the CSS files to use with this widget.
