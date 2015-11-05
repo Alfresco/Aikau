@@ -22,6 +22,7 @@
  *
  * @module alfresco/core/CoreWidgetProcessing
  * @extends module:alfresco/core/Core
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @mixinSafe
  * @author Dave Draper
  */

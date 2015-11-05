@@ -27,6 +27,9 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @mixes module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin
+ * @mixes module:alfresco/node/NodeDropTargetMixin
  * @author Dave Draper
  * @since 1.0.34
  */
@@ -37,14 +40,13 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "alfresco/node/NodeDropTargetMixin",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/ObjectProcessingMixin",
         "alfresco/core/Core",
         "alfresco/core/topics",
         "dojo/_base/lang"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, _AlfDndDocumentUploadMixin, NodeDropTargetMixin,
-                 CoreWidgetProcessing, ObjectProcessingMixin, Core, topics, lang) {
+                 CoreWidgetProcessing, Core, topics, lang) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _AlfDndDocumentUploadMixin, NodeDropTargetMixin, ObjectProcessingMixin, 
+   return declare([_WidgetBase, _TemplatedMixin, _AlfDndDocumentUploadMixin, NodeDropTargetMixin, 
                    CoreWidgetProcessing, Core], {
 
       /**
