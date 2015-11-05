@@ -131,6 +131,8 @@ define(["dojo/_base/declare",
        * @listens module:alfresco/core/topics#DOWNLOAD_GENERATED_ARCHIVE
        * @listens module:alfresco/core/topics#CANCEL_EDIT
        * @listens module:alfresco/core/topics#GET_PARENT_NODEREF
+       * @listens module:alfresco/core/topics#SMART_DOWNLOAD
+       * @listens module:alfresco/core/topics#DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS
        */
       registerSubscriptions: function alfresco_services_DocumentService__registerSubscriptions() {
          // Bind to document topics:
@@ -149,6 +151,8 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.DOWNLOAD_NODE, lang.hitch(this, this.onDownloadFile));
          this.alfSubscribe(topics.CANCEL_EDIT, lang.hitch(this, this.onCancelEdit));
          this.alfSubscribe(topics.GET_PARENT_NODEREF, lang.hitch(this, this.onGetParentNodeRef));
+         this.alfSubscribe(topics.SMART_DOWNLOAD, lang.hitch(this, this.onSmartDownload));
+         this.alfSubscribe(topics.DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS, lang.hitch(this, this.onDocumentRetrievedForDownload));
       },
 
       /**
@@ -354,6 +358,86 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("warn", "A request was made to download a document but no 'node.contentURL' attribute was found in the payload provided", payload, this);
+         }
+      },
+
+      /**
+       * This function is provided to handle downloads of selected items with some intelligence. If a single
+       * document is selected then it will be downloaded
+       * (via the [onDownload]{@link module:alfresco/services/DocumentService#onDownload}), but if multiple items 
+       * are selected then they will be downloaded as an archive 
+       * (via the [onDownloadAsZip]{@link module:alfresco/services/DocumentService#onDownloadAsZip}) function.
+       * If a single folder is selected then it will be downloaded as an archive. This function is also able to cope
+       * with data provided by either the Document Library or Search APIs.
+       * 
+       * @instance
+       * @param {object} payload An object containing the items to download.
+       * @since 1.0.43
+       */
+      onSmartDownload: function alfresco_servicews_DocumentService__onSmartDownload(payload) {
+         if (payload.nodes)
+         {
+            if (payload.nodes.length === 1)
+            {
+               // For single items perform a single download...
+               // However, we still need to check the item type (i.e. whether it is a document or folder)...
+               var node = payload.nodes[0];
+               if (node.node)
+               {
+                  // Document Library style API 
+                  if (node.node.isContainer === true)
+                  {
+                     this.onDownloadAsZip(payload);
+                  }
+                  else
+                  {
+                     this.onDownload(node);
+                  }
+               }
+               else if (node.type === "document" && node.nodeRef)
+               {
+                  // Search style API document, it is necessary to request the full metadata of the node...
+                  this.onRetrieveSingleDocumentRequest({
+                     nodeRef: node.nodeRef,
+                     alfResponseTopic: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL"
+                  });
+               }
+               else if (node.type === "folder")
+               {
+                  // Search style API folder...
+                  this.onDownloadAsZip(payload);
+               }
+               else
+               {
+                  this.alfLog("warn", "A request was made to perform a smart download on a single item but it was not able to determine if the item was a document or a folder", payload, this);
+               }
+            }
+            else
+            {
+               // Always download multiple files as a zip...
+               this.onDownloadAsZip(payload);
+            }
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to perform a smart download but no 'nodes' attribute was provided in the payload", payload, this);
+         }
+      },
+
+      /**
+       * This is the callback function from requests to retrieve the metadata for a node defined by the
+       * Search API called from the [onSmartDownload]{@link module:alfresco/services/DocumentService#onSmartDownload}
+       * function.
+       * 
+       * @instance
+       * @param {object} payload The full metadata of a node to download.
+       * @since 1.0.43
+       */
+      onDocumentRetrievedForDownload: function alfresco_services_DocumentService__onDocumentRetrievedForDownload(payload) {
+         var node = lang.getObject("response.item", false, payload);
+         if (node)
+         {
+            this.onDownload(node);
          }
       },
 

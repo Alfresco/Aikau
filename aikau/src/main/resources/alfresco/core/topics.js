@@ -322,6 +322,23 @@ define([],function() {
       DOWNLOAD_NODE: "ALF_DOWNLOAD_FILE",
 
       /**
+       * This topic subscribed to by the [DocumentService]{@link module:alfresco/services/DocumentService}
+       * in order to trigger a download of a node that has just had its full metadata successfully
+       * retrieved. This is not intended to be used by widgets or services other than the 
+       * [DocumentService]{@link module:alfresco/services/DocumentService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       * @property {object} response The reponse from the XHR request to retrieve the node metadata
+       * @property {object} response.item The metadata for the requested node
+       */
+      DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
+
+      /**
        * This topic can be published to request that a notification be displayed. It is subscribed to 
        * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
        *
@@ -743,6 +760,20 @@ define([],function() {
        * @property {number} value - The size (in pixels) to make the thumbnails.
        */
       SET_THUMBNAIL_SIZE: "ALF_SET_THUMBNAIL_SIZE",
+
+      /**
+       * This can be published to request a "smart" download. It is smart because it will determine whether
+       * or not to download a single item individually or multiple items as a ZIP.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       * @property {object[]} nodes The node or nodes to download.
+       */
+      SMART_DOWNLOAD: "ALF_SMART_DOWNLOAD",
 
       /**
        * This topic is published in order to make the actual request to sync a node or nodes
