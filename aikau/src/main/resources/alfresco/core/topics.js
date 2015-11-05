@@ -322,21 +322,6 @@ define([],function() {
       DOWNLOAD_NODE: "ALF_DOWNLOAD_FILE",
 
       /**
-       * This is the response topic for requests to obtain node data that will be immediately
-       * followed by the downloading of that node. It is set as the response topic for smart
-       * downloads of nodes included in Search API requests where the "nodeRef" attribute
-       * is available but the "contentURL" attribute is not. This is not intended to be used by 
-       * widgets or services other than the 
-       * [DocumentService]{@link module:alfresco/services/DocumentService}.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       * @since 1.0.43
-       */
-      DOWNLOAD_ON_NODE_RETRIEVAL: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL",
-
-      /**
        * This topic subscribed to by the [DocumentService]{@link module:alfresco/services/DocumentService}
        * in order to trigger a download of a node that has just had its full metadata successfully
        * retrieved. This is not intended to be used by widgets or services other than the 

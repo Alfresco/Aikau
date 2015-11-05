@@ -399,7 +399,7 @@ define(["dojo/_base/declare",
                   // Search style API document, it is necessary to request the full metadata of the node...
                   this.onRetrieveSingleDocumentRequest({
                      nodeRef: node.nodeRef,
-                     alfResponseTopic: topics.DOWNLOAD_ON_NODE_RETRIEVAL
+                     alfResponseTopic: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL"
                   });
                }
                else if (node.type === "folder")
