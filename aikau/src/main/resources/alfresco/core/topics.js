@@ -348,6 +348,8 @@ define([],function() {
        * @since 1.0.43
        *
        * @event
+       * @property {object} response The reponse from the XHR request to retrieve the node metadata
+       * @property {object} response.item The metadata for the requested node
        */
       DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
 
