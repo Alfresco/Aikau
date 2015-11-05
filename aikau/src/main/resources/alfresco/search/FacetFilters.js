@@ -174,7 +174,11 @@ define(["dojo/_base/declare",
          var activeFilters = [];
          if (payload.activeFilters)
          {
-            activeFilters = payload.activeFilters.split(",");
+            var encodedActiveFilters = payload.activeFilters.split(",");
+            for(var i = 0; i < encodedActiveFilters.length; i++)
+            {
+               activeFilters.push(decodeURIComponent(encodedActiveFilters[i]));
+            }
          }
 
          // Create a new array and populate with the the facet filters...
