@@ -896,8 +896,11 @@ define(["dojo/_base/declare",
             }
 
             // Substitute any tokens in the current value to search for...
-            currValue = this.substituteFilterTokens(currValue);
-
+            if (renderFilterConfig.substituteTokens === true)
+            {
+               currValue = this.substituteFilterTokens(currValue);
+            }
+            
             foundCurrValue = array.some(targetArray, lang.hitch(this, this.processFilterArrayCompare, currValue));
             foundCurrValue = array.some(targetArray, function(arrayValue) {
                if (typeof arrayValue === "boolean")
@@ -949,7 +952,10 @@ define(["dojo/_base/declare",
          }
 
          // Substitute any tokens in the current value to search for...
-         currValue = this.substituteFilterTokens(currValue);
+         if (renderFilterConfig.substituteTokens === true)
+         {
+            currValue = this.substituteFilterTokens(currValue);
+         }
          
          // Convert booleans to strings for simple comparison...
          // This is necessary because when creating pages dynamically the boolean values

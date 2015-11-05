@@ -87,6 +87,7 @@ model.jsonModel = {
                      label: "Should appear (is token)",
                      renderFilter: [
                         {
+                           substituteTokens: true,
                            property: "x",
                            values: ["{tokens.t2}"]
                         }
@@ -100,6 +101,7 @@ model.jsonModel = {
                      label: "Should appear (contains token)",
                      renderFilter: [
                         {
+                           substituteTokens: true,
                            property: "w",
                            contains: ["{tokens.t1}"]
                         }
