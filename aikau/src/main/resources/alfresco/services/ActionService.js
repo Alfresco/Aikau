@@ -262,10 +262,7 @@ define(["dojo/_base/declare",
          //       release we won't be able to remove these inconsistencies. By including the selected items
          //       as "nodes" it allows us to forward to "actionTopics" without the need to create individual
          //       actions to alias all the capabilities provided by other services.
-         if (!payload.nodes)
-         {
-            payload.nodes = payload.documents;
-         }
+         payload.nodes = payload.documents;
       },
 
       /**

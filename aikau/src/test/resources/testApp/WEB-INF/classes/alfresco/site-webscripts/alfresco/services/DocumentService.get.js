@@ -22,7 +22,7 @@ model.jsonModel = {
             publishTopic: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
             publishPayload: {
                actionTopic: "ALF_SMART_DOWNLOAD",
-               nodes: [
+               documents: [
                   {
                      node: {
                         isContainer: false,
@@ -42,7 +42,7 @@ model.jsonModel = {
             publishTopic: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
             publishPayload: {
                actionTopic: "ALF_SMART_DOWNLOAD",
-               nodes: [
+               documents: [
                   {
                      node: {
                         isContainer: true,
@@ -61,7 +61,7 @@ model.jsonModel = {
             publishTopic: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
             publishPayload: {
                actionTopic: "ALF_SMART_DOWNLOAD",
-               nodes: [
+               documents: [
                   {
                      type: "document",
                      nodeRef: "workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339"
@@ -78,7 +78,7 @@ model.jsonModel = {
             publishTopic: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
             publishPayload: {
                actionTopic: "ALF_SMART_DOWNLOAD",
-               nodes: [
+               documents: [
                   {
                      type: "folder",
                      nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"
@@ -95,7 +95,7 @@ model.jsonModel = {
             publishTopic: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
             publishPayload: {
                actionTopic: "ALF_SMART_DOWNLOAD",
-               nodes: [
+               documents: [
                   {
                      node: {
                         nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"
