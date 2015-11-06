@@ -49,6 +49,33 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/CommentsList.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/CommentsList.properties"}],
+
+      /**
+       * Whether to use a full-screen dialog when adding comments.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.43
+       */
+      addCommentsFullScreen: false,
+
+      /**
+       * Executed after properties mixed in and before widget created
+       *
+       * @instance
+       * @override
+       * @since 1.0.43
+       */
+      postMixInProperties: function alfresco_renderers_CommentsList__postMixInProperties() {
+         this.inherited(arguments);
+         if (this.addCommentsFullScreen) {
+            var addCommentPayload = lang.getObject("widgets.0.config.widgetsBefore.0.config.publishPayload", false, this);
+            if(addCommentPayload) {
+               addCommentPayload.fullScreenMode = true;
+            }
+         }
+      },
       
       /**
        * Widget has been started, but not necessarily any sub-widgets.
