@@ -172,6 +172,7 @@ define(["dojo/_base/declare",
        * @instance
        * @readonly
        * @type {object}
+       * @since 1.0.43
        */
       resizeListener: null,
 
