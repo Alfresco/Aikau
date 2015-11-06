@@ -235,8 +235,8 @@ define(["dojo/_base/declare",
 
             var data = {
                facetFields: payload.facetFields || "",
-               filters: payload.filters || "",
-               term: payload.term,
+               filters: decodeURIComponent(payload.filters) || "",
+               encodedFilters: payload.filters || "",term: payload.term,
                tag: payload.tag || this.tag,
                startIndex: (payload.startIndex || payload.startIndex === 0) ? payload.startIndex : this.startIndex,
                sort: sort,

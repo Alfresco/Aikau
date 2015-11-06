@@ -34,12 +34,15 @@ define(["dojo/_base/array",
    var util = {
 
       // See API below
-      getHash: function alfresco_util_hashUtils__getHash() {
+      getHash: function alfresco_util_hashUtils__getHash(suppressDecoding) {
          var hashString = this.getHashString(),
             hashObj = ioQuery.queryToObject(hashString);
-         array.forEach(Object.keys(hashObj), function(hashKey) {
-            hashObj[hashKey] = decodeURIComponent(hashObj[hashKey]);
-         });
+         if (suppressDecoding !== true)
+         {
+            array.forEach(Object.keys(hashObj), function(hashKey) {
+               hashObj[hashKey] = decodeURIComponent(hashObj[hashKey]);
+            });
+         }
          return hashObj;
       },
 
@@ -49,11 +52,14 @@ define(["dojo/_base/array",
       },
 
       // See API below
-      setHash: function alfresco_util_hashUtils__setHash(hashObj, replace) {
+      setHash: function alfresco_util_hashUtils__setHash(hashObj, replace, suppressEncoding) {
          var hashObjToUse = lang.clone(hashObj);
-         array.forEach(Object.keys(hashObjToUse), function(hashKey) {
-            hashObjToUse[hashKey] = encodeURIComponent(hashObjToUse[hashKey]);
-         });
+         if (suppressEncoding !== true)
+         {
+            array.forEach(Object.keys(hashObjToUse), function(hashKey) {
+               hashObjToUse[hashKey] = encodeURIComponent(hashObjToUse[hashKey]);
+            });
+         }
          var hashString = ioQuery.objectToQuery(hashObjToUse);
          this.setHashString(hashString, replace);
       },
@@ -103,9 +109,11 @@ define(["dojo/_base/array",
    return {
 
       /**
-       * Get the current hash value as an object. All values will be URI decoded.
+       * Get the current hash value as an object. All values will be URI decoded unless
+       * a suppresssDecoding argument of true is provided.
        *
        * @instance
+       * @param {boolean} [suppressDecoding] Optionally suppress URI decoding
        * @returns {Object} The hash value as an object
        */
       getHash: lang.hitch(util, util.getHash),
@@ -119,12 +127,14 @@ define(["dojo/_base/array",
       getHashString: lang.hitch(util, util.getHashString),
 
       /**
-       * Set the current hash value from an object. All values will be URI encoded.
+       * Set the current hash value from an object. All values will be URI encoded unless
+       * a suppressEncoding argument of true is provided.
        *
        * @instance
        * @param {Object} hashObj The new hash object
        * @param {boolean} [replace] Replace the current hash, rather than changing
        *                            (i.e. do not add to the history)
+       * @param {boolean} [suppressEncoding] Optionally suppress URI encoding
        */
       setHash: lang.hitch(util, util.setHash),
 
