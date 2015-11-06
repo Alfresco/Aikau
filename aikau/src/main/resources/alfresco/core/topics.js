@@ -287,6 +287,20 @@ define([],function() {
       DOCUMENTLIST_TAG_CHANGED: "ALF_DOCUMENTLIST_TAG_CHANGED",
       
       /**
+       * This topic is published to request the download of a single document
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.43
+       *
+       * @event
+       * @property {object} [node] - An object containing the node data.
+       * @property {string} [node.contentURL] - The URL to use for the node to download
+       */
+      DOWNLOAD: "ALF_DOWNLOAD",
+
+      /**
        * This topic is published to request either the download of a single document or folder (or a selection
        * of documents and folder) as a ZIP file.
        * 
@@ -306,6 +320,23 @@ define([],function() {
        * @since 1.0.33
        */
       DOWNLOAD_NODE: "ALF_DOWNLOAD_FILE",
+
+      /**
+       * This topic subscribed to by the [DocumentService]{@link module:alfresco/services/DocumentService}
+       * in order to trigger a download of a node that has just had its full metadata successfully
+       * retrieved. This is not intended to be used by widgets or services other than the 
+       * [DocumentService]{@link module:alfresco/services/DocumentService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       * @property {object} response The reponse from the XHR request to retrieve the node metadata
+       * @property {object} response.item The metadata for the requested node
+       */
+      DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
 
       /**
        * This topic can be published to request that a notification be displayed. It is subscribed to 
@@ -731,6 +762,20 @@ define([],function() {
       SET_THUMBNAIL_SIZE: "ALF_SET_THUMBNAIL_SIZE",
 
       /**
+       * This can be published to request a "smart" download. It is smart because it will determine whether
+       * or not to download a single item individually or multiple items as a ZIP.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       * @property {object[]} nodes The node or nodes to download.
+       */
+      SMART_DOWNLOAD: "ALF_SMART_DOWNLOAD",
+
+      /**
        * This topic is published in order to make the actual request to sync a node or nodes
        * with the Cloud.
        * 
@@ -778,6 +823,31 @@ define([],function() {
        * @default
        */
       UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE",
+
+      /**
+       * This topic is published when the user acknowledges the completion of uploading files to the
+       * repository
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       */
+      UPLOAD_COMPLETION_ACKNOWLEDGEMENT: "ALF_UPLOAD_DIALOG_OK_CLICK",
+
+      /**
+       * This topic is published to cancel any file uploads that are currently in progress.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       */
+      UPLOAD_CANCELLATION: "ALF_UPLOAD_DIALOG_CANCEL_CLICK",
 
       /**
        * This topic can be published to display a dialog that allows users to select one or more files

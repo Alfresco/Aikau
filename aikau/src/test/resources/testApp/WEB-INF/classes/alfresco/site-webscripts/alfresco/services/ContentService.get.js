@@ -108,13 +108,29 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/buttons/AlfButton",
          id: "UPLOAD_NEW_FILE",
+         name: "alfresco/buttons/AlfButton",
          config: {
             label: "Launch upload dialog",
             publishTopic: "ALF_SHOW_UPLOADER",
             publishPayload: {
                parent: {
+                  nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
+               }
+            }
+         }
+      },
+      {
+         id: "UPDATE_FILE",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Launch upload new version dialog",
+            publishTopic: "ALF_SHOW_UPLOADER",
+            publishPayload: {
+               parent: {
+                  nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
+               },
+               node: {
                   nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
                }
             }

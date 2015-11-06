@@ -21,11 +21,9 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
    // The IDs that should be displayed are...
    // MBI1 - successful filter rule
@@ -39,129 +37,116 @@ define(["intern!object",
    // MBI6 - failed AND condition
    // MI2 - failed filter rule following inherited currentItem change
          
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "RenderFilter Tests",
+      return {
+         name: "RenderFilter Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/RenderFilter", "RenderFilter Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/RenderFilter", "RenderFilter Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Check that successful contains rule widget is shown": function() {
-         return browser.findAllByCssSelector("#MBI9")
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Could not find widget");
-            });
-      },
+         "Check that successful contains rule widget is shown": function() {
+            return browser.findAllByCssSelector("#MBI9")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Could not find widget");
+               });
+         },
 
-      "Check that successful containsAll rule widget is shown": function() {
-         return browser.findAllByCssSelector("#MBI10")
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Could not find widget");
-            });
-      },
+         "Check that successful containsAll rule widget is shown": function() {
+            return browser.findAllByCssSelector("#MBI10")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Could not find widget");
+               });
+         },
 
-      "Check that failing contains rule widget not rendererd": function() {
-         return browser.findAllByCssSelector("#MBI11")
-            .then(function(elements) {
-               assert.lengthOf(elements, 0, "Should not have been able to find widget");
-            });
-      },
+         "Check that failing contains rule widget not rendererd": function() {
+            return browser.findAllByCssSelector("#MBI11")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "Should not have been able to find widget");
+               });
+         },
 
-      "Check that failing containsAll rule widget is not rendered": function() {
-         return browser.findAllByCssSelector("#MBI12")
-            .then(function(elements) {
-               assert.lengthOf(elements, 0, "Should not have been able to find widget");
-            });
-      },
+         "Check that failing containsAll rule widget is not rendered": function() {
+            return browser.findAllByCssSelector("#MBI12")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "Should not have been able to find widget");
+               });
+         },
 
-      "Test single render filter rule": function () {
-         return browser.findById("MBI1")
-            .then(function (el) {
-               expect(el).to.be.an("object", "A single render filter rule failed unexpectedly");
-            });
-      },
+         "Test single render filter rule": function () {
+            return browser.findById("MBI1");
+         },
 
-      "Test negated render filter rule (1)": function() {
-         return browser.findById("MBI3")
-            .then(function (el) {
-               expect(el).to.be.an("object", "A single negated render filter rule failed unexpectedly");
-            });
-      },
+         "Test negated render filter rule (1)": function() {
+            return browser.findById("MBI3");
+         },
 
-      "Test negated render filter rule (2)": function() {
-         return browser.findAllByCssSelector("MBI3a")
-            .then(function (elements) {
-               assert.lengthOf(elements, 0, "A single negated render filter rule failed unexpectedly");
-            });
-      },
+         "Test negated render filter rule (2)": function() {
+            return browser.findAllByCssSelector("MBI3a")
+               .then(function (elements) {
+                  assert.lengthOf(elements, 0, "A single negated render filter rule failed unexpectedly");
+               });
+         },
 
-      "Test absent property render filter rule": function() {
-         return browser.findById("MBI4")
-            .then(function (el) {
-               expect(el).to.be.an("object", "A single absent property render filter rule failed unexpectedly");
-            });
-      },
+         "Test absent property render filter rule": function() {
+            return browser.findById("MBI4");
+         },
 
-      "Test AND condition": function() {
-         return browser.findById("MBI5")
-            .then(function (el) {
-               expect(el).to.be.an("object", "An AND condition property render filter rule failed unexpectedly");
-            });
-      },
+         "Test AND condition": function() {
+            return browser.findById("MBI5");
+         },
 
-      "Test OR condition (passing)": function() {
-         return browser.findById("MBI7")
-            .then(function (el) {
-               expect(el).to.be.an("object", "An OR condition property render filter rule failed unexpectedly");
-            });
-      },
+         "Test OR condition (passing)": function() {
+            return browser.findById("MBI7");
+         },
 
-      "Test OR condition (failing)": function() {
-         return browser.findAllByCssSelector("#MBI8")
-            .then(function (els) {
-               assert(els.length === 0, "An OR condition property render filter rule passed unexpectedly");
-            });
-      },
+         "Test OR condition (failing)": function() {
+            return browser.findAllByCssSelector("#MBI8")
+               .then(function (els) {
+                  assert(els.length === 0, "An OR condition property render filter rule passed unexpectedly");
+               });
+         },
 
-      "Test inherited currentItem change (failing)": function() {
-         return browser.findAllByCssSelector("#MBI2")
-            .then(function (els) {
-               assert(els.length === 0, "An inherited currentItem change render filter rule passed unexpectedly");
-            });
-      },
+         "Test inherited currentItem change (failing)": function() {
+            return browser.findAllByCssSelector("#MBI2")
+               .then(function (els) {
+                  assert(els.length === 0, "An inherited currentItem change render filter rule passed unexpectedly");
+               });
+         },
 
-      "Test inherited currentItem change (passing)": function() {
-         return browser.findByCssSelector("#DD1_text")
-            .sleep(250)
-            .click()
-         .end()
+         "Test inherited currentItem change (passing)": function() {
+            return browser.findByCssSelector("#DD1_text")
+               .click()
+            .end()
 
-         .sleep(250)
+            .findDisplayedById("MI1");
+         },
 
-         .findById("MI1")
-            .then(function (el) {
-               expect(el).to.be.an("object", "An inherited currentItem change render filter rule failed unexpectedly");
-            });
-      },
+         "Test inherited currentItem change (failing 2)": function() {
+            return browser.findAllByCssSelector("#MI2")
+               .then(function (els) {
+                  assert(els.length === 0, "An inherited currentItem change render filter rule passed unexpectedly");
+               });
+         },
 
-      "Test inherited currentItem change (failing 2)": function() {
-         return browser.findAllByCssSelector("#MI2")
-            .then(function (els) {
-               assert(els.length === 0, "An inherited currentItem change render filter rule passed unexpectedly");
-            });
-      },
+         "Test value with tokens (passing)": function() {
+            return browser.findById("MBI3");
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Test contains tokens (passing)": function() {
+            return browser.findById("MBI4");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

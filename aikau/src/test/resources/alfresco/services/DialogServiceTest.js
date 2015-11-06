@@ -22,10 +22,9 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/helpers/pollUntil"],
-        function(registerSuite, assert, require, TestCommon, pollUntil) {
+        function(registerSuite, assert, TestCommon, pollUntil) {
 
    function closeAllDialogs(browser) {
       // Todo: this fails to close multiple dialogs in Chrome
@@ -402,6 +401,37 @@ registerSuite(function(){
                assert.propertyVal(payload, "tab1tb", "one", "Published form data incorrect (tab1tb)"); 
                assert.propertyVal(payload, "tab2tb", "two", "Published form data incorrect (tab2tb)");
             });
+      },
+
+      "Full screen dialog should be fixed": function() {
+         var initial_y;
+         return browser.findById("FULL_SCREEN_DIALOG_label")
+            .click()
+         .end()
+
+         .findByCssSelector("#FSD1.dialogDisplayed")
+            .getPosition()
+               .then(function(position) {
+                  initial_y = position.y;
+               })
+         .end()
+
+         // Scroll to the bottom of the page...
+         .execute("return window.scrollTo(0,Math.max(document.documentElement.scrollHeight,document.body.scrollHeight,document.documentElement.clientHeight))")
+         .end()
+
+         .findById("FSD1")
+            .getPosition()
+            .then(function(position) {
+               assert.isAbove(position.y, initial_y, "The position of the dialog did not move with the scroll");
+            })
+         .end()
+
+         .findById("FULL_SCREEN_DIALOG_CLOSE_label")
+            .click()
+         .end()
+
+         .findByCssSelector("#FSD1.dialogHidden");
       },
 
       "Can launch dialog within dialog": function() {

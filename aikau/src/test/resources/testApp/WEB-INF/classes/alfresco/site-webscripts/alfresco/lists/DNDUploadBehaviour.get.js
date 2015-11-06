@@ -158,93 +158,101 @@ model.jsonModel = {
    ],
    widgets:[
       {
-         name: "alfresco/layout/HorizontalWidgets",
+         name: "alfresco/layout/UploadContainer",
          config: {
+            proxyDragAndDropNode: "#NO_OVERRIDES",
             widgets: [
                {
-                  name: "alfresco/layout/ClassicWindow",
+                  name: "alfresco/layout/HorizontalWidgets",
                   config: {
-                     title: "List (defaults)",
                      widgets: [
-                        getList({
-                           id: "NO_OVERRIDES"
-                        })
+                        {
+                           name: "alfresco/layout/ClassicWindow",
+                           config: {
+                              title: "List (defaults)",
+                              widgets: [
+                                 getList({
+                                    id: "NO_OVERRIDES"
+                                 })
+                              ]
+                           }
+                        },
+                        {
+                           name: "alfresco/layout/ClassicWindow",
+                           config: {
+                              title: "List (no suppression, no dragging)",
+                              widgets: [
+                                 getList({
+                                    id: "FULLY_SUPPRESSED", 
+                                    listSuppress: false,
+                                    viewSuppress: false,
+                                    rowSuppress: true,
+                                    setData: false,
+                                    thumbnailSuppress: false,
+                                    draggableThumbnail: false
+                                 })
+                              ]
+                           }
+                        },
+                        {
+                           name: "alfresco/layout/ClassicWindow",
+                           config: {
+                              title: "View (defaults)",
+                              widgets: [
+                                 getView({
+                                    id: "JUST", 
+                                    listSuppress: null,
+                                    viewSuppress: null,
+                                    rowSuppress: null,
+                                    setData: true,
+                                    thumbnailSuppress: false,
+                                    draggableThumbnail: null
+                                 })
+                              ]
+                           }
+                        },
+                        {
+                           name: "alfresco/layout/ClassicWindow",
+                           config: {
+                              title: "View (no suppression, no dragging)",
+                              widgets: [
+                                 getView({
+                                    id: "NO_VIEW_DRAG", 
+                                    listSuppress: false,
+                                    viewSuppress: false,
+                                    rowSuppress: true,
+                                    setData: true,
+                                    thumbnailSuppress: false,
+                                    draggableThumbnail: false
+                                 })
+                              ]
+                           }
+                        },
+                        {
+                           name: "alfresco/layout/ClassicWindow",
+                           config: {
+                              title: "View (row upload, thumbnail supress, no dragging)",
+                              widgets: [
+                                 getView({
+                                    id: "ROW_UPLOAD",
+                                    listSuppress: true,
+                                    viewSuppress: true,
+                                    rowSuppress: false,
+                                    setData: true,
+                                    thumbnailSuppress: true,
+                                    draggableThumbnail: false
+                                 })
+                              ]
+                           }
+                        }
                      ]
                   }
                },
                {
-                  name: "alfresco/layout/ClassicWindow",
-                  config: {
-                     title: "List (no suppression, no dragging)",
-                     widgets: [
-                        getList({
-                           id: "FULLY_SUPPRESSED", 
-                           listSuppress: false,
-                           viewSuppress: false,
-                           rowSuppress: false,
-                           setData: false,
-                           thumbnailSuppress: false,
-                           draggableThumbnail: false
-                        })
-                     ]
-                  }
-               },
-               {
-                  name: "alfresco/layout/ClassicWindow",
-                  config: {
-                     title: "View (defaults)",
-                     widgets: [
-                        getView({
-                           id: "JUST", 
-                           listSuppress: null,
-                           viewSuppress: null,
-                           rowSuppress: null,
-                           setData: true,
-                           thumbnailSuppress: false,
-                           draggableThumbnail: null
-                        })
-                     ]
-                  }
-               },
-               {
-                  name: "alfresco/layout/ClassicWindow",
-                  config: {
-                     title: "View (no suppression, no dragging)",
-                     widgets: [
-                        getView({
-                           id: "NO_VIEW_DRAG", 
-                           listSuppress: false,
-                           viewSuppress: false,
-                           rowSuppress: false,
-                           setData: true,
-                           thumbnailSuppress: false,
-                           draggableThumbnail: false
-                        })
-                     ]
-                  }
-               },
-               {
-                  name: "alfresco/layout/ClassicWindow",
-                  config: {
-                     title: "View (row upload, thumbnail supress, no dragging)",
-                     widgets: [
-                        getView({
-                           id: "ROW_UPLOAD",
-                           listSuppress: true,
-                           viewSuppress: true,
-                           rowSuppress: false,
-                           setData: true,
-                           thumbnailSuppress: true,
-                           draggableThumbnail: false
-                        })
-                     ]
-                  }
+                  name: "alfresco/logging/DebugLog"
                }
             ]
          }
-      },
-      {
-         name: "alfresco/logging/DebugLog"
       }
    ]
 };

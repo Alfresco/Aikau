@@ -1,3 +1,11 @@
+/* global page*/
+/* jshint sub:true */
+var useHash = true;
+if (page.url.args["useHash"])
+{
+   useHash = (page.url.args["useHash"] === "true");
+}
+
 model.jsonModel = {
    services: [
       {
@@ -42,7 +50,7 @@ model.jsonModel = {
                                                 group: "SEARCHLIST_SCOPE",
                                                 publishTopic: "ALF_SEARCHLIST_SCOPE_SELECTION",
                                                 checked: false,
-                                                hashName: "scope",
+                                                hashName: (useHash ? "scope" : null),
                                                 publishPayload: {
                                                    label: "Site",
                                                    value: "site"
@@ -58,7 +66,7 @@ model.jsonModel = {
                                                 group: "SEARCHLIST_SCOPE",
                                                 publishTopic: "ALF_SEARCHLIST_SCOPE_SELECTION",
                                                 checked: false,
-                                                hashName: "scope",
+                                                hashName: (useHash ? "scope" : null),
                                                 publishPayload: {
                                                    label: "All Sites",
                                                    value: "all_sites"
@@ -74,10 +82,81 @@ model.jsonModel = {
                                                 group: "SEARCHLIST_SCOPE",
                                                 publishTopic: "ALF_SEARCHLIST_SCOPE_SELECTION",
                                                 checked: true,
-                                                hashName: "scope",
+                                                hashName: (useHash ? "scope" : null),
                                                 publishPayload: {
                                                    label: "Repository",
                                                    value: "repo"
+                                                }
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           id: "FCTSRCH_SORT_ORDER_TOGGLE",
+                           name: "alfresco/menus/AlfMenuBarToggle",
+                           config: {
+                              checked: true,
+                              onConfig: {
+                                 iconClass: "alf-sort-ascending-icon",
+                                 publishTopic: "ALF_DOCLIST_SORT",
+                                 publishPayload: {
+                                    direction: "ascending"
+                                 }
+                              },
+                              offConfig: {
+                                 iconClass: "alf-sort-descending-icon",
+                                 publishTopic: "ALF_DOCLIST_SORT",
+                                 publishPayload: {
+                                    direction: "descending"
+                                 }
+                              }
+                           }
+                        },
+                        {
+                           id: "FCTSRCH_SORT_MENU",
+                           name: "alfresco/menus/AlfMenuBarSelect",
+                           config: {
+                              title: "Sort by",
+                              selectionTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+                              widgets: [
+                                 {
+                                    id: "DOCLIB_SORT_FIELD_SELECT_GROUP",
+                                    name: "alfresco/menus/AlfMenuGroup",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             id: "SORT_BY_RELEVANCE",
+                                             name: "alfresco/menus/AlfCheckableMenuItem",
+                                             config: {
+                                                label: "Relevance",
+                                                value: "",
+                                                group: "DOCUMENT_LIBRARY_SORT_FIELD",
+                                                publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+                                                checked: true,
+                                                publishPayload: {
+                                                   label: "Relevance",
+                                                   direction: "ascending",
+                                                   sortable: false
+                                                }
+                                             }
+                                          },
+                                          {
+                                             id: "SORT_BY_NAME",
+                                             name: "alfresco/menus/AlfCheckableMenuItem",
+                                             config: {
+                                                label: "Name",
+                                                value: "cm:name",
+                                                group: "DOCUMENT_LIBRARY_SORT_FIELD",
+                                                publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+                                                checked: false,
+                                                publishPayload: {
+                                                   label: "Name",
+                                                   direction: "ascending",
+                                                   sortable: true
                                                 }
                                              }
                                           }
@@ -94,7 +173,7 @@ model.jsonModel = {
                   id: "FCTSRCH_SEARCH_FORM",
                   name: "alfresco/forms/SingleTextFieldForm",
                   config: {
-                     useHash: true,
+                     useHash: useHash,
                      okButtonLabel: "Ok",
                      okButtonPublishTopic: "ALF_SET_SEARCH_TERM",
                      okButtonPublishGlobal: true,
@@ -113,7 +192,7 @@ model.jsonModel = {
                      viewPreferenceProperty: "org.alfresco.share.searchList.viewRendererName",
                      view: "simple",
                      waitForPageWidgets: false,
-                     useHash: true,
+                     useHash: useHash,
                      hashVarsForUpdate: [
                         "searchTerm",
                         "facetFilters",

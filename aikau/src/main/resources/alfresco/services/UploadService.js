@@ -216,6 +216,8 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/core/topics#UPLOAD_COMPLETION_ACKNOWLEDGEMENT
+       * @listens module:alfresco/core/topics#UPLOAD_CANCELLATION
        */
       registerSubscriptions: function alfresco_services_UploadService__registerSubscriptions() {
          this.reset();
@@ -234,10 +236,8 @@ define(["dojo/_base/declare",
          {
             // Create topics to give to the dialog buttons, then subscribe to them to handle the
             // events...
-            var okButtonClickTopic = "ALF_UPLOAD_DIALOG_OK_CLICK",
-                cancelButtonClickTopic = "ALF_UPLOAD_DIALOG_CANCEL_CLICK";
-            this.alfSubscribe(okButtonClickTopic, lang.hitch(this, "onProgressDialogOkClick"));
-            this.alfSubscribe(cancelButtonClickTopic, lang.hitch(this, "onProgressDialogCancelClick"));
+            this.alfSubscribe(topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT, lang.hitch(this, this.onProgressDialogOkClick));
+            this.alfSubscribe(topics.UPLOAD_CANCELLATION, lang.hitch(this, this.onProgressDialogCancelClick));
 
             // Create a new dialog... the content is variable, but the widgets are fixed...
             this.progressDialog = new AlfDialog({
@@ -246,20 +246,13 @@ define(["dojo/_base/declare",
                widgetsContent: this.widgetsForProgressDialog,
                widgetsButtons: [
                   {
-                     id: "ALF_UPLOAD_PROGRESS_DIALOG_CONFIRMATION",
-                     name: "alfresco/buttons/AlfButton",
-                     config: {
-                        label: this.message("progress-dialog.ok-button.label"),
-                        publishTopic: okButtonClickTopic,
-                        additionalCssClasses: "call-to-action"
-                     }
-                  },
-                  {
                      id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
                      name: "alfresco/buttons/AlfButton",
+                     assignTo: "_uploadDialogButton",
                      config: {
                         label: this.message("progress-dialog.cancel-button.label"),
-                        publishTopic: cancelButtonClickTopic
+                        publishTopic: topics.UPLOAD_CANCELLATION,
+                        additionalCssClasses: "call-to-action"
                      }
                   }
                ]
@@ -536,6 +529,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       spawnFileUploads: function alfresco_services_UploadService__spawnFileUploads() {
+         var uploadStarted = false;
          for (var key in this.fileStore)
          {
             if (this.fileStore.hasOwnProperty(key))
@@ -545,11 +539,22 @@ define(["dojo/_base/declare",
                {
                   // Start upload
                   this.startFileUpload(fileInfo);
+                  uploadStarted = true;
 
                   // For now only allow 1 upload at a time
-                  return;
+                  break;
                }
             }
+         }
+
+         if (!uploadStarted)
+         {
+            // No-more uploads to begin, this is called at the end of every upload
+            // regardless of success or failure...
+            var button = this.progressDialog._uploadDialogButton;
+            button.setLabel(this.message("progress-dialog.ok-button.label"));
+            button.publishTopic = topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT;
+            this.progressDialog.titleNode.innerHTML = this.message("progress-dialog-complete.title");
          }
       },
 
@@ -922,6 +927,7 @@ define(["dojo/_base/declare",
              this.uploadDisplayWidget !== undefined && 
              typeof this.uploadDisplayWidget.reset === "function")
          {
+            this.resetDialog();
             this.uploadDisplayWidget.reset();
          }
          else
@@ -944,11 +950,27 @@ define(["dojo/_base/declare",
        */
       onProgressDialogCancelClick: function alfresco_services_UploadService__onProgressDialogCancelClick(/*jshint unused:false*/ payload) {
          this.alfLog("log", "Upload progress dialog 'cancel' button clicked");
+
+         for (var key in this.fileStore)
+         {
+            if (this.fileStore.hasOwnProperty(key))
+            {
+               var fileInfo = this.fileStore[key];
+               if (fileInfo.state === this.STATE_UPLOADING)
+               {
+                   // We will only attempt an upload abort if the file is still being uploaded (there is
+                   // no point in aborting if the file has completed or failed)
+                   fileInfo.request.abort();
+               }
+            }
+         }
+
          this.reset();
          if (this.uploadDisplayWidget !== null && 
              this.uploadDisplayWidget !== undefined && 
              typeof this.uploadDisplayWidget.reset === "function")
          {
+            this.resetDialog();
             this.uploadDisplayWidget.reset();
          }
          else
@@ -960,6 +982,20 @@ define(["dojo/_base/declare",
             this.alfPublish(this.currentResponseTopic, {
             }, true);
          }
+      },
+
+      /**
+       * Resets the title and button labels of the dialog to indicate that upload is in progress
+       * (ready for start of the next upload).
+       * 
+       * @instance
+       * @since 1.0.43
+       */
+      resetDialog: function alfresco_services_UploadService__resetDialog() {
+         var button = this.progressDialog._uploadDialogButton;
+         button.setLabel(this.message("progress-dialog.cancel-button.label"));
+         button.publishTopic = topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT;
+         this.progressDialog.titleNode.innerHTML = this.message("progress-dialog.title");
       }
    });
 });

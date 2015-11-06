@@ -32,8 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/html/ImageTest",
-      "src/test/resources/alfresco/logo/LogoTest"
+      "src/test/resources/alfresco/layout/FixedHeaderFooterTest"
 
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/layout/AlfTabContainerTest",
@@ -253,6 +252,7 @@ define({
       "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DeleteSiteTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
+      "src/test/resources/alfresco/services/DocumentServiceTest",
       "src/test/resources/alfresco/services/FullScreenDialogTest",
       "src/test/resources/alfresco/services/LoggingServiceTest",
       "src/test/resources/alfresco/services/NavigationServiceTest",
@@ -265,6 +265,7 @@ define({
       "src/test/resources/alfresco/services/UserServiceTest",
 
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
+      "src/test/resources/alfresco/services/actions/DownloadTest",
       "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
       "src/test/resources/alfresco/services/actions/ManageAspectsTest",
       "src/test/resources/alfresco/services/actions/NodeLocationTest",
