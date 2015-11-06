@@ -1,133 +1,129 @@
 .dijitDialogUnderlay {
    background-color: #000 !important;
-   opacity: 0.2;
+   opacity: .2;
 }
 
-.alfresco-dialog-AlfDialog.dijitDialog {
-   border: @standard-border;
-   border-radius: 4px 4px 4px 4px;
-   box-shadow: 0 3px 8px rgba(0,0,0,.1);
-   font-family: @standard-font;
-   font-size: @normal-font-size;
-   min-width: 560px;
-}
-
-.alfresco-dialog-AlfDialog.dijitDialog .dijitDialogCloseIcon {
-   right: 8px;
-   height: 15px;
-   width: 21px;
-   margin-top: 12px;
-}
-
-/*
- * This resets anchors in a dialog. This is required because the dialog appears outside 
- * of the main body element.
- */
-.alfresco-dialog-AlfDialog.dijitDialog a {
-   color: @general-font-color;
-   text-decoration: @link-text-decoration;
-   &:hover {
-      colour: @link-font-color-hover;
-      text-decoration: @link-text-decoration-hover;
+.alfresco-dialog-AlfDialog {
+   &.dijitDialog {
+      border: @standard-border;
+      border-radius: 4px 4px 4px 4px;
+      box-shadow: 0 3px 8px rgba(0,0,0,.1);
+      font-family: @standard-font;
+      font-size: @normal-font-size;
+      min-width: 560px;
+      &.tinymce-dialog {
+         min-width: 540px;
+         .control {
+            margin-right: 0;
+         }
+         .dialog-body {
+            margin-bottom: 35px;
+            min-width: 540px;
+         }
+      }
+      .dijitDialogCloseIcon {
+         height: 15px;
+         margin-top: 12px;
+         right: 8px;
+         width: 21px;
+      }
+      // This resets anchors in a dialog. This is required because the dialog appears outside of the main body element.
+      a {
+         color: @general-font-color;
+         text-decoration: @link-text-decoration;
+         &:hover {
+            colour: @link-font-color-hover;
+            text-decoration: @link-text-decoration-hover;
+         }
+      }
+      // This resets input elements in a dialog
+      input {
+         border: @standard-border;
+         font-weight: normal;
+      }
+   }
+   &.iefooter {
+      .dialog-body {
+         height: auto;
+         margin-bottom: 0;
+         overflow: hidden;
+         padding: 12px;
+      }
+      .footer {
+         bottom: inherit;
+         position: inherit;
+      }
+      &.handleOverflow .dijitDialogPaneContent {
+         overflow: auto !important; // Wouldn't normally use !important but has to override direct element setting!
+      }
+   }
+   &.no-padding {
+      .dialog-body {
+         padding: 0;
+      }
+      .footer {
+         bottom: 0;
+         position: absolute;
+      }
+   }
+   .dialog-body, .footer {
+      box-sizing: border-box;
+   }
+   .dialog-body {
+      margin-bottom: 40px; // NOTE: If this is changed, the associated margin adjustment in the JS needs updating
+      min-width: 560px;
+      overflow: auto;
+      padding: 12px; // NOTE: If this is changed, the associated paddingAdjustment in the JS needs updating
+      &.no-buttons {
+         margin-bottom: 0;
+      }
+   }
+   .dijitDialogPaneContent {
+      border-top: @standard-border;
+      overflow: hidden !important; // Wouldn't normally use !important but has to override direct element setting!
+      padding: 0;
+   }
+   .dijitDialogTitleBar {
+      background-color: @primary-theme-color;
+      background-image: none;
+      border: none;
+      text-align: center;
+      white-space: nowrap;
+      .dijitDialogTitle {
+         color: @general-font-color;
+         display: inline-block;
+         font-family: Open Sans Condensed, Arial, Helvetica, sans-serif;
+         font-size: 24px;
+         line-height: 1.5em;
+         max-width: 500px;
+         overflow: hidden;
+         padding: 0 1em 0 1em;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+      }
+   }
+   .footer {
+      background-color: @primary-theme-color;
+      background-image: none;
+      border: none;
+      border-top: @standard-border;
+      bottom: 0;
+      padding: 8px 0;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+   }
+   &--textcontent .dialog-body {
+      text-align: center;
    }
 }
 
-/*
- * This resets input elements in a dialog
- */
-.alfresco-dialog-AlfDialog.dijitDialog input {
-   border: @standard-border;
-   font-weight: normal;
-}
-
-.alfresco-dialog-AlfDialog .dialog-body, .alfresco-dialog-AlfDialog .footer {
-   box-sizing: border-box;
-}
-
-.alfresco-dialog-AlfDialog .dialog-body {
-   padding: 12px; /* NOTE: If this is changed, the associated paddingAdjustment in the JS needs updating */
-   overflow: auto;
-   margin-bottom: 40px; /* NOTE: If this is changed, the associated margin adjustment in the JS needs updating */
-   min-width: 560px;
-}
-
-.alfresco-dialog-AlfDialog .dialog-body.no-buttons {
-   margin-bottom: 0;
-}
-
-.alfresco-dialog-AlfDialog.iefooter .dialog-body {
-   padding: 12px;
-   overflow: hidden;
-   height: auto;
-   margin-bottom: 0;
-}
-
-.alfresco-dialog-AlfDialog.no-padding .dialog-body {
-   padding: 0px;
-}
-
-.alfresco-dialogs-AlfDialog--textContent .dialog-body {
-  text-align: center;
-}
-
-.alfresco-dialog-AlfDialog .dijitDialogPaneContent {
-   border-top: @standard-border;
-   padding: 0;
-   overflow: hidden !important; /* Wouldn't normally use !important but has to override direct element setting! */
-}
-
-.alfresco-dialog-AlfDialog.iefooter.handleOverflow .dijitDialogPaneContent {
-   overflow: auto !important; /* Wouldn't normally use !important but has to override direct element setting! */
-}
-
-.alfresco-dialog-AlfDialog .dijitDialogTitleBar {
-   background-color: @primary-theme-color;
-   background-image: none;
-   border: none;
-   text-align: center;
-   white-space: nowrap;
-}
-
-.alfresco-dialog-AlfDialog .dijitDialogTitleBar .dijitDialogTitle {
-   font-family: Open Sans Condensed, Arial, Helvetica, sans-serif;
-   font-size: 24px;
-   line-height: 1.5em;
-   padding: 0 1em 0 1em;
-   color: @general-font-color;
-   overflow: hidden;
-   text-overflow: ellipsis;
-   white-space: nowrap;
-   display: inline-block;
-   max-width: 500px;
-}
-
-.alfresco-dialog-AlfDialog .footer {
-   background-color: @primary-theme-color;
-   background-image: none;
-   border: none;
-   border-top: @standard-border;
-   text-align: center;
-   padding: 8px 0;
-   width: 100%;
-   position: absolute;
-   bottom: 0;
-}
-
-.alfresco-dialog-AlfDialog.iefooter .footer {
-   position: inherit;
-   bottom: inherit;
-}
-
-.alfresco-dialog-AlfDialog.no-padding .footer {
-   position: absolute;
-   bottom: 0px;
-}
-
-.dialog-body .control .dijitTextBox {
-   width: 360px;
-   border-radius: 3px;
-}
-
-.dialog-body .control .dijitTextArea {
-   width: 356px;
+.dialog-body .control {
+   .dijitTextBox {
+      border-radius: 3px;
+      width: 360px;
+   }
+   .dijitTextArea {
+      width: 356px;
+   }
 }

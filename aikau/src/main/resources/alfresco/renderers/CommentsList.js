@@ -91,9 +91,9 @@ define(["dojo/_base/declare",
                               url: "api/node/{node.nodeRef}/comments",
                               pubSubScope: "{pubSubScope}"
                            },
-                           additionalCssClasses: "no-padding",
+                           additionalCssClasses: "no-padding tinymce-dialog",
                            fixedWidth: true,
-                           dialogWidth: "545px",
+                           dialogWidth: "540px",
                            widgets: [
                               {
                                  name: "alfresco/forms/controls/TinyMCE",
