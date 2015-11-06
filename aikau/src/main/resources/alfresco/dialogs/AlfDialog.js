@@ -166,6 +166,16 @@ define(["dojo/_base/declare",
       handleOverflow: true,
 
       /**
+       * A placeholder for the resize-listener that's enabled while the dialog is visible. This
+       * value is set automatically.
+       *
+       * @instance
+       * @readonly
+       * @type {object}
+       */
+      resizeListener: null,
+
+      /**
        * Widgets to be processed into the main node
        * 
        * @instance
@@ -371,6 +381,9 @@ define(["dojo/_base/declare",
                return returnVal;
             }));
          }
+
+         // Listen to resize events
+         this.resizeListener = this.addResizeListener(this.containerNode, this.domNode.parentNode);
       },
 
       /**
@@ -397,6 +410,10 @@ define(["dojo/_base/declare",
          domStyle.set(document.documentElement, "overflow", "");
          domClass.remove(this.domNode, "dialogDisplayed");
          domClass.add(this.domNode, "dialogHidden");
+         if (this.resizeListener) {
+            this.resizeListener.remove();
+            this.resizeListener = null;
+         }
       },
 
       /**

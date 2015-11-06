@@ -110,7 +110,8 @@ define(["dojo/_base/declare",
 
       /**
        * Setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
-       * whenever a resize is detected in the specified node.
+       * whenever a resize is detected in the specified node. If there is an own method on the instance, then it will be called,
+       * so that the listener is removed on widget destruction (encapsulated here to avoid widespread boilerplate-code duplication).
        *
        * @instance
        * @param {object} monitoredNode The node to monitor
@@ -119,26 +120,10 @@ define(["dojo/_base/declare",
        * @since 1.0.42
        */
       addResizeListener: function alfresco_core_ResizeMixin__addResizeListener(monitoredNode, resizeNode) {
-         var resizeHandler = lang.hitch(this, this.alfPublishResizeEvent, resizeNode || monitoredNode.parentNode);
-         return domUtils.addPollingResizeListener(monitoredNode, resizeHandler);
-      },
-
-      /**
-       * A node has been resized, but we don't know whether we need to publish an event. This
-       * function will check for an ancestor "resizable", and publish an event if found, with that
-       * resizable's parent as the resizing node.
-       *
-       * @instance
-       * @param {object} node The node to be checked
-       */
-      onNodeResized: function alfresco_core_ResizeMixin__onNodeResized(node) {
-         var parent = node;
-         while ((parent = parent.parentNode)) {
-            if (domClass.contains(parent, "alfresco-core-ResizeMixin--resizable")) {
-               this.alfPublishResizeEvent(parent.parentNode);
-               break;
-            }
-         }
+         var resizeHandler = lang.hitch(this, this.alfPublishResizeEvent, resizeNode || monitoredNode.parentNode),
+            resizeListener = domUtils.addPollingResizeListener(monitoredNode, resizeHandler);
+         this.own && this.own(resizeListener);
+         return resizeListener;
       }
    });
 });

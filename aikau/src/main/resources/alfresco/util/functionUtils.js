@@ -168,13 +168,18 @@ define([
 
          // Start calling a repeating function
          _startRepeatingTimeout: function alfresco_util_functionUtils___startRepeatingTimeout(period) {
-            setTimeout(function timeoutFunc() {
+            setTimeout(function alfresco_util_functionUtils___timeoutFunc() {
                var funcKeys = Object.keys(period.funcs);
                if (funcKeys.length) {
-                  array.forEach(period.funcs, function(func) {
-                     func();
+                  array.forEach(funcKeys, function(funcKey) {
+                     try {
+                        period.funcs[funcKey]();
+                     } catch (e) {
+                        console.error("Removing erroring periodic function: " + period.funcs[funcKey]);
+                        delete period.funcs[funcKey];
+                     }
                   });
-                  setTimeout(timeoutFunc, period.delay);
+                  setTimeout(alfresco_util_functionUtils___timeoutFunc, period.delay);
                } else {
                   delete period.running;
                }
@@ -216,7 +221,7 @@ define([
           * @param {string} period One of "SHORT" (100ms), "MEDIUM" (1000ms) or "LONG" (10000ms), to determine how often the function is called
           * @returns {object} An object with a remove method on it, which will de-register this function
           */
-         addRepeatingFunction: util.addRepeatingFunction,
+         addRepeatingFunction: lang.hitch(util, util.addRepeatingFunction),
 
          /**
           * <p>Debounce the supplied function.</p>

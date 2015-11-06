@@ -132,7 +132,7 @@ define([
          },
 
          // See API below
-         addPollingResizeListener: function alfresco_util_domUtils__addPollingResizeListener(node, resizeHandler) {
+         addPollingResizeListener: function alfresco_util_domUtils__addPollingResizeListener(nodeToMonitor, resizeHandler) {
 
             // Add the new monitoring nodes
             var nodes = resizeMonitor.nodes,
@@ -141,9 +141,9 @@ define([
                monitorKey = Date.now();
             }
             nodes[monitorKey] = {
-               node: node,
-               height: node.offsetHeight,
-               width: node.offsetWidth,
+               domNode: nodeToMonitor,
+               height: nodeToMonitor.offsetHeight,
+               width: nodeToMonitor.offsetWidth,
                callbackFunc: resizeHandler
             };
 
@@ -169,19 +169,26 @@ define([
          // if the callbacks cause any redraws then each access of offsetXXX will cause another re-calculation
          // of the current layout (i.e. it could be wildly inefficient if we don't do all the size-checking first)
          _checkNodesForResize: function alfresco_util_domUtils___checkNodesForResize() {
-            var callbackFuncs = [];
-            array.forEach(resizeMonitor.nodes, function(node) {
-               var newWidth = node.offsetWidth,
-                  newHeight = node.offsetHeight,
+            var resizedNodeKeys = [],
+               nodeKeys = Object.keys(resizeMonitor.nodes);
+            array.forEach(nodeKeys, function(nodeKey) {
+               var node = resizeMonitor.nodes[nodeKey],
+                  newWidth = node.domNode.offsetWidth,
+                  newHeight = node.domNode.offsetHeight,
                   sizeChanged = node.width !== newWidth || node.height !== newHeight;
                if (sizeChanged) {
                   node.width = newWidth;
                   node.height = newHeight;
-                  callbackFuncs.push(node.callbackFunc);
+                  resizedNodeKeys.push(nodeKey);
                }
             });
-            array.forEach(callbackFuncs, function(func) {
-               func();
+            array.forEach(resizedNodeKeys, function(nodeKey) {
+               try {
+                  resizeMonitor.nodes[nodeKey].callbackFunc();
+               } catch (e) {
+                  console.error("Error occurred while executing resize-callback (node will no longer be monitored): ", resizeMonitor.nodes[nodeKey], e);
+                  delete resizeMonitor.nodes[nodeKey];
+               }
             });
          }
       };
