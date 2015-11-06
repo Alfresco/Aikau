@@ -920,7 +920,7 @@ define(["dojo/_base/declare",
        * currentMetadata objects if they are available.
        * 
        * @instance
-       * @param  {[type]} value The value to look for tokens in
+       * @param  {*} value The value to look for tokens in
        * @return {string} The value with any tokens substituted
        * @since 1.0.43
        */
