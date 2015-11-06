@@ -468,8 +468,7 @@ define(["dojo/_base/declare",
        */
       updateFilterHash: function alfresco_search_AlfSearchList__updateFilterHash(fullFilter, mode) {
          // Get the existing hash and extract the individual facetFilters into an array
-         var aHashString = hashUtils.getHashString(),
-             aHash = ioQuery.queryToObject(aHashString),
+         var aHash = hashUtils.getHash(true),
              facetFilters = aHash.facetFilters ? aHash.facetFilters : "",
              facetFiltersArr = facetFilters === "" ? [] : facetFilters.split(",");
 
