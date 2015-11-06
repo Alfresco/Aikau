@@ -34,12 +34,10 @@ define(["dojo/_base/declare",
         "alfresco/core/_EventsMixin",
         "alfresco/core/topics",
         "alfresco/util/domUtils",
-        "alfresco/util/functionUtils",
         "dojo/_base/lang",
         "dojo/on",
-        "dojo/dom",
-        "dojo/dom-class"], 
-        function(declare, _EventsMixin, topics, domUtils, funcUtils, lang, on, dom, domClass) {
+        "dojo/dom"], 
+        function(declare, _EventsMixin, topics, domUtils, lang, on, dom) {
 
    return declare([_EventsMixin], {
       

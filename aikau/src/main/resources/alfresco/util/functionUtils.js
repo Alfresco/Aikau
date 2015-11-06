@@ -172,6 +172,7 @@ define([
                var funcKeys = Object.keys(period.funcs);
                if (funcKeys.length) {
                   array.forEach(funcKeys, function(funcKey) {
+                     /*jshint devel:true*/
                      try {
                         period.funcs[funcKey]();
                      } catch (e) {
