@@ -19,6 +19,7 @@ model.jsonModel = {
          name: "alfresco/renderers/CommentsList",
          id: "COMMENT_LIST",
          config: {
+            addCommentsFullScreen: true,
             pubSubScope: "COMMENTS1_",
             currentItem: {
                node: {
