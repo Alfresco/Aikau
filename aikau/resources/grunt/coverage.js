@@ -129,7 +129,7 @@ module.exports = function(grunt) {
 
    // Merge individual coverage reports in the node coverage server
    // TODO: Give the report a sensible name (e.g. with a timestamp)
-   grunt.registerTask("sub merge-reports", "A task for merging code coverage reports", function() {
+   grunt.registerTask("sub-merge-reports", "A task for merging code coverage reports", function() {
       var done = this.async();
       
       var mergeArgs;
