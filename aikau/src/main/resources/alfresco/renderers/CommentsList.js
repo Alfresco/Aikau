@@ -61,6 +61,17 @@ define(["dojo/_base/declare",
       addCommentsFullScreen: false,
 
       /**
+       * When [addCommentsFullScreen]{@link module:alfresco/renderers/CommentsList#addCommentsFullScreen} is
+       * set to true, then this will permit overriding the padding that this full-screen mode specifies by default.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.43
+       */
+      addCommentsPadding: 0,
+
+      /**
        * Executed after properties mixed in and before widget created
        *
        * @instance
@@ -73,6 +84,7 @@ define(["dojo/_base/declare",
             var addCommentPayload = lang.getObject("widgets.0.config.widgetsBefore.0.config.publishPayload", false, this);
             if(addCommentPayload) {
                addCommentPayload.fullScreenMode = true;
+               addCommentPayload.fullScreenPadding = this.addCommentsPadding;
             }
          }
       },
