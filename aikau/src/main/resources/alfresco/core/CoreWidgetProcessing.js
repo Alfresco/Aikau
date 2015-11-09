@@ -22,11 +22,13 @@
  *
  * @module alfresco/core/CoreWidgetProcessing
  * @extends module:alfresco/core/Core
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @mixinSafe
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
+        "alfresco/core/ObjectProcessingMixin",
         "alfresco/core/ObjectTypeUtils",
         "dijit/registry",
         "dojo/_base/array",
@@ -37,9 +39,9 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
-   return declare([AlfCore], {
+   return declare([AlfCore, ObjectProcessingMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -892,6 +894,13 @@ define(["dojo/_base/declare",
             {
                currValue = currValue.toString();
             }
+
+            // Substitute any tokens in the current value to search for...
+            if (renderFilterConfig.substituteTokens === true)
+            {
+               currValue = this.substituteFilterTokens(currValue);
+            }
+            
             foundCurrValue = array.some(targetArray, lang.hitch(this, this.processFilterArrayCompare, currValue));
             foundCurrValue = array.some(targetArray, function(arrayValue) {
                if (typeof arrayValue === "boolean")
@@ -902,6 +911,29 @@ define(["dojo/_base/declare",
             });
          }
          return foundCurrValue;
+      },
+
+      /**
+       * This function is called from both [processFilter]{@link module:alfresco/core/CoreWidgetProcessing#processFilter}
+       * and [processFilterArray]{@link module:alfresco/core/CoreWidgetProcessing#processFilterArray} to substitute
+       * any tokens found in the target values with matching dot-notation properties found in the currentItem and
+       * currentMetadata objects if they are available.
+       * 
+       * @instance
+       * @param  {*} value The value to look for tokens in
+       * @return {string} The value with any tokens substituted
+       * @since 1.0.43
+       */
+      substituteFilterTokens: function alfresco_core_CoreWidgetProcessing__substituteFilterTokens(value) {
+         if (this.currentItem)
+         {
+            value = this.processCurrentItemTokens(value);
+         }
+         if (this.currentMetadata)
+         {
+            value = this.processCurrentMetadataTokens(value);
+         }
+         return value;
       },
 
       /**
@@ -919,6 +951,12 @@ define(["dojo/_base/declare",
             currValue = lang.trim(currValue);
          }
 
+         // Substitute any tokens in the current value to search for...
+         if (renderFilterConfig.substituteTokens === true)
+         {
+            currValue = this.substituteFilterTokens(currValue);
+         }
+         
          // Convert booleans to strings for simple comparison...
          // This is necessary because when creating pages dynamically the boolean values
          // will end up as strings so the comparison won't work.

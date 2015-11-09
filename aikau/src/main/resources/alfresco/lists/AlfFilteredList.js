@@ -139,7 +139,10 @@ define(["dojo/_base/declare",
        */
       hideChildren: function alfresco_lists_AlfFilteredList__hideChildren(/*jshint unused:false*/targetNode) {
          this.inherited(arguments);
-         domClass.remove(this.filtersNode, "share-hidden");
+         if (this.filtersNode)
+         {
+            domClass.remove(this.filtersNode, "share-hidden");
+         }
       },
 
       /**

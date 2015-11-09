@@ -33,11 +33,12 @@
 define(["dojo/_base/declare",
         "alfresco/core/_EventsMixin",
         "alfresco/core/topics",
+        "alfresco/util/domUtils",
         "dojo/_base/lang",
         "dojo/on",
         "dojo/dom"], 
-        function( declare, _EventsMixin, topics, lang, on, dom) {
-   
+        function(declare, _EventsMixin, topics, domUtils, lang, on, dom) {
+
    return declare([_EventsMixin], {
       
       /**
@@ -60,7 +61,9 @@ define(["dojo/_base/declare",
          // Fire a custom event to let contained objects know that the node has been resized.
          this.throttledPublish(this.alfResizeNodeTopic, {
             node: resizedNode
-         }, true);
+         }, true, false, {
+            timeoutMs: 100
+         });
       },
 
       /**
@@ -101,6 +104,24 @@ define(["dojo/_base/declare",
          {
             resizeHandler.apply(resizeHandlerCallScope, [payload.node]);
          }
+      },
+
+      /**
+       * Setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
+       * whenever a resize is detected in the specified node. If there is an own method on the instance, then it will be called,
+       * so that the listener is removed on widget destruction (encapsulated here to avoid widespread boilerplate-code duplication).
+       *
+       * @instance
+       * @param {object} monitoredNode The node to monitor
+       * @param {object} [resizeNode] The node against which to publish a resize event (defaults to monitoredNode.parentNode)
+       * @returns {object} A pointer to the listener, with a remove function on it (i.e. it can be passed to this.own)
+       * @since 1.0.42
+       */
+      addResizeListener: function alfresco_core_ResizeMixin__addResizeListener(monitoredNode, resizeNode) {
+         var resizeHandler = lang.hitch(this, this.alfPublishResizeEvent, resizeNode || monitoredNode.parentNode),
+            resizeListener = domUtils.addPollingResizeListener(monitoredNode, resizeHandler);
+         this.own && this.own(resizeListener);
+         return resizeListener;
       }
    });
 });

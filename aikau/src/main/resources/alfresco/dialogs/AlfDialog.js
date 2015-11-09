@@ -166,6 +166,17 @@ define(["dojo/_base/declare",
       handleOverflow: true,
 
       /**
+       * A placeholder for the resize-listener that's enabled while the dialog is visible. This
+       * value is set automatically.
+       *
+       * @instance
+       * @readonly
+       * @type {object}
+       * @since 1.0.43
+       */
+      resizeListener: null,
+
+      /**
        * Widgets to be processed into the main node
        * 
        * @instance
@@ -371,6 +382,9 @@ define(["dojo/_base/declare",
                return returnVal;
             }));
          }
+
+         // Listen to resize events
+         this.resizeListener = this.addResizeListener(this.containerNode, this.domNode.parentNode);
       },
 
       /**
@@ -397,6 +411,10 @@ define(["dojo/_base/declare",
          domStyle.set(document.documentElement, "overflow", "");
          domClass.remove(this.domNode, "dialogDisplayed");
          domClass.add(this.domNode, "dialogHidden");
+         if (this.resizeListener) {
+            this.resizeListener.remove();
+            this.resizeListener = null;
+         }
       },
 
       /**
@@ -415,6 +433,7 @@ define(["dojo/_base/declare",
                "max-height": calculatedHeights.maxBodyHeight + "px"
             });
          }
+         this.resize();
       },
 
       /**
@@ -486,6 +505,11 @@ define(["dojo/_base/declare",
                h: $(window).height() - dimensionAdjustment
             }]);
 
+            // NOTE: Need to set this on the element (rather than using CSS because the underlying 
+            //       Dojo code sets position, the only CSS option would be to use !important which
+            //       we'd prefer to avoid).
+            domStyle.set(this.domNode, "position", "fixed");
+
             // When in full screen mode it is also necessary to take care of the inner dimensions
             // of the dialog...
             var calculatedHeights = this.calculateHeights();
@@ -493,7 +517,7 @@ define(["dojo/_base/declare",
             var bodyHeight = containerHeight;
             if (this.widgetsButtons)
             {
-               // Dedebug height for the widgets buttons if present
+               // Deduct height for the widgets buttons if present
                bodyHeight = bodyHeight - 44;
             }
             $(this.bodyNode).height(bodyHeight);
@@ -519,7 +543,6 @@ define(["dojo/_base/declare",
          // jshint unused:false
          if (this.domNode)
          {
-            this.resize();
             this.onWindowResize();
          }
       },

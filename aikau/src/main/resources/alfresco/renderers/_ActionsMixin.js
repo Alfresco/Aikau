@@ -153,6 +153,9 @@ define(["dojo/_base/declare",
        */
       widgetsForActions: [
          {
+            name: "alfresco/renderers/actions/Download"
+         },
+         {
             name: "alfresco/renderers/actions/DownloadAsZip"
          },
          {
@@ -219,12 +222,17 @@ define(["dojo/_base/declare",
          array.forEach(this.widgetsForActions, function(action) {
             if (action && action.name)
             {
-
+               // It's expected that an Actions rendererer will be used inside a row of Document List view. The
+               // row itself may or may note have its own scope and where some actions will require that the
+               // list is refreshed (e.g. when items are deleted, moved or copied) in which case the responseScope
+               // should be addressed at the list. We therefore need to set the response scope accordingly...
+               var responseScope = this.publishToParent ? this.parentPubSubScope : this.pubSubScope;
                require([action.name], function(config) {
                   if (config)
                   {
                      var clonedConfig = lang.clone(config);
                      clonedConfig.id = idPrefix + clonedConfig.id;
+                     lang.setObject("publishPayload.responseScope", responseScope, clonedConfig);
 
                      // TODO: A potential future improvement here would be to allow replacement
                      //       or augmentation of the default renderFilters.
@@ -281,11 +289,11 @@ define(["dojo/_base/declare",
             var payload = (action.publishPayload) ? action.publishPayload : {document: this.currentItem, action: action};
             payload = this.generatePayload(payload, this.currentItem, null, action.publishPayloadType, action.publishPayloadItemMixin, action.publishPayloadModifiers);
 
-            // It's expected that an Actions renderere will be used inside a row of Document List view, and that
-            // the row will typically have its own scope. However, we know that some actions will require that the
+            // It's expected that an Actions rendererer will be used inside a row of Document List view. The
+            // row itself may or may note have its own scope and where some actions will require that the
             // list is refreshed (e.g. when items are deleted, moved or copied) in which case the responseScope
-            // should be addressed at the list (i.e. the parent scope) not this renderer...
-            payload.responseScope = this.parentPubSubScope;
+            // should be addressed at the list. We therefore need to set the response scope accordingly...
+            payload.responseScope = this.publishToParent ? this.parentPubSubScope : this.pubSubScope;
 
             var menuItem = new AlfMenuItem({
                id: id,

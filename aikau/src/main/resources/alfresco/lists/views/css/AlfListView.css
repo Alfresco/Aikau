@@ -25,11 +25,6 @@
    border: none;
 }
 
-.alfresco-lists-views-AlfListView.dndHighlight {
-   outline: @list-dnd-hover-outline;
-   outline-offset: -2px;
-}
-
 /* bordered table modifiers */
 
 .alfresco-lists-views-AlfListView.bordered > table {

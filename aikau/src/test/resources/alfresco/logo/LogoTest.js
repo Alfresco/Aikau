@@ -53,18 +53,22 @@ define([
             },
 
             "Check image logo": function() {
-               return browser.findByCssSelector("#LOGO2.alfresco-logo-Logo .alfresco-logo-large")
+               return browser.findByCssSelector("#LOGO2 .alfresco-html-Image__img")
                   .isDisplayed()
                   .then(function(displayed) {
                      assert.isTrue(displayed, "Logo with image source was not displayed");
                   });
             },
 
-            "Check image logo height": function() {
+            "Check image logo dimensions": function() {
                return browser.findByCssSelector("#LOGO2 .alfresco-html-Image__img")
                   .getComputedStyle("height")
                   .then(function(height) {
                      assert.equal(height, "48px", "The height of the image logo was incorrect");
+                  })
+                  .getComputedStyle("width")
+                  .then(function(width) {
+                     assert.equal(width, "172px", "The width of the image logo was incorrect");
                   });
             },
 
@@ -83,9 +87,18 @@ define([
                   .getLastPublish("LOGO_TOPIC_PUBLISHED");
             },
 
+            "Title text of link is correctly substituted": function() {
+               return browser.findByCssSelector("#LOGO_WITH_URL .alfresco-navigation-_HtmlAnchorMixin")
+                  .getAttribute("title")
+                  .then(function(attributeValue) {
+                     assert.equal(attributeValue, "Logo image");
+                  });
+            },
+
             "Logo will act as link when configured to do so": function() {
                return browser.findByCssSelector("#LOGO_WITH_URL a")
                   .click()
+                  .sleep(2000)
                   .end()
 
                .findByCssSelector("#TDAC .title")

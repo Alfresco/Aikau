@@ -22,10 +22,9 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/helpers/pollUntil"],
-        function(registerSuite, assert, require, TestCommon, pollUntil) {
+        function(registerSuite, assert, TestCommon, pollUntil) {
 
    function closeAllDialogs(browser) {
       return browser.end()
@@ -67,10 +66,7 @@ define(["intern!object",
                .click()
             .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_DELETED_SUCCESS", "publish", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Delete did not succeed");
-               });
+            .getLastPublish("ALF_CRUD_DELETED_SUCCESS", "Delete did not succeed");
          },
 
          "Invalid DELETE call fails": function() {
@@ -78,10 +74,7 @@ define(["intern!object",
                .click()
             .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_DELETED_FAILURE", "publish", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Invalid delete did not fail");
-               });
+            .getLastPublish("ALF_CRUD_DELETED_FAILURE", "Invalid delete did not fail");
          },
 
          "Failed DELETE displays failure message": function() {
@@ -102,10 +95,7 @@ define(["intern!object",
                      .click()
                   .end()
 
-                  .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATED_SUCCESS", "publish", "any"))
-                     .then(function(elements) {
-                        assert.lengthOf(elements, 1, "Update did not succeed");
-                     });
+                  .getLastPublish("ALF_CRUD_UPDATED_SUCCESS", "Update did not succeed");
                });
          },
 
@@ -114,10 +104,7 @@ define(["intern!object",
                .click()
             .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_UPDATED_FAILURE", "publish", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Invalid update did not fail");
-               });
+            .getLastPublish("ALF_CRUD_UPDATED_FAILURE", "Invalid update did not fail");
          },
 
          "Failed UPDATE displays failure message": function() {
@@ -138,10 +125,7 @@ define(["intern!object",
                      .click()
                   .end()
 
-                  .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_SUCCESS", "publish", "any"))
-                     .then(function(elements) {
-                        assert.lengthOf(elements, 1, "Create did not succeed");
-                     });
+                  .getLastPublish("ALF_CRUD_CREATED_SUCCESS", "Create did not succeed");
                });
          },
 
@@ -150,10 +134,7 @@ define(["intern!object",
                .click()
             .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_CREATED_FAILURE", "publish", "any"))
-               .then(function (elements) {
-                  assert.lengthOf(elements, 1, "Invalid create did not fail");
-               });
+            .getLastPublish("ALF_CRUD_CREATED_FAILURE", "Invalid create did not fail");
          },
 
          "Failed CREATE displays failure message": function () {
@@ -174,10 +155,7 @@ define(["intern!object",
                      .click()
                   .end()
 
-                  .findAllByCssSelector(TestCommon.topicSelector("ALF_GET_ALL_DEFAULT_CACHE_SUCCESS", "publish", "any"))
-                     .then(function (elements) {
-                        assert.lengthOf(elements, 1, "GET ALL didn't succeed");
-                     });
+                  .getLastPublish("ALF_GET_ALL_DEFAULT_CACHE_SUCCESS", "GET ALL didn't succeed");
                });
          },
 
@@ -186,10 +164,7 @@ define(["intern!object",
                .click()
             .end()
 
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_GET_ALL_PREVENT_CACHE_SUCCESS", "publish", "any"))
-               .then(function (elements) {
-                  assert.lengthOf(elements, 1, "GET ALL with preventCache flag failed");
-               });
+            .getLastPublish("ALF_GET_ALL_PREVENT_CACHE_SUCCESS", "GET ALL with preventCache flag failed");
          },
 
          "Check URI encoding": function() {
@@ -198,6 +173,42 @@ define(["intern!object",
                .click()
             .end()
             .getLastXhr("aikau/proxy/alfresco/resources/nocache?filter=%25moomin");
+         },
+
+         "Scoped create": function() {
+            return browser.findById("SCOPED_CREATE_label")
+               .click()
+            .end()
+            .getLastPublish("SCOPE1_ALF_DOCLIST_RELOAD_DATA", "Scoped reload request not published");
+         },
+
+         "Scoped delete": function() {
+            return browser.findById("SCOPED_DELETE_label")
+               .click()
+            .end()
+            .getLastPublish("SCOPE2_ALF_DOCLIST_RELOAD_DATA", "Scoped reload request not published");
+         },
+
+         "Scoped delete with confirmation": function() {
+            return browser.findById("SCOPED_DELETE_WITH_CONFIRMATION_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_CRUD_SERVICE_DELETE_CONFIRMATION_DIALOG.dialogDisplayed")
+            .end()
+
+            .findById("ALF_CRUD_SERVICE_DELETE_CONFIRMATION_DIALOG_CONFIRM_label")
+               .click()
+            .end()
+
+            .getLastPublish("SCOPE3_ALF_DOCLIST_RELOAD_DATA", "Scoped reload request not published");
+         },
+
+         "Scoped Update": function() {
+            return browser.findById("SCOPED_UPDATE_label")
+               .click()
+            .end()
+            .getLastPublish("SCOPE4_ALF_DOCLIST_RELOAD_DATA", "Scoped reload request not published");
          },
 
          "Post Coverage Results": function() {

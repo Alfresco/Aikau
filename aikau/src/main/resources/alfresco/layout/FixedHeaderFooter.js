@@ -130,6 +130,20 @@ define(["alfresco/core/ProcessWidgets",
       }],
 
       /**
+       * If this widget is placed into a widget that has padding then this allowance can be configured which
+       * will be substituted from the calculated height to take padding into account so that an outer scroll
+       * bar is not required on the page. This defaults to 0 and has only been provided for potential 
+       * convenience. This value will only be used on when [height]{@link module:alfresco/layout/FixedHeaderFooter#height}
+       * is set to "auto" (which is also the default).
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @deprecated Since 1.0.36 use [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment} instead
+       */
+      autoHeightPaddingAllowance: 0,
+
+      /**
        * The height of the widget (in CSS units). The default value is "auto" which means that the
        * height of the widget will automatically be set to take up the available space from its current
        * position to the bottom of the window or document (whichever is smallest) so that the entire
@@ -143,20 +157,6 @@ define(["alfresco/core/ProcessWidgets",
        * @deprecated Since 1.0.36 use [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode} instead
        */
       height: "AUTO",
-
-      /**
-       * If this widget is placed into a widget that has padding then this allowance can be configured which
-       * will be substituted from the calculated height to take padding into account so that an outer scroll
-       * bar is not required on the page. This defaults to 0 and has only been provided for potential 
-       * convenience. This value will only be used on when [height]{@link module:alfresco/layout/FixedHeaderFooter#height}
-       * is set to "auto" (which is also the default).
-       *
-       * @instance
-       * @type {number}
-       * @default
-       * @deprecated Since 1.0.36 use [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment} instead
-       */
-      autoHeightPaddingAllowance: 0,
 
       /**
        * If this is configured to be true the the height of the widget will be reset as the browser window is resized.
@@ -237,6 +237,23 @@ define(["alfresco/core/ProcessWidgets",
          // Do the resize
          this.onResize();
          this.alfPublishResizeEvent(this.domNode);
+
+         // Setup the header resize listener
+         this.own(this.addResizeListener(this.header));
+      },
+
+      /**
+       * <p>Setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
+       * whenever a resize is detected in the header.</p>
+       *
+       * <p><strong>NOTE:</strong> This method is no longer called by the postCreate method, and will be removed in a future version</p>
+       *
+       * @instance
+       * @since 1.0.41
+       * @deprecated Since 1.0.42 - use [ResizeMixin.addResizeListener]{@link module:alfresco/core/ResizeMixin#addResizeListener} instead.
+       */
+      addHeaderResizeListener: function alfresco_layout_FixedHeaderFooter__addHeaderResizeListener() {
+         this.addResizeListener(this.header, this.domNode);
       },
 
       /**
@@ -251,7 +268,7 @@ define(["alfresco/core/ProcessWidgets",
        * @param {object[]} widgets The widgets that have been created
        * @since 1.0.38
        */
-      allWidgetsProcessed: function alfresco_layout_HorizontalWidgets__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
+      allWidgetsProcessed: function alfresco_layout_FixedHeaderFooter__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
          this._allWidgetsProcessedCount--;
          if (this._allWidgetsProcessedCount === 0)
          {

@@ -18,9 +18,6 @@
  */
 
 /**
- * This module is currently in BETA. Outstanding work:
- * - overall styling design and CSS
- *
  * This module provides simple display handling for file uploads. It displays completed, in progress and failed
  * file uploads in separate sections along with a displayed value of the overall upload progress. 
  *
@@ -70,13 +67,13 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
-       * The title to display for upload dialog.
-       * 
+       * The description to display for the upload dialog. 
+       *
        * @instance
        * @type {string}
        * @default
-       */
-      title: "title.label",
+       */     
+      aggregateProgressLabel: "aggregate-progress.label",
 
       /**
        * The description to display for the upload dialog. 
@@ -94,7 +91,34 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
+      failedUploadsLabel: "failed.label",
+
+      /**
+       * A map of file IDs to the DOM element that describes them.
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      inProgressFiles: null,
+
+      /**
+       * The description to display for the upload dialog. 
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
       successfulUploadsLabel: "completed.label",
+
+      /**
+       * The title to display for upload dialog.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      title: "title.label",
 
       /**
        * The description to display for the upload dialog. 
@@ -106,22 +130,13 @@ define(["dojo/_base/declare",
       uploadsInProgressLabel: "inprogress.label",
 
       /**
-       * The description to display for the upload dialog. 
+       * A map of the uploaded files.
        *
        * @instance
-       * @type {string}
-       * @default
-       */     
-      aggregateProgressLabel: "aggregate-progress.label",
-
-      /**
-       * The description to display for the upload dialog. 
-       *
-       * @instance
-       * @type {string}
+       * @type {object}
        * @default
        */
-      failedUploadsLabel: "failed.label",
+      uploadedFiles: null,
 
       /**
        * Resets the display.
@@ -156,24 +171,6 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_upload_AlfUploadDisplay__postCreate() {
          this.reset();
       },
-
-      /**
-       * A map of file IDs to the DOM element that describes them.
-       *
-       * @instance
-       * @type {object}
-       * @default
-       */
-      inProgressFiles: null,
-
-      /**
-       * A map of the uploaded files.
-       *
-       * @instance
-       * @type {object}
-       * @default
-       */
-      uploadedFiles: null,
 
       /**
        * This function handles displaying a file that an attempt will be made to upload. The
@@ -216,12 +213,12 @@ define(["dojo/_base/declare",
          var failedFile = domConstruct.create("tr", {
             className: "file"
          }, this.failedItemsNode);
-         var fileName = domConstruct.create("td", {
+         domConstruct.create("td", {
              innerHTML: fileName,
              className: "filename"
          }, failedFile);
-         var reason = domConstruct.create("td", {
-             innerHTML: (error != null && error.reason != null) ? error.reason : message.get("unknown.failure.reason"),
+         domConstruct.create("td", {
+             innerHTML: (error && error.reason) ? error.reason : this.message("unknown.failure.reason"),
              className: "reason"
          }, failedFile);
       },
@@ -234,7 +231,7 @@ define(["dojo/_base/declare",
        * @param {number} percentageComplete The current upload progress as a percentage
        * @param {object} progressEvt The progress event
        */
-      updateUploadProgress: function alfresco_upload_AlfUploadDisplay__updateUploadProgress(fileId, percentageComplete, progressEvt) {
+      updateUploadProgress: function alfresco_upload_AlfUploadDisplay__updateUploadProgress(fileId, percentageComplete, /*jshint unused:false*/ progressEvt) {
          // Set progress position
          // var left = (-400 + ((percentage/100) * 400));
          var inProgressFile = this.inProgressFiles[fileId];
@@ -272,13 +269,13 @@ define(["dojo/_base/declare",
          // Parse the request to get the information about the resulting nodes that have been created
          // This information could be used to allow actions or links to be generated for the uploaded content
          // before the display is closed...
-         if (request != null && request.responseText != null)
+         if (request && request.responseText)
          {
             var jsonResponse = dojoJson.parse(request.responseText);
             this.uploadedFiles[fileId] = {
                nodeRef: jsonResponse.nodeRef,
                fileName: jsonResponse.fileName
-            }
+            };
          }
       },
 
@@ -296,7 +293,7 @@ define(["dojo/_base/declare",
          domConstruct.destroy(inProgressFile.node);
 
          var reason = this.message("upload.failure.reason.unknown");
-         if (request != null && request.statusText != null)
+         if (request && request.statusText)
          {
             reason = request.statusText;
          }

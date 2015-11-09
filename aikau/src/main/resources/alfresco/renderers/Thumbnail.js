@@ -105,7 +105,6 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Thumbnail.html",
         "alfresco/core/Core",
         "alfresco/renderers/_ItemLinkMixin",
-        "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/event",
@@ -116,11 +115,11 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "dojo/when"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
-                 _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, template, AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, 
+                 _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, template, AlfCore, _ItemLinkMixin,
                  AlfConstants, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
-                   AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, _PublishPayloadMixin, ItemSelectionMixin], {
+                   AlfCore, _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -202,6 +201,28 @@ define(["dojo/_base/declare",
        * @since 1.0.40
        */
       dimensions: null,
+
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadHighLightImage}
+       * to use the smaller image.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      dndUploadHighlightImage: "elipse-cross.png",
+
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadText}
+       * to hide the upload message.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      dndUploadHighlightText: "",
 
       /**
        * The name of the folder image to use. Valid options are: "folder-32.png", "folder-48.png", "folder-64.png"
@@ -649,8 +670,8 @@ define(["dojo/_base/declare",
          }
          if (this.hasUploadPermissions() === true)
          {
-            this.addUploadDragAndDrop(this.imgNode);
-            this.addNodeDropTarget(this.imgNode);
+            this.addUploadDragAndDrop(this.frameNode);
+            this.addNodeDropTarget(this.frameNode);
             this._currentNode = this.currentItem.node;
          }
          // If no full dimensions have been provided but a simple width has then

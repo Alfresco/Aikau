@@ -9,11 +9,11 @@ module.exports = {
       coverageReports: "code-coverage-reports/*.json",
       css: "src/main/resources/**/*.css",
       gruntFile: "Gruntfile.js",
-      gruntTasks: "src/grunt/**/*.js",
+      gruntTasks: "resources/grunt/**/*.js",
       html: "src/main/resources/alfresco/**/*.html",
       js: "src/main/resources/alfresco/**/*.js",
       jsdocConfig: "conf.json",
-      jsdocReadme: "src/jsdoc-templates/alfresco/README.md",
+      jsdocReadme: "resources/jsdoc/templates/alfresco/README.md",
       reporter: "src/test/resources/reporters/AikauConcurrentReporter.js",
       test: "tests/alfresco/**",
       testApp: "src/test/resources/testApp/WEB-INF/classes/alfresco/site-webscripts/**",
@@ -30,12 +30,12 @@ module.exports = {
       coverageTemp: "code-coverage-reports/temp",
       docs: "docs",
       jsdoc: "src/main/resources/alfresco",
-      jsdocTemplates: "src/jsdoc-templates/alfresco",
+      jsdocTemplates: "resources/jsdoc/templates/alfresco",
       jsInst: "src/main/resources/alfrescoInst",
       nodeBin: "node_modules/.bin/",
       root: "./",
       testResources: "src/test/resources",
-      vagrant: "src/test/vagrant"
+      vagrant: "resources/vagrant"
    },
 
    // Require-everything settings

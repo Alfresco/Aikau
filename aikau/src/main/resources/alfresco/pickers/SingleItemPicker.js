@@ -31,15 +31,13 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/ObjectProcessingMixin",
         "dojo/text!./templates/SingleItemPicker.html",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/NodeUtils"],
-        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, 
-                 ObjectProcessingMixin, template, lang, array, NodeUtils) {
+        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, template, lang, array, NodeUtils) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ObjectProcessingMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
 
       /**
        * An array of the CSS files to use with this widget.

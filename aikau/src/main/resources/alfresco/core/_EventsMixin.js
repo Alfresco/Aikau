@@ -149,7 +149,6 @@ define(["alfresco/core/Core",
          } else {
             resizeSubscription = this.alfSubscribe(topics.NODE_RESIZED, lang.hitch(this, function(payload) {
                var resizedNode = payload.node,
-                  resizedNodeIsAncestor = false,
                   testNode = nodeToMonitor;
                while (testNode && testNode !== resizedNode) {
                   testNode = testNode.parentNode;

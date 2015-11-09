@@ -326,7 +326,10 @@ define(["dojo/_base/declare",
             name: "alfresco/forms/controls/FileSelect",
             config: {
                label: "contentService.uploader.dialog.fileSelect.label",
-               name: "files"
+               name: "files",
+               requirementConfig: {
+                  initialValue: true
+               }
             }
          }
       ],
@@ -343,7 +346,10 @@ define(["dojo/_base/declare",
             name: "alfresco/forms/controls/FileSelect",
             config: {
                label: "contentService.updater.dialog.fileSelect.label",
-               name: "files"
+               name: "files",
+               requirementConfig: {
+                  initialValue: true
+               }
             }
          },
          {

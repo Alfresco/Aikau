@@ -25,9 +25,10 @@
 define(["dojo/_base/declare",
         "aikauTesting/MockXhr",
         "dojo/text!./responseTemplates/FullDocLib/documents.json",
+        "dojo/text!./responseTemplates/FullDocLib/rawDocuments.json",
         "dojo/text!./responseTemplates/FullDocLib/tree.json",
         "dojo/text!./responseTemplates/FullDocLib/favourites_filter.json"], 
-        function(declare, MockXhr, documents, tree, favourites) {
+        function(declare, MockXhr, documents, rawDocuments, tree, favourites) {
    
    return declare([MockXhr], {
 
@@ -39,13 +40,16 @@ define(["dojo/_base/declare",
       setupServer: function alfresco_testing_mockservices_DocumentLibraryMockXhr__setupServer() {
          try
          {
-            // http://localhost:8081/share/service/components/documentlibrary/data/doclist/all/site/site1/documentLibrary/?filter=path&size=50&pos=1&sortAsc=true&sortField=cm%3Aname&view=browse&noCache=1427117389685
-            // // /aikau/service/components/documentlibrary/data/doclist/all/site/site1/documentlibrary?filter=path&size=25&pos=1&sortAsc=true&sortField=cm%3Aname&view=browse&noCache=1427118579802
             this.server.respondWith("GET",
                                     /\/aikau\/service\/components\/documentlibrary\/data\/doclist\/all\/site\/site1\/documentlibrary\?filter=path(.*)/,
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      documents]);
+            this.server.respondWith("GET",
+                                    /\/aikau\/proxy\/alfresco\/slingshot\/doclib2\/doclist\/all\/site\/site1\/documentlibrary\?filter=path(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     rawDocuments]);
             this.server.respondWith("GET",
                                     /\/aikau\/proxy\/alfresco\/slingshot\/doclib\/treenode\/site\/site1\/documentlibrary\/\?perms=false(.*)/,
                                     [200,
@@ -58,8 +62,13 @@ define(["dojo/_base/declare",
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      favourites]);
 
-            // aikau/proxy/alfresco/slingshot/doclib/treenode/site/site1/documentlibrary/?perms=false&children=false&max=-1
-            // http://localhost:8081/share/proxy/alfresco/slingshot/doclib/treenode/site/site1/documentLibrary?perms=false&children=true&max=-1
+            // Just return a success message for any delete request. The data won't be updated, but we want to check for
+            // the reload request on successful deletion
+            this.server.respondWith("POST",
+                                    "/aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"}]);
+
             this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
          }
 

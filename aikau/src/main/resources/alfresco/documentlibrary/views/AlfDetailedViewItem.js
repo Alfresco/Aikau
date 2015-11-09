@@ -257,7 +257,10 @@ define(["alfresco/lists/views/layouts/Row",
          }, {
             _attachPoint: "actions",
             id: "DETAILED_VIEW_ACTIONS",
-            name: "alfresco/renderers/Actions"
+            name: "alfresco/renderers/Actions",
+            config: {
+               publishToParent: true
+            }
          }]
       });
    });

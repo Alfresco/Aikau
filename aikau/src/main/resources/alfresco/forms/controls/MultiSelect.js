@@ -159,6 +159,27 @@ define([
          }],
 
          /**
+          * <p>Whether to infer missing properties on retrieved option objects.</p>
+          *
+          * <p><strong>NOTE:</strong> The "name", "label" and "value" properties are retrieved using
+          * the "query", "label" and "value" attribute names as configured in the store.</p>
+          *
+          * <p>Priorities are:</p>
+          *
+          * <ul>
+          *   <li>Missing name takes label if available, else value</li>
+          *   <li>Missing label takes name if available, else value</li>
+          *   <li>Missing value takes name if available, else label</li>
+          * </ul>
+          *
+          * @instance
+          * @type {boolean}
+          * @default
+          * @since 1.0.42
+          */
+         inferMissingProperties: false,
+
+         /**
           * An object that defines the formats of the labels. See main module example for example.
           * It should be a format string for each of the three label strings
           *
@@ -345,14 +366,6 @@ define([
          _suppressKeyUp: false,
 
          /**
-          * The attribute name against which to store the value of an item in the HTML
-          *
-          * @instance
-          * @type {string}
-          */
-         _valueHtmlAttribute: "data-aikau-value",
-
-         /**
           * Widget template has been turned into a DOM
           *
           * @override
@@ -434,6 +447,51 @@ define([
          },
 
          /**
+          * Normalise an individual item, to make the data suitable for use with this widget.
+          *
+          * @instance
+          * @param {object} item The item to be normalised
+          * @returns {object} The normalised item (returned for convenience)
+          * @since 1.0.42
+          */
+         normaliseItem: function alfresco_forms_controls_MultiSelect__normaliseItem(item) {
+            /*jshint maxcomplexity:false*/
+
+            // Get the current attributes of the item
+            var itemName = item[this.store.queryAttribute],
+               itemLabel = item[this.store.labelAttribute],
+               itemValue = item[this.store.valueAttribute];
+
+            // Infer missing properties
+            if (this.inferMissingProperties && (itemName || itemLabel || itemValue)) {
+               if (itemName && !itemLabel && !itemValue) {
+                  itemLabel = itemValue = itemName;
+               } else if (!itemName && itemLabel && !itemValue) {
+                  itemName = itemValue = itemLabel;
+               } else if (!itemName && !itemLabel && itemValue) {
+                  itemName = itemLabel = itemValue;
+               } else if (!itemName) {
+                  itemName = itemLabel;
+               } else if (!itemLabel) {
+                  itemLabel = itemName;
+               } else if (!itemValue) {
+                  itemValue = itemName;
+               }
+               item[this.store.queryAttribute] = itemName;
+               item[this.store.labelAttribute] = itemLabel;
+               item[this.store.valueAttribute] = itemValue;
+            }
+
+            // Items MUST have values for the widget to work
+            if (itemValue === null || typeof itemValue === "undefined") {
+               this.alfLog("error", "Option provided to MultiSelect control does not have a value: ", item);
+            }
+
+            // Pass back the modified item for convenience (it's already been mutated)
+            return item;
+         },
+
+         /**
           * Set the specified property
           *
           * @instance
@@ -472,65 +530,42 @@ define([
          setValue: function alfresco_forms_controls_MultiSelect__setValue(newValueParam) {
 
             // Setup helper vars
-            var nameAttrName = this.store.nameAttribute,
-               labelAttrName = this.store.labelAttribute,
-               valueAttrName = this.store.valueAttribute,
-               newValuesArray = newValueParam;
+            var newValuesArray = newValueParam;
             if (!ObjectTypeUtils.isArray(newValuesArray)) {
                newValuesArray = (newValueParam && [newValueParam]) || [];
-            }
-
-            // Normalise attrNames 
-            if (!nameAttrName && !labelAttrName && !valueAttrName) {
-               throw new Error("No attribute names available!");
-            } else if (nameAttrName && !labelAttrName && !valueAttrName) {
-               labelAttrName = valueAttrName = nameAttrName;
-            } else if (!nameAttrName && labelAttrName && !valueAttrName) {
-               nameAttrName = valueAttrName = labelAttrName;
-            } else if (!nameAttrName && !labelAttrName && valueAttrName) {
-               nameAttrName = labelAttrName = valueAttrName;
-            } else if (!nameAttrName) {
-               nameAttrName = labelAttrName;
-            } else if (!labelAttrName) {
-               labelAttrName = nameAttrName;
-            } else if (!valueAttrName) {
-               valueAttrName = nameAttrName;
             }
 
             // Clear existing values
             array.forEach(this._choices, this._removeChoice, this);
 
+            // Normalise the passed-in values
+            var normalisedValues = array.map(newValuesArray, function(nextNewValue) {
+               var valueIsString = typeof nextNewValue === "string",
+                  item;
+               if (valueIsString) {
+                  item = {};
+                  item[this.store.queryAttribute] = item[this.store.labelAttribute] = item[this.store.valueAttribute] = nextNewValue;
+               } else {
+                  item = this.normaliseItem(nextNewValue);
+               }
+               return item;
+            }, this);
+
             // Create an items array
-            var chosenItems = array.map(newValuesArray, function(nextNewValue) {
+            var chosenItems = array.map(normalisedValues, function(nextItem) {
+               /*jshint maxcomplexity:false*/
 
                // Try and get the value from the existing result items
-               var newValueIsString = typeof nextNewValue === "string",
-                  realValue = (newValueIsString && nextNewValue) || nextNewValue[valueAttrName],
-                  nextItem = this._storeItems[realValue];
+               var itemValue = nextItem[this.store.valueAttribute],
+                  storeItem = this._storeItems[itemValue];
 
                // If we already have the item, return immediately
-               if (nextItem) {
-                  return nextItem;
-               }
-
-               // Use value if object, otherwise add as value property to new object
-               if (newValueIsString) {
-                  nextItem = {};
-                  nextItem[valueAttrName] = realValue;
-               } else {
-                  nextItem = nextNewValue;
-               }
-
-               // Add a temporary name and label property if not present
-               if (!nextItem.hasOwnProperty(nameAttrName)) {
-                  nextItem[nameAttrName] = nextItem[valueAttrName];
-               }
-               if (!nextItem.hasOwnProperty(labelAttrName)) {
-                  nextItem[labelAttrName] = nextItem[nameAttrName];
+               if (storeItem) {
+                  return storeItem;
                }
 
                // Put the new item into the items map
-               this._storeItems[realValue] = nextItem;
+               this._storeItems[itemValue] = nextItem;
 
                // Mark this item as needing updating from the store
                this._itemsToUpdateFromStore.push(nextItem);
@@ -597,8 +632,7 @@ define([
             });
             this._choices.push(choiceObject);
 
-            // Add the label and value
-            contentNode.setAttribute(this._valueHtmlAttribute, value);
+            // Add the label
             contentNode.setAttribute("title", labelObj.full);
             contentNode.appendChild(document.createTextNode(labelObj.choice));
          },
@@ -871,11 +905,12 @@ define([
          _handleSearchSuccess: function alfresco_forms_controls_MultiSelect___handleSearchSuccess(responseItems) {
             this._hideLoadingMessage();
             this._results = array.map(responseItems, function(nextItem) {
-               var value = nextItem[this.store.valueAttribute];
-               this._storeItems[value] = nextItem;
+               var safeItem = this.normaliseItem(nextItem),
+                  value = safeItem[this.store.valueAttribute];
+               this._storeItems[value] = safeItem;
                return {
                   domNode: null,
-                  item: nextItem,
+                  item: safeItem,
                   value: value
                };
             }, this);
@@ -984,7 +1019,7 @@ define([
           *
           * @instance
           */
-         _onFocus: function alfresco_forms_controls_MultiSelect___onSearchFocus() {
+         _onFocus: function alfresco_forms_controls_MultiSelect___onFocus() {
             domClass.add(this.domNode, this.rootClass + "--focused");
             this._showOrSearch();
          },
@@ -1341,8 +1376,8 @@ define([
                      name: this.id,
                      func: lang.hitch(this, this._positionDropdown),
                      timeoutMs: 50
-                  })
-               })))
+                  });
+               })));
             }, this);
          },
 
@@ -1398,7 +1433,7 @@ define([
          },
 
          /**
-          * If we have current results then toggle the dropdown, otherwise perform a new search.
+          * If we have current results then open the dropdown, otherwise perform a new search.
           *
           * @instance
           */
@@ -1409,8 +1444,6 @@ define([
                   if (!this._focusedResult) {
                      this._gotoNextResult();
                   }
-               } else {
-                  this._hideResultsDropdown();
                }
             } else {
                this._debounceNewSearch(this.searchBox.value);
@@ -1497,8 +1530,7 @@ define([
                   }, this._nodes.resultsDropdown);
                }
 
-               // Update the value and title
-               itemNode.setAttribute(this._valueHtmlAttribute, nextResult.value);
+               // Update the title
                itemNode.setAttribute("title", labelObj.full);
 
                // Recreate the label
@@ -1542,8 +1574,11 @@ define([
             // Setup handlers
             var successHandler = lang.hitch(this, function(responseItems) {
 
+                  // Normalise the response items
+                  var normalisedItems = array.map(responseItems, this.normaliseItem, this);
+
                   // Update the result items map
-                  array.forEach(responseItems, function(nextItem) {
+                  array.forEach(normalisedItems, function(nextItem) {
                      var value = nextItem[this.store.valueAttribute];
                      if (this._storeItems[value]) {
                         lang.mixin(this._storeItems[value], nextItem);

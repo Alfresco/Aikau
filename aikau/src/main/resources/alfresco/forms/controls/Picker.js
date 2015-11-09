@@ -30,19 +30,17 @@
  * @module alfresco/forms/controls/Picker
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @mixes module:alfresco/core/CoreWidgetProcessing
- * @mixes module:alfresco/core/ObjectProcessingMixin
  * @author Dave Draper
  */
 define(["alfresco/forms/controls/BaseFormControl",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/ObjectProcessingMixin",
         "dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/when"], 
-        function(BaseFormControl, CoreWidgetProcessing, ObjectProcessingMixin, declare, lang, array, when) {
+        function(BaseFormControl, CoreWidgetProcessing, declare, lang, array, when) {
    
-   return declare([BaseFormControl, CoreWidgetProcessing, ObjectProcessingMixin], {
+   return declare([BaseFormControl, CoreWidgetProcessing], {
       
       /**
        * An array of the i18n files to use with this widget.

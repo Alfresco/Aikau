@@ -116,7 +116,9 @@ define(["alfresco/core/_PublishOrLinkMixin",
       aspectRatio: null,
 
       /**
-       * Any optional classes to be added to the wrapped image element.
+       * Any optional classes to be added to the wrapped image element. If a
+       * [src]{@link module:alfresco/html/Image#src} property is provided then
+       * this property will not be used.
        *
        * @instance
        * @type {string|string[]}
@@ -223,7 +225,9 @@ define(["alfresco/core/_PublishOrLinkMixin",
 
       /**
        * The URL of the image to use (this is used in conjunction with the
-       * [srcType]{@link module:alfresco/html/Image#srcType} property).
+       * [srcType]{@link module:alfresco/html/Image#srcType} property). If a src
+       * is provided, then the [classes]{@link module:alfresco/html/Image#classes}
+       * property will not be used.
        *
        * @instance
        * @type {string}
@@ -242,6 +246,16 @@ define(["alfresco/core/_PublishOrLinkMixin",
       srcType: urlTypes.PAGE_RELATIVE,
 
       /**
+       * We want to set a maximum time for waiting for the widget to be attached to
+       * the DOM before trying to setup the widget.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      timeForDomAttach: 5000,
+
+      /**
        * An optional CSS width to apply to the image node in pixels. If width is
        * specified without height then the other will be calculated using the
        * aspectRatio property, or the calculated naturalAspectRatio if not specified.
@@ -251,6 +265,15 @@ define(["alfresco/core/_PublishOrLinkMixin",
        * @default
        */
       width: 0,
+
+      /**
+       * In order to ensure we don't try forever to setup this widget when it's not
+       * being attached to the DOM, note when we first retry the setup.
+       *
+       * @instance
+       * @type {number?}
+       */
+      _firstAttemptedSetup: null,
 
       /**
        * This is run after the config has been mixed into this instance.
@@ -264,11 +287,6 @@ define(["alfresco/core/_PublishOrLinkMixin",
          // If this is being made into a link, try and make sure we have some "title" text
          if (this.targetUrl && !this.label) {
             this.label = this.altText;
-         }
-
-         // Encode the alt text, after checking for properties
-         if (this.altText) {
-            this.altText = this.encodeHTML(this.message(this.altText));
          }
 
          // It's possible to provide a dimensions object, so use this if available
@@ -291,9 +309,48 @@ define(["alfresco/core/_PublishOrLinkMixin",
       postCreate: function alfresco_html_Image__postCreate() {
          this.inherited(arguments);
 
-         // Add any image classes
-         if (this.classes) {
+         // Set the alt attribute value (the JS will make it "safe" automatically)
+         if (this.altText) {
+            this.imageNode.setAttribute("alt", this.message(this.altText));
+         }
+
+         // Add any image classes (but only if no src provided)
+         if (this.classes && !this.src) {
             domClass.add(this.imageNode, this.classes);
+         }
+
+         // Add "block state"
+         if (this.isBlockElem) {
+            domClass.add(this.domNode, "alfresco-html-Image--block");
+         }
+
+         // Setup the image node (sizing, etc)
+         this.setupImageNode();
+      },
+
+      /**
+       * Prepare the image node
+       *
+       * @instance
+       */
+      setupImageNode: function alfresco_html_Image__setupImageNode() {
+
+         // The image-node setup will only work if attached to the DOM, so try again later if necessary
+         var nextParent = this.domNode,
+            isAttached;
+         while((nextParent = nextParent.parentNode) && !isAttached) {
+            isAttached = (nextParent === document.body);
+         }
+         if(!isAttached) {
+
+            // We can't let this run forever, so break out if necessary
+            if(!this._firstAttemptedSetup) {
+               this._firstAttemptedSetup = Date.now();
+            }
+            if(Date.now() - this._firstAttemptedSetup < this.timeForDomAttach) {
+               setTimeout(lang.hitch(this, this.setupImageNode), 200);
+               return;
+            }
          }
 
          // No configured src, so set to blank.gif if a background image is present
@@ -303,11 +360,6 @@ define(["alfresco/core/_PublishOrLinkMixin",
             } else {
                this.imageNode.src = this.src;
             }
-         }
-
-         // Add "block state"
-         if (this.isBlockElem) {
-            domClass.add(this.domNode, "alfresco-html-Image--block");
          }
 
          // Resize the image node
@@ -391,8 +443,8 @@ define(["alfresco/core/_PublishOrLinkMixin",
             var cssDimensions = this.getCssDimensions(),
                hasCssDimensions = cssDimensions.w || cssDimensions.h;
 
-            // Do the resize only if no CSS dimensions, or if forceNatural is true
-            if (!hasCssDimensions || forceNatural) {
+            // Do the resize only if no CSS dimensions or it's a normal self-sizing image, or if forceNatural is true
+            if ((!hasCssDimensions && !this.src) || forceNatural) {
 
                // Use the natural dimensions if we have them (must have both, as an
                // image with zero width or zero height will not display at all)

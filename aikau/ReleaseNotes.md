@@ -1,4 +1,4 @@
-Aikau 1.0.40 Release Notes
+Aikau 1.0.42 Release Notes
 ===
 
 Previous deprecations:
@@ -40,6 +40,32 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.42:
+* [AKU-647](https://issues.alfresco.com/jira/browse/AKU-647)       - AlfDocumentList extends AlfFilteredList
+* [AKU-652](https://issues.alfresco.com/jira/browse/AKU-652)       - Ensure Logo title generates correctly
+* [AKU-653](https://issues.alfresco.com/jira/browse/AKU-653)       - Row mixes _AlfDndDocumentUploadMixin
+* [AKU-654](https://issues.alfresco.com/jira/browse/AKU-654)       - Added alfresco/layout/UploadContainer
+* [AKU-655](https://issues.alfresco.com/jira/browse/AKU-655)       - Ensure delete actions triggers reload
+* [AKU-657](https://issues.alfresco.com/jira/browse/AKU-657)       - Resize detection moved to ResizeMixin
+* [AKU-658](https://issues.alfresco.com/jira/browse/AKU-658)       - Ensure CrudService uses responseScope
+* [AKU-659](https://issues.alfresco.com/jira/browse/AKU-659)       - Ensure full screen dialogs have fixed position
+* [AKU-660](https://issues.alfresco.com/jira/browse/AKU-660)       - Ensure MultiSelectInput supports fixed options
+* [AKU-661](https://issues.alfresco.com/jira/browse/AKU-661)       - Encode username on leave site
+* [AKU-662](https://issues.alfresco.com/jira/browse/AKU-662)       - Ensure Logo uses either class or image source
+* [AKU-666](https://issues.alfresco.com/jira/browse/AKU-666)       - Ensure upload file selection is required
+* [AKU-667](https://issues.alfresco.com/jira/browse/AKU-667)       - Ensure UploadService cancel aborts requests
+* [AKU-679](https://issues.alfresco.com/jira/browse/AKU-679)       - Remove superfluous title attributes from BaseFormControl
+
+1.0.41:
+* [AKU-632](https://issues.alfresco.com/jira/browse/AKU-632)       - Support configurable images in Carousel
+* [AKU-637](https://issues.alfresco.com/jira/browse/AKU-637)       - Disable draggable thumbnails in AlfFilmStripView
+* [AKU-638](https://issues.alfresco.com/jira/browse/AKU-638)       - Support configurable height in AlfFilmStripView
+* [AKU-642](https://issues.alfresco.com/jira/browse/AKU-642)       - Updated drag-and-drop upload highlighting
+* [AKU-643](https://issues.alfresco.com/jira/browse/AKU-643)       - Added simple clickable icon widget
+* [AKU-644](https://issues.alfresco.com/jira/browse/AKU-644)       - Prevent ClassicWindow overflowing content
+* [AKU-646](https://issues.alfresco.com/jira/browse/AKU-646)       - Capture resize events in FixedHeaderFooter
+* [AKU-648](https://issues.alfresco.com/jira/browse/AKU-648)       - Override default itemKeyProperty in AlfSearchList
+
 1.0.40:
 * [AKU-626](https://issues.alfresco.com/jira/browse/AKU-626)       - Thumbnail highlighting on selection
 * [AKU-627](https://issues.alfresco.com/jira/browse/AKU-627)       - Thumbnail click to select support

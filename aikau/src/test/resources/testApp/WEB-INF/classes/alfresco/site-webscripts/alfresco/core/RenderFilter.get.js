@@ -21,7 +21,11 @@ model.jsonModel = {
                w: ["one","two","three"],
                x: "a",
                y: "b",
-               z: "c"
+               z: "c",
+               tokens: {
+                  t1: "one",
+                  t2: "a"
+               }
             },
             widgets: [
                {
@@ -72,6 +76,34 @@ model.jsonModel = {
                         {
                            property: "w",
                            containsAll: ["two","four"]
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "MBI13",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Should appear (is token)",
+                     renderFilter: [
+                        {
+                           substituteTokens: true,
+                           property: "x",
+                           values: ["{tokens.t2}"]
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "MBI14",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Should appear (contains token)",
+                     renderFilter: [
+                        {
+                           substituteTokens: true,
+                           property: "w",
+                           contains: ["{tokens.t1}"]
                         }
                      ]
                   }
@@ -289,7 +321,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

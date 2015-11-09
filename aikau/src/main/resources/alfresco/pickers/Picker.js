@@ -36,11 +36,10 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Picker.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/ObjectProcessingMixin",
         "dojo/_base/lang"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ObjectProcessingMixin, lang) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, lang) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ObjectProcessingMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
 
       /**
        * An array of the i18n files to use with this widget.

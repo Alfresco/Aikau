@@ -90,24 +90,37 @@ define(["dojo/_base/declare",
        * Wrapper for processTokens, searching within this
        *
        * @instance
-       * @param {string} v The value to process.
+       * @param {string} valueToProcess The value to process.
        * @returns {*} The processed value
        */
-      processInstanceTokens: function alfresco_core_ObjectProcessingMixin__processInstanceTokens(v) {
+      processInstanceTokens: function alfresco_core_ObjectProcessingMixin__processInstanceTokens(valueToProcess) {
          // Search for tokens in the current scope
-         return this.processTokens(v, this);
+         return this.processTokens(valueToProcess, this);
       },
 
       /**
        * Wrapper for processTokens, searching within currentItem
        *
        * @instance
-       * @param {string} v The value to process.
+       * @param {string} valueToProcess The value to process.
        * @returns {*} The processed value
        */
-      processCurrentItemTokens: function alfresco_core_ObjectProcessingMixin__processCurrentItemTokens(v) {
+      processCurrentItemTokens: function alfresco_core_ObjectProcessingMixin__processCurrentItemTokens(valueToProcess) {
          // Search for tokens in the current item
-         return this.processTokens(v, this.currentItem);
+         return this.processTokens(valueToProcess, this.currentItem);
+      },
+
+      /**
+       * Wrapper for processTokens, searching within currentMetadata
+       *
+       * @instance
+       * @param {string} valueToProcess The value to process.
+       * @returns {*} The processed value
+       * @since 1.0.43
+       */
+      processCurrentMetadataTokens: function alfresco_core_ObjectProcessingMixin__processCurrentMetadataTokens(valueToProcess) {
+         // Search for tokens in the current metadata
+         return this.processTokens(valueToProcess, this.currentMetadata);
       },
 
       /**
@@ -115,11 +128,11 @@ define(["dojo/_base/declare",
        * be converted to "/")
        *
        * @instance
-       * @param {string} v The value to process
+       * @param {string} nodeRef The value to process
        * @returns The processed value
        */
-      convertNodeRefToUrl: function alfresco_core_ObjectProcessingMixin__convertNodeRefToUrl(v) {
-         return v.replace(":/", "");
+      convertNodeRefToUrl: function alfresco_core_ObjectProcessingMixin__convertNodeRefToUrl(nodeRef) {
+         return nodeRef.replace(":/", "");
       },
 
       /**
