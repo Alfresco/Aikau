@@ -701,12 +701,12 @@ define(["intern!object",
             .end()
 
             // Click the button to create a tab with a publication on addition...
-            .findById("CREATE_TAB_WITH_PUBLICATION_label")
+            .findDisplayedById("CREATE_TAB_WITH_PUBLICATION_label")
                .click()
             .end()
 
             // Find the new tab...
-            .findById("ADDED_LIST_2")
+            .findDisplayedById("ADDED_LIST_2")
             .end()
             
             // ...and check that it is loading (this will be a result of the reload publication)...
