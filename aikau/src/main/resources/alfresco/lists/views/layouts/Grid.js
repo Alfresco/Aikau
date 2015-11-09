@@ -193,13 +193,13 @@ define(["dojo/_base/declare",
          {
             focusedChild.blur();
          }
-         domClass.remove(focusedChild.domNode, "alfresco-lists-views-layouts-Grid--focused");
+         domClass.remove(focusedChild.domNode, "alfresco-lists-views-layouts-Grid__cell--focused");
       },
 
       /**
        * This function ensures that the widget requested to be focused has a focus function
        * and if so calls the "focusChild" function provided by the _KeyNavContainer. Otherwise
-       * it manually takes case of setting the focus.
+       * it manually takes care of setting the focus.
        *
        * @instance
        * @param {object} widget The widget to focus
@@ -221,7 +221,7 @@ define(["dojo/_base/declare",
                focusUtil.focus(widget.domNode);
             }
          }
-         domClass.add(widget.domNode, "alfresco-lists-views-layouts-Grid--focused");
+         domClass.add(widget.domNode, "alfresco-lists-views-layouts-Grid__cell--focused");
       },
 
       /**
