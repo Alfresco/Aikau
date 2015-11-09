@@ -36,10 +36,12 @@ define(["dojo/_base/declare",
    "alfresco/core/CoreWidgetProcessing",
    "alfresco/core/ResizeMixin",
    "alfresco/core/DomElementUtils",
+   "alfresco/enums/urlTypes",
+   "alfresco/util/urlUtils",
    "dojo/_base/lang",
    "dojo/dom-attr",
    "dojo/dom-style"],
-      function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, DomElementUtils, lang, domAttr, domStyle) {
+      function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, DomElementUtils, urlTypes, urlUtils, lang, domAttr, domStyle) {
 
          return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin, DomElementUtils], {
 
@@ -90,6 +92,17 @@ define(["dojo/_base/declare",
              * @default
              */
             src: null,
+
+            /**
+             * The [src type]{@link module:alfresco/enums/urlTypes} to use (defaults to
+             * [FULL_PATH]{@link module:alfresco/enums/urlTypes#FULL_PATH}).
+             *
+             * @instance
+             * @type {string}
+             * @see module:alfresco/enums/urlTypes
+             * @since 1.0.43
+             */
+            srcType: urlTypes.FULL_PATH,
 
             /**
              * The width in pixels of the chart. A null value indicates 100%
@@ -155,7 +168,7 @@ define(["dojo/_base/declare",
                this._setSrc(this.src);
                var messageEl;
                for (var i = 0, il = this.messages.length; i < il; i++) {
-                  messageEl = document.createElement('div');
+                  messageEl = document.createElement("div");
                   messageEl.appendChild(document.createTextNode(this.messages[i]));
                   this.messagesNode.appendChild(messageEl);
                }
@@ -175,9 +188,9 @@ define(["dojo/_base/declare",
              * @private
              */
             _setSrc: function alfresco_integration_IFrame___setSrc(src)  {
-               if (src != null) {
+               if (src) {
                   this._setHeight();
-                  domAttr.set(this.iFrameNode, "src", src);
+                  domAttr.set(this.iFrameNode, "src", urlUtils.convertUrl(src, this.srcType));
                   domStyle.set(this.iFrameNode, "display", "");
                   domStyle.set(this.messagesNode, "display", "none");
                }
@@ -196,9 +209,9 @@ define(["dojo/_base/declare",
              * @private
              */
             _setHeight: function alfresco_integration_IFrame___setHeight(height) {
-               if (height == null) {
+               if (height === null || typeof height === "undefined") {
                   height = this.height;
-                  if (this.heightConfig != null) {
+                  if (this.heightConfig !== null && typeof this.heightConfig !== "undefined") {
                      height = this.resolveDomCalculation(this.heightConfig);
                   }
                }
