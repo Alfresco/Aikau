@@ -205,7 +205,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onApplyFilter: function alfresco_search_FacetFilter__onApplyFilter() {
-         var fullFilter = this.facet + "|" + this.filter;
+         var fullFilter = encodeURIComponent(this.facet + "|" + this.filter);
          if(this.useHash)
          {
             this._updateHash(fullFilter, "add");
@@ -229,7 +229,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onClearFilter: function alfresco_search_FacetFilter__onClearFilter() {
-         var fullFilter = this.facet + "|" + this.filter;
+         var fullFilter = encodeURIComponent(this.facet + "|" + this.filter);
          if(this.useHash)
          {
             this._updateHash(fullFilter, "remove");
@@ -253,7 +253,7 @@ define(["dojo/_base/declare",
        */
       _updateHash: function alfresco_search_FacetFilter___updateHash(fullFilter, mode) {
          // Get the existing hash and extract the individual facetFilters into an array
-         var aHash = hashUtils.getHash(),
+         var aHash = hashUtils.getHash(true),
              facetFilters = ((aHash.facetFilters) ? aHash.facetFilters : ""),
              facetFiltersArr = (facetFilters === "") ? [] : facetFilters.split(",");
 

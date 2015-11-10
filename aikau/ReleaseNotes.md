@@ -1,4 +1,4 @@
-Aikau 1.0.42 Release Notes
+Aikau 1.0.43 Release Notes
 ===
 
 Previous deprecations:
@@ -40,6 +40,21 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.43:
+* [AKU-416](https://issues.alfresco.com/jira/browse/AKU-416)       - Added download action definition
+* [AKU-663](https://issues.alfresco.com/jira/browse/AKU-663)       - Updated PathTree to highlight current path
+* [AKU-664](https://issues.alfresco.com/jira/browse/AKU-664)       - Updated SearchService to support non-hash based sorting
+* [AKU-668](https://issues.alfresco.com/jira/browse/AKU-668)       - Updated UploadService to use dialog with single, label changing button
+* [AKU-671](https://issues.alfresco.com/jira/browse/AKU-671)       - Re-center dialogs on dimension change
+* [AKU-672](https://issues.alfresco.com/jira/browse/AKU-672)       - Fit TinyMCE form control into comment dialog
+* [AKU-673](https://issues.alfresco.com/jira/browse/AKU-673)       - Support full screen dialogs in CommentsList
+* [AKU-677](https://issues.alfresco.com/jira/browse/AKU-677)       - Added "smart" download capabilities
+* [AKU-678](https://issues.alfresco.com/jira/browse/AKU-678)       - Fixed AlfButton accessibility issues
+* [AKU-680](https://issues.alfresco.com/jira/browse/AKU-680)       - Support encoded facet filter selection
+* [AKU-681](https://issues.alfresco.com/jira/browse/AKU-681)       - Update renderFilter config to support token substitution
+* [AKU-685](https://issues.alfresco.com/jira/browse/AKU-685)       - Prevent encoding display error when setting browser title bar
+* [AKU-690](https://issues.alfresco.com/jira/browse/AKU-690)       - Keyboard navigation support for widgets in grid with no focus function
+
 1.0.42:
 * [AKU-647](https://issues.alfresco.com/jira/browse/AKU-647)       - AlfDocumentList extends AlfFilteredList
 * [AKU-652](https://issues.alfresco.com/jira/browse/AKU-652)       - Ensure Logo title generates correctly

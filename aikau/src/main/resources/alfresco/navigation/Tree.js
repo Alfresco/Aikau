@@ -47,6 +47,21 @@ define(["dojo/_base/declare",
         function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, CoreWidgetProcessing, topics, AlfConstants, _AlfDocumentListTopicMixin, 
                  _NavigationServiceTopicMixin, domConstruct, lang, array, TreeStore, ObjectStoreModel, Tree) {
    
+   // Extend the standard Dijit tree to support better identification of nodes (primarily for the purpose of unit testing)...
+   var AikauTree = declare([Tree], {
+      _createTreeNode: function alfresco_navigation_Tree_AikauTree___createTreeNode(){
+         var id = lang.getObject("item.id", false, arguments[0]);
+         if (id)
+         {
+            declare.safeMixin(arguments[0], {
+               id: this.id + "_" + id.replace("://", "_").replace("/", "_") // Clean up NodeRef IDs
+            });
+         }
+         return this.inherited(arguments);
+      }
+   });
+
+
    return declare([_Widget, _Templated, _PublishPayloadMixin, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin], {
       
       /**
@@ -271,7 +286,8 @@ define(["dojo/_base/declare",
          });
          
          // Create the tree and add it to our widget...
-         this.tree = new Tree({
+         this.tree = new AikauTree({
+            id: this.id + "_TREE",
             model: this.treeModel,
             showRoot: this.showRoot,
             onClick: lang.hitch(this, this.onClick),

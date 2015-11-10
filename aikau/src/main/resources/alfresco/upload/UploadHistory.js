@@ -27,6 +27,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
  * @since 1.0.34
  */
@@ -34,17 +35,16 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/UploadHistory.html",
-        "alfresco/core/ObjectProcessingMixin",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/Core",
         "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, ObjectProcessingMixin, CoreWidgetProcessing, Core, topics,
+        function(declare, _WidgetBase, _TemplatedMixin, template, CoreWidgetProcessing, Core, topics,
                  lang, array, domConstruct) {
 
-   return declare([_WidgetBase, _TemplatedMixin, ObjectProcessingMixin, CoreWidgetProcessing, Core], {
+   return declare([_WidgetBase, _TemplatedMixin, CoreWidgetProcessing, Core], {
 
       /**
        * An array of the i18n files to use with this widget.

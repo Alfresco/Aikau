@@ -24,8 +24,27 @@
  * @module alfresco/util/functionUtils
  * @author Martin Doyle
  */
-define(["dojo/_base/lang"],
-   function(lang) {
+define([
+      "dojo/_base/array",
+      "dojo/_base/lang"
+   ],
+   function(array, lang) {
+
+      // Define the repeating periods variables.
+      var REPEATING_PERIODS = {
+         "SHORT": {
+            delay: 100,
+            funcs: {}
+         },
+         "MEDIUM": {
+            delay: 1000,
+            funcs: {}
+         },
+         "LONG": {
+            delay: 10000,
+            funcs: {}
+         }
+      };
 
       // The private container for the functionality and properties of the util
       var util = {
@@ -46,6 +65,33 @@ define(["dojo/_base/lang"],
          throttleVars: {
             lastExecutions: {},
             timeouts: {}
+         },
+
+         // See API below
+         addRepeatingFunction: function alfresco_util_functionUtils__addRepeatingFunction(newFunc, periodType) {
+
+            // Put the new function into the appropriate collection
+            var period = REPEATING_PERIODS[periodType],
+               currentFuncs = period.funcs,
+               newFuncKey = Date.now();
+            if (currentFuncs) {
+               while (currentFuncs.hasOwnProperty(newFuncKey)) {
+                  newFuncKey = Date.now();
+               }
+               currentFuncs[newFuncKey] = newFunc;
+            }
+
+            // Make sure the period's functions are running
+            if (!period.running) {
+               this._startRepeatingTimeout(period);
+            }
+
+            // Pass back the removal object
+            return {
+               remove: function() {
+                  delete currentFuncs[newFuncKey];
+               }
+            };
          },
 
          // See API below
@@ -117,7 +163,28 @@ define(["dojo/_base/lang"],
                remove: function() {
                   clearTimeout(currentTimeout);
                }
-            }
+            };
+         },
+
+         // Start calling a repeating function
+         _startRepeatingTimeout: function alfresco_util_functionUtils___startRepeatingTimeout(period) {
+            setTimeout(function alfresco_util_functionUtils___timeoutFunc() {
+               var funcKeys = Object.keys(period.funcs);
+               if (funcKeys.length) {
+                  array.forEach(funcKeys, function(funcKey) {
+                     /*jshint devel:true*/
+                     try {
+                        period.funcs[funcKey]();
+                     } catch (e) {
+                        console.error("Removing erroring periodic function: " + period.funcs[funcKey]);
+                        delete period.funcs[funcKey];
+                     }
+                  });
+                  setTimeout(alfresco_util_functionUtils___timeoutFunc, period.delay);
+               } else {
+                  delete period.running;
+               }
+            }, period.delay);
          }
       };
 
@@ -145,6 +212,17 @@ define(["dojo/_base/lang"],
           * @default 250
           */
          defaultThrottleMs: util.defaultThrottleMs,
+
+         /**
+          * Register a new repeating function.
+          *
+          * @instance
+          * @function
+          * @param {function} func The function to be added
+          * @param {string} period One of "SHORT" (100ms), "MEDIUM" (1000ms) or "LONG" (10000ms), to determine how often the function is called
+          * @returns {object} An object with a remove method on it, which will de-register this function
+          */
+         addRepeatingFunction: lang.hitch(util, util.addRepeatingFunction),
 
          /**
           * <p>Debounce the supplied function.</p>

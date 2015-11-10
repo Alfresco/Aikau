@@ -239,7 +239,7 @@ define(["alfresco/core/ProcessWidgets",
          this.alfPublishResizeEvent(this.domNode);
 
          // Setup the header resize listener
-         this.addResizeListener(this.header);
+         this.own(this.addResizeListener(this.header));
       },
 
       /**
@@ -253,7 +253,7 @@ define(["alfresco/core/ProcessWidgets",
        * @deprecated Since 1.0.42 - use [ResizeMixin.addResizeListener]{@link module:alfresco/core/ResizeMixin#addResizeListener} instead.
        */
       addHeaderResizeListener: function alfresco_layout_FixedHeaderFooter__addHeaderResizeListener() {
-         this.addResizeListener(this.header);
+         this.addResizeListener(this.header, this.domNode);
       },
 
       /**

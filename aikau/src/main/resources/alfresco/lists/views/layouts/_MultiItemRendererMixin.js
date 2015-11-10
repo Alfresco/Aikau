@@ -33,7 +33,6 @@
  */
 define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/ObjectProcessingMixin",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/JsNode",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
@@ -43,10 +42,10 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/on",
         "dojo/_base/event"], 
-        function(declare, CoreWidgetProcessing, ObjectProcessingMixin, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
+        function(declare, CoreWidgetProcessing, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
                  domClass, array, lang, domStyle, on, event) {
    
-   return declare([CoreWidgetProcessing, ObjectProcessingMixin, _AlfDocumentListTopicMixin], {
+   return declare([CoreWidgetProcessing, _AlfDocumentListTopicMixin], {
 
       /**
        * An array of the CSS files to use with this widget.

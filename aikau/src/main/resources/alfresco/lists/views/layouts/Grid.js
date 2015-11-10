@@ -42,13 +42,17 @@ define(["dojo/_base/declare",
         "dojo/keys",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/dom-attr",
+        "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-geometry",
         "dojo/query",
         "dojo/dom-style",
-        "dijit/registry"],
+        "dijit/registry",
+        "dijit/focus"],
         function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, template, _MultiItemRendererMixin,
-                 AlfCore, _LayoutMixin, keys, lang, array, domConstruct, domGeom, query, domStyle, registry) {
+                 AlfCore, _LayoutMixin, keys, lang, array, domAttr, domClass, domConstruct, domGeom, query, domStyle,
+                 registry, focusUtil) {
 
    return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, _MultiItemRendererMixin, AlfCore, _LayoutMixin], {
 
@@ -189,6 +193,35 @@ define(["dojo/_base/declare",
          {
             focusedChild.blur();
          }
+         domClass.remove(focusedChild.domNode, "alfresco-lists-views-layouts-Grid__cell--focused");
+      },
+
+      /**
+       * This function ensures that the widget requested to be focused has a focus function
+       * and if so calls the "focusChild" function provided by the _KeyNavContainer. Otherwise
+       * it manually takes care of setting the focus.
+       *
+       * @instance
+       * @param {object} widget The widget to focus
+       * @since 1.0.43
+       */
+      focusOnCell: function alfresco_lists_views_layouts_Grid__focusOnCell(widget) {
+         if (typeof widget.focus === "function")
+         {
+            this.focusChild(widget);
+         }
+         else
+         {
+            if(this.focusedChild && widget !== this.focusedChild){
+               this._onChildBlur(this.focusedChild);  // used to be used by _MenuBase
+            }
+            if (widget.domNode)
+            {
+               domAttr.set(widget.domNode, "tabIndex", this.tabIndex); // for IE focus outline to appear, must set tabIndex before focus
+               focusUtil.focus(widget.domNode);
+            }
+         }
+         domClass.add(widget.domNode, "alfresco-lists-views-layouts-Grid__cell--focused");
       },
 
       /**
@@ -209,7 +242,7 @@ define(["dojo/_base/declare",
          {
             target = allChildren[childCount-1];
          }
-         this.focusChild(target);
+         this.focusOnCell(target);
       },
 
       /**
@@ -230,7 +263,7 @@ define(["dojo/_base/declare",
          {
             target = allChildren[0];
          }
-         this.focusChild(target);
+         this.focusOnCell(target);
       },
 
       /**
@@ -265,7 +298,7 @@ define(["dojo/_base/declare",
          {
             target = allChildren[focusIndex - this.columns];
          }
-         this.focusChild(target);
+         this.focusOnCell(target);
       },
 
       /**
@@ -288,7 +321,7 @@ define(["dojo/_base/declare",
          {
             target = allChildren[focusIndex + this.columns];
          }
-         this.focusChild(target);
+         this.focusOnCell(target);
       },
 
       /**

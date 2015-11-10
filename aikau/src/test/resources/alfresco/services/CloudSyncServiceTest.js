@@ -133,10 +133,18 @@ define(["intern!object",
                .findById("CLOUD_SYNC_SITE_CONTROL")
                   .clearValue()
                   .type("s")
+               .end()
+
+               // Wait for the options popup
+               .findDisplayedById("CLOUD_SYNC_SITE_CONTROL_popup")
+               .end()
+
+               // Now select the option...
+               .findById("CLOUD_SYNC_SITE_CONTROL")
                   .pressKeys(keys.ENTER)
                .end()
 
-               .findById("CLOUD_SYNC_CONTAINER")
+               .findDisplayedById("CLOUD_SYNC_CONTAINER")
                   .isDisplayed()
                   .then(function(displayed) {
                      assert.isTrue(displayed, "The container picker should be displayed when a site value is provided");
@@ -158,7 +166,7 @@ define(["intern!object",
             .end()
 
             // There should now be a new container
-            .findByCssSelector("#CLOUD_SYNC_CONTAINER .dijitTreeNodeContainer .dijitTreeNode:nth-child(4) .dijitTreeNodeContainer .dijitTreeLabel")
+            .findDisplayedByCssSelector("#CLOUD_SYNC_CONTAINER .dijitTreeNodeContainer .dijitTreeNode:nth-child(4) .dijitTreeNodeContainer .dijitTreeLabel")
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "CANNOT SYNC", "Could not find the expected tree node");
@@ -195,6 +203,14 @@ define(["intern!object",
             return browser.findById("CLOUD_SYNC_SITE_CONTROL").clearLog()
                   .clearValue()
                   .type("a")
+               .end()
+
+               // Wait for the options popup
+               .findDisplayedById("CLOUD_SYNC_SITE_CONTROL_popup")
+               .end()
+
+               // Now select the option...
+               .findById("CLOUD_SYNC_SITE_CONTROL")
                   .pressKeys(keys.ENTER)
                .end()
 

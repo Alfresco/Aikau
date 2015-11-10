@@ -33,10 +33,11 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "alfresco/core/PathUtils",
         "alfresco/core/NodeUtils",
+        "alfresco/enums/urlTypes",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/_base/array"],
-        function(declare, BaseService, CoreXhr, topics, AlfConstants, PathUtils, NodeUtils, lang, domConstruct, array) {
+        function(declare, BaseService, CoreXhr, topics, AlfConstants, PathUtils, NodeUtils, urlTypes, lang, domConstruct, array) {
 
    return declare([BaseService, CoreXhr, PathUtils], {
 
@@ -120,6 +121,18 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/core/topics#GET_DOCUMENT
+       * @listens module:alfresco/core/topics#GET_DOCUMENT_LIST
+       * @listens module:alfresco/core/topics#REQUEST_ARCHIVE
+       * @listens module:alfresco/core/topics#REQUEST_ARCHIVE_PROGRESS
+       * @listens module:alfresco/core/topics#DELETE_ARCHIVE
+       * @listens module:alfresco/core/topics#DOWNLOAD
+       * @listens module:alfresco/core/topics#DOWNLOAD_AS_ZIP
+       * @listens module:alfresco/core/topics#DOWNLOAD_GENERATED_ARCHIVE
+       * @listens module:alfresco/core/topics#CANCEL_EDIT
+       * @listens module:alfresco/core/topics#GET_PARENT_NODEREF
+       * @listens module:alfresco/core/topics#SMART_DOWNLOAD
+       * @listens module:alfresco/core/topics#DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS
        */
       registerSubscriptions: function alfresco_services_DocumentService__registerSubscriptions() {
          // Bind to document topics:
@@ -133,10 +146,13 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.DELETE_ARCHIVE, lang.hitch(this, this.onDeleteDownloadArchive));
 
          // Bind to download topics:
+         this.alfSubscribe(topics.DOWNLOAD, lang.hitch(this, this.onDownload));
          this.alfSubscribe(topics.DOWNLOAD_AS_ZIP, lang.hitch(this, this.onDownloadAsZip));
          this.alfSubscribe(topics.DOWNLOAD_NODE, lang.hitch(this, this.onDownloadFile));
          this.alfSubscribe(topics.CANCEL_EDIT, lang.hitch(this, this.onCancelEdit));
          this.alfSubscribe(topics.GET_PARENT_NODEREF, lang.hitch(this, this.onGetParentNodeRef));
+         this.alfSubscribe(topics.SMART_DOWNLOAD, lang.hitch(this, this.onSmartDownload));
+         this.alfSubscribe(topics.DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS, lang.hitch(this, this.onDocumentRetrievedForDownload));
       },
 
       /**
@@ -313,6 +329,120 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles requests to download a single document.
+       * 
+       * @instance
+       * @param  {object} payload The published payload that should contain a node.contentURL attribute.
+       * @since 1.0.43
+       * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
+       */
+      onDownload: function alfresco_services_DocumentService__onDownload(payload) {
+         var contentURL = lang.getObject("node.contentURL", false, payload);
+         if (contentURL)
+         {
+            // Strip off any superfluous forward slash at the beginning of the URL, this is required
+            // because the PROXY_URI has a trailing slash included...
+            if (contentURL[0] === "/")
+            {
+               contentURL = contentURL.substring(1);
+            }
+
+            // NOTE: The key request parameter of "a=true" is important to ensure that a download rather than
+            //       a navigation occurs...
+            this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
+               url: AlfConstants.PROXY_URI + contentURL + "?a=true",
+               type: urlTypes.FULL_PATH,
+               target: "NEW"
+            });
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to download a document but no 'node.contentURL' attribute was found in the payload provided", payload, this);
+         }
+      },
+
+      /**
+       * This function is provided to handle downloads of selected items with some intelligence. If a single
+       * document is selected then it will be downloaded
+       * (via the [onDownload]{@link module:alfresco/services/DocumentService#onDownload}), but if multiple items 
+       * are selected then they will be downloaded as an archive 
+       * (via the [onDownloadAsZip]{@link module:alfresco/services/DocumentService#onDownloadAsZip}) function.
+       * If a single folder is selected then it will be downloaded as an archive. This function is also able to cope
+       * with data provided by either the Document Library or Search APIs.
+       * 
+       * @instance
+       * @param {object} payload An object containing the items to download.
+       * @since 1.0.43
+       */
+      onSmartDownload: function alfresco_servicews_DocumentService__onSmartDownload(payload) {
+         if (payload.nodes)
+         {
+            if (payload.nodes.length === 1)
+            {
+               // For single items perform a single download...
+               // However, we still need to check the item type (i.e. whether it is a document or folder)...
+               var node = payload.nodes[0];
+               if (node.node)
+               {
+                  // Document Library style API 
+                  if (node.node.isContainer === true)
+                  {
+                     this.onDownloadAsZip(payload);
+                  }
+                  else
+                  {
+                     this.onDownload(node);
+                  }
+               }
+               else if (node.type === "document" && node.nodeRef)
+               {
+                  // Search style API document, it is necessary to request the full metadata of the node...
+                  this.onRetrieveSingleDocumentRequest({
+                     nodeRef: node.nodeRef,
+                     alfResponseTopic: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL"
+                  });
+               }
+               else if (node.type === "folder")
+               {
+                  // Search style API folder...
+                  this.onDownloadAsZip(payload);
+               }
+               else
+               {
+                  this.alfLog("warn", "A request was made to perform a smart download on a single item but it was not able to determine if the item was a document or a folder", payload, this);
+               }
+            }
+            else
+            {
+               // Always download multiple files as a zip...
+               this.onDownloadAsZip(payload);
+            }
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to perform a smart download but no 'nodes' attribute was provided in the payload", payload, this);
+         }
+      },
+
+      /**
+       * This is the callback function from requests to retrieve the metadata for a node defined by the
+       * Search API called from the [onSmartDownload]{@link module:alfresco/services/DocumentService#onSmartDownload}
+       * function.
+       * 
+       * @instance
+       * @param {object} payload The full metadata of a node to download.
+       * @since 1.0.43
+       */
+      onDocumentRetrievedForDownload: function alfresco_services_DocumentService__onDocumentRetrievedForDownload(payload) {
+         var node = lang.getObject("response.item", false, payload);
+         if (node)
+         {
+            this.onDownload(node);
+         }
+      },
+
+      /**
+       * Handles requests to download one or more documents and/or folders as a ZIP archive.
        * 
        * @instance
        * @param {object} payload The payload containing the nodes to archive and download
@@ -590,6 +720,7 @@ define(["dojo/_base/declare",
       onDownloadFile: function alfresco_services_DocumentService__onDownloadFile(payload) {
          var nodeRefObj = NodeUtils.processNodeRef(payload.nodeRef);
          var fileName = payload.fileName || this.message("services.DocumentService.archiveName") + ".zip";
+
          var form = domConstruct.create("form");
          form.method = "GET";
          form.action = AlfConstants.PROXY_URI + "api/node/content/" + nodeRefObj.uri + "/" + encodeURIComponent(fileName);

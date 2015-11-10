@@ -468,7 +468,7 @@ define(["dojo/_base/declare",
        */
       updateFilterHash: function alfresco_search_AlfSearchList__updateFilterHash(fullFilter, mode) {
          // Get the existing hash and extract the individual facetFilters into an array
-         var aHash = hashUtils.getHash(),
+         var aHash = hashUtils.getHash(true),
              facetFilters = aHash.facetFilters ? aHash.facetFilters : "",
              facetFiltersArr = facetFilters === "" ? [] : facetFilters.split(",");
 
@@ -705,7 +705,7 @@ define(["dojo/_base/declare",
 
          // TODO: This should probably be in the SearchService... but will leave here for now...
          var facets = lang.getObject("response.facets", false, payload);
-         var filters = lang.getObject("requestConfig.query.filters", false, payload);
+         var filters = lang.getObject("requestConfig.query.encodedFilters", false, payload);
          if (facets !== null && facets !== undefined)
          {
             for (var key in facets)

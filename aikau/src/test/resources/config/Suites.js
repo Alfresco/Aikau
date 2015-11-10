@@ -172,6 +172,7 @@ define({
       "src/test/resources/alfresco/lists/LocalStorageFallbackTest",
       "src/test/resources/alfresco/lists/PaginatorVisibilityTest",
       "src/test/resources/alfresco/lists/views/AlfListViewTest",
+      "src/test/resources/alfresco/lists/views/GalleryViewFocusTest",
       "src/test/resources/alfresco/lists/views/GalleryViewInfiniteScrollTest",
       "src/test/resources/alfresco/lists/views/HtmlListViewTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
@@ -252,6 +253,7 @@ define({
       "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DeleteSiteTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
+      "src/test/resources/alfresco/services/DocumentServiceTest",
       "src/test/resources/alfresco/services/FullScreenDialogTest",
       "src/test/resources/alfresco/services/LoggingServiceTest",
       "src/test/resources/alfresco/services/NavigationServiceTest",
@@ -264,6 +266,7 @@ define({
       "src/test/resources/alfresco/services/UserServiceTest",
 
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
+      "src/test/resources/alfresco/services/actions/DownloadTest",
       "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
       "src/test/resources/alfresco/services/actions/ManageAspectsTest",
       "src/test/resources/alfresco/services/actions/NodeLocationTest",

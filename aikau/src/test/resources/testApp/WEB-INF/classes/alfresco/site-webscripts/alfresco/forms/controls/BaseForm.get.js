@@ -82,6 +82,8 @@ model.jsonModel = {
                   name: "alfresco/forms/Form",
                   id: "BASIC_FORM",
                   config: {
+                     okButtonPublishTopic: "OK",
+                     cancelButtonPublishTopic: "CANCEL",
                      widgets: [
                         {
                            id: "FORM_FIELD",

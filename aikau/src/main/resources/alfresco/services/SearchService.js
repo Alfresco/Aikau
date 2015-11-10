@@ -229,13 +229,14 @@ define(["dojo/_base/declare",
             }
             else
             {
-               sort = (payload.sortField || this.sort) + "|" + (payload.sortAscending || this.sortAscending);
+               var sortAscending = (payload.sortAscending !== null && typeof payload.sortAscending !== "undefined") ? payload.sortAscending : this.sortAscending;
+               sort = (payload.sortField || this.sort) + "|" + sortAscending;
             }
 
             var data = {
                facetFields: payload.facetFields || "",
-               filters: payload.filters || "",
-               term: payload.term,
+               filters: decodeURIComponent(payload.filters) || "",
+               encodedFilters: payload.filters || "",term: payload.term,
                tag: payload.tag || this.tag,
                startIndex: (payload.startIndex || payload.startIndex === 0) ? payload.startIndex : this.startIndex,
                sort: sort,

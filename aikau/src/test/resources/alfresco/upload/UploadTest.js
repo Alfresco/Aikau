@@ -21,11 +21,9 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
    var uploadsSelector = ".alfresco-dialog-AlfDialog .alfresco-upload-AlfUploadDisplay .uploads";
    var successfulUploadsSelector = uploadsSelector + "> .successful table tr";
@@ -35,174 +33,188 @@ define(["intern!object",
    var cancelButtonSelector = ".alfresco-dialog-AlfDialog .footer > span:nth-child(2) > span";
    var dialogDelay = 500;
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Upload Failure Tests",
+      return {
+         name: "Upload Failure Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/aikau-upload-failure-unit-test", "Upload Failure").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
-      
-      // teardown: function() {
-      //    return browser.end().alfPostCoverageResults(browser);
-      // },
-      
-      "Upload Failure": function () {
-         // Simulate providing a zero byte file and check the output...
-         return browser.findByCssSelector("#SINGLE_UPLOAD_label")
-            .click()
-            .sleep(dialogDelay)
-         .end()
-         .findAllByCssSelector(failedUploadsSelector)
-            .then(function(elements) {
-               assert(elements.length === 1, "Test #1a - Wrong number of failed uploads, expected 1, found: " + elements.length);
-            })
-         .end()
-         .findByCssSelector(cancelButtonSelector)
-            .click()
-            .sleep(dialogDelay)
-         .end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/aikau-upload-failure-unit-test", "Upload Failure").end();
+         },
+         
+         beforeEach: function() {
+            browser.end();
+         },
+         
+         "Upload Failure": function () {
+            // Simulate providing a zero byte file and check the output...
+            return browser.findById("SINGLE_UPLOAD_label")
+               .click()
+            .end()
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed")
+            .end()
+
+            .findAllByCssSelector(failedUploadsSelector)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Wrong number of failed uploads");
+               })
+            .end()
+
+            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Upload Tests",
-      
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/aikau-upload-unit-test", "Upload").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
-      
-      // teardown: function() {
-      //    return browser.end().alfPostCoverageResults(browser);
-      // },
-      
-      "Test bad file data": function () {
-         // Simulate providing a zero byte file and check the output...
-         return browser.findByCssSelector("#BAD_FILE_DATA_label")
-            .click()
-            .sleep(dialogDelay)
-         .end()
-         .findAllByCssSelector(failedUploadsSelector)
-            .then(function(elements) {
-               assert(elements.length === 1, "Wrong number of failed uploads, expected 1, found: " + elements.length);
-            })
-         .end()
-         .findByCssSelector(cancelButtonSelector)
-            .click()
-            .sleep(dialogDelay)
-         .end();
-      },
-      
-      "Test single file upload (no failures)": function () {
-         return browser.findByCssSelector("#SINGLE_UPLOAD_label")
-            .click()
-            .sleep(dialogDelay)
-         .end()
-         .findAllByCssSelector(failedUploadsSelector)
-            .then(function(elements) {
-               assert(elements.length === 0, "Wrong number of failed uploads, expected 0, found: " + elements.length);
-            })
-         .end();
-      },
-      
-      "Test single file upload (one success)": function() {
-         return browser.findAllByCssSelector(successfulUploadsSelector)
-            .then(function(elements) {
-               assert(elements.length === 1, "Wrong number of successful uploads, expected 1, found: " + elements.length);
-            })
-         .end();
-      },
-      
-      "Test single file upload (progress)": function() {
-         return browser.findByCssSelector(aggProgStatusSelector)
-            .getVisibleText()
-            .then(function(text) {
-               assert(text === "100%", "The aggregate progress was not 100%: " + text);
-            })
-         .end()
-         .findByCssSelector(okButtonSelector)
-            .click()
-            .sleep(dialogDelay)
-         .end();
-      },
-      
-      "Test zero file upload (failed)": function () {
-         return browser.findByCssSelector("#NO_FILES_UPLOAD_label")
-            .click()
-            .sleep(dialogDelay)
-         .end()
-         .findAllByCssSelector(failedUploadsSelector)
-            .then(function(elements) {
-               assert(elements.length === 0, "Wrong number of failed uploads, expected 0, found: " + elements.length);
-            })
-         .end();
-      },
-      
-      "Test zero file upload (successful)": function() {
-         return browser.findAllByCssSelector(successfulUploadsSelector)
-            .then(function(elements) {
-               assert(elements.length === 0, "Wrong number of successful uploads, expected 0, found: " + elements.length);
-            })
-         .end()
-         .findByCssSelector(okButtonSelector)
-            .click()
-            .sleep(dialogDelay)
-         .end();
-      },
-      
-      "Test Multi-File Upload (failed)": function () {
-         return browser.findByCssSelector("#MULTI_UPLOAD_label")
-            .click()
-            .sleep(dialogDelay)
-         .end()
-         .findAllByCssSelector(failedUploadsSelector)
-            .then(function(elements) {
-               assert(elements.length === 0, "Wrong number of failed uploads, expected 0, found: " + elements.length);
-            })
-         .end();
-      },
-      
-      "Test Multi-File Upload (successful)": function () {
-         return browser.findAllByCssSelector(successfulUploadsSelector)
-            .then(function(elements) {
-               assert(elements.length === 4, "Wrong number of successful uploads, expected 4, found: " + elements.length);
-            })
-         .end()
-         .findByCssSelector(aggProgStatusSelector)
-            .getVisibleText()
-            .then(function(text) {
-               assert(text === "100%", "The aggregate progress was not 100%: " + text);
-            })
-         .end()
-         .findByCssSelector(okButtonSelector)
-            .click()
-            .sleep(dialogDelay)
-         .end();
-      },
+      return {
+         name: "Upload Tests",
+         
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/aikau-upload-unit-test", "Upload").end();
+         },
+         
+         beforeEach: function() {
+            browser.end();
+         },
+         
+         "Test bad file data": function () {
+            // Simulate providing a zero byte file and check the output...
+            return browser.findById("BAD_FILE_DATA_label")
+               .click()
+            .end()
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed")
+            .end()
+
+            .findAllByCssSelector(failedUploadsSelector)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Wrong number of failed uploads");
+               })
+            .end()
+
+            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden");
+         },
+         
+         "Test single file upload (no failures)": function () {
+            return browser.findById("SINGLE_UPLOAD_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed")
+            .end()
+            
+            .findAllByCssSelector(failedUploadsSelector)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "Wrong number of failed uploads");
+               });
+         },
+         
+         "Test single file upload (one success)": function() {
+            return browser.findAllByCssSelector(successfulUploadsSelector)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Wrong number of successful uploads");
+               });
+         },
+         
+         "Test single file upload (progress)": function() {
+            return browser.findByCssSelector(aggProgStatusSelector)
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "100%", "The aggregate progress was not 100%");
+               })
+            .end()
+
+            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden");
+         },
+         
+         "Test zero file upload (failed)": function () {
+            return browser.findById("NO_FILES_UPLOAD_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed")
+            .end()
+            
+            .findAllByCssSelector(failedUploadsSelector)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "Wrong number of failed uploads");
+               });
+         },
+         
+         "Test zero file upload (successful)": function() {
+            return browser.findAllByCssSelector(successfulUploadsSelector)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "Wrong number of successful uploads");
+               })
+            .end()
+
+            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden");
+         },
+         
+         "Test Multi-File Upload (failed)": function () {
+            return browser.findById("MULTI_UPLOAD_label")
+               .click()
+            .end()
+            
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed")
+            .end()
+            
+            .findAllByCssSelector(failedUploadsSelector)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "Wrong number of failed uploads");
+               });
+         },
+         
+         "Test Multi-File Upload (successful)": function () {
+            return browser.findAllByCssSelector(successfulUploadsSelector)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 4, "Wrong number of successful uploads");
+               })
+            .end()
+            
+            .findByCssSelector(aggProgStatusSelector)
+               .getVisibleText()
+               .then(function(text) {
+                  assert(text === "100%", "The aggregate progress was not 100%: " + text);
+               })
+            .end()
+            
+            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

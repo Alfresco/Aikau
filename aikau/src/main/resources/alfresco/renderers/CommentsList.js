@@ -49,6 +49,45 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/CommentsList.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/CommentsList.properties"}],
+
+      /**
+       * Whether to use a full-screen dialog when adding comments.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.43
+       */
+      addCommentsFullScreen: false,
+
+      /**
+       * When [addCommentsFullScreen]{@link module:alfresco/renderers/CommentsList#addCommentsFullScreen} is
+       * set to true, then this will permit overriding the padding that this full-screen mode specifies by default.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.43
+       */
+      addCommentsPadding: 0,
+
+      /**
+       * Executed after properties mixed in and before widget created
+       *
+       * @instance
+       * @override
+       * @since 1.0.43
+       */
+      postMixInProperties: function alfresco_renderers_CommentsList__postMixInProperties() {
+         this.inherited(arguments);
+         if (this.addCommentsFullScreen) {
+            var addCommentPayload = lang.getObject("widgets.0.config.widgetsBefore.0.config.publishPayload", false, this);
+            if(addCommentPayload) {
+               addCommentPayload.fullScreenMode = true;
+               addCommentPayload.fullScreenPadding = this.addCommentsPadding;
+            }
+         }
+      },
       
       /**
        * Widget has been started, but not necessarily any sub-widgets.
@@ -91,9 +130,9 @@ define(["dojo/_base/declare",
                               url: "api/node/{node.nodeRef}/comments",
                               pubSubScope: "{pubSubScope}"
                            },
-                           additionalCssClasses: "no-padding",
+                           additionalCssClasses: "no-padding tinymce-dialog",
                            fixedWidth: true,
-                           dialogWidth: "545px",
+                           dialogWidth: "540px",
                            widgets: [
                               {
                                  name: "alfresco/forms/controls/TinyMCE",
