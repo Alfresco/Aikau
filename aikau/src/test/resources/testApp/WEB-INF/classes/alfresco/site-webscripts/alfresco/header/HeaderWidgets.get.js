@@ -1,3 +1,4 @@
+/* global msg */
 model.jsonModel = {
    services: [
       {
@@ -86,7 +87,8 @@ model.jsonModel = {
                {
                   name: "alfresco/header/Title",
                   config: {
-                     label: "test.page.title"
+                     label: msg.get("test.page.title"),
+                     setBrowserTitle: true
                   }
                },
                {
@@ -96,7 +98,7 @@ model.jsonModel = {
                      label: "Change Title",
                      publishTopic: "ALF_UPDATE_PAGE_TITLE",
                      publishPayload: {
-                        title: "test.page.updated.title"
+                        title: msg.get("test.page.updated.title")
                      }
                   }
                }
