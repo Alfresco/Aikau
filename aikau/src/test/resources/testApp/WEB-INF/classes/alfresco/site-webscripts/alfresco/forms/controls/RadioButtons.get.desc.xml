@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>RadioButtons Test</shortname>
+  <description>This is a test page for the alfresco/forms/controls/RadioButtons control</description>
+  <family>aikau-unit-tests</family>
+  <url>/RadioButtons</url>
+</webscript>
