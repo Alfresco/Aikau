@@ -30,13 +30,28 @@ model.jsonModel = {
                {
                   name: "alfresco/documentlibrary/views/AlfGalleryView",
                   config: {
-                     columns: 4,
+                     resizeByColumnCount: false,
+                     thumbnailSize: 200,
                      widgets: [
                         {
-                           id: "PROPERTY",
-                           name: "alfresco/renderers/Property",
+                           id: "VERTICAL",
+                           name: "alfresco/layout/VerticalWidgets",
                            config: {
-                              propertyToRender: "displayName"
+                              widgets: [
+                                 {
+                                    name: "alfresco/layout/HorizontalWidgets",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             name: "alfresco/renderers/Property",
+                                             config: {
+                                                propertyToRender: "displayName"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
                            }
                         }
                      ]
