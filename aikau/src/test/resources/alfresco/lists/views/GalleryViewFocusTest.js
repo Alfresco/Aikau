@@ -41,8 +41,9 @@ define(["intern!object",
             browser.end();
          },
 
+         // See AKU-690...
          "Keyboard focus works": function() {
-            return browser.findDisplayedByCssSelector("#PROPERTY_ITEM_0")
+            return browser.findDisplayedByCssSelector("#VERTICAL_ITEM_0 .alfresco-renderers-Property")
                .click()
             .end()
 
@@ -52,6 +53,16 @@ define(["intern!object",
                .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "Telford and Wrekin Council", "Focus not moved");
+                  });
+         },
+
+         // See AKU-689...
+         // We need to ensure that horizontal widget resize events are correctly handled as the grid cells resize...
+         "Test initial sizing": function() {
+            return browser.findDisplayedByCssSelector("#VERTICAL_ITEM_5 .alfresco-layout-HorizontalWidgets")
+               .getSize()
+                  .then(function(size) {
+                     assert.equal(size.width, 200, "Width not set correctly");
                   });
          },
 

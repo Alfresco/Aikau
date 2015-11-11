@@ -389,12 +389,11 @@ define(["dojo/_base/declare",
       resizeCell: function alfresco_lists_views_layouts_Grid__resizeCell(containerNodeMarginBox, widthToSet, node, /*jshint unused:false*/ index) {
          domStyle.set(node, {"width": widthToSet});
          var dimensions = {
-               w: widthToSet,
-               h: null
-            },
-            widgetsToResize = query("[widgetId]", node); // Resize all contained widgets, not just immediate children.
-
-         array.forEach(widgetsToResize, lang.hitch(this, "resizeWidget", dimensions));
+            w: widthToSet,
+            h: null
+         },
+         widgetsToResize = query("[widgetId]", node); // Resize all contained widgets, not just immediate children.
+         array.forEach(widgetsToResize, lang.hitch(this, this.resizeWidget, dimensions));
       },
 
       /**
@@ -411,6 +410,12 @@ define(["dojo/_base/declare",
          if (widget && typeof widget.resize === "function")
          {
             widget.resize(dimensions);
+         }
+         else
+         {
+            // See AKU-689 - resize the widgets DOM node and publish an event to indicate that it has been resized...
+            domStyle.set(widget.domNode, "width", dimensions.w);
+            this.alfPublishResizeEvent(widget.domNode, true); // Make sure the event is unthrottled...
          }
       },
 
