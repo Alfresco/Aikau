@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Gallery View (focus tests)</shortname>
+  <description>This test page shows an AlfGalleryView with a custom widget model consisting of a primary widget that does not have a focus function in order to verify that keyboard navigation still works.</description>
+  <family>aikau-unit-tests</family>
+  <url>/GalleryViewFocus</url>
+</webscript>

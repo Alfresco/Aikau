@@ -21,212 +21,228 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect", 
         "intern/chai!assert", 
-        "require", 
         "alfresco/TestCommon", 
         "intern/dojo/node!leadfoot/keys"], 
-        function(registerSuite, expect, assert, require, TestCommon, keys) {
+        function(registerSuite, assert, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Basic Header Widgets Tests",
+      return {
+         name: "Basic Header Widgets Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/HeaderWidgets", "Basic Header Widgets Test").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/HeaderWidgets", "Basic Header Widgets Test").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Test that header CSS is applied": function() {
-         // Check that the header CSS is applied...         
-         return browser.findByCssSelector(".alfresco-layout-LeftAndRight.alfresco-header-Header")
-            .then(function() {}, function() {
-               assert(false, "The header CSS was not applied correctly");
-            });
-      },
+         "Test that header CSS is applied": function() {
+            // Check that the header CSS is applied...         
+            return browser.findByCssSelector(".alfresco-layout-LeftAndRight.alfresco-header-Header")
+               .then(function() {}, function() {
+                  assert(false, "The header CSS was not applied correctly");
+               });
+         },
 
-      "Test title text is correct": function() {
-         return browser.findByCssSelector(".alfresco-header-Title__text")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "Test Title", "The title was not set correctly");
-            });
-      },
+         "Test title text is correct": function() {
+            return browser.findByCssSelector(".alfresco-header-Title__text")
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "Sök <img src=\"1\" onerror=\"window.hackedTitle=true\">", "The title was not set correctly");
 
-      "Test initial user status": function() {
-         return browser.findByCssSelector("#HEADER_POPUP_text")
-            .click()
+                  var notHacked = browser.execute("!window.hackedTitle");
+                  assert(notHacked, "XSS attack in title succeeded");
+               })
             .end()
 
-         // Check the preset user status...
-         .findByCssSelector("#PRESET_STATUS > div.status")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "Test Status", "Preset status not set correctly");
-            });
-      },
+            .getPageTitle()
+               .then(function(title) {
+                  assert.equal(title, "Alfresco » Sök <img src=\"1\" onerror=\"window.hackedTitle=true\">", "The title was not set correctly");
+               });
+         },
 
-      "Test initial status time": function() {
-         return browser.findByCssSelector("#PRESET_STATUS > div.lastUpdate > span")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "over 16 years ago", "Preset status time not displayed as expected");
-            });
-      },
+         "Test initial user status": function() {
+            return browser.findByCssSelector("#HEADER_POPUP_text")
+               .click()
+               .end()
 
-      "Test unset status displayed correctly": function() {
-         return browser.findByCssSelector("#NO_STATUS > div.status")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "What are you thinking?", "Unset status not displayed correctly");
-            });
-      },
+            // Check the preset user status...
+            .findByCssSelector("#PRESET_STATUS > div.status")
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "Test Status", "Preset status not set correctly");
+               });
+         },
 
-      "Test unset status time displayed correctly": function() {
-         return browser.findByCssSelector("#NO_STATUS > div.lastUpdate")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "Last updated: never", "Unset status time not displayed as expected");
-            });
-      },
+         "Test initial status time": function() {
+            return browser.findByCssSelector("#PRESET_STATUS > div.lastUpdate > span")
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "over 16 years ago", "Preset status time not displayed as expected");
+               });
+         },
 
-      "Test status dialog is displayed on click": function() {
-         return browser.findByCssSelector("#NO_STATUS > div.status")
-            .click()
-            .sleep(500)
-            .end()
+         "Test unset status displayed correctly": function() {
+            return browser.findByCssSelector("#NO_STATUS > div.status")
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "What are you thinking?", "Unset status not displayed correctly");
+               });
+         },
 
-         .findByCssSelector(".alfresco-dialog-AlfDialog")
-            .then(function() {}, function() {
-               assert(false, "The update dialog was not displayed");
-            });
-      },
+         "Test unset status time displayed correctly": function() {
+            return browser.findByCssSelector("#NO_STATUS > div.lastUpdate")
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "Last updated: never", "Unset status time not displayed as expected");
+               });
+         },
 
-      "Test status dialog text is correct": function() {
-         return browser.findByCssSelector(".alfresco-dialog-AlfDialog .dijitDialogTitleBar > span")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "What Are You Thinking?", "User status dialog title not set correctly");
-            });
-      },
+         "Test status dialog is displayed on click": function() {
+            return browser.findByCssSelector("#NO_STATUS > div.status")
+               .click()
+               .sleep(500)
+               .end()
 
-      "Test new status published correctly": function() {
-         return browser.findByCssSelector("#NO_STATUS_STATUS_TEXTAREA")
-            .clearValue()
-            .type("Status Update")
-            .pressKeys([keys.TAB])
-            .pressKeys([keys.RETURN])
-            .sleep(250)
-            .end()
+            .findByCssSelector(".alfresco-dialog-AlfDialog")
+               .then(function() {}, function() {
+                  assert(false, "The update dialog was not displayed");
+               });
+         },
 
-         // Check that the status update was posted correctly...
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "status", "Status Update"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "User status not published correctly");
-            });
-      },
+         "Test status dialog text is correct": function() {
+            return browser.findByCssSelector(".alfresco-dialog-AlfDialog .dijitDialogTitleBar > span")
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "What Are You Thinking?", "User status dialog title not set correctly");
+               });
+         },
 
-      "Test setting status updates via PubSub (status)": function() {
-         // Use the menus to simulate a status update...
-         // (with the bonus of checking the header versions of the menu items work)...
-         return browser.findByCssSelector("#HEADER_POPUP_text")
-            .click()
-            .end()
-            .sleep(150)
-            .findByCssSelector("#CASCADE_1_text")
-            .click()
-            .end()
-            .sleep(150)
-            .findByCssSelector("#MENU_ITEM_1_text")
-            .click()
-            .end()
-            .sleep(150)
+         "Test new status published correctly": function() {
+            return browser.findByCssSelector("#NO_STATUS_STATUS_TEXTAREA")
+               .clearValue()
+               .type("Status Update")
+               .pressKeys([keys.TAB])
+               .pressKeys([keys.RETURN])
+               .sleep(250)
+               .end()
 
-         // Open the popup again...
-         .findByCssSelector("#HEADER_POPUP_text")
-            .click()
-            .end()
+            // Check that the status update was posted correctly...
+            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "status", "Status Update"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "User status not published correctly");
+               });
+         },
 
-         // Check the preset user status (which should be updated)...
-         .findByCssSelector("#NO_STATUS > div.status")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "Button Update", "Status not updated");
-            });
-      },
+         "Test setting status updates via PubSub (status)": function() {
+            // Use the menus to simulate a status update...
+            // (with the bonus of checking the header versions of the menu items work)...
+            return browser.findByCssSelector("#HEADER_POPUP_text")
+               .click()
+               .end()
+               .sleep(150)
+               .findByCssSelector("#CASCADE_1_text")
+               .click()
+               .end()
+               .sleep(150)
+               .findByCssSelector("#MENU_ITEM_1_text")
+               .click()
+               .end()
+               .sleep(150)
 
-      "Test setting status updates via PubSub (time)": function() {
-         return browser.findByCssSelector("#NO_STATUS > div.lastUpdate > span")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "over 16 years ago", "Status time not updated");
-            })
-            .end();
+            // Open the popup again...
+            .findByCssSelector("#HEADER_POPUP_text")
+               .click()
+               .end()
 
-      },
+            // Check the preset user status (which should be updated)...
+            .findByCssSelector("#NO_STATUS > div.status")
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "Button Update", "Status not updated");
+               });
+         },
 
-      "Test recent sites displayed (first site)": function() {
-         // Click on the sites menus...
-         return browser.findByCssSelector("#SITES_MENU_text")
-            .click()
-            .end()
+         "Test setting status updates via PubSub (time)": function() {
+            return browser.findByCssSelector("#NO_STATUS > div.lastUpdate > span")
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "over 16 years ago", "Status time not updated");
+               })
+               .end();
 
-         .findByCssSelector("#HEADER_SITES_MENU_RECENT_site1 a")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Site1", "First recent site not rendered correctly");
-            });
-      },
+         },
 
-      "Test recent sites displayed (second site)": function() {
-         return browser.findByCssSelector("#HEADER_SITES_MENU_RECENT_site2 a")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Site2", "Sccond recent site not rendered correctly");
-            });
-      },
+         "Test recent sites displayed (first site)": function() {
+            // Click on the sites menus...
+            return browser.findByCssSelector("#SITES_MENU_text")
+               .click()
+               .end()
 
-      "Test favourite sites displayed (first site)": function() {
-         return browser.findByCssSelector("#SITES_MENU_FAVOURITES_text")
-            .click()
-            .end()
+            .findByCssSelector("#HEADER_SITES_MENU_RECENT_site1 a")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Site1", "First recent site not rendered correctly");
+               });
+         },
 
-         .findByCssSelector("#HEADER_SITES_MENU_FAVOURITE_site1 a")
-            .getVisibleText()
-            .then(function(text) {
-               assert(text === "Site1", "First favourite site not rendered correctly");
-            });
-      },
+         "Test recent sites displayed (second site)": function() {
+            return browser.findByCssSelector("#HEADER_SITES_MENU_RECENT_site2 a")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Site2", "Sccond recent site not rendered correctly");
+               });
+         },
 
-      "Test favourite sites displayed (second site)": function() {
-         return browser.findByCssSelector("#HEADER_SITES_MENU_FAVOURITE_site2 a")
-            .getVisibleText()
-            .then(function(text) {
-               assert(text === "Site2", "Second favourite site not rendered correctly");
-            });
-      },
+         "Test favourite sites displayed (first site)": function() {
+            return browser.findByCssSelector("#SITES_MENU_FAVOURITES_text")
+               .click()
+               .end()
 
-      "Test updating title": function() {
-         return browser.findByCssSelector("#SET_TITLE_BUTTON")
-            .click()
+            .findByCssSelector("#HEADER_SITES_MENU_FAVOURITE_site1 a")
+               .getVisibleText()
+               .then(function(text) {
+                  assert(text === "Site1", "First favourite site not rendered correctly");
+               });
+         },
+
+         "Test favourite sites displayed (second site)": function() {
+            return browser.findByCssSelector("#HEADER_SITES_MENU_FAVOURITE_site2 a")
+               .getVisibleText()
+               .then(function(text) {
+                  assert(text === "Site2", "Second favourite site not rendered correctly");
+               });
+         },
+
+         "Test updating title": function() {
+            return browser.findByCssSelector("#SET_TITLE_BUTTON")
+               .click()
             .end()
             .findByCssSelector(".alfresco-header-Title__text")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "Updated Title", "The title was not updated");
-            });
-      },
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "Updated Sök <img src=\"1\" onerror=\"window.hackedSetTitle=true\">", "The title was not updated");
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+                  var notHacked = browser.execute("!window.hackedSetTitle");
+                  assert(notHacked, "XSS attack in setting title succeeded");
+               })
+            .end()
+
+            .getPageTitle()
+               .then(function(title) {
+                  assert.equal(title, "Alfresco » Updated Sök <img src=\"1\" onerror=\"window.hackedSetTitle=true\">", "The title was not set correctly");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
    registerSuite(function() {
@@ -288,145 +304,146 @@ registerSuite(function(){
       };
    });
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Remove Favourites Tests",
+      return {
+         name: "Remove Favourites Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/RemoveFavouriteSite", "Add Favourites Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/RemoveFavouriteSite", "Add Favourites Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Test remove favourite request published": function() {
-         return browser.findByCssSelector("#SITES_MENU_text")
-            .click()
-            .sleep(500)
-            .end()
+         "Test remove favourite request published": function() {
+            return browser.findByCssSelector("#SITES_MENU_text")
+               .click()
+               .sleep(500)
+               .end()
 
-         .findByCssSelector("#SITES_MENU_REMOVE_FAVOURITE_text")
-            .click()
-            .end()
+            .findByCssSelector("#SITES_MENU_REMOVE_FAVOURITE_text")
+               .click()
+               .end()
 
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_REMOVE_FAVOURITE_SITE", "publish", "last"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Remove favourite topic not published");
-            });
-      },
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_REMOVE_FAVOURITE_SITE", "publish", "last"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Remove favourite topic not published");
+               });
+         },
 
-      "Test remove request published correctly": function() {
-         return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", "site1"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Favourite not removed correctly");
-            });
-      },
+         "Test remove request published correctly": function() {
+            return browser.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", "site1"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Favourite not removed correctly");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Title Tests",
+      return {
+         name: "Title Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/Title", "Title Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/Title", "Title Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Test title gets set": function() {
-         return browser.findByCssSelector(".alfresco-header-Title:nth-child(2)")
-            .getVisibleText()
-            .then(function(visibleText) {
-               assert.equal(visibleText, "This is a title", "The title was not set");
-            });
-      },
+         "Test title gets set": function() {
+            return browser.findByCssSelector(".alfresco-header-Title:nth-child(2)")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "This is a title", "The title was not set");
+               });
+         },
 
-      "Long title is truncated": function() {
-         return browser.execute(function() {
-               var title = document.querySelector("#LONG .alfresco-header-Title__text");
-               return title.clientWidth < title.scrollWidth;
-            })
-            .then(function(truncated) {
-               assert.isTrue(truncated, "Long title not truncated");
-            })
+         /* global document */
+         "Long title is truncated": function() {
+            return browser.execute(function() {
+                  var title = document.querySelector("#LONG .alfresco-header-Title__text");
+                  return title.clientWidth < title.scrollWidth;
+               })
+               .then(function(truncated) {
+                  assert.isTrue(truncated, "Long title not truncated");
+               })
+               .end()
+
+            .findByCssSelector("#LONG .alfresco-header-Title__text")
+               .then(function(elem) {
+                  return elem.getSize();
+               })
+               .then(function(size) {
+                  assert.equal(size.width, 300, "Long title width incorrect");
+               })
+               .end()
+
+            .screenie(); // For visual verification of ellipsis if required
+         },
+
+         "Test link title": function() {
+            return browser.findByCssSelector("#LINK .alfresco-header-Title__text a")
+               .click()
             .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "url", "dp/ws/some-other-page");
+                  assert.propertyVal(payload, "type", "PAGE_RELATIVE");
+               });
+         },
 
-         .findByCssSelector("#LONG .alfresco-header-Title__text")
-            .then(function(elem) {
-               return elem.getSize();
-            })
-            .then(function(size) {
-               assert.equal(size.width, 300, "Long title width incorrect");
-            })
-            .end()
-
-         .screenie(); // For visual verification of ellipsis if required
-      },
-
-      "Test link title": function() {
-         return browser.findByCssSelector("#LINK .alfresco-header-Title__text a")
-            .click()
-         .end()
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-            .then(function(payload) {
-               assert.propertyVal(payload, "url", "dp/ws/some-other-page");
-               assert.propertyVal(payload, "type", "PAGE_RELATIVE");
-            });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Set Title Tests",
+      return {
+         name: "Set Title Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SetTitle", "Set Title Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/SetTitle", "Set Title Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Test title gets set": function() {
-         return browser.findByCssSelector(".alfresco-header-Title__text")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert.equal(resultText, "Updated Title", "The title was not updated");
-            });
-      },
+         "Test title gets set": function() {
+            return browser.findByCssSelector(".alfresco-header-Title__text")
+               .getVisibleText()
+               .then(function(resultText) {
+                  assert.equal(resultText, "Updated Title", "The title was not updated");
+               });
+         },
 
-      "Test document title": function() {
-         return browser.execute("return document.title;")
-            .then(function(title) {
-               assert(title.indexOf("Unit Tests" === 0), "The document title was not updated");
-            });
-      },
+         "Test document title": function() {
+            return browser.execute("return document.title;")
+               .then(function(title) {
+                  assert(title.indexOf("Unit Tests" === 0), "The document title was not updated");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });
