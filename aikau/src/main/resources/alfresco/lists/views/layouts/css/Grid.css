@@ -2,17 +2,16 @@
    border-collapse: separate;
    border-spacing: 2px;
    width: 100%;
+   outline: none;
 
-   &--showFocus {
+   &--enableHighlighting {
       
       .alfresco-lists-views-layouts-Grid__cell {
          border: @standard-border;
          border-radius: @standard-border-radius;
-         padding: @standard-column-spacing;
-         box-sizing: border-box;
-
+         
          &--focused {
-            border: @thick-border-width solid @focused-border-color;
+            border: @thick-border-width solid @hover-border-color;
          }
 
          &--expanded {

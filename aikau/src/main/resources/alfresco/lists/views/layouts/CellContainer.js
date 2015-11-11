@@ -18,9 +18,12 @@
  */
 
 /**
- *
+ * This widget has been created to be used as a widget container within a
+ * [list view]{@link module:alfresco/lists/views/AlfListView} that uses a 
+ * [grid renderer]{@link module:alfresco/lists/views/layouts/Grid} such as the
+ * [AlfGalleryView]{@link module:alfresco/documentlibrary/AlfGalleryView}.
  * 
- * @module alfresco/lists/views/layouts/Cell
+ * @module alfresco/lists/views/layouts/CellContainer
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
@@ -37,9 +40,10 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/text!./templates/CellContainer.html",
         "dojo/_base/event",
-        "dojo/_base/lang"], 
+        "dojo/_base/lang",
+        "dojo/dom-style"], 
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PublishPayloadMixin, _LayoutMixin, Core, 
-                 template, event, lang) {
+                 template, event, lang, domStyle) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PublishPayloadMixin, _LayoutMixin, Core], {
       
@@ -60,6 +64,24 @@ define(["dojo/_base/declare",
        */
       templateString: template,
       
+      /**
+       * The minimum height for each container in pixels.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      minHeight: 100,
+
+      /**
+       * The widgets model to render.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       */
+      widgets: null,
+
       /**
        * 
        *
@@ -82,11 +104,13 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets} with the
+       * configured [widgets model]{@link module:alfresco/lists/views/layouts/CellContainer#widgets}.
        * 
        * @instance
        */
       postCreate: function alfresco_lists_views_layouts_CellContainer__postCreate() {
+         domStyle.set(this.domNode, "minHeight", this.minHeight + "px");
          if (this.widgets)
          {
             this.processWidgets(this.widgets, this.widgetsNode);

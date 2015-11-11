@@ -97,6 +97,17 @@ define(["dojo/_base/declare",
       emptyCells: null,
 
       /**
+       * Indicates whether or not highlighting should be enabled. If this is configured to be
+       * true then highlighting of focus and expansion will be handled.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.44
+       */
+      enableHighlighting: false,
+
+      /**
        * This is set to the [itemKeyProperty]{@link module:alfresco/lists/views/layouts/Grid#itemKeyProperty}
        * of the item in the grid that has been expanded by the publication of the 
        * [expandTopic]{@link module:alfresco/lists/views/layouts/Grid#expandTopic}
@@ -241,7 +252,10 @@ define(["dojo/_base/declare",
             }, this);
          }
 
-         domClass.add(this.domNode, "alfresco-lists-views-layouts-Grid--showFocus");
+         if (this.enableHighlighting)
+         {
+            domClass.add(this.domNode, "alfresco-lists-views-layouts-Grid--enableHighlighting");
+         }
       },
 
 

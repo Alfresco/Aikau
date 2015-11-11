@@ -30,10 +30,12 @@ model.jsonModel = {
                   name: "alfresco/documentlibrary/views/AlfGalleryView",
                   config: {
                      columns: 10,
+                     enableHighlighting: true,
                      itemKeyProperty: "nodeRef",
                      expandTopics: ["EXPAND"],
                      widgets: [
                         {
+                           id: "CELL_CONTAINER",
                            name: "alfresco/lists/views/layouts/CellContainer",
                            config: {
                               publishTopic: "EXPAND",
@@ -79,6 +81,7 @@ model.jsonModel = {
                               publishPayloadItemMixin: true,
                               widgets: [
                                  {
+                                    id: "PROPERTY",
                                     name: "alfresco/renderers/Property",
                                     config: {
                                        propertyToRender: "node.properties.cm:name"

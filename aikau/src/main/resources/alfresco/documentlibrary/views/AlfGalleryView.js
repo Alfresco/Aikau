@@ -69,6 +69,17 @@ define(["dojo/_base/declare",
       columnsPreferenceProperty: "org.alfresco.share.documentList.galleryColumns",
 
       /**
+       * Indicates whether or not highlighting should be enabled. If this is configured to be
+       * true then highlighting of focus and expansion will be handled.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.44
+       */
+      enableHighlighting: false,
+
+      /**
        * This is an array of optional topics that can be subscribed to to create a panel within the 
        * [grid]{@link module:alfresco/lists/views/layouts/Grid} for showing additional data about a 
        * particular cell in the grid. The payload should contain a "widgets" attribute that represents the model 
@@ -388,7 +399,8 @@ define(["dojo/_base/declare",
             nextLinkPublishTopic: this.nextLinkPublishTopic,
             thumbnailSize: this.thumbnailSize,
             itemKeyProperty: this.itemKeyProperty,
-            expandTopics: this.expandTopics
+            expandTopics: this.expandTopics,
+            enableHighlighting: this.enableHighlighting
          });
          return dlr;
       },
