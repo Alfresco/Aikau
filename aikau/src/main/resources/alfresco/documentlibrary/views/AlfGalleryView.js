@@ -69,6 +69,36 @@ define(["dojo/_base/declare",
       columnsPreferenceProperty: "org.alfresco.share.documentList.galleryColumns",
 
       /**
+       * This is an array of optional topics that can be subscribed to to create a panel within the 
+       * [grid]{@link module:alfresco/lists/views/layouts/Grid} for showing additional data about a 
+       * particular cell in the grid. The payload should contain a "widgets" attribute that represents the model 
+       * to render within the panel.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.44
+       */
+      expandTopics: null,
+
+      /**
+       * This is the property that is used to uniquely identify each 
+       * [item]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} rendered in the
+       * [grid]{@link module:alfresco/lists/views/layouts/Grid}. It is used
+       * as the key in the [gridCellMapping]{@link module:alfresco/lists/views/layouts/Grid#gridCellMapping}
+       * to map each item to the cell that it is rendered in. This is required in order to know where to 
+       * exand the grid when the 
+       * [expandTopics]{@link module:alfresco/lists/views/layouts/Grid#expandTopics} is
+       * published.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.44
+       */
+      itemKeyProperty: null,
+
+      /**
        * This enables the mixed in [SelectedItemStateMixin]{@link module:alfresco/lists/SelectedItemStateMixin}
        * capabilities to track items as they are selected and deselected. This should only be changed from the
        * default when the view is not used within a [list]{@link module:alfresco/lists/AlfList} (as lists will
@@ -356,7 +386,9 @@ define(["dojo/_base/declare",
             showNextLink: this.showNextLink,
             nextLinkLabel: this.nextLinkLabel,
             nextLinkPublishTopic: this.nextLinkPublishTopic,
-            thumbnailSize: this.thumbnailSize
+            thumbnailSize: this.thumbnailSize,
+            itemKeyProperty: this.itemKeyProperty,
+            expandTopics: this.expandTopics
          });
          return dlr;
       },

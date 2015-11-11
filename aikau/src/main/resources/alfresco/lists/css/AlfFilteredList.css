@@ -1,3 +1,9 @@
-.alfresco-lists-AlfFilteredList .alfresco-forms-controls-BaseFormControl {
-   display: inline-block;
+.alfresco-lists-AlfFilteredList {
+
+   .alfresco-lists-AlfFilteredList__filters {
+      
+      .alfresco-forms-controls-BaseFormControl {
+         display: inline-block;
+      }
+   }
 }

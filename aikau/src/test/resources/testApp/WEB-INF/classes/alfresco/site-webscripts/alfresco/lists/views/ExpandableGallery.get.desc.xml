@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Expandable Gallery</shortname>
+  <description>This demonstrates how a gallery view can be configured to split to reveal a panel showing more information for a specific cell.</description>
+  <family>aikau-unit-tests</family>
+  <url>/ExandableGallery</url>
+</webscript>
