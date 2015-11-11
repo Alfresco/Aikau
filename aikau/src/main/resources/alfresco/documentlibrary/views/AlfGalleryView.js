@@ -18,8 +18,27 @@
  */
 
 /**
- * This defines the widget model for rendering the gallery view. This is a grid based layout of thumbnails
- * that can be scaled using a slider control.
+ * <p>This defines the widget model for rendering the gallery view. By default this is a grid based layout 
+ * of thumbnails that can be scaled using a slider control. There are a number of ways in which this can
+ * be configured to obtain alternative rendering.</p>
+ * <p>By default the thumbnail size will be determined by the
+ * available horizontal space for the configured number of 
+ * [columns]{@link module:alfresco/documentlibrary/AlfGalleryView#columns} however it is possible to 
+ * configure [resizeByColumnCount]{@link module:alfresco/documentlibrary/AlfGalleryView#resizeByColumnCount}
+ * to be false such that the thumbnails will have a constant width defined by the configured
+ * [thumbnailSize]{@link module:alfresco/documentlibrary/AlfGalleryView#thumbnailSize}.</p>
+ * <p>When used in a [list]{@link module:alfresco/lists/AlfList} that is configured for
+ * [infinite scrolling]{@link module:alfresco/lists/AlfList#useInfiniteScroll} it is sensible to
+ * configure [showNextLink]{@link module:alfresco/documentlibrary/AlfGalleryView#showNextLink} to be true
+ * such that a link is provided when the scrolling is not available when the thumbnails are so small
+ * that an entire page of data fits within the browser window.</p>
+ * <p>If something other than [thumbnails]{@link module:alfresco/renderers/GalleryThumbnail} needs to be
+ * displayed then it is possible to 
+ * [enable highlighting]{@link module:alfresco/documentlibrary/AlfGalleryView#enableHighlighting} so that
+ * it is clear what item is currently focused - this will help greatly with keyboard navigation.</p>
+ * <p>If more information needs to be displayed for an individual cell then it is possible to configure
+ * one or more [expandTopics]{@link module:alfresco/documentlibrary/AlfGalleryView#expandTopics} that 
+ * when published will reveal a panel in which additional data can be rendered.</p>
  * 
  * @module alfresco/documentlibrary/views/AlfGalleryView
  * @extends module:alfresco/lists/views/AlfListView
@@ -67,6 +86,47 @@ define(["dojo/_base/declare",
        * @since 1.0.35
        */
       columnsPreferenceProperty: "org.alfresco.share.documentList.galleryColumns",
+
+      /**
+       * Indicates whether or not highlighting should be enabled. If this is configured to be
+       * true then highlighting of focus and expansion will be handled.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.44
+       */
+      enableHighlighting: false,
+
+      /**
+       * This is an array of optional topics that can be subscribed to to create a panel within the 
+       * [grid]{@link module:alfresco/lists/views/layouts/Grid} for showing additional data about a 
+       * particular cell in the grid. The payload should contain a "widgets" attribute that represents the model 
+       * to render within the panel.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.44
+       */
+      expandTopics: null,
+
+      /**
+       * This is the property that is used to uniquely identify each 
+       * [item]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} rendered in the
+       * [grid]{@link module:alfresco/lists/views/layouts/Grid}. It is used
+       * as the key in the [gridCellMapping]{@link module:alfresco/lists/views/layouts/Grid#gridCellMapping}
+       * to map each item to the cell that it is rendered in. This is required in order to know where to 
+       * exand the grid when the 
+       * [expandTopics]{@link module:alfresco/lists/views/layouts/Grid#expandTopics} is
+       * published.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.44
+       */
+      itemKeyProperty: null,
 
       /**
        * This enables the mixed in [SelectedItemStateMixin]{@link module:alfresco/lists/SelectedItemStateMixin}
@@ -356,7 +416,10 @@ define(["dojo/_base/declare",
             showNextLink: this.showNextLink,
             nextLinkLabel: this.nextLinkLabel,
             nextLinkPublishTopic: this.nextLinkPublishTopic,
-            thumbnailSize: this.thumbnailSize
+            thumbnailSize: this.thumbnailSize,
+            itemKeyProperty: this.itemKeyProperty,
+            expandTopics: this.expandTopics,
+            enableHighlighting: this.enableHighlighting
          });
          return dlr;
       },
