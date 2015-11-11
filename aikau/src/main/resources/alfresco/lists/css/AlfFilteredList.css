@@ -1,6 +1,6 @@
 .alfresco-lists-AlfFilteredList {
 
-   .alfresco-lists-AlfFilteredList__filters {
+   &__filters {
       
       .alfresco-forms-controls-BaseFormControl {
          display: inline-block;

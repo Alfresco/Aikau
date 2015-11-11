@@ -4,7 +4,7 @@
    box-sizing: border-box;
    outline: none;
 
-   .alfresco-lists-views-layouts-CellContainer__widgets {
+   &__widgets {
       overflow: hidden;
    }
 }
