@@ -48,3 +48,9 @@
    }
 }
 
+.alfresco-lists-views-layouts-Grid__expandedPanel {
+   .alfresco-lists-views-layouts-Grid__cell--focused {
+      border: none;
+   }
+}
+

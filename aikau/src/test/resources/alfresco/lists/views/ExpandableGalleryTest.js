@@ -41,24 +41,69 @@ define(["intern!object",
             browser.end();
          },
 
-         "Click on a cell to expand": function() {
+         "There should be no expanded cells": function() {
+            return browser.findDisplayedById("CELL_CONTAINER_ITEM_0")
+            .end()
 
+            .findAllByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "Unexpected expanded panel found");
+               });
+         },
+
+         "Click on a cell to expand": function() {
+            return browser.findDisplayedById("CELL_CONTAINER_ITEM_0")
+               .click()
+            .end()
+
+            .findByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel");
+         },
+
+         "Check the expanded panel position": function() {
+            // This verifies that the expanded panel has been inserted in the 2nd row...
+            return browser.findByCssSelector(".alfresco-lists-views-layouts-Grid tr.alfresco-lists-views-layouts-Grid__expandedPanel:nth-child(2)");
          },
 
          "Check that expanded panel has focus": function() {
-
+            return browser.getActiveElement()
+               .getProperty("value")
+               .then(function(value) {
+                  assert.equal(value, "Monthly HES Summary Data", "The form field in the expanded element was not focused");
+               });
          },
 
          "Use escape key to close panel": function() {
+            return browser.pressKeys(keys.ESCAPE)
+               .waitForDeletedByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel");
+         },
 
+         "The expanded cell should be re-focused": function() {
+            return browser.findByCssSelector(".alfresco-lists-views-layouts-Grid__cell--focused #CELL_CONTAINER_ITEM_0");
          },
 
          "Keyboard navigate to and expand another cell": function() {
+            return browser.pressKeys(keys.ARROW_RIGHT)
+               .findByCssSelector(".alfresco-lists-views-layouts-Grid__cell--focused #CELL_CONTAINER_ITEM_1")
+            .end()
 
+            .pressKeys(keys.RETURN)
+
+            .findByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel")
+            .end()
+
+            .getActiveElement()
+               .getProperty("value")
+               .then(function(value) {
+                  assert.equal(value, "Telford and Wrekin Council", "The form field in the expanded element was not focused");
+               });
          },
 
          "Use mouse to close expanded cell": function() {
+            return browser.findById("CELL_CONTAINER_ITEM_1")
+               .click()
+            .end()
 
+            .waitForDeletedByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel");
          },
 
          "Post Coverage Results": function() {

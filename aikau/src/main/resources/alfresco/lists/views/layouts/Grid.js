@@ -41,6 +41,7 @@ define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "alfresco/core/WidgetsCreator",
         "dojo/keys",
+        "dojo/on",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-attr",
@@ -52,7 +53,7 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "dijit/focus"],
         function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, template, _MultiItemRendererMixin,
-                 AlfCore, _LayoutMixin, WidgetsCreator, keys, lang, array, domAttr, domClass, domConstruct, domGeom, query, domStyle,
+                 AlfCore, _LayoutMixin, WidgetsCreator, keys, on, lang, array, domAttr, domClass, domConstruct, domGeom, query, domStyle,
                  registry, focusUtil) {
 
    return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, _MultiItemRendererMixin, AlfCore, _LayoutMixin], {
@@ -256,19 +257,39 @@ define(["dojo/_base/declare",
          {
             domClass.add(this.domNode, "alfresco-lists-views-layouts-Grid--enableHighlighting");
          }
+
+         on(this.domNode, "keydown", lang.hitch(this, function(evt) {
+            if (evt && evt.keyCode === keys.ESCAPE) {
+               this.collapsePanel();
+            }
+         }));
       },
 
 
       /**
-       * Destroys the [exandedPanel]{@link module:alfresco/lists/views/layouts/Grid#exandedPanel}.
+       * Destroys the [exandedPanel]{@link module:alfresco/lists/views/layouts/Grid#exandedPanel} and
+       * restores the focus to the cell that was selected to be expanded.
        * 
        * @instance
        * @since 1.0.44
        */
       collapsePanel: function alfresco_lists_views_layouts_Grid__collapsePanel() {
-         // If an expanded pane already exists, then destroy it
          if (this.exandedPanel)
          {
+            if (this.expandedItemKey)
+            {
+               var expandedCell = this.gridCellMapping[this.expandedItemKey];
+               var expandedCellWidgets = registry.findWidgets(expandedCell);
+               if (expandedCellWidgets && expandedCellWidgets.length)
+               {
+                  this.focusOnCell(expandedCellWidgets[0]);
+               }
+               domClass.remove(expandedCell, "alfresco-lists-views-layouts-Grid__cell--expanded");
+               this.expandedItemKey = null;
+            }
+
+            // NOTE: This needs to be done after resetting focus to prevent exceptions trying to
+            //       blur a destroyed widget...
             var widgets = registry.findWidgets(this.exandedPanel);
             array.forEach(widgets, function(widget) {
                widget.destroy();
@@ -289,7 +310,6 @@ define(["dojo/_base/declare",
        * @since 1.0.44
        */
       expandPanel: function alfresco_lists_views_layouts_Grid__expandPanel(payload) {
-
          var itemKey = lang.getObject(this.itemKeyProperty, false, payload);
          if (itemKey && this.gridCellMapping[itemKey])
          {
@@ -299,25 +319,19 @@ define(["dojo/_base/declare",
                // The item is already expanded so collapse it...
                this.collapsePanel();
                domClass.remove(cell, "alfresco-lists-views-layouts-Grid__cell--expanded");
-               this.expandedItemKey = null;
             }
             else
             {
-               // Remove the highlight from the previous selected cell...
-               if (this.expandedItemKey)
-               {
-                  domClass.remove(this.gridCellMapping[this.expandedItemKey], "alfresco-lists-views-layouts-Grid__cell--expanded");
-               }
+               // Collapse the previously displayed panel (will only have an effect if a 
+               // panel has been expanded)...
+               this.collapsePanel();
                
                // Set the current itemKey as the expanded panel...
                this.expandedItemKey = itemKey;
 
                // A new item has been requested to be expanded...
                var row = cell.parentNode;
-
                domClass.add(cell, "alfresco-lists-views-layouts-Grid__cell--expanded");
-
-               this.collapsePanel();
 
                // Create a new row...
                this.exandedPanel = domConstruct.create("tr", {
@@ -338,7 +352,15 @@ define(["dojo/_base/declare",
                   //       to slurp the required data - maybe by passing "this" as an optional argument?
                   var wc = new WidgetsCreator({ 
                      currentItem: this.currentItem,
-                     widgets: payload.widgets
+                     widgets: payload.widgets,
+
+                     // Add a callback to focus on the first created widget...
+                     callback: lang.hitch(this, function(widgets) {
+                        if (widgets && widgets.length)
+                        {
+                           this.focusOnCell(widgets[0]);
+                        }
+                     })
                   });
                   wc.buildWidgets(forWidgets);
                }
@@ -354,7 +376,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       setupKeyboardNavigation: function alfresco_lists_views_layouts_Grid__setupKeyboardNavigation() {
-         // this.connectKeyNavHandlers([keys.LEFT_ARROW], [keys.RIGHT_ARROW]);
          this._keyNavCodes[keys.UP_ARROW] = lang.hitch(this, this.focusOnCellAbove);
          this._keyNavCodes[keys.RIGHT_ARROW] = lang.hitch(this, this.focusOnCellRight);
          this._keyNavCodes[keys.DOWN_ARROW] = lang.hitch(this, this.focusOnCellBelow);
