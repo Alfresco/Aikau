@@ -1,0 +1,25 @@
+.alfresco-forms-controls-PushButtonsControl {
+   &__input {
+      display: none;
+      &:checked {
+         + label {
+            border-color: #0c0;
+            color: #0c0;
+            opacity: 1;
+         }
+      }
+   }
+   &__label {
+      border: 1px solid #a00;
+      color: #a00;
+      cursor: pointer;
+      display: inline-block;
+      margin-right: 5px;
+      opacity: .2;
+      padding: 0 5px;
+      transition: all .3s ease-out;
+      &:last-child {
+         margin-right: 0;
+      }
+   }
+}
