@@ -18,8 +18,27 @@
  */
 
 /**
- * This defines the widget model for rendering the gallery view. This is a grid based layout of thumbnails
- * that can be scaled using a slider control.
+ * <p>This defines the widget model for rendering the gallery view. By default this is a grid based layout 
+ * of thumbnails that can be scaled using a slider control. There are a number of ways in which this can
+ * be configured to obtain alternative rendering.</p>
+ * <p>By default the thumbnail size will be determined by the
+ * available horizontal space for the configured number of 
+ * [columns]{@link module:alfresco/documentlibrary/AlfGalleryView#columns} however it is possible to 
+ * configure [resizeByColumnCount]{@link module:alfresco/documentlibrary/AlfGalleryView#resizeByColumnCount}
+ * to be false such that the thumbnails will have a constant width defined by the configured
+ * [thumbnailSize]{@link module:alfresco/documentlibrary/AlfGalleryView#thumbnailSize}.</p>
+ * <p>When used in a [list]{@link module:alfresco/lists/AlfList} that is configured for
+ * [infinite scrolling]{@link module:alfresco/lists/AlfList#useInfiniteScroll} it is sensible to
+ * configure [showNextLink]{@link module:alfresco/documentlibrary/AlfGalleryView#showNextLink} to be true
+ * such that a link is provided when the scrolling is not available when the thumbnails are so small
+ * that an entire page of data fits within the browser window.</p>
+ * <p>If something other than [thumbnails]{@link module:alfresco/renderers/GalleryThumbnail} needs to be
+ * displayed then it is possible to 
+ * [enable highlighting]{@link module:alfresco/documentlibrary/AlfGalleryView#enableHighlighting} so that
+ * it is clear what item is currently focused - this will help greatly with keyboard navigation.</p>
+ * <p>If more information needs to be displayed for an individual cell then it is possible to configure
+ * one or more [expandTopics]{@link module:alfresco/documentlibrary/AlfGalleryView#expandTopics} that 
+ * when published will reveal a panel in which additional data can be rendered.</p>
  * 
  * @module alfresco/documentlibrary/views/AlfGalleryView
  * @extends module:alfresco/lists/views/AlfListView

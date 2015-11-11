@@ -348,10 +348,7 @@ define(["dojo/_base/declare",
 
                if (payload.widgets)
                {
-                  // TODO: pubSubScopes, currentMetadata, etc -might want to generally improve WidgetsCreator
-                  //       to slurp the required data - maybe by passing "this" as an optional argument?
                   var wc = new WidgetsCreator({ 
-                     currentItem: this.currentItem,
                      widgets: payload.widgets,
 
                      // Add a callback to focus on the first created widget...
@@ -362,7 +359,7 @@ define(["dojo/_base/declare",
                         }
                      })
                   });
-                  wc.buildWidgets(forWidgets);
+                  wc.buildWidgets(forWidgets, this);
                }
             }
          }
