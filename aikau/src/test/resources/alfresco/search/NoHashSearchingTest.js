@@ -63,7 +63,7 @@ define(["intern!object",
             .findByCssSelector(".confirmationButton > span")
                .click()
             .end()
-            .getLastPublish("SEARCH_RESULTS_SUCCESS")
+            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS")
                .then(function(payload) {
                   assert.deepPropertyVal(payload, "response.totalRecords", 10, "Response not published");
                })

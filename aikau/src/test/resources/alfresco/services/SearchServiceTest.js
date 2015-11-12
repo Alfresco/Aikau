@@ -47,7 +47,7 @@ define(["intern!object",
             // See AKU-619 - it should not be necessary to provide a search term in order for searching to occur...
             return browser.findAllByCssSelector("#FCTSRCH_SEARCH_RESULTS_LIST tr.alfresco-search-AlfSearchResult")
                .then(function (results){
-                  assert.lengthOf(results, 24, "There should be 24 mocked results");
+                  assert.lengthOf(results, 3, "There should be 3 mocked results");
                });
          },
 
