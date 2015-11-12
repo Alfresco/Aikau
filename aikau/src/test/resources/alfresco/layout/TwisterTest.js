@@ -263,6 +263,46 @@ define(["intern!object",
                });
          },
 
+         "Check fixed width": function() {
+            return browser.findById("FIXED_WIDTH_TWISTER")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.width, 500, "The fixed width twister was not the correct size");
+               });
+         },
+
+         "Check dynamic resizing": function() {
+            var lastWidth;
+            return browser.findById("AUTO_WIDTH_TWISTER")
+               .getSize()
+               .then(function(size) {
+                  lastWidth = size.width;
+               })
+            .end()
+
+            .findById("HIDE_BUTTON_label")
+               .click()
+            .end()
+
+            .findById("AUTO_WIDTH_TWISTER")
+               .getSize()
+               .then(function(size) {
+                  assert.isAbove(size.width, lastWidth, "Twister did not get bigger");
+                  lastWidth = size.width;
+               })
+            .end()
+
+            .findById("SHOW_BUTTON_label")
+               .click()
+            .end()
+
+            .findById("AUTO_WIDTH_TWISTER")
+               .getSize()
+               .then(function(size) {
+                  assert.isBelow(size.width, lastWidth, "Twister did not get smaller");
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }

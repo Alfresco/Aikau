@@ -22,6 +22,10 @@
  * open or closed state is indicated by a "twister" icon. The widget can be configured to render any other widget
  * model as its contents. The twister can be configured to be intially open or closed by setting the 
  * [initiallyOpen]{@link module:alfresco/layout/Twister#initiallyOpen} attribute to true (for open) or false (for closed).</p>
+ *
+ * <p>The [width]{@link module:alfresco/layout/Twister#width} of the twister is determined by the 
+ * @sidebar-component-width LESS variable unless otherwise specified. If a value of "AUTO" is configured then 
+ * the twister will automatically grow and shrink horizontally to use up the available space.</p>
  * 
  * <p>It is also possible for the open or closed state to be stored to a users personal preferences. This can be done 
  * by configuring a [preferenceName]{@link module:alfresco/layout/Twister#preferenceName} attribute
@@ -175,7 +179,8 @@ define(["dojo/_base/declare",
       /**
        * The width to make the twister. This is null by default and the standard width of a twister is controlled
        * by the "@sidebar-component-width" LESS variable. However, this can be overridden by configuring this
-       * attribute to be a specific width. Units such as "px" should be included.
+       * attribute to be a specific width. Units such as "px" should be included. A value of "AUTO" can be configured
+       * to make the twister use all the available horizontal space.
        *
        * @instance
        * @type {string}
