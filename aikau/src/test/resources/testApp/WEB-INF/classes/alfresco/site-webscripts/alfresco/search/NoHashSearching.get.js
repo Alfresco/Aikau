@@ -9,7 +9,6 @@ model.jsonModel = {
             }
          }
       },
-      // "aikauTesting/mockservices/SearchMockService",
       "alfresco/services/SearchService",
       "alfresco/services/NavigationService"
    ],

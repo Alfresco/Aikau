@@ -1,0 +1,25 @@
+{
+   "suggestions" :
+   [
+       {
+            "weight" : 175,
+            "term" : "sample"
+       },
+       {
+            "weight" : 62,
+            "term" : "sample of"
+       },
+       {
+            "weight" : 42,
+            "term" : "sample user"
+       },
+       {
+            "weight" : 42,
+            "term" : "sample user dictionary"
+       },
+       {
+            "weight" : 41,
+            "term" : "sample of text"
+       }
+   ]
+}
