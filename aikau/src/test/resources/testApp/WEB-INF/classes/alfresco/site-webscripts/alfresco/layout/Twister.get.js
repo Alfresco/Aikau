@@ -35,6 +35,7 @@ model.jsonModel = {
                                     config: {
                                        label: "Twister with heading level",
                                        headingLevel: 3,
+                                       width: "AUTO",
                                        initiallyOpen: true,
                                        widgets: [
                                           {

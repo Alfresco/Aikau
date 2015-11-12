@@ -280,9 +280,13 @@ define(["intern!object",
                })
             .end()
 
+            .clearLog()
+
             .findById("HIDE_BUTTON_label")
                .click()
             .end()
+
+            .getLastPublish("ALF_PREFERENCE_SET_SUCCESS")
 
             .findById("AUTO_WIDTH_TWISTER")
                .getSize()
@@ -292,14 +296,45 @@ define(["intern!object",
                })
             .end()
 
+            .clearLog()
+
             .findById("SHOW_BUTTON_label")
                .click()
             .end()
+
+            .getLastPublish("ALF_PREFERENCE_SET_SUCCESS")
 
             .findById("AUTO_WIDTH_TWISTER")
                .getSize()
                .then(function(size) {
                   assert.isBelow(size.width, lastWidth, "Twister did not get smaller");
+               });
+         },
+
+         // NOTE: During development it was noticed that the sidebar was not publishing
+         //       to indicate that the sidebar had resized as well as the main node
+         "Check sidebar dynamic resizing": function() {
+            var lastWidth;
+            return browser.findById("TWISTER_HEADING_LEVEL")
+               .getSize()
+               .then(function(size) {
+                  lastWidth = size.width;
+               })
+            .end()
+
+            .clearLog()
+
+            .findById("HIDE_BUTTON_label")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_PREFERENCE_SET_SUCCESS")
+
+            .findById("TWISTER_HEADING_LEVEL")
+               .getSize()
+               .then(function(size) {
+                  assert.isBelow(size.width, lastWidth, "Twister in sidebar did not get bigger");
+                  lastWidth = size.width;
                });
          },
 
