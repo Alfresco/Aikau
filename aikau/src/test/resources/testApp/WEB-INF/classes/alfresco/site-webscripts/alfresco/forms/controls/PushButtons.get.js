@@ -37,6 +37,17 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "VB_VALUE",
+         config: {
+            label: "VisualBasic",
+            publishTopic: "SET_FORM_VALUE",
+            publishPayload: {
+               bestlanguage: "vb"
+            }
+         }
+      },
+      {
          name: "alfresco/html/Spacer",
          config: {
             height: "30px"
@@ -51,7 +62,8 @@ model.jsonModel = {
             pubSubScope: "SCOPED_",
             value: {
                canbuild: true,
-               properfootball: ["rugby_football", "union_football"]
+               properfootball: ["rugby_football", "union_football"],
+               bestlanguage: "javascript"
             },
             widgets: [
                {
@@ -59,9 +71,9 @@ model.jsonModel = {
                   id: "CAN_BUILD",
                   config: {
                      name: "canbuild",
-                     label: "Can build",
+                     label: "Can build (single-value, default theme)",
                      description: "Can we build it?",
-                     width: 500,
+                     width: 200,
                      optionsConfig: {
                         fixed: [
                            {
@@ -80,14 +92,42 @@ model.jsonModel = {
                   name: "alfresco/forms/controls/PushButtons",
                   id: "PROPER_FOOTBALL",
                   config: {
+                     additionalCssClasses: "grey-gradient",
                      name: "properfootball",
-                     label: "Proper football",
+                     label: "Proper football (multi-value, custom theme)",
                      description: "What are the only proper forms of football?",
-                     width: 600,
+                     width: 400,
                      multiMode: true,
                      optionsConfig: {
                         publishTopic: "GET_FOOTBALL_OPTIONS",
                         publishGlobal: true
+                     }
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/PushButtons",
+                  id: "BEST_LANGUAGE",
+                  config: {
+                     additionalCssClasses: "grey-gradient",
+                     name: "bestlanguage",
+                     label: "Best language (single-value, custom theme)",
+                     description: "Which is the best language?",
+                     width: 300,
+                     optionsConfig: {
+                        fixed: [
+                           {
+                              label: "PHP",
+                              value: "php"
+                           },
+                           {
+                              label: "JavaScript",
+                              value: "javascript"
+                           },
+                           {
+                              label: "VisualBasic",
+                              value: "vb"
+                           }
+                        ]
                      }
                   }
                }

@@ -36,11 +36,23 @@ define([
       "alfresco/forms/controls/BaseFormControl",
       "dojo/_base/declare",
       "dojo/_base/lang",
+      "dojo/dom-class",
       "alfresco/forms/controls/PushButtonsControl"
    ],
-   function(CoreWidgetProcessing, BaseFormControl, declare, lang) {
+   function(CoreWidgetProcessing, BaseFormControl, declare, lang, domClass) {
 
       return declare([BaseFormControl, CoreWidgetProcessing], {
+
+         /**
+          * Run after widget created.
+          *
+          * @instance
+          * @override
+          */
+         postCreate: function() {
+            this.inherited(arguments);
+            domClass.add(this.domNode, "alfresco-forms-controls-PushButtons");
+         },
 
          /**
           * Construct the config for the wrapped control.
@@ -54,10 +66,12 @@ define([
             // Setup the widget config
             var widgetConfig = {
                id: this.id + "_CONTROL",
-               multiMode: this.multiMode,
-               name: this.name,
-               width: this.width
+               multiMode: !!this.multiMode,
+               name: this.name
             };
+            if (this.width) {
+               widgetConfig.width = this.width;
+            }
 
             // Pass back the config
             return widgetConfig;

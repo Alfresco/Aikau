@@ -51,7 +51,10 @@ define(["intern!object",
                .getLastPublish("SCOPED_POST_FORM", true)
                   .then(function(payload) {
                      assert.propertyVal(payload, "canbuild", true);
-                     assert.propertyVal(payload, "properfootball", "rugby_football");
+                     assert.lengthOf(payload.properfootball, 2);
+                     assert.deepPropertyVal(payload, "properfootball[0]", "rugby_football");
+                     assert.deepPropertyVal(payload, "properfootball[1]", "union_football");
+                     assert.propertyVal(payload, "bestlanguage", "javascript");
                   });
             },
 
@@ -64,6 +67,10 @@ define(["intern!object",
                   .click()
                   .end()
 
+               .findById("VB_VALUE")
+                  .click()
+                  .end()
+
                .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
                   .clearLog()
                   .click()
@@ -72,15 +79,28 @@ define(["intern!object",
                .getLastPublish("SCOPED_POST_FORM", true)
                   .then(function(payload) {
                      assert.propertyVal(payload, "canbuild", false);
-                     assert.propertyVal(payload, "properfootball", "rugby_union");
+                     assert.lengthOf(payload.properfootball, 1);
+                     assert.deepPropertyVal(payload, "properfootball[0]", "rugby_union");
+                     assert.propertyVal(payload, "bestlanguage", "vb");
                   });
             },
 
-            "Keyboard navigation and selection is supported": function() {
-               return browser.pressKeys([keys.SHIFT, keys.TAB])
-                  .pressKeys(keys.ARROW_UP)
+            "Keyboard navigation and selection is supported on single-value controls": function() {
+               return browser.findById("VB_VALUE") // Focus on last button at top
+                  .click()
+                  .end()
+
+               .pressKeys(keys.TAB) // Tab to "canbuild" control
+                  .pressKeys(keys.ARROW_LEFT)
                   .pressKeys(keys.SPACE)
-                  .pressKeys(keys.NULL) // Cancel modifiers
+                  .end()
+
+               .pressKeys(keys.TAB) // Tab to "properfootball" control, first value
+                  .pressKeys(keys.SPACE)
+                  .end()
+
+               .pressKeys(keys.TAB) // Tab to "properfootball" control, second value
+                  .pressKeys(keys.SPACE)
                   .end()
 
                .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
@@ -90,12 +110,14 @@ define(["intern!object",
 
                .getLastPublish("SCOPED_POST_FORM", true)
                   .then(function(payload) {
-                     assert.propertyVal(payload, "properfootball", "rugby_football");
+                     assert.propertyVal(payload, "canbuild", true);
+                     assert.lengthOf(payload.properfootball, 1);
+                     assert.deepPropertyVal(payload, "properfootball[0]", "rugby_football");
                   });
             },
 
             "Can select push button with mouse": function() {
-               return browser.findByCssSelector("input[value=\"union_football\"]")
+               return browser.findByCssSelector("#BEST_LANGUAGE_CONTROL label:nth-of-type(2)")
                   .click()
                   .end()
 
@@ -106,7 +128,7 @@ define(["intern!object",
 
                .getLastPublish("SCOPED_POST_FORM", true)
                   .then(function(payload) {
-                     assert.propertyVal(payload, "properfootball", "union_football");
+                     assert.propertyVal(payload, "bestlanguage", "javascript");
                   });
             },
 

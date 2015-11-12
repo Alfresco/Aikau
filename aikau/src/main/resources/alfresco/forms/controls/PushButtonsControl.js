@@ -64,12 +64,13 @@ define([
       "dojo/_base/array",
       "dojo/_base/declare",
       "dojo/_base/lang",
+      "dojo/dom-class",
       "dojo/dom-construct",
       "dojo/dom-style",
       "dojo/on",
       "dojo/text!./templates/PushButtonsControl.html"
    ],
-   function(Core, ObjectProcessingMixin, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, domConstruct, domStyle, on, template) {
+   function(Core, ObjectProcessingMixin, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, domClass, domConstruct, domStyle, on, template) {
       /*jshint devel:true*/
 
       return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core, ObjectProcessingMixin], {
@@ -101,17 +102,6 @@ define([
           * @type {String}
           */
          templateString: template,
-
-         /**
-          * The height of the control. Can be specified either as a number,
-          * which is assumed to be in pixels, or as a CSS dimension
-          * string.
-          *
-          * @instance
-          * @type {number|string}
-          * @default
-          */
-         height: 50,
 
          /**
           * The ID of this control
@@ -173,13 +163,16 @@ define([
          },
 
          /**
-          * Start up the widget
+          * Widget has been created (but not necessarily sub-widgets)
           *
           * @instance
           * @override
           */
-         startup: function alfresco_forms_controls_PushButtonsControl__startup() {
+         postCreate: function alfresco_forms_controls_PushButtonsControl__postCreate() {
             this.inherited(arguments);
+            if (this.multiMode) {
+               domClass.add(this.domNode, this.rootClass + "--multi-mode");
+            }
             this.resize();
          },
 
@@ -274,7 +267,7 @@ define([
           * @instance
           */
          resize: function alfresco_forms_controls_PushButtonsControl__resize() {
-            domStyle.set(this.domNode, "lineHeight", isNaN(this.height) ? this.height : this.height + "px");
+            domStyle.set(this.domNode, "width", isNaN(this.width) ? this.width : this.width + "px");
          },
 
          /**
@@ -288,17 +281,18 @@ define([
           * @param {*} value The value to be set
           */
          setValue: function alfresco_forms_controls_PushButtonsControl__setValue(value) {
+            this.alfLog("debug", this.name + ": setValue(" + JSON.stringify(value) + ")");
 
             // Discard null, undefined and empty-string values
             if (value === null || typeof value === "undefined") {
-               this.alfLog("warn", "Invalid value passed to PushButtonsControl (" + value + ")");
+               this.alfLog("warn", "setValue() not completed as invalid value passed to PushButtonsControl (" + value + ")");
                return;
             }
 
             // Make sure value is/isn't an array as appropriate
             var valueIsArray = value.constructor === Array;
             if (!this.multiMode && valueIsArray) {
-               this.alfLog("error", "Value for single-value mode must not be array (value=" + JSON.stringify(value) + ")");
+               this.alfLog("warn", "setValue() not completed as value for single-value mode must not be array (value=" + JSON.stringify(value) + ")");
                return;
             }
 
@@ -317,7 +311,7 @@ define([
                return array.indexOf(validValues, nextValue) === -1;
             });
             if (hasInvalidValues) {
-               this.alfLog("error", "Supplied value " + JSON.stringify(value) + " does not match current option values: " + JSON.stringify(validValues));
+               this.alfLog("warn", "setValue() not completed as supplied value " + JSON.stringify(value) + " does not match current option values: " + JSON.stringify(validValues));
                return;
             }
 
