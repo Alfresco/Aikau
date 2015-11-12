@@ -21,8 +21,8 @@
          @link-title-font-color-hover: @button-color-default;
          @link-title-text-decoration-hover: underline;
 
-         @sidebar-container-sidebar-background-color: #FDFAA4;
-         @sidebar-container-main-background-color: #CCFCA5;
+         @sidebar-container-sidebar-background-color: #eee;
+         @sidebar-container-main-background-color: #f8f8f8;
       </less-variables>
    </css-tokens>
 </theme>

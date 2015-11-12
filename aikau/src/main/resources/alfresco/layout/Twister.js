@@ -79,6 +79,7 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dijit/_OnDijitClickMixin",
+        "alfresco/core/ResizeMixin",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
@@ -87,12 +88,13 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
+        "dojo/dom-geometry",
         "dojo/dom-style",
         "dojo/dom-attr",
         "dojo/_base/event"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PreferenceServiceTopicMixin, AlfCore, CoreWidgetProcessing, 
-                 template, lang, array, domConstruct, domClass, domStyle, domAttr, event) {
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, CoreWidgetProcessing, _PreferenceServiceTopicMixin], {
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ResizeMixin, _PreferenceServiceTopicMixin, AlfCore, CoreWidgetProcessing, 
+                 template, lang, array, domConstruct, domClass, domGeom, domStyle, domAttr, event) {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ResizeMixin, AlfCore, CoreWidgetProcessing, _PreferenceServiceTopicMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -197,7 +199,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_layout_Twister__postCreate() {
-         if (this.width)
+         if (this.width === "AUTO")
+         {
+            this.alfSetupResizeSubscriptions(this.resize, this);
+         }
+         else if (this.width)
          {
             domStyle.set(this.domNode, "width", this.width);
          }
@@ -320,6 +326,17 @@ define(["dojo/_base/declare",
 
          // Stop the event propogating any further (ie into the parent element)
          event.stop(evt);
+      },
+
+      /**
+       * 
+       * @instance
+       * @since 1.0.44
+       */
+      resize: function alfresco_layout_Twister__resize() {
+         var computedStyle = domStyle.getComputedStyle(this.domNode.parentNode);
+         var output = domGeom.getMarginBox(this.domNode.parentNode, computedStyle);
+         domStyle.set(this.domNode, "width", output.w + "px");
       }
    });
 });
