@@ -300,8 +300,8 @@ define(["dojo/_base/declare",
          payload.query = query[this.queryAttribute || "name"];
 
          var optionsHandle = [];
-         optionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle)));
-         optionsHandle.push(this.alfSubscribe(responseTopic, lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle)));
+         optionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle), this.publishGlobal));
+         optionsHandle.push(this.alfSubscribe(responseTopic, lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle), this.publishGlobal));
          this.alfPublish(this.publishTopic, payload, this.publishGlobal);
          return response;
       },

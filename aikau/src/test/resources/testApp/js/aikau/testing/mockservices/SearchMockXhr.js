@@ -24,8 +24,14 @@
  */
 define(["dojo/_base/declare",
         "aikauTesting/MockXhr",
-        "dojo/text!./responseTemplates/SearchTest/XhrSearchResponse.json"], 
-        function(declare, MockXhr, xhrSearchResponse) {
+        "dojo/_base/lang",
+        "dojo/io-query",
+        "dojo/text!./responseTemplates/SearchService/alternative.json",
+        "dojo/text!./responseTemplates/SearchService/original.json",
+        "dojo/text!./responseTemplates/SearchService/default.json",
+        "dojo/text!./responseTemplates/SearchTest/XhrSearchResponse.json",
+        "dojo/text!./responseTemplates/SearchService/suggestions.json"], 
+        function(declare, MockXhr, lang, ioQuery, alternative, original, base, xhrSearchResponse, suggestions) {
    
    return declare([MockXhr], {
 
@@ -34,21 +40,66 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      setupServer: function alfresco_testing_MockXhr__setupServer() {
+      setupServer: function alfresco_testing_SearchMockXhr__setupServer() {
          try
          {
-            var templateToUse = xhrSearchResponse;
             this.server.respondWith("GET",
-                                    /(.*)/,
-                                    [200,
-                                     {"Content-Type":"application/json;charset=UTF-8"},
-                                     templateToUse]);
+                                    /(.*)proxy\/alfresco\/slingshot\/search(.*)/,
+                                    lang.hitch(this, this.onSearch));
+
+            this.server.respondWith("GET",
+                                    /(.*)proxy\/alfresco\/slingshot\/auto-suggest(.*)/,
+                                    lang.hitch(this, this.onAutoSuggest));
             this.alfPublish("ALF_MOCK_XHR_SERVICE_READY");
          }
          catch(e)
          {
             this.alfLog("error", "The following error occurred setting up the mock server", e);
          }
+      },
+
+      /**
+       * @instance
+       */
+      onSearch: function alfresco_testing_SearchMockXhr__onSearch(request) {
+         var url = request.url;
+         var query = url.substring(url.indexOf("?") + 1);
+         var queryObj = ioQuery.queryToObject(query);
+         if (queryObj.term === "hame" && queryObj.spellcheck === "false")
+         {
+            request.respond(200, {
+               "Content-Type": "application/json;charset=UTF-8"
+            }, original);
+         }
+         else if (queryObj.term === "hame" && queryObj.spellcheck === "true")
+         {
+            request.respond(200, {
+               "Content-Type": "application/json;charset=UTF-8"
+            }, alternative);
+         }
+         else if (queryObj.term === "" || queryObj.term === "home")
+         {
+            request.respond(200, {
+               "Content-Type": "application/json;charset=UTF-8"
+            }, base);
+         }
+         else
+         {
+            request.respond(200, {
+               "Content-Type": "application/json;charset=UTF-8"
+            }, xhrSearchResponse);
+         }
+      },
+
+      /**
+       * Simulates getting the tags based on a supplied filter
+       *
+       * @instance
+       */
+      onAutoSuggest: function alfresco_testing_SearchMockXhr__onAutoSuggest(request) {
+         request.respond(200, {
+            "Content-Type": "application/json;charset=UTF-8"
+         }, suggestions);
       }
    });
 });
