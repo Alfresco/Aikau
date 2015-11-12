@@ -4,7 +4,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-      <version>1.0.39-SNAPSHOT</version>
+      <version>1.0.39.1</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -58,4 +58,8 @@
          </plugins>
       </pluginManagement>
    </build>
+
+  <scm>
+    <tag>release-1.0.39.1</tag>
+  </scm>
 </project>
