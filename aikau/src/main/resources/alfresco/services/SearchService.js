@@ -281,6 +281,7 @@ define(["dojo/_base/declare",
             this.serviceXhr({url: url,
                              query: options,
                              alfTopic: (payload.alfResponseTopic ? payload.alfResponseTopic : null),
+                             alfResponseScope: payload.alfResponseScope,
                              method: "GET"});
          }
       }
