@@ -87,12 +87,11 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
-        "dojo/dom-geometry",
         "dojo/dom-style",
         "dojo/dom-attr",
         "dojo/_base/event"], 
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PreferenceServiceTopicMixin, AlfCore, CoreWidgetProcessing, 
-                 template, lang, array, domConstruct, domClass, domGeom, domStyle, domAttr, event) {
+                 template, lang, array, domConstruct, domClass, domStyle, domAttr, event) {
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, CoreWidgetProcessing, _PreferenceServiceTopicMixin], {
 
       /**
