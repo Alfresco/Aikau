@@ -22,10 +22,6 @@
  * open or closed state is indicated by a "twister" icon. The widget can be configured to render any other widget
  * model as its contents. The twister can be configured to be intially open or closed by setting the 
  * [initiallyOpen]{@link module:alfresco/layout/Twister#initiallyOpen} attribute to true (for open) or false (for closed).</p>
- *
- * <p>The [width]{@link module:alfresco/layout/Twister#width} of the twister is determined by the 
- * @sidebar-component-width LESS variable unless otherwise specified. If a value of "AUTO" is configured then 
- * the twister will automatically grow and shrink horizontally to use up the available space.</p>
  * 
  * <p>It is also possible for the open or closed state to be stored to a users personal preferences. This can be done 
  * by configuring a [preferenceName]{@link module:alfresco/layout/Twister#preferenceName} attribute
@@ -83,7 +79,6 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dijit/_OnDijitClickMixin",
-        "alfresco/core/ResizeMixin",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
@@ -96,9 +91,9 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom-attr",
         "dojo/_base/event"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ResizeMixin, _PreferenceServiceTopicMixin, AlfCore, CoreWidgetProcessing, 
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PreferenceServiceTopicMixin, AlfCore, CoreWidgetProcessing, 
                  template, lang, array, domConstruct, domClass, domGeom, domStyle, domAttr, event) {
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ResizeMixin, AlfCore, CoreWidgetProcessing, _PreferenceServiceTopicMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, CoreWidgetProcessing, _PreferenceServiceTopicMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -177,16 +172,14 @@ define(["dojo/_base/declare",
       preferencePrefix: "org.alfresco.share.twisters.",
       
       /**
-       * The width to make the twister. This is null by default and the standard width of a twister is controlled
-       * by the "@sidebar-component-width" LESS variable. However, this can be overridden by configuring this
-       * attribute to be a specific width. Units such as "px" should be included. A value of "AUTO" can be configured
-       * to make the twister use all the available horizontal space.
+       * The width to make the twister. Units such as "px" should be included. By default all available
+       * horizontal width will be used.
        *
        * @instance
        * @type {string}
        * @default
        */
-      width: null,
+      width: "auto",
 
       /**
        * @instance
@@ -204,11 +197,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_layout_Twister__postCreate() {
-         if (this.width === "AUTO")
-         {
-            this.alfSetupResizeSubscriptions(this.resize, this);
-         }
-         else if (this.width)
+         if (this.width)
          {
             domStyle.set(this.domNode, "width", this.width);
          }
@@ -331,17 +320,6 @@ define(["dojo/_base/declare",
 
          // Stop the event propogating any further (ie into the parent element)
          event.stop(evt);
-      },
-
-      /**
-       * 
-       * @instance
-       * @since 1.0.44
-       */
-      resize: function alfresco_layout_Twister__resize() {
-         var computedStyle = domStyle.getComputedStyle(this.domNode.parentNode);
-         var output = domGeom.getMarginBox(this.domNode.parentNode, computedStyle);
-         domStyle.set(this.domNode, "width", output.w + "px");
       }
    });
 });
