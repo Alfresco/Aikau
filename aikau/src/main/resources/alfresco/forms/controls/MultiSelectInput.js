@@ -20,8 +20,8 @@
 /**
  * @module alfresco/forms/controls/MultiSelectInput
  * @extends alfresco/forms/controls/BaseFormControl
- * @extends alfresco/forms/controls/utilities/IconMixin
- * @extends alfresco/forms/controls/utilities/UseServiceStoreMixin
+ * @mixes alfresco/forms/controls/utilities/IconMixin
+ * @mixes alfresco/forms/controls/utilities/UseServiceStoreMixin
  * @author Martin Doyle
  */
 define([
