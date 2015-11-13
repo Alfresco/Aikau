@@ -368,6 +368,7 @@ define(["dojo/_base/declare",
          
          // Fire a custom event to let contained objects know that the node has been resized.
          this.alfPublishResizeEvent(this.mainNode);
+         this.alfPublishResizeEvent(this.sidebarNode);
       },
       
       /**
