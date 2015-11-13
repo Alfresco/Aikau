@@ -119,7 +119,7 @@ The “ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST” topic is subscribed to by the `al
 When the document details have been retrieved the `alfresco/services/DocumentService` will publish the data on the “ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST_SUCCESS” topic. We now need to add in some widgets that will be able to use that data to generate a preview.
 
 ### Step 4 - Create a side-by-side layout
-We want to place our list of documents on the left of the page and our preview on the right. To do this we can use an `alfresco/layout/HorizontalLayout` widget (remember these from [Tutorial 13](./Tutorial13.md "Link to Tutorial 13")).
+We want to place our list of documents on the left of the page and our preview on the right. To do this we can use an `alfresco/layout/HorizontalWigets` widget (remember these from [Tutorial 13](./Tutorial13.md "Link to Tutorial 13")).
 
 Add a new `alfresco/layout/HorizontalLayout` into the page and place the `alfresco/documentlibrary/AlfDocumentList` as the first widget into the `widgets` array of its configuration. Then add the following as the second widget in the array:
 
