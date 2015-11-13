@@ -88,7 +88,6 @@ define([
       "dojo/text!./templates/PushButtonsControl.html"
    ],
    function(Core, ObjectProcessingMixin, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, domClass, domConstruct, domStyle, on, template) {
-      /*jshint devel:true*/
 
       return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core, ObjectProcessingMixin], {
 
