@@ -71,17 +71,18 @@ model.jsonModel = {
                   id: "CAN_BUILD",
                   config: {
                      name: "canbuild",
-                     label: "Can build (single-value, default theme)",
-                     description: "Can we build it?",
-                     width: 200,
+                     label: "Can we build it?",
+                     description: "Config options: noWrap=true, percentGap=5",
+                     noWrap: true,
+                     percentGap: 5,
                      optionsConfig: {
                         fixed: [
                            {
-                              label: "Yes",
+                              label: "Yes we can",
                               value: true
                            },
                            {
-                              label: "No",
+                              label: "No we can't",
                               value: false
                            }
                         ]
@@ -94,8 +95,8 @@ model.jsonModel = {
                   config: {
                      additionalCssClasses: "grey-gradient",
                      name: "properfootball",
-                     label: "Proper football (multi-value, custom theme)",
-                     description: "What are the only proper forms of football?",
+                     label: "Only proper form of football?",
+                     description: "Config options: width=400, multiMode=true",
                      width: 400,
                      multiMode: true,
                      optionsConfig: {
@@ -110,9 +111,10 @@ model.jsonModel = {
                   config: {
                      additionalCssClasses: "grey-gradient",
                      name: "bestlanguage",
-                     label: "Best language (single-value, custom theme)",
-                     description: "Which is the best language?",
+                     label: "What's the best language?",
+                     description: "Config options: width=300, maxLineLength=3",
                      width: 300,
+                     maxLineLength: 3,
                      optionsConfig: {
                         fixed: [
                            {
@@ -126,6 +128,26 @@ model.jsonModel = {
                            {
                               label: "VisualBasic",
                               value: "vb"
+                           },
+                           {
+                              label: "Java",
+                              value: "java"
+                           },
+                           {
+                              label: "C",
+                              value: "c"
+                           },
+                           {
+                              label: "Ruby",
+                              value: "ruby"
+                           },
+                           {
+                              label: "Scala",
+                              value: "scale"
+                           },
+                           {
+                              label: "Go",
+                              value: "go"
                            }
                         ]
                      }

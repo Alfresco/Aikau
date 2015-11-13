@@ -67,10 +67,22 @@ define([
             var widgetConfig = {
                id: this.id + "_CONTROL",
                multiMode: !!this.multiMode,
-               name: this.name
+               name: this.name,
+               noWrap: !!this.noWrap
             };
-            if (this.width) {
+
+            // Set config only if available
+            if (!isNaN(this.width)) {
                widgetConfig.width = this.width;
+            }
+            if (!isNaN(this.maxLineLength)) {
+               widgetConfig.maxLineLength = this.maxLineLength;
+            }
+            if (!isNaN(this.percentGap)) {
+               widgetConfig.percentGap = this.percentGap;
+            }
+            if (!isNaN(this.minPadding)) {
+               widgetConfig.minPadding = this.minPadding;
             }
 
             // Pass back the config

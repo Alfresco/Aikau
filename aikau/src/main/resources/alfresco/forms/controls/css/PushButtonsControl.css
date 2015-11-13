@@ -1,12 +1,9 @@
 .alfresco-forms-controls-PushButtonsControl {
    box-sizing: border-box;
-   display: flex;
    line-height: 20px;
+   margin-top: 2px;
    overflow: hidden;
    position: relative;
-   &__input, &__label {
-      box-sizing: inherit;
-   }
    &__input {
       height: 0;
       left: 100%;
@@ -16,24 +13,25 @@
          background: @button-color-default;
          color: #fff;
       }
-      &:focus + label {
-         background: @focused-border-color;
+      &:focus + label, &:hover + label {
+         border-color: @focused-border-color;
+      }
+      &:checked {
+         &:focus + label, &:hover + label {
+            background: @focused-border-color;
+         }
       }
    }
    &__label {
       border: 1px solid @button-color-default;
       border-radius: 10px;
+      box-sizing: inherit;
       color: @primary-font-color;
       cursor: pointer;
       display: inline-block;
-      flex: 1 0 auto;
       font-size: @small-font-size;
-      margin-right: 10px;
       text-align: center;
       transition: background .2s ease-out, color .2s ease-out;
-      &:last-child {
-         margin-right: 0;
-      }
    }
 }
 
@@ -47,14 +45,14 @@
                border-color: #666;
                box-shadow: inset 1px 1px 3px rgba(0, 0, 0, .3);
                color: @primary-font-color;
-               padding: 2px 0 0 2px;
-               transition: all .2s ease-out;
             }
-            &:focus + label {
+            &:focus + label, &:hover + label {
                background: #eee linear-gradient(to bottom, #fff, #ddd);
             }
-            &:checked:focus + label {
-               background: #f8c681 linear-gradient(to bottom, #fdd49d, #f6b65e);
+            &:checked {
+               &:focus + label, &:hover + label {
+                  background: #f8c681 linear-gradient(to bottom, #fdd49d, #f6b65e);
+               }
             }
          }
          &__label {
@@ -62,8 +60,6 @@
             border: 1px solid #aaa;
             border-radius: 0;
             font-size: @normal-font-size;
-            margin-right: 2px;
-            padding: 1px;
             transition: all .1s ease-in;
          }
       }

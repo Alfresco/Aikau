@@ -22,26 +22,43 @@
  * on [the mode]{@link module:alfresco/forms/controls/PushButtonsControl#multiMode}, rendered as a
  * single control with push-button options.
  *
- * @example <caption>Sample configuration:</caption>
+ * @example <caption>Sample configuration (uses noWrap and percentGap overrides):</caption>
  * {
  *    name: "alfresco/forms/controls/PushButtons",
  *    id: "CAN_BUILD",
  *    config: {
  *       name: "canbuild",
- *       label: "Can build",
- *       description: "Can we build it?",
- *       width: 500,
+ *       label: "Can we build it?",
+ *       noWrap: true,
+ *       percentGap: 5,
  *       optionsConfig: {
  *          fixed: [
  *             {
- *                label: "Yes",
+ *                label: "Yes we can",
  *                value: true
  *             },
  *             {
- *                label: "No",
+ *                label: "No we can't",
  *                value: false
  *             }
  *          ]
+ *       }
+ *    }
+ * }
+ * 
+ * @example <caption>Sample configuration (uses custom theme, ficed-width, multi-value mode properties):</caption>
+ * {
+ *    name: "alfresco/forms/controls/PushButtons",
+ *    id: "PROPER_FOOTBALL",
+ *    config: {
+ *       additionalCssClasses: "grey-gradient",
+ *       name: "properfootball",
+ *       label: "Only proper form of football?",
+ *       width: 400,
+ *       multiMode: true,
+ *       optionsConfig: {
+ *          publishTopic: "GET_FOOTBALL_OPTIONS",
+ *          publishGlobal: true
  *       }
  *    }
  * }
@@ -113,7 +130,27 @@ define([
          id: null,
 
          /**
-          * Whether to run the control in multi-value mode (i.e. like a checkbox).
+          * Maximum number of buttons on a line (zero means no limit)
+          *
+          * @instance
+          * @type {number}
+          * @default
+          */
+         maxLineLength: 0,
+
+         /**
+          * The minimum padding to apply to the side of the buttons. This is
+          * ignored on fixed-width controls.
+          *
+          * @instance
+          * @type {number}
+          * @default
+          */
+         minPadding: 50,
+
+         /**
+          * Whether to run the control in multi-value mode (i.e. behave like
+          * checkboxs rather than the default radio-buttons behaviour).
           *
           * @instance
           * @type {boolean}
@@ -131,27 +168,44 @@ define([
          name: null,
 
          /**
-          * Local store of the current control options, where the generated
-          * UUID of the input element is the key and the value is an object
-          * containing details of the option.
+          * Disable line-wrap on the labels if set to true.
           *
           * @instance
-          * @type {object}
+          * @type {boolean}
+          * @default
+          */
+         noWrap: false,
+
+         /**
+          * Local store of the current control options, as an ordered
+          * collection of option objects.
+          *
+          * @instance
+          * @type {object[]}
           * @readonly
           * @default
           */
          opts: null,
 
          /**
-          * The total width of the control. Can be specified either as a
-          * number, which is assumed to be in pixels, or as a CSS dimension
-          * string.
+          * The gap (margin) to have between buttons, expressed as a percentage
+          * of the total width of the control.
           *
           * @instance
-          * @type {number|string}
+          * @type {number}
           * @default
           */
-         width: "auto",
+         percentGap: 1,
+
+         /**
+          * The total width of the control in pixels. Zero indicates that
+          * the control should take as much space as needed.
+          *
+          * @instance
+          * @type {number}
+          * @default
+          */
+         width: 0,
 
          /**
           * Constructor
@@ -159,7 +213,7 @@ define([
           * @instance
           */
          constructor: function() {
-            this.opts = {};
+            this.opts = [];
          },
 
          /**
@@ -185,7 +239,7 @@ define([
          addOption: function alfresco_forms_controls_PushButtonsControl__addOption(option) {
 
             // Duplicate values are unsupported
-            var optionAlreadyExists = array.some(this._getOpts(), function(opt) {
+            var optionAlreadyExists = array.some(this.opts, function(opt) {
                return opt.option.value === option.value;
             });
             if (optionAlreadyExists) {
@@ -211,17 +265,33 @@ define([
             labelNode.appendChild(labelContent);
 
             // Setup change-listener
-            var changeListener = on(inputNode, "change", lang.hitch(this, this.onValueChanged));
+            var changeListener = on(inputNode, "change", lang.hitch(this, this._markValueChanged));
             this.own(changeListener);
 
             // Put the new option into the options-map
-            this.opts[optionId] = {
+            this.opts.push({
                id: optionId,
                inputNode: inputNode,
                labelNode: labelNode,
                changeListener: changeListener,
                option: option
-            };
+            });
+
+            // Resize the buttons
+            this.resize();
+         },
+
+         /**
+          * Get the current options
+          *
+          * @instance
+          * @override
+          * @returns {object[]} The current options
+          */
+         getOptions: function alfresco_forms_controls_PushButtonsControl__getOptions() {
+            return array.map(this.opts, function(opt) {
+               return opt.option;
+            });
          },
 
          /**
@@ -232,19 +302,10 @@ define([
           */
          getValue: function alfresco_forms_controls_PushButtonsControl__getValue() {
             var values = [];
-            array.forEach(this._getOpts(), function(opt) {
+            array.forEach(this.opts, function(opt) {
                opt.inputNode.checked && values.push(opt.option.value);
             }, this);
             return this.multiMode ? values : values[0];
-         },
-
-         /**
-          * Fires when the value is changed.
-          *
-          * @instance
-          */
-         onValueChanged: function alfresco_forms_controls_PushButtonsControl__onValueChanged() {
-            this._changeAttrValue("value", this.getValue());
          },
 
          /**
@@ -254,11 +315,14 @@ define([
           * @param {object} option The option to be removed
           */
          removeOption: function alfresco_forms_controls_PushButtonsControl__removeOption(option) {
-            array.forEach(this._getOpts(), function(opt) {
-               if (opt.option === option) {
-                  delete this.opts[opt.id];
-               }
-            }, this);
+
+            // Remove the option
+            this.opts = array.filter(this.opts, function(opt) {
+               return opt.option !== option;
+            });
+
+            // Resize the buttons
+            this.resize();
          },
 
          /**
@@ -267,7 +331,36 @@ define([
           * @instance
           */
          resize: function alfresco_forms_controls_PushButtonsControl__resize() {
+
+            // Set overall control width
             domStyle.set(this.domNode, "width", isNaN(this.width) ? this.width : this.width + "px");
+
+            // Set the width of each button
+            var buttonsPerLine = this.maxLineLength ? Math.min(this.maxLineLength, this.opts.length) : this.opts.length,
+               gapsPerLine = buttonsPerLine - 1,
+               availButtonPercent = 100 - (gapsPerLine * this.percentGap),
+               buttonWidthPercent = availButtonPercent / buttonsPerLine;
+            array.forEach(this.opts, function(opt, buttonIndex) {
+               var indexInRow = buttonIndex % buttonsPerLine,
+                  lastInRow = indexInRow + 1 === buttonsPerLine,
+                  isFirstRow = buttonIndex < buttonsPerLine;
+               domStyle.set(opt.labelNode, {
+                  width: buttonWidthPercent + "%",
+                  marginTop: isFirstRow ? 0 : this.percentGap + "%",
+                  marginRight: lastInRow ? 0 : this.percentGap + "%",
+                  whiteSpace: this.noWrap ? "nowrap" : "normal"
+               });
+            }, this);
+
+            // If width not hard-coded, set the width of the control based on the content plus padding
+            if (!this.width) {
+               var maxLabelWidth = 0;
+               array.forEach(this.opts, function(opt) {
+                  maxLabelWidth = Math.max(maxLabelWidth, opt.labelNode.scrollWidth);
+               });
+               var minLineLength = (maxLabelWidth + this.minPadding) * buttonsPerLine / (availButtonPercent / 100);
+               domStyle.set(this.domNode, "width", Math.ceil(minLineLength) + "px");
+            }
          },
 
          /**
@@ -297,8 +390,7 @@ define([
             }
 
             // Get valid values and normalise value to an array
-            var opts = this._getOpts(),
-               validValues = array.map(opts, function(opt) {
+            var validValues = array.map(this.opts, function(opt) {
                   return opt.option.value;
                }, this),
                valuesToUse = value;
@@ -317,7 +409,7 @@ define([
 
             // Set the values (and if we're in multi-mode then we deselect
             // the other values)
-            array.forEach(opts, function(opt) {
+            array.forEach(this.opts, function(opt) {
                if (this.multiMode) {
                   opt.inputNode.checked = false;
                }
@@ -327,20 +419,16 @@ define([
             }, this);
 
             // Fire a value-changed event
-            this.onValueChanged();
+            this._markValueChanged();
          },
 
          /**
-          * This internal function is a helper function used to coerce
-          * the options map into an array of options objects.
+          * Fires when the value is changed.
           *
           * @instance
-          * @returns {object[]} The option objects
           */
-         _getOpts: function alfresco_forms_controls_PushButtonsControl___getOpts() {
-            return array.map(Object.keys(this.opts), function(optionId) {
-               return this.opts[optionId];
-            }, this);
+         _markValueChanged: function alfresco_forms_controls_PushButtonsControl___markValueChanged() {
+            this._changeAttrValue("value", this.getValue());
          }
       });
    }
