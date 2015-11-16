@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Views with add rendering</shortname>
+  <description>This shows how a view can include additional rendering to add a new item to the list.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AddableView</url>
+</webscript>

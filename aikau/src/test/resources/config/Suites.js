@@ -173,6 +173,7 @@ define({
       "src/test/resources/alfresco/lists/InfiniteScrollTest",
       "src/test/resources/alfresco/lists/LocalStorageFallbackTest",
       "src/test/resources/alfresco/lists/PaginatorVisibilityTest",
+      "src/test/resources/alfresco/lists/views/AddableViewTest",
       "src/test/resources/alfresco/lists/views/AlfListViewTest",
       "src/test/resources/alfresco/lists/views/ExpandableGalleryTest",
       "src/test/resources/alfresco/lists/views/GalleryViewFocusTest",

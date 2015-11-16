@@ -36,6 +36,7 @@ define(["dojo/_base/declare",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/JsNode",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
+        "alfresco/lists/views/RenderAppendixSentinel",
         "dojo/dom-class",
         "dojo/_base/array",
         "dojo/_base/lang",
@@ -43,7 +44,7 @@ define(["dojo/_base/declare",
         "dojo/on",
         "dojo/_base/event"], 
         function(declare, CoreWidgetProcessing, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
-                 domClass, array, lang, domStyle, on, event) {
+                 RenderAppendixSentinel, domClass, array, lang, domStyle, on, event) {
    
    return declare([CoreWidgetProcessing, _AlfDocumentListTopicMixin], {
 
@@ -91,6 +92,16 @@ define(["dojo/_base/declare",
        */
       focusHighlighting: false,
 
+      /**
+       * This is the widget that acts as the root of the view. By default this will
+       * be instantiated as a [Table]{@link module:alfresco/documentlibrary/views/layoutTable}.
+       * 
+       * @instance
+       * @type {Object} 
+       * @default
+       */
+      rootViewWidget: null,
+      
       /**
        * A setter for [currentData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentData}
        * @instance
@@ -191,7 +202,6 @@ define(["dojo/_base/declare",
             }
 
             var itemsToRender = (this.currentIndex)? this.currentData.items.slice(this.currentIndex): this.currentData.items;
-            
             array.forEach(itemsToRender, lang.hitch(this, this.renderNextItem));
             this.allItemsRendered();
          }
@@ -202,45 +212,46 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * This is the widget that acts as the root of the view. By default this will
-       * be instantiated as a [Table]{@link module:alfresco/documentlibrary/views/layoutTable}.
-       * 
-       * @instance
-       * @type {Object} 
-       * @default
-       */
-      rootViewWidget: null,
-      
-      /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets} to instantiate the widgets
        * defined in the JSON model for [currentItem]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentItem}
        * @instance
        */
       renderNextItem: function alfresco_lists_views_layout___MultiItemRendererMixin__renderNextItem() {
-         // Process the widgets defined using the current item as the data to go into those widgets...
-         this.alfLog("log", "Rendering item", this.currentData.items[this.currentIndex]);
-         
-         // Mark the current item with an attribute indicating that it is the last item.
-         // This is done for the benefit of renderers that need to know if they are the last item.
-         this.currentData.items[this.currentIndex].isLastItem = (this.currentItem.index === this.currentData.items.length -1);
-
-         // Set a width if provided...
-         if (this.width)
+         var itemToRender = this.currentData.items[this.currentIndex];
+         if (itemToRender === RenderAppendixSentinel && this.widgetsForAppendix)
          {
-            domStyle.set(this.domNode, "width", this.width);
-         }
-         
-         if (this.containerNode)
-         {
-            // It is necessary to clone the widget definition to prevent them being modified for future iterations...
-            // var clonedWidgets = lang.clone(this.widgets);
-            // Intentionally switched from lang.clone to native JSON approach to cloning for performance...
-            var clonedWidgets = JSON.parse(JSON.stringify(this.widgets));
-            this.processWidgets(clonedWidgets, this.containerNode);
+            // The current item is a marker to render an "appendix". This is a non-data entry into the list
+            // of items to be rendered, the original use case is for some kind of "Add" style control that
+            // can be used to create a new entry...
+            this.processWidgets(this.widgetsForAppendix, this.containerNode, "RENDER_APPENDIX_SENTINEL");
          }
          else
          {
-            this.alfLog("warn", "There is no 'containerNode' for adding an item to");
+            // Process the widgets defined using the current item as the data to go into those widgets...
+            this.alfLog("log", "Rendering item", itemToRender);
+            
+            // Mark the current item with an attribute indicating that it is the last item.
+            // This is done for the benefit of renderers that need to know if they are the last item.
+            this.currentData.items[this.currentIndex].isLastItem = (this.currentItem.index === this.currentData.items.length -1);
+
+            // Set a width if provided...
+            if (this.width)
+            {
+               domStyle.set(this.domNode, "width", this.width);
+            }
+            
+            if (this.containerNode)
+            {
+               // It is necessary to clone the widget definition to prevent them being modified for future iterations...
+               // var clonedWidgets = lang.clone(this.widgets);
+               // Intentionally switched from lang.clone to native JSON approach to cloning for performance...
+               var clonedWidgets = JSON.parse(JSON.stringify(this.widgets));
+               this.processWidgets(clonedWidgets, this.containerNode);
+            }
+            else
+            {
+               this.alfLog("warn", "There is no 'containerNode' for adding an item to");
+            }
          }
       },
       
@@ -261,39 +272,47 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {Object[]}
+       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        */
-      allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets) {
-         // Push the processed widgets for the last item into the array of rendered widgets...
-         if (!this._renderedItemWidgets)
+      allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets, processWidgetsId) {
+         if (!processWidgetsId)
          {
-            this._renderedItemWidgets = [];
-         }
-         this._renderedItemWidgets.push(widgets);
-
-         // Increment the current index and check to see if there are more items to render...
-         // Only the root widget(s) will have the currentData object set so we don't start rendering the next item
-         // on nested widgets...
-         this.currentIndex++;
-         if (this.currentData && 
-             this.currentData.items &&
-             this.currentData.items.length != null)
-         {
-            array.forEach(widgets, lang.hitch(this, "rootWidgetProcessing"));
-            if (this.currentIndex < this.currentData.items.length)
+            // Push the processed widgets for the last item into the array of rendered widgets...
+            if (!this._renderedItemWidgets)
             {
-               // Render the next item...
-               this.currentItem = this.currentData.items[this.currentIndex];
+               this._renderedItemWidgets = [];
+            }
+            this._renderedItemWidgets.push(widgets);
 
-               // Add in the index...
-               if (this.currentItem.index == null)
+            // Increment the current index and check to see if there are more items to render...
+            // Only the root widget(s) will have the currentData object set so we don't start rendering the next item
+            // on nested widgets...
+            this.currentIndex++;
+            if (this.currentData && 
+                this.currentData.items &&
+                this.currentData.items.length != null)
+            {
+               array.forEach(widgets, lang.hitch(this, "rootWidgetProcessing"));
+               if (this.currentIndex < this.currentData.items.length)
                {
-                  this.currentItem.index = this.currentIndex;
+                  // Render the next item...
+                  this.currentItem = this.currentData.items[this.currentIndex];
+
+                  // Add in the index...
+                  if (this.currentItem.index == null)
+                  {
+                     this.currentItem.index = this.currentIndex;
+                  }
                }
+            }
+            else
+            {
+               // TODO: We need to make sure that we're able to stop rendering if another request arrives before we've completed
             }
          }
          else
          {
-            // TODO: We need to make sure that we're able to stop rendering if another request arrives before we've completed
+            this.inherited(arguments);
          }
       },
       
@@ -402,34 +421,41 @@ define(["dojo/_base/declare",
        * @param {function} callback A function to call once the widget has been instantiated
        * @param {Array} callbackArgs An array of arguments to pass to the callback function
        */
-      createWidget: function alfresco_lists_views_layout___MultiItemRendererMixin__createWidget(config, domNode, callback, callbackArgs) {
-         // Only create a widget if there is data to create it with
-         if (!config)
+      createWidget: function alfresco_lists_views_layout___MultiItemRendererMixin__createWidget(config, domNode, callback, callbackScope, index, processWidgetsId) {
+         if (!processWidgetsId)
          {
-            config = {
-               config: {}
-            };
-         }
-         else if (!config.config)
-         {
-            config.config = {};
-         }
-         if (this.currentItem)
-         {
-            // This checks if the "jsNode" attribute has been created, and if not will make an attempt
-            // to create it. This is in place purely for handling node based items, but shouldn't
-            // break anything else...
-            if (typeof this.currentItem.jsNode === "undefined" && this.currentItem.node)
+            // Only create a widget if there is data to create it with
+            if (!config)
             {
-               this.currentItem.jsNode = new JsNode(this.currentItem.node);
+               config = {
+                  config: {}
+               };
             }
-            config.config.currentItem = this.currentItem;
+            else if (!config.config)
+            {
+               config.config = {};
+            }
+            if (this.currentItem)
+            {
+               // This checks if the "jsNode" attribute has been created, and if not will make an attempt
+               // to create it. This is in place purely for handling node based items, but shouldn't
+               // break anything else...
+               if (typeof this.currentItem.jsNode === "undefined" && this.currentItem.node)
+               {
+                  this.currentItem.jsNode = new JsNode(this.currentItem.node);
+               }
+               config.config.currentItem = this.currentItem;
 
-            // Pass on any metadata...
-            if (this.currentData && this.currentData.metadata)
-            {
-               config.config.currentMetadata = this.currentData.metadata;
+               // Pass on any metadata...
+               if (this.currentData && this.currentData.metadata)
+               {
+                  config.config.currentMetadata = this.currentData.metadata;
+               }
+               return this.inherited(arguments);
             }
+         }
+         else
+         {
             return this.inherited(arguments);
          }
       },
