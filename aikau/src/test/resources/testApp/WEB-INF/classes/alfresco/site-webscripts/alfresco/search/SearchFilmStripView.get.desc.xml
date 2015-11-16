@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Filmstrip View for Search</shortname>
+  <description>This demonstrates the film strip view for search pages.</description>
+  <family>aikau-unit-tests</family>
+  <url>/SearchFilmStripView</url>
+</webscript>
