@@ -39,9 +39,17 @@ define([
          evaluateRules: function alfresco_util_objectUtils__evaluateRules(rules, successHandler, failureHandler) {
 
             // Setup variables
-            var testValue = lang.getObject(rules.attributePath, false, rules.testObject),
-               hasIsRules = typeof rules.is !== "undefined" && rules.is.length > 0,
-               hasIsNotRules = typeof rules.isNot !== "undefined" && rules.isNot.length > 0;
+            var testValue = lang.getObject(rules.attribute, false, rules.testObject),
+               hasIsRules = rules.is && rules.is.constructor === Array && rules.is.length,
+               hasIsNotRules = rules.isNot && rules.isNot.constructor === Array && rules.isNot.length;
+
+            // Log a warning if rules are not valid
+            if (rules.is !== null && typeof rules.is !== "undefined" && rules.is.constructor !== Array) {
+               console.warn("alfresco_util_objectUtils__evaluateRules() - \"is\" rules provided but not an array: " + JSON.stringify(rules.is));
+            }
+            if (rules.isNot !== null && typeof rules.isNot !== "undefined" && rules.isNot.constructor !== Array) {
+               console.warn("alfresco_util_objectUtils__evaluateRules() - \"isNot\" rules provided but not an array: " + JSON.stringify(rules.isNot));
+            }
 
             // Test the validity
             var comparatorFunc = rules.useLegacyProcessing === false ? this._ruleComparator : this._legacyRuleComparator,
@@ -100,7 +108,7 @@ define([
          /**
           * <p>The Rules object (as used in [evaluateRules]{@link module:alfresco/util/objectUtils#evaluateRules}).</p>
           *
-          * <p>The value under test (test-value) is retrieved from the "testObject" property using the path defined in "attributePath". The rules are then evaluated as follows:</p>
+          * <p>The value under test (test-value) is retrieved from the "testObject" property using the path defined in "attribute". The rules are then evaluated as follows:</p>
           *
           * <ul>
           *    <li>If neither "is" nor "isNot" are specified then the test-value is valid and the success callback will be executed</li>
@@ -113,12 +121,12 @@ define([
           *
           * @instance
           * @typedef {object} Rules
-          * @property {string} attributePath The dot-notation path to the value retrieve from the object under test
+          * @property {string} attribute The dot-notation path to the value retrieve from the object under test
           * @property {object} testObject The object under test
           * @property {object} [lookupObject] If this is supplied then treat the values contained in the rules as paths
           *                                   to the true comparison value within this lookupObject
-          * @property {string|string[]} [is] The tested value MUST be equal to at least one of these values if provided
-          * @property {string|string[]} [isNot] The tested value must NOT be equal to any of these values if provided
+          * @property {*} [is] The tested value MUST be equal to at least one of these values if provided (must be array)
+          * @property {*} [isNot] The tested value must NOT be equal to any of these values if provided (must be array)
           * @property {boolean} [negate] Invert the final result
           * @property {boolean} [strict] See description above
           * @property {boolean} [useLegacyProcessing=true] Use the legacy algorithms for evaluating matches

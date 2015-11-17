@@ -342,7 +342,7 @@ define(["dojo/_base/declare",
                   if (topic && attribute && (is || isNot))
                   {
                      var rulesObj = {
-                           attributePath: attribute,
+                           attribute: attribute,
                            lookupObject: useCurrentItem && widget.currentItem,
                            is: is,
                            isNot: isNot,
