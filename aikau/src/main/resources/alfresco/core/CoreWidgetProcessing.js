@@ -901,7 +901,6 @@ define(["dojo/_base/declare",
                currValue = this.substituteFilterTokens(currValue);
             }
             
-            foundCurrValue = array.some(targetArray, lang.hitch(this, this.processFilterArrayCompare, currValue));
             foundCurrValue = array.some(targetArray, function(arrayValue) {
                if (typeof arrayValue === "boolean")
                {
