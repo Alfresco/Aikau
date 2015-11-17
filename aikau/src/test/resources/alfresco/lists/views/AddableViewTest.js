@@ -52,6 +52,29 @@ define(["alfresco/TestCommon",
             .findDisplayedByCssSelector("#GRID #CREATE_BUTTON_3_ITEM_0");
          },
 
+         "Check that add button is not as wide as it's parent": function() {
+            var containerSize;
+            return browser.findById("CELL_CONTAINER_ITEM_0")
+               .getSize()
+               .then(function(size) {
+                  containerSize = size.width;
+               })
+            .end()
+
+            .findById("CREATE_BUTTON_3_ITEM_0")
+               .getSize()
+               .then(function(size) {
+                  assert.isBelow(size.width, containerSize, "The button was resized");
+               });
+         },
+
+         "Empty cells should be created when there are no items": function() {
+            return browser.findAllByCssSelector("#GRID_ITEMS .alfresco-lists-views-layouts-Grid__emptyCell")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 3, "No empty cells created");
+               });
+         },
+
          "Create a new item from the grid view": function() {
             // Click the add button...
             return browser.findById("CREATE_BUTTON_3_ITEM_0_label")
