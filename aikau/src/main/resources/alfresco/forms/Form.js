@@ -1192,8 +1192,10 @@ define(["dojo/_base/declare",
             this.setHashFragment(payload);
          }
 
-         // Change the button label
-         this.okButton.set("label", this.message(this.okButtonPublishedLabel));
+         // Change the button label if auto-revert or disable-on-publish are set
+         if (this.okButtonPublishRevertSecs > 0 || this.okButtonDisableOnPublish) {
+            this.okButton.set("label", this.message(this.okButtonPublishedLabel));
+         }
 
          // If we should disable on publish then do so
          if (this.okButtonDisableOnPublish) {
@@ -1201,12 +1203,8 @@ define(["dojo/_base/declare",
          }
 
          // Unless there are enablement topics, automatically revert changes to the OK button
-         if (!this.okButtonEnablementTopics || !this.okButtonEnablementTopics.length) {
-            if (this.okButtonPublishRevertSecs > 0) {
-               setTimeout(lang.hitch(this, this.reenableOkButton), this.okButtonPublishRevertSecs * 1000);
-            } else {
-               this.reenableOkButton();
-            }
+         if ((!this.okButtonEnablementTopics || !this.okButtonEnablementTopics.length) && this.okButtonPublishRevertSecs > 0) {
+            setTimeout(lang.hitch(this, this.reenableOkButton), this.okButtonPublishRevertSecs * 1000);
          }
       },
 
