@@ -132,6 +132,25 @@ registerSuite(function(){
          .clearLog();
       },
 
+      "Cancel will prevent the download occurring": function() {
+         return browser.findById("MULTIPLE_DOWNLOAD_VIA_ACTION_SERVICE")
+            .clearLog()
+            .click()
+            .end()
+
+         .findByCssSelector("#ARCHIVING_DIALOG.dialogDisplayed .dijitButtonNode")
+            .click()
+            .end()
+
+         .findByCssSelector("#ARCHIVING_DIALOG.dialogHidden")
+            .end()
+
+         .getAllPublishes("ALF_DOWNLOAD_FILE")
+            .then(function(publishes) {
+               assert.lengthOf(publishes, 0);
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

@@ -117,6 +117,16 @@ define(["dojo/_base/declare",
       itemsAddedProperty: "response.filesAdded",
 
       /**
+       * Whether the task(s) have been cancelled
+       *
+       * @instance
+       * @readonly
+       * @type {boolean}
+       * @default
+       */
+      isCancelled: false,
+
+      /**
        * renderProgressUI
        *
        * @instance
@@ -274,18 +284,20 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onProgressComplete: function alfresco_renderers_Progress__onProgressComplete(payload) {
-         this.alfLog("log", "Progress Dialog Complete: " + payload);
+         if(!this.isCancelled) {
+            this.alfLog("log", "Progress Dialog Complete: " + payload);
 
-         // Update the UI:
-         this.displayUIMessage(this.message(this.completedMessage));
-         this.updateProgressBar(0);
+            // Update the UI:
+            this.displayUIMessage(this.message(this.completedMessage));
+            this.updateProgressBar(0);
 
-         // Trigger the progressFinishedTopic
-         if (this.progressFinishedTopic) {
-            this.alfPublish(this.progressFinishedTopic, payload);
+            // Trigger the progressFinishedTopic
+            if (this.progressFinishedTopic) {
+               this.alfPublish(this.progressFinishedTopic, payload);
+            }
+
+            this.alfPublish("ALF_CLOSE_DIALOG", payload, true);
          }
-
-         this.alfPublish("ALF_CLOSE_DIALOG", payload, true);
       },
 
       /**
@@ -295,6 +307,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onProgressCancelled: function alfresco_renderers_Progress__onProgressCancelled(payload) {
+         this.isCancelled = true;
          this.alfLog("log", "Progress Dialog Cancelled: " + payload);
          this.alfPublish("ALF_CLOSE_DIALOG", payload, true);
       },
