@@ -59,6 +59,22 @@ define(["intern!object",
             .findByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel");
          },
 
+         "Resize window to make sure expanded cell remains the same size": function() {
+            var originalWidth;
+            return browser.findByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel td")
+               .getSize()
+               .then(function(size) {
+                  originalWidth = size.width;
+               })
+
+               .setWindowSize(null, 1500, 768)
+
+               .getSize()
+               .then(function(size) {
+                  assert.isAbove(size.width, originalWidth, "Expanded panel cell should not have got smaller");
+               });
+         },
+
          "Check the expanded panel position": function() {
             // This verifies that the expanded panel has been inserted in the 2nd row...
             return browser.findByCssSelector(".alfresco-lists-views-layouts-Grid tr.alfresco-lists-views-layouts-Grid__expandedPanel:nth-child(2)");
