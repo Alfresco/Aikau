@@ -52,7 +52,7 @@ define(["alfresco/TestCommon",
             .findDisplayedByCssSelector("#GRID #CREATE_BUTTON_3_ITEM_0");
          },
 
-         "Check that add button is not as wide as it's parent": function() {
+         "Check that add button is not as wide as its parent": function() {
             var containerSize;
             return browser.findById("CELL_CONTAINER_ITEM_0")
                .getSize()
