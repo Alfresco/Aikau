@@ -218,6 +218,33 @@ define([],function() {
       DELETE_SITE: "ALF_DELETE_SITE",
 
       /**
+       * This topic can be published to request that a notification be displayed. It is subscribed to 
+       * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       *
+       * @event
+       * @property {string} message The message to be displayed
+       * @property {string} [publishTopic] A topic to be published after the notification has closed
+       * @property {object} [publishPayload] The payload to be published after the notification has closed
+       * @property {boolean} [publishGlobal] Whether to publish the topic globally
+       * @property {boolean} [publishToParent] Whether to publish the topic on the parent scope
+       */
+      DISPLAY_NOTIFICATION: "ALF_DISPLAY_NOTIFICATION",
+
+      /**
+       * This topic can be published to request that a prompt be displayed. It is subscribed to 
+       * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      DISPLAY_PROMPT: "ALF_DISPLAY_PROMPT",
+
+      /**
        * Publish this to indicate the de-selection of an individual item
        * 
        * @instance
@@ -337,33 +364,6 @@ define([],function() {
        * @property {object} response.item The metadata for the requested node
        */
       DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
-
-      /**
-       * This topic can be published to request that a notification be displayed. It is subscribed to 
-       * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       *
-       * @event
-       * @property {string} message The message to be displayed
-       * @property {string} [publishTopic] A topic to be published after the notification has closed
-       * @property {object} [publishPayload] The payload to be published after the notification has closed
-       * @property {boolean} [publishGlobal] Whether to publish the topic globally
-       * @property {boolean} [publishToParent] Whether to publish the topic on the parent scope
-       */
-      DISPLAY_NOTIFICATION: "ALF_DISPLAY_NOTIFICATION",
-
-      /**
-       * This topic can be published to request that a prompt be displayed. It is subscribed to 
-       * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      DISPLAY_PROMPT: "ALF_DISPLAY_PROMPT",
 
       /**
        * This topic can be used to request Cloud specific paths to use in an

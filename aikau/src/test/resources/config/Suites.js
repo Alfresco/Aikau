@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/forms/controls/PushButtonsTest"
+      "src/test/resources/alfresco/forms/controls/DisablingSubmitFormTest"
 
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/layout/AlfTabContainerTest",
@@ -125,6 +125,7 @@ define({
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
       "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
       "src/test/resources/alfresco/forms/controls/DateTextBoxTest",
+      "src/test/resources/alfresco/forms/controls/DisablingSubmitFormTest",
       "src/test/resources/alfresco/forms/controls/DocumentPickerTest",
       "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest",
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
