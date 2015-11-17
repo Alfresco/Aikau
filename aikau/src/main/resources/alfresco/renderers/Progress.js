@@ -68,13 +68,13 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
-       * The message to display when progress is complete.
+       * renderProgressUI
        *
        * @instance
-       * @type {string}
+       * @type {String}
        * @default
        */
-      completedMessage: "renderer.progress.complete",
+      renderProgressUITopic: "ALF_PROGRESS_RENDER",
 
       /**
        * The message to display when progress is being initialized. By default this includes a message
@@ -88,102 +88,15 @@ define(["dojo/_base/declare",
       creatingMessage: "renderer.progress.creating",
 
       /**
-       * The dot-notation address of the property in the progress publication that contains the
-       * amount "done". This is expected to be an integer.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      doneProperty: "response.done",
-
-      /**
-       * The message to display when an error occurs reporting progress.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      errorMessage: "renderer.progress.error",
-
-      /**
-       * The dot-notation address of the property in the progress publication that contains the
-       * number of items completed towards the target.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      itemsAddedProperty: "response.filesAdded",
-
-      /**
        * Whether the task(s) have been cancelled
        *
        * @instance
        * @readonly
        * @type {boolean}
        * @default
+       * @since 1.0.44
        */
       isCancelled: false,
-
-      /**
-       * renderProgressUI
-       *
-       * @instance
-       * @type {String}
-       * @default
-       */
-      renderProgressUITopic: "ALF_PROGRESS_RENDER",
-
-      /**
-       * This is the topic that will be published to request the start of progress updates. It will publish
-       * a payload on this topic containing scoped topics that should be used to provide 
-       * [update]{@link module:alfresco/renderers/Progress#progressUpdateTopic}, 
-       * [completion]{@link module:alfresco/renderers/Progress#progressCompleteTopic},
-       * [cancellation]{@link module:alfresco/renderers/Progress#progressCancelledTopic} and
-       * [error]{@link module:alfresco/renderers/Progress#progressErrorTopic} events.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      requestProgressTopic: null,
-
-      /**
-       * The topic to publish on to indicate that the task has been cancelled
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      progressCancelledTopic: "ALF_PROGRESS_CANCELLED",
-
-      /**
-       * The topic to publish on to indicate the task has completed.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      progressCompleteTopic: "ALF_PROGRESS_COMPLETED",
-
-      /**
-       * The topic to publish on to indicate that there has been an error processing the task
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      progressErrorTopic: "ALF_PROGRESS_ERROR",
-
-      /**
-       * The topic to publish on to provide progress updates.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      progressUpdateTopic: "ALF_PROGRESS_UPDATED",
 
       /**
        * The message to display that reports the current status. This message will be provided two tokens
@@ -196,26 +109,22 @@ define(["dojo/_base/declare",
       statusMessage: "renderer.progress.status",
 
       /**
-       * The dot-notation address of the property in the progress publication that contains the
-       * total number of items to process.
+       * The message to display when an error occurs reporting progress.
        *
        * @instance
        * @type {string}
        * @default
        */
-      totalItemsProperty: "response.totalFiles",
+      errorMessage: "renderer.progress.error",
 
       /**
-       * The dot-notation address of the property in the progress publication that contains the
-       * total amount "to do". This is expected to be an integer. The percentage complete will be
-       * measured by the value of the [doneProperty]{@link module:alfresco/renderers/Progress} divided 
-       * by the value represented by this property.
+       * The message to display when progress is complete.
        *
        * @instance
        * @type {string}
        * @default
        */
-      totalProperty: "response.total",
+      completedMessage: "renderer.progress.complete",
 
       /**
        * Sets up the form specific configuration for the dialog.
@@ -233,6 +142,56 @@ define(["dojo/_base/declare",
          // Kick off the initial progress request
          this.onRequestProgress();
       },
+
+      /**
+       * This is the topic that will be published to request the start of progress updates. It will publish
+       * a payload on this topic containing scoped topics that should be used to provide 
+       * [update]{@link module:alfresco/renderers/Progress#progressUpdateTopic}, 
+       * [completion]{@link module:alfresco/renderers/Progress#progressCompleteTopic},
+       * [cancellation]{@link module:alfresco/renderers/Progress#progressCancelledTopic} and
+       * [error]{@link module:alfresco/renderers/Progress#progressErrorTopic} events.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      requestProgressTopic: null,
+
+      /**
+       * The topic to publish on to provide progress updates.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      progressUpdateTopic: "ALF_PROGRESS_UPDATED",
+
+      /**
+       * The topic to publish on to indicate the task has completed.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      progressCompleteTopic: "ALF_PROGRESS_COMPLETED",
+
+      /**
+       * The topic to publish on to indicate that the task has been cancelled
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      progressCancelledTopic: "ALF_PROGRESS_CANCELLED",
+
+      /**
+       * The topic to publish on to indicate that there has been an error processing the task
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      progressErrorTopic: "ALF_PROGRESS_ERROR",
 
       /**
        * Called when progress returns & updates progress dialog.
@@ -323,6 +282,48 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Progress Dialog Error: " + payload);
          this.displayUIMessage(this.message(this.errorMessage));
       },
+
+      /**
+       * The dot-notation address of the property in the progress publication that contains the
+       * amount "done". This is expected to be an integer.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      doneProperty: "response.done",
+
+      /**
+       * The dot-notation address of the property in the progress publication that contains the
+       * total amount "to do". This is expected to be an integer. The percentage complete will be
+       * measured by the value of the [doneProperty]{@link module:alfresco/renderers/Progress} divided 
+       * by the value represented by this property.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      totalProperty: "response.total",
+
+      /**
+       * The dot-notation address of the property in the progress publication that contains the
+       * number of items completed towards the target.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      itemsAddedProperty: "response.filesAdded",
+
+      /**
+       * The dot-notation address of the property in the progress publication that contains the
+       * total number of items to process.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      totalItemsProperty: "response.totalFiles",
 
       /**
        * Called to update the UI with the data.
