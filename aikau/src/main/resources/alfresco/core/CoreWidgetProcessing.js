@@ -341,11 +341,47 @@ define(["dojo/_base/declare",
                       useCurrentItem = rule.useCurrentItem != null ? rule.useCurrentItem : false;
                   if (topic && attribute && (is || isNot))
                   {
-                     widget.alfSubscribe(topic, lang.hitch(this, "processVisibility", widget, is, isNot, attribute, negate, strict, useCurrentItem));
+                     var rulesObj = {
+                           attribute: attribute,
+                           lookupObject: useCurrentItem && widget.currentItem,
+                           is: is,
+                           isNot: isNot,
+                           negate: negate,
+                           strict: strict
+                        },
+                        successCallback = lang.hitch(this, this.onVisibilityProcessedSuccess, widget),
+                        failureCallback = lang.hitch(this, this.onVisibilityProcessedFailure, widget);
+                     widget.alfConditionalSubscribe(topic, rulesObj, successCallback, failureCallback);
                   }
                }, this);
             }
          }
+      },
+
+      /**
+       * Called when visibility config on a widget has passed rule-evaluation.
+       *
+       * @instance
+       * @param {object} widget The widget under test
+       * @since 1.0.44
+       */
+      onVisibilityProcessedSuccess: function alfresco_core_CoreWidgetProcessing__onVisibilityProcessedSuccess(widget) {
+         domStyle.set(widget.domNode, "display", "");
+         if (typeof widget.alfPublishResizeEvent === "function")
+         {
+            widget.alfPublishResizeEvent(widget.domNode);
+         }
+      },
+
+      /**
+       * Called when visibility config on a widget has failed rule-evaluation.
+       *
+       * @instance
+       * @param {object} widget The widget under test
+       * @since 1.0.44
+       */
+      onVisibilityProcessedFailure: function alfresco_core_CoreWidgetProcessing__onVisibilityProcessedFailure(widget) {
+         domStyle.set(widget.domNode, "display", "none");
       },
 
       /**
@@ -360,6 +396,7 @@ define(["dojo/_base/declare",
        * @param {string} attribute The dot-notation attribute to retrieve from the payload
        * @param {boolean} negate Whether or not the to negate the evaluated rule (e.g evaluated visible become invisible)
        * @param {object} payload The publication payload triggering the visibility processing
+       * @deprecated Since 1.0.44 - See [setupVisibilityConfigProcessing]{@link module:alfresco/core/CoreWidgetProcessing#setupVisibilityConfigProcessing} source code for current technique for evaluating visibility
        */
       processVisibility: function alfresco_core_CoreWidgetProcessing__processVisibility(widget, is, isNot, attribute, negate, strict, useCurrentItem, payload) {
          var target = lang.getObject(attribute, false, payload);
@@ -430,6 +467,7 @@ define(["dojo/_base/declare",
        * @param {boolean} useCurrentItem Indicates whether or not the values to check are attributes of the "currentItem"
        * @param {string} currValue The value from the current rule being processed
        * @returns {boolean} true if the values match and false otherwise
+       * @deprecated Since 1.0.44 - See [setupVisibilityConfigProcessing]{@link module:alfresco/core/CoreWidgetProcessing#setupVisibilityConfigProcessing} source code for current technique for evaluating visibility
        */
       visibilityRuleComparator: function alfresco_core_CoreWidgetProcessing__visibilityRuleComparator(targetValue, widget, useCurrentItem, currValue) {
          if (targetValue == null && currValue == null)
@@ -901,7 +939,6 @@ define(["dojo/_base/declare",
                currValue = this.substituteFilterTokens(currValue);
             }
             
-            foundCurrValue = array.some(targetArray, lang.hitch(this, this.processFilterArrayCompare, currValue));
             foundCurrValue = array.some(targetArray, function(arrayValue) {
                if (typeof arrayValue === "boolean")
                {

@@ -1,4 +1,4 @@
-Aikau 1.0.43 Release Notes
+Aikau 1.0.44 Release Notes
 ===
 
 Previous deprecations:
@@ -40,6 +40,16 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.44:
+* [AKU-670](https://issues.alfresco.com/jira/browse/AKU-670)       - Ensure twister supports resizing
+* [AKU-674](https://issues.alfresco.com/jira/browse/AKU-674)       - Appendix support for AlfListView
+* [AKU-675](https://issues.alfresco.com/jira/browse/AKU-675)       - Support for expandable panel in grids
+* [AKU-682](https://issues.alfresco.com/jira/browse/AKU-682)       - Added alfresco/forms/controls/PushButtons widget
+* [AKU-683](https://issues.alfresco.com/jira/browse/AKU-683)       - Support for disabling/re-labelling button on form submit
+* [AKU-689](https://issues.alfresco.com/jira/browse/AKU-689)       - Gallery view cell resizing fix
+* [AKU-693](https://issues.alfresco.com/jira/browse/AKU-693)       - Fixed suggestions scoping in SearchService
+* [AKU-697](https://issues.alfresco.com/jira/browse/AKU-697)       - Ensure consistent preview heigh in SearchFilmStripView
+
 1.0.43:
 * [AKU-416](https://issues.alfresco.com/jira/browse/AKU-416)       - Added download action definition
 * [AKU-663](https://issues.alfresco.com/jira/browse/AKU-663)       - Updated PathTree to highlight current path
