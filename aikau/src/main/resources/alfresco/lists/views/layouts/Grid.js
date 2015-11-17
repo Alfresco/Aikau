@@ -590,9 +590,11 @@ define(["dojo/_base/declare",
             var dimensions = {
                w: widthToSet,
                h: null
-            },
-            widgetsToResize = query("[widgetId]", node); // Resize all contained widgets, not just immediate children.
-            array.forEach(widgetsToResize, lang.hitch(this, this.resizeWidget, dimensions));
+            };
+
+            // See AKU-704 - if you review the change history here you'll see that this has now gone back
+            //               to the original implementation of only resizing direct children
+            array.forEach(node.children, lang.hitch(this, this.resizeWidget, dimensions));
          }
       },
 

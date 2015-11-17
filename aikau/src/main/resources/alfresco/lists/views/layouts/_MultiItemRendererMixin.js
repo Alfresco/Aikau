@@ -87,10 +87,23 @@ define(["dojo/_base/declare",
       currentItem: null,
       
       /**
-       * [focusHighlighting description]
-       * @type {Boolean}
+       * Indicates whether or not focused items should have a highlight style applied to them.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
        */
       focusHighlighting: false,
+
+      /**
+       * This is the property that should be used to compare unique keys when comparing items. This will default
+       * to "nodeRef" if not set.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      itemKey: "nodeRef",
 
       /**
        * This is the widget that acts as the root of the view. By default this will
@@ -102,6 +115,25 @@ define(["dojo/_base/declare",
        */
       rootViewWidget: null,
       
+      /**
+       * @instance
+       * @type {object[]}
+       * @default
+       */
+      rootWidgetSubscriptions: null,
+      
+      /**
+       * Records all the widgets that are processed for each item. This differs from the 
+       * [_processedWidgets]{@link module:alfresco/core/CoreWidgetProcessing#_processedWidgets}
+       * attribute because that captures the widgets processed for the last item (i.e. the 
+       * data is replaced on each item iteration)
+       *
+       * @instance
+       * @type {array}
+       * @default
+       */
+      _renderedItemWidgets: null,
+
       /**
        * A setter for [currentData]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentData}
        * @instance
@@ -256,18 +288,6 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Records all the widgets that are processed for each item. This differs from the 
-       * [_processedWidgets]{@link module:alfresco/core/CoreWidgetProcessing#_processedWidgets}
-       * attribute because that captures the widgets processed for the last item (i.e. the 
-       * data is replaced on each item iteration)
-       *
-       * @instance
-       * @type {array}
-       * @default
-       */
-      _renderedItemWidgets: null,
-
-      /**
        * Overrides the default implementation to start the rendering of the next item.
        * 
        * @instance
@@ -275,15 +295,19 @@ define(["dojo/_base/declare",
        * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        */
       allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets, processWidgetsId) {
-         if (!processWidgetsId)
+         if (!processWidgetsId || processWidgetsId === "RENDER_APPENDIX_SENTINEL")
          {
             // Push the processed widgets for the last item into the array of rendered widgets...
             if (!this._renderedItemWidgets)
             {
                this._renderedItemWidgets = [];
             }
-            this._renderedItemWidgets.push(widgets);
 
+            if (!processWidgetsId)
+            {
+               this._renderedItemWidgets.push(widgets);
+            }
+            
             // Increment the current index and check to see if there are more items to render...
             // Only the root widget(s) will have the currentData object set so we don't start rendering the next item
             // on nested widgets...
@@ -292,7 +316,7 @@ define(["dojo/_base/declare",
                 this.currentData.items &&
                 this.currentData.items.length != null)
             {
-               array.forEach(widgets, lang.hitch(this, "rootWidgetProcessing"));
+               array.forEach(widgets, lang.hitch(this, this.rootWidgetProcessing));
                if (this.currentIndex < this.currentData.items.length)
                {
                   // Render the next item...
@@ -322,13 +346,6 @@ define(["dojo/_base/declare",
       allItemsRendered: function alfresco_lists_views_layout___MultiItemRendererMixin__allItemsRendered() {
          // No action by default.
       },
-      
-      /**
-       * @instance
-       * @type {object[]}
-       * @default
-       */
-      rootWidgetSubscriptions: null,
       
       /**
        * Adds the "alfresco-lists-views-layout-_MultiItemRendererMixin__item" class to the root DOM node
@@ -382,16 +399,6 @@ define(["dojo/_base/declare",
             domClass.remove(widget.domNode, "selected");
          }
       },
-
-      /**
-       * This is the property that should be used to compare unique keys when comparing items. This will default
-       * to "nodeRef" if not set.
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      itemKey: "nodeRef",
 
       /**
        * Compares the nodeRef attribute of both item arguments. This has been abstracted to a separate function to
