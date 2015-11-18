@@ -3,7 +3,7 @@ var model1 = [
       name: "alfresco/logo/Logo"
    }
 ];
-var model1Value = JSON.stringify(model1);
+var model1Value = JSON.stringify(model1, null, "\t");
 
 function outputExamples(examples) {
    var model = [];
@@ -69,7 +69,13 @@ function outputExamples(examples) {
                                     {
                                        name: "alfresco/prototyping/Preview",
                                        config: {
-                                          pubSubScope: pubSubScope
+                                          pubSubScope: pubSubScope,
+                                          pageDefinition: {
+                                             stringified: true,
+                                             publishOnReady: "[]",
+                                             services: "[]",
+                                             widgets: example.value
+                                          }
                                        }
                                     }
                                  ]
@@ -94,7 +100,7 @@ var model2 = [{
       logoClasses: "surf-logo-large"
    }
 }];
-var model2Value = JSON.stringify(model2);
+var model2Value = JSON.stringify(model2, null, "\t");
 
 var data = [
    {

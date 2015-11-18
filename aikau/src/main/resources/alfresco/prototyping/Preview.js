@@ -65,11 +65,17 @@ define(["dojo/_base/declare",
        * @type {String}
        */
       templateString: template,
+
+      pageDefinition: null,
       
       /**
        * @instance
        */
       postCreate: function alfresco_prototyping_Preview__postCreate() {
+         if (this.pageDefinition)
+         {
+            this.generatePreview(this.pageDefinition);
+         }
          this.alfSubscribe("ALF_GENERATE_PAGE_PREVIEW", lang.hitch(this, "generatePreview"));
       },
       
