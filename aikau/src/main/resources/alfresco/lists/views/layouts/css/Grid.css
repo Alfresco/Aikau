@@ -2,4 +2,55 @@
    border-collapse: separate;
    border-spacing: 2px;
    width: 100%;
+   outline: none;
+
+   &--enableHighlighting {
+      
+      .alfresco-lists-views-layouts-Grid__cell {
+         border: @standard-border;
+         border-radius: @standard-border-radius;
+         
+         &--focused {
+            border: @thick-border-width solid @hover-border-color;
+         }
+
+         &--expanded {
+            position: relative;
+            background:@primary-background-color;
+            border: @thick-border-width solid @focused-border-color;
+
+            &:after, &:before {
+               top: 100%;
+               left: 50%;
+               border: solid transparent;
+               content: " ";
+               height: 0;
+               width: 0;
+               position: absolute;
+               pointer-events: none;
+            }
+
+            &:after {
+               border-color: rgba(red(@primary-background-color), green(@primary-background-color), blue(@primary-background-color), 0);
+               border-top-color: @primary-background-color;
+               border-width: 10px;
+               margin-left: -10px;
+            }
+
+            &:before {
+               border-color: rgba(red(@focused-border-color), green(@focused-border-color), blue(@focused-border-color), 0);
+               border-top-color: @focused-border-color;
+               border-width: 14px;
+               margin-left: -14px;
+            }
+         }
+      }
+   }
 }
+
+.alfresco-lists-views-layouts-Grid__expandedPanel {
+   .alfresco-lists-views-layouts-Grid__cell--focused {
+      border: none;
+   }
+}
+

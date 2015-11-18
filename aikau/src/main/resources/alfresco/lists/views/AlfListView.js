@@ -37,6 +37,7 @@ define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "alfresco/lists/views/ListRenderer",
+        "alfresco/lists/views/RenderAppendixSentinel",
         "alfresco/core/Core",
         "alfresco/core/JsNode",
         "alfresco/core/WidgetsCreator",
@@ -46,7 +47,7 @@ define(["dojo/_base/declare",
         "dojo/dom-class",
         "dojo/query"],
         function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, _AlfDndDocumentUploadMixin, ListRenderer,
-                 AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query) {
+                 RenderAppendixSentinel, AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query) {
 
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _AlfDndDocumentUploadMixin], {
 
@@ -76,13 +77,35 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
-       * The widgets to be processed to generate each item in the rendered view.
+       * This is the topic that will be subscribed to when [subscribeToDocRequests]
+       * {@link module:alfresco/lists/views/AlfListView#subscribeToDocRequests} is
+       * configured to be true.
        *
        * @instance
-       * @type {object[]}
+       * @type {string}
        * @default
        */
-      widgets: null,
+      documentSubscriptionTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
+
+      /**
+       * This is the property of each item in the list that uniquely identifies that item. This
+       * should be configured correctly in order for items to be 
+       * [brought into view]{@link module alfresco/lists/views/ListRenderer#bringItemIntoView} as required.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      itemKey: "nodeRef",
+
+      /**
+       * This is the property that is used to lookup documents in the subscribed topic.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      itemsProperty: "response.items",
 
       /**
        * This can be set to be a custom message that is displayed when there are no items to
@@ -95,6 +118,19 @@ define(["dojo/_base/declare",
       noItemsMessage: null,
 
       /**
+       * This is the default CSS selector query to use to check whether any data has actually been rendered.
+       * It's used from within the [renderView]{@link module:alfresco/lists/views/AlfListView#renderView}
+       * function to check that data is actually rendered (because even though renderable items might exist it's possible
+       * for them to be filtered out so that they're not displayed). This needs to be overriden by views that don't
+       * render a DOM that matches the query.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      renderFilterSelectorQuery: "tr",
+
+      /**
        * Should the widget subscribe to events triggered by the documents request?
        * This should be set to true in the widget config for standalone/isolated usage.
        *
@@ -103,17 +139,6 @@ define(["dojo/_base/declare",
        * @default
        */
       subscribeToDocRequests: false,
-
-      /**
-       * This is the topic that will be subscribed to when [subscribeToDocRequests]
-       * {@link module:alfresco/lists/views/AlfListView#subscribeToDocRequests} is
-       * configured to be true.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      documentSubscriptionTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
 
       /**
        * Overrides the 
@@ -137,6 +162,52 @@ define(["dojo/_base/declare",
        */
       useInfiniteScroll: false,
       
+      /**
+       * The configuration for view selection menu items. This needs to be either configured or defined in an
+       * extending module. If this isn't specified then the view will not be selectable in the document list.
+       *
+       * @instance
+       * @type {Object}
+       * @default {}
+       */
+      viewSelectionConfig: {
+         label: "Abstract",
+         value: "Abstract"
+      },
+
+      /**
+       * The widgets to be processed to generate each item in the rendered view.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       */
+      widgets: null,
+
+      /**
+       * An optional widget model to be rendered as an appendix to the actual data. If this is
+       * defined then it will never be possible for the
+       * [widgetsForNoDataDisplay]{@link module:alfresco/lists/views/AlfListView#widgetsForNoDataDisplay}
+       * model to be rendered because it results in a special 
+       * [marker]{@link module:alfresco/lists/views/RenderAppendixSentinel}
+       * being added to the data set to be rendered.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.44
+       */
+      widgetsForAppendix: null,
+
+      /**
+       * An optional JSON model defining the widgets to display when no data is available to display.
+       *
+       * @instance
+       * @type {array}
+       * @default
+       */
+      widgetsForNoDataDisplay: null,
+
       /**
        * Implements the widget life-cycle method to add drag-and-drop upload capabilities to the root DOM node.
        * This allows files to be dragged and dropped from the operating system directly into the browser
@@ -202,26 +273,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This is the property of each item in the list that uniquely identifies that item. This
-       * should be configured correctly in order for items to be 
-       * [brought into view]{@link module alfresco/lists/views/ListRenderer#bringItemIntoView} as required.
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      itemKey: "nodeRef",
-
-      /**
-       * This is the property that is used to lookup documents in the subscribed topic.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      itemsProperty: "response.items",
-
-      /**
        * @instance
        * @param {object} payload The details of the documents that have been provided.
        */
@@ -263,19 +314,6 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "Could not process item as Alfresco node", item, e);
          }
-      },
-
-      /**
-       * The configuration for view selection menu items. This needs to be either configured or defined in an
-       * extending module. If this isn't specified then the view will not be selectable in the document list.
-       *
-       * @instance
-       * @type {Object}
-       * @default {}
-       */
-      viewSelectionConfig: {
-         label: "Abstract",
-         value: "Abstract"
       },
 
       /**
@@ -341,68 +379,69 @@ define(["dojo/_base/declare",
        * most common example of this is when infinite scroll is being used.
        */
       renderView: function alfresco_lists_views_AlfListView__renderView(preserveCurrentData) {
-         if (this.currentData && this.currentData.items && this.currentData.items.length > 0)
+         if (this.currentData && this.currentData.items)
          {
-            try
+            if (this.widgetsForAppendix)
             {
-               if (this.messageNode)
-               {
-                  domConstruct.destroy(this.messageNode);
-               }
-
-               // If we don't want to preserve the current data (e.g. if infinite scroll isn't being used)
-               // then we should destroy the previous renderer...
-               if ((preserveCurrentData === false || preserveCurrentData === undefined) && this.docListRenderer)
-               {
-                  this.destroyRenderer();
-               }
-
-               // If the renderer is null we need to create one (this typically wouldn't be expected to happen)
-               // when rendering additional infinite scroll data...
-               if (!this.docListRenderer)
-               {
-                  this.docListRenderer = this.createListRenderer();
-                  this.docListRenderer.placeAt(this.tableNode, "last");
-               }
-
-               // Ensure that the renderer has has the same itemKey value as configured on the view. This is
-               // so that comparisons can be made for selection and items can be brought into view as necessary
-               this.docListRenderer.itemKey = this.itemKey;
-               
-               // Finally, render the current data (when using infinite scroll the data should have been augmented)
-               this.docListRenderer.renderData();
-
-               // Check to see if any rows were rendered (allows for renderFilters on widgets. If they weren't, render no Data Display.
-               if (query(this.renderFilterSelectorQuery, this.tableNode).length === 0)
-               {
-                  this.renderNoDataDisplay();
-               }
-            }
-            catch(e)
-            {
-               this.alfLog("error", "The following error occurred rendering the data", e, this);
-               this.renderErrorDisplay();
+               var containsSentinel = array.some(this.currentData.items, function(item) {
+                  return item === RenderAppendixSentinel;
+               });
+               !containsSentinel && this.currentData.items.push(RenderAppendixSentinel);
             }
 
+            if (this.currentData.items.length > 0)
+            {
+               try
+               {
+                  if (this.messageNode)
+                  {
+                     domConstruct.destroy(this.messageNode);
+                  }
+
+                  // If we don't want to preserve the current data (e.g. if infinite scroll isn't being used)
+                  // then we should destroy the previous renderer...
+                  if ((preserveCurrentData === false || preserveCurrentData === undefined) && this.docListRenderer)
+                  {
+                     this.destroyRenderer();
+                  }
+
+                  // If the renderer is null we need to create one (this typically wouldn't be expected to happen)
+                  // when rendering additional infinite scroll data...
+                  if (!this.docListRenderer)
+                  {
+                     this.docListRenderer = this.createListRenderer();
+                     this.docListRenderer.placeAt(this.tableNode, "last");
+                  }
+
+                  // Ensure that the renderer has has the same itemKey value as configured on the view. This is
+                  // so that comparisons can be made for selection and items can be brought into view as necessary
+                  this.docListRenderer.itemKey = this.itemKey;
+                  
+                  // Finally, render the current data (when using infinite scroll the data should have been augmented)
+                  this.docListRenderer.renderData();
+
+                  // Check to see if any rows were rendered (allows for renderFilters on widgets. If they weren't, render no Data Display.
+                  if (query(this.renderFilterSelectorQuery, this.tableNode).length === 0)
+                  {
+                     this.renderNoDataDisplay();
+                  }
+               }
+               catch(e)
+               {
+                  this.alfLog("error", "The following error occurred rendering the data", e, this);
+                  this.renderErrorDisplay();
+               }
+            }
+            else
+            {
+               this.renderNoDataDisplay();
+            }
          }
          else
          {
             this.renderNoDataDisplay();
          }
       },
-
-      /**
-       * This is the default CSS selector query to use to check whether any data has actually been rendered.
-       * It's used from within the [renderView]{@link module:alfresco/lists/views/AlfListView#renderView}
-       * function to check that data is actually rendered (because even though renderable items might exist it's possible
-       * for them to be filtered out so that they're not displayed). This needs to be overriden by views that don't
-       * render a DOM that matches the query.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      renderFilterSelectorQuery: "tr",
 
       /**
        * Creates a new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
@@ -419,7 +458,8 @@ define(["dojo/_base/declare",
             widgets: this.widgets,
             currentData: this.currentData,
             pubSubScope: this.pubSubScope,
-            parentPubSubScope: this.parentPubSubScope
+            parentPubSubScope: this.parentPubSubScope,
+            widgetsForAppendix: this.widgetsForAppendix
          });
          return dlr;
       },
@@ -481,15 +521,6 @@ define(["dojo/_base/declare",
       onViewShown: function alfresco_lists_views_AlfListView__onViewShown() {
          this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
       },
-
-      /**
-       * An optional JSON model defining the widgets to display when no data is available to display.
-       *
-       * @instance
-       * @type {array}
-       * @default
-       */
-      widgetsForNoDataDisplay: null,
 
       /**
        * This method is called when there is no data to be shown. By default this just shows a standard localized

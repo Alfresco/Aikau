@@ -54,8 +54,11 @@
  * }
  *
  * @module alfresco/forms/controls/MultiSelect
- * @extends external:dijit/_TemplatedMixin
  * @extends external:dijit/_WidgetBase
+ * @mixes external:dijit/_TemplatedMixin
+ * @mixes external:dijit/_FocusMixin
+ * @mixes alfresco/core/Core
+ * @mixes alfresco/core/ObjectProcessingMixin
  * @author Martin Doyle
  */
 define([

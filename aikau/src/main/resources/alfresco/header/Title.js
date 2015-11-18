@@ -124,6 +124,12 @@ define(["dojo/_base/declare",
          if (this.label)
          {
             var label = this.label ? this.label : "";
+
+            if (this.setBrowserTitle === true)
+            {
+               document.title = this.browserTitlePrefix + " \u00bb " + this.label; // Set the browser title
+            }
+         
             this.label = this.encodeHTML(this.message(label));
          }
          if (this.browserTitlePrefix)
@@ -137,10 +143,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_header_Title__postCreate() {
          this.textNode.innerHTML = this.label;
-         if (this.setBrowserTitle === true)
-         {
-            document.title = this.browserTitlePrefix + " \u00bb " + this.label; // Set the browser title
-         }
+         
          if (this.maxWidth) {
             this.textNode.title = this.label;
             domClass.add(this.textNode, "has-max-width");

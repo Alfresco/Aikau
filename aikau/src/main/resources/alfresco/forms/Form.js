@@ -309,7 +309,7 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       warningsPosition: "top",
-      
+
       /**
        * @instance
        */
@@ -383,6 +383,13 @@ define(["dojo/_base/declare",
             }, this);
 
             this.processWidgets(this.widgets, this._form.domNode, "FIELDS");
+         }
+
+         // Setup subscriptions for the re-enablement of the OK button if necessary
+         if(this.okButton && this.okButtonDisableOnPublish && this.okButtonEnablementTopics && this.okButtonEnablementTopics.length) {
+            array.forEach(this.okButtonEnablementTopics, function(topic) {
+               this.setupOkButtonEnablementSubscription(topic);
+            }, this);
          }
       },
 
@@ -655,6 +662,62 @@ define(["dojo/_base/declare",
       okButtonPublishGlobal: null,
 
       /**
+       * The label that will be used for the "OK" button after a publish. It will return to the configured label
+       * after [okButtonPublishRevertSecs]{@link module:alfresco/forms/Form#okButtonPublishRevertSecs} seconds
+       * (but also see [okButtonDisableOnPublish]{@link module:alfresco/forms/Form#okButtonDisableOnPublish}).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.44
+       */
+      okButtonPublishedLabel: "form.button.ok.label.published",
+
+      /**
+       * <p>When the OK button has been pushed, the label will changed to the [published-label]{@link module:alfresco/forms/Form#okButtonPublishedLabel}
+       * and will also disable if [okButtonDisableOnPublish]{@link module:alfresco/forms/Form#okButtonDisableOnPublish} is set to true. Unless the
+       * [okButtonEnablementTopics property]{@link module:alfresco/alfresco/forms/Form#okButtonEnablementTopics} has been provided, both changes will
+       * automatically be reverted after this property's value in seconds has passed.</p>
+       *
+       * <p>See [this comment from UX]{link https://issues.alfresco.com/jira/browse/AKU-683?focusedCommentId=425326&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-425326} for the reason for this property.</p>
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.44
+       */
+      okButtonPublishRevertSecs: 0,
+
+      /**
+       * Whether to disable the OK button after a publish. If this is set to true then the
+       * [published-label]{@link module:alfresco/forms/Form#okButtonPublishedLabel} will
+       * remain in-place until the button is re-enabled by use of either the
+       * [okButtonEnablementTopics]{@link module:alfresco/alfresco/forms/Form#okButtonEnablementTopics}
+       * or [okButtonReenableSecs]{@link module:alfresco/alfresco/forms/Form#okButtonReenableSecs}
+       * properties.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.44
+       */
+      okButtonDisableOnPublish: false,
+
+      /**
+       * If [okButtonDisableOnPublish]{@link module:alfresco/forms/Form#okButtonDisableOnPublish} has been set to true
+       * and this property is provided then the button will remain disabled until one of these topics has been published
+       * (scoped as necessary). The array should contain either strings for unconditional re-enablement if that topic
+       * is published or [rule objects]{@link module:alfresco/util/objectUtils#Rules} with an additional topic attribute
+       * that defines the topic aname to conditionally subscribe to.
+       *
+       * @instance
+       * @type {string[]|object[]}
+       * @default
+       * @since 1.0.44
+       */
+      okButtonEnablementTopics: null,
+
+      /**
        * The label that will be used for the "Cancel" button. This value can either be an explicit
        * localised value or an properties key that will be used to retrieve a localised value.
        *
@@ -844,19 +907,14 @@ define(["dojo/_base/declare",
                iconClass: this.okButtonIconClass
             }, this.okButtonNode);
 
-            // If useHash is set to true then set up a subcription on the publish topic for the OK button which will
-            // set the hash fragment with the form contents...
-            if (this.useHash === true && this.setHash === true)
+            // Handle any post-publish actions
+            if (this.okButtonPublishTopic && lang.trim(this.okButtonPublishTopic))
             {
-               if (this.okButtonPublishTopic &&
-                   lang.trim(this.okButtonPublishTopic) !== "")
-               {
-                  this.alfSubscribe(this.okButtonPublishTopic, lang.hitch(this, this.setHashFragment), this.okButtonPublishGlobal);
-               }
-               else
-               {
-                  this.alfLog("warn", "A form is configured to use the browser hash fragment, but has no okButtonPublishTopic set", this);
-               }
+               this.alfSubscribe(this.okButtonPublishTopic, lang.hitch(this, this.onOkButtonPublish), this.okButtonPublishGlobal);
+            }
+            else if (this.useHash === true && this.setHash === true)
+            {
+               this.alfLog("warn", "A form is configured to use the browser hash fragment, but has no okButtonPublishTopic set", this);
             }
          }
          else
@@ -1117,6 +1175,72 @@ define(["dojo/_base/declare",
             lang.mixin(clonedPayload, currentValue);
             this.alfServicePublish(payload.publishTopic, clonedPayload);
          }
+      },
+
+      /**
+       * If an [okButtonPublishTopic]{@link module:alfresco/forms/Form#okButtonPublishTopic} has been provided
+       * then this function will be run after it has been published.
+       *
+       * @instance
+       * @param {object} payload The published payload
+       * @since 1.0.44
+       */
+      onOkButtonPublish: function alfresco_forms_Form__onOkButtonPublish(payload) {
+
+         // Set the hash fragment with the form contents...
+         if (this.useHash === true && this.setHash === true) {
+            this.setHashFragment(payload);
+         }
+
+         // Change the button label if auto-revert or disable-on-publish are set
+         if (this.okButtonPublishRevertSecs > 0 || this.okButtonDisableOnPublish) {
+            this.okButton.set("label", this.message(this.okButtonPublishedLabel));
+         }
+
+         // If we should disable on publish then do so
+         if (this.okButtonDisableOnPublish) {
+            this.okButton.set("disabled", true);
+         }
+
+         // Unless there are enablement topics, automatically revert changes to the OK button
+         if ((!this.okButtonEnablementTopics || !this.okButtonEnablementTopics.length) && this.okButtonPublishRevertSecs > 0) {
+            setTimeout(lang.hitch(this, this.reenableOkButton), this.okButtonPublishRevertSecs * 1000);
+         }
+      },
+
+      /**
+       * Setup the subscription(s) to re-enable the OK button after it's been disabled on submission.
+       *
+       * @instance
+       * @param {string|module:alfresco/util/objectUtils#Rules} topic The raw topic name to subscribe to, or a Rules object with an additional
+       *                                                              topic attribute that defines the name of the topic to subscribe to
+       * @param {string|string[]} [is] The possible value/values that will re-enable the OK button if matching the specified attribute
+       * @param {string|string[]} [isNot] The disallowed value/values that will re-enable the OK button if the attribute does not match it/them
+       */
+      setupOkButtonEnablementSubscription: function alfresco_forms_Form__setupOkButtonEnablementSubscription(topics) {
+         var topicName,
+            rulesObj;
+         if (typeof topics === "string") {
+            topicName = topics;
+            rulesObj = {};
+         } else {
+            topicName = topics.topic;
+            rulesObj = lang.clone(topics);
+            delete rulesObj.topic;
+         }
+         this.alfConditionalSubscribe(topicName, rulesObj, lang.hitch(this, this.reenableOkButton));
+      },
+
+      /**
+       * Re-enable the OK button after it's been [disabled by publishing]{@link module:alfresco/forms/Form#okButtonDisableOnPublish}.
+       * Calls the [onValidField]{@link module:alfresco/forms/Form#onValidField} method to ensure that validation rules are maintained.
+       *
+       * @instance
+       * @since 1.0.44
+       */
+      reenableOkButton: function alfresco_forms_Form__reenableOkButton() {
+         this.okButton.set("label", this.message(this.okButtonLabel));
+         this.onValidField();
       }
    });
 });

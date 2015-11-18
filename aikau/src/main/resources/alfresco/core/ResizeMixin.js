@@ -51,19 +51,31 @@ define(["dojo/_base/declare",
       alfResizeNodeTopic: topics.NODE_RESIZED,
 
       /**
-       * Publishes on a topic that indicates that the supplied node has been resized.
+       * Publishes on a topic that indicates that the supplied node has been resized. By default publications
+       * will be throttled to prevent multiple resize events being published for the same node, however it
+       * is possible to provide an optional "unthrottled" argument to prevent throttling.
        *
        * @instance
        * @param {object} resizedNode The node that has been resized
+       * @param {boolean} [unthrottled] Indicates whether or not the publication should be throttled or not
        * @fires module:alfresco/core/ResizeMixin#alfResizeNodeTopic
        */
-      alfPublishResizeEvent: function alfresco_core_ResizeMixin__alfPublishResizeEvent(resizedNode) {
+      alfPublishResizeEvent: function alfresco_core_ResizeMixin__alfPublishResizeEvent(resizedNode, unthrottled) {
          // Fire a custom event to let contained objects know that the node has been resized.
-         this.throttledPublish(this.alfResizeNodeTopic, {
-            node: resizedNode
-         }, true, false, {
-            timeoutMs: 100
-         });
+         if (!unthrottled)
+         {
+            this.throttledPublish(this.alfResizeNodeTopic, {
+               node: resizedNode
+            }, true, false, {
+               timeoutMs: 100
+            });
+         }
+         else
+         {
+            this.alfPublish(this.alfResizeNodeTopic, {
+               node: resizedNode
+            }, true);
+         }
       },
 
       /**

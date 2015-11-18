@@ -85,7 +85,8 @@ module.exports = function(grunt) {
       grunt.task.run("startUnitTestApp");
       grunt.task.run("waitServer");
       grunt.task.run("intern:dev_coverage");
-      grunt.task.run("merge-reports");
+      grunt.task.run("sub-merge-reports");
+      grunt.task.run("merge-merged-reports");
       grunt.task.run("clean-reports");
       grunt.task.run("showExistingCoverageReports");
       grunt.task.run("copyOriginalCode");
@@ -128,7 +129,57 @@ module.exports = function(grunt) {
 
    // Merge individual coverage reports in the node coverage server
    // TODO: Give the report a sensible name (e.g. with a timestamp)
-   grunt.registerTask("merge-reports", "A task for merging code coverage reports", function() {
+   grunt.registerTask("sub-merge-reports", "A task for merging code coverage reports", function() {
+      var done = this.async();
+      
+      var mergeArgs;
+      var reports = grunt.file.expand(["code-coverage-reports/report_*.json"]);
+
+      var page = 10;
+      var totalSpawns = Math.ceil(reports.length / page);
+
+      for (var j = 0; j < totalSpawns; j++)
+      {
+         grunt.log.writeln("Spawn " + j);
+
+         mergeArgs = [
+            "node_modules/node-coverage/merge.js",
+            "-o",
+            "code-coverage-reports/SubMerge_" + Date.now() + ".json"
+         ];
+            
+         // Get the starting index (the spawn number multiplied by the page size)
+         // This should mean k will be 0, 10, 20, 30, etc... (if page is 10)...
+         var k = j * page;
+         grunt.log.writeln("k=" + k);
+
+         // Build merge arguments for the current page of data...
+         for (var i = k; i < (k + page); i++) {
+            mergeArgs.push(reports[i]);
+         }
+
+         // Spawn a new merge request for the current page...
+         grunt.util.spawn({
+            cmd: "node",
+            args: mergeArgs,
+            opts: {
+               stdio: "inherit"
+            }
+         }, function(error, result, code) {
+            /*jshint unused:false*/
+            totalSpawns--;
+            grunt.log.writeln("Finished a spawn, " + totalSpawns + " remaining...");
+            if (totalSpawns === 0)
+            {
+               // Only report done when all the spawned merges have completed...
+               grunt.log.writeln("Finished sub-merging reports...");
+               done();
+            }
+         });
+      }
+   });
+
+   grunt.registerTask("merge-merged-reports", "A task for merging merged code coverage reports", function() {
       var done = this.async();
       var mergeArgs = [
          "node_modules/node-coverage/merge.js",
@@ -136,7 +187,7 @@ module.exports = function(grunt) {
          "code-coverage-reports/Coverage_Report_" + Date.now() + ".json"
       ];
 
-      var reports = grunt.file.expand(["code-coverage-reports/*.json"]);
+      var reports = grunt.file.expand(["code-coverage-reports/SubMerge_*.json"]);
       for (var i = 0; i < reports.length; i++) {
          mergeArgs.push(reports[i]);
       }
@@ -149,7 +200,7 @@ module.exports = function(grunt) {
          }
       }, function(error, result, code) {
          /*jshint unused:false*/
-         grunt.log.writeln("Finished merging reports...");
+         grunt.log.writeln("Finished merging sub-merged reports...");
          done();
       });
    });

@@ -9,7 +9,7 @@ model.jsonModel = {
             }
          }
       },
-      "aikauTesting/mockservices/SearchMockService",
+      "alfresco/services/SearchService",
       "alfresco/services/NavigationService"
    ],
    widgets: [
@@ -132,7 +132,6 @@ model.jsonModel = {
          config: {
             waitForPageWidgets: true,
             useHash: false,
-            loadDataPublishTopic: "SEARCH_RESULTS",
             widgets: [
                {
                   id: "SEARCH_RESULTS_VIEW",
@@ -164,6 +163,9 @@ model.jsonModel = {
                }
             ]
          }
+      },
+      {
+         name: "aikauTesting/mockservices/SearchMockXhr"
       },
       {
          name: "alfresco/logging/DebugLog"
