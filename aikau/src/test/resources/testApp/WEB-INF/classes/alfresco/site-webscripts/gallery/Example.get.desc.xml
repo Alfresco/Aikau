@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Example Gallery Page</shortname>
+  <description>This is a sample for how we could create a gallery of widgets</description>
+  <family>Gallery</family>
+  <url>/gallery-sample</url>
+</webscript>
