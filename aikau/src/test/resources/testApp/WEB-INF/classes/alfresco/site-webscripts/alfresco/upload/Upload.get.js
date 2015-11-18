@@ -1,3 +1,11 @@
+/* global page */
+/* jshint sub:true */
+var respondAfter = null;
+if (page.url.args["respondAfter"])
+{
+   respondAfter = parseInt(page.url.args["respondAfter"], 10);
+}
+
 model.jsonModel = {
    services: [
       {
@@ -77,6 +85,7 @@ model.jsonModel = {
             label: "Multiple File Upload",
             publishTopic: "ALF_UPLOAD_REQUEST",
             publishPayload: {
+               alfResponseTopic: "UPLOAD_COMPLETE_OR_CANCELLED",
                files: [
                   {
                      size: 100,
@@ -102,7 +111,10 @@ model.jsonModel = {
          }
       },
       {
-         name: "aikauTesting/mockservices/UploadMockXhr"
+         name: "aikauTesting/mockservices/UploadMockXhr",
+         config: {
+            respondAfter: respondAfter
+         }
       },
       {
          name: "alfresco/logging/DebugLog"
