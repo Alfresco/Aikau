@@ -54,6 +54,16 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * An amount of time (in milliseconds) to respond after. This is useful for giving the test a chance to
+       * cancel operations. If no value is given then it will respond immediately.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      respondAfter: null,
+
+      /**
        * Sets up the Sinon fake server.
        *
        * @instance
@@ -66,6 +76,11 @@ define(["dojo/_base/declare",
          this.server = sinon.fakeServer.create();
          this.server.autoRespond = true;
          this.setupServer();
+
+         if (this.respondAfter)
+         {
+            this.server.autoRespondAfter = this.respondAfter;
+         }
 
          // Capture each request and log it...
          this.requests = [];
