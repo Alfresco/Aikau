@@ -12,6 +12,7 @@
       li {
          display: inline-block;
          margin-top: 6px;
+         vertical-align: top;
       }
    }
    .prev, .next {

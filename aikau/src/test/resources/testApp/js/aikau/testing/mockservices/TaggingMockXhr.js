@@ -19,7 +19,7 @@
 
 /**
  *
- * @module aikauTesting/SocialMockXhr
+ * @module aikauTesting/TaggingMockXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",

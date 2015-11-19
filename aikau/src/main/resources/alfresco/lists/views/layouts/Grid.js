@@ -584,13 +584,18 @@ define(["dojo/_base/declare",
        * @param {number} index The current index of the element in the array
        */
       resizeCell: function alfresco_lists_views_layouts_Grid__resizeCell(containerNodeMarginBox, widthToSet, node, /*jshint unused:false*/ index) {
-         domStyle.set(node, {"width": widthToSet});
-         var dimensions = {
-            w: widthToSet,
-            h: null
-         },
-         widgetsToResize = query("[widgetId]", node); // Resize all contained widgets, not just immediate children.
-         array.forEach(widgetsToResize, lang.hitch(this, this.resizeWidget, dimensions));
+         if (!domClass.contains(node.parentNode, "alfresco-lists-views-layouts-Grid__expandedPanel"))
+         {
+            domStyle.set(node, {"width": widthToSet});
+            var dimensions = {
+               w: widthToSet,
+               h: null
+            };
+
+            // See AKU-704 - if you review the change history here you'll see that this has now gone back
+            //               to the original implementation of only resizing direct children
+            array.forEach(node.children, lang.hitch(this, this.resizeWidget, dimensions));
+         }
       },
 
       /**

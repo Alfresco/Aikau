@@ -228,7 +228,28 @@ define(["intern!object",
             .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog
             .end()
 
-            .findByCssSelector("#ALF_UPLOAD_DIALOG .confirmationButton.dijitDisabled");
+            .findByCssSelector("#ALF_UPLOAD_DIALOG .confirmationButton.dijitDisabled")
+            .end()
+
+            .findById("ALF_UPLOAD_DIALOG_CANCEL")
+               .click()
+               .end()
+
+            .findByCssSelector("#ALF_UPLOAD_DIALOG.dialogHidden");
+         },
+
+         "Create new content strips framework attributes from POST body": function() {
+            return browser.findById("CREATE_CONTENT")
+               .click()
+               .end()
+ 
+            .getLastXhr("cm:folder/formprocessor")
+               .then(function(xhrEntry){
+                  assert.notDeepProperty(xhrEntry, "request.body.alfPublishScope");
+                  assert.notDeepProperty(xhrEntry, "request.body.alfTopic");
+                  assert.notDeepProperty(xhrEntry, "request.body.type");
+                  assert.notDeepProperty(xhrEntry, "request.body.currentNode");
+               });
          },
 
          "Post Coverage Results": function() {

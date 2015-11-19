@@ -29,6 +29,7 @@
 define(["dojo/_base/declare",
         "alfresco/core/CoreData",
         "alfresco/core/PubSubLog",
+        "alfresco/util/objectUtils",
         "service/constants/Default",
         "dojo/topic",
         "alfresco/core/PubQueue",
@@ -37,7 +38,7 @@ define(["dojo/_base/declare",
         "dojox/uuid/generateRandomUuid", 
         "dojox/html/entities", 
         "dojo/Deferred"], 
-        function(declare, CoreData, PubSubLog, AlfConstants, pubSub, PubQueue, array, lang, uuid, htmlEntities, Deferred) {
+        function(declare, CoreData, PubSubLog, objUtils, AlfConstants, pubSub, PubQueue, array, lang, uuid, htmlEntities, Deferred) {
 
    return declare(null, {
 
@@ -397,6 +398,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} object The object to remove the attributes from.
+       * @deprecated Since 1.0.45 - Use [alfCleanFrameworkAttributes]{@link module:alfreso/core/Core#alfCleanFrameworkAttributes} instead.
        */
       alfDeleteFrameworkAttributes: function alfresco_core_Core__alfDeleteFrameworkAttributes(object) {
          delete object.alfResponseTopic;
@@ -404,6 +406,54 @@ define(["dojo/_base/declare",
          delete object.alfTopic;
          delete object.alfPublishScope;
          delete object.alfCallerName;
+      },
+
+      /**
+       * By default, clones the passed-in object and then deletes any automatically added attributes from the clone. These attributes
+       * are added automatically by [alfPublish]{@link module:alfresco/core/Core#alfPublish} or are used only by the pub/sub framework
+       * (e.g. "responseScope"). The cleaned object is then returned. By passing in the "modifyOriginal" flag this will behave
+       * identically to the [deprecated method it replaces]{@link module:alfresco/core/Core#alfDeleteFrameworkAttributes}, by removing
+       * the framework attributes directly from the passed-in object.
+       * 
+       * @instance
+       * @param {object} original The object to clean the attributes from.
+       * @param {boolean} [modifyOriginal=false] If true, will modify the original object, not a clone.
+       * @param {string[]} [alsoDelete] An optional array of strings denoting additional properties to remove from the object
+       *                                being cleaned. It's also possible to pass in properties prefixed with an exclamation
+       *                                mark, to denote that that property should NOT be removed by the default cleaning
+       *                                algorithm (e.g. ["url", "!alfTopic"]).
+       * @returns {object} The cloned, cleaned object, or if "modifyOriginal" is true then the original, cleaned object.
+       * @since 1.0.45
+       */
+      alfCleanFrameworkAttributes: function alfresco_core_Core__alfCleanFrameworkAttributes(original, modifyOriginal, alsoDelete) {
+
+         // If we have a falsy object, it cannot be an object we are able to clean
+         if (!original) {
+            this.alfLog("warn", "Requested to clean 'falsy' object: ", original);
+            return original;
+         }
+
+         // Setup variables
+         var objToClean = modifyOriginal ? original : lang.clone(original),
+            propsToClean = ["alfResponseTopic", "alfResponseScope", "responseScope", "alfTopic", "alfPublishScope", "alfCallerName"],
+            additionalProps = (alsoDelete && alsoDelete.length) ? alsoDelete : [];
+
+         // Calculate the properties to clean
+         array.forEach(additionalProps, function(propName) {
+            if (propName.charAt(0) === "!") {
+               propsToClean = array.filter(propsToClean, function(propToClean) {
+                  return propToClean !== propName.substr(1);
+               });
+            } else {
+               propsToClean.push(propName);
+            }
+         });
+
+         // Clean and return the properties from the object
+         array.forEach(propsToClean, function(propName) {
+            delete objToClean[propName];
+         });
+         return objToClean;
       },
 
       /**
@@ -561,6 +611,29 @@ define(["dojo/_base/declare",
          handle.scopedTopic = scopedTopic;
          this.alfSubscriptions.push(handle);
          return handle;
+      },
+
+      /**
+       * Subscribe to a publication and then analyse the payload. Depending on whether it
+       * matches the provided [rules object]{@link module:alfresco/util/objectUtils#Rules},
+       * apply the success or failure callback as appropriate. Please see the
+       * [underlying method]{@link module:alfresco/util/objectUtils#evaluateRules} for more
+       * information.
+       *
+       * @instance
+       * @param {string} topic The topic on which to subscribe
+       * @param {module:alfresco/util/objectUtils#Rules} rules The rules object to apply
+       * @param {function} success The function to run if successful
+       * @param {function} [failure] The function to run if unsuccessful
+       * @param {boolean} [global] Indicates that the pub/sub scope should not be applied
+       * @param {boolean} [parentScope] Indicates that the pub/sub scope inherited from the parent should be applied
+       * @returns {object} A handle to the subscription
+       * @since 1.0.44
+       */
+      alfConditionalSubscribe: function alfresco_core_CoreWidgetProcessing__alfConditionalSubscribe(topic, rules, success, failure, global, parentScope) {
+         return this.alfSubscribe(topic, lang.hitch(this, function(payload) {
+            objUtils.evaluateRules(lang.mixin({testObject: payload}, rules), success, failure);
+         }), global, parentScope);
       },
 
       /**

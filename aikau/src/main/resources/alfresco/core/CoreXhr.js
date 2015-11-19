@@ -106,6 +106,7 @@ define(["dojo/_base/declare",
        * @property {String} url - Where should we send the request to.
        * @property {Object} [headers] headers - Request headers to send (replaces [the default headers]{@link module:alfresco/core/CoreXhr#getDefaultHeaders} if specified)
        * @property {Object} [data=null] - data for the request body
+       * @property {boolean} [doNotCleanData=false] Pass true to SUPPRESS cleaning of the "data" object to [remove framework attributes]{@link module:alfresco/core/Core#alfCleanFrameworkAttributes} from it.
        * @property {String} [query=null] - data for the query string
        * @property {String} [handleAs=text] - TODO - document this feature.
        * @property {String} [method=POST] - HTTP method to use for XHR
@@ -158,6 +159,11 @@ define(["dojo/_base/declare",
                else
                {
                   data = config.data;
+               }
+
+               // Clean the data prior to sending, unless specifically told not to
+               if(data && !config.doNotCleanData) {
+                  data = this.alfCleanFrameworkAttributes(data);
                }
 
                var options = {

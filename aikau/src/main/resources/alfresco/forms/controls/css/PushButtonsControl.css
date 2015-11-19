@@ -6,7 +6,7 @@
    position: relative;
    &__input {
       height: 0;
-      left: 100%;
+      left: -100%;
       position: absolute;
       width: 0;
       &:checked + label {
@@ -19,6 +19,7 @@
       &:checked {
          &:focus + label, &:hover + label {
             background: @focused-border-color;
+            border-color: @button-color-default;
          }
       }
    }

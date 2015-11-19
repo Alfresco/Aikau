@@ -29,9 +29,6 @@ define(["intern!object",
    var successfulUploadsSelector = uploadsSelector + "> .successful table tr";
    var failedUploadsSelector = uploadsSelector + " > .failed table tr";
    var aggProgStatusSelector = uploadsSelector + " .aggregate-progress .percentage";
-   var okButtonSelector = ".alfresco-dialog-AlfDialog .footer > span:first-child > span";
-   var cancelButtonSelector = ".alfresco-dialog-AlfDialog .footer > span:nth-child(2) > span";
-   var dialogDelay = 500;
 
    registerSuite(function(){
       var browser;
@@ -209,7 +206,51 @@ define(["intern!object",
                .click()
             .end()
 
-            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden");
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden")
+
+            // Check that alfResponseTopic is published on completion
+            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "Upload Cancellation Tests",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/aikau-upload-unit-test?respondAfter=5000", "Upload Cancellation Tests").end();
+         },
+         
+         beforeEach: function() {
+            browser.end();
+         },
+         
+         "Cancel upload": function () {
+            // Simulate providing a zero byte file and check the output...
+            return browser.findById("MULTI_UPLOAD_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed")
+            .end()
+
+            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden")
+            .end()
+
+            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED");
          },
 
          "Post Coverage Results": function() {

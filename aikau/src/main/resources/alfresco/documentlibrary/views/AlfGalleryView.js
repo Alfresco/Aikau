@@ -419,7 +419,8 @@ define(["dojo/_base/declare",
             thumbnailSize: this.thumbnailSize,
             itemKeyProperty: this.itemKeyProperty,
             expandTopics: this.expandTopics,
-            enableHighlighting: this.enableHighlighting
+            enableHighlighting: this.enableHighlighting,
+            widgetsForAppendix: this.widgetsForAppendix
          });
          return dlr;
       },
