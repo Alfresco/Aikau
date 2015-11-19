@@ -137,6 +137,22 @@ model.jsonModel = {
          }
       },
       {
+         id: "CREATE_CONTENT",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Create new content",
+            publishTopic: "ALF_CREATE_CONTENT_REQUEST",
+            publishPayload: {
+               currentNode: {
+                  parent: {
+                     nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
+                  }
+               },
+               type: "cm:folder"
+            }
+         }
+      },
+      {
          name: "aikauTesting/mockservices/CreateContentMockXhr"
       },
       {
