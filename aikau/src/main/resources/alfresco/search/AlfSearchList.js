@@ -639,7 +639,7 @@ define(["dojo/_base/declare",
 
                if (this.query)
                {
-                  this.alfDeleteFrameworkAttributes(this.query);
+                  this.alfCleanFrameworkAttributes(this.query, true);
 
                   if(typeof this.query === "string")
                   {

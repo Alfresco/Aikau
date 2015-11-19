@@ -418,7 +418,7 @@ define(["dojo/_base/declare",
             this.alfUnsubscribe(payload.subscriptionHandle);
             delete payload.subscriptionHandle;
          }
-         this.alfDeleteFrameworkAttributes(payload);
+         this.alfCleanFrameworkAttributes(payload, true);
 
          // We should consider whether we actually want to mixin in the updated value
          // or just override it completely. It depends on whether or not we want to be
