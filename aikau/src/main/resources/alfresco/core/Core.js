@@ -398,6 +398,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} object The object to remove the attributes from.
+       * @deprecated Since 1.0.45 - Use [alfCleanFrameworkAttributes]{@link module:alfreso/core/Core#alfCleanFrameworkAttributes} instead.
        */
       alfDeleteFrameworkAttributes: function alfresco_core_Core__alfDeleteFrameworkAttributes(object) {
          delete object.alfResponseTopic;
@@ -405,6 +406,54 @@ define(["dojo/_base/declare",
          delete object.alfTopic;
          delete object.alfPublishScope;
          delete object.alfCallerName;
+      },
+
+      /**
+       * By default, clones the passed-in object and then deletes any automatically added attributes from the clone. These attributes
+       * are added automatically by [alfPublish]{@link module:alfresco/core/Core#alfPublish} or are used only by the pub/sub framework
+       * (e.g. "responseScope"). The cleaned object is then returned. By passing in the "modifyOriginal" flag this will behave
+       * identically to the [deprecated method it replaces]{@link module:alfresco/core/Core#alfDeleteFrameworkAttributes}, by removing
+       * the framework attributes directly from the passed-in object.
+       * 
+       * @instance
+       * @param {object} original The object to clean the attributes from.
+       * @param {boolean} [modifyOriginal=false] If true, will modify the original object, not a clone.
+       * @param {string[]} [alsoDelete] An optional array of strings denoting additional properties to remove from the object
+       *                                being cleaned. It's also possible to pass in properties prefixed with an exclamation
+       *                                mark, to denote that that property should NOT be removed by the default cleaning
+       *                                algorithm (e.g. ["url", "!alfTopic"]).
+       * @returns {object} The cloned, cleaned object, or if "modifyOriginal" is true then the original, cleaned object.
+       * @since 1.0.45
+       */
+      alfCleanFrameworkAttributes: function alfresco_core_Core__alfCleanFrameworkAttributes(original, modifyOriginal, alsoDelete) {
+
+         // If we have a falsy object, it cannot be an object we are able to clean
+         if (!original) {
+            this.alfLog("warn", "Requested to clean 'falsy' object: ", original);
+            return original;
+         }
+
+         // Setup variables
+         var objToClean = modifyOriginal ? original : lang.clone(original),
+            propsToClean = ["alfResponseTopic", "alfResponseScope", "responseScope", "alfTopic", "alfPublishScope", "alfCallerName"],
+            additionalProps = (alsoDelete && alsoDelete.length) ? alsoDelete : [];
+
+         // Calculate the properties to clean
+         array.forEach(additionalProps, function(propName) {
+            if (propName.charAt(0) === "!") {
+               propsToClean = array.filter(propsToClean, function(propToClean) {
+                  return propToClean !== propName.substr(1);
+               });
+            } else {
+               propsToClean.push(propName);
+            }
+         });
+
+         // Clean and return the properties from the object
+         array.forEach(propsToClean, function(propName) {
+            delete objToClean[propName];
+         });
+         return objToClean;
       },
 
       /**
