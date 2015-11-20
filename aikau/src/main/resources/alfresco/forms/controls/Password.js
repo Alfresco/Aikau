@@ -1,4 +1,4 @@
-/**
+   /**
  * Copyright (C) 2005-2014 Alfresco Software Limited.
  *
  * This file is part of Alfresco
@@ -18,27 +18,27 @@
  */
 
 /**
- * This is a specialization of the [DojoValidationTextBox]{@link module:alfresco/forms/controls/DojoValidationTextBox}
+ * This is a specialization of the [TextBox]{@link module:alfresco/forms/controls/TextBox}
  * that sets the widget type to be of type "password". It should be used for capturing user password entry where the
  * password entered should not be visible.
  * 
  * @module alfresco/forms/controls/Password
- * @extends module:alfresco/forms/controls/DojoValidationTextBox
+ * @extends module:alfresco/forms/controls/TextBox
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/forms/controls/DojoValidationTextBox"], 
-        function(declare, DojoValidationTextBox) {
+        "alfresco/forms/controls/TextBox"], 
+        function(declare, TextBox) {
    
-   return declare([DojoValidationTextBox], {
+   return declare([TextBox], {
       
       /**
-       * Extends the [inherited function]{@link module:alfresco/forms/controls/DojoValidationTextBox#getWidgetConfig}
+       * Extends the [inherited function]{@link module:alfresco/forms/controls/TextBox#getWidgetConfig}
        * to make the text box of type "password".
        *
        * @instance
        */
-      getWidgetConfig: function alfresco_forms_controls_DojoValidationTextBox__getWidgetConfig() {
+      getWidgetConfig: function alfresco_forms_controls_Password__getWidgetConfig() {
          var config = this.inherited(arguments);
          config.type = "password";
          return config;
