@@ -39,10 +39,10 @@ define(["alfresco/forms/controls/BaseFormControl",
         "alfresco/forms/controls/utilities/TextBoxValueChangeMixin",
         "alfresco/forms/controls/utilities/IconMixin",
         "dojo/_base/declare",
-        "dijit/form/ValidationTextBox",
+        "alfresco/forms/controls/TextBoxControl",
         "dojo/_base/lang",
         "dojo/dom-class"], 
-        function(BaseFormControl, TextBoxValueChangeMixin, IconMixin, declare, ValidationTextBox, lang, domClass) {
+        function(BaseFormControl, TextBoxValueChangeMixin, IconMixin, declare, TextBoxControl, lang, domClass) {
    
    return declare([BaseFormControl, TextBoxValueChangeMixin, IconMixin], {
       
@@ -55,7 +55,25 @@ define(["alfresco/forms/controls/BaseFormControl",
       cssRequirements: [{cssFile:"./css/TextBox.css"}],
 
       /**
+       * <p>Whether to enable autocomplete on the textbox. Be aware that this can cause issues in two ways. Firstly, change events are not
+       * reliably fired by browsers when they autofill fields. Secondly, it may cause problems if set to true on textbox sub-components which
+       * would normally verify user-inputs and control them. The default (null) will leave the autocomplete as "off", as per the Dojo defaults.</p>
        *
+       * <p><strong>NOTE:</strong> Although one would normally override this with a setting of "on", consideration should be given to instead
+       * using a more suitable HTML5-accepted value, such as "username" or "email". A full list of the possible values can be found on
+       * the [WHATWG reference page]{@link https://html.spec.whatwg.org/multipage/forms.html#autofill} and further explanation of many of them
+       * is available on the [MDN input page]{@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input}.</p>
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.45
+       */
+      autocomplete: null,
+
+      /**
+       * The placeholder to be used (will use native HTML5 if available).
+       * 
        * @instance
        * @type {string}
        * @default
@@ -71,6 +89,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          return {
             id : this.generateUuid(),
             name: this.name,
+            autocomplete: this.autocomplete,
             placeHolder: placeHolder,
             iconClass: this.iconClass
          };
@@ -80,7 +99,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       createFormControl: function alfresco_forms_controls_TextBox__createFormControl(config, /*jshint unused:false*/ domNode) {
-         var textBox = new ValidationTextBox(config);
+         var textBox = new TextBoxControl(config);
          // Handle adding classes
          var additionalCssClasses = "";
          if (this.additionalCssClasses)
