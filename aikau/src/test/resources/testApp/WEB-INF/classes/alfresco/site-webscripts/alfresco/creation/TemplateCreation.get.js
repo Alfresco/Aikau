@@ -5,7 +5,7 @@ var services = {
    name: "alfresco/services/DragAndDropModellingService",
    config: {
       models: [
-         getDefaultLayoutModel()
+         getDefaultClassicWindowModel()
       ]
    }
 };

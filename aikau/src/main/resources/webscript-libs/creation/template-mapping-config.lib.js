@@ -6,6 +6,18 @@
  * @param {string[]} attributes The attributes that are selectable for configuration
  */
 function getTemplateMappingConfigurationControls(attributes) {
+
+   var fixedOptions = [];
+   if (Array.isArray(attributes))
+   {
+      attributes.forEach(function(attribute) {
+         fixedOptions.push({
+            label: attribute,
+            value: attribute
+         });
+      });
+   }
+
    return [
       {
          name: "alfresco/forms/controls/CheckBox",
@@ -43,9 +55,6 @@ function getTemplateMappingConfigurationControls(attributes) {
                      name: "id",
                      label: "dnd.model.layout.id.label",
                      description: "dnd.model.layout.id.description",
-                     optionsConfig: {
-                        fixed: attributes
-                     },
                      visibilityConfig: {
                         initialValue: false
                      }
@@ -59,13 +68,7 @@ function getTemplateMappingConfigurationControls(attributes) {
                      label: "dnd.model.layout.property.label",
                      description: "dnd.model.layout.property.description",
                      optionsConfig: {
-                        fixed: [
-                           {
-                              fieldId: "48a9dbf2-a6cc-480c-87a5-b8fe94c92800",
-                              label: "dnd.model.layout.48a9dbf2-a6cc-480c-87a5-b8fe94c92800.label",
-                              value: "ONE"
-                           }
-                        ]
+                        fixed: fixedOptions
                      },
                      requirementConfig: {
                         initialValue: true
