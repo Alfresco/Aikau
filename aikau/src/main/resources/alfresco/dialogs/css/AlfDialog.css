@@ -116,6 +116,12 @@
    &--textcontent .dialog-body {
       text-align: center;
    }
+   &--dialogs-visible {
+      &, body, .alfresco-core-Page {
+         height: 100%;
+         overflow: hidden;
+      }
+   }
 }
 
 .dialog-body .control {
