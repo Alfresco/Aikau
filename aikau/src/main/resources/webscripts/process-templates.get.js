@@ -1,8 +1,10 @@
+/* global page, remote, user */
+
 // This file is just for sketching out some ideas for WebScripts to parse/save Aikau templates for remote pages...
 
 
 // An example template might look like this:
-var template = {
+var exampleTemplate = {
    name: "alfresco/layout/HorizontalWidgets",
    config: {
       widgets: [
@@ -15,26 +17,41 @@ var template = {
                ],
 
                // Flag to indicate that this has attributes to be exposed in the template
-               // _alfIncludeInTemplate: true,
+               _alfIncludeInTemplate: true,
 
                // "_alfTemplateMapping_" is a prefix, "x1" would be a GUID
-               _alfTemplateMapping_x1: {
+               // _alfTemplateMapping_x1: {
                   
-                  // This is the property to expose via the template...
-                  property: "title",
+               //    // This is the property to expose via the template...
+               //    property: "title",
 
-                  // These values would override the default label/description for the model...
-                  label: "Window title",
-                  description: "Enter the title for the window"
-               },
+               //    // These values would override the default label/description for the model...
+               //    label: "Window title",
+               //    description: "Enter the title for the window"
+               // },
 
-               // QUESTION: Should here be a distinction between config attributes and drop-zones?
-               _alfTemplateMapping_x2: {
+               // // QUESTION: Should here be a distinction between config attributes and drop-zones?
+               // _alfTemplateMapping_x2: {
                   
-                  property: "widgets",
-                  label: "Window widgets",
-                  description: "The widgets to display in the window"
-               }
+               //    property: "widgets",
+               //    label: "Window widgets",
+               //    description: "The widgets to display in the window"
+               // },
+
+               _alfTemplateMappings: [
+                  {
+                     id: "x1",
+                     property: "title",
+                     label: "Window title",
+                     description: "Enter a title for the window"
+                  },
+                  {
+                     id: "x2",
+                     property: "widgets",
+                     label: "Window widgets",
+                     description: "The widgets to display in the window"
+                  }
+               ]
 
             }
          }
@@ -105,7 +122,6 @@ function findObject(object, parameters) {
             if (typeof parameters.processFunction === "function")
             {
                parameters.processFunction.call(this, {
-                  key: key,
                   object: object[key],
                   config: parameters.config,
                   ancestors: parameters.ancestors
@@ -142,7 +158,53 @@ function processTemplates(widgets) {
 
 // Loads a template from the Repository...
 function loadTemplate(templateName) {
-   return template;
+
+   // var template;
+   // if (templateName)
+   // {
+   //    // If a template name has been supplied then retrieve it's details...
+   //    // By passing the name only a single result should be returned...
+   //    var json = remote.call("/remote-share/pages/name/" + templateName);
+   //    var templates = null;
+   //    try
+   //    {
+   //       if (json.status === 200)
+   //       {
+   //          templates = JSON.parse(json.response);
+   //       }
+   //       else
+   //       {
+   //          model.jsonModelError = "remote.page.error.remotefailure";
+   //       }
+   //       if (templates &&
+   //           templates.items &&
+   //           templates.items.length === 1 &&
+   //           templates.items[0].content)
+   //       {
+   //          template = templates.items[0].content;
+   //       }
+   //       else
+   //       {
+   //          model.jsonModelError = "remote.page.error.invalidData";
+   //          model.jsonModelErrorArgs = templates;
+   //       }
+
+   //       model.jsonModel = JSON.parse(template);
+   //       // model.jsonModel.groupMemberships = user.properties["alfUserGroups"];
+   //    }
+   //    catch(e)
+   //    {
+   //       model.jsonModelError = "remote.page.load.error";
+   //       model.jsonModelErrorArgs = page.url.templateArgs.pagename;
+   //    }
+   // }
+   // else
+   // {
+   //    // No page name supplied...
+   //    model.jsonModelError = "remote.page.error.nopage";
+   // }
+   // return template;
+   return exampleTemplate;
 }
 
 
@@ -181,7 +243,7 @@ function processTemplate(parameters) {
          // Set the template configuration points...
          // findObject(loadedTemplate, "_alfTemplateMapping_", parent.config, null, setTemplateConfiguration);
          findObject(loadedTemplate, {
-            prefix: "_alfTemplateMapping_", 
+            prefix: "_alfTemplateMappings", 
             config: parent.config,
             processFunction: setTemplateConfiguration
          });
@@ -205,31 +267,38 @@ function processTemplate(parameters) {
 
 // Sets the values in the supplied template...
 function setTemplateConfiguration(parameters) {
-   if (parameters.key &&
-       parameters.config && 
-       parameters.object && 
-       parameters.object.property &&
+   if (Array.isArray(parameters.object)  &&
+       parameters.config &&
        parameters.ancestors)
    {
-      // Get the last ancestor as this will be the "config" object of a widget in the 
-      // template that has a property to be set...
       var parent = parameters.ancestors[parameters.ancestors.length-1]; 
+      parameters.object.forEach(function(templateMapping) {
+         if (templateMapping.property)
+         {
+            // Get the last ancestor as this will be the "config" object of a widget in the 
+            // template that has a property to be set...
+            if (typeof templateMapping.id !== undefined)
+            {
+               parent[templateMapping.property] = parameters.config[templateMapping.id];
 
-      // The key will contain a prefix "_alfTemplateMapping_" and then the actual value to be set...
-      var valueProperty = parameters.key.substring("_alfTemplateMapping_".length);
-      if (typeof valueProperty !== undefined)
-      {
-         parent[parameters.object.property] = parameters.config[valueProperty];
+               // delete parent["_alfTemplateMapping_" + valueProperty];
+            }
+            else
+            {
+               // TODO: Log missing value attribute (e.g. the attribute to get the value from to set in the template)
+            }
+         }
+         else
+         {
+            // TODO: Log incorrect parameters argument - missing some attributes
+         }
+      });
 
-         delete parent["_alfTemplateMapping_" + valueProperty];
-      }
-      else
-      {
-         // TODO: Log missing value attribute (e.g. the attribute to get the value from to set in the template)
-      }
+      delete parent._alfTemplateMappings;
+      delete parent._alfIncludeInTemplate;
    }
    else
    {
-      // TODO: Log incorrect parameters argument - missing some attributes
+      // TODO: Log incorrect parameters
    }
 }
