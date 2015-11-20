@@ -1,4 +1,11 @@
-function getLayoutConfig() {
+/**
+ * The purpose of this function is to return the form control configuration for making
+ * attributes for a widget exposed through the template configuration. This will mean
+ * that when the template is saved the attributes will be configurable.
+ *
+ * @param {string[]} attributes The attributes that are selectable for configuration
+ */
+function getTemplateMappingConfigurationControls(attributes) {
    return [
       {
          name: "alfresco/forms/controls/CheckBox",
@@ -37,7 +44,7 @@ function getLayoutConfig() {
                      label: "dnd.model.layout.id.label",
                      description: "dnd.model.layout.id.description",
                      optionsConfig: {
-                        fixed: []
+                        fixed: attributes
                      },
                      visibilityConfig: {
                         initialValue: false
@@ -93,41 +100,4 @@ function getLayoutConfig() {
          }
       }
    ];
-}
-
-function getLayoutNestedConfig() {
-   return [];
-}
-
-function getLayoutDisplay() {
-   return [
-      {
-         name: "alfresco/dnd/DroppedNestingItemWrapper",
-         config: {
-            showEditButton: true,
-            label: "{label}",
-            value: "{value}",
-            widgets: [
-               {
-                  name: "alfresco/dnd/DragAndDropFormControlTarget",
-                  config: {
-                     useModellingService: true,
-                     label: "Widgets", // TODO: NLS
-                     targetProperty: "config.widgets"
-                  }
-               }
-            ]
-         }
-      }
-   ];
-}
-
-function getDefaultLayoutModel() {
-   return {
-      property: "name",
-      targetValues: ["alfresco/layout/ClassicWindow"],
-      widgetsForConfig: getLayoutConfig(),
-      widgetsForNestedConfig: getLayoutNestedConfig(),
-      widgetsForDisplay: getLayoutDisplay()
-   };
 }
