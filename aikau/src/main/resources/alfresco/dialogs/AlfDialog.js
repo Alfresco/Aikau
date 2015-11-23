@@ -408,7 +408,6 @@ define(["dojo/_base/declare",
        */
       onHide: function alfresco_dialogs_AlfDialog__onHide() {
          this.inherited(arguments);
-         domStyle.set(document.documentElement, "overflow", "");
          domClass.remove(this.domNode, "dialogDisplayed");
          domClass.add(this.domNode, "dialogHidden");
          if (this.resizeListener) {
@@ -504,11 +503,6 @@ define(["dojo/_base/declare",
                w: $(window).width() - dimensionAdjustment,
                h: $(window).height() - dimensionAdjustment
             }]);
-
-            // NOTE: Need to set this on the element (rather than using CSS because the underlying 
-            //       Dojo code sets position, the only CSS option would be to use !important which
-            //       we'd prefer to avoid).
-            domStyle.set(this.domNode, "position", "fixed");
 
             // When in full screen mode it is also necessary to take care of the inner dimensions
             // of the dialog...
