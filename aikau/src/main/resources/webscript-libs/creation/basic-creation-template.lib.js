@@ -58,6 +58,18 @@ function getBasicCreationTemplateWidgets(paletteWidgets) {
                               title: "Widget Layout",
                               widgets: [
                                  {
+                                    name: "alfresco/forms/controls/TextBox",
+                                    config: {
+                                       name: "pageName",
+                                       label: "Template Name",
+                                       description: "This is the name of the page as it will be saved on the repository",
+                                       placeHolder: "Name...",
+                                       requirementConfig: {
+                                          initialValue: true
+                                       }
+                                    }
+                                 },
+                                 {
                                     id: "FORM1",
                                     name: "alfresco/forms/Form",
                                     config: {

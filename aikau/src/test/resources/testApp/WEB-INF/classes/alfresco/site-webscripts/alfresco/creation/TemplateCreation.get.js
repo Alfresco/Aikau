@@ -1,5 +1,5 @@
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/creation/basic-creation-template.lib.js">
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/layout.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/creation/basic-creation-template.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/layout.lib.js">
 
 var services = {
    name: "alfresco/services/DragAndDropModellingService",

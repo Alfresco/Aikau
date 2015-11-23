@@ -1,4 +1,4 @@
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/creation/template-mapping-config.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/creation/template-mapping-config.lib.js">
 
 function getClassicWindowConfig() {
    return [
