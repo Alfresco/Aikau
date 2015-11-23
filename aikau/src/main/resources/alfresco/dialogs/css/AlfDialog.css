@@ -46,7 +46,6 @@
       .dialog-body {
          height: auto;
          margin-bottom: 0;
-         overflow: hidden;
          padding: 12px;
       }
       .footer {
