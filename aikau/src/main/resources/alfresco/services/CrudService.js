@@ -138,10 +138,7 @@ define(["dojo/_base/declare",
        * @returns {object} The cloned payload
        */
       clonePayload: function alfresco_services_CrudService__clonePayload(payload) {
-         var data = lang.clone(payload);
-         delete data.url;
-         this.alfDeleteFrameworkAttributes(data);
-         return data;
+         return this.alfCleanFrameworkAttributes(payload, false, ["url"]);
       },
 
       /**

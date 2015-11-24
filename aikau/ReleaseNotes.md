@@ -1,5 +1,9 @@
-Aikau 1.0.44 Release Notes
+Aikau 1.0.45 Release Notes
 ===
+
+New deprecations:
+---
+* alfresco/core/Core "alfDeleteFrameworkAttributes"              (use alfresco/core/Core "alfCleanFrameworkAttributes")
 
 Previous deprecations:
 ---
@@ -40,6 +44,17 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.45:
+* [AKU-665](https://issues.alfresco.com/jira/browse/AKU-665)       - Clean Aikau internal attributes from payload before XHR requests
+* [AKU-694](https://issues.alfresco.com/jira/browse/AKU-694)       - Ensure that generation of download zip can be cancelled
+* [AKU-695](https://issues.alfresco.com/jira/browse/AKU-695)       - Ensure list is refreshed on partial upload
+* [AKU-696](https://issues.alfresco.com/jira/browse/AKU-696)       - Ensure page cannot be scrolled when dialogs are displayed
+* [AKU-698](https://issues.alfresco.com/jira/browse/AKU-698)       - Ensure placeholder text is not shown with auto-complete
+* [AKU-701](https://issues.alfresco.com/jira/browse/AKU-701)       - Allow TextBox to configure "autocomplete" attribute
+* [AKU-704](https://issues.alfresco.com/jira/browse/AKU-704)       - Grid should only resize root widgets
+* [AKU-718](https://issues.alfresco.com/jira/browse/AKU-718)       - Ensure long dialogs can be scrolled in IE8/IE9
+* [AKU-724](https://issues.alfresco.com/jira/browse/AKU-724)       - Correction to function name
+
 1.0.44:
 * [AKU-670](https://issues.alfresco.com/jira/browse/AKU-670)       - Ensure twister supports resizing
 * [AKU-674](https://issues.alfresco.com/jira/browse/AKU-674)       - Appendix support for AlfListView

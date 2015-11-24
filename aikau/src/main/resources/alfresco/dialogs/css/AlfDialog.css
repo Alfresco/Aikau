@@ -46,7 +46,6 @@
       .dialog-body {
          height: auto;
          margin-bottom: 0;
-         overflow: hidden;
          padding: 12px;
       }
       .footer {
@@ -115,6 +114,14 @@
    }
    &--textcontent .dialog-body {
       text-align: center;
+   }
+   &--dialogs-visible {
+      &, body, .alfresco-core-Page {
+         height: 100%;
+      }
+      body, .alfresco-core-Page {
+         overflow: hidden;
+      }
    }
 }
 

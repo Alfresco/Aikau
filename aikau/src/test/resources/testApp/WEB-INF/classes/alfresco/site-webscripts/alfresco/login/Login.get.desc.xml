@@ -1,0 +1,6 @@
+<webscript>
+   <shortname>Login Test</shortname>
+   <description>A sample login-page for exercising forms/controls/TextBox, forms/controls/Password and alfresco/services/LoginService</description>
+   <family>aikau-unit-tests</family>
+   <url>/Login</url>
+</webscript>
