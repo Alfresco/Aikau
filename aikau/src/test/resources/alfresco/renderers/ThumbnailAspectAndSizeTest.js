@@ -126,6 +126,27 @@ define(["intern!object",
                });
          },
 
+         // NOTE: The following two tests address both AKU-713 and AKU-714...
+         //       The height and width of the landscape and portrait take into account the 
+         //       5px margin - e.g. the *thumbnail* width and height should be 300px and 200px
+         "Non-square thumbnail landscape renders correctly": function() {
+            return browser.findByCssSelector("#THUMB9_ITEM_0 .alfresco-renderers-Thumbnail__image")
+               .getSize()
+               .then(function(size) {
+                  assert.closeTo(size.width, 290, 1, "Non-square landscape width is wrong");
+                  assert.closeTo(size.height, 163, 1, "Non-square landscape height is wrong");
+               });
+         },
+
+         "Non-square thumbnail portrait renders correctly": function() {
+            return browser.findByCssSelector("#THUMB9_ITEM_1 .alfresco-renderers-Thumbnail__image")
+               .getSize()
+               .then(function(size) {
+                  assert.closeTo(size.height, 190, 1, "Non-square portrait height is wrong");
+                  assert.closeTo(size.width, 143, 1, "Non-square portrait width is wrong");
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
