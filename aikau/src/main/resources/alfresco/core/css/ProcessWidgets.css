@@ -6,6 +6,7 @@
    appear "jumpy" on hybrid pages. */
 body {
    opacity: 0;
+   box-sizing: border-box;
 }
 
 body.aikau-reveal {
