@@ -403,17 +403,21 @@ define(["intern!object",
                });
          },
 
-         "Full screen dialog should be fixed": function() {
-            var initial_y;
+         "Page does not scroll when dialogs present": function() {
+            var inital_y,
+               getScrollTop = function() {
+                  return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+               };
+
             return browser.findById("FULL_SCREEN_DIALOG_label")
                .click()
             .end()
 
             .findByCssSelector("#FSD1.dialogDisplayed")
-               .getPosition()
-                  .then(function(position) {
-                     initial_y = position.y;
-                  })
+               .execute(getScrollTop)
+               .then(function(scrollTop) {
+                  initial_y = scrollTop;
+               })
             .end()
 
             // Scroll to the bottom of the page...
@@ -421,9 +425,9 @@ define(["intern!object",
             .end()
 
             .findById("FSD1")
-               .getPosition()
-               .then(function(position) {
-                  assert.isAbove(position.y, initial_y, "The position of the dialog did not move with the scroll");
+               .execute(getScrollTop)
+               .then(function(scrollTop) {
+                  assert.equal(scrollTop, initial_y, "The page scrolled with a dialog present");
                })
             .end()
 

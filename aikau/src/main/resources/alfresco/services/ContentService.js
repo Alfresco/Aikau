@@ -96,9 +96,10 @@ define(["dojo/_base/declare",
          {
             type = payload.type;
          }
-         var url = AlfConstants.PROXY_URI + "api/type/" + type + "/formprocessor";
+         var url = AlfConstants.PROXY_URI + "api/type/" + type + "/formprocessor",
+            data = this.alfCleanFrameworkAttributes(payload, false, ["currentNode", "type"]);
          this.serviceXhr({url : url,
-                          data: payload,
+                          data: data,
                           method: "POST",
                           successCallback: this.onContentCreationSuccess,
                           callbackScope: this});
