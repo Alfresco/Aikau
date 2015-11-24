@@ -81,9 +81,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      getItems: function alfresco_testing_PageCreationMockXhr__getItems(request) {
+      getPages: function alfresco_testing_PageCreationMockXhr__getPages(request) {
+         var items = [];
+         Object.keys(this.items).forEach(function(item) {
+            items.push(item);
+         });
+
          var response = {
-            items: this.items
+            items: items
          };
 
          request.respond(200, {

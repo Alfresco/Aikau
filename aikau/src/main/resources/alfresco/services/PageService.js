@@ -54,10 +54,11 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_PageService__registerSubscriptions() {
-         this.alfSubscribe("ALF_AVAILABLE_PAGE_DEFINITIONS", lang.hitch(this, "loadPages"));
-         this.alfSubscribe(this.createPageTopic, lang.hitch(this, "createPage"));
-         this.alfSubscribe(this.updatePageTopic, lang.hitch(this, "updatePage"));
-         this.alfSubscribe("ALF_EXPORT_PAGE_DEFINITION", lang.hitch(this, "exportPageModel"));
+         this.alfSubscribe("ALF_AVAILABLE_PAGE_DEFINITIONS", lang.hitch(this, this.loadPages));
+         this.alfSubscribe("ALF_GET_ALL_REMOTE_PAGES", lang.hitch(this, this.getPages));
+         this.alfSubscribe(this.createPageTopic, lang.hitch(this, this.createPage));
+         this.alfSubscribe(this.updatePageTopic, lang.hitch(this, this.updatePage));
+         this.alfSubscribe("ALF_EXPORT_PAGE_DEFINITION", lang.hitch(this, this.exportPageModel));
       },
       
 
@@ -108,6 +109,21 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * 
+       * 
+       * @param  {[type]} payload [description]
+       * @return {[type]}         [description]
+       */
+      getPages: function alfresco_services_PageService__loadPages(/*jshint unused:false */ payload) {
+         this.serviceXhr({
+            url: AlfConstants.PROXY_URI + "remote-share/pages",
+            method: "GET",
+            alfTopic: payload.alfResponseTopic
+         });
+      },
+
+
+      /**
        * Makes an XHR request to retrieve the pages that are available. The pages returned are those
        * that have been created and stored in the Data Dictionary on the Alfresco repository. 
        *
@@ -117,7 +133,7 @@ define(["dojo/_base/declare",
        */
       loadPages: function alfresco_services_PageService__loadPages(payload) {
          this.serviceXhr({
-            url: AlfConstants.PROXY_URI + "/remote-share/pages",
+            url: AlfConstants.PROXY_URI + "remote-share/pages",
             method: "GET",
             responseTopic: payload.responseTopic,
             successCallback: this.loadPagesSuccess,

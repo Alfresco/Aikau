@@ -1,16 +1,30 @@
 <import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/creation/basic-creation-template.lib.js">
 <import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/layout.lib.js">
 
-var services = {
+var services = [{
    name: "alfresco/services/DragAndDropModellingService",
    config: {
       models: [
          getDefaultClassicWindowModel()
       ]
    }
-};
+},
+"alfresco/services/NotificationService"];
 
 var palette = [
+   {
+      id: "DRAG_PALETTE",
+      name: "alfresco/lists/AlfList",
+      config: {
+         loadDataPublishTopic: "ALF_GET_ALL_REMOTE_PAGES",
+         noDataMessage: "No remote templates",
+         widgets: [
+            {
+               name: "alfresco/dnd/DragAndDropItemsListView"
+            }
+         ]
+      }
+   },
    {
       id: "DRAG_PALETTE",
       name: "alfresco/dnd/DragAndDropItems",
@@ -31,14 +45,24 @@ var palette = [
    }
 ];
 
-var widgets = getBasicCreationTemplateWidgets(palette).concat([
+var coreWidgets = [
+   {
+      name: "alfresco/buttons/AlfButton",
+      config: {
+         label: "Refresh Remote Templates",
+         publishTopic: "ALF_DOCLIST_RELOAD_DATA"
+      }
+   }
+];
+
+var widgets = coreWidgets.concat(getBasicCreationTemplateWidgets(palette)).concat([
    {
       name: "aikauTesting/mockservices/PageCreationMockXhr"
    },
    {
       name: "alfresco/logging/DebugLog"
    }
-])
+]);
 
 model.jsonModel = {
    services: getBasicCreationTemplateServices().concat(services),
