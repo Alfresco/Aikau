@@ -77,15 +77,26 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Returns all the items
+       * Returns all the items 
+       * NOTE: This is geared up just for returning data in a response that would be suitable
+       *       for viewing items in the drag-and-drop palette. The Repo API doesn't support this
+       *       so we're going to need to move the JSON restructing into a client side service
        *
        * @instance
        */
       getPages: function alfresco_testing_PageCreationMockXhr__getPages(request) {
          var items = [];
-         Object.keys(this.items).forEach(function(item) {
-            items.push(item);
-         });
+         Object.keys(this.items).forEach(function(key) {
+            items.push({
+               type: ["widget"],
+               label: key,
+               value: {
+                  name: key,
+                  templateModel: this.items[key],
+                  isTemplate: true
+               }
+            });
+         }, this);
 
          var response = {
             items: items
