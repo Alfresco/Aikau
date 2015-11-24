@@ -94,6 +94,12 @@ model.jsonModel = {
                            config: {
                               label: "Gallery view (cropped to fit)"
                            }
+                        },
+                        {
+                           name: "alfresco/lists/views/layouts/HeaderCell",
+                           config: {
+                              label: "Gallery view (non-square with margin)"
+                           }
                         }
                      ],
                      widgets: [
@@ -236,6 +242,28 @@ model.jsonModel = {
                                                 dimensions: {
                                                    w: "250px"
                                                 }
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    id: "COL9",
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             id: "THUMB9",
+                                             name: "alfresco/renderers/GalleryThumbnail",
+                                             config: {
+                                                dimensions: {
+                                                   w: "300px",
+                                                   h: "200px",
+                                                   margin: "5px"
+                                                },
+                                                horizontalAlignment: "MIDDLE",
+                                                verticalAlignment: "BOTTOM",
+                                                cropToFit: false
                                              }
                                           }
                                        ]
