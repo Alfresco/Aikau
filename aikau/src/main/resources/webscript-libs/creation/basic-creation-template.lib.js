@@ -58,27 +58,27 @@ function getBasicCreationTemplateWidgets(paletteWidgets) {
                               title: "Widget Layout",
                               widgets: [
                                  {
-                                    name: "alfresco/forms/controls/TextBox",
-                                    config: {
-                                       name: "pageName",
-                                       label: "Template Name",
-                                       description: "This is the name of the page as it will be saved on the repository",
-                                       placeHolder: "Name...",
-                                       requirementConfig: {
-                                          initialValue: true
-                                       }
-                                    }
-                                 },
-                                 {
                                     id: "FORM1",
                                     name: "alfresco/forms/Form",
                                     config: {
                                        scopeFormControls: false,
                                        okButtonLabel: "Save",
-                                       okButtonPublishTopic: "FORM1_POST",
+                                       okButtonPublishTopic: "ALF_CREATE_PAGE_DEFINITION",
                                        okButtonPublishGlobal: true,
                                        showCancelButton: false,
                                        widgets: [
+                                          {
+                                             name: "alfresco/forms/controls/TextBox",
+                                             config: {
+                                                name: "pageName",
+                                                label: "Template Name",
+                                                description: "This is the name of the page as it will be saved on the repository",
+                                                placeHolder: "Name...",
+                                                requirementConfig: {
+                                                   initialValue: true
+                                                }
+                                             }
+                                          },
                                           {
                                              id: "ROOT_DROPPED_ITEMS1",
                                              name: "alfresco/forms/controls/DragAndDropTargetControl",

@@ -33,6 +33,9 @@ var palette = [
 
 var widgets = getBasicCreationTemplateWidgets(palette).concat([
    {
+      name: "aikauTesting/mockservices/PageCreationMockXhr"
+   },
+   {
       name: "alfresco/logging/DebugLog"
    }
 ])
