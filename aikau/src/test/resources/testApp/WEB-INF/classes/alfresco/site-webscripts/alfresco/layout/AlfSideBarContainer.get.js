@@ -15,10 +15,10 @@ model.jsonModel = {
       {
          name: "alfresco/layout/AlfSideBarContainer",
          config: {
-            footerHeight: 10,
+            footerHeight: 100,
             widgets: [
                {
-                  name: "alfresco/layout/HorizontalWidgets",
+                  name: "alfresco/layout/VerticalWidgets",
                   align: "sidebar",
                   config: {
                      widgets: [
@@ -28,60 +28,158 @@ model.jsonModel = {
                            config: {
                               logoClasses: "alfresco-logo-only"
                            }
+                        },
+                        {
+                           name: "alfresco/layout/Twister",
+                           id: "SIDEBAR_TWISTER",
+                           config: {
+                              label: "I am a 700px tall twister",
+                              initiallyOpen: false,
+                              widgets: [
+                                 {
+                                    name: "alfresco/layout/SimplePanel", 
+                                    config: {
+                                       height: "700px", 
+                                       additionalStyles: {
+                                          background: "#cfc",
+                                          border: "1px solid #0c0",
+                                          marginRight: "25px"
+                                       }
+                                    }
+                                 },
+                              ]
+                           }
                         }
                      ]
                   }
                },
                {
-                  name: "alfresco/layout/HorizontalWidgets",
+                  name: "alfresco/layout/VerticalWidgets",
                   config: {
                      widgets: [
                         {
-                           id: "MAIN_LOGO",
-                           name: "alfresco/logo/Logo",
+                           name: "alfresco/layout/HorizontalWidgets",
                            config: {
-                              logoClasses: "surf-logo-large"
+                              widgets: [
+                                 {
+                                    id: "MAIN_LOGO",
+                                    name: "alfresco/logo/Logo",
+                                    config: {
+                                       logoClasses: "surf-logo-large"
+                                    }
+                                 },
+                                 {
+                                    id: "SHOW_BUTTON",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Show Sidebar",
+                                       publishTopic: "ALF_DOCLIST_SHOW_SIDEBAR",
+                                       publishPayload: {
+                                          selected: true
+                                       }
+                                    }
+                                 },
+                                 {
+                                    id: "HIDE_BUTTON",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Hide Sidebar",
+                                       publishTopic: "ALF_DOCLIST_SHOW_SIDEBAR",
+                                       publishPayload: {
+                                          selected: false
+                                       }
+                                    }
+                                 },
+                                 {
+                                    id: "WIDTH_PREFERENCE",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Set Width Preference",
+                                       publishTopic: "ALF_DOCLIST_SHOW_SIDEBAR",
+                                       publishPayload: {
+                                          selected: false
+                                       }
+                                    }
+                                 }
+                              ]
                            }
                         },
                         {
-                           id: "SHOW_BUTTON",
-                           name: "alfresco/buttons/AlfButton",
+                           name: "alfresco/html/Spacer",
                            config: {
-                              label: "Show Sidebar",
-                              publishTopic: "ALF_DOCLIST_SHOW_SIDEBAR",
-                              publishPayload: {
-                                 selected: true
-                              }
+                              height: "20px"
                            }
                         },
                         {
-                           id: "HIDE_BUTTON",
-                           name: "alfresco/buttons/AlfButton",
+                           name: "alfresco/html/Heading",
                            config: {
-                              label: "Hide Sidebar",
-                              publishTopic: "ALF_DOCLIST_SHOW_SIDEBAR",
-                              publishPayload: {
-                                 selected: false
-                              }
+                              level: 3,
+                              label: "Debug log"
                            }
                         },
                         {
-                           id: "WIDTH_PREFERENCE",
-                           name: "alfresco/buttons/AlfButton",
+                           name: "alfresco/layout/SimplePanel", 
                            config: {
-                              label: "Set Width Preference",
-                              publishTopic: "ALF_DOCLIST_SHOW_SIDEBAR",
-                              publishPayload: {
-                                 selected: false
-                              }
+                              height: "300px", 
+                              additionalStyles: {
+                                 background: "#fff",
+                                 border: "1px solid #666",
+                                 padding: "10px"
+                              },
+                              widgets: [
+                                 {
+                                    name: "alfresco/logging/DebugLog"
+                                 } 
+                              ]
+                           }
+                        },
+                        {
+                           name: "alfresco/layout/Twister",
+                           id: "MAIN_TWISTER",
+                           config: {
+                              label: "I am a 200px tall twister",
+                              initiallyOpen: false,
+                              widgets: [
+                                 {
+                                    name: "alfresco/layout/SimplePanel", 
+                                    config: {
+                                       height: "200px", 
+                                       additionalStyles: {
+                                          background: "#ccf",
+                                          border: "1px solid #00c"
+                                       }
+                                    }
+                                 },
+                              ]
                            }
                         }
                      ]
                   }
-               },
-               {
-                  name: "alfresco/logging/DebugLog"
                }
+            ]
+         }
+      },
+      {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "10px"
+         }
+      },
+      {
+         name: "alfresco/layout/SimplePanel", 
+         config: {
+            height: "75px", 
+            additionalStyles: {
+               border: "1px solid #fcc"
+            },
+            widgets: [
+               {
+                  name: "alfresco/html/Heading",
+                  config: {
+                     level: 3,
+                     label: "I'm 75px tall"
+                  }
+               } 
             ]
          }
       }
