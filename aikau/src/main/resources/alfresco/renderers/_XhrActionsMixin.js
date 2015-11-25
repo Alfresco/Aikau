@@ -30,13 +30,23 @@
 define(["dojo/_base/declare",
         "alfresco/renderers/_ActionsMixin",
         "alfresco/core/topics",
-        "alfresco/menus/AlfMenuGroup",
+        "dojo/aspect",
         "dojo/_base/array",
         "dojo/_base/lang"], 
-        function(declare, _ActionsMixin, topics, AlfMenuGroup, array, lang) {
+        function(declare, _ActionsMixin, topics, aspect, array, lang) {
 
    return declare([_ActionsMixin], {
       
+      /**
+       * The array of file(s) containing internationalised strings.
+       *
+       * @instance
+       * @type {object}
+       * @default [{i18nFile: "./i18n/_XhrActionsMixin.properties"}]
+       * @since 1.0.46
+       */
+      i18nRequirements: [{i18nFile: "./i18n/_XhrActionsMixin.properties"}],
+
       /**
        * A boolean flag indicating whether or not the actions have been loaded yet.
        *
@@ -78,17 +88,10 @@ define(["dojo/_base/declare",
          }
          else
          {
+            this.processWidgets(this.widgetsForLoading);
+
             // Pass the loading JSON model to the actions menu group to be displayed...
-            this.actionsGroup.processWidgets(this.widgetsForLoading);
-            if (this.actionsMenu.popup)
-            {
-               // Load the actions only when the user opens the Actions menu...
-               this.actionsMenu.popup.onOpen = lang.hitch(this, this.loadActions);
-            }
-            else
-            {
-               this.alfLog("log", "No actions popup - something has gone wrong!");
-            }
+            aspect.after(this._menu, "_scheduleOpen", lang.hitch(this, this.loadActions));
          }
       },
 
@@ -164,8 +167,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       clearLoadingItem: function alfresco_renderers__XhrActionsMixin__clearLoadingItem() {
-         array.forEach(this.actionsMenu.popup.getChildren(), function(widget) {
-            this.actionsMenu.popup.removeChild(widget);
+         array.forEach(this._menu.getChildren(), function(widget) {
+            this._menu.removeChild(widget);
          }, this);
       },
 
@@ -175,8 +178,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       addXhrItems: function alfresco_renderers__XhrActionsMixin__addXhrItems() {
-         this.actionsGroup = new AlfMenuGroup({});
-         this.actionsMenu.popup.addChild(this.actionsGroup);
          this.addActions();
       }
    });

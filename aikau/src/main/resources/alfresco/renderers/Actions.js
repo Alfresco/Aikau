@@ -114,12 +114,12 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/Actions.css"}],
 
       /**
-      * The array of file(s) containing internationalised strings.
-      *
-      * @instance
-      * @type {object}
-      * @default [{i18nFile: "./i18n/Actions.properties"}]
-      */
+       * The array of file(s) containing internationalised strings.
+       *
+       * @instance
+       * @type {object}
+       * @default [{i18nFile: "./i18n/Actions.properties"}]
+       */
       i18nRequirements: [{i18nFile: "./i18n/Actions.properties"}],
 
       /**
@@ -164,6 +164,19 @@ define(["dojo/_base/declare",
        * @since 1.0.46
        */
       _menu: null,
+
+      /**
+       * [destroy description]
+       * @param  {[type]} preserveDom [description]
+       * @return {[type]}             [description]
+       */
+      destroy: function alfresco_renderers_Actions__destroy(preserveDom) {
+         this.inherited(arguments);
+         if (this._menu)
+         {
+            this._menu.destroyRecursive();
+         }
+      },
 
       /**
        * Handles key press events on the actions renderer and opens the menu if 

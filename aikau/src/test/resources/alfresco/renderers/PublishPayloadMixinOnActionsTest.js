@@ -18,118 +18,70 @@
  */
 
 /**
- * @author Richard Smith
+ * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "PublishPayloadMixinOnActions Tests",
+      return {
+         name: "PublishPayloadMixinOnActions Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/PublishPayloadMixinOnActions", "PublishPayloadMixinOnActions Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/PublishPayloadMixinOnActions", "PublishPayloadMixinOnActions Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-     "Tests": function () {
-         var testname = "PublishPayloadMixinOnActionsTest";
-         return browser.findAllByCssSelector("div.alfresco-menus-AlfMenuBar")
-            .then(function (actionmenus) {
-               TestCommon.log(testname,"Check there are 3 action menus as described in the model");
-               expect(actionmenus).to.have.length(3, "There should be 3 action menus rendered");
-            })
+        "There should be 3 action menus rendered": function () {
+            return browser.findAllByCssSelector(".alfresco-renderers-Actions")
+               .then(function (elements) {
+                  assert.lengthOf(elements, 3, "There should be 3 action menus rendered");
+               });
+         },
+
+         "Click delete action": function() {
+            return browser.findById("ACTIONS_ITEM_0_MENU_text")
+               .click()
+            .end()
+            
+            .findDisplayedById("ACTIONS_ITEM_0_DELETE_text")
+               .click()
             .end()
 
-         // Open the first action menu by mouse click
-         .findByCssSelector("div.dijitMenuItemLabel:nth-of-type(1)")
-            .click()
+            .getLastPublish("DELETE_ACTION_TOPIC")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "document.variable1", "red", "The action menu did not publish the payload with 'variable1' as 'red' after mouse clicks");
+                  assert.deepPropertyVal(payload, "document.variable2", "orange", "The action menu did not publish the payload with 'variable2' as 'orange' after mouse clicks");
+               });
+         },
+
+         "Click manage action": function() {
+            return browser.findById("ACTIONS_ITEM_0_MENU_text")
+               .click()
             .end()
-         .findByCssSelector(".dijitPopup")
-            .then(
-               null,
-               function() { assert(false,"The action menu did not appear on mouse clicks");}
-            )
+            
+            .findDisplayedById("ACTIONS_ITEM_0_MANAGE_text")
+               .click()
             .end()
 
-         //Check the menu has appeared
-         .findByCssSelector(".dijitPopup")
-            .isDisplayed()
-            .then(function(result2) {
-               TestCommon.log(testname,"Check the action menu has appeared");
-               expect(result2).to.equal(true, "The action menu should be visible on mouse clicks");
-            })
-            .end()
+            .getLastPublish("MANAGE_ACTION_TOPIC")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "payloadVariable2", "red", "The action menu did not publish the payload with 'payloadVariable2' as 'red' after mouse clicks");
+                  assert.propertyVal(payload, "payloadVariable1", "orange", "The action menu did not publish the payload with 'payloadVariable1' as 'orange' after mouse clicks");
+               });
+         },
 
-         // Click the first button in the action menu
-         .findByCssSelector(".dijitPopup .dijitMenuItem:nth-of-type(1) .dijitMenuItemLabel")
-            .click()
-            .end()
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "alfTopic", "DELETE_ACTION_TOPIC"))
-            .then(
-               function() {},
-               function() { assert(false,"The action menu did not publish on 'DELETE_ACTION_TOPIC' after mouse clicks");}
-            )
-            .end()
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "variable1", "red"))
-            .then(
-               function() {},
-               function() { assert(false,"The action menu did not publish the payload with 'variable1' as 'red' after mouse clicks"); }
-            )
-            .end()
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "variable2", "orange"))
-            .then(
-               function() {},
-               function() { assert(false,"The action menu did not publish the payload with 'variable2' as 'orange' after mouse clicks");}
-            )
-            .end()
-
-         // Open the first action menu again
-         .findByCssSelector("div.dijitMenuItemLabel:nth-of-type(1)")
-            .click()
-            .end()
-
-         // Click the second button in the action menu
-         .findByCssSelector(".dijitPopup .dijitMenuItem:nth-of-type(2) .dijitMenuItemLabel")
-            .click()
-            .end()
-
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "alfTopic", "MANAGE_ACTION_TOPIC"))
-            .then(
-               null,
-               function() { 
-                  assert(false, "The action menu did not publish the payload with 'payloadVariable1' as 'red' after mouse clicks");
-               }
-            )
-            .end()
-
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "payloadVariable1", "orange"))
-            .then(
-               null,
-               function() {
-                  assert(false,"The action menu did not publish the payload with 'payloadVariable1' as 'red' after mouse clicks");
-               })
-               .end()
-
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "payloadVariable2", "red"))
-            .then(null, function() {
-               assert(false,"The action menu did not publish the payload with 'payloadVariable2' as 'orange' after mouse clicks");
-            });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });
