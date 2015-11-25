@@ -72,6 +72,17 @@ define(["intern!object",
                });
          },
 
+         "Check that actions don't appear off the screen": function() {
+            return browser.findById("FOOTER_ACTIONS_MENU_text")
+               .click()
+            .end()
+            
+            .findDisplayedById("FOOTER_ACTIONS_F1_text")
+               // NOTE: These tests should ensure that the menu item is visible.
+               .isDisplayed()
+               .click();
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
