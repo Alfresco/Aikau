@@ -211,8 +211,9 @@ define(["dojo/_base/declare",
          }
 
          this._menu = new Menu({
+            id: this.id + "_GROUP", // Used "_GROUP" as a suffix for backwards compatibility with tests
             leftClickToOpen: true,
-            targetNodeIds: [this.domNode]
+            targetNodeIds: [this.labelNode]
          });
          
          // Add all the actions...
