@@ -37,9 +37,10 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin", 
         "dojo/text!./templates/TinyMCE.html", 
         "alfresco/core/Core", 
+        "alfresco/core/topics",
         "service/constants/Default", 
         "dojo/_base/lang"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, AlfConstants, lang) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, topics, AlfConstants, lang) {
 
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
@@ -68,6 +69,63 @@ define(["dojo/_base/declare",
        */
       templateString: template,
 
+      /**
+       * A function that should be called whenever the content of the editor changes. The function will be bound to the
+       * supplied [contentChangeScope]{@link module:alfresco/editors/TinyMCE#contentChangeScope}.
+       *
+       * @instance
+       * @type {object}
+       * @default null
+       */
+      contentChangeHandler: null,
+
+      /**
+       * A scope for calling the [contentChangeHandler]{@link module:alfresco/editors/TinyMCE#contentChangeHandler}
+       * against.
+       *
+       * @instance
+       * @type {object}
+       * @default null
+       */
+      contentChangeScope: null,
+
+      /**
+       * Should be used to override the [defaultEditorConfig]{@link module:alfresco/editors/TinyMCE#defaultEditorConfig}
+       *
+       * @instance
+       * @type {object}
+       * @default null
+       */
+      editorConfig: null,
+
+      /**
+       * Indicates whether or not the editor should be initialized as soon as it is created. This defaults to
+       * true but should be configured to false if the editor is being created in a DOM fragment and the init
+       * function should only be called once the DOM fragment has been placed into the document.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       */
+      immediateInit: true,
+
+      /**
+       * The content with which to intially populate the editor
+       *
+       * @instance
+       * @type {string}
+       * @default ""
+       */
+      intialContent: "",
+
+      /**
+       * Indicates whether or not the editor should be initially disabled
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      initiallyDisabled: false,
 
       /**
        * The list of support locales for the editor. Can be overridden by only if there are the message
@@ -78,6 +136,28 @@ define(["dojo/_base/declare",
        * @default "en,de,es,fr,it,ja,nl,zh_CN,ru,nb,pt_BR"
        */
       supportedLocales: "en,de,es,fr,it,ja,nl,zh_CN,ru,nb,pt_BR",
+
+      /**
+       * Starts as false and gets set to true on the [editorInitialized]{@link module:alfresco/editors/TinyMCE#editorInitialized}
+       * callback that is bound to the TinyMCE editors "init_instance_callback" configuration options.
+       *
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      _editorInitialized: false,
+
+      /**
+       * Indicates whether or not the TinyMCE editor should be focused once it has been initialized. This will
+       * be set to true by the [focus]{@link module:alfresco/editors/TinyMCE#focus} function if it is called before
+       * the editor has been [initialized]{@link module:alfresco/editors/TinyMCE#editorInitialized}.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.46
+       */
+      _focusWhenInitialized: false,
 
       /**
        * The default configuration for the editor. These settings should not be configured (as they will apply
@@ -97,35 +177,6 @@ define(["dojo/_base/declare",
          statusbar: false,
          theme_advanced_resize_horizontal: false
       },
-
-      /**
-       * Should be used to override the [defaultEditorConfig]{@link module:alfresco/editors/TinyMCE#defaultEditorConfig}
-       *
-       * @instance
-       * @type {object}
-       * @default null
-       */
-      editorConfig: null,
-
-      /**
-       * The content with which to intially populate the editor
-       *
-       * @instance
-       * @type {string}
-       * @default ""
-       */
-      intialContent: "",
-
-      /**
-       * Indicates whether or not the editor should be initialized as soon as it is created. This defaults to
-       * true but should be configured to false if the editor is being created in a DOM fragment and the init
-       * function should only be called once the DOM fragment has been placed into the document.
-       *
-       * @instance
-       * @type {boolean}
-       * @default true
-       */
-      immediateInit: true,
 
       /**
        *
@@ -219,36 +270,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Starts as false and gets set to true on the [editorInitialized]{@link module:alfresco/editors/TinyMCE#editorInitialized}
-       * callback that is bound to the TinyMCE editors "init_instance_callback" configuration options.
-       *
-       * @instance
-       * @type {boolean}
-       * @default false
-       */
-      _editorInitialized: false,
-
-      /**
-       * A scope for calling the [contentChangeHandler]{@link module:alfresco/editors/TinyMCE#contentChangeHandler}
-       * against.
-       *
-       * @instance
-       * @type {object}
-       * @default null
-       */
-      contentChangeScope: null,
-
-      /**
-       * A function that should be called whenever the content of the editor changes. The function will be bound to the
-       * supplied [contentChangeScope]{@link module:alfresco/editors/TinyMCE#contentChangeScope}.
-       *
-       * @instance
-       * @type {object}
-       * @default null
-       */
-      contentChangeHandler: null,
-
-      /**
        * This is bound to the TinyMCE editors "init_instance_callback" configuration option. This then sets up the
        * various events required to manage the editor.
        *
@@ -262,17 +283,33 @@ define(["dojo/_base/declare",
          }
          editor.setContent(this.initialContent);
          this._editorInitialized = true;
+
+         if (this._focusWhenInitialized)
+         {
+            this.focus();
+         }
          this.setDisabled(this.initiallyDisabled);
+
       },
 
       /**
-       * Indicates whether or not the editor should be initially disabled
-       *
+       * Give focus to the TinyMCE editor
+       * 
        * @instance
-       * @type {boolean}
-       * @default false
+       * @since 1.0.46
+       * @fires module:alfresco/core/topics#TINYMCE_EDITOR_FOCUSED
        */
-      initiallyDisabled: false,
+      focus: function alfresco_editors_TinyMCE__focus() {
+         if (this._editorInitialized)
+         {
+            this.editor.focus();
+            this.alfPublish(topics.TINYMCE_EDITOR_FOCUSED);
+         }
+         else
+         {
+            this._focusWhenInitialized = true;
+         }
+      },
 
       /**
        * This function has been added to support the use of this widget within the [TinyMCE form control]
