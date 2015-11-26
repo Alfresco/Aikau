@@ -242,6 +242,9 @@ define(["dojo/_base/declare",
                data: []
             };
 
+
+            
+
             // Iterate through the data to find all the config attributes to expose - this will be more efficient
             // Then check 
 
@@ -258,7 +261,7 @@ define(["dojo/_base/declare",
                         var found = (mapping.property === targetProperty);
                         if (found)
                         {
-                           config.data.push(parent);
+                           config.data.push(lang.clone(parent));
 
                            // TODO: Is this where we need to swap in the mapping ID?
                         }
@@ -288,7 +291,7 @@ define(["dojo/_base/declare",
                   config: {
                      templateMappings: parameters.object
                   }
-               })
+               });
             }
 
             objectProcessingUtil.findObject(templateModel, {
@@ -297,11 +300,33 @@ define(["dojo/_base/declare",
                config: config
             });
 
+            modelMatchFound = true;
+            if (configAttribute === "widgetsForDisplay")
+            {
+               // For widgetsForDisplay it is necessary to set up the basic model...
+               response.widgets = [
+                  {
+                     name: "alfresco/dnd/DroppedNestingItemWrapper",
+                     label: "Nested item wrapper",
+                     responseScope: "",
+                     config: {
+                        value: "{value}",
+                        widgets: config.data,
+                        label: "{label}",
+                        showEditButton: "false"
+                     }
+                     
+                  }
+               ];
+            }
+            else
+            {
+               response.widgets = config.data;
+            }
+
             // TODO: Need to set this as the response!
          }
-
-         // TODO: This is probably an else if
-         if (model.property && model.targetValues && value[model.property]) 
+         else if (model.property && model.targetValues && value[model.property]) 
          {
             // The model has a property to check for, and the value contains the property
             // We're going to want to test this value against the configured RegularExpression target
