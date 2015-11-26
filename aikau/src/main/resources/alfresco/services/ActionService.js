@@ -865,7 +865,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      onActionEditOfflineFailure: function alfresco_services_ActionService__onActionEditOfflineSuccess(response, originalRequestConfig) {
+      onActionEditOfflineFailure: function alfresco_services_ActionService__onActionEditOfflineFailure(response, originalRequestConfig) {
          this.alfLog("error", "Edit offline request failure", response, originalRequestConfig);
          this.displayMessage(this.message("message.edit-offline.failure", {"0": response.results[0].id}));
       },
