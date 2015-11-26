@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfDocumentFilters</shortname>
+  <description>This page is used to test the alfresco/documentlibrary/AlfDocumentFilters widget.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfDocumentFilters</url>
+</webscript>

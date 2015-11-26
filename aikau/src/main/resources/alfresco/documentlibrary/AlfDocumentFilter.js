@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -38,9 +38,8 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
-        "dojo/dom-class",
-        "dojo/on"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template,  AlfCore, _AlfDocumentListTopicMixin, lang, array, domConstruct, domClass, on) {
+        "dojo/dom-class"], 
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template,  AlfCore, _AlfDocumentListTopicMixin, lang, array, domConstruct, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, AlfCore, _AlfDocumentListTopicMixin], {
       
@@ -101,12 +100,12 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_documentlibrary_AlfDocumentFilter__postMixInProperties() {
-         if (this.label != null && this.filter != null)
+         if (this.label && this.filter)
          {
-            this.label = this.encodeHTML(this.message(this.label));
-            if (this.description != null)
+            this.label = this.message(this.label);
+            if (this.description)
             {
-               this.description = this.encodeHTML(this.message(this.description));
+               this.description = this.message(this.description);
             }
          }
          else
@@ -122,7 +121,7 @@ define(["dojo/_base/declare",
        * @listens hashChangeTopic
        */
       postCreate: function alfresco_documentlibrary_AlfDocumentFilter__postCreate() {
-         if (this.hide == true)
+         if (this.hide)
          {
             domClass.add(this.domNode, "hidden");
          }
@@ -130,9 +129,9 @@ define(["dojo/_base/declare",
          // Only do this when useHash is set to true. This means that when hashing is used the 
          // description will be published (this is done for the benefit of breadcrumb trails or other
          // widgets that indicate currently selected filters)...
-         if (this.description != null && this.useHash === true)
+         if (this.description && this.useHash === true)
          {
-            this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, "onClick"));
+            this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onClick));
          }
       },
 
@@ -142,7 +141,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onClick: function alfresco_documentlibrary_AlfDocumentFilter__onClick(evt) {
+      onClick: function alfresco_documentlibrary_AlfDocumentFilter__onClick(/*jshint unused:false*/ evt) {
          this.alfPublish(this.filterSelectionTopic, {
             value: this.filter,
             description: this.description
