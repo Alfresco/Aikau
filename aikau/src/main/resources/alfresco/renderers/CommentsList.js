@@ -112,6 +112,7 @@ define(["dojo/_base/declare",
             config: {
                documentsLoadedTopic: "ALF_GET_COMMENTS_SUCCESS",
                documentsPerPage: 5,
+               pageSizePreferenceName: "org.alfresco.share.documentList.commentsPerPage",
                pageSizes: [5, 10, 20],
                widgetsBefore: [
                   {
@@ -195,6 +196,7 @@ define(["dojo/_base/declare",
                loadDataPublishPayload: {
                   nodeRef: "{node.nodeRef}"
                },
+               pageSizePreferenceName: "org.alfresco.share.documentList.commentsPerPage",
                currentPageSize: 5,
                documentsLoadedTopic: "ALF_COMMENTS_LOADED",
                widgets: [
