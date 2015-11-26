@@ -73,8 +73,9 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/dnd/Constants",
-        "alfresco/core/ObjectTypeUtils"],
-        function(declare, BaseService, lang, array, Constants, ObjectTypeUtils) {
+        "alfresco/core/ObjectTypeUtils",
+        "alfresco/util/objectProcessingUtil"],
+        function(declare, BaseService, lang, array, Constants, ObjectTypeUtils, objectProcessingUtil) {
    
    return declare([BaseService], {
       
@@ -223,6 +224,83 @@ define(["dojo/_base/declare",
        */
       processModel: function alfresco_services_DragAndDropModellingService__processModel(configAttribute, response, value, model) {
          var modelMatchFound = false;
+
+         if (value.isTemplate === true && value.templateModel)
+         {
+            // The dropped item is a template, it will be necessary to construct the data from the data it contains...
+            var templateModel = value.templateModel;
+
+            // 1) Search through the model until a _alfTemplateMappings attribute is found
+            // 2) The parent object will have a "name" attribute identifying the widget to look up in the models
+            // 3) Each entry in the _alfTemplateMappings attribute will have a label, description and property attribute
+            // 4) Find the property data in the model for the widget
+            // 5) Overwrite the label and description
+            // 6) Add to the overall DND model to return
+            
+            var config = {
+               models: this.models,
+               data: []
+            };
+
+            // Iterate through the data to find all the config attributes to expose - this will be more efficient
+            // Then check 
+
+            function findDropTargets(parameters) {
+               if (parameters.object === "alfresco/dnd/DragAndDropNestedTarget")
+               {
+                  var parent = parameters.ancestors[parameters.ancestors.length-1];
+                  var targetProperty = lang.getObject("config.targetProperty", false, parent);
+                  if (targetProperty)
+                  {
+                     // See if the target property of the DragAndDropNestedTarget is a mapped in
+                     // the template...
+                     array.some(parameters.config.templateMappings, function(mapping) {
+                        var found = (mapping.property === targetProperty);
+                        if (found)
+                        {
+                           config.data.push(parent);
+
+                           // TODO: Is this where we need to swap in the mapping ID?
+                        }
+                        return found;
+                     });
+                  } 
+               }
+
+            }
+
+            // TODO: Move this to a module function
+            function addConfig(parameters) {
+               console.info("Adding config", parameters);
+               var parent = parameters.ancestors[parameters.ancestors.length-2];
+               var templateResponse = {};
+               var success = array.some(parameters.config.models, lang.hitch(this, this.processModel, configAttribute, templateResponse, parent));
+               console.info("Found something?", success);
+
+               // The problem with widgetsForDisplay is knowing what to filter and what to display.
+               // There could be multiple nested config...
+               // We should just have the drop targets (DragAndDropNestedTarget) where the "targetProperty" matches an exposed property (e.g. config.widgets)
+               // 
+               
+               objectProcessingUtil.findObject(templateResponse, {
+                  prefix: "name",
+                  processFunction: lang.hitch(this, findDropTargets),
+                  config: {
+                     templateMappings: parameters.object
+                  }
+               })
+            }
+
+            objectProcessingUtil.findObject(templateModel, {
+               prefix: "_alfTemplateMappings",
+               processFunction: lang.hitch(this, addConfig),
+               config: config
+            });
+
+            // TODO: Need to set this as the response!
+         }
+
+         // TODO: This is probably an else if
          if (model.property && model.targetValues && value[model.property]) 
          {
             // The model has a property to check for, and the value contains the property

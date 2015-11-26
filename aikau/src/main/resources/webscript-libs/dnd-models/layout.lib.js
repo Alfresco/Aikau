@@ -70,7 +70,7 @@ function getDefaultClassicWindowModel() {
    return {
       property: "name",
       targetValues: ["alfresco/layout/ClassicWindow"],
-      widgetsForConfig: getClassicWindowConfig().concat(getTemplateMappingConfigurationControls(["title"])),
+      widgetsForConfig: getClassicWindowConfig().concat(getTemplateMappingConfigurationControls(["config.title","config.widgets"])),
       widgetsForNestedConfig: getClassicWindowNestedConfig(),
       widgetsForDisplay: getClassicWindowDisplay()
    };
