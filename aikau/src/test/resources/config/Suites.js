@@ -285,6 +285,7 @@ define({
       "src/test/resources/alfresco/upload/UploadTargetTest",
 
       "src/test/resources/alfresco/util/functionUtilsTest",
+      "src/test/resources/alfresco/util/hashUtilsTest",
       "src/test/resources/alfresco/util/urlUtilsTest"
    ],
 
