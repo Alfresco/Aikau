@@ -1038,6 +1038,71 @@ define(["dojo/_base/declare",
       createLiveSearchDocument: function alfresco_header_SearchBox__createLiveSearchDocument(data) {
          return new LiveSearchItem(data);
       },
+      
+      /**
+       * Process the live search item for a document and create the HTML entity representing it
+       * 
+       * @instance
+       * @param  {object} item The data item to create the document entity from
+       * @return {object} An instance of LiveSearchItem
+       * @since 1.0.46
+       * @overridable
+       */
+      processLiveSearchDocument: function alfresco_header_SearchBox__processLiveSearchDocument(item) {
+         // construct the meta-data - site information, modified by and title description as tooltip
+         var site = (item.site ? "site/" + item.site.shortName + "/" : "");
+         var info = "";
+         var siteDocLibUrl = urlUtils.convertUrl(site + this.documentLibraryPage, urlTypes.PAGE_RELATIVE);
+         if (item.site)
+         {
+            info += "<a href='" + siteDocLibUrl + "'>" + this.encodeHTML(item.site.title) + "</a> | ";
+         }
+         var modifiedUserUrl = urlUtils.convertUrl("user/" + this.encodeHTML(item.modifiedBy) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE);
+         info += "<a href='" + modifiedUserUrl + "'>" + this.encodeHTML(item.modifiedBy) + "</a> | ";
+         info += this.getRelativeTime(item.modifiedOn) + " | ";
+         info += this.formatFileSize(item.size);
+
+         var desc = this.encodeHTML(item.title);
+         if (item.description)
+         {
+            desc += (desc.length !== 0 ? "\r\n" : "") + this.encodeHTML(item.description);
+         }
+         // build the widget for the item - including the thumbnail url for the document
+         var link;
+         switch (item.container)
+         {
+            case "wiki":
+               link = this.wikiPage + "?title=" + encodeURIComponent(item.name);
+               
+               break;
+            case "blog":
+               link = this.blogPage + "?postId=" + encodeURIComponent(item.name);
+               item.name = item.title;
+               break;
+            default:
+               link = this.documentPage + "?nodeRef=" + item.nodeRef;
+               break;
+         }
+         var lastModified = item.lastThumbnailModification || 1;
+         return this.createLiveSearchDocument({
+            searchBox: this,
+            cssClass: "alf-livesearch-thumbnail",
+            title: desc,
+            label: this.encodeHTML(item.name),
+            link: urlUtils.convertUrl(site + link, urlTypes.PAGE_RELATIVE),
+            icon: AlfConstants.PROXY_URI + "api/node/" + item.nodeRef.replace(":/", "") + "/content/thumbnails/doclib?c=queue&ph=true&lastModified=" + lastModified,
+            alt: this.encodeHTML(item.name),
+            meta: info,
+            currentItem: lang.clone(item),
+            publishTopic: this.publishTopic,
+            publishPayload: this.publishPayload,
+            publishGlobal: this.publishGlobal,
+            publishToParent: this.publishToParent,
+            publishPayloadType: this.publishPayloadType,
+            publishPayloadItemMixin: this.publishPayloadItemMixin,
+            publishPayloadModifiers: this.publishPayloadModifiers
+         });
+      },
 
       /**
        * @instance
@@ -1050,6 +1115,7 @@ define(["dojo/_base/declare",
                url: AlfConstants.PROXY_URI + this.liveSearchDocumentsUri + "?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
                method: "GET",
                successCallback: function(response) {
+                  
                   if (startIndex === 0)
                   {
                      this._LiveSearch.containerNodeDocs.innerHTML = "";
@@ -1057,63 +1123,13 @@ define(["dojo/_base/declare",
                   
                   // construct each Document item as a LiveSearchItem widget
                   array.forEach(response.items, function(item) {
-                     // construct the meta-data - site information, modified by and title description as tooltip
-                     var site = (item.site ? "site/" + item.site.shortName + "/" : "");
-                     var info = "";
-                     var siteDocLibUrl = urlUtils.convertUrl(site + this.documentLibraryPage, urlTypes.PAGE_RELATIVE);
-                     if (item.site)
-                     {
-                        info += "<a href='" + siteDocLibUrl + "'>" + this.encodeHTML(item.site.title) + "</a> | ";
-                     }
-                     var modifiedUserUrl = urlUtils.convertUrl("user/" + this.encodeHTML(item.modifiedBy) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE);
-                     info += "<a href='" + modifiedUserUrl + "'>" + this.encodeHTML(item.modifiedBy) + "</a> | ";
-                     info += this.getRelativeTime(item.modifiedOn) + " | ";
-                     info += this.formatFileSize(item.size);
-
-                     var desc = this.encodeHTML(item.title);
-                     if (item.description)
-                     {
-                        desc += (desc.length !== 0 ? "\r\n" : "") + this.encodeHTML(item.description);
-                     }
-                     // build the widget for the item - including the thumbnail url for the document
-                     var link;
-                     switch (item.container)
-                     {
-                        case "wiki":
-                           link = this.wikiPage + "?title=" + encodeURIComponent(item.name);
-                           
-                           break;
-                        case "blog":
-                           link = this.blogPage + "?postId=" + encodeURIComponent(item.name);
-                           item.name = item.title;
-                           break;
-                        default:
-                           link = this.documentPage + "?nodeRef=" + item.nodeRef;
-                           break;
-                     }
-                     var lastModified = item.lastThumbnailModification || 1;
-                     var itemLink = this.createLiveSearchDocument({
-                        searchBox: this,
-                        cssClass: "alf-livesearch-thumbnail",
-                        title: desc,
-                        label: this.encodeHTML(item.name),
-                        link: urlUtils.convertUrl(site + link, urlTypes.PAGE_RELATIVE),
-                        icon: AlfConstants.PROXY_URI + "api/node/" + item.nodeRef.replace(":/", "") + "/content/thumbnails/doclib?c=queue&ph=true&lastModified=" + lastModified,
-                        alt: this.encodeHTML(item.name),
-                        meta: info,
-                        currentItem: lang.clone(item),
-                        publishTopic: this.publishTopic,
-                        publishPayload: this.publishPayload,
-                        publishGlobal: this.publishGlobal,
-                        publishToParent: this.publishToParent,
-                        publishPayloadType: this.publishPayloadType,
-                        publishPayloadItemMixin: this.publishPayloadItemMixin,
-                        publishPayloadModifiers: this.publishPayloadModifiers
-                     });
+                     var itemLink = this.processLiveSearchDocument(item);
                      itemLink.placeAt(this._LiveSearch.containerNodeDocs);
                   }, this);
+                  
                   // the more action is added if more results are potentially available
                   domStyle.set(this._LiveSearch.nodeDocsMore, "display", response.hasMoreRecords ? "block" : "none");
+                  
                   // record the count of results
                   if (startIndex === 0)
                   {
@@ -1147,6 +1163,36 @@ define(["dojo/_base/declare",
       createLiveSearchSite: function alfresco_header_SearchBox__createLiveSearchSite(data) {
          return new LiveSearchItem(data);
       },
+      
+      /**
+       * Process the live search item for a site and create the HTML entity representing it
+       * 
+       * @instance
+       * @param  {object} item The data item to create the site entity from
+       * @return {object} An instance of LiveSearchItem
+       * @since 1.0.46
+       * @overridable
+       */
+      processLiveSearchSite: function alfresco_header_SearchBox__processLiveSearchSite(item) {
+         return this.createLiveSearchSite({
+            searchBox: this,
+            cssClass: "alf-livesearch-icon",
+            title: this.encodeHTML(item.description),
+            label: this.encodeHTML(item.title),
+            link: urlUtils.convertUrl("site/" + item.shortName + "/" + this.sitePage, urlTypes.PAGE_RELATIVE),
+            icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-32.png",
+            alt: this.encodeHTML(item.title),
+            meta: item.description ? this.encodeHTML(item.description) : "&nbsp;",
+            currentItem: lang.clone(item),
+            publishTopic: this.publishTopic,
+            publishPayload: this.publishPayload,
+            publishGlobal: this.publishGlobal,
+            publishToParent: this.publishToParent,
+            publishPayloadType: this.publishPayloadType,
+            publishPayloadItemMixin: this.publishPayloadItemMixin,
+            publishPayloadModifiers: this.publishPayloadModifiers
+         });
+      },
 
       /**
        * @instance
@@ -1163,24 +1209,7 @@ define(["dojo/_base/declare",
                   
                   // construct each Site item as a LiveSearchItem widget
                   array.forEach(response.items, function(item) {
-                     var itemLink = this.createLiveSearchSite({
-                        searchBox: this,
-                        cssClass: "alf-livesearch-icon",
-                        title: this.encodeHTML(item.description),
-                        label: this.encodeHTML(item.title),
-                        link: urlUtils.convertUrl("site/" + item.shortName + "/" + this.sitePage, urlTypes.PAGE_RELATIVE),
-                        icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-32.png",
-                        alt: this.encodeHTML(item.title),
-                        meta: item.description ? this.encodeHTML(item.description) : "&nbsp;",
-                        currentItem: lang.clone(item),
-                        publishTopic: this.publishTopic,
-                        publishPayload: this.publishPayload,
-                        publishGlobal: this.publishGlobal,
-                        publishToParent: this.publishToParent,
-                        publishPayloadType: this.publishPayloadType,
-                        publishPayloadItemMixin: this.publishPayloadItemMixin,
-                        publishPayloadModifiers: this.publishPayloadModifiers
-                     });
+                     var itemLink = this.processLiveSearchSite(item);
                      itemLink.placeAt(this._LiveSearch.containerNodeSites);
                   }, this);
                   this.resultsCounts.sites = response.items.length;
@@ -1207,6 +1236,38 @@ define(["dojo/_base/declare",
       createLiveSearchPerson: function alfresco_header_SearchBox__createLiveSearchPerson(data) {
          return new LiveSearchItem(data);
       },
+      
+      /**
+       * Process the live search item for a person and create the HTML entity representing it
+       * 
+       * @instance
+       * @param  {object} item The data item to create the person entity from
+       * @return {object} An instance of LiveSearchItem
+       * @since 1.0.46
+       * @overridable
+       */
+      processLiveSearchPerson: function alfresco_header_SearchBox__processLiveSearchPerson(item) {
+         var fullName = item.firstName + " " + item.lastName;
+         var meta = this.encodeHTML(item.jobtitle || "") + (item.location ? (", "+this.encodeHTML(item.location)) : "");
+         return this.createLiveSearchPerson({
+            searchBox: this,
+            cssClass: "alf-livesearch-icon",
+            title: this.encodeHTML(item.jobtitle || ""),
+            label: this.encodeHTML(fullName + " (" + item.userName + ")"),
+            link: urlUtils.convertUrl("user/" + encodeURIComponent(item.userName) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE),
+            icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar32",
+            alt: this.encodeHTML(fullName),
+            meta: meta ? meta : "&nbsp;",
+            currentItem: lang.clone(item),
+            publishTopic: this.publishTopic,
+            publishPayload: this.publishPayload,
+            publishGlobal: this.publishGlobal,
+            publishToParent: this.publishToParent,
+            publishPayloadType: this.publishPayloadType,
+            publishPayloadItemMixin: this.publishPayloadItemMixin,
+            publishPayloadModifiers: this.publishPayloadModifiers
+         });
+      },
 
       /**
        * @instance
@@ -1223,26 +1284,7 @@ define(["dojo/_base/declare",
                   
                   // construct each Person item as a LiveSearchItem widget
                   array.forEach(response.items, function(item) {
-                     var fullName = item.firstName + " " + item.lastName;
-                     var meta = this.encodeHTML(item.jobtitle || "") + (item.location ? (", "+this.encodeHTML(item.location)) : "");
-                     var itemLink = this.createLiveSearchPerson({
-                        searchBox: this,
-                        cssClass: "alf-livesearch-icon",
-                        title: this.encodeHTML(item.jobtitle || ""),
-                        label: this.encodeHTML(fullName + " (" + item.userName + ")"),
-                        link: urlUtils.convertUrl("user/" + encodeURIComponent(item.userName) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE),
-                        icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar32",
-                        alt: this.encodeHTML(fullName),
-                        meta: meta ? meta : "&nbsp;",
-                        currentItem: lang.clone(item),
-                        publishTopic: this.publishTopic,
-                        publishPayload: this.publishPayload,
-                        publishGlobal: this.publishGlobal,
-                        publishToParent: this.publishToParent,
-                        publishPayloadType: this.publishPayloadType,
-                        publishPayloadItemMixin: this.publishPayloadItemMixin,
-                        publishPayloadModifiers: this.publishPayloadModifiers
-                     });
+                     var itemLink = this.processLiveSearchPerson(item);
                      itemLink.placeAt(this._LiveSearch.containerNodePeople);
                   }, this);
                   this.resultsCounts.people = response.items.length;
