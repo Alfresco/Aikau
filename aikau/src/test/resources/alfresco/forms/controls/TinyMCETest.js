@@ -21,56 +21,60 @@
  * @author Martin Doyle
  */
 define(["intern!object",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon",
-      "intern/dojo/node!leadfoot/keys",
-      "intern/dojo/node!leadfoot/helpers/pollUntil"
-   ],
-   function(registerSuite, assert, require, TestCommon, keys, pollUntil) {
+        "intern/chai!assert",
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys",
+        "intern/dojo/node!leadfoot/helpers/pollUntil"],
+        function(registerSuite, assert, TestCommon, keys, pollUntil) {
 
-      var browser;
+   var browser;
 
-      registerSuite({
-         name: "TinyMCE",
+   registerSuite({
+      name: "TinyMCE",
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/TinyMCE", "TinyMCE")
-               .end();
-         },
+      setup: function() {
+         browser = this.remote;
+         return TestCommon.loadTestWebScript(this.remote, "/TinyMCE", "TinyMCE")
+            .end();
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      beforeEach: function() {
+         browser.end();
+      },
 
-         "Can enter content into control and publish it": function() {
-            return browser.findByCssSelector(".alfresco-editors-TinyMCE iframe")
-               .execute("tinymce.get(0).setContent('<p><strong>a</strong></p>');")
-               .execute("tinymce.get(0).save();")
-               .screenie()
-               .screenie()
-               .end()
+      "Can enter content into control and publish it": function() {
+         return browser.findByCssSelector(".alfresco-editors-TinyMCE iframe")
+            .execute("tinymce.get(0).setContent('<p><strong>a</strong></p>');")
+            .execute("tinymce.get(0).save();")
+            .screenie()
+            .screenie()
+            .end()
 
-            .findByCssSelector(".confirmationButton .dijitButtonNode")
-               .click()
-               .then(pollUntil(function() {
-                  /*jshint browser:true*/
-                  var topicData = document.querySelectorAll(".sl-topic[data-publish-topic=FORM_POST] + td.sl-data"),
-                     lastTopic = topicData && topicData[topicData.length - 1],
-                     dataContent = lastTopic && (lastTopic.textContent || lastTopic.innerText);
-                  return dataContent || null;
-               }, 5000))
-               .then(function(dataContent) {
-                  assert.include(dataContent, "RichText", "Publish did not include editor Form ID");
-                  assert.include(dataContent, "<p><strong>a</strong></p>", "Publish did not include created content");
-               }, function(err) {
-                  assert.fail(null, null, "Unable to enter content and publish it [" + err.name + "]: " + err);
-               });
-         },
+         .findByCssSelector(".confirmationButton .dijitButtonNode")
+            .click()
+         .end()
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      });
+         .getLastPublish("FORM_POST")
+            .then(function(payload) {
+               assert.include(payload.RichText, "<p><strong>a</strong></p>", "Publish did not include created content");
+            }).clearLog();
+      },
+
+      // See AKU-711...
+      "Focus is set in dialog form": function() {
+         return browser.findById("CREATE_FORM_DIALOG_label")
+            .click()
+         .end()
+
+         // NOTE: It's not possible to type into the TinyMCE editor has it is rendered in an iframe
+         //       and Selenium will not process the characters. Therefore we are relying on a topic
+         //       published when the editor gets focused to determine that the focus function has
+         //       at least been called.
+         .getLastPublish("ALF_TINYMCE_EDITOR_FOCUSED", "Editor was not given focus");
+      },
+
+      "Post Coverage Results": function() {
+         TestCommon.alfPostCoverageResults(this, browser);
+      }
    });
+});

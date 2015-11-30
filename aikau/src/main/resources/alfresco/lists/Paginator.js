@@ -180,6 +180,16 @@ define(["dojo/_base/declare",
       pageSelectorGroup: null,
       
       /**
+       * The name of the property to access in order to retrieve the page-size preference for this widget
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.46
+       */
+      pageSizePreferenceName: "org.alfresco.share.documentList.documentsPerPage",
+
+      /**
        * This can be used to configure an array of page sizes that should be displayed in the paginator.
        * If left as the default of null then an array will automatically created containing page sizes of
        * 25, 50, 75 and 100. The array should be a simple list of numbers.
@@ -309,8 +319,8 @@ define(["dojo/_base/declare",
          if (payload && payload.value && payload.value !== this.documentsPerPage && this.isValidPageSize(payload.value))
          {
             this.documentsPerPage = payload.value;
-            this.alfPublish(this.setPreferenceTopic, {
-               preference: "org.alfresco.share.documentList.documentsPerPage",
+            this.alfServicePublish(this.setPreferenceTopic, {
+               preference: this.pageSizePreferenceName,
                value: this.documentsPerPage
             });
          }

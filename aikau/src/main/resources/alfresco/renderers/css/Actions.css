@@ -6,3 +6,9 @@
 .alfresco-lists-views-layout-_MultiItemRendererMixin__item .alfresco-renderers-Actions.hover-only > div {
    visibility: hidden;
 }
+
+.alfresco-renderers-Actions {
+   &__label {
+      cursor: pointer;
+   }
+}

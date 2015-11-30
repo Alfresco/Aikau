@@ -385,6 +385,23 @@ define(["dojo/_base/declare",
 
          // Listen to resize events
          this.resizeListener = this.addResizeListener(this.containerNode, this.domNode.parentNode);
+
+         // See AKU-604 - ensure that first item in dialog is focused...
+         // Moved for AKU-711 because _onFocus was not always being called...
+         if (this._dialogPanel)
+         {
+            when(this._dialogPanel.getProcessedWidgets(), lang.hitch(this, function(children) {
+               array.some(children, function(child) {
+                  var focused = false;
+                  if (typeof child.focus === "function")
+                  {
+                     child.focus();
+                     focused = true;
+                  }
+                  return focused;
+               });
+            }));
+         }
       },
 
       /**
@@ -466,7 +483,15 @@ define(["dojo/_base/declare",
          domClass.add(this.domNode, "dialogDisplayed");
          // TODO: We could optionally reveal the dialog after resizing to prevent any resizing jumping?
          
-         // See AKU-604 - ensure that first item in dialog is focused...
+         // Publish the widgets ready
+         this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
+
+         // NOTE: This is duplicated from the onShow function to absolutely be sure that focus 
+         //       is given to child widgets. It was found in development that in particular
+         //       when attempting to focus on the TinyMCE editor that the carat was not being
+         //       displayed for Chrome without this additional code. It was noted that Firefox,
+         //       Chrome and IE all behaved slightly differently with regards to this function
+         //       being called. Although inefficient, it is at least reliable.
          if (this._dialogPanel)
          {
             when(this._dialogPanel.getProcessedWidgets(), lang.hitch(this, function(children) {
@@ -481,9 +506,6 @@ define(["dojo/_base/declare",
                });
             }));
          }
-         
-         // Publish the widgets ready
-         this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
       },
 
       /**

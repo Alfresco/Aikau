@@ -1068,9 +1068,9 @@ define(["dojo/_base/declare",
          if (this._form)
          {
             var children = this._form.getChildren();
-            if (children.length > 0 && children[0].wrappedWidget && typeof children[0].wrappedWidget.focus === "function")
+            if (children.length > 0 && children[0].wrappedWidget && typeof children[0].focus === "function")
             {
-               children[0].wrappedWidget.focus();
+               children[0].focus();
             }
          }
       },
