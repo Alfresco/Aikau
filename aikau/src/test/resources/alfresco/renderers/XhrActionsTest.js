@@ -43,11 +43,7 @@ define(["intern!object",
         "Check Actions menu was rendered": function () {
             // Test spec:
             // 1: Check dropdown element exists
-            return browser.findById("XHR_ACTIONS_ITEM_0_MENU_text")
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert.equal(resultText, "Actions", "Actions should be rendered as a menu");
-               });
+            return browser.findById("XHR_ACTIONS_ITEM_0_MENU_text");
          },
 
          "Check that document request event was triggered": function() {

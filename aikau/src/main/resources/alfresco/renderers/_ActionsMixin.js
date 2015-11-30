@@ -256,7 +256,7 @@ define(["dojo/_base/declare",
        */
       allWidgetsProcessed: function alfresco_renderers__ActionsMixin__allWidgetsProcessed(widgets) {
          array.forEach(widgets, function(widget) {
-            this.actionsGroup.addChild(widget);
+            this._menu.addChild(widget);
          }, this);
       },
 
@@ -307,7 +307,7 @@ define(["dojo/_base/declare",
                publishGlobal: true,
                publishToParent: false
             });
-            this.actionsGroup.addChild(menuItem);
+            this._menu.addChild(menuItem);
          }
          else
          {

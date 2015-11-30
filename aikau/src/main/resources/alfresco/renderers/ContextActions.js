@@ -33,9 +33,8 @@
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfContextMenu",
-        "alfresco/renderers/_ActionsMixin",
-        "alfresco/menus/AlfMenuGroup"],
-        function(declare, AlfMenuBar, _ActionsMixin, AlfMenuGroup) {
+        "alfresco/renderers/_ActionsMixin"],
+        function(declare, AlfMenuBar, _ActionsMixin) {
 
    return declare([AlfMenuBar, _ActionsMixin], {
 
@@ -48,13 +47,10 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
 
          // Create a group to hold all the actions...
-         this.actionsGroup = new AlfMenuGroup({});
+         this._menu = this._contextMenu;
          
          // Add all the actions...
          this.addActions();
-
-         // Add the group to the child...
-         this._contextMenu.addChild(this.actionsGroup);
       }
    });
 });

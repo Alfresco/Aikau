@@ -8,8 +8,7 @@ model.jsonModel = {
                all: true
             }
          }
-      },
-      "alfresco/services/ErrorReporter"
+      }
    ],
    widgets:[
       {
@@ -39,14 +38,17 @@ model.jsonModel = {
             ],
             widgets:[
                {
+                  id: "ROW",
                   name: "alfresco/lists/views/layouts/Row",
                   config: {
                      widgets: [
                         {
+                           id: "CELL1",
                            name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {
+                                    id: "PROPERTY",
                                     name: "alfresco/renderers/Property",
                                     config: {
                                        propertyToRender: "col1",
@@ -57,15 +59,18 @@ model.jsonModel = {
                            }
                         },
                         {
+                           id: "CELL2",
                            name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {
+                                    id: "ACTIONS",
                                     name: "alfresco/renderers/Actions",
                                     config: {
                                        filterActions: false,
                                        customActions: [
                                           {
+                                             id: "DELETE",
                                              label: "Delete action",
                                              icon: "document-delete",
                                              index: "10",
@@ -73,6 +78,7 @@ model.jsonModel = {
                                              type: "javascript"
                                           },
                                           {
+                                             id: "MANAGE",
                                              label: "Manage action",
                                              icon: "folder-manage-permissions",
                                              index: "10",
@@ -103,10 +109,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

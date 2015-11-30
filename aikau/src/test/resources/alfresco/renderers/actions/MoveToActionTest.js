@@ -36,7 +36,11 @@ define([
          if (!shouldBePresent) {
             nodeName = nodeName.substr(1);
          }
-         return browser.findByCssSelector(actionSelector)
+         return browser.findById("ACTIONS_ITEM_" + index + "_MENU_text")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(actionSelector)
             .end()
             .then(function() {
                if (!shouldBePresent) {
@@ -122,7 +126,7 @@ define([
             },
 
             "Context action works": function() {
-               return browser.findByCssSelector("#ACTIONS_ITEM_0 .dijitMenuItem")
+               return browser.findById("ACTIONS_ITEM_0_MENU_text")
                   .clearLog()
                   .click()
                   .end()
