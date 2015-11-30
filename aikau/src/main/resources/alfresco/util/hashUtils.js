@@ -34,15 +34,9 @@ define(["dojo/_base/array",
    var util = {
 
       // See API below
-      getHash: function alfresco_util_hashUtils__getHash(suppressDecoding) {
+      getHash: function alfresco_util_hashUtils__getHash() {
          var hashString = this.getHashString(),
             hashObj = ioQuery.queryToObject(hashString);
-         if (suppressDecoding !== true)
-         {
-            array.forEach(Object.keys(hashObj), function(hashKey) {
-               hashObj[hashKey] = decodeURIComponent(hashObj[hashKey]);
-            });
-         }
          return hashObj;
       },
 
@@ -52,15 +46,9 @@ define(["dojo/_base/array",
       },
 
       // See API below
-      setHash: function alfresco_util_hashUtils__setHash(hashObj, replace, suppressEncoding) {
-         var hashObjToUse = lang.clone(hashObj);
-         if (suppressEncoding !== true)
-         {
-            array.forEach(Object.keys(hashObjToUse), function(hashKey) {
-               hashObjToUse[hashKey] = encodeURIComponent(hashObjToUse[hashKey]);
-            });
-         }
-         var hashString = ioQuery.objectToQuery(hashObjToUse);
+      setHash: function alfresco_util_hashUtils__setHash(hashObj, replace) {
+         var hashObjToUse = lang.clone(hashObj),
+            hashString = ioQuery.objectToQuery(hashObjToUse);
          this.setHashString(hashString, replace);
       },
 
@@ -114,7 +102,6 @@ define(["dojo/_base/array",
        *
        * @instance
        * @function
-       * @param {boolean} [suppressDecoding] Optionally suppress URI decoding
        * @returns {Object} The hash value as an object
        */
       getHash: lang.hitch(util, util.getHash),
@@ -137,7 +124,6 @@ define(["dojo/_base/array",
        * @param {Object} hashObj The new hash object
        * @param {boolean} [replace] Replace the current hash, rather than changing
        *                            (i.e. do not add to the history)
-       * @param {boolean} [suppressEncoding] Optionally suppress URI encoding
        */
       setHash: lang.hitch(util, util.setHash),
 
