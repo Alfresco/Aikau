@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfTabContainer (in IFrame)</shortname>
+  <description>Shows an alfresco/layout/AlfTabContainer rendered in an IFrame</description>
+  <family>aikau-unit-tests</family>
+  <url>/IFramedTabContainer</url>
+</webscript>
