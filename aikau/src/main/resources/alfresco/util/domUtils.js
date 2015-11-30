@@ -30,16 +30,21 @@ define([
       "dojo/_base/array",
       "dojo/_base/lang",
       "dojo/dom-style",
+      "dojo/dom-class",
       "dojo/on",
       "dojo/sniff"
    ],
-   function(funcUtils, array, lang, domStyle, on, has) {
+   function(funcUtils, array, lang, domStyle, domClass, on, has) {
 
       // An object for containing resize-monitoring state information
       var resizeMonitor = {
          nodes: {},
          removeObj: null
       };
+
+      // Define the class to decorate a node with when resizes on it should be ignored
+      var ignoreResizeClass = "dom-utils--ignore-resize",
+         ignoreResizeRegexp = new RegExp("\\b" + ignoreResizeClass + "\\b");
 
       // The private container for the functionality and properties of the util
       var util = {
@@ -164,6 +169,16 @@ define([
             };
          },
 
+         // See API below
+         noticeResizes: function alfresco_util_domUtils__noticeResizes(nodes) {
+            this._setResizeIgnored(nodes, false);
+         },
+
+         // See API below
+         ignoreResizes: function alfresco_util_domUtils__ignoreResizes(nodes) {
+            this._setResizeIgnored(nodes, true);
+         },
+
          // Run through the nodes registered to notify on resize, calling the function if necessary
          // NOTE: All of the size-checks are completed before any callback functions are called because
          // if the callbacks cause any redraws then each access of offsetXXX will cause another re-calculation
@@ -175,11 +190,14 @@ define([
                var node = resizeMonitor.nodes[nodeKey],
                   newWidth = node.domNode.offsetWidth,
                   newHeight = node.domNode.offsetHeight,
-                  sizeChanged = node.width !== newWidth || node.height !== newHeight;
+                  sizeChanged = node.width !== newWidth || node.height !== newHeight,
+                  notificationDisabled = ignoreResizeRegexp.test(node.domNode.className);
                if (sizeChanged) {
                   node.width = newWidth;
                   node.height = newHeight;
-                  resizedNodeKeys.push(nodeKey);
+                  if (!notificationDisabled) {
+                     resizedNodeKeys.push(nodeKey);
+                  }
                }
             });
             array.forEach(resizedNodeKeys, function(nodeKey) {
@@ -189,6 +207,14 @@ define([
                   console.error("Error occurred while executing resize-callback (node will no longer be monitored): ", resizeMonitor.nodes[nodeKey], e);
                   delete resizeMonitor.nodes[nodeKey];
                }
+            });
+         },
+
+         // See API below
+         _setResizeIgnored: function alfresco_util_domUtils___setResizeIgnored(nodeOrNodes, doIgnore) {
+            var nodes = nodeOrNodes.constructor === Array ? nodeOrNodes : [nodeOrNodes];
+            array.forEach(nodes, function(node) {
+               domClass[doIgnore ? "add" : "remove"](nodes, ignoreResizeClass);
             });
          }
       };
@@ -243,6 +269,27 @@ define([
           * @returns {object} A pointer to the listener, with a remove function on it (i.e. it can be passed to this.own)
           * @deprecated Since 1.0.43 - Use [addPollingResizeListener]{@link module:alfresco/util/domUtils#addPollingResizeListener} instead
           */
-         addResizeListener: lang.hitch(util, util.addPollingResizeListener)
+         addResizeListener: lang.hitch(util, util.addPollingResizeListener),
+
+         /**
+          * Given a domNode, disable resize listening on that node temporarily.
+          *
+          * @instance
+          * @function
+          * @param {object|object[]} nodes The node or nodes to disable resize-listening on.
+          * @since 1.0.46
+          */
+         ignoreResizes: lang.hitch(util, util.ignoreResizes),
+
+         /**
+          * Given a domNode, re-enable resize listening on that node. Note that this will not add a new resize listener
+          * to a node, merely re-enable an existing, disabled one.
+          *
+          * @instance
+          * @function
+          * @param {object|object[]} nodes The node or nodes to re-enable resize-listening on.
+          * @since 1.0.46
+          */
+         noticeResizes: lang.hitch(util, util.noticeResizes)
       };
    });

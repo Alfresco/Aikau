@@ -1,94 +1,74 @@
 .alfresco-layout-AlfSideBarContainer {
-
-   .alfresco-layout-AlfSideBarContainer__container {
-      overflow: hidden;
+   &__container {
       background-color: @sidebar-container-main-background-color;
-
-      .alfresco-layout-AlfSideBarContainer__sidebar,
-      .alfresco-layout-AlfSideBarContainer__main {
+      overflow: hidden;
+   }
+   &__sidebar, &__main {
+      background: none;
+      border: none;
+      display: inline-block;
+      float: none;
+      overflow: hidden;
+      vertical-align: top;
+      &__widgets {
+         position: relative;
          overflow: hidden;
-         float: none;
-         display: inline-block;
-         vertical-align: top;
-         background: none;
-         border: none;
       }
-
-      .alfresco-layout-AlfSideBarContainer__sidebar {
-         color: @general-font-color;
-         border: none;
-         padding-right: 10px;
-         background-color: @sidebar-container-sidebar-background-color;
-
-         /* Convert the YUI resize handle to be transparent and slightly wider
-            to accommodate our custom image for popping the sidebar in and out */
-         .alfresco-layout-AlfSideBarContainer__resizeHandle {
-            background-color: @sidebar-container-resize-handle-background-color;
-            width: 9px;
-            right: 0;
-            border-right: @sidebar-container-borders;
-            border-left: @sidebar-container-borders;
-
-            /* Override the default drag handle image */
-            .alfresco-layout-AlfSideBarContainer__resizeButton {
-               background-position: 0 6px;
-               background-color: transparent;
-               background-repeat: no-repeat;
-               border: @sidebar-container-borders;
-               border-left: none;
-               border-right: none;
-               width: 8px;
-               height: 21px;
-               cursor: pointer;
-               position: fixed;
-               top: 50%;
-               z-index: 500;
-               background-image: url("./images/PopInArrow.png");
-            }
-         }
-
-         /* Overrides JQuery default behaviour to hide the handle when disabled, but this would
-            make our pop-out control hidden as well which we don't want */
-         &.ui-resizable-disabled {
-            .alfresco-layout-AlfSideBarContainer__resizeHandle {
-               display: inherit;
-            }
-         }
-
-         /* Ensure that the resize handle gets some colour when being used */ 
-         .resize-handle.active{
-            background-color: @sidebar-container-resize-handle-background-color-active;
+   }
+   &__sidebar {
+      background-color: @sidebar-container-sidebar-background-color;
+      border: none;
+      color: @general-font-color;
+      padding-right: 10px;
+      &.ui-resizable-disabled {
+         .alfresco-layout-AlfSideBarContainer__resize-handle {
+            display: inherit;
          }
       }
-
-      .alfresco-layout-AlfSideBarContainer__sidebar--closed {
+      .resize-handle.active {
+         background-color: @sidebar-container-resize-handle-background-color-active;
+      }
+      &--closed {
          padding-right: 0;
-
-         /* Hide all children EXCEPT the resize handle when the sidebar is closed */
          > *:nth-child(n+2) {
             display: none;
          }
-
-         .alfresco-layout-AlfSideBarContainer__resizeHandle {
-
-            /* This selector should be applied when the sidebar is hidden */
-            .alfresco-layout-AlfSideBarContainer__resizeButton {
-               background-image: url("./images/PopOutArrow.png");
-            }
+         .alfresco-layout-AlfSideBarContainer__resize-button {
+            background-image: url("./images/PopOutArrow.png");
          }
       }
    }
-
-   &--resizeDisabled {
-      .alfresco-layout-AlfSideBarContainer__container {
-         .alfresco-layout-AlfSideBarContainer__sidebar {
+   &__resize-handle {
+      background-color: @sidebar-container-resize-handle-background-color;
+      border-left: @sidebar-container-borders;
+      border-right: @sidebar-container-borders;
+      right: 0;
+      width: 9px;
+   }
+   &__resize-button {
+      background-color: transparent;
+      background-image: url("./images/PopInArrow.png");
+      background-position: 0 6px;
+      background-repeat: no-repeat;
+      border: @sidebar-container-borders;
+      border-left: none;
+      border-right: none;
+      cursor: pointer;
+      height: 21px;
+      position: fixed;
+      top: 50%;
+      width: 8px;
+      z-index: 500;
+   }
+   &--resize-disabled {
+      .alfresco-layout-AlfSideBarContainer {
+         &__sidebar {
             border-right: @sidebar-container-borders;
             padding-right: 0;
          }
-      }
-      
-      .alfresco-layout-AlfSideBarContainer__resizeHandle {
-         display: none;
+         &__resize-handle {
+            display: none;
+         }
       }
    }
 }
