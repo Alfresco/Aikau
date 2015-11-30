@@ -33,7 +33,7 @@ model.jsonModel = {
                            name: "alfresco/layout/Twister",
                            id: "SIDEBAR_TWISTER",
                            config: {
-                              label: "I am a 700px tall twister",
+                              label: "Large twister (700px)",
                               initiallyOpen: false,
                               widgets: [
                                  {
@@ -137,7 +137,7 @@ model.jsonModel = {
                            name: "alfresco/layout/Twister",
                            id: "MAIN_TWISTER",
                            config: {
-                              label: "I am a 200px tall twister",
+                              label: "Small twister (200px)",
                               initiallyOpen: false,
                               widgets: [
                                  {

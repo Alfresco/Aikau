@@ -87,7 +87,6 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/AlfSideBarContainer.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/util/domUtils",
         "dijit/layout/BorderContainer",
         "dojo/_base/lang",
         "dojo/_base/array",
@@ -99,7 +98,7 @@ define(["dojo/_base/declare",
         "jquery",
         "jqueryui"], 
         function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _PreferenceServiceTopicMixin, template, AlfCore, 
-                 CoreWidgetProcessing, domUtils, BorderContainer, lang, array, domStyle, domClass, on, domGeom, win, $) {
+                 CoreWidgetProcessing, BorderContainer, lang, array, domStyle, domClass, on, domGeom, win, $) {
    
    return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _PreferenceServiceTopicMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -281,7 +280,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            domClass.add(this.domNode, "alfresco-layout-AlfSideBarContainer--resizeDisabled");
+            domClass.add(this.domNode, "alfresco-layout-AlfSideBarContainer--resize-disabled");
          }
          
          // We need to subscribe after the resize widget has been created...

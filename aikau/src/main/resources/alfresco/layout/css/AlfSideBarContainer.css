@@ -10,6 +10,10 @@
       float: none;
       overflow: hidden;
       vertical-align: top;
+      &__widgets {
+         position: relative;
+         overflow: hidden;
+      }
    }
    &__sidebar {
       background-color: @sidebar-container-sidebar-background-color;
@@ -56,7 +60,7 @@
       width: 8px;
       z-index: 500;
    }
-   &--resizeDisabled {
+   &--resize-disabled {
       .alfresco-layout-AlfSideBarContainer {
          &__sidebar {
             border-right: @sidebar-container-borders;

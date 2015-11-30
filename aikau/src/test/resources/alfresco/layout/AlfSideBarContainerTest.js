@@ -116,44 +116,139 @@ define(["intern!object",
             .end();
          },
 
-         "Increase window size and check sidebar height": function() {
-            var bodyHeight;
-            return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar") // Need to find something before clearing logs!
-               .end()
-               .clearLog() // Clear the logs otherwise they'll force the size of the window
-               .setWindowSize(null, 1024, 968)
-               .findByCssSelector("body")
-                  .getSize()
-                  .then(function(size) {
-                     // We need the body size, not the window size because the window size includes all the OS chrome
-                     bodyHeight = size.height;
-                  })
+         "Sidebar height increases with window size": function() {
+            var sidebarHeight;
+            return browser.setWindowSize(null, 1024, 768)
                .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
-                  .getSize()
-                  .then(function(size) {
-                     // Substracting the padding from the height!
-                     assert.closeTo(size.height, (bodyHeight - 20), 5, "The sidebar height didn't increase with the window size");
-                  });
+               .getSize()
+               .then(function(size) {
+                  sidebarHeight = size.height;
+               })
+               .end()
+
+            .setWindowSize(null, 1024, 968)
+               .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(sidebarHeight + 200, size.height);
+                  sidebarHeight = size.height;
+               });
          },
 
-         "Decrease window size and check sidebar height": function() {
-            var bodyHeight;
-            return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar") // Need to find something before clearing logs!
+         "Sidebar height decreases with window size": function() {
+            var sidebarHeight;
+            return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
+               .getSize()
+               .then(function(size) {
+                  sidebarHeight = size.height;
+               })
                .end()
-               .clearLog() // Clear the logs otherwise they'll force the size of the window
-               .setWindowSize(null, 1024, 568)
-               .findByCssSelector("body")
-                  .getSize()
-                  .then(function(size) {
-                     // We need the body size, not the window size because the window size includes all the OS chrome
-                     bodyHeight = size.height;
-                  })
+
+            .setWindowSize(null, 1024, 768)
                .findByCssSelector(".alfresco-layout-AlfSideBarContainer__sidebar")
-                  .getSize()
-                  .then(function(size) {
-                     // Substracting the padding from the height!
-                     assert.closeTo(size.height, (bodyHeight - 20), 5, "The sidebar height didn't decrease with the window size");
-                  });
+               .getSize()
+               .then(function(size) {
+                  assert.equal(sidebarHeight - 200, size.height);
+                  sidebarHeight = size.height;
+               });
+         },
+
+         "Panes increase and decrease in size if other changes": function() {
+            var storedHeights = {},
+               getHeights = function() {
+                  var sidebar = document.querySelector('.alfresco-layout-AlfSideBarContainer__sidebar'),
+                     main = document.querySelector('.alfresco-layout-AlfSideBarContainer__main');
+                  return {
+                     sidebar: sidebar.offsetHeight,
+                     main: main.offsetHeight
+                  };
+               };
+
+            return browser.execute(getHeights)
+               .then(function(newHeights) {
+                  storedHeights.original = newHeights.sidebar;
+               })
+               .end()
+
+            .execute(getHeights)
+               .then(function(newHeights) {
+                  assert.closeTo(newHeights.main, storedHeights.original, 2, "Main panel starting height not same as sidebar starting height");
+               })
+               .end()
+
+            .findByCssSelector("#MAIN_TWISTER .alfresco-layout-Twister--closed")
+               .clearLog()
+               .click()
+               .getLastPublish("ALF_NODE_RESIZED")
+               .end()
+
+            .execute(getHeights)
+               .then(function(newHeights) {
+                  storedHeights.updated1 = newHeights.main;
+                  assert.isAbove(storedHeights.updated1, storedHeights.original, "Main panel height not increased after expanding small twister");
+               })
+               .end()
+
+            .execute(getHeights)
+               .then(function(newHeights) {
+                  assert.closeTo(newHeights.sidebar, storedHeights.updated1, 2, "Side panel height not increased correctly after expanding small twister");
+               })
+               .end()
+
+            .findByCssSelector("#SIDEBAR_TWISTER .alfresco-layout-Twister--closed")
+               .clearLog()
+               .click()
+               .getLastPublish("ALF_NODE_RESIZED")
+               .end()
+
+            .execute(getHeights)
+               .then(function(newHeights) {
+                  storedHeights.updated2 = newHeights.sidebar;
+                  assert.isAbove(storedHeights.updated2, storedHeights.updated1, "Side panel height not increased after expanding large twister");
+               })
+               .end()
+
+            .execute(getHeights)
+               .then(function(newHeights) {
+                  assert.closeTo(newHeights.main, storedHeights.updated2, 2, "Main panel height not increased correctly after expanding large twister");
+               })
+               .end()
+
+            .findByCssSelector("#SIDEBAR_TWISTER .alfresco-layout-Twister--open")
+               .clearLog()
+               .click()
+               .getLastPublish("ALF_NODE_RESIZED")
+               .end()
+
+            .execute(getHeights)
+               .then(function(newHeights) {
+                  assert.closeTo(newHeights.main, storedHeights.updated1, 2, "Main panel height not restored correctly after collapsing large twister");
+               })
+               .end()
+
+            .execute(getHeights)
+               .then(function(newHeights) {
+                  assert.closeTo(newHeights.sidebar, storedHeights.updated1, 2, "Side panel height not restored correctly after collapsing large twister");
+               })
+               .end()
+
+            .findByCssSelector("#MAIN_TWISTER .alfresco-layout-Twister--open")
+               .clearLog()
+               .click()
+               .getLastPublish("ALF_NODE_RESIZED")
+               .end()
+
+            .execute(getHeights)
+               .then(function(newHeights) {
+                  assert.closeTo(newHeights.main, storedHeights.original, 2, "Main panel height not restored correctly after collapsing small twister");
+               })
+               .end()
+
+            .execute(getHeights)
+               .then(function(newHeights) {
+                  assert.closeTo(newHeights.sidebar, storedHeights.original, 2, "Side panel height not restored correctly after collapsing small twister");
+               })
+               .end()
          },
 
          "Test Resize": function() {
@@ -182,7 +277,7 @@ define(["intern!object",
          },
 
          "Resize bar is hidden": function() {
-            return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__resizeHandle")
+            return browser.findByCssSelector(".alfresco-layout-AlfSideBarContainer__resize-handle")
                .isDisplayed()
                .then(function(displayed) {
                   assert.isFalse(displayed, "The resize bar should not have been displayed");
