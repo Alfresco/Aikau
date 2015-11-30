@@ -147,20 +147,24 @@ model.jsonModel = {
             },
             widgets: [
                {
+                  id: "ROW",
                   name: "alfresco/lists/views/layouts/Row",
                   config: {
                      widgets: [
                         {
+                           id: "CELL",
                            name: "alfresco/lists/views/layouts/Cell",
                            config: {
                               widgets: [
                                  {
+                                    id: "PROPERTY",
                                     name: "alfresco/renderers/Property",
                                     config: {
                                        propertyToRender: "displayName"
                                     }
                                  },
                                  {
+                                    id: "ACTIONS",
                                     name: "alfresco/renderers/Actions",
                                     config: {
                                        widgetsForActions: [

@@ -92,15 +92,17 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/menus/AlfMenuBar",
+        "dijit/_WidgetBase", 
+        "dijit/_TemplatedMixin",
+        "dojo/text!./templates/Actions.html",
         "alfresco/renderers/_ActionsMixin",
-        "alfresco/menus/AlfMenuBarPopup",
-        "alfresco/menus/AlfMenuGroup",
-        "alfresco/menus/AlfMenuItem",
-        "dojo/dom-class"],
-        function(declare, AlfMenuBar, _ActionsMixin, AlfMenuBarPopup, AlfMenuGroup, AlfMenuItem, domClass) {
+        "dijit/Menu",
+        "dojo/dom-class",
+        "dojo/_base/event",
+        "dojo/keys"],
+        function(declare, _WidgetBase, _TemplatedMixin, template, _ActionsMixin, Menu, domClass, Event, keys) {
 
-   return declare([AlfMenuBar, _ActionsMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _ActionsMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -112,14 +114,23 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/Actions.css"}],
 
       /**
-      * The array of file(s) containing internationalised strings.
-      *
-      * @instance
-      * @type {object}
-      * @default [{i18nFile: "./i18n/Actions.properties"}]
-      */
+       * The array of file(s) containing internationalised strings.
+       *
+       * @instance
+       * @type {object}
+       * @default [{i18nFile: "./i18n/Actions.properties"}]
+       */
       i18nRequirements: [{i18nFile: "./i18n/Actions.properties"}],
 
+      /**
+       * The HTML template to use for the widget.
+       * 
+       * @instance
+       * @type {string}
+       * @since 1.0.46
+       */
+      templateString: template,
+      
       /**
        * Indicates that this should only be displayed when the item (note: NOT the renderer) is
        * hovered over.
@@ -131,6 +142,69 @@ define(["dojo/_base/declare",
       onlyShowOnHover: false,
 
       /**
+       * The label to display to as the actions renderer.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.46
+       */
+      label: "alf.renderers.Actions.menuLabel",
+
+      /**
+       * This will hold a reference to a diijt/Menu widget that is created to hold the menu. This
+       * should not be referenced by extending widgets as it may not always be available depending 
+       * upon how implementation of the menu changes as required. For example, this widget previously
+       * used an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} but it was necessary to change
+       * the implementation to resolve menu pop-up location issues (see AKU-706).
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.46
+       */
+      _menu: null,
+
+      /**
+       * [destroy description]
+       * @param  {[type]} preserveDom [description]
+       * @return {[type]}             [description]
+       */
+      destroy: function alfresco_renderers_Actions__destroy(preserveDom) {
+         this.inherited(arguments);
+         if (this._menu)
+         {
+            this._menu.destroyRecursive();
+         }
+      },
+
+      /**
+       * Handles key press events on the actions renderer and opens the menu if 
+       * 
+       * @instance
+       * @param  {object} evt The key press event
+       * @since 1.0.46
+       */
+      onKeyPress: function alfresco_renderers_Actions__onKeyPress(evt) {
+         if (evt && (evt.charOrCode === keys.ENTER || evt.charCode === keys.SPACE))
+         {
+            Event.stop(evt);
+            this._menu._scheduleOpen(this.domNode, null, null, this.domNode);
+         }
+      },
+
+      /**
+       * Sets the local appropriate [label]{@link module:alfresco/renderers/Actions#label}.
+       * 
+       * @instance
+       * @since 1.0.46
+       */
+      postMixInProperties: function alfresco_renderers_Actions__postMixInProperties() {
+         this.inherited(arguments);
+         this.label = this.message(this.label);
+      },
+
+      /**
        * Overrides the default to create a popup containing a group containing all the actions
        * for the current item.
        * 
@@ -138,9 +212,6 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_Actions__postCreate() {
          this.inherited(arguments);
-
-         // Add a class to tie this to the CSS selectors for this widget...
-         domClass.add(this.domNode, "alfresco-renderers-Actions");
 
          // Handle display on hover configuration...
          if (this.onlyShowOnHover === true)
@@ -152,27 +223,14 @@ define(["dojo/_base/declare",
             // No action
          }
 
-         // Create a group to hold all the actions...
-         this.actionsGroup = new AlfMenuGroup({
-            id: this.id + "_GROUP",
-            pubSubScope: this.pubSubScope,
-            parentPubSubScope: this.parentPubSubScope
+         this._menu = new Menu({
+            id: this.id + "_GROUP", // Used "_GROUP" as a suffix for backwards compatibility with tests
+            leftClickToOpen: true,
+            targetNodeIds: [this.labelNode]
          });
-         
-         // Create a menu popup to hold the group...
-         this.actionsMenu = new AlfMenuBarPopup({
-            id: this.id + "_MENU",
-            label:  this.message("alf.renderers.Actions.menuLabel"),
-            pubSubScope: this.pubSubScope,
-            parentPubSubScope: this.parentPubSubScope
-         });
-         this.actionsMenu.popup.addChild(this.actionsGroup);
          
          // Add all the actions...
          this.addActions();
-
-         this._menuBar.addChild(this.actionsMenu);
-         this._menuBar.placeAt(this.containerNode);
       }
    });
 });
