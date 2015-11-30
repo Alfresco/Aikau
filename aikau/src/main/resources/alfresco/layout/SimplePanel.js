@@ -62,6 +62,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/SimplePanel.css"}]
+       * @since 1.0.46
        */
       cssRequirements: [{cssFile:"./css/SimplePanel.css"}],
 

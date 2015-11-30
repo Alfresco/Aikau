@@ -277,6 +277,7 @@ define([
           * @instance
           * @function
           * @param {object|object[]} nodes The node or nodes to disable resize-listening on.
+          * @since 1.0.46
           */
          ignoreResizes: lang.hitch(util, util.ignoreResizes),
 
@@ -287,6 +288,7 @@ define([
           * @instance
           * @function
           * @param {object|object[]} nodes The node or nodes to re-enable resize-listening on.
+          * @since 1.0.46
           */
          noticeResizes: lang.hitch(util, util.noticeResizes)
       };
