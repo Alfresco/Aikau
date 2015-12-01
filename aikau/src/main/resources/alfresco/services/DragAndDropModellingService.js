@@ -249,9 +249,9 @@ define(["dojo/_base/declare",
             // Then check 
 
             function findDropTargets(parameters) {
+               var parent = parameters.ancestors[parameters.ancestors.length-1];
                if (parameters.object === "alfresco/dnd/DragAndDropNestedTarget")
                {
-                  var parent = parameters.ancestors[parameters.ancestors.length-1];
                   var targetProperty = lang.getObject("config.targetProperty", false, parent);
                   if (targetProperty)
                   {
@@ -261,25 +261,38 @@ define(["dojo/_base/declare",
                         var found = (mapping.property === targetProperty);
                         if (found)
                         {
-                           config.data.push(lang.clone(parent));
+                           var clonedParent = lang.clone(parent);
 
-                           // TODO: Is this where we need to swap in the mapping ID?
+                           // We need to swap the actual targetProperty and label for the template mapped versions...
+                           clonedParent.config.targetProperty = "config." + mapping.id;
+                           clonedParent.config.label = mapping.label;
+                           config.data.push(clonedParent);
                         }
                         return found;
                      });
                   } 
                }
+               else
+               {
+                  array.some(parameters.config.templateMappings, function(mapping) {
+                     var found = (mapping.property === parameters.object);
+                     if (found)
+                     {
+                        var clonedParent = lang.clone(parent);
 
+                        config.data.push(clonedParent);
+                     }
+                     return found;
+                  });
+               }
             }
 
             // TODO: Move this to a module function
             function addConfig(parameters) {
-               console.info("Adding config", parameters);
                var parent = parameters.ancestors[parameters.ancestors.length-2];
                var templateResponse = {};
                var success = array.some(parameters.config.models, lang.hitch(this, this.processModel, configAttribute, templateResponse, parent));
-               console.info("Found something?", success);
-
+               
                // The problem with widgetsForDisplay is knowing what to filter and what to display.
                // There could be multiple nested config...
                // We should just have the drop targets (DragAndDropNestedTarget) where the "targetProperty" matches an exposed property (e.g. config.widgets)
@@ -306,7 +319,7 @@ define(["dojo/_base/declare",
                // For widgetsForDisplay it is necessary to set up the basic model...
                response.widgets = [
                   {
-                     name: "alfresco/dnd/DroppedNestingItemWrapper",
+                     name: "alfresco/dnd/DroppedTemplateItemWrapper",
                      label: "Nested item wrapper",
                      responseScope: "",
                      config: {
