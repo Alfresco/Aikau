@@ -632,7 +632,12 @@ define(["dojo/_base/declare",
        */
       alfConditionalSubscribe: function alfresco_core_CoreWidgetProcessing__alfConditionalSubscribe(topic, rules, success, failure, global, parentScope) {
          return this.alfSubscribe(topic, lang.hitch(this, function(payload) {
-            objUtils.evaluateRules(lang.mixin({testObject: payload}, rules), success, failure);
+            var rulesObj = lang.mixin({
+                  testObject: payload
+               }, rules),
+               successHandler = success && lang.partial(success, payload),
+               failureHandler = failure && lang.partial(failure, payload);
+            objUtils.evaluateRules(rulesObj, successHandler, failureHandler);
          }), global, parentScope);
       },
 

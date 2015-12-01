@@ -65,6 +65,12 @@
                 <sub-component-chrome></sub-component-chrome>
             </defaults>
             
+            <module-deployment>
+            <!-- Allow extension modules with <auto-deploy> set to true to be automatically deployed -->
+               <mode>manual</mode>
+               <enable-auto-deploy-modules>true</enable-auto-deploy-modules>
+            </module-deployment>
+         
             <!-- This option enables advanced dependency management and ensures that all dependency request
                  URLs include a checksum suffix that uniquely identifies their contents. This option is disabled
                  in Alfresco versions up to 4.x but will be enabled in future versions. The <@ouputJavaScript>

@@ -55,11 +55,22 @@ define(["intern!object",
                });
          },
 
+         // See AKU-719 - The CommentsList should not use the standard Document Library page size (25) 
+         // and instead use it's own preference. CommentsList by default will show 5 items per page unlike
+         // with the next test suite there is no mock preference service so this default should remain.
          "Check paginator page selector text": function() {
             return browser.findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(2) > span")
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "1-5 of 6", "The page selector label was incorrect");
+               });
+         },
+
+         "Check comments pagination (results per page)": function() {
+            return browser.findByCssSelector("#COMMENT_LIST .alfresco-lists-Paginator__results-per-page")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.include(text, "5 per page", "Wrong initial page information");
                });
          },
 
@@ -211,6 +222,7 @@ define(["intern!object",
    });
 
    registerSuite(function(){
+      /* global document, window */
       var browser;
 
       return {
@@ -223,6 +235,25 @@ define(["intern!object",
 
          beforeEach: function() {
             browser.end();
+         },
+
+         // See AKU-719 - The CommentsList should not use the standard Document Library page size (25) 
+         // and instead use it's own preference. CommentsList by default will show 5 items per page, however
+         // the mock preference service will override that with a preference of 10...
+         "Check comments pagination (page selector)": function() {
+            return browser.findDisplayedByCssSelector("#FS_COMMENT_LIST .alfresco-lists-Paginator__page-selector")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.include(text, "1-6 of 6", "Wrong initial page information");
+               });
+         },
+
+         "Check comments pagination (results per page)": function() {
+            return browser.findDisplayedByCssSelector("#FS_COMMENT_LIST .alfresco-lists-Paginator__results-per-page")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.include(text, "10 per page", "Wrong initial page information");
+               });
          },
 
          "Add-comment opens in full-screen mode": function() {

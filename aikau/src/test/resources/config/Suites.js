@@ -83,6 +83,7 @@ define({
       "src/test/resources/alfresco/dnd/NestedReorderTest",
 
       "src/test/resources/alfresco/documentlibrary/AlfDocumentTest",
+      "src/test/resources/alfresco/documentlibrary/AlfDocumentFiltersTest",
       "src/test/resources/alfresco/documentlibrary/AlfGalleryViewSliderTest",
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
@@ -163,6 +164,7 @@ define({
       "src/test/resources/alfresco/layout/FixedHeaderFooterTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/HeightMixinTest",
+      "src/test/resources/alfresco/layout/IFramedTabContainerTest",
       "src/test/resources/alfresco/layout/StripedContentTest",
       "src/test/resources/alfresco/layout/TwisterTest",
       "src/test/resources/alfresco/layout/VerticalRevealTest",
@@ -284,6 +286,7 @@ define({
       "src/test/resources/alfresco/upload/UploadTargetTest",
 
       "src/test/resources/alfresco/util/functionUtilsTest",
+      "src/test/resources/alfresco/util/hashUtilsTest",
       "src/test/resources/alfresco/util/urlUtilsTest"
    ],
 

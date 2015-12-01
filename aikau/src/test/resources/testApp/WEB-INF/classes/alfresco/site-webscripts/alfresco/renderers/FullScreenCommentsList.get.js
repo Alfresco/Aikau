@@ -17,7 +17,7 @@ model.jsonModel = {
    widgets: [
       {
          name: "alfresco/renderers/CommentsList",
-         id: "COMMENT_LIST",
+         id: "FS_COMMENT_LIST",
          config: {
             addCommentsFullScreen: true,
             addCommentsPadding: 0,
@@ -33,6 +33,9 @@ model.jsonModel = {
                }
             }
          }
+      },
+      {
+         name: "aikauTesting/mockservices/PreferenceServiceMockXhr"
       },
       {
          name: "alfresco/logging/DebugLog"

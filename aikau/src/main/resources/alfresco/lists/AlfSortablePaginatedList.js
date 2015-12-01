@@ -122,11 +122,11 @@ define(["dojo/_base/declare",
             this._coreHashVars = ["currentPage","currentPageSize","sortField","sortAscending"];
          }
 
-         this.alfPublish(this.getPreferenceTopic, {
+         this.alfServicePublish(this.getPreferenceTopic, {
             preference: this.pageSizePreferenceName,
             callback: this.setPageSize,
             callbackScope: this
-         }, true);
+         });
       },
 
       /**
@@ -136,12 +136,13 @@ define(["dojo/_base/declare",
        * @param {number} value The number of documents per page.
        */
       setPageSize: function alfresco_lists_AlfSortablePaginatedList__setPageSize(value) {
+         if (value)
+         {
+            this.onItemsPerPageChange({
+               value: value
+            });
+         }
          this.currentPageSize = value || this.currentPageSize || 25;
-         this.alfPublish(this.docsPerpageSelectionTopic, {
-            label: this.message("list.paginator.perPage.label", {0: this.currentPageSize}),
-            value: this.currentPageSize,
-            selected: true
-         });
       },
 
       /**
@@ -329,9 +330,6 @@ define(["dojo/_base/declare",
             // Set the new page size, and log the previous page size for some calculations we'll do in a moment...
             var previousPageSize = this.currentPageSize;
             this.currentPageSize = payload.value;
-            // this.alfPublish(this.docsPerpageSelectionTopic, {
-            //    value: this.currentPageSize
-            // });
 
             if (this._readyToLoad === true)
             {

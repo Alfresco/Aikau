@@ -57,12 +57,32 @@ define(["dojo/_base/declare",
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
       /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/SimplePanel.css"}]
+       * @since 1.0.46
+       */
+      cssRequirements: [{cssFile:"./css/SimplePanel.css"}],
+
+      /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
        */
       templateString: template,
-      
+
+      /**
+       * Any additional style rules, as a map of style attributes to values
+       *
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.46
+       */
+      additionalStyles: null,
+
       /**
        * The height of the panel.
        * 
@@ -102,6 +122,10 @@ define(["dojo/_base/declare",
          if (this.handleOverflow === false)
          {
             domStyle.set(this.domNode, "overflow", "hidden");
+         }
+         if (this.additionalStyles)
+         {
+            domStyle.set(this.domNode, this.additionalStyles);
          }
          this.height && domStyle.set(this.domNode, "height", this.height);
          this.width && domStyle.set(this.domNode, "width", this.width);

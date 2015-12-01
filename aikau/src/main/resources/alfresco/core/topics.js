@@ -814,6 +814,18 @@ define([],function() {
       TAG_QUERY: "ALF_TAG_QUERY",
 
       /**
+       * This topic is fired when a [TinyMCE editor]{@link module:alfresco/editors/TinyMCE} is given focus.
+       * This is primarily used for testing purposes.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.46
+       * @event
+       */
+      TINYMCE_EDITOR_FOCUSED: "ALF_TINYMCE_EDITOR_FOCUSED",
+
+      /**
        * This topic can be used to publish a request to change the title of a page. It is subscribed to by the
        * [Title widget]{@link module:alfresco/header/Title} and published by the 
        * [SetTitle widget]{@link module:alfresco/header/SetTitle}

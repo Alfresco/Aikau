@@ -28,7 +28,8 @@
                "hideNavBar": false,
                "showFolders": true,
                "showSidebar": true,
-               "viewRendererName": "simple"
+               "viewRendererName": "simple",
+               "commentsPerPage": 10
             },
             "documents": {
                "favourites": "workspace:\/\/SpacesStore\/5fa74ad3-9b5b-461b-9df5-de407f1f4fe7,workspace:\/\/SpacesStore\/8fe12e94-f092-4d41-9823-cb94507b44d9,workspace:\/\/SpacesStore\/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"

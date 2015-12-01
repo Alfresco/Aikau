@@ -34,7 +34,19 @@ model.jsonModel = {
                   }
                },
                {
-                  name: "alfresco/logging/DebugLog"
+                  name: "alfresco/layout/SimplePanel",
+                  config: {
+                     additionalStyles: {
+                        border: "1px solid #999",
+                        padding: "10px"
+                     },
+                     height: "500px",
+                     widgets: [
+                        {
+                           name: "alfresco/logging/DebugLog"
+                        }
+                     ]
+                  }
                }
             ]
          }
