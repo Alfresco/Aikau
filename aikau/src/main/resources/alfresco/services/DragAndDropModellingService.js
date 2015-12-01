@@ -225,7 +225,7 @@ define(["dojo/_base/declare",
       processModel: function alfresco_services_DragAndDropModellingService__processModel(configAttribute, response, value, model) {
          var modelMatchFound = false;
 
-         if (value.isTemplate === true && value.templateModel)
+         if ((value.isTemplate === true || value._alfTemplateName) && value.templateModel)
          {
             // The dropped item is a template, it will be necessary to construct the data from the data it contains...
             var templateModel = value.templateModel;
@@ -249,9 +249,9 @@ define(["dojo/_base/declare",
             // Then check 
 
             function findDropTargets(parameters) {
-               var parent = parameters.ancestors[parameters.ancestors.length-1];
                if (parameters.object === "alfresco/dnd/DragAndDropNestedTarget")
                {
+                  var parent = parameters.ancestors[parameters.ancestors.length-1];
                   var targetProperty = lang.getObject("config.targetProperty", false, parent);
                   if (targetProperty)
                   {
@@ -274,12 +274,15 @@ define(["dojo/_base/declare",
                }
                else
                {
+                  var configParent = parameters.ancestors[parameters.ancestors.length-2];
                   array.some(parameters.config.templateMappings, function(mapping) {
                      var found = (mapping.property === parameters.object);
                      if (found)
                      {
-                        var clonedParent = lang.clone(parent);
-
+                        var clonedParent = lang.clone(configParent);
+                        clonedParent.config.name = mapping.id;
+                        clonedParent.config.label = mapping.label;
+                        clonedParent.config.description = mapping.description;
                         config.data.push(clonedParent);
                      }
                      return found;

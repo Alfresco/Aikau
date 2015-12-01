@@ -43,7 +43,7 @@ define(["dojo/_base/declare",
             {
                this.value._alfTemplateName = this.value.name;
                delete this.value.name;
-               delete this.value.templateModel;
+               // delete this.value.templateModel; // NEED TO KEEP THIS
                delete this.value.isTemplate;
             }
             widget.setValue(this.value);
