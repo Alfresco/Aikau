@@ -127,17 +127,19 @@ define([
          },
 
          // Helper to get the value for a name and filter
-         _getFilteredValue: function alfresco_util_functionUtils___getFilteredValue(collection, name, filter) {
+         _getFilteredValue: function alfresco_util_functionUtils___getFilteredValue(collection, name, filter, defaultValue) {
             var items = collection[name] || [],
+               valueFound = false,
                value;
             array.some(items, function(item) {
                if (item.filter === filter) {
                   value = item.value;
-                  return true;
+                  valueFound = true;
                }
-               return false;
+               return valueFound;
             });
-            return value;
+
+            return valueFound ? value : defaultValue;
          },
 
          // Helper to set the value for a name and filter
@@ -151,10 +153,11 @@ define([
                   return false;
                });
             if (!updatedValue) {
-               collection[name] = [{
+               items.push({
                   filter: filter,
                   value: value
-               }];
+               });
+               collection[name] = items;
             }
          },
 
@@ -173,7 +176,7 @@ define([
 
             // Retrieve the specific info using name and filter
             var currentTimeout = this._getFilteredValue(timeouts, name, filter),
-               lastExecutionTime = this._getFilteredValue(lastExecutions, name, filter),
+               lastExecutionTime = this._getFilteredValue(lastExecutions, name, filter, 0),
                timeSinceLastExec = Date.now() - lastExecutionTime,
                lastExecWithinTimePeriod = timeSinceLastExec < timeoutMs;
 
@@ -222,6 +225,7 @@ define([
             }
 
             // Pass back a remove-object for cancelling the queued function
+            currentTimeout = this._getFilteredValue(timeouts, name, filter);
             return {
                remove: function() {
                   clearTimeout(currentTimeout);
