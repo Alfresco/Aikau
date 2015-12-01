@@ -74,7 +74,7 @@ define(["intern!object",
          "Count the documents": function() {
             return browser.findAllByCssSelector(".alf-live-search-documents-list .alf-livesearch-item")
                .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Unexpected number of documents found");
+                  assert.lengthOf(elements, 3, "Unexpected number of documents found");
                });
          },
 
@@ -89,6 +89,41 @@ define(["intern!object",
             return browser.findAllByCssSelector(".alf-live-search-people-list .alf-livesearch-item")
                .then(function(elements) {
                   assert.lengthOf(elements, 0, "There shouldn't have been any people displayed");
+               });
+         },
+
+         "Text isn't erroneously escaped": function() {
+            return browser.findByCssSelector("#SB1 .alf-live-search-documents-list > div:nth-child(2)")
+               .findByCssSelector(".alf-livesearch-thumbnail a")
+               .getAttribute("title")
+               .then(function(attr) {
+                  assert.equal(attr, "Terms & Conditions.pdf", "Preview link title attribute not set correctly");
+               })
+               .end()
+
+            .findByCssSelector(".alf-livesearch-thumbnail a img")
+               .getAttribute("alt")
+               .then(function(attr) {
+                  assert.equal(attr, "Terms & Conditions.pdf", "Preview image alt attribute not set correctly");
+               })
+               .end()
+
+            .findByCssSelector(".alf-livesearch-item a")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Terms & Conditions.pdf", "Link content not set correctly");
+               })
+               .end(); // Necessary to break out of inner context - suite will break out of outer automatically
+         },
+
+         "Code cannot be injected maliciously": function() {
+            return browser.execute(function() {
+                  return ["Name", "Title", "Description"].filter(function(hackedProp) {
+                     return !!window[hackedProp];
+                  });
+               })
+               .then(function(hackedItems) {
+                  assert.lengthOf(hackedItems, 0);
                });
          },
 
