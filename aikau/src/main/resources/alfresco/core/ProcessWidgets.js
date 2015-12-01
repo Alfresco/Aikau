@@ -83,7 +83,6 @@ define(["dojo/_base/declare",
        * @instance postCreate
        */
       postCreate: function alfresco_core_ProcessWidgets__postCreate() {
-         // NOTE: If this function is changed, please also update onResize in HorizontalWidgets
          domClass.add(this.domNode, this.additionalCssClasses || "");
          if (this.widgets)
          {

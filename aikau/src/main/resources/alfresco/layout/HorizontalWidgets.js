@@ -180,8 +180,8 @@ define(["alfresco/core/ProcessWidgets",
          {
             this._hasInitialDimensions = true;
             this.doWidthProcessing(this.widgets, true);
-            this.inherited(arguments);
          }
+         this.inherited(arguments);
 
          // Update the grid as the window changes...
          this.alfSetupResizeSubscriptions(this.onResize, this);
@@ -354,18 +354,7 @@ define(["alfresco/core/ProcessWidgets",
             if (overallwidth)
             {
                this._hasInitialDimensions = true;
-
-               // NOTE: A calculated risk is included here, this is that when there is no initial
-               //       width (which in itself is an edge case - see AKU-692) then we need to 
-               //       execute the code that would normally be found in the postCreate function
-               //       of ProcessWidgets. It is possible that the code could get out of step, but this
-               //       is a very minor issue.
                this.doWidthProcessing(this.widgets, true);
-               domClass.add(this.domNode, this.additionalCssClasses || "");
-               if (this.widgets)
-               {
-                  this.processWidgets(this.widgets, this.containerNode);
-               }
             }
          }
          else
