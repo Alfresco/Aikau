@@ -355,6 +355,7 @@ define(["alfresco/core/ProcessWidgets",
             {
                this._hasInitialDimensions = true;
                this.doWidthProcessing(this.widgets, true);
+               this.alfPublishResizeEvent(this.domNode);
             }
          }
          else

@@ -131,9 +131,9 @@ define(["intern!object",
                .click()
             .end()
 
-            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_CRUD_UPDATE", "id", "Updated_ID1"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "ID was not updated");
+            .getLastPublish("ALF_CRUD_UPDATE")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "id", "Updated_ID1", "ID was not updated");
                });
          },
 
