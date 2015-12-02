@@ -206,6 +206,75 @@ define(["intern!object",
       var browser;
 
       return {
+         name: "AlfSortablePaginatedList Tests (item selection retention)",
+         
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/AlfSortablePaginatedList", "AlfSortablePaginatedList Tests (item selection retention)").end();
+         },
+         
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Select items": function() {
+            return browser.findDisplayedById("SELECTOR_ITEM_2")
+               .click()
+            .end()
+
+            .getLastPublish("HASH_CUSTOM_ALF_DOCLIST_FILE_SELECTION", "Selection data not published (1)")
+            .clearLog()
+
+            .findDisplayedById("SELECTOR_ITEM_4")
+               .click()
+            .end()
+
+            .getLastPublish("HASH_CUSTOM_ALF_DOCLIST_FILE_SELECTION", "Selection data not published (2)")
+            .clearLog();
+         },
+
+         "Switch order and check items are still selected": function() {
+            return browser.findById("DESCENDING_text")
+               .click()
+            .end()
+
+            .getLastPublish("HASH_CUSTOM_ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "Data not reloaded")
+            .clearLog()
+
+            .findByCssSelector("#SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--selected")
+            .end()
+
+            .findByCssSelector("#SELECTOR_ITEM_4.alfresco-lists-ItemSelectionMixin--selected");
+         },
+
+         "Change the page size and check items are still selected": function() {
+            return browser.findById("HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
+               .click()
+            .end()
+
+            .findDisplayedByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:first-child .dijitMenuItemLabel")
+               .click()
+            .end()
+
+            .getLastPublish("HASH_CUSTOM_ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "Data not reloaded")
+            .clearLog()
+
+            .findByCssSelector("#SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--selected")
+            .end()
+
+            .findByCssSelector("#SELECTOR_ITEM_4.alfresco-lists-ItemSelectionMixin--selected");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
          name: "AlfSortablePaginatedList Tests (data load failure)",
          
          setup: function() {
