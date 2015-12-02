@@ -143,27 +143,24 @@ define(["dojo/_base/declare",
                }
 
                // Attempt to parse the data, but reset to null if not possible...
-               var data;
+               var data = config.data;
+
+               // Clean the data prior to sending, unless specifically told not to
+               if (data && !config.doNotCleanData) {
+                  data = this.alfCleanFrameworkAttributes(data);
+               }
+
                if (headers["Content-Type"] === "application/json")
                {
                   try
                   {
-                     data = (config.data && JSON.stringify(config.data)) || null;
+                     data = (data && JSON.stringify(data)) || null;
                   }
                   catch (e)
                   {
                      this.alfLog("warn", "Could not stringify XHR JSON data", data);
                      data = null;
                   }
-               }
-               else
-               {
-                  data = config.data;
-               }
-
-               // Clean the data prior to sending, unless specifically told not to
-               if(data && !config.doNotCleanData) {
-                  data = this.alfCleanFrameworkAttributes(data);
                }
 
                var options = {

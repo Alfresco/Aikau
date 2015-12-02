@@ -239,7 +239,7 @@ define(["intern!object",
          },
 
          "Create new content strips framework attributes from POST body": function() {
-            return browser.findById("CREATE_CONTENT")
+            return browser.findById("CREATE_CONTENT_label")
                .click()
                .end()
  
@@ -250,6 +250,15 @@ define(["intern!object",
                   assert.notDeepProperty(xhrEntry, "request.body.type");
                   assert.notDeepProperty(xhrEntry, "request.body.currentNode");
                });
+         },
+
+         "Create new content scopes the success response correctly": function() {
+            return browser.findById("CREATE_CONTENT_SCOPED_label")
+               .clearLog()
+               .click()
+               .end()
+ 
+            .getLastPublish("SCOPED_ALF_DOCLIST_RELOAD_DATA", true);
          },
 
          "Post Coverage Results": function() {
