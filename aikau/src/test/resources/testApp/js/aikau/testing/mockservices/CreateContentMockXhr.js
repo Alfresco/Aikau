@@ -65,12 +65,17 @@ define(["dojo/_base/declare",
                                     /\/aikau\/proxy\/alfresco\/slingshot\/doclib\/node-templates/,
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
-                                     "{'name':'FAKE_NODE_NAME','success':true}"]);
+                                     "{\"name\":\"FAKE_NODE_NAME\",\"success\":true}"]);
             this.server.respondWith("POST",
                                     /\/aikau\/proxy\/alfresco\/slingshot\/doclib\/folder-templates/,
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
-                                     "{'name':'FAKE_FOLDER_NAME','success':true}"]);
+                                     "{\"name\":\"FAKE_FOLDER_NAME\",\"success\":true}"]);
+            this.server.respondWith("POST",
+                                    /\/aikau\/proxy\/alfresco\/api\/type\/cm:folder\/formprocessor/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     "{\"success\":true}"]);
          }
          catch(e)
          {
