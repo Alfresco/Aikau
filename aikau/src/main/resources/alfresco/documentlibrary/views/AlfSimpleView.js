@@ -79,7 +79,10 @@ define(["dojo/_base/declare",
                         widgets: [
                            {
                               id: "SIMPLE_VIEW_SELECTOR",
-                              name: "alfresco/renderers/Selector"
+                              name: "alfresco/renderers/Selector",
+                              config: {
+                                 itemKey: "node.nodeRef"
+                              }
                            }
                         ]
                      }
