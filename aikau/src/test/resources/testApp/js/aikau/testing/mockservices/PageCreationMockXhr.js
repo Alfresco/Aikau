@@ -88,13 +88,9 @@ define(["dojo/_base/declare",
          var items = [];
          Object.keys(this.items).forEach(function(key) {
             items.push({
-               type: ["widget"],
-               label: key,
-               value: {
-                  name: key,
-                  templateModel: this.items[key],
-                  isTemplate: true
-               }
+               name: key,
+               nodeRef: key,
+               content: JSON.stringify(this.items[key])
             });
          }, this);
 

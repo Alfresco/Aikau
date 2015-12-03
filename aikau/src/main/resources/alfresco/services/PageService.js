@@ -119,39 +119,51 @@ define(["dojo/_base/declare",
             url: AlfConstants.PROXY_URI + "remote-share/pages",
             method: "GET",
             alfTopic: payload.alfResponseTopic,
-            // successCallback: this.getPagesForPaletteSuccess,
+            successCallback: this.getPagesForPaletteSuccess,
             callbackScope: this
          });
       },
 
-      // getPagesForPaletteSuccess: function alfresco_services_PageService__getPagesForPaletteSuccess(response, originalRequestConfig) {
-      //    if (response && response.items && ObjectTypeUtils.isArray(response.items))
-      //    {
-      //       var pageDefs = [];
-      //       array.forEach(response.items, lang.hitch(this, function(item) {
-      //          pageDefs.push(
-      //             {
-      //                type: [ "widget"],
-      //                label: item.config.label,
-      //                value: {
-      //                   name: item.name
-      //                }
-      //             }
-      //          );
-      //       }));
+      getPagesForPaletteSuccess: function alfresco_services_PageService__getPagesForPaletteSuccess(response, originalRequestConfig) {
+         if (response && response.items && ObjectTypeUtils.isArray(response.items))
+         {
+            var pageDefs = [];
+            array.forEach(response.items, lang.hitch(this, function(item) {
+               // if (item.content)
+               // {
+                  
+               //    var parsedContent = JSON.parse(item.content);
+               //    if (ObjectTypeUtils.isArray(parsedContent.widgets))
+               //    {
+               //       array.forEach(parsedContent.widgets)
+               //    }
+               // }
+               
 
-      //       response.items = pageDefs;
-      //       var topic = originalRequestConfig.alfTopic + "_SUCCESS";
-      //       this.alfPublish(topic, {
-      //          response: response,
-      //          originalRequestConfig: originalRequestConfig
-      //       });
-      //    }
-      //    else
-      //    {
-      //       this.alfLog("error", "The request to retrieve available page definitions returned a response that could not be interpreted", response, originalRequestConfig, this);
-      //    }
-      // },
+               pageDefs.push(
+                  {
+                     type: [ "widget"],
+                     label: item.name,
+                     value: {
+                        templateModel: JSON.parse(item.content),
+                        isTemplate: true
+                     }
+                  }
+               );
+            }));
+
+            response.items = pageDefs;
+            var topic = originalRequestConfig.alfTopic + "_SUCCESS";
+            this.alfPublish(topic, {
+               response: response,
+               originalRequestConfig: originalRequestConfig
+            });
+         }
+         else
+         {
+            this.alfLog("error", "The request to retrieve available page definitions returned a response that could not be interpreted", response, originalRequestConfig, this);
+         }
+      },
 
 
       /**
