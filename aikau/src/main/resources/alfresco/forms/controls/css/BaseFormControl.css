@@ -11,6 +11,24 @@
 // Main CSS
 .alfresco-forms-controls-BaseFormControl {
    margin-bottom: @standard-line-height;
+   // BEM CSS
+   &__validation-error {
+      display: none;
+      height: 16px;
+      margin: 0 4px;
+      width: 16px;
+   }
+   &--invalid {
+      > .title-row {
+         > .alfresco-forms-controls-BaseFormControl__validation-error {
+            display: inline-block;
+         }
+         > span.validation-message {
+            display: inline-block;
+         }
+      }
+   }
+   // Legacy CSS
    > .description-row {
       max-width: @dialog-control-section;
       > .description {
@@ -45,9 +63,6 @@
             display: inline-block;
          }
       }
-      > .validation {
-         display: none;
-      }
       > img.validationInProgress {
          height: 16px;
          margin: 2px 0;
@@ -67,23 +82,12 @@
             display: none;
          }
       }
-      > .validation-error {
-         background: url("./images/error-16.png");
-         background-repeat: no-repeat;
-         display: inline-block;
-         height: 16px;
-         margin: 0 4px;
-         width: 16px;
-      }
       > .validation-message {
          color: #ed2525;
          display: none;
          font-size: @normal-font-size - 3;
          margin: 0;
          width: @dialog-label-section;
-         &.display {
-            display: inline-block;
-         }
       }
    }
    > .units {
@@ -131,6 +135,13 @@
          > form {
             > .alfresco-forms-controls-BaseFormControl {
                min-width: @dialog-control-section + 2;
+               &--invalid {
+                  > .title-row {
+                     > span.validation-message {
+                        display: block;
+                     }
+                  }
+               }
                > .description-row > .description {
                   margin: 0 0 @standard-line-height @dialog-label-section + 4;
                }
@@ -146,9 +157,6 @@
                   }
                   > .validation-message {
                      margin: 7px 0 0 -5px;
-                     &.display {
-                        display: block;
-                     }
                   }
                }
             }
