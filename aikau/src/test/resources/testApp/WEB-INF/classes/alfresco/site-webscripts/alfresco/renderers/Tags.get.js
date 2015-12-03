@@ -26,7 +26,8 @@ model.jsonModel = {
          name: "alfresco/renderers/Tags",
          config: {
             propertyToRender: "node.properties.cm:taggable",
-            permissionProperty: null
+            permissionProperty: null,
+            showOkCancelActions: false
          }
       },
       {
