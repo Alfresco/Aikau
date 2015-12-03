@@ -305,11 +305,7 @@ registerSuite(function(){
       },
 
       "Check validation error indicator": function() {
-         return browser.findByCssSelector("#HAS_VALIDATION_CONFIG span.validation")
-            .getComputedStyle("display")
-            .then(function(result) {
-               assert(result === "inline-block", "Validation error indicator should be displayed");
-            });
+         return browser.findByCssSelector("#HAS_VALIDATION_CONFIG.alfresco-forms-controls-BaseFormControl--invalid");
       },
 
       "Check validation error message": function() {
@@ -328,11 +324,7 @@ registerSuite(function(){
          return browser.findByCssSelector("#HAS_VALIDATION_CONFIG .dijitInputContainer input")
             .type("x")
          .end()
-         .findByCssSelector("#HAS_VALIDATION_CONFIG span.validation")
-            .getComputedStyle("display")
-            .then(function(result) {
-               assert(result === "inline-block", "Validation error indicator should be displayed for non-numeric");
-            });
+         .findByCssSelector("#HAS_VALIDATION_CONFIG.alfresco-forms-controls-BaseFormControl--invalid");
       },
 
       "Check validation indicator is hidden (non-numeric)": function() {
@@ -340,10 +332,9 @@ registerSuite(function(){
             .type(keys.BACKSPACE)
             .type("1234")
          .end()
-         .findByCssSelector("#HAS_VALIDATION_CONFIG span.validation")
-            .getComputedStyle("display")
-            .then(function(result) {
-               assert(result === "none", "Validation error indicator should be hidden for numeric entry");
+         .findAllByCssSelector("#HAS_VALIDATION_CONFIG.alfresco-forms-controls-BaseFormControl--invalid")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
             });
       },
 
