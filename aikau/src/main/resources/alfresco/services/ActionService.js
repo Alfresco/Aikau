@@ -808,7 +808,8 @@ define(["dojo/_base/declare",
          if (document && document.node && document.node.nodeRef)
          {
             var data = {
-               nodeRef: document.node.nodeRef
+               nodeRef: document.node.nodeRef,
+               displayName: lang.getObject("node.properties.cm:title", false, document) || lang.getObject("node.properties.cm:name", false, document)
             };
             var config = {
                url: AlfConstants.PROXY_URI + "slingshot/doclib/action/checkout/node/" + data.nodeRef.replace("://", "/"),
@@ -867,7 +868,7 @@ define(["dojo/_base/declare",
        */
       onActionEditOfflineFailure: function alfresco_services_ActionService__onActionEditOfflineFailure(response, originalRequestConfig) {
          this.alfLog("error", "Edit offline request failure", response, originalRequestConfig);
-         this.displayMessage(this.message("message.edit-offline.failure", {"0": response.results[0].id}));
+         this.displayMessage(this.message("message.edit-offline.failure", {"0": originalRequestConfig.data.displayName}));
       },
 
       /**
