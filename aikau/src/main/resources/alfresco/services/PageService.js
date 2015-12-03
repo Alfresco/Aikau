@@ -30,11 +30,12 @@ define(["dojo/_base/declare",
         "alfresco/services/_PageServiceTopicMixin",
         "alfresco/core/NotificationUtils",
         "alfresco/core/ObjectTypeUtils",
+        "alfresco/util/objectProcessingUtil",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
         "service/constants/Default"],
-        function(declare, BaseService, CoreXhr, _PageServiceTopicMixin, NotificationUtils, ObjectTypeUtils, lang, array, domConstruct, AlfConstants) {
+        function(declare, BaseService, CoreXhr, _PageServiceTopicMixin, NotificationUtils, ObjectTypeUtils, objectProcessingUtil, lang, array, domConstruct, AlfConstants) {
    
    return declare([BaseService, CoreXhr, _PageServiceTopicMixin, NotificationUtils], {
       
@@ -278,6 +279,27 @@ define(["dojo/_base/declare",
          return pageDefinition;
       },
 
+
+      cleanUpTemplateConfig: function alfresco_services_PageService__cleanUpTemplateConfig(parameters) {
+         if (parameters.object === true)
+         {
+            // Found a template object...
+            var parent = parameters.ancestors[parameters.ancestors.length-1];
+
+            objectProcessingUtil.findObject(parent.config, {
+               prefix: "isTemplate",
+               processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
+               config: null
+            });
+
+            parent._alfTemplateName = parent.label;
+            delete parent.label;
+            delete parent.isTemplate;
+            delete parent.templateModel;
+            delete parent.type;
+         }
+      },
+
       /**
        * 
        * @instance
@@ -290,6 +312,15 @@ define(["dojo/_base/declare",
                name: payload.pageName,
                json: this.getPageDefinitionFromPayload(payload)
             };
+
+            // TODO: Clean up template data to set "_alfTemplateName" and remove superfluous attributes...
+            // 
+            objectProcessingUtil.findObject(data, {
+               prefix: "isTemplate",
+               processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
+               config: null
+            });
+
             this.serviceXhr({
                url : AlfConstants.PROXY_URI + "remote-share/page-definition",
                data: data,

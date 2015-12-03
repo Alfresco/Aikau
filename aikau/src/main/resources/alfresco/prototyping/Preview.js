@@ -129,6 +129,10 @@ define(["dojo/_base/declare",
             {
                var pageDefinition = this.getPageDefinitionFromPayload(payload);
                var pageDefObject = dojoJson.parse(pageDefinition);
+
+               // Find all templates and swap them out for the actual widget models...
+               
+
                var data = {
                   jsonContent: pageDefObject,
                   widgets: pageDefinition
