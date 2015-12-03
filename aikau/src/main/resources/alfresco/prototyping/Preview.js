@@ -33,13 +33,14 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "alfresco/core/Page",
+        "alfresco/util/objectProcessingUtil",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/json",
         "dojo/query",
         "dojo/NodeList-manipulate"], 
-        function(declare, _Widget, _Templated, template, AlfCore, CoreXhr, AlfConstants, Page, domConstruct, lang, array, dojoJson, query) {
+        function(declare, _Widget, _Templated, template, AlfCore, CoreXhr, AlfConstants, Page, objectProcessingUtil, domConstruct, lang, array, dojoJson, query) {
    
    return declare([_Widget, _Templated, AlfCore, CoreXhr], {
       
@@ -110,6 +111,127 @@ define(["dojo/_base/declare",
          return pageDefinition;
       },
 
+      loadTemplate: function alfresco_prototyping_Preview__loadTemplate(parameters) {
+         // var template;
+         // if (templateName)
+         // {
+         //    // If a template name has been supplied then retrieve it's details...
+         //    // By passing the name only a single result should be returned...
+         //    var json = remote.call("/remote-share/pages/name/" + templateName);
+         //    var templates = null;
+         //    try
+         //    {
+         //       if (json.status === 200)
+         //       {
+         //          templates = JSON.parse(json.response);
+         //       }
+         //       else
+         //       {
+         //          model.jsonModelError = "remote.page.error.remotefailure";
+         //       }
+         //       if (templates &&
+         //           templates.items &&
+         //           templates.items.length === 1 &&
+         //           templates.items[0].content)
+         //       {
+         //          template = templates.items[0].content;
+         //       }
+         //       else
+         //       {
+         //          model.jsonModelError = "remote.page.error.invalidData";
+         //          model.jsonModelErrorArgs = templates;
+         //       }
+
+         //       model.jsonModel = JSON.parse(template);
+         //       // model.jsonModel.groupMemberships = user.properties["alfUserGroups"];
+         //    }
+         //    catch(e)
+         //    {
+         //       model.jsonModelError = "remote.page.load.error";
+         //       model.jsonModelErrorArgs = page.url.templateArgs.pagename;
+         //    }
+         // }
+         // else
+         // {
+         //    // No page name supplied...
+         //    model.jsonModelError = "remote.page.error.nopage";
+         // }
+         // return template;
+      },
+
+      setTemplateConfiguration: function alfresco_prototyping_Preview__setTemplateConfiguration(parameters) {
+         if (Array.isArray(parameters.object)  &&
+             parameters.config &&
+             parameters.ancestors)
+         {
+            var parent = parameters.ancestors[parameters.ancestors.length-1]; 
+            parameters.object.forEach(function(templateMapping) {
+               if (templateMapping.property)
+               {
+                  // Get the last ancestor as this will be the "config" object of a widget in the 
+                  // template that has a property to be set...
+                  if (typeof templateMapping.id !== undefined)
+                  {
+                     parent[templateMapping.property] = parameters.config[templateMapping.id];
+
+                     // delete parent["_alfTemplateMapping_" + valueProperty];
+                  }
+                  else
+                  {
+                     // TODO: Log missing value attribute (e.g. the attribute to get the value from to set in the template)
+                  }
+               }
+               else
+               {
+                  // TODO: Log incorrect parameters argument - missing some attributes
+               }
+            });
+
+            delete parent._alfTemplateMappings;
+            delete parent._alfIncludeInTemplate;
+         }
+         else
+         {
+            // TODO: Log incorrect parameters
+         }
+      },
+
+      processTemplate: function alfresco_prototyping_Preview__processTemplate(parameters) {
+         // The object should actually be a string (i.e. the name or nodeRef of the template)...
+         if (typeof parameters.object === "string" &&
+             parameters.ancestors)
+         {
+            // TODO: load the template...
+            var loadedTemplate = this.loadTemplate(parameters.object);
+
+            // Get the parent in order to get the "config" to apply to the template...
+            var parent = parameters.ancestors[parameters.ancestors.length-1];
+            if (parent.config)
+            {
+               // Set the template configuration points...
+               // findObject(loadedTemplate, "_alfTemplateMapping_", parent.config, null, setTemplateConfiguration);
+               objectProcessingUtil.findObject(loadedTemplate, {
+                  prefix: "_alfTemplateMappings", 
+                  config: parent.config,
+                  processFunction: lang.hitch(this, this.setTemplateConfiguration)
+               });
+
+               // Swap the loaded template back into the correct location...
+               var arrayToUpdate = parameters.ancestors[parameters.ancestors.length-3];
+               var indexToSwapForTemplate = parameters.ancestors[parameters.ancestors.length-2];
+               arrayToUpdate.splice(indexToSwapForTemplate, 1, loadedTemplate);
+            }
+            else
+            {
+               // TODO: Log missing config (not able to set configure template without values!)
+            }
+         }
+         else
+         {
+            // TODO: Log incorrect object type - string expected for template name/nodeRef
+         }
+      },
+
       /**
        * @instance
        * @param {object} payload An object containing the details of the page definition to preview.
@@ -131,7 +253,11 @@ define(["dojo/_base/declare",
                var pageDefObject = dojoJson.parse(pageDefinition);
 
                // Find all templates and swap them out for the actual widget models...
-               
+               objectProcessingUtil.findObject(data, {
+                  prefix: "_alfTemplateMappings",
+                  processFunction: lang.hitch(this, this.processTemplate),
+                  config: null
+               });
 
                var data = {
                   jsonContent: pageDefObject,
