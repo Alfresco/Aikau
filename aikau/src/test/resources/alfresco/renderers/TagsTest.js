@@ -151,9 +151,8 @@ define(["intern!object",
          "Navigate to a node with no tags and edit it": function() {
             // Tab to the third Tags renderer and use the keyboard shortcut to edit it...
             // An immediate request for existing tags should be made
-            return browser.pressKeys([keys.TAB])
-               .pressKeys([keys.TAB])
-               .pressKeys([keys.TAB])
+            return browser.findByCssSelector("body")
+               .tabToElement("#TAGS_3 .inlineEditValue")
                .pressKeys([keys.CONTROL, "e"])
                .pressKeys(keys.NULL)
                .end()
@@ -220,8 +219,8 @@ define(["intern!object",
          "Navigate to a node with no tags and edit it": function() {
             // Tab to the third Tags renderer and use the keyboard shortcut to edit it...
             // An immediate request for existing tags should be made
-            return browser.pressKeys([keys.TAB])
-               .pressKeys([keys.TAB])
+            return browser.findByCssSelector("body")
+               .tabToElement("#TAGS_2 .inlineEditValue")
                .pressKeys([keys.CONTROL, "e"])
                .pressKeys(keys.NULL)
             .end()
