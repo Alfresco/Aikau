@@ -137,7 +137,7 @@ define(["dojo/_base/declare",
              parameters.config &&
              parameters.ancestors)
          {
-            var parent = parameters.ancestors[parameters.ancestors.length-1]; 
+            var parent = parameters.ancestors[parameters.ancestors.length-2]; 
             parameters.object.forEach(function(templateMapping) {
                if (templateMapping.property)
                {
@@ -145,8 +145,8 @@ define(["dojo/_base/declare",
                   // template that has a property to be set...
                   if (typeof templateMapping.id !== undefined)
                   {
-                     parent[templateMapping.property] = parameters.config[templateMapping.id];
-
+                     // parent[templateMapping.property] = parameters.config[templateMapping.id];
+                     lang.setObject(templateMapping.property, parameters.config[templateMapping.id], parent);
                      // delete parent["_alfTemplateMapping_" + valueProperty];
                   }
                   else
@@ -180,7 +180,7 @@ define(["dojo/_base/declare",
                if (template.name === parameters.object)
                {
                   var parsedContent = JSON.parse(template.content);
-                  loadedTemplate = parsedContent.widgets;
+                  loadedTemplate = parsedContent.widgets[0];
                }
             });
 
