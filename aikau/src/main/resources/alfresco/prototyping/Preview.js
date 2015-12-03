@@ -37,10 +37,13 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/Deferred",
+        "dojo/when",
         "dojo/json",
         "dojo/query",
         "dojo/NodeList-manipulate"], 
-        function(declare, _Widget, _Templated, template, AlfCore, CoreXhr, AlfConstants, Page, objectProcessingUtil, domConstruct, lang, array, dojoJson, query) {
+        function(declare, _Widget, _Templated, template, AlfCore, CoreXhr, AlfConstants, Page, objectProcessingUtil, 
+                 domConstruct, lang, array, Deferred, when, dojoJson, query) {
    
    return declare([_Widget, _Templated, AlfCore, CoreXhr], {
       
@@ -111,52 +114,22 @@ define(["dojo/_base/declare",
          return pageDefinition;
       },
 
-      loadTemplate: function alfresco_prototyping_Preview__loadTemplate(parameters) {
-         // var template;
-         // if (templateName)
-         // {
-         //    // If a template name has been supplied then retrieve it's details...
-         //    // By passing the name only a single result should be returned...
-         //    var json = remote.call("/remote-share/pages/name/" + templateName);
-         //    var templates = null;
-         //    try
-         //    {
-         //       if (json.status === 200)
-         //       {
-         //          templates = JSON.parse(json.response);
-         //       }
-         //       else
-         //       {
-         //          model.jsonModelError = "remote.page.error.remotefailure";
-         //       }
-         //       if (templates &&
-         //           templates.items &&
-         //           templates.items.length === 1 &&
-         //           templates.items[0].content)
-         //       {
-         //          template = templates.items[0].content;
-         //       }
-         //       else
-         //       {
-         //          model.jsonModelError = "remote.page.error.invalidData";
-         //          model.jsonModelErrorArgs = templates;
-         //       }
+      
 
-         //       model.jsonModel = JSON.parse(template);
-         //       // model.jsonModel.groupMemberships = user.properties["alfUserGroups"];
-         //    }
-         //    catch(e)
-         //    {
-         //       model.jsonModelError = "remote.page.load.error";
-         //       model.jsonModelErrorArgs = page.url.templateArgs.pagename;
-         //    }
-         // }
-         // else
-         // {
-         //    // No page name supplied...
-         //    model.jsonModelError = "remote.page.error.nopage";
-         // }
-         // return template;
+      loadAllTemplates: function alfresco_prototyping_Preview__loadAllTemplates() {
+         var promise = new Deferred();
+         this.serviceXhr({
+            url: AlfConstants.PROXY_URI + "remote-share/pages",
+            method: "GET",
+            promise: promise,
+            successCallback: this.loadAllTemplatesSuccess,
+            callbackScope: this
+         });
+         return promise;
+      },
+
+      loadAllTemplatesSuccess: function alfresco_prototyping_Preview__loadTemplateSuccess(response, originalRequestConfig) {
+         originalRequestConfig.promise.resolve(response.items);
       },
 
       setTemplateConfiguration: function alfresco_prototyping_Preview__setTemplateConfiguration(parameters) {
@@ -201,8 +174,15 @@ define(["dojo/_base/declare",
          if (typeof parameters.object === "string" &&
              parameters.ancestors)
          {
-            // TODO: load the template...
-            var loadedTemplate = this.loadTemplate(parameters.object);
+            // Find the the template...
+            var loadedTemplate;
+            array.forEach(parameters.config.templates, function(template) {
+               if (template.name === parameters.object)
+               {
+                  var parsedContent = JSON.parse(template.content);
+                  loadedTemplate = parsedContent.widgets;
+               }
+            });
 
             // Get the parent in order to get the "config" to apply to the template...
             var parent = parameters.ancestors[parameters.ancestors.length-1];
@@ -232,6 +212,27 @@ define(["dojo/_base/declare",
          }
       },
 
+      // TODO: This should be in mixin module...
+      cleanUpTemplateConfig: function alfresco_services_PageService__cleanUpTemplateConfig(parameters) {
+         if (parameters.object === true)
+         {
+            // Found a template object...
+            var parent = parameters.ancestors[parameters.ancestors.length-1];
+
+            objectProcessingUtil.findObject(parent.config, {
+               prefix: "isTemplate",
+               processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
+               config: null
+            });
+
+            parent._alfTemplateName = parent.label;
+            delete parent.label;
+            delete parent.isTemplate;
+            delete parent.templateModel;
+            delete parent.type;
+         }
+      },
+
       /**
        * @instance
        * @param {object} payload An object containing the details of the page definition to preview.
@@ -244,38 +245,54 @@ define(["dojo/_base/declare",
                this.rootPreviewWidget.destroyRecursive(false);
             }
 
+            var templateReponse = this.loadAllTemplates();
+            when(templateReponse, lang.hitch(this, function(templates) {
+
+               try
+               {
+                  var pageDefinition = this.getPageDefinitionFromPayload(payload);
+                  var pageDefObject = dojoJson.parse(pageDefinition);
+
+                  var data = {
+                     jsonContent: pageDefObject
+                  };
+
+                  objectProcessingUtil.findObject(data, {
+                     prefix: "isTemplate",
+                     processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
+                     config: null
+                  });
+
+                  // Find all templates and swap them out for the actual widget models...
+                  objectProcessingUtil.findObject(data, {
+                     prefix: "_alfTemplateName",
+                     processFunction: lang.hitch(this, this.processTemplate),
+                     config: {
+                        templates: templates
+                     }
+                  });
+
+                  data.widgets = JSON.stringify(data.jsonContent);
+
+                  this.serviceXhr({
+                     url : AlfConstants.URL_SERVICECONTEXT + "surf/dojo/xhr/dependencies",
+                     data: data,
+                     method: "POST",
+                     successCallback: this.updatePage,
+                     failureCallback: this.onDependencyFailure,
+                     callbackScope: this
+                  });
+               }
+               catch(e)
+               {
+                  this.alfLog("error", "An error occurred parsing the JSON", e, this);
+               }
+            }));
+
             // // Clear out any previous preview...
             // domConstruct.empty(this.previewNode);
             
-            try
-            {
-               var pageDefinition = this.getPageDefinitionFromPayload(payload);
-               var pageDefObject = dojoJson.parse(pageDefinition);
-
-               // Find all templates and swap them out for the actual widget models...
-               objectProcessingUtil.findObject(data, {
-                  prefix: "_alfTemplateMappings",
-                  processFunction: lang.hitch(this, this.processTemplate),
-                  config: null
-               });
-
-               var data = {
-                  jsonContent: pageDefObject,
-                  widgets: pageDefinition
-               };
-               this.serviceXhr({
-                  url : AlfConstants.URL_SERVICECONTEXT + "surf/dojo/xhr/dependencies",
-                  data: data,
-                  method: "POST",
-                  successCallback: this.updatePage,
-                  failureCallback: this.onDependencyFailure,
-                  callbackScope: this
-               });
-            }
-            catch(e)
-            {
-               this.alfLog("error", "An error occurred parsing the JSON", e, this);
-            }
+            
          }
          else
          {
