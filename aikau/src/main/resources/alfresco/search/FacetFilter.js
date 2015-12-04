@@ -124,6 +124,17 @@ define(["dojo/_base/declare",
       filterData: "",
 
       /**
+       * Indicates whether or not the full width of the filter (including the count and the white space)
+       * can be clicked to toggle the filter.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.47
+       */
+      fullWidthClick: false,
+
+      /**
        * Indicates that the filter should be hidden. This will be set to "true" if any required data is missing
        * 
        * @instance
@@ -179,6 +190,11 @@ define(["dojo/_base/declare",
             domClass.remove(this.removeNode, "hidden");
             domClass.add(this.labelNode, "applied");
          }
+
+         if (this.fullWidthClick)
+         {
+            domClass.add(this.domNode, "alfresco-search-FacetFilter--full-width-click");
+         }
       },
       
       /**
@@ -187,14 +203,21 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      onToggleFilter: function alfresco_search_FacetFilter__onToggleFilter(/*jshint unused:false*/ evt) {
-         if (this.applied)
+      onToggleFilter: function alfresco_search_FacetFilter__onToggleFilter(evt) {
+         if (evt.target === this.labelNode || this.fullWidthClick)
          {
-            this.onClearFilter();
+            if (this.applied)
+            {
+               this.onClearFilter();
+            }
+            else
+            {
+               this.onApplyFilter();
+            }
          }
          else
          {
-            this.onApplyFilter();
+            this.alfLog("debug", "Clicking on details node not supported for current configuration", this);
          }
       },
 

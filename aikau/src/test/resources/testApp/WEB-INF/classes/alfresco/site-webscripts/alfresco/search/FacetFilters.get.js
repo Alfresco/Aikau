@@ -171,7 +171,8 @@ model.jsonModel = {
                      facetQName: "FACET2QNAME",
                      sortBy: "ASCENDING",
                      maxFilters: 5,
-                     useHash: true
+                     useHash: true,
+                     fullWidthClick: true
                   }
                }
             ]
