@@ -209,7 +209,7 @@ define(["dojo/_base/declare",
       noViewSelectedMessage: "alflist.no.view.message",
 
       /**
-       * This is the message to display when no view is selected. Message keys will be localized
+       * This is the message to display when no data is available. Message keys will be localized
        * where possible.
        *
        * @instance
@@ -219,7 +219,7 @@ define(["dojo/_base/declare",
       noDataMessage: "alflist.no.data.message",
 
       /**
-       * This is the message to display when no data is available. Message keys will be localized
+       * This is the message to display when data is loading. Message keys will be localized
        * where possible.
        *
        * @instance
@@ -229,7 +229,7 @@ define(["dojo/_base/declare",
       fetchingDataMessage: "alflist.loading.data.message",
 
       /**
-       * This is the message to display whilst data is being loaded. Message keys will be localized
+       * This is the message to display whilst a view is being rendered. Message keys will be localized
        * where possible.
        *
        * @instance
@@ -239,7 +239,7 @@ define(["dojo/_base/declare",
       renderingViewMessage: "alflist.rendering.data.message",
 
       /**
-       * This is the message to display when an error occurs rendering data. Message keys will be localized
+       * This is the message to display when fetching more data. Message keys will be localized
        * where possible.
        *
        * @instance
