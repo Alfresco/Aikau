@@ -265,9 +265,16 @@ define(["dojo/_base/declare",
             if (this._editorInitialized)
             {
                // Work our way back up through the current node ancestors to find
-               // the first ancestor that have height and width set on them
+               // the first ancestors that have height and width set on them. Height
+               // and width do not need to come from the same node, but we only want
+               // to take the first values we find of each (i.e. if we find a height but
+               // not a width, don't take the height from the node that we DO find a width
+               // on later)...
                var height, width;
                $(this.domNode).parents().each(function() {
+                  // Check the style attribute returned by the JQuery function to see if
+                  // height/width is set... then get the actual height/width of that
+                  // element.
                   var style = $(this).attr("style");
                   if (!height && style && style.indexOf("height:") !== -1)
                   {
@@ -277,6 +284,7 @@ define(["dojo/_base/declare",
                   {
                      width = $(this).width();
                   }
+                  // When both height and width have been set exit the loop...
                   if (height && width)
                   {
                      return false;
