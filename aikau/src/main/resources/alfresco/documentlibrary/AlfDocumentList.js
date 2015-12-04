@@ -30,8 +30,9 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "alfresco/util/hashUtils",
-        "dojo/io-query"],
-        function(declare, AlfSortablePaginatedList, JsNode, topics, array, lang, hashUtils, ioQuery) {
+        "dojo/io-query",
+        "dojo/dom-class"],
+        function(declare, AlfSortablePaginatedList, JsNode, topics, array, lang, hashUtils, ioQuery, domClass) {
 
    return declare([AlfSortablePaginatedList], {
 
