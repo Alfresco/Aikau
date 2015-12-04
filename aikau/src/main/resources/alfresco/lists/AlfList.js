@@ -216,16 +216,6 @@ define(["dojo/_base/declare",
        * @default
        */
       noDataMessage: "alflist.no.data.message",
-    
-      /**
-       * This is the message to display when no view is selected. Message keys will be localized
-       * where possible.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      noViewSelectedMessage: "alflist.no.view.message",
 
       /**
        * This is the message to display whilst a view is being rendered. Message keys will be localized
@@ -429,7 +419,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       setDisplayMessages: function alfresco_lists_AlfList__setDisplayMessages() {
-         this.noViewSelectedMessage = this.message(this.noViewSelectedMessage);
          this.noDataMessage = this.message(this.noDataMessage);
          this.fetchingDataMessage = this.message(this.fetchingDataMessage);
          this.renderingViewMessage = this.message(this.renderingViewMessage);

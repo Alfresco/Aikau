@@ -213,7 +213,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       setDisplayMessages: function alfresco_search_AlfSearchList__setDisplayMessages() {
-         this.noViewSelectedMessage = this.message("searchlist.no.view.message");
          this.noDataMessage = this.message("searchlist.no.data.message");
          this.fetchingDataMessage = this.message("searchlist.loading.data.message");
          this.renderingViewMessage = this.message("searchlist.rendering.data.message");

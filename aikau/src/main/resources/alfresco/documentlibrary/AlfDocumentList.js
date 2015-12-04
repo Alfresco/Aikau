@@ -45,15 +45,6 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/AlfDocumentList.properties"}],
 
       /**
-       * An array of the CSS files to use with this widget.
-       *
-       * @instance cssRequirements {Array}
-       * @type {object[]}
-       * @default [{cssFile:"./css/AlfDocumentList.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/AlfDocumentList.css"}],
-
-      /**
        * Indicates whether or not folders should be shown in the document library.
        *
        * @instance
@@ -143,6 +134,17 @@ define(["dojo/_base/declare",
                path: "/"
             };
          }
+      },
+
+      /**
+       * Run after widget created
+       *
+       * @instance
+       * @override
+       */
+      postCreate: function alfrescdo_documentlibrary_AlfDocumentList__postCreate() {
+         this.inherited(arguments);
+         domClass.add(this.domNode, "alfresco-documentlibrary-AlfDocumentList");
       },
 
       /**
