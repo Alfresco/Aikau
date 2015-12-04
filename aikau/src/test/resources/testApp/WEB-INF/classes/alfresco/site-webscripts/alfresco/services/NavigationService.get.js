@@ -116,6 +116,114 @@ model.jsonModel = {
          }
       },
       {
+         id: "MENU_BAR",
+         name: "alfresco/menus/AlfMenuBar",
+         config: {
+            widgets: [
+               {
+                  id: "FULL_PATH_SITE_STRING",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Full path site string",
+                     publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                     publishPayload: {
+                        url: "/aikau/page/tp/ws/NavigationService",
+                        type: "FULL_PATH",
+                        target: "CURRENT"
+                     },
+                     publishPayloadType: "PROCESS",
+                     publishPayloadModifiers: ["processCurrentItemTokens"],
+                     publishPayloadItemMixin: true,
+                     currentItem: {
+                        site: "gwen"
+                     }
+                  }
+               },
+               {
+                  id: "PAGE_RELATIVE_SITE_OBJECT",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Page relative site object",
+                     publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                     publishPayload: {
+                        url: "tp/ws/NavigationService",
+                        type: "PAGE_RELATIVE",
+                        target: "CURRENT"
+                     },
+                     publishPayloadType: "PROCESS",
+                     publishPayloadModifiers: ["processCurrentItemTokens"],
+                     publishPayloadItemMixin: true,
+                     currentItem: {
+                        site: {
+                           shortName: "bob",
+                           title: "Bob"
+                        }
+                     }
+                  }
+               },
+               {
+                  id: "PAGE_RELATIVE_SITE_STRING",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Page relative site string",
+                     publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                     publishPayload: {
+                        url: "tp/ws/NavigationService",
+                        type: "PAGE_RELATIVE",
+                        target: "CURRENT"
+                     },
+                     publishPayloadType: "PROCESS",
+                     publishPayloadModifiers: ["processCurrentItemTokens"],
+                     publishPayloadItemMixin: true,
+                     currentItem: {
+                        site: "gwen"
+                     }
+                  }
+               },
+               {
+                  id: "PAGE_RELATIVE_INVALID_SITE",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Page relative invalid site object",
+                     publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                     publishPayload: {
+                        url: "tp/ws/NavigationService",
+                        type: "PAGE_RELATIVE",
+                        target: "CURRENT"
+                     },
+                     publishPayloadType: "PROCESS",
+                     publishPayloadModifiers: ["processCurrentItemTokens"],
+                     publishPayloadItemMixin: true,
+                     currentItem: {
+                        site: {
+                           wrong: "tony"
+                        }
+                     }
+                  }
+               },
+               {
+                  id: "PAGE_RELATIVE_NO_SITE",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Page relative no site",
+                     publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                     publishPayload: {
+                        url: "tp/ws/NavigationService",
+                        type: "PAGE_RELATIVE",
+                        target: "CURRENT"
+                     },
+                     publishPayloadType: "PROCESS",
+                     publishPayloadModifiers: ["processCurrentItemTokens"],
+                     publishPayloadItemMixin: true,
+                     currentItem: {
+                        
+                     }
+                  }
+               }
+            ]
+         }
+      },
+      {
          name: "aikauTesting/mockservices/NavigationServiceMockXhr"
       },
       {

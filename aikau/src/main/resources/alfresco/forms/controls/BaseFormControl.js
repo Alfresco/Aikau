@@ -948,6 +948,26 @@ define(["dojo/_base/declare",
       validationInProgressAltText: "validation.inprogress.alttext",
 
       /**
+       * The local image to use for a validation-error indicator.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.47
+       */
+      validationErrorImg: "error-16.png",
+
+      /**
+       * The alt-text label to use for the validation-error indicator.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.47
+       */
+      validationErrorAltText: "validation.error.alttext",
+
+      /**
        * The local image to use for the inline help indicator.
        *
        * @instance
@@ -989,7 +1009,17 @@ define(["dojo/_base/declare",
          {
             this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationInProgressImg;
          }
-         this.validationInProgressAltText = this.message(this.validationInProgressAltText);
+         this.validationInProgressAltText = this.message(this.validationInProgressAltText, {
+            0: this.message(this.label)
+         });
+
+         if (!this.validationErrorImgSrc)
+         {
+            this.validationErrorImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationErrorImg;
+         }
+         this.validationErrorAltText = this.message(this.validationErrorAltText, {
+            0: this.message(this.label)
+         });
 
          if (!this.inlineHelpImgSrc)
          {
@@ -1647,8 +1677,7 @@ define(["dojo/_base/declare",
       showValidationFailure: function alfresco_forms_controls_BaseFormControl__showValidationFailure() {
          if (this.showValidationErrorsImmediately || this._hadFocus)
          {
-            domClass.add(this._validationIndicator, "validation-error");
-            domClass.add(this._validationMessage, "display");
+            domClass.add(this.domNode, "alfresco-forms-controls-BaseFormControl--invalid");
          }
          else
          {
@@ -1665,8 +1694,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       hideValidationFailure: function alfresco_forms_controls_BaseFormControl__hideValidationFailure() {
-         domClass.remove(this._validationIndicator, "validation-error");
-         domClass.remove(this._validationMessage, "display");
+         domClass.remove(this.domNode, "alfresco-forms-controls-BaseFormControl--invalid");
          this._pendingValidationFailureDisplay = false;
       },
 

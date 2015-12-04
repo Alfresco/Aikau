@@ -35,10 +35,10 @@ define({
       "src/test/resources/alfresco/login/LoginFormTest"
 
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
+      // "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
+      // "src/test/resources/alfresco/dnd/NestedConfigurationTest",
       // "src/test/resources/alfresco/layout/AlfTabContainerTest",
-      // "src/test/resources/alfresco/layout/HeightMixinTest",
       // "src/test/resources/alfresco/preview/PdfJsPreviewTest"
-      // "src/test/resources/alfresco/services/CloudSyncServiceTest",
    ],
 
    /**

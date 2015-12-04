@@ -39,13 +39,63 @@ model.jsonModel = {
          }
       },
       {
+         id: "EDIT_OFFLINE_SUCCESS",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Edit Offline Success",
+            publishTopic: "ALF_SINGLE_DOCUMENT_ACTION_REQUEST",
+            publishPayload: {
+               action: {
+                  "id": "document-edit-offline",
+                  "icon": "document-edit-offline",
+                  "type": "javascript",
+                  "label": "actions.document.edit-offline",
+                  "params": {
+                     "function": "onActionEditOffline"
+                  },
+                  "index": "100"
+               },
+               document: {
+                  node: getTestNode()
+               }
+            }
+         }
+      },
+      {
+         id: "EDIT_OFFLINE_FAILURE",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Edit Offline Failure",
+            publishTopic: "ALF_SINGLE_DOCUMENT_ACTION_REQUEST",
+            publishPayload: {
+               action: {
+                  "id": "document-edit-offline",
+                  "icon": "document-edit-offline",
+                  "type": "javascript",
+                  "label": "actions.document.edit-offline",
+                  "params": {
+                     "function": "onActionEditOffline"
+                  },
+                  "index": "100"
+               },
+               document: {
+                  node: getTestNode("workspace:\/\/SpacesStore\/b0037179-f105-4858-9d8f-44bfb0f67d8b"),
+                  displayName: "Another document"
+               }
+            }
+         }
+      },
+      {
+         name: "aikauTesting/mockservices/ActionServiceMockXhr"
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]
 };
 
 // Put this into a function (use hoisting to keep code tidy), to avoid repetition
-function getTestNode() {
+function getTestNode(nodeRef) {
    return {
       "isLink": false,
       "aspects": ["cm:auditable", "cm:thumbnailModification", "sys:referenceable", "cm:titled", "rn:renditioned", "cm:author", "cm:taggable", "sys:localized", "cm:generalclassifiable", "app:inlineeditable"],
@@ -58,7 +108,7 @@ function getTestNode() {
          "cm:categories": [{
             "name": "British English",
             "path": "\/Languages\/English",
-            "nodeRef": "workspace:\/\/SpacesStore\/bdd65b2d-8b03-45f0-89fe-701723df1afa"
+            "nodeRef": nodeRef || "workspace:\/\/SpacesStore\/bdd65b2d-8b03-45f0-89fe-701723df1afa"
          }],
          "cm:content": null,
          "sys:node-uuid": null,
@@ -96,7 +146,12 @@ function getTestNode() {
       "mimetype": "text\/plain",
       "encoding": "UTF-8",
       "permissions": {
-         "roles": ["ALLOWED;GROUP_site_site5_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_site5_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_site5_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_site5_SiteManager;SiteManager;INHERITED", "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
+         "roles": ["ALLOWED;GROUP_site_site5_SiteContributor;SiteContributor;INHERITED", 
+                   "ALLOWED;GROUP_site_site5_SiteCollaborator;SiteCollaborator;INHERITED", 
+                   "ALLOWED;GROUP_site_site5_SiteConsumer;SiteConsumer;INHERITED", 
+                   "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED", 
+                   "ALLOWED;GROUP_site_site5_SiteManager;SiteManager;INHERITED", 
+                   "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED"],
          "inherited": true,
          "user": {
             "ChangePermissions": true,
@@ -107,7 +162,7 @@ function getTestNode() {
             "Unlock": false
          }
       },
-      "nodeRef": "workspace:\/\/SpacesStore\/b0037179-f105-4858-9d8f-44bfb0f67d8a",
+      "nodeRef": nodeRef || "workspace:\/\/SpacesStore\/b0037179-f105-4858-9d8f-44bfb0f67d8a",
       "isContainer": false,
       "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/b0037179-f105-4858-9d8f-44bfb0f67d8a\/Another%20document"
    };

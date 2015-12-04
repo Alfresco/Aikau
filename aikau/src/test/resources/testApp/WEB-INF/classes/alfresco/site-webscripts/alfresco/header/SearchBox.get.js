@@ -95,6 +95,32 @@ model.jsonModel = {
             advancedSearch: false
          }
       },
+      // See AKU-737
+      {
+         id: "SB6",
+         name: "alfresco/header/SearchBox",
+         config: {
+            alignment: "left",
+            placeholder: "Search me!",
+            advancedSearch: false,
+            width: "250",
+            suppressRedirect: true,
+            showSiteResults: false,
+            showPeopleResults: false,
+            hiddenSearchTerms: null,
+            publishTopic: "ALF_NAVIGATE_TO_PAGE",
+            publishPayloadType: "PROCESS",
+            publishPayloadModifiers: ["processCurrentItemTokens"],
+            publishPayload: {
+               target: "NEW",
+               type: "FULL_PATH",
+               url: "/share/page/sfdc-document-details?nodeRef={nodeRef}"
+            },
+            publishPayloadItemMixin: false,
+            publishGlobal: true,
+            publishToParent: false
+         }
+      },
       {
          name: "aikauTesting/mockservices/SearchBoxMockXhr"
       },

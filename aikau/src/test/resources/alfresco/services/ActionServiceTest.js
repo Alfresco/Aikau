@@ -21,16 +21,14 @@
  * @author Martin Doyle
  */
 define(["intern!object",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon"
-   ],
-   function(registerSuite, assert, require, TestCommon) {
+        "intern/chai!assert",
+        "alfresco/TestCommon"],
+        function(registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
+      return {
 
          name: "ActionService Tests",
 
@@ -66,9 +64,36 @@ registerSuite(function(){
                });
          },
 
+         "Edit offline succcess": function() {
+            return browser.findById("EDIT_OFFLINE_SUCCESS_label")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_DISPLAY_NOTIFICATION")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "message", "'AKU-610.mp4' can now be edited");
+               })
+
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.include(payload.url, "/aikau/proxy/alfresco/api/node/content/workspace/SpacesStore/888956ca-b90e-47ff-9a18-86ae6dcdc50f/AKU-610%20(Working%20Copy).mp4?a=true");
+               });
+         },
+
+         "Edit offline failure": function() {
+            return browser.findById("EDIT_OFFLINE_FAILURE_label")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_DISPLAY_NOTIFICATION")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "message", "You cannot edit 'Another document'.");
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
       };
-      });
    });
+});

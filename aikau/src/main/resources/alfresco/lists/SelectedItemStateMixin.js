@@ -36,8 +36,9 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/topics",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "dojo/_base/lang"], 
-        function( declare, Core, topics, _AlfDocumentListTopicMixin, lang) {
+        "dojo/_base/lang",
+        "dojo/_base/array"], 
+        function( declare, Core, topics, _AlfDocumentListTopicMixin, lang, array) {
    
    return declare([Core, _AlfDocumentListTopicMixin], {
       
@@ -83,6 +84,19 @@ define(["dojo/_base/declare",
        * @default
        */
       itemKeyProperty: "node.nodeRef",
+
+      /**
+       * This is assigned the [currentlySelectedItems]{@link module:alfresco/lists/SelectedItemStateMixin#currentlySelectedItems}
+       * when [item selection is cleared]{@link module:alfresco/lists/SelectedItemStateMixin#onItemSelectionCleared}. If the
+       * [retainPreviousItemSelectionState]{@link module:alfresco/lists/SelectedItemStateMixin#retainPreviousItemSelectionState}
+       * function is called then these items will be compared against the supplied list for consideration to be republished.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.47
+       */
+      previouslySelectedItems: null,
 
       /**
        * An array of the currently selected items.
@@ -214,6 +228,7 @@ define(["dojo/_base/declare",
        * @param {object} payload This is not expected to contain any usable data.
        */
       onItemSelectionCleared: function alfresco_lists_SelectedItemStateMixin__onItemSelectionCleared(/*jshint unused:false*/ payload) {
+         this.previouslySelectedItems = this.currentlySelectedItems;
          this.currentlySelectedItems = {};
          if (this.selectionTimeout)
          {
@@ -246,6 +261,8 @@ define(["dojo/_base/declare",
        * {@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#selectedDocumentsChangeTopic}.
        *
        * @instance
+       * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#selectedDocumentsChangeTopic
+       * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentSelectionTopic
        */
       publishSelectedItems: function alfresco_lists_SelectedItemStateMixin__publishSelectedItems() {
          this.alfPublish(this.selectedDocumentsChangeTopic, {
@@ -254,6 +271,45 @@ define(["dojo/_base/declare",
          this.alfPublish(this.documentSelectionTopic, {
             selectedItems: this.selectedItems
          });
+      },
+
+      /**
+       * This function can be called to determine whether it is necessary to republish any items that were 
+       * [previously selected]{@link module:alfresco/lists/SelectedItemStateMixin#previouslySelectedItems} before 
+       * item selection was [cleared]{@link module:alfresco/lists/SelectedItemStateMixin#onItemSelectionCleared}. 
+       * The [previously selected]{@link module:alfresco/lists/SelectedItemStateMixin#previouslySelectedItems} are compared
+       * against the array of items provided and any that were previously selected will be re-published as the
+       * currently selected items.
+       * 
+       * @instance
+       * @param  {object[]} items The items to check for the selected items among
+       * @since 1.0.47
+       * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#selectedDocumentsChangeTopic
+       * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentSelectionTopic
+       */
+      retainPreviousItemSelectionState: function alfresco_lists_SelectedItemStateMixin__retainPreviousItemSelectionState(items) {
+         var itemsToRepublish = [];
+         if (this.previouslySelectedItems)
+         {
+            array.forEach(items, function(item) {
+
+               var itemKey = lang.getObject(this.itemKeyProperty, false, item);
+               if (itemKey && this.previouslySelectedItems[itemKey])
+               {
+                  itemsToRepublish.push(item);
+                  this.currentlySelectedItems[itemKey] = item;
+               }
+            }, this);
+         }
+         if (itemsToRepublish.length)
+         {
+            this.alfPublish(this.selectedDocumentsChangeTopic, {
+               selectedItems: itemsToRepublish
+            });
+            this.alfPublish(this.documentSelectionTopic, {
+               selectedItems: itemsToRepublish
+            });
+         }
       }
    });
 });
