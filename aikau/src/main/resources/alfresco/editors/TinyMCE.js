@@ -37,13 +37,16 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin", 
         "dojo/text!./templates/TinyMCE.html", 
         "alfresco/core/Core", 
+        "alfresco/core/ResizeMixin",
         "alfresco/core/topics",
         "service/constants/Default", 
-        "dojo/_base/lang"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, topics, AlfConstants, lang) {
+        "dojo/_base/lang",
+        "jquery",
+        "jqueryui"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, ResizeMixin, topics, AlfConstants, lang, $) {
 
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, ResizeMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -68,6 +71,16 @@ define(["dojo/_base/declare",
        * @type {String}
        */
       templateString: template,
+
+      /**
+       * This indicates whether the size should be adjusted on resize events.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.47
+       */
+      autoResize: false,
 
       /**
        * A function that should be called whenever the content of the editor changes. The function will be bound to the
@@ -160,6 +173,18 @@ define(["dojo/_base/declare",
       _focusWhenInitialized: false,
 
       /**
+       * Indicates whether or not the TinyMCE editor should be resized once it has been initialized. This will
+       * be set to true by the [focus]{@link module:alfresco/editors/TinyMCE#onResize} function if it is called before
+       * the editor has been [initialized]{@link module:alfresco/editors/TinyMCE#editorInitialized}.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.47
+       */
+      _resizeWhenInitialized: false,
+
+      /**
        * The default configuration for the editor. These settings should not be configured (as they will apply
        * to all instances of the editor). However specific overrides can be achieved by setting the value of
        * [editorConfig]{@link module:alfresco/editors/TinyMCE#editorConfig} which will be mixed into these default
@@ -185,6 +210,15 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_editors_TinyMCE__postCreate() {
          // Mix the custom editor config overrides into the default editor config...
          var config = lang.clone(this.defaultEditorConfig);
+
+         if (this.autoResize)
+         {
+            config.width = "100%";
+            config.autoresize_max_height = 1024;
+            config.autoresize_min_height = 250;
+            config.autoresize_on_init = true;
+         }
+
          if (this.editorConfig) {
             lang.mixin(config, this.editorConfig);
          }
@@ -208,6 +242,64 @@ define(["dojo/_base/declare",
             this.init(config);
          } else {
             this._delayedInitConfig = config;
+         }
+
+         if (this.autoResize)
+         {
+            this.alfSetupResizeSubscriptions(this.onResize, this);
+         }
+      },
+
+      /**
+       * When [autoResize]{@link module:alfresco/editors/TinyMCE} is configured to true this will
+       * respond to resize events by finding the first ancestor with height and width dimensions
+       * and then increasing the size of the TinyMCE editor to fill the available space as best
+       * it can.
+       * 
+       * @instance
+       * @since 1.0.47
+       */
+      onResize: function alfresco_editors_TinyMCE__onResize() {
+         if (this.autoResize)
+         {
+            if (this._editorInitialized)
+            {
+               // Work our way back up through the current node ancestors to find
+               // the first ancestor that have height and width set on them
+               var height, width;
+               $(this.domNode).parents().each(function() {
+                  var style = $(this).attr("style");
+                  if (!height && style && style.indexOf("height:") !== -1)
+                  {
+                     height = $(this).height();
+                  }
+                  if (!width && style && style.indexOf("width:") !== -1)
+                  {
+                     width = $(this).width();
+                  }
+                  if (height && width)
+                  {
+                     return false;
+                  }
+               });
+               
+               // Update the dimensions of the main node (so that the TinyMCE editor
+               // can grow into it - the auto resize plugin will automatically take
+               // care of the width)...
+               $(this.domNode).height(height - 10); // Deduct 10 to compensate for margin
+
+               // We need to handle the height manually, and it needs to be set on the
+               // .mce-edit-area node. Since we know that this is going to appear below
+               // a menu bar we need to get it's offset in order to prevent overflow.
+               var editAreaNode = $(this.domNode).find(".mce-edit-area");
+               var offset = $(editAreaNode).offset().top;
+               $(editAreaNode).height(height - offset);
+               $(this.domNode).width(width - 2); // Deduct 2 to compensate for border
+            }
+            else
+            {
+               this._resizeWhenInitialized = true;
+            }
          }
       },
 
@@ -253,7 +345,7 @@ define(["dojo/_base/declare",
          config.plugins = [
             "advlist autolink link image lists charmap print preview hr anchor pagebreak",
             "searchreplace code fullscreen insertdatetime nonbreaking",
-            "table contextmenu paste textcolor visualblocks"
+            "table contextmenu paste textcolor visualblocks autoresize"
          ];
          config.init_instance_callback = lang.hitch(this, this.editorInitialized);
 
@@ -287,6 +379,10 @@ define(["dojo/_base/declare",
          if (this._focusWhenInitialized)
          {
             this.focus();
+         }
+         if (this._resizeWhenInitialized)
+         {
+            this.onResize();
          }
          this.setDisabled(this.initiallyDisabled);
 
