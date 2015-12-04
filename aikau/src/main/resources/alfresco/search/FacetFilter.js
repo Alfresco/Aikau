@@ -204,11 +204,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       onToggleFilter: function alfresco_search_FacetFilter__onToggleFilter(evt) {
-         if (evt.target !== this.labelNode && !this.fullWidthClick)
-         {
-            this.alfLog("debug", "Clicking on details node not supported for current configuration", this);
-         }
-         else
+         if (evt.target === this.labelNode || this.fullWidthClick)
          {
             if (this.applied)
             {
@@ -218,6 +214,10 @@ define(["dojo/_base/declare",
             {
                this.onApplyFilter();
             }
+         }
+         else
+         {
+            this.alfLog("debug", "Clicking on details node not supported for current configuration", this);
          }
       },
 
