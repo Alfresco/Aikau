@@ -78,72 +78,92 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
-       * A map of views that the list can switch between.
-       *
-       * @instance
-       * @type {object}
-       * @default
-       */
-      viewMap: null,
-
-      /**
-       * A map of the additional controls that each view requires. This is map is populated as each view
-       * is selected (so that the controls are only loaded once) but are then loaded from the map. This
-       * allows the same controls to be added and removed as views are switched.
-       *
-       * @instance
-       * @type {object}
-       * @default
-       */
-      viewControlsMap: null,
-
-      /**
-       * The widgets processed by AlfDocumentList should all be instances of "alfresco/documentlibrary/AlfDocumentListView".
-       * Any widget that is instantiated that does not inherit from that class will not be included as a view.
-       *
-       * @instance
-       * @type {object[]}
-       * @default
-       */
-      widgets: null,
-
-      /**
-       * Is there currently a request in progress?
-       *
-       * @instance
-       * @default
-       * @type {Boolean}
-       */
-      requestInProgress: false,
-
-      /**
-       * Indicates whether Infinite Scroll should be used when requesting documents
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      useInfiniteScroll: false,
-
-      /**
-       * This is the topic to publish to make requests to retrieve data to populate the list
-       * with. This can be overridden with alternative topics to obtain different data sets
+       * This is the ID of the widget that should be targeted with adding additional view controls to
        *
        * @instance
        * @type {string}
        * @default
        */
-      loadDataPublishTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
+      additionalControlsTarget: "DOCLIB_TOOLBAR",
 
       /**
-       * This is the payload to publish to make requests to retrieve data to populate the list
-       * with.
+       * This is the dynacmic visibility configuration that should be applied
+       * to all additional controls added for a view.
        *
        * @instance
        * @type {object}
        * @default
        */
-      loadDataPublishPayload: null,
+      additionalViewControlVisibilityConfig: null,
+
+      /**
+       * Used to keep track of the current data for rendering by [views]{@link module:alfresco/lists/views/AlfListView}.
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      currentData: null,
+
+      /**
+       * This is the message to display when data cannot be loaded Message keys will be localized
+       * where possible.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      dataFailureMessage: "alflist.data.failure.message",
+
+      /**
+       * An array of filters that should be included in data loading requests. The list itself will
+       * not perform any filtering it is up to the service (or API that the service calls) to filter
+       * the results based on the data provided.
+       *
+       * @instance
+       * @type {array}
+       * @default
+       */
+      dataFilters: null,
+
+      /**
+       * This is the message to display when data is loading. Message keys will be localized
+       * where possible.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      fetchingDataMessage: "alflist.loading.data.message",
+
+      /**
+       * This is the message to display when fetching more data. Message keys will be localized
+       * where possible.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      fetchingMoreDataMessage: "alflist.loading.data.message",
+
+      /**
+       * An array of the topics to subscribe to that when published provide data that the indicates how the
+       * data requested should be filtered.
+       *
+       * @instance
+       * @type {array}
+       * @default
+       */
+      filteringTopics: null,
+
+      /**
+       * The property in the data response that is the attribute of items to render
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      itemsProperty: "items",
 
       /**
        * Indicates whether or not a request for data should be loaded as soon as the widget is created.
@@ -157,6 +177,85 @@ define(["dojo/_base/declare",
       loadDataImmediately: true,
 
       /**
+       * This is the payload to publish to make requests to retrieve data to populate the list
+       * with.
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      loadDataPublishPayload: null,
+
+      /**
+       * This is the topic to publish to make requests to retrieve data to populate the list
+       * with. This can be overridden with alternative topics to obtain different data sets
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      loadDataPublishTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
+
+      /**
+       * The property in the data response that is a metadata attribute containing additional information
+       * about the overall context of the list. This defaults to "metadata". If not attribute with the
+       * defined name is provided then no data will be assigned.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      metadataProperty: "metadata",
+
+      /**
+       * This is the message to display when no data is available. Message keys will be localized
+       * where possible.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      noDataMessage: "alflist.no.data.message",
+    
+      /**
+       * This is the message to display when no view is selected. Message keys will be localized
+       * where possible.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      noViewSelectedMessage: "alflist.no.view.message",
+
+      /**
+       * This is the message to display whilst a view is being rendered. Message keys will be localized
+       * where possible.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      renderingViewMessage: "alflist.rendering.data.message",
+
+      /**
+       * Is there currently a request in progress?
+       *
+       * @instance
+       * @default
+       * @type {Boolean}
+       */
+      requestInProgress: false,
+
+      /**
+       * The property in the response that indicates the starting index of overall data to request.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      startIndexProperty: "startIndex",
+
+      /**
        * Indicates whether or not views should apply drag-and-drop highlighting. Each view used by the
        * list will have this value applied (even if it overrides custom configuration) as it is up to
        * the list to control whether or not it supported drag-and-drop behaviour.
@@ -167,7 +266,118 @@ define(["dojo/_base/declare",
        * @since 1.0.39
        */
       suppressDndUploading: true,
-    
+
+      /**
+       * The property in the response that indicates the total number of results available.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      totalResultsProperty: "totalRecords",
+
+      /**
+       * Indicates whether Infinite Scroll should be used when requesting documents
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      useInfiniteScroll: false,
+
+      /**
+       * A map of the additional controls that each view requires. This is map is populated as each view
+       * is selected (so that the controls are only loaded once) but are then loaded from the map. This
+       * allows the same controls to be added and removed as views are switched.
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      viewControlsMap: null,
+
+      /**
+       * A map of views that the list can switch between.
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      viewMap: null,
+
+      /**
+       * The preference property to use for saving the current view. Initially defaulted to
+       * the document library view preference but can be overridden if desired.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      viewPreferenceProperty: "org.alfresco.share.documentList.viewRendererName",
+
+      /**
+       * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       * to create the views defined for the list to the resulting callback in 
+       * [allWidgetsProcessed]{@link module:alfresco/core/Core#allWidgetsProcessed}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      viewWidgetsMappingId: "VIEWS",
+
+      /**
+       * This indicates that the instance should wait for all widgets on the page to finish rendering before
+       * making any attempt to load data. If this is set to true then loading can begin as soon as this instance
+       * has finished being created. This needs to be overridden in the case where the instance is created
+       * dynamically after the page has loaded.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      waitForPageWidgets: true,
+
+      /**
+       * The widgets processed by AlfDocumentList should all be instances of "alfresco/documentlibrary/AlfDocumentListView".
+       * Any widget that is instantiated that does not inherit from that class will not be included as a view.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       */
+      widgets: null,
+
+      /**
+       * Use to keeps track of the [view]{@link module:alfresco/lists/views/AlfListView} that is currently selected.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      _currentlySelectedView: null,
+
+      /**
+       * @instance
+       * @type {number}
+       * @default
+       */
+      _filterDelay: 1000,
+
+      /**
+       * This is updated by the [onPageWidgetsReady]{@link module:alfresco/lists/AlfList#onPageWidgetsReady}
+       * function to be true when all widgets on the page have been loaded. It is used to block loading of
+       * data until the page is completely setup. This is done to avoid multiple data loads as other widgets
+       * on the page publish the details of their initial state (which would otherwise trigger a call to
+       * [loadData]{@link module:alfresco/lists/AlfList#onPageWidgetsReady})
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      _readyToLoad: false,
+
       /**
        * Subscribe the document list topics.
        *
@@ -197,79 +407,6 @@ define(["dojo/_base/declare",
          }
          this.createSelectedItemSubscriptions();
       },
-
-      /**
-       * This is the message to display when no view is selected. Message keys will be localized
-       * where possible.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      noViewSelectedMessage: "alflist.no.view.message",
-
-      /**
-       * This is the message to display when no data is available. Message keys will be localized
-       * where possible.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      noDataMessage: "alflist.no.data.message",
-
-      /**
-       * This is the message to display when data is loading. Message keys will be localized
-       * where possible.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      fetchingDataMessage: "alflist.loading.data.message",
-
-      /**
-       * This is the message to display whilst a view is being rendered. Message keys will be localized
-       * where possible.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      renderingViewMessage: "alflist.rendering.data.message",
-
-      /**
-       * This is the message to display when fetching more data. Message keys will be localized
-       * where possible.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      fetchingMoreDataMessage: "alflist.loading.data.message",
-
-      /**
-       * This is the message to display when data cannot be loaded Message keys will be localized
-       * where possible.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-
-      dataFailureMessage: "alflist.data.failure.message",
-
-      /**
-       * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
-       * to create the views defined for the list to the resulting callback in 
-       * [allWidgetsProcessed]{@link module:alfresco/core/Core#allWidgetsProcessed}
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       * @since 1.0.35
-       */
-      viewWidgetsMappingId: "VIEWS",
 
       /**
        * The constructor
@@ -321,34 +458,6 @@ define(["dojo/_base/declare",
             this.processWidgets(this.widgets, null, this.viewWidgetsMappingId);
          }
       },
-
-      /**
-       * @instance
-       * @type {number}
-       * @default
-       */
-      _filterDelay: 1000,
-
-      /**
-       * An array of the topics to subscribe to that when published provide data that the indicates how the
-       * data requested should be filtered.
-       *
-       * @instance
-       * @type {array}
-       * @default
-       */
-      filteringTopics: null,
-
-      /**
-       * An array of filters that should be included in data loading requests. The list itself will
-       * not perform any filtering it is up to the service (or API that the service calls) to filter
-       * the results based on the data provided.
-       *
-       * @instance
-       * @type {array}
-       * @default
-       */
-      dataFilters: null,
 
       /**
        * Updates the list of filters that should currently be included when requesting data.
@@ -404,31 +513,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This indicates that the instance should wait for all widgets on the page to finish rendering before
-       * making any attempt to load data. If this is set to true then loading can begin as soon as this instance
-       * has finished being created. This needs to be overridden in the case where the instance is created
-       * dynamically after the page has loaded.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      waitForPageWidgets: true,
-
-      /**
-       * This is updated by the [onPageWidgetsReady]{@link module:alfresco/lists/AlfList#onPageWidgetsReady}
-       * function to be true when all widgets on the page have been loaded. It is used to block loading of
-       * data until the page is completely setup. This is done to avoid multiple data loads as other widgets
-       * on the page publish the details of their initial state (which would otherwise trigger a call to
-       * [loadData]{@link module:alfresco/lists/AlfList#onPageWidgetsReady})
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      _readyToLoad: false,
-
-      /**
        * The list is intended to work co-operatively with other widgets on a page to assist with
        * setting the data that should be retrieved. As related widgets are created and publish their initial
        * state they may trigger requests to load data. As such, data loading should not be started until
@@ -455,16 +539,6 @@ define(["dojo/_base/declare",
             this.alfLog("log", "This list configured to not load data immediately", this);
          }
       },
-
-      /**
-       * The preference property to use for saving the current view. Initially defaulted to
-       * the document library view preference but can be overridden if desired.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      viewPreferenceProperty: "org.alfresco.share.documentList.viewRendererName",
 
       /**
        * Iterates over the widgets processed and calls the [registerView]{@link module:alfresco/lists/AlfList#registerView}
@@ -665,25 +739,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This is the ID of the widget that should be targeted with adding additional view controls to
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      additionalControlsTarget: "DOCLIB_TOOLBAR",
-
-      /**
-       * This is the dynacmic visibility configuration that should be applied
-       * to all additional controls added for a view.
-       *
-       * @instance
-       * @type {object}
-       * @default
-       */
-      additionalViewControlVisibilityConfig: null,
-
-      /**
        * Gets the additional controls for a view and publishes them.
        *
        * @instance
@@ -733,24 +788,6 @@ define(["dojo/_base/declare",
       isValidViewSelectionConfig: function alfresco_lists_AlfList__isValidViewSelectionConfig(viewSelectionConfig) {
          return (viewSelectionConfig.label && viewSelectionConfig.label !== "");
       },
-
-      /**
-       * Use to keeps track of the [view]{@link module:alfresco/lists/views/AlfListView} that is currently selected.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      _currentlySelectedView: null,
-
-      /**
-       * Used to keep track of the current data for rendering by [views]{@link module:alfresco/lists/views/AlfListView}.
-       *
-       * @instance
-       * @type {object}
-       * @default
-       */
-      currentData: null,
 
       /**
        * Handles requests to switch views. This is called whenever the [viewSelectionTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#viewSelectionTopic}
@@ -982,44 +1019,6 @@ define(["dojo/_base/declare",
          // jshint unused:false
          // Does nothing by default.
       },
-
-      /**
-       * The property in the data response that is the attribute of items to render
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      itemsProperty: "items",
-
-      /**
-       * The property in the data response that is a metadata attribute containing additional information
-       * about the overall context of the list. This defaults to "metadata". If not attribute with the
-       * defined name is provided then no data will be assigned.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      metadataProperty: "metadata",
-
-      /**
-       * The property in the response that indicates the starting index of overall data to request.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      startIndexProperty: "startIndex",
-
-      /**
-       * The property in the response that indicates the total number of results available.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      totalResultsProperty: "totalRecords",
 
       /**
        * Handles successful calls to get data from the repository.
