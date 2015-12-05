@@ -280,7 +280,7 @@ define(["dojo/_base/declare",
                      if (found)
                      {
                         var clonedParent = lang.clone(configParent);
-                        clonedParent.config.name = mapping.id;
+                        clonedParent.config.name = "config." + mapping.id;
                         clonedParent.config.label = mapping.label;
                         clonedParent.config.description = mapping.description;
                         config.data.push(clonedParent);
