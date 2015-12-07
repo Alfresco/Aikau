@@ -564,12 +564,9 @@ define(["dojo/_base/declare",
             var oldView = this.viewMap[this._currentlySelectedView];
             if (oldView)
             {
-               // We need to remove the old view from the registry before we create the new instance
-               // in order that the desired IDs can be re-used...
-               registry.remove(oldView.id);
-
                // There should only be one view rendered...
                var newView = widgets[0];
+               newView.noItemsMessage = this.noDataMessage;
                
                // Pass useInfiniteScroll to the view
                if (this.useInfiniteScroll) {
@@ -1190,6 +1187,12 @@ define(["dojo/_base/declare",
             {
                var index = this.viewDefinitionMap[this._currentlySelectedView];
                var widgets = [this.widgets[index]];
+
+               // We need to de-register the current view from the widget registry
+               // so that the original view ID can be re-registered for a new instance
+               // of the view. This needs to be done BEFORE we call processWidgets
+               var currentView = this.viewMap[this._currentlySelectedView];
+               registry.remove(currentView.id);
                this.processWidgets(widgets, null, "NEW_VIEW_INSTANCE");
             }
          }
