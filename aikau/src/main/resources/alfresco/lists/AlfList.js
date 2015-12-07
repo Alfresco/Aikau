@@ -539,10 +539,43 @@ define(["dojo/_base/declare",
        * create the views.
        */
       allWidgetsProcessed: function alfresco_lists_AlfList__allWidgetsProcessed(widgets, /*jshint unused:false*/ processWidgetsId) {
-         this.createFilterSubscriptions();
-         this.registerViews(widgets);
-         this.completeListSetup();
+         if (processWidgetsId === "NEW_VIEW_INSTANCE")
+         {
+            this.handleNewViewInstances(widgets);
+         }
+         else
+         {
+            this.createFilterSubscriptions();
+            this.registerViews(widgets);
+            this.completeListSetup();
+         }
       },
+
+      handleNewViewInstances: function alfresco_lists_AlfList__handleNewViewInstances(widgets) {
+         if (widgets.length === 1)
+         {
+            // There should only be one view rendered...
+            var newView = widgets[0];
+            newView.setData(this.currentData);
+            newView.renderView(this.useInfiniteScroll);
+
+            var oldView = this.viewMap[this._currentlySelectedView];
+            if (oldView)
+            {
+               // var index = this.viewDefinitionMap[oldView];
+               oldView.clearOldView();
+
+               // var viewName = newView.getViewName();
+               // if (!viewName)
+               // {
+               //    viewName = index;
+               // }
+
+               this.viewMap[this._currentlySelectedView] = newView;
+            }
+            this.showView(newView);
+        }
+     },
 
       /**
        * Create the subscriptions for the [filteringTopics]{@link module:alfresco/lists/AlfList#filteringTopics}. This is
@@ -606,6 +639,7 @@ define(["dojo/_base/declare",
        */
       registerViews: function alfresco_lists_AlfList__registerViews(widgets) {
          this.viewMap = {};
+         this.viewDefinitionMap = {};
          array.forEach(widgets, lang.hitch(this, this.registerView));
 
          // If no default view has been provided, then just use the first...
@@ -725,6 +759,7 @@ define(["dojo/_base/declare",
             menuItem: selectionMenuItem
          });
          this.viewMap[viewName] = view;
+         this.viewDefinitionMap[viewName] = index;
       },
 
       /**
@@ -962,13 +997,13 @@ define(["dojo/_base/declare",
       loadData: function alfresco_lists_AlfList__loadData() {
          if (!this.requestInProgress)
          {
-            this.showLoadingMessage();
+            // this.showLoadingMessage();
 
             // Clear the previous data only when not configured to use infinite scroll...
-            if (!this.useInfiniteScroll)
-            {
-               this.clearViews();
-            }
+            // if (!this.useInfiniteScroll)
+            // {
+            //    this.clearViews();
+            // }
 
             var payload;
             if (this.loadDataPublishPayload)
@@ -1091,22 +1126,39 @@ define(["dojo/_base/declare",
          var view = this.viewMap[this._currentlySelectedView];
          if (view)
          {
-            this.showRenderingMessage();
-
             if (this.useInfiniteScroll)
             {
                view.augmentData(this.currentData);
                this.currentData = view.getData();
+               view.renderView(this.useInfiniteScroll);
+               this.showView(view);
             }
             else
             {
-               view.setData(this.currentData);
+               var index = this.viewDefinitionMap[this._currentlySelectedView];
+               var widgets = [this.widgets[index]];
+               this.processWidgets(widgets, null, "NEW_VIEW_INSTANCE");
             }
-            view.renderView(this.useInfiniteScroll);
-            this.showView(view);
+            // view.renderView(this.useInfiniteScroll);
+            // this.showView(view);
 
-            // Force a resize of the sidebar container to take the new height of the view into account...
-            this.alfPublish("ALF_RESIZE_SIDEBAR", {});
+            
+
+            // this.showRenderingMessage();
+
+            // if (this.useInfiniteScroll)
+            // {
+            //    view.augmentData(this.currentData);
+            //    this.currentData = view.getData();
+            // }
+            // else
+            // {
+            //    view.setData(this.currentData);
+            // }
+            
+
+            // // Force a resize of the sidebar container to take the new height of the view into account...
+            // this.alfPublish("ALF_RESIZE_SIDEBAR", {});
          }
       },
 
