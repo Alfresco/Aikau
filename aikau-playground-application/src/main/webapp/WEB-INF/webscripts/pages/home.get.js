@@ -1,63 +1,141 @@
 model.jsonModel = {
    services: [
+      {
+         name: "alfresco/services/LoggingService",
+         config: {
+            loggingPreferences: {
+               enabled: true,
+               all: true,
+               warn: true,
+               error: true
+            }
+         }
+      },
       "alfresco/services/NavigationService",
-      "alfresco/services/LogoutService"
-      // Add more services here !!!
+      "alfresco/services/CrudService"
    ],
    widgets: [
       {
-         id: "MAIN_VERTICAL_LAYOUT",
-         name: "alfresco/layout/VerticalWidgets",
-         config: 
-         {
+         name: "alfresco/layout/StripedContent",
+         config: {
+            contentWidth: "1400px",
             widgets: [
                {
-                  id: "HEADER_BAR",
-                  name: "alfresco/header/Header",
+                  name: "alfresco/layout/LeftAndRight",
+                  stripeClass: "header",
+                  className: "share-header-title",
                   config: {
+                     semanticWrapper: "header",
                      widgets: [
                         {
-                           id: "APP_MENU_BAR",
-                           name: "alfresco/header/AlfMenuBar",
+                           name: "alfresco/logo/Logo",
                            align: "left",
-                           config: {
-                              widgets: [
-                                 {
-                                    id: "HOME",
-                                    name: "alfresco/menus/AlfMenuBarItem",
-                                    config: {
-                                       label: "Home",
-                                       targetUrl: "ap/ws/home"
-                                    }
-                                 }
-                              ]
+                           config:
+                           {
+                              logoClasses: "alfresco-logo-large"
                            }
                         },
                         {
-                           id: "USER_MENU_BAR",
-                           name: "alfresco/header/AlfMenuBar",
-                           align: "right",
+                           name: "alfresco/header/Title",
+                           align: "left",
                            config: {
+                              label: "Aikau Playground",
+                              setBrowserTitle: "Aikau Playground"
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  name: "alfresco/lists/AlfFilteredList",
+                  config: {
+                     useHash: true,
+                     hashVarsForUpdate: [
+                        "currentPage",
+                        "currentPageSize"
+                     ],
+                     filteringTopics: ["_valueChangeOf_FILTER"],
+                     loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+                     loadDataPublishPayload: {
+                       url: "exampleList",
+                       urlType: "SHARE"
+                     },
+                     widgetsForFilters: [
+                        {
+                           id: "TEXTBOX",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              fieldId: "FILTER",
+                              name: "filter",
+                              placeHolder: "Filter by name",
+                              label: "Filter results",
+                              description: "Enter a value that the name must contain"
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/Paginator",
+                           config: {
+                              documentsPerPage: 10,
+                              pageSizes: [10, 25, 50, 100]
+                           }
+                        }
+                     ],
+                     widgets: [
+                        {
+                           name: "alfresco/lists/views/AlfListView",
+                           config: {
+                              additionalCssClasses: "bordered",
+                              widgetsForHeader: [
+                                 {
+                                    name: "alfresco/lists/views/layouts/HeaderCell",
+                                    config: {
+                                       label: "Name"
+                                    }
+                                 },
+                                 {
+                                    name: "alfresco/lists/views/layouts/HeaderCell",
+                                    config: {
+                                       label: "Description"
+                                    }
+                                 }
+                              ],
                               widgets: [
                                  {
-                                    id: "USER_MENU",
-                                    name: "alfresco/header/AlfMenuBarPopup",
+                                    name: "alfresco/lists/views/layouts/Row",
                                     config: {
-                                       label: "User Menu",
+                                       additionalCssClasses: "zebra-striping",
                                        widgets: [
                                           {
-                                             id: "HEADER_USER_MENU",
-                                             name: "alfresco/menus/AlfMenuGroup",
+                                             name: "alfresco/lists/views/layouts/Cell",
                                              config: {
+                                                additionalCssClasses: "mediumpad",
                                                 widgets: [
                                                    {
-                                                      id: "LOGOUT",
-                                                      name: "alfresco/header/AlfMenuItem",
-                                                      config:
-                                                      {
-                                                         label: "Logout",
-                                                         iconClass: "alf-user-logout-icon",
-                                                         publishTopic: "ALF_DOLOGOUT"
+                                                      name: "alfresco/renderers/PropertyLink",
+                                                      config: {
+                                                         propertyToRender: "shortname",
+                                                         useCurrentItemAsPayload: false,
+                                                         publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                                                         publishPayloadType: "PROCESS",
+                                                         publishPayloadModifiers: ["processCurrentItemTokens"],
+                                                         publishPayload: {
+                                                            type: "PAGE_RELATIVE",
+                                                            url: "na/ws{url}"
+                                                         }
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          },
+                                          {
+                                             name: "alfresco/lists/views/layouts/Cell",
+                                             config: {
+                                                additionalCssClasses: "mediumpad",
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/renderers/Property",
+                                                      config: {
+                                                         propertyToRender: "description"
                                                       }
                                                    }
                                                 ]
@@ -71,38 +149,7 @@ model.jsonModel = {
                         }
                      ]
                   }
-               },
-               {
-                  id: "HEADER_TITLE_BAR",
-                  name: "alfresco/layout/LeftAndRight",
-                  className: "share-header-title",
-                  config:
-                  {
-                     semanticWrapper: "header",
-                     widgets:
-                     [
-                        {
-                           id: "HEADER_LOGO",
-                           name: "alfresco/logo/Logo",
-                           align: "left",
-                           config:
-                           {
-                              logoClasses: "alfresco-logo-only"
-                           }
-                        },
-                        {
-                           id: "HEADER_TITLE",
-                           name: "alfresco/header/Title",
-                           align: "left",
-                           config: {
-                              label: "Welcome to Aikau Development!",
-                              setBrowserTitle: "Home"
-                           }
-                        }
-                     ]
-                  }
                }
-               // Add more widgets here !!!
             ]
          }
       }

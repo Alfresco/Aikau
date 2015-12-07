@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>List Examples</shortname>
+  <url>/exampleList</url>
+  <format default="json">argument</format>
+</webscript>

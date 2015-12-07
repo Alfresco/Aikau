@@ -85,6 +85,7 @@
       <property name="path"><value>/surf-config/</value></property>
    </bean>
    
+   <bean id="webscript.utils.ExampleList.get" class="org.alfresco.aikau.ExampleList" parent="webscript" scope="prototype" />
 
    <!-- This section of configuration will pull in the standard message bundles from Alfresco Share. It's worth noting that some Aikau
         widgets still rely on these message bundles so this will need to be addressed if Aikau is ever used independently from Share. -->
