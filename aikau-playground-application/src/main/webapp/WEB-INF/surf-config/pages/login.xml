@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page>
+   <title>Login</title>
+   <title-id>page.login.title</title-id>
+   <template-instance>login-template-instance</template-instance>
+   <authentication>none</authentication>
+   <components>
+      <component>
+         <region-id>model</region-id>
+         <url>/login</url>
+         <properties>
+            <error>{error}</error>
+         </properties>
+      </component>
+   </components>
+</page>

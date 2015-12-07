@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN"
+"http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+
+<taglib>
+   <tlibversion>1.0</tlibversion>
+   <jspversion>1.1</jspversion>
+   <shortname>surf</shortname>
+   <uri>http://www.springframework.org/tags/surf</uri>
+   <info>Spring Surf Tags</info>
+   <tag>
+      <name>region</name>
+      <tagclass>org.springframework.extensions.surf.taglib.RegionTag</tagclass>
+      <bodycontent>empty</bodycontent>
+      <info>Region within a Template</info>
+      <attribute>
+         <name>name</name>
+         <required>true</required>
+      </attribute>
+      <attribute>
+         <name>scope</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>protect</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>chrome</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>chromeless</name>
+         <required>false</required>
+      </attribute>
+   </tag>
+   <tag>
+      <name>regionInclude</name>
+      <tagclass>org.springframework.extensions.surf.taglib.IncludeTag</tagclass>
+      <bodycontent>empty</bodycontent>
+      <info>Includes a regions components into a region chrome</info>
+   </tag>
+   <tag>
+      <name>componentInclude</name>
+      <tagclass>org.springframework.extensions.surf.taglib.IncludeTag</tagclass>
+      <bodycontent>empty</bodycontent>
+      <info>Includes a component into a component chrome</info>
+   </tag>
+   <tag>
+      <name>head</name>
+      <tagclass>org.springframework.extensions.surf.taglib.HeadTag</tagclass>
+      <bodycontent>empty</bodycontent>
+      <info>Renders the header focus of the associated component (if provided).</info>
+   </tag>
+   <tag>
+      <name>pageTitle</name>
+      <tagclass>org.springframework.extensions.surf.taglib.PageTitleTag</tagclass>
+      <bodycontent>empty</bodycontent>
+      <info>Throws down the title of the current page / node</info>
+   </tag>
+   <tag>
+      <name>component</name>
+      <tagclass>org.springframework.extensions.surf.taglib.ComponentTag</tagclass>
+      <bodycontent>empty</bodycontent>
+      <info>Renders a component</info>
+      <attribute>
+         <name>component</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>chrome</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>chromeless</name>
+         <required>false</required>
+      </attribute>
+   </tag>
+   <tag>
+      <name>resource</name>
+      <tagclass>org.springframework.extensions.surf.taglib.ResourceTag</tagclass>
+      <bodycontent>empty</bodycontent>
+      <info>Pulls in resource URLs</info>
+      <attribute>
+         <name>name</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>id</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>protocol</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>endpoint</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>object</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>payload</name>
+         <required>false</required>
+      </attribute>
+   </tag>
+
+   <!-- Object Handling Tags / Links -->
+   <tag>
+      <name>pagelink</name>
+      <tagclass>org.springframework.extensions.surf.taglib.ObjectLinkTag</tagclass>
+      <bodycontent>jsp</bodycontent>
+      <info>Renders a URL for a given page or object</info>
+      <attribute>
+         <name>page</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>pageType</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>object</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>format</name>
+         <required>false</required>
+      </attribute>
+   </tag>
+   <tag>
+      <name>anchor</name>
+      <tagclass>org.springframework.extensions.surf.taglib.ObjectAnchorTag</tagclass>
+      <bodycontent>jsp</bodycontent>
+      <info>Renders an HTML Anchor to a given page or object</info>
+      <attribute>
+         <name>page</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>pageType</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>object</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>format</name>
+         <required>false</required>
+      </attribute>
+      <attribute>
+         <name>target</name>
+         <required>false</required>
+      </attribute>
+   </tag>
+   <tag>
+       <name>link</name>
+       <tagclass>org.springframework.extensions.surf.taglib.StylesheetTag</tagclass>
+       <bodycontent>empty</bodycontent>
+       <info>Tag to use as workaround for Internet Explorer bug detailed in KB262161</info>
+       <attribute>
+           <name>rel</name>
+           <required>true</required>
+       </attribute>
+       <attribute>
+           <name>type</name>
+           <required>true</required>
+       </attribute>
+       <attribute>
+           <name>href</name>
+           <required>true</required>
+       </attribute>
+   </tag>
+
+   <tag>
+       <name>constructPreset</name>
+       <tagclass>org.springframework.extensions.surf.taglib.ConstructPreset</tagclass>
+       <bodycontent>JSP</bodycontent>
+       <info>This tag can be used to construct Spring Surf preset defined objects.</info>
+       <attribute>
+           <name>preset</name>
+           <required>true</required>
+       </attribute>
+   </tag>
+   <tag>
+       <name>presetToken</name>
+       <tagclass>org.springframework.extensions.surf.taglib.PresetToken</tagclass>
+       <bodycontent>empty</bodycontent>
+       <info>This tag can be used to create token map entries to apply when constructing a Spring Surf preset using the "constructPreset" tag.</info>
+       <attribute>
+           <name>key</name>
+           <required>true</required>
+       </attribute>
+       <attribute>
+           <name>value</name>
+           <required>true</required>
+       </attribute>
+   </tag>
+</taglib>
