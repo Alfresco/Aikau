@@ -26,9 +26,32 @@ model.jsonModel = {
             additionalControlsTarget: "TOOLBAR",
             widgets: [
                {
+                  id: "VIEW",
                   name: "alfresco/documentlibrary/views/AlfGalleryView",
                   config: {
-                     resizeByColumnCount: false
+                     resizeByColumnCount: false,
+                     widgets: [
+                        {
+                           id: "TOOLIP",
+                           name: "alfresco/misc/AlfTooltip",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "THUMBNAIL",
+                                    name: "alfresco/renderers/GalleryThumbnail"
+                                 }
+                              ],
+                              widgetsForTooltip: [
+                                 {
+                                    name: "alfresco/html/Label",
+                                    config: {
+                                       label: "This is the tooltip content"
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
                   }
                }
             ]
