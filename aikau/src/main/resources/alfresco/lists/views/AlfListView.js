@@ -45,9 +45,10 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
-        "dojo/query"],
+        "dojo/query",
+        "dijit/registry"],
         function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, _AlfDndDocumentUploadMixin, ListRenderer,
-                 RenderAppendixSentinel, AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query) {
+                 RenderAppendixSentinel, AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query, registry) {
 
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _AlfDndDocumentUploadMixin], {
 
@@ -442,6 +443,26 @@ define(["dojo/_base/declare",
             this.renderNoDataDisplay();
          }
       },
+
+      /**
+       * This function is called in order to un-register any renderers that were created by previous
+       * calls to [createListRenderer]{@link module:alfresco/lists/views/AlfListView#createListRenderer}.
+       * Any views that override [createListRenderer]{@link module:alfresco/lists/views/AlfListView#createListRenderer}
+       * should also override this function to ensure the correct unregistration can be performed. This
+       * is required as the [lists]{@link module:alfresco/lists/AlfList} now create duplicate instances of
+       * the current list when rendering new data to achieve an "instant" rendering and it is essential that
+       * the original IDs of used for the view are released ready for re-use. 
+       * 
+       * @instance
+       * @since 1.0.47
+       */
+      unregisterRenderers: function alfresco_lists_views_AlfListView__unregisterRenderers() {
+         if (this.docListRenderer)
+         {
+            registry.remove(this.docListRenderer.id);
+         }
+      },
+
 
       /**
        * Creates a new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}

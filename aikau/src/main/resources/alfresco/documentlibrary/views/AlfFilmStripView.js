@@ -33,8 +33,10 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/views/layouts/DocumentCarousel",
         "alfresco/lists/views/layouts/Carousel",
         "dojo/_base/lang",
-        "dojo/dom-construct"], 
-        function(declare, AlfDocumentListView, template, AlfDocument, AlfDocumentPreview, DocumentCarousel, Carousel, lang, domConstruct) {
+        "dojo/dom-construct",
+        "dijit/registry"], 
+        function(declare, AlfDocumentListView, template, AlfDocument, AlfDocumentPreview, DocumentCarousel, Carousel, 
+                 lang, domConstruct, registry) {
    
    return declare([AlfDocumentListView], {
       
@@ -173,6 +175,21 @@ define(["dojo/_base/declare",
          if (this.contentCarousel && typeof this.contentCarousel.resize === "function")
          {
             this.contentCarousel.resize();
+         }
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#unregisterRenderers}
+       * to unregister the content carousel.
+       * 
+       * @instance
+       * @since 1.0.47
+       */
+      unregisterRenderers: function alfresco_documentlibrary_views_AlfFilmStripView__unregisterRenderers() {
+         this.inherited(arguments);
+         if (this.contentCarousel)
+         {
+            registry.remove(this.contentCarousel.id);
          }
       },
 

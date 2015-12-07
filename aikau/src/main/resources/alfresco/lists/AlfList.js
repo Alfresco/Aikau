@@ -1193,7 +1193,9 @@ define(["dojo/_base/declare",
                // of the view. This needs to be done BEFORE we call processWidgets
                var currentView = this.viewMap[this._currentlySelectedView];
                registry.remove(currentView.id);
-               this.processWidgets(widgets, null, "NEW_VIEW_INSTANCE");
+               currentView.unregisterRenderers();
+
+               this.processWidgets(widgets, null, "NEW_VIEW_INSTANCE", true);
             }
          }
 
