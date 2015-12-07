@@ -894,6 +894,10 @@ define(["dojo/_base/declare",
        * @param {Element} targetNode The DOM node to hide the children of.
        */
       hideChildren: function alfresco_lists_AlfList__hideChildren(targetNode) {
+         // Hide any messages
+         this.hideLoadingMessage();
+         this.hideRenderingMessage();
+
          array.forEach(targetNode.children, function(node) {
             domClass.add(node, "share-hidden");
          });
@@ -930,14 +934,27 @@ define(["dojo/_base/declare",
       showLoadingMessage: function alfresco_lists_AlfList__showLoadingMessage() {
          if (!this.useInfiniteScroll)
          {
-            this.hideChildren(this.domNode);
-            domClass.add(this.noDataNode, "share-hidden");
-            domClass.remove(this.dataLoadingNode, "share-hidden");
+            (requestAnimationFrame || setTimeout)(lang.hitch(this, function() {
+               domClass.remove(this.domNode, "alfresco-lists-AlfList--rendering");
+               domClass.add(this.domNode, "alfresco-lists-AlfList--loading");
+            }));
          }
          else
          {
             domClass.remove(this.dataLoadingMoreNode, "share-hidden");
          }
+      },
+
+      /**
+       * Remove any loading displays.
+       *
+       * @instance
+       * @since 1.0.47
+       */
+      hideLoadingMessage: function alfresco_lists_AlfList__hideLoadingMessage() {
+         (requestAnimationFrame || setTimeout)(lang.hitch(this, function() {
+            domClass.remove(this.domNode, "alfresco-lists-AlfList--loading");
+         }));
       },
 
       /**
@@ -949,9 +966,23 @@ define(["dojo/_base/declare",
       showRenderingMessage: function alfresco_lists_AlfList__showRenderingMessage() {
          if (!this.useInfiniteScroll)
          {
-            this.hideChildren(this.domNode);
-            domClass.remove(this.renderingViewNode, "share-hidden");
+            (requestAnimationFrame || setTimeout)(lang.hitch(this, function() {
+               domClass.remove(this.domNode, "alfresco-lists-AlfList--loading");
+               domClass.add(this.domNode, "alfresco-lists-AlfList--rendering");
+            }));
          }
+      },
+
+      /**
+       * Remove any rendering displays.
+       *
+       * @instance
+       * @since 1.0.47
+       */
+      hideRenderingMessage: function alfresco_lists_AlfList__hideRenderingMessage() {
+         (requestAnimationFrame || setTimeout)(lang.hitch(this, function() {
+            domClass.remove(this.domNode, "alfresco-lists-AlfList--rendering");
+         }));
       },
 
       /**
@@ -997,7 +1028,7 @@ define(["dojo/_base/declare",
       loadData: function alfresco_lists_AlfList__loadData() {
          if (!this.requestInProgress)
          {
-            // this.showLoadingMessage();
+            this.showLoadingMessage();
 
             // Clear the previous data only when not configured to use infinite scroll...
             // if (!this.useInfiniteScroll)
@@ -1023,7 +1054,7 @@ define(["dojo/_base/declare",
             }
 
             this.updateLoadDataPayload(payload);
-            this.alfPublish(this.loadDataPublishTopic, payload, true);
+            setTimeout(lang.hitch(this, this.alfPublish, this.loadDataPublishTopic, payload, true));
          }
          else
          {
@@ -1139,27 +1170,11 @@ define(["dojo/_base/declare",
                var widgets = [this.widgets[index]];
                this.processWidgets(widgets, null, "NEW_VIEW_INSTANCE");
             }
-            // view.renderView(this.useInfiniteScroll);
-            // this.showView(view);
-
-            
-
-            // this.showRenderingMessage();
-
-            // if (this.useInfiniteScroll)
-            // {
-            //    view.augmentData(this.currentData);
-            //    this.currentData = view.getData();
-            // }
-            // else
-            // {
-            //    view.setData(this.currentData);
-            // }
-            
-
-            // // Force a resize of the sidebar container to take the new height of the view into account...
-            // this.alfPublish("ALF_RESIZE_SIDEBAR", {});
          }
+
+         // Hide any messages
+         this.hideLoadingMessage();
+         this.hideRenderingMessage();
       },
 
       

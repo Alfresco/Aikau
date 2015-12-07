@@ -1,12 +1,50 @@
 .alfresco-lists-AlfList {
-   min-width: 100px;
    min-height: 100px;
+   min-width: 100px;
+   > .rendered-view {
+      position: relative;
+      &::before, &::after {
+         display: none;
+         position: absolute;
+      }
+      &::before {
+         background: rgba(0, 0, 0, .03);
+         content: "";
+         height: 100%;
+         width: 100%;
+      }
+      &::after {
+         background: rgba(255,255,255,.8) url(./images/circle_anim.gif) no-repeat 10px 50%;
+         border: 1px solid #666;
+         border-radius: 5px;
+         content: attr(data-aikau-loading-message);
+         left: 40%;
+         line-height: 30px;
+         padding: 0 15px 0 30px;
+         top: 40%;
+      }
+   }
    > * {
       margin: @standard-line-height @standard-column-width;
    }
    tr {
       &:focus {
          outline: none;
+      }
+   }
+   &--loading, &--rendering {
+      > .rendered-view {
+         &::before, &::after {
+            display: block;
+         }
+      }
+   }
+   &--rendering {
+      > .rendered-view {
+         &::after {
+            content: attr(data-aikau-rendering-message);
+            left: 30%;
+         }
       }
    }
 }
