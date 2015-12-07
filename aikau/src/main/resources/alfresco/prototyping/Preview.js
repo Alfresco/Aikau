@@ -65,11 +65,17 @@ define(["dojo/_base/declare",
        * @type {String}
        */
       templateString: template,
+
+      pageDefinition: null,
       
       /**
        * @instance
        */
       postCreate: function alfresco_prototyping_Preview__postCreate() {
+         if (this.pageDefinition)
+         {
+            this.generatePreview(this.pageDefinition);
+         }
          this.alfSubscribe("ALF_GENERATE_PAGE_PREVIEW", lang.hitch(this, "generatePreview"));
       },
       
@@ -83,11 +89,23 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload from which to retrieve the page definition.
        */
       getPageDefinitionFromPayload: function alfresco_prototyping_Preview__getPageDefinitionFromPayload(payload) {
-         var pageDefinition = {
-            publishOnReady: payload.publishOnReady,
-            services: payload.services,
-            widgets: payload.widgets
-         };
+         var pageDefinition;
+         if (!payload.stringified)
+         {
+            pageDefinition = {
+               publishOnReady: payload.publishOnReady,
+               services: payload.services,
+               widgets: payload.widgets
+            };
+         }
+         else 
+         {
+            pageDefinition = {
+               publishOnReady: payload.publishOnReady ? JSON.parse(payload.publishOnReady) : [],
+               services: payload.services? JSON.parse(payload.services) : [],
+               widgets: payload.widgets? JSON.parse(payload.widgets): []
+            };
+         }
          pageDefinition = dojoJson.stringify(pageDefinition);
          return pageDefinition;
       },

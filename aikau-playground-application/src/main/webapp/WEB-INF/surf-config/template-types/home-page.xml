@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template-type>
+   <title>Home page template type</title>
+   <processor mode="view">
+      <id>jsp</id>
+      <jsp-path>/home-page.jsp</jsp-path>
+   </processor>
+</template-type>

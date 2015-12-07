@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+   <name>Aikau Sample Application</name>
+   <source-id>site</source-id>
+   <properties>
+      <theme>theme_1-theme</theme>
+      <root-page>home-page</root-page>
+   </properties>
+</configuration>
