@@ -3,6 +3,7 @@
 buildPageModel({
    title: "alfresco/logo/Logo",
    description: "The Logo widget is intended for rendering company logos in Alfresco Share.",
+   jsdoc: "http://dev.alfresco.com/resource/docs/aikau-jsdoc/Logo.html",
    examples: [
       {
          title: "Basic Logo",

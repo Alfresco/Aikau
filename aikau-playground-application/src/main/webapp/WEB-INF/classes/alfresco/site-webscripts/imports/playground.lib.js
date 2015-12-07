@@ -110,11 +110,78 @@ function buildPageModel(data) {
          ],
          widgets: [
             {
-               name: "alfresco/layout/TitleDescriptionAndContent",
+               name: "alfresco/layout/StripedContent",
                config: {
-                  title: data.title,
-                  description: data.description,
-                  widgets: outputExamples(data.examples)
+                  contentWidth: "1400px",
+                  widgets: [
+                     {
+                        name: "alfresco/layout/LeftAndRight",
+                        stripeClass: "header",
+                        className: "share-header-title",
+                        config: {
+                           semanticWrapper: "header",
+                           widgets: [
+                              {
+                                 name: "alfresco/logo/Logo",
+                                 align: "left",
+                                 config:
+                                 {
+                                    logoClasses: "alfresco-logo-large"
+                                 }
+                              },
+                              {
+                                 name: "alfresco/header/Title",
+                                 align: "left",
+                                 config: {
+                                    label: "Aikau Playground - " + data.title,
+                                    setBrowserTitle: "Aikau Playground"
+                                 }
+                              }
+                           ]
+                        }
+                     },
+                     {
+                        name: "alfresco/layout/VerticalWidgets",
+                        stripeClass: "menu",
+                        stripeStyle: "border-bottom: none",
+                        config: {
+                           widgets: [
+                              {
+                                 name: "alfresco/html/Label",
+                                 config: {
+                                    label: data.description
+                                 }
+                              }
+                           ]
+                        }
+                     },
+                     {
+                        name: "alfresco/layout/AlfTabContainer",
+                        config: {
+                           widgets: [
+                              {
+                                 title: "Examples",
+                                 name: "alfresco/layout/VerticalWidgets",
+                                 config: {
+                                    widgets: outputExamples(data.examples)
+                                 }
+                              },
+                              {
+                                 title: "Logging",
+                                 name: "alfresco/logging/DebugLog"
+                              },
+                              {
+                                 title: "JSDoc",
+                                 name: "alfresco/integration/IFrame",
+                                 config: {
+                                    src: data.jsdoc,
+                                    srcType: "FULL_PATH"
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  ]
                }
             }
          ]

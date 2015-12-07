@@ -9,7 +9,9 @@
     </page-types>
     <css-tokens>
       <less-variables>
-         <!-- Override default LESS variables here -->
+         @header-stripe-background-color: #0082c8;
+         @header-stripe-font-color: #fff;
+         @use-legacy-buttons: false;
       </less-variables>
    </css-tokens>
 </theme>
