@@ -45,10 +45,11 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/dom-class",
-        "dojo/io-query"],
+        "dojo/io-query",
+        "dijit/registry"],
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, SelectedItemStateMixin,
                  DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct, 
-                 domClass, ioQuery) {
+                 domClass, ioQuery, registry) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, SelectedItemStateMixin, DynamicWidgetProcessingTopics], {
 
@@ -551,29 +552,48 @@ define(["dojo/_base/declare",
          }
       },
 
+      /**
+       * 
+       * @instance
+       * @param {object[]} widgets The array of widgets created (this should just contain a single view instance)
+       * @since 1.0.47
+       */
       handleNewViewInstances: function alfresco_lists_AlfList__handleNewViewInstances(widgets) {
          if (widgets.length === 1)
          {
-            // There should only be one view rendered...
-            var newView = widgets[0];
-            newView.setData(this.currentData);
-            newView.renderView(this.useInfiniteScroll);
-
             var oldView = this.viewMap[this._currentlySelectedView];
             if (oldView)
             {
-               // var index = this.viewDefinitionMap[oldView];
+               // We need to remove the old view from the registry before we create the new instance
+               // in order that the desired IDs can be re-used...
+               registry.remove(oldView.id);
+
+               // There should only be one view rendered...
+               var newView = widgets[0];
+               
+               // Pass useInfiniteScroll to the view
+               if (this.useInfiniteScroll) {
+                  newView.useInfiniteScroll = true;
+               }
+
+               // Remove the old aspect handle for re-selecting items and apply the aspect to the new view...
+               var oldAspect = this.viewAspectHandles[this._currentlySelectedView];
+               oldAspect && oldAspect.remove();
+               var newAspect = aspect.after(newView, "renderView", lang.hitch(this, this.publishSelectedItems));
+               this.viewAspectHandles[this._currentlySelectedView] = newAspect;
+
+               // Set the current data...
+               newView.setData(this.currentData);
+               newView.renderView(this.useInfiniteScroll);
+
+               // Clear up the old view...
                oldView.clearOldView();
+               oldView.destroy();
 
-               // var viewName = newView.getViewName();
-               // if (!viewName)
-               // {
-               //    viewName = index;
-               // }
-
+               // Show the view...
                this.viewMap[this._currentlySelectedView] = newView;
+               this.showView(newView);
             }
-            this.showView(newView);
         }
      },
 
@@ -640,6 +660,7 @@ define(["dojo/_base/declare",
       registerViews: function alfresco_lists_AlfList__registerViews(widgets) {
          this.viewMap = {};
          this.viewDefinitionMap = {};
+         this.viewAspectHandles = {};
          array.forEach(widgets, lang.hitch(this, this.registerView));
 
          // If no default view has been provided, then just use the first...
@@ -731,7 +752,8 @@ define(["dojo/_base/declare",
          // that where views re-render themselves (e.g. resizing a gallery view)
          // that selection will be maintained even if the underlying renderer is destroyed
          // and recreated...
-         aspect.after(view, "renderView", lang.hitch(this, this.publishSelectedItems));
+         var aspectHandle = aspect.after(view, "renderView", lang.hitch(this, this.publishSelectedItems));
+         this.viewAspectHandles[viewName] = aspectHandle;
 
          // Publish the additional controls...
          this.publishAdditionalControls(viewName, view);
