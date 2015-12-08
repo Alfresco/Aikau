@@ -166,11 +166,13 @@ define(["dojo/_base/declare",
       _menu: null,
 
       /**
-       * [destroy description]
-       * @param  {[type]} preserveDom [description]
-       * @return {[type]}             [description]
+       * Ensures that the [menu]{@link module:alfresco/renderers/Actions#_menu} is destroyed.
+       *
+       * @instance
+       * @param  {boolean} preserveDom Indicates whether or not the DOM should be preserved.
+       * @since 1.0.46
        */
-      destroy: function alfresco_renderers_Actions__destroy(preserveDom) {
+      destroy: function alfresco_renderers_Actions__destroy(/*jshint unused:false*/ preserveDom) {
          this.inherited(arguments);
          if (this._menu)
          {
