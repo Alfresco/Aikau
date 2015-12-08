@@ -45,10 +45,9 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
-        "dojo/query",
-        "dijit/registry"],
+        "dojo/query"],
         function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, _AlfDndDocumentUploadMixin, ListRenderer,
-                 RenderAppendixSentinel, AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query, registry) {
+                 RenderAppendixSentinel, AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query) {
 
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _AlfDndDocumentUploadMixin], {
 
@@ -445,26 +444,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called in order to un-register any renderers that were created by previous
-       * calls to [createListRenderer]{@link module:alfresco/lists/views/AlfListView#createListRenderer}.
-       * Any views that override [createListRenderer]{@link module:alfresco/lists/views/AlfListView#createListRenderer}
-       * should also override this function to ensure the correct unregistration can be performed. This
-       * is required as the [lists]{@link module:alfresco/lists/AlfList} now create duplicate instances of
-       * the current list when rendering new data to achieve an "instant" rendering and it is essential that
-       * the original IDs of used for the view are released ready for re-use. 
-       * 
-       * @instance
-       * @since 1.0.47
-       */
-      unregisterRenderers: function alfresco_lists_views_AlfListView__unregisterRenderers() {
-         if (this.docListRenderer)
-         {
-            registry.remove(this.docListRenderer.id);
-         }
-      },
-
-
-      /**
        * Creates a new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        * which is used to render the actual items in the view. This function can be overridden by extending views
        * (such as the [Film Strip View]{@link module:alfresco/documentlibrary/views/AlfFilmStripView}) to create
@@ -478,7 +457,6 @@ define(["dojo/_base/declare",
             id: this.id + "_ITEMS",
             widgets: this.widgets,
             currentData: this.currentData,
-            _forceWidgetRegistration: true,
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
             widgetsForAppendix: this.widgetsForAppendix

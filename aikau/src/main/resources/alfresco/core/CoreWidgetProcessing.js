@@ -33,13 +33,14 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "dojo/_base/array",
         "dojo/_base/lang",
+        "dojo/dom-attr",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-style",
         "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
    return declare([AlfCore, ObjectProcessingMixin], {
 
@@ -60,26 +61,6 @@ define(["dojo/_base/declare",
        * @default
        */
       currentItem: null,
-
-      /**
-       * <p>If this widget is configured to be true on a widget then in all calls to 
-       * [createWidget]{@link module:alfresco/core/CoreWidgetProcessing#createWidget}
-       * if a widget is already found to have been registered with the requested ID then that
-       * widget will be removed from the registry so that the new widget can take its place.
-       * The existing widget will not be deleted but it will not be able to find it via the
-       * registry. Setting this attribute should be done with extreme caution and an 
-       * understanding of the rammifications of making this change for all child widgets.</p>
-       * 
-       * <p>It has been added to support the use case of being able to create a new view instance
-       * to replace an existing view instance to achieve a smooth transition between rendered
-       * data sets.</p>
-       * 
-       * @instance
-       * @type {boolean}
-       * @default
-       * @since 1.0.47
-       */
-      _forceWidgetRegistration: false,
 
       /**
        * This string is used to identify locations of counts of widgets that are being processed.
@@ -195,10 +176,9 @@ define(["dojo/_base/declare",
        * @param {array} widgets An array of the widget definitions to instantiate
        * @param {element} rootNode The DOM node which should be used to add instantiated widgets to
        * @param {string} processWidgetsId An optional ID that might have been provided to map the results of the call to
-       * @param {boolean} forceRegister Optionally allows any widgets registered with the requested ID to be removed from the registry
        * this option should be used with caution.
        */
-      processWidgets: function alfresco_core_CoreWidgetProcessing__processWidgets(widgets, rootNode, processWidgetsId, forceRegister) {
+      processWidgets: function alfresco_core_CoreWidgetProcessing__processWidgets(widgets, rootNode, processWidgetsId) {
          // There are two options for providing configuration, either via a JSON object or
          // via a URL to asynchronously retrieve the configuration. The configuration object
          // takes precedence as it will be faster by virtue of not requiring a remote call.
@@ -218,7 +198,7 @@ define(["dojo/_base/declare",
                lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._processingWidgetsLocationPrefix), [], this);
                
                // Iterate over all the widgets in the configuration object and add them...
-               array.forEach(widgets, lang.hitch(this, this.processWidget, rootNode, processWidgetsId, forceRegister));
+               array.forEach(widgets, lang.hitch(this, this.processWidget, rootNode, processWidgetsId));
             }
          }
          catch(e)
@@ -238,18 +218,16 @@ define(["dojo/_base/declare",
        * @instance
        * @param {element} rootNode The DOM node where the widget should be created.
        * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
-       * @param {boolean} forceRegister Optionally allows any widgets registered with the requested ID to be removed from the registry
-       * this option should be used with caution.
        * @param {object} widgetConfig The configuration for the widget to be created
        * @param {number} index The index of the widget configuration in the array that it was taken from
        */
-      processWidget: function alfresco_core_CoreWidgetProcessing__processWidget(rootNode, processWidgetsId, forceRegister, widgetConfig, index) {
+      processWidget: function alfresco_core_CoreWidgetProcessing__processWidget(rootNode, processWidgetsId, widgetConfig, index) {
          if (widgetConfig)
          {
             if (this.filterWidget(widgetConfig, index, processWidgetsId))
             {
                var domNode = this.createWidgetDomNode(widgetConfig, rootNode, widgetConfig.className || "");
-               this.createWidget(widgetConfig, domNode, this._registerProcessedWidget, this, index, processWidgetsId, forceRegister);
+               this.createWidget(widgetConfig, domNode, this._registerProcessedWidget, this, index, processWidgetsId);
             }
          }
          else
@@ -642,10 +620,6 @@ define(["dojo/_base/declare",
          {
             initArgs.groupMemberships = this.groupMemberships;
          }
-         if (initArgs._forceWidgetRegistration === undefined)
-         {
-            initArgs._forceWidgetRegistration = this._forceWidgetRegistration;
-         }
          return initArgs;
       },
 
@@ -664,11 +638,9 @@ define(["dojo/_base/declare",
        * @param {object} callbackScope The scope with which to call the callback
        * @param {number} index The index of the widget to create (this will effect it's location in the
        * [_processedWidgets]{@link module:alfresco/core/Core#_processedWidgets} array)
-       * @param {boolean} forceRegister Optionally allows any widgets registered with the requested ID to be removed from the registry
-       * this option should be used with caution.
        * @return {object|promise} Either the created widget or the promise of a widget
        */
-      createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(widget, domNode, callback, callbackScope, index, processWidgetsId, forceRegister) {
+      createWidget: function alfresco_core_CoreWidgetProcessing__createWidget(widget, domNode, callback, callbackScope, index, processWidgetsId) {
          var _this = this;
          this.alfLog("log", "Creating widget: ",widget);
          var initArgs = this.processWidgetConfig(widget);
@@ -693,8 +665,6 @@ define(["dojo/_base/declare",
          // variable will be returned with an assigned value...
          var instantiatedWidget;
 
-         var forceWidgetRegistration = forceRegister || this._forceWidgetRegistration;
-
          // Dynamically require the specified widget
          // The use of indirection is done so modules will not rolled into a build (should we do one)
          var requires = [widget.name];
@@ -706,17 +676,11 @@ define(["dojo/_base/declare",
             {
                try
                {
-                  var existingWidget = registry.byId(initArgs.id);
-                  if (existingWidget)
+                  var preferredDomNodeId;
+                  if (registry.byId(initArgs.id))
                   {
-                     if (forceWidgetRegistration)
-                     {
-                        registry.remove(existingWidget.id);
-                     }
-                     else
-                     {
-                        initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
-                     }
+                     preferredDomNodeId = initArgs.id;
+                     initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
                   }
 
                   // Instantiate the new widget
@@ -727,6 +691,12 @@ define(["dojo/_base/declare",
                      _this.widgetsToDestroy = [];
                      _this.widgetsToDestroy.push(widget);
                   }
+
+                  if (preferredDomNodeId)
+                  {
+                     domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
+                  }
+
                   _this.alfLog("log", "Created widget", instantiatedWidget);
                   if (typeof instantiatedWidget.startup === "function")
                   {

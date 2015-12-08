@@ -179,21 +179,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/lists/views/AlfListView#unregisterRenderers}
-       * to unregister the content carousel.
-       * 
-       * @instance
-       * @since 1.0.47
-       */
-      unregisterRenderers: function alfresco_documentlibrary_views_AlfFilmStripView__unregisterRenderers() {
-         this.inherited(arguments);
-         if (this.contentCarousel)
-         {
-            registry.remove(this.contentCarousel.id);
-         }
-      },
-
-      /**
        * Creates a new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        * which is used to render the actual items in the view. This function can be overridden by extending views
        * (such as the [Film Strip View]{@link module:alfresco/documentlibrary/views/AlfFilmStripView}) to create
@@ -212,7 +197,6 @@ define(["dojo/_base/declare",
             id: this.id + "_PREVIEWS",
             widgets: clonedWidgetsForContent,
             currentData: this.currentData,
-            _forceWidgetRegistration: true,
             heightAdjustment: this.heightAdjustment,
             heightMode: this.heightMode,
             pubSubScope: this.pubSubScope,
@@ -228,7 +212,6 @@ define(["dojo/_base/declare",
             id: this.id + "_ITEMS",
             widgets: lang.clone(this.widgets),
             currentData: this.currentData,
-            _forceWidgetRegistration: true,
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
             fixedHeight: "112px",

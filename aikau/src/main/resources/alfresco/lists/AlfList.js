@@ -45,11 +45,10 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/dom-class",
-        "dojo/io-query",
-        "dijit/registry"],
+        "dojo/io-query"],
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, SelectedItemStateMixin,
                  DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct, 
-                 domClass, ioQuery, registry) {
+                 domClass, ioQuery) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, SelectedItemStateMixin, DynamicWidgetProcessingTopics], {
 
@@ -1182,15 +1181,7 @@ define(["dojo/_base/declare",
             {
                var index = this.viewDefinitionMap[this._currentlySelectedView];
                var widgets = [this.widgets[index]];
-
-               // We need to de-register the current view from the widget registry
-               // so that the original view ID can be re-registered for a new instance
-               // of the view. This needs to be done BEFORE we call processWidgets
-               var currentView = this.viewMap[this._currentlySelectedView];
-               registry.remove(currentView.id);
-               currentView.unregisterRenderers();
-
-               this.processWidgets(widgets, null, "NEW_VIEW_INSTANCE", true);
+               this.processWidgets(widgets, null, "NEW_VIEW_INSTANCE");
             }
          }
 
