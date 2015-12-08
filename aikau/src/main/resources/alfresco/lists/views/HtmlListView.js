@@ -90,6 +90,7 @@ define(["dojo/_base/declare",
       createListRenderer: function alfresco_lists_views_HtmlListView__createListRenderer() {
          var dlr = new HtmlListViewRenderer({
             items: this.currentData.items,
+            _forceWidgetRegistration: true,
             propertyToRender: this.propertyToRender || "displayName",
             listStyleType: this.listStyleType || "none"
          });

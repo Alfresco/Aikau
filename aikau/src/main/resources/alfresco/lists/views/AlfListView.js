@@ -478,6 +478,7 @@ define(["dojo/_base/declare",
             id: this.id + "_ITEMS",
             widgets: this.widgets,
             currentData: this.currentData,
+            _forceWidgetRegistration: true,
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
             widgetsForAppendix: this.widgetsForAppendix

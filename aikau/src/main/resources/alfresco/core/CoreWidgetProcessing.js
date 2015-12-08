@@ -62,6 +62,26 @@ define(["dojo/_base/declare",
       currentItem: null,
 
       /**
+       * <p>If this widget is configured to be true on a widget then in all calls to 
+       * [createWidget]{@link module:alfresco/core/CoreWidgetProcessing#createWidget}
+       * if a widget is already found to have been registered with the requested ID then that
+       * widget will be removed from the registry so that the new widget can take its place.
+       * The existing widget will not be deleted but it will not be able to find it via the
+       * registry. Setting this attribute should be done with extreme caution and an 
+       * understanding of the rammifications of making this change for all child widgets.</p>
+       * 
+       * <p>It has been added to support the use case of being able to create a new view instance
+       * to replace an existing view instance to achieve a smooth transition between rendered
+       * data sets.</p>
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.47
+       */
+      _forceWidgetRegistration: false,
+
+      /**
        * This string is used to identify locations of counts of widgets that are being processed.
        *
        * @instance
@@ -683,7 +703,7 @@ define(["dojo/_base/declare",
                   var existingWidget = registry.byId(initArgs.id);
                   if (existingWidget)
                   {
-                     if (forceRegister)
+                     if (forceRegister || this._forceWidgetRegistration)
                      {
                         registry.remove(existingWidget.byId);
                      }

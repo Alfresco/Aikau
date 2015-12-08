@@ -1049,12 +1049,6 @@ define(["dojo/_base/declare",
          {
             this.showLoadingMessage();
 
-            // Clear the previous data only when not configured to use infinite scroll...
-            // if (!this.useInfiniteScroll)
-            // {
-            //    this.clearViews();
-            // }
-
             var payload;
             if (this.loadDataPublishPayload)
             {
@@ -1073,6 +1067,7 @@ define(["dojo/_base/declare",
             }
 
             this.updateLoadDataPayload(payload);
+            this.requestInProgress = true;
             setTimeout(lang.hitch(this, this.alfPublish, this.loadDataPublishTopic, payload, true));
          }
          else

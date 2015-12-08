@@ -207,15 +207,12 @@ define(["dojo/_base/declare",
          //       TODO: Possible memory leak to investigate here, because the call to empy the node *is* required.
          domConstruct.empty(this.previewNode);
 
-         // Process the widgets for content in order to swap in instance tokens such as the
-         // heightMode and heightAdjustment...
          var clonedWidgetsForContent = lang.clone(this.widgetsForContent);
-         // this.processObject(["processInstanceTokens"], clonedWidgetsForContent);
-
          this.contentCarousel = new DocumentCarousel({
             id: this.id + "_PREVIEWS",
             widgets: clonedWidgetsForContent,
             currentData: this.currentData,
+            _forceWidgetRegistration: true,
             heightAdjustment: this.heightAdjustment,
             heightMode: this.heightMode,
             pubSubScope: this.pubSubScope,
@@ -231,6 +228,7 @@ define(["dojo/_base/declare",
             id: this.id + "_ITEMS",
             widgets: lang.clone(this.widgets),
             currentData: this.currentData,
+            _forceWidgetRegistration: true,
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
             fixedHeight: "112px",
