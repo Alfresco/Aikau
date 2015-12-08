@@ -55,7 +55,8 @@ registerSuite(function(){
                                  name: "Throttle Test",
                                  func: function() {
                                     results.push(label);
-                                 }
+                                 },
+                                 timeoutMs: 250
                               });
                            }, delayMs);
                         };
@@ -74,6 +75,45 @@ registerSuite(function(){
                });
          },
 
+         "Filtered throttle works": function() {
+            return browser.setExecuteAsyncTimeout(5000)
+               .executeAsync(function(callback) {
+                  require(["alfresco/util/functionUtils"], function(funcUtils) {
+                     var results = [],
+                        before = Date.now(),
+                        filterObj = {},
+                        invokeThrottle = function(label, delayMs, filter) {
+                           setTimeout(function() {
+                              funcUtils.throttle({
+                                 name: "Throttle Test",
+                                 func: function() {
+                                    results.push(label);
+                                 },
+                                 timeoutMs: 250,
+                                 filter: filter
+                              });
+                           }, delayMs);
+                        };
+                     invokeThrottle("A", 0);
+                     invokeThrottle("B", 50, filterObj);
+                     invokeThrottle("C", 60);
+                     invokeThrottle("D", 110, filterObj);
+                     invokeThrottle("E", 120);
+                     invokeThrottle("F", 170, filterObj);
+                     invokeThrottle("G", 280);
+                     invokeThrottle("H", 330, filterObj);
+                     invokeThrottle("I", 400);
+                     invokeThrottle("J", 450, filterObj);
+                     setTimeout(function() {
+                        callback(results);
+                     }, 1000);
+                  });
+               })
+               .then(function(results) {
+                  assert.equal(results.join(), "A,B,E,F,I,J", "Did not throttle functions correctly");
+               });
+         },
+
          "Throttle option ignoreFirst works": function() {
             return browser.setExecuteAsyncTimeout(5000)
                .executeAsync(function(callback) {
@@ -87,6 +127,7 @@ registerSuite(function(){
                                  func: function() {
                                     results.push(label);
                                  },
+                                 timeoutMs: 250,
                                  ignoreFirst: true
                               });
                            }, delayMs);
@@ -119,7 +160,8 @@ registerSuite(function(){
                                  name: "Debounce Test",
                                  func: function() {
                                     timeOfExecution = Date.now() - before
-                                 }
+                                 },
+                                 timeoutMs: 250
                               });
                            }, delayMs);
                         };
@@ -152,6 +194,7 @@ registerSuite(function(){
                                  func: function() {
                                     timeOfExecution = Date.now() - before
                                  },
+                                 timeoutMs: 250,
                                  execFirst: true
                               });
                            }, delayMs);

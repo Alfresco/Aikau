@@ -1,5 +1,5 @@
 {
-   "totalRecords": 1,
+   "totalRecords": 3,
    "startIndex": 0,
    "hasMoreRecords": false,
    "items":
@@ -18,6 +18,38 @@
          },
          "container": "documentLibrary",
          "size": 381778,
+         "mimetype": "application\/pdf"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/1a0b110f-1e09-4ca2-b367-fe25e4964a4f",
+         "name": "Terms & Conditions.pdf",
+         "title": "Terms & Conditions for Green Enery",
+         "description": "Terms & Conditions for the Green Energy project",
+         "modifiedOn": "2011-06-14T11:28:55.714+01:00",
+         "modifiedBy": "admin",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "size": 381779,
+         "mimetype": "application\/pdf"
+      },
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/1a0b110f-1e09-4ca2-b367-fe25e4964a4d",
+         "name": "Test\u0053\u00f6\u006b<img src=\"1\" onerror=\"window.hackedName=true\">",
+         "title": "Test\u0053\u00f6\u006b<img src=\"1\" onerror=\"window.hackedTitle=true\">",
+         "description": "Test\u0053\u00f6\u006b<img src=\"1\" onerror=\"window.hackedDescription=true\">",
+         "modifiedOn": "2011-06-14T11:18:55.714+01:00",
+         "modifiedBy": "admin",
+         "site":
+         {
+            "shortName": "swsdp",
+            "title": "Sample: Web Site Design Project"
+         },
+         "container": "documentLibrary",
+         "size": 381479,
          "mimetype": "application\/pdf"
       }
    ]

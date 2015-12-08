@@ -32,6 +32,17 @@ define(["alfresco/forms/controls/BaseFormControl",
    return declare([BaseFormControl], {
       
       /**
+       * This indicates whether or not the [TinyMCE editor]{@link module:alfresco/editors/TinyMCE}
+       * should automatically resize to consume the available space.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.47
+       */
+      autoResize: false,
+
+      /**
        * Returns the configuration to use for the widget.
        *
        * @instance
@@ -44,7 +55,8 @@ define(["alfresco/forms/controls/BaseFormControl",
             initiallyDisabled: (this.disablementConfig && this.disablementConfig.initialValue === true),
             immediateInit: false,
             contentChangeScope: this,
-            contentChangeHandler: this.onEditorValueChange
+            contentChangeHandler: this.onEditorValueChange,
+            autoResize: this.autoResize
          };
       },
       

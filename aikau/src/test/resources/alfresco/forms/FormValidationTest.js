@@ -41,28 +41,17 @@ registerSuite(function(){
          browser.end();
       },
 
-      "Check that first form does NOT show validation errors on load": function() {
-         return browser.findAllByCssSelector("#TB1 .validation-error")
+      "Check that first form is NOT displayed as invalid on load": function() {
+         return browser.findAllByCssSelector("#TB1.alfresco-forms-controls-BaseFormControl--invalid")
             .then(function(elements) {
-               assert.lengthOf(elements, 0, "The error icon should not have been displayed (TB1)");
+               assert.lengthOf(elements, 0, "The form control should not be marked as invalid (TB1)");
             })
          .end()
-         .findByCssSelector("#TB1 .validation-message")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isFalse(displayed, "The error message should not have been displayed (TB1)");
-            })
-         .end()
-         .findAllByCssSelector("#TB2 .validation-error")
+         .findAllByCssSelector("#TB2.alfresco-forms-controls-BaseFormControl--invalid")
             .then(function(elements) {
-               assert.lengthOf(elements, 0, "The error icon should not have been displayed (TB1)");
+               assert.lengthOf(elements, 0, "The form control should not be marked as invalid (TB2)");
             })
          .end()
-         .findByCssSelector("#TB2 .validation-message")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isFalse(displayed, "The error message should not have been displayed (TB2)");
-            });
       },
 
       "Check that first form confirmation button is disabled": function() {
@@ -72,70 +61,59 @@ registerSuite(function(){
             });
       },
 
-      "Check that seoond form DOES show validation errors on load": function() {
-         return browser.findByCssSelector("#TB3 .validation-error")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isTrue(displayed, "The error icon SHOULD have been displayed (TB3)");
-            })
+      "Check that second form IS displayed as invalid on load": function() {
+         return browser.findByCssSelector("#TB3.alfresco-forms-controls-BaseFormControl--invalid")
          .end()
+         .findByCssSelector("#TB4.alfresco-forms-controls-BaseFormControl--invalid");
+      },
+
+      "Error indicators are only shown when form is invalid": function() {
+         return browser.findByCssSelector("#TB1 .alfresco-forms-controls-BaseFormControl__validation-error")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isFalse(isDisplayed, "Error image was shown on valid form control");
+            })
+            .end()
+            
+         .findByCssSelector("#TB1 .validation-message")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isFalse(isDisplayed, "Error message was shown on valid form control");
+            })
+            .end()
+
+         .findByCssSelector("#TB3 .alfresco-forms-controls-BaseFormControl__validation-error")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isTrue(isDisplayed, "Error image was not shown on invalid form control");
+            })
+            .end()
+            
          .findByCssSelector("#TB3 .validation-message")
             .isDisplayed()
-            .then(function(displayed) {
-               assert.isTrue(displayed, "The error message SHOULD have been displayed (TB3)");
-            })
-         .end()
-         .findByCssSelector("#TB4 .validation-error")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isTrue(displayed, "The error icon SHOULD have been displayed (TB4)");
-            })
-         .end()
-         .findByCssSelector("#TB4 .validation-message")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isTrue(displayed, "The error message SHOULD have been displayed (TB4)");
+            .then(function(isDisplayed) {
+               assert.isTrue(isDisplayed, "Error message was not shown on invalid form control");
             });
       },
 
-      "Give and remove focus to first text field and verify error message is displayed": function() {
+      "Give and remove focus to first text field and verify control is marked as invalid": function() {
          return browser.findByCssSelector("#TB1 .dijitInputContainer input")
             .click()
          .end()
          .findByCssSelector("#TB2 .dijitInputContainer input")
             .click()
          .end()
-         .findByCssSelector("#TB1 .validation-error")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isTrue(displayed, "The error icon SHOULD have been displayed (TB1)");
-            })
-         .end()
-         .findByCssSelector("#TB1 .validation-message")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isTrue(displayed, "The error message SHOULD have been displayed (TB1)");
-            });
+         .findByCssSelector("#TB1.alfresco-forms-controls-BaseFormControl--invalid");
       },
 
-      "Remove focus from second text field and verify error message is displayed": function() {
+      "Remove focus from second text field and verify control is marked as invalid": function() {
          return browser.findByCssSelector("#TB3 .dijitInputContainer input")
             .click()
          .end()
-         .findByCssSelector("#TB2 .validation-error")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isTrue(displayed, "The error icon SHOULD have been displayed (TB2)");
-            })
-         .end()
-         .findByCssSelector("#TB2 .validation-message")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isTrue(displayed, "The error message SHOULD have been displayed (TB2)");
-            });
+         .findByCssSelector("#TB2.alfresco-forms-controls-BaseFormControl--invalid");
       },
 
-      "Make third text field valid and then remove focus and verify that error indicator is not displayed": function() {
+      "Make third text field valid and then remove focus and verify that control is not marked as invalid": function() {
          return browser.findByCssSelector("#TB5 .dijitInputContainer input")
             .clearValue()
             .type("abcde")
@@ -143,15 +121,9 @@ registerSuite(function(){
          .findByCssSelector("#TB3 .dijitInputContainer input")
             .click()
          .end()
-         .findAllByCssSelector("#TB5 .validation-error")
+         .findAllByCssSelector("#TB5.alfresco-forms-controls-BaseFormControl--invalid")
             .then(function(elements) {
-               assert.lengthOf(elements, 0, "The error icon should NOT have been displayed (TB5)");
-            })
-         .end()
-         .findByCssSelector("#TB5 .validation-message")
-            .isDisplayed()
-            .then(function(displayed) {
-               assert.isFalse(displayed, "The error message should NOT have been displayed (TB5)");
+               assert.lengthOf(elements, 0, "The control should not be marked as invalid (TB5)");
             });
       },
 

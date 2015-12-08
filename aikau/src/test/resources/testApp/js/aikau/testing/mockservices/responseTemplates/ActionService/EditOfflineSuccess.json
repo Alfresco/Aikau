@@ -1,0 +1,16 @@
+{
+   "totalResults": 1,
+   "overallSuccess": true,
+   "successCount": 1,
+   "failureCount": 0,
+   "results":
+   [
+      {
+         "downloadUrl": "api\/node\/content\/workspace\/SpacesStore\/888956ca-b90e-47ff-9a18-86ae6dcdc50f\/AKU-610%20(Working%20Copy).mp4?a=true",
+         "action": "checkoutAsset",
+         "id": "AKU-610.mp4",
+         "nodeRef": "workspace:\/\/SpacesStore\/888956ca-b90e-47ff-9a18-86ae6dcdc50f",
+         "success": true
+      }
+   ]
+}

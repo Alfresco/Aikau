@@ -26,6 +26,52 @@ var view = {
    }
 };
 
+var view2 = {
+   name: "alfresco/lists/views/AlfListView",
+   config: {
+      widgets: [
+         {
+            id: "ROW",
+            name: "alfresco/lists/views/layouts/Row",
+            config: {
+               widgets: [
+                  {
+                     id: "SELECTOR_CELL",
+                     name: "alfresco/lists/views/layouts/Cell",
+                     config: {
+                        widgets: [
+                           {
+                              id: "SELECTOR",
+                              name: "alfresco/renderers/Selector",
+                              config: {
+                                 itemKey: "index"
+                              }
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     id: "PROPERTY_CELL",
+                     name: "alfresco/lists/views/layouts/Cell",
+                     config: {
+                        widgets: [
+                           {
+                              id: "PROPERTY",
+                              name: "alfresco/renderers/Property",
+                              config: {
+                                 propertyToRender: "index"
+                              }
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         }
+      ]
+   }
+};
+
 model.jsonModel = {
    services: [
       {
@@ -60,17 +106,33 @@ model.jsonModel = {
                      pubSubScope: "HASH_CUSTOM_",
                      widgets: [
                         {
-                           id: "HASH_MENU_BAR",
-                           name: "alfresco/menus/AlfMenuBar",
+                           id: "HASH_CUSTOM_PAGE_SIZE_PAGINATOR",
+                           name: "alfresco/lists/Paginator",
                            config: {
-                              widgets: [
+                              useHash: true,
+                              documentsPerPage: 10,
+                              pageSizes: [5,10,20],
+                              widgetsAfter: [
                                  {
-                                    id: "HASH_CUSTOM_PAGE_SIZE_PAGINATOR",
-                                    name: "alfresco/lists/Paginator",
+                                    id: "ASCENDING",
+                                    name: "alfresco/menus/AlfMenuBarItem",
                                     config: {
-                                       useHash: true,
-                                       documentsPerPage: 10,
-                                       pageSizes: [5,10,20]
+                                       label: "Ascending",
+                                       publishTopic: "ALF_DOCLIST_SORT",
+                                       publishPayload: {
+                                          direction: "ascending"
+                                       }
+                                    }
+                                 },
+                                 {
+                                    id: "DESCENDING",
+                                    name: "alfresco/menus/AlfMenuBarItem",
+                                    config: {
+                                       label: "Descending",
+                                       publishTopic: "ALF_DOCLIST_SORT",
+                                       publishPayload: {
+                                          direction: "descending"
+                                       }
                                     }
                                  }
                               ]
@@ -80,9 +142,10 @@ model.jsonModel = {
                            id: "HASH_LIST",
                            name: "alfresco/lists/AlfSortablePaginatedList",
                            config: {
+                              itemKeyProperty: "index",
                               useHash: true,
                               currentPageSize: 10,
-                              widgets: [view]
+                              widgets: [view2]
                            }
                         }
                      ]

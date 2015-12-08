@@ -293,6 +293,15 @@ define(["intern!object",
                   assert.equal(dialog.y, 0, "Dialog top was not zero");
                })
 
+            // See AKU-717...
+            .findByCssSelector(".alfresco-editors-TinyMCE")
+               .getSize()
+               .then(function(size) {
+                  assert.isAbove(size.height, 250, "Height of editor did now grow to consume dialog space");
+                  assert.isAbove(size.width, 538, "Height of editor did now grow to consume dialog space");
+               })
+            .end()
+
             .findByCssSelector(".cancellationButton .dijitButtonNode")
                .click()
                .end()

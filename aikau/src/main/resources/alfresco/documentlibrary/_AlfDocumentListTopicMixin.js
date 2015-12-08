@@ -179,6 +179,7 @@ define(["dojo/_base/declare",
        * @type {string} 
        * @default [DOCUMENT_SELECTION_UPDATE]{@link module:alfresco/core/topics#DOCUMENT_SELECTION_UPDATE}
        * @event
+       * @property {object[]} selectedItems The selected items
        */
       documentSelectionTopic: topics.DOCUMENT_SELECTION_UPDATE,
       
@@ -199,6 +200,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
+       * @property {object[]} selectedItems The items selected
        */
       selectedDocumentsChangeTopic: topics.SELECTED_DOCUMENTS_CHANGED,
       

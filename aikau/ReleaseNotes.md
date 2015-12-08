@@ -1,4 +1,4 @@
-Aikau 1.0.46 Release Notes
+Aikau 1.0.47 Release Notes
 ===
 
 Previous deprecations:
@@ -41,6 +41,19 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.47:
+* [AKU-679](https://issues.alfresco.com/jira/browse/AKU-679)       - Ensure form elementrs pass Wave accessibility checks
+* [AKU-703](https://issues.alfresco.com/jira/browse/AKU-703)       - Added config option for full-width FacetFilters
+* [AKU-715](https://issues.alfresco.com/jira/browse/AKU-715)       - Added config option to hide Save/Cancel links in Tag renderer
+* [AKU-717](https://issues.alfresco.com/jira/browse/AKU-717)       - Added config option to auto-resize TinyMCE editor
+* [AKU-723](https://issues.alfresco.com/jira/browse/AKU-723)       - Prevent double encoding in InlineEditProperty
+* [AKU-725](https://issues.alfresco.com/jira/browse/AKU-725)       - Fix TypeError in ActionService (Edit Offline action)
+* [AKU-734](https://issues.alfresco.com/jira/browse/AKU-734)       - Ensure selected items retained on sort order change
+* [AKU-736](https://issues.alfresco.com/jira/browse/AKU-736)       - Prevent double encoding in SearchBox results
+* [AKU-737](https://issues.alfresco.com/jira/browse/AKU-737)       - Fix NavigationService page relative site handling
+* [AKU-738](https://issues.alfresco.com/jira/browse/AKU-738)       - Fix scoping on ContentService requests
+* [AKU-743](https://issues.alfresco.com/jira/browse/AKU-743)       - Tooltip delegates resize requests
+
 1.0.46:
 * [AKU-692](https://issues.alfresco.com/jira/browse/AKU-692)       - Resolved iframe in Firefox issues
 * [AKU-706](https://issues.alfresco.com/jira/browse/AKU-706)       - Ensure actions menu items are visible

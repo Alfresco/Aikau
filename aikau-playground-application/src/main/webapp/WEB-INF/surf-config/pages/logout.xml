@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page>
+  <title>Logout</title>
+  <title-id>page.logout.title</title-id>
+  <template-instance>simple-guest</template-instance>
+   <authentication>none</authentication>
+   <components>
+
+      <!-- Login form -->
+      <component>
+         <region-id>components</region-id>
+         <url>/components/guest/message</url>
+         <properties>
+            <notification>message.logged-out</notification>
+         </properties>
+      </component>
+
+   </components>
+</page>

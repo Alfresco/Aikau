@@ -617,7 +617,7 @@ define(["dojo/_base/declare",
          {
             // See AKU-689 - resize the widgets DOM node and publish an event to indicate that it has been resized...
             domStyle.set(widget.domNode, "width", dimensions.w);
-            this.alfPublishResizeEvent(widget.domNode, true); // Make sure the event is unthrottled...
+            this.alfPublishResizeEvent(widget.domNode);
          }
       },
 

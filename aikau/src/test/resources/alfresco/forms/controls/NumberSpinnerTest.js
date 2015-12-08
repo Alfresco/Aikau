@@ -167,17 +167,14 @@ registerSuite(function(){
             .clearValue()
             .end()
 
-         .findAllByCssSelector("#NS1 .validation-error")
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Standard number spinner should not permit empty values");
-            })
+         .findByCssSelector("#NS1.alfresco-forms-controls-BaseFormControl--invalid")
             .end()
 
          .findByCssSelector("#NS7 .dijitInputContainer input")
             .clearValue()
             .end()
 
-         .findAllByCssSelector("#NS7 .validation-error")
+         .findAllByCssSelector("#NS7.alfresco-forms-controls-BaseFormControl--invalid")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "'permitEmpty' number spinner should allow empty values");
             });
