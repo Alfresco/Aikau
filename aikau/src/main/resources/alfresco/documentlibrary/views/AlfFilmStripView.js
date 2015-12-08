@@ -253,7 +253,10 @@ define(["dojo/_base/declare",
                widgets: [
                   {
                      name: "alfresco/renderers/Selector",
-                     align: "left"
+                     align: "left",
+                     config: {
+                        itemKey: "node.nodeRef"
+                     }
                   },
                   {
                      name: "alfresco/renderers/Property",

@@ -180,9 +180,10 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/_base/lang",
-        "dojo/_base/array"], 
+        "dojo/_base/array",
+        "jquery"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, ResizeMixin, 
-                 topics, TabContainer, ContentPane, domConstruct, domClass, lang, array) {
+                 topics, TabContainer, ContentPane, domConstruct, domClass, lang, array, $) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ResizeMixin], {
       
@@ -295,80 +296,104 @@ define(["dojo/_base/declare",
       delayProcessingDefault: true,
 
       /**
+       * Creates the "dijit/layout/TabContainer" wrapped by this widget and sets up associated
+       * subscriptions, etc.
+       * 
+       * @instance
+       * @since 1.0.46
+       */
+      createTabContainer: function alfresco_layout_AlfTabContainer__createTabContainer() {
+         var overallwidth = $(this.domNode).width();
+         if (overallwidth)
+         {
+            try
+            {
+               // Initialise a TabContainer instance and watch its selectedChildWidget event
+               this.tabContainerWidget = new TabContainer({
+                  id: this.id + "_TABCONTAINER",
+                  style: "height: " + this.height + "; width: " + this.width + ";",
+                  doLayout: this.doLayout
+               }, this.tabNode);
+               this.tabContainerWidget.watch("selectedChildWidget", lang.hitch(this, this._tabChanged));
+
+               // Setup child widgets and startup()
+               if (this.widgets)
+               {
+                  // By default we want to ensure that we don't unnecessarily process widgets for 
+                  // tabs that are not immediately visible. Therefore unless specifically requested 
+                  // in the configuration to be the selected tab or the to render immediately then
+                  // we'll mark them all as delayed processing. If no tab is marked as selected then
+                  // we'll ensure that the first tab is both selected and will be immediately rendered
+                  var tabSelected = false;
+                  array.forEach(this.widgets, function(widget) {
+                     if ((widget.delayProcessing === true && !widget.selected) || 
+                         widget.delayProcessing === false)
+                     {
+                        // No action, use the explicit configuration
+                     }
+                     else if (widget.delayProcessing === true && widget.selected)
+                     {
+                        // Silly configuration, if the tab is to be initially selected, processing can't be delayed...
+                        widget.delayProcessingDefault = false;
+                     }
+                     else
+                     {
+                        // Use the default if no configuration is provided...
+                        widget.delayProcessing = this.delayProcessingDefault;
+                     }
+                     tabSelected = tabSelected || widget.selected;
+                  }, this);
+
+                  if (this.widgets.length && !tabSelected)
+                  {
+                     this.widgets[0].selected = true;
+                     this.widgets[0].delayProcessing = false;
+                  }
+
+                  // Now add tabs for each widget...
+                  array.forEach(this.widgets, lang.hitch(this, this.addWidget));
+               }
+               this.tabContainerWidget.startup();
+
+               // Subscribe to some optional topics
+               if (this.tabSelectionTopic)
+               {
+                  this.alfSubscribe(this.tabSelectionTopic, lang.hitch(this, this.onTabSelect));
+               }
+               if (this.tabDisablementTopic)
+               {
+                  this.alfSubscribe(this.tabDisablementTopic, lang.hitch(this, this.onTabDisable));
+               }
+               if (this.tabAdditionTopic)
+               {
+                  this.alfSubscribe(this.tabAdditionTopic, lang.hitch(this, this.onTabAdd));
+               }
+               if (this.tabDeletionTopic)
+               {
+                  this.alfSubscribe(this.tabDeletionTopic, lang.hitch(this, this.onTabDelete));
+               }
+
+               
+               this.alfPublishResizeEvent(this.domNode);
+               domClass.add(this.domNode, "alfresco-layout-AlfTabContainer--tabsDisplayed");
+            }
+            catch(e)
+            {
+               this.alfLog("error", "It was not possible to create a TabContainer", e, this);
+            }
+         }
+      },
+
+      /**
+       * Calls [createTabContainer]{@link module:alfresco/layout/AlfTabContainer#createTabContainer}
+       * to create the "dijit/layout/TabContainer" that is wrapped by this widget.
+       * 
        * @instance
        */
       postCreate: function alfresco_layout_AlfTabContainer__postCreate() {
-         // Initialise a TabContainer instance and watch its selectedChildWidget event
-         this.tabContainerWidget = new TabContainer({
-            id: this.id + "_TABCONTAINER",
-            style: "height: " + this.height + "; width: " + this.width + ";",
-            doLayout: this.doLayout
-         }, this.tabNode);
-         this.tabContainerWidget.watch("selectedChildWidget", lang.hitch(this, this._tabChanged));
-
-         // Setup child widgets and startup()
-         if (this.widgets)
-         {
-            // By default we want to ensure that we don't unnecessarily process widgets for 
-            // tabs that are not immediately visible. Therefore unless specifically requested 
-            // in the configuration to be the selected tab or the to render immediately then
-            // we'll mark them all as delayed processing. If no tab is marked as selected then
-            // we'll ensure that the first tab is both selected and will be immediately rendered
-            var tabSelected = false;
-            array.forEach(this.widgets, function(widget) {
-               if ((widget.delayProcessing === true && !widget.selected) || 
-                   widget.delayProcessing === false)
-               {
-                  // No action, use the explicit configuration
-               }
-               else if (widget.delayProcessing === true && widget.selected)
-               {
-                  // Silly configuration, if the tab is to be initially selected, processing can't be delayed...
-                  widget.delayProcessingDefault = false;
-               }
-               else
-               {
-                  // Use the default if no configuration is provided...
-                  widget.delayProcessing = this.delayProcessingDefault;
-               }
-               tabSelected = tabSelected || widget.selected;
-            }, this);
-
-            if (this.widgets.length && !tabSelected)
-            {
-               this.widgets[0].selected = true;
-               this.widgets[0].delayProcessing = false;
-            }
-
-            // Now add tabs for each widget...
-            array.forEach(this.widgets, lang.hitch(this, this.addWidget));
-         }
-         this.tabContainerWidget.startup();
-
-         // Subscribe to some optional topics
-         if (this.tabSelectionTopic)
-         {
-            this.alfSubscribe(this.tabSelectionTopic, lang.hitch(this, this.onTabSelect));
-         }
-         if (this.tabDisablementTopic)
-         {
-            this.alfSubscribe(this.tabDisablementTopic, lang.hitch(this, this.onTabDisable));
-         }
-         if (this.tabAdditionTopic)
-         {
-            this.alfSubscribe(this.tabAdditionTopic, lang.hitch(this, this.onTabAdd));
-         }
-         if (this.tabDeletionTopic)
-         {
-            this.alfSubscribe(this.tabDeletionTopic, lang.hitch(this, this.onTabDelete));
-         }
-
+         this.createTabContainer();
          this.alfSetupResizeSubscriptions(this.onResize, this);
-         this.alfPublishResizeEvent(this.domNode);
-         domClass.add(this.domNode, "alfresco-layout-AlfTabContainer--tabsDisplayed");
       },
-
-
 
       /**
        * This function adds widgets to the TabContainer widget
@@ -522,7 +547,15 @@ define(["dojo/_base/declare",
        * @param {object} evt The resize event.
        */
       onResize: function alfresco_layout_AlfTabContainer__onResize() {
-         if (this.tabContainerWidget && typeof this.tabContainerWidget.resize === "function")
+         if (!this.tabContainerWidget)
+         {
+            // If wrapped tab container does not exist then this is likely to mean that it was not
+            // possible to create the widget at startup - possibly because of issues around visibility.
+            // Therefore we should attempt to create the tab container again (which will get the appropriate
+            // sizing)...
+            this.createTabContainer();
+         }
+         else if (this.tabContainerWidget && typeof this.tabContainerWidget.resize === "function")
          {
             this.tabContainerWidget.resize();
          }

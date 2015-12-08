@@ -139,6 +139,34 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/lists/views/AlfListView",
+         id: "LIST_UMLAUTS",
+         config: {
+            currentData: {
+               items: [
+                  {
+                     name: "test äöü test"
+                  }
+               ]
+            },
+            widgets: propertyLinkWidgets
+         }
+      },
+      {
+         name: "alfresco/lists/views/AlfListView",
+         id: "LIST_XSS",
+         config: {
+            currentData: {
+               items: [
+                  {
+                     name: "<img src=\"1\" onerror=\"window.hackedProperty=true\">"
+                  }
+               ]
+            },
+            widgets: propertyLinkWidgets
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]

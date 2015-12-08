@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template-type>
+   <title>Aikau Page</title>
+   <description>This is the standard template type for all pages</description>
+   <processor mode="view">
+      <id>webscript</id>
+      <uri>/aikau/page/template</uri>
+   </processor>
+</template-type>

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Example Page</shortname>
+  <description>This is a proof-of-concept example page</description>
+  <family>ExamplePage</family>
+  <url>/example</url>
+</webscript>

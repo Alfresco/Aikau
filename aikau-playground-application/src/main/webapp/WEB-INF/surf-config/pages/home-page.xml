@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+   <title>Home</title>
+   <description>Default landing page</description>
+   <template-instance>home-page</template-instance>
+   <authentication>none</authentication>
+</page>

@@ -149,7 +149,10 @@ define(["dojo/_base/declare",
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
-                              name: "alfresco/renderers/Selector"
+                              name: "alfresco/renderers/Selector",
+                              config: {
+                                 itemKey: "node.nodeRef"
+                              }
                            }
                         ]
                      }

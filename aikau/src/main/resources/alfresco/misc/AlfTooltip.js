@@ -123,11 +123,14 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "dojo/_base/lang",
+        "dojo/_base/array",
         "dojo/dom-construct",
+        "dojo/dom-style",
         "dojo/on",
+        "dojo/when",
         "dijit/popup"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, TooltipDialog, AlfCore, CoreWidgetProcessing,
-                 lang, domConstruct, on, popup) {
+                 lang, array, domConstruct, domStyle, on, when, popup) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -318,6 +321,38 @@ define(["dojo/_base/declare",
        */
       onTooltipMouseLeave: function alfresco_misc_AlfTooltip__onTooltipMouseLeave() {
          this._hideTooltipTimeout = setTimeout(lang.hitch(this, this.hideTooltip), this.mouseoutHideDelay);
+      },
+
+      /**
+       * The tooltip needs to take responsibility for delegating any resize requests that its child widgets
+       * would usually get if they were not contained within the tooltip. This is particularly important
+       * when widgets are placed in a [grid]{@link module:alfresco/lists/views/layouts/Grid} that will request
+       * to resize those widgets. Without this delegation the widgets intended to be resized will stay their
+       * original size. If the widget does not have a resize function then its DOM node will be resized.
+       * If the widget has mixed in the [ResizeMixin]{@link module:alfresco/core/ResizeMixin} then its
+       * [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent} will be called.
+       * 
+       * @instance
+       * @param {object} dimensions The object containing the width and height for the widget.
+       * @since 1.0.47
+       */
+      resize: function alfresco_misc_AlfTooltip__resize(dimensions) {
+         when(this.getProcessedWidgets(), lang.hitch(this, function(widgets) {
+            array.forEach(widgets, function(widget) {
+               if (widget && typeof widget.resize === "function")
+               {
+                  widget.resize(dimensions);
+               }
+               else
+               {
+                  domStyle.set(widget.domNode, "width", dimensions.w);
+                  if (typeof widget.alfPublishResizeEvent === "function")
+                  {
+                     this.alfPublishResizeEvent(widget.domNode);
+                  }
+               }
+            });
+         }));
       }
    });
 });

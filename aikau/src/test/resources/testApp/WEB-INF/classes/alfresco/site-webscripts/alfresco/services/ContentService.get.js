@@ -153,6 +153,24 @@ model.jsonModel = {
          }
       },
       {
+         id: "CREATE_CONTENT_SCOPED",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Create new content (scoped)",
+            publishTopic: "ALF_CREATE_CONTENT_REQUEST",
+            publishPayload: {
+               currentNode: {
+                  parent: {
+                     nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
+                  }
+               },
+               type: "cm:folder"
+            },
+            publishGlobal: true,
+            pubSubScope: "SCOPED_"
+         }
+      },
+      {
          name: "aikauTesting/mockservices/CreateContentMockXhr"
       },
       {

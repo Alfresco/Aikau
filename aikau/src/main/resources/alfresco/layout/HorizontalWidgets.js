@@ -68,12 +68,14 @@ define(["alfresco/core/ProcessWidgets",
         "alfresco/layout/DynamicVisibilityResizingMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-style",
         "dojo/dom-geometry",
-        "dojo/when"], 
+        "dojo/when",
+        "jquery"], 
         function(ProcessWidgets, declare, template, ResizeMixin, DynamicVisibilityResizingMixin, lang, array, 
-                 domConstruct, domStyle, domGeom, when) {
+                 domClass, domConstruct, domStyle, domGeom, when, $) {
    
    return declare([ProcessWidgets, ResizeMixin, DynamicVisibilityResizingMixin], {
       
@@ -131,6 +133,18 @@ define(["alfresco/core/ProcessWidgets",
       widgetMarginRight: null,
 
       /**
+       * Indicates whether or not the widget has dimensions to work with when created. This mainly refers
+       * to the available width and when there is no width to consume then is not "safe" to create child
+       * widgets.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.46
+       */
+      _hasInitialDimensions: false,
+
+      /**
        * Extends the [inherited function]{@link module:alfresco/core/CoreWidgetProcessing#allWidgetsProcessed}
        * to set up subscriptions for the [visibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#visibilityRuleTopics}
        * that are returned by calling [getVisibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#getVisibilityRuleTopics}
@@ -157,7 +171,16 @@ define(["alfresco/core/ProcessWidgets",
          // Split the full width between all widgets... 
          // We should update this to allow for specific widget width requests...
          this.visibilityRuleTopics = this.getVisibilityRuleTopics(this.widgets);
-         this.doWidthProcessing(this.widgets, true);
+
+         // NOTE: Here we're very deliberately using JQuery to get the available width, this
+         //       is to address a very specific issue with Firefox failing when using iframes
+         //       and the dojo/dom-geometry code (in particular the getComputedStyle) - see AKU-692
+         var overallwidth = $(this.domNode).width();
+         if (overallwidth)
+         {
+            this._hasInitialDimensions = true;
+            this.doWidthProcessing(this.widgets, true);
+         }
          this.inherited(arguments);
 
          // Update the grid as the window changes...
@@ -179,131 +202,138 @@ define(["alfresco/core/ProcessWidgets",
          // jshint maxstatements:false
          if (widgets && this.domNode)
          {
-            // Get the dimensions of the current DOM node...
-            var computedStyle = domStyle.getComputedStyle(this.domNode);
-            var output = domGeom.getMarginBox(this.domNode, computedStyle);
-            var overallwidth = output.w;
-            overallwidth -= widgets.length;
+            try
+            {
+               // Get the dimensions of the current DOM node...
+               var computedStyle = domStyle.getComputedStyle(this.domNode);
+               var output = domGeom.getMarginBox(this.domNode, computedStyle);
+               var overallwidth = output.w;
+               overallwidth -= widgets.length;
 
-            // Always allow some pixels for potential scrollbars...
-            overallwidth -= 30;
-            
-            // Subtract the margins from the overall width
-            var leftMarginsSize = 0,
-                rightMarginsSize = 0;
+               // Always allow some pixels for potential scrollbars...
+               overallwidth -= 30;
+               
+               // Subtract the margins from the overall width
+               var leftMarginsSize = 0,
+                   rightMarginsSize = 0;
 
-            // Filter out any widgets that are configured to be initially invisible (on first pass processing)
-            // or that have a DOM node that is not displayed (on resizing)...
-            if (firstPass)
-            {
-               widgets = array.filter(widgets, function(widget) {
-                  var visibleInitialValue = lang.getObject("config.visibilityConfig.initialValue", false, widget);
-                  var invisibleInitialValue = lang.getObject("config.invisibilityConfig.initialValue", false, widget);
-                  return visibleInitialValue !== false && invisibleInitialValue !== true;
-               });
-            }
-            else
-            {
-               widgets = array.filter(widgets, function(widget) {
-                  return widget.domNode && domStyle.get(widget.domNode, "display") !== "none";
-               });
-            }
-            
-            // NOTE: In the "if" statements below we're not worried about widgetMarginLeft 
-            //       or widgetMarginRight being 0 and thus the statement failing to evaluate
-            //       to true since the calculated size would remain 0 anyway
-            if (this.widgetMarginLeft && !isNaN(this.widgetMarginLeft))
-            {
-               leftMarginsSize = widgets.length * parseInt(this.widgetMarginLeft, 10);
-            }
-            else
-            {
-               this.widgetMarginLeft = 0;
-            }
-            if (this.widgetMarginRight && !isNaN(this.widgetMarginRight))
-            {
-               rightMarginsSize = widgets.length * parseInt(this.widgetMarginRight, 10);
-            }
-            else
-            {
-               this.widgetMarginRight = 0;
-            }
-            var remainingWidth = overallwidth - leftMarginsSize - rightMarginsSize;
-
-            // Work out how many pixels widgets have requested and subtract that from the remainder...
-            var widgetRequestedWidth = 0;
-            var widgetsWithNoWidthReq = 0;
-            array.forEach(widgets, function(widget) {
-               if ((widget.widthPx || widget.widthPx === 0) && !isNaN(widget.widthPx))
+               // Filter out any widgets that are configured to be initially invisible (on first pass processing)
+               // or that have a DOM node that is not displayed (on resizing)...
+               if (firstPass)
                {
-                  widgetRequestedWidth += parseInt(widget.widthPx, 10);
-                  widget.widthCalc = widget.widthPx;
-               }
-               else if ((widget.widthPc || widget.widthPc === 0) && !isNaN(widget.widthPc))
-               {
-                  // No action, just avoiding adding to the count of widgets that don't request
-                  // a width as either a pixel or percentage size.
+                  widgets = array.filter(widgets, function(widget) {
+                     var visibleInitialValue = lang.getObject("config.visibilityConfig.initialValue", false, widget);
+                     var invisibleInitialValue = lang.getObject("config.invisibilityConfig.initialValue", false, widget);
+                     return visibleInitialValue !== false && invisibleInitialValue !== true;
+                  });
                }
                else
                {
-                  // The current widget either hasn't requested a width or has requested it with a value
-                  // that is not a number. It will therefore get an equal share of whatever remainder is left.
-                  widgetsWithNoWidthReq++;
+                  widgets = array.filter(widgets, function(widget) {
+                     return widget.domNode && domStyle.get(widget.domNode, "display") !== "none";
+                  });
                }
-            });
-
-            // Check to see if there is actually any space left across the page...
-            // There's not really a lot we can do about it if not but it's useful to warn developers so that they
-            // can spot that there's a potential fault...
-            remainingWidth = remainingWidth - widgetRequestedWidth;
-            if (remainingWidth < 0)
-            {
-               this.alfLog("warn", "There is no horizontal space left for widgets requesting a percentage of available space", this);
-            }
-
-            // Update the widgets that have requested a percentage of space with a value that is calculated from the remaining space
-            var totalWidthAsRequestedPercentage = 0;
-            array.forEach(widgets, function(widget) {
-               if ((widget.widthPc || widget.widthPc === 0) && !isNaN(widget.widthPc))
+               
+               // NOTE: In the "if" statements below we're not worried about widgetMarginLeft 
+               //       or widgetMarginRight being 0 and thus the statement failing to evaluate
+               //       to true since the calculated size would remain 0 anyway
+               if (this.widgetMarginLeft && !isNaN(this.widgetMarginLeft))
                {
-                  var pc = parseInt(widget.widthPc, 10);
-                  totalWidthAsRequestedPercentage += pc;
+                  leftMarginsSize = widgets.length * parseInt(this.widgetMarginLeft, 10);
+               }
+               else
+               {
+                  this.widgetMarginLeft = 0;
+               }
+               if (this.widgetMarginRight && !isNaN(this.widgetMarginRight))
+               {
+                  rightMarginsSize = widgets.length * parseInt(this.widgetMarginRight, 10);
+               }
+               else
+               {
+                  this.widgetMarginRight = 0;
+               }
+               var remainingWidth = overallwidth - leftMarginsSize - rightMarginsSize;
 
-                  if (pc > 100)
+               // Work out how many pixels widgets have requested and subtract that from the remainder...
+               var widgetRequestedWidth = 0;
+               var widgetsWithNoWidthReq = 0;
+               array.forEach(widgets, function(widget) {
+                  if ((widget.widthPx || widget.widthPx === 0) && !isNaN(widget.widthPx))
                   {
-                     this.alfLog("warn", "A widget has requested more than 100% of available horizontal space", widget, this);
+                     widgetRequestedWidth += parseInt(widget.widthPx, 10);
+                     widget.widthCalc = widget.widthPx;
                   }
+                  else if ((widget.widthPc || widget.widthPc === 0) && !isNaN(widget.widthPc))
+                  {
+                     // No action, just avoiding adding to the count of widgets that don't request
+                     // a width as either a pixel or percentage size.
+                  }
+                  else
+                  {
+                     // The current widget either hasn't requested a width or has requested it with a value
+                     // that is not a number. It will therefore get an equal share of whatever remainder is left.
+                     widgetsWithNoWidthReq++;
+                  }
+               });
 
-                  widget.widthCalc = remainingWidth * (pc/100);
-               }
-            }, this);
-
-            // Work out the remaining percentage of the page that can be divided between widgets that haven't requested a specific
-            // widget in either pixels or as a percentage...
-            var remainingPercentage = 0;
-            if (totalWidthAsRequestedPercentage > 100)
-            {
-               this.alfLog("warn", "Widgets have requested more than 100% of the available horizontal space", this);
-            }
-            else
-            {
-               remainingPercentage = 100 - totalWidthAsRequestedPercentage;
-            }
-
-            // Divide up the remaining horizontal space between the remaining widgets...
-            remainingPercentage = remainingPercentage / widgetsWithNoWidthReq;
-            var standardWidgetWidth = remainingWidth * (remainingPercentage/100);
-            array.forEach(widgets, function(widget) {
-               if (((widget.widthPc || widget.widthPc === 0) && !isNaN(widget.widthPc)) ||
-                   ((widget.widthPx || widget.widthPx === 0) && !isNaN(widget.widthPx)))
+               // Check to see if there is actually any space left across the page...
+               // There's not really a lot we can do about it if not but it's useful to warn developers so that they
+               // can spot that there's a potential fault...
+               remainingWidth = remainingWidth - widgetRequestedWidth;
+               if (remainingWidth < 0)
                {
-                  // No action required. 
+                  this.alfLog("warn", "There is no horizontal space left for widgets requesting a percentage of available space", this);
+               }
+
+               // Update the widgets that have requested a percentage of space with a value that is calculated from the remaining space
+               var totalWidthAsRequestedPercentage = 0;
+               array.forEach(widgets, function(widget) {
+                  if ((widget.widthPc || widget.widthPc === 0) && !isNaN(widget.widthPc))
+                  {
+                     var pc = parseInt(widget.widthPc, 10);
+                     totalWidthAsRequestedPercentage += pc;
+
+                     if (pc > 100)
+                     {
+                        this.alfLog("warn", "A widget has requested more than 100% of available horizontal space", widget, this);
+                     }
+
+                     widget.widthCalc = remainingWidth * (pc/100);
+                  }
+               }, this);
+
+               // Work out the remaining percentage of the page that can be divided between widgets that haven't requested a specific
+               // widget in either pixels or as a percentage...
+               var remainingPercentage = 0;
+               if (totalWidthAsRequestedPercentage > 100)
+               {
+                  this.alfLog("warn", "Widgets have requested more than 100% of the available horizontal space", this);
                }
                else
                {
-                  widget.widthCalc = standardWidgetWidth;
+                  remainingPercentage = 100 - totalWidthAsRequestedPercentage;
                }
-            });
+
+               // Divide up the remaining horizontal space between the remaining widgets...
+               remainingPercentage = remainingPercentage / widgetsWithNoWidthReq;
+               var standardWidgetWidth = remainingWidth * (remainingPercentage/100);
+               array.forEach(widgets, function(widget) {
+                  if (((widget.widthPc || widget.widthPc === 0) && !isNaN(widget.widthPc)) ||
+                      ((widget.widthPx || widget.widthPx === 0) && !isNaN(widget.widthPx)))
+                  {
+                     // No action required. 
+                  }
+                  else
+                  {
+                     widget.widthCalc = standardWidgetWidth;
+                  }
+               });
+            }
+            catch (e)
+            {
+               this.alfLog("warn", "Failure to calculate widths correctly", e, this);
+            }
          }
       },
 
@@ -314,20 +344,37 @@ define(["alfresco/core/ProcessWidgets",
        * @param {object} evt The resize event.
        */
       onResize: function alfresco_layout_HorizontalWidget__onResize() {
-         when(this.getProcessedWidgets(), lang.hitch(this, function(processedWidgets) {
-            this.doWidthProcessing(processedWidgets, false);
-            array.forEach(processedWidgets, function(widget) {
-               if (widget && widget.domNode && widget.widthCalc)
-               {
-                  var currentWidth = domGeom.getMarginBox(widget.domNode.parentNode).w;
-                  domStyle.set(widget.domNode.parentNode, "width", widget.widthCalc + "px");
-                  if (currentWidth !== widget.widthCalc)
+         // This function is called whenever a resize event occurs, but also when a widget 
+         // changes in visibility. This allows us to hook into any ancestor widget publishing
+         // a resize request that occurs as it becomes visible. This allows us then to check
+         // for some dimensions to work with...
+         if (!this._hasInitialDimensions)
+         {
+            var overallwidth = $(this.domNode).width();
+            if (overallwidth)
+            {
+               this._hasInitialDimensions = true;
+               this.doWidthProcessing(this.widgets, true);
+               this.alfPublishResizeEvent(this.domNode);
+            }
+         }
+         else
+         {
+            when(this.getProcessedWidgets(), lang.hitch(this, function(processedWidgets) {
+               this.doWidthProcessing(processedWidgets, false);
+               array.forEach(processedWidgets, function(widget) {
+                  if (widget && widget.domNode && widget.widthCalc)
                   {
-                     this.alfPublishResizeEvent(widget.domNode.parentNode);
+                     var currentWidth = domGeom.getMarginBox(widget.domNode.parentNode).w;
+                     domStyle.set(widget.domNode.parentNode, "width", widget.widthCalc + "px");
+                     if (currentWidth !== widget.widthCalc)
+                     {
+                        this.alfPublishResizeEvent(widget.domNode.parentNode);
+                     }
                   }
-               }
-            }, this);
-         }));
+               }, this);
+            }));
+         }
       },
 
       /**

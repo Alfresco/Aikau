@@ -854,7 +854,12 @@ function getDocLibSortOptions(options, sortingConfigItems) {
       for (var i = 0; i < xmlSortConfig.size(); i++)
       {
          var xmlSortItem = xmlSortConfig.get(i);
-         sortingConfigItems.push(xmlSortItem.attributes);
+         var label = xmlSortItem.getAttribute("label");
+         var value = xmlSortItem.getValue();
+         sortingConfigItems.push({
+            label: label,
+            value: value
+         });
       }
    }
    else

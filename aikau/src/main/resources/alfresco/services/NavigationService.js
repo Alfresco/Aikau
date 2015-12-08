@@ -28,6 +28,7 @@
  */
 define(["dojo/_base/declare",
         "module",
+        "alfresco/core/ObjectTypeUtils",
         "alfresco/enums/urlTypes",
         "alfresco/services/BaseService",
         "alfresco/services/_NavigationServiceTopicMixin",
@@ -36,7 +37,7 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct"],
-        function(declare, module, urlTypes, BaseService, _NavigationServiceTopicMixin, hashUtils, urlUtils, array, lang, domConstruct) {
+        function(declare, module, ObjectTypeUtils, urlTypes, BaseService, _NavigationServiceTopicMixin, hashUtils, urlUtils, array, lang, domConstruct) {
 
    return declare([BaseService, _NavigationServiceTopicMixin], {
 
@@ -103,11 +104,24 @@ define(["dojo/_base/declare",
          // jshint maxcomplexity:false
 
          // Update the URL based on the site and type properties of the data object
-         var url = data.url,
-            urlType = data.type,
-            siteStem = "site/" + data.site + "/";
-         if(data.site && url.indexOf(siteStem) === -1) {
-            url = siteStem + url;
+         var url = data.url;
+         var urlType = data.type;
+         if (urlType === urlTypes.PAGE_RELATIVE)
+         {
+            var site = lang.getObject("site", false, data);
+            if (!site || !ObjectTypeUtils.isString(site))
+            {
+               site = lang.getObject("site.shortName", false, data);
+            }
+
+            if (site && ObjectTypeUtils.isString(site))
+            {
+               var siteStem = "/site/" + site + "/";
+               if (url.indexOf(siteStem) === -1)
+               {
+                  url = siteStem + url;
+               }
+            }
          }
          url = urlUtils.convertUrl(url, urlType);
 

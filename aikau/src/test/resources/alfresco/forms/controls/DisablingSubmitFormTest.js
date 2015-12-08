@@ -25,10 +25,9 @@
 define([
       "alfresco/TestCommon",
       "intern!object",
-      "intern/chai!assert",
-      "intern/dojo/node!leadfoot/keys"
+      "intern/chai!assert"
    ],
-   function(TestCommon, registerSuite, assert, keys) {
+   function(TestCommon, registerSuite, assert) {
 
       registerSuite(function() {
          var browser;
@@ -63,7 +62,7 @@ define([
                   })
                   .getVisibleText()
                   .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted!", "OK button label not changed");
+                     assert.equal(visibleText, "Submitted", "OK button label not changed");
                   })
                   .end()
 
@@ -95,7 +94,7 @@ define([
                   })
                   .getVisibleText()
                   .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted!", "OK button label not changed");
+                     assert.equal(visibleText, "Submitted", "OK button label not changed");
                   })
                   .end()
 
@@ -108,7 +107,7 @@ define([
                   })
                   .getVisibleText()
                   .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted!", "OK button label incorrectly reset");
+                     assert.equal(visibleText, "Submitted", "OK button label incorrectly reset");
                   })
                   .end()
 
@@ -142,7 +141,7 @@ define([
                   })
                   .getVisibleText()
                   .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted!", "OK button label not changed");
+                     assert.equal(visibleText, "Submitted", "OK button label not changed");
                   })
                   .end()
 
@@ -174,7 +173,7 @@ define([
                   })
                   .getVisibleText()
                   .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted!", "OK button label not changed");
+                     assert.equal(visibleText, "Submitted", "OK button label not changed");
                   })
                   .end()
 

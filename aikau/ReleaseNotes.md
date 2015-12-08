@@ -1,13 +1,10 @@
-Aikau 1.0.45 Release Notes
+Aikau 1.0.47 Release Notes
 ===
-
-New deprecations:
----
-* alfresco/core/Core "alfDeleteFrameworkAttributes"              (use alfresco/core/Core "alfCleanFrameworkAttributes")
 
 Previous deprecations:
 ---
 * alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
+* alfresco/core/Core "alfDeleteFrameworkAttributes"              (use alfresco/core/Core "alfCleanFrameworkAttributes")
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 * alfresco/core/UrlUtils.js                                      (use alfresco/util/urlUtils or alfresco/core/UrlUtilsMixin)
 * alfresco/dialogs/_AlfCreateFormDialogMixin.js                  (use alfresco/services/DialogService)
@@ -44,6 +41,31 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.47:
+* [AKU-679](https://issues.alfresco.com/jira/browse/AKU-679)       - Ensure form elementrs pass Wave accessibility checks
+* [AKU-703](https://issues.alfresco.com/jira/browse/AKU-703)       - Added config option for full-width FacetFilters
+* [AKU-715](https://issues.alfresco.com/jira/browse/AKU-715)       - Added config option to hide Save/Cancel links in Tag renderer
+* [AKU-717](https://issues.alfresco.com/jira/browse/AKU-717)       - Added config option to auto-resize TinyMCE editor
+* [AKU-723](https://issues.alfresco.com/jira/browse/AKU-723)       - Prevent double encoding in InlineEditProperty
+* [AKU-725](https://issues.alfresco.com/jira/browse/AKU-725)       - Fix TypeError in ActionService (Edit Offline action)
+* [AKU-734](https://issues.alfresco.com/jira/browse/AKU-734)       - Ensure selected items retained on sort order change
+* [AKU-736](https://issues.alfresco.com/jira/browse/AKU-736)       - Prevent double encoding in SearchBox results
+* [AKU-737](https://issues.alfresco.com/jira/browse/AKU-737)       - Fix NavigationService page relative site handling
+* [AKU-738](https://issues.alfresco.com/jira/browse/AKU-738)       - Fix scoping on ContentService requests
+* [AKU-743](https://issues.alfresco.com/jira/browse/AKU-743)       - Tooltip delegates resize requests
+
+1.0.46:
+* [AKU-692](https://issues.alfresco.com/jira/browse/AKU-692)       - Resolved iframe in Firefox issues
+* [AKU-706](https://issues.alfresco.com/jira/browse/AKU-706)       - Ensure actions menu items are visible
+* [AKU-707](https://issues.alfresco.com/jira/browse/AKU-707)       - Improve AlfSideBarContainer height calculations
+* [AKU-711](https://issues.alfresco.com/jira/browse/AKU-711)       - Ensure carat appears in TinyMCE editor in dialogs
+* [AKU-713](https://issues.alfresco.com/jira/browse/AKU-713)       - Fix thumbnail height/width issues
+* [AKU-714](https://issues.alfresco.com/jira/browse/AKU-714)       - Verify thumbnail margin configuration
+* [AKU-719](https://issues.alfresco.com/jira/browse/AKU-719)       - Update preferences key for CommentsList
+* [AKU-721](https://issues.alfresco.com/jira/browse/AKU-721)       - Prevent double encoding in AlfDocumentFilters
+* [AKU-727](https://issues.alfresco.com/jira/browse/AKU-727)       - Hide IE10/11 "X" in input fields
+* [AKU-731](https://issues.alfresco.com/jira/browse/AKU-731)       - Prevent double-escaping of hash by updateHash function
+
 1.0.45:
 * [AKU-665](https://issues.alfresco.com/jira/browse/AKU-665)       - Clean Aikau internal attributes from payload before XHR requests
 * [AKU-694](https://issues.alfresco.com/jira/browse/AKU-694)       - Ensure that generation of download zip can be cancelled

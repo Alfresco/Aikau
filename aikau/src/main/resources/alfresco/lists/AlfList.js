@@ -1085,6 +1085,7 @@ define(["dojo/_base/declare",
                this.currentData.filters = payload.requestConfig && this._extractFilters(payload.requestConfig);
                this.processLoadedData(payload.response || this.currentData);
                this.renderView();
+               this.retainPreviousItemSelectionState(items);
             }
 
             // This request has finished, allow another one to be triggered.
@@ -1120,6 +1121,8 @@ define(["dojo/_base/declare",
             this.alfPublish("ALF_RESIZE_SIDEBAR", {});
          }
       },
+
+      
 
       /**
        * Publishes the details of the documents that have been loaded (primarily for multi-selection purposes)
