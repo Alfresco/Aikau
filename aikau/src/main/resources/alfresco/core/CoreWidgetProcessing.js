@@ -642,6 +642,10 @@ define(["dojo/_base/declare",
          {
             initArgs.groupMemberships = this.groupMemberships;
          }
+         if (initArgs._forceWidgetRegistration === undefined)
+         {
+            initArgs._forceWidgetRegistration = this._forceWidgetRegistration;
+         }
          return initArgs;
       },
 
@@ -689,6 +693,8 @@ define(["dojo/_base/declare",
          // variable will be returned with an assigned value...
          var instantiatedWidget;
 
+         var forceWidgetRegistration = forceRegister || this._forceWidgetRegistration;
+
          // Dynamically require the specified widget
          // The use of indirection is done so modules will not rolled into a build (should we do one)
          var requires = [widget.name];
@@ -703,9 +709,9 @@ define(["dojo/_base/declare",
                   var existingWidget = registry.byId(initArgs.id);
                   if (existingWidget)
                   {
-                     if (forceRegister || this._forceWidgetRegistration)
+                     if (forceWidgetRegistration)
                      {
-                        registry.remove(existingWidget.byId);
+                        registry.remove(existingWidget.id);
                      }
                      else
                      {
