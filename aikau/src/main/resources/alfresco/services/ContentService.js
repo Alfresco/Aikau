@@ -114,9 +114,17 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
+       *
+       * @fires module:alfresco/core/topics#CONTENT_CREATED
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
        */
       onContentCreationSuccess: function alfresco_services_ContentService__onContentCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
          var responseScope = lang.getObject("data.alfResponseScope", false, originalRequestConfig) || "";
+
+         this.alfPublish(topics.CONTENT_CREATED, {
+            parentNodeRef: originalRequestConfig.data.alf_destination,
+            nodeRef: response.persistedObject
+         }, false, false, responseScope);
          this.alfPublish(this.reloadDataTopic, {}, false, false, responseScope);
       },
 

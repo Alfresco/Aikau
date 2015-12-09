@@ -70,44 +70,93 @@ define(["dojo/_base/declare",
             this.alfSubscribe(this.pathChangeTopic, lang.hitch(this, this.onFilterChange));
          }
 
-         this.alfSubscribe(topics.CONTENT_DELETED, lang.hitch(this, this.onItemsDeleted));
+         this.alfSubscribe(topics.CONTENT_CREATED, lang.hitch(this, this.onContentCreated));
+         this.alfSubscribe(topics.CONTENT_DELETED, lang.hitch(this, this.onContentDeleted));
       },
 
       /**
+       * Handles the refreshing of a particular node in the tree. In order to perform the refresh
+       * it is necessary to remove any cached data from the model relating to the children of the node
+       * and to make sure any previously loaded data is removed from the node itself. The tree node
+       * is collapsed and expanded to render the latest data. This function is called from the
+       * [onContentCreated]{@link module:alfresco/navigaion/PathTree#onContentCreated} and
+       * [onContentDeleted]{@link module:alfresco/navigaion/PathTree#onContentDeleted} functions to 
+       * refresh the tree when folders are created and deleted.
+       * 
+       * @instance
+       * @param  {object} treeNode The node widget to refresh in the tree.
+       * @since 1.0.48
+       */
+      refreshTreeNode: function alfresco_navigation_PathTree__refreshTreeNode(treeNode) {
+         var id = treeNode.getIdentity(); // This should be a nodeRef - we need to remove this from the cache...
+         
+         // Remove the parentId from the cached data of the model for the tree. This means that in the getChildren
+         // function of the tree that there won't be data available to re-use...
+         delete this.tree.model.childrenCache[id]; 
+
+         // It is necessary to collapse the node before deleting the _loadDeferred data from it otherwise
+         // an exception will occur in the _expandNode function 
+         this.tree._collapseNode(treeNode);
+
+         // Delete the previously loaded data from the node. This means that in the _expandNode function
+         // of the tree that it will force the tree to reload.
+         delete treeNode._loadDeferred;
+
+         // Finally expand the node, because the cache and loading promise have been deleted then a
+         // request will be made to fetch the current state.
+         this.tree._expandNode(treeNode);
+      },
+
+      /**
+       * This function attempts to [refresh the node]{@link module:alfresco/navigaion/PathTree#refreshTreeNode} 
+       * that content has just been created in.
+       * 
+       * @instance
+       * @param  {object} payload A payload containing the nodeRef of the created object and the
+       * nodeRef of the node it was created as a child of.
+       * @since 1.0.48
+       */
+      onContentCreated: function alfresco_navigation_PathTree__onContentCreated(payload) {
+         if (payload.parentNodeRef)
+         {
+            var parentTreeNode = this.tree._itemNodesMap[payload.parentNodeRef];
+            if (parentTreeNode && parentTreeNode.length)
+            {
+               parentTreeNode = parentTreeNode[0];
+               this.refreshTreeNode(parentTreeNode);
+            }
+         }
+         else
+         {
+            this.alfLog("warn", "A publication was made indicating that content was created, but no 'parentNodeRef' was provided in the payload", payload, this);
+         }
+      },
+
+      /**
+       * This function attempts to [refresh the node]{@link module:alfresco/navigaion/PathTree#refreshTreeNode} 
+       * that content has just been deleted from.
        * 
        * @instance
        * @param  {object} payload A payload containing an array of nodeRefs for the deleted nodes.
        * @since 1.0.48
        */
-      onItemsDeleted: function alfresco_navigation_PathTree__onItemsDeleted(payload) {
-         this.alfLog("info", "Items deleted", payload);
-
-         var nodeRef = payload.nodeRefs[0];
-         var treeNode = this.tree._itemNodesMap[nodeRef];
-         if (treeNode && treeNode.length)
+      onContentDeleted: function alfresco_navigation_PathTree__onContentDeleted(payload) {
+         if (payload.nodeRefs && payload.nodeRefs.length)
          {
-            // If the parent node has not been expanded then the deleted item will not have been rendered
-            // in the tree, therefore we need to be sure that it is in the tree before attempting to refresh.
-            treeNode = treeNode[0];
-
-            var parent = treeNode.getParent();
-            var parentId = parent.getIdentity(); // This should be a nodeRef - we need to remove this from the cache...
-            
-            // Remove the parentId from the cached data of the model for the tree. This means that in the getChildren
-            // function of the tree that there won't be data available to re-use...
-            delete this.tree.model.childrenCache[parentId]; 
-
-            // It is necessary to collapse the parent node before deleted the _loadDeferred data from it otherwise
-            // an exception will occur in the _expandNode function 
-            this.tree._collapseNode(parent);
-
-            // Delete the previously loaded data from the parent. This means that in the _expandNode function
-            // of the tree that it will force the tree to reload.
-            delete parent._loadDeferred;
-
-            // Finally expand the parent node, because the cache and loading promise have been deleted then a
-            // request will be made to fetch the current state.
-            this.tree._expandNode(parent);
+            var nodeRef = payload.nodeRefs[0];
+            var treeNode = this.tree._itemNodesMap[nodeRef];
+            if (treeNode && treeNode.length)
+            {
+               // If the parent node has not been expanded then the deleted item will not have been rendered
+               // in the tree, therefore we need to be sure that it is in the tree before attempting to refresh.
+               treeNode = treeNode[0];
+               var parentTreeNode = treeNode.getParent();
+               this.refreshTreeNode(parentTreeNode);
+            }
+         }
+         else
+         {
+            this.alfLog("warn", "A publication was made indicating that content was deleted, but no 'nodeRefs' were provided in the payload", payload, this);
          }
       },
       
