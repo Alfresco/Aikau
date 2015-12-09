@@ -162,7 +162,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {number}
        * @default
-       * @since 1.0.47
+       * @since 1.0.48
        */
       hideLoadingTimeoutDuration: 10000,
 
@@ -371,7 +371,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object}
        * @default
-       * @since 1.0.47
+       * @since 1.0.48
        */
       _hideLoadingTimeoutPointer: null,
 
@@ -575,7 +575,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object[]} widgets The array of widgets created (this should just contain a single view instance)
-       * @since 1.0.47
+       * @since 1.0.48
        */
       handleNewViewInstances: function alfresco_lists_AlfList__handleNewViewInstances(widgets) {
          if (widgets.length === 1)
@@ -985,7 +985,7 @@ define(["dojo/_base/declare",
        * Remove any loading displays.
        *
        * @instance
-       * @since 1.0.47
+       * @since 1.0.48
        */
       hideLoadingMessage: function alfresco_lists_AlfList__hideLoadingMessage() {
          setTimeout(lang.hitch(this, function() {

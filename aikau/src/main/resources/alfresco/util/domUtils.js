@@ -326,7 +326,7 @@ define([
           * @param {object} node The node to describe
           * @param {boolean} [includeAttrs=false] Include the attributes in the description
           * @returns {string} The description of the node, e.g. 'div#myId.class1.class2[tabindex=0]' or "my string"
-          * @since 1.0.47
+          * @since 1.0.48
           */
          describeNode: lang.hitch(util, util.describeNode),
 
