@@ -650,7 +650,7 @@ define(["alfresco/TestCommon",
          "Navigating to Page 3 of results renders only one item": function() {
             return browser.findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR")
                .click()
-               .end()
+            .end()
 
             .findByCssSelector("#PAGED_PAGINATOR_PAGE_SELECTOR_dropdown .alfresco-menus-AlfMenuItem:last-child")
                .click()

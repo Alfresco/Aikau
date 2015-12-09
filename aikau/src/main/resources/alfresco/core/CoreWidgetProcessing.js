@@ -695,6 +695,7 @@ define(["dojo/_base/declare",
                   if (preferredDomNodeId)
                   {
                      domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
+                     instantiatedWidget._alfPreferredWidgetId = preferredDomNodeId;
                   }
 
                   _this.alfLog("log", "Created widget", instantiatedWidget);
