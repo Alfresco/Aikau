@@ -142,6 +142,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @override
+       * @since 1.0.47
        */
       postCreate: function alfrescdo_documentlibrary_AlfDocumentList__postCreate() {
          this.inherited(arguments);
