@@ -32,27 +32,14 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
+      "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/DocumentListTest",
-      "src/test/resources/alfresco/documentlibrary/FilteredDocumentListTest",
-      "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
-      "src/test/resources/alfresco/documentlibrary/SearchListTest",
-      "src/test/resources/alfresco/documentlibrary/SitesListTest",
-      "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
-      "src/test/resources/alfresco/lists/AlfHashListTest",
+      "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
+      "src/test/resources/alfresco/forms/controls/DocumentPickerTest",
+      "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest",
+      "src/test/resources/alfresco/forms/controls/SitePickerTest",
       "src/test/resources/alfresco/lists/AlfSortablePaginatedListTest",
-      "src/test/resources/alfresco/lists/FilteredListTest",
-      "src/test/resources/alfresco/lists/FilteredListUseCaseTest",
-      "src/test/resources/alfresco/lists/InfiniteScrollTest",
-      "src/test/resources/alfresco/lists/LocalStorageFallbackTest",
-      "src/test/resources/alfresco/lists/PaginatorVisibilityTest",
-      "src/test/resources/alfresco/lists/views/AddableViewTest",
-      "src/test/resources/alfresco/lists/views/AlfListViewTest",
-      "src/test/resources/alfresco/lists/views/ExpandableGalleryTest",
-      "src/test/resources/alfresco/lists/views/GalleryViewFocusTest",
-      "src/test/resources/alfresco/lists/views/GalleryViewInfiniteScrollTest",
-      "src/test/resources/alfresco/lists/views/HtmlListViewTest",
-      "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
-      "src/test/resources/alfresco/lists/views/layouts/RowTest",
+      "src/test/resources/alfresco/services/SearchServiceTest",
       "src/test/resources/alfresco/renderers/CommentsListTest"
 
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
