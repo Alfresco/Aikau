@@ -461,10 +461,10 @@ define(["dojo/_base/declare",
             }, this);
 
             // Opting to NOT clone the widgets for performance here, but leaving the code commented out
-            // for hasty re-insertion if necessary. It *shouldn't* be necessary to clone here because
+            // for hasty re-insertion if necessary. It is necessary to clone here because
             // the views will clone as necessary...
-            // this.processWidgets(JSON.parse(JSON.stringify(this.widgets)));
-            this.processWidgets(this.widgets, null, this.viewWidgetsMappingId);
+            var clonedWidgets = JSON.parse(JSON.stringify(this.widgets));
+            this.processWidgets(clonedWidgets, null, this.viewWidgetsMappingId);
          }
       },
 
@@ -1184,9 +1184,12 @@ define(["dojo/_base/declare",
             }
             else
             {
+               // We need to clone the widget configuration that was used to populate the original
+               // view. It needs to be cloned so that the original preferred ID of the widget is preferred
+               // (otherwise it will be set in the original model and re-used)...
                var index = this.viewDefinitionMap[this._currentlySelectedView];
-               var widgets = [this.widgets[index]];
-               this.processWidgets(widgets, null, "NEW_VIEW_INSTANCE");
+               var clonedWidgets = [JSON.parse(JSON.stringify(this.widgets[index]))];
+               this.processWidgets(clonedWidgets, null, "NEW_VIEW_INSTANCE");
             }
          }
 

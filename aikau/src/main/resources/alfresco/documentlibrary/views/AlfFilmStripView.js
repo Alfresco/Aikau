@@ -33,10 +33,9 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/views/layouts/DocumentCarousel",
         "alfresco/lists/views/layouts/Carousel",
         "dojo/_base/lang",
-        "dojo/dom-construct",
-        "dijit/registry"], 
+        "dojo/dom-construct"], 
         function(declare, AlfDocumentListView, template, AlfDocument, AlfDocumentPreview, DocumentCarousel, Carousel, 
-                 lang, domConstruct, registry) {
+                 lang, domConstruct) {
    
    return declare([AlfDocumentListView], {
       
@@ -192,6 +191,7 @@ define(["dojo/_base/declare",
          //       TODO: Possible memory leak to investigate here, because the call to empy the node *is* required.
          domConstruct.empty(this.previewNode);
 
+
          var clonedWidgetsForContent = lang.clone(this.widgetsForContent);
          this.contentCarousel = new DocumentCarousel({
             id: this.id + "_PREVIEWS",
@@ -205,6 +205,7 @@ define(["dojo/_base/declare",
             nextArrow: this.arrows && this.arrows.contentNext,
             prevArrow: this.arrows && this.arrows.contentPrev
          });
+
          this.contentCarousel.placeAt(this.previewNode);
          this.contentCarousel.resize();
 
