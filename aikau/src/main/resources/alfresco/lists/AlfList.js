@@ -157,6 +157,16 @@ define(["dojo/_base/declare",
       filteringTopics: null,
 
       /**
+       * Specifies how long to wait (in ms) before forcing removal of the loading message
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.47
+       */
+      hideLoadingTimeoutDuration: 10000,
+
+      /**
        * The property in the data response that is the attribute of items to render
        *
        * @instance
@@ -354,6 +364,16 @@ define(["dojo/_base/declare",
        * @default
        */
       _filterDelay: 1000,
+
+      /**
+       * This timeout pointer is used to ensure the loading message doesn't display forever
+       *
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.47
+       */
+      _hideLoadingTimeoutPointer: null,
 
       /**
        * This is updated by the [onPageWidgetsReady]{@link module:alfresco/lists/AlfList#onPageWidgetsReady}
@@ -912,10 +932,7 @@ define(["dojo/_base/declare",
        * @param {Element} targetNode The DOM node to hide the children of.
        */
       hideChildren: function alfresco_lists_AlfList__hideChildren(targetNode) {
-         // Hide any messages
          this.hideLoadingMessage();
-         this.hideRenderingMessage();
-
          array.forEach(targetNode.children, function(node) {
             domClass.add(node, "share-hidden");
          });
@@ -952,9 +969,10 @@ define(["dojo/_base/declare",
       showLoadingMessage: function alfresco_lists_AlfList__showLoadingMessage() {
          if (!this.useInfiniteScroll)
          {
+            clearTimeout(this._hideLoadingTimeoutPointer);
             (requestAnimationFrame || setTimeout)(lang.hitch(this, function() {
-               domClass.remove(this.domNode, "alfresco-lists-AlfList--rendering");
                domClass.add(this.domNode, "alfresco-lists-AlfList--loading");
+               this._hideLoadingTimeoutPointer = setTimeout(lang.hitch(this, this.hideLoadingMessage), this.hideLoadingTimeoutDuration);
             }));
          }
          else
@@ -970,9 +988,9 @@ define(["dojo/_base/declare",
        * @since 1.0.47
        */
       hideLoadingMessage: function alfresco_lists_AlfList__hideLoadingMessage() {
-         (requestAnimationFrame || setTimeout)(lang.hitch(this, function() {
-            domClass.remove(this.domNode, "alfresco-lists-AlfList--loading");
-         }));
+         setTimeout(lang.hitch(this, function() {
+            domClass.remove(this.domNode, ["alfresco-lists-AlfList--loading", "alfresco-lists-AlfList--rendering"]);
+         }), 250);
       },
 
       /**
@@ -985,22 +1003,9 @@ define(["dojo/_base/declare",
          if (!this.useInfiniteScroll)
          {
             (requestAnimationFrame || setTimeout)(lang.hitch(this, function() {
-               domClass.remove(this.domNode, "alfresco-lists-AlfList--loading");
-               domClass.add(this.domNode, "alfresco-lists-AlfList--rendering");
+               domClass.replace(this.domNode, "alfresco-lists-AlfList--loading", "alfresco-lists-AlfList--rendering");
             }));
          }
-      },
-
-      /**
-       * Remove any rendering displays.
-       *
-       * @instance
-       * @since 1.0.47
-       */
-      hideRenderingMessage: function alfresco_lists_AlfList__hideRenderingMessage() {
-         (requestAnimationFrame || setTimeout)(lang.hitch(this, function() {
-            domClass.remove(this.domNode, "alfresco-lists-AlfList--rendering");
-         }));
       },
 
       /**
@@ -1187,7 +1192,6 @@ define(["dojo/_base/declare",
 
          // Hide any messages
          this.hideLoadingMessage();
-         this.hideRenderingMessage();
       },
 
       
