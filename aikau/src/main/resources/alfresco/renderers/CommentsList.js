@@ -72,24 +72,6 @@ define(["dojo/_base/declare",
       addCommentsPadding: 0,
 
       /**
-       * Executed after properties mixed in and before widget created
-       *
-       * @instance
-       * @override
-       * @since 1.0.43
-       */
-      postMixInProperties: function alfresco_renderers_CommentsList__postMixInProperties() {
-         this.inherited(arguments);
-         if (this.addCommentsFullScreen) {
-            var addCommentPayload = lang.getObject("widgets.0.config.widgetsBefore.0.config.publishPayload", false, this);
-            if(addCommentPayload) {
-               addCommentPayload.fullScreenMode = true;
-               addCommentPayload.fullScreenPadding = this.addCommentsPadding;
-            }
-         }
-      },
-      
-      /**
        * Widget has been started, but not necessarily any sub-widgets.
        * 
        * @instance
@@ -131,6 +113,8 @@ define(["dojo/_base/declare",
                               url: "api/node/{node.nodeRef}/comments",
                               pubSubScope: "{pubSubScope}"
                            },
+                           fullScreenMode: "{addCommentsFullScreen}",
+                           fullScreenPadding: "{addCommentsPadding}",
                            additionalCssClasses: "no-padding tinymce-dialog",
                            fixedWidth: true,
                            dialogWidth: "540px",
@@ -138,7 +122,8 @@ define(["dojo/_base/declare",
                               {
                                  name: "alfresco/forms/controls/TinyMCE",
                                  config: {
-                                    name: "content"
+                                    name: "content",
+                                    autoResize: "{addCommentsFullScreen}"
                                  }
                               }
                            ]

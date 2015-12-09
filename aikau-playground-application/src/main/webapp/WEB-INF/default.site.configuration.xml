@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration> 
+  <title>surf</title>
+  <description>surf</description> 
+  <source-id>site</source-id>
+  <properties>
+    <root-page>home</root-page>
+    <theme>theme_1-theme</theme>
+  </properties>
+</configuration>

@@ -51,6 +51,16 @@ define(["intern!object",
                });
          },
 
+         // See AKU-743 - The thumbnail is wrapped in a tooltip and we need to ensure that the tooltip
+         //               delegates resize calls onto its child widgets...
+         "Check the thumbnail size": function() {
+            return browser.findByCssSelector("#TOOLIP_ITEM_0 .alfresco-renderers-Thumbnail")
+               .getSize()
+               .then(function(size) {
+                  assert.equal(size.width, 400, "Thumbnail was not sized by outer tooltip widget");
+               });
+         },
+
          "Increase thumbnail size to decrease columns": function() {
             // Increasing the thumbnail size (using the slider) should re-render the grid
             // so that there is only a single column of thumbnails

@@ -4,8 +4,8 @@
          <img src="${appliedFilterImageSrc}" alt="${appliedFilterAltText}"/>
       </span>
    </span>
-   <span class="details">
-      <span class="filterLabel" data-dojo-attach-event="ondijitclick:onToggleFilter" data-dojo-attach-point="labelNode" tabindex="0">${label}</span>
+   <span class="details" data-dojo-attach-event="ondijitclick:onToggleFilter">
+      <span class="filterLabel" data-dojo-attach-point="labelNode" tabindex="0">${label}</span>
       <span class="hits">${hits}</span>
    </span>
 </li>
