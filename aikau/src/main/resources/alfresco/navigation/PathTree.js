@@ -29,12 +29,13 @@
 define(["dojo/_base/declare",
         "alfresco/navigation/Tree",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-class",
         "dojo/query",
         "dojo/NodeList-dom"], 
-        function(declare, Tree, _AlfDocumentListTopicMixin, lang, array, domClass, query) {
+        function(declare, Tree, _AlfDocumentListTopicMixin, topics, lang, array, domClass, query) {
    
    return declare([Tree, _AlfDocumentListTopicMixin], {
       
@@ -56,6 +57,7 @@ define(["dojo/_base/declare",
        * topic passing the [onFilterChange function]{@link module:alfresco/navigation/PathTree#onFilterChange} as the callback handler.
        * 
        * @instance
+       * @listens module:alfresco/core/topics#CONTENT_DELETED
        */
       postMixInProperties: function alfresco_navigation_PathTree__postMixInProperties() {
          this.inherited(arguments);
@@ -66,6 +68,46 @@ define(["dojo/_base/declare",
          else
          {
             this.alfSubscribe(this.pathChangeTopic, lang.hitch(this, this.onFilterChange));
+         }
+
+         this.alfSubscribe(topics.CONTENT_DELETED, lang.hitch(this, this.onItemsDeleted));
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {object} payload A payload containing an array of nodeRefs for the deleted nodes.
+       * @since 1.0.48
+       */
+      onItemsDeleted: function alfresco_navigation_PathTree__onItemsDeleted(payload) {
+         this.alfLog("info", "Items deleted", payload);
+
+         var nodeRef = payload.nodeRefs[0];
+         var treeNode = this.tree._itemNodesMap[nodeRef];
+         if (treeNode && treeNode.length)
+         {
+            // If the parent node has not been expanded then the deleted item will not have been rendered
+            // in the tree, therefore we need to be sure that it is in the tree before attempting to refresh.
+            treeNode = treeNode[0];
+
+            var parent = treeNode.getParent();
+            var parentId = parent.getIdentity(); // This should be a nodeRef - we need to remove this from the cache...
+            
+            // Remove the parentId from the cached data of the model for the tree. This means that in the getChildren
+            // function of the tree that there won't be data available to re-use...
+            delete this.tree.model.childrenCache[parentId]; 
+
+            // It is necessary to collapse the parent node before deleted the _loadDeferred data from it otherwise
+            // an exception will occur in the _expandNode function 
+            this.tree._collapseNode(parent);
+
+            // Delete the previously loaded data from the parent. This means that in the _expandNode function
+            // of the tree that it will force the tree to reload.
+            delete parent._loadDeferred;
+
+            // Finally expand the parent node, because the cache and loading promise have been deleted then a
+            // request will be made to fetch the current state.
+            this.tree._expandNode(parent);
          }
       },
       

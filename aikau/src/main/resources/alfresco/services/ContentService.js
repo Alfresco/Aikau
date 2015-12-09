@@ -279,6 +279,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
+       * @fires module:alfresco/core/topics#CONTENT_DELETED
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
        */
       onActionDeleteSuccess: function alfresco_services_ContentService__onActionDeleteSuccess(payload) {
          var subscriptionHandle = lang.getObject("requestConfig.subscriptionHandle", false, payload);
@@ -289,7 +291,10 @@ define(["dojo/_base/declare",
          this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message("contentService.delete.success.message")
          });
-         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, payload.requestConfig.responseScope);
+         this.alfPublish(topics.CONTENT_DELETED, {
+            nodeRefs: lang.getObject("requestConfig.data.nodeRefs", false, payload)
+         }, false, false, payload.requestConfig.responseScope);
+         this.alfPublish(topics.RELOAD_DATA_TOPIC, {}, false, false, payload.requestConfig.responseScope);
       },
 
       /**
