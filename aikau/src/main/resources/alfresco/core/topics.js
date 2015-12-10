@@ -127,6 +127,37 @@ define([],function() {
       CLOUD_AUTHENTICATION_SUCCESS: "ALF_CLOUD_AUTHENTICATION_SUCCESS",
 
       /**
+       * This is fired when content is created (typically by the [ContentService]{@link module:alfresco/services/ContentService})
+       * and was added to that [trees]{@link module:alfresco/navigation/PathTree} would be able to refresh themselves
+       * following content creation.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {string} parentNodeRef The nodeRef of the parent that the content was created within
+       * @property {string} nodeRef The nodeRef of the created content
+       */
+      CONTENT_CREATED: "ALF_CONTENT_CREATED",
+
+      /**
+       * This is fired when content is deleted (typically by the [ContentService]{@link module:alfresco/services/ContentService})
+       * and was added to that [trees]{@link module:alfresco/navigation/PathTree} would be able to refresh themselves
+       * following content deletion.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {string[]} nodeRef The nodeRefs of the content that has been deleted.
+       */
+      CONTENT_DELETED: "ALF_CONTENT_DELETED",
+
+      /**
        * This topic is published to launch the copying or moving of a node (or nodes) to another location.
        *
        * @instance

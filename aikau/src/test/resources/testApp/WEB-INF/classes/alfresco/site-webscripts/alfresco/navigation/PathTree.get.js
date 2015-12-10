@@ -51,6 +51,28 @@ model.jsonModel = {
                                           path: "/documentLibrary/Budget Files/Invoices/"
                                        }
                                     }
+                                 },
+                                 {
+                                    id: "ADD_FOLDER",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Add Folder",
+                                       publishTopic: "ALF_CONTENT_CREATED",
+                                       publishPayload: {
+                                          parentNodeRef: "workspace://SpacesStore/8ab12916-4897-47fb-94eb-1ab699822ecb"
+                                       }
+                                    }
+                                 },
+                                 {
+                                    id: "DELETE_FOLDER",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Delete Folder",
+                                       publishTopic: "ALF_CONTENT_DELETED",
+                                       publishPayload: {
+                                          nodeRefs: ["workspace://SpacesStore/d56afdc3-0174-4f8c-bce8-977cafd712ab"] 
+                                       }
+                                    }
                                  }
                               ]
                            }
