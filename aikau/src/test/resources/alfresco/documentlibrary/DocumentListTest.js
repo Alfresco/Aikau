@@ -204,9 +204,14 @@ registerSuite(function(){
                assert.lengthOf(elements, 3, "Couldn't find select controls in PublishingDropDownMenu widgets");
             })
          .end()
-         .findByCssSelector(".alfresco-forms-controls-Select .dijitButtonContents")
+
+         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
+         .end()
+
+         .findDisplayedById("PDM_ITEM_0_SELECT_CONTROL")
             .click()
          .end()
+
          .findAllByCssSelector(".dijitPopup tr")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "No options provided available");
