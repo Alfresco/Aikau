@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>StickyPanel</shortname>
+  <description>A test-page to exercise the alfresco/layout/StickyPanel widget</description>
+  <family>aikau-unit-tests</family>
+  <url>/StickyPanel</url>
+</webscript>

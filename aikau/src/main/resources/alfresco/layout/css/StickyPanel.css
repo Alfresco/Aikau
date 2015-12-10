@@ -1,0 +1,58 @@
+.alfresco-layout-StickyPanel {
+   background: #fff;
+   border: 1px solid #07c;
+   border-bottom: 0;
+   border-radius: 3px 3px 0 0;
+   bottom: 0;
+   box-sizing: border-box;
+   min-width: 200px;
+   position: fixed;
+   right: 10%;
+   &__title-bar {
+      background: #07c;
+      color: #fff;
+      line-height: 28px;
+      padding: 0 70px 0 7px;
+      position: relative;
+      &__title {
+         font-size: 13px;
+      }
+      &__close, &__restore, &__minimise {
+         cursor: pointer;
+         display: block;
+         font-size: 20px;
+         position: absolute;
+      }
+      &__close {
+         right: 7px;
+         top: 0;
+      }
+      &__restore {
+         display: none;
+         right: 25px;
+         top: -5px;
+      }
+      &__minimise {
+         right: 25px;
+         top: 2px;
+      }
+   }
+   &__widgets {
+      padding: 7px;
+   }
+   &--minimised {
+      .alfresco-layout-StickyPanel {
+         &__title-bar {
+            &__restore {
+               display: block;
+            }
+            &__minimise {
+               display: none;
+            }
+         }
+         &__widgets {
+            display: none;
+         }
+      }
+   }
+}
