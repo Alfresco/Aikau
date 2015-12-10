@@ -45,10 +45,15 @@ define(["intern!object",
 
          "Check there are the expected number of mocked results": function() {
             // See AKU-619 - it should not be necessary to provide a search term in order for searching to occur...
-            return browser.findAllByCssSelector("#FCTSRCH_SEARCH_RESULTS_LIST tr.alfresco-search-AlfSearchResult")
-               .then(function (results){
-                  assert.lengthOf(results, 3, "There should be 3 mocked results");
-               });
+            return browser.findByCssSelector("body").end()
+
+               // Need to give the results a chance to render...
+               .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+            
+               .findAllByCssSelector("#FCTSRCH_SEARCH_RESULTS_LIST tr.alfresco-search-AlfSearchResult")
+                  .then(function (results){
+                     assert.lengthOf(results, 3, "There should be 3 mocked results");
+                  });
          },
 
          "Check there are still the expected number of mocked results": function() {
