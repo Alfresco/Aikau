@@ -176,7 +176,6 @@ define(["dojo/_base/declare",
        * @param {array} widgets An array of the widget definitions to instantiate
        * @param {element} rootNode The DOM node which should be used to add instantiated widgets to
        * @param {string} processWidgetsId An optional ID that might have been provided to map the results of the call to
-       * this option should be used with caution.
        */
       processWidgets: function alfresco_core_CoreWidgetProcessing__processWidgets(widgets, rootNode, processWidgetsId) {
          // There are two options for providing configuration, either via a JSON object or
