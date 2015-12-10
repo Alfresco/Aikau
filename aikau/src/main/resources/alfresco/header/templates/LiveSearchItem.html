@@ -1,7 +1,7 @@
 <div>
-   <div class="${cssClass}"><a data-dojo-attach-event="onclick:onResultClick" title="${label}" href="${link}" tabindex="0"><img src="${icon}" alt="${alt}" width="32" border="0"></a></div>
+   <div class="${cssClass}"><a data-dojo-attach-event="onclick:onResultClick" data-dojo-attach-point="previewLinkNode" href="${link}" tabindex="0"><img src="${icon}" alt="${alt}" width="32" border="0" data-dojo-attach-point="previewImgNode"></a></div>
    <div class="alf-livesearch-item">
-      <a data-dojo-attach-event="onclick:onResultClick" title="${title}" href="${link}" tabindex="0">${label}</a><br>
+      <a data-dojo-attach-event="onclick:onResultClick" data-dojo-attach-point="linkNode" href="${link}" tabindex="0"></a><br>
       <span data-dojo-attach-event="onclick:onMetaClick">${!meta}</span>
    </div>
 </div>

@@ -159,6 +159,23 @@ define(["dojo/_base/declare",
        */
       templateString: LiveSearchItemTemplate,
       
+
+      /**
+       * Run after widget created
+       *
+       * @instance
+       * @override
+       */
+      postCreate: function alfresco_header_LiveSearchItem__postCreate() {
+         this.inherited(arguments);
+
+         // Do safe insertion of user data
+         this.linkNode.appendChild(document.createTextNode(this.label));
+         this.linkNode.setAttribute("title", this.title);
+         this.previewImgNode.setAttribute("alt", this.alt);
+         this.previewLinkNode.setAttribute("title", this.label);
+      },
+
       /**
        * Handle storing of a "last" user search in local storage list
        *
@@ -1066,10 +1083,10 @@ define(["dojo/_base/declare",
                      info += this.getRelativeTime(item.modifiedOn) + " | ";
                      info += this.formatFileSize(item.size);
 
-                     var desc = this.encodeHTML(item.title);
+                     var desc = item.title;
                      if (item.description)
                      {
-                        desc += (desc.length !== 0 ? "\r\n" : "") + this.encodeHTML(item.description);
+                        desc += (desc.length !== 0 ? "\r\n" : "") + item.description;
                      }
                      // build the widget for the item - including the thumbnail url for the document
                      var link;
@@ -1092,10 +1109,10 @@ define(["dojo/_base/declare",
                         searchBox: this,
                         cssClass: "alf-livesearch-thumbnail",
                         title: desc,
-                        label: this.encodeHTML(item.name),
+                        label: item.name,
                         link: AlfConstants.URL_PAGECONTEXT + site + link,
                         icon: AlfConstants.PROXY_URI + "api/node/" + item.nodeRef.replace(":/", "") + "/content/thumbnails/doclib?c=queue&ph=true&lastModified=" + lastModified,
-                        alt: this.encodeHTML(item.name),
+                        alt: item.name,
                         meta: info,
                         currentItem: lang.clone(item),
                         publishTopic: this.publishTopic,
@@ -1162,11 +1179,11 @@ define(["dojo/_base/declare",
                      var itemLink = this.createLiveSearchSite({
                         searchBox: this,
                         cssClass: "alf-livesearch-icon",
-                        title: this.encodeHTML(item.description),
-                        label: this.encodeHTML(item.title),
+                        title: item.description,
+                        label: item.title,
                         link: AlfConstants.URL_PAGECONTEXT + "site/" + item.shortName + "/" + this.sitePage,
                         icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-32.png",
-                        alt: this.encodeHTML(item.title),
+                        alt: item.title,
                         meta: item.description ? this.encodeHTML(item.description) : "&nbsp;",
                         currentItem: lang.clone(item),
                         publishTopic: this.publishTopic,
@@ -1224,11 +1241,11 @@ define(["dojo/_base/declare",
                      var itemLink = this.createLiveSearchPerson({
                         searchBox: this,
                         cssClass: "alf-livesearch-icon",
-                        title: this.encodeHTML(item.jobtitle || ""),
-                        label: this.encodeHTML(fullName + " (" + item.userName + ")"),
+                        title: item.jobtitle || "",
+                        label: fullName + " (" + item.userName + ")",
                         link: AlfConstants.URL_PAGECONTEXT + "user/" + encodeURIComponent(item.userName) + "/" + this.peoplePage,
                         icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar32",
-                        alt: this.encodeHTML(fullName),
+                        alt: fullName,
                         meta: meta ? meta : "&nbsp;",
                         currentItem: lang.clone(item),
                         publishTopic: this.publishTopic,
