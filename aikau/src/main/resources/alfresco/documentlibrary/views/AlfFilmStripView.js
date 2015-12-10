@@ -34,7 +34,8 @@ define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/Carousel",
         "dojo/_base/lang",
         "dojo/dom-construct"], 
-        function(declare, AlfDocumentListView, template, AlfDocument, AlfDocumentPreview, DocumentCarousel, Carousel, lang, domConstruct) {
+        function(declare, AlfDocumentListView, template, AlfDocument, AlfDocumentPreview, DocumentCarousel, Carousel, 
+                 lang, domConstruct) {
    
    return declare([AlfDocumentListView], {
       
@@ -190,38 +191,40 @@ define(["dojo/_base/declare",
          //       TODO: Possible memory leak to investigate here, because the call to empy the node *is* required.
          domConstruct.empty(this.previewNode);
 
-         // Process the widgets for content in order to swap in instance tokens such as the
-         // heightMode and heightAdjustment...
          var clonedWidgetsForContent = lang.clone(this.widgetsForContent);
-         // this.processObject(["processInstanceTokens"], clonedWidgetsForContent);
-
-         this.contentCarousel = new DocumentCarousel({
-            id: this.id + "_PREVIEWS",
-            widgets: clonedWidgetsForContent,
-            currentData: this.currentData,
-            heightAdjustment: this.heightAdjustment,
-            heightMode: this.heightMode,
-            pubSubScope: this.pubSubScope,
-            parentPubSubScope: this.parentPubSubScope,
-            itemSelectionTopics: ["ALF_FILMSTRIP_SELECT_ITEM"],
-            nextArrow: this.arrows && this.arrows.contentNext,
-            prevArrow: this.arrows && this.arrows.contentPrev
-         });
+         this.contentCarousel = this.createWidget({
+            id: (this._alfPreferredWidgetId || this.id) + "_PREVIEWS",
+            name: "alfresco/documentlibrary/views/layouts/DocumentCarousel",
+            config: {
+               widgets: clonedWidgetsForContent,
+               currentData: this.currentData,
+               pubSubScope: this.pubSubScope,
+               parentPubSubScope: this.parentPubSubScope,
+               heightAdjustment: this.heightAdjustment,
+               heightMode: this.heightMode,
+               itemSelectionTopics: ["ALF_FILMSTRIP_SELECT_ITEM"],
+               nextArrow: this.arrows && this.arrows.contentNext,
+               prevArrow: this.arrows && this.arrows.contentPrev
+            }
+         }, null, null, null, null, "CONTENT_CAROUSEL");
          this.contentCarousel.placeAt(this.previewNode);
          this.contentCarousel.resize();
 
-         var dlr = new Carousel({
-            id: this.id + "_ITEMS",
-            widgets: lang.clone(this.widgets),
-            currentData: this.currentData,
-            pubSubScope: this.pubSubScope,
-            parentPubSubScope: this.parentPubSubScope,
-            fixedHeight: "112px",
-            useInfiniteScroll: this.useInfiniteScroll,
-            itemSelectionTopics: ["ALF_FILMSTRIP_ITEM_CHANGED"],
-            nextArrow: this.arrows && this.arrows.listNext,
-            prevArrow: this.arrows && this.arrows.listPrev
-         });
+         var dlr = this.createWidget({
+            id: (this._alfPreferredWidgetId || this.id) + "_ITEMS",
+            name: "alfresco/lists/views/layouts/Carousel",
+            config: {
+               widgets: lang.clone(this.widgets),
+               currentData: this.currentData,
+               pubSubScope: this.pubSubScope,
+               parentPubSubScope: this.parentPubSubScope,
+               fixedHeight: "112px",
+               useInfiniteScroll: this.useInfiniteScroll,
+               itemSelectionTopics: ["ALF_FILMSTRIP_ITEM_CHANGED"],
+               nextArrow: this.arrows && this.arrows.listNext,
+               prevArrow: this.arrows && this.arrows.listPrev
+            }
+         }, null, null, null, null, "ITEMS_CAROUSEL");
          return dlr;
       },
 

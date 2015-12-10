@@ -70,7 +70,6 @@ model.jsonModel = {
          config: {
             widgets: [
                {
-                  id: "FIXED_BREADCRUMBS",
                   widthPx: 400,
                   name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
                   config: {

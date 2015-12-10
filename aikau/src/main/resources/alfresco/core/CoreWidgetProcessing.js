@@ -33,13 +33,14 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "dojo/_base/array",
         "dojo/_base/lang",
+        "dojo/dom-attr",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-style",
         "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
    return declare([AlfCore, ObjectProcessingMixin], {
 
@@ -674,8 +675,10 @@ define(["dojo/_base/declare",
             {
                try
                {
+                  var preferredDomNodeId;
                   if (registry.byId(initArgs.id))
                   {
+                     preferredDomNodeId = initArgs.id;
                      initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
                   }
 
@@ -687,6 +690,13 @@ define(["dojo/_base/declare",
                      _this.widgetsToDestroy = [];
                      _this.widgetsToDestroy.push(widget);
                   }
+
+                  if (preferredDomNodeId)
+                  {
+                     domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
+                     instantiatedWidget._alfPreferredWidgetId = preferredDomNodeId;
+                  }
+
                   _this.alfLog("log", "Created widget", instantiatedWidget);
                   if (typeof instantiatedWidget.startup === "function")
                   {

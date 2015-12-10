@@ -170,6 +170,53 @@ define([
          },
 
          // See API below
+         describeNode: function alfresco_util_domUtils__describeNode(node, includeAttrs) {
+
+            // If we have a falsy node, just pass it straight back
+            if (!node) {
+               return node;
+            }
+
+            // Initialise description as for text nodes
+            var description = "\"" + node.textContent + "\"";
+
+            // We only deal with text nodes (already done) and element nodes
+            if (node.nodeType === 1) {
+
+               // Start with the tag name
+               description = node.tagName;
+
+               // Add the ID
+               if (node.id) {
+                  description += "#" + node.id;
+               }
+
+               // Add the classes
+               var classes = (node.className && node.className.split(" ")) || [];
+               array.forEach(classes, function(clazz) {
+                  description += "." + clazz;
+               });
+
+               // Optionally add the attributes
+               var nextAttr, i;
+               if (includeAttrs && node.attributes.length) {
+                  for (i = 0; i < node.attributes.length; i++) {
+                     nextAttr = node.attributes[i];
+                     description += "[" + nextAttr.name + "=\"" + nextAttr.value + "\"]";
+                  }
+               }
+
+            } else if (node.nodeType !== 3) {
+
+               // Not text or element node!
+               console.warn("[alfresco_util_domUtils__describeNode] Unhandle node type (" + node.nodeType + "): ", node);
+            }
+
+            // Pass back the constructed description
+            return description;
+         },
+
+         // See API below
          noticeResizes: function alfresco_util_domUtils__noticeResizes(nodes) {
             this._setResizeIgnored(nodes, false);
          },
@@ -214,7 +261,7 @@ define([
          _setResizeIgnored: function alfresco_util_domUtils___setResizeIgnored(nodeOrNodes, doIgnore) {
             var nodes = nodeOrNodes.constructor === Array ? nodeOrNodes : [nodeOrNodes];
             array.forEach(nodes, function(node) {
-               domClass[doIgnore ? "add" : "remove"](nodes, ignoreResizeClass);
+               domClass[doIgnore ? "add" : "remove"](node, ignoreResizeClass);
             });
          }
       };
@@ -270,6 +317,18 @@ define([
           * @deprecated Since 1.0.43 - Use [addPollingResizeListener]{@link module:alfresco/util/domUtils#addPollingResizeListener} instead
           */
          addResizeListener: lang.hitch(util, util.addPollingResizeListener),
+
+         /**
+          * Given a node in the document, return a string that identifies that node as much as possible.
+          *
+          * @instance
+          * @function
+          * @param {object} node The node to describe
+          * @param {boolean} [includeAttrs=false] Include the attributes in the description
+          * @returns {string} The description of the node, e.g. 'div#myId.class1.class2[tabindex=0]' or "my string"
+          * @since 1.0.48
+          */
+         describeNode: lang.hitch(util, util.describeNode),
 
          /**
           * Given a domNode, disable resize listening on that node temporarily.

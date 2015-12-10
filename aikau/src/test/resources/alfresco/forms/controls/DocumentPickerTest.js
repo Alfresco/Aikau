@@ -23,18 +23,8 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"],
-        function (registerSuite, assert, require, TestCommon) {
-
-
-   // TODO: Check all items can be removed
-   // TODO: Check form values can be set and retrieved
-   // TODO: Check that initial values can be set
-   // TOOD: Check that folders don't have publish action images
-   // TODO: Set up controls with invalid data
-   // TODO: Click on a folder to get sub-results
-   // TODO: Check singleItemMode works.
+        function (registerSuite, assert, TestCommon) {
 
    registerSuite(function(){
       var browser;
@@ -82,7 +72,7 @@ define(["intern!object",
             // Count the mocked results...
             return browser.findAllByCssSelector(".alfresco-lists-views-AlfListView tr")
                .then(function(elements) {
-                  assert(elements.length === 4, "4 results expected for Shared Files, found: " + elements.length);
+                  assert.lengthOf(elements, 4, "4 results expected for Shared Files");
                });
          },
 
@@ -106,7 +96,7 @@ define(["intern!object",
             // TODO: Could probably check that there were none picked when the dialog was first opened...
             .findAllByCssSelector(".picked-items tr")
                .then(function(elements) {
-                  assert(elements.length === 1, "Only one result was expected for picked items");
+                  assert.lengthOf(elements, 1, "Only one result was expected for picked items");
                });
          },
 
@@ -119,7 +109,7 @@ define(["intern!object",
             // Count the selected items...
             .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
                .then(function(elements) {
-                  assert(elements.length === 1, "Only 1 results was expected for picked items after dialog close, found: " + elements.length);
+                  assert.lengthOf(elements, 1, "Only 1 results was expected for picked items after dialog close");
                });
          },
 
@@ -133,7 +123,7 @@ define(["intern!object",
             .end()
             .findAllByCssSelector(".picked-items tr")
                .then(function(elements) {
-                  assert(elements.length === 1, "The previously selected item was not preserved");
+                  assert.lengthOf(elements, 1, "The previously selected item was not preserved");
                });
          },
 
@@ -160,7 +150,7 @@ define(["intern!object",
             // Check the item was removed...
             .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
                .then(function(elements) {
-                  assert(elements.length === 0, "The previously selected item should have been removed");
+                  assert.lengthOf(elements, 0, "The previously selected item should have been removed");
                });
          },
 
@@ -181,7 +171,7 @@ define(["intern!object",
             // Count the number of picked items (there should now be 1 DESPITE clicking twice)...
             .findAllByCssSelector(".picked-items tr")
                .then(function(elements) {
-                  assert(elements.length === 1, "Only one result was expected for picked items, found: " + elements.length);
+                  assert.lengthOf(elements, 1, "Only one result was expected for picked items");
                });
          },
 
@@ -192,7 +182,7 @@ define(["intern!object",
             .end()
             .findAllByCssSelector(".picked-items tr")
                .then(function(elements) {
-                  assert(elements.length === 2, "Two results were expected for picked items, found: " + elements.length);
+                  assert.lengthOf(elements, 2, "Two results were expected for picked items");
                });
          },
          
@@ -204,7 +194,7 @@ define(["intern!object",
             // Check there are now 2 items...
             .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
                .then(function(elements) {
-                  assert(elements.length === 2, "Two items should have been picked, found: " + elements.length);
+                  assert.lengthOf(elements, 2, "Two items should have been picked");
                });
          },
 
