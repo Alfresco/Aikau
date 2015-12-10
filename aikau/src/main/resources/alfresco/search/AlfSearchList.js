@@ -733,7 +733,7 @@ define(["dojo/_base/declare",
             // Publish the number of search results found...
             this.alfPublish("ALF_SEARCH_RESULTS_COUNT", {
                count: resultsCount,
-               label: this.message("faceted-search.results-menu.results-found", {
+               label: this.message("faceted-search.results-menu.results-found-patch", {
                   0: resultsCount
                })
             });
